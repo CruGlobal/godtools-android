@@ -12,6 +12,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -62,7 +63,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyVararg
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
@@ -70,12 +70,9 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
-import org.mockito.kotlin.nullableArgumentCaptor
-import org.mockito.kotlin.reset
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.stubbing
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -110,7 +107,10 @@ class GodToolsDownloadManagerTest {
 
     private lateinit var downloadManager: GodToolsDownloadManager
 
-    private lateinit var observer: Observer<DownloadProgress?>
+    private val downloadProgress = mutableListOf<DownloadProgress?>()
+    private val observer = mockk<Observer<DownloadProgress?>> {
+        every { onChanged(captureNullable(downloadProgress)) } returns Unit
+    }
 
     @Before
     fun setup() {
@@ -121,7 +121,6 @@ class GodToolsDownloadManagerTest {
             onBlocking { rootDir() } doReturn resourcesDir
             onBlocking { exists() } doReturn true
         }
-        observer = mock()
         testScope = TestCoroutineScope()
 
         downloadManager = GodToolsDownloadManager(
@@ -245,35 +244,24 @@ class GodToolsDownloadManagerTest {
         val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
 
         liveData.observeForever(observer)
-        verify(observer, never()).onChanged(any())
+        verifyAll { observer wasNot Called }
 
         // start download
         downloadManager.startProgress(translationKey)
-        argumentCaptor<DownloadProgress> {
-            verify(observer).onChanged(capture())
-
-            assertEquals(DownloadProgress.INITIAL, firstValue)
-        }
+        verify(exactly = 1) { observer.onChanged(any()) }
+        assertEquals(DownloadProgress.INITIAL, downloadProgress[0])
 
         // update progress
-        reset(observer)
         downloadManager.updateProgress(translationKey, 5, 0)
         downloadManager.updateProgress(translationKey, 5, 10)
-        argumentCaptor<DownloadProgress> {
-            verify(observer, times(2)).onChanged(capture())
-
-            assertEquals(DownloadProgress(5, 0), firstValue)
-            assertEquals(DownloadProgress(5, 10), lastValue)
-        }
+        verify(exactly = 3) { observer.onChanged(any()) }
+        assertEquals(DownloadProgress(5, 0), downloadProgress[1])
+        assertEquals(DownloadProgress(5, 10), downloadProgress[2])
 
         // finish download
-        reset(observer)
         downloadManager.finishDownload(translationKey)
-        nullableArgumentCaptor<DownloadProgress> {
-            verify(observer).onChanged(capture())
-
-            assertNull(firstValue)
-        }
+        verify(exactly = 4) { observer.onChanged(any()) }
+        assertNull(downloadProgress[3])
     }
     // endregion Download Progress
 
@@ -485,10 +473,8 @@ class GodToolsDownloadManagerTest {
             eventBus.post(TranslationUpdateEvent)
         }
         confirmVerified(translationsApi, eventBus)
-        argumentCaptor<DownloadProgress> {
-            verify(observer, atLeastOnce()).onChanged(capture())
-            assertNull(lastValue)
-        }
+        verify { observer.onChanged(any()) }
+        assertNull(downloadProgress.last())
     }
 
     @Test
@@ -507,10 +493,8 @@ class GodToolsDownloadManagerTest {
         }
         confirmVerified(translationsApi, workManager)
         verifyNoMoreInteractions(dao)
-        argumentCaptor<DownloadProgress> {
-            verify(observer, atLeastOnce()).onChanged(capture())
-            assertNull(lastValue)
-        }
+        verify { observer.onChanged(any()) }
+        assertNull(downloadProgress.last())
     }
     // endregion downloadLatestPublishedTranslation()
 
@@ -537,10 +521,8 @@ class GodToolsDownloadManagerTest {
         verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
         verify(exactly = 1) { eventBus.post(TranslationUpdateEvent) }
         confirmVerified(eventBus)
-        argumentCaptor<DownloadProgress> {
-            verify(observer, atLeastOnce()).onChanged(capture())
-            assertNull(lastValue)
-        }
+        verify { observer.onChanged(any()) }
+        assertNull(downloadProgress.last())
     }
 
     @Test
