@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyOrder
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -76,7 +77,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
 import org.mockito.kotlin.stubbing
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyBlocking
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import retrofit2.Response
@@ -96,7 +97,10 @@ class GodToolsDownloadManagerTest {
     private val attachmentsApi = mockk<AttachmentsApi>()
     private lateinit var dao: GodToolsDao
     private val eventBus = mockk<EventBus>(relaxUnitFun = true)
-    private lateinit var fs: ToolFileSystem
+    private val fs = mockk<ToolFileSystem> {
+        coEvery { rootDir() } returns resourcesDir
+        coEvery { exists() } returns true
+    }
     private val settings = mockk<Settings> {
         every { isLanguageProtected(any()) } returns false
         every { parallelLanguage } returns null
@@ -118,10 +122,6 @@ class GodToolsDownloadManagerTest {
     fun setup() {
         dao = mock {
             on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
-        }
-        fs = mock {
-            onBlocking { rootDir() } doReturn resourcesDir
-            onBlocking { exists() } doReturn true
         }
         testScope = TestCoroutineScope()
 
@@ -282,7 +282,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
@@ -320,7 +320,7 @@ class GodToolsDownloadManagerTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
@@ -337,7 +337,7 @@ class GodToolsDownloadManagerTest {
         attachment.isDownloaded = true
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         coEvery { attachmentsApi.download(any()) } throws IOException()
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertFalse(file.exists())
@@ -370,7 +370,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportAttachment() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertArrayEquals(testData, file.readBytes())
@@ -384,10 +384,8 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportAttachmentUnableToCreateResourcesDir() = runTest {
         whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        fs.stub {
-            onBlocking { exists() } doReturn false
-            onBlocking { attachment.getFile(this) } doReturn file
-        }
+        coEvery { fs.exists() } returns false
+        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertFalse(file.exists())
@@ -403,13 +401,13 @@ class GodToolsDownloadManagerTest {
             on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao, never()).updateOrInsert(any())
         verify(dao, never()).update(any(), anyVararg<String>())
         verify { eventBus wasNot Called }
-        verifyBlocking(fs, never()) { file(any()) }
+        coVerify(inverse = true) { fs.file(any()) }
         assertTrue(attachment.isDownloaded)
     }
 
@@ -420,13 +418,13 @@ class GodToolsDownloadManagerTest {
             on { find<Attachment>(attachment.id) } doReturn attachment
             on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
         }
-        whenever(attachment.getFile(fs)) doReturn file
+        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
         verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
+        coVerify(inverse = true) { fs.file(any()) }
         confirmVerified(eventBus)
-        verifyBlocking(fs, never()) { file(any()) }
         verify(dao, never()).updateOrInsert(any())
         assertTrue(attachment.isDownloaded)
     }
@@ -448,11 +446,9 @@ class GodToolsDownloadManagerTest {
         val files = Array(3) { getTmpFile() }
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
         whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
-        fs.stub {
-            onBlocking { file("a.txt") } doReturn files[0]
-            onBlocking { file("b.txt") } doReturn files[1]
-            onBlocking { file("c.txt") } doReturn files[2]
-        }
+        coEvery { fs.file("a.txt") } returns files[0]
+        coEvery { fs.file("b.txt") } returns files[1]
+        coEvery { fs.file("c.txt") } returns files[2]
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
 
@@ -504,11 +500,9 @@ class GodToolsDownloadManagerTest {
     fun verifyImportTranslation() = runTest {
         val files = Array(3) { getTmpFile() }
         downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
-        fs.stub {
-            onBlocking { file("a.txt") } doReturn files[0]
-            onBlocking { file("b.txt") } doReturn files[1]
-            onBlocking { file("c.txt") } doReturn files[2]
-        }
+        coEvery { fs.file("a.txt") } returns files[0]
+        coEvery { fs.file("b.txt") } returns files[1]
+        coEvery { fs.file("c.txt") } returns files[2]
 
         downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
@@ -587,19 +581,26 @@ class GodToolsDownloadManagerTest {
     }
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {
-        inOrder(dao, fs) {
-            repeat(times) {
-                verify(fs).exists()
-                verify(fs).rootDir()
-                verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
+        if (times == 0) {
+            verifyNoInteractions(dao)
+        } else {
+            coVerifyOrder {
+                inOrder(dao) {
+                    repeat(times) {
+                        fs.exists()
+                        fs.rootDir()
+                        verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
 
-                verify(fs).exists()
-                verify(dao).get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
-                verify(dao).get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
-                verify(fs).rootDir()
+                        fs.exists()
+                        verify(dao).get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+                        verify(dao).get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                        fs.rootDir()
+                    }
+                    verifyNoMoreInteractions()
+                }
             }
-            verifyNoMoreInteractions()
         }
+        confirmVerified(fs)
     }
 
     @Test
@@ -607,10 +608,8 @@ class GodToolsDownloadManagerTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
         whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
-        fs.stub {
-            onBlocking { rootDir() } doReturn file.parentFile!!
-            onBlocking { file(any()) } doAnswer { File(file.parentFile, it.getArgument(0)) }
-        }
+        coEvery { fs.rootDir() } returns file.parentFile!!
+        coEvery { fs.file(any()) } answers { File(file.parentFile, it.invocation.args[0] as String) }
 
         downloadManager.detectMissingFiles()
         verify(dao, never()).delete(LocalFile(file.name))
@@ -629,10 +628,8 @@ class GodToolsDownloadManagerTest {
             val keepLocalFile = LocalFile(keep.name)
             on { find<LocalFile>(keep.name) } doReturn keepLocalFile
         }
-        fs.stub {
-            onBlocking { file(keep.name) } doReturn keep
-            onBlocking { file(orphan.name) } doReturn orphan
-        }
+        keep.name.let { coEvery { fs.file(it) } returns keep }
+        orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
         downloadManager.cleanFilesystem()
