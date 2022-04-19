@@ -41,7 +41,6 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -98,6 +97,8 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
             .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
     )
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+@VisibleForTesting
+internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
 @VisibleForTesting
 internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
@@ -437,7 +438,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
                 // check for missing files
-                Query.select<LocalFile>().get(dao)
+                dao.get(QUERY_LOCAL_FILES)
                     .filterNot { files.contains(it.getFile(fs)) }
                     .forEach { dao.delete(it) }
             }

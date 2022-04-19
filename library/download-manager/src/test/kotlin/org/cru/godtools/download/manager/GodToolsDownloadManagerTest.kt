@@ -28,7 +28,6 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.internal.http.RealResponseBody
 import okio.buffer
 import okio.source
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
@@ -65,7 +64,6 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyVararg
-import org.mockito.kotlin.argThat
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
@@ -588,7 +586,7 @@ class GodToolsDownloadManagerTest {
                     repeat(times) {
                         fs.exists()
                         fs.rootDir()
-                        verify(dao).get(argThat<Query<*>> { table.type == LocalFile::class.java })
+                        verify(dao).get(QUERY_LOCAL_FILES)
 
                         fs.exists()
                         verify(dao).get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
@@ -606,7 +604,7 @@ class GodToolsDownloadManagerTest {
     fun verifyDetectMissingFiles() = runTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
-        whenever(dao.get(any<Query<LocalFile>>())).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
+        whenever(dao.get(QUERY_LOCAL_FILES)).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
         coEvery { fs.rootDir() } returns file.parentFile!!
         coEvery { fs.file(any()) } answers { File(file.parentFile, it.invocation.args[0] as String) }
 
