@@ -543,8 +543,7 @@ class GodToolsDownloadManagerTest {
             languageCode = Locale.ENGLISH
             isDownloaded = true
         }
-        whenever(dao.get(argThat<Query<*>> { table.type == Translation::class.java }))
-            .thenReturn(listOf(valid1, valid2, invalid, valid3))
+        whenever(dao.get(QUERY_STALE_TRANSLATIONS)).thenReturn(listOf(valid1, valid2, invalid, valid3))
 
         downloadManager.pruneStaleTranslations()
         verify(dao).update(invalid, TranslationTable.COLUMN_DOWNLOADED)

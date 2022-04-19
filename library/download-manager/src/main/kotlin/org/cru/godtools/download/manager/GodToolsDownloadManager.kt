@@ -100,6 +100,11 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
 
 @VisibleForTesting
+internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
+    .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+
+@VisibleForTesting
 internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFile>()
     .join(
         TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
@@ -391,10 +396,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
         val changes = dao.transaction(true) {
             val seen = mutableSetOf<TranslationKey>()
-            Query.select<Translation>()
-                .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-                .get(dao).asSequence()
+            dao.get(QUERY_STALE_TRANSLATIONS).asSequence()
                 .filterNot { seen.add(TranslationKey(it)) }
                 .filter { it.isDownloaded }
                 .onEach {
