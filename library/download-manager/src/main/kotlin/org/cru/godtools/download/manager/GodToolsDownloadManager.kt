@@ -18,11 +18,9 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -467,14 +465,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Cleanup
-
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    internal suspend fun shutdown() {
-        cleanupActor.close()
-        val job = coroutineScope.coroutineContext[Job]
-        if (job is CompletableJob) job.complete()
-        job?.join()
-    }
 
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
