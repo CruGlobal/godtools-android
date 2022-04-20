@@ -25,9 +25,11 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -53,7 +55,6 @@ import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasItem
-import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -101,9 +102,6 @@ class GodToolsDownloadManagerTest {
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
-    private lateinit var testScope: TestCoroutineScope
-
-    private lateinit var downloadManager: GodToolsDownloadManager
 
     private val tool = slot<Tool>()
     private val language = slot<Language>()
@@ -113,11 +111,12 @@ class GodToolsDownloadManagerTest {
         every { onChanged(captureNullable(downloadProgress)) } returns Unit
     }
 
-    @Before
-    fun setup() {
-        testScope = TestCoroutineScope()
-
-        downloadManager = GodToolsDownloadManager(
+    private inline fun TestScope.withDownloadManager(
+        dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher(testScheduler),
+        enableCleanupActor: Boolean = false,
+        block: (GodToolsDownloadManager) -> Unit
+    ) {
+        val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
             dao,
             eventBus,
@@ -125,15 +124,15 @@ class GodToolsDownloadManagerTest {
             settings,
             translationsApi,
             { workManager },
-            testScope,
-            testScope.coroutineContext
+            this,
+            dispatcher
         )
-    }
-
-    @After
-    fun cleanup() {
-        runBlocking { downloadManager.shutdown() }
-        testScope.cleanupTestCoroutines()
+        try {
+            if (!enableCleanupActor) downloadManager.cleanupActor.close()
+            block(downloadManager)
+        } finally {
+            downloadManager.cleanupActor.close()
+        }
     }
 
     // region pinTool()/unpinTool()
@@ -141,7 +140,7 @@ class GodToolsDownloadManagerTest {
     fun verifyPinTool() = runTest {
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.pinTool(TOOL)
+        withDownloadManager { it.pinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertTrue(tool.captured.isAdded)
         verifyAll {
@@ -154,7 +153,7 @@ class GodToolsDownloadManagerTest {
     fun verifyPinToolAsync() = runTest {
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.pinToolAsync(TOOL).join()
+        withDownloadManager { it.pinToolAsync(TOOL).join() }
         assertEquals(TOOL, tool.captured.code)
         assertTrue(tool.captured.isAdded)
         verifyAll {
@@ -167,7 +166,7 @@ class GodToolsDownloadManagerTest {
     fun verifyUnpinTool() = runTest {
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.unpinTool(TOOL)
+        withDownloadManager { it.unpinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertFalse(tool.captured.isAdded)
         verifyAll {
@@ -180,7 +179,7 @@ class GodToolsDownloadManagerTest {
     fun verifyUnpinToolAsync() = runTest {
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.unpinToolAsync(TOOL).join()
+        withDownloadManager { it.unpinToolAsync(TOOL).join() }
         assertEquals(TOOL, tool.captured.code)
         assertFalse(tool.captured.isAdded)
         verifyAll {
@@ -195,7 +194,7 @@ class GodToolsDownloadManagerTest {
     fun verifyPinLanguage() = runTest {
         every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.pinLanguage(Locale.FRENCH)
+        withDownloadManager { it.pinLanguage(Locale.FRENCH) }
         assertEquals(Locale.FRENCH, language.captured.code)
         assertTrue(language.captured.isAdded)
         verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
@@ -205,7 +204,7 @@ class GodToolsDownloadManagerTest {
     fun verifyPinLanguageAsync() = runTest {
         every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.pinLanguageAsync(Locale.FRENCH).join()
+        withDownloadManager { it.pinLanguageAsync(Locale.FRENCH).join() }
         assertEquals(Locale.FRENCH, language.captured.code)
         assertTrue(language.captured.isAdded)
         verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
@@ -215,7 +214,7 @@ class GodToolsDownloadManagerTest {
     fun verifyUnpinLanguage() = runTest {
         every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
 
-        downloadManager.unpinLanguage(Locale.FRENCH)
+        withDownloadManager { it.unpinLanguage(Locale.FRENCH) }
         assertEquals(Locale.FRENCH, language.captured.code)
         assertFalse(language.captured.isAdded)
         verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
@@ -224,41 +223,44 @@ class GodToolsDownloadManagerTest {
 
     // region Download Progress
     @Test
-    fun verifyDownloadProgressLiveDataReused() {
-        assertSame(
-            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
-            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
-        )
-        assertNotSame(
-            downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
-            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH)
-        )
+    fun verifyDownloadProgressLiveDataReused() = runTest {
+        withDownloadManager {
+            assertSame(
+                it.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
+                it.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
+            )
+            assertNotSame(
+                it.getDownloadProgressLiveData(TOOL, Locale.ENGLISH),
+                it.getDownloadProgressLiveData(TOOL, Locale.FRENCH)
+            )
+        }
     }
 
     @Test
-    fun verifyDownloadProgressLiveData() {
+    fun verifyDownloadProgressLiveData() = runTest {
         val translationKey = TranslationKey(TOOL, Locale.ENGLISH)
-        val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
+        withDownloadManager { downloadManager ->
+            val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
+            liveData.observeForever(observer)
+            verifyAll { observer wasNot Called }
 
-        liveData.observeForever(observer)
-        verifyAll { observer wasNot Called }
+            // start download
+            downloadManager.startProgress(translationKey)
+            verify(exactly = 1) { observer.onChanged(any()) }
+            assertEquals(DownloadProgress.INITIAL, downloadProgress[0])
 
-        // start download
-        downloadManager.startProgress(translationKey)
-        verify(exactly = 1) { observer.onChanged(any()) }
-        assertEquals(DownloadProgress.INITIAL, downloadProgress[0])
+            // update progress
+            downloadManager.updateProgress(translationKey, 5, 0)
+            downloadManager.updateProgress(translationKey, 5, 10)
+            verify(exactly = 3) { observer.onChanged(any()) }
+            assertEquals(DownloadProgress(5, 0), downloadProgress[1])
+            assertEquals(DownloadProgress(5, 10), downloadProgress[2])
 
-        // update progress
-        downloadManager.updateProgress(translationKey, 5, 0)
-        downloadManager.updateProgress(translationKey, 5, 10)
-        verify(exactly = 3) { observer.onChanged(any()) }
-        assertEquals(DownloadProgress(5, 0), downloadProgress[1])
-        assertEquals(DownloadProgress(5, 10), downloadProgress[2])
-
-        // finish download
-        downloadManager.finishDownload(translationKey)
-        verify(exactly = 4) { observer.onChanged(any()) }
-        assertNull(downloadProgress[3])
+            // finish download
+            downloadManager.finishDownload(translationKey)
+            verify(exactly = 4) { observer.onChanged(any()) }
+            assertNull(downloadProgress[3])
+        }
     }
     // endregion Download Progress
 
@@ -291,7 +293,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        withDownloadManager { it.downloadAttachment(attachment.id) }
         assertArrayEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
@@ -306,7 +308,7 @@ class GodToolsDownloadManagerTest {
     fun `downloadAttachment() - Already Downloaded`() = runTest {
         attachment.isDownloaded = true
 
-        downloadManager.downloadAttachment(attachment.id)
+        withDownloadManager { it.downloadAttachment(attachment.id) }
         assertTrue(attachment.isDownloaded)
         verify {
             attachmentsApi wasNot Called
@@ -322,7 +324,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(attachment.id) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        withDownloadManager { it.downloadAttachment(attachment.id) }
         assertArrayEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
@@ -340,7 +342,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        withDownloadManager { it.downloadAttachment(attachment.id) }
         assertFalse(file.exists())
         assertFalse(attachment.isDownloaded)
         verify(inverse = true) { dao.updateOrInsert(attachment.asLocalFile()) }
@@ -356,7 +358,7 @@ class GodToolsDownloadManagerTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
 
-        downloadManager.downloadAttachment(attachment.id)
+        withDownloadManager { it.downloadAttachment(attachment.id) }
         assertFalse(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
@@ -370,7 +372,9 @@ class GodToolsDownloadManagerTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachment.getFile(fs) } returns file
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        withDownloadManager { downloadManager ->
+            testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        }
         assertArrayEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         verifySequence {
@@ -385,7 +389,9 @@ class GodToolsDownloadManagerTest {
         coEvery { fs.exists() } returns false
         coEvery { attachment.getFile(fs) } returns file
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        withDownloadManager { downloadManager ->
+            testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        }
         assertFalse(file.exists())
         verify {
             dao wasNot Called
@@ -397,7 +403,9 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentAttachmentAlreadyDownloaded() = runTest {
         attachment.isDownloaded = true
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        withDownloadManager { downloadManager ->
+            testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        }
         assertTrue(attachment.isDownloaded)
         coVerify(inverse = true) {
             fs.file(any())
@@ -411,7 +419,9 @@ class GodToolsDownloadManagerTest {
     fun verifyImportAttachmentLocalFileExists() = runTest {
         attachment.isDownloaded = false
 
-        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        withDownloadManager { downloadManager ->
+            testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        }
         assertTrue(attachment.isDownloaded)
         verifySequence {
             dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
@@ -445,13 +455,15 @@ class GodToolsDownloadManagerTest {
         coEvery { fs.file("c.txt") } returns files[2]
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
         // HACK: suppress dao calls from pruneTranslations()
         every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
         excludeRecords { dao.get(any<Query<*>>()) }
 
-        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        withDownloadManager { downloadManager ->
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+            assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        }
         assertTrue(translation.isDownloaded)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
@@ -481,9 +493,11 @@ class GodToolsDownloadManagerTest {
     fun `downloadLatestPublishedTranslation() - API IOException`() = runTest {
         every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
-        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        withDownloadManager { downloadManager ->
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+            assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        }
         assertNull(downloadProgress.last())
         coVerifyAll {
             dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
@@ -502,9 +516,11 @@ class GodToolsDownloadManagerTest {
         coEvery { fs.file("a.txt") } returns files[0]
         coEvery { fs.file("b.txt") } returns files[1]
         coEvery { fs.file("c.txt") } returns files[2]
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
-        downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
+        withDownloadManager { downloadManager ->
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+            downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
+        }
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
@@ -549,8 +565,9 @@ class GodToolsDownloadManagerTest {
             isDownloaded = true
         }
         every { dao.get(QUERY_STALE_TRANSLATIONS) } returns listOf(valid1, valid2, invalid, valid3)
+        setupCleanupActorMocks()
 
-        downloadManager.pruneStaleTranslations()
+        withDownloadManager(enableCleanupActor = true) { it.pruneStaleTranslations() }
         assertFalse(invalid.isDownloaded)
         assertTrue(valid1.isDownloaded)
         assertTrue(valid2.isDownloaded)
@@ -573,23 +590,27 @@ class GodToolsDownloadManagerTest {
     fun verifyCleanupActorInitialRun() = runTest {
         setupCleanupActorMocks()
 
-        testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY)
-        assertCleanupActorRan(0)
-        testScope.runCurrent()
-        assertCleanupActorRan(1)
-        testScope.advanceUntilIdle()
-        assertCleanupActorRan(1)
+        withDownloadManager(enableCleanupActor = true) {
+            advanceTimeBy(CLEANUP_DELAY)
+            assertCleanupActorRan(0)
+            runCurrent()
+            assertCleanupActorRan(1)
+            advanceUntilIdle()
+            assertCleanupActorRan(1)
+        }
     }
 
     @Test
     fun verifyCleanupActorRunsWhenTriggered() = runTest {
         setupCleanupActorMocks()
 
-        testScope.advanceUntilIdle()
-        assertCleanupActorRan(1)
-        downloadManager.cleanupActor.send(Unit)
-        testScope.advanceUntilIdle()
-        assertCleanupActorRan(2)
+        withDownloadManager(enableCleanupActor = true) {
+            advanceUntilIdle()
+            assertCleanupActorRan(1)
+            it.cleanupActor.send(Unit)
+            advanceUntilIdle()
+            assertCleanupActorRan(2)
+        }
     }
 
     private fun setupCleanupActorMocks() {
@@ -626,7 +647,7 @@ class GodToolsDownloadManagerTest {
         coEvery { fs.rootDir() } returns file.parentFile!!
         coEvery { fs.file(any()) } answers { File(file.parentFile, it.invocation.args[0] as String) }
 
-        downloadManager.detectMissingFiles()
+        withDownloadManager { it.detectMissingFiles() }
         verifyAll {
             dao.get(QUERY_LOCAL_FILES)
             dao.delete(LocalFile(missingFile.name))
@@ -648,7 +669,7 @@ class GodToolsDownloadManagerTest {
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        downloadManager.cleanFilesystem()
+        withDownloadManager { it.cleanFilesystem() }
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
         verifyOrder {
             dao.delete(translation)
