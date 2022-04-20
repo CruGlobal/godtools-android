@@ -18,26 +18,27 @@ import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
-import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
-import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
-import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -66,9 +67,7 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @VisibleForTesting
-internal const val CLEANUP_DELAY = HOUR_IN_MS
-@VisibleForTesting
-internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
+internal const val CLEANUP_DELAY = 30_000L
 
 @VisibleForTesting
 internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
@@ -96,6 +95,29 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
             .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
     )
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+@VisibleForTesting
+internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
+
+@VisibleForTesting
+internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
+    .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+
+@VisibleForTesting
+internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFile>()
+    .join(
+        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
+            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
+    )
+    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
+@VisibleForTesting
+internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
+    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
+    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
+    .where(
+        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
+            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
+    )
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -211,14 +233,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Download Progress
 
     // region Attachments
-    private val staleAttachmentsJob = coroutineScope.launch {
-        dao.getAsFlow(QUERY_STALE_ATTACHMENTS).collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
-    }
-    private val toolBannerAttachmentsJob = coroutineScope.launch {
-        dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
-            .collect { it.map { launch { downloadAttachment(it.id) } }.joinAll() }
-    }
-
     @VisibleForTesting
     internal suspend fun downloadAttachment(attachmentId: Long) {
         if (!fs.exists()) return
@@ -297,11 +311,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Attachments
 
     // region Translations
-    private val pinnedTranslationsJob = coroutineScope.launch {
-        dao.getAsFlow(QUERY_PINNED_TRANSLATIONS)
-            .collect { it.map { launch { downloadLatestPublishedTranslation(TranslationKey(it)) } }.joinAll() }
-    }
-
     @AnyThread
     fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
@@ -386,10 +395,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
         val changes = dao.transaction(true) {
             val seen = mutableSetOf<TranslationKey>()
-            Query.select<Translation>()
-                .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-                .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-                .get(dao).asSequence()
+            dao.get(QUERY_STALE_TRANSLATIONS).asSequence()
                 .filterNot { seen.add(TranslationKey(it)) }
                 .filter { it.isDownloaded }
                 .onEach {
@@ -402,23 +408,21 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         // if any translations were updated, send a broadcast
         if (changes > 0) {
             eventBus.post(TranslationUpdateEvent)
-            cleanupActor.send(RunCleanup)
+            cleanupActor.send(Unit)
         }
     }
     // endregion Translations
 
     // region Cleanup
     @VisibleForTesting
-    internal object RunCleanup
-
-    @VisibleForTesting
     @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-    internal val cleanupActor = coroutineScope.actor<RunCleanup>(capacity = Channel.CONFLATED) {
-        withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
-        while (!channel.isClosedForReceive) {
+    internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
+        consumeAsFlow().onStart { emit(Unit) }.transformLatest {
+            delay(CLEANUP_DELAY)
+            emit(Unit)
+        }.conflate().collect {
             detectMissingFiles()
             cleanFilesystem()
-            withTimeoutOrNull(CLEANUP_DELAY) { channel.receiveCatching() }
         }
     }
 
@@ -432,7 +436,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
                 // check for missing files
-                Query.select<LocalFile>().get(dao)
+                dao.get(QUERY_LOCAL_FILES)
                     .filterNot { files.contains(it.getFile(fs)) }
                     .forEach { dao.delete(it) }
             }
@@ -445,27 +449,13 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded
-                Query.select<TranslationFile>()
-                    .join(
-                        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
-                            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
-                    )
-                    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
-                    .get(dao).forEach { dao.delete(it) }
+                dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
 
                 // delete any LocalFiles that are no longer being used
-                Query.select<LocalFile>()
-                    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
-                    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-                    .where(
-                        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
-                            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
-                    )
-                    .get(dao)
-                    .forEach {
-                        dao.delete(it)
-                        it.getFile(fs).delete()
-                    }
+                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES).forEach {
+                    dao.delete(it)
+                    it.getFile(fs).delete()
+                }
 
                 // delete any orphaned files
                 fs.rootDir().listFiles()
@@ -476,22 +466,45 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
     // endregion Cleanup
 
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    internal suspend fun shutdown() {
-        cleanupActor.close()
-        staleAttachmentsJob.cancel()
-        toolBannerAttachmentsJob.cancel()
-        pinnedTranslationsJob.cancel()
-        val job = coroutineScope.coroutineContext[Job]
-        if (job is CompletableJob) job.complete()
-        job?.join()
-        staleAttachmentsJob.join()
-        toolBannerAttachmentsJob.join()
-        pinnedTranslationsJob.join()
-    }
-
     @WorkerThread
     private suspend fun InputStream.copyTo(localFile: LocalFile) {
         withContext(Dispatchers.IO) { localFile.getFile(fs).outputStream().use { copyTo(it) } }
+    }
+
+    @Singleton
+    class Dispatcher @VisibleForTesting internal constructor(
+        dao: GodToolsDao,
+        private val downloadManager: GodToolsDownloadManager,
+        coroutineScope: CoroutineScope
+    ) {
+        @Inject
+        constructor(dao: GodToolsDao, downloadManager: GodToolsDownloadManager) :
+            this(dao, downloadManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+
+        private val pinnedTranslationsJob = dao.getAsFlow(QUERY_PINNED_TRANSLATIONS).conflate()
+            .onEach {
+                coroutineScope {
+                    it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(TranslationKey(it)) } }
+                }
+            }
+            .launchIn(coroutineScope)
+
+        private val staleAttachmentsJob = dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
+            .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            .launchIn(coroutineScope)
+
+        private val toolBannerAttachmentsJob = dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
+            .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            .launchIn(coroutineScope)
+
+        @RestrictTo(RestrictTo.Scope.TESTS)
+        internal suspend fun shutdown() {
+            pinnedTranslationsJob.cancel()
+            staleAttachmentsJob.cancel()
+            toolBannerAttachmentsJob.cancel()
+            pinnedTranslationsJob.join()
+            staleAttachmentsJob.join()
+            toolBannerAttachmentsJob.join()
+        }
     }
 }
