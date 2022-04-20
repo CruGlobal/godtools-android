@@ -8,13 +8,19 @@ import androidx.work.WorkManager
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.coVerifyOrder
+import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
+import io.mockk.excludeRecords
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
+import io.mockk.verifyOrder
+import io.mockk.verifySequence
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -28,6 +34,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.internal.http.RealResponseBody
 import okio.buffer
 import okio.source
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
@@ -62,22 +69,6 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyVararg
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.inOrder
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.stubbing
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -93,7 +84,10 @@ class GodToolsDownloadManagerTest {
     }
 
     private val attachmentsApi = mockk<AttachmentsApi>()
-    private lateinit var dao: GodToolsDao
+    private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
+        every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
+        excludeRecords { transaction(any(), any()) }
+    }
     private val eventBus = mockk<EventBus>(relaxUnitFun = true)
     private val fs = mockk<ToolFileSystem> {
         coEvery { rootDir() } returns resourcesDir
@@ -111,6 +105,9 @@ class GodToolsDownloadManagerTest {
 
     private lateinit var downloadManager: GodToolsDownloadManager
 
+    private val tool = slot<Tool>()
+    private val language = slot<Language>()
+
     private val downloadProgress = mutableListOf<DownloadProgress?>()
     private val observer = mockk<Observer<DownloadProgress?>> {
         every { onChanged(captureNullable(downloadProgress)) } returns Unit
@@ -118,9 +115,6 @@ class GodToolsDownloadManagerTest {
 
     @Before
     fun setup() {
-        dao = mock {
-            on { transaction(any(), any<() -> Any>()) } doAnswer { it.getArgument<() -> Any>(1).invoke() }
-        }
         testScope = TestCoroutineScope()
 
         downloadManager = GodToolsDownloadManager(
@@ -145,83 +139,86 @@ class GodToolsDownloadManagerTest {
     // region pinTool()/unpinTool()
     @Test
     fun verifyPinTool() = runTest {
+        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+
         downloadManager.pinTool(TOOL)
-        argumentCaptor<Tool> {
-            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
-            assertEquals(TOOL, firstValue.code)
-            assertTrue(firstValue.isAdded)
+        assertEquals(TOOL, tool.captured.code)
+        assertTrue(tool.captured.isAdded)
+        verifyAll {
+            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
+            eventBus.post(ToolUpdateEvent)
         }
-        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
-        confirmVerified(eventBus)
     }
 
     @Test
     fun verifyPinToolAsync() = runTest {
+        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+
         downloadManager.pinToolAsync(TOOL).join()
-        argumentCaptor<Tool> {
-            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
-            assertEquals(TOOL, firstValue.code)
-            assertTrue(firstValue.isAdded)
+        assertEquals(TOOL, tool.captured.code)
+        assertTrue(tool.captured.isAdded)
+        verifyAll {
+            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
+            eventBus.post(ToolUpdateEvent)
         }
-        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
-        confirmVerified(eventBus)
     }
 
     @Test
     fun verifyUnpinTool() = runTest {
+        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+
         downloadManager.unpinTool(TOOL)
-        argumentCaptor<Tool> {
-            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
-            assertEquals(TOOL, firstValue.code)
-            assertFalse(firstValue.isAdded)
+        assertEquals(TOOL, tool.captured.code)
+        assertFalse(tool.captured.isAdded)
+        verifyAll {
+            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
+            eventBus.post(ToolUpdateEvent)
         }
-        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
-        confirmVerified(eventBus)
     }
 
     @Test
     fun verifyUnpinToolAsync() = runTest {
+        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+
         downloadManager.unpinToolAsync(TOOL).join()
-        argumentCaptor<Tool> {
-            verify(dao).update(capture(), eq(ToolTable.COLUMN_ADDED))
-            assertEquals(TOOL, firstValue.code)
-            assertFalse(firstValue.isAdded)
+        assertEquals(TOOL, tool.captured.code)
+        assertFalse(tool.captured.isAdded)
+        verifyAll {
+            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
+            eventBus.post(ToolUpdateEvent)
         }
-        verify(exactly = 1) { eventBus.post(ToolUpdateEvent) }
-        confirmVerified(eventBus)
     }
     // endregion pinTool()/unpinTool()
 
     // region pinLanguage()/unpinLanguage()
     @Test
     fun verifyPinLanguage() = runTest {
+        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
+
         downloadManager.pinLanguage(Locale.FRENCH)
-        argumentCaptor<Language> {
-            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
-            assertEquals(Locale.FRENCH, firstValue.code)
-            assertTrue(firstValue.isAdded)
-        }
+        assertEquals(Locale.FRENCH, language.captured.code)
+        assertTrue(language.captured.isAdded)
+        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
     }
 
     @Test
     fun verifyPinLanguageAsync() = runTest {
-        downloadManager.pinLanguageAsync(Locale.FRENCH).join()
+        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
 
-        argumentCaptor<Language> {
-            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
-            assertEquals(Locale.FRENCH, firstValue.code)
-            assertTrue(firstValue.isAdded)
-        }
+        downloadManager.pinLanguageAsync(Locale.FRENCH).join()
+        assertEquals(Locale.FRENCH, language.captured.code)
+        assertTrue(language.captured.isAdded)
+        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
     }
 
     @Test
     fun verifyUnpinLanguage() = runTest {
+        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
+
         downloadManager.unpinLanguage(Locale.FRENCH)
-        argumentCaptor<Language> {
-            verify(dao).update(capture(), eq(LanguageTable.COLUMN_ADDED))
-            assertEquals(Locale.FRENCH, firstValue.code)
-            assertFalse(firstValue.isAdded)
-        }
+        assertEquals(Locale.FRENCH, language.captured.code)
+        assertFalse(language.captured.isAdded)
+        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
     }
     // endregion pinLanguage()/unpinLanguage()
 
@@ -274,157 +271,156 @@ class GodToolsDownloadManagerTest {
     private val file = getTmpFile()
     private val testData = Random.nextBytes(16 * 1024)
 
+    @Before
+    fun setupAttachmentMocks() {
+        every { dao.find<Attachment>(attachment.id) } returns attachment
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns attachment.asLocalFile()
+        every { dao.update(any<Attachment>(), AttachmentTable.COLUMN_DOWNLOADED) } returns 1
+
+        excludeRecords {
+            dao.find<Attachment>(attachment.id)
+            dao.find<LocalFile>(attachment.localFilename!!)
+        }
+    }
+
     // region downloadAttachment()
     @Test
     fun `downloadAttachment()`() = runTest {
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
+        coVerifySequence {
+            attachmentsApi.download(attachment.id)
+            dao.updateOrInsert(attachment.asLocalFile())
+            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            eventBus.post(AttachmentUpdateEvent)
+        }
     }
 
     @Test
     fun `downloadAttachment() - Already Downloaded`() = runTest {
         attachment.isDownloaded = true
-        stubbing(dao) {
-            on { find<Attachment>(attachment.id) } doReturn attachment
-            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
-        }
 
         downloadManager.downloadAttachment(attachment.id)
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao).find<LocalFile>(attachment.localFilename!!)
-        verify(dao, never()).updateOrInsert(any())
-        verify(dao, never()).update(any(), anyVararg<String>())
+        assertTrue(attachment.isDownloaded)
         verify {
             attachmentsApi wasNot Called
             eventBus wasNot Called
         }
-        assertTrue(attachment.isDownloaded)
     }
 
     @Test
     fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = runTest {
         attachment.isDownloaded = true
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
-        coEvery { attachmentsApi.download(any()) } returns Response.success(response)
+        coEvery { attachmentsApi.download(attachment.id) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertArrayEquals(testData, file.readBytes())
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
+        coVerifySequence {
+            attachmentsApi.download(attachment.id)
+            dao.updateOrInsert(attachment.asLocalFile())
+            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            eventBus.post(AttachmentUpdateEvent)
+        }
     }
 
     @Test
     fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = runTest {
         attachment.isDownloaded = true
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
-        coEvery { attachmentsApi.download(any()) } throws IOException()
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { attachmentsApi.download(attachment.id) } throws IOException()
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertFalse(file.exists())
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao, never()).updateOrInsert(any())
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
         assertFalse(attachment.isDownloaded)
+        verify(inverse = true) { dao.updateOrInsert(attachment.asLocalFile()) }
+        coVerifySequence {
+            attachmentsApi.download(attachment.id)
+            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            eventBus.post(AttachmentUpdateEvent)
+        }
     }
 
     @Test
     fun `downloadAttachment() - Download fails`() = runTest {
-        whenever(dao.find<Attachment>(attachment.id)) doReturn attachment
-        coEvery { attachmentsApi.download(any()) } throws IOException()
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { attachmentsApi.download(attachment.id) } throws IOException()
 
         downloadManager.downloadAttachment(attachment.id)
-        verify(dao).find<Attachment>(attachment.id)
-        verify(dao, never()).updateOrInsert(any())
-        verify(dao, never()).update(any(), anyVararg<String>())
-        coVerify(exactly = 1) {
-            attachmentsApi.download(any())
+        assertFalse(attachment.isDownloaded)
+        coVerifySequence {
+            attachmentsApi.download(attachment.id)
             eventBus wasNot Called
         }
-        confirmVerified(attachmentsApi)
-        assertFalse(attachment.isDownloaded)
     }
     // endregion downloadAttachment()
 
     @Test
     fun verifyImportAttachment() = runTest {
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
+        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertArrayEquals(testData, file.readBytes())
-        verify(dao).updateOrInsert(eq(attachment.asLocalFile()))
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        confirmVerified(eventBus)
         assertTrue(attachment.isDownloaded)
+        verifySequence {
+            dao.updateOrInsert(attachment.asLocalFile())
+            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            eventBus.post(AttachmentUpdateEvent)
+        }
     }
 
     @Test
     fun verifyImportAttachmentUnableToCreateResourcesDir() = runTest {
-        whenever(dao.find<Attachment>(attachment.id)).thenReturn(attachment)
         coEvery { fs.exists() } returns false
         coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertFalse(file.exists())
-        verify(dao, never()).updateOrInsert(any())
-        verify(dao, never()).update(any(), anyVararg<String>())
-        verify { eventBus wasNot Called }
+        verify {
+            dao wasNot Called
+            eventBus wasNot Called
+        }
     }
 
     @Test
     fun verifyImportAttachmentAttachmentAlreadyDownloaded() = runTest {
         attachment.isDownloaded = true
-        dao.stub {
-            on { find<Attachment>(attachment.id) } doReturn attachment
-            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
-        }
-        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
-        verify(dao, never()).updateOrInsert(any())
-        verify(dao, never()).update(any(), anyVararg<String>())
-        verify { eventBus wasNot Called }
-        coVerify(inverse = true) { fs.file(any()) }
         assertTrue(attachment.isDownloaded)
+        coVerify(inverse = true) {
+            fs.file(any())
+            dao.updateOrInsert(any())
+            dao.update(any())
+        }
+        verify { eventBus wasNot Called }
     }
 
     @Test
     fun verifyImportAttachmentLocalFileExists() = runTest {
         attachment.isDownloaded = false
-        dao.stub {
-            on { find<Attachment>(attachment.id) } doReturn attachment
-            on { find<LocalFile>(attachment.localFilename!!) } doReturn attachment.asLocalFile()
-        }
-        coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
-        verify(dao).update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(AttachmentUpdateEvent) }
-        coVerify(inverse = true) { fs.file(any()) }
-        confirmVerified(eventBus)
-        verify(dao, never()).updateOrInsert(any())
         assertTrue(attachment.isDownloaded)
+        verifySequence {
+            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            eventBus.post(AttachmentUpdateEvent)
+        }
+        coVerify(inverse = true) {
+            fs.file(any())
+            dao.updateOrInsert(any())
+        }
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
@@ -441,80 +437,91 @@ class GodToolsDownloadManagerTest {
     // region downloadLatestPublishedTranslation()
     @Test
     fun `downloadLatestPublishedTranslation()`() = runTest {
+        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
+        every { dao.find<LocalFile>(any<String>()) } returns null
         val files = Array(3) { getTmpFile() }
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
-        whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
         coEvery { fs.file("a.txt") } returns files[0]
         coEvery { fs.file("b.txt") } returns files[1]
         coEvery { fs.file("c.txt") } returns files[2]
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+
+        // HACK: suppress dao calls from pruneTranslations()
+        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
+        excludeRecords { dao.get(any<Query<*>>()) }
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-        verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+        assertTrue(translation.isDownloaded)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
-        verify(dao).updateOrInsert(eq(LocalFile("a.txt")))
-        verify(dao).updateOrInsert(eq(LocalFile("b.txt")))
-        verify(dao).updateOrInsert(eq(LocalFile("c.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "a.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
-        verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
-        assertTrue(translation.isDownloaded)
-        coVerify(exactly = 1) {
+
+        coVerifyAll {
+            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
             translationsApi.download(translation.id)
-            workManager wasNot Called
+            dao.find<LocalFile>("a.txt")
+            dao.find<LocalFile>("b.txt")
+            dao.find<LocalFile>("c.txt")
+            dao.updateOrInsert(LocalFile("a.txt"))
+            dao.updateOrInsert(LocalFile("b.txt"))
+            dao.updateOrInsert(LocalFile("c.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
             eventBus.post(TranslationUpdateEvent)
+            workManager wasNot Called
+            observer.onChanged(any())
         }
-        confirmVerified(translationsApi, eventBus)
-        verify { observer.onChanged(any()) }
         assertNull(downloadProgress.last())
     }
 
     @Test
     fun `downloadLatestPublishedTranslation() - API IOException`() = runTest {
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
-        whenever(dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)) doReturn translation
+        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
-        clearInvocations(dao)
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
         assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-        verify(dao).getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
-        coVerify(exactly = 1) {
+        assertNull(downloadProgress.last())
+        coVerifyAll {
+            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
             translationsApi.download(translation.id)
             workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
-            eventBus wasNot Called
+            observer.onChanged(any())
         }
-        confirmVerified(translationsApi, workManager)
-        verifyNoMoreInteractions(dao)
-        verify { observer.onChanged(any()) }
-        assertNull(downloadProgress.last())
     }
     // endregion downloadLatestPublishedTranslation()
 
     @Test
     fun verifyImportTranslation() = runTest {
+        every { dao.getLatestTranslation(any(), any(), any(), any()) } returns null
+        every { dao.find<LocalFile>(any<String>()) } returns null
         val files = Array(3) { getTmpFile() }
-        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
         coEvery { fs.file("a.txt") } returns files[0]
         coEvery { fs.file("b.txt") } returns files[1]
         coEvery { fs.file("c.txt") } returns files[2]
+        downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
 
         downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
         assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
-        verify(dao).updateOrInsert(eq(LocalFile("a.txt")))
-        verify(dao).updateOrInsert(eq(LocalFile("b.txt")))
-        verify(dao).updateOrInsert(eq(LocalFile("c.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "a.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "b.txt")))
-        verify(dao).updateOrInsert(eq(TranslationFile(translation, "c.txt")))
-        verify(dao).update(translation, TranslationTable.COLUMN_DOWNLOADED)
-        verify(exactly = 1) { eventBus.post(TranslationUpdateEvent) }
-        confirmVerified(eventBus)
+        verifyAll {
+            dao.getLatestTranslation(translation.toolCode, translation.languageCode, true, true)
+            dao.find<LocalFile>("a.txt")
+            dao.updateOrInsert(LocalFile("a.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
+            dao.find<LocalFile>("b.txt")
+            dao.find<LocalFile>("c.txt")
+            dao.updateOrInsert(LocalFile("b.txt"))
+            dao.updateOrInsert(LocalFile("c.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            eventBus.post(TranslationUpdateEvent)
+        }
         verify { observer.onChanged(any()) }
         assertNull(downloadProgress.last())
     }
@@ -541,18 +548,22 @@ class GodToolsDownloadManagerTest {
             languageCode = Locale.ENGLISH
             isDownloaded = true
         }
-        whenever(dao.get(QUERY_STALE_TRANSLATIONS)).thenReturn(listOf(valid1, valid2, invalid, valid3))
+        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns listOf(valid1, valid2, invalid, valid3)
 
         downloadManager.pruneStaleTranslations()
-        verify(dao).update(invalid, TranslationTable.COLUMN_DOWNLOADED)
         assertFalse(invalid.isDownloaded)
-        verify(dao, never()).update(valid1, TranslationTable.COLUMN_DOWNLOADED)
-        verify(dao, never()).update(valid2, TranslationTable.COLUMN_DOWNLOADED)
-        verify(dao, never()).update(valid3, TranslationTable.COLUMN_DOWNLOADED)
         assertTrue(valid1.isDownloaded)
         assertTrue(valid2.isDownloaded)
         assertTrue(valid3.isDownloaded)
-        verify(exactly = 1) { eventBus.post(TranslationUpdateEvent) }
+        verify {
+            dao.update(invalid, TranslationTable.COLUMN_DOWNLOADED)
+            eventBus.post(TranslationUpdateEvent)
+        }
+        verify(inverse = true) {
+            dao.update(valid1, TranslationTable.COLUMN_DOWNLOADED)
+            dao.update(valid2, TranslationTable.COLUMN_DOWNLOADED)
+            dao.update(valid3, TranslationTable.COLUMN_DOWNLOADED)
+        }
         confirmVerified(eventBus)
     }
     // endregion Translations
@@ -560,6 +571,8 @@ class GodToolsDownloadManagerTest {
     // region Cleanup
     @Test
     fun verifyCleanupActorInitialRun() = runTest {
+        setupCleanupActorMocks()
+
         testScope.testScheduler.advanceTimeBy(CLEANUP_DELAY)
         assertCleanupActorRan(0)
         testScope.runCurrent()
@@ -570,6 +583,8 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyCleanupActorRunsWhenTriggered() = runTest {
+        setupCleanupActorMocks()
+
         testScope.advanceUntilIdle()
         assertCleanupActorRan(1)
         downloadManager.cleanupActor.send(Unit)
@@ -577,40 +592,45 @@ class GodToolsDownloadManagerTest {
         assertCleanupActorRan(2)
     }
 
-    private suspend fun assertCleanupActorRan(times: Int = 1) {
-        if (times == 0) {
-            verifyNoInteractions(dao)
-        } else {
-            coVerifyOrder {
-                inOrder(dao) {
-                    repeat(times) {
-                        fs.exists()
-                        fs.rootDir()
-                        verify(dao).get(QUERY_LOCAL_FILES)
+    private fun setupCleanupActorMocks() {
+        every { dao.get(QUERY_LOCAL_FILES) } returns emptyList()
+        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
+        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns emptyList()
+    }
 
-                        fs.exists()
-                        verify(dao).get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
-                        verify(dao).get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
-                        fs.rootDir()
-                    }
-                    verifyNoMoreInteractions()
+    private suspend fun assertCleanupActorRan(times: Int = 1) {
+        if (times > 0) {
+            coVerifyOrder {
+                repeat(times) {
+                    // detectMissingFiles()
+                    fs.exists()
+                    fs.rootDir()
+                    dao.get(QUERY_LOCAL_FILES)
+
+                    // cleanupFilesystem()
+                    fs.exists()
+                    dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+                    dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                    fs.rootDir()
                 }
             }
         }
-        confirmVerified(fs)
+        confirmVerified(dao, fs)
     }
 
     @Test
     fun verifyDetectMissingFiles() = runTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
-        whenever(dao.get(QUERY_LOCAL_FILES)).thenReturn(listOf(LocalFile(file.name), LocalFile(missingFile.name)))
+        every { dao.get(QUERY_LOCAL_FILES) } returns listOf(LocalFile(file.name), LocalFile(missingFile.name))
         coEvery { fs.rootDir() } returns file.parentFile!!
         coEvery { fs.file(any()) } answers { File(file.parentFile, it.invocation.args[0] as String) }
 
         downloadManager.detectMissingFiles()
-        verify(dao, never()).delete(LocalFile(file.name))
-        verify(dao).delete(LocalFile(missingFile.name))
+        verifyAll {
+            dao.get(QUERY_LOCAL_FILES)
+            dao.delete(LocalFile(missingFile.name))
+        }
     }
 
     @Test
@@ -619,22 +639,23 @@ class GodToolsDownloadManagerTest {
         val keep = spyk(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
-        dao.stub {
-            on { get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } doReturn listOf(translation)
-            on { get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } doReturn listOf(localFile)
-            val keepLocalFile = LocalFile(keep.name)
-            on { find<LocalFile>(keep.name) } doReturn keepLocalFile
+        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns listOf(translation)
+        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(localFile)
+        keep.name.let {
+            every { dao.find<LocalFile>(it) } returns LocalFile(it)
+            coEvery { fs.file(it) } returns keep
         }
-        keep.name.let { coEvery { fs.file(it) } returns keep }
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
         downloadManager.cleanFilesystem()
-        verify(dao).delete(translation)
-        verify(dao).delete(localFile)
-        verify { orphan.delete() }
-        verify(exactly = 0) { keep.delete() }
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+        verifyOrder {
+            dao.delete(translation)
+            dao.delete(localFile)
+            orphan.delete()
+        }
+        verify(inverse = true) { keep.delete() }
     }
     // endregion Cleanup
 
