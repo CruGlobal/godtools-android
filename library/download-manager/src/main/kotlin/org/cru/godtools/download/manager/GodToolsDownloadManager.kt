@@ -14,6 +14,7 @@ import dagger.Lazy
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicLong
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,6 +24,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
@@ -57,6 +60,8 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
+import org.cru.godtools.tool.service.ManifestParser
+import org.cru.godtools.tool.service.ParserResult
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
@@ -125,6 +130,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val dao: GodToolsDao,
     private val eventBus: EventBus,
     private val fs: ToolFileSystem,
+    private val manifestParser: ManifestParser,
     private val settings: Settings,
     private val translationsApi: TranslationsApi,
     private val workManager: Lazy<WorkManager>,
@@ -137,6 +143,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         eventBus: EventBus,
         fs: ToolFileSystem,
+        manifestParser: ManifestParser,
         settings: Settings,
         translationsApi: TranslationsApi,
         workManager: Lazy<WorkManager>
@@ -145,6 +152,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         dao,
         eventBus,
         fs,
+        manifestParser,
         settings,
         translationsApi,
         workManager,
@@ -325,17 +333,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             startProgress(key)
             val downloaded = try {
-                val body = translationsApi.download(translation.id).takeIf { it.isSuccessful }?.body()
-                if (body != null) {
-                    body.byteStream().extractZipFor(translation, body.contentLength())
-                    pruneStaleTranslations()
-                    true
-                } else false
-            } catch (e: IOException) {
-                false
+                downloadTranslationFiles(translation) || downloadTranslationZip(translation)
             } finally {
                 finishDownload(key)
             }
+            if (downloaded) pruneStaleTranslations()
             if (!downloaded) workManager.get().scheduleDownloadTranslationWork(key)
             return downloaded
         }
@@ -356,6 +358,70 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 finishDownload(key)
             }
         }
+    }
+
+    private suspend fun downloadTranslationFiles(translation: Translation): Boolean = filesystemMutex.read.withLock {
+        // download manifest if necessary
+        val manifestFileName = translation.manifestFileName ?: return false
+        if (!downloadTranslationFileIfNecessary(manifestFileName)) return false
+
+        // parse manifest
+        val manifest = (manifestParser.parseManifest(
+            manifestFileName,
+            manifestParser.defaultConfig.withParseRelated(false)
+        ) as? ParserResult.Data)?.manifest ?: return false
+
+        // download all files the manifest references
+        val key = TranslationKey(translation)
+        val relatedFiles = manifest.relatedFiles
+        val completedFiles = AtomicLong(0)
+        val successful = coroutineScope {
+            relatedFiles.map {
+                async {
+                    val resp = downloadTranslationFileIfNecessary(it)
+                    do {
+                        val completed = completedFiles.get()
+                        updateProgress(key, completed + 1, relatedFiles.size.toLong())
+                    } while (!completedFiles.compareAndSet(completed, completed + 1))
+                    resp
+                }
+            }.awaitAll().all { it }
+        }
+        if (!successful) return false
+
+        // record the translation as downloaded
+        translation.isDownloaded = true
+        dao.transaction {
+            dao.updateOrInsert(TranslationFile(translation, manifestFileName))
+            relatedFiles.forEach { dao.updateOrInsert(TranslationFile(translation, it)) }
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        }
+        eventBus.post(TranslationUpdateEvent)
+
+        return true
+    }
+
+    private suspend fun downloadTranslationFileIfNecessary(fileName: String): Boolean = filesMutex.withLock(fileName) {
+        if (dao.find<LocalFile>(fileName) != null) return true
+        try {
+            val body = translationsApi.downloadFile(fileName).takeIf { it.isSuccessful }?.body() ?: return false
+            val localFile = LocalFile(fileName)
+            withContext(ioDispatcher) { body.byteStream().copyTo(localFile) }
+            dao.updateOrInsert(localFile)
+            return true
+        } catch (e: IOException) {
+            return false
+        }
+    }
+
+    private suspend fun downloadTranslationZip(translation: Translation) = try {
+        val body = translationsApi.download(translation.id).takeIf { it.isSuccessful }?.body()
+        if (body != null) {
+            body.byteStream().extractZipFor(translation, body.contentLength())
+            true
+        } else false
+    } catch (e: IOException) {
+        false
     }
 
     @GuardedBy("translationsMutex")

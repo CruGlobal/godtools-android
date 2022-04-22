@@ -121,6 +121,7 @@ class GodToolsDownloadManagerTest {
             dao,
             eventBus,
             fs,
+            mockk(),
             settings,
             translationsApi,
             { workManager },

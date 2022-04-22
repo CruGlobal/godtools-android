@@ -12,4 +12,8 @@ interface TranslationsApi {
     @Streaming
     @GET("$PATH_TRANSLATIONS/{id}")
     suspend fun download(@Path("id") id: Long): Response<ResponseBody>
+
+    @Streaming
+    @GET("$PATH_TRANSLATIONS/files/{filename}")
+    suspend fun downloadFile(@Path("filename") name: String): Response<ResponseBody>
 }
