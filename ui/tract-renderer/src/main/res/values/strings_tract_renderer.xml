@@ -23,6 +23,7 @@
     <string name="menu_settings">Settings</string>
     <string name="tract_settings_title">Tool Settings</string>
     <string name="tract_settings_action_share">Share link</string>
+    <string name="tract_settings_action_tips_disable">Hide tips</string>
     <string name="tract_settings_languages_title">Parallel Language</string>
     <string name="tract_settings_languages_description">Toggle between two different languages in this tool.</string>
     <string name="tract_settings_shareables_title">Related graphics</string>

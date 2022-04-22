@@ -40,6 +40,7 @@ class SettingsBottomSheetDialogFragment :
         binding.tool = activityDataModel.tool
         binding.activeManifest = activityDataModel.activeManifest
         binding.hasTips = activityDataModel.hasTips
+        binding.showTips = activityDataModel.showTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
         setupLanguageViews(binding)
