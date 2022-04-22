@@ -25,6 +25,8 @@ dependencies {
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
 
+    implementation(libs.godtoolsMpp.parser)
+
     implementation(libs.dagger)
     implementation(libs.eventbus)
     implementation(libs.guava)
