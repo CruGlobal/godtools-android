@@ -36,7 +36,6 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.internal.http.RealResponseBody
 import okio.buffer
 import okio.source
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
@@ -90,9 +89,11 @@ class GodToolsDownloadManagerTest {
         excludeRecords { transaction(any(), any()) }
     }
     private val eventBus = mockk<EventBus>(relaxUnitFun = true)
+    private val files = mutableMapOf<String, File>()
     private val fs = mockk<ToolFileSystem> {
         coEvery { rootDir() } returns resourcesDir
         coEvery { exists() } returns true
+        coEvery { file(any()) } answers { files.getOrPut(it.invocation.args[0] as String) { getTmpFile() } }
     }
     private val settings = mockk<Settings> {
         every { isLanguageProtected(any()) } returns false
@@ -450,25 +451,21 @@ class GodToolsDownloadManagerTest {
     fun `downloadLatestPublishedTranslation()`() = runTest {
         every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
         every { dao.find<LocalFile>(any<String>()) } returns null
-        val files = Array(3) { getTmpFile() }
-        coEvery { fs.file("a.txt") } returns files[0]
-        coEvery { fs.file("b.txt") } returns files[1]
-        coEvery { fs.file("c.txt") } returns files[2]
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
 
         // HACK: suppress dao calls from pruneTranslations()
         every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
-        excludeRecords { dao.get(any<Query<*>>()) }
+        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
 
         withDownloadManager { downloadManager ->
             downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
             assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         }
         assertTrue(translation.isDownloaded)
-        assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
-        assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
-        assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
+        assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+        assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+        assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
 
         coVerifyAll {
             dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
@@ -513,18 +510,14 @@ class GodToolsDownloadManagerTest {
     fun verifyImportTranslation() = runTest {
         every { dao.getLatestTranslation(any(), any(), any(), any()) } returns null
         every { dao.find<LocalFile>(any<String>()) } returns null
-        val files = Array(3) { getTmpFile() }
-        coEvery { fs.file("a.txt") } returns files[0]
-        coEvery { fs.file("b.txt") } returns files[1]
-        coEvery { fs.file("c.txt") } returns files[2]
 
         withDownloadManager { downloadManager ->
             downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
             downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
         }
-        assertArrayEquals("a".repeat(1024).toByteArray(), files[0].readBytes())
-        assertArrayEquals("b".repeat(1024).toByteArray(), files[1].readBytes())
-        assertArrayEquals("c".repeat(1024).toByteArray(), files[2].readBytes())
+        assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+        assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+        assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
         verifyAll {
             dao.getLatestTranslation(translation.toolCode, translation.languageCode, true, true)
             dao.find<LocalFile>("a.txt")
