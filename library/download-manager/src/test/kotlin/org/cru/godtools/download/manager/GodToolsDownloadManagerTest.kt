@@ -34,6 +34,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.internal.http.RealResponseBody
+import okio.Buffer
 import okio.buffer
 import okio.source
 import org.ccci.gto.android.common.db.find
@@ -51,6 +52,9 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
+import org.cru.godtools.tool.ParserConfig
+import org.cru.godtools.tool.service.ManifestParser
+import org.cru.godtools.tool.service.ParserResult
 import org.greenrobot.eventbus.EventBus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasItem
@@ -74,6 +78,7 @@ import retrofit2.Response
 private const val TOOL = "tool"
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@Suppress("BlockingMethodInNonBlockingContext")
 class GodToolsDownloadManagerTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -94,6 +99,10 @@ class GodToolsDownloadManagerTest {
         coEvery { rootDir() } returns resourcesDir
         coEvery { exists() } returns true
         coEvery { file(any()) } answers { files.getOrPut(it.invocation.args[0] as String) { getTmpFile() } }
+    }
+    private val manifestParser = mockk<ManifestParser> {
+        every { defaultConfig } returns ParserConfig()
+        excludeRecords { defaultConfig }
     }
     private val settings = mockk<Settings> {
         every { isLanguageProtected(any()) } returns false
@@ -122,7 +131,7 @@ class GodToolsDownloadManagerTest {
             dao,
             eventBus,
             fs,
-            mockk(),
+            manifestParser,
             settings,
             translationsApi,
             { workManager },
@@ -448,7 +457,61 @@ class GodToolsDownloadManagerTest {
 
     // region downloadLatestPublishedTranslation()
     @Test
-    fun `downloadLatestPublishedTranslation()`() = runTest {
+    fun `downloadLatestPublishedTranslation() - Files`() = runTest {
+        translation.manifestFileName = "manifest.xml"
+        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
+        every { dao.find<LocalFile>(any<String>()) } returns null
+        val config = slot<ParserConfig>()
+        coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
+            ParserResult.Data(mockk { every { relatedFiles } returns setOf("a.txt", "b.txt") })
+        coEvery { translationsApi.downloadFile("manifest.xml") } returns
+            Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("manifest")))
+        coEvery { translationsApi.downloadFile("a.txt") } returns
+            Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("a".repeat(1024))))
+        coEvery { translationsApi.downloadFile("b.txt") } returns
+            Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("b".repeat(1024))))
+
+        // HACK: suppress dao calls from pruneTranslations()
+        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
+        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
+
+        withDownloadManager { downloadManager ->
+            downloadManager.getDownloadProgressLiveData(TOOL, Locale.FRENCH).observeForever(observer)
+            assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        }
+        assertTrue(translation.isDownloaded)
+        assertEquals(setOf("manifest.xml", "a.txt", "b.txt"), files.keys)
+        assertArrayEquals("manifest".toByteArray(), files["manifest.xml"]!!.readBytes())
+        assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+        assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+        assertEquals(config.captured.withParseRelated(false), config.captured)
+
+        coVerifyAll {
+            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+            dao.find<LocalFile>("manifest.xml")
+            translationsApi.downloadFile("manifest.xml")
+            dao.updateOrInsert(LocalFile("manifest.xml"))
+            manifestParser.parseManifest("manifest.xml", any())
+
+            dao.find<LocalFile>("a.txt")
+            dao.find<LocalFile>("b.txt")
+            translationsApi.downloadFile("a.txt")
+            translationsApi.downloadFile("b.txt")
+            dao.updateOrInsert(LocalFile("a.txt"))
+            dao.updateOrInsert(LocalFile("b.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "manifest.xml"))
+            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
+            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
+            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            eventBus.post(TranslationUpdateEvent)
+            workManager wasNot Called
+            observer.onChanged(any())
+        }
+        assertNull(downloadProgress.last())
+    }
+
+    @Test
+    fun `downloadLatestPublishedTranslation() - Zip`() = runTest {
         every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
         every { dao.find<LocalFile>(any<String>()) } returns null
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
@@ -488,7 +551,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadLatestPublishedTranslation() - API IOException`() = runTest {
+    fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = runTest {
         every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
 
