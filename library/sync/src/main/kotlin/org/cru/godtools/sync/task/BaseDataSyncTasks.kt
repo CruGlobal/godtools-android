@@ -84,7 +84,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
 
     // region Languages
     protected fun storeLanguages(languages: List<Language>, existing: MutableMap<Locale, Language>?) {
-        languages.forEach {
+        languages.filter { it.isValid }.forEach {
             storeLanguage(it)
             existing?.remove(it.code)
         }
@@ -95,6 +95,8 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
 
     @VisibleForTesting
     internal fun storeLanguage(language: Language) {
+        if (!language.isValid) return
+
         // this language doesn't exist yet, check to see if a different language shares the same id
         if (language.id != Base.INVALID_ID && dao.refresh(language) == null) {
             // update the language code to preserve the added state

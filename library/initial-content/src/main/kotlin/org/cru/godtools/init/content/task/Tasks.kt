@@ -62,7 +62,9 @@ internal class Tasks @Inject constructor(
             val languages = context.assets.open("languages.json").reader().use { it.readText() }
                 .let { jsonApiConverter.fromJson(it, Language::class.java) }
 
-            dao.transaction { languages.data.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) } }
+            dao.transaction {
+                languages.data.filter { it.isValid }.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+            }
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
