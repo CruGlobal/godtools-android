@@ -2,10 +2,10 @@ package org.keynote.godtools.android.db
 
 import android.content.ContentValues
 import android.database.Cursor
+import java.util.Locale
 import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getLocale
 import org.ccci.gto.android.common.util.database.getString
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.TrainingTip
 import org.keynote.godtools.android.db.Contract.TrainingTipTable.COLUMN_IS_COMPLETED
 import org.keynote.godtools.android.db.Contract.TrainingTipTable.COLUMN_LANGUAGE
@@ -25,7 +25,7 @@ internal object TrainingTipMapper : AbstractMapper<TrainingTip>() {
 
     override fun newObject(c: Cursor) = TrainingTip(
         c.getString(COLUMN_TOOL).orEmpty(),
-        c.getLocale(COLUMN_LANGUAGE) ?: Language.INVALID_CODE,
+        c.getLocale(COLUMN_LANGUAGE) ?: Locale.ROOT,
         c.getString(COLUMN_TIP_ID).orEmpty()
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
