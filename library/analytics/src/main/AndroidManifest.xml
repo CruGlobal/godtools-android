@@ -32,11 +32,17 @@
         </service>
         <!-- endregion AppsFlyer -->
 
-        <meta-data
-            android:name="google_analytics_automatic_screen_reporting_enabled"
-            android:value="false" />
+        <!-- region Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
+        <!-- endregion Facebook -->
+
+        <meta-data
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
     </application>
 </manifest>

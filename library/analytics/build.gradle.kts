@@ -18,10 +18,12 @@ android {
     buildTypes {
         debug {
             resValue("string", "facebook_app_id", "448969905944197")
+            resValue("string", "facebook_client_token", "be1edf48d86ed54a24951ededa62eda2")
             buildConfigField("String", "SNOWPLOW_APP_ID", "\"godtools-dev\"")
         }
         release {
             resValue("string", "facebook_app_id", "2236701616451487")
+            resValue("string", "facebook_client_token", "3b6bf5b7c128a970337c4fa1860ffa6e")
             buildConfigField("String", "SNOWPLOW_APP_ID", "\"godtools\"")
         }
     }
