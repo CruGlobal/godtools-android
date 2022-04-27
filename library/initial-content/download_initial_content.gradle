@@ -14,25 +14,9 @@ android.libraryVariants.all { variant ->
 
     // create a generated assets directory for the initial content and add it to the most specific source set available.
     def assetGenDir = new File(project.buildDir, "generated/assets/initial-content/" + variant.dirName)
-    variant.sourceSets.last().assets.srcDir(assetGenDir)
 
     // generate assets task, this should depend on all tasks we create locally
     def assetGenTask = project.tasks.getByName("generate${variant.name.capitalize()}Assets")
-
-    // languages json
-    def languagesJsonFile = new File(assetGenDir, 'languages.json')
-    def downloadLanguagesTask = project.tasks.create "download${variant.name.capitalize()}BundledLanguages", Download, {
-        mustRunAfter clean
-
-        src "${mobileContentApi}languages"
-        dest languagesJsonFile
-        quiet true
-
-        doLast {
-            simplifyBundledLanguages(languagesJsonFile)
-        }
-    }
-    assetGenTask.dependsOn(downloadLanguagesTask)
 
     // tools json
     def toolsJsonFile = new File(assetGenDir, 'tools.json')
@@ -112,18 +96,6 @@ android.libraryVariants.all { variant ->
         }
         assetGenTask.dependsOn(downloadTranslationsTask)
     }
-}
-
-static def simplifyBundledLanguages(File file) {
-    def data = new JsonSlurper().parseText(file.text)
-
-    data.data.each { language ->
-        removeJsonApiAttrs(language, 'direction')
-        language.remove('relationships')
-    }
-
-    sortJsonApiObject(data)
-    file.text = JsonOutput.toJson(data)
 }
 
 static def simplifyBundledTools(File file) {

@@ -21,4 +21,5 @@ dependencies {
     compileOnly(gradleKotlinDsl())
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
+    implementation(libs.json)
 }
