@@ -87,10 +87,14 @@ class SettingsBottomSheetDialogFragment :
         binding.languageParallelDropdown.apply {
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
-                .combineWith(primaryLanguage) { langs, prim -> langs.filterNot { it.code == prim?.code } }
+                .combineWith(primaryLanguage) { langs, prim ->
+                    listOf(LanguagesDropdownAdapter.NONE) + langs.filterNot { it.code == prim?.code }
+                }
                 .observe(viewLifecycleOwner, adapter)
             setAdapter(adapter)
-            setOnItemClickListener { _, _, pos, _ -> updateParallelLanguage(adapter.getItem(pos)?.code) }
+            setOnItemClickListener { _, _, pos, _ ->
+                updateParallelLanguage(adapter.getItem(pos)?.takeUnless { it == LanguagesDropdownAdapter.NONE }?.code)
+            }
         }
     }
 
