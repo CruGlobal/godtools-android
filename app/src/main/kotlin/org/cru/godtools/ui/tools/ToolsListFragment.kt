@@ -22,7 +22,8 @@ import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.Simple
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerHeaderAdapter
-import org.cru.godtools.analytics.firebase.model.ACTION_IAM_MY_TOOLS
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
@@ -116,9 +117,12 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         when (mode) {
             MODE_ADDED -> {
                 eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
-                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS))
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
             }
-            MODE_LESSONS -> eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
+            MODE_LESSONS -> {
+                eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
+            }
         }
     }
 
