@@ -14,6 +14,7 @@
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />
         <variable name="activeManifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="hasTips" type="LiveData&lt;Boolean&gt;" />
+        <variable name="showTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="primaryLanguage" type="LiveData&lt;Language&gt;" />
         <variable name="parallelLanguage" type="LiveData&lt;Language&gt;" />
     </data>
@@ -155,7 +156,7 @@
         <ImageView
             android:id="@+id/action_tips_icon"
             style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
-            android:src="@drawable/ic_tips_tip_done"
+            android:src="@{showTips ? @drawable/ic_disable_tips : @drawable/ic_tips_tip_done, default=@drawable/ic_tips_tip_done}"
             app:layout_constraintBottom_toTopOf="@id/action_tips_label"
             app:layout_constraintEnd_toEndOf="@id/action_tips"
             app:layout_constraintStart_toStartOf="@id/action_tips"
@@ -167,7 +168,7 @@
             style="@style/Widget.GodTools.Tract.Settings.Action.Label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/menu_training_tips"
+            android:text="@{showTips ? @string/tract_settings_action_tips_disable : @string/menu_training_tips, default=@string/menu_training_tips}"
             app:layout_constraintBottom_toBottomOf="@id/action_tips"
             app:layout_constraintEnd_toEndOf="@id/action_tips"
             app:layout_constraintStart_toStartOf="@id/action_tips"
@@ -219,6 +220,7 @@
             app:layout_constraintEnd_toStartOf="@id/margin_end"
             app:layout_constraintStart_toEndOf="@id/margin_start"
             app:layout_constraintTop_toBottomOf="@id/languages_description"
+            app:layout_goneMarginBottom="32dp"
             app:shapeAppearance="@style/ShapeAppearance.GodTools.Tract.Settings.Languages" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -267,7 +269,7 @@
                 android:id="@+id/language_parallel_dropdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{parallelLanguage.getDisplayName(context)}"
+                android:text="@{parallelLanguage != null ? parallelLanguage.getDisplayName(context) : @string/tract_settings_languages_parallel}"
                 android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
