@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": "1",
+    "type": "language",
+    "attributes": {
+      "code": "en",
+      "name": "English",
+      "direction": "ltr"
+    }
+  }
+}
