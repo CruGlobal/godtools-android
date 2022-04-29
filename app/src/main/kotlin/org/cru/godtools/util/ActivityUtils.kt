@@ -14,5 +14,5 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
         Type.ARTICLE -> startArticlesActivity(code, languages[0])
         Type.CYOA -> startCyoaActivity(code, *languages)
         Type.LESSON -> startLessonActivity(code, languages[0])
-        Type.UNKNOWN -> Unit
+        Type.META, Type.UNKNOWN -> Unit
     }

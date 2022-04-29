@@ -11,6 +11,7 @@ private const val JSON_TYPE_TRACT = "tract"
 private const val JSON_TYPE_ARTICLE = "article"
 private const val JSON_TYPE_CYOA = "cyoa"
 private const val JSON_TYPE_LESSON = "lesson"
+private const val JSON_TYPE_META = "metatool"
 private const val JSON_ABBREVIATION = "abbreviation"
 private const val JSON_NAME = "name"
 private const val JSON_CATEGORY = "attr-category"
@@ -31,6 +32,7 @@ class Tool : Base() {
     companion object {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
+        const val JSON_METATOOL = "metatool"
     }
 
     enum class Type(val json: String?) {
@@ -38,6 +40,7 @@ class Tool : Base() {
         ARTICLE(JSON_TYPE_ARTICLE),
         CYOA(JSON_TYPE_CYOA),
         LESSON(JSON_TYPE_LESSON),
+        META(JSON_TYPE_META),
         UNKNOWN(null);
 
         val supportsParallelLanguage get() = this in setOf(TRACT, CYOA)
@@ -97,6 +100,12 @@ class Tool : Base() {
     @JsonApiIgnore
     var order = Int.MAX_VALUE
 
+    @JsonApiAttribute(JSON_METATOOL)
+    var metatool: Tool? = null
+        private set
+    @JsonApiIgnore
+    var metatoolCode: String? = null
+        get() = field ?: metatool?.code
     @JsonApiAttribute(JSON_ATTACHMENTS)
     var attachments: List<Attachment>? = null
         private set

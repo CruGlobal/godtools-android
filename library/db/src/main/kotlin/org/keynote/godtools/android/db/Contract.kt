@@ -96,6 +96,7 @@ object Contract : BaseContract() {
         const val COLUMN_SCREEN_SHARE_DISABLED = "screen_share_disabled"
         const val COLUMN_DEFAULT_ORDER = "default_order"
         internal const val COLUMN_ORDER = "ordering"
+        const val COLUMN_META_TOOL = "metatool"
         const val COLUMN_ADDED = "added"
         const val COLUMN_HIDDEN = "isHidden"
         const val COLUMN_SPOTLIGHT = "isSpotlight"
@@ -126,6 +127,7 @@ object Contract : BaseContract() {
             COLUMN_SCREEN_SHARE_DISABLED,
             COLUMN_DEFAULT_ORDER,
             COLUMN_ORDER,
+            COLUMN_META_TOOL,
             COLUMN_ADDED,
             COLUMN_HIDDEN,
             COLUMN_SPOTLIGHT
@@ -145,6 +147,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
         private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
         private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
+        private const val SQL_COLUMN_META_TOOL = "$COLUMN_META_TOOL TEXT"
         private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
         private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
@@ -171,6 +174,7 @@ object Contract : BaseContract() {
             SQL_COLUMN_SCREEN_SHARE_DISABLED,
             SQL_COLUMN_DEFAULT_ORDER,
             SQL_COLUMN_ORDER,
+            SQL_COLUMN_META_TOOL,
             SQL_COLUMN_ADDED,
             SQL_COLUMN_HIDDEN,
             SQL_COLUMN_SPOTLIGHT,
@@ -192,6 +196,7 @@ object Contract : BaseContract() {
         internal const val SQL_V48_POPULATE_SPOTLIGHT = "UPDATE $TABLE_NAME SET $COLUMN_SPOTLIGHT = 0"
         internal const val SQL_V49_ALTER_DETAILS_BANNER_ANIMATION =
             "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BANNER_ANIMATION"
+        internal const val SQL_V50_ALTER_META_TOOL = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_META_TOOL"
         // endregion DB migrations
     }
 
