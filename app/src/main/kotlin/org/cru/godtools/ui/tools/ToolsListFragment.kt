@@ -22,10 +22,10 @@ import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.Simple
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerHeaderAdapter
-import org.cru.godtools.analytics.firebase.model.ACTION_IAM_MY_TOOLS
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ALL_TOOLS
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LESSONS
 import org.cru.godtools.base.Settings
@@ -46,7 +46,6 @@ import splitties.fragmentargs.argOrDefault
 class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
     companion object {
         const val MODE_ADDED = 1
-        const val MODE_ALL = 2
         const val MODE_LESSONS = 3
     }
 
@@ -116,12 +115,14 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
 
     private fun trackInAnalytics() {
         when (mode) {
-            MODE_ALL -> eventBus.post(AnalyticsScreenEvent(SCREEN_ALL_TOOLS))
             MODE_ADDED -> {
                 eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
-                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_MY_TOOLS))
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
             }
-            MODE_LESSONS -> eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
+            MODE_LESSONS -> {
+                eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
+            }
         }
     }
 
