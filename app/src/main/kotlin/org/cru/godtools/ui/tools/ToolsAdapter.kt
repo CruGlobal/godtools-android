@@ -25,7 +25,7 @@ private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
     private val dataModel: ToolsAdapterViewModel,
-    @LayoutRes private val itemLayout: Int? = null
+    @LayoutRes private val itemLayout: Int
 ) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
         setHasStableIds(true)
@@ -52,12 +52,7 @@ class ToolsAdapter(
         tools = t
     }
 
-    override fun getItemViewType(position: Int) = when {
-        itemLayout != null -> itemLayout
-        getItem(position)?.type == Tool.Type.LESSON -> R.layout.tools_list_item_lesson
-        else -> R.layout.tools_list_item_tool
-    }
-
+    override fun getItemViewType(position: Int) = itemLayout
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false)
             .also { it.setVariable(BR.callbacks, callbacks) }
