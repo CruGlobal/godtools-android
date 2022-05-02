@@ -11,6 +11,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CATEGORY
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CODE
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DEFAULT_ORDER
+import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DEFAULT_VARIANT
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DESCRIPTION
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_DETAILS_BANNER_ANIMATION
@@ -43,6 +44,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
             COLUMN_DEFAULT_ORDER -> values.put(field, obj.defaultOrder)
             COLUMN_ORDER -> values.put(field, obj.order)
             COLUMN_META_TOOL -> values.put(field, obj.metatoolCode)
+            COLUMN_DEFAULT_VARIANT -> values.put(field, obj.defaultVariant)
             COLUMN_ADDED -> values.put(field, obj.isAdded)
             COLUMN_HIDDEN -> values.put(field, obj.isHidden)
             COLUMN_SPOTLIGHT -> values.put(field, obj.isSpotlight)
@@ -66,6 +68,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
         defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0)
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE)
         metatoolCode = c.getString(COLUMN_META_TOOL)
+        defaultVariant = c.getString(COLUMN_DEFAULT_VARIANT)
         isAdded = getBool(c, COLUMN_ADDED, false)
         isHidden = getBool(c, COLUMN_HIDDEN, false)
         isSpotlight = getBool(c, COLUMN_SPOTLIGHT, false)

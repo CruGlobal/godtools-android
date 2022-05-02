@@ -24,7 +24,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 50
+private const val DATABASE_VERSION = 51
 
 /*
  * Version history
@@ -47,6 +47,7 @@ private const val DATABASE_VERSION = 50
  * 48: 2022-02-14
  * 49: 2022-04-08
  * 50: 2022-04-29
+ * 51: 2022-05-02
  */
 
 @Singleton
@@ -99,6 +100,7 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
                     }
                     49 -> db.execSQL(ToolTable.SQL_V49_ALTER_DETAILS_BANNER_ANIMATION)
                     50 -> db.execSQL(ToolTable.SQL_V50_ALTER_META_TOOL)
+                    51 -> db.execSQL(ToolTable.SQL_V51_ALTER_DEFAULT_VARIANT)
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
