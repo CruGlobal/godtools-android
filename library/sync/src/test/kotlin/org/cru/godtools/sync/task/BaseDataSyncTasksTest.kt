@@ -18,6 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.same
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 class BaseDataSyncTasksTest {
@@ -36,7 +37,7 @@ class BaseDataSyncTasksTest {
     }
 
     @Test
-    fun verifyStoreLanguage() {
+    fun `storeLanguage()`() {
         // setup test
         val language = Language().apply {
             id = 1
@@ -51,7 +52,17 @@ class BaseDataSyncTasksTest {
     }
 
     @Test
-    fun verifyStoreLanguageChangingCode() {
+    fun `storeLanguage() - Missing Code`() {
+        val language = Language().apply {
+            id = 1
+        }
+
+        tasks.storeLanguage(language)
+        verifyNoInteractions(dao)
+    }
+
+    @Test
+    fun `storeLanguage() - Changing Code`() {
         // setup test
         val language = Language().apply {
             id = 1

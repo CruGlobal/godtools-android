@@ -32,6 +32,8 @@ class Language : Base() {
     @JsonApiIgnore
     var isAdded = false
 
+    val isValid get() = code != null && code != INVALID_CODE
+
     fun getDisplayName(context: Context?) = getDisplayName(context, null)
     fun getDisplayName(context: Context?, inLocale: Locale?) =
         _code?.getDisplayName(context, name, inLocale).orEmpty()
