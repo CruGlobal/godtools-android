@@ -96,7 +96,6 @@ internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
             .and(TranslationTable.SQL_WHERE_PUBLISHED)
             .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
     )
-    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
 @VisibleForTesting
 internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
