@@ -2,8 +2,13 @@ package org.cru.godtools.shortcuts
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Called
+import io.mockk.clearMocks
+import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,12 +24,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verifyBlocking
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Config.NEWEST_SDK
 import org.robolectric.annotation.Config.OLDEST_SDK
@@ -32,27 +31,25 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
-    private val invalidations = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
-    private val dao: GodToolsDao = mockk {
-        every { invalidationFlow(*anyVararg()) } returns invalidations
-    }
-    private lateinit var settings: Settings
-    private lateinit var shortcutManager: GodToolsShortcutManager
-    private val coroutineScope = TestScope()
-
+    // various flows
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(extraBufferCapacity = 20)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(extraBufferCapacity = 20)
+    private val invalidationFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
+
+    private val dao: GodToolsDao = mockk {
+        every { invalidationFlow(*anyVararg()) } returns invalidationFlow
+    }
+    private val settings: Settings = mockk {
+        every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
+        every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
+    }
+    private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true)
+    private val coroutineScope = TestScope()
 
     private lateinit var dispatcher: GodToolsShortcutManager.Dispatcher
 
     @Before
     fun setup() {
-        shortcutManager = mock()
-        settings = mock {
-            on { primaryLanguageFlow } doReturn primaryLanguageFlow
-            on { parallelLanguageFlow } doReturn parallelLanguageFlow
-        }
-
         dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, settings, coroutineScope)
     }
 
@@ -68,29 +65,29 @@ class GodToolsShortcutManagerDispatcherTest {
         // update doesn't trigger before requested
         coroutineScope.advanceUntilIdle()
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
 
         // trigger update
-        assertTrue(invalidations.tryEmit(Unit))
-        verifyNoInteractions(shortcutManager)
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        verify { shortcutManager wasNot Called }
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         coroutineScope.runCurrent()
-        verifyBlocking(shortcutManager) { updatePendingShortcuts() }
-        verifyNoMoreInteractions(shortcutManager)
-        clearInvocations(shortcutManager)
+        coVerify { shortcutManager.updatePendingShortcuts() }
+        confirmVerified(shortcutManager)
+        clearMocks(shortcutManager)
 
         // trigger multiple updates simultaneously, it should conflate to a single update
-        assertTrue(invalidations.tryEmit(Unit))
+        assertTrue(invalidationFlow.tryEmit(Unit))
         coroutineScope.advanceTimeBy(1)
         coroutineScope.runCurrent()
-        verifyNoInteractions(shortcutManager)
-        assertTrue(invalidations.tryEmit(Unit))
+        verify { shortcutManager wasNot Called }
+        assertTrue(invalidationFlow.tryEmit(Unit))
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         coroutineScope.runCurrent()
-        verifyBlocking(shortcutManager) { updatePendingShortcuts() }
-        verifyNoMoreInteractions(shortcutManager)
+        coVerify { shortcutManager.updatePendingShortcuts() }
+        confirmVerified(shortcutManager)
         coroutineScope.advanceUntilIdle()
-        verifyNoMoreInteractions(shortcutManager)
+        confirmVerified(shortcutManager)
     }
 
     // region updateShortcutsActor
@@ -102,10 +99,10 @@ class GodToolsShortcutManagerDispatcherTest {
 
         // trigger a primary language update
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
         coroutineScope.advanceUntilIdle()
-        verifyBlocking(shortcutManager) { updateShortcuts() }
-        verifyNoMoreInteractions(shortcutManager)
+        coVerify { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
     }
 
     @Test
@@ -116,10 +113,10 @@ class GodToolsShortcutManagerDispatcherTest {
 
         // trigger a primary language update
         assertTrue(parallelLanguageFlow.tryEmit(null))
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
         coroutineScope.advanceUntilIdle()
-        verifyBlocking(shortcutManager) { updateShortcuts() }
-        verifyNoMoreInteractions(shortcutManager)
+        coVerify { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
     }
 
     @Test
@@ -133,15 +130,15 @@ class GodToolsShortcutManagerDispatcherTest {
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 4000)
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
         assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
         assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
         coroutineScope.advanceUntilIdle()
-        verifyBlocking(shortcutManager) { updateShortcuts() }
+        coVerify { shortcutManager.updateShortcuts() }
     }
 
     @Test
@@ -153,18 +150,18 @@ class GodToolsShortcutManagerDispatcherTest {
             dispatcher.updateShortcutsActor.trySend(Unit).isSuccess
         )
         coroutineScope.advanceUntilIdle()
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
     }
 
     private fun assertUpdateExistingShortcutsInitialUpdate() {
         // ensure update shortcuts is initially delayed
         coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
-        verifyNoInteractions(shortcutManager)
+        verify { shortcutManager wasNot Called }
         coroutineScope.runCurrent()
-        verifyBlocking(shortcutManager) { updateShortcuts() }
+        coVerify { shortcutManager.updateShortcuts() }
         coroutineScope.advanceUntilIdle()
-        verifyNoMoreInteractions(shortcutManager)
-        clearInvocations(shortcutManager)
+        confirmVerified(shortcutManager)
+        clearMocks(shortcutManager)
     }
     // endregion updateShortcutsActor
 }
