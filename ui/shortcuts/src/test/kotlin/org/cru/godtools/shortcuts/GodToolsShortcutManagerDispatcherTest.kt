@@ -18,9 +18,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
-import org.junit.After
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
@@ -44,124 +42,134 @@ class GodToolsShortcutManagerDispatcherTest {
         every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true)
-    private val coroutineScope = TestScope()
 
-    private lateinit var dispatcher: GodToolsShortcutManager.Dispatcher
-
-    @Before
-    fun setup() {
-        dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, settings, coroutineScope)
-    }
-
-    @After
-    fun cleanup() {
+    private fun TestScope.testDispatcher(block: (GodToolsShortcutManager.Dispatcher) -> Unit) {
+        val dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, settings, this)
+        block(dispatcher)
         dispatcher.shutdown()
     }
 
     @Test
-    fun verifyUpdatePendingToolShortcuts() {
-        dispatcher.updateShortcutsActor.close()
+    fun verifyUpdatePendingToolShortcuts() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updateShortcutsActor.close()
 
-        // update doesn't trigger before requested
-        coroutineScope.advanceUntilIdle()
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        verify { shortcutManager wasNot Called }
+            // update doesn't trigger before requested
+            advanceUntilIdle()
+            verify { shortcutManager wasNot Called }
 
-        // trigger update
-        assertTrue(invalidationFlow.tryEmit(Unit))
-        verify { shortcutManager wasNot Called }
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        coroutineScope.runCurrent()
-        coVerify { shortcutManager.updatePendingShortcuts() }
-        confirmVerified(shortcutManager)
-        clearMocks(shortcutManager)
+            // trigger update
+            assertTrue(invalidationFlow.tryEmit(Unit))
+            verify { shortcutManager wasNot Called }
+            advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+            runCurrent()
+            coVerify { shortcutManager.updatePendingShortcuts() }
+            confirmVerified(shortcutManager)
+            clearMocks(shortcutManager)
 
-        // trigger multiple updates simultaneously, it should conflate to a single update
-        assertTrue(invalidationFlow.tryEmit(Unit))
-        coroutineScope.advanceTimeBy(1)
-        coroutineScope.runCurrent()
-        verify { shortcutManager wasNot Called }
-        assertTrue(invalidationFlow.tryEmit(Unit))
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-        coroutineScope.runCurrent()
-        coVerify { shortcutManager.updatePendingShortcuts() }
-        confirmVerified(shortcutManager)
-        coroutineScope.advanceUntilIdle()
-        confirmVerified(shortcutManager)
+            // trigger multiple updates simultaneously, it should conflate to a single update
+            assertTrue(invalidationFlow.tryEmit(Unit))
+            advanceTimeBy(1)
+            runCurrent()
+            verify { shortcutManager wasNot Called }
+            assertTrue(invalidationFlow.tryEmit(Unit))
+            advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+            runCurrent()
+            coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
+            confirmVerified(shortcutManager)
+            advanceUntilIdle()
+            confirmVerified(shortcutManager)
+        }
     }
 
     // region updateShortcutsActor
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsOnPrimaryLanguageUpdate() {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        assertUpdateExistingShortcutsInitialUpdate()
-
-        // trigger a primary language update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        verify { shortcutManager wasNot Called }
-        coroutineScope.advanceUntilIdle()
-        coVerify { shortcutManager.updateShortcuts() }
-        confirmVerified(shortcutManager)
+    fun `updateShortcutsActor - Triggers once on startup`() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updatePendingShortcutsJob.cancel()
+            verify { shortcutManager wasNot Called }
+            advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
+            verify { shortcutManager wasNot Called }
+            runCurrent()
+            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+            advanceUntilIdle()
+            confirmVerified(shortcutManager)
+        }
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsOnParallelLanguageUpdate() {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        assertUpdateExistingShortcutsInitialUpdate()
+    fun `updateShortcutsActor - Trigger on primaryLanguage Update`() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updatePendingShortcutsJob.cancel()
+            advanceUntilIdle()
+            clearMocks(shortcutManager)
 
-        // trigger a primary language update
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        verify { shortcutManager wasNot Called }
-        coroutineScope.advanceUntilIdle()
-        coVerify { shortcutManager.updateShortcuts() }
-        confirmVerified(shortcutManager)
+            // trigger a primary language update
+            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+            verify { shortcutManager wasNot Called }
+            advanceUntilIdle()
+            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+            confirmVerified(shortcutManager)
+        }
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateExistingShortcutsAggregateMultiple() = runTest {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        assertUpdateExistingShortcutsInitialUpdate()
+    fun `updateShortcutsActor - Trigger on parallelLanguage Update`() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updatePendingShortcutsJob.cancel()
+            advanceUntilIdle()
+            clearMocks(shortcutManager)
 
-        // trigger multiple updates simultaneously, it should aggregate to a single update
-        assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 4000)
-        verify { shortcutManager wasNot Called }
-        assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-        verify { shortcutManager wasNot Called }
-        coroutineScope.advanceUntilIdle()
-        coVerify { shortcutManager.updateShortcuts() }
+            // trigger a parallel language update
+            assertTrue(parallelLanguageFlow.tryEmit(null))
+            verify { shortcutManager wasNot Called }
+            advanceUntilIdle()
+            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+            confirmVerified(shortcutManager)
+        }
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
+    fun `updateShortcutsActor - Aggregates multiple events`() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updatePendingShortcutsJob.cancel()
+
+            // trigger multiple updates simultaneously, it should aggregate to a single update
+            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
+            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+            assertTrue(parallelLanguageFlow.tryEmit(null))
+            advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
+            verify { shortcutManager wasNot Called }
+            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
+            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
+            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+            assertTrue(parallelLanguageFlow.tryEmit(null))
+            advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
+            verify { shortcutManager wasNot Called }
+            runCurrent()
+            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+            advanceUntilIdle()
+            confirmVerified(shortcutManager)
+        }
     }
 
     @Test
     @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
-    fun verifyUpdateExistingShortcutsNotAvailableForOldSdks() {
-        coroutineScope.advanceUntilIdle()
-        assertTrue(
-            "Ensure actor can still accept requests, even though they are no-ops",
-            dispatcher.updateShortcutsActor.trySend(Unit).isSuccess
-        )
-        coroutineScope.advanceUntilIdle()
-        verify { shortcutManager wasNot Called }
-    }
-
-    private fun assertUpdateExistingShortcutsInitialUpdate() {
-        // ensure update shortcuts is initially delayed
-        coroutineScope.advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
-        verify { shortcutManager wasNot Called }
-        coroutineScope.runCurrent()
-        coVerify { shortcutManager.updateShortcuts() }
-        coroutineScope.advanceUntilIdle()
-        confirmVerified(shortcutManager)
-        clearMocks(shortcutManager)
+    fun `updateShortcutsActor - Not Available For Old Sdks`() = runTest {
+        testDispatcher { dispatcher ->
+            dispatcher.updatePendingShortcutsJob.cancel()
+            advanceUntilIdle()
+            assertTrue(
+                "Ensure actor can still accept requests, even though they are no-ops",
+                dispatcher.updateShortcutsActor.trySend(Unit).isSuccess
+            )
+            advanceUntilIdle()
+            verify { shortcutManager wasNot Called }
+        }
     }
     // endregion updateShortcutsActor
 }
