@@ -55,10 +55,7 @@ import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.ToolUsedEvent
-import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -285,7 +282,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
         private val dao: GodToolsDao,
-        eventBus: EventBus,
         settings: Settings,
         coroutineScope: CoroutineScope
     ) {
@@ -293,26 +289,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         constructor(
             manager: GodToolsShortcutManager,
             dao: GodToolsDao,
-            eventBus: EventBus,
             settings: Settings
-        ) : this(manager, dao, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
-
-        // region Events
-        @AnyThread
-        @Subscribe
-        fun onToolUpdate(event: ToolUpdateEvent) {
-        }
-
-        @AnyThread
-        @Subscribe
-        fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
-        }
-
-        @AnyThread
-        @Subscribe
-        fun onTranslationUpdate(event: TranslationUpdateEvent) {
-        }
-        // endregion Events
+        ) : this(manager, dao, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
         @VisibleForTesting
         internal val updatePendingShortcutsJob = coroutineScope.launch {
@@ -343,9 +321,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
 
         init {
-            // register event listeners
-            eventBus.register(this)
-
             // launch an initial update
             updateShortcutsActor.trySend(Unit)
         }

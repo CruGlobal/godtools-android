@@ -13,22 +13,15 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
-import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.ToolUpdateEvent
-import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyBlocking
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
@@ -60,7 +53,7 @@ class GodToolsShortcutManagerDispatcherTest {
             on { parallelLanguageFlow } doReturn parallelLanguageFlow
         }
 
-        dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, mock(), settings, coroutineScope)
+        dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, settings, coroutineScope)
     }
 
     @After
@@ -174,22 +167,4 @@ class GodToolsShortcutManagerDispatcherTest {
         clearInvocations(shortcutManager)
     }
     // endregion updateShortcutsActor
-
-    @Test
-    fun `Initialization - EventBus events shouldn't race initialization`() {
-        val eventBus = mock<EventBus> {
-            on { register(any<GodToolsShortcutManager.Dispatcher>()) } doAnswer {
-                // trigger events immediately when the Dispatcher is registered
-                val dispatcher: GodToolsShortcutManager.Dispatcher = it.getArgument(0)
-                dispatcher.onToolUpdate(ToolUpdateEvent)
-                dispatcher.onAttachmentUpdate(AttachmentUpdateEvent)
-                dispatcher.onTranslationUpdate(TranslationUpdateEvent)
-            }
-        }
-
-        val dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, eventBus, settings, coroutineScope)
-        verify(eventBus).register(dispatcher)
-        verifyNoMoreInteractions(eventBus)
-        dispatcher.shutdown()
-    }
 }
