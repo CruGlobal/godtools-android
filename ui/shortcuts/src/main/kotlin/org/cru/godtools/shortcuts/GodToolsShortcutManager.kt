@@ -22,18 +22,13 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
-import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -305,30 +300,23 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
 
         @VisibleForTesting
-        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        internal val updateShortcutsJob = coroutineScope.launch {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
+
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java),
-                channel.consumeAsFlow()
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
             ).conflate().collectLatest {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    delay(DELAY_UPDATE_SHORTCUTS)
-                    manager.updateShortcuts()
-                }
+                delay(DELAY_UPDATE_SHORTCUTS)
+                manager.updateShortcuts()
             }
-        }
-
-        init {
-            // launch an initial update
-            updateShortcutsActor.trySend(Unit)
         }
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
             updatePendingShortcutsJob.cancel()
-            updateShortcutsActor.close()
+            updateShortcutsJob.cancel()
         }
     }
 }

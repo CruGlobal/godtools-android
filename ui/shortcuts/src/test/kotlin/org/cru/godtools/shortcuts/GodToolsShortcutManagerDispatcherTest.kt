@@ -61,7 +61,7 @@ class GodToolsShortcutManagerDispatcherTest {
     @Test
     fun verifyUpdatePendingToolShortcuts() = runTest {
         testDispatcher { dispatcher ->
-            dispatcher.updateShortcutsActor.close()
+            dispatcher.updateShortcutsJob.cancel()
 
             // trigger update
             assertTrue(invalidationFlow.tryEmit(Unit))
@@ -90,7 +90,7 @@ class GodToolsShortcutManagerDispatcherTest {
     // region updateShortcutsActor
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsActor - Triggers once on startup`() = runTest {
+    fun `updateShortcutsJob - Triggers once on startup`() = runTest {
         testDispatcher { dispatcher ->
             dispatcher.updatePendingShortcutsJob.cancel()
             verify { shortcutManager wasNot Called }
@@ -105,7 +105,7 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsActor - Trigger on primaryLanguage Update`() = runTest {
+    fun `updateShortcutsJob - Trigger on primaryLanguage Update`() = runTest {
         testDispatcher { dispatcher ->
             dispatcher.updatePendingShortcutsJob.cancel()
             advanceUntilIdle()
@@ -122,7 +122,7 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsActor - Trigger on parallelLanguage Update`() = runTest {
+    fun `updateShortcutsJob - Trigger on parallelLanguage Update`() = runTest {
         testDispatcher { dispatcher ->
             dispatcher.updatePendingShortcutsJob.cancel()
             advanceUntilIdle()
@@ -139,20 +139,20 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsActor - Aggregates multiple events`() = runTest {
+    fun `updateShortcutsJob - Aggregates multiple events`() = runTest {
         testDispatcher { dispatcher ->
             dispatcher.updatePendingShortcutsJob.cancel()
 
             // trigger multiple updates simultaneously, it should aggregate to a single update
-            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
             assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
             assertTrue(parallelLanguageFlow.tryEmit(null))
+            assertTrue(invalidationFlow.tryEmit(Unit))
             advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
             verify { shortcutManager wasNot Called }
-            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
-            assertTrue(dispatcher.updateShortcutsActor.trySend(Unit).isSuccess)
             assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
             assertTrue(parallelLanguageFlow.tryEmit(null))
+            assertTrue(invalidationFlow.tryEmit(Unit))
+            assertTrue(invalidationFlow.tryEmit(Unit))
             advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
             verify { shortcutManager wasNot Called }
             runCurrent()
@@ -164,15 +164,11 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
-    fun `updateShortcutsActor - Not Available For Old Sdks`() = runTest {
+    fun `updateShortcutsJob - Not Available For Old Sdks`() = runTest {
         testDispatcher { dispatcher ->
             dispatcher.updatePendingShortcutsJob.cancel()
             advanceUntilIdle()
-            assertTrue(
-                "Ensure actor can still accept requests, even though they are no-ops",
-                dispatcher.updateShortcutsActor.trySend(Unit).isSuccess
-            )
-            advanceUntilIdle()
+            assertTrue(dispatcher.updateShortcutsJob.isCompleted)
             verify { shortcutManager wasNot Called }
         }
     }
