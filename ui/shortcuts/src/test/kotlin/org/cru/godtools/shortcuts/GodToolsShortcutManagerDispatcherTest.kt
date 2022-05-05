@@ -2,6 +2,8 @@ package org.cru.godtools.shortcuts
 
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,6 +22,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doAnswer
@@ -36,6 +39,10 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
+    private val invalidations = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
+    private val dao: GodToolsDao = mockk {
+        every { invalidationFlow(*anyVararg()) } returns invalidations
+    }
     private lateinit var settings: Settings
     private lateinit var shortcutManager: GodToolsShortcutManager
     private val coroutineScope = TestScope()
@@ -53,7 +60,7 @@ class GodToolsShortcutManagerDispatcherTest {
             on { parallelLanguageFlow } doReturn parallelLanguageFlow
         }
 
-        dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, mock(), settings, coroutineScope)
+        dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, mock(), settings, coroutineScope)
     }
 
     @After
@@ -180,7 +187,7 @@ class GodToolsShortcutManagerDispatcherTest {
             }
         }
 
-        val dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, eventBus, settings, coroutineScope)
+        val dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, eventBus, settings, coroutineScope)
         verify(eventBus).register(dispatcher)
         verifyNoMoreInteractions(eventBus)
         dispatcher.shutdown()

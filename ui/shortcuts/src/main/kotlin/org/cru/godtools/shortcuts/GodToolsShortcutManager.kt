@@ -54,6 +54,7 @@ import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.ToolUsedEvent
@@ -283,6 +284,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Singleton
     class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
+        private val dao: GodToolsDao,
         eventBus: EventBus,
         settings: Settings,
         coroutineScope: CoroutineScope
@@ -290,9 +292,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Inject
         constructor(
             manager: GodToolsShortcutManager,
+            dao: GodToolsDao,
             eventBus: EventBus,
             settings: Settings
-        ) : this(manager, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        ) : this(manager, dao, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
         // region Events
         @AnyThread
@@ -300,7 +303,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fun onToolUpdate(event: ToolUpdateEvent) {
             // Could change which tools are visible or the label for tools
             updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
@@ -308,7 +310,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
             // Handles potential icon image changes.
             updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
@@ -316,7 +317,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fun onTranslationUpdate(event: TranslationUpdateEvent) {
             // Could change which tools are available or the label for tools
             updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
         }
         // endregion Events
 
@@ -326,6 +326,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java),
                 channel.consumeAsFlow()
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
