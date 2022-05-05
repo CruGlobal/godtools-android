@@ -321,13 +321,11 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // endregion Events
 
         @VisibleForTesting
-        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        internal val updatePendingShortcutsJob = coroutineScope.launch {
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java),
-                channel.consumeAsFlow()
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
                 manager.updatePendingShortcuts()
@@ -359,7 +357,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
-            updatePendingShortcutsActor.close()
+            updatePendingShortcutsJob.cancel()
             updateShortcutsActor.close()
         }
     }

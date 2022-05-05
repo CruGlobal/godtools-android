@@ -78,7 +78,7 @@ class GodToolsShortcutManagerDispatcherTest {
         verifyNoInteractions(shortcutManager)
 
         // trigger update
-        assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
+        assertTrue(invalidations.tryEmit(Unit))
         verifyNoInteractions(shortcutManager)
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         coroutineScope.runCurrent()
@@ -87,11 +87,11 @@ class GodToolsShortcutManagerDispatcherTest {
         clearInvocations(shortcutManager)
 
         // trigger multiple updates simultaneously, it should conflate to a single update
-        assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
+        assertTrue(invalidations.tryEmit(Unit))
         coroutineScope.advanceTimeBy(1)
         coroutineScope.runCurrent()
         verifyNoInteractions(shortcutManager)
-        assertTrue(dispatcher.updatePendingShortcutsActor.trySend(Unit).isSuccess)
+        assertTrue(invalidations.tryEmit(Unit))
         coroutineScope.advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
         coroutineScope.runCurrent()
         verifyBlocking(shortcutManager) { updatePendingShortcuts() }
@@ -104,7 +104,7 @@ class GodToolsShortcutManagerDispatcherTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnPrimaryLanguageUpdate() {
-        dispatcher.updatePendingShortcutsActor.close()
+        dispatcher.updatePendingShortcutsJob.cancel()
         assertUpdateExistingShortcutsInitialUpdate()
 
         // trigger a primary language update
@@ -118,7 +118,7 @@ class GodToolsShortcutManagerDispatcherTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsOnParallelLanguageUpdate() {
-        dispatcher.updatePendingShortcutsActor.close()
+        dispatcher.updatePendingShortcutsJob.cancel()
         assertUpdateExistingShortcutsInitialUpdate()
 
         // trigger a primary language update
@@ -132,7 +132,7 @@ class GodToolsShortcutManagerDispatcherTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateExistingShortcutsAggregateMultiple() = runTest {
-        dispatcher.updatePendingShortcutsActor.close()
+        dispatcher.updatePendingShortcutsJob.cancel()
         assertUpdateExistingShortcutsInitialUpdate()
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
