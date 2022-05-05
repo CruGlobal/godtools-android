@@ -12,6 +12,7 @@ import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -19,6 +20,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
@@ -30,12 +32,19 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
     // various flows
-    private val primaryLanguageFlow = MutableSharedFlow<Locale>(extraBufferCapacity = 20)
-    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(extraBufferCapacity = 20)
+    private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1, extraBufferCapacity = 20)
+    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
     private val invalidationFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
 
+    @Before
+    fun setupFlows() {
+        assertTrue(primaryLanguageFlow.tryEmit(Settings.defaultLanguage))
+        assertTrue(parallelLanguageFlow.tryEmit(null))
+    }
+
     private val dao: GodToolsDao = mockk {
-        every { invalidationFlow(*anyVararg()) } returns invalidationFlow
+        every { invalidationFlow(*anyVararg(), emitOnStart = false) } returns invalidationFlow
+        every { invalidationFlow(*anyVararg(), emitOnStart = true) } returns invalidationFlow.onStart { emit(Unit) }
     }
     private val settings: Settings = mockk {
         every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
@@ -54,16 +63,12 @@ class GodToolsShortcutManagerDispatcherTest {
         testDispatcher { dispatcher ->
             dispatcher.updateShortcutsActor.close()
 
-            // update doesn't trigger before requested
-            advanceUntilIdle()
-            verify { shortcutManager wasNot Called }
-
             // trigger update
             assertTrue(invalidationFlow.tryEmit(Unit))
             verify { shortcutManager wasNot Called }
             advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
             runCurrent()
-            coVerify { shortcutManager.updatePendingShortcuts() }
+            coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
             confirmVerified(shortcutManager)
             clearMocks(shortcutManager)
 
