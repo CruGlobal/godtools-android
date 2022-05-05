@@ -301,22 +301,16 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @AnyThread
         @Subscribe
         fun onToolUpdate(event: ToolUpdateEvent) {
-            // Could change which tools are visible or the label for tools
-            updateShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
         @Subscribe
         fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
-            // Handles potential icon image changes.
-            updateShortcutsActor.trySend(Unit)
         }
 
         @AnyThread
         @Subscribe
         fun onTranslationUpdate(event: TranslationUpdateEvent) {
-            // Could change which tools are available or the label for tools
-            updateShortcutsActor.trySend(Unit)
         }
         // endregion Events
 
@@ -338,6 +332,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java),
                 channel.consumeAsFlow()
             ).conflate().collectLatest {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
