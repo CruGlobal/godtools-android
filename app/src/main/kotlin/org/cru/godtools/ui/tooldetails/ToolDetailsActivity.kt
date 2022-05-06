@@ -11,7 +11,6 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
-import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 
 fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
@@ -22,7 +21,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
 @AndroidEntryPoint
 class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     // these properties should be treated as final and only set/modified in onCreate()
-    private lateinit var tool: String
+    private lateinit var initialTool: String
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,21 +29,13 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
 
         // finish now if we couldn't process the intent
         if (!processIntent()) finish()
+
+        createFragmentIfNeeded()
     }
 
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         title = ""
-    }
-
-    override fun onStart() {
-        super.onStart()
-        loadInitialFragmentIfNeeded()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        eventBus.post(ToolDetailsScreenEvent(tool))
     }
     // endregion Lifecycle
 
@@ -54,17 +45,17 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        tool = intent?.extras?.getString(EXTRA_TOOL) ?: return false
+        initialTool = intent?.extras?.getString(EXTRA_TOOL) ?: return false
         return true
     }
 
     @MainThread
-    private fun loadInitialFragmentIfNeeded() {
+    private fun createFragmentIfNeeded() {
         with(supportFragmentManager) {
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = ToolDetailsFragment(tool)
+                val fragment = ToolDetailsFragment(initialTool)
                 replace(R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }

@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.tooldetails
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -62,7 +61,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    private val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
+    internal val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
     val primaryTranslation = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
         dao.getLatestTranslationLiveData(tool, locale)
     }
@@ -74,10 +73,10 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         code?.let { manifestManager.getLatestPublishedManifestLiveData(code, locale) }.orEmpty()
     }
 
-    val shortcut = tool.asLiveData().map {
+    val shortcut = tool.map {
         it?.takeIf { shortcutManager.canPinToolShortcut(it) }
             ?.let { shortcutManager.getPendingToolShortcut(it.code) }
-    }
+    }.asLiveData()
 
     val downloadProgress = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
         tool?.let { downloadManager.getDownloadProgressLiveData(tool, locale) }.orEmpty()
