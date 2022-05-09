@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.SimpleArrayMap
 import androidx.collection.forEach
+import androidx.collection.valueIterator
 import java.util.Locale
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
@@ -15,7 +16,6 @@ import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -75,7 +75,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         }
         if (includes.include(Tool.JSON_ATTACHMENTS)) tool.attachments?.let { attachments ->
             storeAttachments(
-                events, attachments,
+                attachments,
                 existing = index(Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(tool.id)).get(dao))
             )
         }
@@ -150,29 +150,19 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     // endregion Translations
 
     // region Attachments
-    private fun storeAttachments(
-        events: SimpleArrayMap<Class<*>, Any>,
-        attachments: List<Attachment>,
-        existing: LongSparseArray<Attachment>?
-    ) {
+    private fun storeAttachments(attachments: List<Attachment>, existing: LongSparseArray<Attachment>?) {
         attachments.forEach {
-            storeAttachment(events, it)
+            storeAttachment(it)
             existing?.remove(it.id)
         }
 
         // prune any existing attachments that weren't synced
-        existing?.forEach { _, attachment ->
-            dao.delete(attachment)
-            coalesceEvent(events, AttachmentUpdateEvent)
-        }
+        existing?.valueIterator()?.forEach { dao.delete(it) }
     }
 
-    private fun storeAttachment(events: SimpleArrayMap<Class<*>, Any>, attachment: Attachment) {
-        dao.updateOrInsert(
-            attachment,
-            AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
-        )
-        coalesceEvent(events, AttachmentUpdateEvent)
-    }
+    private fun storeAttachment(attachment: Attachment) = dao.updateOrInsert(
+        attachment,
+        AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
+    )
     // endregion Attachments
 }
