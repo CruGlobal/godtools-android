@@ -57,7 +57,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
@@ -172,7 +171,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             it.isAdded = true
         }
         withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-        eventBus.post(ToolUpdateEvent)
     }
 
     @AnyThread
@@ -183,7 +181,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             it.isAdded = false
         }
         withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-        eventBus.post(ToolUpdateEvent)
     }
 
     @AnyThread

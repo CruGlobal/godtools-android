@@ -1,6 +1,5 @@
 package org.cru.godtools.model.event
 
-object ToolUpdateEvent
 object TranslationUpdateEvent
 
 /**

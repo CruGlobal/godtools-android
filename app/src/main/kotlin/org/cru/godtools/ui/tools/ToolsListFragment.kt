@@ -13,9 +13,6 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
@@ -33,7 +30,6 @@ import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
@@ -92,10 +88,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     }
 
     override fun onToolsReordered(vararg ids: Long) {
-        GlobalScope.launch(Dispatchers.IO) {
-            dao.updateToolOrder(*ids)
-            eventBus.post(ToolUpdateEvent)
-        }
+        dao.updateToolOrderAsync(*ids)
     }
 
     fun onEmptyActionClick() {

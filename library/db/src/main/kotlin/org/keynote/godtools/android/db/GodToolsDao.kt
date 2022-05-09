@@ -120,6 +120,9 @@ class GodToolsDao @Inject internal constructor(
         }
     }
 
+    @AnyThread
+    fun updateToolOrderAsync(vararg tools: Long) = coroutineScope.launch { updateToolOrder(*tools) }
+
     @WorkerThread
     fun updateToolOrder(vararg tools: Long) {
         val tool = Tool()

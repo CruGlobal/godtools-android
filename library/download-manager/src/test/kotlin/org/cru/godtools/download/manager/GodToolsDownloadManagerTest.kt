@@ -49,7 +49,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.service.ManifestParser
@@ -153,10 +152,7 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { it.pinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertTrue(tool.captured.isAdded)
-        verifyAll {
-            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
-            eventBus.post(ToolUpdateEvent)
-        }
+        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
     }
 
     @Test
@@ -166,10 +162,7 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { it.pinToolAsync(TOOL).join() }
         assertEquals(TOOL, tool.captured.code)
         assertTrue(tool.captured.isAdded)
-        verifyAll {
-            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
-            eventBus.post(ToolUpdateEvent)
-        }
+        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
     }
 
     @Test
@@ -179,10 +172,7 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { it.unpinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertFalse(tool.captured.isAdded)
-        verifyAll {
-            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
-            eventBus.post(ToolUpdateEvent)
-        }
+        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
     }
 
     @Test
@@ -192,10 +182,7 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { it.unpinToolAsync(TOOL).join() }
         assertEquals(TOOL, tool.captured.code)
         assertFalse(tool.captured.isAdded)
-        verifyAll {
-            dao.update(tool.captured, ToolTable.COLUMN_ADDED)
-            eventBus.post(ToolUpdateEvent)
-        }
+        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
     }
     // endregion pinTool()/unpinTool()
 
