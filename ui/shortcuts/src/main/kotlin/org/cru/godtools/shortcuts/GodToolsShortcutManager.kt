@@ -22,18 +22,13 @@ import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
-import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -54,10 +49,8 @@ import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.event.AttachmentUpdateEvent
-import org.cru.godtools.model.event.ToolUpdateEvent
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
-import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -283,50 +276,23 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Singleton
     class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
-        eventBus: EventBus,
+        private val dao: GodToolsDao,
         settings: Settings,
         coroutineScope: CoroutineScope
     ) {
         @Inject
         constructor(
             manager: GodToolsShortcutManager,
-            eventBus: EventBus,
+            dao: GodToolsDao,
             settings: Settings
-        ) : this(manager, eventBus, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
-
-        // region Events
-        @AnyThread
-        @Subscribe
-        fun onToolUpdate(event: ToolUpdateEvent) {
-            // Could change which tools are visible or the label for tools
-            updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
-        }
-
-        @AnyThread
-        @Subscribe
-        fun onAttachmentUpdate(event: AttachmentUpdateEvent) {
-            // Handles potential icon image changes.
-            updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
-        }
-
-        @AnyThread
-        @Subscribe
-        fun onTranslationUpdate(event: TranslationUpdateEvent) {
-            // Could change which tools are available or the label for tools
-            updateShortcutsActor.trySend(Unit)
-            updatePendingShortcutsActor.trySend(Unit)
-        }
-        // endregion Events
+        ) : this(manager, dao, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
         @VisibleForTesting
-        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        internal val updatePendingShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        internal val updatePendingShortcutsJob = coroutineScope.launch {
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                channel.consumeAsFlow()
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
                 manager.updatePendingShortcuts()
@@ -334,32 +300,23 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
 
         @VisibleForTesting
-        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        internal val updateShortcutsActor = coroutineScope.actor<Unit>(capacity = CONFLATED) {
+        internal val updateShortcutsJob = coroutineScope.launch {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
+
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                channel.consumeAsFlow()
+                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
             ).conflate().collectLatest {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                    delay(DELAY_UPDATE_SHORTCUTS)
-                    manager.updateShortcuts()
-                }
+                delay(DELAY_UPDATE_SHORTCUTS)
+                manager.updateShortcuts()
             }
-        }
-
-        init {
-            // register event listeners
-            eventBus.register(this)
-
-            // launch an initial update
-            updateShortcutsActor.trySend(Unit)
         }
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal fun shutdown() {
-            updatePendingShortcutsActor.close()
-            updateShortcutsActor.close()
+            updatePendingShortcutsJob.cancel()
+            updateShortcutsJob.cancel()
         }
     }
 }
