@@ -27,7 +27,6 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
@@ -110,7 +109,6 @@ internal class Tasks @Inject constructor(
         // send a broadcast for updated objects
         eventBus.post(ToolUpdateEvent)
         eventBus.post(TranslationUpdateEvent)
-        eventBus.post(AttachmentUpdateEvent)
     }
 
     suspend fun initDefaultTools() {

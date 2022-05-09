@@ -49,7 +49,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.model.event.AttachmentUpdateEvent
 import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.ParserConfig
@@ -311,7 +310,6 @@ class GodToolsDownloadManagerTest {
             attachmentsApi.download(attachment.id)
             dao.updateOrInsert(attachment.asLocalFile())
             dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-            eventBus.post(AttachmentUpdateEvent)
         }
     }
 
@@ -342,7 +340,6 @@ class GodToolsDownloadManagerTest {
             attachmentsApi.download(attachment.id)
             dao.updateOrInsert(attachment.asLocalFile())
             dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-            eventBus.post(AttachmentUpdateEvent)
         }
     }
 
@@ -360,7 +357,6 @@ class GodToolsDownloadManagerTest {
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-            eventBus.post(AttachmentUpdateEvent)
         }
     }
 
@@ -391,7 +387,6 @@ class GodToolsDownloadManagerTest {
         verifySequence {
             dao.updateOrInsert(attachment.asLocalFile())
             dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-            eventBus.post(AttachmentUpdateEvent)
         }
     }
 
@@ -434,14 +429,12 @@ class GodToolsDownloadManagerTest {
             testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         }
         assertTrue(attachment.isDownloaded)
-        verifySequence {
-            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
-            eventBus.post(AttachmentUpdateEvent)
-        }
+        verify { dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED) }
         coVerify(inverse = true) {
             fs.file(any())
             dao.updateOrInsert(any())
         }
+        confirmVerified(dao)
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
