@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
-import androidx.collection.SimpleArrayMap
 import androidx.collection.forEach
 import androidx.collection.valueIterator
 import java.util.Locale
@@ -16,8 +15,6 @@ import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -25,17 +22,11 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao, eventBus: EventBus) :
-    BaseSyncTasks(eventBus) {
+abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao) : BaseSyncTasks() {
     // region Tools
-    protected fun storeTools(
-        events: SimpleArrayMap<Class<*>, Any>,
-        tools: List<Tool>,
-        existing: LongSparseArray<Tool>?,
-        includes: Includes
-    ) {
+    protected fun storeTools(tools: List<Tool>, existing: LongSparseArray<Tool>?, includes: Includes) {
         tools.forEach {
-            storeTool(events, it, includes)
+            storeTool(it, includes)
             existing?.remove(it.id)
         }
 
@@ -50,7 +41,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         }
     }
 
-    private fun storeTool(events: SimpleArrayMap<Class<*>, Any>, tool: Tool, includes: Includes) {
+    private fun storeTool(tool: Tool, includes: Includes) {
         dao.updateOrInsert(
             tool, SQLiteDatabase.CONFLICT_REPLACE,
             ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
@@ -63,7 +54,7 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) tool.latestTranslations?.let { translations ->
             storeTranslations(
-                events, translations,
+                translations,
                 includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
                 existing = tool.code?.let { code ->
                     index(Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao))
@@ -114,33 +105,28 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
 
     // region Translations
     private fun storeTranslations(
-        events: SimpleArrayMap<Class<*>, Any>,
         translations: List<Translation>,
         existing: LongSparseArray<Translation>?,
         includes: Includes
     ) {
         translations.forEach {
-            storeTranslation(events, it, includes)
+            storeTranslation(it, includes)
             existing?.remove(it.id)
         }
 
         // prune any existing translations that weren't synced and aren't downloaded to the device
-        existing?.forEach { _, translation ->
-            dao.refresh(translation)?.takeUnless { it.isDownloaded }?.let {
-                dao.delete(it)
-                coalesceEvent(events, TranslationUpdateEvent)
-            }
+        existing?.valueIterator()?.forEach { translation ->
+            dao.refresh(translation)?.takeUnless { it.isDownloaded }?.let { dao.delete(it) }
         }
     }
 
-    private fun storeTranslation(events: SimpleArrayMap<Class<*>, Any>, translation: Translation, includes: Includes) {
+    private fun storeTranslation(translation: Translation, includes: Includes) {
         dao.updateOrInsert(
             translation,
             TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
             TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_TAGLINE,
             TranslationTable.COLUMN_MANIFEST, TranslationTable.COLUMN_PUBLISHED
         )
-        coalesceEvent(events, TranslationUpdateEvent)
 
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
     }

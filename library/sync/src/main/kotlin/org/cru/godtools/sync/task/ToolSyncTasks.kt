@@ -2,7 +2,6 @@ package org.cru.godtools.sync.task
 
 import android.os.Bundle
 import androidx.annotation.AnyThread
-import androidx.collection.SimpleArrayMap
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_OK
 import javax.inject.Inject
@@ -23,7 +22,6 @@ import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -39,9 +37,8 @@ private val API_GET_INCLUDES = arrayOf(
 class ToolSyncTasks @Inject internal constructor(
     dao: GodToolsDao,
     private val toolsApi: ToolsApi,
-    private val viewsApi: ViewsApi,
-    eventBus: EventBus
-) : BaseDataSyncTasks(dao, eventBus) {
+    private val viewsApi: ViewsApi
+) : BaseDataSyncTasks(dao) {
     private val toolsMutex = Mutex()
     private val sharesMutex = Mutex()
 
@@ -58,14 +55,10 @@ class ToolSyncTasks @Inject internal constructor(
                 .takeIf { it.code() == HTTP_OK }?.body() ?: return@withContext false
 
             // store fetched tools
-            val events = SimpleArrayMap<Class<*>, Any>()
             dao.transaction {
                 val existing = index(Query.select<Tool>().get(dao))
-                storeTools(events, json.data, existing, Includes(*API_GET_INCLUDES))
+                storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
             }
-
-            // send any pending events
-            sendEvents(events)
 
             // update the sync time
             dao.updateLastSyncTime(SYNC_TIME_TOOLS)

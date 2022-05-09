@@ -24,7 +24,6 @@ dependencies {
     implementation(libs.gtoSupport.util)
 
     implementation(libs.dagger)
-    implementation(libs.eventbus)
     implementation(libs.hilt)
 
     testImplementation(libs.kotlin.coroutines.test)

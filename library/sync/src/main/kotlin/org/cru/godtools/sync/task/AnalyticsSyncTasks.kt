@@ -10,7 +10,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.cru.godtools.api.AnalyticsApi
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_GLOBAL_ACTIVITY = "last_synced.global_activity"
@@ -20,9 +19,8 @@ private const val STALE_DURATION_GLOBAL_ACTIVITY = TimeConstants.DAY_IN_MS
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 class AnalyticsSyncTasks @Inject internal constructor(
     private val dao: GodToolsDao,
-    private val analyticsApi: AnalyticsApi,
-    eventBus: EventBus
-) : BaseSyncTasks(eventBus) {
+    private val analyticsApi: AnalyticsApi
+) : BaseSyncTasks() {
     private val globalActivityMutex = Mutex()
 
     suspend fun syncGlobalActivity(args: Bundle) = withContext(Dispatchers.IO) {

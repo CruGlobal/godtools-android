@@ -49,11 +49,9 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.ParserConfig
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
-import org.greenrobot.eventbus.EventBus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasItem
 import org.junit.Assert.assertArrayEquals
@@ -91,7 +89,6 @@ class GodToolsDownloadManagerTest {
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
         excludeRecords { transaction(any(), any()) }
     }
-    private val eventBus = mockk<EventBus>(relaxUnitFun = true)
     private val files = mutableMapOf<String, File>()
     private val fs = mockk<ToolFileSystem> {
         coEvery { rootDir() } returns resourcesDir
@@ -127,7 +124,6 @@ class GodToolsDownloadManagerTest {
         val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
             dao,
-            eventBus,
             fs,
             manifestParser,
             settings,
@@ -306,10 +302,7 @@ class GodToolsDownloadManagerTest {
 
         withDownloadManager { it.downloadAttachment(attachment.id) }
         assertTrue(attachment.isDownloaded)
-        verify {
-            attachmentsApi wasNot Called
-            eventBus wasNot Called
-        }
+        verify { attachmentsApi wasNot Called }
     }
 
     @Test
@@ -354,10 +347,7 @@ class GodToolsDownloadManagerTest {
 
         withDownloadManager { it.downloadAttachment(attachment.id) }
         assertFalse(attachment.isDownloaded)
-        coVerifySequence {
-            attachmentsApi.download(attachment.id)
-            eventBus wasNot Called
-        }
+        coVerifySequence { attachmentsApi.download(attachment.id) }
     }
     // endregion downloadAttachment()
 
@@ -386,10 +376,7 @@ class GodToolsDownloadManagerTest {
             testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         }
         assertFalse(file.exists())
-        verify {
-            dao wasNot Called
-            eventBus wasNot Called
-        }
+        verify { dao wasNot Called }
     }
 
     @Test
@@ -405,7 +392,6 @@ class GodToolsDownloadManagerTest {
             dao.updateOrInsert(any())
             dao.update(any())
         }
-        verify { eventBus wasNot Called }
     }
 
     @Test
@@ -483,7 +469,6 @@ class GodToolsDownloadManagerTest {
             dao.updateOrInsert(TranslationFile(translation, "a.txt"))
             dao.updateOrInsert(TranslationFile(translation, "b.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-            eventBus.post(TranslationUpdateEvent)
             workManager wasNot Called
             observer.onChanged(any())
         }
@@ -523,7 +508,6 @@ class GodToolsDownloadManagerTest {
             dao.updateOrInsert(TranslationFile(translation, "b.txt"))
             dao.updateOrInsert(TranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-            eventBus.post(TranslationUpdateEvent)
             workManager wasNot Called
             observer.onChanged(any())
         }
@@ -573,7 +557,6 @@ class GodToolsDownloadManagerTest {
             dao.updateOrInsert(TranslationFile(translation, "b.txt"))
             dao.updateOrInsert(TranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-            eventBus.post(TranslationUpdateEvent)
         }
         verify { observer.onChanged(any()) }
         assertNull(downloadProgress.last())
@@ -609,16 +592,12 @@ class GodToolsDownloadManagerTest {
         assertTrue(valid1.isDownloaded)
         assertTrue(valid2.isDownloaded)
         assertTrue(valid3.isDownloaded)
-        verify {
-            dao.update(invalid, TranslationTable.COLUMN_DOWNLOADED)
-            eventBus.post(TranslationUpdateEvent)
-        }
+        verify { dao.update(invalid, TranslationTable.COLUMN_DOWNLOADED) }
         verify(inverse = true) {
             dao.update(valid1, TranslationTable.COLUMN_DOWNLOADED)
             dao.update(valid2, TranslationTable.COLUMN_DOWNLOADED)
             dao.update(valid3, TranslationTable.COLUMN_DOWNLOADED)
         }
-        confirmVerified(eventBus)
     }
     // endregion Translations
 

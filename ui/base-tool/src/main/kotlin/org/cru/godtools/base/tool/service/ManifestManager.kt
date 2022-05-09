@@ -20,11 +20,9 @@ import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.ccci.gto.android.common.support.v4.util.WeakLruCache
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -32,11 +30,7 @@ private const val COROUTINES_PARALLELISM = 8
 
 @Reusable
 @OptIn(ExperimentalCoroutinesApi::class)
-class ManifestManager @Inject constructor(
-    private val dao: GodToolsDao,
-    private val eventBus: EventBus,
-    private val parser: ManifestParser
-) {
+class ManifestManager @Inject constructor(private val dao: GodToolsDao, private val parser: ManifestParser) {
     private val coroutineDispatcher = Dispatchers.IO.limitedParallelism(COROUTINES_PARALLELISM)
     private val coroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
     private val cache = WeakLruCache<String, ParserResult.Data>(6)
@@ -93,6 +87,5 @@ class ManifestManager @Inject constructor(
             TranslationTable.FIELD_MANIFEST.eq(manifestName),
             TranslationTable.COLUMN_DOWNLOADED
         )
-        eventBus.post(TranslationUpdateEvent)
     }
 }

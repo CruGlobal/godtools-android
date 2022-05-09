@@ -40,7 +40,7 @@ class ManifestManagerTest {
     fun setup() {
         dao = mock()
         parser = mockk()
-        manager = ManifestManager(dao, mock(), parser)
+        manager = ManifestManager(dao, parser)
 
         translation = mock {
             on { manifestFileName } doReturn MANIFEST_NAME

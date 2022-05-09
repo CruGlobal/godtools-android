@@ -6,7 +6,6 @@ import java.util.Locale
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.model.Language
-import org.greenrobot.eventbus.EventBus
 import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.LanguageTable
@@ -23,7 +22,6 @@ import org.mockito.kotlin.whenever
 
 class BaseDataSyncTasksTest {
     private lateinit var dao: GodToolsDao
-    private lateinit var eventBus: EventBus
     private lateinit var events: SimpleArrayMap<Class<*>, Any>
 
     private lateinit var tasks: BaseDataSyncTasks
@@ -31,9 +29,8 @@ class BaseDataSyncTasksTest {
     @Before
     fun setup() {
         dao = mock()
-        eventBus = mock()
         events = mock()
-        tasks = object : BaseDataSyncTasks(dao, eventBus) {}
+        tasks = object : BaseDataSyncTasks(dao) {}
     }
 
     @Test

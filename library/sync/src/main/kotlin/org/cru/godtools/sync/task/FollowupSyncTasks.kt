@@ -13,15 +13,13 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.FollowupApi
 import org.cru.godtools.model.Followup
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 class FollowupSyncTasks @Inject internal constructor(
     private val dao: GodToolsDao,
-    private val followupApi: FollowupApi,
-    eventBus: EventBus
-) : BaseSyncTasks(eventBus) {
+    private val followupApi: FollowupApi
+) : BaseSyncTasks() {
     private val followupMutex = Mutex()
 
     suspend fun syncFollowups() = withContext(Dispatchers.IO) {
