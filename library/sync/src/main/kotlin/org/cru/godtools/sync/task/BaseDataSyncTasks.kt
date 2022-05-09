@@ -16,7 +16,6 @@ import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.ToolUpdateEvent
 import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -45,7 +44,6 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
             if (tool.isAdded) return@forEach
 
             dao.delete(tool)
-            coalesceEvent(events, ToolUpdateEvent)
 
             // delete any attachments for this tool
             dao.delete(Attachment::class.java, AttachmentTable.FIELD_TOOL.eq(tool.id))
@@ -61,7 +59,6 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
             ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_HIDDEN,
             ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT
         )
-        coalesceEvent(events, ToolUpdateEvent)
 
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) tool.latestTranslations?.let { translations ->
