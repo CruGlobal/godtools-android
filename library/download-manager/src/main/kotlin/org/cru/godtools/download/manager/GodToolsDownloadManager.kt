@@ -57,7 +57,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.model.event.TranslationUpdateEvent
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
 import org.greenrobot.eventbus.EventBus
@@ -126,7 +125,6 @@ internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val dao: GodToolsDao,
-    private val eventBus: EventBus,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
     private val settings: Settings,
@@ -139,7 +137,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
-        eventBus: EventBus,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
         settings: Settings,
@@ -148,7 +145,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) : this(
         attachmentsApi,
         dao,
-        eventBus,
         fs,
         manifestParser,
         settings,
@@ -390,7 +386,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             relatedFiles.forEach { dao.updateOrInsert(TranslationFile(translation, it)) }
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
         }
-        eventBus.post(TranslationUpdateEvent)
 
         return true
     }
@@ -447,7 +442,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             // mark translation as downloaded
             translation.isDownloaded = true
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-            eventBus.post(TranslationUpdateEvent)
         }
     }
 
@@ -466,10 +460,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         }
 
         // if any translations were updated, send a broadcast
-        if (changes > 0) {
-            eventBus.post(TranslationUpdateEvent)
-            cleanupActor.send(Unit)
-        }
+        if (changes > 0) cleanupActor.send(Unit)
     }
     // endregion Translations
 

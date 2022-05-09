@@ -12,7 +12,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.greenrobot.eventbus.EventBus
 import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
@@ -33,7 +32,6 @@ class TasksTest {
     private lateinit var context: Context
     private lateinit var dao: GodToolsDao
     private lateinit var downloadManager: GodToolsDownloadManager
-    private lateinit var eventBus: EventBus
     private lateinit var jsonApiConverter: JsonApiConverter
     private lateinit var settings: Settings
 
@@ -48,13 +46,12 @@ class TasksTest {
             on { getLastSyncTime(anyVararg()) } doReturn 0
         }
         downloadManager = mock()
-        eventBus = mock()
         jsonApiConverter = mock()
         settings = mock {
             on { primaryLanguage } doReturn Locale("x")
         }
 
-        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings, eventBus)
+        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings)
     }
 
     // region initFavoriteTools()

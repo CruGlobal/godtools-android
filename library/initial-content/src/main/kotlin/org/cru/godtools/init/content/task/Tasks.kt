@@ -27,8 +27,6 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.event.TranslationUpdateEvent
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
@@ -48,8 +46,7 @@ internal class Tasks @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
-    private val settings: Settings,
-    private val eventBus: EventBus
+    private val settings: Settings
 ) {
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
@@ -104,9 +101,6 @@ internal class Tasks @Inject constructor(
                 }
             }
         }
-
-        // send a broadcast for updated objects
-        eventBus.post(TranslationUpdateEvent)
     }
 
     suspend fun initDefaultTools() {

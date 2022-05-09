@@ -13,7 +13,6 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.cru.godtools.api.LanguagesApi
 import org.cru.godtools.model.Language
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
@@ -22,11 +21,8 @@ private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS
 
 @Singleton
-class LanguagesSyncTasks @Inject internal constructor(
-    dao: GodToolsDao,
-    private val languagesApi: LanguagesApi,
-    eventBus: EventBus
-) : BaseDataSyncTasks(dao, eventBus) {
+class LanguagesSyncTasks @Inject internal constructor(dao: GodToolsDao, private val languagesApi: LanguagesApi) :
+    BaseDataSyncTasks(dao) {
     private val languagesMutex = Mutex()
 
     suspend fun syncLanguages(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
