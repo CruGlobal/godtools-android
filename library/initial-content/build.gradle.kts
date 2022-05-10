@@ -35,8 +35,6 @@ dependencies {
     kapt(libs.hilt.compiler)
 }
 
-apply(from = "download_initial_content.gradle")
-
 android.libraryVariants.configureEach {
     val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
     val mobileContentApi =
@@ -67,4 +65,34 @@ android.libraryVariants.configureEach {
         output.set(languagesJson)
     }
     assetGenTask.configure { dependsOn(pruneLanguagesJsonTask) }
+
+    // configure tools json download tasks
+    val intermediateToolsJson = intermediatesDir.resolve("tools.json")
+    val downloadToolsJsonTask = tasks.create<Download>("download${name.capitalize()}ToolsJson") {
+        mustRunAfter("clean")
+
+        src("${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language")
+        dest(intermediateToolsJson)
+        retries(2)
+        quiet(false)
+        tempAndMove(true)
+    }
+    val toolsJson = assetGenDir.resolve("tools.json")
+    val pruneToolsJsonTask = tasks.create<PruneJsonApiResponseTask>("prune${name.capitalize()}ToolsJson") {
+        dependsOn(downloadToolsJsonTask)
+        input.set(intermediateToolsJson)
+        removeAllRelationshipsFor = listOf("language")
+        removeAttributesFor["resource"] = listOf(
+            // attributes
+            "manifest", "onesky-project-id",
+            // relationships
+            "system", "translations", "latest-drafts-translations", "pages", "custom-manifests", "tips"
+        )
+        removeAttributesFor["attachment"] = listOf("file", "is-zipped")
+        removeAttributesFor["language"] = listOf("direction")
+        output.set(toolsJson)
+    }
+    assetGenTask.configure { dependsOn(pruneToolsJsonTask) }
 }
+
+apply(from = "download_initial_content.gradle")

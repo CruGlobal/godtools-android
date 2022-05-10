@@ -16,22 +16,11 @@ android.libraryVariants.all { variant ->
     def assetGenDir = new File(project.buildDir, "generated/assets/initial-content/" + variant.dirName)
 
     // generate assets task, this should depend on all tasks we create locally
-    def assetGenTask = project.tasks.getByName("generate${variant.name.capitalize()}Assets")
+    def assetGenTask = tasks.getByName("generate${variant.name.capitalize()}Assets")
 
     // tools json
     def toolsJsonFile = new File(assetGenDir, 'tools.json')
-    def downloadToolsTask = project.tasks.create "download${variant.name.capitalize()}BundledTools", Download, {
-        mustRunAfter clean
-
-        src "${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language"
-        dest toolsJsonFile
-        quiet true
-
-        doLast {
-            simplifyBundledTools(toolsJsonFile)
-        }
-    }
-    assetGenTask.dependsOn(downloadToolsTask)
+    def downloadToolsTask = tasks.named("prune${variant.name.capitalize()}ToolsJson")
 
     // download attachments
     def attachmentsDir = new File(assetGenDir, 'attachments')
@@ -95,58 +84,5 @@ android.libraryVariants.all { variant ->
             }
         }
         assetGenTask.dependsOn(downloadTranslationsTask)
-    }
-}
-
-static def simplifyBundledTools(File file) {
-    def data = new JsonSlurper().parseText(file.text)
-
-    // update main objects
-    data.data.each { tool ->
-        removeJsonApiAttrs(tool,
-                // attributes
-                'manifest', 'onesky-project-id',
-                // relationships
-                'system', 'translations', 'latest-drafts-translations', 'pages', 'custom-manifests', 'tips')
-    }
-
-    // update included objects
-    data.included.each { obj ->
-        switch (obj.type) {
-            case "attachment":
-                removeJsonApiAttrs(obj, "file", "is-zipped")
-                break
-            case "language":
-                obj.remove('relationships')
-                removeJsonApiAttrs(obj, 'direction')
-                break
-        }
-    }
-
-    sortJsonApiObject(data)
-    file.text = JsonOutput.toJson(data)
-}
-
-static def removeJsonApiAttrs(obj, String... attrs) {
-    attrs.each {
-        obj.attributes?.remove(it)
-        obj.relationships?.remove(it)
-    }
-}
-
-static def sortJsonApiObject(obj) {
-    sortJsonApiObjects(obj.data)
-    sortJsonApiObjects(obj.included)
-}
-
-static def sortJsonApiObjects(objs) {
-    objs?.sort { it.id as Integer }
-    objs?.sort { it.type }
-    objs?.each {
-        it.relationships?.each { k, v ->
-            if (v.data instanceof List) {
-                v.data.sort { it.id as Integer }
-            }
-        }
     }
 }
