@@ -1,31 +1,32 @@
 package org.cru.godtools.ui.tools
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findLiveData
-import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class ToolsAdapterViewModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
@@ -38,16 +39,11 @@ class ToolsAdapterViewModel @Inject constructor(
         private val tool = dao.findAsFlow<Tool>(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val banner = Query.select<Attachment>()
-            .join(AttachmentTable.SQL_JOIN_TOOL)
-            .where(
-                ToolTable.FIELD_CODE.eq(code)
-                    .and(ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID))
-                    .and(AttachmentTable.SQL_WHERE_DOWNLOADED)
-            )
-            .limit(1)
-            .getAsLiveData(dao)
-            .map { it.firstOrNull() }
+        val banner = tool
+            .map { it?.bannerId }.distinctUntilChanged()
+            .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+            .map { it?.takeIf { it.isDownloaded } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         private val primaryTranslation =
             settings.primaryLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(code, it) }

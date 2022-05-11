@@ -13,6 +13,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
@@ -70,7 +71,7 @@ class ToolsListItemToolBindingTest {
     )
     private val parallelLanguage = MutableLiveData<Language?>(null)
     private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
-        every { banner } returns emptyLiveData()
+        every { banner } returns MutableStateFlow(null)
         every { downloadProgress } returns emptyLiveData()
         every { firstTranslation } returns primaryTranslation
         every { parallelTranslation } returns this@ToolsListItemToolBindingTest.parallelTranslation

@@ -64,7 +64,6 @@ class ToolsAdapter(
         binding.setVariable(BR.tool, tool)
         binding.setVariable(BR.toolViewModel, toolViewModel)
         binding.setVariable(BR.downloadProgress, toolViewModel?.downloadProgress)
-        binding.setVariable(BR.banner, toolViewModel?.banner)
         binding.setVariable(BR.primaryTranslation, toolViewModel?.firstTranslation)
         binding.setVariable(BR.primaryLanguage, toolViewModel?.firstLanguage)
         binding.setVariable(BR.parallelTranslation, toolViewModel?.parallelTranslation)
