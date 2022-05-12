@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.tools
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,13 +17,17 @@ import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombine
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findLiveData
+import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
@@ -36,7 +41,7 @@ class ToolsAdapterViewModel @Inject constructor(
     fun getToolViewModel(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
 
     inner class ToolViewModel(private val code: String) {
-        private val tool = dao.findAsFlow<Tool>(code)
+        val tool = dao.findAsFlow<Tool>(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val banner = tool
@@ -58,6 +63,11 @@ class ToolsAdapterViewModel @Inject constructor(
         val parallelLanguage = parallelTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
+
+        val availableLanguages = Query.select<Translation>()
+            .where(TranslationTable.FIELD_TOOL.eq(code))
+            .getAsLiveData(dao)
+            .map { it.map { it.languageCode }.distinct() }
 
         val downloadProgress = switchCombine(firstTranslation, parallelTranslation) { first, para ->
             when {
