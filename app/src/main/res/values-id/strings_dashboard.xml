@@ -3,7 +3,7 @@
     <!-- Lessons -->
     <string name="nav_lessons">Pelajaran</string>
     <string name="tools_list_lesson_info_length">%1$d Minimal Baca</string>
-    <string name="tools_list_lesson_info_language_available">Tersedia di %1$s</string>
+    <string name="tools_list_info_language_available">Tersedia di %1$s</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Favorit</string>
     <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>

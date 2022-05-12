@@ -3,7 +3,7 @@
     <!-- Lessons -->
     <string name="nav_lessons">Bài học</string>
     <string name="tools_list_lesson_info_length">%1$d phút đọc</string>
-    <string name="tools_list_lesson_info_language_available">Có sẵn trong %1$s</string>
+    <string name="tools_list_info_language_available">Có sẵn trong %1$s</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Ưa thích</string>
     <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>

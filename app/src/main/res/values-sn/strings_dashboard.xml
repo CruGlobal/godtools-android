@@ -3,7 +3,7 @@
     <!-- Lessons -->
     <string name="nav_lessons">Zvidzidzo</string>
     <string name="tools_list_lesson_info_length">Verenga</string>
-    <string name="tools_list_lesson_info_language_available">Zvinowanikwa mu</string>
+    <string name="tools_list_info_language_available">Zvinowanikwa mu</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Zvinofarirwa</string>
     <string name="tools_list_remove_favorite_dialog_title">Bvisa “%1$s” kubva pane zvinodikwa?</string>

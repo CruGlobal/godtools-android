@@ -3,7 +3,7 @@
     <!-- Lessons -->
     <string name="nav_lessons">Lecciones</string>
     <string name="tools_list_lesson_info_length">%1$d Minutos de lectura</string>
-    <string name="tools_list_lesson_info_language_available">Disponible en %1$s</string>
+    <string name="tools_list_info_language_available">Disponible en %1$s</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="tools_list_remove_favorite_dialog_title">¿Eliminar \"%1$s\" de favoritos?</string>
