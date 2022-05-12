@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">ဝေငှလို သောအရာကို ရွေးချယ်ပါ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">အထွေထွေ</string>
     <string name="menu_heading_account">အကောင့်</string>

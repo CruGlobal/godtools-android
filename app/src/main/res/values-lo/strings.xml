@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">ເລືອກວິທີ ທີ່ທ່ານຢາກຈະແບ່ງປັນ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">ທົ່ວໄປ</string>
     <string name="menu_heading_share">ແບ່ງປັນ</string>

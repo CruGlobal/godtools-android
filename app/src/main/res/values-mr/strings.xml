@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">आपण कसे सांगू इच्छिता त्याची निवड करा</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">सर्वसामान्य</string>
     <string name="menu_heading_account">खाते</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">എങ്ങനെ പങ്കു വയ്ക്കുവാൻ ആഗ്രഹിക്കുന്നു എന്നുള്ളത് തിരഞ്ഞെടുക്കുക</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">പൊതുവെ</string>
     <string name="menu_heading_share">പങ്കിടുക</string>

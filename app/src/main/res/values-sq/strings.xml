@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Zgjidhni se si do të donit të ndanit .</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">I përgjithshëm.</string>
     <string name="menu_heading_share">Ndaj</string>

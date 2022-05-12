@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Nasıl paylaşmak istediğinizi seçin</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Genel</string>
     <string name="menu_heading_account">Hesap</string>

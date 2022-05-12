@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">अपनी पंसद अनुसार साझा करने के तरीके को चुनें</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">सामान्य</string>
     <string name="menu_heading_account">खाता</string>

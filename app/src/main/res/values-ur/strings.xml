@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">انتخاب کریں کہ کیسے شیئر کرنا پسند کریں گے</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">جنرل</string>
     <string name="menu_heading_account">اکاؤنٹ</string>

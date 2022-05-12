@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Выберите способ отправки</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Общая информация</string>
     <string name="menu_heading_share">Поделиться</string>

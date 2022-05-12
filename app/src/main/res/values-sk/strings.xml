@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Vyberte, ako chcete zdieľať</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Všeobecné</string>
     <string name="menu_heading_account">Účet</string>

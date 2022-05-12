@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Sélectionnez le mode de partage</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Général</string>
     <string name="menu_heading_account">Compte</string>

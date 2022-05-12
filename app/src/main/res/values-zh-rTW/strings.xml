@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">選擇您想要的分享方式</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">一般</string>
     <string name="menu_heading_account">帳號</string>

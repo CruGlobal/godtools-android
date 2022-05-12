@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">בחרו כיצד ברצונכם לשתף</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">כללי</string>
     <string name="menu_heading_account">חשבון</string>

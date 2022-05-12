@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">নির্বাচন করুন কেমনভাবে আপনি শেয়ার করতে চান</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">সাধারণ</string>
     <string name="menu_heading_account">অ্যাকাউন্ট</string>

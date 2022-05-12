@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">በምን መንገድ እንደሚያካፍሉ ይምረጡ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">አጠቃላይ</string>
     <string name="menu_heading_share">አጋራ</string>

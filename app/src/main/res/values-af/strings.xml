@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Kies hoe jy graag wil deel</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Algemeen</string>
     <string name="menu_heading_share">Deel</string>

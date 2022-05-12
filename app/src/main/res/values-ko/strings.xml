@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">공유하려는 방법을 선택하세요</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">일반</string>
     <string name="menu_heading_account">계정</string>

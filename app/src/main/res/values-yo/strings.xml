@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Yan ona ti o fe lo lati ṣe ajopin</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Apapo</string>
     <string name="menu_heading_account">Accounti</string>

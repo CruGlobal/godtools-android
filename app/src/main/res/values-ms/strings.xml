@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Pilih cara anda mahu berkongsi</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Umum</string>
     <string name="menu_heading_account">Akaun</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Necə paylaşmaq istədiyinizi seçin</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Ümumi</string>
     <string name="menu_heading_share">Paylaş</string>

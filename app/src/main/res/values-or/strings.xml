@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">ଆପଣ କିପରି ଅଂଶୀଦାର କରିବାକୁ ଚାହାଁନ୍ତି ଚୟନ କରନ୍ତୁ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">ଜେନେରାଲ୍ |</string>
     <string name="menu_heading_account">"ଖାତା "</string>

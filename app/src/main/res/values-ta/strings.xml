@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">நீங்கள் எவ்வாறு பகிர விரும்புகிறீர்கள் என்பதைத் தேர்ந்தெடுக்கவும்</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">பொது</string>
     <string name="menu_heading_account">கணக்கு</string>

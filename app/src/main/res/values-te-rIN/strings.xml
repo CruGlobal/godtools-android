@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">మీరు ఎలా పంచుకోదలచారో ఎంచుకోండి</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">సాధారణ</string>
     <string name="menu_heading_account">ఖాతా</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">ನೀವು ಹೇಗೆ ಹಂಚಿಕೊಳ್ಳಲು ಬಯಸುತ್ತೀರಿ ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">ಸಾರ್ವಜನಿಕವಾದ</string>
     <string name="menu_heading_account">ಖಾತೆ</string>

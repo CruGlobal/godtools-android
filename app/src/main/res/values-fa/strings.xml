@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">نحوه اشتراک‌گذاری مورد نظر خود را انتخاب کنید</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">عمومی</string>
     <string name="menu_heading_account">حساب کاربری</string>

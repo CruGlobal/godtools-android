@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">Оберіть, як переслати</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Основне</string>
     <string name="menu_heading_account">Обліковий запис</string>

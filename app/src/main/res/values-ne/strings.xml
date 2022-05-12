@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">"तपाई कसरी साझा गर्न चाहनुहुन्छ यो चुन्नुहोस     "</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">सामान्य</string>
     <string name="menu_heading_account">एकाउन्ट</string>

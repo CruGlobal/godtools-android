@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Activity-->
-    <string name="share_prompt">ਚੁਣੋ ਕਿ ਤੁਸੀ ਕਿਵੇਂ ਦੁਜਿਆਂ ਨਾਲ ਸਾਂਝਿਆਂ ਕਰਨਾ ਚਾਹੋਗੇ</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">ਆਮ</string>
     <string name="menu_heading_account">ਖਾਤਾ</string>
