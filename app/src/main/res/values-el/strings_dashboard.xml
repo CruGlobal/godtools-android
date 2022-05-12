@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Γενικά</string>
+    <string name="menu_heading_account">Λογαριασμός</string>
+    <string name="menu_heading_share">Κοινοποίηση</string>
+    <string name="menu_heading_legal">Νομικά</string>
+    <string name="menu_about">Σχετικά</string>
+    <string name="menu_help">Συχνές Ερωτήσεις</string>
+    <string name="menu_contact_us">Επικοινωνήστε μαζί μας</string>
+    <string name="menu_tutorial">Εκπαιδευτικό υλικό</string>
+    <string name="menu_login">Σύνδεση</string>
+    <string name="menu_signup">Δημιουργία Λογαριασμού</string>
+    <string name="menu_logout">Αποσύνδεση</string>
+    <string name="menu_share_godtools">Κοινοποίηση Εφαρμογής Θεϊκών Εργαλείων</string>
+    <string name="menu_share_story">Μοιραστείτε μια ιστορία μαζί μας</string>
+    <string name="menu_rate">Βαθμολογήστε τα Θεϊκά Εργαλεία</string>
+    <string name="menu_terms_of_use">Όροι χρήσης</string>
+    <string name="menu_privacy_policy">Πολιτική Απορρήτου</string>
+    <string name="menu_copyright">Πνευματικά δικαιώματα</string>
+    <string name="share_story_subject">Ιστορία GodTools</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Αγαπημένα</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Απόρριψη</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Όλα τα Εργαλεία</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Θα θέλατε να ορίσετε μία δευτερεύουσα γλώσσα;</string>
+    <string name="languages_parallel_dialog_select">Επιλέξτε μία γλώσσα</string>
+    <string name="languages_parallel_dialog_action_start">Αρχίστε</string>
+    <string name="languages_parallel_dialog_action_cancel">Όχι ευχαριστώ</string>
     <!-- Tools List -->
     <string name="action_tools_about">Σχετικά</string>
     <string name="action_tools_open">Άνοιγμα</string>

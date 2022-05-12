@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity-->
-    <!-- Navigation Menu -->
-    <string name="menu_heading_general">सामान्य</string>
-    <string name="menu_heading_share">साझा करें</string>
-    <string name="menu_heading_legal">वैद्य</string>
-    <string name="menu_about">के बारे में</string>
-    <string name="menu_help">अक्सर पूछे जाने वाले प्रश्न</string>
-    <string name="menu_contact_us">सम्पर्क करें</string>
-    <string name="menu_login">भीतर आएँ</string>
-    <string name="menu_signup">एकाउन्ट खोलें</string>
-    <string name="menu_logout">बाहर निकलें</string>
-    <string name="menu_share_godtools">GodTools ऐप को साझा करें</string>
-    <string name="menu_share_story">हमा से कहानी को साझा करें</string>
-    <string name="menu_terms_of_use">उपयोग की शर्तें</string>
-    <string name="menu_privacy_policy">गोपनीय नीति</string>
-    <string name="menu_copyright">कॉपीराइट</string>
-    <!-- Share a story -->
-    <string name="share_story_subject">सुनें कैसे परमेश्वर कार्य कर रहा है!</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ भाषाएँ</string>
     <string name="menu_language_settings">भाषा को चुनें</string>
@@ -29,5 +11,4 @@
     <string name="text_language_warning">प्रत्येक भाषा में प्रत्येक टूल उपलब्ध नहीं है।</string>
     <string name="label_language_none">कोई नहीं</string>
     <string name="label_language_search">भाषाएं फिल्टर करें</string>
-    <!-- Parallel Language Dialog -->
 </resources>

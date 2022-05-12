@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Zvakangodarowo</string>
+    <string name="menu_heading_account">Akaundi</string>
+    <string name="menu_heading_share">Goverana</string>
+    <string name="menu_heading_legal">Zviri pamutemo</string>
+    <string name="menu_about">Maererano</string>
+    <string name="menu_help">Mibvunzo Inonyanya Kubvunzwa</string>
+    <string name="menu_contact_us">Tibate</string>
+    <string name="menu_tutorial">Zvidzidzo</string>
+    <string name="menu_login">Pekupinda napo</string>
+    <string name="menu_signup">Vhura akaundi</string>
+    <string name="menu_logout">Pokubuda napo</string>
+    <string name="menu_share_godtools">Goverana GodTools App</string>
+    <string name="menu_share_story">Goverana nesu nyaya</string>
+    <string name="menu_terms_of_use">Mashandisirwe</string>
+    <string name="menu_privacy_policy">Mashandire atinoita</string>
+    <string name="menu_copyright">Muridzi wezvinhu</string>
+    <string name="share_story_subject">Nyaya yeGodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Zvidzidzo</string>
     <string name="tools_list_lesson_info_length">Verenga</string>
-    <string name="tools_list_info_language_available">Zvinowanikwa mu</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Zvinofarirwa</string>
     <string name="tools_list_remove_favorite_dialog_title">Bvisa “%1$s” kubva pane zvinodikwa?</string>
@@ -13,6 +30,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Bvisa</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Zvombo zvose</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Ungada here kutsveta mutauro wechipiri?</string>
+    <string name="languages_parallel_dialog_select">Sarudza mutauro</string>
+    <string name="languages_parallel_dialog_action_start">Ibva watanga</string>
+    <string name="languages_parallel_dialog_action_cancel">Kwete, ndatenda</string>
     <!-- Tools List -->
     <string name="action_tools_about">Pamusoro</string>
     <string name="action_tools_open">Vhura</string>

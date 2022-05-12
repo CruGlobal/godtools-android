@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">सामान्य</string>
+    <string name="menu_heading_account">खाता</string>
+    <string name="menu_heading_share">साझा करें</string>
+    <string name="menu_heading_legal">कानूनी</string>
+    <string name="menu_about">परिचय</string>
+    <string name="menu_help">अक्सर पूछे जाने वाले प्रश्न</string>
+    <string name="menu_contact_us">हमसे संपर्क करें</string>
+    <string name="menu_tutorial">ट्यूटोरियल</string>
+    <string name="menu_login">लॉग-इन</string>
+    <string name="menu_signup">खाता बनाएंँ</string>
+    <string name="menu_logout">लॉग-आउट</string>
+    <string name="menu_share_godtools">GodTools ऐप को साझा करें</string>
+    <string name="menu_share_story">हमसे कोई कहानी शेयर करें</string>
+    <string name="menu_rate">GodTools को आंकें</string>
+    <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
+    <string name="menu_privacy_policy">निजता नीति</string>
+    <string name="menu_copyright">कॉपीराइट</string>
+    <string name="share_story_subject">GodTools कहानी</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">पसंदीदा</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">खारिज करें</string>
     <!-- All Tools -->
     <string name="nav_all_tools">सभी टूल्स</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">क्या आप कोई द्वितीय भाषा सेट करना चाहेंगे?</string>
+    <string name="languages_parallel_dialog_select">एक भाषा चुनें</string>
+    <string name="languages_parallel_dialog_action_start">शुरू करें</string>
+    <string name="languages_parallel_dialog_action_cancel">नहीं, धन्यवाद</string>
     <!-- Tools List -->
     <string name="action_tools_about">परिचय</string>
     <string name="action_tools_open">खोलें</string>

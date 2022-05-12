@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Bendra</string>
+    <string name="menu_heading_account">Paskyra</string>
+    <string name="menu_heading_share">Dalytis</string>
+    <string name="menu_heading_legal">Teisė</string>
+    <string name="menu_about">Apie</string>
+    <string name="menu_help">Dažnai užduodami klausimai</string>
+    <string name="menu_contact_us">Susisiekite su mumis</string>
+    <string name="menu_tutorial">Mokomasis įrašas</string>
+    <string name="menu_login">Prisijungti</string>
+    <string name="menu_signup">Susikurti paskyrą</string>
+    <string name="menu_logout">Atsijungti</string>
+    <string name="menu_share_godtools">Dalytis „GodTools“ programėle</string>
+    <string name="menu_share_story">Pasidalykite istorija su mumis</string>
+    <string name="menu_terms_of_use">Naudojimosi sąlygos</string>
+    <string name="menu_privacy_policy">Privatumo politika</string>
+    <string name="menu_copyright">Autoriaus teisės</string>
+    <string name="share_story_subject">„GodTools“ istorija</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Mėgstamiausi</string>
@@ -10,6 +28,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Išjungti</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Visi įrankiai</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Ar norėtumėte nustatyti papildomą kalbą?</string>
+    <string name="languages_parallel_dialog_select">Pasirinkite kalbą</string>
+    <string name="languages_parallel_dialog_action_start">Pradėkite</string>
+    <string name="languages_parallel_dialog_action_cancel">Ne, ačiū</string>
     <!-- Tools List -->
     <string name="action_tools_about">Apie</string>
     <string name="action_tools_open">Atidaryti</string>

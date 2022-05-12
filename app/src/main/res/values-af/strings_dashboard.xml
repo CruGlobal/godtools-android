@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Algemeen</string>
+    <string name="menu_heading_share">Deel</string>
+    <string name="menu_heading_legal">Wetlik</string>
+    <string name="menu_about">Aangaande</string>
+    <string name="menu_help">Veelgestelde vrae</string>
+    <string name="menu_contact_us">Kontak ons</string>
+    <string name="menu_login">Meld aan</string>
+    <string name="menu_signup">Skep rekening</string>
+    <string name="menu_logout">Teken uit</string>
+    <string name="menu_share_godtools">Deel die GodTools-toep</string>
+    <string name="menu_share_story">Deel \'n storie met ons</string>
+    <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
+    <string name="menu_privacy_policy">Privaatheidsbeleid</string>
+    <string name="menu_copyright">Kopiereg</string>
+    <string name="share_story_subject">Hoor hoe God beweeg!</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Gunstelinge</string>
@@ -10,6 +26,7 @@
     <string name="tools_list_favorites_banner_action_dismiss">Laat gaan</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Alle hulpmiddels</string>
+    <!-- Parallel Language Dialog -->
     <!-- Tools List -->
     <string name="action_tools_about">Aangaande</string>
     <string name="action_tools_open">Maak oop</string>

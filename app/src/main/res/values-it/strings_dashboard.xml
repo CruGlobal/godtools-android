@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Generale</string>
+    <string name="menu_heading_account">Account</string>
+    <string name="menu_heading_share">Condividi</string>
+    <string name="menu_heading_legal">Legale</string>
+    <string name="menu_about">Informazioni</string>
+    <string name="menu_help">Domande frequenti</string>
+    <string name="menu_contact_us">Contattaci</string>
+    <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_login">Accesso</string>
+    <string name="menu_signup">Crea account</string>
+    <string name="menu_logout">Esci</string>
+    <string name="menu_share_godtools">Condividi l\'app GodTools</string>
+    <string name="menu_share_story">Condividi con noi una storia</string>
+    <string name="menu_rate">Recensisci GodTools</string>
+    <string name="menu_terms_of_use">Condizioni d\'utilizzo</string>
+    <string name="menu_privacy_policy">Informativa sulla privacy</string>
+    <string name="menu_copyright">Copyright</string>
+    <string name="share_story_subject">Storia di GodTools</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Preferiti</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Ignora</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tutti gli strumenti</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vuoi impostare una lingua secondaria?</string>
+    <string name="languages_parallel_dialog_select">Seleziona una lingua</string>
+    <string name="languages_parallel_dialog_action_start">Per iniziare</string>
+    <string name="languages_parallel_dialog_action_cancel">No, grazie</string>
     <!-- Tools List -->
     <string name="action_tools_about">Informazioni</string>
     <string name="action_tools_open">Apri</string>

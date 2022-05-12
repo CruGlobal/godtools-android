@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">عام</string>
+    <string name="menu_heading_account">حساب</string>
+    <string name="menu_heading_share">شارك</string>
+    <string name="menu_heading_legal">قانوني</string>
+    <string name="menu_about">حول</string>
+    <string name="menu_help">الأسئلة المتكررة</string>
+    <string name="menu_contact_us">اتصل بنا</string>
+    <string name="menu_tutorial">شرح</string>
+    <string name="menu_login">تسجيل الدخول</string>
+    <string name="menu_signup">إنشاء حساب</string>
+    <string name="menu_logout">تسجيل الخروج</string>
+    <string name="menu_share_godtools">شارك تطبيق GodTools</string>
+    <string name="menu_share_story">شارك قصة معنا</string>
+    <string name="menu_rate">قيم GodTools</string>
+    <string name="menu_terms_of_use">شروط الاستخدام</string>
+    <string name="menu_privacy_policy">سياسة الخصوصية</string>
+    <string name="menu_copyright">حق النشر والتأليف</string>
+    <string name="share_story_subject">قصة GodTools</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">المفضلة</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">تجاهل</string>
     <!-- All Tools -->
     <string name="nav_all_tools">كل الأدوات</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">هل ترغب في تعيين لغة ثانوية؟</string>
+    <string name="languages_parallel_dialog_select">تحديد اللغة</string>
+    <string name="languages_parallel_dialog_action_start">ابدأ</string>
+    <string name="languages_parallel_dialog_action_cancel">لا شكراً</string>
     <!-- Tools List -->
     <string name="action_tools_about">حول</string>
     <string name="action_tools_open">فتح</string>

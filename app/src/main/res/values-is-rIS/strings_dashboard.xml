@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Almennt</string>
+    <string name="menu_heading_share">Deila</string>
+    <string name="menu_heading_legal">Lagaleg atriði</string>
+    <string name="menu_about">Um</string>
+    <string name="menu_help">Algengar spurningar</string>
+    <string name="menu_contact_us">Hafa samband við okkur</string>
+    <string name="menu_login">Innskrá</string>
+    <string name="menu_signup">Búa til aðgang</string>
+    <string name="menu_logout">Útskrá</string>
+    <string name="menu_share_godtools">Deila GodTools appinu</string>
+    <string name="menu_share_story">Deila sögu með okkur</string>
+    <string name="menu_terms_of_use">Notkunarskilmálar</string>
+    <string name="menu_privacy_policy">Persónuverndarstefna</string>
+    <string name="menu_copyright">Höfundarréttur</string>
+    <string name="share_story_subject">Heyrðu hvernig Guð ferðast!</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Uppáhalds</string>
@@ -10,6 +26,7 @@
     <string name="tools_list_favorites_banner_action_dismiss">Hafna</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Öll tól</string>
+    <!-- Parallel Language Dialog -->
     <!-- Tools List -->
     <string name="action_tools_about">Um</string>
     <string name="action_tools_open">Opna</string>

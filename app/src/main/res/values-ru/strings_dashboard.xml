@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Общая информация</string>
+    <string name="menu_heading_account">Учетная запись</string>
+    <string name="menu_heading_share">Поделиться</string>
+    <string name="menu_heading_legal">Юридическая информация</string>
+    <string name="menu_about">О приложении</string>
+    <string name="menu_help">Частые вопросы</string>
+    <string name="menu_contact_us">Связаться с нами</string>
+    <string name="menu_tutorial">Руководство для использования</string>
+    <string name="menu_login">Войти</string>
+    <string name="menu_signup">Создать учетную запись</string>
+    <string name="menu_logout">Выйти</string>
+    <string name="menu_share_godtools">Поделиться приложением GodTools</string>
+    <string name="menu_share_story">Поделитесь с нами историей</string>
+    <string name="menu_rate">Оценить GodTools</string>
+    <string name="menu_terms_of_use">Условия использования</string>
+    <string name="menu_privacy_policy">Политика конфиденциальности</string>
+    <string name="menu_copyright">Авторское право</string>
+    <string name="share_story_subject">Живые истории</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Избранное</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Скрыть</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Все инструменты</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Хотите установить второй язык?</string>
+    <string name="languages_parallel_dialog_select">Выберите язык</string>
+    <string name="languages_parallel_dialog_action_start">Начать</string>
+    <string name="languages_parallel_dialog_action_cancel">Нет, спасибо</string>
     <!-- Tools List -->
     <string name="action_tools_about">О приложении</string>
     <string name="action_tools_open">Открыть</string>

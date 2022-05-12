@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity-->
-    <!-- Navigation Menu -->
-    <string name="menu_heading_general">Ümumi</string>
-    <string name="menu_heading_share">Paylaş</string>
-    <string name="menu_heading_legal">Hüquqi</string>
-    <string name="menu_about">Haqqında</string>
-    <string name="menu_help">Tez-tez verilən suallar</string>
-    <string name="menu_contact_us">Bizimlə əlaqə</string>
-    <string name="menu_login">Daxil ol</string>
-    <string name="menu_signup">Hesab yarat</string>
-    <string name="menu_logout">Çıx</string>
-    <string name="menu_share_godtools">GodTools App paylaşın</string>
-    <string name="menu_share_story">Bizimlə hekayənizi paylaşın</string>
-    <string name="menu_terms_of_use">İstifadə şərtləri</string>
-    <string name="menu_privacy_policy">Məxfilik siyasəti</string>
-    <string name="menu_copyright">Müəllif hüququ</string>
-    <!-- Share a story -->
-    <string name="share_story_subject">God-un hərəkətini dinləyin!</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ dil</string>
     <string name="menu_language_settings">Dil parametrləri</string>
@@ -29,5 +11,4 @@
     <string name="text_language_warning">Hər alət bütün dillərdə mövcud deyil.</string>
     <string name="label_language_none">Heç biri</string>
     <string name="label_language_search">Dilləri filtrlə</string>
-    <!-- Parallel Language Dialog -->
 </resources>

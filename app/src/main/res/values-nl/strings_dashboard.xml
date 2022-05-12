@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Algemeen</string>
+    <string name="menu_heading_account">Account</string>
+    <string name="menu_heading_share">Delen</string>
+    <string name="menu_heading_legal">Legaal</string>
+    <string name="menu_about">Over</string>
+    <string name="menu_help">Veelgestelde vragen</string>
+    <string name="menu_contact_us">Contacteer Ons</string>
+    <string name="menu_tutorial">Uitleg</string>
+    <string name="menu_login">Inloggen</string>
+    <string name="menu_signup">Account aanmaken</string>
+    <string name="menu_logout">Uitloggen</string>
+    <string name="menu_share_godtools">Deel de GodTools app</string>
+    <string name="menu_share_story">Deel een verhaal met ons</string>
+    <string name="menu_rate">Waardeer GodTools</string>
+    <string name="menu_terms_of_use">Gebruiksvoorwaarden</string>
+    <string name="menu_privacy_policy">Privacybeleid</string>
+    <string name="menu_copyright">Copyright</string>
+    <string name="share_story_subject">GodTools-verhaal</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Favorieten</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Afwijzen</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Alle hulpmiddelen</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Wil je een tweede taal instellen?</string>
+    <string name="languages_parallel_dialog_select">Selecteer een taal</string>
+    <string name="languages_parallel_dialog_action_start">Aan de slag</string>
+    <string name="languages_parallel_dialog_action_cancel">Nee, bedankt</string>
     <!-- Tools List -->
     <string name="action_tools_about">Over</string>
     <string name="action_tools_open">Openen</string>

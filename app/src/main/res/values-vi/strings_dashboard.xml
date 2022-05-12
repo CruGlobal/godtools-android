@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Tổng quát</string>
+    <string name="menu_heading_account">Tài khoản</string>
+    <string name="menu_heading_share">Chia sẻ</string>
+    <string name="menu_heading_legal">Hợp pháp</string>
+    <string name="menu_about">Giới thiệu</string>
+    <string name="menu_help">Câu hỏi thường gặp</string>
+    <string name="menu_contact_us">Liên hệ</string>
+    <string name="menu_tutorial">Hướng dẫn</string>
+    <string name="menu_login">Đăng nhập</string>
+    <string name="menu_signup">Tạo tài khoản</string>
+    <string name="menu_logout">Đăng xuất</string>
+    <string name="menu_share_godtools">Chia sẻ ứng dụng GodTools</string>
+    <string name="menu_share_story">Chia sẻ câu chuyện với chúng tôi</string>
+    <string name="menu_rate">Đánh giá GodTools</string>
+    <string name="menu_terms_of_use">Điều khoản sử dụng</string>
+    <string name="menu_privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="menu_copyright">Bản quyền</string>
+    <string name="share_story_subject">Câu chuyện từ GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Bài học</string>
     <string name="tools_list_lesson_info_length">%1$d phút đọc</string>
-    <string name="tools_list_info_language_available">Có sẵn trong %1$s</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Ưa thích</string>
     <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>
@@ -13,7 +31,13 @@
     <string name="tools_list_favorites_banner_action_dismiss">Bỏ qua</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tất cả công cụ</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Bạn có muốn thiết lập ngôn ngữ thứ hai không?</string>
+    <string name="languages_parallel_dialog_select">Chọn một ngôn ngữ</string>
+    <string name="languages_parallel_dialog_action_start">Bắt đầu</string>
+    <string name="languages_parallel_dialog_action_cancel">Không, cám ơn</string>
     <!-- Tools List -->
     <string name="action_tools_about">Giới thiệu</string>
     <string name="action_tools_open">Mở</string>
+    <string name="tools_list_info_language_available">Có sẵn trong %1$s</string>
 </resources>

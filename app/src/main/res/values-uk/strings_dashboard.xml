@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Основне</string>
+    <string name="menu_heading_account">Обліковий запис</string>
+    <string name="menu_heading_share">Переслати</string>
+    <string name="menu_heading_legal">Правові відомості</string>
+    <string name="menu_about">Про програму</string>
+    <string name="menu_help">Часті запитання</string>
+    <string name="menu_contact_us">Зв\'язок з нами</string>
+    <string name="menu_tutorial">Тренування</string>
+    <string name="menu_login">Увійти</string>
+    <string name="menu_signup">Створити обліковий запис</string>
+    <string name="menu_logout">Вийти</string>
+    <string name="menu_share_godtools">Показати GodTools іншим</string>
+    <string name="menu_share_story">Розкажіть нам історію</string>
+    <string name="menu_rate">Оцінити GodTools</string>
+    <string name="menu_terms_of_use">Умови користування</string>
+    <string name="menu_privacy_policy">Політика конфіденційності</string>
+    <string name="menu_copyright">Авторське право</string>
+    <string name="share_story_subject">Історія GodTools</string>
     <!-- Lessons -->
     <!-- Favorites -->
     <string name="nav_favorite_tools">Улюблене</string>
@@ -10,6 +29,11 @@
     <string name="tools_list_favorites_banner_action_dismiss">Закрити</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Усі інструменти</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Хочете встановити додаткову мову?</string>
+    <string name="languages_parallel_dialog_select">Оберіть мову</string>
+    <string name="languages_parallel_dialog_action_start">Розпочати</string>
+    <string name="languages_parallel_dialog_action_cancel">Ні, дякую</string>
     <!-- Tools List -->
     <string name="action_tools_about">Про</string>
     <string name="action_tools_open">Відкрити</string>

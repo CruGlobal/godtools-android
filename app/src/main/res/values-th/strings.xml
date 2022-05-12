@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity-->
-    <!-- Navigation Menu -->
-    <string name="menu_heading_general">ทั่วไป</string>
-    <string name="menu_heading_account">บัญชี</string>
-    <string name="menu_heading_share">แชร์</string>
-    <string name="menu_heading_legal">กฎหมาย</string>
-    <string name="menu_about">เกี่ยวกับ</string>
-    <string name="menu_help">คำถามที่พบบ่อย</string>
-    <string name="menu_contact_us">ติดต่อเรา</string>
-    <string name="menu_tutorial">คู่มือ</string>
-    <string name="menu_login">เข้าสู่ระบบ</string>
-    <string name="menu_signup">สร้างบัญชี</string>
-    <string name="menu_logout">ออกจากระบบ</string>
-    <string name="menu_share_godtools">แชร์แอป GodTools</string>
-    <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
-    <string name="menu_rate">ให้คะแนน GodTools</string>
-    <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
-    <string name="menu_privacy_policy">นโยบายความเป็นส่วนตัว</string>
-    <string name="menu_copyright">ลิขสิทธิ์</string>
-    <!-- Share a story -->
-    <string name="share_story_subject">เรื่องราวของ GodTools</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">กว่า 90 ภาษา</string>
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
@@ -32,9 +11,4 @@
     <string name="text_language_warning">มีเครื่องมือไม่ครบทุกภาษา</string>
     <string name="label_language_none">ไม่มี</string>
     <string name="label_language_search">กรองภาษา</string>
-    <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">คุณต้องการตั้งค่าภาษารองหรือไม่</string>
-    <string name="languages_parallel_dialog_select">เลือกภาษา</string>
-    <string name="languages_parallel_dialog_action_start">เริ่มต้นใช้งาน</string>
-    <string name="languages_parallel_dialog_action_cancel">ไม่ ขอบคุณ</string>
 </resources>
