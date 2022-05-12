@@ -173,7 +173,11 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     // region Tools List
     private val toolsAdapterDataModel by viewModels<ToolsAdapterViewModel>()
     private val toolsAdapter: ToolsAdapter by lazy {
-        ToolsAdapter(this, toolsAdapterDataModel).also { adapter ->
+        val itemLayout = when (mode) {
+            MODE_LESSONS -> R.layout.tools_list_item_lesson
+            else -> R.layout.tools_list_item_tool
+        }
+        ToolsAdapter(this, toolsAdapterDataModel, itemLayout).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.tools.observe(this, adapter)

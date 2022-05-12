@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.weakdelegate)
 
     testImplementation(libs.kotlin.coroutines.test)
-    testImplementation(libs.play.billing)
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
