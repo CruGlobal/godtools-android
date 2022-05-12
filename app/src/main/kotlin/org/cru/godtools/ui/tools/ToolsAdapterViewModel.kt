@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
+import org.ccci.gto.android.common.androidx.lifecycle.switchCombine
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.base.Settings
@@ -45,10 +45,10 @@ class ToolsAdapterViewModel @Inject constructor(
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        private val primaryTranslation =
-            settings.primaryLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(code, it) }
-        private val defaultTranslation = dao.getLatestTranslationLiveData(code, Settings.defaultLanguage)
-        val firstTranslation = primaryTranslation.combineWith(defaultTranslation) { p, d -> p ?: d }
+        val firstTranslation = combine(
+            settings.primaryLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(code, it) },
+            dao.getLatestTranslationLiveData(code, Settings.defaultLanguage)
+        ) { p, d -> p ?: d }
         val parallelTranslation =
             settings.parallelLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(code, it) }
 
@@ -59,14 +59,12 @@ class ToolsAdapterViewModel @Inject constructor(
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
 
-        val downloadProgress =
-            primaryTranslation.switchCombineWith(defaultTranslation, parallelTranslation) { prim, def, para ->
-                when {
-                    prim != null -> downloadManager.getDownloadProgressLiveData(code, prim.languageCode)
-                    def != null -> downloadManager.getDownloadProgressLiveData(code, def.languageCode)
-                    para != null -> downloadManager.getDownloadProgressLiveData(code, para.languageCode)
-                    else -> emptyLiveData()
-                }
+        val downloadProgress = switchCombine(firstTranslation, parallelTranslation) { first, para ->
+            when {
+                first != null -> downloadManager.getDownloadProgressLiveData(code, first.languageCode)
+                para != null -> downloadManager.getDownloadProgressLiveData(code, para.languageCode)
+                else -> emptyLiveData()
             }
+        }
     }
 }
