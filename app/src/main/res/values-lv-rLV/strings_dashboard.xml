@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <string name="nav_lessons">Nodarbības</string>
+    <string name="tools_list_lesson_info_length">Aizņems %1$d minūtes</string>
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Izlase</string>
+    <string name="tools_list_remove_favorite_dialog_title">Izņemt “%1$s” no Izlases?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Izņemt</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Atcelt</string>
+    <string name="tools_list_favorites_banner_text">Padari rīku pieejamu bezsaistē, nospiežot sirds ikonu, lai pievienotu to Izlasei.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Atcelt</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Visi rīki</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Par rīku</string>
+    <string name="action_tools_open">Atvērt</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">ເພີ່ມໃສ່ ໜ້າ ຈໍເຮືອນ</string>
+    <string name="action_tools_open_tool">ເປີດເຄື່ອງມື</string>
+    <string name="action_tools_add_favorite">ເພີ່ມໃສ່ລາຍການທີ່ມັກ</string>
+    <string name="action_tools_remove_favorite">ລືບອອກຈາກລາຍການທີ່ມັກ</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d ຮັບຊົມ</item>
+    </plurals>
+    <string name="label_tools_about">ກ່ຽວກັບ</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">" %1$,d ພາສາ"</item>
+    </plurals>
+</resources>

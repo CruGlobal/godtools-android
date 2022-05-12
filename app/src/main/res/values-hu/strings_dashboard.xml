@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Kedvencek</string>
+    <string name="tools_list_remove_favorite_dialog_title">Eltávolítod ezt: “%1$s” a Kedvencekből?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Eltávolítás</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Mégse</string>
+    <string name="tools_list_favorites_banner_text">Offline elérhetővé teheted az eszközt a szív ikonra kattintva, amivel hozzáadod a kedvenceidhez.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Elvetés</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Minden eszköz</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Rólunk</string>
+    <string name="action_tools_open">Megnyitás</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Oblíbené</string>
+    <string name="tools_list_remove_favorite_dialog_title">Odstranit \"%1$s” z Oblíbených?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstranit</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušit</string>
+    <string name="tools_list_favorites_banner_text">Klepnutím na ikonu srdíčka přidáte nástroj do svých oblíbených a budete jej mít k dispozici offline.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Zrušit</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Všechny nástroje</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">O nás</string>
+    <string name="action_tools_open">Otevřít</string>
+</resources>

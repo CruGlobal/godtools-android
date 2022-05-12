@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Lemmikud</string>
+    <string name="tools_list_remove_favorite_dialog_title">Kas eemaldada “%1$s” lemmikutest?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Eemalda</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Tühista</string>
+    <string name="tools_list_favorites_banner_text">Tee tööriist kättesaadavaks võrguühenduseta, puudutades südameikoonil, et lisada see lemmikute hulka.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Jäta vahele</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Kõik tööriistad</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Rakendusest</string>
+    <string name="action_tools_open">Ava</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">پسندیدگان</string>
+    <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>
+    <string name="tools_list_favorites_banner_text">دل کے آئیکن پر ٹیپ کر کے کسی ٹول کو آف لائن دستیاب کروائیں جو کہ اسے آپ کے پسندیدگان میں شامل کر دیتا ہے۔</string>
+    <string name="tools_list_favorites_banner_action_dismiss">برخاست کریں</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">تمام ٹولز</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">ہمارے متعلق</string>
+    <string name="action_tools_open">کھولیں</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">पसंदीदा</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” को पसंदीदा से निकालें?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">निकालें</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करें</string>
+    <string name="tools_list_favorites_banner_text">टूल को पसंदीदा में जोड़ने वाले \'दिल\' चिन्ह को टैप करके आप उस टूल को ऑफलाइन उपलब्ध कर सकते हैं।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">खारिज करें</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">सभी टूल्स</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">के बारे में</string>
+    <string name="action_tools_open">खोलें</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">홈 스크린에 추가</string>
+    <string name="action_tools_open_tool">툴 열기</string>
+    <string name="action_tools_add_favorite">즐겨찾기에 추가</string>
+    <string name="action_tools_remove_favorite">즐겨찾기에서 제거</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d 뷰</item>
+    </plurals>
+    <string name="label_tools_about">정보</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d 언어</item>
+    </plurals>
+</resources>

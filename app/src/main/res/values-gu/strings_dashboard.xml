@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">મનપસંદ</string>
+    <string name="tools_list_remove_favorite_dialog_title">મનપસંદમાંથી \"%1s\" ને દૂર કરીએ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">દૂર કરો</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">રદ કરો</string>
+    <string name="tools_list_favorites_banner_text">હાર્ટ આઇકોનને ટેપ કરીને Tool ને ઓફ઼લાઇન ઉપલબ્ધ બનાવો જે તેને તમારા મનપસંદમાં ઉમેરે છે.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">કાઢી નાખો</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">બધા ટુલ્સ</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">ના વિશે</string>
+    <string name="action_tools_open">ખુલ્લું</string>
+</resources>

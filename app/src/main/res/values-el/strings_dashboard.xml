@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Αγαπημένα</string>
+    <string name="tools_list_remove_favorite_dialog_title">Αφαίρεση “%1$s” από τα Αγαπημένα;</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Αφαίρεση</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ακύρωση</string>
+    <string name="tools_list_favorites_banner_text">Κάντε το εργαλείο διαθέσιμο offline πατώντας το εικονίδιο με την καρδιά που το προσθέτει στα αγαπημένα σας.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Απόρριψη</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Όλα τα Εργαλεία</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Σχετικά</string>
+    <string name="action_tools_open">Άνοιγμα</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">အနှစ်သက်ဆုံးများ</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” ကိုသင့်အကြိုက်ဆုံးမှ ပယ်ဖျက်မည်လား?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ပယ်ဖျက်မည်</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ဖျက်သိမ်းသည်</string>
+    <string name="tools_list_favorites_banner_text">ကိရိယာတစ္ခုကိုအင္တာနက္ဆက္သြယ္မႈမရွိခ်ိန္တြင္ အသံုးျပဳႏိုင္ရန္အတြက္ သင္၏အႀကိဳက္ဆံုးမ်ားထဲသို႔ထည္႔သည္႔ အသဲပံုအိုင္ကြန္ကို ႏွိပ္ၿပီးျပဳလုပ္ပါ။</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ထုတ်ပစ်သည်</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">ကိရိယာများအားလုံး</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">အကြောင်းအရာ</string>
+    <string name="action_tools_open">ဖွင့်ရန်</string>
+</resources>

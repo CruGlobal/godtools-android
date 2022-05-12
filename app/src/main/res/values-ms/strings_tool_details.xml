@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Tambah ke skrin Laman Utama</string>
+    <string name="action_tools_open_tool">Buka Alat</string>
+    <string name="action_tools_add_favorite">Tambah ke Kegemaran</string>
+    <string name="action_tools_remove_favorite">Buang daripada Kegemaran</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">%1$,d Melihat</item>
+    </plurals>
+    <string name="label_tools_about">Perihal</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d Bahasa</item>
+    </plurals>
+</resources>

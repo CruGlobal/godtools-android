@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoris</string>
+    <string name="tools_list_remove_favorite_dialog_title">Retirer « %1$s » des favoris?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Retirer</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
+    <string name="tools_list_favorites_banner_text">Appuyez sur l\'icône en forme de cœur pour ajouter un outil à vos favoris et le rendre disponible hors ligne.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Ignorer</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Tous les outils</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">À propos</string>
+    <string name="action_tools_open">Ouvrir</string>
+</resources>

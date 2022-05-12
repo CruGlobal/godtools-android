@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">ລາຍການທີ່ມັກ</string>
+    <string name="tools_list_remove_favorite_dialog_title">ລຶບ “%1$s” ອອກຈາກລາຍການທີ່ມັກບໍ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ລຶບ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ຍົກເລີກ</string>
+    <string name="tools_list_favorites_banner_text">ເຮັດໃຫ້ນຳໃຊ້ເຄື່ອງມືແບບອອບລາຍໄດ້ໂດຍແຕະໄອຄອນຫົວໃຈ ເຊິ່ງຈະເພີ່ມມັນເຂົ້າໃນລາຍການທີ່ມັກຂອງທ່ານ.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ປິດໄວ້</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">ເຄື່ອງມືທັງໝົດ</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">ກ່ຽວກັບ</string>
+    <string name="action_tools_open">ເປີດ</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoriti</string>
+    <string name="tools_list_remove_favorite_dialog_title">Ukloniti “%1$s” iz favorita?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Ukloni</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Odustani</string>
+    <string name="tools_list_favorites_banner_text">Alat vam može biti raspoloživ i izvan mreže, samo dodirnite ikonu srca koja ga dodaje u vaše favorite.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Odbaci</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Svi alati</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">O nama</string>
+    <string name="action_tools_open">Otvori</string>
+</resources>

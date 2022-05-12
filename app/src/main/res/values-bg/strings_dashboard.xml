@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Любими</string>
+    <string name="tools_list_remove_favorite_dialog_title">Премахване на “%1$s” от любимите?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Премахни</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Отмени</string>
+    <string name="tools_list_favorites_banner_text">Направете инструмента достъпен офлайн чрез докосване на иконката сърце. Така го прибавяте към любимите си.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Затвори</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Всички инструменти</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Подробности</string>
+    <string name="action_tools_open">Отвори</string>
+</resources>

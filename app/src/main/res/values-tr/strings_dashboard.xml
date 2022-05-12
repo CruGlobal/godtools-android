@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoriler</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” Favorilerden Kaldırılsın mı?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Kaldır</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">İptal</string>
+    <string name="tools_list_favorites_banner_text">Kalp simgesine dokunup favorilerine ekleyerek bir aracı çevrim dışı kullanılabilir hâle getir.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Kapat</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Tüm Araçlar</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Hakkında</string>
+    <string name="action_tools_open">Aç</string>
+</resources>

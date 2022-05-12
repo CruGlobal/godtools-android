@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">我的最愛</string>
+    <string name="tools_list_remove_favorite_dialog_title">要將「%1$s」從我的最愛移除嗎？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">移除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="tools_list_favorites_banner_text">點擊愛心圖示，將工具新增至你的最愛，就能離線使用工具。</string>
+    <string name="tools_list_favorites_banner_action_dismiss">略過</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">所有工具</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">關於</string>
+    <string name="action_tools_open">開啟</string>
+</resources>

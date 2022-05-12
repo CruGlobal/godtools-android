@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favorieten</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” uit Favorieten verwijderen?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Verwijderen</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuleren</string>
+    <string name="tools_list_favorites_banner_text">Maak een hulpmiddel offline beschikbaar door op het hartje te tikken en het zo aan je Favorieten toe te voegen.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Afwijzen</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Alle hulpmiddelen</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Over</string>
+    <string name="action_tools_open">Openen</string>
+</resources>

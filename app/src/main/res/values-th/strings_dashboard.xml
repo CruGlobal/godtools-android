@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">รายการโปรด</string>
+    <string name="tools_list_remove_favorite_dialog_title">ลบ “%1$s\" จากรายการโปรด</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ลบ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ยกเลิก</string>
+    <string name="tools_list_favorites_banner_text">ทำให้เครื่องมือพร้อมใช้งานแบบออฟไลน์โดยแตะที่ไอคอนรูปหัวใจเพื่อเพิ่มไว้ในรายการโปรดของคุณ</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ยกเลิก</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">เครื่องมือทั้งหมด</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">เกี่ยวกับ</string>
+    <string name="action_tools_open">เปิด</string>
+</resources>

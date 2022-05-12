@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Додај на почетни екран</string>
+    <string name="action_tools_open_tool">Отворени алат</string>
+    <string name="action_tools_add_favorite">Додај у Омиљене</string>
+    <string name="action_tools_remove_favorite">Уклони из Омиљених</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d преглед</item>
+        <item quantity="other">%1$,d прегледа</item>
+        <item quantity="few">%1$,d прегледа</item>
+    </plurals>
+    <string name="label_tools_about">О</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d језик</item>
+        <item quantity="other">%1$,d језика</item>
+        <item quantity="few">%1$,d језика</item>
+    </plurals>
+</resources>

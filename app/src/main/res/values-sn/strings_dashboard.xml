@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lessons -->
+    <string name="nav_lessons">Zvidzidzo</string>
+    <string name="tools_list_lesson_info_length">Verenga</string>
+    <string name="tools_list_lesson_info_language_available">Zvinowanikwa mu</string>
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Zvinofarirwa</string>
+    <string name="tools_list_remove_favorite_dialog_title">Bvisa “%1$s” kubva pane zvinodikwa?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Bvisa</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Regedza</string>
+    <string name="tools_list_favorites_banner_text">It\'s kuti chombo chiwanikwa kana usiri pamasai-sai nekubata pakaiswa mwoyo kuti chigoinda pane zvinodikwa</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Bvisa</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Zvombo zvose</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Pamusoro</string>
+    <string name="action_tools_open">Vhura</string>
+</resources>
