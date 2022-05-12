@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
+    <string name="action_tools_open_tool">Abrir ferramenta</string>
+    <string name="action_tools_add_favorite">Adicionar aos Favoritos</string>
+    <string name="action_tools_remove_favorite">Remover dos Favoritos</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d visualização</item>
+        <item quantity="other">%1$,d visualizações</item>
+    </plurals>
+    <string name="label_tools_about">Sobre</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d idioma</item>
+        <item quantity="other">%1$,d idiomas</item>
+    </plurals>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">ทั่วไป</string>
+    <string name="menu_heading_account">บัญชี</string>
+    <string name="menu_heading_share">แชร์</string>
+    <string name="menu_heading_legal">กฎหมาย</string>
+    <string name="menu_about">เกี่ยวกับ</string>
+    <string name="menu_help">คำถามที่พบบ่อย</string>
+    <string name="menu_contact_us">ติดต่อเรา</string>
+    <string name="menu_tutorial">คู่มือ</string>
+    <string name="menu_login">เข้าสู่ระบบ</string>
+    <string name="menu_signup">สร้างบัญชี</string>
+    <string name="menu_logout">ออกจากระบบ</string>
+    <string name="menu_share_godtools">แชร์แอป GodTools</string>
+    <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
+    <string name="menu_rate">ให้คะแนน GodTools</string>
+    <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
+    <string name="menu_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="menu_copyright">ลิขสิทธิ์</string>
+    <string name="share_story_subject">เรื่องราวของ GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">รายการโปรด</string>
+    <string name="tools_list_remove_favorite_dialog_title">ลบ “%1$s\" จากรายการโปรด</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ลบ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ยกเลิก</string>
+    <string name="tools_list_favorites_banner_text">ทำให้เครื่องมือพร้อมใช้งานแบบออฟไลน์โดยแตะที่ไอคอนรูปหัวใจเพื่อเพิ่มไว้ในรายการโปรดของคุณ</string>
+    <string name="tools_list_favorites_banner_action_dismiss">ยกเลิก</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">เครื่องมือทั้งหมด</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">คุณต้องการตั้งค่าภาษารองหรือไม่</string>
+    <string name="languages_parallel_dialog_select">เลือกภาษา</string>
+    <string name="languages_parallel_dialog_action_start">เริ่มต้นใช้งาน</string>
+    <string name="languages_parallel_dialog_action_cancel">ไม่ ขอบคุณ</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">เกี่ยวกับ</string>
+    <string name="action_tools_open">เปิด</string>
+</resources>

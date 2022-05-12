@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">כללי</string>
+    <string name="menu_heading_account">חשבון</string>
+    <string name="menu_heading_share">שתף</string>
+    <string name="menu_heading_legal">חוקיות</string>
+    <string name="menu_about">אודות</string>
+    <string name="menu_help">שאלות נפוצות</string>
+    <string name="menu_contact_us">צרו איתנו קשר</string>
+    <string name="menu_tutorial">הדרכה</string>
+    <string name="menu_login">כניסה</string>
+    <string name="menu_signup">יצירת חשבון</string>
+    <string name="menu_logout">יציאה</string>
+    <string name="menu_share_godtools">שתפו את אפליקציית GodTools</string>
+    <string name="menu_share_story">שתפו איתנו סיפור</string>
+    <string name="menu_rate">דרגו את GodTools</string>
+    <string name="menu_terms_of_use">תנאי שימוש</string>
+    <string name="menu_privacy_policy">מדיניות פרטיות</string>
+    <string name="menu_copyright">זכויות יוצרים</string>
+    <string name="share_story_subject">סיפורי GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">מועדפים</string>
+    <string name="tools_list_remove_favorite_dialog_title">האם להסיר את \"%1$s\" מהמועדפים?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">הסר</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">בטל</string>
+    <string name="tools_list_favorites_banner_text">הפוך כלי לזמין במצב לא מקוון על ידי הקשה על סמל הלב שמוסיף אותו למועדפים שלך.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">שחרר</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">כל הכלים</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">" האם ברצונכם להגדיר שפה שניה?"</string>
+    <string name="languages_parallel_dialog_select">בחרו שפה</string>
+    <string name="languages_parallel_dialog_action_start">בואו נתחיל</string>
+    <string name="languages_parallel_dialog_action_cancel">לא תודה</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">אודות</string>
+    <string name="action_tools_open">פתח</string>
+</resources>

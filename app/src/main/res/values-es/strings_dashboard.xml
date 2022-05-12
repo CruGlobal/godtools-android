@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">General</string>
+    <string name="menu_heading_account">Cuenta</string>
+    <string name="menu_heading_share">Compartir</string>
+    <string name="menu_heading_legal">Legal</string>
+    <string name="menu_about">Acerca de</string>
+    <string name="menu_help">Preguntas frecuentes</string>
+    <string name="menu_contact_us">Contáctanos</string>
+    <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_login">Iniciar</string>
+    <string name="menu_signup">Crear cuenta</string>
+    <string name="menu_logout">Cerrar sesión</string>
+    <string name="menu_share_godtools">Comparte la aplicación GodTools</string>
+    <string name="menu_share_story">Comparte una historia con nosotros</string>
+    <string name="menu_rate">Califica a GodTools</string>
+    <string name="menu_terms_of_use">Términos de uso</string>
+    <string name="menu_privacy_policy">Política de privacidad</string>
+    <string name="menu_copyright">Derechos de autor</string>
+    <string name="share_story_subject">Historia de GodTools</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Lecciones</string>
+    <string name="tools_list_lesson_info_length">%1$d Minutos de lectura</string>
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoritos</string>
+    <string name="tools_list_remove_favorite_dialog_title">¿Eliminar \"%1$s\" de favoritos?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Eliminar</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Cancelar</string>
+    <string name="tools_list_favorites_banner_text">Toca el icono de corazón para añadir una herramienta a favoritos y tenerla disponible sin conexión.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Descartar</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Todas las herramientas</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">¿Quiere establecer un idioma secundario?</string>
+    <string name="languages_parallel_dialog_select">Seleccione un idioma</string>
+    <string name="languages_parallel_dialog_action_start">Comenzar</string>
+    <string name="languages_parallel_dialog_action_cancel">No, gracias</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Acerca de</string>
+    <string name="action_tools_open">Abrir</string>
+    <string name="tools_list_info_language_available">Disponible en %1$s</string>
+</resources>

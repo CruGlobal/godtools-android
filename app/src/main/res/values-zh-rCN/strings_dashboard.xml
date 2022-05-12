@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">通用</string>
+    <string name="menu_heading_account">账户</string>
+    <string name="menu_heading_share">分享</string>
+    <string name="menu_heading_legal">法律</string>
+    <string name="menu_about">关于</string>
+    <string name="menu_help">常见问题</string>
+    <string name="menu_contact_us">联系我们</string>
+    <string name="menu_tutorial">教程</string>
+    <string name="menu_login">登录</string>
+    <string name="menu_signup">建立帳戶</string>
+    <string name="menu_logout">登出</string>
+    <string name="menu_share_godtools">分享GodTools应用</string>
+    <string name="menu_share_story">与我们分享故事</string>
+    <string name="menu_rate">为GodTools评分</string>
+    <string name="menu_terms_of_use">使用条款</string>
+    <string name="menu_privacy_policy">隐私政策</string>
+    <string name="menu_copyright">版权</string>
+    <string name="share_story_subject">GodTools故事</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">收藏夹</string>
+    <string name="tools_list_remove_favorite_dialog_title">从收藏夹中删除 “%1$s”？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">删除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="tools_list_favorites_banner_text">要离线使用某个工具，请点击心形图标将其添加到收藏夹。</string>
+    <string name="tools_list_favorites_banner_action_dismiss">取消</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">所有工具</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">您想设置第二语言吗？</string>
+    <string name="languages_parallel_dialog_select">选择语言</string>
+    <string name="languages_parallel_dialog_action_start">开始体验</string>
+    <string name="languages_parallel_dialog_action_cancel">不了，谢谢</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">关于</string>
+    <string name="action_tools_open">打开</string>
+</resources>

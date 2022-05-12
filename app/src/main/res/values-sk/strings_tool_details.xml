@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Pridať na domovskú obrazovku</string>
+    <string name="action_tools_open_tool">Otvoriť nástroj</string>
+    <string name="action_tools_add_favorite">Pridať medzi obľúbené</string>
+    <string name="action_tools_remove_favorite">Odstrániť z obľúbených</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d zobrazenie</item>
+        <item quantity="other">%1$,d zobrazení</item>
+        <item quantity="few">%1$,d zobrazenia</item>
+        <item quantity="many">%1$,d zobrazenia</item>
+    </plurals>
+    <string name="label_tools_about">O nás</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d jazyk</item>
+        <item quantity="other">%1$,d jazykov</item>
+        <item quantity="few">%1$,d jazyky</item>
+        <item quantity="many">%1$,d jazyka</item>
+    </plurals>
+</resources>

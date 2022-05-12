@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Bæta við á heimaskjá</string>
+    <string name="action_tools_open_tool">Opna tól</string>
+    <string name="action_tools_add_favorite">Bæta við Uppáhald</string>
+    <string name="action_tools_remove_favorite">Fjarlægja frá Uppáhaldi</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d skoðun</item>
+        <item quantity="other">%1$,d skoðanir</item>
+    </plurals>
+    <string name="label_tools_about">Um</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Tungumál</item>
+        <item quantity="other">%1$,d Tungumál</item>
+    </plurals>
+</resources>

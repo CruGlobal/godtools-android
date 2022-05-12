@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">General</string>
+    <string name="menu_heading_account">Kuenta</string>
+    <string name="menu_heading_share">Kompartí</string>
+    <string name="menu_heading_legal">Legal</string>
+    <string name="menu_about">Tokante</string>
+    <string name="menu_help">Preguntanan Frekuente</string>
+    <string name="menu_contact_us">Tuma Kontakto Ku Nos</string>
+    <string name="menu_tutorial">Instrukshon</string>
+    <string name="menu_login">Inisiá seshon</string>
+    <string name="menu_signup">Krea un Kuenta di Miembro</string>
+    <string name="menu_logout">Tèrminá seshon</string>
+    <string name="menu_share_godtools">Kompartí e app di GodTools</string>
+    <string name="menu_share_story">Kompartí un Storia Ku Nos</string>
+    <string name="menu_terms_of_use">Terminonan di Uzo</string>
+    <string name="menu_privacy_policy">Pólisa di Privasidat</string>
+    <string name="menu_copyright">Derecho di outor</string>
+    <string name="share_story_subject">Testimonio di GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Lista di Faboritonan</string>
+    <string name="tools_list_remove_favorite_dialog_title">Kita “%1$s” for di lista di Faboritonan?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Kita</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselá</string>
+    <string name="tools_list_favorites_banner_text">Hasi un hèrmènt aksesibel sin internèt dor di klek riba e boton di kurason i e lo bai den bo lista di faboritonan.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Deskartá</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Tur hèrmènt</string>
+    <!-- Parallel Language Dialog -->
+    <!-- Tools List -->
+    <string name="action_tools_about">Tokante</string>
+    <string name="action_tools_open">Habri</string>
+</resources>

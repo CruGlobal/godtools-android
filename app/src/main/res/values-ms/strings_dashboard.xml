@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Umum</string>
+    <string name="menu_heading_account">Akaun</string>
+    <string name="menu_heading_share">Kongsi</string>
+    <string name="menu_heading_legal">Sah</string>
+    <string name="menu_about">Perihal</string>
+    <string name="menu_help">Soalan Lazim</string>
+    <string name="menu_contact_us">Hubungi Kami</string>
+    <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_login">Log Masuk</string>
+    <string name="menu_signup">Cipta Akaun</string>
+    <string name="menu_logout">Log Keluar</string>
+    <string name="menu_share_godtools">Kongsi Aplikasi GodTools</string>
+    <string name="menu_share_story">Kongsikan sebuah Kisah Bersama Kami</string>
+    <string name="menu_rate">Nilaikan GodTools</string>
+    <string name="menu_terms_of_use">Terma Penggunaan</string>
+    <string name="menu_privacy_policy">Dasar Privasi</string>
+    <string name="menu_copyright">Hak Cipta</string>
+    <string name="share_story_subject">Kisah GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Kegemaran</string>
+    <string name="tools_list_remove_favorite_dialog_title">Buang “%1$s” daripada Kegemaran?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Buang</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="tools_list_favorites_banner_text">"Menjadikan sesuatu alat tersedia semasa luar talian dengan mengetik pada ikon hati yang akan menambahkannya ke kegemaran anda.
+"</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Surai</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Semua Alat</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Adakah anda ingin menetapkan bahasa kedua?</string>
+    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
+    <string name="languages_parallel_dialog_action_start">Mulakan</string>
+    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Perihal</string>
+    <string name="action_tools_open">Buka</string>
+</resources>

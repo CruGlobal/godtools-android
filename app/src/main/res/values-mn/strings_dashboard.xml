@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_share">ХУВААЛЦ</string>
+    <string name="menu_privacy_policy">Нууцлалын бодлого</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <!-- All Tools -->
+    <!-- Parallel Language Dialog -->
+    <!-- Tools List -->
+    <string name="action_tools_open">Нээлттэй</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Generelt</string>
+    <string name="menu_heading_account">Konto</string>
+    <string name="menu_heading_share">Del</string>
+    <string name="menu_heading_legal">Juridisk</string>
+    <string name="menu_about">Om</string>
+    <string name="menu_help">Vanlige spørsmål</string>
+    <string name="menu_contact_us">Kontakt oss</string>
+    <string name="menu_tutorial">Veiledning</string>
+    <string name="menu_login">Logg inn</string>
+    <string name="menu_signup">Opprett konto</string>
+    <string name="menu_logout">Logg ut</string>
+    <string name="menu_share_godtools">Del GodTools-appen</string>
+    <string name="menu_share_story">Del en historie med oss</string>
+    <string name="menu_rate">Vurder GodTools</string>
+    <string name="menu_terms_of_use">Betingelser for bruk</string>
+    <string name="menu_privacy_policy">Personvern</string>
+    <string name="menu_copyright">Copyright</string>
+    <string name="share_story_subject">GodTools-historie</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoritter</string>
+    <string name="tools_list_remove_favorite_dialog_title">Vil du fjerne %1$s fra Favoritter?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Fjern</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Avbryt</string>
+    <string name="tools_list_favorites_banner_text">Gjør et verktøy tilgjengelig offline ved å trykke på hjerteikonet – det legges da i Favoritter.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Ok</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Alle verktøy</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vil du velg et språk til?</string>
+    <string name="languages_parallel_dialog_select">Velg språk</string>
+    <string name="languages_parallel_dialog_action_start">Kom i gang</string>
+    <string name="languages_parallel_dialog_action_cancel">Nei takk</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Om</string>
+    <string name="action_tools_open">Åpne</string>
+</resources>

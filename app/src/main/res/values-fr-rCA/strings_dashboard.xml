@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Général</string>
+    <string name="menu_heading_account">Compte</string>
+    <string name="menu_heading_share">Partager</string>
+    <string name="menu_heading_legal">Légal</string>
+    <string name="menu_about">À propos</string>
+    <string name="menu_help">Questions fréquemment posées</string>
+    <string name="menu_contact_us">Contactez-nous</string>
+    <string name="menu_tutorial">Tutoriel</string>
+    <string name="menu_login">Connexion</string>
+    <string name="menu_signup">Créer un compte</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_share_godtools">Partager l\'application GodTools</string>
+    <string name="menu_share_story">Partager une histoire avec nous</string>
+    <string name="menu_rate">Noter GodTools</string>
+    <string name="menu_terms_of_use">Conditions d\'utilisation</string>
+    <string name="menu_privacy_policy">Politique de confidentialité</string>
+    <string name="menu_copyright">Droit d\'auteur</string>
+    <string name="share_story_subject">Histoire GodTols</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favoris</string>
+    <string name="tools_list_remove_favorite_dialog_title">Retirer « %1$s » des favoris?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Retirer</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
+    <string name="tools_list_favorites_banner_text">Appuyez sur l\'icône en forme de cœur pour ajouter un outil à vos favoris et le rendre disponible hors ligne.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Ignorer</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Tous les outils</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Voudriez-vous définir une langue secondaire?</string>
+    <string name="languages_parallel_dialog_select">Sélectionner une langue</string>
+    <string name="languages_parallel_dialog_action_start">Commencer</string>
+    <string name="languages_parallel_dialog_action_cancel">Non merci</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">À propos</string>
+    <string name="action_tools_open">Ouvrir</string>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">பொது</string>
+    <string name="menu_heading_account">கணக்கு</string>
+    <string name="menu_heading_share">பகிர்</string>
+    <string name="menu_heading_legal">சட்டரீதியாக</string>
+    <string name="menu_about">பற்றி</string>
+    <string name="menu_help">அடிக்கடி கேட்கப்படும் கேள்விகள்</string>
+    <string name="menu_contact_us">எங்களை தொடர்பு கொள்ள</string>
+    <string name="menu_tutorial">பயிற்சி</string>
+    <string name="menu_login">உள்நுழைய</string>
+    <string name="menu_signup">உங்கள் கணக்கை துவங்குங்கள்</string>
+    <string name="menu_logout">வெளியேறு</string>
+    <string name="menu_share_godtools">GodTools செயலியை பகிரவும்</string>
+    <string name="menu_share_story">ஒரு கதையை எங்களுடன் பகிர்ந்து கொள்ளுங்கள்</string>
+    <string name="menu_rate">GodToolளை மதிப்பிடுங்கள்</string>
+    <string name="menu_terms_of_use">பயன்பாட்டு விதிமுறைகளை</string>
+    <string name="menu_privacy_policy">தனியுரிமைக் கொள்கை</string>
+    <string name="menu_copyright">பதிப்புரிமை</string>
+    <string name="share_story_subject">GodTools கதை</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">பிடித்தவை</string>
+    <string name="tools_list_remove_favorite_dialog_title">பிடித்தவைகளிலிருந்து “%1$s” ஐ அகற்றவா?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">அகற்று</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ரத்துசெய்</string>
+    <string name="tools_list_favorites_banner_text">உங்கள் விருப்பங்களில் சேர்க்கும் இதய ஐகானைத் தட்டுவதன் மூலம் ஒரு கருவியை ஆஃப்லைனில் கிடைக்கும்.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">நிராகரி</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">அனைத்து கருவிகள்</string>
+    <!-- Parallel Language Dialog -->
+    <!-- Tools List -->
+    <string name="action_tools_about">பற்றி</string>
+    <string name="action_tools_open">திற</string>
+</resources>

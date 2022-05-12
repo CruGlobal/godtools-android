@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">جنرل</string>
+    <string name="menu_heading_account">اکاؤنٹ</string>
+    <string name="menu_heading_share">شیئر کریں</string>
+    <string name="menu_heading_legal">لِیگل</string>
+    <string name="menu_about">ہمارے متعلق</string>
+    <string name="menu_help">اکثر پوچھے جانے والے سوالات</string>
+    <string name="menu_contact_us">ہم سے رابطہ کریں</string>
+    <string name="menu_tutorial">ٹیوٹوریل</string>
+    <string name="menu_login">میں لاگ ان کریں</string>
+    <string name="menu_signup">اپنا کھاتا شروع کریں</string>
+    <string name="menu_logout">کمپیوٹر سے باہر نکلیں</string>
+    <string name="menu_share_godtools">گاڈ ٹُولز ایپ شیئر کریں</string>
+    <string name="menu_share_story">ہمارے ساتھ اسٹوری شیئر کریں</string>
+    <string name="menu_terms_of_use">استعمال کرنے کی شرائط</string>
+    <string name="menu_privacy_policy">رازداری کی پالیسی</string>
+    <string name="menu_copyright">کاپی رائٹ</string>
+    <string name="share_story_subject">GodTools کہانی</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">پسندیدگان</string>
+    <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>
+    <string name="tools_list_favorites_banner_text">دل کے آئیکن پر ٹیپ کر کے کسی ٹول کو آف لائن دستیاب کروائیں جو کہ اسے آپ کے پسندیدگان میں شامل کر دیتا ہے۔</string>
+    <string name="tools_list_favorites_banner_action_dismiss">برخاست کریں</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">تمام ٹولز</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">کیا آپ کوئی ثانوی زبان سیٹ کرنا چاہیں گے؟</string>
+    <string name="languages_parallel_dialog_select">کوئی زبان منتخب کریں</string>
+    <string name="languages_parallel_dialog_action_start">شروعات</string>
+    <string name="languages_parallel_dialog_action_cancel">نہیں، شکریہ</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">ہمارے متعلق</string>
+    <string name="action_tools_open">کھولیں</string>
+</resources>

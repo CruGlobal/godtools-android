@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Опште</string>
+    <string name="menu_heading_account">Налог</string>
+    <string name="menu_heading_share">Подели</string>
+    <string name="menu_heading_legal">Правно</string>
+    <string name="menu_about">О</string>
+    <string name="menu_help">Често постављана питања</string>
+    <string name="menu_contact_us">Контактирајте нас</string>
+    <string name="menu_tutorial">Приручник</string>
+    <string name="menu_login">Пријава</string>
+    <string name="menu_signup">Креирајте налог</string>
+    <string name="menu_logout">Одјава</string>
+    <string name="menu_share_godtools">Поделите апликацију GodTools</string>
+    <string name="menu_share_story">Поделите причу са нама</string>
+    <string name="menu_rate">Оцените GodTools</string>
+    <string name="menu_terms_of_use">Услови коришћења</string>
+    <string name="menu_privacy_policy">Политика приватности</string>
+    <string name="menu_copyright">Ауторско право</string>
+    <string name="share_story_subject">GodTools Прича</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Омиљено</string>
+    <string name="tools_list_remove_favorite_dialog_title">Уклони “%1$s” из Омиљених?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Уклони</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Откажи</string>
+    <string name="tools_list_favorites_banner_text">Омогући да алатка буде доступна ван мреже тако што ћете додирнути иконицу срце која ће је додати у омиљене.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Откажо</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Све алатке</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Желите ли да поставите секундарни језик?</string>
+    <string name="languages_parallel_dialog_select">Изаберите језик</string>
+    <string name="languages_parallel_dialog_action_start">Започни</string>
+    <string name="languages_parallel_dialog_action_cancel">Не хвала</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">O</string>
+    <string name="action_tools_open">Отвори</string>
+</resources>

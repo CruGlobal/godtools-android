@@ -99,11 +99,11 @@
                 style="@style/Widget.GodTools.Tools.Card.Lesson.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/tools_list_lesson_info_language_available(toolViewModel.firstLanguage.getDisplayName(context))}"
+                android:text="@{@string/tools_list_info_language_available(toolViewModel.firstLanguage.getDisplayName(context))}"
                 app:drawableEndCompat="@drawable/ic_tool_checkmark"
                 app:visibleIf="@{toolViewModel.firstLanguage != null}"
                 tools:ignore="MissingConstraints"
-                tools:text="@string/tools_list_lesson_info_language_available" />
+                tools:text="@string/tools_list_info_language_available" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

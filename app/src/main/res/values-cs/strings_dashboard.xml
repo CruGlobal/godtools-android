@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Obecné</string>
+    <string name="menu_heading_account">Účet</string>
+    <string name="menu_heading_share">Sdílet</string>
+    <string name="menu_heading_legal">Pravidla užívání a ochrany soukromí</string>
+    <string name="menu_about">O nás</string>
+    <string name="menu_help">Často kladené otázky</string>
+    <string name="menu_contact_us">Kontaktujte nás</string>
+    <string name="menu_tutorial">Návod</string>
+    <string name="menu_login">Přihlášení</string>
+    <string name="menu_signup">Vytvořit účet</string>
+    <string name="menu_logout">Odhlášení</string>
+    <string name="menu_share_godtools">Sdílet GodTools</string>
+    <string name="menu_share_story">Napište nám příběh</string>
+    <string name="menu_rate">Ohodnoťte GodTools</string>
+    <string name="menu_terms_of_use">Pravidla užívání</string>
+    <string name="menu_privacy_policy">Ochrana soukromí</string>
+    <string name="menu_copyright">Autorská práva</string>
+    <string name="share_story_subject">Příběh GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Oblíbené</string>
+    <string name="tools_list_remove_favorite_dialog_title">Odstranit \"%1$s” z Oblíbených?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstranit</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušit</string>
+    <string name="tools_list_favorites_banner_text">Klepnutím na ikonu srdíčka přidáte nástroj do svých oblíbených a budete jej mít k dispozici offline.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Zrušit</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Všechny nástroje</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Chcete si nastavit druhý jazyk?</string>
+    <string name="languages_parallel_dialog_select">Vybrat jazyk</string>
+    <string name="languages_parallel_dialog_action_start">Začít</string>
+    <string name="languages_parallel_dialog_action_cancel">Ne, děkuji</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">O nás</string>
+    <string name="action_tools_open">Otevřít</string>
+</resources>

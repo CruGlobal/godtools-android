@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Hozzáadás kezdőképernyőhöz</string>
+    <string name="action_tools_open_tool">Eszköz megnyitása</string>
+    <string name="action_tools_add_favorite">Hozzáadás Kedvencekhez</string>
+    <string name="action_tools_remove_favorite">Eltávolítás Kedvencek közül</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d megtekintés</item>
+        <item quantity="other">%1$,d megtekintés</item>
+    </plurals>
+    <string name="label_tools_about">Rólunk</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d nyelv</item>
+        <item quantity="other">%1$,d nyelv</item>
+    </plurals>
+</resources>

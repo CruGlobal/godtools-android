@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Všeobecné</string>
+    <string name="menu_heading_account">Účet</string>
+    <string name="menu_heading_share">Zdieľanie</string>
+    <string name="menu_heading_legal">Právne informácie</string>
+    <string name="menu_about">O nás</string>
+    <string name="menu_help">Časté otázky</string>
+    <string name="menu_contact_us">Kontaktujte nás</string>
+    <string name="menu_tutorial">Návod</string>
+    <string name="menu_login">Prihlásiť sa</string>
+    <string name="menu_signup">Vytvoriť účet</string>
+    <string name="menu_logout">Odhlásiť sa</string>
+    <string name="menu_share_godtools">Zdieľanie aplikácie GodTools</string>
+    <string name="menu_share_story">Podeľte sa s nami o príbeh</string>
+    <string name="menu_rate">Ohodnotiť aplikáciu GodTools</string>
+    <string name="menu_terms_of_use">Zmluvné podmienky</string>
+    <string name="menu_privacy_policy">Pravidlá ochrany súkromia</string>
+    <string name="menu_copyright">Autorské právo</string>
+    <string name="share_story_subject">Príbeh GodTools</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Obľúbené</string>
+    <string name="tools_list_remove_favorite_dialog_title">Odstrániť položku %1$s z Obľúbených?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstrániť</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušiť</string>
+    <string name="tools_list_favorites_banner_text">Sprístupnite nástroj offline ťuknutím na ikonu srdiečka, čím sa pridá medzi vaše obľúbené.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Zavrieť</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Všetky nástroje</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Chcete si nastaviť vedľajší jazyk?</string>
+    <string name="languages_parallel_dialog_select">Vyberte jazyk</string>
+    <string name="languages_parallel_dialog_action_start">Začať</string>
+    <string name="languages_parallel_dialog_action_cancel">Nie, ďakujem</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">O nás</string>
+    <string name="action_tools_open">Otvoriť</string>
+</resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">सर्वसामान्य</string>
+    <string name="menu_heading_account">खाते</string>
+    <string name="menu_heading_share">सांगा</string>
+    <string name="menu_heading_legal">कायदेशीर</string>
+    <string name="menu_about">विषयी</string>
+    <string name="menu_help">वारंवार विचारले जाणारे प्रश्न</string>
+    <string name="menu_contact_us">आमच्याशी संपर्क साधा</string>
+    <string name="menu_tutorial">"
+प्रशिक्षण"</string>
+    <string name="menu_login">लाॅगिन</string>
+    <string name="menu_signup">अकाऊंट सुरू करा.</string>
+    <string name="menu_logout">लाॅग-आऊट</string>
+    <string name="menu_share_godtools">GodTools App शेअर करा</string>
+    <string name="menu_share_story">आम्हाला गोष्ट सांगा</string>
+    <string name="menu_rate">गाॅड्स टूलचे मूल्यमापन करा</string>
+    <string name="menu_terms_of_use">"उपयोगाच्या अटी "</string>
+    <string name="menu_privacy_policy">गोपनीयता धोरण</string>
+    <string name="menu_copyright">काॅपीराईट</string>
+    <string name="share_story_subject">GodTools Story</string>
+    <!-- Lessons -->
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">पसंत</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s”ला पसंतीतून काढायचे?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">काढा</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करा</string>
+    <string name="tools_list_favorites_banner_text">आपल्या पसंतीत जोडणाऱ्या \'ह्रदय\' आयकाॅनवर टॅप करून ते टूल ऑफलाइन उपलब्ध करा.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">काढून टाका</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">सर्व टूल्स</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">आपण अतिरिक्त भाषा सेट करू इच्छिता?</string>
+    <string name="languages_parallel_dialog_select">एक भाषा निवडा</string>
+    <string name="languages_parallel_dialog_action_start">सुरु करा</string>
+    <string name="languages_parallel_dialog_action_cancel">नाही धन्यवाद</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">विषयी</string>
+    <string name="action_tools_open">उघडा</string>
+</resources>

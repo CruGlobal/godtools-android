@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Umum</string>
+    <string name="menu_heading_account">Akun</string>
+    <string name="menu_heading_share">Berbagi</string>
+    <string name="menu_heading_legal">Legal</string>
+    <string name="menu_about">Tentang</string>
+    <string name="menu_help">Tanya Jawab Umum</string>
+    <string name="menu_contact_us">Hubungi Kami</string>
+    <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_login">Masuk</string>
+    <string name="menu_signup">Buat Akun</string>
+    <string name="menu_logout">Keluar</string>
+    <string name="menu_share_godtools">Bergbagi App GodTools</string>
+    <string name="menu_share_story">Berbagi Cerita Dengan Kami</string>
+    <string name="menu_rate">Nilai GodTools</string>
+    <string name="menu_terms_of_use">Syarat Penggunaan</string>
+    <string name="menu_privacy_policy">Kebijakan Privasi</string>
+    <string name="menu_copyright">Hak cipta</string>
+    <string name="share_story_subject">Kisah GodTools</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Pelajaran</string>
+    <string name="tools_list_lesson_info_length">%1$d Minimal Baca</string>
+    <!-- Favorites -->
+    <string name="nav_favorite_tools">Favorit</string>
+    <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Berhentikan</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Semua Alat</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Apakah Anda ingin menyetel bahasa sekunder?</string>
+    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
+    <string name="languages_parallel_dialog_action_start">Mari mulai</string>
+    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih.</string>
+    <!-- Tools List -->
+    <string name="action_tools_about">Tentang</string>
+    <string name="action_tools_open">Buka</string>
+    <string name="tools_list_info_language_available">Tersedia di %1$s</string>
+</resources>

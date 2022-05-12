@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Main Activity-->
-    <string name="share_prompt">તમે કેવી રીતે વહેંચવા માંગો છો તે પસંદ કરો</string>
-    <!-- Navigation Menu -->
-    <string name="menu_heading_general">સામાન્ય</string>
-    <string name="menu_heading_account">ખાતું</string>
-    <string name="menu_heading_share">વહેંચો</string>
-    <string name="menu_heading_legal">કાનૂની</string>
-    <string name="menu_about">વિશે</string>
-    <string name="menu_help">મદદ વારંવાર પૂછાતા પ્રશ્નો</string>
-    <string name="menu_contact_us">અમારો સંપર્ક કરો</string>
-    <string name="menu_tutorial">ટ્યુટોરિયલ</string>
-    <string name="menu_login">લોગ ઇન કરો</string>
-    <string name="menu_signup">ખાતું બનાવો</string>
-    <string name="menu_logout">લૉગ આઉટ</string>
-    <string name="menu_share_godtools">ગોડ ટૂલ્સ એપ્લિકેશન વહેંચો</string>
-    <string name="menu_share_story">અમારી સાથે એક વાર્તા વહેંચો</string>
-    <string name="menu_terms_of_use">વાપરવાના નિયમો</string>
-    <string name="menu_privacy_policy">ગોપનીયતા નીતિ</string>
-    <string name="menu_copyright">કોપિરાઇટ</string>
-    <!-- Share a story -->
-    <string name="share_story_subject">ઈશ્વર કેવી રીતે કાર્ય કરે છે તે સાંભળો! ગોડ ટુલ્સ વાર્તા</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૮૦ થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સેટિંગ્સ</string>
@@ -32,5 +11,4 @@
     <string name="text_language_warning">દરેક ભાષામાં દરેક ટુલ્સ ઉપલબ્ધ નથી.</string>
     <string name="label_language_none">કંઈ નહીં</string>
     <string name="label_language_search">ફિલ્ટર ભાષાઓ</string>
-    <!-- Parallel Language Dialog -->
 </resources>
