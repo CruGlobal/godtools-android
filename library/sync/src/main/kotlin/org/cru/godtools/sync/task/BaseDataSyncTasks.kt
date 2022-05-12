@@ -24,31 +24,33 @@ import org.keynote.godtools.android.db.GodToolsDao
 @RestrictTo(RestrictTo.Scope.LIBRARY)
 abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao) : BaseSyncTasks() {
     // region Tools
-    protected fun storeTools(tools: List<Tool>, existing: LongSparseArray<Tool>?, includes: Includes) {
+    protected fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
         tools.forEach {
-            storeTool(it, includes)
-            existing?.remove(it.id)
+            storeTool(it, existingTools, includes)
+            existingTools?.remove(it.id)
         }
 
         // prune any existing tools that weren't synced and aren't already added to the device
-        existing?.forEach { _, tool ->
+        existingTools?.forEach { _, tool ->
             if (tool.isAdded) return@forEach
 
             dao.delete(tool)
 
-            // delete any attachments for this tool
+            // delete any orphaned objects for this tool
             dao.delete(Attachment::class.java, AttachmentTable.FIELD_TOOL.eq(tool.id))
+            tool.code?.let { dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(it)) }
         }
     }
 
-    private fun storeTool(tool: Tool, includes: Includes) {
+    private fun storeTool(tool: Tool, existingTools: LongSparseArray<Tool>?, includes: Includes) {
         dao.updateOrInsert(
             tool, SQLiteDatabase.CONFLICT_REPLACE,
             ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
             ToolTable.COLUMN_CATEGORY, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
             ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_DETAILS_BANNER_ANIMATION,
             ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_HIDDEN,
-            ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT
+            ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT, ToolTable.COLUMN_META_TOOL,
+            ToolTable.COLUMN_DEFAULT_VARIANT
         )
 
         // persist related included objects
@@ -66,6 +68,12 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
                 attachments,
                 existing = index(Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(tool.id)).get(dao))
             )
+        }
+        if (includes.include(Tool.JSON_METATOOL)) {
+            tool.metatool?.let {
+                storeTool(it, existingTools, includes.descendant(Tool.JSON_METATOOL))
+                existingTools?.remove(it.id)
+            }
         }
     }
     // endregion Tools

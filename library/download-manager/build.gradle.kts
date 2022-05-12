@@ -33,10 +33,13 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
 
-    testImplementation(libs.androidx.arch.core.testing)
-    testImplementation(libs.kotlin.coroutines.test)
-
     kapt(libs.androidx.hilt.compiler)
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.hilt.testing)
+    testImplementation(libs.kotlin.coroutines.test)
+
+    kaptTest(libs.hilt.compiler)
 }
