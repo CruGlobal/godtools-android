@@ -64,11 +64,6 @@
                 android:id="@+id/action_share_story"
                 android:orderInCategory="200"
                 android:title="@string/menu_share_story" />
-            <item
-                android:id="@+id/action_rate"
-                android:orderInCategory="300"
-                android:title="@string/menu_rate"
-                android:visible="false" />
         </menu>
     </item>
 

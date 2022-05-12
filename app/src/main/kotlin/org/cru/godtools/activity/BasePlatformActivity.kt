@@ -35,7 +35,6 @@ import org.ccci.gto.android.common.okta.oidc.clients.web.signOut
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.view.MenuUtils
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_CONTACT_US
@@ -151,10 +150,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         R.id.action_help -> {
             eventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
             openUrl(URI_HELP)
-            true
-        }
-        R.id.action_rate -> {
-            openPlayStore()
             true
         }
         R.id.action_share -> {
@@ -283,14 +278,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     // endregion Navigation Drawer
 
     // region Navigation Menu actions
-    private fun openPlayStore() {
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")))
-        } catch (e: ActivityNotFoundException) {
-            openUrl(Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"))
-        }
-    }
-
     private fun launchLogin() {
         oktaClient.signIn(this, AuthenticationPayload.Builder().addParameter("prompt", "login").build())
     }
