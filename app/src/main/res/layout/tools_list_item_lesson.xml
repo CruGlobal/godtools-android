@@ -10,7 +10,6 @@
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
-        <variable name="tool" type="org.cru.godtools.model.Tool" />
         <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
     </data>
 
@@ -21,7 +20,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:clipToPadding="false"
-        android:onClick="@{() -> callbacks.onToolClicked(tool, toolViewModel.firstTranslation)}">
+        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
@@ -61,7 +60,7 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:lines="2"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation, tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation, toolViewModel.tool, context)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/margin_start"

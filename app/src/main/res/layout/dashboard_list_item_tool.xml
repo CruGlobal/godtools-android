@@ -9,7 +9,6 @@
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
-        <variable name="tool" type="org.cru.godtools.model.Tool" />
         <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
     </data>
 
@@ -17,7 +16,7 @@
         style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() ->callbacks.onToolClicked(tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
+        android:onClick="@{() ->callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,10 +63,10 @@
                 style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> tool.isAdded ? callbacks.unpinTool(tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.pinTool(tool.code)}"
+                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:selected="@{tool.isAdded}" />
+                app:selected="@{toolViewModel.tool.isAdded}" />
 
             <TextView
                 android:id="@+id/title"
@@ -75,7 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation, tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintEnd_toStartOf="@id/language_parallel"
                 app:layout_constraintStart_toEndOf="@id/margin_start"
                 app:layout_constraintTop_toBottomOf="@id/toolImageView"
@@ -93,7 +92,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/title"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{tool.type.supportsParallelLanguage &amp;&amp; toolViewModel.parallelLanguage != null &amp;&amp; !toolViewModel.firstTranslation.languageCode.equals(toolViewModel.parallelLanguage.code)}"
+                app:visibleIf="@{toolViewModel.tool.type.supportsParallelLanguage &amp;&amp; toolViewModel.parallelLanguage != null &amp;&amp; !toolViewModel.firstTranslation.languageCode.equals(toolViewModel.parallelLanguage.code)}"
                 tools:text="Spanish" />
 
             <TextView
@@ -101,7 +100,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="@{ModelUtils.getToolCategory(tool, context, toolViewModel.firstTranslation.languageCode)}"
+                android:text="@{ModelUtils.getToolCategory(toolViewModel.tool, context, toolViewModel.firstTranslation.languageCode)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/margin_start"

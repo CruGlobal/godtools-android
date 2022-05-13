@@ -48,13 +48,7 @@ class ToolsListItemToolBindingTest {
 
     private lateinit var binding: ToolsListItemToolBinding
     private lateinit var callbacks: ToolsAdapterCallbacks
-    private val tool = Tool().apply {
-        type = Tool.Type.TRACT
-        code = "test"
-        name = "toolName"
-        description = "toolDescription"
-        category = "gospel"
-    }
+    private val toolFlow = MutableStateFlow<Tool?>(tool())
     private val primaryTranslation = MutableLiveData(
         Translation().apply {
             languageCode = Locale("en")
@@ -71,11 +65,20 @@ class ToolsListItemToolBindingTest {
     )
     private val parallelLanguage = MutableLiveData<Language?>(null)
     private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
+        every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
         every { downloadProgress } returns emptyLiveData()
         every { firstTranslation } returns primaryTranslation
         every { parallelTranslation } returns this@ToolsListItemToolBindingTest.parallelTranslation
         every { parallelLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage
+    }
+
+    private fun tool() = Tool().apply {
+        type = Tool.Type.TRACT
+        code = "test"
+        name = "toolName"
+        description = "toolDescription"
+        category = "gospel"
     }
 
     @Before
@@ -86,7 +89,6 @@ class ToolsListItemToolBindingTest {
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activity), null, false)
         binding.lifecycleOwner = TestLifecycleOwner()
         binding.callbacks = ObservableField(callbacks)
-        binding.tool = tool
         binding.toolViewModel = toolViewModel
         binding.executePendingBindings()
     }
@@ -183,8 +185,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun `language_parallel - Hidden - Article Tool Type`() {
-        tool.type = Tool.Type.ARTICLE
-        binding.tool = tool
+        toolFlow.value = tool().apply { type = Tool.Type.ARTICLE }
         parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
@@ -193,8 +194,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun `language_parallel - Visible - Cyoa Tool Type`() {
-        tool.type = Tool.Type.CYOA
-        binding.tool = tool
+        toolFlow.value = tool().apply { type = Tool.Type.CYOA }
         parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
@@ -206,8 +206,7 @@ class ToolsListItemToolBindingTest {
     // region Favorite Action
     @Test
     fun verifyActionFavoriteToolNotAdded() {
-        tool.isAdded = false
-        binding.tool = tool
+        toolFlow.value = tool().apply { isAdded = false }
         binding.executePendingBindings()
         reset(callbacks)
 
@@ -219,47 +218,43 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyActionFavoriteToolAdded() {
-        tool.isAdded = true
-        binding.tool = tool
+        toolFlow.value = tool().apply { isAdded = true }
         binding.executePendingBindings()
         reset(callbacks)
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
         verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
+        verify(callbacks).unpinTool(eq(toolFlow.value), eq(primaryTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoritePrimaryTranslationOnly() {
-        tool.isAdded = true
-        binding.tool = tool
+        toolFlow.value = tool().apply { isAdded = true }
         parallelTranslation.value = null
         binding.executePendingBindings()
         reset(callbacks)
 
         binding.actionFavorite.performClick()
         verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(tool), eq(primaryTranslation.value))
+        verify(callbacks).unpinTool(eq(toolFlow.value), eq(primaryTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteParallelTranslationOnly() {
-        tool.isAdded = true
-        binding.tool = tool
+        toolFlow.value = tool().apply { isAdded = true }
         primaryTranslation.value = null
         binding.executePendingBindings()
         reset(callbacks)
 
         binding.actionFavorite.performClick()
         verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(tool), eq(parallelTranslation.value))
+        verify(callbacks).unpinTool(eq(toolFlow.value), eq(parallelTranslation.value))
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteNoTranslations() {
-        tool.isAdded = true
-        binding.tool = tool
+        toolFlow.value = tool().apply { isAdded = true }
         primaryTranslation.value = null
         parallelTranslation.value = null
         binding.executePendingBindings()
@@ -267,7 +262,7 @@ class ToolsListItemToolBindingTest {
 
         binding.actionFavorite.performClick()
         verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(tool), eq(null))
+        verify(callbacks).unpinTool(eq(toolFlow.value), eq(null))
     }
     // endregion Favorite Action
 
@@ -285,7 +280,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(tool, primaryTranslation.value, parallelTranslation.value)
+        verify(callbacks).onToolClicked(toolFlow.value, primaryTranslation.value, parallelTranslation.value)
     }
 
     @Test
@@ -294,7 +289,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(tool, primaryTranslation.value, null)
+        verify(callbacks).onToolClicked(toolFlow.value, primaryTranslation.value, null)
     }
 
     @Test
@@ -303,7 +298,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(tool, null, parallelTranslation.value)
+        verify(callbacks).onToolClicked(toolFlow.value, null, parallelTranslation.value)
     }
 
     @Test
@@ -313,7 +308,7 @@ class ToolsListItemToolBindingTest {
         reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(tool, null, null)
+        verify(callbacks).onToolClicked(toolFlow.value, null, null)
     }
     // endregion Click Action
 
