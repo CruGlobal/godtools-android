@@ -98,8 +98,8 @@
     <!-- endregion Tool List Cards -->
 
     <!-- region Tool Details -->
-    <dimen name="tool_details_margin_horizontal">56dp</dimen>
-    <dimen name="tool_details_page_padding_vertical">44dp</dimen>
+    <dimen name="tool_details_margin_horizontal">32dp</dimen>
+    <dimen name="tool_details_page_padding_vertical">32dp</dimen>
 
     <style name="Widget.GodTools.Tools.Details.Title" parent="Base">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Title</item>

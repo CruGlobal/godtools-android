@@ -10,6 +10,7 @@ import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.tabs.TabLayout
@@ -38,13 +39,17 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
 @AndroidEntryPoint
 class ToolDetailsFragment() :
-    BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment), LinkClickedListener {
+    BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
+    LinkClickedListener,
+    ToolsAdapterCallbacks {
     constructor(toolCode: String) : this() {
         arguments = Bundle().apply {
             put(EXTRA_TOOL, toolCode)
@@ -59,6 +64,7 @@ class ToolDetailsFragment() :
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private val dataModel: ToolDetailsFragmentDataModel by viewModels()
+    private val toolsDataModel: ToolsAdapterViewModel by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,21 +122,18 @@ class ToolDetailsFragment() :
     }
 
     // region Data Binding
-    fun addTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.pinToolAsync(toolCode)
+
+    // region ToolsAdapterCallbacks
+    override fun onToolClicked(tool: Tool?, primary: Translation?, parallel: Translation?) {
+        showToolDetails(tool?.code)
     }
 
-    fun removeTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
-    }
-
-    fun openTool(tool: Tool?, primaryTranslation: Translation?, parallelTranslation: Translation?) {
+    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         tool?.code?.let { code ->
-            val primaryLanguage = primaryTranslation?.languageCode ?: Locale.ENGLISH
-            val parallelLanguage = parallelTranslation?.languageCode
+            val primaryLanguage = primary?.languageCode ?: Locale.ENGLISH
+            val parallelLanguage = parallel?.languageCode
 
             // start pre-loading the tool in the primary language
-            manifestManager.get().preloadLatestPublishedManifest(code, primaryLanguage)
             if (parallelLanguage != null) {
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage, parallelLanguage)
             } else {
@@ -139,6 +142,21 @@ class ToolDetailsFragment() :
         }
         eventBus.post(AboutToolButtonAnalyticsActionEvent)
     }
+
+    override fun showToolDetails(code: String?) {
+        dataModel.toolCode.value = code
+    }
+
+    override fun pinTool(code: String?) {
+        if (code != null) downloadManager.pinToolAsync(code)
+    }
+
+    fun unpinTool(toolCode: String?) {
+        if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
+    }
+
+    override fun unpinTool(tool: Tool?, translation: Translation?) = unpinTool(tool?.code)
+    // endregion ToolsAdapterCallbacks
 
     fun openToolTraining(tool: Tool?, translation: Translation?) =
         launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
@@ -157,16 +175,29 @@ class ToolDetailsFragment() :
         // Setup the ViewPager
         pages.setHeightWrapContent()
         pages.offscreenPageLimit = 2
-        pages.adapter = ToolDetailsPagerAdapter(viewLifecycleOwner, dataModel, this@ToolDetailsFragment)
+        pages.adapter = ToolDetailsPagerAdapter(
+            viewLifecycleOwner,
+            dataModel,
+            VariantToolsAdapter(
+                viewLifecycleOwner,
+                toolsDataModel,
+                R.layout.tool_details_page_variants_variant,
+                dataModel.toolCodeLiveData
+            ).also {
+                it.callbacks.set(this@ToolDetailsFragment)
+                dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
+            },
+            this@ToolDetailsFragment
+        ).also { dataModel.pages.asLiveData().observe(viewLifecycleOwner, it) }
 
         // Setup the TabLayout
         val mediator = TabLayoutMediator(tabs, pages) { tab: TabLayout.Tab, i: Int ->
-            when (i) {
-                0 -> tab.setText(R.string.label_tools_about)
-                1 -> {
+            when (val page = dataModel.pages.value[i]) {
+                ToolDetailsPagerAdapter.Page.LANGUAGES -> {
                     val count = dataModel.availableLanguages.value?.size ?: 0
                     tab.text = resources.getQuantityString(R.plurals.label_tools_languages, count, count)
                 }
+                else -> tab.setText(page.tabLabel)
             }
         }
         mediator.attach()

@@ -15,12 +15,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
+import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings
@@ -31,6 +33,7 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
+import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -89,4 +92,19 @@ class ToolDetailsFragmentDataModel @Inject constructor(
             }.orEmpty()
         }
         .map { it?.map { translation -> translation.languageCode }?.distinct().orEmpty() }
+
+    val variants = tool.flatMapLatest {
+        when (val metatool = it?.metatoolCode) {
+            null -> flowOf(emptyList())
+            else -> Query.select<Tool>().where(ToolTable.FIELD_META_TOOL.eq(metatool)).getAsFlow(dao)
+        }
+    }.shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+
+    internal val pages = variants.map {
+        buildList {
+            add(ToolDetailsPagerAdapter.Page.DESCRIPTION)
+            add(ToolDetailsPagerAdapter.Page.LANGUAGES)
+            if (it.isNotEmpty()) add(ToolDetailsPagerAdapter.Page.VARIANTS)
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 }
