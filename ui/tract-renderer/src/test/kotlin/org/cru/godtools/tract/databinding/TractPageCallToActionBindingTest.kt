@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.widget.ImageViewCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.tract.CallToAction
 import org.cru.godtools.tool.model.tract.TractPage
@@ -17,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -56,16 +54,6 @@ class TractPageCallToActionBindingTest {
     }
 
     @Test
-    fun verifyArrowVisibilityLastPageWithEvents() {
-        whenever(page.isLastPage) doReturn true
-        whenever(callToAction.events) doReturn listOf(EventId.FOLLOWUP)
-        binding.page = page
-        binding.callToAction = callToAction
-        binding.executePendingBindings()
-        assertEquals(View.VISIBLE, binding.callToActionArrow.visibility)
-    }
-
-    @Test
     fun verifyArrowVisibilityNotLastPage() {
         whenever(page.isLastPage).thenReturn(false)
         binding.page = page
@@ -90,17 +78,6 @@ class TractPageCallToActionBindingTest {
         binding.callToActionArrow.performClick()
         verify(binding.callbacks!!).goToNextPage()
         verify(binding.controller!!, never()).sendEvents(any())
-    }
-
-    @Test
-    fun verifyArrowOnClickEvents() {
-        whenever(callToAction.events) doReturn listOf(EventId.FOLLOWUP)
-        binding.callToAction = callToAction
-        binding.executePendingBindings()
-
-        binding.callToActionArrow.performClick()
-        verify(binding.callbacks!!, never()).goToNextPage()
-        verify(binding.controller!!).sendEvents(any())
     }
 
     @Test
