@@ -21,7 +21,7 @@ import org.cru.godtools.model.Tool
 
 private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 
-class ToolsAdapter(
+open class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
     private val dataModel: ToolsAdapterViewModel,
     @LayoutRes private val itemLayout: Int

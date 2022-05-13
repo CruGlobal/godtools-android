@@ -8,8 +8,10 @@
         <import type="android.view.View" />
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="androidx.lifecycle.LiveData" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
+        <variable name="selectedVariant" type="LiveData&lt;String&gt;" />
         <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
     </data>
 
@@ -52,11 +54,17 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <ImageView
+            <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/selected"
+                style="@style/Widget.MaterialComponents.CompoundButton.CheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="?android:attr/listChoiceIndicatorSingle"
+                android:background="@null"
+                android:button="?android:attr/listChoiceIndicatorSingle"
+                android:checked="@{selectedVariant.equals(toolViewModel.code)}"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
                 app:layout_constraintStart_toStartOf="@id/margin_start"
                 app:layout_constraintTop_toTopOf="@id/title" />
 

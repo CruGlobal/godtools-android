@@ -40,7 +40,7 @@ class ToolsAdapterViewModel @Inject constructor(
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     fun getToolViewModel(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
 
-    inner class ToolViewModel(private val code: String) {
+    inner class ToolViewModel(val code: String) {
         val tool = dao.findAsFlow<Tool>(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
