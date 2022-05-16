@@ -8,8 +8,10 @@
         <import type="android.view.View" />
         <import type="androidx.databinding.ObservableField" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="androidx.lifecycle.LiveData" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
+        <variable name="selectedVariant" type="LiveData&lt;String&gt;" />
         <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
     </data>
 
@@ -18,24 +20,23 @@
         style="@style/Widget.GodTools.Tools.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
         android:clipToPadding="false"
-        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation)}">
+        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="@{toolViewModel.firstTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}"
-            android:minHeight="160dp">
+            android:layoutDirection="@{toolViewModel.firstTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/banner"
+                style="@style/Widget.GodTools.Tools.Card.Banner"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="88dp"
                 android:adjustViewBounds="true"
-                android:background="@color/gray_E6"
-                android:scaleType="centerCrop"
                 android:src="@{toolViewModel.banner}"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,25 +54,51 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="16dp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/selected"
+                style="@style/Widget.MaterialComponents.CompoundButton.CheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="?android:attr/listChoiceIndicatorSingle"
+                android:checked="@{selectedVariant.equals(toolViewModel.code)}"
+                android:clickable="false"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                app:layout_constraintStart_toStartOf="@id/margin_start"
+                app:layout_constraintTop_toTopOf="@id/title" />
+
+            <TextView
                 android:id="@+id/title"
+                style="@style/Widget.GodTools.Tools.Card.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:lines="2"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation, toolViewModel.tool, context)}"
-                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Title"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
-                app:layout_constraintStart_toEndOf="@id/margin_start"
+                app:layout_constraintStart_toEndOf="@id/selected"
                 app:layout_constraintTop_toBottomOf="@id/banner"
                 tools:text="Knowing God Personally (Extra Long Title)" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ModelUtils.getTranslationTagline(toolViewModel.firstTranslation, toolViewModel.tool, context)}"
+                android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="A Gospel presentation that uses hand drawn images to help illustrate God’s invitation to know" />
 
             <androidx.constraintlayout.helper.widget.Flow
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="length,language"
-                app:flow_horizontalBias="0"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                app:constraint_referenced_ids="languages,language"
+                app:flow_horizontalBias="1"
                 app:flow_horizontalGap="4dp"
                 app:flow_horizontalStyle="packed"
                 app:flow_verticalGap="4dp"
@@ -79,18 +106,17 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/margin_end"
                 app:layout_constraintStart_toStartOf="@id/margin_start"
-                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@id/description"
                 app:layout_constraintVertical_bias="0" />
 
             <TextView
-                android:id="@+id/length"
+                android:id="@+id/languages"
                 style="@style/Widget.GodTools.Tools.Card.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@{toolViewModel.firstLanguage != null ? @drawable/ic_bullet : null}"
-                android:text="@{@string/tools_list_lesson_info_length(2)}"
-                android:visibility="gone"
-                tools:ignore="MissingConstraints"
+                android:text="@{@plurals/label_tools_languages(toolViewModel.availableLanguages.size, toolViewModel.availableLanguages.size)}"
+                app:goneIf="@{toolViewModel.availableLanguages.isEmpty}"
                 tools:text="@string/tools_list_lesson_info_length" />
 
             <TextView
@@ -101,7 +127,6 @@
                 android:text="@{@string/tools_list_info_language_available(toolViewModel.firstLanguage.getDisplayName(context))}"
                 app:drawableEndCompat="@drawable/ic_tool_checkmark"
                 app:visibleIf="@{toolViewModel.firstLanguage != null}"
-                tools:ignore="MissingConstraints"
                 tools:text="@string/tools_list_info_language_available" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

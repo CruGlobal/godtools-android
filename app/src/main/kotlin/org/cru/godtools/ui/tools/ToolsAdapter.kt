@@ -17,12 +17,11 @@ import com.karumi.weak.weak
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.DataBindingDraggableItemViewHolder
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleDataBindingDraggableItemAdapter
 import org.cru.godtools.BR
-import org.cru.godtools.R
 import org.cru.godtools.model.Tool
 
 private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 
-class ToolsAdapter(
+open class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
     private val dataModel: ToolsAdapterViewModel,
     @LayoutRes private val itemLayout: Int
@@ -58,17 +57,7 @@ class ToolsAdapter(
             .also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
-        val tool = getItem(position)
-        val toolViewModel = tool?.code?.let { dataModel.getToolViewModel(it) }
-
-        binding.setVariable(BR.tool, tool)
-        binding.setVariable(BR.toolViewModel, toolViewModel)
-        binding.setVariable(BR.downloadProgress, toolViewModel?.downloadProgress)
-        binding.setVariable(BR.banner, toolViewModel?.banner)
-        binding.setVariable(BR.primaryTranslation, toolViewModel?.firstTranslation)
-        binding.setVariable(BR.primaryLanguage, toolViewModel?.firstLanguage)
-        binding.setVariable(BR.parallelTranslation, toolViewModel?.parallelTranslation)
-        binding.setVariable(BR.parallelLanguage, toolViewModel?.parallelLanguage)
+        binding.setVariable(BR.toolViewModel, getItem(position)?.code?.let { dataModel.getToolViewModel(it) })
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

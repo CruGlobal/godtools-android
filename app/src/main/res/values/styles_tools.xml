@@ -45,23 +45,19 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="Widget.GodTools.Tools.Card.ParallelLanguage" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.ParallelLanguage</item>
+    <style name="Widget.GodTools.Tools.Card.Info" parent="Base">
+        <item name="drawableTint">@color/gray_80</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.Info</item>
+    </style>
 
+    <style name="Widget.GodTools.Tools.Card.ParallelLanguage" parent="Widget.GodTools.Tools.Card.Info">
         <!-- text output behavior -->
         <item name="android:lines">1</item>
         <item name="android:ellipsize">end</item>
 
         <!-- parallel language checkmark -->
         <item name="drawableEndCompat">@drawable/ic_tool_checkmark</item>
-        <item name="drawableTint">@color/gray_80</item>
-        <item name="android:drawablePadding">4dp</item>
-    </style>
-
-    <style name="Widget.GodTools.Tools.Card.Lesson.Info" parent="Base">
-        <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Card.Lesson.Info</item>
-        <item name="drawableTint">@color/gray_80</item>
-        <item name="android:drawablePadding">4dp</item>
     </style>
 
     <style name="Widget.GodTools.Tools.Card.Action.Favorite" parent="Base">
@@ -95,20 +91,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="TextAppearance.GodTools.Tools.Card.ParallelLanguage" parent="TextAppearance.GodTools.Small">
-        <item name="android:textColor">@color/gray_80</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.GodTools.Tools.Card.Lesson.Info" parent="TextAppearance.GodTools.Small">
+    <style name="TextAppearance.GodTools.Tools.Card.Info" parent="TextAppearance.GodTools.Small">
         <item name="android:textColor">@color/gray_80</item>
         <item name="android:textSize">12sp</item>
     </style>
     <!-- endregion Tool List Cards -->
 
     <!-- region Tool Details -->
-    <dimen name="tool_details_margin_horizontal">56dp</dimen>
-    <dimen name="tool_details_page_padding_vertical">44dp</dimen>
+    <dimen name="tool_details_margin_horizontal">32dp</dimen>
+    <dimen name="tool_details_page_padding_vertical">32dp</dimen>
 
     <style name="Widget.GodTools.Tools.Details.Title" parent="Base">
         <item name="android:textAppearance">@style/TextAppearance.GodTools.Tools.Details.Title</item>
