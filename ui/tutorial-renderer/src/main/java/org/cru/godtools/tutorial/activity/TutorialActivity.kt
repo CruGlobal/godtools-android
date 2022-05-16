@@ -191,7 +191,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
             }
             R.id.action_onboarding_launch_tools -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS))
-                startDashboardActivity(DashboardPage.FAVORITE_TOOLS)
+                startDashboardActivity(DashboardPage.ALL_TOOLS)
                 finish()
             }
             R.id.action_onboarding_finish -> {
