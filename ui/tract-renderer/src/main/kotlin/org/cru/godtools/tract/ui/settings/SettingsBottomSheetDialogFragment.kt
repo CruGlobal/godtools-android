@@ -19,6 +19,7 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.model.Language
 import org.cru.godtools.tool.model.shareable.ShareableImage
 import org.cru.godtools.tract.R
 import org.cru.godtools.tract.activity.TractActivity
@@ -85,15 +86,18 @@ class SettingsBottomSheetDialogFragment :
             setOnItemClickListener { _, _, pos, _ -> adapter.getItem(pos)?.code?.let { updatePrimaryLanguage(it) } }
         }
         binding.languageParallelDropdown.apply {
+            val none = Language().apply {
+                id = -2
+                code = Locale("x", "none")
+                name = getString(R.string.tract_settings_languages_none)
+            }
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
-                .combineWith(primaryLanguage) { langs, prim ->
-                    listOf(LanguagesDropdownAdapter.NONE) + langs.filterNot { it.code == prim?.code }
-                }
+                .combineWith(primaryLanguage) { l, prim -> listOf(none) + l.filterNot { it.code == prim?.code } }
                 .observe(viewLifecycleOwner, adapter)
             setAdapter(adapter)
             setOnItemClickListener { _, _, pos, _ ->
-                updateParallelLanguage(adapter.getItem(pos)?.takeUnless { it == LanguagesDropdownAdapter.NONE }?.code)
+                updateParallelLanguage(adapter.getItem(pos)?.code?.takeUnless { it == none.code })
             }
         }
     }
