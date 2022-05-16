@@ -27,5 +27,6 @@
     <string name="tract_settings_languages_title">Parallel Language</string>
     <string name="tract_settings_languages_description">Toggle between two different languages in this tool.</string>
     <string name="tract_settings_languages_parallel">Parallel</string>
+    <string name="tract_settings_languages_none">None</string>
     <string name="tract_settings_shareables_title">Related graphics</string>
 </resources>
