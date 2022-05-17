@@ -59,6 +59,11 @@ jobs:
   tests:
     name: Unit Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        testShard: [1, 2]
+    env:
+      ORG_GRADLE_PROJECT_testShard: ${{ matrix.testShard }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -86,7 +91,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: unit-test-results
+          name: unit-test-results-${{ matrix.testShard }}
           path: "**/build/reports/tests/"
 
   qa_build:
