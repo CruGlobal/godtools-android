@@ -1,21 +1,21 @@
 package org.cru.godtools.analytics.firebase
 
 import android.app.Application
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.okta.oidc.net.response.UserInfo
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineScope
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.greenrobot.eventbus.EventBus
-import org.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
@@ -24,7 +24,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 
-@RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class FirebaseAnalyticsServiceTest {
     private lateinit var application: Application
@@ -77,5 +76,8 @@ class FirebaseAnalyticsServiceTest {
         verify(firebase).setUserId(null)
     }
 
-    private fun userInfo(guid: String?): UserInfo = UserInfo(JSONObject(mapOf("ssoGuid" to guid)))
+    private fun userInfo(guid: String?) = mockk<UserInfo> {
+        every { this@mockk.get(any()) } returns null
+        every { ssoGuid } returns guid
+    }
 }
