@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.service
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -15,7 +14,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.kotlin.argThat
@@ -27,7 +25,6 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 
 private const val MANIFEST_NAME = "manifest.xml"
 
-@RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManifestManagerTest {
     private lateinit var dao: GodToolsDao
