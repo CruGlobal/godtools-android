@@ -3,7 +3,6 @@ import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
-import com.android.build.gradle.internal.core.InternalBaseVariant
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
@@ -135,37 +134,4 @@ fun CommonExtension<*,*,*,*>.configureQaBuildType(project: Project) {
     project.configurations {
         named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
     }
-}
-
-// TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
-private fun TestedExtension.configureTestOptions(project: Project) {
-    testOptions.unitTests {
-        isIncludeAndroidResources = true
-
-        all {
-            // default is 512MB, robolectric consumes a lot of memory
-            // by loading an AOSP image for each version being tested
-            it.maxHeapSize = "2g"
-        }
-    }
-
-    testVariants.all { configureTestManifestPlaceholders() }
-    unitTestVariants.all { configureTestManifestPlaceholders() }
-
-    project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
-
-    project.configurations.configureEach {
-        resolutionStrategy.dependencySubstitution {
-            // use the new condensed version of hamcrest
-            val hamcrest = project.libs.findLibrary("hamcrest").get().get().toString()
-            substitute(module("org.hamcrest:hamcrest-core")).using(module(hamcrest))
-            substitute(module("org.hamcrest:hamcrest-library")).using(module(hamcrest))
-        }
-    }
-}
-
-private fun InternalBaseVariant.configureTestManifestPlaceholders() {
-    mergedFlavor.manifestPlaceholders += "hostGodtoolsCustomUri" to "org.cru.godtools.test"
 }
