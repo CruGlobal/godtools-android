@@ -14,6 +14,7 @@ import org.cru.godtools.tool.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
@@ -23,6 +24,7 @@ import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class TractPageCallToActionBindingTest {
     private lateinit var binding: TractPageCallToActionBinding
 

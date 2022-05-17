@@ -14,10 +14,12 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class SnowplowAnalyticsServiceTest {
     private val userInfoFlow = MutableStateFlow<UserInfo?>(null)
     private val oktaUserProfileProvider = mockk<OktaUserProfileProvider> {

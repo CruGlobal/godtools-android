@@ -18,11 +18,13 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class DashboardActivityTest {
     @get:Rule

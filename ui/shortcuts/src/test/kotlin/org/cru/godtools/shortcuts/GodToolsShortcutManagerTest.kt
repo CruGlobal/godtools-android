@@ -28,6 +28,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
 import org.mockito.kotlin.any
@@ -52,6 +53,7 @@ private const val ACTION_INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL
 private const val INSTALL_SHORTCUT_PERMISSION = "com.android.launcher.permission.INSTALL_SHORTCUT"
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N, Build.VERSION_CODES.N_MR1, NEWEST_SDK])
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerTest {

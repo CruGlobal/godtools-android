@@ -16,6 +16,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -23,6 +24,7 @@ private const val TOOL = "test"
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class ArticlesActivityTest {
     @get:Rule

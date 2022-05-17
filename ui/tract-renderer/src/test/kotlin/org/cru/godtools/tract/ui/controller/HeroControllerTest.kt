@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
@@ -30,6 +31,7 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class HeroControllerTest {
     private val baseLifecycleOwner = TestLifecycleOwner(Lifecycle.State.CREATED)

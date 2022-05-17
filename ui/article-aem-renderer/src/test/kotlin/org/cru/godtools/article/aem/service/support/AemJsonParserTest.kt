@@ -6,9 +6,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
 import org.json.JSONObject
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class AemJsonParserTest {
     @Test
     fun verifyArticleParseLogic() {

@@ -11,9 +11,11 @@ import kotlinx.coroutines.test.runTest
 import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsSyncServiceTest {
     private val toolsSyncTasks = mockk<ToolSyncTasks> { coEvery { syncTools(any()) } returns true }

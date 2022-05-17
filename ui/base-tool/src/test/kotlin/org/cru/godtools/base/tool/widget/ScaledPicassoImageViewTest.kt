@@ -17,9 +17,11 @@ import org.cru.godtools.tool.model.ImageScaleType
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ScaledPicassoImageViewTest {
     private val drawable = mockk<Drawable>()
     private val imageMatrix = slot<Matrix>()

@@ -15,6 +15,7 @@ import org.hamcrest.Matchers
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -27,6 +28,7 @@ import org.robolectric.Robolectric
 private const val TOOL = "tool"
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ActivitiesTest {
     private lateinit var activity: Activity
 

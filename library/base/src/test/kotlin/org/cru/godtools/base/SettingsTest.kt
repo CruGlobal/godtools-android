@@ -12,11 +12,13 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 private const val FEATURE_TEST = "testFeature"
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class SettingsTest {
     private val sessionClient = mockk<SessionClient> { every { tokens } returns null }
     private lateinit var settings: Settings

@@ -33,6 +33,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.KStubbing
 import org.mockito.kotlin.doReturn
@@ -46,6 +47,7 @@ private const val TOOL = "test"
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class CyoaActivityTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()

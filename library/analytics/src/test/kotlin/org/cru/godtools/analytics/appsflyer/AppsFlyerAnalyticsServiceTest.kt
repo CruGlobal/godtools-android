@@ -10,9 +10,11 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class AppsFlyerAnalyticsServiceTest {
     private val activity = mockk<Activity>(relaxUnitFun = true)
     private lateinit var deepLinkResolver: AppsFlyerDeepLinkResolver

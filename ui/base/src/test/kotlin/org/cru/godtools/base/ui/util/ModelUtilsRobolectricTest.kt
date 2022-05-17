@@ -8,10 +8,12 @@ import org.cru.godtools.model.Tool
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ModelUtilsRobolectricTest {
     private lateinit var context: Context
     private val tool = Tool().apply {

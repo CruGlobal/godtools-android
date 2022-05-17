@@ -8,11 +8,13 @@ import com.google.android.material.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ToolShareSheetBindingTest {
     private lateinit var binding: ToolShareSheetBinding
 

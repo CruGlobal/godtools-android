@@ -22,6 +22,7 @@ import org.cru.godtools.base.Settings
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.annotation.Config
@@ -29,6 +30,7 @@ import org.robolectric.annotation.Config.NEWEST_SDK
 import org.robolectric.annotation.Config.OLDEST_SDK
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
     // various flows

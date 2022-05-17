@@ -6,10 +6,12 @@ import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class TrainingTipMapperTest {
     private val cursor = MatrixCursor(
         arrayOf(

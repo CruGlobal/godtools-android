@@ -7,9 +7,11 @@ import org.cru.godtools.tool.model.tips.Tip
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class TipBottomSheetDialogFragmentTest {
     @Test
     fun testCreateFragment() {

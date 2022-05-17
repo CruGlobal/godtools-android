@@ -13,12 +13,14 @@ import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 private const val PACKAGE_NAME = "packageName"
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = Application::class)
 class LocaleUtilsGetDisplayNameTest {
     lateinit var context: Context

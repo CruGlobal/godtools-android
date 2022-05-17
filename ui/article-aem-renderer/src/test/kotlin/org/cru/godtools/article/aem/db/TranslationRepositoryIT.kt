@@ -11,12 +11,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 private val URI1 = Uri.parse("https://example.com/content/experience-fragments/questions_about_god")
 private val URI2 = Uri.parse("https://example.com/content/experience-fragments/other")
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class TranslationRepositoryIT : BaseArticleRoomDatabaseIT() {
     private val repository get() = db.translationRepository()
 

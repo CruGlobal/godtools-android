@@ -13,6 +13,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
@@ -21,6 +22,7 @@ import org.robolectric.android.controller.ActivityController
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = MockApplication::class)
 class BaseActivityTest {
     lateinit var controller: ActivityController<ConcreteBaseActivity>

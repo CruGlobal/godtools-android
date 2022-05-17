@@ -21,12 +21,14 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.android.controller.ActivityController
 import splitties.bitflags.hasFlag
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class TextViewBindingAdapterTest {
     private lateinit var activityController: ActivityController<Activity>
     private lateinit var activity: Activity

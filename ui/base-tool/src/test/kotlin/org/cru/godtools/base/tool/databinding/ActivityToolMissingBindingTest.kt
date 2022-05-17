@@ -10,10 +10,12 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ActivityToolMissingBindingTest {
     private lateinit var binding: ActivityToolMissingBinding
 

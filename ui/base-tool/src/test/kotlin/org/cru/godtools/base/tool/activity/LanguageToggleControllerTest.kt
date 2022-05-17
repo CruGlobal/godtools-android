@@ -17,9 +17,11 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class LanguageToggleControllerTest {
     private lateinit var context: Context
     private lateinit var tabLayout: TabLayout

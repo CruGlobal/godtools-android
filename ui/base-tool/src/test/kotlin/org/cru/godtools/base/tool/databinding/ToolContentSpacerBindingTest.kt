@@ -12,9 +12,11 @@ import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.Spacer
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 class ToolContentSpacerBindingTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
 

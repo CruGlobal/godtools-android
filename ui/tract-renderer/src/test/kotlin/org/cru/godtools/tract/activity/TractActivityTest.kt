@@ -38,6 +38,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -51,6 +52,7 @@ private const val TOOL = "test"
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Category(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
 class TractActivityTest {
     @get:Rule
