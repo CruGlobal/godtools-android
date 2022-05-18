@@ -4,7 +4,6 @@ buildscript {
     ext {
         bundledContent = [
                 tools               : ['kgp', 'fourlaws', 'satisfied', 'teachmetoshare'],
-                attachments         : ['attr-banner', 'attr-banner-about'],
                 languages           : ['en'],
                 downloadTranslations: false,
         ]

@@ -1,5 +1,8 @@
 import com.android.build.api.dsl.AndroidSourceSet
+import dagger.hilt.android.plugin.util.capitalize
 import de.undercouch.gradle.tasks.download.Download
+import org.cru.godtools.gradle.bundledcontent.DownloadApiResourcesTask
+import org.cru.godtools.gradle.bundledcontent.ExtractAttachmentsTask
 import org.cru.godtools.gradle.bundledcontent.PruneJsonApiResponseTask
 
 plugins {
@@ -35,6 +38,9 @@ dependencies {
     kapt(libs.hilt.compiler)
 }
 
+val BUNDLED_TOOLS = listOf("kgp", "fourlaws", "satisfied", "teachmetoshare")
+val BUNDLED_ATTACHMENTS = listOf("attr-banner", "attr-banner-about")
+
 android.libraryVariants.configureEach {
     val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
     val mobileContentApi =
@@ -68,17 +74,15 @@ android.libraryVariants.configureEach {
 
     // configure tools json download tasks
     val intermediateToolsJson = intermediatesDir.resolve("tools.json")
-    val downloadToolsJsonTask = tasks.create<Download>("download${name.capitalize()}ToolsJson") {
+    val downloadToolsJsonTask = tasks.create<Download>("download${name.capitalize()}BundledToolsJson") {
         mustRunAfter("clean")
 
         src("${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language")
         dest(intermediateToolsJson)
         retries(2)
-        quiet(false)
         tempAndMove(true)
     }
-    val toolsJson = assetGenDir.resolve("tools.json")
-    val pruneToolsJsonTask = tasks.create<PruneJsonApiResponseTask>("prune${name.capitalize()}ToolsJson") {
+    val pruneToolsJsonTask = tasks.create<PruneJsonApiResponseTask>("prune${name.capitalize()}BundledToolsJson") {
         dependsOn(downloadToolsJsonTask)
         input.set(intermediateToolsJson)
         removeAllRelationshipsFor = listOf("language")
@@ -90,9 +94,33 @@ android.libraryVariants.configureEach {
         )
         removeAttributesFor["attachment"] = listOf("file", "is-zipped")
         removeAttributesFor["language"] = listOf("direction")
-        output.set(toolsJson)
+        output.set(assetGenDir.resolve("tools.json"))
     }
     assetGenTask.configure { dependsOn(pruneToolsJsonTask) }
+
+    val attachmentsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledAttachments") {
+        into(assetGenDir.resolve("attachments/"))
+    }
+    assetGenTask.configure { dependsOn(attachmentsCopyTask) }
+    BUNDLED_TOOLS.forEach { tool ->
+        val variant = "${name.capitalize()}${tool.capitalize()}"
+
+        // configure bundled attachments download tasks
+        val extractAttachmentsTask = tasks.register<ExtractAttachmentsTask>("extract${variant}BundledAttachments") {
+            toolsJson.set(pruneToolsJsonTask.output)
+            this.tool = tool
+            attachments = BUNDLED_ATTACHMENTS
+            output.set(intermediatesDir.resolve("tool/$tool/attachments.json"))
+        }
+
+        val downloadAttachmentsTask = tasks.register<DownloadApiResourcesTask>("download${variant}BundledAttachments") {
+            resources.set(extractAttachmentsTask.flatMap { it.output })
+            api = mobileContentApi
+            output.set(intermediatesDir.resolve("attachments/$tool/"))
+        }
+
+        attachmentsCopyTask.configure { from(downloadAttachmentsTask.flatMap { it.output }) }
+    }
 }
 
 apply(from = "download_initial_content.gradle")

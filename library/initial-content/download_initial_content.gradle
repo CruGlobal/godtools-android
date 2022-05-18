@@ -1,4 +1,3 @@
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 apply plugin: 'de.undercouch.download'
@@ -20,38 +19,7 @@ android.libraryVariants.all { variant ->
 
     // tools json
     def toolsJsonFile = new File(assetGenDir, 'tools.json')
-    def downloadToolsTask = tasks.named("prune${variant.name.capitalize()}ToolsJson")
-
-    // download attachments
-    def attachmentsDir = new File(assetGenDir, 'attachments')
-    def downloadAttachmentsTask = project.tasks.create("download${variant.name.capitalize()}BundledAttachments") {
-        mustRunAfter clean
-        dependsOn downloadToolsTask
-
-        doLast {
-            def toolsJson = new JsonSlurper().parseText(toolsJsonFile.text)
-            toolsJson.data.findAll { bundledContent.tools.contains(it.attributes.abbreviation) }.each { tool ->
-                bundledContent.attachments.each { attr ->
-                    def attachmentId = tool.attributes.get(attr)
-                    def attachment = toolsJson.included.find { it.id == attachmentId && it.type == "attachment" }
-                    if (!attachment) {
-                        return
-                    }
-
-                    def rawName = attachment.attributes.get('file-file-name')
-                    def fileName = attachment.attributes.sha256 + rawName.substring(rawName.lastIndexOf('.'))
-                    download.run {
-                        src "${mobileContentApi}attachments/${attachmentId}/download"
-                        dest new File(attachmentsDir, fileName)
-                        overwrite false
-                        tempAndMove true
-                        quiet true
-                    }
-                }
-            }
-        }
-    }
-    assetGenTask.dependsOn(downloadAttachmentsTask)
+    def downloadToolsTask = tasks.named("prune${variant.name.capitalize()}BundledToolsJson")
 
     // download translations
     if (bundledContent.downloadTranslations) {
