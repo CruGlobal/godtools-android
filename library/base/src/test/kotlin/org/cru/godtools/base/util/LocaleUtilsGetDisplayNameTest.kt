@@ -4,20 +4,19 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.MockKStubScope
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import java.util.Locale
+import kotlin.random.Random
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
-import org.mockito.stubbing.OngoingStubbing
 import org.robolectric.annotation.Config
+
+private const val PACKAGE_NAME = "packageName"
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
@@ -26,29 +25,33 @@ class LocaleUtilsGetDisplayNameTest {
 
     @Before
     fun setup() {
-        context = mock(defaultAnswer = RETURNS_DEEP_STUBS)
-        whenever(context.packageName).thenReturn(null)
-        whenever(context.resources.configuration).thenReturn(Configuration())
-        whenever(context.createConfigurationContext(any())).thenReturn(context)
+        context = mockk {
+            every { packageName } returns PACKAGE_NAME
+            every { resources } returns mockk {
+                every { configuration } returns Configuration()
+                every { getIdentifier(any(), "string", PACKAGE_NAME) } returns 0
+            }
+            every { createConfigurationContext(any()) } returns this
+        }
     }
 
     @Test
     fun preferLanguageNameString() {
-        wheneverGetLanguageNameStringRes(Locale.ENGLISH).thenReturn("Language Name String")
+        everyGetLanguageNameStringRes(Locale.ENGLISH) returns "Language Name String"
 
         assertEquals("Language Name String", Locale.ENGLISH.getDisplayName(context, defaultName = "invalid"))
-        verify(context, never()).createConfigurationContext(any())
+        verify(inverse = true) { context.createConfigurationContext(any()) }
     }
 
     @Test
     fun preferLanguageNameStringInDifferentLocale() {
-        wheneverGetLanguageNameStringRes(Locale.ENGLISH).thenReturn("Language Name String")
+        everyGetLanguageNameStringRes(Locale.ENGLISH) returns "Language Name String"
 
         assertEquals(
             "Language Name String",
             Locale.ENGLISH.getDisplayName(context, defaultName = "invalid", inLocale = Locale.FRENCH)
         )
-        verify(context).createConfigurationContext(argThat { locale == Locale.FRENCH })
+        verify(exactly = 1) { context.createConfigurationContext(match { it.locale == Locale.FRENCH }) }
     }
 
     @Test
@@ -66,12 +69,14 @@ class LocaleUtilsGetDisplayNameTest {
         assertEquals("x", Locale("x").getDisplayName(context = context))
     }
 
-    private fun wheneverGetLanguageNameStringRes(locale: Locale): OngoingStubbing<String?> {
-        whenever(
-            context.resources.getIdentifier(
-                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}", "string", null
+    private fun everyGetLanguageNameStringRes(locale: Locale): MockKStubScope<String, String> {
+        val id = Random.nextInt(1, Int.MAX_VALUE)
+        val resources = context.resources
+        every {
+            resources.getIdentifier(
+                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}", "string", PACKAGE_NAME
             )
-        ).thenReturn(1)
-        return whenever(context.resources.getString(1))
+        } returns id
+        return every { resources.getString(id) }
     }
 }
