@@ -15,8 +15,6 @@ import org.cru.godtools.dagger.EventBusModule
 import org.cru.godtools.dagger.ServicesModule
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
-import org.mockito.Mockito
-import org.mockito.kotlin.mock
 
 @Module(includes = [EagerModule::class])
 @TestInstallIn(
@@ -27,7 +25,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val eventbus by lazy { mockk<EventBus>(relaxUnitFun = true) }
     @get:Provides
-    val picasso by lazy { mock<Picasso>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) }
+    val picasso by lazy { mockk<Picasso>() }
     @get:Provides
     val syncService by lazy {
         val completedSyncTask = object : SyncTask {
@@ -45,5 +43,5 @@ class ExternalSingletonsModule {
         }
     }
     @get:Provides
-    val workManager by lazy { mock<WorkManager>() }
+    val workManager by lazy { mockk<WorkManager>() }
 }
