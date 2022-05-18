@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
 
     api(libs.gtoSupport.picasso)
+    implementation(libs.gtoSupport.androidx.collection)
     implementation(libs.gtoSupport.androidx.constraintlayout)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
@@ -43,7 +44,6 @@ dependencies {
     implementation(libs.gtoSupport.animation)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
-    implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.eventbus)
     implementation(libs.gtoSupport.kotlin.coroutines)

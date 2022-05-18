@@ -1,81 +1,88 @@
 package org.cru.godtools.analytics.firebase
 
-import android.app.Application
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.okta.oidc.net.response.UserInfo
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.excludeRecords
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import io.mockk.verify
+import io.mockk.verifySequence
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
+import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
 import org.greenrobot.eventbus.EventBus
-import org.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.any
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
 
-@RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class FirebaseAnalyticsServiceTest {
-    private lateinit var application: Application
-    private lateinit var firebase: FirebaseAnalytics
-    private lateinit var eventBus: EventBus
-    private lateinit var oktaUserProfileProvider: OktaUserProfileProvider
-    private val userInfoChannel = Channel<UserInfo?>()
-    private lateinit var coroutineScope: TestCoroutineScope
+    private val firebase = mockk<FirebaseAnalytics>(relaxUnitFun = true)
+    private val eventBus = mockk<EventBus>(relaxUnitFun = true)
+    private val userInfoFlow = MutableSharedFlow<UserInfo?>()
+    private val oktaUserProfileProvider = mockk<OktaUserProfileProvider> {
+        every { userInfoFlow(refreshIfStale = any()) } returns userInfoFlow
+    }
 
-    private lateinit var analyticsService: FirebaseAnalyticsService
+    private fun userInfo(guid: String?) = mockk<UserInfo> {
+        every { this@mockk.get(any()) } returns null
+        every { ssoGuid } returns guid
+    }
+
+    private suspend fun TestScope.useAnalyticsService(block: suspend (FirebaseAnalyticsService) -> Unit) {
+        val service = FirebaseAnalyticsService(mockk(), eventBus, oktaUserProfileProvider, firebase, this)
+        try {
+            block(service)
+        } finally {
+            service.userInfoJob.cancel()
+        }
+    }
 
     @Before
     fun setupMocks() {
-        application = mock(defaultAnswer = RETURNS_DEEP_STUBS)
-        coroutineScope = TestCoroutineScope()
-        eventBus = mock()
-        firebase = mock()
-        oktaUserProfileProvider = mock {
-            on { userInfoFlow(refreshIfStale = any()) } doReturn userInfoChannel.consumeAsFlow()
-        }
-
-        analyticsService =
-            FirebaseAnalyticsService(application, eventBus, oktaUserProfileProvider, firebase, coroutineScope)
+        mockkStatic("com.google.android.gms.common.wrappers.InstantApps")
+        every { InstantApps.isInstantApp(any()) } returns false
     }
 
     @After
-    fun cleanup() {
-        userInfoChannel.close()
-        coroutineScope.cleanupTestCoroutines()
+    fun cleanupMocks() {
+        unmockkStatic("com.google.android.gms.common.wrappers.InstantApps")
     }
 
-    @Test(timeout = 10000)
-    fun verifySetUser() = runBlocking {
-        // initial state
-        verify(firebase, never()).setUserId(any())
-        clearInvocations(firebase)
+    @Test
+    fun verifySetUser() = runTest(UnconfinedTestDispatcher()) {
+        excludeRecords { firebase.setUserProperty(any(), any()) }
 
-        // no active user
-        userInfoChannel.send(null)
-        verify(firebase).setUserId(null)
-        clearInvocations(firebase)
+        useAnalyticsService {
+            // initial state
+            verify(inverse = true) { firebase.setUserId(any()) }
+            confirmVerified(firebase)
 
-        // active user
-        userInfoChannel.send(userInfo("GUID"))
-        verify(firebase).setUserId("GUID")
-        clearInvocations(firebase)
+            // no active user
+            userInfoFlow.emit(null)
+            verify(exactly = 1) { firebase.setUserId(null) }
+            confirmVerified(firebase)
 
-        // user logs out
-        userInfoChannel.send(null)
-        verify(firebase).setUserId(null)
+            // active user
+            userInfoFlow.emit(userInfo("GUID"))
+            verify(exactly = 1) { firebase.setUserId("GUID") }
+            confirmVerified(firebase)
+
+            // user logs out
+            userInfoFlow.emit(null)
+            verifySequence {
+                firebase.setUserId(null)
+                firebase.setUserId("GUID")
+                firebase.setUserId(null)
+            }
+        }
     }
-
-    private fun userInfo(guid: String?): UserInfo = UserInfo(JSONObject(mapOf("ssoGuid" to guid)))
 }

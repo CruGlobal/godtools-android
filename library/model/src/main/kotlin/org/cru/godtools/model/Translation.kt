@@ -37,6 +37,7 @@ class Translation : Base() {
 
     @JsonApiAttribute(JSON_LANGUAGE)
     var language: Language? = null
+        private set
     @JsonApiIgnore
     private var _languageCode: Locale? = null
     var languageCode: Locale

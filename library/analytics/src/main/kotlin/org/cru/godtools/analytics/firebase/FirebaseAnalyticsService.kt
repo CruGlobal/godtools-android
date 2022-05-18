@@ -96,16 +96,17 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         firebase.logEvent(event.firebaseEventName, params)
     }
 
-    init {
-        oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
-            .onEach {
-                firebase.setUserId(it?.ssoGuid)
-                firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
-                firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
-                firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
-            }
-            .launchIn(coroutineScope)
+    @VisibleForTesting
+    internal val userInfoJob = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+        .onEach {
+            firebase.setUserId(it?.ssoGuid)
+            firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
+            firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
+            firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
+        }
+        .launchIn(coroutineScope)
 
+    init {
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
         firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, Locale.getDefault().toLanguageTag())
         firebase.setUserProperty(
