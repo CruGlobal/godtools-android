@@ -84,7 +84,7 @@ android.libraryVariants.configureEach {
         removeAllRelationshipsFor = listOf("language")
         removeAttributesFor["resource"] = listOf(
             // attributes
-            "manifest", "onesky-project-id",
+            "manifest", "onesky-project-id", "total-views",
             // relationships
             "system", "translations", "latest-drafts-translations", "pages", "custom-manifests", "tips"
         )
