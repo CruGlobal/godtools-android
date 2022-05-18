@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        testShard: [1, 2]
+        testShard: ["robolectric", "other"]
     env:
       ORG_GRADLE_PROJECT_testShard: ${{ matrix.testShard }}
     steps:

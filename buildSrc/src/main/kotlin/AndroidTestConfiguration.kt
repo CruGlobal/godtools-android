@@ -14,12 +14,10 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
         all { test ->
             test.useJUnit {
                 // configure Test Sharding
-                // 1: Robolectric
-                // 2: Other Tests
                 // null: Default Behavior, all tests run
-                when (project.findProperty("testShard")?.toString()?.toIntOrNull()) {
-                    1 -> includeCategories = setOf(CATEGORY_ROBOLECTRIC)
-                    2 -> excludeCategories = setOf(CATEGORY_ROBOLECTRIC)
+                when (project.findProperty("testShard")?.toString()) {
+                    "robolectric" -> includeCategories = setOf(CATEGORY_ROBOLECTRIC)
+                    "other" -> excludeCategories = setOf(CATEGORY_ROBOLECTRIC)
                     null -> Unit
                     else -> throw IllegalArgumentException("Invalid testShard: ${project.findProperty("testShard")}")
                 }
