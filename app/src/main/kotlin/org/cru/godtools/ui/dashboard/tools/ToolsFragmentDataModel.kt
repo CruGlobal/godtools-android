@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -19,7 +20,8 @@ private val QUERY_TOOLS_BASE = Query.select<Tool>().where(
         (ToolTable.FIELD_HIDDEN ne true)
 ).orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
 
-private val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.type("LEFT"))
+@VisibleForTesting
+internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.type("LEFT"))
     .andWhere(
         ToolTable.FIELD_META_TOOL.isNull() or
             (ToolTable.FIELD_CODE eq ToolTable.TABLE_META.field(ToolTable.COLUMN_DEFAULT_VARIANT))
