@@ -51,6 +51,7 @@ internal class ToolDetailsPagerAdapter(
                 tool = dataModel.tool
                 translation = dataModel.primaryTranslation
                 autoLinkListener = linkClickListener
+                languages = dataModel.availableLanguages
             }
         Page.LANGUAGES -> ToolDetailsPageLanguagesBinding
             .inflate(LayoutInflater.from(parent.context), parent, false).apply {
