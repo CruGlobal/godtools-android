@@ -81,6 +81,7 @@ object Contract : BaseContract() {
     object ToolTable : BaseTable() {
         internal const val TABLE_NAME = "tools"
         internal val TABLE = Table.forClass<Tool>()
+        val TABLE_META = TABLE.`as`("meta")
 
         const val COLUMN_CODE = "code"
         const val COLUMN_TYPE = "type"
@@ -111,6 +112,7 @@ object Contract : BaseContract() {
         val FIELD_META_TOOL = TABLE.field(COLUMN_META_TOOL)
         val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
         val FIELD_HIDDEN = TABLE.field(COLUMN_HIDDEN)
+        val FIELD_SPOTLIGHT = TABLE.field(COLUMN_SPOTLIGHT)
         private val FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES)
 
         internal val PROJECTION_ALL = arrayOf(
@@ -156,6 +158,9 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
+
+        val SQL_JOIN_METATOOL =
+            TABLE.join(TABLE_META).on(TABLE_META.field(COLUMN_CODE).eq(TABLE.field(COLUMN_META_TOOL)))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
         val SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0)
