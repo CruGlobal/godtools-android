@@ -13,7 +13,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,6 @@ import javax.inject.Named
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
-import org.ccci.gto.android.common.material.tabs.notifyChanged
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.EXTRA_TOOL
@@ -191,17 +189,7 @@ class ToolDetailsFragment() :
         ).also { dataModel.pages.asLiveData().observe(viewLifecycleOwner, it) }
 
         // Setup the TabLayout
-        val mediator = TabLayoutMediator(tabs, pages) { tab: TabLayout.Tab, i: Int ->
-            when (val page = dataModel.pages.value[i]) {
-                ToolDetailsPagerAdapter.Page.LANGUAGES -> {
-                    val count = dataModel.availableLanguages.value?.size ?: 0
-                    tab.text = resources.getQuantityString(R.plurals.label_tools_languages, count, count)
-                }
-                else -> tab.setText(page.tabLabel)
-            }
-        }
-        mediator.attach()
-        dataModel.availableLanguages.observe(viewLifecycleOwner) { mediator.notifyChanged() }
+        TabLayoutMediator(tabs, pages) { tab, i -> tab.setText(dataModel.pages.value[i].tabLabel) }.attach()
     }
     // endregion Pages
 
