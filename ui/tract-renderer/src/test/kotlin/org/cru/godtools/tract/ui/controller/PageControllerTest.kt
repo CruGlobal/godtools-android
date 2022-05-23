@@ -2,6 +2,7 @@ package org.cru.godtools.tract.ui.controller
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.appcompat.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
@@ -16,7 +17,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.state.State
-import org.cru.godtools.tract.R
 import org.cru.godtools.tract.databinding.TractPageBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals

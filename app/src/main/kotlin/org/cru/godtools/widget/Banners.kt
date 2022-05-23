@@ -19,9 +19,9 @@ enum class BannerType(
         icon = R.drawable.ic_favorite_24dp
     ),
     TUTORIAL_TRAINING(
-        message = R.string.tutorial_features_banner_text,
-        primaryButton = R.string.tutorial_features_banner_action_open,
-        secondaryButton = R.string.tutorial_features_banner_action_dismiss
+        message = org.cru.godtools.tutorial.R.string.tutorial_features_banner_text,
+        primaryButton = org.cru.godtools.tutorial.R.string.tutorial_features_banner_action_open,
+        secondaryButton = org.cru.godtools.tutorial.R.string.tutorial_features_banner_action_dismiss
     );
 }
 
@@ -54,7 +54,7 @@ private fun Banner.updateUi(
     }
     if (type.icon != null) {
         setIcon(type.icon)
-        setIconTintColor(R.color.gt_blue)
+        setIconTintColor(org.cru.godtools.base.ui.R.color.gt_blue)
     } else {
         setIcon(null)
     }

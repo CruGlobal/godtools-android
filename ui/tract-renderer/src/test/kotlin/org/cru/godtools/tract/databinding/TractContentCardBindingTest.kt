@@ -12,7 +12,7 @@ import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.model.tract.CallToAction
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
-import org.cru.godtools.tract.R
+import org.cru.godtools.tool.tips.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

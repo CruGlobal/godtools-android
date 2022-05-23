@@ -3,6 +3,7 @@ package org.cru.godtools.tract.databinding
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.widget.ImageViewCompat
@@ -11,7 +12,6 @@ import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.tract.CallToAction
 import org.cru.godtools.tool.model.tract.TractPage
-import org.cru.godtools.tract.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

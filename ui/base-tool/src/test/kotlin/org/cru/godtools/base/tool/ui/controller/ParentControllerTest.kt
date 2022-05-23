@@ -6,11 +6,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
+import androidx.appcompat.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.Image

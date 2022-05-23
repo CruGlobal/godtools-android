@@ -1,12 +1,12 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Context
+import androidx.appcompat.R
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
-import org.cru.godtools.base.tool.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -39,7 +39,8 @@ internal class AemArticleViewModel @Inject constructor(
         val context = when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
                 ContextThemeWrapper(activity.applicationContext, activity.theme)
-            else -> ContextThemeWrapper(activity.applicationContext, R.style.Theme_GodTools_Tool)
+            else ->
+                ContextThemeWrapper(activity.applicationContext, org.cru.godtools.base.tool.R.style.Theme_GodTools_Tool)
         }
 
         webView = WebView(context).apply {

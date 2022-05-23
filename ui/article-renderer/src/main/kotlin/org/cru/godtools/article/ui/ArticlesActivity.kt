@@ -13,7 +13,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.ui.articles.ArticlesFragment
@@ -21,6 +20,7 @@ import org.cru.godtools.article.ui.categories.CategoriesFragment
 import org.cru.godtools.article.ui.categories.CategorySelectedListener
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
+import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.tool.model.Category

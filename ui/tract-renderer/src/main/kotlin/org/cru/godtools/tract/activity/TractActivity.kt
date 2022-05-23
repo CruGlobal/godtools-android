@@ -106,7 +106,7 @@ class TractActivity :
     @CallSuper
     override fun onSetupActionBar() {
         super.onSetupActionBar()
-        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(R.drawable.ic_close)
+        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(org.cru.godtools.base.ui.R.drawable.ic_close)
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {

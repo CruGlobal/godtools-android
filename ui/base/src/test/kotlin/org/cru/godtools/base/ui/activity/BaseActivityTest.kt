@@ -3,12 +3,12 @@ package org.cru.godtools.base.ui.activity
 import android.app.Application
 import android.os.Handler
 import android.view.View
+import androidx.appcompat.R
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.viewbinding.ViewBinding
 import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
-import org.cru.godtools.base.ui.R
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
