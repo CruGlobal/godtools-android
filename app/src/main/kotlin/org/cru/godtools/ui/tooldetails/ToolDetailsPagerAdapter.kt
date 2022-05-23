@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.R
 import org.cru.godtools.databinding.ToolDetailsPageDescriptionBinding
-import org.cru.godtools.databinding.ToolDetailsPageLanguagesBinding
 import org.cru.godtools.databinding.ToolDetailsPageVariantsBinding
 
 internal class ToolDetailsPagerAdapter(
@@ -21,7 +20,6 @@ internal class ToolDetailsPagerAdapter(
 ) : SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<ToolDetailsPagerAdapter.Page>> {
     enum class Page(@StringRes val tabLabel: Int) {
         DESCRIPTION(R.string.label_tools_about),
-        LANGUAGES(R.plurals.label_tools_languages),
         VARIANTS(R.string.tool_details_section_variants_label)
     }
 
@@ -51,9 +49,6 @@ internal class ToolDetailsPagerAdapter(
                 tool = dataModel.tool
                 translation = dataModel.primaryTranslation
                 autoLinkListener = linkClickListener
-            }
-        Page.LANGUAGES -> ToolDetailsPageLanguagesBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false).apply {
                 languages = dataModel.availableLanguages
             }
         Page.VARIANTS -> ToolDetailsPageVariantsBinding
