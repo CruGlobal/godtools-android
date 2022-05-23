@@ -27,12 +27,12 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/horiz_margin_call_to_action_arrow"
-            android:onClick="@{() -> callToAction == null || callToAction.events.empty ? callbacks.goToNextPage() : controller.sendEvents(callToAction.events)}"
+            android:onClick="@{() -> callbacks.goToNextPage()}"
             android:padding="8dp"
             android:saveEnabled="false"
             app:srcCompat="@drawable/ic_call_to_action"
             app:tint="@{CallToActionKt.getControlColor(callToAction)}"
-            app:visibleIf="@{!page.lastPage || (callToAction != null &amp;&amp; !callToAction.events.empty)}"
+            app:goneIf="@{page.lastPage}"
             tools:tint="@android:color/holo_orange_light" />
 
         <TextView
