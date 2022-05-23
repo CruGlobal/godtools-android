@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.base.tool.R
+import com.google.android.material.R
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

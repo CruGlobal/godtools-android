@@ -168,7 +168,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected open val shareLinkTitle get() = activeManifest?.title
     @get:StringRes
-    protected open val shareLinkMessageRes get() = R.string.share_general_message
+    protected open val shareLinkMessageRes get() = org.cru.godtools.base.ui.R.string.share_general_message
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 

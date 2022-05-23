@@ -42,7 +42,11 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
             putString(EXTRA_MODAL, modal.id)
         }
     ),
-    ActivityOptionsCompat.makeCustomAnimation(this, R.anim.activity_fade_in, R.anim.activity_fade_out).toBundle()
+    ActivityOptionsCompat.makeCustomAnimation(
+        this,
+        org.cru.godtools.base.ui.R.anim.activity_fade_in,
+        org.cru.godtools.base.ui.R.anim.activity_fade_out
+    ).toBundle()
 )
 
 @AndroidEntryPoint

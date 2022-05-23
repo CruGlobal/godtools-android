@@ -146,7 +146,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
     }
 
     private fun makeFullScreen() {
-        dialog?.findViewById<View>(R.id.design_bottom_sheet)?.apply {
+        dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.apply {
             layoutParams = layoutParams.apply { height = ViewGroup.LayoutParams.MATCH_PARENT }
         }
     }
