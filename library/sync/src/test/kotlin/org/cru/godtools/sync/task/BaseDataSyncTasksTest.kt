@@ -1,7 +1,12 @@
 package org.cru.godtools.sync.task
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.collection.SimpleArrayMap
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.excludeRecords
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import java.util.Locale
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
@@ -10,26 +15,14 @@ import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.same
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.whenever
 
 class BaseDataSyncTasksTest {
-    private lateinit var dao: GodToolsDao
-    private lateinit var events: SimpleArrayMap<Class<*>, Any>
+    private val dao = mockk<GodToolsDao>(relaxUnitFun = true)
 
     private lateinit var tasks: BaseDataSyncTasks
 
     @Before
     fun setup() {
-        dao = mock()
-        events = mock()
         tasks = object : BaseDataSyncTasks(dao) {}
     }
 
@@ -40,12 +33,17 @@ class BaseDataSyncTasksTest {
             id = 1
             code = Locale("lt")
         }
+        every { dao.refresh(any()) } returns null
+        every { dao.get(any<Query<Language>>()) } returns emptyList()
+        excludeRecords {
+            dao.refresh(any())
+            dao.get(any<Query<Language>>())
+        }
 
         // run test
         tasks.storeLanguage(language)
-        verify(dao).refresh(same(language))
-        verify(dao, never()).update(any(), anyOrNull<Expression>(), any<String>())
-        verify(dao).updateOrInsert(same(language), eq(SQLiteDatabase.CONFLICT_REPLACE), any())
+        verify { dao.updateOrInsert(refEq(language), SQLiteDatabase.CONFLICT_REPLACE, *anyVararg()) }
+        confirmVerified(dao)
     }
 
     @Test
@@ -55,7 +53,7 @@ class BaseDataSyncTasksTest {
         }
 
         tasks.storeLanguage(language)
-        verifyNoInteractions(dao)
+        confirmVerified(dao)
     }
 
     @Test
@@ -71,14 +69,23 @@ class BaseDataSyncTasksTest {
             code = Locale.forLanguageTag("lt-LT")
             isAdded = true
         }
-        val pk = Expression.raw("test", "")
-        whenever(dao.get(any<Query<Language>>())).thenReturn(listOf(originalLanguage))
-        whenever(dao.getPrimaryKeyWhere(eq(originalLanguage))).thenReturn(pk)
+        val pk = mockk<Expression>()
+        every { dao.refresh(any()) } returns null
+        every { dao.get(any<Query<Language>>()) } returns listOf(originalLanguage)
+        every { dao.getPrimaryKeyWhere(originalLanguage) } returns pk
+        every { dao.update(language, pk, LanguageTable.COLUMN_CODE) } returns 1
+        excludeRecords {
+            dao.refresh(any())
+            dao.get(any<Query<Language>>())
+            dao.getPrimaryKeyWhere(any())
+        }
 
         // run test
         tasks.storeLanguage(language)
-        verify(dao).refresh(same(language))
-        verify(dao).update(same(language), same(pk), eq(LanguageTable.COLUMN_CODE))
-        verify(dao).updateOrInsert(same(language), eq(SQLiteDatabase.CONFLICT_REPLACE), any())
+        verifyOrder {
+            dao.update(refEq(language), refEq(pk), LanguageTable.COLUMN_CODE)
+            dao.updateOrInsert(refEq(language), SQLiteDatabase.CONFLICT_REPLACE, *anyVararg())
+        }
+        confirmVerified(dao)
     }
 }
