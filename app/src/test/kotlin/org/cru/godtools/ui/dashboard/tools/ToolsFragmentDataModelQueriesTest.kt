@@ -73,6 +73,34 @@ class ToolsFragmentDataModelQueriesTest {
     }
     // endregion QUERY_TOOLS
 
+    // region QUERY_TOOLS_SPOTLIGHT
+    @Test
+    fun `QUERY_TOOLS_SPOTLIGHT - returns only spotlighted tools`() {
+        val normal = createTool("normal")
+        val spotlight = createTool("spotlight") { isSpotlight = true }
+        val meta = createTool("meta") {
+            type = Tool.Type.META
+            defaultVariant = "normalVariant"
+        }
+        val spotlightVariant = createTool("spotlightVariant") {
+            metatoolCode = "meta"
+            isSpotlight = true
+        }
+        val normalVariant = createTool("normalVariant") { metatoolCode = "meta" }
+
+        val tools = dao.get(QUERY_TOOLS_SPOTLIGHT)
+        assertThat(
+            tools,
+            allOf(
+                containsInAnyOrder(tool(spotlight), tool(spotlightVariant)),
+                not(hasItem(tool(normal))),
+                not(hasItem(tool(meta))),
+                not(hasItem(tool(normalVariant))),
+            )
+        )
+    }
+    // endregion QUERY_TOOLS_SPOTLIGHT
+
     private fun createTool(code: String = "tool", config: Tool.() -> Unit = {}) = Tool().apply {
         id = Random.nextLong()
         this.code = code

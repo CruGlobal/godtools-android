@@ -26,7 +26,8 @@ internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.typ
         ToolTable.FIELD_META_TOOL.isNull() or
             (ToolTable.FIELD_CODE eq ToolTable.TABLE_META.field(ToolTable.COLUMN_DEFAULT_VARIANT))
     )
-private val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_SPOTLIGHT eq true)
+@VisibleForTesting
+internal val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_SPOTLIGHT eq true)
 
 @HiltViewModel
 class ToolsFragmentDataModel @Inject constructor(dao: GodToolsDao, savedState: SavedStateHandle) : ViewModel() {
