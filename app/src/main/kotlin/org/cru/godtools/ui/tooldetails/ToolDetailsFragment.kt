@@ -98,7 +98,13 @@ class ToolDetailsFragment() :
     }
 
     override fun onLinkClicked(url: String) {
-        eventBus.post(ExitLinkActionEvent(dataModel.toolCode.value, Uri.parse(url)))
+        eventBus.post(
+            ExitLinkActionEvent(
+                dataModel.toolCode.value,
+                Uri.parse(url),
+                dataModel.primaryTranslation.value?.languageCode
+            )
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
