@@ -25,6 +25,7 @@ fun LibraryVariant.configureBundledContent(
 
     // create a generated assets directory for the bundled content and add it to the most specific source set available.
     val assetGenDir = project.buildDir.resolve("generated/assets/initial-content/$dirName")
+    val assetGenTask = project.tasks.named("generate${name.capitalize()}Assets")
     sourceSets.filterIsInstance<AndroidSourceSet>().last().assets.srcDir(assetGenDir)
 
     // configure download bundled content tasks
@@ -39,8 +40,14 @@ fun LibraryVariant.configureBundledContent(
         registerDownloadBundledAttachmentsTask(project, apiUrl, toolsJsonOutput, bundledTools, bundledAttachments) {
             into(assetGenDir.resolve("attachments/"))
         }
+    if (downloadTranslations) {
+        val translationsTask =
+            registerDownloadBundledTranslationsTask(project, apiUrl, toolsJsonOutput, bundledTools, bundledLanguages) {
+                into(assetGenDir.resolve("translations/"))
+            }
+        assetGenTask.configure { dependsOn(translationsTask) }
+    }
 
-    val assetGenTask = project.tasks.named("generate${name.capitalize()}Assets")
     assetGenTask.configure { dependsOn(languagesJsonTask, toolsJsonTask, attachmentsTask) }
 }
 
@@ -143,4 +150,38 @@ private fun LibraryVariant.registerDownloadBundledAttachmentsTask(
     }
 
     return attachmentsCopyTask
+}
+
+private fun LibraryVariant.registerDownloadBundledTranslationsTask(
+    project: Project,
+    apiUrl: String,
+    toolsJson: Provider<RegularFile>,
+    bundledTools: List<String>,
+    bundledLanguages: List<String>,
+    configuration: Copy.() -> Unit
+): TaskProvider<Copy> {
+    val intermediatesDir = project.buildDir.resolve("intermediates/mobile_content_api/$dirName/")
+    val translationsCopyTask = project.tasks.register("copy${name.capitalize()}BundledTranslations", configuration)
+    bundledTools.forEach { tool ->
+        bundledLanguages.forEach { lang ->
+            val variant = "${name.capitalize()}${tool.capitalize()}${lang.capitalize()}"
+            val extractTask = project.tasks.register<ExtractTranslationTask>("extract${variant}BundledTranslation") {
+                this.toolsJson.set(toolsJson)
+                this.tool = tool
+                language = lang
+                output.set(intermediatesDir.resolve("tool/$tool/$lang.translation.json"))
+            }
+
+            val downloadTask =
+                project.tasks.register<DownloadApiResourcesTask>("download${variant}BundledTranslation") {
+                    resources.set(extractTask.flatMap { it.output })
+                    api = apiUrl
+                    output.set(intermediatesDir.resolve("translation/$tool/$lang/"))
+                }
+
+            translationsCopyTask.configure { from(downloadTask.flatMap { it.output }) }
+        }
+    }
+
+    return translationsCopyTask
 }
