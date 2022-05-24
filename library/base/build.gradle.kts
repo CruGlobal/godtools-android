@@ -4,11 +4,7 @@ plugins {
     kotlin("kapt")
 }
 
-android {
-    baseConfiguration(project)
-
-    defaultConfig.buildConfigField("int", "VERSION_CODE", "${rootProject.ext["versionCode"]}")
-}
+android.baseConfiguration(project)
 
 dependencies {
     implementation(libs.androidx.core.ktx)

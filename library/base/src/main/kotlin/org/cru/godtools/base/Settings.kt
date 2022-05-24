@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
@@ -168,22 +169,22 @@ class Settings @Inject internal constructor(
     // region Launch tracking
     @VisibleForTesting
     internal var firstLaunchVersion
-        get() = prefs.getInt(PREF_VERSION_FIRST_LAUNCH, BuildConfig.VERSION_CODE)
-        set(value) = prefs.edit { putInt(PREF_VERSION_FIRST_LAUNCH, value) }
+        get() = prefs.getLong(PREF_VERSION_FIRST_LAUNCH, context.versionCode)
+        set(value) = prefs.edit { putLong(PREF_VERSION_FIRST_LAUNCH, value) }
     private var lastLaunchVersion
-        get() = prefs.getInt(PREF_VERSION_LAST_LAUNCH, -1).takeUnless { it == -1 }
-        private set(value) = prefs.edit { putInt(PREF_VERSION_LAST_LAUNCH, value ?: BuildConfig.VERSION_CODE) }
+        get() = prefs.getLong(PREF_VERSION_LAST_LAUNCH, -1).takeUnless { it == -1L }
+        private set(value) = prefs.edit { putLong(PREF_VERSION_LAST_LAUNCH, value ?: context.versionCode) }
     var launches
         get() = prefs.getInt(PREF_LAUNCHES, 0)
         private set(value) = prefs.edit { putInt(PREF_LAUNCHES, value) }
 
     private fun trackFirstLaunchVersion() {
         if (prefs.contains(PREF_VERSION_FIRST_LAUNCH)) return
-        firstLaunchVersion = BuildConfig.VERSION_CODE
+        firstLaunchVersion = context.versionCode
     }
 
     fun trackLaunch() {
-        lastLaunchVersion = BuildConfig.VERSION_CODE
+        lastLaunchVersion = context.versionCode
         launches++
     }
 
@@ -192,3 +193,6 @@ class Settings @Inject internal constructor(
     }
     // endregion Launch tracking
 }
+
+private val Context.versionCode
+    get() = PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(packageName, 0))
