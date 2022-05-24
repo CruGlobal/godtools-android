@@ -3,6 +3,7 @@ import dagger.hilt.android.plugin.util.capitalize
 import de.undercouch.gradle.tasks.download.Download
 import org.cru.godtools.gradle.bundledcontent.DownloadApiResourcesTask
 import org.cru.godtools.gradle.bundledcontent.ExtractAttachmentsTask
+import org.cru.godtools.gradle.bundledcontent.ExtractTranslationTask
 import org.cru.godtools.gradle.bundledcontent.PruneJsonApiResponseTask
 
 plugins {
@@ -40,12 +41,26 @@ dependencies {
 
 val BUNDLED_TOOLS = listOf("kgp", "fourlaws", "satisfied", "teachmetoshare")
 val BUNDLED_ATTACHMENTS = listOf("attr-banner", "attr-banner-about")
+val BUNDLED_LANGUAGES = listOf("en")
+val DOWNLOAD_TRANSLATIONS = false
 
 android.libraryVariants.configureEach {
     val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
     val mobileContentApi =
         if (flavorName.contains("stage")) URI_MOBILE_CONTENT_API_STAGE else URI_MOBILE_CONTENT_API_PRODUCTION
     val intermediatesDir = buildDir.resolve("intermediates/mobile_content_api/$dirName/")
+
+    // include the list of bundled tools and languages as a BuildConfig constant
+    buildConfigField(
+        "java.util.List<String>",
+        "BUNDLED_TOOLS",
+        "java.util.Arrays.asList(" + BUNDLED_TOOLS.joinToString(",") { "\"$it\"" } + ")"
+    )
+    buildConfigField(
+        "java.util.List<String>",
+        "BUNDLED_LANGUAGES",
+        "java.util.Arrays.asList(" + BUNDLED_LANGUAGES.joinToString(",") { "\"$it\"" } + ")"
+    )
 
     // create a generated assets directory for the initial content and add it to the most specific source set available.
     val assetGenDir = project.buildDir.resolve("generated/assets/initial-content/$dirName")
@@ -101,7 +116,14 @@ android.libraryVariants.configureEach {
     val attachmentsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledAttachments") {
         into(assetGenDir.resolve("attachments/"))
     }
-    assetGenTask.configure { dependsOn(attachmentsCopyTask) }
+    val translationsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledTranslations") {
+        enabled = DOWNLOAD_TRANSLATIONS
+        into(assetGenDir.resolve("translations/"))
+    }
+    assetGenTask.configure {
+        dependsOn(attachmentsCopyTask)
+        dependsOn(translationsCopyTask)
+    }
     BUNDLED_TOOLS.forEach { tool ->
         val variant = "${name.capitalize()}${tool.capitalize()}"
 
@@ -120,7 +142,29 @@ android.libraryVariants.configureEach {
         }
 
         attachmentsCopyTask.configure { from(downloadAttachmentsTask.flatMap { it.output }) }
+
+        if (DOWNLOAD_TRANSLATIONS) {
+            // configure bundled translations download tasks for each bundled language
+            BUNDLED_LANGUAGES.forEach { lang ->
+                val langVariant = "$variant${lang.capitalize()}"
+
+                val extractTranslationTask =
+                    tasks.register<ExtractTranslationTask>("extract${langVariant}BundledTranslation") {
+                        toolsJson.set(pruneToolsJsonTask.output)
+                        this.tool = tool
+                        language = lang
+                        output.set(intermediatesDir.resolve("tool/$tool/$lang.translation.json"))
+                    }
+
+                val downloadTranslationTask =
+                    tasks.register<DownloadApiResourcesTask>("download${langVariant}BundledTranslation") {
+                        resources.set(extractTranslationTask.flatMap { it.output })
+                        api = mobileContentApi
+                        output.set(intermediatesDir.resolve("translation/$tool/$lang/"))
+                    }
+
+                translationsCopyTask.configure { from(downloadTranslationTask.flatMap { it.output }) }
+            }
+        }
     }
 }
-
-apply(from = "download_initial_content.gradle")
