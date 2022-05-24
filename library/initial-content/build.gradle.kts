@@ -1,10 +1,10 @@
-import com.android.build.api.dsl.AndroidSourceSet
 import dagger.hilt.android.plugin.util.capitalize
 import de.undercouch.gradle.tasks.download.Download
 import org.cru.godtools.gradle.bundledcontent.DownloadApiResourcesTask
 import org.cru.godtools.gradle.bundledcontent.ExtractAttachmentsTask
 import org.cru.godtools.gradle.bundledcontent.ExtractTranslationTask
 import org.cru.godtools.gradle.bundledcontent.PruneJsonApiResponseTask
+import org.cru.godtools.gradle.bundledcontent.configureBundledContent
 
 plugins {
     id("com.android.library")
@@ -45,47 +45,19 @@ val BUNDLED_LANGUAGES = listOf("en")
 val DOWNLOAD_TRANSLATIONS = false
 
 android.libraryVariants.configureEach {
-    val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
     val mobileContentApi =
         if (flavorName.contains("stage")) URI_MOBILE_CONTENT_API_STAGE else URI_MOBILE_CONTENT_API_PRODUCTION
-    val intermediatesDir = buildDir.resolve("intermediates/mobile_content_api/$dirName/")
 
-    // include the list of bundled tools and languages as a BuildConfig constant
-    buildConfigField(
-        "java.util.List<String>",
-        "BUNDLED_TOOLS",
-        "java.util.Arrays.asList(" + BUNDLED_TOOLS.joinToString(",") { "\"$it\"" } + ")"
-    )
-    buildConfigField(
-        "java.util.List<String>",
-        "BUNDLED_LANGUAGES",
-        "java.util.Arrays.asList(" + BUNDLED_LANGUAGES.joinToString(",") { "\"$it\"" } + ")"
+    configureBundledContent(
+        project,
+        apiUrl = mobileContentApi,
+        bundledTools = BUNDLED_TOOLS,
+        bundledLanguages = BUNDLED_LANGUAGES
     )
 
-    // create a generated assets directory for the initial content and add it to the most specific source set available.
+    val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
     val assetGenDir = project.buildDir.resolve("generated/assets/initial-content/$dirName")
-    sourceSets.filterIsInstance<AndroidSourceSet>().last().assets.srcDir(assetGenDir)
-
-    // configure language json download tasks
-    val intermediateLanguagesJson = intermediatesDir.resolve("languages.json")
-    val downloadLanguagesJsonTask = tasks.create<Download>("download${name.capitalize()}LanguagesJson") {
-        mustRunAfter("clean")
-
-        src("${mobileContentApi}languages")
-        dest(intermediateLanguagesJson)
-        retries(2)
-        quiet(false)
-        tempAndMove(true)
-    }
-    val languagesJson = assetGenDir.resolve("languages.json")
-    val pruneLanguagesJsonTask = tasks.create<PruneJsonApiResponseTask>("prune${name.capitalize()}LanguagesJson") {
-        dependsOn(downloadLanguagesJsonTask)
-        input.set(intermediateLanguagesJson)
-        removeAllRelationshipsFor = listOf("language")
-        removeAttributesFor["language"] = listOf("direction")
-        output.set(languagesJson)
-    }
-    assetGenTask.configure { dependsOn(pruneLanguagesJsonTask) }
+    val intermediatesDir = buildDir.resolve("intermediates/mobile_content_api/$dirName/")
 
     // configure tools json download tasks
     val intermediateToolsJson = intermediatesDir.resolve("tools.json")
