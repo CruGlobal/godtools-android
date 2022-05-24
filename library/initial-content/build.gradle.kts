@@ -1,6 +1,5 @@
 import dagger.hilt.android.plugin.util.capitalize
 import org.cru.godtools.gradle.bundledcontent.DownloadApiResourcesTask
-import org.cru.godtools.gradle.bundledcontent.ExtractAttachmentsTask
 import org.cru.godtools.gradle.bundledcontent.ExtractTranslationTask
 import org.cru.godtools.gradle.bundledcontent.PruneJsonApiResponseTask
 import org.cru.godtools.gradle.bundledcontent.configureBundledContent
@@ -51,7 +50,9 @@ android.libraryVariants.configureEach {
         project,
         apiUrl = mobileContentApi,
         bundledTools = BUNDLED_TOOLS,
-        bundledLanguages = BUNDLED_LANGUAGES
+        bundledAttachments = BUNDLED_ATTACHMENTS,
+        bundledLanguages = BUNDLED_LANGUAGES,
+        downloadTranslations = DOWNLOAD_TRANSLATIONS
     )
 
     val assetGenTask = tasks.named("generate${name.capitalize()}Assets")
@@ -61,35 +62,13 @@ android.libraryVariants.configureEach {
     // configure tools json download tasks
     val pruneToolsJsonTask = tasks.named<PruneJsonApiResponseTask>("prune${name.capitalize()}BundledToolsJson")
 
-    val attachmentsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledAttachments") {
-        into(assetGenDir.resolve("attachments/"))
-    }
     val translationsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledTranslations") {
         enabled = DOWNLOAD_TRANSLATIONS
         into(assetGenDir.resolve("translations/"))
     }
-    assetGenTask.configure {
-        dependsOn(attachmentsCopyTask)
-        dependsOn(translationsCopyTask)
-    }
+    assetGenTask.configure { dependsOn(translationsCopyTask) }
     BUNDLED_TOOLS.forEach { tool ->
         val variant = "${name.capitalize()}${tool.capitalize()}"
-
-        // configure bundled attachments download tasks
-        val extractAttachmentsTask = tasks.register<ExtractAttachmentsTask>("extract${variant}BundledAttachments") {
-            toolsJson.set(pruneToolsJsonTask.flatMap { it.output })
-            this.tool = tool
-            attachments = BUNDLED_ATTACHMENTS
-            output.set(intermediatesDir.resolve("tool/$tool/attachments.json"))
-        }
-
-        val downloadAttachmentsTask = tasks.register<DownloadApiResourcesTask>("download${variant}BundledAttachments") {
-            resources.set(extractAttachmentsTask.flatMap { it.output })
-            api = mobileContentApi
-            output.set(intermediatesDir.resolve("attachments/$tool/"))
-        }
-
-        attachmentsCopyTask.configure { from(downloadAttachmentsTask.flatMap { it.output }) }
 
         if (DOWNLOAD_TRANSLATIONS) {
             // configure bundled translations download tasks for each bundled language

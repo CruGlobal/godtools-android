@@ -4,6 +4,9 @@ import com.android.build.api.dsl.AndroidSourceSet
 import com.android.build.gradle.api.LibraryVariant
 import de.undercouch.gradle.tasks.download.Download
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
 
@@ -14,7 +17,9 @@ fun LibraryVariant.configureBundledContent(
     project: Project,
     apiUrl: String,
     bundledTools: List<String>,
-    bundledLanguages: List<String>
+    bundledLanguages: List<String>,
+    bundledAttachments: List<String>,
+    downloadTranslations: Boolean
 ) {
     bundledContentBuildConfigFields(bundledTools, bundledLanguages)
 
@@ -23,17 +28,20 @@ fun LibraryVariant.configureBundledContent(
     sourceSets.filterIsInstance<AndroidSourceSet>().last().assets.srcDir(assetGenDir)
 
     // configure download bundled content tasks
-    val downloadBundledLanguagesJsonTask = registerDownloadBundledLanguageJsonTask(project, apiUrl) {
+    val languagesJsonTask = registerDownloadBundledLanguageJsonTask(project, apiUrl) {
         output.set(assetGenDir.resolve("languages.json"))
     }
-    val downloadBundledToolsJsonTask = registerDownloadBundledToolsJsonTask(project, apiUrl) {
+    val toolsJsonTask = registerDownloadBundledToolsJsonTask(project, apiUrl) {
         output.set(assetGenDir.resolve("tools.json"))
     }
+    val toolsJsonOutput = toolsJsonTask.flatMap { it.output }
+    val attachmentsTask =
+        registerDownloadBundledAttachmentsTask(project, apiUrl, toolsJsonOutput, bundledTools, bundledAttachments) {
+            into(assetGenDir.resolve("attachments/"))
+        }
 
     val assetGenTask = project.tasks.named("generate${name.capitalize()}Assets")
-    assetGenTask.configure {
-        dependsOn(downloadBundledLanguagesJsonTask, downloadBundledToolsJsonTask)
-    }
+    assetGenTask.configure { dependsOn(languagesJsonTask, toolsJsonTask, attachmentsTask) }
 }
 
 private fun LibraryVariant.bundledContentBuildConfigFields(bundledTools: List<String>, bundledLanguages: List<String>) {
@@ -104,4 +112,35 @@ private fun LibraryVariant.registerDownloadBundledToolsJsonTask(
         removeAttributesFor["language"] = listOf("direction")
         configuration()
     }
+}
+
+// configure download bundled attachments tasks
+private fun LibraryVariant.registerDownloadBundledAttachmentsTask(
+    project: Project,
+    apiUrl: String,
+    toolsJson: Provider<RegularFile>,
+    bundledTools: List<String>,
+    bundledAttachments: List<String>,
+    configuration: Copy.() -> Unit
+): TaskProvider<Copy> {
+    val intermediatesDir = project.buildDir.resolve("intermediates/mobile_content_api/$dirName/")
+    val attachmentsCopyTask = project.tasks.register("copy${name.capitalize()}BundledAttachments", configuration)
+
+    bundledTools.forEach { tool ->
+        val variant = "${name.capitalize()}${tool.capitalize()}"
+        val extractTask = project.tasks.register<ExtractAttachmentsTask>("extract${variant}BundledAttachments") {
+            this.toolsJson.set(toolsJson)
+            this.tool = tool
+            attachments = bundledAttachments
+            output.set(intermediatesDir.resolve("tool/$tool/attachments.json"))
+        }
+        val downloadTask = project.tasks.register<DownloadApiResourcesTask>("download${variant}BundledAttachments") {
+            resources.set(extractTask.flatMap { it.output })
+            api = apiUrl
+            output.set(intermediatesDir.resolve("attachments/$tool/"))
+        }
+        attachmentsCopyTask.configure { from(downloadTask.flatMap { it.output }) }
+    }
+
+    return attachmentsCopyTask
 }
