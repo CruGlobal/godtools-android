@@ -1,3 +1,7 @@
+plugins {
+    alias libs.plugins.grgit
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -11,9 +15,9 @@ AndroidConfigurationKt.configureAndroidApp(project)
 
 android {
     defaultConfig {
-        applicationId rootProject.applicationId
-        versionName rootProject.version
-        versionCode rootProject.versionCode
+        applicationId 'org.keynote.godtools.android'
+        versionName '6.0.0-SNAPSHOT'
+        versionCode grgit.log(includes:['HEAD']).size() + 4029265
 
         proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
         proguardFile 'proguard-rules.pro'
