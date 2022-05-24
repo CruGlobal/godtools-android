@@ -1,5 +1,4 @@
 import dagger.hilt.android.plugin.util.capitalize
-import de.undercouch.gradle.tasks.download.Download
 import org.cru.godtools.gradle.bundledcontent.DownloadApiResourcesTask
 import org.cru.godtools.gradle.bundledcontent.ExtractAttachmentsTask
 import org.cru.godtools.gradle.bundledcontent.ExtractTranslationTask
@@ -60,30 +59,7 @@ android.libraryVariants.configureEach {
     val intermediatesDir = buildDir.resolve("intermediates/mobile_content_api/$dirName/")
 
     // configure tools json download tasks
-    val intermediateToolsJson = intermediatesDir.resolve("tools.json")
-    val downloadToolsJsonTask = tasks.create<Download>("download${name.capitalize()}BundledToolsJson") {
-        mustRunAfter("clean")
-
-        src("${mobileContentApi}resources?filter[system]=GodTools&include=attachments,latest-translations.language")
-        dest(intermediateToolsJson)
-        retries(2)
-        tempAndMove(true)
-    }
-    val pruneToolsJsonTask = tasks.create<PruneJsonApiResponseTask>("prune${name.capitalize()}BundledToolsJson") {
-        dependsOn(downloadToolsJsonTask)
-        input.set(intermediateToolsJson)
-        removeAllRelationshipsFor = listOf("language")
-        removeAttributesFor["resource"] = listOf(
-            // attributes
-            "manifest", "onesky-project-id", "total-views",
-            // relationships
-            "system", "translations", "latest-drafts-translations", "pages", "custom-manifests", "tips"
-        )
-        removeAttributesFor["attachment"] = listOf("file", "is-zipped")
-        removeAttributesFor["language"] = listOf("direction")
-        output.set(assetGenDir.resolve("tools.json"))
-    }
-    assetGenTask.configure { dependsOn(pruneToolsJsonTask) }
+    val pruneToolsJsonTask = tasks.named<PruneJsonApiResponseTask>("prune${name.capitalize()}BundledToolsJson")
 
     val attachmentsCopyTask = tasks.register<Copy>("copy${name.capitalize()}BundledAttachments") {
         into(assetGenDir.resolve("attachments/"))
@@ -101,7 +77,7 @@ android.libraryVariants.configureEach {
 
         // configure bundled attachments download tasks
         val extractAttachmentsTask = tasks.register<ExtractAttachmentsTask>("extract${variant}BundledAttachments") {
-            toolsJson.set(pruneToolsJsonTask.output)
+            toolsJson.set(pruneToolsJsonTask.flatMap { it.output })
             this.tool = tool
             attachments = BUNDLED_ATTACHMENTS
             output.set(intermediatesDir.resolve("tool/$tool/attachments.json"))
@@ -122,7 +98,7 @@ android.libraryVariants.configureEach {
 
                 val extractTranslationTask =
                     tasks.register<ExtractTranslationTask>("extract${langVariant}BundledTranslation") {
-                        toolsJson.set(pruneToolsJsonTask.output)
+                        toolsJson.set(pruneToolsJsonTask.flatMap { it.output })
                         this.tool = tool
                         language = lang
                         output.set(intermediatesDir.resolve("tool/$tool/$lang.translation.json"))
