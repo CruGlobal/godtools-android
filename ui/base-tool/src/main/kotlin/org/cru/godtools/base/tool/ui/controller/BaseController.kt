@@ -163,7 +163,8 @@ abstract class BaseController<T : Base> protected constructor(
         if (model is HasAnalyticsEvents) triggerAnalyticsEvents(model.getAnalyticsEvents(Trigger.CLICKED))
         sendEvents(model.events)
         model.url?.let { url ->
-            eventBus.post(ExitLinkActionEvent(model.manifest.code, url))
+            val manifest = model.manifest
+            eventBus.post(ExitLinkActionEvent(manifest.code, url, manifest.locale))
             root.context.openUrl(url)
         }
     }
