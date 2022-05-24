@@ -5,6 +5,35 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            setUrl("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
+            content {
+                includeGroup("org.ccci.gto.android")
+                includeGroup("org.ccci.gto.android.testing")
+                includeGroup("org.cru.godtools.kotlin")
+                includeGroup("org.cru.mobile.fork.antlr-kotlin")
+            }
+        }
+        maven {
+            setUrl("https://jitpack.io")
+            content {
+                includeGroupByRegex("com\\.github\\..*")
+                excludeGroup("com.github.ajalt.colormath")
+            }
+        }
+        google()
+        mavenCentral()
+        jcenter {
+            content {
+                includeModule("com.duolingo.open", "rtl-viewpager")
+                includeModule("com.sergivonavi", "materialbanner")
+            }
+        }
+    }
+}
+
 rootProject.name = "godtools"
 
 include("library:analytics")
