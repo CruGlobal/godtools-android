@@ -1,41 +1,36 @@
 package org.cru.godtools.analytics.appsflyer
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.greenrobot.eventbus.EventBus
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.isNull
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.same
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class AppsFlyerAnalyticsServiceTest {
-    private lateinit var application: Application
-    private lateinit var activity: Activity
-    private lateinit var eventBus: EventBus
+    private val activity = mockk<Activity>(relaxUnitFun = true)
     private lateinit var deepLinkResolver: AppsFlyerDeepLinkResolver
 
     private lateinit var analyticsService: AppsFlyerAnalyticsService
 
     @Before
     fun setupMocks() {
-        application = mock()
-        activity = mock()
-        eventBus = mock()
-        deepLinkResolver = mock()
+        deepLinkResolver = mockk {
+            every { resolve(any(), any(), any()) } returns null
+        }
 
-        analyticsService = AppsFlyerAnalyticsService(application, eventBus, setOf(deepLinkResolver), mock())
+        analyticsService = AppsFlyerAnalyticsService(
+            mockk(relaxUnitFun = true),
+            eventBus = mockk(relaxUnitFun = true),
+            deepLinkResolvers = setOf(deepLinkResolver),
+            appsFlyer = mockk(relaxed = true)
+        )
     }
 
     // region conversionListener.onAppOpenAttribution()
@@ -45,7 +40,7 @@ class AppsFlyerAnalyticsServiceTest {
         val data = mapOf(AF_DP to uri.toString())
 
         analyticsService.conversionListener.onAppOpenAttribution(data)
-        verify(deepLinkResolver).resolve(any(), eq(uri), same(data))
+        verify { deepLinkResolver.resolve(any(), uri, data) }
     }
 
     @Test
@@ -53,26 +48,28 @@ class AppsFlyerAnalyticsServiceTest {
         val data = emptyMap<String, String>()
 
         analyticsService.conversionListener.onAppOpenAttribution(data)
-        verify(deepLinkResolver).resolve(any(), isNull(), same(data))
+        verify { deepLinkResolver.resolve(any(), null, data) }
     }
 
     @Test
     fun verifyOnAppOpenAttributionOpensReturnedIntent() {
-        val intent = mock<Intent>()
+        val intent = mockk<Intent>()
         analyticsService.onActivityResumed(activity)
-        whenever(deepLinkResolver.resolve(any(), anyOrNull(), any())).thenReturn(intent)
+        every { deepLinkResolver.resolve(any(), any(), any()) } returns intent
 
         analyticsService.conversionListener.onAppOpenAttribution(emptyMap())
-        verify(activity).startActivity(intent)
+        verify { activity.startActivity(intent) }
+        confirmVerified(activity)
     }
 
     @Test
     fun verifyOnAppOpenAttributionDoesntOpenNullIntent() {
         analyticsService.onActivityResumed(activity)
-        whenever(deepLinkResolver.resolve(any(), anyOrNull(), any())).thenReturn(null)
+        every { deepLinkResolver.resolve(any(), any(), any()) } returns null
 
         analyticsService.conversionListener.onAppOpenAttribution(emptyMap())
-        verify(activity, never()).startActivity(any())
+        verify(inverse = true) { activity.startActivity(any()) }
+        confirmVerified(activity)
     }
     // endregion conversionListener.onAppOpenAttribution()
 }
