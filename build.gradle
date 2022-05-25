@@ -23,49 +23,13 @@ buildscript {
 }
 
 plugins {
-    alias libs.plugins.grgit
     alias libs.plugins.hilt apply false
     alias libs.plugins.junitJacoco
     alias libs.plugins.ktlint
 }
 
-version '6.0.0-SNAPSHOT'
-ext.versionCode = grgit.log(includes:['HEAD']).size() + 4029265
-
-// define dependency versions for this project
-ext {
-    applicationId = 'org.keynote.godtools.android'
-}
-
 // configure dependency resolution
 allprojects {
-    repositories {
-        maven {
-            url 'https://cruglobal.jfrog.io/artifactory/maven-mobile/'
-            content {
-                includeGroup 'org.ccci.gto.android'
-                includeGroup 'org.ccci.gto.android.testing'
-                includeGroup 'org.cru.godtools.kotlin'
-                includeGroup 'org.cru.mobile.fork.antlr-kotlin'
-            }
-        }
-        maven {
-            url 'https://jitpack.io'
-            content {
-                includeGroupByRegex 'com\\.github\\..*'
-                excludeGroup 'com.github.ajalt.colormath'
-            }
-        }
-        google()
-        mavenCentral()
-        jcenter {
-            content {
-                includeModule 'com.duolingo.open', 'rtl-viewpager'
-                includeModule 'com.sergivonavi', 'materialbanner'
-            }
-        }
-    }
-
     configurations.all { configuration ->
         configuration.resolutionStrategy {
             force libs.androidx.annotation
