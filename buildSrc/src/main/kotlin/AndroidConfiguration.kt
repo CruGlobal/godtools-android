@@ -12,11 +12,6 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-fun Project.configureAndroidApp() = extensions.configure<BaseAppModuleExtension> {
-    configureAndroidCommon(project)
-    configureFlavorDimensions()
-}
-
 fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExtension> {
     configureAndroidCommon(project)
     configureFlavorDimensions()
@@ -24,6 +19,14 @@ fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExten
     dependencies {
         add("implementation", project(":app"))
     }
+}
+
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+fun BaseAppModuleExtension.baseConfiguration(project: Project) {
+    configureAndroidCommon(project)
+    configureFlavorDimensions()
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
