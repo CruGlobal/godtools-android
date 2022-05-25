@@ -1,3 +1,5 @@
+import org.cru.godtools.gradle.bundledcontent.configureBundledContent
+
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -7,6 +9,20 @@ plugins {
 android {
     baseConfiguration(project)
     configureFlavorDimensions()
+
+    libraryVariants.configureEach {
+        val mobileContentApi =
+            if (flavorName.contains("stage")) URI_MOBILE_CONTENT_API_STAGE else URI_MOBILE_CONTENT_API_PRODUCTION
+
+        configureBundledContent(
+            project,
+            apiUrl = mobileContentApi,
+            bundledTools = listOf("kgp", "fourlaws", "satisfied", "teachmetoshare"),
+            bundledAttachments = listOf("attr-banner", "attr-banner-about"),
+            bundledLanguages = listOf("en"),
+            downloadTranslations = false
+        )
+    }
 }
 
 dependencies {
@@ -30,5 +46,3 @@ dependencies {
 
     kapt(libs.hilt.compiler)
 }
-
-apply(from = "download_initial_content.gradle")
