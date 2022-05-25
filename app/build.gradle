@@ -11,6 +11,7 @@ plugins {
 }
 
 AndroidConfigurationKt.configureAndroidApp(project)
+EventBusConfigurationKt.createEventBusIndex(project, "org.cru.godtools.AppEventBusIndex")
 
 android {
     defaultConfig {
@@ -148,11 +149,6 @@ android {
             res.srcDir 'src/debug/res/values'
             manifest.srcFile 'src/debug/AndroidManifest.xml'
         }
-    }
-}
-kapt {
-    arguments {
-        arg('eventBusIndex', 'org.cru.godtools.AppEventBusIndex')
     }
 }
 
