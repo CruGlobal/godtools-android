@@ -46,8 +46,13 @@ class MultiLanguageToolActivityDataModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     // region Objects & Mocks
-    private lateinit var dao: GodToolsDao
-    private lateinit var manifestManager: ManifestManager
+    private val dao: GodToolsDao = mockk {
+        every { findAsFlow<Tool>(any<String>()) } returns emptyFlow()
+        every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
+    }
+    private val manifestManager: ManifestManager = mockk {
+        every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
+    }
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
     private val savedStateHandle = SavedStateHandle()
@@ -55,13 +60,6 @@ class MultiLanguageToolActivityDataModelTest {
     @Before
     fun setupDataModel() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        dao = mockk {
-            every { findAsFlow<Tool>(any<String>()) } returns emptyFlow()
-            every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
-        }
-        manifestManager = mockk {
-            every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
-        }
         dataModel = MultiLanguageToolActivityDataModel(
             dao,
             mockk(),

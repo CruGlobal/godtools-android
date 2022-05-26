@@ -11,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.Base
 import org.cru.godtools.tool.model.Image
@@ -24,15 +28,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
 class ParentControllerTest {
     private lateinit var context: Context
-    private lateinit var cache: UiControllerCache
+    private val cache: UiControllerCache = mockk {
+        every { acquire(ofType<Text>()) } answers { testController(TextView(context)) }
+        every { acquire(ofType<Image>()) } answers { testController(ImageView(context)) }
+        every { release(any(), any()) } just Runs
+    }
     private lateinit var contentContainer: LinearLayout
 
     private lateinit var controller: ConcreteParentController
@@ -44,10 +49,6 @@ class ParentControllerTest {
         val activity = Robolectric.buildActivity(AppCompatActivity::class.java).get()
         context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
         contentContainer = LinearLayout(context)
-        cache = mock {
-            on { acquire(any<Text>()) } doAnswer { testController(TextView(context)) }
-            on { acquire(any<Image>()) } doAnswer { testController(ImageView(context)) }
-        }
         controller = ConcreteParentController(contentContainer, cache)
     }
 

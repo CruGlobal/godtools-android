@@ -10,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.EnumSet
 import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -36,7 +37,7 @@ class ToolGenericFragmentActivityBindingTest {
         visible.forEach {
             binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
-            Assert.assertEquals(
+            assertEquals(
                 "mainContent should be visible when tool state is $it",
                 View.VISIBLE, binding.mainContent.visibility
             )
@@ -45,7 +46,7 @@ class ToolGenericFragmentActivityBindingTest {
         notVisible.forEach {
             binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
-            Assert.assertEquals(
+            assertEquals(
                 "mainContent should be hidden when tool state is $it",
                 View.GONE, binding.mainContent.visibility
             )

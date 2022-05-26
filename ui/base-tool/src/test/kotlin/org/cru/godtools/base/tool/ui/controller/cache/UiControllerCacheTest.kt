@@ -2,6 +2,12 @@ package org.cru.godtools.base.tool.ui.controller.cache
 
 import android.content.pm.ApplicationInfo
 import android.view.ViewGroup
+import io.mockk.Called
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyAll
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.tool.model.Image
 import org.cru.godtools.tool.model.Text
@@ -14,35 +20,26 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.Mockito.verifyNoInteractions
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyVararg
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 import timber.log.Timber
 
 class UiControllerCacheTest {
-    private lateinit var parent: ViewGroup
-    private lateinit var parentController: BaseController<*>
-    private lateinit var imageFactory: BaseController.Factory<BaseController<Image>>
-    private lateinit var imageFactory2: BaseController.Factory<BaseController<Image>>
-    private lateinit var variationResolver: VariationResolver
+    private val parent: ViewGroup = mockk {
+        every { context } returns mockk {
+            every { applicationInfo } returns ApplicationInfo()
+        }
+    }
+    private val parentController: BaseController<*> = mockk()
+    private val imageFactory: BaseController.Factory<BaseController<Image>> = mockk {
+        every { create(parent, parentController) } answers { mockk() }
+    }
+    private val imageFactory2: BaseController.Factory<BaseController<Image>> = mockk {
+        every { create(parent, parentController) } answers { mockk() }
+    }
+    private val variationResolver: VariationResolver = mockk { every { resolve(any()) } returns null }
     private lateinit var cache: UiControllerCache
 
     @Before
     fun setup() {
-        parent = mock(defaultAnswer = RETURNS_DEEP_STUBS)
-        parentController = mock()
-        imageFactory = mock { on { create(parent, parentController) } doAnswer { mock() } }
-        imageFactory2 = mock { on { create(parent, parentController) } doAnswer { mock() } }
-        variationResolver = mock { on { resolve(any()) } doReturn null }
         cache = UiControllerCache(
             parent,
             parentController,
@@ -57,76 +54,69 @@ class UiControllerCacheTest {
     // region acquire()
     @Test
     fun testAcquireReusesReleased() {
-        val model = mock<Image>()
-        val image = mock<BaseController<Image>>()
-        cache.release(model, image)
-        val image2 = cache.acquire(model)
-        assertSame(image, image2)
+        val model: Image = mockk()
+        val controller: BaseController<Image> = mockk(relaxed = true)
+        cache.release(model, controller)
+        val controller2 = cache.acquire(model)
+        assertSame(controller, controller2)
     }
 
     @Test
     fun testAcquireDoesntReuseDifferentVariation() {
-        val model1 = mock<Image>()
-        val model2 = mock<Image>()
-        variationResolver.stub {
-            on { resolve(model1) } doReturn 1
-            on { resolve(model2) } doReturn 2
-        }
+        val model1: Image = mockk()
+        val model2: Image = mockk()
+        every { variationResolver.resolve(model1) } returns 1
+        every { variationResolver.resolve(model2) } returns 2
 
-        val image = mock<BaseController<Image>>()
-        cache.release(model1, image)
-        assertThat(cache.acquire(model2), not(sameInstance(image)))
-        assertThat(cache.acquire(model1), sameInstance(image))
+        val controller: BaseController<Image> = mockk(relaxed = true)
+        cache.release(model1, controller)
+        assertThat(cache.acquire(model2), not(sameInstance(controller)))
+        assertThat(cache.acquire(model1), sameInstance(controller))
     }
     // endregion acquire()
 
     // region createController()
     @Test
     fun testCreateController() {
-        val model = mock<Image>()
+        val model: Image = mockk()
         val controller = cache.acquire(model)
-        assertNotNull(controller)
-        verify(imageFactory).create(parent, parentController)
-        verifyNoInteractions(imageFactory2)
-        verifyNoMoreInteractions(imageFactory)
-        clearInvocations(imageFactory)
-
         val controller2 = cache.acquire(model)
+        assertNotNull(controller)
         assertNotNull(controller2)
         assertNotSame(controller, controller2)
-        verify(imageFactory).create(parent, parentController)
-        verifyNoInteractions(imageFactory2)
-        verifyNoMoreInteractions(imageFactory)
+        verify(exactly = 2) { imageFactory.create(parent, parentController) }
+        confirmVerified(imageFactory, imageFactory2)
     }
 
     @Test
     fun testCreateControllerVariations() {
-        val model = mock<Image>()
-        whenever(variationResolver.resolve(model)).thenReturn(2)
+        val model: Image = mockk()
+        every { variationResolver.resolve(model) } returns 2
 
         val controller = cache.acquire(model)
         assertNotNull(controller)
-        verify(imageFactory2).create(parent, parentController)
-        verifyNoInteractions(imageFactory)
-        verifyNoMoreInteractions(imageFactory2)
+        verifyAll {
+            imageFactory2.create(parent, parentController)
+            imageFactory wasNot Called
+        }
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun testCreateControllerFactoryMissingDebug() {
         parent.context.applicationInfo.flags = ApplicationInfo.FLAG_DEBUGGABLE
-        cache.acquire(mock<Text>())
+        cache.acquire(mockk<Text>())
     }
 
     @Test
     fun testCreateControllerFactoryMissingRelease() {
-        val tree = mock<Timber.Tree>()
+        val tree: Timber.Tree = mockk(relaxed = true)
         Timber.plant(tree)
 
         try {
-            val controller = cache.acquire(mock<Text>())
+            val controller = cache.acquire(mockk<Text>())
             assertNull(controller)
-            verifyNoInteractions(imageFactory)
-            verify(tree).e(any<IllegalArgumentException>(), any(), anyVararg())
+            verify { tree.e(any<IllegalArgumentException>(), any(), *anyVararg()) }
+            confirmVerified(imageFactory, imageFactory2)
         } finally {
             Timber.uproot(tree)
         }
