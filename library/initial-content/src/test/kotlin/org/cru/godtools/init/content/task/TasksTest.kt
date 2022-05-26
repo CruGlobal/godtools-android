@@ -1,10 +1,18 @@
 package org.cru.godtools.init.content.task
 
 import android.content.Context
+import io.mockk.Called
+import io.mockk.Runs
+import io.mockk.coVerifyAll
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import java.io.ByteArrayInputStream
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
@@ -15,68 +23,58 @@ import org.cru.godtools.model.Translation
 import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyVararg
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TasksTest {
-    private lateinit var context: Context
-    private lateinit var dao: GodToolsDao
-    private lateinit var downloadManager: GodToolsDownloadManager
-    private lateinit var jsonApiConverter: JsonApiConverter
-    private lateinit var settings: Settings
+    private val context = mockk<Context> {
+        every { assets } returns mockk {
+            every { open(any()) } answers { ByteArrayInputStream(ByteArray(0)) }
+        }
+    }
+    private val dao = mockk<GodToolsDao> {
+        every { getLastSyncTime(*anyVararg()) } returns 0
+        every { updateLastSyncTime(*anyVararg()) } just Runs
+    }
+    private val downloadManager = mockk<GodToolsDownloadManager>(relaxUnitFun = true)
+    private val jsonApiConverter = mockk<JsonApiConverter>()
+    private val settings = mockk<Settings> {
+        every { primaryLanguage } returns Locale("x")
+    }
 
     private lateinit var tasks: Tasks
 
     @Before
     fun setup() {
-        context = mock(defaultAnswer = RETURNS_DEEP_STUBS) {
-            on { assets.open(any()) } doReturn ByteArrayInputStream(ByteArray(0))
-        }
-        dao = mock {
-            on { getLastSyncTime(anyVararg()) } doReturn 0
-        }
-        downloadManager = mock()
-        jsonApiConverter = mock()
-        settings = mock {
-            on { primaryLanguage } doReturn Locale("x")
-        }
-
         tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings)
     }
 
     // region initFavoriteTools()
     @Test
-    fun testInitFavoriteToolsAlreadyRun() = runBlockingTest {
-        whenever(dao.getLastSyncTime(anyVararg())).thenReturn(5)
+    fun testInitFavoriteToolsAlreadyRun() = runTest {
+        every { dao.getLastSyncTime(*anyVararg()) } returns 5
         tasks.initFavoriteTools()
-        verify(dao, never()).get(any<Query<*>>())
-        verifyNoInteractions(downloadManager)
+        verify {
+            dao.getLastSyncTime(*anyVararg())
+            downloadManager wasNot Called
+        }
+        confirmVerified(dao)
     }
 
     @Test
-    fun testInitFavoriteTools() = runBlockingTest {
-        val tools = listOf("1", "2", "3", "4", "5").map { Tool(it) }
+    fun testInitFavoriteTools() = runTest {
+        val tools = Array(5) { Tool("${it + 1}") }
         val translations = listOf("1", "5").map { Translation(it) }
-        whenever(dao.get(any<Query<*>>())).thenReturn(translations)
-        whenever(jsonApiConverter.fromJson(any(), eq(Tool::class.java)))
-            .thenReturn(JsonApiObject.of(*tools.toTypedArray()))
+        every { dao.get(any<Query<Translation>>()) } returns translations
+        every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
 
         tasks.initFavoriteTools()
-        verify(downloadManager).pinTool("1")
-        verify(downloadManager).pinTool("2")
-        verify(downloadManager).pinTool("3")
-        verify(downloadManager).pinTool("5")
-        verifyNoMoreInteractions(downloadManager)
+        coVerifyAll {
+            downloadManager.pinTool("1")
+            downloadManager.pinTool("2")
+            downloadManager.pinTool("3")
+            downloadManager.pinTool("5")
+        }
+        confirmVerified(downloadManager)
     }
     // endregion initFavoriteTools()
 
