@@ -1,15 +1,6 @@
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 buildscript {
-    ext {
-        uris = [
-                mobileContentApi: [
-                        stage     : "https://mobile-content-api-stage.cru.org/",
-                        production: "https://mobile-content-api.cru.org/"
-                ]
-        ]
-    }
-
     repositories {
         google()
         mavenCentral()
