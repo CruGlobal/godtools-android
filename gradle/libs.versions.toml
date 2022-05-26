@@ -136,7 +136,7 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-leakcanary = "com.squareup.leakcanary:leakcanary-android:2.8.1"
+leakcanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
 lottie = "com.airbnb.android:lottie:5.1.1"
 materialBanner = "com.sergivonavi:materialbanner:1.2.0"
 materialComponents = "com.google.android.material:material:1.6.0"
