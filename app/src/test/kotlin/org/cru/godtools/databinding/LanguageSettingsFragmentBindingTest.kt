@@ -4,6 +4,9 @@ import android.app.Application
 import android.view.LayoutInflater
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verifyAll
 import java.util.Locale
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.languages.LanguageSettingsActivity
@@ -12,12 +15,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.reset
-import org.mockito.kotlin.verify
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -25,12 +22,11 @@ import org.robolectric.annotation.Config
 @Config(application = Application::class)
 class LanguageSettingsFragmentBindingTest {
     private lateinit var binding: LanguageSettingsFragmentBinding
-    private lateinit var callbacks: LanguageSettingsFragmentBindingCallbacks
+    private val callbacks = mockk<LanguageSettingsFragmentBindingCallbacks>(relaxUnitFun = true)
 
     @Before
     fun createBinding() {
         val activityController = Robolectric.buildActivity(LanguageSettingsActivity::class.java)
-        callbacks = mock()
 
         binding = LanguageSettingsFragmentBinding.inflate(LayoutInflater.from(activityController.get()), null, false)
         binding.lifecycleOwner = activityController.get()
@@ -41,7 +37,7 @@ class LanguageSettingsFragmentBindingTest {
     // region Primary Language
     @Test
     fun verifyPrimaryLanguageLabel() {
-        val language = mock<Language> { on { getDisplayName(any()) } doReturn "Language Object" }
+        val language = mockk<Language> { every { getDisplayName(any()) } returns "Language Object" }
         binding.primaryLocale = MutableLiveData(Locale.ENGLISH)
         binding.primaryLanguage = MutableLiveData(language)
         binding.invalidateAll()
@@ -62,18 +58,15 @@ class LanguageSettingsFragmentBindingTest {
 
     @Test
     fun verifyEditPrimaryLanguageAction() {
-        reset(callbacks)
-
         binding.primaryLanguageButton.performClick()
-        verify(callbacks).editPrimaryLanguage()
-        verify(callbacks, never()).editParallelLanguage()
+        verifyAll { callbacks.editPrimaryLanguage() }
     }
     // endregion Primary Language
 
     // region Parallel Language
     @Test
     fun verifyParallelLanguageLabel() {
-        val language = mock<Language> { on { getDisplayName(any()) } doReturn "Language Object" }
+        val language = mockk<Language> { every { getDisplayName(any()) } returns "Language Object" }
         binding.parallelLocale = MutableLiveData(Locale.ENGLISH)
         binding.parallelLanguage = MutableLiveData(language)
         binding.invalidateAll()
@@ -104,11 +97,8 @@ class LanguageSettingsFragmentBindingTest {
 
     @Test
     fun verifyEditParallelLanguageAction() {
-        reset(callbacks)
-
         binding.parallelLanguageButton.performClick()
-        verify(callbacks, never()).editPrimaryLanguage()
-        verify(callbacks).editParallelLanguage()
+        verifyAll { callbacks.editParallelLanguage() }
     }
     // endregion Parallel Language
 }

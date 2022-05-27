@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verifyAll
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
@@ -28,12 +29,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.reset
-import org.mockito.kotlin.verify
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -47,7 +42,7 @@ class ToolsListItemToolBindingTest {
     val instantTaskRule = InstantTaskExecutorRule()
 
     private lateinit var binding: ToolsListItemToolBinding
-    private lateinit var callbacks: ToolsAdapterCallbacks
+    private val callbacks = mockk<ToolsAdapterCallbacks>(relaxUnitFun = true)
     private val toolFlow = MutableStateFlow<Tool?>(tool())
     private val primaryTranslation = MutableLiveData(
         Translation().apply {
@@ -84,7 +79,6 @@ class ToolsListItemToolBindingTest {
     @Before
     fun createBinding() {
         val activity = Robolectric.buildActivity(HiltTestActivity::class.java).get()
-        callbacks = mock()
 
         binding = ToolsListItemToolBinding.inflate(LayoutInflater.from(activity), null, false)
         binding.lifecycleOwner = TestLifecycleOwner()
@@ -208,24 +202,20 @@ class ToolsListItemToolBindingTest {
     fun verifyActionFavoriteToolNotAdded() {
         toolFlow.value = tool().apply { isAdded = false }
         binding.executePendingBindings()
-        reset(callbacks)
 
         assertFalse(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks).pinTool(eq("test"))
-        verify(callbacks, never()).unpinTool(any(), any())
+        verifyAll { callbacks.pinTool("test") }
     }
 
     @Test
     fun verifyActionFavoriteToolAdded() {
         toolFlow.value = tool().apply { isAdded = true }
         binding.executePendingBindings()
-        reset(callbacks)
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(toolFlow.value), eq(primaryTranslation.value))
+        verifyAll { callbacks.unpinTool(toolFlow.value, primaryTranslation.value) }
     }
 
     @Test
@@ -233,11 +223,9 @@ class ToolsListItemToolBindingTest {
         toolFlow.value = tool().apply { isAdded = true }
         parallelTranslation.value = null
         binding.executePendingBindings()
-        reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(toolFlow.value), eq(primaryTranslation.value))
+        verifyAll { callbacks.unpinTool(toolFlow.value, primaryTranslation.value) }
     }
 
     @Test
@@ -245,11 +233,9 @@ class ToolsListItemToolBindingTest {
         toolFlow.value = tool().apply { isAdded = true }
         primaryTranslation.value = null
         binding.executePendingBindings()
-        reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(toolFlow.value), eq(parallelTranslation.value))
+        verifyAll { callbacks.unpinTool(toolFlow.value, parallelTranslation.value) }
     }
 
     @Test
@@ -258,57 +244,48 @@ class ToolsListItemToolBindingTest {
         primaryTranslation.value = null
         parallelTranslation.value = null
         binding.executePendingBindings()
-        reset(callbacks)
 
         binding.actionFavorite.performClick()
-        verify(callbacks, never()).pinTool(any())
-        verify(callbacks).unpinTool(eq(toolFlow.value), eq(null))
+        verifyAll { callbacks.unpinTool(toolFlow.value, null) }
     }
     // endregion Favorite Action
 
     @Test
     fun verifyActionInfoTriggersOnToolInfoCallback() {
-        reset(callbacks)
-
         binding.actionDetails.performClick()
-        verify(callbacks).showToolDetails(eq("test"))
+        verifyAll { callbacks.showToolDetails("test") }
     }
 
     // region Click Action
     @Test
     fun `root view - onClick - Triggers Callback With Both Translations`() {
-        reset(callbacks)
-
         binding.root.performClick()
-        verify(callbacks).onToolClicked(toolFlow.value, primaryTranslation.value, parallelTranslation.value)
+        verifyAll { callbacks.onToolClicked(toolFlow.value, primaryTranslation.value, parallelTranslation.value) }
     }
 
     @Test
     fun `root view - onClick - Triggers Callback With Only Primary Translation`() {
         parallelTranslation.value = null
-        reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(toolFlow.value, primaryTranslation.value, null)
+        verifyAll { callbacks.onToolClicked(toolFlow.value, primaryTranslation.value, null) }
     }
 
     @Test
     fun `root view - onClick - Triggers Callback With Only Parallel Translation`() {
         primaryTranslation.value = null
-        reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(toolFlow.value, null, parallelTranslation.value)
+        verifyAll { callbacks.onToolClicked(toolFlow.value, null, parallelTranslation.value) }
     }
 
     @Test
     fun `root view - onClick -  Triggers Callback With No Translations`() {
         primaryTranslation.value = null
         parallelTranslation.value = null
-        reset(callbacks)
 
         binding.root.performClick()
-        verify(callbacks).onToolClicked(toolFlow.value, null, null)
+        verifyAll { callbacks.onToolClicked(toolFlow.value, null, null) }
     }
     // endregion Click Action
 

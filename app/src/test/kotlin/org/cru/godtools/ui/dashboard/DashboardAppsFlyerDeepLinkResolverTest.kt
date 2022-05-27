@@ -6,10 +6,12 @@ import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.mockk.verifyAll
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
+import org.junit.After
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Before
@@ -23,6 +25,11 @@ class DashboardAppsFlyerDeepLinkResolverTest {
     fun setupMocks() {
         mockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
         every { context.createDashboardIntent(any()) } returns intent
+    }
+
+    @After
+    fun cleanupMocks() {
+        unmockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
     }
 
     @Test

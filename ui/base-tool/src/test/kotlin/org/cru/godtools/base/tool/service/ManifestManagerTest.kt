@@ -4,6 +4,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Translation
@@ -16,37 +17,27 @@ import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
 
 private const val MANIFEST_NAME = "manifest.xml"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManifestManagerTest {
-    private lateinit var dao: GodToolsDao
-    private lateinit var parser: ManifestParser
+    private val dao: GodToolsDao = mockk(relaxed = true)
+    private val parser: ManifestParser = mockk()
     private lateinit var manager: ManifestManager
 
-    private lateinit var translation: Translation
+    private val translation = Translation().apply {
+        manifestFileName = MANIFEST_NAME
+    }
 
     @Before
     fun setup() {
-        dao = mock()
-        parser = mockk()
         manager = ManifestManager(dao, parser)
-
-        translation = mock {
-            on { manifestFileName } doReturn MANIFEST_NAME
-        }
     }
 
     @Test
     fun testGetManifest() = runTest {
-        val manifest = mockk<Manifest>()
+        val manifest: Manifest = mockk()
         coEvery { parser.parseManifest(MANIFEST_NAME) } returns ParserResult.Data(manifest)
 
         val result = manager.getManifest(translation)
@@ -71,7 +62,7 @@ class ManifestManagerTest {
         val result = manager.getManifest(translation)
         assertNull(result)
         verifyMarkTranslationAsNotDownloaded()
-        verifyNoMoreInteractions(dao)
+        confirmVerified(dao)
     }
 
     @Test
@@ -81,14 +72,14 @@ class ManifestManagerTest {
         val result = manager.getManifest(translation)
         assertNull(result)
         verifyMarkTranslationAsNotDownloaded()
-        verifyNoMoreInteractions(dao)
+        confirmVerified(dao)
     }
 
-    private fun verifyMarkTranslationAsNotDownloaded() {
-        verify(dao).update(
-            argThat<Translation> { !isDownloaded },
-            eq(TranslationTable.FIELD_MANIFEST.eq(MANIFEST_NAME)),
-            eq(TranslationTable.COLUMN_DOWNLOADED)
+    private fun verifyMarkTranslationAsNotDownloaded() = verify {
+        dao.update(
+            match<Translation> { !it.isDownloaded },
+            TranslationTable.FIELD_MANIFEST.eq(MANIFEST_NAME),
+            TranslationTable.COLUMN_DOWNLOADED
         )
     }
 }
