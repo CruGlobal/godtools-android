@@ -9,6 +9,7 @@ plugins {
 
 android {
     baseConfiguration(project)
+    configureCompose(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
@@ -28,6 +29,7 @@ dependencies {
 
     api(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.compose.material3)
     compileOnly(libs.androidx.fragment.ktx)
 
     api(libs.gtoSupport.androidx.fragment)
