@@ -77,7 +77,6 @@ android {
         val debug by getting {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            multiDexEnabled = true
 
             isMinifyEnabled = false
             isShrinkResources = false

@@ -1,12 +1,12 @@
 package org.cru.godtools.tract.activity
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +42,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
             putString(EXTRA_MODAL, modal.id)
         }
     ),
-    ActivityOptionsCompat.makeCustomAnimation(
+    ActivityOptions.makeCustomAnimation(
         this,
         org.cru.godtools.base.ui.R.anim.activity_fade_in,
         org.cru.godtools.base.ui.R.anim.activity_fade_out
