@@ -137,7 +137,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
-lottie = "com.airbnb.android:lottie:5.1.1"
+lottie = "com.airbnb.android:lottie:5.2.0"
 materialBanner = "com.sergivonavi:materialbanner:1.2.0"
 materialComponents = "com.google.android.material:material:1.6.0"
 mockito = "org.mockito:mockito-inline:4.6.0"
