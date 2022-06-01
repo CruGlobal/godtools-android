@@ -131,20 +131,18 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
             secondaryCallback = BannerInterface.OnClickListener { bannerSecondaryCallback() }
         }
 
-    private fun bannerPrimaryCallback() {
-        when (dataModel.banner.value) {
-            BannerType.TUTORIAL_TRAINING -> openTrainingTutorial()
-            BannerType.TOOL_LIST_FAVORITES -> settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-        }
+    private fun bannerPrimaryCallback() = when (dataModel.banner.value) {
+        BannerType.TUTORIAL_TRAINING -> openTrainingTutorial()
+        BannerType.TOOL_LIST_FAVORITES -> settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+        else -> Unit
     }
 
-    private fun bannerSecondaryCallback() {
-        when (dataModel.banner.value) {
-            BannerType.TUTORIAL_TRAINING -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TUTORIAL_HOME_DISMISS))
-                settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING)
-            }
+    private fun bannerSecondaryCallback() = when (dataModel.banner.value) {
+        BannerType.TUTORIAL_TRAINING -> {
+            eventBus.post(TutorialAnalyticsActionEvent(TUTORIAL_HOME_DISMISS))
+            settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_TRAINING)
         }
+        else -> Unit
     }
 
     private fun openTrainingTutorial() {
