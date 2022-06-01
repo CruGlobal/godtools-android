@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.h6ah4i.android.widget.advrecyclerview.animator.DraggableItemAnimator
+import com.h6ah4i.android.widget.advrecyclerview.composedadapter.ComposedAdapter
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils
 import com.sergivonavi.materialbanner.BannerInterface
@@ -18,7 +19,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
-import org.cru.godtools.adapter.BannerHeaderAdapter
+import org.cru.godtools.adapter.BannerAdapter
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
@@ -120,9 +121,8 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     }
 
     // region Banners
-    private fun createBannerWrappedAdapter(adapter: RecyclerView.Adapter<*>, lifecycleOwner: LifecycleOwner) =
-        BannerHeaderAdapter().apply {
-            setAdapter(adapter)
+    private fun createBannerAdapter(lifecycleOwner: LifecycleOwner) =
+        BannerAdapter().apply {
             dataModel.banner.observe(lifecycleOwner) { banner = it }
             primaryCallback = BannerInterface.OnClickListener { bannerPrimaryCallback() }
             secondaryCallback = BannerInterface.OnClickListener { bannerSecondaryCallback() }
@@ -188,10 +188,11 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     private var toolsDragDropAdapter: RecyclerView.Adapter<*>? = null
 
     private fun setupToolsList(binding: ToolsFragmentBinding) {
-        binding.tools.setHasFixedSize(false)
+        binding.tools.setHasFixedSize(true)
 
-        // create base tools adapter
-        var adapter: RecyclerView.Adapter<*> = toolsAdapter
+        // create composed adapter
+        val adapter = ComposedAdapter()
+        adapter.addAdapter(createBannerAdapter(viewLifecycleOwner))
 
         // configure the DragDrop RecyclerView components (Only for Added tools)
         if (mode == MODE_ADDED) {
@@ -202,8 +203,8 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
                     ContextCompat.getDrawable(requireActivity(), R.drawable.material_shadow_z3) as? NinePatchDrawable
                 )
 
-                toolsDragDropAdapter = createWrappedAdapter(adapter)
-                    .also { adapter = it }
+                toolsDragDropAdapter = createWrappedAdapter(toolsAdapter)
+                    .also { adapter.addAdapter(it) }
 
                 // HACK: Because the RecyclerView isn't the direct child of the SwipeRefreshLayout,
                 //       reordering items in the RecyclerView doesn't cooperate correctly with the SwipeRefreshLayout.
@@ -219,12 +220,11 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
                 }
             }
             binding.tools.itemAnimator = DraggableItemAnimator()
+        } else {
+            adapter.addAdapter(toolsAdapter)
         }
 
-        // add banner header adapter
-        adapter = createBannerWrappedAdapter(adapter, viewLifecycleOwner)
-
-        // attach the correct adapter to the tools RecyclerView
+        // attach the composed adapter to the tools RecyclerView
         binding.tools.adapter = adapter
 
         // handle some post-adapter configuration
