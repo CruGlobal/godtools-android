@@ -13,7 +13,7 @@ import timber.log.Timber
 @VisibleForTesting
 internal const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"
 
-val Context.deviceLocale: Locale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
+val Context.deviceLocale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
 
 @JvmOverloads
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {

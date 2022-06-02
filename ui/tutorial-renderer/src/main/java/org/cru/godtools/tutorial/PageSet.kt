@@ -1,7 +1,7 @@
 package org.cru.godtools.tutorial
 
 import java.util.Locale
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 
 enum class PageSet(
@@ -70,7 +70,8 @@ enum class PageSet(
         )
     );
 
-    fun supportsLocale(locale: Locale) = LocaleUtils.getFallbacks(locale).any { supportedLocales.contains(it) }
+    fun supportsLocale(locale: Locale?) =
+        locale != null && sequenceOf(locale).includeFallbacks().any { supportedLocales.contains(it) }
 
     internal fun pagesFor(locale: Locale) = pages.filter { it.supportsLocale(locale) }
 
