@@ -14,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import me.relex.circleindicator.CircleIndicator3
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 import org.cru.godtools.base.ui.startArticlesActivity
@@ -179,7 +179,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
             R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             R.id.action_onboarding_launch_articles -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES))
-                val locale = LocaleUtils.getFallbacks(deviceLocale, Locale.ENGLISH)
+                val locale = sequenceOf(deviceLocale, Locale.ENGLISH).filterNotNull().includeFallbacks()
                     .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                 startArticlesActivity("es", locale)
                 finish()

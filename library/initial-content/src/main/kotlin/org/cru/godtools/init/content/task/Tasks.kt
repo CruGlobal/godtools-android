@@ -18,7 +18,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -71,7 +71,8 @@ internal class Tasks @Inject constructor(
         // add device languages if we haven't added languages before
         if (dao.get(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
             coroutineScope {
-                LocaleUtils.getFallbacks(context.deviceLocale, Locale.ENGLISH).toList()
+                sequenceOf(context.deviceLocale, Locale.ENGLISH).filterNotNull()
+                    .includeFallbacks().distinct().toList()
                     // add all device languages and fallbacks
                     .onEach { launch { downloadManager.pinLanguage(it) } }
                     // set the first available language as the primary language
