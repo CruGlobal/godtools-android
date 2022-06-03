@@ -8,12 +8,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
@@ -57,18 +57,21 @@ class ToolsAdapterViewModel @Inject constructor(
             .map { it.map { it.languageCode }.distinct() }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-        private val primaryTranslation =
-            settings.primaryLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(code, it) }
-        private val defaultTranslation = dao.getLatestTranslationLiveData(code, Settings.defaultLanguage)
-        private val parallelTranslation = tool.asLiveData().switchMap { t ->
+        private val primaryTranslation = settings.primaryLanguageFlow
+            .flatMapLatest { dao.getLatestTranslationFlow(code, it) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        private val defaultTranslation = dao.getLatestTranslationFlow(code, Settings.defaultLanguage)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        private val parallelTranslation = tool.flatMapLatest { t ->
             when {
-                t == null || !t.type.supportsParallelLanguage -> emptyLiveData()
-                else -> settings.parallelLanguageLiveData.switchMap { dao.getLatestTranslationLiveData(t.code, it) }
+                t == null || !t.type.supportsParallelLanguage -> flowOf(null)
+                else -> settings.parallelLanguageFlow.flatMapLatest { dao.getLatestTranslationFlow(t.code, it) }
             }
-        }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
-        val secondTranslation = parallelTranslation.combineWith(firstTranslation) { p, f ->
+            .asLiveData()
+        val secondTranslation = parallelTranslation.asLiveData().combineWith(firstTranslation) { p, f ->
             p?.takeUnless { p.languageCode == f?.languageCode }
         }
 
