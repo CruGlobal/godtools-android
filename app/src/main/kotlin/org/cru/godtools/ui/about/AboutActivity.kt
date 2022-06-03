@@ -2,16 +2,13 @@ package org.cru.godtools.ui.about
 
 import android.app.Activity
 import android.content.Intent
-import androidx.annotation.MainThread
-import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.util.deviceLocale
-import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.databinding.ActivityGenericComposeWithNavDrawerBinding
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -21,11 +18,11 @@ fun Activity.startAboutActivity() {
 }
 
 @AndroidEntryPoint
-class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
+class AboutActivity : BasePlatformActivity<ActivityGenericComposeWithNavDrawerBinding>() {
     // region Lifecycle
-    override fun onContentChanged() {
-        super.onContentChanged()
-        loadPrimaryFragmentIfNeeded()
+    override fun onBindingChanged() {
+        super.onBindingChanged()
+        binding.genericActivity.frame.setContent { AboutLayout() }
     }
 
     override fun onResume() {
@@ -34,18 +31,5 @@ class AboutActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerB
     }
     // endregion Lifecycle
 
-    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
-
-    @MainThread
-    private fun loadPrimaryFragmentIfNeeded() {
-        with(supportFragmentManager) {
-            if (primaryNavigationFragment != null) return
-
-            commit {
-                val fragment = AboutFragment()
-                replace(R.id.frame, fragment)
-                setPrimaryNavigationFragment(fragment)
-            }
-        }
-    }
+    override fun inflateBinding() = ActivityGenericComposeWithNavDrawerBinding.inflate(layoutInflater)
 }
