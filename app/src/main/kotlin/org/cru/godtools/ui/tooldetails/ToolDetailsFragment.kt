@@ -19,6 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
@@ -83,6 +86,7 @@ class ToolDetailsFragment() :
         binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
 
+        binding.setupScrollView()
         binding.setupPages()
     }
 
@@ -173,6 +177,14 @@ class ToolDetailsFragment() :
         }
     }
     // endregion Pin Shortcut
+
+    // region ScrollView
+    private fun ToolDetailsFragmentBinding.setupScrollView() {
+        dataModel.toolCode.drop(1)
+            .onEach { scrollView.smoothScrollTo(0, 0) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+    // endregion ScrollView
 
     // region Pages
     private fun ToolDetailsFragmentBinding.setupPages() {
