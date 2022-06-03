@@ -14,7 +14,11 @@ import org.cru.godtools.base.ui.util.openUrl
 
 private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
 
-private val GodToolsLightColorScheme = lightColorScheme(primary = GT_BLUE)
+private val GodToolsLightColorScheme = lightColorScheme(
+    primary = GT_BLUE,
+    background = Color.White,
+    onBackground = Color(90, 90, 90)
+)
 
 @Composable
 fun GodToolsTheme(content: @Composable () -> Unit) {

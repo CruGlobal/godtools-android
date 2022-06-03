@@ -3,6 +3,7 @@ package org.cru.godtools.ui.tools
 import android.graphics.drawable.NinePatchDrawable
 import android.os.Bundle
 import androidx.annotation.CallSuper
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -16,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
+import org.ccci.gto.android.common.recyclerview.advrecyclerview.composedadapter.addLayout
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
@@ -35,6 +37,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
+import org.cru.godtools.ui.dashboard.lessons.LessonsHeader
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.argOrDefault
@@ -193,6 +196,13 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         // create composed adapter
         val adapter = ComposedAdapter()
         adapter.addAdapter(createBannerAdapter(viewLifecycleOwner))
+
+        // add Lessons Header Text
+        if (mode == MODE_LESSONS) {
+            adapter.addLayout(R.layout.dashboard_lessons_header) {
+                it.findViewById<ComposeView>(R.id.frame)?.setContent { LessonsHeader() }
+            }
+        }
 
         // configure the DragDrop RecyclerView components (Only for Added tools)
         if (mode == MODE_ADDED) {
