@@ -204,7 +204,11 @@ class ToolDetailsFragment() :
                 dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
             },
             this@ToolDetailsFragment
-        ).also { dataModel.pages.asLiveData().observe(viewLifecycleOwner, it) }
+        ).also { adapter ->
+            dataModel.pages
+                .onEach { adapter.pages = it }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
         // Setup the TabLayout
         TabLayoutMediator(tabs, pages) { tab, i -> tab.setText(dataModel.pages.value[i].tabLabel) }.attach()
