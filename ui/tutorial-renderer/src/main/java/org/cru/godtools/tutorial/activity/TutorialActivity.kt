@@ -37,7 +37,15 @@ private const val ARG_PAGE_SET = "pageSet"
 private const val ARG_FRMT_ARGS = "formatArgs"
 
 // TODO: this should be dynamic based upon the available languages in the database
-private val ARTICLES_SUPPORTED_LANGUAGES = setOf(Locale.ENGLISH, Locale("es"))
+private val ARTICLES_SUPPORTED_LANGUAGES = setOf(
+    Locale("bg"),
+    Locale.ENGLISH,
+    Locale("es"),
+    Locale.FRENCH,
+    Locale("lv"),
+    Locale("ru"),
+    Locale("vi")
+)
 
 fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
     Intent(this, TutorialActivity::class.java)
