@@ -9,8 +9,10 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.R
+import org.cru.godtools.base.tool.analytics.model.ShareShareableAnalyticsActionEvent
 import org.cru.godtools.base.tool.databinding.ToolShareableImageSheetBinding
 import org.cru.godtools.base.tool.model.shareable.buildShareIntent
+import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
@@ -44,11 +46,15 @@ class ShareableImageBottomSheetDialogFragment() :
     // endregion Lifecycle
 
     @Inject
+    internal lateinit var eventBus: EventBus
+    @Inject
     internal lateinit var toolFileSystem: ToolFileSystem
 
     private fun shareShareable() {
         val context = context ?: return
-        val intent = dataModel.shareable.value?.buildShareIntent(context) ?: return
+        val shareable = dataModel.shareable.value ?: return
+        val intent = shareable.buildShareIntent(context) ?: return
+        eventBus.post(ShareShareableAnalyticsActionEvent(shareable))
         startActivity(Intent.createChooser(intent, null))
         dismissAllowingStateLoss()
     }
