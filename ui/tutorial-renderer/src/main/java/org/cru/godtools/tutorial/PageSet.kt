@@ -39,16 +39,7 @@ enum class PageSet(
             Page.TRAINING_TRY,
             Page.TRAINING_FINAL
         ),
-        supportedLocales = setOf(
-            Locale.ENGLISH,
-            Locale("es"),
-            Locale.FRENCH,
-            Locale("hi"),
-            Locale("in"),
-            Locale("ru"),
-            Locale.SIMPLIFIED_CHINESE,
-            Locale.forLanguageTag("zh-Hans")
-        )
+        supportedLocales = setOf(Locale.ENGLISH)
     ),
     LIVE_SHARE(
         menu = R.menu.tutorial_live_share_menu,
