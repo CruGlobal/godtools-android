@@ -30,13 +30,10 @@ enum class PageSet(
         feature = Settings.FEATURE_TUTORIAL_TRAINING,
         analyticsBaseScreenName = "tutorial",
         pages = listOf(
-            Page.TRAINING_WATCH,
             Page.FEATURES_TOOLS,
             Page.FEATURES_TIPS,
             Page.FEATURES_LIVE_SHARE,
             Page.FEATURES_LESSONS,
-            Page.TRAINING_PREPARE,
-            Page.TRAINING_TRY,
             Page.TRAINING_FINAL
         ),
         supportedLocales = setOf(Locale.ENGLISH)
