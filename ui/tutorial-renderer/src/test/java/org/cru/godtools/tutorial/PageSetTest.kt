@@ -22,26 +22,26 @@ import org.robolectric.annotation.Config.NEWEST_SDK
 class PageSetTest {
     @Test
     fun testTrainingSupportedLanguages() {
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("en")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-CN")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-419")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-ES")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("es-MX")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("fr-CA")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("id")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("in")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("ru-MD")))
-        assertTrue(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-Hans-CN")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("en")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-CN")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("es-419")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("es-ES")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("es-MX")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("fr-CA")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("id")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("in")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("ru-MD")))
+        assertTrue(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-Hans-CN")))
     }
 
     @Test
     fun testTrainingUnsupportedLanguages() {
-        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("de")))
+        assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("de")))
 
         assumeThat(Build.VERSION.SDK_INT, greaterThanOrEqualTo(Build.VERSION_CODES.LOLLIPOP))
-        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-TW")))
-        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh")))
-        assertFalse(PageSet.TRAINING.supportsLocale(Locale.forLanguageTag("zh-Hant")))
+        assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-TW")))
+        assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh")))
+        assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-Hant")))
     }
 
     @Test

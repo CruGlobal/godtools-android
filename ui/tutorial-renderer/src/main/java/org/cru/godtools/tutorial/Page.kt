@@ -35,7 +35,7 @@ internal enum class Page(
     FEATURES_TIPS(R.layout.tutorial_features_tips),
     FEATURES_LIVE_SHARE(R.layout.tutorial_features_live_share),
     FEATURES_LESSONS(R.layout.tutorial_features_lessons),
-    TRAINING_FINAL(R.layout.tutorial_training_final),
+    FEATURES_FINAL(R.layout.tutorial_features_final),
     LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
     LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
     LIVE_SHARE_START(R.layout.tutorial_live_share_start, showMenu = false),

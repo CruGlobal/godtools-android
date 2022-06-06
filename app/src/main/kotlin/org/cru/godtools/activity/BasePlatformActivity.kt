@@ -246,7 +246,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
             with(menu) {
                 // the tutorial menu item is currently only available in English
-                findItem(R.id.action_tutorial)?.isVisible = PageSet.TRAINING.supportsLocale(deviceLocale)
+                findItem(R.id.action_tutorial)?.isVisible = PageSet.FEATURES.supportsLocale(deviceLocale)
 
                 // login items visibility
                 if (showLoginItems) {
@@ -322,7 +322,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         }
     }
 
-    private fun launchTrainingTutorial() = startTutorialActivity(PageSet.TRAINING)
+    private fun launchTrainingTutorial() = startTutorialActivity(PageSet.FEATURES)
     // endregion Navigation Menu actions
 
     // region Sync Logic
