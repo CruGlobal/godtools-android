@@ -7,3 +7,5 @@ coverage:
       default:
         target: 0%
         threshold: 1
+github_checks:
+  annotations: false
