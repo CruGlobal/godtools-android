@@ -16,7 +16,7 @@
         style="@style/Widget.GodTools.Dashboard.Tools.Spotlight.Tool.Card"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:onClick="@{() ->callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
+        android:onClick="@{() ->callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.secondTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
+                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.secondTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:selected="@{toolViewModel.tool.isAdded}" />
@@ -88,8 +88,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="@{toolViewModel.parallelLanguage.getDisplayName(context)}"
-                app:invisibleIf="@{!toolViewModel.tool.type.supportsParallelLanguage || toolViewModel.parallelLanguage == null || toolViewModel.firstTranslation.languageCode.equals(toolViewModel.parallelLanguage.code)}"
+                android:text="@{toolViewModel.secondLanguage.getDisplayName(context)}"
+                app:invisibleIf="@{toolViewModel.secondLanguage == null}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintHorizontal_bias="0"

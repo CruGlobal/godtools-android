@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{@string/tools_list_info_language_available(toolViewModel.firstLanguage.getDisplayName(context))}"
-                app:drawableEndCompat="@drawable/ic_tool_checkmark"
+                app:drawableEndCompat="@drawable/ic_language_available"
                 app:visibleIf="@{toolViewModel.firstLanguage != null}"
                 tools:ignore="MissingConstraints"
                 tools:text="@string/tools_list_info_language_available" />

@@ -19,6 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
@@ -83,6 +86,7 @@ class ToolDetailsFragment() :
         binding.parallelTranslation = dataModel.parallelTranslation
         binding.setDownloadProgress(dataModel.downloadProgress)
 
+        binding.setupScrollView()
         binding.setupPages()
     }
 
@@ -174,6 +178,14 @@ class ToolDetailsFragment() :
     }
     // endregion Pin Shortcut
 
+    // region ScrollView
+    private fun ToolDetailsFragmentBinding.setupScrollView() {
+        dataModel.toolCode.drop(1)
+            .onEach { scrollView.smoothScrollTo(0, 0) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+    // endregion ScrollView
+
     // region Pages
     private fun ToolDetailsFragmentBinding.setupPages() {
         // Setup the ViewPager
@@ -192,7 +204,11 @@ class ToolDetailsFragment() :
                 dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
             },
             this@ToolDetailsFragment
-        ).also { dataModel.pages.asLiveData().observe(viewLifecycleOwner, it) }
+        ).also { adapter ->
+            dataModel.pages
+                .onEach { adapter.pages = it }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
         // Setup the TabLayout
         TabLayoutMediator(tabs, pages) { tab, i -> tab.setText(dataModel.pages.value[i].tabLabel) }.attach()

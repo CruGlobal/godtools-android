@@ -44,14 +44,14 @@ class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
     private val callbacks = mockk<ToolsAdapterCallbacks>(relaxUnitFun = true)
     private val toolFlow = MutableStateFlow<Tool?>(tool())
-    private val primaryTranslation = MutableLiveData(
+    private val firstTranslation = MutableLiveData(
         Translation().apply {
             languageCode = Locale("en")
             name = "primaryName"
             tagline = "primaryTagline"
         }
     )
-    private val parallelTranslation = MutableLiveData(
+    private val secondTranslation = MutableLiveData(
         Translation().apply {
             languageCode = Locale("fr")
             name = "parallelName"
@@ -63,9 +63,9 @@ class ToolsListItemToolBindingTest {
         every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
         every { downloadProgress } returns emptyLiveData()
-        every { firstTranslation } returns primaryTranslation
-        every { parallelTranslation } returns this@ToolsListItemToolBindingTest.parallelTranslation
-        every { parallelLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage
+        every { firstTranslation } returns this@ToolsListItemToolBindingTest.firstTranslation
+        every { secondTranslation } returns this@ToolsListItemToolBindingTest.secondTranslation
+        every { secondLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage
     }
 
     private fun tool() = Tool().apply {
@@ -90,7 +90,7 @@ class ToolsListItemToolBindingTest {
     // region Layout Direction
     @Test
     fun verifyLayoutDirectionWithoutTranslation() {
-        primaryTranslation.value = null
+        firstTranslation.value = null
         binding.executePendingBindings()
 
         assertTrue(binding.content.isLayoutDirectionInherit())
@@ -98,7 +98,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyLayoutDirectionWithLtrTranslation() {
-        primaryTranslation.value = Translation().apply { languageCode = Locale.ENGLISH }
+        firstTranslation.value = Translation().apply { languageCode = Locale.ENGLISH }
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())
@@ -107,7 +107,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyLayoutDirectionWithRtlTranslation() {
-        primaryTranslation.value = Translation().apply { languageCode = Locale("ar") }
+        firstTranslation.value = Translation().apply { languageCode = Locale("ar") }
         binding.executePendingBindings()
 
         assertFalse(binding.content.isLayoutDirectionInherit())
@@ -132,7 +132,7 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyTitleAndTaglineFromParallelTranslation() {
-        primaryTranslation.value = null
+        firstTranslation.value = null
         binding.executePendingBindings()
 
         assertEquals("parallelName", binding.title.text)
@@ -141,8 +141,8 @@ class ToolsListItemToolBindingTest {
 
     @Test
     fun verifyTitleAndTaglineFromTool() {
-        primaryTranslation.value = null
-        parallelTranslation.value = null
+        firstTranslation.value = null
+        secondTranslation.value = null
         binding.executePendingBindings()
 
         assertEquals("toolName", binding.title.text)
@@ -161,26 +161,8 @@ class ToolsListItemToolBindingTest {
     }
 
     @Test
-    fun `language_parallel - Hidden - No Parallel Language`() {
+    fun `language_parallel - Hidden - No Second Language`() {
         parallelLanguage.value = null
-        binding.executePendingBindings()
-
-        assertEquals(View.GONE, binding.languageParallel.visibility)
-    }
-
-    @Test
-    fun `language_parallel - Hidden - Primary Translation === Parallel Language`() {
-        primaryTranslation.value = Translation().apply { languageCode = Locale("es") }
-        parallelLanguage.value = language(Locale("es"))
-        binding.executePendingBindings()
-
-        assertEquals(View.GONE, binding.languageParallel.visibility)
-    }
-
-    @Test
-    fun `language_parallel - Hidden - Article Tool Type`() {
-        toolFlow.value = tool().apply { type = Tool.Type.ARTICLE }
-        parallelLanguage.value = language(Locale.FRENCH)
         binding.executePendingBindings()
 
         assertEquals(View.GONE, binding.languageParallel.visibility)
@@ -215,34 +197,34 @@ class ToolsListItemToolBindingTest {
 
         assertTrue(binding.actionFavorite.isSelected)
         binding.actionFavorite.performClick()
-        verifyAll { callbacks.unpinTool(toolFlow.value, primaryTranslation.value) }
+        verifyAll { callbacks.unpinTool(toolFlow.value, firstTranslation.value) }
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoritePrimaryTranslationOnly() {
         toolFlow.value = tool().apply { isAdded = true }
-        parallelTranslation.value = null
+        secondTranslation.value = null
         binding.executePendingBindings()
 
         binding.actionFavorite.performClick()
-        verifyAll { callbacks.unpinTool(toolFlow.value, primaryTranslation.value) }
+        verifyAll { callbacks.unpinTool(toolFlow.value, firstTranslation.value) }
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteParallelTranslationOnly() {
         toolFlow.value = tool().apply { isAdded = true }
-        primaryTranslation.value = null
+        firstTranslation.value = null
         binding.executePendingBindings()
 
         binding.actionFavorite.performClick()
-        verifyAll { callbacks.unpinTool(toolFlow.value, parallelTranslation.value) }
+        verifyAll { callbacks.unpinTool(toolFlow.value, secondTranslation.value) }
     }
 
     @Test
     fun verifyActionFavoriteRemoveFavoriteNoTranslations() {
         toolFlow.value = tool().apply { isAdded = true }
-        primaryTranslation.value = null
-        parallelTranslation.value = null
+        firstTranslation.value = null
+        secondTranslation.value = null
         binding.executePendingBindings()
 
         binding.actionFavorite.performClick()
@@ -260,29 +242,29 @@ class ToolsListItemToolBindingTest {
     @Test
     fun `root view - onClick - Triggers Callback With Both Translations`() {
         binding.root.performClick()
-        verifyAll { callbacks.onToolClicked(toolFlow.value, primaryTranslation.value, parallelTranslation.value) }
+        verifyAll { callbacks.onToolClicked(toolFlow.value, firstTranslation.value, secondTranslation.value) }
     }
 
     @Test
     fun `root view - onClick - Triggers Callback With Only Primary Translation`() {
-        parallelTranslation.value = null
+        secondTranslation.value = null
 
         binding.root.performClick()
-        verifyAll { callbacks.onToolClicked(toolFlow.value, primaryTranslation.value, null) }
+        verifyAll { callbacks.onToolClicked(toolFlow.value, firstTranslation.value, null) }
     }
 
     @Test
     fun `root view - onClick - Triggers Callback With Only Parallel Translation`() {
-        primaryTranslation.value = null
+        firstTranslation.value = null
 
         binding.root.performClick()
-        verifyAll { callbacks.onToolClicked(toolFlow.value, null, parallelTranslation.value) }
+        verifyAll { callbacks.onToolClicked(toolFlow.value, null, secondTranslation.value) }
     }
 
     @Test
     fun `root view - onClick -  Triggers Callback With No Translations`() {
-        primaryTranslation.value = null
-        parallelTranslation.value = null
+        firstTranslation.value = null
+        secondTranslation.value = null
 
         binding.root.performClick()
         verifyAll { callbacks.onToolClicked(toolFlow.value, null, null) }

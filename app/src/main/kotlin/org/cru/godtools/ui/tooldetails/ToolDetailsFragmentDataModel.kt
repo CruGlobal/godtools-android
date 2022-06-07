@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
@@ -98,7 +97,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
             null -> flowOf(emptyList())
             else -> Query.select<Tool>().where(ToolTable.FIELD_META_TOOL.eq(metatool)).getAsFlow(dao)
         }
-    }.shareIn(viewModelScope, SharingStarted.WhileSubscribed())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     internal val pages = variants.map {
         buildList {

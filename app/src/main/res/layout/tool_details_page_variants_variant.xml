@@ -23,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:background="@color/white"
         android:clipToPadding="false"
-        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
+        android:onClick="@{() -> callbacks.showToolDetails(toolViewModel.code)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation, toolViewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/selected"
                 app:layout_constraintTop_toBottomOf="@id/banner"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
-                app:constraint_referenced_ids="languages,language"
+                app:constraint_referenced_ids="languages,primary_language,parallel_language"
                 app:flow_horizontalBias="1"
                 app:flow_horizontalGap="4dp"
                 app:flow_horizontalStyle="packed"
@@ -114,20 +114,29 @@
                 style="@style/Widget.GodTools.Tools.Card.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@{toolViewModel.firstLanguage != null ? @drawable/ic_bullet : null}"
                 android:text="@{@plurals/label_tools_languages(toolViewModel.availableLanguages.size, toolViewModel.availableLanguages.size)}"
-                app:goneIf="@{toolViewModel.availableLanguages.isEmpty}"
-                tools:text="@string/tools_list_lesson_info_length" />
+                tools:text="@plurals/label_tools_languages" />
 
             <TextView
-                android:id="@+id/language"
+                android:id="@+id/primary_language"
                 style="@style/Widget.GodTools.Tools.Card.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{@string/tools_list_info_language_available(toolViewModel.firstLanguage.getDisplayName(context))}"
-                app:drawableEndCompat="@drawable/ic_tool_checkmark"
-                app:visibleIf="@{toolViewModel.firstLanguage != null}"
-                tools:text="@string/tools_list_info_language_available" />
+                android:drawableEnd="@{toolViewModel.primaryTranslation != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
+                android:text="@{toolViewModel.primaryLanguage.getDisplayName(context)}"
+                app:drawableStartCompat="@drawable/ic_bullet"
+                tools:text="English" />
+
+            <TextView
+                android:id="@+id/parallel_language"
+                style="@style/Widget.GodTools.Tools.Card.Info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@{toolViewModel.parallelTranslation != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
+                android:text="@{toolViewModel.parallelLanguage.getDisplayName(context)}"
+                app:drawableStartCompat="@drawable/ic_bullet"
+                app:visibleIf="@{toolViewModel.parallelLanguage != null}"
+                tools:text="English" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
