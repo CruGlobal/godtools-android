@@ -12,7 +12,7 @@ import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TRAINING
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_FEATURES
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
@@ -40,10 +40,10 @@ class ToolsListFragmentDataModel @Inject constructor(private val dao: GodToolsDa
             .getAsLiveData(dao)
     }
 
-    val banner = mode.combineWith(settings.isFeatureDiscoveredLiveData(FEATURE_TUTORIAL_TRAINING)) { mode, training ->
+    val banner = mode.combineWith(settings.isFeatureDiscoveredLiveData(FEATURE_TUTORIAL_FEATURES)) { mode, training ->
         when {
-            mode == MODE_ADDED && !training && PageSet.TRAINING.supportsLocale(Locale.getDefault()) ->
-                BannerType.TUTORIAL_TRAINING
+            mode == MODE_ADDED && !training && PageSet.FEATURES.supportsLocale(Locale.getDefault()) ->
+                BannerType.TUTORIAL_FEATURES
             else -> null
         }
     }

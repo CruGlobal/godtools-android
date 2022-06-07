@@ -18,7 +18,7 @@ enum class BannerType(
         primaryButton = R.string.tools_list_favorites_banner_action_dismiss,
         icon = R.drawable.ic_favorite_24dp
     ),
-    TUTORIAL_TRAINING(
+    TUTORIAL_FEATURES(
         message = org.cru.godtools.tutorial.R.string.tutorial_features_banner_text,
         primaryButton = org.cru.godtools.tutorial.R.string.tutorial_features_banner_action_open,
         secondaryButton = org.cru.godtools.tutorial.R.string.tutorial_features_banner_action_dismiss
