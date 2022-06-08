@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Melihat kembali</string>
+    <string name="lesson_feedback_question_helpful">Apakah pelajaran ini membantu Anda?</string>
+    <string name="lesson_feedback_question_helpful_yes">Ya</string>
+    <string name="lesson_feedback_question_helpful_no">Tidak</string>
+    <string name="lesson_feedback_question_readiness">"Seberapa siap Anda untuk memulai percakapan rohani? "</string>
+    <string name="lesson_feedback_action_submit">Kirim tanggapan</string>
+    <string name="lesson_feedback_action_cancel">Lewati</string>
+</resources>

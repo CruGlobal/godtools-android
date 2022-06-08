@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">分享</string>
     <string name="tool_not_found">找不到您要求的工具</string>
     <string name="tool_loading">工具正在載入中⋯⋯</string>
     <string name="tool_offline">你要求的工具需要網路連線才能開啟</string>
-    <string name="feature_discovery_title_share_tool">分享連結</string>
-    <string name="feature_discovery_desc_share_tool">點選此圖示即可將此工具傳送給好友</string>
     <string name="tract_content_input_error_required">必須輸入%1$s</string>
     <string name="tract_content_input_error_invalid_email">請輸入正確的電子郵件地址</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">分享</string>
+    <string name="feature_discovery_title_share_tool">分享連結</string>
+    <string name="feature_discovery_desc_share_tool">點選此圖示即可將此工具傳送給好友</string>
+    <!-- Shareables -->
 </resources>

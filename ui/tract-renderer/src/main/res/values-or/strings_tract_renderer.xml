@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">ବର୍ତ୍ତମାନ ସୁଦୂର ଅଂଶୀଦାର ଅଧିବେଶନ ଛାଡନ୍ତୁ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ପ୍ରସ୍ଥାନ କରନ୍ତୁ</string>
     <string name="tract_live_share_exit_dialog_cancel">ବାତିଲ୍ କରନ୍ତୁ</string>
+    <!-- Settings -->
 </resources>

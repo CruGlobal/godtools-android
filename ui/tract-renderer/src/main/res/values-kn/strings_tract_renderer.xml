@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">ಈಗ ದೂರಸ್ಥ ಹಂಚಿಕೆ ಅಧಿವೇಶನದಿಂದ ನಿರ್ಗಮಿಸುವುದೇ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ನಿರ್ಗಮಿಸಿ</string>
     <string name="tract_live_share_exit_dialog_cancel">ರದ್ದುಮಾಡಿ</string>
+    <!-- Settings -->
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Pamusoro pangu</string>
+    <string name="menu_profile">Zviri kuitika pasi rose</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Zviri kuitika</string>
+    <string name="profile_global_activity_heading">%s Zviri kuitika pasi rose</string>
+    <string name="profile_activity_unique_users">Vashandisi vakashanangurwa</string>
+    <string name="profile_activity_gospel_presentations">Kugoverwa kwevhangeri</string>
+    <string name="profile_activity_sessions">Zvikamu</string>
+    <string name="profile_activity_countries">Nyika</string>
+</resources>

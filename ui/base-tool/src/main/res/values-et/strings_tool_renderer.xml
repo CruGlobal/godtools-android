@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">Jagamine</string>
     <string name="tool_not_found">Soovitud tööriista ei leitud</string>
     <string name="tool_loading">Soovitud tööriista laadimine…</string>
     <string name="tool_offline">Soovitud tööriista avamiseks on vajalik võrguühendus</string>
-    <string name="feature_discovery_title_share_tool">Jaga linki</string>
-    <string name="feature_discovery_desc_share_tool">Saada tööriist sõbrale, klõpsates sellele ikoonile</string>
     <string name="tract_content_input_error_required">%1$s on kohustuslik</string>
     <string name="tract_content_input_error_invalid_email">Sisesta kehtiv meiliaadress</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Jagamine</string>
+    <string name="feature_discovery_title_share_tool">Jaga linki</string>
+    <string name="feature_discovery_desc_share_tool">Saada tööriist sõbrale, klõpsates sellele ikoonile</string>
+    <!-- Shareables -->
 </resources>

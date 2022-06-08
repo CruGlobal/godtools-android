@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Zvinotevera</string>
+    <string name="tract_tips_tip_action_close">Vhara</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Bvunza</string>
+    <string name="tract_tips_type_consider">Funga nezvazvo</string>
+    <string name="tract_tips_type_prepare">Gadzirira</string>
+    <string name="tract_tips_type_quote">Taura</string>
+    <string name="tract_tips_type_tip">Chenjedzo</string>
+</resources>

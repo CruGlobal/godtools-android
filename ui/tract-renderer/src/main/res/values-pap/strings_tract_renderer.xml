@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">Sali for di e seshon di kompartí riba distansha aworakí?</string>
     <string name="tract_live_share_exit_dialog_confirm">Sali</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselá</string>
+    <!-- Settings -->
 </resources>
