@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">شارك</string>
     <string name="tool_not_found">لا يمكن إيجاد الأداة التي طلبتها</string>
     <string name="tool_loading">جاري تحميل الأداة التي طلبتها…</string>
     <string name="tool_offline">الأداة التي طلبتها تستلزم فتح الاتصال بالإنترنت</string>
-    <string name="feature_discovery_title_share_tool">شارك رابطاً</string>
-    <string name="feature_discovery_desc_share_tool">أرسل هذه الأداة إلى صديق بالضغط على هذه الأيقونة</string>
     <string name="tract_content_input_error_required">%1$s مطلوب</string>
     <string name="tract_content_input_error_invalid_email">يرجى إدخال عنوان إلكتروني صالح</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">شارك</string>
+    <string name="feature_discovery_title_share_tool">شارك رابطاً</string>
+    <string name="feature_discovery_desc_share_tool">أرسل هذه الأداة إلى صديق بالضغط على هذه الأيقونة</string>
+    <!-- Shareables -->
 </resources>

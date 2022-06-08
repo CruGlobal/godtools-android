@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">పంచుకోండి</string>
-    <string name="share_tool_message_article">క్రిస్టియన్ ఈ కథనాన్ని మీతో పంచుకోవాలనుకున్నాడు మరియు దాని గురించి మీ ఆలోచనలను వినాలనుకుంటున్నారు. \n%1$s\n</string>
     <string name="tool_not_found">మీరు అభ్యర్థించిన పరికరము కనుగొనబడలేదు</string>
     <string name="tool_loading">మీ అభ్యర్థించిన పరికరము లోడ్ అవుతున్నది…</string>
     <string name="tool_offline">మీరు అభ్యర్థించిన పరికరం తెరవడానికి ఇంటర్నెట్ కనెక్షన్ అవసరం</string>
-    <string name="feature_discovery_title_share_tool">లింకును పంచండి</string>
-    <string name="feature_discovery_desc_share_tool">ఈ ఐకాన్ నొక్కడం ద్వారా ఈ పరికరంను ఒక స్నేహితునికి పంపండి</string>
     <string name="tract_content_input_error_required">%1$s అవసరం</string>
     <string name="tract_content_input_error_invalid_email">చెల్లుబాటయ్యే ఈమెయిల్ చిరునామాను దయచేసి ఎంటర్ చేయండి</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">పంచుకోండి</string>
+    <string name="share_tool_message_article">క్రిస్టియన్ ఈ కథనాన్ని మీతో పంచుకోవాలనుకున్నాడు మరియు దాని గురించి మీ ఆలోచనలను వినాలనుకుంటున్నారు. \n%1$s\n</string>
+    <string name="feature_discovery_title_share_tool">లింకును పంచండి</string>
+    <string name="feature_discovery_desc_share_tool">ఈ ఐకాన్ నొక్కడం ద్వారా ఈ పరికరంను ఒక స్నేహితునికి పంపండి</string>
+    <!-- Shareables -->
 </resources>

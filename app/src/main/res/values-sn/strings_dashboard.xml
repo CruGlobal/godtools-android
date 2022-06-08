@@ -30,6 +30,10 @@
     <string name="tools_list_favorites_banner_action_dismiss">Bvisa</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Zvombo zvose</string>
+    <string name="dashboard_tools_section_categories_label">Zvikamu</string>
+    <string name="dashboard_tools_section_categories_all">Zvikwanisiro zvose</string>
+    <string name="dashboard_tools_section_spotlight_label">Kujekeswa kwemudziyo</string>
+    <string name="dashboard_tools_section_spotlight_description">Heinoi mimwe midziyo yatinofunga kuti ungada</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Ungada here kutsveta mutauro wechipiri?</string>
     <string name="languages_parallel_dialog_select">Sarudza mutauro</string>

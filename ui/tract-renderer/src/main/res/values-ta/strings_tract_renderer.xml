@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">தொலை பகிர்வு அமர்விலிருந்து இப்போது வெளியேற வேண்டுமா?</string>
     <string name="tract_live_share_exit_dialog_confirm">வெளியேறு</string>
     <string name="tract_live_share_exit_dialog_cancel">ரத்துசெய்</string>
+    <!-- Settings -->
 </resources>

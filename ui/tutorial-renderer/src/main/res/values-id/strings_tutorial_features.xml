@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tutorial_features_tools_headline">Sarana-Sarana</string>
+    <string name="tutorial_features_tools_subhead">Setiap sarana dibuat untuk tahap percakapan yang berbeda– sebelum, selama, atau sesudahnya.</string>
+    <string name="tutorial_features_tips_headline">Sarana Tips</string>
+    <string name="tutorial_features_tips_subhead">Panduan Tips GodTools ketika Anda membantu seseorang memahami Injil dan berjumpa Yesus.</string>
+    <string name="tutorial_features_live_share_headline">Berbagi layar</string>
+    <string name="tutorial_features_live_share_subhead">Sekarang Anda dapat membagikan layar Anda dari jarak jauh sehingga orang lain dapat mengikuti saat Anda menggunakan sarana untuk membahas Injil.</string>
+    <string name="tutorial_features_lessons_headline">Pelajaran</string>
+    <string name="tutorial_features_lessons_subhead">Dalam setiap pelajaran GodTools Anda mempelajari sesuatu untuk membantu Anda melakukan percakapan nyata tentang Tuhan.</string>
     <string name="tutorial_features_final_headline">Tutorial ini tersedia untuk dilihat lagi di menu</string>
     <string name="tutorial_features_action_continue">Lanjutkan</string>
     <string name="tutorial_features_action_close">Mulai menggunakan GodTools</string>

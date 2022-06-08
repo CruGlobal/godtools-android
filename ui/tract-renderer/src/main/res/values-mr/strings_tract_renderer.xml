@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">रिमोट शेअरिंग सत्र आता सोडायचे?</string>
     <string name="tract_live_share_exit_dialog_confirm">सोडा</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करा</string>
+    <!-- Settings -->
 </resources>

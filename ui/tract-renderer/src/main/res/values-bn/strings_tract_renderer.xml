@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">"এখন রিমোট শেয়ার করা সেশন থেকে বেরিয়ে আসুন "</string>
     <string name="tract_live_share_exit_dialog_confirm">"বেরিয়ে আসুন "</string>
     <string name="tract_live_share_exit_dialog_cancel">"বাতিল করুন "</string>
+    <!-- Settings -->
 </resources>

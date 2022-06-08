@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">Chombo chawakumbira hachisi kuwanikwa</string>
+    <string name="tool_loading">Chombo chawakumbira chiri kunzwa...</string>
+    <string name="tool_offline">Chombo chawakumbira chinoda uri pamasai-sai kuti chivhure</string>
+    <string name="tract_content_input_error_required">%1$s zvinodiwa</string>
+    <string name="tract_content_input_error_invalid_email">Isa email address inoshanda</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Govera</string>
+    <string name="share_tool_message_article">Ndinoda kugoverana newe chinyorwa chino uye ndinoda kunzwa pfungwa dzako pamusoro pazvo\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Goverana pazvimowanikwa</string>
+    <string name="feature_discovery_desc_share_tool">Tumira chombo ichi kushamwari uchidzvanya chakapiwa</string>
+    <!-- Shareables -->
+</resources>

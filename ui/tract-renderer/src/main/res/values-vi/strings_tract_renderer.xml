@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">Thoát khỏi chế độ chia sẻ từ xa?</string>
     <string name="tract_live_share_exit_dialog_confirm">Thoát</string>
     <string name="tract_live_share_exit_dialog_cancel">Hủy</string>
+    <!-- Settings -->
 </resources>

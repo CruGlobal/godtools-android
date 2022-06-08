@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Iemācies kopīgot rīku</string>
+    <string name="tutorial_tips_learn_text">Praktizējies izmantot tik daudz padomu, cik nepieciešams, lai pārliecinoši kopīgotu šo rīku.</string>
+    <string name="tutorial_tips_light_headline">Padomi rīka lietošanā</string>
+    <string name="tutorial_tips_light_text1">"Dažādos šīs apmācības ekrānos ir dažādas ikonas. Lai atklātos padoms, kas palīdzēs runāt par ekrāna saturu, spied uz ikonas. "</string>
+    <string name="tutorial_tips_light_text2">Ja ekrānam nav ikonas, vienkārši izlasi saturu un pārrunā to pēc vajadzības.</string>
+    <string name="tutorial_tips_start_headline">Izgaismo padomus</string>
+    <string name="tutorial_tips_start_text">Kad atvērsi padomu, atbilstošā ikona izgaismosies. Praktizējies izmantot tik daudz padomu, cik nepieciešams, lai pārliecinoši izskaidrotu rīku.</string>
+    <string name="tutorial_tips_action_continue">Turpināt</string>
+    <string name="tutorial_tips_action_skip">Izlaist</string>
+    <string name="tutorial_tips_action_start">Sākt apmācību</string>
+</resources>

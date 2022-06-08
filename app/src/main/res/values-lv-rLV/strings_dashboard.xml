@@ -27,11 +27,11 @@
     <string name="tools_list_remove_favorite_dialog_confirm">Izņemt</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Atcelt</string>
     <string name="tools_list_favorites_banner_text">Padari rīku pieejamu bezsaistē, nospiežot sirds ikonu, lai pievienotu to Izlasei.</string>
-    <string name="tools_list_favorites_banner_action_dismiss">Atcelt</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Aizvērt</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Visi rīki</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Vai vēlaties iestatīt otro valodu?</string>
+    <string name="languages_parallel_dialog_headline">Vai vēlies iestatīt sekundāro valodu?</string>
     <string name="languages_parallel_dialog_select">Izvēlies valodu</string>
     <string name="languages_parallel_dialog_action_start">Sākt</string>
     <string name="languages_parallel_dialog_action_cancel">Nē, paldies</string>

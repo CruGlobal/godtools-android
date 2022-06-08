@@ -12,4 +12,5 @@
     <string name="tract_live_share_exit_dialog_message">¿Salir ahora de la sesión de pantalla compartida?</string>
     <string name="tract_live_share_exit_dialog_confirm">Salir</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
+    <!-- Settings -->
 </resources>

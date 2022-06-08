@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">હવે દૂરસ્થ શેરિંગ સત્રથી બહાર નીકળવું છે?</string>
     <string name="tract_live_share_exit_dialog_confirm">બહાર નીકળો</string>
     <string name="tract_live_share_exit_dialog_cancel">રદ કરો</string>
+    <!-- Settings -->
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Xem lại</string>
+    <string name="lesson_feedback_question_helpful">Bài học này có giúp ích cho bạn không?</string>
+    <string name="lesson_feedback_question_helpful_yes">Có</string>
+    <string name="lesson_feedback_question_helpful_no">Không</string>
+    <string name="lesson_feedback_question_readiness">Mức độ bạn cảm thấy sẵn sàng để bắt đầu cuộc trò chuyện thuộc linh?</string>
+    <string name="lesson_feedback_action_submit">Gửi ý kiến</string>
+    <string name="lesson_feedback_action_cancel">Bỏ qua</string>
+</resources>

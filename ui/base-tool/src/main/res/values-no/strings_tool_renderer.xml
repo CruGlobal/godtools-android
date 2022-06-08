@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">Del</string>
     <string name="tool_not_found">Vi kunne ikke finne det forespurte verktøyet</string>
     <string name="tool_loading">Verktøyet du forespurte lastes inn …</string>
     <string name="tool_offline">Verktøyet du har forespurt krever internettilkobling for å åpnes</string>
-    <string name="feature_discovery_title_share_tool">Del en kobling</string>
-    <string name="feature_discovery_desc_share_tool">Send dette verktøyet til en venn ved å klikke på dette ikonet.</string>
     <string name="tract_content_input_error_required">%1$s kreves</string>
     <string name="tract_content_input_error_invalid_email">Oppgi en gyldig e-postadresse</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Del</string>
+    <string name="feature_discovery_title_share_tool">Del en kobling</string>
+    <string name="feature_discovery_desc_share_tool">Send dette verktøyet til en venn ved å klikke på dette ikonet.</string>
+    <!-- Shareables -->
 </resources>
