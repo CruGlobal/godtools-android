@@ -82,6 +82,7 @@ class TractPublisherController @Inject constructor(
                             when (it) {
                                 is WebSocket.Event.OnConnectionOpened<*> -> service.subscribe(Subscribe(identifier))
                                 is WebSocket.Event.OnConnectionFailed -> Timber.tag(TAG).d(it.throwable)
+                                else -> Unit
                             }
                         }
                     }
