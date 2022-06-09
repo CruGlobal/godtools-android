@@ -20,6 +20,8 @@ fun Translation?.getDescription(tool: Tool?, context: Context?) =
 fun Translation?.getTagline(tool: Tool?, context: Context?) =
     this?.let { (tagline ?: description)?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
 
+fun Translation.getFontFamilyOrNull() = languageCode.getFontFamilyOrNull()
+
 private fun Translation.getTypeface(context: Context?) = context?.getTypeface(languageCode)
 
 // region Tool Category
