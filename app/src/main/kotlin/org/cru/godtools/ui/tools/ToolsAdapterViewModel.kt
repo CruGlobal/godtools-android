@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombine
@@ -77,19 +76,19 @@ class ToolsAdapterViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
-            .asLiveData()
-        val secondTranslation = parallelTranslation.asLiveData().combineWith(firstTranslation) { p, f ->
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val secondTranslation = combine(parallelTranslation, firstTranslation) { p, f ->
             p?.takeUnless { p.languageCode == f?.languageCode }
-        }
+        }.asLiveData()
 
-        val firstLanguage = firstTranslation.switchMap { t ->
-            t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
-        }
+        val firstLanguage = firstTranslation
+            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .asLiveData()
         val secondLanguage = secondTranslation.switchMap { t ->
             t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
         }
 
-        val downloadProgress = switchCombine(firstTranslation, secondTranslation) { first, second ->
+        val downloadProgress = switchCombine(firstTranslation.asLiveData(), secondTranslation) { first, second ->
             when {
                 first != null -> downloadManager.getDownloadProgressLiveData(code, first.languageCode)
                 second != null -> downloadManager.getDownloadProgressLiveData(code, second.languageCode)

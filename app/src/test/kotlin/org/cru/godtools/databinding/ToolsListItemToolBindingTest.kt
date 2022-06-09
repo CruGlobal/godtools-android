@@ -44,7 +44,7 @@ class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
     private val callbacks = mockk<ToolsAdapterCallbacks>(relaxUnitFun = true)
     private val toolFlow = MutableStateFlow<Tool?>(tool())
-    private val firstTranslation = MutableLiveData(
+    private val firstTranslation = MutableStateFlow<Translation?>(
         Translation().apply {
             languageCode = Locale("en")
             name = "primaryName"
