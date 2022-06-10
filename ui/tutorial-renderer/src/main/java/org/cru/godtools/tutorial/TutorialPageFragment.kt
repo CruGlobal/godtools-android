@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
+
 
 internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     constructor(page: Page, formatArgs: Bundle?) : this() {
@@ -39,6 +41,15 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.startAnimations()
+        binding?.setCompose()
+    }
+
+    private fun ViewDataBinding.setCompose() {
+        when (this) {
+            is TutorialTipsLearnBinding -> {
+                compose.setContent { TipsLayout() }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -59,6 +70,9 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             else -> Unit
         }
     }
+
+
+
 
     // region TutorialCallbacks
     override fun nextPage() {

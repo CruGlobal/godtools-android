@@ -22,7 +22,7 @@ class AboutActivity : BasePlatformActivity<ActivityGenericComposeWithNavDrawerBi
     // region Lifecycle
     override fun onBindingChanged() {
         super.onBindingChanged()
-        binding.genericActivity.frame.setContent { AboutLayout() }
+       binding.genericActivity.frame.setContent { AboutLayout() }
     }
 
     override fun onResume() {

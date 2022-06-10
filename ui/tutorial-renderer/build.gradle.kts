@@ -7,6 +7,7 @@ plugins {
 
 android {
     baseConfiguration(project)
+    configureCompose(project)
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -25,6 +26,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.compose.material3)
 
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.fragment)

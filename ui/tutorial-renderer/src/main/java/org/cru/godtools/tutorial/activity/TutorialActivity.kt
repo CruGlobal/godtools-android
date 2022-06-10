@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.view.forEach
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,10 +21,9 @@ import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.startDashboardActivity
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.tutorial.*
 import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.TutorialCallbacks
+import org.cru.godtools.tutorial.TipsLayout
 import org.cru.godtools.tutorial.TutorialPageFragment
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
 import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES
@@ -32,6 +32,8 @@ import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
+
 
 private const val ARG_PAGE_SET = "pageSet"
 private const val ARG_FRMT_ARGS = "formatArgs"
@@ -65,6 +67,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         super.onContentChanged()
         setupViewPager()
     }
+
+
 
     override fun onSetupActionBar() {
         super.onSetupActionBar()
@@ -219,6 +223,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         finish()
     }
 }
+
+
 
 internal class TutorialPagerAdapter(
     activity: FragmentActivity,
