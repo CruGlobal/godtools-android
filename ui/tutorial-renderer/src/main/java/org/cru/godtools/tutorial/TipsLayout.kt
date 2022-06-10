@@ -15,7 +15,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
-//import com.airbnb.lottie.compose.*
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 //import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import java.nio.file.Files.size
@@ -24,14 +28,15 @@ import java.nio.file.Files.size
 @Composable
 internal fun TipsLayout() = GodToolsTheme() {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(top = 100.dp),
+
         //verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Spacer(modifier = Modifier.height(100.dp))
-        /*val composition by rememberLottieComposition(
+        val composition by rememberLottieComposition(
             LottieCompositionSpec
-                .RawRes(org.cru.godtools.tutorial.R.raw.anim_tutorial_features_tips)
+                .RawRes(org.cru.godtools.tutorial.R.raw.anim_tutorial_tips_people)
         )
         var isPlaying by remember {
             mutableStateOf(true)
@@ -68,27 +73,20 @@ internal fun TipsLayout() = GodToolsTheme() {
             composition,
             progress,
             modifier = Modifier.size(250.dp)
-        )*/
-        Image(
-            painter = painterResource(R.drawable.img_tutorial_live_share_people),
-            contentDescription = "Contact profile picture",
-            modifier = Modifier
-                // Set image size to 40 dp
-                .size(250.dp)
-                // Clip image to be shaped as a circle
-
         )
+
         Spacer(modifier = Modifier.height(20.dp))
         Text(text = "Learn to share this tool with anyone",
-            //style = MaterialTheme.typography.subtitle2,
-            fontSize = 37.sp,
+            style = MaterialTheme.typography.titleMedium,
+            fontSize = 30.sp,
             textAlign = TextAlign.Center
             //modifier = Modifier.align
 
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text("Practice using as many tips as you need to feel confident in sharing this tool with others.",
-            fontSize = 25.sp,
+            style = MaterialTheme.typography.bodySmall,
+            fontSize = 20.sp,
             textAlign = TextAlign.Center)
     }
 

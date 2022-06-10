@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
+
     implementation(libs.splitties.fragmentargs)
     implementation(libs.splitties.intents)
     implementation(libs.youtubePlayer)
