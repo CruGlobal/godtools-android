@@ -8,7 +8,6 @@ import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -25,7 +24,6 @@ import timber.log.Timber
 private const val TAG = "TractSubscribrControllr"
 
 @HiltViewModel
-@OptIn(ExperimentalCoroutinesApi::class)
 class TractSubscriberController @Inject internal constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle
