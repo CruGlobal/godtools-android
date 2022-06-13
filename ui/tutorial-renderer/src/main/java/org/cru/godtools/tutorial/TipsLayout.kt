@@ -39,14 +39,7 @@ internal fun TipsLayout() = GodToolsTheme() {
             LottieCompositionSpec
                 .RawRes(org.cru.godtools.tutorial.R.raw.anim_tutorial_tips_people)
         )
-        var isPlaying by remember {
-            mutableStateOf(true)
-        }
 
-// for speed
-        var speed by remember {
-            mutableStateOf(1f)
-        }
         val progress by animateLottieCompositionAsState(
             // pass the composition created above
             composition,
