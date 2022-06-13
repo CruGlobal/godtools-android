@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
@@ -29,6 +30,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 class ToolsAdapterViewModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
+    private val fileSystem: ToolFileSystem,
     private val settings: Settings
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
@@ -42,6 +44,9 @@ class ToolsAdapterViewModel @Inject constructor(
             .map { it?.bannerId }.distinctUntilChanged()
             .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val bannerFile = banner
+            .map { it?.getFile(fileSystem) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val availableLanguages = Query.select<Translation>()

@@ -15,11 +15,17 @@ import androidx.compose.ui.platform.UriHandler
 import org.cru.godtools.base.ui.util.openUrl
 
 private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
+val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 
 private val GodToolsLightColorScheme = lightColorScheme(
     primary = GT_BLUE,
     background = Color.White,
-    onBackground = Color(90, 90, 90)
+    onBackground = Color(90, 90, 90),
+    surface = Color.White,
+    onSurface = Color(90, 90, 90),
+    // HACK: We are currently disabling surface tint to avoid using tonal elevation on surfaces.
+    //       When we transition to using tonal elevation we can revert this back to the default value
+    surfaceTint = Color.White
 )
 
 @Composable
