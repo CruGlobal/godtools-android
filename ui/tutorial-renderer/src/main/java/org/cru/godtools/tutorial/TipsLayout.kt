@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 
 import com.airbnb.lottie.compose.LottieAnimation
@@ -30,10 +31,10 @@ internal fun TipsLayout() = GodToolsTheme() {
     Column(
         modifier = Modifier.fillMaxSize().padding(top = 100.dp),
 
-        //verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Spacer(modifier = Modifier.height(100.dp))
+
         val composition by rememberLottieComposition(
             LottieCompositionSpec
                 .RawRes(org.cru.godtools.tutorial.R.raw.anim_tutorial_tips_people)
@@ -56,11 +57,11 @@ internal fun TipsLayout() = GodToolsTheme() {
             // pass isPlaying we created above,
             // changing isPlaying will recompose
             // Lottie and pause/play
-            isPlaying = isPlaying,
+            isPlaying = true,
 
             // pass speed we created above,
             // changing speed will increase Lottie
-            speed = speed,
+            speed = 1f,
 
             // this makes animation to restart
             // when paused and play
@@ -72,22 +73,23 @@ internal fun TipsLayout() = GodToolsTheme() {
         LottieAnimation(
             composition,
             progress,
-            modifier = Modifier.size(250.dp)
+            modifier = Modifier.height(290.dp).fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(text = "Learn to share this tool with anyone",
-            style = MaterialTheme.typography.titleMedium,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-            //modifier = Modifier.align
+        //Spacer(modifier = Modifier.height(20.dp))
+        Text(text = stringResource(R.string.tutorial_tips_learn_headline),
+            style = MaterialTheme.typography.titleLarge,
+            //fontSize = 30.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 20.dp)
 
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Practice using as many tips as you need to feel confident in sharing this tool with others.",
-            style = MaterialTheme.typography.bodySmall,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center)
+        //Spacer(modifier = Modifier.height(20.dp))
+        Text(stringResource(R.string.tutorial_tips_learn_text),
+            style = MaterialTheme.typography.bodyLarge,
+            //fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 20.dp))
     }
 
 
