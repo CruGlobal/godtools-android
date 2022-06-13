@@ -33,8 +33,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             it.setVariable(BR.callbacks, this)
             it.setVariable(BR.page, page)
             it.setVariable(BR.formatArgs, formatArgs)
-            it.setVariable(BR.lifecycleOwner2, viewLifecycleOwner)
-            it.setVariable(BR.isVisible, false)
             binding = it
         }.root
 
@@ -57,12 +55,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         super.onDestroyView()
     }
     // endregion Lifecycle
-
-    // HACK: we leverage menu visibility to infer when the fragment is visible or not
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-        binding?.setVariable(BR.isVisible, menuVisible)
-    }
 
     private fun ViewDataBinding.startAnimations() {
         when (this) {

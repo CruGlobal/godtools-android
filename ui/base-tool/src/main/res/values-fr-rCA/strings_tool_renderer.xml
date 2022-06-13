@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">Partager</string>
     <string name="tool_not_found">Impossible de trouver l\'outil que vous avez demandé</string>
     <string name="tool_loading">Chargement de l\'outil que vous avez demandé…</string>
     <string name="tool_offline">L\'ouverture de l\'outil demandé nécessite une connexion internet.</string>
-    <string name="feature_discovery_title_share_tool">Partagez un lien</string>
-    <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
     <string name="tract_content_input_error_required">%1$s est requis</string>
     <string name="tract_content_input_error_invalid_email">Veuillez saisir une adresse courriel valide.</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Partager</string>
+    <string name="feature_discovery_title_share_tool">Partagez un lien</string>
+    <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
+    <!-- Shareables -->
 </resources>

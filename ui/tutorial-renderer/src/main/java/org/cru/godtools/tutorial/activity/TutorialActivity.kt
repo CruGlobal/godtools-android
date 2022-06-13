@@ -210,7 +210,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
-            R.id.action_live_share_finish, R.id.action_training_finish, R.id.action_tips_finish -> {
+            R.id.action_live_share_finish, R.id.action_features_finish, R.id.action_tips_finish -> {
                 setResult(RESULT_OK)
                 finish()
             }

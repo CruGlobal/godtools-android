@@ -12,4 +12,5 @@
     <string name="tract_live_share_exit_dialog_message">Fernfreigabe-Sitzung jetzt beenden?</string>
     <string name="tract_live_share_exit_dialog_confirm">Beenden</string>
     <string name="tract_live_share_exit_dialog_cancel">Abbrechen</string>
+    <!-- Settings -->
 </resources>

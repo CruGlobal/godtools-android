@@ -1,5 +1,3 @@
-@file:JvmName("LocaleTypefaceUtils")
-
 package org.cru.godtools.base.ui.util
 
 import android.content.Context

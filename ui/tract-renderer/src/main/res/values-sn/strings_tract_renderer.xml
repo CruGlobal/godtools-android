@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_install">Isa pafoni</string>
+    <string name="menu_share_tract">Tumira chombo ichi</string>
     <string name="tract_card_previous">Yapfuura</string>
-    <string name="tract_card_next">Tevere</string>
+    <string name="tract_card_next">Zvinotevera</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Goverana nenharembozha yako</string>
+    <string name="menu_live_share_active">Kugoverana nenharembozha kwatenderwa</string>
+    <string name="share_tool_message_tract_live_share">Anodiwa, ngatibatane muGodTools tichishandisa kugoverana nenharembozha. Unokwanisa kubaya apa: %1$s\n\nUkasagamuchira mashoko ano kusvika nguva dzafamba, panenge pasingachashandi. Tinogona kuzoedza pane imwe nguva.</string>
+    <string name="tract_live_share_starting">Tanga kugoverana nenharembozha</string>
+    <string name="tract_live_share_unable_to_connect">Haukwanisi kuti zviite</string>
+    <string name="tract_live_share_exit_dialog_message">Buda muhurongwa hwekugoverana evezvi?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Buda</string>
+    <string name="tract_live_share_exit_dialog_cancel">Regedza</string>
+    <!-- Settings -->
 </resources>

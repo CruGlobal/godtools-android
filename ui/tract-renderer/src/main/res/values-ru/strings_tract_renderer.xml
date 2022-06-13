@@ -13,4 +13,5 @@
     <string name="tract_live_share_exit_dialog_message">Выйти из сеанса удаленной трансляции?</string>
     <string name="tract_live_share_exit_dialog_confirm">Выход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмена</string>
+    <!-- Settings -->
 </resources>

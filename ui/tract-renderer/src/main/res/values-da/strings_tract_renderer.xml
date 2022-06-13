@@ -12,4 +12,5 @@
     <string name="tract_live_share_exit_dialog_message">Afslut fjerndelingssessionen nu?</string>
     <string name="tract_live_share_exit_dialog_confirm">Afslut</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuller</string>
+    <!-- Settings -->
 </resources>

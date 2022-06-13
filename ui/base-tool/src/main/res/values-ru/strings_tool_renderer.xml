@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">Поделиться</string>
-    <string name="share_tool_message_article">Хочу поделиться с вами статьей и услышать ваше мнение о ней.\n%1$s</string>
     <string name="tool_not_found">Не удалось найти инструмент</string>
     <string name="tool_loading">Загрузка требуемого инструмента…</string>
     <string name="tool_offline">Запрошенный вами инструмент требует подключение к Интернету</string>
-    <string name="feature_discovery_title_share_tool">Поделитесь ссылкой</string>
-    <string name="feature_discovery_desc_share_tool">Нажмите на значок, чтобы рассказать об этом инструменте друзьям</string>
     <string name="tract_content_input_error_required">Необходимо ввести %1$s</string>
     <string name="tract_content_input_error_invalid_email">Введите правильный адрес эл. почты</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Поделиться</string>
+    <string name="share_tool_message_article">Хочу поделиться с вами статьей и услышать ваше мнение о ней.\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Поделитесь ссылкой</string>
+    <string name="feature_discovery_desc_share_tool">Нажмите на значок, чтобы рассказать об этом инструменте друзьям</string>
+    <!-- Shareables -->
 </resources>

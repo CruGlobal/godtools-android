@@ -16,6 +16,7 @@ import timber.log.Timber
 internal fun View.setLayoutWidth(w: Dimension?) {
     val lp = layoutParams
     when (w) {
+        null -> Unit
         is Pixels -> {
             val size = dpToPixelSize(w.value, resources)
             if (size != lp.width) {

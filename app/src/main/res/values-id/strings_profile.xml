@@ -4,4 +4,9 @@
     <string name="menu_profile">Aktifitas Global</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">Aktivitas</string>
+    <string name="profile_global_activity_heading">%s Aktivitas Global</string>
+    <string name="profile_activity_unique_users">Pengguna unik</string>
+    <string name="profile_activity_gospel_presentations">Presentasi Injil</string>
+    <string name="profile_activity_sessions">Sesi-Sesi</string>
+    <string name="profile_activity_countries">Negara-negara</string>
 </resources>

@@ -21,7 +21,7 @@ class TutorialAnalyticsScreenEvent internal constructor(
 
     override val appSection get() = when (tutorial) {
         PageSet.ONBOARDING -> APP_SECTION_ONBOARDING
-        PageSet.TRAINING -> APP_SECTION_TUTORIAL
+        PageSet.FEATURES -> APP_SECTION_TUTORIAL
         // TODO: what should the app section actually be?
         PageSet.LIVE_SHARE -> null
         PageSet.TIPS -> null

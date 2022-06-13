@@ -57,7 +57,7 @@
         <item name="android:ellipsize">end</item>
 
         <!-- parallel language checkmark -->
-        <item name="drawableEndCompat">@drawable/ic_tool_checkmark</item>
+        <item name="drawableEndCompat">@drawable/ic_language_available</item>
     </style>
 
     <style name="Widget.GodTools.Tools.Card.Action.Favorite" parent="Base">

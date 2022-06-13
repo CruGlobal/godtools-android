@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:clipToPadding="false"
-        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}">
+        android:onClick="@{() -> callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.secondTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
@@ -69,7 +69,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation, toolViewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintEnd_toStartOf="@id/language_parallel"
                 app:layout_constraintStart_toEndOf="@id/margin_start"
                 app:layout_constraintTop_toBottomOf="@id/banner"
@@ -83,11 +83,11 @@
                 android:layout_marginStart="4dp"
                 android:gravity="end"
                 android:maxWidth="72dp"
-                android:text="@{toolViewModel.parallelLanguage.getDisplayName(context)}"
+                android:text="@{toolViewModel.secondLanguage.getDisplayName(context)}"
                 app:layout_constraintBaseline_toBaselineOf="@id/title"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/title"
-                app:visibleIf="@{toolViewModel.tool.type.supportsParallelLanguage &amp;&amp; toolViewModel.parallelLanguage != null &amp;&amp; !toolViewModel.firstTranslation.languageCode.equals(toolViewModel.parallelLanguage.code)}"
+                app:visibleIf="@{toolViewModel.secondLanguage != null}"
                 tools:text="Bosnian (Bosnia &amp; Herzegovina)" />
 
             <TextView
@@ -117,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:onClick="@{() -> callbacks.openTool(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.parallelTranslation)}"
+                android:onClick="@{() -> callbacks.openTool(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.secondTranslation)}"
                 android:text="@string/action_tools_open"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -138,7 +138,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.parallelTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
+                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.secondTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
                 android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="@id/action_details"
                 app:layout_constraintStart_toStartOf="parent"

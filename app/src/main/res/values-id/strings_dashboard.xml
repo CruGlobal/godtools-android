@@ -30,6 +30,10 @@
     <string name="tools_list_favorites_banner_action_dismiss">Berhentikan</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Semua Alat</string>
+    <string name="dashboard_tools_section_categories_label">Kategori</string>
+    <string name="dashboard_tools_section_categories_all">Semua Sarana</string>
+    <string name="dashboard_tools_section_spotlight_label">Spotlight Sarana</string>
+    <string name="dashboard_tools_section_spotlight_description">Ini beberapa sarama yang mungkin Anda suka</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Apakah Anda ingin menyetel bahasa sekunder?</string>
     <string name="languages_parallel_dialog_select">Pilih bahasa</string>

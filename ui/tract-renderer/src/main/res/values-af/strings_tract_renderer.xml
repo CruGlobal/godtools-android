@@ -12,4 +12,5 @@
     <string name="tract_live_share_exit_dialog_message">Wil jy nou die afstanddeelsessie verlaat?</string>
     <string name="tract_live_share_exit_dialog_confirm">Verlaat</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselleer</string>
+    <!-- Settings -->
 </resources>

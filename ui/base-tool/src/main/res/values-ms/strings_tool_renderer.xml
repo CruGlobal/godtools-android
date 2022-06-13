@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">Kongsi</string>
     <string name="tool_not_found">Alat yang anda minta tidak ditemui</string>
     <string name="tool_loading">Alat yang anda minta sedang dimuatkan…</string>
     <string name="tool_offline">Alat yang anda minta memerlukan sambungan internet untuk dibuka</string>
-    <string name="feature_discovery_title_share_tool">Kongsi pautan</string>
-    <string name="feature_discovery_desc_share_tool">Hantar alat ini kepada rakan dengan mengklik ikon ini</string>
     <string name="tract_content_input_error_required">%1$s diperlukan</string>
     <string name="tract_content_input_error_invalid_email">Sila masukkan alamat e-mel yang sah</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Kongsi</string>
+    <string name="feature_discovery_title_share_tool">Kongsi pautan</string>
+    <string name="feature_discovery_desc_share_tool">Hantar alat ini kepada rakan dengan mengklik ikon ini</string>
+    <!-- Shareables -->
 </resources>

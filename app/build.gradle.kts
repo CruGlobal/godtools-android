@@ -122,8 +122,7 @@ android {
         }
         val release by existing {
             isMinifyEnabled = true
-            // TODO: this is disabled until it supports dynamic features in AS 4.2
-//            shrinkResources true
+            isShrinkResources = true
             signingConfigs.getByName("release").takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
 

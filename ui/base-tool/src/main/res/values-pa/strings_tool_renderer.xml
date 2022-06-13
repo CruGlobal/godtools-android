@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_share_tool">ਸਾਂਝਿਆ ਕਰੋ</string>
     <string name="tool_not_found">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਨਹੀਂ ਮਿਲ ਰਿਹਾ ਹੈ</string>
     <string name="tool_loading">ਬੇਨਤੀ ਕੀਤੇ ਜਾਣ ਵਾਲਾ ਟੂਲ ਲੋ਼ਡ ਹੋ ਰਿਹਾ ਹੈ</string>
     <string name="tool_offline">ਤੁਹਾਡੇ ਦੁਆਰਾ ਬੇਨਤੀ ਕੀਤੇ ਟੂਲ ਨੂੰ ਖੋਲ੍ਹਣ ਲਈ ਇੱਕ ਇੰਟਰਨੈਟ ਕਨੈਕਸ਼ਨ ਦੀ ਲੋੜ ਹੈ</string>
-    <string name="feature_discovery_title_share_tool">ਇੱਕ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
-    <string name="feature_discovery_desc_share_tool">ਇਸ ਆਈਕਾਨ ਨੂੰ ਕਲਿੱਕ ਕਰਕੇ ਇਸ ਟੂਲ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ</string>
     <string name="tract_content_input_error_required">“%1$s ਦੀ ਲੋੜ ਹੈ</string>
     <string name="tract_content_input_error_invalid_email">ਕਿਰਪਾ ਕਰਕੇ ਈਮੇਲ ਦੇ ਸਹੀ ਪਤੇ ਨੂੰ ਲਿਖੋ</string>
+    <!-- Menu Items -->
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">ਸਾਂਝਿਆ ਕਰੋ</string>
+    <string name="feature_discovery_title_share_tool">ਇੱਕ ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
+    <string name="feature_discovery_desc_share_tool">ਇਸ ਆਈਕਾਨ ਨੂੰ ਕਲਿੱਕ ਕਰਕੇ ਇਸ ਟੂਲ ਨੂੰ ਆਪਣੇ ਦੋਸਤ ਨੂੰ ਭੇਜੋ</string>
+    <!-- Shareables -->
 </resources>

@@ -26,29 +26,17 @@ enum class PageSet(
             Page.ONBOARDING_LINKS
         )
     ),
-    TRAINING(
-        feature = Settings.FEATURE_TUTORIAL_TRAINING,
+    FEATURES(
+        feature = Settings.FEATURE_TUTORIAL_FEATURES,
         analyticsBaseScreenName = "tutorial",
         pages = listOf(
-            Page.TRAINING_WATCH,
             Page.FEATURES_TOOLS,
             Page.FEATURES_TIPS,
             Page.FEATURES_LIVE_SHARE,
             Page.FEATURES_LESSONS,
-            Page.TRAINING_PREPARE,
-            Page.TRAINING_TRY,
-            Page.TRAINING_FINAL
+            Page.FEATURES_FINAL
         ),
-        supportedLocales = setOf(
-            Locale.ENGLISH,
-            Locale("es"),
-            Locale.FRENCH,
-            Locale("hi"),
-            Locale("in"),
-            Locale("ru"),
-            Locale.SIMPLIFIED_CHINESE,
-            Locale.forLanguageTag("zh-Hans")
-        )
+        supportedLocales = setOf(Locale.ENGLISH)
     ),
     LIVE_SHARE(
         menu = R.menu.tutorial_live_share_menu,

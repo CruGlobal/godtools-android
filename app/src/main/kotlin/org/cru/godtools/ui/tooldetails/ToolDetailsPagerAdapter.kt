@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.R
@@ -17,7 +16,7 @@ internal class ToolDetailsPagerAdapter(
     private val dataModel: ToolDetailsFragmentDataModel,
     private val variantsAdapter: RecyclerView.Adapter<*>,
     private val linkClickListener: LinkClickedListener?
-) : SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<ToolDetailsPagerAdapter.Page>> {
+) : SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner) {
     enum class Page(@StringRes val tabLabel: Int) {
         DESCRIPTION(R.string.label_tools_about),
         VARIANTS(R.string.tool_details_section_variants_label)
@@ -38,10 +37,6 @@ internal class ToolDetailsPagerAdapter(
     fun getItem(position: Int) = pages[position]
     override fun getItemCount() = pages.size
     override fun getItemViewType(position: Int) = getItem(position).ordinal
-
-    override fun onChanged(t: List<Page>) {
-        pages = t
-    }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (Page.values()[viewType]) {
         Page.DESCRIPTION -> ToolDetailsPageDescriptionBinding
