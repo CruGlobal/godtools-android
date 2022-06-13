@@ -9,7 +9,6 @@ import com.tinder.scarlet.WebSocket
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.UUID
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -27,7 +26,6 @@ import timber.log.Timber
 private const val TAG = "TractPublisherContrller"
 
 @HiltViewModel
-@OptIn(ExperimentalCoroutinesApi::class)
 class TractPublisherController @Inject constructor(
     private val service: TractShareService,
     private val referenceLifecycle: ReferenceLifecycle,
@@ -82,6 +80,7 @@ class TractPublisherController @Inject constructor(
                             when (it) {
                                 is WebSocket.Event.OnConnectionOpened<*> -> service.subscribe(Subscribe(identifier))
                                 is WebSocket.Event.OnConnectionFailed -> Timber.tag(TAG).d(it.throwable)
+                                else -> Unit
                             }
                         }
                     }

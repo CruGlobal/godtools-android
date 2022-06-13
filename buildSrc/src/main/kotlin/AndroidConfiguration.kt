@@ -87,6 +87,7 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
 
     // add our base compose dependencies
     project.dependencies.addProvider("implementation", project.libs.findBundle("androidx-compose").get())
+    project.dependencies.addProvider("debugImplementation", project.libs.findBundle("androidx-compose-debug").get())
 }
 
 private fun TestedExtension.configureTestOptions() {
