@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.splitties.fragmentargs)
     implementation(libs.splitties.intents)
     implementation(libs.youtubePlayer)
+    implementation("androidx.compose.ui:ui:1.1.1")
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)

@@ -1,7 +1,11 @@
-package org.cru.godtools.tutorial
+package org.cru.godtools.tutorial.layout
 
-//import org.cru.godtools.R
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,18 +16,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.*
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.tutorial.R
 
 @Preview(showBackground = true)
 @Composable
-internal fun TipsLayout() = GodToolsTheme() {
+internal fun TipsTutorialLayout() = GodToolsTheme() {
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 100.dp),
-
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
 
         val composition by rememberLottieComposition(
             LottieCompositionSpec
@@ -55,25 +63,22 @@ internal fun TipsLayout() = GodToolsTheme() {
         )
         LottieAnimation(
             composition,
-            progress,
+            {progress},
             modifier = Modifier.height(290.dp).fillMaxWidth()
         )
 
-        //Spacer(modifier = Modifier.height(20.dp))
-        Text(text = stringResource(R.string.tutorial_tips_learn_headline),
+        Text(
+            text = stringResource(R.string.tutorial_tips_learn_headline),
             style = MaterialTheme.typography.titleLarge,
-            //fontSize = 30.sp,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 20.dp)
 
         )
-        //Spacer(modifier = Modifier.height(20.dp))
-        Text(stringResource(R.string.tutorial_tips_learn_text),
+
+        Text(
+            stringResource(R.string.tutorial_tips_learn_text),
             style = MaterialTheme.typography.bodyLarge,
-            //fontSize = 20.sp,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 20.dp))
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
-
-
 }

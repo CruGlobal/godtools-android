@@ -170,9 +170,6 @@ dependencies {
     implementation(project(":ui:tutorial-renderer"))
 
     implementation(libs.androidx.compose.material3)
-
-
-
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.hilt.work)

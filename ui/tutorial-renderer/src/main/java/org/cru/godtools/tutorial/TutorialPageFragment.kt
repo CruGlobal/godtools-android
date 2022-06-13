@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
+import org.cru.godtools.tutorial.layout.TipsTutorialLayout
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
 
@@ -45,7 +46,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     private fun ViewDataBinding.setCompose() {
         when (this) {
             is TutorialTipsLearnBinding -> {
-                compose.setContent { TipsLayout() }
+                compose.setContent { TipsTutorialLayout() }
             }
         }
     }
@@ -62,9 +63,6 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             else -> Unit
         }
     }
-
-
-
 
     // region TutorialCallbacks
     override fun nextPage() {
