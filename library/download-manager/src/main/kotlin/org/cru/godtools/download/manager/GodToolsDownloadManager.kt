@@ -59,7 +59,6 @@ import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
-import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
@@ -355,10 +354,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!downloadTranslationFileIfNecessary(manifestFileName)) return false
 
         // parse manifest
-        val manifest = (manifestParser.parseManifest(
+        val parserResult = manifestParser.parseManifest(
             manifestFileName,
             manifestParser.defaultConfig.withParseRelated(false)
-        ) as? ParserResult.Data)?.manifest ?: return false
+        )
+        val manifest = (parserResult as? ParserResult.Data)?.manifest ?: return false
 
         // download all files the manifest references
         val key = TranslationKey(translation)

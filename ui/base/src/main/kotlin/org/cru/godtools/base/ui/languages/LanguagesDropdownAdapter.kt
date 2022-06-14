@@ -2,7 +2,6 @@ package org.cru.godtools.base.ui.languages
 
 import android.content.Context
 import android.widget.Filter
-import java.util.Locale
 import org.ccci.gto.android.common.androidx.databinding.widget.DataBindingArrayAdapter
 import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.ui.R
