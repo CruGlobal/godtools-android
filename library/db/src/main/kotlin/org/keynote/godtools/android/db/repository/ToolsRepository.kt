@@ -5,7 +5,7 @@ import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.db.Expression
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsFlow
@@ -23,6 +23,22 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
         )
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
         .getAsFlow(dao)
+
+    suspend fun pinTool(code: String) {
+        val tool = Tool().also {
+            it.code = code
+            it.isAdded = true
+        }
+        withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+    }
+
+    suspend fun unpinTool(code: String) {
+        val tool = Tool().also {
+            it.code = code
+            it.isAdded = false
+        }
+        withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+    }
 
     @WorkerThread
     private fun updateToolOrder(vararg tools: Long) {

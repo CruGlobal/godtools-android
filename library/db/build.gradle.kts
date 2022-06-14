@@ -23,4 +23,6 @@ dependencies {
     implementation(libs.hilt)
 
     kapt(libs.dagger.compiler)
+
+    testImplementation(libs.kotlin.coroutines.test)
 }

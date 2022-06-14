@@ -6,6 +6,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
@@ -14,6 +15,7 @@ import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
@@ -45,7 +47,6 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -66,9 +67,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -103,12 +104,12 @@ class GodToolsDownloadManagerTest {
         every { isLanguageProtected(any()) } returns false
         every { parallelLanguage } returns null
     }
+    private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
     private val translationsApi = mockk<TranslationsApi>()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
 
-    private val tool = slot<Tool>()
     private val language = slot<Language>()
 
     private val downloadProgress = mutableListOf<DownloadProgress?>()
@@ -127,6 +128,7 @@ class GodToolsDownloadManagerTest {
             fs,
             manifestParser,
             settings,
+            toolsRepository,
             translationsApi,
             { workManager },
             this,
@@ -141,44 +143,24 @@ class GodToolsDownloadManagerTest {
     }
 
     // region pinTool()/unpinTool()
-    @Test
-    fun verifyPinTool() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.pinTool(TOOL) }
-        assertEquals(TOOL, tool.captured.code)
-        assertTrue(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
-    }
+    private val tool = slot<String>()
 
     @Test
     fun verifyPinToolAsync() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+        coEvery { toolsRepository.pinTool(capture(tool)) } just Runs
 
         withDownloadManager { it.pinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured.code)
-        assertTrue(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
-    }
-
-    @Test
-    fun verifyUnpinTool() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.unpinTool(TOOL) }
-        assertEquals(TOOL, tool.captured.code)
-        assertFalse(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
+        assertEquals(TOOL, tool.captured)
+        coVerifyAll { toolsRepository.pinTool(tool.captured) }
     }
 
     @Test
     fun verifyUnpinToolAsync() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+        coEvery { toolsRepository.unpinTool(capture(tool)) } just Runs
 
         withDownloadManager { it.unpinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured.code)
-        assertFalse(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
+        assertEquals(TOOL, tool.captured)
+        coVerifyAll { toolsRepository.unpinTool(tool.captured) }
     }
     // endregion pinTool()/unpinTool()
 

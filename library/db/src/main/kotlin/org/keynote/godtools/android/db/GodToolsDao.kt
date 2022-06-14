@@ -107,6 +107,8 @@ class GodToolsDao @Inject internal constructor(
     }
 
     @get:RestrictTo(RestrictTo.Scope.LIBRARY)
+    override val coroutineDispatcher get() = super<CoroutinesAsyncDao>.coroutineDispatcher
+    @get:RestrictTo(RestrictTo.Scope.LIBRARY)
     override val coroutineScope get() = super<CoroutinesAsyncDao>.coroutineScope
 
     // region Custom DAO methods
