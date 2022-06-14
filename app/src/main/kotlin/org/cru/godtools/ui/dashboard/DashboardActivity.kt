@@ -10,7 +10,6 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
-import com.google.android.material.transition.MaterialFadeThrough
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -130,10 +129,6 @@ class DashboardActivity :
             Page.LESSONS -> ToolsListFragment(MODE_LESSONS)
             Page.ALL_TOOLS -> ToolsFragment()
             Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
-        }.apply {
-            val transition = MaterialFadeThrough()
-            enterTransition = transition
-            exitTransition = transition
         }
 
         supportFragmentManager.commit {
