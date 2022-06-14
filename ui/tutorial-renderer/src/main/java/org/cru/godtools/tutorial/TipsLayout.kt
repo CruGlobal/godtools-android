@@ -63,7 +63,7 @@ internal fun TipsTutorialLayout() = GodToolsTheme() {
         )
         LottieAnimation(
             composition,
-            {progress},
+            { progress },
             modifier = Modifier.height(290.dp).fillMaxWidth()
         )
 

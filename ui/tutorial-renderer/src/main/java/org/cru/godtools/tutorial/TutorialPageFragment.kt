@@ -15,7 +15,6 @@ import org.cru.godtools.tutorial.layout.TipsTutorialLayout
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
 
-
 internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     constructor(page: Page, formatArgs: Bundle?) : this() {
         this.page = page
