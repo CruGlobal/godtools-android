@@ -23,10 +23,10 @@ dependencies {
     implementation(project(":library:base"))
     implementation(project(":ui:base"))
 
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
-    implementation(libs.androidx.compose.material3)
 
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.fragment)
@@ -41,7 +41,6 @@ dependencies {
     implementation(libs.splitties.fragmentargs)
     implementation(libs.splitties.intents)
     implementation(libs.youtubePlayer)
-
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
