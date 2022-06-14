@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.about
 
-
 import android.text.SpannableString
 import android.text.style.URLSpan
 import android.text.util.Linkify
@@ -21,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-
 
 @Preview(showBackground = true)
 @Composable
