@@ -39,15 +39,15 @@ internal class ToolDetailsPagerAdapter(
     override fun getItemViewType(position: Int) = getItem(position).ordinal
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) = when (Page.values()[viewType]) {
-        Page.DESCRIPTION -> ToolDetailsPageDescriptionBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false).apply {
+        Page.DESCRIPTION ->
+            ToolDetailsPageDescriptionBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
                 tool = dataModel.tool
                 translation = dataModel.primaryTranslation
                 autoLinkListener = linkClickListener
                 languages = dataModel.availableLanguages
             }
-        Page.VARIANTS -> ToolDetailsPageVariantsBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false).apply {
+        Page.VARIANTS ->
+            ToolDetailsPageVariantsBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
                 variants.adapter = variantsAdapter
             }
     }
