@@ -38,16 +38,8 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.setupCompose()
         binding?.startAnimations()
-        binding?.setCompose()
-    }
-
-    private fun ViewDataBinding.setCompose() {
-        when (this) {
-            is TutorialTipsLearnBinding -> {
-                compose.setContent { TipsTutorialLayout() }
-            }
-        }
     }
 
     override fun onDestroyView() {
@@ -55,6 +47,12 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         super.onDestroyView()
     }
     // endregion Lifecycle
+
+    private fun ViewDataBinding.setupCompose() {
+        when (this) {
+            is TutorialTipsLearnBinding -> compose.setContent { TipsTutorialLayout() }
+        }
+    }
 
     private fun ViewDataBinding.startAnimations() {
         when (this) {
