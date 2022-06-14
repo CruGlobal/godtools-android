@@ -1,7 +1,6 @@
 package org.cru.godtools.tool.lesson.util
 
 import android.net.Uri
-import java.util.Locale
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 
 // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
