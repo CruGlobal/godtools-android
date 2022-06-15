@@ -14,7 +14,6 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -61,7 +60,7 @@ class ToolsListItemToolBindingTest {
     private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
         every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
-        every { downloadProgress } returns emptyLiveData()
+        every { downloadProgress } returns MutableStateFlow(null)
         every { firstTranslation } returns this@ToolsListItemToolBindingTest.firstTranslation
         every { secondTranslation } returns this@ToolsListItemToolBindingTest.secondTranslation
         every { secondLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage

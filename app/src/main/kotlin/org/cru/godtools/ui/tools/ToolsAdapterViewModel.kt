@@ -1,8 +1,6 @@
 package org.cru.godtools.ui.tools
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +12,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
@@ -86,8 +83,9 @@ class ToolsAdapterViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
-            .asLiveData().switchMap {
-                it?.let { downloadManager.getDownloadProgressLiveData(code, it.languageCode) }.orEmpty()
+            .flatMapLatest {
+                it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
             }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     }
 }
