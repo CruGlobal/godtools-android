@@ -9,7 +9,7 @@ import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.databinding.DashboardHomeFragmentBinding
-import org.cru.godtools.ui.tools.ToolsListFragment
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<DashboardHomeFragmentBinding>(R.layout.dashboard_home_fragment) {
@@ -22,7 +22,10 @@ class HomeFragment : BaseFragment<DashboardHomeFragmentBinding>(R.layout.dashboa
         binding.frame.setContent {
             HomeLayout(
                 onOpenTool = { tool, primary, parallel ->
-                    findListener<ToolsListFragment.Callbacks>()?.openTool(tool, primary, parallel)
+                    findListener<ToolsAdapterCallbacks>()?.openTool(tool, primary, parallel)
+                },
+                onOpenToolDetails = {
+                    findListener<ToolsAdapterCallbacks>()?.showToolDetails(it)
                 },
             )
         }
