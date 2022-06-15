@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.tools
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -28,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,7 +47,11 @@ private val toolCardElevation @Composable get() = elevatedCardElevation(defaultE
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LessonToolCard(toolCode: String, onClick: (Tool?, Translation?) -> Unit = { _, _ -> }) {
+fun LessonToolCard(
+    toolCode: String,
+    modifier: Modifier = Modifier,
+    onClick: (Tool?, Translation?) -> Unit = { _, _ -> }
+) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
@@ -55,40 +59,22 @@ fun LessonToolCard(toolCode: String, onClick: (Tool?, Translation?) -> Unit = { 
     ElevatedCard(
         elevation = toolCardElevation,
         onClick = { onClick(tool, translation) },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp)
+        modifier = modifier.fillMaxWidth()
     ) {
-        AsyncImage(
-            model = viewModel.bannerFile.collectAsState().value,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .background(GRAY_E6)
-                .aspectRatio(4.1875f)
-        )
+        ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            val baseToolNameStyle = MaterialTheme.typography.titleMedium
-            val toolNameStyle by remember(baseToolNameStyle) {
-                derivedStateOf { baseToolNameStyle.merge(TextStyle(fontFamily = translation?.getFontFamilyOrNull())) }
-            }
+            ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
 
-            Text(
-                translation.getName(tool).orEmpty(),
-                style = toolNameStyle,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .minLinesHeight(minLines = 2, textStyle = toolNameStyle)
-            )
-
-            Box(modifier = Modifier.align(Alignment.End)) {
+                    .align(Alignment.End)
+                    .wrapContentWidth()
+            ) {
                 AvailableInLanguage(
                     language = viewModel.primaryLanguage.collectAsState(),
                     translation = viewModel.primaryTranslation.collectAsState()
@@ -99,11 +85,44 @@ fun LessonToolCard(toolCode: String, onClick: (Tool?, Translation?) -> Unit = { 
 }
 
 @Composable
-private fun AvailableInLanguage(language: State<Language?>, translation: State<Translation?>) = Row(
-    verticalAlignment = Alignment.Bottom,
-    modifier = Modifier
-        .wrapContentWidth()
-        .alpha(0.6f)
+private fun ToolBanner(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier) = AsyncImage(
+    model = viewModel.bannerFile.collectAsState().value,
+    contentDescription = null,
+    contentScale = ContentScale.Crop,
+    modifier = modifier.background(GRAY_E6)
+)
+
+@Composable
+private fun ToolName(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier, lines: Int = 1) {
+    val tool by viewModel.tool.collectAsState()
+    val translation by viewModel.firstTranslation.collectAsState()
+
+    val baseStyle = MaterialTheme.typography.titleMedium
+    val style by remember(baseStyle) {
+        derivedStateOf {
+            baseStyle.merge(
+                TextStyle(
+                    fontFamily = translation?.getFontFamilyOrNull(),
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+    }
+
+    Text(
+        translation.getName(tool).orEmpty(),
+        style = style,
+        maxLines = lines,
+        overflow = TextOverflow.Ellipsis,
+        modifier = modifier.minLinesHeight(minLines = lines, textStyle = style)
+    )
+}
+
+@Composable
+private fun RowScope.AvailableInLanguage(
+    language: State<Language?>,
+    translation: State<Translation?>,
+    alpha: Float = 0.6f
 ) {
     val available by remember { derivedStateOf { translation.value != null } }
 
@@ -114,6 +133,7 @@ private fun AvailableInLanguage(language: State<Language?>, translation: State<T
         modifier = Modifier
             .wrapContentWidth()
             .alignByBaseline()
+            .alpha(alpha)
     )
     Icon(
         painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
@@ -122,5 +142,6 @@ private fun AvailableInLanguage(language: State<Language?>, translation: State<T
             .padding(start = 4.dp)
             .size(8.dp)
             .alignBy { it.measuredHeight }
+            .alpha(alpha)
     )
 }

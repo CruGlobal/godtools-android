@@ -65,6 +65,10 @@ private fun LazyListScope.FeaturedLessons(
     }
 
     items(lessons, key = { it }, contentType = { "lesson-tool-card" }) {
-        LessonToolCard(it) { tool, translation -> onOpenLesson(tool, translation) }
+        LessonToolCard(
+            it,
+            onClick = { tool, translation -> onOpenLesson(tool, translation) },
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
     }
 }
