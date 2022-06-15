@@ -26,13 +26,16 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
@@ -121,6 +124,7 @@ class GodToolsDownloadManagerTest {
         enableCleanupActor: Boolean = false,
         block: (GodToolsDownloadManager) -> Unit
     ) {
+        Dispatchers.setMain(dispatcher)
         val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
             dao,
@@ -137,6 +141,7 @@ class GodToolsDownloadManagerTest {
             block(downloadManager)
         } finally {
             downloadManager.cleanupActor.close()
+            Dispatchers.resetMain()
         }
     }
 
@@ -235,24 +240,25 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { downloadManager ->
             val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
             liveData.observeForever(observer)
-            verifyAll { observer wasNot Called }
+            verify(exactly = 1) { observer.onChanged(any()) }
+            assertNull(downloadProgress.removeAt(0))
 
             // start download
             downloadManager.startProgress(translationKey)
-            verify(exactly = 1) { observer.onChanged(any()) }
-            assertEquals(DownloadProgress.INITIAL, downloadProgress[0])
+            verify(exactly = 2) { observer.onChanged(any()) }
+            assertSame(DownloadProgress.INITIAL, downloadProgress.removeAt(0))
 
             // update progress
-            downloadManager.updateProgress(translationKey, 5, 0)
+            downloadManager.updateProgress(translationKey, 3, 5)
             downloadManager.updateProgress(translationKey, 5, 10)
-            verify(exactly = 3) { observer.onChanged(any()) }
-            assertEquals(DownloadProgress(5, 0), downloadProgress[1])
-            assertEquals(DownloadProgress(5, 10), downloadProgress[2])
+            verify(exactly = 4) { observer.onChanged(any()) }
+            assertEquals(DownloadProgress(3, 5), downloadProgress.removeAt(0))
+            assertEquals(DownloadProgress(5, 10), downloadProgress.removeAt(0))
 
             // finish download
             downloadManager.finishDownload(translationKey)
-            verify(exactly = 4) { observer.onChanged(any()) }
-            assertNull(downloadProgress[3])
+            verify(exactly = 5) { observer.onChanged(any()) }
+            assertNull(downloadProgress.removeAt(0))
         }
     }
     // endregion Download Progress
