@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "7.2.1"
-androidx-compose = "1.2.0-beta03"
+androidx-compose = "1.2.0-rc01"
 androidx-core = "1.8.0"
 androidx-hilt = "1.0.0"
 androidx-lifecycle = "2.4.1"
