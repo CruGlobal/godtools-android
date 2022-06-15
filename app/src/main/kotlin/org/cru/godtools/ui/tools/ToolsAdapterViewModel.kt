@@ -80,10 +80,10 @@ class ToolsAdapterViewModel @Inject constructor(
 
         val firstLanguage = firstTranslation
             .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
-            .asLiveData()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondLanguage = secondTranslation
             .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
-            .asLiveData()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
             .asLiveData().switchMap {

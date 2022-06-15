@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -58,7 +57,7 @@ class ToolsListItemToolBindingTest {
             tagline = "parallelTagline"
         }
     )
-    private val parallelLanguage = MutableLiveData<Language?>(null)
+    private val parallelLanguage = MutableStateFlow<Language?>(null)
     private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
         every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
