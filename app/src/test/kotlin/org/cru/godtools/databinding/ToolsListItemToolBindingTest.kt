@@ -51,7 +51,7 @@ class ToolsListItemToolBindingTest {
             tagline = "primaryTagline"
         }
     )
-    private val secondTranslation = MutableLiveData(
+    private val secondTranslation = MutableStateFlow<Translation?>(
         Translation().apply {
             languageCode = Locale("fr")
             name = "parallelName"

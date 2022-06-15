@@ -14,12 +14,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombine
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
-import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -79,21 +76,18 @@ class ToolsAdapterViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondTranslation = combine(parallelTranslation, firstTranslation) { p, f ->
             p?.takeUnless { p.languageCode == f?.languageCode }
-        }.asLiveData()
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val firstLanguage = firstTranslation
             .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
             .asLiveData()
-        val secondLanguage = secondTranslation.switchMap { t ->
-            t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
-        }
+        val secondLanguage = secondTranslation
+            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .asLiveData()
 
-        val downloadProgress = switchCombine(firstTranslation.asLiveData(), secondTranslation) { first, second ->
-            when {
-                first != null -> downloadManager.getDownloadProgressLiveData(code, first.languageCode)
-                second != null -> downloadManager.getDownloadProgressLiveData(code, second.languageCode)
-                else -> emptyLiveData()
+        val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
+            .asLiveData().switchMap {
+                it?.let { downloadManager.getDownloadProgressLiveData(code, it.languageCode) }.orEmpty()
             }
-        }
     }
 }
