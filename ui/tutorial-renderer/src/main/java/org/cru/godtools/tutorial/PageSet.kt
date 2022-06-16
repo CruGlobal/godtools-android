@@ -36,7 +36,7 @@ enum class PageSet(
             Page.FEATURES_LIVE_SHARE,
             Page.FEATURES_FINAL
         ),
-        supportedLocales = setOf(Locale.ENGLISH)
+        supportedLocales = setOf(Locale.ENGLISH, Locale("lv"))
     ),
     LIVE_SHARE(
         menu = R.menu.tutorial_live_share_menu,
