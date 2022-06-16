@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tools
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -47,6 +49,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
+import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -110,13 +113,27 @@ fun SquareToolCard(
     val secondTranslation = viewModel.secondTranslation.collectAsState()
     val secondLanguage = viewModel.secondLanguage.collectAsState()
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
+    val downloadProgress = viewModel.downloadProgress.collectAsState()
 
     ElevatedCard(
         elevation = toolCardElevation,
         onClick = { onClick(tool, firstTranslation, secondTranslation.value) },
         modifier = modifier.width(189.dp)
     ) {
-        ToolBanner(viewModel, modifier = Modifier.aspectRatio(189f / 128f))
+        Box(modifier = Modifier.fillMaxWidth()) {
+            ToolBanner(
+                viewModel,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(189f / 128f)
+            )
+            DownloadProgressIndicator(
+                downloadProgress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+            )
+        }
         Column(modifier = Modifier.padding(16.dp)) {
             ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
             ToolCategory(viewModel, modifier = Modifier.fillMaxWidth())
@@ -210,6 +227,30 @@ private fun ToolCategory(viewModel: ToolsAdapterViewModel.ToolViewModel, modifie
         style = MaterialTheme.typography.bodySmall,
         modifier = modifier
     )
+}
+
+// TODO: this can be refactored & moved elsewhere when we need to use it outside of tool cards
+@Composable
+private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>, modifier: Modifier = Modifier) {
+    val hasProgress by remember { derivedStateOf { downloadProgress.value != null } }
+    val isIndeterminate by remember { derivedStateOf { downloadProgress.value?.isIndeterminate == true } }
+    val progress by remember {
+        derivedStateOf {
+            downloadProgress.value
+                ?.takeIf { it.max > 0 }
+                ?.let { it.progress.toFloat() / it.max }
+                ?.coerceIn(0f, 1f) ?: 0f
+        }
+    }
+
+    if (hasProgress) {
+        if (isIndeterminate) {
+            LinearProgressIndicator(modifier = modifier)
+        } else {
+            // TODO: figure out how to animate progress updates to make a more smooth UI
+            LinearProgressIndicator(progress, modifier = modifier)
+        }
+    }
 }
 
 @Composable
