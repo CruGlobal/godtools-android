@@ -55,7 +55,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             is TutorialTipsLearnBinding -> compose.setContent {
                 TipsTutorialLayout(
                     R.raw.anim_tutorial_tips_people,
-                    R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text, 0
+                    R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text
                 )
             }
             is TutorialTipsLightBinding -> compose.setContent {
@@ -68,7 +68,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             is TutorialTipsStartBinding -> compose.setContent {
                 TipsTutorialLayout(
                     R.raw.anim_tutorial_tips_light,
-                    R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text, 0
+                    R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text
                 )
             }
         }

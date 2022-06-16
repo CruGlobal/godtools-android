@@ -23,119 +23,63 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @Composable
-internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int) = GodToolsTheme() {
-    if (body2 == 0) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int = 0) = GodToolsTheme() {
 
-            val composition by rememberLottieComposition(
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-                LottieCompositionSpec
-                    .RawRes(anim)
-            )
+        val composition by rememberLottieComposition(
 
-            val progress by animateLottieCompositionAsState(
-                // pass the composition created above
-                composition,
+            LottieCompositionSpec
+                .RawRes(anim)
+        )
 
-                // Iterates Forever
-                iterations = LottieConstants.IterateForever,
+        val progress by animateLottieCompositionAsState(
+            // pass the composition created above
+            composition,
 
-                // pass isPlaying we created above,
-                // changing isPlaying will recompose
-                // Lottie and pause/play
-                isPlaying = true,
+            // Iterates Forever
+            iterations = LottieConstants.IterateForever,
 
-                // pass speed we created above,
-                // changing speed will increase Lottie
-                speed = 1f,
+            // pass isPlaying we created above,
+            // changing isPlaying will recompose
+            // Lottie and pause/play
+            isPlaying = true,
 
-                // this makes animation to restart
-                // when paused and play
-                // pass false to continue the animation
-                // at which is was paused
-                restartOnPlay = false
+            // pass speed we created above,
+            // changing speed will increase Lottie
+            speed = 1f,
 
-            )
-            LottieAnimation(
-                composition,
-                { progress },
-                modifier = Modifier.height(290.dp).fillMaxWidth()
-            )
+            // this makes animation to restart
+            // when paused and play
+            // pass false to continue the animation
+            // at which is was paused
+            restartOnPlay = false
 
-            Text(
-                text = stringResource(title),
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
+        )
+        LottieAnimation(
+            composition,
+            { progress },
+            modifier = Modifier.height(290.dp).fillMaxWidth()
+        )
 
-            )
+        Text(
+            text = stringResource(title),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center,
 
-            Text(
-                stringResource(body),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-        }
-    } else {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        )
 
-            val composition by rememberLottieComposition(
-
-                LottieCompositionSpec
-                    .RawRes(anim)
-            )
-
-            val progress by animateLottieCompositionAsState(
-                // pass the composition created above
-                composition,
-
-                // Iterates Forever
-                iterations = LottieConstants.IterateForever,
-
-                // pass isPlaying we created above,
-                // changing isPlaying will recompose
-                // Lottie and pause/play
-                isPlaying = true,
-
-                // pass speed we created above,
-                // changing speed will increase Lottie
-                speed = 1f,
-
-                // this makes animation to restart
-                // when paused and play
-                // pass false to continue the animation
-                // at which is was paused
-                restartOnPlay = false
-
-            )
-            LottieAnimation(
-                composition,
-                { progress },
-                modifier = Modifier.height(290.dp).fillMaxWidth()
-            )
-
-            Text(
-                text = stringResource(title),
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-
-            )
-
-            Text(
-                stringResource(body),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
-            )
-
+        Text(
+            stringResource(body),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        if (body2 != 0) {
             Text(
                 stringResource(body2),
                 style = MaterialTheme.typography.bodyLarge,
