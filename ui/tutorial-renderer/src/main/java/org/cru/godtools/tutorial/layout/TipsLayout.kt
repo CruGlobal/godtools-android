@@ -23,7 +23,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @Composable
-internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int?) = GodToolsTheme() {
+internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int? = null) = GodToolsTheme() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
