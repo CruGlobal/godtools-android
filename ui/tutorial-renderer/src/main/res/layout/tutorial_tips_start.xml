@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="@id/marginStart"
             app:layout_constraintEnd_toEndOf="@id/marginEnd"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/action_next"/>
+            app:layout_constraintBottom_toTopOf="@id/action_tips_finish"/>
 
 
 
