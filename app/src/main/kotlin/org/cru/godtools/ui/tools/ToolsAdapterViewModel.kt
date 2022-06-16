@@ -1,8 +1,6 @@
 package org.cru.godtools.ui.tools
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,13 +12,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombine
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
-import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -77,24 +70,22 @@ class ToolsAdapterViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
-            .asLiveData()
-        val secondTranslation = parallelTranslation.asLiveData().combineWith(firstTranslation) { p, f ->
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val secondTranslation = combine(parallelTranslation, firstTranslation) { p, f ->
             p?.takeUnless { p.languageCode == f?.languageCode }
-        }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val firstLanguage = firstTranslation.switchMap { t ->
-            t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
-        }
-        val secondLanguage = secondTranslation.switchMap { t ->
-            t?.languageCode?.let { dao.findLiveData<Language>(it) }.orEmpty()
-        }
+        val firstLanguage = firstTranslation
+            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val secondLanguage = secondTranslation
+            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val downloadProgress = switchCombine(firstTranslation, secondTranslation) { first, second ->
-            when {
-                first != null -> downloadManager.getDownloadProgressLiveData(code, first.languageCode)
-                second != null -> downloadManager.getDownloadProgressLiveData(code, second.languageCode)
-                else -> emptyLiveData()
+        val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
+            .flatMapLatest {
+                it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
             }
-        }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     }
 }

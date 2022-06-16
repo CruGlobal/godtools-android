@@ -83,7 +83,8 @@ fun BaseExtension.configureFlavorDimensions() {
 //context(Project)
 fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion = project.libs.findVersion("androidx-compose").get().requiredVersion
+    composeOptions.kotlinCompilerExtensionVersion =
+        project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
 
     // add our base compose dependencies
     project.dependencies.addProvider("implementation", project.libs.findBundle("androidx-compose").get())

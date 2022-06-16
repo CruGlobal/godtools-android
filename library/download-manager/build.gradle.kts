@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":library:model"))
 
     api(libs.androidx.hilt.work)
+    api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.work.ktx)
 
     implementation(libs.gtoSupport.androidx.work)

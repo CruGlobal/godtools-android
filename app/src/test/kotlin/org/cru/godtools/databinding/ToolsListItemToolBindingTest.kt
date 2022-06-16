@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.databinding.ObservableField
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.testing.TestLifecycleOwner
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -15,7 +14,6 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -44,25 +42,25 @@ class ToolsListItemToolBindingTest {
     private lateinit var binding: ToolsListItemToolBinding
     private val callbacks = mockk<ToolsAdapterCallbacks>(relaxUnitFun = true)
     private val toolFlow = MutableStateFlow<Tool?>(tool())
-    private val firstTranslation = MutableLiveData(
+    private val firstTranslation = MutableStateFlow<Translation?>(
         Translation().apply {
             languageCode = Locale("en")
             name = "primaryName"
             tagline = "primaryTagline"
         }
     )
-    private val secondTranslation = MutableLiveData(
+    private val secondTranslation = MutableStateFlow<Translation?>(
         Translation().apply {
             languageCode = Locale("fr")
             name = "parallelName"
             tagline = "parallelTagline"
         }
     )
-    private val parallelLanguage = MutableLiveData<Language?>(null)
+    private val parallelLanguage = MutableStateFlow<Language?>(null)
     private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
         every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
-        every { downloadProgress } returns emptyLiveData()
+        every { downloadProgress } returns MutableStateFlow(null)
         every { firstTranslation } returns this@ToolsListItemToolBindingTest.firstTranslation
         every { secondTranslation } returns this@ToolsListItemToolBindingTest.secondTranslation
         every { secondLanguage } returns this@ToolsListItemToolBindingTest.parallelLanguage

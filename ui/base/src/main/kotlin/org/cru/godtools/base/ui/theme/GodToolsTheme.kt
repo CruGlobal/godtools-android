@@ -1,7 +1,9 @@
 package org.cru.godtools.base.ui.theme
 
 import android.net.Uri
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -22,16 +24,18 @@ private val GodToolsLightColorScheme = lightColorScheme(
 
 @Composable
 fun GodToolsTheme(content: @Composable () -> Unit) {
-    ProvideCompositionLocals {
-        MaterialTheme(
-            colorScheme = GodToolsLightColorScheme,
-            content = content
-        )
+    MaterialTheme(colorScheme = GodToolsLightColorScheme) {
+        CompositionLocalUtils {
+            CompositionLocalProvider(
+                LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),
+                content = content
+            )
+        }
     }
 }
 
 @Composable
-private fun ProvideCompositionLocals(content: @Composable () -> Unit) {
+private fun CompositionLocalUtils(content: @Composable () -> Unit) {
     val context = LocalContext.current
 
     val uriHandler = remember {

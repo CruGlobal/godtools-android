@@ -6,8 +6,11 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
 import java.util.Locale
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.ui.R
 
 private val typefaces = buildMap {
@@ -27,6 +30,9 @@ private val typefaces = buildMap {
     }
 }
 
+private val FONT_SINHALA = FontFamily(Font(R.font.noto_sans_sinhala_regular))
+private val FONT_TIBETAN = FontFamily(Font(R.font.noto_sans_tibetan_regular))
+
 fun Context.getTypeface(locale: Locale?) = typefaces[locale]?.let { ResourcesCompat.getFont(this, it) }
 
 fun CharSequence.applyTypefaceSpan(typeface: Typeface?) = when {
@@ -38,3 +44,13 @@ fun CharSequence.applyTypefaceSpan(typeface: Typeface?) = when {
         }
     }
 }
+
+internal fun Locale.getFontFamilyOrNull() = sequenceOf(this).includeFallbacks()
+    .mapNotNull {
+        when (it) {
+            Locale("si") -> if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) FONT_SINHALA else null
+            Locale("bo") -> if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) FONT_TIBETAN else null
+            else -> null
+        }
+    }
+    .firstOrNull()

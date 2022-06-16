@@ -7,7 +7,7 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -30,6 +30,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.launchIn
@@ -200,33 +202,40 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Tool/Language pinning
 
     // region Download Progress
-    private val downloadProgressLiveData = mutableMapOf<TranslationKey, MutableLiveData<DownloadProgress?>>()
+    private val downloadProgressStateFlows = mutableMapOf<TranslationKey, MutableStateFlow<DownloadProgress?>>()
+    private val downloadProgressLiveData = mutableMapOf<TranslationKey, LiveData<DownloadProgress?>>()
 
     @AnyThread
-    private fun getDownloadProgressLiveData(translation: TranslationKey) = synchronized(downloadProgressLiveData) {
-        downloadProgressLiveData.getOrPut(translation) { DownloadProgressLiveData() }
+    private fun getDownloadProgressStateFlow(translation: TranslationKey) = synchronized(downloadProgressStateFlows) {
+        downloadProgressStateFlows.getOrPut(translation) { MutableStateFlow(null) }
     }
+
+    @AnyThread
+    fun getDownloadProgressFlow(tool: String, locale: Locale): Flow<DownloadProgress?> =
+        getDownloadProgressStateFlow(TranslationKey(tool, locale))
 
     @MainThread
     fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
-        getDownloadProgressLiveData(TranslationKey(tool, locale))
+        TranslationKey(tool, locale).let {
+            downloadProgressLiveData.getOrPut(it) { getDownloadProgressStateFlow(it).asLiveData() }
+        }
 
     @AnyThread
     @VisibleForTesting
     internal fun startProgress(translation: TranslationKey) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
+        getDownloadProgressStateFlow(translation).compareAndSet(null, DownloadProgress.INITIAL)
     }
 
     @AnyThread
     @VisibleForTesting
     internal fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress(progress, max))
+        getDownloadProgressStateFlow(translation).value = DownloadProgress(progress, max)
     }
 
     @AnyThread
     @VisibleForTesting
     internal fun finishDownload(translation: TranslationKey) {
-        getDownloadProgressLiveData(translation).postValue(null)
+        getDownloadProgressStateFlow(translation).value = null
     }
     // endregion Download Progress
 
