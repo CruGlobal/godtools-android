@@ -23,7 +23,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @Composable
-internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int = 0) = GodToolsTheme() {
+internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int?) = GodToolsTheme() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -33,8 +33,7 @@ internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int = 0
 
         val composition by rememberLottieComposition(
 
-            LottieCompositionSpec
-                .RawRes(anim)
+            LottieCompositionSpec.RawRes(anim)
         )
 
         val progress by animateLottieCompositionAsState(
@@ -79,7 +78,7 @@ internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int = 0
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp)
         )
-        if (body2 != 0) {
+        if (body2 != null) {
             Text(
                 stringResource(body2),
                 style = MaterialTheme.typography.bodyLarge,
