@@ -23,6 +23,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -127,6 +129,7 @@ fun SquareToolCard(
                     .fillMaxWidth()
                     .aspectRatio(189f / 128f)
             )
+            FavoriteAction(viewModel, modifier = Modifier.align(Alignment.TopEnd))
             DownloadProgressIndicator(
                 downloadProgress,
                 modifier = Modifier
@@ -250,6 +253,30 @@ private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>
             // TODO: figure out how to animate progress updates to make a more smooth UI
             LinearProgressIndicator(progress, modifier = modifier)
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FavoriteAction(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier) {
+    val tool by viewModel.tool.collectAsState()
+    val isAdded by remember { derivedStateOf { tool?.isAdded == true } }
+
+    Surface(
+        onClick = { if (!isAdded) viewModel.pinTool() else viewModel.unpinTool() },
+        shape = Shapes.Full,
+        shadowElevation = 6.dp,
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(if (isAdded) R.drawable.ic_favorite_24dp else R.drawable.ic_favorite_border_24dp),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .padding(horizontal = 5.dp)
+                .padding(top = 6.dp, bottom = 4.dp)
+                .size(18.dp)
+        )
     }
 }
 

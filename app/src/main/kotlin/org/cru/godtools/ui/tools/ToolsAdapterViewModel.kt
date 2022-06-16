@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
@@ -24,6 +25,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,7 +33,8 @@ class ToolsAdapterViewModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
-    private val settings: Settings
+    private val settings: Settings,
+    private val toolsRepository: ToolsRepository
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     fun getToolViewModel(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
@@ -92,5 +95,8 @@ class ToolsAdapterViewModel @Inject constructor(
                 it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+        fun pinTool() = viewModelScope.launch { toolsRepository.pinTool(code) }
+        fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
     }
 }
