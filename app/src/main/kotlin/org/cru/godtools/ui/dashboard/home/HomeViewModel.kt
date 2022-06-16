@@ -25,5 +25,5 @@ class HomeViewModel @Inject constructor(dao: GodToolsDao, toolsRepository: Tools
 
     val favoriteTools = toolsRepository.favoriteTools
         .map { it.mapNotNull { it.code } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 }

@@ -121,7 +121,7 @@ class DashboardActivity :
 
     override val isShowNavigationDrawerIndicator get() = true
 
-    private fun showPage(page: Page) {
+    internal fun showPage(page: Page) {
         // short-circuit if the page is already displayed
         if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 

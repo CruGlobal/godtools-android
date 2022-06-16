@@ -23,6 +23,8 @@ private val GodToolsLightColorScheme = lightColorScheme(
     onBackground = Color(90, 90, 90),
     surface = Color.White,
     onSurface = Color(90, 90, 90),
+    surfaceVariant = Color(243, 243, 243),
+    onSurfaceVariant = Color(90, 90, 90),
     // HACK: We are currently disabling surface tint to avoid using tonal elevation on surfaces.
     //       When we transition to using tonal elevation we can revert this back to the default value
     surfaceTint = Color.White
