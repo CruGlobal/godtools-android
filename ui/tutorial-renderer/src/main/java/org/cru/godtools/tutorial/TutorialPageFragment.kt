@@ -11,6 +11,8 @@ import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsLightBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsStartBinding
 import org.cru.godtools.tutorial.layout.TipsTutorialLayout
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
@@ -50,7 +52,25 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
 
     private fun ViewDataBinding.setupCompose() {
         when (this) {
-            is TutorialTipsLearnBinding -> compose.setContent { TipsTutorialLayout() }
+            is TutorialTipsLearnBinding -> compose.setContent {
+                TipsTutorialLayout(
+                    R.raw.anim_tutorial_tips_people,
+                    R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text, 0
+                )
+            }
+            is TutorialTipsLightBinding -> compose.setContent {
+                TipsTutorialLayout(
+                    R.raw.anim_tutorial_tips_tool,
+                    R.string.tutorial_tips_light_headline, R.string.tutorial_tips_light_text1,
+                    R.string.tutorial_tips_light_text2
+                )
+            }
+            is TutorialTipsStartBinding -> compose.setContent {
+                TipsTutorialLayout(
+                    R.raw.anim_tutorial_tips_light,
+                    R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text, 0
+                )
+            }
         }
     }
 

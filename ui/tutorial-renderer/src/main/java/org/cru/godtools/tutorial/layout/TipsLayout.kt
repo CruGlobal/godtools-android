@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -22,63 +21,126 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.R
 
-@Preview(showBackground = true)
 @Composable
-internal fun TipsTutorialLayout() = GodToolsTheme() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int) = GodToolsTheme() {
+    if (body2 == 0) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        val composition by rememberLottieComposition(
-            LottieCompositionSpec
-                .RawRes(org.cru.godtools.tutorial.R.raw.anim_tutorial_tips_people)
-        )
+            val composition by rememberLottieComposition(
 
-        val progress by animateLottieCompositionAsState(
-            // pass the composition created above
-            composition,
+                LottieCompositionSpec
+                    .RawRes(anim)
+            )
 
-            // Iterates Forever
-            iterations = LottieConstants.IterateForever,
+            val progress by animateLottieCompositionAsState(
+                // pass the composition created above
+                composition,
 
-            // pass isPlaying we created above,
-            // changing isPlaying will recompose
-            // Lottie and pause/play
-            isPlaying = true,
+                // Iterates Forever
+                iterations = LottieConstants.IterateForever,
 
-            // pass speed we created above,
-            // changing speed will increase Lottie
-            speed = 1f,
+                // pass isPlaying we created above,
+                // changing isPlaying will recompose
+                // Lottie and pause/play
+                isPlaying = true,
 
-            // this makes animation to restart
-            // when paused and play
-            // pass false to continue the animation
-            // at which is was paused
-            restartOnPlay = false
+                // pass speed we created above,
+                // changing speed will increase Lottie
+                speed = 1f,
 
-        )
-        LottieAnimation(
-            composition,
-            { progress },
-            modifier = Modifier.height(290.dp).fillMaxWidth()
-        )
+                // this makes animation to restart
+                // when paused and play
+                // pass false to continue the animation
+                // at which is was paused
+                restartOnPlay = false
 
-        Text(
-            text = stringResource(R.string.tutorial_tips_learn_headline),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
+            )
+            LottieAnimation(
+                composition,
+                { progress },
+                modifier = Modifier.height(290.dp).fillMaxWidth()
+            )
 
-        )
+            Text(
+                text = stringResource(title),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
 
-        Text(
-            stringResource(R.string.tutorial_tips_learn_text),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp)
-        )
+            )
+
+            Text(
+                stringResource(body),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            val composition by rememberLottieComposition(
+
+                LottieCompositionSpec
+                    .RawRes(anim)
+            )
+
+            val progress by animateLottieCompositionAsState(
+                // pass the composition created above
+                composition,
+
+                // Iterates Forever
+                iterations = LottieConstants.IterateForever,
+
+                // pass isPlaying we created above,
+                // changing isPlaying will recompose
+                // Lottie and pause/play
+                isPlaying = true,
+
+                // pass speed we created above,
+                // changing speed will increase Lottie
+                speed = 1f,
+
+                // this makes animation to restart
+                // when paused and play
+                // pass false to continue the animation
+                // at which is was paused
+                restartOnPlay = false
+
+            )
+            LottieAnimation(
+                composition,
+                { progress },
+                modifier = Modifier.height(290.dp).fillMaxWidth()
+            )
+
+            Text(
+                text = stringResource(title),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+
+            )
+
+            Text(
+                stringResource(body),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+
+            Text(
+                stringResource(body2),
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
