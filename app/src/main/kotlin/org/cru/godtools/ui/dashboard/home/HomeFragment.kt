@@ -25,6 +25,7 @@ class HomeFragment : BaseFragment<DashboardHomeFragmentBinding>(R.layout.dashboa
             HomeLayout(
                 onOpenTool = { tool, tr1, tr2 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1, tr2) },
                 onOpenToolDetails = { findListener<ToolsAdapterCallbacks>()?.showToolDetails(it) },
+                onViewAllFavorites = { findListener<DashboardActivity>()?.showPage(Page.FAVORITE_TOOLS) },
                 onViewAllTools = { findListener<DashboardActivity>()?.showPage(Page.ALL_TOOLS) }
             )
         }

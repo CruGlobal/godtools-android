@@ -30,6 +30,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.ui.dashboard.home.HomeFragment
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
@@ -127,6 +128,7 @@ class DashboardActivity :
 
         val fragment = when (page) {
             Page.LESSONS -> ToolsListFragment(MODE_LESSONS)
+            Page.HOME -> HomeFragment()
             Page.ALL_TOOLS -> ToolsFragment()
             Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
         }
