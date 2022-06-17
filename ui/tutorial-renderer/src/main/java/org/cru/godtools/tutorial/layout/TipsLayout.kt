@@ -1,11 +1,10 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package org.cru.godtools.tutorial.layout
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import android.view.View
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +20,15 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.tutorial.Page
+import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.TutorialCallbacks
 
 @Composable
-internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int? = null) = GodToolsTheme() {
+internal fun TipsTutorialLayout(
+    nextPage: () -> Unit = {},
+    onTutorialAction: (View?) -> Unit = {},
+    anim: Int, title: Int, body: Int, body2: Int? = null) = GodToolsTheme() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -74,16 +79,34 @@ internal fun TipsTutorialLayout(anim: Int, title: Int, body: Int, body2: Int? = 
 
         Text(
             stringResource(body),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp)
         )
+
         if (body2 != null) {
+
             Text(
+                //Spacer(modifier = Modifier.minLinesHeight(minLines = 1, textStyle = MaterialTheme.typography.bodyMedium)),
                 stringResource(body2),
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
             )
         }
+        if(anim == R.raw.anim_tutorial_tips_light){
+            Button(onClick = {
+                onTutorialAction
+            },
+            Modifier.width(20.dp)) {
+                Text(text = "Start Training")
+            }
+        }else{
+            Button(onClick = nextPage) {
+                Text(text = "Continue")
+            }
+        }
+
     }
 }
+
+
