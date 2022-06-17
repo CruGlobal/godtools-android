@@ -31,6 +31,7 @@ import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
@@ -46,7 +47,8 @@ internal class Tasks @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
-    private val settings: Settings
+    private val settings: Settings,
+    private val toolsRepository: ToolsRepository
 ) {
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
@@ -111,7 +113,7 @@ internal class Tasks @Inject constructor(
         // add any bundled tools as the default tools
         coroutineScope {
             BuildConfig.BUNDLED_TOOLS
-                .map { launch { downloadManager.pinTool(it) } }
+                .map { launch { toolsRepository.pinTool(it) } }
                 .joinAll()
         }
 
@@ -137,7 +139,7 @@ internal class Tasks @Inject constructor(
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
                 .distinct()
                 .take(NUMBER_OF_FAVORITES)
-                .map { launch { downloadManager.pinTool(it) } }
+                .map { launch { toolsRepository.pinTool(it) } }
                 .toList().joinAll()
         }
 

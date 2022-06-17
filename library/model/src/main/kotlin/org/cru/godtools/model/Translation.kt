@@ -68,3 +68,5 @@ class Translation : Base() {
         lastAccessed = Date()
     }
 }
+
+fun Translation?.getName(tool: Tool?) = this?.name ?: tool?.name

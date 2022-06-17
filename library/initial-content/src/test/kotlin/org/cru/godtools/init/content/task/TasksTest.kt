@@ -23,6 +23,7 @@ import org.cru.godtools.model.Translation
 import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TasksTest {
@@ -35,17 +36,18 @@ class TasksTest {
         every { getLastSyncTime(*anyVararg()) } returns 0
         every { updateLastSyncTime(*anyVararg()) } just Runs
     }
-    private val downloadManager = mockk<GodToolsDownloadManager>(relaxUnitFun = true)
+    private val downloadManager = mockk<GodToolsDownloadManager>()
     private val jsonApiConverter = mockk<JsonApiConverter>()
     private val settings = mockk<Settings> {
         every { primaryLanguage } returns Locale("x")
     }
+    private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
 
     private lateinit var tasks: Tasks
 
     @Before
     fun setup() {
-        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings)
+        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings, toolsRepository)
     }
 
     // region initFavoriteTools()
@@ -56,6 +58,7 @@ class TasksTest {
         verify {
             dao.getLastSyncTime(*anyVararg())
             downloadManager wasNot Called
+            toolsRepository wasNot Called
         }
         confirmVerified(dao)
     }
@@ -69,12 +72,12 @@ class TasksTest {
 
         tasks.initFavoriteTools()
         coVerifyAll {
-            downloadManager.pinTool("1")
-            downloadManager.pinTool("2")
-            downloadManager.pinTool("3")
-            downloadManager.pinTool("5")
+            toolsRepository.pinTool("1")
+            toolsRepository.pinTool("2")
+            toolsRepository.pinTool("3")
+            toolsRepository.pinTool("5")
         }
-        confirmVerified(downloadManager)
+        confirmVerified(toolsRepository)
     }
     // endregion initFavoriteTools()
 

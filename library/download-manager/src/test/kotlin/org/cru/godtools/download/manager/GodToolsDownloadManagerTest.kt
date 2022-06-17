@@ -6,6 +6,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
@@ -14,6 +15,7 @@ import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
@@ -26,13 +28,16 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
@@ -45,7 +50,6 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -66,9 +70,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -103,12 +107,12 @@ class GodToolsDownloadManagerTest {
         every { isLanguageProtected(any()) } returns false
         every { parallelLanguage } returns null
     }
+    private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
     private val translationsApi = mockk<TranslationsApi>()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
 
-    private val tool = slot<Tool>()
     private val language = slot<Language>()
 
     private val downloadProgress = mutableListOf<DownloadProgress?>()
@@ -121,12 +125,14 @@ class GodToolsDownloadManagerTest {
         enableCleanupActor: Boolean = false,
         block: (GodToolsDownloadManager) -> Unit
     ) {
+        Dispatchers.setMain(dispatcher)
         val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
             dao,
             fs,
             manifestParser,
             settings,
+            toolsRepository,
             translationsApi,
             { workManager },
             this,
@@ -137,48 +143,29 @@ class GodToolsDownloadManagerTest {
             block(downloadManager)
         } finally {
             downloadManager.cleanupActor.close()
+            Dispatchers.resetMain()
         }
     }
 
     // region pinTool()/unpinTool()
-    @Test
-    fun verifyPinTool() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.pinTool(TOOL) }
-        assertEquals(TOOL, tool.captured.code)
-        assertTrue(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
-    }
+    private val tool = slot<String>()
 
     @Test
     fun verifyPinToolAsync() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+        coEvery { toolsRepository.pinTool(capture(tool)) } just Runs
 
         withDownloadManager { it.pinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured.code)
-        assertTrue(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
-    }
-
-    @Test
-    fun verifyUnpinTool() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.unpinTool(TOOL) }
-        assertEquals(TOOL, tool.captured.code)
-        assertFalse(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
+        assertEquals(TOOL, tool.captured)
+        coVerifyAll { toolsRepository.pinTool(tool.captured) }
     }
 
     @Test
     fun verifyUnpinToolAsync() = runTest {
-        every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
+        coEvery { toolsRepository.unpinTool(capture(tool)) } just Runs
 
         withDownloadManager { it.unpinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured.code)
-        assertFalse(tool.captured.isAdded)
-        verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
+        assertEquals(TOOL, tool.captured)
+        coVerifyAll { toolsRepository.unpinTool(tool.captured) }
     }
     // endregion pinTool()/unpinTool()
 
@@ -235,24 +222,25 @@ class GodToolsDownloadManagerTest {
         withDownloadManager { downloadManager ->
             val liveData = downloadManager.getDownloadProgressLiveData(TOOL, Locale.ENGLISH)
             liveData.observeForever(observer)
-            verifyAll { observer wasNot Called }
+            verify(exactly = 1) { observer.onChanged(any()) }
+            assertNull(downloadProgress.removeAt(0))
 
             // start download
             downloadManager.startProgress(translationKey)
-            verify(exactly = 1) { observer.onChanged(any()) }
-            assertEquals(DownloadProgress.INITIAL, downloadProgress[0])
+            verify(exactly = 2) { observer.onChanged(any()) }
+            assertSame(DownloadProgress.INITIAL, downloadProgress.removeAt(0))
 
             // update progress
-            downloadManager.updateProgress(translationKey, 5, 0)
+            downloadManager.updateProgress(translationKey, 3, 5)
             downloadManager.updateProgress(translationKey, 5, 10)
-            verify(exactly = 3) { observer.onChanged(any()) }
-            assertEquals(DownloadProgress(5, 0), downloadProgress[1])
-            assertEquals(DownloadProgress(5, 10), downloadProgress[2])
+            verify(exactly = 4) { observer.onChanged(any()) }
+            assertEquals(DownloadProgress(3, 5), downloadProgress.removeAt(0))
+            assertEquals(DownloadProgress(5, 10), downloadProgress.removeAt(0))
 
             // finish download
             downloadManager.finishDownload(translationKey)
-            verify(exactly = 4) { observer.onChanged(any()) }
-            assertNull(downloadProgress[3])
+            verify(exactly = 5) { observer.onChanged(any()) }
+            assertNull(downloadProgress.removeAt(0))
         }
     }
     // endregion Download Progress

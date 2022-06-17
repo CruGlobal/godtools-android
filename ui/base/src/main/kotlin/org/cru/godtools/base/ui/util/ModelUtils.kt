@@ -9,7 +9,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
 @JvmName("getTranslationName")
-fun Translation?.getName(tool: Tool?, context: Context? = null) =
+fun Translation?.getName(tool: Tool?, context: Context?) =
     this?.let { name?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.name ?: ""
 
 @JvmName("getTranslationDescription")
@@ -19,6 +19,8 @@ fun Translation?.getDescription(tool: Tool?, context: Context?) =
 @JvmName("getTranslationTagline")
 fun Translation?.getTagline(tool: Tool?, context: Context?) =
     this?.let { (tagline ?: description)?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
+
+fun Translation.getFontFamilyOrNull() = languageCode.getFontFamilyOrNull()
 
 private fun Translation.getTypeface(context: Context?) = context?.getTypeface(languageCode)
 

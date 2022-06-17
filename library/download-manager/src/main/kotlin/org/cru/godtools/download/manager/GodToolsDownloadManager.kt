@@ -7,7 +7,7 @@ import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -30,6 +30,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.launchIn
@@ -53,7 +55,6 @@ import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -66,6 +67,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -126,6 +128,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
     private val settings: Settings,
+    private val toolsRepository: ToolsRepository,
     private val translationsApi: TranslationsApi,
     private val workManager: Lazy<WorkManager>,
     private val coroutineScope: CoroutineScope,
@@ -138,6 +141,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
         settings: Settings,
+        toolsRepository: ToolsRepository,
         translationsApi: TranslationsApi,
         workManager: Lazy<WorkManager>
     ) : this(
@@ -146,6 +150,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         fs,
         manifestParser,
         settings,
+        toolsRepository,
         translationsApi,
         workManager,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -158,24 +163,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     // region Tool/Language pinning
     @AnyThread
-    fun pinToolAsync(code: String) = coroutineScope.launch { pinTool(code) }
-    suspend fun pinTool(code: String) {
-        val tool = Tool().also {
-            it.code = code
-            it.isAdded = true
-        }
-        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-    }
+    fun pinToolAsync(code: String) = coroutineScope.launch { toolsRepository.pinTool(code) }
 
     @AnyThread
-    fun unpinToolAsync(code: String) = coroutineScope.launch { unpinTool(code) }
-    suspend fun unpinTool(code: String) {
-        val tool = Tool().also {
-            it.code = code
-            it.isAdded = false
-        }
-        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-    }
+    fun unpinToolAsync(code: String) = coroutineScope.launch { toolsRepository.unpinTool(code) }
 
     @AnyThread
     fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }
@@ -200,33 +191,40 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Tool/Language pinning
 
     // region Download Progress
-    private val downloadProgressLiveData = mutableMapOf<TranslationKey, MutableLiveData<DownloadProgress?>>()
+    private val downloadProgressStateFlows = mutableMapOf<TranslationKey, MutableStateFlow<DownloadProgress?>>()
+    private val downloadProgressLiveData = mutableMapOf<TranslationKey, LiveData<DownloadProgress?>>()
 
     @AnyThread
-    private fun getDownloadProgressLiveData(translation: TranslationKey) = synchronized(downloadProgressLiveData) {
-        downloadProgressLiveData.getOrPut(translation) { DownloadProgressLiveData() }
+    private fun getDownloadProgressStateFlow(translation: TranslationKey) = synchronized(downloadProgressStateFlows) {
+        downloadProgressStateFlows.getOrPut(translation) { MutableStateFlow(null) }
     }
+
+    @AnyThread
+    fun getDownloadProgressFlow(tool: String, locale: Locale): Flow<DownloadProgress?> =
+        getDownloadProgressStateFlow(TranslationKey(tool, locale))
 
     @MainThread
     fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
-        getDownloadProgressLiveData(TranslationKey(tool, locale))
+        TranslationKey(tool, locale).let {
+            downloadProgressLiveData.getOrPut(it) { getDownloadProgressStateFlow(it).asLiveData() }
+        }
 
     @AnyThread
     @VisibleForTesting
     internal fun startProgress(translation: TranslationKey) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress.INITIAL)
+        getDownloadProgressStateFlow(translation).compareAndSet(null, DownloadProgress.INITIAL)
     }
 
     @AnyThread
     @VisibleForTesting
     internal fun updateProgress(translation: TranslationKey, progress: Long, max: Long) {
-        getDownloadProgressLiveData(translation).postValue(DownloadProgress(progress, max))
+        getDownloadProgressStateFlow(translation).value = DownloadProgress(progress, max)
     }
 
     @AnyThread
     @VisibleForTesting
     internal fun finishDownload(translation: TranslationKey) {
-        getDownloadProgressLiveData(translation).postValue(null)
+        getDownloadProgressStateFlow(translation).value = null
     }
     // endregion Download Progress
 
