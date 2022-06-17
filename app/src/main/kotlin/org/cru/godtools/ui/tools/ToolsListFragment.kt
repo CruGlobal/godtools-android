@@ -39,7 +39,7 @@ import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsHeader
 import org.cru.godtools.widget.BannerType
-import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
@@ -60,7 +60,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     private var mode by argOrDefault(MODE_ADDED)
 
     @Inject
-    internal lateinit var dao: GodToolsDao
+    internal lateinit var toolsRepository: ToolsRepository
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +92,7 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     }
 
     override fun onToolsReordered(vararg ids: Long) {
-        dao.updateToolOrderAsync(*ids)
+        toolsRepository.updateToolOrderAsync(*ids)
     }
 
     fun onEmptyActionClick() {

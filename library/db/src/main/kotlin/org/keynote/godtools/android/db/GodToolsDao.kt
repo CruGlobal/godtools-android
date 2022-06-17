@@ -4,6 +4,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
+import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -105,6 +106,11 @@ class GodToolsDao @Inject internal constructor(
         else -> super.getPrimaryKeyWhere(obj)
     }
 
+    @get:RestrictTo(RestrictTo.Scope.LIBRARY)
+    override val coroutineDispatcher get() = super<CoroutinesAsyncDao>.coroutineDispatcher
+    @get:RestrictTo(RestrictTo.Scope.LIBRARY)
+    override val coroutineScope get() = super<CoroutinesAsyncDao>.coroutineScope
+
     // region Custom DAO methods
     @WorkerThread
     fun insertNew(obj: Base): Long {
@@ -116,23 +122,6 @@ class GodToolsDao @Inject internal constructor(
             } catch (e: SQLException) {
                 // propagate exception if we've exhausted our attempts
                 if (--attempts < 0) throw e
-            }
-        }
-    }
-
-    @AnyThread
-    fun updateToolOrderAsync(vararg tools: Long) = coroutineScope.launch { updateToolOrder(*tools) }
-
-    @WorkerThread
-    fun updateToolOrder(vararg tools: Long) {
-        val tool = Tool()
-        transaction(exclusive = false) { _ ->
-            update(tool, null, ToolTable.COLUMN_ORDER)
-
-            // set order for each specified tool
-            tools.forEachIndexed { index, toolId ->
-                tool.order = index
-                update(tool, ToolTable.FIELD_ID.eq(toolId), ToolTable.COLUMN_ORDER)
             }
         }
     }

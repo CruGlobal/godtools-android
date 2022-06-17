@@ -55,7 +55,6 @@ import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -68,6 +67,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -128,6 +128,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
     private val settings: Settings,
+    private val toolsRepository: ToolsRepository,
     private val translationsApi: TranslationsApi,
     private val workManager: Lazy<WorkManager>,
     private val coroutineScope: CoroutineScope,
@@ -140,6 +141,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
         settings: Settings,
+        toolsRepository: ToolsRepository,
         translationsApi: TranslationsApi,
         workManager: Lazy<WorkManager>
     ) : this(
@@ -148,6 +150,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         fs,
         manifestParser,
         settings,
+        toolsRepository,
         translationsApi,
         workManager,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -160,24 +163,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     // region Tool/Language pinning
     @AnyThread
-    fun pinToolAsync(code: String) = coroutineScope.launch { pinTool(code) }
-    suspend fun pinTool(code: String) {
-        val tool = Tool().also {
-            it.code = code
-            it.isAdded = true
-        }
-        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-    }
+    fun pinToolAsync(code: String) = coroutineScope.launch { toolsRepository.pinTool(code) }
 
     @AnyThread
-    fun unpinToolAsync(code: String) = coroutineScope.launch { unpinTool(code) }
-    suspend fun unpinTool(code: String) {
-        val tool = Tool().also {
-            it.code = code
-            it.isAdded = false
-        }
-        withContext(Dispatchers.IO) { dao.update(tool, ToolTable.COLUMN_ADDED) }
-    }
+    fun unpinToolAsync(code: String) = coroutineScope.launch { toolsRepository.unpinTool(code) }
 
     @AnyThread
     fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }

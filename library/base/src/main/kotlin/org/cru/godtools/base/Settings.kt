@@ -16,9 +16,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.getBooleanFlow
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
 import org.ccci.gto.android.common.util.toLocale
@@ -136,6 +138,11 @@ class Settings @Inject internal constructor(
         isFeatureDiscovered(feature)
         return prefs.getInt("$PREF_FEATURE_DISCOVERED_COUNT$feature", 0)
     }
+
+    fun isFeatureDiscoveredFlow(feature: String) = prefs.getBooleanFlow("$PREF_FEATURE_DISCOVERED$feature", false)
+        // perform a simple lookup to initialize the feature when necessary
+        .onStart { emit(isFeatureDiscovered(feature)) }
+        .distinctUntilChanged()
 
     fun isFeatureDiscoveredLiveData(feature: String): LiveData<Boolean> {
         // perform a simple lookup to initialize the feature when necessary
