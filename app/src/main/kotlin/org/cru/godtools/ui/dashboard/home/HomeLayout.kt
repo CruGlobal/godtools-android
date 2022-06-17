@@ -82,33 +82,14 @@ internal fun HomeLayout(
         // favorite tools
         if (favoriteToolsLoaded) {
             item("favorites-header") {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                FavoritesHeader(
+                    showViewAll = { hasFavoriteTools },
+                    onViewAllFavorites = onViewAllFavorites,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        stringResource(R.string.dashboard_home_section_favorites_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .weight(1f)
-                            .alignByBaseline()
-                    )
-
-                    if (hasFavoriteTools) {
-                        Text(
-                            stringResource(R.string.dashboard_home_section_favorites_action_view_all),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier
-                                .clickable(onClick = onViewAllFavorites)
-                                .alignByBaseline()
-                        )
-                    }
-                }
+                        .padding(top = 32.dp, bottom = 16.dp),
+                )
             }
 
             if (hasFavoriteTools) {
@@ -147,6 +128,32 @@ private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
     style = MaterialTheme.typography.titleLarge,
     modifier = modifier.fillMaxWidth()
 )
+
+@Composable
+private fun FavoritesHeader(
+    showViewAll: () -> Boolean,
+    modifier: Modifier = Modifier,
+    onViewAllFavorites: () -> Unit = {}
+) = Row(modifier = modifier.fillMaxWidth()) {
+    Text(
+        stringResource(R.string.dashboard_home_section_favorites_title),
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier
+            .weight(1f)
+            .alignByBaseline()
+    )
+
+    if (showViewAll()) {
+        Text(
+            stringResource(R.string.dashboard_home_section_favorites_action_view_all),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clickable(onClick = onViewAllFavorites)
+                .alignByBaseline()
+        )
+    }
+}
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
