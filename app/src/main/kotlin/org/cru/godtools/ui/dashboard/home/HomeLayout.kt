@@ -1,5 +1,8 @@
 package org.cru.godtools.ui.dashboard.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -143,14 +146,17 @@ private fun FavoritesHeader(
             .alignByBaseline()
     )
 
-    if (showViewAll()) {
+    AnimatedVisibility(
+        showViewAll(),
+        enter = fadeIn(),
+        exit = fadeOut(),
+        modifier = Modifier.alignByBaseline()
+    ) {
         Text(
             stringResource(R.string.dashboard_home_section_favorites_action_view_all),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable(onClick = onViewAllFavorites)
-                .alignByBaseline()
+            modifier = Modifier.clickable(onClick = onViewAllFavorites)
         )
     }
 }
