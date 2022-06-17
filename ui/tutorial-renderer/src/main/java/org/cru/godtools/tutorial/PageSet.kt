@@ -30,13 +30,13 @@ enum class PageSet(
         feature = Settings.FEATURE_TUTORIAL_FEATURES,
         analyticsBaseScreenName = "tutorial",
         pages = listOf(
+            Page.FEATURES_LESSONS,
             Page.FEATURES_TOOLS,
             Page.FEATURES_TIPS,
             Page.FEATURES_LIVE_SHARE,
-            Page.FEATURES_LESSONS,
             Page.FEATURES_FINAL
         ),
-        supportedLocales = setOf(Locale.ENGLISH)
+        supportedLocales = setOf(Locale.ENGLISH, Locale("lv"))
     ),
     LIVE_SHARE(
         menu = R.menu.tutorial_live_share_menu,
