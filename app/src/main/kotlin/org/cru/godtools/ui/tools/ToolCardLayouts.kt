@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,6 +66,25 @@ import org.cru.godtools.model.getName
 @Composable
 private fun toolViewModel(tool: String) = viewModel<ToolsAdapterViewModel>().getToolViewModel(tool)
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
+
+@Composable
+private fun toolNameStyle(viewModel: ToolsAdapterViewModel.ToolViewModel): State<TextStyle> {
+    val translation by viewModel.firstTranslation.collectAsState()
+
+    val baseStyle = MaterialTheme.typography.titleMedium
+    return remember(baseStyle) {
+        derivedStateOf {
+            baseStyle.merge(
+                TextStyle(
+                    fontFamily = translation?.getFontFamilyOrNull(),
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+    }
+}
+private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
+private val infoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,16 +166,42 @@ fun SquareToolCard(
                 )
             }
             Column(modifier = Modifier.padding(16.dp)) {
-                ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
-                ToolCategory(viewModel, modifier = Modifier.fillMaxWidth())
-                if (parallelLanguage != null) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .fillMaxWidth()
-                            .alpha(if (secondTranslation.value != null) 1f else 0f)
-                    ) {
-                        AvailableInLanguage(language = secondLanguage, translation = secondTranslation)
+                Box {
+                    Column {
+                        ToolName(viewModel, minLines = 1, maxLines = 2, modifier = Modifier.fillMaxWidth())
+                        ToolCategory(
+                            viewModel,
+                            modifier = Modifier
+                                .padding(top = 2.dp)
+                                .fillMaxWidth()
+                        )
+                        if (parallelLanguage != null) {
+                            Row(
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                                    .fillMaxWidth()
+                                    .alpha(if (secondTranslation.value != null) 1f else 0f)
+                            ) {
+                                AvailableInLanguage(language = secondLanguage, translation = secondTranslation)
+                            }
+                        }
+                    }
+
+                    // use Spacers to reserve the maximum height consistently across all cards
+                    Column {
+                        Spacer(modifier = Modifier.minLinesHeight(2, toolNameStyle(viewModel).value))
+                        Spacer(
+                            modifier = Modifier
+                                .padding(top = 2.dp)
+                                .minLinesHeight(1, toolCategoryStyle)
+                        )
+                        if (parallelLanguage != null) {
+                            Spacer(
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                                    .minLinesHeight(1, infoLabelStyle)
+                            )
+                        }
                     }
                 }
 
@@ -229,28 +275,29 @@ private fun ToolBanner(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier:
 )
 
 @Composable
-private fun ToolName(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier, lines: Int = 1) {
+private inline fun ToolName(
+    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    modifier: Modifier = Modifier,
+    lines: Int,
+) = ToolName(viewModel = viewModel, modifier = modifier, minLines = lines, maxLines = lines)
+
+@Composable
+private fun ToolName(
+    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    modifier: Modifier = Modifier,
+    minLines: Int = 0,
+    maxLines: Int = Int.MAX_VALUE
+) {
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
-
-    val baseStyle = MaterialTheme.typography.titleMedium
-    val style by remember(baseStyle) {
-        derivedStateOf {
-            baseStyle.merge(
-                TextStyle(
-                    fontFamily = translation?.getFontFamilyOrNull(),
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
-    }
+    val style by toolNameStyle(viewModel)
 
     Text(
         translation.getName(tool).orEmpty(),
         style = style,
-        maxLines = lines,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier.minLinesHeight(minLines = lines, textStyle = style)
+        modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
     )
 }
 
@@ -264,7 +311,8 @@ private fun ToolCategory(viewModel: ToolsAdapterViewModel.ToolViewModel, modifie
 
     Text(
         tool.getCategory(context, locale),
-        style = MaterialTheme.typography.bodySmall,
+        style = toolCategoryStyle,
+        maxLines = 1,
         modifier = modifier
     )
 }
@@ -327,7 +375,7 @@ private fun RowScope.AvailableInLanguage(
 
     Text(
         language.value?.getDisplayName(LocalContext.current).orEmpty(),
-        style = MaterialTheme.typography.labelSmall,
+        style = infoLabelStyle,
         maxLines = 1,
         modifier = Modifier
             .wrapContentWidth()
