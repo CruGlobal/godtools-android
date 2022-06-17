@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.tools
 
+import android.text.TextUtils
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,14 +40,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GRAY_E6
@@ -72,29 +77,31 @@ fun LessonToolCard(
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
 
-    ElevatedCard(
-        elevation = toolCardElevation,
-        onClick = { onClick(tool, translation) },
-        modifier = modifier.fillMaxWidth()
-    ) {
-        ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
+        ElevatedCard(
+            elevation = toolCardElevation,
+            onClick = { onClick(tool, translation) },
+            modifier = modifier.fillMaxWidth()
         ) {
-            ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
+            ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
 
-            Row(
+            Column(
                 modifier = Modifier
-                    .align(Alignment.End)
-                    .wrapContentWidth()
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
-                AvailableInLanguage(
-                    language = viewModel.primaryLanguage.collectAsState(),
-                    translation = viewModel.primaryTranslation.collectAsState()
-                )
+                ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
+
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .wrapContentWidth()
+                ) {
+                    AvailableInLanguage(
+                        language = viewModel.primaryLanguage.collectAsState(),
+                        translation = viewModel.primaryTranslation.collectAsState()
+                    )
+                }
             }
         }
     }
@@ -117,70 +124,100 @@ fun SquareToolCard(
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
     val downloadProgress = viewModel.downloadProgress.collectAsState()
 
-    ElevatedCard(
-        elevation = toolCardElevation,
-        onClick = { onClick(tool, firstTranslation, secondTranslation.value) },
-        modifier = modifier.width(189.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            ToolBanner(
-                viewModel,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(189f / 128f)
-            )
-            FavoriteAction(viewModel, modifier = Modifier.align(Alignment.TopEnd))
-            DownloadProgressIndicator(
-                downloadProgress,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            )
-        }
-        Column(modifier = Modifier.padding(16.dp)) {
-            ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
-            ToolCategory(viewModel, modifier = Modifier.fillMaxWidth())
-            if (parallelLanguage != null) {
-                Row(
+    ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
+        ElevatedCard(
+            elevation = toolCardElevation,
+            onClick = { onClick(tool, firstTranslation, secondTranslation.value) },
+            modifier = modifier.width(189.dp)
+        ) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                ToolBanner(
+                    viewModel,
                     modifier = Modifier
-                        .padding(top = 4.dp)
                         .fillMaxWidth()
-                        .alpha(if (secondTranslation.value != null) 1f else 0f)
-                ) {
-                    AvailableInLanguage(language = secondLanguage, translation = secondTranslation)
-                }
+                        .aspectRatio(189f / 128f)
+                )
+                FavoriteAction(viewModel, modifier = Modifier.align(Alignment.TopEnd))
+                DownloadProgressIndicator(
+                    downloadProgress,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                )
             }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                val contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
-                val minHeight = 30.dp
-
-                CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
-                    OutlinedButton(
-                        onClick = { onOpenToolDetails(toolCode) },
-                        contentPadding = contentPadding,
+            Column(modifier = Modifier.padding(16.dp)) {
+                ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
+                ToolCategory(viewModel, modifier = Modifier.fillMaxWidth())
+                if (parallelLanguage != null) {
+                    Row(
                         modifier = Modifier
-                            .weight(1f)
-                            .defaultMinSize(minHeight = minHeight)
+                            .padding(top = 4.dp)
+                            .fillMaxWidth()
+                            .alpha(if (secondTranslation.value != null) 1f else 0f)
                     ) {
-                        Text(stringResource(R.string.action_tools_about), style = MaterialTheme.typography.labelMedium)
+                        AvailableInLanguage(language = secondLanguage, translation = secondTranslation)
                     }
-                    Button(
-                        onClick = { onOpenTool(tool, firstTranslation, secondTranslation.value) },
-                        contentPadding = contentPadding,
-                        modifier = Modifier
-                            .weight(1f)
-                            .defaultMinSize(minHeight = minHeight)
-                    ) {
-                        Text(stringResource(R.string.action_tools_open), style = MaterialTheme.typography.labelMedium)
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    val contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+                    val minHeight = 30.dp
+
+                    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+                        OutlinedButton(
+                            onClick = { onOpenToolDetails(toolCode) },
+                            contentPadding = contentPadding,
+                            modifier = Modifier
+                                .weight(1f)
+                                .defaultMinSize(minHeight = minHeight)
+                        ) {
+                            Text(
+                                stringResource(R.string.action_tools_about),
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
+                        Button(
+                            onClick = { onOpenTool(tool, firstTranslation, secondTranslation.value) },
+                            contentPadding = contentPadding,
+                            modifier = Modifier
+                                .weight(1f)
+                                .defaultMinSize(minHeight = minHeight)
+                        ) {
+                            Text(
+                                stringResource(R.string.action_tools_open),
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                        }
                     }
                 }
             }
         }
     }
+}
+
+// TODO: Should this be moved to somewhere that is more re-usable?
+@Composable
+private fun ProvideLayoutDirectionFromLocale(locale: () -> Locale?, content: @Composable () -> Unit) {
+    val currentLayoutDirection = LocalLayoutDirection.current
+    val layoutDirection by remember {
+        derivedStateOf {
+            locale()?.let {
+                when (TextUtils.getLayoutDirectionFromLocale(it)) {
+                    View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
+                    View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
+                    else -> null
+                }
+            } ?: currentLayoutDirection
+        }
+    }
+
+    CompositionLocalProvider(
+        LocalLayoutDirection provides layoutDirection,
+        content = content
+    )
 }
 
 @Composable
