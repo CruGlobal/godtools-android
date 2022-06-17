@@ -84,6 +84,7 @@ google-auto-value-annotations = { module = "com.google.auto.value:auto-value-ann
 google-services-gradlePlugin = "com.google.gms:google-services:4.3.10"
 gradleDownloadTask = "de.undercouch:gradle-download-task:5.1.0"
 gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-androidx-collection", version.ref = "gtoSupport" }
+gtoSupport-androidx-compose = { module = "org.ccci.gto.android:gto-support-androidx-compose", version.ref = "gtoSupport" }
 gtoSupport-androidx-constraintlayout = { module = "org.ccci.gto.android:gto-support-androidx-constraintlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
 gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
