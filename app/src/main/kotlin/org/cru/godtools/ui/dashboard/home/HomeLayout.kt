@@ -36,6 +36,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
 
+private val PADDING_HORIZONTAL = 16.dp
+
 @Preview(showBackground = true)
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -52,7 +54,7 @@ internal fun HomeLayout(
     val hasFavoriteTools by remember { derivedStateOf { !favoriteTools.isNullOrEmpty() } }
 
     LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
-        item("welcome") { WelcomeMessage(modifier = Modifier.padding(horizontal = 16.dp)) }
+        item("welcome") { WelcomeMessage(modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL)) }
 
         // featured lessons
         if (spotlightLessons.isNotEmpty()) {
@@ -60,7 +62,7 @@ internal fun HomeLayout(
                 FeaturedLessonsHeader(
                     modifier = Modifier
                         .animateItemPlacement()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(top = 32.dp, bottom = 16.dp)
                 )
             }
@@ -71,7 +73,7 @@ internal fun HomeLayout(
                     onClick = { tool, translation -> onOpenTool(tool, translation, null) },
                     modifier = Modifier
                         .animateItemPlacement()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(bottom = 16.dp)
                 )
             }
@@ -84,8 +86,8 @@ internal fun HomeLayout(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .animateItemPlacement()
+                        .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(top = 32.dp, bottom = 16.dp)
-                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                 ) {
                     Text(
@@ -124,7 +126,7 @@ internal fun HomeLayout(
                         onViewAllTools = onViewAllTools,
                         modifier = Modifier
                             .animateItemPlacement()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = PADDING_HORIZONTAL)
                     )
                 }
             }
