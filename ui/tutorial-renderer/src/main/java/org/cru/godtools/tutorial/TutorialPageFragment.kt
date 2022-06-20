@@ -57,8 +57,8 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         findListener<TutorialCallbacks>()?.nextPage()
     }
 
-    override fun onTutorialAction(view: View) {
-        findListener<TutorialCallbacks>()?.onTutorialAction(view)
+    override fun onTutorialAction(id: Int) {
+        findListener<TutorialCallbacks>()?.onTutorialAction(id)
     }
     // endregion TutorialCallbacks
 }

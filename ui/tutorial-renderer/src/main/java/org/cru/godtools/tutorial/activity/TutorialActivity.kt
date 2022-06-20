@@ -181,8 +181,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         }
     }
 
-    override fun onTutorialAction(view: View) {
-        when (view.id) {
+    override fun onTutorialAction(id: Int) {
+        when (id) {
             R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             R.id.action_onboarding_launch_articles -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES))
