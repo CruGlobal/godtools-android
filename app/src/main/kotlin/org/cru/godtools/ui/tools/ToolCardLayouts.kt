@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tools
 
 import android.text.TextUtils
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -351,9 +352,10 @@ private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FavoriteAction(
+@VisibleForTesting
+@OptIn(ExperimentalMaterial3Api::class)
+internal fun FavoriteAction(
     viewModel: ToolsAdapterViewModel.ToolViewModel,
     modifier: Modifier = Modifier,
     confirmRemoval: Boolean = true
