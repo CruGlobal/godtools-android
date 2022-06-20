@@ -40,7 +40,9 @@ internal fun TipsTutorialLayout(
 ) = GodToolsTheme() {
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(bottom = 70.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 70.dp),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -76,7 +78,9 @@ internal fun TipsTutorialLayout(
         LottieAnimation(
             composition,
             { progress },
-            modifier = Modifier.height(290.dp).fillMaxWidth()
+            modifier = Modifier
+                .height(290.dp)
+                .fillMaxWidth()
         )
 
         Text(
@@ -112,17 +116,19 @@ internal fun TipsTutorialLayout(
                 modifier = Modifier.width(250.dp)
             ) {
                 Text(
-                    text = "Start Training",
+                    text = stringResource(id = R.string.tutorial_tips_action_start),
                     fontSize = 30.sp
                 )
             }
         } else {
             Button(
                 onClick = nextPage,
-                modifier = Modifier.padding(top = 150.dp).width(250.dp)
+                modifier = Modifier
+                    .padding(top = 150.dp)
+                    .width(250.dp)
             ) {
                 Text(
-                    text = "Continue",
+                    text = stringResource(id = R.string.tutorial_tips_action_continue),
                     fontSize = 30.sp
                 )
             }
