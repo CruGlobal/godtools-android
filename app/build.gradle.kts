@@ -222,11 +222,11 @@ dependencies {
     implementation(libs.weakdelegate)
     implementation(libs.youtubePlayer)
 
-    debugImplementation(libs.firebase.crashlytics.ndk)
     debugImplementation(libs.facebook.flipper)
     debugImplementation(libs.facebook.flipper.plugins.leakcanary2)
     debugImplementation(libs.facebook.flipper.plugins.network)
     debugImplementation(libs.facebook.soloader)
+    debugImplementation(libs.firebase.crashlytics.ndk)
     debugImplementation(libs.gtoSupport.facebook.flipper)
     debugImplementation(libs.gtoSupport.leakcanary)
     debugImplementation(libs.gtoSupport.okhttp3)
