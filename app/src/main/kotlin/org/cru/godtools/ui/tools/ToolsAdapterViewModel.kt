@@ -39,6 +39,13 @@ class ToolsAdapterViewModel @Inject constructor(
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     fun getToolViewModel(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
 
+    val primaryLanguage = settings.primaryLanguageFlow
+        .flatMapLatest { dao.findAsFlow<Language>(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val parallelLanguage = settings.parallelLanguageFlow
+        .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
     inner class ToolViewModel(val code: String) {
         val tool = dao.findAsFlow<Tool>(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -70,12 +77,8 @@ class ToolsAdapterViewModel @Inject constructor(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val primaryLanguage = settings.primaryLanguageFlow
-            .flatMapLatest { dao.findAsFlow<Language>(it) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val parallelLanguage = settings.parallelLanguageFlow
-            .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val primaryLanguage get() = this@ToolsAdapterViewModel.primaryLanguage
+        val parallelLanguage get() = this@ToolsAdapterViewModel.parallelLanguage
 
         val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)

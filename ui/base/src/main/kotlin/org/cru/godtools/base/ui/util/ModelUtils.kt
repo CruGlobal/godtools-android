@@ -3,6 +3,8 @@
 package org.cru.godtools.base.ui.util
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.DeprecatedSinceApi
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.model.Tool
@@ -20,6 +22,7 @@ fun Translation?.getDescription(tool: Tool?, context: Context?) =
 fun Translation?.getTagline(tool: Tool?, context: Context?) =
     this?.let { (tagline ?: description)?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
 
+@DeprecatedSinceApi(Build.VERSION_CODES.M)
 fun Translation.getFontFamilyOrNull() = languageCode.getFontFamilyOrNull()
 
 private fun Translation.getTypeface(context: Context?) = context?.getTypeface(languageCode)

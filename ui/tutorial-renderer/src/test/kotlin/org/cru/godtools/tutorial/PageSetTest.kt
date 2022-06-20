@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
@@ -10,9 +9,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class PageSetTest {
     @Test
     fun testTrainingSupportedLanguages() {
