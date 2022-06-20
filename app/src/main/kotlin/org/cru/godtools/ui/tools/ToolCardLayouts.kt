@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
@@ -29,13 +30,17 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -132,6 +137,7 @@ fun LessonToolCard(
 fun SquareToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    confirmRemovalFromFavorites: Boolean = false,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
     onClick: (Tool?, Translation?, Translation?) -> Unit = onOpenTool
@@ -157,7 +163,11 @@ fun SquareToolCard(
                         .fillMaxWidth()
                         .aspectRatio(189f / 128f)
                 )
-                FavoriteAction(viewModel, modifier = Modifier.align(Alignment.TopEnd))
+                FavoriteAction(
+                    viewModel,
+                    confirmRemoval = confirmRemovalFromFavorites,
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
                 DownloadProgressIndicator(
                     downloadProgress,
                     modifier = Modifier
@@ -343,12 +353,23 @@ private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun FavoriteAction(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier) {
+private fun FavoriteAction(
+    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    modifier: Modifier = Modifier,
+    confirmRemoval: Boolean = true
+) {
     val tool by viewModel.tool.collectAsState()
     val isAdded by remember { derivedStateOf { tool?.isAdded == true } }
+    var showRemovalConfirmation by rememberSaveable { mutableStateOf(false) }
 
     Surface(
-        onClick = { if (!isAdded) viewModel.pinTool() else viewModel.unpinTool() },
+        onClick = {
+            when {
+                !isAdded -> viewModel.pinTool()
+                confirmRemoval -> showRemovalConfirmation = true
+                else -> viewModel.unpinTool()
+            }
+        },
         shape = Shapes.Full,
         shadowElevation = 6.dp,
         modifier = modifier
@@ -361,6 +382,35 @@ private fun FavoriteAction(viewModel: ToolsAdapterViewModel.ToolViewModel, modif
                 .padding(horizontal = 5.dp)
                 .padding(top = 6.dp, bottom = 4.dp)
                 .size(18.dp)
+        )
+    }
+
+    if (showRemovalConfirmation) {
+        val translation by viewModel.firstTranslation.collectAsState()
+
+        AlertDialog(
+            onDismissRequest = { showRemovalConfirmation = false },
+            text = {
+                Text(
+                    stringResource(
+                        R.string.tools_list_remove_favorite_dialog_title,
+                        translation.getName(tool).orEmpty()
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.unpinTool()
+                        showRemovalConfirmation = false
+                    }
+                ) { Text(stringResource(R.string.tools_list_remove_favorite_dialog_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRemovalConfirmation = false }) {
+                    Text(stringResource(R.string.tools_list_remove_favorite_dialog_dismiss))
+                }
+            }
         )
     }
 }

@@ -176,6 +176,7 @@ private fun FavoriteTools(
     items(tools().orEmpty(), key = { it }) {
         SquareToolCard(
             toolCode = it,
+            confirmRemovalFromFavorites = true,
             onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
             onOpenToolDetails = onOpenToolDetails,
             modifier = Modifier.animateItemPlacement()
