@@ -2,9 +2,9 @@
 
 package org.cru.godtools.tutorial.layout
 
-import android.view.View
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -31,7 +32,7 @@ import org.cru.godtools.tutorial.R
 @Composable
 internal fun TipsTutorialLayout(
     nextPage: () -> Unit = {},
-    onTutorialAction: (View?) -> Unit = {},
+    onTutorialAction: (Int?) -> Unit = {},
     anim: Int,
     title: Int,
     body: Int,
@@ -39,8 +40,8 @@ internal fun TipsTutorialLayout(
 ) = GodToolsTheme() {
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize().padding(bottom = 70.dp),
+        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -102,17 +103,28 @@ internal fun TipsTutorialLayout(
             )
         }
         if (anim == R.raw.anim_tutorial_tips_light) {
+            Spacer(Modifier.padding(top = 150.dp))
             Button(
                 onClick = {
-                    onTutorialAction
+                    onTutorialAction(R.id.action_tips_finish)
                 },
-                Modifier.width(20.dp)
+
+                modifier = Modifier.width(250.dp)
             ) {
-                Text(text = "Start Training")
+                Text(
+                    text = "Start Training",
+                    fontSize = 30.sp
+                )
             }
         } else {
-            Button(onClick = nextPage) {
-                Text(text = "Continue")
+            Button(
+                onClick = nextPage,
+                modifier = Modifier.padding(top = 150.dp).width(250.dp)
+            ) {
+                Text(
+                    text = "Continue",
+                    fontSize = 30.sp
+                )
             }
         }
     }

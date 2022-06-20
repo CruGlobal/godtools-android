@@ -5,16 +5,9 @@
         <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/tutorial_page_inset_top"
-        android:paddingBottom="@dimen/tutorial_page_inset_bottom">
 
-        <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_tips_include_positioning" />
+
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose"
             android:layout_width="0dp"
@@ -26,14 +19,5 @@
 
 
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/action_tips_finish"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:onClick="@{callbacks::onTutorialAction}"
-            android:text="@string/tutorial_tips_action_start"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/marginEnd"
-            app:layout_constraintStart_toEndOf="@id/marginStart" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

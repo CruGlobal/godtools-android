@@ -82,7 +82,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = {
                         view?.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it1)
+                            findListener<TutorialCallbacks>()?.onTutorialAction(R.id.action_tips_finish)
                         }
                     },
                     R.raw.anim_tutorial_tips_light,
@@ -104,8 +104,8 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
         findListener<TutorialCallbacks>()?.nextPage()
     }
 
-    override fun onTutorialAction(view: View) {
-        findListener<TutorialCallbacks>()?.onTutorialAction(view)
+    override fun onTutorialAction(id: Int) {
+        findListener<TutorialCallbacks>()?.onTutorialAction(id)
     }
 
     // endregion TutorialCallbacks
