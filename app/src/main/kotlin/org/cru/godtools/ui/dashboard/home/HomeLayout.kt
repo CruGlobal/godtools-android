@@ -32,6 +32,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
@@ -56,62 +58,67 @@ internal fun HomeLayout(
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
     val hasFavoriteTools by remember { derivedStateOf { !favoriteTools.isNullOrEmpty() } }
 
-    LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
-        item("welcome") { WelcomeMessage(modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL)) }
+    SwipeRefresh(
+        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
+        onRefresh = { viewModel.triggerSync(true) }
+    ) {
+        LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
+            item("welcome") { WelcomeMessage(modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL)) }
 
-        // featured lessons
-        if (spotlightLessons.isNotEmpty()) {
-            item("lesson-header", "lesson-header") {
-                FeaturedLessonsHeader(
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp)
-                )
-            }
-
-            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
-                LessonToolCard(
-                    it,
-                    onClick = { tool, translation -> onOpenTool(tool, translation, null) },
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(bottom = 16.dp)
-                )
-            }
-        }
-
-        // favorite tools
-        if (favoriteToolsLoaded) {
-            item("favorites-header") {
-                FavoritesHeader(
-                    showViewAll = { hasFavoriteTools },
-                    onViewAllFavorites = onViewAllFavorites,
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp),
-                )
-            }
-
-            if (hasFavoriteTools) {
-                item("favorites", "favorites") {
-                    FavoriteTools(
-                        { favoriteTools },
-                        modifier = Modifier
-                            .animateItemPlacement()
-                            .fillMaxWidth()
-                    )
-                }
-            } else {
-                item("favorites-empty", "favorites-empty") {
-                    NoFavoriteTools(
-                        onViewAllTools = onViewAllTools,
+            // featured lessons
+            if (spotlightLessons.isNotEmpty()) {
+                item("lesson-header", "lesson-header") {
+                    FeaturedLessonsHeader(
                         modifier = Modifier
                             .animateItemPlacement()
                             .padding(horizontal = PADDING_HORIZONTAL)
+                            .padding(top = 32.dp, bottom = 16.dp)
                     )
+                }
+
+                items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
+                    LessonToolCard(
+                        it,
+                        onClick = { tool, translation -> onOpenTool(tool, translation, null) },
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .padding(horizontal = PADDING_HORIZONTAL)
+                            .padding(bottom = 16.dp)
+                    )
+                }
+            }
+
+            // favorite tools
+            if (favoriteToolsLoaded) {
+                item("favorites-header") {
+                    FavoritesHeader(
+                        showViewAll = { hasFavoriteTools },
+                        onViewAllFavorites = onViewAllFavorites,
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .padding(horizontal = PADDING_HORIZONTAL)
+                            .padding(top = 32.dp, bottom = 16.dp),
+                    )
+                }
+
+                if (hasFavoriteTools) {
+                    item("favorites", "favorites") {
+                        FavoriteTools(
+                            { favoriteTools },
+                            modifier = Modifier
+                                .animateItemPlacement()
+                                .fillMaxWidth()
+                        )
+                    }
+                } else {
+                    item("favorites-empty", "favorites-empty") {
+                        NoFavoriteTools(
+                            onViewAllTools = onViewAllTools,
+                            modifier = Modifier
+                                .animateItemPlacement()
+                                .padding(horizontal = PADDING_HORIZONTAL)
+                        )
+                    }
                 }
             }
         }

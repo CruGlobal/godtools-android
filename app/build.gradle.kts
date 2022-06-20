@@ -208,6 +208,7 @@ dependencies {
     implementation(libs.play.instantapps)
 
     api(libs.eventbus)
+    implementation(libs.accompanist.swiperefresh)
     implementation(libs.advrecyclerview)
     implementation(libs.coil.compose)
     implementation(libs.godtoolsMpp.parser)
