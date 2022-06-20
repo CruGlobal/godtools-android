@@ -174,9 +174,11 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.work)
 
+    implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.drawerlayout)
     implementation(libs.gtoSupport.androidx.fragment)
@@ -207,6 +209,7 @@ dependencies {
 
     api(libs.eventbus)
     implementation(libs.advrecyclerview)
+    implementation(libs.coil.compose)
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)

@@ -7,7 +7,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.cru.godtools.base.ui.dashboard.Page
 
 private const val ATTR_SELECTED_PAGE = "selectedPage"
-private val DEFAULT_PAGE = Page.FAVORITE_TOOLS
+private val DEFAULT_PAGE = Page.HOME
 
 internal class DashboardSavedState(savedState: SavedStateHandle) : ViewModel() {
     var selectedPage by savedState.delegate(ATTR_SELECTED_PAGE, DEFAULT_PAGE)

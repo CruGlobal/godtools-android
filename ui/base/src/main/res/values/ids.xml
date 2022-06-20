@@ -10,6 +10,7 @@
 
     <!-- Dashboard Pages -->
     <item name="dashboard_page_lessons" type="id" />
+    <item name="dashboard_page_home" type="id" />
     <item name="dashboard_page_favorites" type="id" />
     <item name="dashboard_page_all_tools" type="id" />
 </resources>

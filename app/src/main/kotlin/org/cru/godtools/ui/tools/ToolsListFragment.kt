@@ -1,7 +1,9 @@
 package org.cru.godtools.ui.tools
 
+import android.content.Context
 import android.graphics.drawable.NinePatchDrawable
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.annotation.CallSuper
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
@@ -29,6 +31,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LESSONS
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.databinding.ToolsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
@@ -37,6 +40,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
+import org.cru.godtools.ui.dashboard.DashboardActivity
 import org.cru.godtools.ui.dashboard.lessons.LessonsHeader
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -63,6 +67,11 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     internal lateinit var toolsRepository: ToolsRepository
 
     // region Lifecycle
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerBackPressedDispatcherCallback()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataModel()
@@ -109,6 +118,16 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         super.onDestroyBinding(binding)
     }
     // endregion Lifecycle
+
+    private fun registerBackPressedDispatcherCallback() {
+        // HACK: this behavior really should be handled within the DashboardActivity,
+        //       but this is a quick temporary solution until we fully migrate the Dashboard to Compose
+        if (mode == MODE_ADDED) {
+            requireActivity().onBackPressedDispatcher.addCallback(this) {
+                findListener<DashboardActivity>()?.showPage(Page.HOME)
+            }
+        }
+    }
 
     private fun trackInAnalytics() {
         when (mode) {
