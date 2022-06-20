@@ -12,7 +12,7 @@ plugins {
 
 android {
     baseConfiguration(project)
-    configureCompose(project)
+    configureCompose(project, enableTesting = true)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"

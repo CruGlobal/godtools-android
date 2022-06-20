@@ -36,6 +36,8 @@ androidx-collection-ktx = "androidx.collection:collection-ktx:1.2.0"
 androidx-compose-material3 = "androidx.compose.material3:material3:1.0.0-alpha13"
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
+androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidx-compose" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
@@ -182,6 +184,7 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1"
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
 androidx-compose-debug = ["androidx-compose-ui-tooling"]
+androidx-compose-testing = ["androidx-compose-ui-test"]
 
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
