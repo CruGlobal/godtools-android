@@ -27,10 +27,9 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
 
     @Test
     fun testFirebaseParamsAdobeMigration() {
-        val adobeEvent =
-            ContentAnalyticsEventAnalyticsActionEvent(
-                AnalyticsEvent(systems = setOf(ADOBE), attributes = mapOf("cru.Key" to "value"))
-            )
+        val adobeEvent = ContentAnalyticsEventAnalyticsActionEvent(
+            AnalyticsEvent(systems = setOf(ADOBE), attributes = mapOf("cru.Key" to "value"))
+        )
         assertThat(adobeEvent.adobeAttributes, hasEntry("cru.Key", "value"))
         with(adobeEvent.firebaseParams) {
             assertTrue(containsKey("cru_key"))
@@ -38,10 +37,9 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
             assertEquals("value", getString("cru_key"))
         }
 
-        val firebaseEvent =
-            ContentAnalyticsEventAnalyticsActionEvent(
-                AnalyticsEvent(systems = setOf(FIREBASE), attributes = mapOf("cru.Key" to "value"))
-            )
+        val firebaseEvent = ContentAnalyticsEventAnalyticsActionEvent(
+            AnalyticsEvent(systems = setOf(FIREBASE), attributes = mapOf("cru.Key" to "value"))
+        )
         with(firebaseEvent.firebaseParams) {
             assertFalse(containsKey("cru_key"))
             assertTrue(containsKey("cru.Key"))
