@@ -7,7 +7,7 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.tool.model.AnalyticsEvent
 
 class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event: AnalyticsEvent) :
-    AnalyticsActionEvent(action = event.action.orEmpty()) {
+    AnalyticsActionEvent(action = event.action.orEmpty(), locale = event.manifest.locale) {
     override fun isForSystem(system: AnalyticsSystem) = when (system) {
         AnalyticsSystem.APPSFLYER -> event.isForSystem(AnalyticsEvent.System.APPSFLYER)
         AnalyticsSystem.FACEBOOK -> event.isForSystem(AnalyticsEvent.System.FACEBOOK)
