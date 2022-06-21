@@ -182,6 +182,11 @@ tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
 youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1"
 
+# HACK: dependencies used to trigger renovate upgrades
+androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
+jacoco = { module = "org.jacoco:jacoco", version.ref = "jacoco" }
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
+
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
 androidx-compose-debug = ["androidx-compose-ui-tooling"]
