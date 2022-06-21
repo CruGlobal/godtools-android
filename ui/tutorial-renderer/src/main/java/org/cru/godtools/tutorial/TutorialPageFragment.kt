@@ -57,11 +57,13 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = {
                         view?.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it1)
+                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
                         }
                     },
+                    Page.TIPS_LEARN,
                     R.raw.anim_tutorial_tips_people,
-                    R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text
+                    R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text,
+
                 )
             }
             is TutorialTipsLightBinding -> compose.setContent {
@@ -69,9 +71,10 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = {
                         view?.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it1)
+                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
                         }
                     },
+                    Page.TIPS_LIGHT,
                     R.raw.anim_tutorial_tips_tool,
                     R.string.tutorial_tips_light_headline, R.string.tutorial_tips_light_text1,
                     R.string.tutorial_tips_light_text2
@@ -82,9 +85,10 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = {
                         view?.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(R.id.action_tips_finish)
+                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
                         }
                     },
+                    Page.TIPS_START,
                     R.raw.anim_tutorial_tips_light,
                     R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text
                 )
