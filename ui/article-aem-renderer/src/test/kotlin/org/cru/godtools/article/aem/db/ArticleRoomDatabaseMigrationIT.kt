@@ -17,9 +17,7 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @Config(sdk = [OLDEST_SDK, NEWEST_SDK])
 class ArticleRoomDatabaseMigrationIT {
     @get:Rule
-    val helper = MigrationTestHelper(
-        InstrumentationRegistry.getInstrumentation(), ArticleRoomDatabase::class.java.canonicalName
-    )
+    val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), ArticleRoomDatabase::class.java)
 
     @Test
     fun migrate8To9() {
