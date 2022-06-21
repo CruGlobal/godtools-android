@@ -11,24 +11,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  static:
-    name: Static Analysis
+  ktlint:
+    name: ktlint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Run Static Analysis
+      - name: Run ktlint
         uses: gradle/gradle-build-action@v2
         with:
-          cache-read-only: false
-#          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
-          arguments: assemble check -x test --scan
+          arguments: ktlintCheck --scan
       - name: Archive ktlint results
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ktlint-results
           path: "**/build/reports/ktlint/"
+
+  lint:
+    name: Lint Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Lint Checks
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: false
+#          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
+          arguments: assemble lint --scan
       - name: Archive lint results
         if: always()
         uses: actions/upload-artifact@v3
@@ -73,7 +84,7 @@ jobs:
     name: Deploy QA Build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-    needs: [static, tests]
+    needs: [ktlint, lint, tests]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
