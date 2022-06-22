@@ -49,10 +49,10 @@ class DashboardAppsFlyerDeepLinkResolverTest {
     @Test
     fun testDeepLinkDashboardHome() {
         assertSame(intent, DashboardAppsFlyerDeepLinkResolver.resolve(context, "dashboard"))
-        verifyAll { context.createDashboardIntent(Page.FAVORITE_TOOLS) }
+        verifyAll { context.createDashboardIntent(Page.HOME) }
 
         assertSame(intent, DashboardAppsFlyerDeepLinkResolver.resolve(context, "dashboard|home"))
-        verifyAll { context.createDashboardIntent(Page.FAVORITE_TOOLS) }
+        verifyAll { context.createDashboardIntent(Page.HOME) }
     }
 
     @Test
@@ -64,6 +64,6 @@ class DashboardAppsFlyerDeepLinkResolverTest {
     @Test
     fun testDeepLinkDashboardDefault() {
         assertSame(intent, DashboardAppsFlyerDeepLinkResolver.resolve(context, "dashboard|non-existant"))
-        verifyAll { context.createDashboardIntent(Page.FAVORITE_TOOLS) }
+        verifyAll { context.createDashboardIntent(Page.HOME) }
     }
 }

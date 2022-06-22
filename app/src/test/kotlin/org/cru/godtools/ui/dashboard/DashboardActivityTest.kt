@@ -76,8 +76,8 @@ class DashboardActivityTest {
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Home`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/home"))) {
             it.onActivity {
-                assertEquals(Page.FAVORITE_TOOLS, it.savedState.selectedPage)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsListFragment)
+                assertEquals(Page.HOME, it.savedState.selectedPage)
+                assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
             }
         }
     }

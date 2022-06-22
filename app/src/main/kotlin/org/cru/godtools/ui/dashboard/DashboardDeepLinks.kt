@@ -16,6 +16,6 @@ internal fun Uri.isDashboardCustomUriSchemeDeepLink() = SCHEME_GODTOOLS.equals(s
 internal fun findPageByUriPathSegment(segment: String?) = when (segment) {
     "lessons" -> Page.LESSONS
     "tools" -> Page.ALL_TOOLS
-    "home" -> Page.FAVORITE_TOOLS
-    else -> Page.FAVORITE_TOOLS
+    "home" -> Page.HOME
+    else -> Page.HOME
 }
