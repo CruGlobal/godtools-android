@@ -2,7 +2,6 @@
 
 package org.cru.godtools.tutorial.layout
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -57,11 +56,12 @@ internal fun TipsTutorialLayout(
                 top = dimensionResource(R.dimen.tutorial_page_inset_top),
                 bottom = dimensionResource(R.dimen.tutorial_page_inset_bottom)
             ),
-        verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(1f))
-        Column() {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             val composition by rememberLottieComposition(
 
                 LottieCompositionSpec.RawRes(anim)
