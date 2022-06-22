@@ -15,6 +15,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.ui.dashboard.home.HomeFragment
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.tools.ToolsListFragment
 import org.junit.Assert.assertEquals
@@ -45,8 +46,8 @@ class DashboardActivityTest {
     fun `Intent Processing - Normal Launch`() {
         scenario(intent = context.createDashboardIntent(null)) {
             it.onActivity {
-                assertEquals(Page.FAVORITE_TOOLS, it.savedState.selectedPage)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsListFragment)
+                assertEquals(Page.HOME, it.savedState.selectedPage)
+                assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
             }
         }
     }
@@ -75,8 +76,8 @@ class DashboardActivityTest {
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Home`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/home"))) {
             it.onActivity {
-                assertEquals(Page.FAVORITE_TOOLS, it.savedState.selectedPage)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsListFragment)
+                assertEquals(Page.HOME, it.savedState.selectedPage)
+                assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
             }
         }
     }

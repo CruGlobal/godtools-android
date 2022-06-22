@@ -81,7 +81,7 @@ fun BaseExtension.configureFlavorDimensions() {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
-fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
+fun CommonExtension<*, *, *, *>.configureCompose(project: Project, enableTesting: Boolean = false) {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion =
         project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
@@ -89,6 +89,17 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
     // add our base compose dependencies
     project.dependencies.addProvider("implementation", project.libs.findBundle("androidx-compose").get())
     project.dependencies.addProvider("debugImplementation", project.libs.findBundle("androidx-compose-debug").get())
+
+    if (enableTesting) {
+        project.dependencies.addProvider(
+            "testImplementation",
+            project.libs.findBundle("androidx-compose-testing").get()
+        )
+        project.dependencies.addProvider(
+            "debugImplementation",
+            project.libs.findLibrary("androidx-compose-ui-test-manifest").get()
+        )
+    }
 }
 
 private fun TestedExtension.configureTestOptions() {

@@ -12,7 +12,7 @@ plugins {
 
 android {
     baseConfiguration(project)
-    configureCompose(project)
+    configureCompose(project, enableTesting = true)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -174,9 +174,11 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.work)
 
+    implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.drawerlayout)
     implementation(libs.gtoSupport.androidx.fragment)
@@ -206,7 +208,9 @@ dependencies {
     implementation(libs.play.instantapps)
 
     api(libs.eventbus)
+    implementation(libs.accompanist.swiperefresh)
     implementation(libs.advrecyclerview)
+    implementation(libs.coil.compose)
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
@@ -219,11 +223,11 @@ dependencies {
     implementation(libs.weakdelegate)
     implementation(libs.youtubePlayer)
 
-    debugImplementation(libs.firebase.crashlytics.ndk)
     debugImplementation(libs.facebook.flipper)
     debugImplementation(libs.facebook.flipper.plugins.leakcanary2)
     debugImplementation(libs.facebook.flipper.plugins.network)
     debugImplementation(libs.facebook.soloader)
+    debugImplementation(libs.firebase.crashlytics.ndk)
     debugImplementation(libs.gtoSupport.facebook.flipper)
     debugImplementation(libs.gtoSupport.leakcanary)
     debugImplementation(libs.gtoSupport.okhttp3)

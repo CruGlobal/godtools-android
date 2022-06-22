@@ -6,6 +6,7 @@ import android.os.Build
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
+import androidx.annotation.DeprecatedSinceApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
@@ -33,8 +34,10 @@ private val typefaces = buildMap {
 private val FONT_SINHALA = FontFamily(Font(R.font.noto_sans_sinhala_regular))
 private val FONT_TIBETAN = FontFamily(Font(R.font.noto_sans_tibetan_regular))
 
+@DeprecatedSinceApi(Build.VERSION_CODES.M)
 fun Context.getTypeface(locale: Locale?) = typefaces[locale]?.let { ResourcesCompat.getFont(this, it) }
 
+@DeprecatedSinceApi(Build.VERSION_CODES.M)
 fun CharSequence.applyTypefaceSpan(typeface: Typeface?) = when {
     typeface == null -> this
     length == 0 -> this
@@ -45,6 +48,7 @@ fun CharSequence.applyTypefaceSpan(typeface: Typeface?) = when {
     }
 }
 
+@DeprecatedSinceApi(Build.VERSION_CODES.M)
 internal fun Locale.getFontFamilyOrNull() = sequenceOf(this).includeFallbacks()
     .mapNotNull {
         when (it) {

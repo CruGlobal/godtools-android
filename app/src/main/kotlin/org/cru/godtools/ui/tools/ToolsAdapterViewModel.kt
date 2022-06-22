@@ -12,10 +12,12 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
@@ -23,16 +25,26 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsAdapterViewModel @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
-    private val settings: Settings
+    private val fileSystem: ToolFileSystem,
+    private val settings: Settings,
+    private val toolsRepository: ToolsRepository
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     fun getToolViewModel(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
+
+    val primaryLanguage = settings.primaryLanguageFlow
+        .flatMapLatest { dao.findAsFlow<Language>(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val parallelLanguage = settings.parallelLanguageFlow
+        .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     inner class ToolViewModel(val code: String) {
         val tool = dao.findAsFlow<Tool>(code)
@@ -42,6 +54,9 @@ class ToolsAdapterViewModel @Inject constructor(
             .map { it?.bannerId }.distinctUntilChanged()
             .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val bannerFile = banner
+            .map { it?.getFile(fileSystem) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val availableLanguages = Query.select<Translation>()
@@ -62,12 +77,8 @@ class ToolsAdapterViewModel @Inject constructor(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val primaryLanguage = settings.primaryLanguageFlow
-            .flatMapLatest { dao.findAsFlow<Language>(it) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val parallelLanguage = settings.parallelLanguageFlow
-            .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val primaryLanguage get() = this@ToolsAdapterViewModel.primaryLanguage
+        val parallelLanguage get() = this@ToolsAdapterViewModel.parallelLanguage
 
         val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -87,5 +98,8 @@ class ToolsAdapterViewModel @Inject constructor(
                 it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+        fun pinTool() = viewModelScope.launch { toolsRepository.pinTool(code) }
+        fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
     }
 }

@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_lessons"
         android:title="@string/nav_lessons" />
     <item
-        android:id="@+id/dashboard_page_favorites"
+        android:id="@+id/dashboard_page_home"
         android:icon="@drawable/ic_favorite_24dp"
         android:title="@string/nav_favorite_tools" />
     <item

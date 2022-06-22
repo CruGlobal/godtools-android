@@ -27,9 +27,16 @@
     <string name="dashboard_lessons_header_description">Practical ideas that open doors to meaningful conversations.</string>
     <string name="tools_list_lesson_info_length">%1$d Min Read</string>
 
-    <!-- Favorites -->
+    <!-- Home -->
     <eat-comment />
     <string name="nav_favorite_tools">Favorites</string>
+    <string name="dashboard_home_header_title">Welcome to GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Featured Lesson</string>
+    <string name="dashboard_home_section_favorites_title">Your favorite tools</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">No favorite tools to display</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Tap on the heart icon to favorite a tool and make it available offline.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">View all ></string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Go to Tools</string>
     <string name="tools_list_remove_favorite_dialog_title">Remove “%1$s” from Favorites?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Remove</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancel</string>
