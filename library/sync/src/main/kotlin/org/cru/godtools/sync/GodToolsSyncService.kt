@@ -9,10 +9,12 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.sync.SyncRegistry
 import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
@@ -43,18 +45,18 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     private val eventBus: EventBus,
     private val workManager: WorkManager,
     private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
-    private val coroutineScope: CoroutineScope
+    private val coroutineDispatcher: CoroutineDispatcher,
+    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
 ) {
     @Inject
     internal constructor(
         eventBus: EventBus,
         workManager: WorkManager,
         syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
-    ) : this(eventBus, workManager, syncTasks, CoroutineScope(Dispatchers.IO + SupervisorJob()))
+    ) : this(eventBus, workManager, syncTasks, Dispatchers.IO)
 
-    private fun processSyncTask(task: GtSyncTask): Int {
-        val syncId = SyncRegistry.startSync()
-        coroutineScope.launch {
+    private suspend fun executeSyncTask(task: GtSyncTask, syncId: Int? = null): Unit =
+        withContext(coroutineDispatcher) {
             val syncType = task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)
             try {
                 when (syncType) {
@@ -86,13 +88,12 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
                 }
             } finally {
-                SyncRegistry.finishSync(syncId)
-                eventBus.post(SyncFinishedEvent(syncId))
+                if (syncId != null) {
+                    SyncRegistry.finishSync(syncId)
+                    eventBus.post(SyncFinishedEvent(syncId))
+                }
             }
         }
-
-        return syncId
-    }
 
     private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) =
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
@@ -111,6 +112,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             ContentResolver.SYNC_EXTRAS_MANUAL to force
         )
     )
+
+    suspend fun suspendAndSyncTools(force: Boolean) = executeSyncTask(syncTools(force) as GtSyncTask)
 
     fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(
@@ -131,7 +134,11 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     fun syncDirtyUserCounters(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_DIRTY_USER_COUNTERS))
 
     private inner class GtSyncTask(val args: Bundle) : SyncTask {
-        override fun sync() = processSyncTask(this)
+        override fun sync(): Int {
+            val syncId = SyncRegistry.startSync()
+            coroutineScope.launch { executeSyncTask(this@GtSyncTask, syncId) }
+            return syncId
+        }
     }
     // endregion Sync Tasks
 }

@@ -1,4 +1,5 @@
 [versions]
+accompanist = "0.24.11-rc"
 android-gradle-plugin = "7.2.1"
 androidx-compose = "1.2.0-rc01"
 androidx-compose-compiler = "1.2.0-rc01"
@@ -26,6 +27,7 @@ scarlet = "0.1.12"
 splitties = "3.0.0"
 
 [libraries]
+accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 androidx-annotation = "androidx.annotation:annotation:1.4.0"

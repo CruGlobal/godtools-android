@@ -6,7 +6,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.sync.SyncRegistry
@@ -40,6 +43,7 @@ class ExternalSingletonsModule {
             every { syncFollowups() } returns completedSyncTask
             every { syncTools(any()) } returns completedSyncTask
             every { syncToolShares() } returns completedSyncTask
+            coEvery { suspendAndSyncTools(any()) } just Runs
         }
     }
     @get:Provides
