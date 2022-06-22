@@ -67,6 +67,7 @@ subprojects {
 
     ktlint {
         android = true
+        version = libs.versions.ktlint.get()
         reporters {
             reporter(ReporterType.PLAIN_GROUP_BY_FILE)
             reporter(ReporterType.CHECKSTYLE)

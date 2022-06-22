@@ -17,6 +17,7 @@ godtoolsMpp = "0.6.0-SNAPSHOT"
 google-auto-value = "1.9"
 gtoSupport = "3.11.2-SNAPSHOT"
 jacoco = "0.8.7"
+ktlint = "0.45.2"
 kotlin = "1.6.21"
 kotlinCoroutines = "1.6.3"
 okhttp3 = "4.10.0"
@@ -180,6 +181,11 @@ timber = "com.jakewharton.timber:timber:5.0.1"
 tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
 youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:11.0.1"
+
+# HACK: dependencies used to trigger renovate upgrades
+androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
+jacoco = { module = "org.jacoco:jacoco", version.ref = "jacoco" }
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
