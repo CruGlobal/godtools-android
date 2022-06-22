@@ -48,8 +48,6 @@ jobs:
       - name: Run Lint Checks
         uses: gradle/gradle-build-action@v2
         with:
-          cache-read-only: false
-#          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
           arguments: lint --scan
       - name: Archive lint results
         if: always()
