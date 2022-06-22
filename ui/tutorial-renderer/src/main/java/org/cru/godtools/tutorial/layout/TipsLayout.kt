@@ -131,18 +131,16 @@ internal fun TipsTutorialLayout(
             modifier = Modifier.weight(1f)
         ) {
             if (page == Page.TIPS_START) {
-                Spacer(Modifier.padding(top = 150.dp))
                 Button(
                     onClick = {
                         onTutorialAction(R.id.action_tips_finish)
                     },
 
-                    modifier = Modifier.padding(horizontal = 32.dp).width(275.dp)
+                    modifier = Modifier.padding(horizontal = 32.dp).width(275.dp).align(Alignment.BottomCenter)
                 ) {
                     Text(
                         text = stringResource(id = R.string.tutorial_tips_action_start),
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(horizontal = 32.dp)
+                        fontSize = 30.sp
                     )
                 }
             } else {
@@ -150,12 +148,11 @@ internal fun TipsTutorialLayout(
                     onClick = nextPage,
                     modifier = Modifier
                         .padding(horizontal = 32.dp)
-                        .width(250.dp)
+                        .width(250.dp).align(Alignment.BottomCenter)
                 ) {
                     Text(
                         text = stringResource(id = R.string.tutorial_tips_action_continue),
-                        fontSize = 30.sp,
-                        modifier = Modifier.padding(horizontal = 32.dp)
+                        fontSize = 30.sp
                     )
                 }
             }
