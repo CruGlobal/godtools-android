@@ -115,7 +115,11 @@ internal fun TipsTutorialLayout(
                 )
 
                 if (body2 != null) {
-
+                    Spacer(
+                        modifier = Modifier.minLinesHeight(
+                            minLines = 1,
+                            textStyle = MaterialTheme.typography.bodyMedium
+                        ))
                     Text(
                         stringResource(body2),
                         style = MaterialTheme.typography.bodyMedium,
