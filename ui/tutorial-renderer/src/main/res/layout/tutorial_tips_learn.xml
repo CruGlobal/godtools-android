@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+   >
 
     <data>
         <import type="org.cru.godtools.tutorial.activity.TutorialActivity" />
 
-        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
+
         <variable name="formatArgs" type="android.os.Bundle" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/tutorial_page_inset_top"
-        android:paddingBottom="@dimen/tutorial_page_inset_bottom"
-        >
 
-        <include layout="@layout/tutorial_include_margins" />
 
-        <include layout="@layout/tutorial_tips_include_positioning" />
+
+
+
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/marginStart"
-            app:layout_constraintEnd_toEndOf="@id/marginEnd"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/action_next"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
-        <include
-            layout="@layout/tutorial_tips_include_navigation"
-            app:callbacks="@{callbacks}" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

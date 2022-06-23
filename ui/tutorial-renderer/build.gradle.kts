@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
 
+    implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.compat)
