@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -52,7 +51,7 @@ fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = 
         .putExtra(ARG_PAGE_SET, pageSet)
         .putExtra(ARG_FRMT_ARGS, formatArgs)
 
-fun Activity.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
+fun Context.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
     startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
 
 @AndroidEntryPoint
