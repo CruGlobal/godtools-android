@@ -55,11 +55,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             is TutorialTipsLearnBinding -> compose.setContent {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
-                    onTutorialAction = {
-                        id.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
-                        }
-                    },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
                     Page.TIPS_LEARN,
                     R.raw.anim_tutorial_tips_people,
                     R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text,
@@ -69,11 +65,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             is TutorialTipsLightBinding -> compose.setContent {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
-                    onTutorialAction = {
-                        id.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
-                        }
-                    },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
                     Page.TIPS_LIGHT,
                     R.raw.anim_tutorial_tips_tool,
                     R.string.tutorial_tips_light_headline, R.string.tutorial_tips_light_text1,
@@ -83,11 +75,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
             is TutorialTipsStartBinding -> compose.setContent {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
-                    onTutorialAction = {
-                        id.let { it1 ->
-                            findListener<TutorialCallbacks>()?.onTutorialAction(it)
-                        }
-                    },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
                     Page.TIPS_START,
                     R.raw.anim_tutorial_tips_light,
                     R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text

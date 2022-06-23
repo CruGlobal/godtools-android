@@ -9,7 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,7 +22,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -31,12 +31,7 @@ import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeig
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
-/*
-column, box column
-spacer for top with weight 1
-column for middle content
-box for button with weight 1
- */
+
 @Composable
 internal fun TipsTutorialLayout(
     nextPage: () -> Unit = {},
@@ -55,80 +50,82 @@ internal fun TipsTutorialLayout(
             .padding(
                 top = dimensionResource(R.dimen.tutorial_page_inset_top),
                 bottom = dimensionResource(R.dimen.tutorial_page_inset_bottom)
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+            ).verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.weight(1f))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val composition by rememberLottieComposition(
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Column() {
+                Spacer(modifier = Modifier.height(290.dp))
+                Spacer(modifier = Modifier.minLinesHeight(1, MaterialTheme.typography.titleLarge))
+                Spacer(modifier = Modifier.minLinesHeight(8, MaterialTheme.typography.bodyMedium))
+            }
 
-                LottieCompositionSpec.RawRes(anim)
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                val composition by rememberLottieComposition(
 
-            val progress by animateLottieCompositionAsState(
-                // pass the composition created above
-                composition,
-
-                // Iterates Forever
-                iterations = LottieConstants.IterateForever,
-
-                // pass isPlaying we created above,
-                // changing isPlaying will recompose
-                // Lottie and pause/play
-                isPlaying = true,
-
-                // pass speed we created above,
-                // changing speed will increase Lottie
-                speed = 1f,
-
-                // this makes animation to restart
-                // when paused and play
-                // pass false to continue the animation
-                // at which is was paused
-                restartOnPlay = false
-
-            )
-            LottieAnimation(
-                composition,
-                { progress },
-                modifier = Modifier
-                    .height(290.dp)
-                    .fillMaxWidth()
-            )
-
-            Text(
-                text = stringResource(title),
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-
-            Text(
-                stringResource(body),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-
-            if (body2 != null) {
-                Spacer(
-                    modifier = Modifier.minLinesHeight(
-                        minLines = 1,
-                        textStyle = MaterialTheme.typography.bodyMedium
-                    )
+                    LottieCompositionSpec.RawRes(anim)
                 )
+
+                val progress by animateLottieCompositionAsState(
+                    // pass the composition created above
+                    composition,
+
+                    // Iterates Forever
+                    iterations = LottieConstants.IterateForever,
+
+                    // pass isPlaying we created above,
+                    // changing isPlaying will recompose
+                    // Lottie and pause/play
+                    isPlaying = true,
+
+                    // pass speed we created above,
+                    // changing speed will increase Lottie
+                    speed = 1f,
+
+                    // this makes animation to restart
+                    // when paused and play
+                    // pass false to continue the animation
+                    // at which is was paused
+                    restartOnPlay = false
+
+                )
+                LottieAnimation(
+                    composition,
+                    { progress },
+                    modifier = Modifier
+                        .height(290.dp)
+                        .fillMaxWidth()
+                )
+
                 Text(
-                    stringResource(body2),
+                    text = stringResource(title),
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                )
+
+                Text(
+                    stringResource(body),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
+
+                if (body2 != null) {
+
+                    Text(
+                        stringResource(body2),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 32.dp)
+                    )
+                }
             }
         }
         Box(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f).fillMaxWidth()
         ) {
             if (page == Page.TIPS_START) {
                 Button(
@@ -136,11 +133,11 @@ internal fun TipsTutorialLayout(
                         onTutorialAction(R.id.action_tips_finish)
                     },
 
-                    modifier = Modifier.padding(horizontal = 32.dp).width(275.dp).align(Alignment.BottomCenter)
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                        .fillMaxWidth(0.8f).align(Alignment.BottomCenter)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.tutorial_tips_action_start),
-                        fontSize = 30.sp
+                        text = stringResource(id = R.string.tutorial_tips_action_start)
                     )
                 }
             } else {
@@ -148,11 +145,10 @@ internal fun TipsTutorialLayout(
                     onClick = nextPage,
                     modifier = Modifier
                         .padding(horizontal = 32.dp)
-                        .width(250.dp).align(Alignment.BottomCenter)
+                        .fillMaxWidth(0.8f).align(Alignment.BottomCenter)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.tutorial_tips_action_continue),
-                        fontSize = 30.sp
+                        text = stringResource(id = R.string.tutorial_tips_action_continue)
                     )
                 }
             }
