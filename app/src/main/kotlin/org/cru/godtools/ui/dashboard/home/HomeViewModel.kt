@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val favoriteTools = toolsRepository.favoriteTools
-        .map { it.mapNotNull { it.code }.take(3) }
+        .map { it.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // region Sync logic
