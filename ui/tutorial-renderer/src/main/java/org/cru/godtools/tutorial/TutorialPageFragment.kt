@@ -56,7 +56,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
-                    Page.TIPS_LEARN,
+                    page,
                     R.raw.anim_tutorial_tips_people,
                     R.string.tutorial_tips_learn_headline, R.string.tutorial_tips_learn_text,
 
@@ -66,7 +66,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
-                    Page.TIPS_LIGHT,
+                    page,
                     R.raw.anim_tutorial_tips_tool,
                     R.string.tutorial_tips_light_headline, R.string.tutorial_tips_light_text1,
                     R.string.tutorial_tips_light_text2
@@ -76,7 +76,7 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                 TipsTutorialLayout(
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
-                    Page.TIPS_START,
+                    page,
                     R.raw.anim_tutorial_tips_light,
                     R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text
                 )

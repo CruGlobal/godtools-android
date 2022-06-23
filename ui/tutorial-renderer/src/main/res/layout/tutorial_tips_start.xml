@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable name="callbacks" type="org.cru.godtools.tutorial.TutorialCallbacks" />
-    </data>
+    >
+
 
 
 
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/marginStart"
-            app:layout_constraintEnd_toEndOf="@id/marginEnd"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/action_tips_finish"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
 
 

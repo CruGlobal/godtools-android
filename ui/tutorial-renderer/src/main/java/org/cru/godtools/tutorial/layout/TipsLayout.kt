@@ -118,40 +118,33 @@ internal fun TipsTutorialLayout(
 
                     Text(
                         stringResource(body2),
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = 32.dp)
                     )
                 }
             }
         }
-        Box(
-            modifier = Modifier.weight(1f).fillMaxWidth()
-        ) {
-            if (page == Page.TIPS_START) {
-                Button(
-                    onClick = {
-                        onTutorialAction(R.id.action_tips_finish)
-                    },
 
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                        .fillMaxWidth(0.8f).align(Alignment.BottomCenter)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.tutorial_tips_action_start)
-                    )
-                }
-            } else {
-                Button(
-                    onClick = nextPage,
-                    modifier = Modifier
-                        .padding(horizontal = 32.dp)
-                        .fillMaxWidth(0.8f).align(Alignment.BottomCenter)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.tutorial_tips_action_continue)
-                    )
-                }
-            }
+        Spacer(modifier = Modifier.weight(1f).fillMaxWidth())
+        Button(
+            onClick = {
+                if (page == Page.TIPS_START) {
+                    onTutorialAction(R.id.action_tips_finish)
+                } else
+                    nextPage()
+            },
+            modifier = Modifier
+                .padding(horizontal = 32.dp)
+                .fillMaxWidth(0.8f).align(Alignment.CenterHorizontally)
+        ) {
+            Text(
+                stringResource(
+                    if (page == Page.TIPS_START) R.string.tutorial_tips_action_start
+                    else R.string.tutorial_tips_action_continue
+                )
+
+            )
         }
     }
 }
