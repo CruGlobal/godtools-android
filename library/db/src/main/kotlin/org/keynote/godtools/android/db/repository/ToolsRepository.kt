@@ -17,9 +17,9 @@ import org.keynote.godtools.android.db.GodToolsDao
 class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
     val favoriteTools get() = Query.select<Tool>()
         .where(
-            ToolTable.FIELD_ADDED.eq(true) and
+            ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)) and
                 ToolTable.FIELD_HIDDEN.ne(true) and
-                ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
+                ToolTable.FIELD_ADDED.eq(true)
         )
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
         .getAsFlow(dao)
