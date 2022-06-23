@@ -191,7 +191,7 @@ ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
-androidx-compose-debug = ["androidx-compose-ui-tooling"]
+androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
 androidx-compose-testing = ["androidx-compose-ui-test"]
 
 [plugins]
