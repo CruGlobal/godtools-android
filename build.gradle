@@ -54,8 +54,8 @@ subprojects {
                 testImplementation libs.robolectric
 
                 // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
-                androidTestImplementation libs.gtoSupport.testing.okta
-                testImplementation libs.gtoSupport.testing.okta
+                androidTestImplementation(testFixtures(libs.gtoSupport.okta))
+                testImplementation(testFixtures(libs.gtoSupport.okta))
             }
         }
     }
