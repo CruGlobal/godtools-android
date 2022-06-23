@@ -104,7 +104,7 @@ internal fun HomeLayout(
                 if (hasFavoriteTools) {
                     item("favorites", "favorites") {
                         FavoriteTools(
-                            { favoriteTools },
+                            { favoriteTools?.take(3) },
                             modifier = Modifier
                                 .animateItemPlacement()
                                 .fillMaxWidth()
