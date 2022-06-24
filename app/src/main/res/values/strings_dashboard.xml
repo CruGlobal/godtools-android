@@ -25,7 +25,6 @@
     <string name="nav_lessons">Lessons</string>
     <string name="dashboard_lessons_header_title">Lessons made for you</string>
     <string name="dashboard_lessons_header_description">Practical ideas to build relationships and start meaningful conversations.</string>
-    <string name="tools_list_lesson_info_length">%1$d Min Read</string>
 
     <!-- Home -->
     <eat-comment />
@@ -62,5 +61,4 @@
     <eat-comment />
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Open</string>
-    <string name="tools_list_info_language_available">Available in %1$s</string>
 </resources>
