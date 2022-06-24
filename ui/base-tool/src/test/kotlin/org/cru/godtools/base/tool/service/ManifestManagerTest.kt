@@ -32,7 +32,7 @@ class ManifestManagerTest {
 
     @Before
     fun setup() {
-        manager = ManifestManager(dao, parser)
+        manager = ManifestManager(dao, parser, mockk())
     }
 
     @Test

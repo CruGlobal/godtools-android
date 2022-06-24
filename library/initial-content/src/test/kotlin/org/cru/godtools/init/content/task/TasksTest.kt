@@ -47,7 +47,7 @@ class TasksTest {
 
     @Before
     fun setup() {
-        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings, toolsRepository)
+        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, settings, toolsRepository, mockk())
     }
 
     // region initFavoriteTools()

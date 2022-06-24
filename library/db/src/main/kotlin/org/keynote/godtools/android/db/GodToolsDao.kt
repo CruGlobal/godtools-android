@@ -126,7 +126,7 @@ class GodToolsDao @Inject internal constructor(
         }
     }
 
-    private fun getLatestTranslationQuery(code: String, locale: Locale, isPublished: Boolean, isDownloaded: Boolean) =
+    internal fun getLatestTranslationQuery(code: String, locale: Locale, isPublished: Boolean, isDownloaded: Boolean) =
         Query.select<Translation>()
             .where(
                 TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
@@ -135,17 +135,6 @@ class GodToolsDao @Inject internal constructor(
             )
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
-
-    @WorkerThread
-    fun getLatestTranslation(
-        code: String?,
-        locale: Locale?,
-        isPublished: Boolean = false,
-        isDownloaded: Boolean = false
-    ): Translation? = when {
-        code == null || locale == null -> null
-        else -> getLatestTranslationQuery(code, locale, isPublished, isDownloaded).get(this).firstOrNull()
-    }
 
     @AnyThread
     fun getLatestTranslationFlow(

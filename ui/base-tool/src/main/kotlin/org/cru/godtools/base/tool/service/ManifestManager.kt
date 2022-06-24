@@ -25,12 +25,17 @@ import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val COROUTINES_PARALLELISM = 8
 
 @Reusable
 @OptIn(ExperimentalCoroutinesApi::class)
-class ManifestManager @Inject constructor(private val dao: GodToolsDao, private val parser: ManifestParser) {
+class ManifestManager @Inject constructor(
+    private val dao: GodToolsDao,
+    private val parser: ManifestParser,
+    private val translationsRepository: TranslationsRepository
+) {
     private val coroutineDispatcher = Dispatchers.IO.limitedParallelism(COROUTINES_PARALLELISM)
     private val coroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
     private val cache = WeakLruCache<String, ParserResult.Data>(6)
@@ -39,7 +44,7 @@ class ManifestManager @Inject constructor(private val dao: GodToolsDao, private 
     @AnyThread
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         coroutineScope.launch {
-            val t = dao.getLatestTranslation(toolCode, locale, isPublished = true, isDownloaded = true)
+            val t = translationsRepository.getLatestTranslation(toolCode, locale, isDownloaded = true)
             if (t != null) getManifest(t)
         }
     }

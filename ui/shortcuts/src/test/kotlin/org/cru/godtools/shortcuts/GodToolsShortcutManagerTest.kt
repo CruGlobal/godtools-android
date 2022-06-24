@@ -8,7 +8,7 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.squareup.picasso.Picasso
+import io.mockk.mockk
 import java.util.EnumSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,9 +20,7 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
-import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
-import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -61,15 +59,12 @@ class GodToolsShortcutManagerTest {
     private lateinit var shortcutManagerService: ShortcutManager
 
     private lateinit var dao: GodToolsDao
-    private lateinit var eventBus: EventBus
-    private lateinit var picasso: Picasso
-    private lateinit var settings: Settings
     @Deprecated("Transition tests to use runTest closure")
     private val coroutineScope = TestScope()
 
     private val shortcutManager by lazy { coroutineScope.createShortcutManager() }
     private fun TestScope.createShortcutManager() =
-        GodToolsShortcutManager(app, dao, eventBus, mock(), picasso, settings, this)
+        GodToolsShortcutManager(app, dao, mockk(relaxUnitFun = true), mockk(), mockk(), mockk(), mockk(), this)
 
     @Before
     fun setup() {
@@ -90,9 +85,6 @@ class GodToolsShortcutManagerTest {
             }
         }
         dao = mock()
-        eventBus = mock()
-        picasso = mock()
-        settings = mock()
     }
 
     // region Pending Shortcuts
