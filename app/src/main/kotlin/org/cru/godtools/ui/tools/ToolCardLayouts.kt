@@ -71,11 +71,11 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
 
 @Composable
-private fun toolViewModel(tool: String) = viewModel<ToolsAdapterViewModel>().getToolViewModel(tool)
+private fun toolViewModel(tool: String) = viewModel<ToolViewModels>()[tool]
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
 @Composable
-private fun toolNameStyle(viewModel: ToolsAdapterViewModel.ToolViewModel): State<TextStyle> {
+private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextStyle> {
     val translation by viewModel.firstTranslation.collectAsState()
 
     val baseStyle = MaterialTheme.typography.titleMedium
@@ -286,7 +286,7 @@ private fun ProvideLayoutDirectionFromLocale(locale: () -> Locale?, content: @Co
 }
 
 @Composable
-private fun ToolBanner(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier) = AsyncImage(
+private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) = AsyncImage(
     model = viewModel.bannerFile.collectAsState().value,
     contentDescription = null,
     contentScale = ContentScale.Crop,
@@ -295,14 +295,14 @@ private fun ToolBanner(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier:
 
 @Composable
 private inline fun ToolName(
-    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     lines: Int,
 ) = ToolName(viewModel = viewModel, modifier = modifier, minLines = lines, maxLines = lines)
 
 @Composable
 private fun ToolName(
-    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     minLines: Int = 0,
     maxLines: Int = Int.MAX_VALUE
@@ -321,7 +321,7 @@ private fun ToolName(
 }
 
 @Composable
-private fun ToolCategory(viewModel: ToolsAdapterViewModel.ToolViewModel, modifier: Modifier = Modifier) {
+private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
 
@@ -364,7 +364,7 @@ private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>
 @VisibleForTesting
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun FavoriteAction(
-    viewModel: ToolsAdapterViewModel.ToolViewModel,
+    viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     confirmRemoval: Boolean = true
 ) {
