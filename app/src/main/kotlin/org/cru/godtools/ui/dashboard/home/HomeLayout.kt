@@ -1,11 +1,17 @@
 package org.cru.godtools.ui.dashboard.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,12 +21,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -38,6 +46,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.banner.TutorialFeaturesBanner
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
 
@@ -58,12 +67,34 @@ internal fun HomeLayout(
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
     val hasFavoriteTools by remember { derivedStateOf { !favoriteTools.isNullOrEmpty() } }
 
+    val columnState = rememberLazyListState()
+    val showTutorialFeaturesBanner by viewModel.showTutorialFeaturesBanner.collectAsState()
+    LaunchedEffect(showTutorialFeaturesBanner) {
+        if (showTutorialFeaturesBanner) columnState.animateScrollToItem(0)
+    }
+
     SwipeRefresh(
         rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
         onRefresh = { viewModel.triggerSync(true) }
     ) {
-        LazyColumn(contentPadding = PaddingValues(vertical = 16.dp)) {
-            item("welcome") { WelcomeMessage(modifier = Modifier.padding(horizontal = PADDING_HORIZONTAL)) }
+        LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
+            item("banners", "banners") {
+                Banners(
+                    viewModel,
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .fillMaxWidth()
+                )
+            }
+
+            item("welcome") {
+                WelcomeMessage(
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .padding(horizontal = PADDING_HORIZONTAL)
+                        .padding(top = 16.dp)
+                )
+            }
 
             // featured lessons
             if (spotlightLessons.isNotEmpty()) {
@@ -121,6 +152,23 @@ internal fun HomeLayout(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalAnimationApi::class)
+private fun Banners(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
+    val showTutorialFeaturesBanner by viewModel.showTutorialFeaturesBanner.collectAsState()
+
+    Box(modifier = modifier.heightIn(min = 1.dp)) {
+        AnimatedContent(
+            targetState = showTutorialFeaturesBanner,
+            transitionSpec = {
+                slideInVertically(initialOffsetY = { -it }) with slideOutVertically(targetOffsetY = { -it })
+            }
+        ) {
+            if (it) TutorialFeaturesBanner()
         }
     }
 }
