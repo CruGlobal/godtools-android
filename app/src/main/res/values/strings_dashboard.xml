@@ -52,6 +52,7 @@
     <string name="tools_list_remove_favorite_dialog_title">Remove “%1$s” from Favorites?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Remove</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancel</string>
+    <string name="tool_card_label_language_unavailable">Not available in %1$s</string>
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Open</string>
 
