@@ -9,18 +9,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
-import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
-import org.keynote.godtools.android.db.Contract.ToolTable
-import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    dao: GodToolsDao,
+    lessonsRepository: LessonsRepository,
     settings: Settings,
     private val syncService: GodToolsSyncService,
     toolsRepository: ToolsRepository
@@ -29,10 +25,7 @@ class HomeViewModel @Inject constructor(
         .map { !it }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
-    val spotlightLessons = Query.select<Tool>()
-        .where(ToolTable.FIELD_TYPE.eq(Tool.Type.LESSON) and ToolTable.FIELD_SPOTLIGHT.eq(true))
-        .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
-        .getAsFlow(dao)
+    val spotlightLessons = lessonsRepository.spotlightLessons
         .map { it.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
