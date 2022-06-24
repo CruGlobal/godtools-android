@@ -2,7 +2,6 @@ package org.keynote.godtools.android.db
 
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.AnyThread
 import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
@@ -11,8 +10,6 @@ import androidx.lifecycle.map
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,7 +20,6 @@ import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
-import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
@@ -135,25 +131,6 @@ class GodToolsDao @Inject internal constructor(
             )
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
-
-    @AnyThread
-    fun getLatestTranslationFlow(
-        code: String?,
-        locale: Locale?,
-        isPublished: Boolean = true,
-        isDownloaded: Boolean = false,
-        trackAccess: Boolean = false
-    ): Flow<Translation?> {
-        if (code == null || locale == null) return flowOf(null)
-        if (trackAccess) {
-            val obj = Translation().apply { updateLastAccessed() }
-            val where = TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-            @Suppress("DeferredResultUnused")
-            updateAsync(obj, where, TranslationTable.COLUMN_LAST_ACCESSED)
-        }
-        return getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
-            .getAsFlow(this).map { it.firstOrNull() }
-    }
 
     @MainThread
     fun getLatestTranslationLiveData(

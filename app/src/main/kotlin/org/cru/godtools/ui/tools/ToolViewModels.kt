@@ -26,6 +26,7 @@ import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,7 +35,8 @@ class ToolViewModels @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
     private val settings: Settings,
-    private val toolsRepository: ToolsRepository
+    private val toolsRepository: ToolsRepository,
+    private val translationsRepository: TranslationsRepository
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
@@ -66,14 +68,16 @@ class ToolViewModels @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow
-            .flatMapLatest { dao.getLatestTranslationFlow(code, it) }
+            .flatMapLatest { translationsRepository.getLatestTranslationFlow(code, it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        private val defaultTranslation = dao.getLatestTranslationFlow(code, Settings.defaultLanguage)
+        private val defaultTranslation = translationsRepository.getLatestTranslationFlow(code, Settings.defaultLanguage)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
-                else -> settings.parallelLanguageFlow.flatMapLatest { dao.getLatestTranslationFlow(t.code, it) }
+                else -> settings.parallelLanguageFlow.flatMapLatest {
+                    translationsRepository.getLatestTranslationFlow(t.code, it)
+                }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 

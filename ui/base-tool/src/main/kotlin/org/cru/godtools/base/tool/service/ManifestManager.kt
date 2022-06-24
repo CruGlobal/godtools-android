@@ -50,7 +50,7 @@ class ManifestManager @Inject constructor(
     }
 
     fun getLatestPublishedManifestFlow(toolCode: String, locale: Locale) =
-        dao.getLatestTranslationFlow(toolCode, locale, isDownloaded = true, trackAccess = true)
+        translationsRepository.getLatestTranslationFlow(toolCode, locale, isDownloaded = true, trackAccess = true)
             .mapLatest { it?.let { getManifest(it) } }
 
     @MainThread
