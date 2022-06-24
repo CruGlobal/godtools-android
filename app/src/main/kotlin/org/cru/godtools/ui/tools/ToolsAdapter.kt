@@ -23,7 +23,7 @@ private typealias VH = DataBindingDraggableItemViewHolder<ViewDataBinding>
 
 open class ToolsAdapter(
     lifecycleOwner: LifecycleOwner,
-    private val dataModel: ToolsAdapterViewModel,
+    private val toolViewModels: ToolViewModels,
     @LayoutRes private val itemLayout: Int
 ) : SimpleDataBindingDraggableItemAdapter<ViewDataBinding>(lifecycleOwner), Observer<List<Tool>> {
     init {
@@ -57,7 +57,7 @@ open class ToolsAdapter(
             .also { it.setVariable(BR.callbacks, callbacks) }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
-        binding.setVariable(BR.toolViewModel, getItem(position)?.code?.let { dataModel.getToolViewModel(it) })
+        binding.setVariable(BR.toolViewModel, getItem(position)?.code?.let { toolViewModels[it] })
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

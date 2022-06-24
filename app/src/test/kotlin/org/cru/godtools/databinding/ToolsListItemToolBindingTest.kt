@@ -18,8 +18,8 @@ import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -57,7 +57,7 @@ class ToolsListItemToolBindingTest {
         }
     )
     private val parallelLanguage = MutableStateFlow<Language?>(null)
-    private val toolViewModel = mockk<ToolsAdapterViewModel.ToolViewModel> {
+    private val toolViewModel = mockk<ToolViewModels.ToolViewModel> {
         every { tool } returns toolFlow
         every { banner } returns MutableStateFlow(null)
         every { downloadProgress } returns MutableStateFlow(null)

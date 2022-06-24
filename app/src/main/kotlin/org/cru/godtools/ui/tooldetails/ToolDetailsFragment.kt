@@ -40,8 +40,8 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
+import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
@@ -65,7 +65,7 @@ class ToolDetailsFragment() :
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private val dataModel: ToolDetailsFragmentDataModel by viewModels()
-    private val toolsDataModel: ToolsAdapterViewModel by viewModels()
+    private val toolViewModels: ToolViewModels by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -196,7 +196,7 @@ class ToolDetailsFragment() :
             dataModel,
             VariantToolsAdapter(
                 viewLifecycleOwner,
-                toolsDataModel,
+                toolViewModels,
                 R.layout.tool_details_page_variants_variant,
                 dataModel.toolCodeLiveData
             ).also {

@@ -35,7 +35,7 @@ class ToolCardLayoutsTest {
     private val toolFlow = MutableStateFlow<Tool?>(null)
     private val firstTranslationFlow = MutableStateFlow<Translation?>(null)
 
-    private val toolViewModel: ToolsAdapterViewModel.ToolViewModel = mockk {
+    private val toolViewModel: ToolViewModels.ToolViewModel = mockk {
         every { tool } returns toolFlow
         every { firstTranslation } returns firstTranslationFlow
         every { pinTool() } returns mockk()
