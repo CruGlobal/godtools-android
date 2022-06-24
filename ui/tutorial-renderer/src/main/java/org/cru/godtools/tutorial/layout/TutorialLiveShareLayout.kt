@@ -32,15 +32,16 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 
-
 @Composable
-internal fun TutorialLiveShareLayout(nextPage: () -> Unit = {},
-                                     onTutorialAction: (Int) -> Unit = {},
-                                     page: Page,
-                                     anim: Int,
-                                     title: Int,
-                                     body: Int,
-                                     body2: Int? = null) = GodToolsTheme() {
+internal fun TutorialLiveShareLayout(
+    nextPage: () -> Unit = {},
+    onTutorialAction: (Int) -> Unit = {},
+    page: Page,
+    anim: Int,
+    title: Int,
+    body: Int,
+    body2: Int? = null
+) = GodToolsTheme() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,7 +62,6 @@ internal fun TutorialLiveShareLayout(nextPage: () -> Unit = {},
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-
 
                 Text(
                     text = stringResource(title),
@@ -151,4 +151,3 @@ internal fun TutorialLiveShareLayout(nextPage: () -> Unit = {},
         }
     }
 }
-

@@ -9,7 +9,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
-import org.cru.godtools.tutorial.databinding.*
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareDescriptionBinding
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareMirroredBinding
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareStartBinding
+import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsLightBinding
+import org.cru.godtools.tutorial.databinding.TutorialTipsStartBinding
 import org.cru.godtools.tutorial.layout.TipsTutorialLayout
 import org.cru.godtools.tutorial.layout.TutorialLiveShareLayout
 import splitties.fragmentargs.arg
