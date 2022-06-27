@@ -86,59 +86,52 @@ internal fun TutorialLiveShareLayout(
 
          */
 
-            when{
-                anim != null -> {
-                    val composition by rememberLottieComposition(
+        when {
+            anim != null -> {
+                val composition by rememberLottieComposition(
 
-                        LottieCompositionSpec.RawRes(anim)
-                    )
+                    LottieCompositionSpec.RawRes(anim)
+                )
 
-                    val progress by animateLottieCompositionAsState(
-                        // pass the composition created above
-                        composition,
+                val progress by animateLottieCompositionAsState(
+                    // pass the composition created above
+                    composition,
 
-                        // Iterates Forever
-                        iterations = LottieConstants.IterateForever,
+                    // Iterates Forever
+                    iterations = LottieConstants.IterateForever,
 
-                        // pass isPlaying we created above,
-                        // changing isPlaying will recompose
-                        // Lottie and pause/play
-                        isPlaying = true,
+                    // pass isPlaying we created above,
+                    // changing isPlaying will recompose
+                    // Lottie and pause/play
+                    isPlaying = true,
 
-                        // pass speed we created above,
-                        // changing speed will increase Lottie
-                        speed = 1f,
+                    // pass speed we created above,
+                    // changing speed will increase Lottie
+                    speed = 1f,
 
-                        // this makes animation to restart
-                        // when paused and play
-                        // pass false to continue the animation
-                        // at which is was paused
-                        restartOnPlay = false
+                    // this makes animation to restart
+                    // when paused and play
+                    // pass false to continue the animation
+                    // at which is was paused
+                    restartOnPlay = false
 
-                    )
-                    LottieAnimation(
-                        composition,
-                        { progress },
-                        modifier = Modifier
-                            .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                            .fillMaxWidth().padding(top = 16.dp)
-                    )
-                }
-                img != null -> Image(
-                    painter = painterResource(img), contentDescription = "",
+                )
+                LottieAnimation(
+                    composition,
+                    { progress },
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
                         .fillMaxWidth().padding(top = 16.dp)
-
                 )
             }
+            img != null -> Image(
+                painter = painterResource(img), contentDescription = "",
+                modifier = Modifier
+                    .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+                    .fillMaxWidth().padding(top = 16.dp)
 
-
-
-
-
-
-
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
         Button(
