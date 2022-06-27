@@ -25,6 +25,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
@@ -34,6 +35,7 @@ class ToolViewModels @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
+    private val languagesRepository: LanguagesRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
@@ -42,10 +44,10 @@ class ToolViewModels @Inject constructor(
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
 
     private val primaryLanguage = settings.primaryLanguageFlow
-        .flatMapLatest { dao.findAsFlow<Language>(it) }
+        .flatMapLatest { languagesRepository.getLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     private val parallelLanguage = settings.parallelLanguageFlow
-        .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     inner class ToolViewModel(val code: String) {
@@ -94,7 +96,7 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondLanguage = secondTranslation
-            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
