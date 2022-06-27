@@ -56,7 +56,7 @@ internal fun TutorialLiveShareLayout(
         Box(modifier = Modifier.fillMaxWidth()) {
             Column() {
                 Spacer(modifier = Modifier.minLinesHeight(1, MaterialTheme.typography.titleLarge))
-                Spacer(modifier = Modifier.minLinesHeight(5, MaterialTheme.typography.bodyMedium).padding(top = 16.dp))
+                Spacer(modifier = Modifier.padding(top = 16.dp).minLinesHeight(5, MaterialTheme.typography.bodyMedium))
             }
 
             Column(
@@ -119,16 +119,16 @@ internal fun TutorialLiveShareLayout(
                 LottieAnimation(
                     composition,
                     { progress },
-                    modifier = Modifier
+                    modifier = Modifier.padding(top = 16.dp)
                         .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                        .fillMaxWidth().padding(top = 16.dp)
+                        .fillMaxWidth()
                 )
             }
             img != null -> Image(
-                painter = painterResource(img), contentDescription = "",
-                modifier = Modifier
+                painter = painterResource(img), contentDescription = null,
+                modifier = Modifier.padding(top = 16.dp)
                     .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                    .fillMaxWidth().padding(top = 16.dp)
+                    .fillMaxWidth()
 
             )
         }
