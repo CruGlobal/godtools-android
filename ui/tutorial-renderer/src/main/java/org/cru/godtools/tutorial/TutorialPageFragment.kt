@@ -90,8 +90,9 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
                     page,
-                    R.raw.anim_tutorial_tips_people,
-                    R.string.tutorial_live_share_description_headline, R.string.tutorial_live_share_description_text
+                    null,
+                    R.string.tutorial_live_share_description_headline, R.string.tutorial_live_share_description_text,
+                    R.drawable.img_tutorial_live_share_people
 
                 )
             }

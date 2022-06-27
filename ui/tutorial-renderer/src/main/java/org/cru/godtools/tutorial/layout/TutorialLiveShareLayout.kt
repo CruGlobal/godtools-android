@@ -2,6 +2,7 @@
 
 package org.cru.godtools.tutorial.layout
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,10 +39,10 @@ internal fun TutorialLiveShareLayout(
     nextPage: () -> Unit = {},
     onTutorialAction: (Int) -> Unit = {},
     page: Page,
-    anim: Int,
+    anim: Int? = null,
     title: Int,
     body: Int,
-    body2: Int? = null
+    img: Int? = null
 ) = GodToolsTheme() {
     Column(
         modifier = Modifier
@@ -53,9 +55,8 @@ internal fun TutorialLiveShareLayout(
         Spacer(modifier = Modifier.weight(1f))
         Box(modifier = Modifier.fillMaxWidth()) {
             Column() {
-                Spacer(modifier = Modifier.height(290.dp))
                 Spacer(modifier = Modifier.minLinesHeight(1, MaterialTheme.typography.titleLarge))
-                Spacer(modifier = Modifier.minLinesHeight(8, MaterialTheme.typography.bodyMedium))
+                Spacer(modifier = Modifier.minLinesHeight(5, MaterialTheme.typography.bodyMedium))
             }
 
             Column(
@@ -67,7 +68,8 @@ internal fun TutorialLiveShareLayout(
                     text = stringResource(title),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp)
+                    modifier = Modifier.padding(horizontal = 32.dp),
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Text(
@@ -76,21 +78,25 @@ internal fun TutorialLiveShareLayout(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
+            }
+        }
+        /*
+        Spacer for first two elements only
+        Animation will not be in box, will be element of parent column
 
-                if (body2 != null) {
-                    Spacer(
-                        modifier = Modifier.minLinesHeight(
-                            minLines = 1,
-                            textStyle = MaterialTheme.typography.bodyMedium
-                        )
-                    )
-                    Text(
-                        stringResource(body2),
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = 32.dp)
-                    )
-                }
+         */
+        if (page == Page.LIVE_SHARE_DESCRIPTION) {
+            if (img != null) {
+                Image(
+                    painter = painterResource(img), contentDescription = "",
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+                        .fillMaxWidth()
+
+                )
+            }
+        } else {
+            if (anim != null) {
                 val composition by rememberLottieComposition(
 
                     LottieCompositionSpec.RawRes(anim)
@@ -123,7 +129,7 @@ internal fun TutorialLiveShareLayout(
                     composition,
                     { progress },
                     modifier = Modifier
-                        .height(290.dp)
+                        .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
                         .fillMaxWidth()
                 )
             }
