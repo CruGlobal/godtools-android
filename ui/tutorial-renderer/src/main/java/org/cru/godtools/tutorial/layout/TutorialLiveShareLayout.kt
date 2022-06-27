@@ -56,7 +56,7 @@ internal fun TutorialLiveShareLayout(
         Box(modifier = Modifier.fillMaxWidth()) {
             Column() {
                 Spacer(modifier = Modifier.minLinesHeight(1, MaterialTheme.typography.titleLarge))
-                Spacer(modifier = Modifier.minLinesHeight(5, MaterialTheme.typography.bodyMedium))
+                Spacer(modifier = Modifier.minLinesHeight(5, MaterialTheme.typography.bodyMedium).padding(top = 16.dp))
             }
 
             Column(
@@ -76,7 +76,7 @@ internal fun TutorialLiveShareLayout(
                     stringResource(body),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp)
+                    modifier = Modifier.padding(horizontal = 32.dp).padding(top = 16.dp)
                 )
             }
         }
@@ -85,57 +85,62 @@ internal fun TutorialLiveShareLayout(
         Animation will not be in box, will be element of parent column
 
          */
-        if (page == Page.LIVE_SHARE_DESCRIPTION) {
-            if (img != null) {
-                Image(
+
+            when{
+                anim != null -> {
+                    val composition by rememberLottieComposition(
+
+                        LottieCompositionSpec.RawRes(anim)
+                    )
+
+                    val progress by animateLottieCompositionAsState(
+                        // pass the composition created above
+                        composition,
+
+                        // Iterates Forever
+                        iterations = LottieConstants.IterateForever,
+
+                        // pass isPlaying we created above,
+                        // changing isPlaying will recompose
+                        // Lottie and pause/play
+                        isPlaying = true,
+
+                        // pass speed we created above,
+                        // changing speed will increase Lottie
+                        speed = 1f,
+
+                        // this makes animation to restart
+                        // when paused and play
+                        // pass false to continue the animation
+                        // at which is was paused
+                        restartOnPlay = false
+
+                    )
+                    LottieAnimation(
+                        composition,
+                        { progress },
+                        modifier = Modifier
+                            .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+                            .fillMaxWidth().padding(top = 16.dp)
+                    )
+                }
+                img != null -> Image(
                     painter = painterResource(img), contentDescription = "",
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                        .fillMaxWidth()
+                        .fillMaxWidth().padding(top = 16.dp)
 
                 )
             }
-        } else {
-            if (anim != null) {
-                val composition by rememberLottieComposition(
 
-                    LottieCompositionSpec.RawRes(anim)
-                )
 
-                val progress by animateLottieCompositionAsState(
-                    // pass the composition created above
-                    composition,
 
-                    // Iterates Forever
-                    iterations = LottieConstants.IterateForever,
 
-                    // pass isPlaying we created above,
-                    // changing isPlaying will recompose
-                    // Lottie and pause/play
-                    isPlaying = true,
 
-                    // pass speed we created above,
-                    // changing speed will increase Lottie
-                    speed = 1f,
 
-                    // this makes animation to restart
-                    // when paused and play
-                    // pass false to continue the animation
-                    // at which is was paused
-                    restartOnPlay = false
 
-                )
-                LottieAnimation(
-                    composition,
-                    { progress },
-                    modifier = Modifier
-                        .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                        .fillMaxWidth()
-                )
-            }
-        }
 
-        Spacer(modifier = Modifier.weight(1f).fillMaxWidth())
+        Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = {
                 if (page == Page.LIVE_SHARE_START) {
