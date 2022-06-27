@@ -4,7 +4,6 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.launch
@@ -13,7 +12,6 @@ import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.CoroutinesAsyncDao
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
@@ -115,16 +113,6 @@ class GodToolsDao @Inject internal constructor(
             }
         }
     }
-
-    internal fun getLatestTranslationQuery(code: String, locale: Locale, isPublished: Boolean, isDownloaded: Boolean) =
-        Query.select<Translation>()
-            .where(
-                TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-                    .run { if (isPublished) and(TranslationTable.SQL_WHERE_PUBLISHED) else this }
-                    .run { if (isDownloaded) and(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
-            )
-            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-            .limit(1)
 
     fun updateSharesDeltaAsync(toolCode: String?, shares: Int) =
         coroutineScope.launch { updateSharesDelta(toolCode, shares) }

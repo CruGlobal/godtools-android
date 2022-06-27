@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.model.Translation
@@ -17,6 +18,13 @@ import org.keynote.godtools.android.db.GodToolsDao
 @Singleton
 class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
     // region Latest Translations
+    private fun getLatestTranslationQuery(code: String, locale: Locale, isDownloaded: Boolean) =
+        Query.select<Translation>()
+            .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale) and TranslationTable.SQL_WHERE_PUBLISHED)
+            .run { if (isDownloaded) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
+            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+            .limit(1)
+
     suspend fun getLatestTranslation(
         code: String?,
         locale: Locale?,
@@ -24,8 +32,7 @@ class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
     ): Translation? = when {
         code == null || locale == null -> null
         else -> withContext(dao.coroutineDispatcher) {
-            dao.getLatestTranslationQuery(code, locale, isPublished = true, isDownloaded = isDownloaded)
-                .get(dao).firstOrNull()
+            getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded).get(dao).firstOrNull()
         }
     }
 
@@ -42,8 +49,7 @@ class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
             @Suppress("DeferredResultUnused")
             dao.updateAsync(obj, where, TranslationTable.COLUMN_LAST_ACCESSED)
         }
-        return dao.getLatestTranslationQuery(code, locale, isPublished = true, isDownloaded = isDownloaded)
-            .getAsFlow(dao).map { it.firstOrNull() }
+        return getLatestTranslationQuery(code, locale, isDownloaded).getAsFlow(dao).map { it.firstOrNull() }
     }
 
     fun getLatestTranslationLiveData(
