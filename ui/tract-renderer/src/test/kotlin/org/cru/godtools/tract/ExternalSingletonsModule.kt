@@ -28,6 +28,7 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
@@ -53,7 +54,6 @@ class ExternalSingletonsModule {
     val dao by lazy {
         mockk<GodToolsDao> {
             every { findAsFlow<Tool>(any<String>()) } returns flowOf(null)
-            every { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } answers { MutableLiveData(null) }
             every { updateSharesDeltaAsync(any(), any()) } returns mockk()
         }
     }
@@ -87,4 +87,10 @@ class ExternalSingletonsModule {
     val toolSyncTasks by lazy { mock<ToolSyncTasks>() }
     @get:Provides
     val tractShareService by lazy { mock<TractShareService>() }
+    @get:Provides
+    val translationsRepository by lazy {
+        mockk<TranslationsRepository> {
+            every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
+        }
+    }
 }

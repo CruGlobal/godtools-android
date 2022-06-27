@@ -35,6 +35,7 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -45,6 +46,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     settings: Settings,
     private val shortcutManager: GodToolsShortcutManager,
     private val toolFileSystem: ToolFileSystem,
+    translationsRepository: TranslationsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val toolCode = savedStateHandle.getStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
@@ -65,10 +67,10 @@ class ToolDetailsFragmentDataModel @Inject constructor(
 
     internal val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
     val primaryTranslation = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { tool, locale ->
-        dao.getLatestTranslationLiveData(tool, locale)
+        translationsRepository.getLatestTranslationLiveData(tool, locale)
     }
     val parallelTranslation = toolCodeLiveData.switchCombineWith(settings.parallelLanguageLiveData) { tool, locale ->
-        dao.getLatestTranslationLiveData(tool, locale)
+        translationsRepository.getLatestTranslationLiveData(tool, locale)
     }
 
     val primaryManifest = toolCodeLiveData.switchCombineWith(settings.primaryLanguageLiveData) { code, locale ->

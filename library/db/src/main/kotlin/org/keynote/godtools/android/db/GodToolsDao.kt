@@ -2,25 +2,19 @@ package org.keynote.godtools.android.db
 
 import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.CoroutinesAsyncDao
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
-import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
 import org.cru.godtools.model.Followup
@@ -131,25 +125,6 @@ class GodToolsDao @Inject internal constructor(
             )
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
-
-    @MainThread
-    fun getLatestTranslationLiveData(
-        code: String?,
-        locale: Locale?,
-        isPublished: Boolean = true,
-        isDownloaded: Boolean = false,
-        trackAccess: Boolean = false
-    ): LiveData<Translation?> {
-        if (code == null || locale == null) return emptyLiveData()
-        if (trackAccess) {
-            val obj = Translation().apply { updateLastAccessed() }
-            val where = TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-            @Suppress("DeferredResultUnused")
-            updateAsync(obj, where, TranslationTable.COLUMN_LAST_ACCESSED)
-        }
-        return getLatestTranslationQuery(code, locale, isPublished, isDownloaded)
-            .getAsLiveData(this).map { it.firstOrNull() }
-    }
 
     fun updateSharesDeltaAsync(toolCode: String?, shares: Int) =
         coroutineScope.launch { updateSharesDelta(toolCode, shares) }

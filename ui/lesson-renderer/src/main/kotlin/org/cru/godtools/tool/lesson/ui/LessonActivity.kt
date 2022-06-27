@@ -40,7 +40,7 @@ import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.lesson.LessonPage
-import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @AndroidEntryPoint
 class LessonActivity :
@@ -223,11 +223,11 @@ class LessonActivity :
 @HiltViewModel
 class LessonActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
-    dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
     settings: Settings,
+    translationsRepository: TranslationsRepository,
     savedState: SavedStateHandle
-) : BaseSingleToolActivityDataModel(manifestManager, dao, downloadManager) {
+) : BaseSingleToolActivityDataModel(manifestManager, downloadManager, translationsRepository) {
     val visiblePages = SetLiveData<String>(synchronous = true)
 
     val pages = manifest.combineWith(visiblePages) { manifest, visible ->

@@ -55,7 +55,7 @@ class ManifestManager @Inject constructor(
 
     @MainThread
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =
-        dao.getLatestTranslationLiveData(toolCode, locale, isDownloaded = true, trackAccess = true)
+        translationsRepository.getLatestTranslationLiveData(toolCode, locale, isDownloaded = true, trackAccess = true)
             .switchMap {
                 when (it) {
                     null -> emptyLiveData()
