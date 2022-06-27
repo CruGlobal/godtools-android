@@ -1,8 +1,8 @@
 [versions]
 accompanist = "0.24.11-rc"
 android-gradle-plugin = "7.2.1"
-androidx-compose = "1.2.0-rc01"
-androidx-compose-compiler = "1.2.0-rc01"
+androidx-compose = "1.2.0-rc02"
+androidx-compose-compiler = "1.2.0-rc02"
 androidx-core = "1.8.0"
 androidx-hilt = "1.0.0"
 androidx-lifecycle = "2.4.1"
@@ -11,7 +11,7 @@ androidx-viewpager2 = "1.0.0"
 androidx-work = "2.7.1"
 dagger = "2.42"
 eventbus = "3.3.1"
-facebook-flipper = "0.150.0"
+facebook-flipper = "0.151.1"
 firebase-crashlytics = "18.2.11"
 firebase-perf = "20.1.0"
 godtoolsMpp = "0.6.0-SNAPSHOT"
@@ -79,10 +79,10 @@ facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-netw
 facebook-soloader = "com.facebook.soloader:soloader:0.10.3"
 firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.0.2"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
-firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.0"
+firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.1"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.1.2"
-firebase-messaging = "com.google.firebase:firebase-messaging:23.0.5"
+firebase-messaging = "com.google.firebase:firebase-messaging:23.0.6"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.1"
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
@@ -133,7 +133,6 @@ gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-sc
 gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.ref = "gtoSupport" }
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
-gtoSupport-testing-okta = { module = "org.ccci.gto.android.testing:gto-support-okta", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
@@ -193,7 +192,7 @@ ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
-androidx-compose-debug = ["androidx-compose-ui-tooling"]
+androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
 androidx-compose-testing = ["androidx-compose-ui-test"]
 
 [plugins]

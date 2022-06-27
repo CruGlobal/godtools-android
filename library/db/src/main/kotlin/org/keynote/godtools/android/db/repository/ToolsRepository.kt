@@ -4,6 +4,8 @@ import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Expression.Companion.constants
@@ -15,14 +17,15 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
-    val favoriteTools get() = Query.select<Tool>()
+    val favoriteTools = Query.select<Tool>()
         .where(
-            ToolTable.FIELD_ADDED.eq(true) and
+            ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)) and
                 ToolTable.FIELD_HIDDEN.ne(true) and
-                ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
+                ToolTable.FIELD_ADDED.eq(true)
         )
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
         .getAsFlow(dao)
+        .shareIn(dao.coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
 
     suspend fun pinTool(code: String) {
         val tool = Tool().also {

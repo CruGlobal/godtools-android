@@ -19,9 +19,9 @@ import org.cru.godtools.databinding.DashboardToolsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.ToolsAdapter
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.ToolsAdapterViewModel
 
 @AndroidEntryPoint
 class ToolsFragment :
@@ -32,7 +32,7 @@ class ToolsFragment :
 
     // region Data Model
     private val dataModel: ToolsFragmentDataModel by viewModels()
-    private val toolsDataModel: ToolsAdapterViewModel by viewModels()
+    private val toolViewModels: ToolViewModels by viewModels()
     // endregion Data Model
 
     // region Lifecycle
@@ -59,7 +59,7 @@ class ToolsFragment :
         adapter = ConcatAdapter(Config.Builder().setStableIdMode(ISOLATED_STABLE_IDS).build()).apply {
             // Tool Spotlight adapter
             val spotlightAdapter =
-                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_tools_spotlight_tool).also {
+                ToolsAdapter(viewLifecycleOwner, toolViewModels, R.layout.dashboard_tools_spotlight_tool).also {
                     dataModel.spotlightTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }
@@ -82,7 +82,7 @@ class ToolsFragment :
 
             // Tools
             addAdapter(
-                ToolsAdapter(viewLifecycleOwner, toolsDataModel, R.layout.dashboard_list_item_tool).also {
+                ToolsAdapter(viewLifecycleOwner, toolViewModels, R.layout.dashboard_list_item_tool).also {
                     dataModel.filteredTools.observe(viewLifecycleOwner, it)
                     it.callbacks.set(this@ToolsFragment)
                 }

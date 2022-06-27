@@ -16,8 +16,8 @@ import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.ui.dashboard.home.HomeFragment
+import org.cru.godtools.ui.dashboard.lessons.LessonsFragment
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
-import org.cru.godtools.ui.tools.ToolsListFragment
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -57,7 +57,7 @@ class DashboardActivityTest {
         scenario(intent = context.createDashboardIntent(Page.LESSONS)) {
             it.onActivity {
                 assertEquals(Page.LESSONS, it.savedState.selectedPage)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsListFragment)
+                assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
             }
         }
     }
@@ -87,7 +87,7 @@ class DashboardActivityTest {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/lessons"))) {
             it.onActivity {
                 assertEquals(Page.LESSONS, it.savedState.selectedPage)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsListFragment)
+                assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
             }
         }
     }

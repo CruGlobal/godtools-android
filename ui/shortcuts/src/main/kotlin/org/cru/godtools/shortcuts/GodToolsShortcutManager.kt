@@ -217,7 +217,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @AnyThread
-    @OptIn(ExperimentalStdlibApi::class)
     private suspend fun createToolShortcut(tool: Tool) = withContext(Dispatchers.IO) {
         val code = tool.code ?: return@withContext null
 

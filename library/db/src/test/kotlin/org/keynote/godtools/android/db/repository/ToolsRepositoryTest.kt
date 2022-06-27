@@ -6,9 +6,13 @@ import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verifyAll
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.model.Tool
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -23,23 +27,34 @@ private const val TOOL = "tool"
 class ToolsRepositoryTest {
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
+        every { getAsFlow(any<Query<*>>()) } answers { flowOf(emptyList()) }
         excludeRecords {
             coroutineDispatcher
             coroutineScope
+            getAsFlow(any<Query<*>>())
             transaction(any(), any())
         }
     }
-    private val repository = ToolsRepository(dao)
+
+    private inline fun withRepository(
+        dispatcher: CoroutineDispatcher = UnconfinedTestDispatcher(),
+        body: (ToolsRepository) -> Unit
+    ) {
+        coEvery { dao.coroutineDispatcher } returns dispatcher
+        coEvery { dao.coroutineScope } returns CoroutineScope(dispatcher)
+        every { dao.getAsFlow(any<Query<*>>()) } answers { flowOf(emptyList()) }
+        val repository = ToolsRepository(dao)
+        body(repository)
+    }
 
     // region pinTool()/unpinTool()
     private val tool = slot<Tool>()
 
     @Test
     fun verifyPinTool() = runTest {
-        coEvery { dao.coroutineDispatcher } returns UnconfinedTestDispatcher()
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        repository.pinTool(TOOL)
+        withRepository { it.pinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertTrue(tool.captured.isAdded)
         verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }
@@ -47,10 +62,9 @@ class ToolsRepositoryTest {
 
     @Test
     fun verifyUnpinTool() = runTest {
-        coEvery { dao.coroutineDispatcher } returns UnconfinedTestDispatcher()
         every { dao.update(capture(tool), ToolTable.COLUMN_ADDED) } returns 1
 
-        repository.unpinTool(TOOL)
+        withRepository { it.unpinTool(TOOL) }
         assertEquals(TOOL, tool.captured.code)
         assertFalse(tool.captured.isAdded)
         verifyAll { dao.update(tool.captured, ToolTable.COLUMN_ADDED) }

@@ -5,7 +5,6 @@ import android.graphics.drawable.NinePatchDrawable
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.annotation.CallSuper
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
@@ -19,17 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
-import org.ccci.gto.android.common.recyclerview.advrecyclerview.composedadapter.addLayout
 import org.ccci.gto.android.common.recyclerview.advrecyclerview.draggable.SimpleOnItemDragEventListener
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.adapter.BannerAdapter
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
-import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LESSONS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.databinding.ToolsFragmentBinding
@@ -41,7 +37,6 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.ui.dashboard.DashboardActivity
-import org.cru.godtools.ui.dashboard.lessons.LessonsHeader
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import splitties.fragmentargs.argOrDefault
@@ -50,7 +45,6 @@ import splitties.fragmentargs.argOrDefault
 class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.tools_fragment), ToolsAdapterCallbacks {
     companion object {
         const val MODE_ADDED = 1
-        const val MODE_LESSONS = 3
     }
 
     interface Callbacks : ToolsAdapterCallbacks {
@@ -135,10 +129,6 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
                 eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
             }
-            MODE_LESSONS -> {
-                eventBus.post(AnalyticsScreenEvent(SCREEN_LESSONS))
-                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
-            }
         }
     }
 
@@ -191,13 +181,9 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
     // endregion ToolsAdapterCallbacks
 
     // region Tools List
-    private val toolsAdapterDataModel by viewModels<ToolsAdapterViewModel>()
+    private val toolViewModels by viewModels<ToolViewModels>()
     private val toolsAdapter: ToolsAdapter by lazy {
-        val itemLayout = when (mode) {
-            MODE_LESSONS -> R.layout.tools_list_item_lesson
-            else -> R.layout.tools_list_item_tool
-        }
-        ToolsAdapter(this, toolsAdapterDataModel, itemLayout).also { adapter ->
+        ToolsAdapter(this, toolViewModels, R.layout.tools_list_item_tool).also { adapter ->
             adapter.callbacks.set(this)
             lifecycle.onDestroy { adapter.callbacks.set(null) }
             dataModel.tools.observe(this, adapter)
@@ -213,13 +199,6 @@ class ToolsListFragment() : BasePlatformFragment<ToolsFragmentBinding>(R.layout.
         // create composed adapter
         val adapter = ComposedAdapter()
         adapter.addAdapter(createBannerAdapter(viewLifecycleOwner))
-
-        // add Lessons Header Text
-        if (mode == MODE_LESSONS) {
-            adapter.addLayout(R.layout.dashboard_lessons_header) {
-                it.findViewById<ComposeView>(R.id.frame)?.setContent { LessonsHeader() }
-            }
-        }
 
         // configure the DragDrop RecyclerView components (Only for Added tools)
         if (mode == MODE_ADDED) {

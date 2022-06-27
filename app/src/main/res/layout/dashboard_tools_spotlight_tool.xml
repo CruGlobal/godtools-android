@@ -9,7 +9,7 @@
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
-        <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
+        <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolViewModels.ToolViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:lines="2"
-                android:text="@{toolViewModel.tool.name}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintBottom_toTopOf="@id/parallelLanguageText"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/margin_start"

@@ -12,7 +12,7 @@
 
         <variable name="callbacks" type="ObservableField&lt;org.cru.godtools.ui.tools.ToolsAdapterCallbacks&gt;" />
         <variable name="selectedVariant" type="LiveData&lt;String&gt;" />
-        <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolsAdapterViewModel.ToolViewModel" />
+        <variable name="toolViewModel" type="org.cru.godtools.ui.tools.ToolViewModels.ToolViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
