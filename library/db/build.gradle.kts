@@ -15,6 +15,7 @@ dependencies {
     api(libs.gtoSupport.db)
     api(libs.gtoSupport.db.coroutines)
     api(libs.gtoSupport.db.livedata)
+    implementation(libs.gtoSupport.androidx.collection)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.util)
