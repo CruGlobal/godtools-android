@@ -20,7 +20,6 @@
     <string name="share_story_subject">\'GodTools\' liecība</string>
     <!-- Lessons -->
     <string name="nav_lessons">Nodarbības</string>
-    <string name="tools_list_lesson_info_length">Aizņems %1$d minūtes</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Izlase</string>
     <string name="tools_list_remove_favorite_dialog_title">Izņemt “%1$s” no Izlases?</string>

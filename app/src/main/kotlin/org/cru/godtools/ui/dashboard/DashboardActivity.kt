@@ -31,13 +31,13 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.dashboard.home.HomeFragment
+import org.cru.godtools.ui.dashboard.lessons.LessonsFragment
 import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsListFragment
 import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
-import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_LESSONS
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
@@ -127,7 +127,7 @@ class DashboardActivity :
         if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
 
         val fragment = when (page) {
-            Page.LESSONS -> ToolsListFragment(MODE_LESSONS)
+            Page.LESSONS -> LessonsFragment()
             Page.HOME -> HomeFragment()
             Page.ALL_TOOLS -> ToolsFragment()
             Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)

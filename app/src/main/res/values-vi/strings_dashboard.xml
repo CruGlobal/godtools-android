@@ -20,7 +20,6 @@
     <string name="share_story_subject">Câu chuyện từ GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Bài học</string>
-    <string name="tools_list_lesson_info_length">%1$d phút đọc</string>
     <!-- Favorites -->
     <string name="nav_favorite_tools">Ưa thích</string>
     <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>
@@ -42,5 +41,4 @@
     <!-- Tools List -->
     <string name="action_tools_about">Giới thiệu</string>
     <string name="action_tools_open">Mở</string>
-    <string name="tools_list_info_language_available">Có sẵn trong %1$s</string>
 </resources>

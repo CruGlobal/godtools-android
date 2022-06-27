@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -123,9 +124,12 @@ fun LessonToolCard(
                         .align(Alignment.End)
                         .wrapContentWidth()
                 ) {
+                    val primaryTranslation by viewModel.primaryTranslation.collectAsState()
+                    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
+
                     AvailableInLanguage(
-                        language = viewModel.primaryLanguage.collectAsState(),
-                        translation = viewModel.primaryTranslation.collectAsState()
+                        language = primaryLanguage,
+                        translation = { primaryTranslation }
                     )
                 }
             }
@@ -146,15 +150,15 @@ fun SquareToolCard(
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val secondTranslation = viewModel.secondTranslation.collectAsState()
-    val secondLanguage = viewModel.secondLanguage.collectAsState()
+    val secondTranslation by viewModel.secondTranslation.collectAsState()
+    val secondLanguage by viewModel.secondLanguage.collectAsState()
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
     val downloadProgress = viewModel.downloadProgress.collectAsState()
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, firstTranslation, secondTranslation.value) },
+            onClick = { onClick(tool, firstTranslation, secondTranslation) },
             modifier = modifier.width(189.dp)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -191,9 +195,13 @@ fun SquareToolCard(
                                 modifier = Modifier
                                     .padding(top = 2.dp)
                                     .fillMaxWidth()
-                                    .alpha(if (secondTranslation.value != null) 1f else 0f)
                             ) {
-                                AvailableInLanguage(language = secondLanguage, translation = secondTranslation)
+                                val available by remember { derivedStateOf { secondTranslation != null } }
+                                if (available) {
+                                    AvailableInLanguage(language = secondLanguage, available = true)
+                                } else {
+                                    Spacer(modifier = Modifier.minLinesHeight(1, infoLabelStyle))
+                                }
                             }
                         }
                     }
@@ -237,7 +245,7 @@ fun SquareToolCard(
                             )
                         }
                         Button(
-                            onClick = { onOpenTool(tool, firstTranslation, secondTranslation.value) },
+                            onClick = { onOpenTool(tool, firstTranslation, secondTranslation) },
                             contentPadding = contentPadding,
                             modifier = Modifier
                                 .weight(1f)
@@ -418,15 +426,25 @@ internal fun FavoriteAction(
 }
 
 @Composable
+private inline fun RowScope.AvailableInLanguage(
+    language: Language?,
+    crossinline translation: @DisallowComposableCalls () -> Translation?
+) {
+    val available by remember { derivedStateOf { translation() != null } }
+    AvailableInLanguage(language = language, available = available)
+}
+
+@Composable
 private fun RowScope.AvailableInLanguage(
-    language: State<Language?>,
-    translation: State<Translation?>,
+    language: Language?,
+    available: Boolean,
     alpha: Float = 0.6f
 ) {
-    val available by remember { derivedStateOf { translation.value != null } }
+    val context = LocalContext.current
+    val languageName = remember(language, context) { language?.getDisplayName(context).orEmpty() }
 
     Text(
-        language.value?.getDisplayName(LocalContext.current).orEmpty(),
+        if (available) languageName else stringResource(R.string.tool_card_label_language_unavailable, languageName),
         style = infoLabelStyle,
         maxLines = 1,
         modifier = Modifier
