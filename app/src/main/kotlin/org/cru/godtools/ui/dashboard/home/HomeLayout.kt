@@ -136,6 +136,8 @@ internal fun HomeLayout(
                     item("favorites", "favorites") {
                         FavoriteTools(
                             { favoriteTools?.take(3) },
+                            onOpenTool = onOpenTool,
+                            onOpenToolDetails = onOpenToolDetails,
                             modifier = Modifier
                                 .animateItemPlacement()
                                 .fillMaxWidth()
@@ -221,8 +223,8 @@ private fun FavoritesHeader(
 private fun FavoriteTools(
     tools: () -> List<String>?,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolDetails: (String) -> Unit = {},
+    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenToolDetails: (String) -> Unit,
 ) = LazyRow(
     contentPadding = PaddingValues(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(16.dp),
