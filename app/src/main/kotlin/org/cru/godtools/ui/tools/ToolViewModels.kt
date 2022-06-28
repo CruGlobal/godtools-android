@@ -21,7 +21,6 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -51,7 +50,7 @@ class ToolViewModels @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     inner class ToolViewModel(val code: String) {
-        val tool = dao.findAsFlow<Tool>(code)
+        val tool = toolsRepository.getToolFlow(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val banner = tool

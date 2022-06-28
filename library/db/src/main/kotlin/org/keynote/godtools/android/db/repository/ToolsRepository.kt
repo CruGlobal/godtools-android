@@ -6,12 +6,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.ccci.gto.android.common.androidx.collection.WeakLruCache
+import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -20,6 +24,12 @@ import org.keynote.godtools.android.db.GodToolsDao
 @Singleton
 class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
     private val coroutineScope = CoroutineScope(SupervisorJob())
+
+    private val toolsCache = WeakLruCache<String, Flow<Tool?>>(15)
+    fun getToolFlow(code: String) = toolsCache.getOrPut(code) {
+        dao.findAsFlow<Tool>(code)
+            .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
+    }
 
     val favoriteTools = Query.select<Tool>()
         .where(
