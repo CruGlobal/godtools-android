@@ -124,13 +124,18 @@ internal fun TutorialLiveShareLayout(
                         .fillMaxWidth()
                 )
             }
-            img != null -> Image(
-                painter = painterResource(img), contentDescription = null,
-                modifier = Modifier.padding(top = 16.dp)
-                    .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                    .fillMaxWidth()
+            img != null -> Box(
+                modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(0.8f)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(img), contentDescription = null,
+                    modifier = Modifier.padding(top = 16.dp)
+                        .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+                        .fillMaxWidth()
 
-            )
+                )
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
