@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cru.godtools.base.Settings
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tutorial.PageSet
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 
@@ -22,7 +24,7 @@ class HomeViewModel @Inject constructor(
     toolsRepository: ToolsRepository
 ) : ViewModel() {
     val showTutorialFeaturesBanner = settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
-        .map { !it }
+        .map { !it && PageSet.FEATURES.supportsLocale(Locale.getDefault()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     val spotlightLessons = lessonsRepository.spotlightLessons
