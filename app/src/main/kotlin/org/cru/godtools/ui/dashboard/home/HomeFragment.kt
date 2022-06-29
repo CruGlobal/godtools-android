@@ -14,6 +14,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.fragment.BaseFragment
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ComposeLayoutBinding
 import org.cru.godtools.ui.dashboard.DashboardActivity
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
@@ -31,12 +32,14 @@ class HomeFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layout)
     override fun onBindingCreated(binding: ComposeLayoutBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.compose.setContent {
-            HomeLayout(
-                onOpenTool = { tool, tr1, tr2 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1, tr2) },
-                onOpenToolDetails = { findListener<ToolsAdapterCallbacks>()?.showToolDetails(it) },
-                onViewAllFavorites = { findListener<DashboardActivity>()?.showPage(Page.FAVORITE_TOOLS) },
-                onViewAllTools = { findListener<DashboardActivity>()?.showPage(Page.ALL_TOOLS) }
-            )
+            GodToolsTheme {
+                HomeLayout(
+                    onOpenTool = { tool, tr1, tr2 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1, tr2) },
+                    onOpenToolDetails = { findListener<ToolsAdapterCallbacks>()?.showToolDetails(it) },
+                    onViewAllFavorites = { findListener<DashboardActivity>()?.showPage(Page.FAVORITE_TOOLS) },
+                    onViewAllTools = { findListener<DashboardActivity>()?.showPage(Page.ALL_TOOLS) }
+                )
+            }
         }
     }
 

@@ -43,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
@@ -61,7 +60,7 @@ internal fun HomeLayout(
     onOpenToolDetails: (String) -> Unit = {},
     onViewAllFavorites: () -> Unit = {},
     onViewAllTools: () -> Unit = {}
-) = GodToolsTheme {
+) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
