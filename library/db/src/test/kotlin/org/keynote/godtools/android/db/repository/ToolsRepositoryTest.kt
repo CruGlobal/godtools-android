@@ -7,7 +7,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verifyAll
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -30,7 +29,6 @@ class ToolsRepositoryTest {
         every { getAsFlow(any<Query<*>>()) } answers { flowOf(emptyList()) }
         excludeRecords {
             coroutineDispatcher
-            coroutineScope
             getAsFlow(any<Query<*>>())
             transaction(any(), any())
         }
@@ -41,7 +39,6 @@ class ToolsRepositoryTest {
         body: (ToolsRepository) -> Unit
     ) {
         coEvery { dao.coroutineDispatcher } returns dispatcher
-        coEvery { dao.coroutineScope } returns CoroutineScope(dispatcher)
         every { dao.getAsFlow(any<Query<*>>()) } answers { flowOf(emptyList()) }
         val repository = ToolsRepository(dao)
         body(repository)
