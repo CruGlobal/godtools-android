@@ -2,4 +2,9 @@
 <resources>
     <item name="action_tips_finish" type="id" />
     <item name="action_live_share_finish" type="id" />
+    <item name="action_onboarding_watch_video" type="id" />
+    <item name="action_onboarding_launch_articles" type="id" />
+    <item name="action_onboarding_launch_lessons" type="id" />
+    <item name="action_onboarding_launch_tools" type="id" />
+    <item name="action_onboarding_finish" type="id" />
 </resources>

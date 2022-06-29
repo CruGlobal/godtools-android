@@ -56,7 +56,6 @@ internal class TutorialPageFragment() : BindingFragment<ViewBinding>(), Tutorial
             }
             is ViewDataBinding -> {
                 binding.setVariable(BR.callbacks, this)
-                binding.setVariable(BR.page, page)
                 binding.setVariable(BR.formatArgs, formatArgs)
                 binding.setupCompose()
             }
