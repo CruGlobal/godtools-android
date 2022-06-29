@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -50,7 +52,9 @@ internal fun TutorialLiveShareLayout(
             .padding(
                 top = dimensionResource(R.dimen.tutorial_page_inset_top),
                 bottom = dimensionResource(R.dimen.tutorial_page_inset_bottom)
-            ).verticalScroll(rememberScrollState())
+            )
+            .padding(horizontal = 32.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.weight(1f))
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -68,7 +72,6 @@ internal fun TutorialLiveShareLayout(
                     text = stringResource(title),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp),
                     color = MaterialTheme.colorScheme.primary
                 )
 
@@ -76,7 +79,7 @@ internal fun TutorialLiveShareLayout(
                     stringResource(body),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 32.dp).padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp)
                 )
             }
         }
@@ -119,23 +122,21 @@ internal fun TutorialLiveShareLayout(
                 LottieAnimation(
                     composition,
                     { progress },
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier
+                        .padding(top = 16.dp)
                         .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
                         .fillMaxWidth()
                 )
             }
-            img != null -> Box(
-                modifier = Modifier.padding(horizontal = 32.dp).fillMaxWidth(0.8f)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Image(
-                    painter = painterResource(img), contentDescription = null,
-                    modifier = Modifier.padding(top = 16.dp)
-                        .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
-                        .fillMaxWidth()
-
-                )
-            }
+            img != null -> Image(
+                painter = painterResource(img),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .heightIn(min = dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+                    .fillMaxWidth()
+                    .wrapContentSize(Alignment.TopCenter)
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -147,8 +148,8 @@ internal fun TutorialLiveShareLayout(
                     nextPage()
             },
             modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .fillMaxWidth(0.8f).align(Alignment.CenterHorizontally)
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally)
         ) {
             Text(
                 stringResource(
