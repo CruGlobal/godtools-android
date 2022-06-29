@@ -33,8 +33,6 @@ dependencies {
     api(project(":library:base"))
     implementation(project(":ui:base"))
 
-    implementation(libs.kotlin.coroutines)
-
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
 
@@ -48,6 +46,7 @@ dependencies {
     implementation(libs.eventbus)
     implementation(libs.facebook)
     implementation(libs.hilt)
+    implementation(libs.kotlin.coroutines)
     implementation(libs.okhttp3)
     implementation(libs.play.installreferrer)
     implementation(libs.play.tagmanager)
