@@ -9,11 +9,15 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.tutorial.animation.animateViews
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareDescriptionBinding
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareMirroredBinding
+import org.cru.godtools.tutorial.databinding.TutorialLiveShareStartBinding
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLightBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsStartBinding
 import org.cru.godtools.tutorial.layout.TipsTutorialLayout
+import org.cru.godtools.tutorial.layout.TutorialLiveShareLayout
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
 
@@ -79,6 +83,37 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
                     page,
                     R.raw.anim_tutorial_tips_light,
                     R.string.tutorial_tips_start_headline, R.string.tutorial_tips_start_text
+                )
+            }
+            is TutorialLiveShareDescriptionBinding -> compose.setContent {
+                TutorialLiveShareLayout(
+                    nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
+                    page,
+                    null,
+                    R.string.tutorial_live_share_description_headline, R.string.tutorial_live_share_description_text,
+                    R.drawable.img_tutorial_live_share_people
+
+                )
+            }
+            is TutorialLiveShareMirroredBinding -> compose.setContent {
+                TutorialLiveShareLayout(
+                    nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
+                    page,
+                    R.raw.anim_tutorial_live_share_devices,
+                    R.string.tutorial_live_share_mirrored_headline, R.string.tutorial_live_share_mirrored_text
+
+                )
+            }
+            is TutorialLiveShareStartBinding -> compose.setContent {
+                TutorialLiveShareLayout(
+                    nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
+                    onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
+                    page,
+                    R.raw.anim_tutorial_live_share_messages,
+                    R.string.tutorial_live_share_start_headline, R.string.tutorial_live_share_start_text
+
                 )
             }
         }
