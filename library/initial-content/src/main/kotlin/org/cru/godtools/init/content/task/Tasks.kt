@@ -32,6 +32,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
@@ -48,7 +49,8 @@ internal class Tasks @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
     private val settings: Settings,
-    private val toolsRepository: ToolsRepository
+    private val toolsRepository: ToolsRepository,
+    private val translationsRepository: TranslationsRepository
 ) {
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
@@ -193,7 +195,7 @@ internal class Tasks @Inject constructor(
 
                     // short-circuit if a newer translation is already downloaded
                     val latestTranslation =
-                        dao.getLatestTranslation(toolCode, languageCode, isPublished = true, isDownloaded = true)
+                        translationsRepository.getLatestTranslation(toolCode, languageCode, isDownloaded = true)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
                     withContext(Dispatchers.IO) {

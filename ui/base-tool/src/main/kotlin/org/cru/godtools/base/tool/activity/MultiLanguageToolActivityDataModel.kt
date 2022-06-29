@@ -49,6 +49,7 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tool.model.Manifest
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,6 +57,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
+    translationsRepository: TranslationsRepository,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
 ) : ViewModel() {
@@ -74,7 +76,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
-            dao.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true).distinctUntilChanged()
+            translationsRepository.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true)
+                .distinctUntilChanged()
     }
     // endregion LiveData Caches
 

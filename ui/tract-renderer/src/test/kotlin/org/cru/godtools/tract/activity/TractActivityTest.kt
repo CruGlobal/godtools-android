@@ -40,6 +40,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 import org.mockito.MockedStatic
 import org.mockito.Mockito.mockStatic
 import org.mockito.kotlin.any
@@ -62,6 +63,8 @@ class TractActivityTest {
     lateinit var dao: GodToolsDao
     @Inject
     lateinit var manifestManager: ManifestManager
+    @Inject
+    lateinit var translationsRepository: TranslationsRepository
 
     private lateinit var lottieUtils: MockedStatic<*>
 
@@ -332,7 +335,7 @@ class TractActivityTest {
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
-        every { dao.getLatestTranslationLiveData(tool ?: any(), locale ?: any(), any(), any(), any()) }
+        every { translationsRepository.getLatestTranslationLiveData(tool ?: any(), locale ?: any(), any(), any()) }
     private fun whenGetManifest(tool: String = any(), locale: Locale = any()) =
         whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))
 }

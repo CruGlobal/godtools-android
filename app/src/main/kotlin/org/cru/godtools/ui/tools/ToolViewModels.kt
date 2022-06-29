@@ -21,11 +21,12 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,21 +34,23 @@ class ToolViewModels @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
+    private val languagesRepository: LanguagesRepository,
     private val settings: Settings,
-    private val toolsRepository: ToolsRepository
+    private val toolsRepository: ToolsRepository,
+    private val translationsRepository: TranslationsRepository
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
 
     private val primaryLanguage = settings.primaryLanguageFlow
-        .flatMapLatest { dao.findAsFlow<Language>(it) }
+        .flatMapLatest { languagesRepository.getLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     private val parallelLanguage = settings.parallelLanguageFlow
-        .flatMapLatest { it?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     inner class ToolViewModel(val code: String) {
-        val tool = dao.findAsFlow<Tool>(code)
+        val tool = toolsRepository.getToolFlow(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val banner = tool
@@ -66,14 +69,16 @@ class ToolViewModels @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow
-            .flatMapLatest { dao.getLatestTranslationFlow(code, it) }
+            .flatMapLatest { translationsRepository.getLatestTranslationFlow(code, it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        private val defaultTranslation = dao.getLatestTranslationFlow(code, Settings.defaultLanguage)
+        private val defaultTranslation = translationsRepository.getLatestTranslationFlow(code, Settings.defaultLanguage)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
-                else -> settings.parallelLanguageFlow.flatMapLatest { dao.getLatestTranslationFlow(t.code, it) }
+                else -> settings.parallelLanguageFlow.flatMapLatest {
+                    translationsRepository.getLatestTranslationFlow(t.code, it)
+                }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
@@ -90,7 +95,7 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondLanguage = secondTranslation
-            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }

@@ -68,6 +68,7 @@ import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -130,6 +131,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsApi: TranslationsApi,
+    private val translationsRepository: TranslationsRepository,
     private val workManager: Lazy<WorkManager>,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
@@ -143,6 +145,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         settings: Settings,
         toolsRepository: ToolsRepository,
         translationsApi: TranslationsApi,
+        translationsRepository: TranslationsRepository,
         workManager: Lazy<WorkManager>
     ) : this(
         attachmentsApi,
@@ -152,6 +155,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         settings,
         toolsRepository,
         translationsApi,
+        translationsRepository,
         workManager,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
@@ -314,7 +318,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         require(fs.exists())
 
         translationsMutex.withLock(key) {
-            val translation = dao.getLatestTranslation(key.tool, key.locale, true)?.takeUnless { it.isDownloaded }
+            val translation = translationsRepository.getLatestTranslation(key.tool, key.locale)
+                ?.takeUnless { it.isDownloaded }
                 ?: return true
 
             startProgress(key)
@@ -334,7 +339,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
-            val current = dao.getLatestTranslation(key.tool, key.locale, isPublished = true, isDownloaded = true)
+            val current = translationsRepository.getLatestTranslation(key.tool, key.locale, isDownloaded = true)
             if (current != null && current.version >= translation.version) return
 
             startProgress(key)

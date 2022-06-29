@@ -37,6 +37,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val TOOL = "kgp"
 
@@ -48,7 +49,6 @@ class MultiLanguageToolActivityDataModelTest {
     // region Objects & Mocks
     private val dao: GodToolsDao = mockk {
         every { findAsFlow<Tool>(any<String>()) } returns emptyFlow()
-        every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
     }
     private val manifestManager: ManifestManager = mockk {
         every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
@@ -56,6 +56,9 @@ class MultiLanguageToolActivityDataModelTest {
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
     private val savedStateHandle = SavedStateHandle()
+    private val translationsRepository = mockk<TranslationsRepository> {
+        every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
+    }
 
     @Before
     fun setupDataModel() {
@@ -64,6 +67,7 @@ class MultiLanguageToolActivityDataModelTest {
             dao,
             mockk(),
             manifestManager,
+            translationsRepository,
             isConnnected,
             savedStateHandle
         )
@@ -78,7 +82,7 @@ class MultiLanguageToolActivityDataModelTest {
     private fun everyGetManifest(tool: String, locale: Locale) =
         every { manifestManager.getLatestPublishedManifestLiveData(tool, locale) }
     private fun everyGetTranslation(tool: String, locale: Locale) =
-        every { dao.getLatestTranslationLiveData(tool, locale, trackAccess = true) }
+        every { translationsRepository.getLatestTranslationLiveData(tool, locale, trackAccess = true) }
     // endregion Objects & Mocks
 
     // region Resolved Data
@@ -95,9 +99,9 @@ class MultiLanguageToolActivityDataModelTest {
 
         dataModel.translations.observeForever(observer)
         verifyAll {
-            dao.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
-            dao.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
-            dao.getLatestTranslationLiveData(TOOL, Locale.CHINESE, trackAccess = true)
+            translationsRepository.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
+            translationsRepository.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
+            translationsRepository.getLatestTranslationLiveData(TOOL, Locale.CHINESE, trackAccess = true)
             observer.onChanged(
                 withArg {
                     assertThat(
@@ -139,8 +143,8 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.translations.observeForever(observer)
         french.value = Translation()
         verifyAll {
-            dao.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
-            dao.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
+            translationsRepository.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
+            translationsRepository.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
             repeat(2) { observer.onChanged(any()) }
         }
         assertThat(
@@ -366,8 +370,14 @@ class MultiLanguageToolActivityDataModelTest {
         assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
 
         // creating a new DataModel using the same SavedState emulates recreation after process death
-        val dataModel2 =
-            MultiLanguageToolActivityDataModel(dao, mockk(), manifestManager, isConnnected, savedStateHandle)
+        val dataModel2 = MultiLanguageToolActivityDataModel(
+            dao,
+            mockk(),
+            manifestManager,
+            translationsRepository,
+            isConnnected,
+            savedStateHandle
+        )
         assertEquals(Locale.ENGLISH, dataModel2.activeLocale.value)
     }
     // endregion Property: activeLocale
