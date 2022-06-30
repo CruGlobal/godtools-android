@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
@@ -31,7 +30,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -42,10 +40,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -61,7 +57,6 @@ import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.download.manager.DownloadProgress
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
@@ -87,7 +82,7 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
     }
 }
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
-private val infoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
+internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -194,7 +189,7 @@ fun SquareToolCard(
                                 Spacer(
                                     modifier = Modifier
                                         .padding(top = 2.dp)
-                                        .minLinesHeight(1, infoLabelStyle)
+                                        .minLinesHeight(1, toolCardInfoLabelStyle)
                                 )
                             }
                         }
@@ -212,7 +207,7 @@ fun SquareToolCard(
                             Spacer(
                                 modifier = Modifier
                                     .padding(top = 2.dp)
-                                    .minLinesHeight(1, infoLabelStyle)
+                                    .minLinesHeight(1, toolCardInfoLabelStyle)
                             )
                         }
                     }
@@ -395,55 +390,4 @@ internal fun FavoriteAction(
             }
         )
     }
-}
-
-@Composable
-private inline fun AvailableInLanguage(
-    language: Language?,
-    crossinline translation: @DisallowComposableCalls () -> Translation?,
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-) {
-    val available by remember { derivedStateOf { translation() != null } }
-    AvailableInLanguage(
-        language,
-        available = available,
-        horizontalArrangement = horizontalArrangement,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun AvailableInLanguage(
-    language: Language?,
-    available: Boolean = true,
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    alpha: Float = 0.6f
-) = Row(
-    horizontalArrangement = horizontalArrangement,
-    modifier = modifier
-        .widthIn(min = 50.dp)
-        .alpha(alpha)
-) {
-    val context = LocalContext.current
-    val languageName = remember(language, context) { language?.getDisplayName(context).orEmpty() }
-
-    Text(
-        if (available) languageName else stringResource(R.string.tool_card_label_language_unavailable, languageName),
-        style = infoLabelStyle,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = Modifier
-            .alignByBaseline()
-            .weight(1f, false)
-    )
-    Icon(
-        painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
-        contentDescription = null,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .size(with(LocalDensity.current) { (infoLabelStyle.fontSize * 0.65).toDp() })
-            .alignBy { it.measuredHeight }
-    )
 }
