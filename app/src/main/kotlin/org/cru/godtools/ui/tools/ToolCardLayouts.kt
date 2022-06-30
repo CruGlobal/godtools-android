@@ -1,7 +1,5 @@
 package org.cru.godtools.ui.tools
 
-import android.text.TextUtils
-import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,20 +46,18 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GRAY_E6
+import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.download.manager.DownloadProgress
@@ -259,28 +255,6 @@ fun SquareToolCard(
             }
         }
     }
-}
-
-// TODO: Should this be moved to somewhere that is more re-usable?
-@Composable
-private fun ProvideLayoutDirectionFromLocale(locale: () -> Locale?, content: @Composable () -> Unit) {
-    val currentLayoutDirection = LocalLayoutDirection.current
-    val layoutDirection by remember {
-        derivedStateOf {
-            locale()?.let {
-                when (TextUtils.getLayoutDirectionFromLocale(it)) {
-                    View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
-                    View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
-                    else -> null
-                }
-            } ?: currentLayoutDirection
-        }
-    }
-
-    CompositionLocalProvider(
-        LocalLayoutDirection provides layoutDirection,
-        content = content
-    )
 }
 
 @Composable
