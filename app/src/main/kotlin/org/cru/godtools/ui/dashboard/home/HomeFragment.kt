@@ -8,7 +8,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ComposeLayoutBinding
@@ -32,8 +31,7 @@ class HomeFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layout)
                 HomeLayout(
                     onOpenTool = { tool, tr1, tr2 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1, tr2) },
                     onOpenToolDetails = { findListener<ToolsAdapterCallbacks>()?.showToolDetails(it) },
-                    onViewAllFavorites = { findListener<DashboardActivity>()?.showPage(Page.FAVORITE_TOOLS) },
-                    onViewAllTools = { findListener<DashboardActivity>()?.showPage(Page.ALL_TOOLS) }
+                    onShowDashboardPage = { findListener<DashboardActivity>()?.showPage(it) }
                 )
             }
         }
