@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
@@ -17,7 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
@@ -48,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -119,19 +119,15 @@ fun LessonToolCard(
             ) {
                 ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
 
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .wrapContentWidth()
-                ) {
-                    val primaryTranslation by viewModel.primaryTranslation.collectAsState()
-                    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
+                val primaryTranslation by viewModel.primaryTranslation.collectAsState()
+                val primaryLanguage by viewModel.primaryLanguage.collectAsState()
 
-                    AvailableInLanguage(
-                        language = primaryLanguage,
-                        translation = { primaryTranslation }
-                    )
-                }
+                AvailableInLanguage(
+                    language = primaryLanguage,
+                    translation = { primaryTranslation },
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.align(Alignment.End)
+                )
             }
         }
     }
@@ -191,17 +187,19 @@ fun SquareToolCard(
                                 .fillMaxWidth()
                         )
                         if (parallelLanguage != null) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(top = 2.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                val available by remember { derivedStateOf { secondTranslation != null } }
-                                if (available) {
-                                    AvailableInLanguage(language = secondLanguage, available = true)
-                                } else {
-                                    Spacer(modifier = Modifier.minLinesHeight(1, infoLabelStyle))
-                                }
+                            val available by remember { derivedStateOf { secondTranslation != null } }
+                            if (available) {
+                                AvailableInLanguage(
+                                    secondLanguage,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            } else {
+                                Spacer(
+                                    modifier = Modifier
+                                        .padding(top = 2.dp)
+                                        .minLinesHeight(1, infoLabelStyle)
+                                )
                             }
                         }
                     }
@@ -426,19 +424,33 @@ internal fun FavoriteAction(
 }
 
 @Composable
-private inline fun RowScope.AvailableInLanguage(
+private inline fun AvailableInLanguage(
     language: Language?,
-    crossinline translation: @DisallowComposableCalls () -> Translation?
+    crossinline translation: @DisallowComposableCalls () -> Translation?,
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
 ) {
     val available by remember { derivedStateOf { translation() != null } }
-    AvailableInLanguage(language = language, available = available)
+    AvailableInLanguage(
+        language,
+        available = available,
+        horizontalArrangement = horizontalArrangement,
+        modifier = modifier
+    )
 }
 
 @Composable
-private fun RowScope.AvailableInLanguage(
+private fun AvailableInLanguage(
     language: Language?,
-    available: Boolean,
+    available: Boolean = true,
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
     alpha: Float = 0.6f
+) = Row(
+    horizontalArrangement = horizontalArrangement,
+    modifier = modifier
+        .widthIn(min = 50.dp)
+        .alpha(alpha)
 ) {
     val context = LocalContext.current
     val languageName = remember(language, context) { language?.getDisplayName(context).orEmpty() }
@@ -447,18 +459,17 @@ private fun RowScope.AvailableInLanguage(
         if (available) languageName else stringResource(R.string.tool_card_label_language_unavailable, languageName),
         style = infoLabelStyle,
         maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = Modifier
-            .wrapContentWidth()
             .alignByBaseline()
-            .alpha(alpha)
+            .weight(1f, false)
     )
     Icon(
         painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
         contentDescription = null,
         modifier = Modifier
             .padding(start = 4.dp)
-            .size(8.dp)
+            .size(with(LocalDensity.current) { (infoLabelStyle.fontSize * 0.65).toDp() })
             .alignBy { it.measuredHeight }
-            .alpha(alpha)
     )
 }
