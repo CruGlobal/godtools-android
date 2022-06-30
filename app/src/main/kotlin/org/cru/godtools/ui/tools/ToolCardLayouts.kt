@@ -113,7 +113,7 @@ fun LessonToolCard(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
+                ToolName(viewModel, minLines = 2, modifier = Modifier.fillMaxWidth())
 
                 val primaryTranslation by viewModel.primaryTranslation.collectAsState()
                 val primaryLanguage by viewModel.primaryLanguage.collectAsState()
@@ -276,7 +276,7 @@ private inline fun ToolName(
 private fun ToolName(
     viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
-    minLines: Int = 0,
+    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE
 ) {
     val tool by viewModel.tool.collectAsState()
