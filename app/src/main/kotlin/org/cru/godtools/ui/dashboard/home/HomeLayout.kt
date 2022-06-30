@@ -42,7 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
@@ -61,6 +63,8 @@ internal fun HomeLayout(
     onViewAllFavorites: () -> Unit = {},
     onViewAllTools: () -> Unit = {}
 ) {
+    OnResume { viewModel.trackPageInAnalytics(Page.HOME) }
+
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
