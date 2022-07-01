@@ -55,6 +55,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
+import org.cru.godtools.ui.tools.ToolCard
 
 private val PADDING_HORIZONTAL = 16.dp
 
@@ -86,6 +87,13 @@ internal fun HomeLayout(
                     onOpenToolDetails = onOpenToolDetails,
                     onViewAllFavorites = { onShowDashboardPage(Page.ALL_TOOLS) },
                     onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
+                )
+            }
+            Page.FAVORITE_TOOLS -> {
+                AllFavoritesList(
+                    viewModel,
+                    onOpenTool = onOpenTool,
+                    onOpenToolDetails = onOpenToolDetails
                 )
             }
             else -> Unit
@@ -310,6 +318,43 @@ private fun NoFavoriteTools(
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(R.string.dashboard_home_section_favorites_action_all_tools))
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun AllFavoritesList(
+    viewModel: HomeViewModel,
+    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenToolDetails: (String) -> Unit,
+) {
+    OnResume { viewModel.trackPageInAnalytics(Page.FAVORITE_TOOLS) }
+
+    val favoriteTools by viewModel.favoriteTools.collectAsState()
+
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        item("header", "header") {
+            Text(
+                stringResource(R.string.dashboard_home_section_favorites_title),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItemPlacement()
+            )
+        }
+
+        items(favoriteTools.orEmpty(), key = { it }) {
+            ToolCard(
+                toolCode = it,
+                confirmRemovalFromFavorites = true,
+                onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
+                onOpenToolDetails = onOpenToolDetails,
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .padding(top = 16.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }

@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
 
     // region Analytics
     fun trackPageInAnalytics(page: Page) = when (page) {
-        Page.HOME -> {
+        Page.HOME, Page.FAVORITE_TOOLS -> {
             eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
             eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
         }
