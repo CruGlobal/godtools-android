@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
+import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import dagger.Lazy
@@ -120,7 +121,9 @@ class DashboardActivity :
     override val drawerLayout get() = binding.drawerLayout
     override val drawerMenu get() = binding.drawerMenu
 
-    override val isShowNavigationDrawerIndicator get() = true
+    override val isShowNavigationDrawerIndicator by lazy {
+        savedState.selectedPageLiveData.map { it != Page.FAVORITE_TOOLS }
+    }
 
     internal fun showPage(page: Page) {
         // short-circuit if the page is already displayed
@@ -289,4 +292,12 @@ class DashboardActivity :
     }
     // endregion Language Settings
     // endregion Feature Discovery
+
+    override fun onSupportNavigateUp() = when {
+        onBackPressedDispatcher.hasEnabledCallbacks() -> {
+            onBackPressedDispatcher.onBackPressed()
+            true
+        }
+        else -> super.onSupportNavigateUp()
+    }
 }
