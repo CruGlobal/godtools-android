@@ -16,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -45,7 +44,6 @@ import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
-import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
@@ -129,7 +127,7 @@ fun SquareToolCard(
     val secondTranslation by viewModel.secondTranslation.collectAsState()
     val secondLanguage by viewModel.secondLanguage.collectAsState()
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
-    val downloadProgress = viewModel.downloadProgress.collectAsState()
+    val downloadProgress by viewModel.downloadProgress.collectAsState()
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
         ElevatedCard(
@@ -150,7 +148,7 @@ fun SquareToolCard(
                     modifier = Modifier.align(Alignment.TopEnd)
                 )
                 DownloadProgressIndicator(
-                    downloadProgress,
+                    { downloadProgress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -290,28 +288,4 @@ private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modi
         maxLines = 1,
         modifier = modifier
     )
-}
-
-// TODO: this can be refactored & moved elsewhere when we need to use it outside of tool cards
-@Composable
-private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>, modifier: Modifier = Modifier) {
-    val hasProgress by remember { derivedStateOf { downloadProgress.value != null } }
-    val isIndeterminate by remember { derivedStateOf { downloadProgress.value?.isIndeterminate == true } }
-    val progress by remember {
-        derivedStateOf {
-            downloadProgress.value
-                ?.takeIf { it.max > 0 }
-                ?.let { it.progress.toFloat() / it.max }
-                ?.coerceIn(0f, 1f) ?: 0f
-        }
-    }
-
-    if (hasProgress) {
-        if (isIndeterminate) {
-            LinearProgressIndicator(modifier = modifier)
-        } else {
-            // TODO: figure out how to animate progress updates to make a more smooth UI
-            LinearProgressIndicator(progress, modifier = modifier)
-        }
-    }
 }
