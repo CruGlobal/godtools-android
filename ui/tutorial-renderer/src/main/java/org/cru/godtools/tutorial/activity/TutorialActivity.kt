@@ -81,7 +81,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         pageSet.feature?.let { settings.setFeatureDiscovered(it) }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         binding.pages.updateMenuVisibility()
         return super.onPrepareOptionsMenu(menu)
     }

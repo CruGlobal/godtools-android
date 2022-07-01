@@ -20,7 +20,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -91,9 +90,6 @@ class ToolViewModels @Inject constructor(
             p?.takeUnless { p.languageCode == f?.languageCode }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val firstLanguage = firstTranslation
-            .flatMapLatest { it?.languageCode?.let { dao.findAsFlow<Language>(it) } ?: flowOf(null) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondLanguage = secondTranslation
             .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
