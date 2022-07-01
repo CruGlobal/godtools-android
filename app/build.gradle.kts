@@ -169,6 +169,7 @@ dependencies {
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
 
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)

@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -32,10 +33,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -63,8 +65,14 @@ internal fun HomeLayout(
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
     onShowDashboardPage: (Page) -> Unit = {},
+    onUpdateCurrentPage: (Page) -> Unit = {}
 ) {
-    var currentPage by rememberSaveable { mutableStateOf(Page.HOME) }
+    val pageStack = rememberSaveable(
+        saver = listSaver(save = { it }, restore = { it.toMutableStateList() })
+    ) { mutableStateListOf(Page.HOME) }
+    BackHandler(pageStack.size > 1) { pageStack.removeLast() }
+    val currentPage by remember { derivedStateOf { pageStack.last() } }
+    LaunchedEffect(currentPage) { onUpdateCurrentPage(currentPage) }
 
     SwipeRefresh(
         rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
