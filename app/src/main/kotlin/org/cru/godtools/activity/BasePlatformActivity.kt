@@ -29,6 +29,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.okta.oidc.clients.web.signOut
@@ -224,17 +225,15 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     private var drawerToggle: ActionBarDrawerToggle? = null
 
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
-    protected open val isShowNavigationDrawerIndicator get() = false
+    protected open val isShowNavigationDrawerIndicator: LiveData<Boolean> = ImmutableLiveData(false)
 
     private fun setupNavigationDrawer() {
-        drawerLayout?.let {
-            drawerToggle = ActionBarDrawerToggle(this, it, INVALID_STRING_RES, INVALID_STRING_RES)
-                .apply {
-                    isDrawerIndicatorEnabled = isShowNavigationDrawerIndicator
-                    isDrawerSlideAnimationEnabled = false
-                }
+        drawerLayout?.let { layout ->
+            drawerToggle = ActionBarDrawerToggle(this, layout, INVALID_STRING_RES, INVALID_STRING_RES)
+                .apply { isDrawerSlideAnimationEnabled = false }
                 .also { toggle ->
-                    it.addDrawerListener(toggle)
+                    isShowNavigationDrawerIndicator.observe(this) { toggle.isDrawerIndicatorEnabled = it }
+                    layout.addDrawerListener(toggle)
                     toggle.syncState()
                 }
         }

@@ -28,7 +28,7 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Category(AndroidJUnit4::class)
 @Config(application = Application::class)
-class ToolCardLayoutsTest {
+class FavoriteActionTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

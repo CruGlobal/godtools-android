@@ -32,7 +32,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,8 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
@@ -54,14 +58,44 @@ private val PADDING_HORIZONTAL = 16.dp
 
 @Preview(showBackground = true)
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun HomeLayout(
     viewModel: HomeViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
-    onViewAllFavorites: () -> Unit = {},
-    onViewAllTools: () -> Unit = {}
-) = GodToolsTheme {
+    onShowDashboardPage: (Page) -> Unit = {},
+) {
+    var currentPage by rememberSaveable { mutableStateOf(Page.HOME) }
+
+    SwipeRefresh(
+        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
+        onRefresh = { viewModel.triggerSync(true) }
+    ) {
+        when (currentPage) {
+            Page.HOME -> {
+                HomeContent(
+                    viewModel,
+                    onOpenTool = onOpenTool,
+                    onOpenToolDetails = onOpenToolDetails,
+                    onViewAllFavorites = { onShowDashboardPage(Page.ALL_TOOLS) },
+                    onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
+                )
+            }
+            else -> Unit
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun HomeContent(
+    viewModel: HomeViewModel,
+    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenToolDetails: (String) -> Unit,
+    onViewAllFavorites: () -> Unit,
+    onViewAllTools: () -> Unit
+) {
+    OnResume { viewModel.trackPageInAnalytics(Page.HOME) }
+
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
@@ -73,85 +107,80 @@ internal fun HomeLayout(
         if (showTutorialFeaturesBanner) columnState.animateScrollToItem(0)
     }
 
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
-        LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
-            item("banners", "banners") {
-                Banners(
-                    viewModel,
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .fillMaxWidth()
-                )
-            }
+    LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
+        item("banners", "banners") {
+            Banners(
+                viewModel,
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .fillMaxWidth()
+            )
+        }
 
-            item("welcome") {
-                WelcomeMessage(
+        item("welcome") {
+            WelcomeMessage(
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .padding(horizontal = PADDING_HORIZONTAL)
+                    .padding(top = 16.dp)
+            )
+        }
+
+        // featured lessons
+        if (spotlightLessons.isNotEmpty()) {
+            item("lesson-header", "lesson-header") {
+                FeaturedLessonsHeader(
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 16.dp)
+                        .padding(top = 32.dp, bottom = 16.dp)
                 )
             }
 
-            // featured lessons
-            if (spotlightLessons.isNotEmpty()) {
-                item("lesson-header", "lesson-header") {
-                    FeaturedLessonsHeader(
-                        modifier = Modifier
-                            .animateItemPlacement()
-                            .padding(horizontal = PADDING_HORIZONTAL)
-                            .padding(top = 32.dp, bottom = 16.dp)
-                    )
-                }
+            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
+                LessonToolCard(
+                    it,
+                    onClick = { tool, translation -> onOpenTool(tool, translation, null) },
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .padding(horizontal = PADDING_HORIZONTAL)
+                        .padding(bottom = 16.dp)
+                )
+            }
+        }
 
-                items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
-                    LessonToolCard(
-                        it,
-                        onClick = { tool, translation -> onOpenTool(tool, translation, null) },
-                        modifier = Modifier
-                            .animateItemPlacement()
-                            .padding(horizontal = PADDING_HORIZONTAL)
-                            .padding(bottom = 16.dp)
-                    )
-                }
+        // favorite tools
+        if (favoriteToolsLoaded) {
+            item("favorites-header") {
+                FavoritesHeader(
+                    showViewAll = { hasFavoriteTools },
+                    onViewAllFavorites = onViewAllFavorites,
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .padding(horizontal = PADDING_HORIZONTAL)
+                        .padding(top = 32.dp, bottom = 16.dp),
+                )
             }
 
-            // favorite tools
-            if (favoriteToolsLoaded) {
-                item("favorites-header") {
-                    FavoritesHeader(
-                        showViewAll = { hasFavoriteTools },
-                        onViewAllFavorites = onViewAllFavorites,
+            if (hasFavoriteTools) {
+                item("favorites", "favorites") {
+                    HorizontalFavoriteTools(
+                        { favoriteTools?.take(3) },
+                        onOpenTool = onOpenTool,
+                        onOpenToolDetails = onOpenToolDetails,
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .fillMaxWidth()
+                    )
+                }
+            } else {
+                item("favorites-empty", "favorites-empty") {
+                    NoFavoriteTools(
+                        onViewAllTools = onViewAllTools,
                         modifier = Modifier
                             .animateItemPlacement()
                             .padding(horizontal = PADDING_HORIZONTAL)
-                            .padding(top = 32.dp, bottom = 16.dp),
                     )
-                }
-
-                if (hasFavoriteTools) {
-                    item("favorites", "favorites") {
-                        FavoriteTools(
-                            { favoriteTools?.take(3) },
-                            onOpenTool = onOpenTool,
-                            onOpenToolDetails = onOpenToolDetails,
-                            modifier = Modifier
-                                .animateItemPlacement()
-                                .fillMaxWidth()
-                        )
-                    }
-                } else {
-                    item("favorites-empty", "favorites-empty") {
-                        NoFavoriteTools(
-                            onViewAllTools = onViewAllTools,
-                            modifier = Modifier
-                                .animateItemPlacement()
-                                .padding(horizontal = PADDING_HORIZONTAL)
-                        )
-                    }
                 }
             }
         }
@@ -220,7 +249,7 @@ private fun FavoritesHeader(
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun FavoriteTools(
+private fun HorizontalFavoriteTools(
     tools: () -> List<String>?,
     modifier: Modifier = Modifier,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,

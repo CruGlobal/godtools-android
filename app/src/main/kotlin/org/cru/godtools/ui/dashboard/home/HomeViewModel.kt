@@ -10,14 +10,21 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
+import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val eventBus: EventBus,
     lessonsRepository: LessonsRepository,
     settings: Settings,
     private val syncService: GodToolsSyncService,
@@ -34,6 +41,16 @@ class HomeViewModel @Inject constructor(
     val favoriteTools = toolsRepository.favoriteTools
         .map { it.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    // region Analytics
+    fun trackPageInAnalytics(page: Page) = when (page) {
+        Page.HOME -> {
+            eventBus.post(AnalyticsScreenEvent(SCREEN_HOME))
+            eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
+        }
+        else -> Unit
+    }
+    // endregion Analytics
 
     // region Sync logic
     private val syncsRunning = MutableStateFlow(0)

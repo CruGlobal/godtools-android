@@ -1,71 +1,40 @@
 package org.cru.godtools.ui.tools
 
-import android.text.TextUtils
-import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Shapes
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
-import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GRAY_E6
+import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
-import org.cru.godtools.download.manager.DownloadProgress
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
@@ -91,7 +60,7 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
     }
 }
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
-private val infoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
+internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,21 +86,17 @@ fun LessonToolCard(
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                ToolName(viewModel, lines = 2, modifier = Modifier.fillMaxWidth())
+                ToolName(viewModel, minLines = 2, modifier = Modifier.fillMaxWidth())
 
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .wrapContentWidth()
-                ) {
-                    val primaryTranslation by viewModel.primaryTranslation.collectAsState()
-                    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
+                val primaryTranslation by viewModel.primaryTranslation.collectAsState()
+                val primaryLanguage by viewModel.primaryLanguage.collectAsState()
 
-                    AvailableInLanguage(
-                        language = primaryLanguage,
-                        translation = { primaryTranslation }
-                    )
-                }
+                AvailableInLanguage(
+                    language = primaryLanguage,
+                    translation = { primaryTranslation },
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.align(Alignment.End)
+                )
             }
         }
     }
@@ -153,7 +118,7 @@ fun SquareToolCard(
     val secondTranslation by viewModel.secondTranslation.collectAsState()
     val secondLanguage by viewModel.secondLanguage.collectAsState()
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
-    val downloadProgress = viewModel.downloadProgress.collectAsState()
+    val downloadProgress by viewModel.downloadProgress.collectAsState()
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
         ElevatedCard(
@@ -174,7 +139,7 @@ fun SquareToolCard(
                     modifier = Modifier.align(Alignment.TopEnd)
                 )
                 DownloadProgressIndicator(
-                    downloadProgress,
+                    { downloadProgress },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -191,17 +156,19 @@ fun SquareToolCard(
                                 .fillMaxWidth()
                         )
                         if (parallelLanguage != null) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(top = 2.dp)
-                                    .fillMaxWidth()
-                            ) {
-                                val available by remember { derivedStateOf { secondTranslation != null } }
-                                if (available) {
-                                    AvailableInLanguage(language = secondLanguage, available = true)
-                                } else {
-                                    Spacer(modifier = Modifier.minLinesHeight(1, infoLabelStyle))
-                                }
+                            val available by remember { derivedStateOf { secondTranslation != null } }
+                            if (available) {
+                                AvailableInLanguage(
+                                    secondLanguage,
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            } else {
+                                Spacer(
+                                    modifier = Modifier
+                                        .padding(top = 2.dp)
+                                        .minLinesHeight(1, toolCardInfoLabelStyle)
+                                )
                             }
                         }
                     }
@@ -218,71 +185,21 @@ fun SquareToolCard(
                             Spacer(
                                 modifier = Modifier
                                     .padding(top = 2.dp)
-                                    .minLinesHeight(1, infoLabelStyle)
+                                    .minLinesHeight(1, toolCardInfoLabelStyle)
                             )
                         }
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ToolCardActions(
+                    viewModel,
+                    onOpenTool = onOpenTool,
+                    onOpenToolDetails = onOpenToolDetails,
                     modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    val contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
-                    val minHeight = 30.dp
-
-                    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
-                        OutlinedButton(
-                            onClick = { onOpenToolDetails(toolCode) },
-                            contentPadding = contentPadding,
-                            modifier = Modifier
-                                .weight(1f)
-                                .defaultMinSize(minHeight = minHeight)
-                        ) {
-                            Text(
-                                stringResource(R.string.action_tools_about),
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
-                        Button(
-                            onClick = { onOpenTool(tool, firstTranslation, secondTranslation) },
-                            contentPadding = contentPadding,
-                            modifier = Modifier
-                                .weight(1f)
-                                .defaultMinSize(minHeight = minHeight)
-                        ) {
-                            Text(
-                                stringResource(R.string.action_tools_open),
-                                style = MaterialTheme.typography.labelMedium
-                            )
-                        }
-                    }
-                }
+                )
             }
         }
     }
-}
-
-// TODO: Should this be moved to somewhere that is more re-usable?
-@Composable
-private fun ProvideLayoutDirectionFromLocale(locale: () -> Locale?, content: @Composable () -> Unit) {
-    val currentLayoutDirection = LocalLayoutDirection.current
-    val layoutDirection by remember {
-        derivedStateOf {
-            locale()?.let {
-                when (TextUtils.getLayoutDirectionFromLocale(it)) {
-                    View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
-                    View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
-                    else -> null
-                }
-            } ?: currentLayoutDirection
-        }
-    }
-
-    CompositionLocalProvider(
-        LocalLayoutDirection provides layoutDirection,
-        content = content
-    )
 }
 
 @Composable
@@ -304,7 +221,7 @@ private inline fun ToolName(
 private fun ToolName(
     viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
-    minLines: Int = 0,
+    minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE
 ) {
     val tool by viewModel.tool.collectAsState()
@@ -333,132 +250,5 @@ private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modi
         style = toolCategoryStyle,
         maxLines = 1,
         modifier = modifier
-    )
-}
-
-// TODO: this can be refactored & moved elsewhere when we need to use it outside of tool cards
-@Composable
-private fun DownloadProgressIndicator(downloadProgress: State<DownloadProgress?>, modifier: Modifier = Modifier) {
-    val hasProgress by remember { derivedStateOf { downloadProgress.value != null } }
-    val isIndeterminate by remember { derivedStateOf { downloadProgress.value?.isIndeterminate == true } }
-    val progress by remember {
-        derivedStateOf {
-            downloadProgress.value
-                ?.takeIf { it.max > 0 }
-                ?.let { it.progress.toFloat() / it.max }
-                ?.coerceIn(0f, 1f) ?: 0f
-        }
-    }
-
-    if (hasProgress) {
-        if (isIndeterminate) {
-            LinearProgressIndicator(modifier = modifier)
-        } else {
-            // TODO: figure out how to animate progress updates to make a more smooth UI
-            LinearProgressIndicator(progress, modifier = modifier)
-        }
-    }
-}
-
-@Composable
-@VisibleForTesting
-@OptIn(ExperimentalMaterial3Api::class)
-internal fun FavoriteAction(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    confirmRemoval: Boolean = true
-) {
-    val tool by viewModel.tool.collectAsState()
-    val isAdded by remember { derivedStateOf { tool?.isAdded == true } }
-    var showRemovalConfirmation by rememberSaveable { mutableStateOf(false) }
-
-    Surface(
-        onClick = {
-            when {
-                !isAdded -> viewModel.pinTool()
-                confirmRemoval -> showRemovalConfirmation = true
-                else -> viewModel.unpinTool()
-            }
-        },
-        shape = Shapes.Full,
-        shadowElevation = 6.dp,
-        modifier = modifier
-    ) {
-        Icon(
-            painter = painterResource(if (isAdded) R.drawable.ic_favorite_24dp else R.drawable.ic_favorite_border_24dp),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(horizontal = 5.dp)
-                .padding(top = 6.dp, bottom = 4.dp)
-                .size(18.dp)
-        )
-    }
-
-    if (showRemovalConfirmation) {
-        val translation by viewModel.firstTranslation.collectAsState()
-
-        AlertDialog(
-            onDismissRequest = { showRemovalConfirmation = false },
-            text = {
-                Text(
-                    stringResource(
-                        R.string.tools_list_remove_favorite_dialog_title,
-                        translation.getName(tool).orEmpty()
-                    )
-                )
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        viewModel.unpinTool()
-                        showRemovalConfirmation = false
-                    }
-                ) { Text(stringResource(R.string.tools_list_remove_favorite_dialog_confirm)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showRemovalConfirmation = false }) {
-                    Text(stringResource(R.string.tools_list_remove_favorite_dialog_dismiss))
-                }
-            }
-        )
-    }
-}
-
-@Composable
-private inline fun RowScope.AvailableInLanguage(
-    language: Language?,
-    crossinline translation: @DisallowComposableCalls () -> Translation?
-) {
-    val available by remember { derivedStateOf { translation() != null } }
-    AvailableInLanguage(language = language, available = available)
-}
-
-@Composable
-private fun RowScope.AvailableInLanguage(
-    language: Language?,
-    available: Boolean,
-    alpha: Float = 0.6f
-) {
-    val context = LocalContext.current
-    val languageName = remember(language, context) { language?.getDisplayName(context).orEmpty() }
-
-    Text(
-        if (available) languageName else stringResource(R.string.tool_card_label_language_unavailable, languageName),
-        style = infoLabelStyle,
-        maxLines = 1,
-        modifier = Modifier
-            .wrapContentWidth()
-            .alignByBaseline()
-            .alpha(alpha)
-    )
-    Icon(
-        painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
-        contentDescription = null,
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .size(8.dp)
-            .alignBy { it.measuredHeight }
-            .alpha(alpha)
     )
 }
