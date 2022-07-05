@@ -1,14 +1,17 @@
 package org.cru.godtools.ui.tools
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
@@ -96,6 +100,92 @@ fun LessonToolCard(
                     translation = { primaryTranslation },
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.align(Alignment.End)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun ToolCard(
+    toolCode: String,
+    modifier: Modifier = Modifier,
+    confirmRemovalFromFavorites: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
+    onOpenToolDetails: (String) -> Unit = {},
+    onClick: (Tool?, Translation?, Translation?) -> Unit = onOpenTool
+) {
+    val viewModel = toolViewModel(toolCode)
+    val tool by viewModel.tool.collectAsState()
+    val firstTranslation by viewModel.firstTranslation.collectAsState()
+    val secondTranslation by viewModel.secondTranslation.collectAsState()
+    val secondLanguage by viewModel.secondLanguage.collectAsState()
+    val downloadProgress by viewModel.downloadProgress.collectAsState()
+
+    ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
+        ElevatedCard(
+            elevation = toolCardElevation,
+            interactionSource = interactionSource,
+            onClick = { onClick(tool, firstTranslation, secondTranslation) },
+            modifier = modifier
+        ) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                ToolBanner(
+                    viewModel,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(335f / 87f)
+                )
+                FavoriteAction(
+                    viewModel,
+                    confirmRemoval = confirmRemovalFromFavorites,
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
+                DownloadProgressIndicator(
+                    { downloadProgress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                )
+            }
+            Column(modifier = Modifier.padding(16.dp)) {
+                val hasSecondTranslation by remember { derivedStateOf { secondTranslation != null } }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ToolName(
+                        viewModel,
+                        modifier = Modifier
+                            .run { if (hasSecondTranslation) widthIn(max = { it - 70.dp }) else this }
+                            .alignByBaseline()
+                    )
+                    if (hasSecondTranslation) {
+                        AvailableInLanguage(
+                            secondLanguage,
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .alignByBaseline()
+                        )
+                    }
+                }
+                ToolCategory(
+                    viewModel,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                ToolCardActions(
+                    viewModel,
+                    buttonWeightFill = false,
+                    buttonModifier = Modifier.widthIn(min = 92.dp),
+                    onOpenTool = onOpenTool,
+                    onOpenToolDetails = onOpenToolDetails,
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .align(Alignment.End)
                 )
             }
         }

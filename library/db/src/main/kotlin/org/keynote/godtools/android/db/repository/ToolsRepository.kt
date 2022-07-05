@@ -1,7 +1,5 @@
 package org.keynote.godtools.android.db.repository
 
-import androidx.annotation.AnyThread
-import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +7,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
@@ -57,20 +54,18 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
         withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
     }
 
-    @WorkerThread
-    private fun updateToolOrder(vararg tools: Long) {
+    suspend fun updateToolOrder(tools: List<String>) {
         val tool = Tool()
-        dao.transaction(exclusive = false) {
-            dao.update(tool, null, ToolTable.COLUMN_ORDER)
+        withContext(dao.coroutineDispatcher) {
+            dao.transaction(exclusive = false) {
+                dao.update(tool, null, ToolTable.COLUMN_ORDER)
 
-            // set order for each specified tool
-            tools.forEachIndexed { index, toolId ->
-                tool.order = index
-                dao.update(tool, ToolTable.FIELD_ID.eq(toolId), ToolTable.COLUMN_ORDER)
+                // set order for each specified tool
+                tools.forEachIndexed { index, code ->
+                    tool.order = index
+                    dao.update(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ORDER)
+                }
             }
         }
     }
-
-    @AnyThread
-    fun updateToolOrderAsync(vararg tools: Long) = dao.coroutineScope.launch { updateToolOrder(*tools) }
 }

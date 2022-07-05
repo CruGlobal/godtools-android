@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -10,6 +11,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,10 +35,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -45,6 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.dashboard.Page
@@ -53,6 +61,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
+import org.cru.godtools.ui.tools.ToolCard
 
 private val PADDING_HORIZONTAL = 16.dp
 
@@ -63,8 +72,14 @@ internal fun HomeLayout(
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
     onShowDashboardPage: (Page) -> Unit = {},
+    onUpdateCurrentPage: (Page) -> Unit = {}
 ) {
-    var currentPage by rememberSaveable { mutableStateOf(Page.HOME) }
+    val pageStack = rememberSaveable(
+        saver = listSaver(save = { it }, restore = { it.toMutableStateList() })
+    ) { mutableStateListOf(Page.HOME) }
+    BackHandler(pageStack.size > 1) { pageStack.removeLast() }
+    val currentPage by remember { derivedStateOf { pageStack.last() } }
+    LaunchedEffect(currentPage) { onUpdateCurrentPage(currentPage) }
 
     SwipeRefresh(
         rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
@@ -76,8 +91,15 @@ internal fun HomeLayout(
                     viewModel,
                     onOpenTool = onOpenTool,
                     onOpenToolDetails = onOpenToolDetails,
-                    onViewAllFavorites = { onShowDashboardPage(Page.ALL_TOOLS) },
+                    onViewAllFavorites = { pageStack.add(Page.FAVORITE_TOOLS) },
                     onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
+                )
+            }
+            Page.FAVORITE_TOOLS -> {
+                AllFavoritesList(
+                    viewModel,
+                    onOpenTool = onOpenTool,
+                    onOpenToolDetails = onOpenToolDetails
                 )
             }
             else -> Unit
@@ -165,7 +187,7 @@ private fun HomeContent(
             if (hasFavoriteTools) {
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
-                        { favoriteTools?.take(3) },
+                        { favoriteTools.orEmpty().take(5) },
                         onOpenTool = onOpenTool,
                         onOpenToolDetails = onOpenToolDetails,
                         modifier = Modifier
@@ -250,7 +272,7 @@ private fun FavoritesHeader(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
-    tools: () -> List<String>?,
+    tools: () -> List<String>,
     modifier: Modifier = Modifier,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
@@ -259,7 +281,7 @@ private fun HorizontalFavoriteTools(
     horizontalArrangement = Arrangement.spacedBy(16.dp),
     modifier = modifier
 ) {
-    items(tools().orEmpty(), key = { it }) {
+    items(tools(), key = { it }) {
         SquareToolCard(
             toolCode = it,
             confirmRemovalFromFavorites = true,
@@ -302,6 +324,79 @@ private fun NoFavoriteTools(
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(R.string.dashboard_home_section_favorites_action_all_tools))
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun AllFavoritesList(
+    viewModel: HomeViewModel,
+    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenToolDetails: (String) -> Unit,
+) {
+    OnResume { viewModel.trackPageInAnalytics(Page.FAVORITE_TOOLS) }
+
+    val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
+
+    val reorderableState = rememberReorderableLazyListState(
+        // only support reordering tool items
+        canDragOver = { (_, k) -> (k as? String)?.startsWith("tool:") == true },
+        onMove = { from, to ->
+            val fromPos = favoriteTools.indexOf((from.key as? String)?.removePrefix("tool:"))
+            val toPos = favoriteTools.indexOf((to.key as? String)?.removePrefix("tool:"))
+            if (fromPos != -1 && toPos != -1) viewModel.moveFavoriteTool(fromPos, toPos)
+        },
+        onDragEnd = { _, _ -> viewModel.commitFavoriteToolOrder() }
+    )
+
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        state = reorderableState.listState,
+        modifier = Modifier
+            .reorderable(reorderableState)
+            .detectReorderAfterLongPress(reorderableState)
+    ) {
+        item("header", "header") {
+            Text(
+                stringResource(R.string.dashboard_home_section_favorites_title),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItemPlacement()
+            )
+        }
+
+        items(favoriteTools, key = { "tool:$it" }) { tool ->
+            ReorderableItem(reorderableState, "tool:$tool") { isDragging ->
+                val interactionSource = remember { MutableInteractionSource() }
+                interactionSource.reorderableDragInteractions(isDragging)
+
+                ToolCard(
+                    toolCode = tool,
+                    confirmRemovalFromFavorites = true,
+                    interactionSource = interactionSource,
+                    onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
+                    onOpenToolDetails = onOpenToolDetails,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boolean) {
+    val dragState = remember { object { var start: DragInteraction.Start? = null } }
+    LaunchedEffect(isDragging) {
+        when (val start = dragState.start) {
+            null -> if (isDragging) dragState.start = DragInteraction.Start().also { emit(it) }
+            else -> if (!isDragging) {
+                dragState.start = null
+                emit(DragInteraction.Stop(start))
+            }
         }
     }
 }

@@ -37,8 +37,7 @@ import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
-import org.cru.godtools.ui.tools.ToolsListFragment
-import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
@@ -47,7 +46,7 @@ private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 @AndroidEntryPoint
 class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
-    ToolsListFragment.Callbacks,
+    ToolsAdapterCallbacks,
     ToolsFragment.Callbacks,
     RemoveFavoriteConfirmationDialogFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
@@ -133,12 +132,14 @@ class DashboardActivity :
             Page.LESSONS -> LessonsFragment()
             Page.HOME -> HomeFragment()
             Page.ALL_TOOLS -> ToolsFragment()
-            Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
+            Page.FAVORITE_TOOLS -> null
         }
 
-        supportFragmentManager.commit {
-            replace(R.id.frame, fragment)
-            setPrimaryNavigationFragment(fragment)
+        if (fragment != null) {
+            supportFragmentManager.commit {
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
+            }
         }
         savedState.selectedPage = page
     }
@@ -192,10 +193,6 @@ class DashboardActivity :
         }
     }
     // endregion ToolsAdapterCallbacks
-
-    // region ToolsListFragment.Callbacks
-    override fun onNoToolsAvailableAction() = showPage(Page.ALL_TOOLS)
-    // endregion ToolsListFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
         bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->

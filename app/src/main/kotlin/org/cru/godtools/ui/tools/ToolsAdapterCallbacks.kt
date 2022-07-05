@@ -14,6 +14,4 @@ interface ToolsAdapterCallbacks {
 
     fun pinTool(code: String?)
     fun unpinTool(tool: Tool?, translation: Translation?)
-
-    fun onToolsReordered(vararg ids: Long) = Unit
 }

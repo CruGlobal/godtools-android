@@ -169,6 +169,7 @@ dependencies {
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
 
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
@@ -197,7 +198,6 @@ dependencies {
     implementation(libs.gtoSupport.napier)
     implementation(libs.gtoSupport.okta)
     implementation(libs.gtoSupport.picasso)
-    implementation(libs.gtoSupport.recyclerview.advrecyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
@@ -209,13 +209,12 @@ dependencies {
 
     api(libs.eventbus)
     implementation(libs.accompanist.swiperefresh)
-    implementation(libs.advrecyclerview)
     implementation(libs.coil.compose)
+    implementation(libs.compose.reorderable)
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
-    implementation(libs.materialBanner)
     implementation(libs.materialComponents)
     implementation(libs.okta)
     implementation(libs.splitties.fragmentargs)
