@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
+import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
@@ -99,7 +100,9 @@ fun LessonToolCard(
                     language = primaryLanguage,
                     translation = { primaryTranslation.value },
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .invisibleIf { primaryTranslation.isInitial || primaryLanguage == null }
                 )
             }
         }
