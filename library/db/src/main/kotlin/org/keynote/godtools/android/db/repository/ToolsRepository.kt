@@ -56,6 +56,21 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
         withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
     }
 
+    suspend fun updateToolOrder(tools: List<String>) {
+        val tool = Tool()
+        withContext(dao.coroutineDispatcher) {
+            dao.transaction(exclusive = false) {
+                dao.update(tool, null, ToolTable.COLUMN_ORDER)
+
+                // set order for each specified tool
+                tools.forEachIndexed { index, code ->
+                    tool.order = index
+                    dao.update(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ORDER)
+                }
+            }
+        }
+    }
+
     @AnyThread
     fun updateToolOrderAsync(vararg tools: Long) = coroutineScope.launch {
         withContext(dao.coroutineDispatcher) {
