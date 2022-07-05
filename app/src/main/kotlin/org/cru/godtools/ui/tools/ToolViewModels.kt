@@ -73,7 +73,8 @@ class ToolViewModels @Inject constructor(
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         private val defaultTranslation = translationsRepository.getLatestTranslationFlow(code, Settings.defaultLanguage)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+            .map { StateFlowValue(it) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
@@ -86,17 +87,19 @@ class ToolViewModels @Inject constructor(
         val primaryLanguage get() = this@ToolViewModels.primaryLanguage
         val parallelLanguage get() = this@ToolViewModels.parallelLanguage
 
-        val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p.value ?: d }
+        val firstTranslation = primaryTranslation
+            .combine(defaultTranslation) { p, d -> if (p.isInitial || p.value != null) p else d }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
+        val secondTranslation = parallelTranslation
+            .combine(firstTranslation) { p, f -> p?.takeUnless { p.languageCode == f.value?.languageCode } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val secondTranslation = combine(parallelTranslation, firstTranslation) { p, f ->
-            p?.takeUnless { p.languageCode == f?.languageCode }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val secondLanguage = secondTranslation
             .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val downloadProgress = combine(firstTranslation, secondTranslation) { f, s -> f ?: s }
+        val downloadProgress = firstTranslation
+            .combine(secondTranslation) { f, s -> f.value ?: s }
             .flatMapLatest {
                 it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
             }

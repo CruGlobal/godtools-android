@@ -16,12 +16,12 @@
         style="@style/Widget.GodTools.Dashboard.Tools.Spotlight.Tool.Card"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:onClick="@{() ->callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation, toolViewModel.secondTranslation)}">
+        android:onClick="@{() ->callbacks.onToolClicked(toolViewModel.tool, toolViewModel.firstTranslation.value, toolViewModel.secondTranslation)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutDirection="@{toolViewModel.firstTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+            android:layoutDirection="@{toolViewModel.firstTranslation.value.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.value.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/toolsImage"
@@ -49,7 +49,7 @@
                 style="@style/Widget.GodTools.Tools.Card.Action.Favorite"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation ?? toolViewModel.secondTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
+                android:onClick="@{() -> toolViewModel.tool.isAdded ? callbacks.unpinTool(toolViewModel.tool, toolViewModel.firstTranslation.value ?? toolViewModel.secondTranslation) : callbacks.pinTool(toolViewModel.tool.code)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:selected="@{toolViewModel.tool.isAdded}" />
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:lines="2"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation.value ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintBottom_toTopOf="@id/parallelLanguageText"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/margin_start"

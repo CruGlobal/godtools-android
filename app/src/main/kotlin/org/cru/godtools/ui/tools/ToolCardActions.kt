@@ -55,7 +55,7 @@ internal fun ToolCardActions(
         }
         Spacer(Modifier.width(8.dp))
         Button(
-            onClick = { onOpenTool(tool, firstTranslation, secondTranslation) },
+            onClick = { onOpenTool(tool, firstTranslation.value, secondTranslation) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()
