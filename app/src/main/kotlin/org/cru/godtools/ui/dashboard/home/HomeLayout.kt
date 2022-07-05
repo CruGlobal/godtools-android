@@ -181,7 +181,7 @@ private fun HomeContent(
             if (hasFavoriteTools) {
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
-                        { favoriteTools?.take(3) },
+                        { favoriteTools.orEmpty().take(5) },
                         onOpenTool = onOpenTool,
                         onOpenToolDetails = onOpenToolDetails,
                         modifier = Modifier
@@ -266,7 +266,7 @@ private fun FavoritesHeader(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
-    tools: () -> List<String>?,
+    tools: () -> List<String>,
     modifier: Modifier = Modifier,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
@@ -275,7 +275,7 @@ private fun HorizontalFavoriteTools(
     horizontalArrangement = Arrangement.spacedBy(16.dp),
     modifier = modifier
 ) {
-    items(tools().orEmpty(), key = { it }) {
+    items(tools(), key = { it }) {
         SquareToolCard(
             toolCode = it,
             confirmRemovalFromFavorites = true,
