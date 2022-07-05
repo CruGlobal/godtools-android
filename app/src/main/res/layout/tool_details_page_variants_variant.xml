@@ -122,7 +122,7 @@
                 style="@style/Widget.GodTools.Tools.Card.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@{toolViewModel.primaryTranslation != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
+                android:drawableEnd="@{toolViewModel.primaryTranslation.value != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
                 android:text="@{toolViewModel.primaryLanguage.getDisplayName(context)}"
                 app:drawableStartCompat="@drawable/ic_bullet"
                 tools:text="English" />

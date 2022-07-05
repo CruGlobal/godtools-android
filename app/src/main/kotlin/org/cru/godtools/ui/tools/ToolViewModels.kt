@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
+import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -69,7 +70,8 @@ class ToolViewModels @Inject constructor(
 
         val primaryTranslation = settings.primaryLanguageFlow
             .flatMapLatest { translationsRepository.getLatestTranslationFlow(code, it) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+            .map { StateFlowValue(it) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         private val defaultTranslation = translationsRepository.getLatestTranslationFlow(code, Settings.defaultLanguage)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val parallelTranslation = tool.flatMapLatest { t ->
@@ -84,7 +86,7 @@ class ToolViewModels @Inject constructor(
         val primaryLanguage get() = this@ToolViewModels.primaryLanguage
         val parallelLanguage get() = this@ToolViewModels.parallelLanguage
 
-        val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p ?: d }
+        val firstTranslation = combine(primaryTranslation, defaultTranslation) { p, d -> p.value ?: d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val secondTranslation = combine(parallelTranslation, firstTranslation) { p, f ->
             p?.takeUnless { p.languageCode == f?.languageCode }

@@ -97,7 +97,7 @@ fun LessonToolCard(
 
                 AvailableInLanguage(
                     language = primaryLanguage,
-                    translation = { primaryTranslation },
+                    translation = { primaryTranslation.value },
                     horizontalArrangement = Arrangement.End,
                     modifier = Modifier.align(Alignment.End)
                 )
