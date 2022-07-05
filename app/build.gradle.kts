@@ -212,6 +212,7 @@ dependencies {
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.advrecyclerview)
     implementation(libs.coil.compose)
+    implementation(libs.compose.reorderable)
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)

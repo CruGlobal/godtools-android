@@ -47,6 +47,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.burnoutcrew.reorderable.ReorderableItem
+import org.burnoutcrew.reorderable.detectReorderAfterLongPress
+import org.burnoutcrew.reorderable.rememberReorderableLazyListState
+import org.burnoutcrew.reorderable.reorderable
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.dashboard.Page
@@ -331,9 +335,26 @@ private fun AllFavoritesList(
 ) {
     OnResume { viewModel.trackPageInAnalytics(Page.FAVORITE_TOOLS) }
 
-    val favoriteTools by viewModel.favoriteTools.collectAsState()
+    val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+    val reorderableState = rememberReorderableLazyListState(
+        // only support reordering tool items
+        canDragOver = { (_, k) -> (k as? String)?.startsWith("tool:") == true },
+        onMove = { from, to ->
+            val fromPos = favoriteTools.indexOf((from.key as? String)?.removePrefix("tool:"))
+            val toPos = favoriteTools.indexOf((to.key as? String)?.removePrefix("tool:"))
+            if (fromPos != -1 && toPos != -1) viewModel.moveFavoriteTool(fromPos, toPos)
+        },
+        onDragEnd = { _, _ -> viewModel.commitFavoriteToolOrder() }
+    )
+
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        state = reorderableState.listState,
+        modifier = Modifier
+            .reorderable(reorderableState)
+            .detectReorderAfterLongPress(reorderableState)
+    ) {
         item("header", "header") {
             Text(
                 stringResource(R.string.dashboard_home_section_favorites_title),
@@ -344,17 +365,18 @@ private fun AllFavoritesList(
             )
         }
 
-        items(favoriteTools.orEmpty(), key = { it }) {
-            ToolCard(
-                toolCode = it,
-                confirmRemovalFromFavorites = true,
-                onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
-                onOpenToolDetails = onOpenToolDetails,
-                modifier = Modifier
-                    .animateItemPlacement()
-                    .padding(top = 16.dp)
-                    .fillMaxWidth()
-            )
+        items(favoriteTools, key = { "tool:$it" }) { tool ->
+            ReorderableItem(reorderableState, "tool:$tool") {
+                ToolCard(
+                    toolCode = tool,
+                    confirmRemovalFromFavorites = true,
+                    onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
+                    onOpenToolDetails = onOpenToolDetails,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                )
+            }
         }
     }
 }
