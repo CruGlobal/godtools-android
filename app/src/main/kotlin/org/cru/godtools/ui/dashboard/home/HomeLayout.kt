@@ -91,7 +91,7 @@ internal fun HomeLayout(
                     viewModel,
                     onOpenTool = onOpenTool,
                     onOpenToolDetails = onOpenToolDetails,
-                    onViewAllFavorites = { onShowDashboardPage(Page.ALL_TOOLS) },
+                    onViewAllFavorites = { pageStack.add(Page.FAVORITE_TOOLS) },
                     onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
                 )
             }

@@ -38,7 +38,6 @@ import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragme
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.ui.tools.ToolsListFragment
-import org.cru.godtools.ui.tools.ToolsListFragment.Companion.MODE_ADDED
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
@@ -133,12 +132,14 @@ class DashboardActivity :
             Page.LESSONS -> LessonsFragment()
             Page.HOME -> HomeFragment()
             Page.ALL_TOOLS -> ToolsFragment()
-            Page.FAVORITE_TOOLS -> ToolsListFragment(MODE_ADDED)
+            Page.FAVORITE_TOOLS -> null
         }
 
-        supportFragmentManager.commit {
-            replace(R.id.frame, fragment)
-            setPrimaryNavigationFragment(fragment)
+        if (fragment != null) {
+            supportFragmentManager.commit {
+                replace(R.id.frame, fragment)
+                setPrimaryNavigationFragment(fragment)
+            }
         }
         savedState.selectedPage = page
     }
