@@ -154,7 +154,6 @@ kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
 lottie = "com.airbnb.android:lottie:5.2.0"
-materialBanner = "com.sergivonavi:materialbanner:1.2.0"
 materialComponents = "com.google.android.material:material:1.6.1"
 mockito = "org.mockito:mockito-inline:4.6.1"
 mockito-kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
