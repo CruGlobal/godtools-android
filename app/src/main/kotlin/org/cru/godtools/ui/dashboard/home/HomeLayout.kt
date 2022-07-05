@@ -11,6 +11,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -366,16 +368,34 @@ private fun AllFavoritesList(
         }
 
         items(favoriteTools, key = { "tool:$it" }) { tool ->
-            ReorderableItem(reorderableState, "tool:$tool") {
+            ReorderableItem(reorderableState, "tool:$tool") { isDragging ->
+                val interactionSource = remember { MutableInteractionSource() }
+                interactionSource.reorderableDragInteractions(isDragging)
+
                 ToolCard(
                     toolCode = tool,
                     confirmRemovalFromFavorites = true,
+                    interactionSource = interactionSource,
                     onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
                     onOpenToolDetails = onOpenToolDetails,
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .fillMaxWidth()
                 )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boolean) {
+    val dragState = remember { object { var start: DragInteraction.Start? = null } }
+    LaunchedEffect(isDragging) {
+        when (val start = dragState.start) {
+            null -> if (isDragging) dragState.start = DragInteraction.Start().also { emit(it) }
+            else -> if (!isDragging) {
+                dragState.start = null
+                emit(DragInteraction.Stop(start))
             }
         }
     }

@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.tools
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,6 +112,7 @@ fun ToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
     confirmRemovalFromFavorites: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
     onClick: (Tool?, Translation?, Translation?) -> Unit = onOpenTool
@@ -125,6 +127,7 @@ fun ToolCard(
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
+            interactionSource = interactionSource,
             onClick = { onClick(tool, firstTranslation, secondTranslation) },
             modifier = modifier
         ) {
