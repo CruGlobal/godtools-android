@@ -12,6 +12,7 @@ import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.fragment.BaseFragment
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ComposeLayoutBinding
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.greenrobot.eventbus.EventBus
@@ -28,9 +29,11 @@ class LessonsFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layo
     override fun onBindingCreated(binding: ComposeLayoutBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         binding.compose.setContent {
-            LessonsLayout(
-                onOpenLesson = { tool, tr1 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1) },
-            )
+            GodToolsTheme {
+                LessonsLayout(
+                    onOpenLesson = { tool, tr1 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1) },
+                )
+            }
         }
     }
 

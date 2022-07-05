@@ -19,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.LessonToolCard
@@ -29,7 +28,7 @@ import org.cru.godtools.ui.tools.LessonToolCard
 fun LessonsLayout(
     viewModel: LessonsViewModel = viewModel(),
     onOpenLesson: (Tool?, Translation?) -> Unit = { _, _ -> },
-) = GodToolsTheme {
+) {
     val lessons by viewModel.lessons.collectAsState()
 
     SwipeRefresh(
