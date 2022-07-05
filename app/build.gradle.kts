@@ -198,7 +198,6 @@ dependencies {
     implementation(libs.gtoSupport.napier)
     implementation(libs.gtoSupport.okta)
     implementation(libs.gtoSupport.picasso)
-    implementation(libs.gtoSupport.recyclerview.advrecyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
@@ -210,7 +209,6 @@ dependencies {
 
     api(libs.eventbus)
     implementation(libs.accompanist.swiperefresh)
-    implementation(libs.advrecyclerview)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.godtoolsMpp.parser)
