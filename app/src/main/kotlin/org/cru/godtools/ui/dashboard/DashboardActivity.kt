@@ -37,7 +37,7 @@ import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
-import org.cru.godtools.ui.tools.ToolsListFragment
+import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
@@ -46,7 +46,7 @@ private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 @AndroidEntryPoint
 class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
-    ToolsListFragment.Callbacks,
+    ToolsAdapterCallbacks,
     ToolsFragment.Callbacks,
     RemoveFavoriteConfirmationDialogFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
@@ -193,10 +193,6 @@ class DashboardActivity :
         }
     }
     // endregion ToolsAdapterCallbacks
-
-    // region ToolsListFragment.Callbacks
-    override fun onNoToolsAvailableAction() = showPage(Page.ALL_TOOLS)
-    // endregion ToolsListFragment.Callbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
         bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
