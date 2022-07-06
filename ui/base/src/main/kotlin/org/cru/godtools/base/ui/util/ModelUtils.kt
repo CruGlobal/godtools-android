@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.DeprecatedSinceApi
 import java.util.Locale
-import org.ccci.gto.android.common.util.content.localize
+import org.cru.godtools.base.util.localizeIfPossible
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
@@ -31,7 +31,7 @@ private fun Translation.getTypeface(context: Context?) = context?.getTypeface(la
 @JvmName("getToolCategory")
 fun Tool?.getCategory(context: Context, locale: Locale? = null) = getToolCategoryName(this?.category, context, locale)
 fun getToolCategoryName(category: String?, context: Context, locale: Locale? = null) =
-    category?.let { c -> (locale?.let { context.localize(it) } ?: context).getToolCategoryStringRes(c) ?: c }.orEmpty()
+    category?.let { c -> context.localizeIfPossible(locale).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
 private const val STRING_RES_CATEGORY_NAME_PREFIX = "tool_category_"
 private fun Context.getToolCategoryStringRes(category: String) =
