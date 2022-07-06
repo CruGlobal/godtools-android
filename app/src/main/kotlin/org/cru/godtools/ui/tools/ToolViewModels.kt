@@ -21,6 +21,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -41,6 +42,9 @@ class ToolViewModels @Inject constructor(
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
+    fun initializeToolViewModel(code: String, tool: Tool) {
+        toolViewModels.getOrPut(code) { ToolViewModel(code, tool) }
+    }
 
     private val primaryLanguage = settings.primaryLanguageFlow
         .flatMapLatest { languagesRepository.getLanguageFlow(it) }
@@ -49,9 +53,9 @@ class ToolViewModels @Inject constructor(
         .flatMapLatest { it?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    inner class ToolViewModel(val code: String) {
+    inner class ToolViewModel(val code: String, initialTool: Tool? = null) {
         val tool = toolsRepository.getToolFlow(code)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialTool)
 
         val banner = tool
             .map { it?.bannerId }.distinctUntilChanged()

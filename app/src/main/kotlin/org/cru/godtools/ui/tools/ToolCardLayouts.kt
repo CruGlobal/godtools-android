@@ -44,8 +44,10 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
 
+private val toolViewModels: ToolViewModels @Composable get() = viewModel()
 @Composable
-private fun toolViewModel(tool: String) = viewModel<ToolViewModels>()[tool]
+private fun toolViewModel(tool: String) = toolViewModels[tool]
+
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
 @Composable
@@ -66,6 +68,12 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
 }
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
 internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
+
+@Composable
+fun PreloadTool(tool: Tool) {
+    val code = tool.code ?: return
+    toolViewModels.initializeToolViewModel(code, tool)
+}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

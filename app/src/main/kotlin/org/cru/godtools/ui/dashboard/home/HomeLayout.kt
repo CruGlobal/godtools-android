@@ -60,6 +60,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.TutorialFeaturesBanner
 import org.cru.godtools.ui.tools.LessonToolCard
+import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
 
@@ -272,7 +273,7 @@ private fun FavoritesHeader(
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
-    tools: () -> List<String>,
+    tools: () -> List<Tool>,
     modifier: Modifier = Modifier,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
@@ -281,9 +282,11 @@ private fun HorizontalFavoriteTools(
     horizontalArrangement = Arrangement.spacedBy(16.dp),
     modifier = modifier
 ) {
-    items(tools(), key = { it }) {
+    items(tools(), key = { it.code.orEmpty() }) {
+        PreloadTool(it)
+
         SquareToolCard(
-            toolCode = it,
+            toolCode = it.code.orEmpty(),
             confirmRemovalFromFavorites = true,
             onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
             onOpenToolDetails = onOpenToolDetails,
@@ -343,8 +346,8 @@ private fun AllFavoritesList(
         // only support reordering tool items
         canDragOver = { (_, k) -> (k as? String)?.startsWith("tool:") == true },
         onMove = { from, to ->
-            val fromPos = favoriteTools.indexOf((from.key as? String)?.removePrefix("tool:"))
-            val toPos = favoriteTools.indexOf((to.key as? String)?.removePrefix("tool:"))
+            val fromPos = favoriteTools.indexOfFirst { it.code == (from.key as? String)?.removePrefix("tool:") }
+            val toPos = favoriteTools.indexOfFirst { it.code == (to.key as? String)?.removePrefix("tool:") }
             if (fromPos != -1 && toPos != -1) viewModel.moveFavoriteTool(fromPos, toPos)
         },
         onDragEnd = { _, _ -> viewModel.commitFavoriteToolOrder() }
@@ -367,13 +370,14 @@ private fun AllFavoritesList(
             )
         }
 
-        items(favoriteTools, key = { "tool:$it" }) { tool ->
-            ReorderableItem(reorderableState, "tool:$tool") { isDragging ->
+        items(favoriteTools, key = { "tool:${it.code}" }) { tool ->
+            ReorderableItem(reorderableState, "tool:${tool.code}") { isDragging ->
                 val interactionSource = remember { MutableInteractionSource() }
                 interactionSource.reorderableDragInteractions(isDragging)
 
+                PreloadTool(tool)
                 ToolCard(
-                    toolCode = tool,
+                    toolCode = tool.code.orEmpty(),
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
                     onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
