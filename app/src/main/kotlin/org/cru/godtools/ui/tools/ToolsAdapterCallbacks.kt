@@ -12,5 +12,5 @@ interface ToolsAdapterCallbacks {
     fun showToolDetails(code: String?)
 
     fun pinTool(code: String?)
-    fun unpinTool(tool: Tool?, translation: Translation?)
+    fun unpinTool(tool: Tool?)
 }

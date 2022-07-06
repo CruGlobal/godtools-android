@@ -24,7 +24,6 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
-import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
@@ -47,8 +46,7 @@ private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
     ToolsAdapterCallbacks,
-    ToolsFragment.Callbacks,
-    RemoveFavoriteConfirmationDialogFragment.Callbacks {
+    ToolsFragment.Callbacks {
     private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
@@ -152,17 +150,6 @@ class DashboardActivity :
         }.also { savedState.selectedPageLiveData.observe(this@DashboardActivity, it) }
     }
 
-    // region Remove Favorite Dialog
-    private fun showRemoveFavoriteConfirmationDialog(tool: Tool?, translation: Translation?) {
-        RemoveFavoriteConfirmationDialogFragment(tool?.code ?: return, translation.getName(tool, this).toString())
-            .show(supportFragmentManager, null)
-    }
-
-    override fun removeFavorite(code: String) {
-        downloadManager.unpinToolAsync(code)
-    }
-    // endregion Remove Favorite Dialog
-
     // region ToolsAdapterCallbacks
     @Inject
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
@@ -186,11 +173,9 @@ class DashboardActivity :
         code?.let { downloadManager.pinToolAsync(it) }
     }
 
-    override fun unpinTool(tool: Tool?, translation: Translation?) {
-        when (savedState.selectedPage) {
-            Page.FAVORITE_TOOLS -> showRemoveFavoriteConfirmationDialog(tool, translation)
-            else -> tool?.code?.let { removeFavorite(it) }
-        }
+    override fun unpinTool(tool: Tool?) {
+        val code = tool?.code ?: return
+        downloadManager.unpinToolAsync(code)
     }
     // endregion ToolsAdapterCallbacks
 
