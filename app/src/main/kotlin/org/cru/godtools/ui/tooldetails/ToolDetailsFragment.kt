@@ -163,7 +163,7 @@ class ToolDetailsFragment() :
         if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
     }
 
-    override fun unpinTool(tool: Tool?, translation: Translation?) = unpinTool(tool?.code)
+    override fun unpinTool(tool: Tool?) = unpinTool(tool?.code)
     // endregion ToolsAdapterCallbacks
 
     fun openToolTraining(tool: Tool?, translation: Translation?) =

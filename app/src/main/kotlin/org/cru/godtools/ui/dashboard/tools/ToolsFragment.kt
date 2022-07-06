@@ -110,8 +110,8 @@ class ToolsFragment :
         findListener<Callbacks>()?.pinTool(code)
     }
 
-    override fun unpinTool(tool: Tool?, translation: Translation?) {
-        findListener<Callbacks>()?.unpinTool(tool, translation)
+    override fun unpinTool(tool: Tool?) {
+        findListener<Callbacks>()?.unpinTool(tool)
     }
     // endregion ToolsAdapterCallbacks
 }
