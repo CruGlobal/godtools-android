@@ -19,6 +19,7 @@ import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
@@ -183,7 +184,9 @@ class DashboardActivity :
     }
 
     override fun pinTool(code: String?) {
-        code?.let { downloadManager.pinToolAsync(it) }
+        if (code == null) return
+        downloadManager.pinToolAsync(code)
+        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
     }
 
     override fun unpinTool(tool: Tool?, translation: Translation?) {

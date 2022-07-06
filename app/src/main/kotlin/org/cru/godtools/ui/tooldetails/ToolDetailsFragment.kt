@@ -28,6 +28,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapConte
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -156,7 +157,9 @@ class ToolDetailsFragment() :
     }
 
     override fun pinTool(code: String?) {
-        if (code != null) downloadManager.pinToolAsync(code)
+        if (code == null) return
+        downloadManager.pinToolAsync(code)
+        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
     }
 
     fun unpinTool(toolCode: String?) {
