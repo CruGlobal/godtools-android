@@ -9,7 +9,10 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_FAVORITE
 import org.cru.godtools.model.Tool
+import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -30,7 +33,14 @@ internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.typ
 internal val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_SPOTLIGHT eq true)
 
 @HiltViewModel
-class ToolsFragmentDataModel @Inject constructor(dao: GodToolsDao, savedState: SavedStateHandle) : ViewModel() {
+class ToolsFragmentDataModel @Inject constructor(
+    dao: GodToolsDao,
+    settings: Settings,
+    savedState: SavedStateHandle
+) : ViewModel() {
+    val banner = settings.isFeatureDiscoveredLiveData(FEATURE_TOOL_FAVORITE)
+        .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
+
     private val tools = dao.getLiveData(QUERY_TOOLS)
 
     val categories = tools.map { it.mapNotNull { it.category }.distinct() }

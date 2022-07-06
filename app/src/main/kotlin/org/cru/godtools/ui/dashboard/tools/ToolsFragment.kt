@@ -6,15 +6,18 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ConcatAdapter.Config
 import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS
 import androidx.recyclerview.widget.RecyclerView
+import com.sergivonavi.materialbanner.BannerInterface
 import dagger.hilt.android.AndroidEntryPoint
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.recyclerview.widget.addLayout
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
+import org.cru.godtools.adapter.BannerAdapter
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ALL_TOOLS
+import org.cru.godtools.base.Settings
 import org.cru.godtools.databinding.DashboardToolsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
@@ -22,6 +25,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.ToolsAdapter
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
+import org.cru.godtools.widget.BannerType
 
 @AndroidEntryPoint
 class ToolsFragment :
@@ -57,6 +61,20 @@ class ToolsFragment :
     // region UI
     private fun RecyclerView.setupRecyclerView() {
         adapter = ConcatAdapter(Config.Builder().setStableIdMode(ISOLATED_STABLE_IDS).build()).apply {
+            // Banner Adapter
+            addAdapter(
+                BannerAdapter().also {
+                    it.primaryCallback = BannerInterface.OnClickListener {
+                        when (dataModel.banner.value) {
+                            BannerType.TOOL_LIST_FAVORITES ->
+                                settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+                            else -> Unit
+                        }
+                    }
+                    dataModel.banner.observe(viewLifecycleOwner, it)
+                }
+            )
+
             // Tool Spotlight adapter
             val spotlightAdapter =
                 ToolsAdapter(viewLifecycleOwner, toolViewModels, R.layout.dashboard_tools_spotlight_tool).also {

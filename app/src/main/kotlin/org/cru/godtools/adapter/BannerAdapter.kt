@@ -3,6 +3,7 @@ package org.cru.godtools.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.sergivonavi.materialbanner.Banner
 import com.sergivonavi.materialbanner.BannerInterface
@@ -10,7 +11,7 @@ import org.cru.godtools.R
 import org.cru.godtools.widget.BannerType
 import org.cru.godtools.widget.show
 
-class BannerAdapter : RecyclerView.Adapter<BannerViewHolder>() {
+class BannerAdapter : RecyclerView.Adapter<BannerViewHolder>(), Observer<BannerType?> {
     init {
         setHasStableIds(true)
     }
@@ -31,6 +32,10 @@ class BannerAdapter : RecyclerView.Adapter<BannerViewHolder>() {
             field = value
             notifyItemChanged(0)
         }
+
+    override fun onChanged(t: BannerType?) {
+        banner = t
+    }
 
     override fun getItemCount() = 1
     override fun getItemId(localPosition: Int) = 1L
