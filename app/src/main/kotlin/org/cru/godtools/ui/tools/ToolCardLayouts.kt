@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
+import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
@@ -43,8 +44,10 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
 
+private val toolViewModels: ToolViewModels @Composable get() = viewModel()
 @Composable
-private fun toolViewModel(tool: String) = viewModel<ToolViewModels>()[tool]
+private fun toolViewModel(tool: String) = toolViewModels[tool]
+
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
 @Composable
@@ -56,7 +59,7 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
         derivedStateOf {
             baseStyle.merge(
                 TextStyle(
-                    fontFamily = translation?.getFontFamilyOrNull(),
+                    fontFamily = translation.value?.getFontFamilyOrNull(),
                     fontWeight = FontWeight.Bold
                 )
             )
@@ -65,6 +68,12 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
 }
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
 internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
+
+@Composable
+fun PreloadTool(tool: Tool) {
+    val code = tool.code ?: return
+    toolViewModels.initializeToolViewModel(code, tool)
+}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,10 +86,10 @@ fun LessonToolCard(
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
 
-    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, translation) },
+            onClick = { onClick(tool, translation.value) },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
@@ -97,9 +106,11 @@ fun LessonToolCard(
 
                 AvailableInLanguage(
                     language = primaryLanguage,
-                    translation = { primaryTranslation },
+                    translation = { primaryTranslation.value },
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.align(Alignment.End)
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .invisibleIf { primaryTranslation.isInitial || primaryLanguage == null }
                 )
             }
         }
@@ -124,11 +135,11 @@ fun ToolCard(
     val secondLanguage by viewModel.secondLanguage.collectAsState()
     val downloadProgress by viewModel.downloadProgress.collectAsState()
 
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = { onClick(tool, firstTranslation, secondTranslation) },
+            onClick = { onClick(tool, firstTranslation.value, secondTranslation) },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -210,10 +221,10 @@ fun SquareToolCard(
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
     val downloadProgress by viewModel.downloadProgress.collectAsState()
 
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, firstTranslation, secondTranslation) },
+            onClick = { onClick(tool, firstTranslation.value, secondTranslation) },
             modifier = modifier.width(189.dp)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -319,26 +330,27 @@ private fun ToolName(
     val style by toolNameStyle(viewModel)
 
     Text(
-        translation.getName(tool).orEmpty(),
+        translation.value.getName(tool).orEmpty(),
         style = style,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
+        modifier = modifier
+            .invisibleIf { translation.isInitial }
+            .minLinesHeight(minLines = minLines, textStyle = style)
     )
 }
 
 @Composable
 private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-
     val context = LocalContext.current
-    val locale by remember { derivedStateOf { firstTranslation?.languageCode } }
+    val tool by viewModel.tool.collectAsState()
+    val translation by viewModel.firstTranslation.collectAsState()
+    val locale by remember { derivedStateOf { translation.value?.languageCode } }
 
     Text(
         tool.getCategory(context, locale),
         style = toolCategoryStyle,
         maxLines = 1,
-        modifier = modifier
+        modifier = modifier.invisibleIf { translation.isInitial }
     )
 }

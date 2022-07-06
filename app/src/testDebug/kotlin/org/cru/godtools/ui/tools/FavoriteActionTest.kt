@@ -17,6 +17,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.junit.Rule
@@ -33,7 +34,7 @@ class FavoriteActionTest {
     val composeTestRule = createComposeRule()
 
     private val toolFlow = MutableStateFlow<Tool?>(null)
-    private val firstTranslationFlow = MutableStateFlow<Translation?>(null)
+    private val firstTranslationFlow = MutableStateFlow(StateFlowValue.Initial<Translation?>(null))
 
     private val toolViewModel: ToolViewModels.ToolViewModel = mockk {
         every { tool } returns toolFlow

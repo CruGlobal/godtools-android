@@ -18,6 +18,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HOME
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.greenrobot.eventbus.EventBus
@@ -53,10 +54,9 @@ class HomeViewModel @Inject constructor(
 
     // region Favorites Tools
     val favoriteTools = toolsRepository.favoriteTools
-        .map { it.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    private val favoriteToolsOrder = MutableStateFlow(emptyList<String>())
+    private val favoriteToolsOrder = MutableStateFlow(emptyList<Tool>())
     val reorderableFavoriteTools = favoriteTools
         .flatMapLatest {
             favoriteToolsOrder.value = it.orEmpty()
@@ -69,7 +69,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun commitFavoriteToolOrder() {
-        viewModelScope.launch { toolsRepository.updateToolOrder(favoriteToolsOrder.value) }
+        viewModelScope.launch { toolsRepository.updateToolOrder(favoriteToolsOrder.value.mapNotNull { it.code }) }
     }
     // endregion Favorite Tools
 

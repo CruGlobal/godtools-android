@@ -67,7 +67,7 @@ internal fun FavoriteAction(
                 Text(
                     stringResource(
                         R.string.tools_list_remove_favorite_dialog_title,
-                        translation.getName(tool).orEmpty()
+                        translation.value.getName(tool).orEmpty()
                     )
                 )
             },

@@ -29,7 +29,7 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layoutDirection="@{toolViewModel.firstTranslation.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
+            android:layoutDirection="@{toolViewModel.firstTranslation.value.languageCode != null ? TextUtils.getLayoutDirectionFromLocale(toolViewModel.firstTranslation.value.languageCode) : View.LAYOUT_DIRECTION_INHERIT}">
 
             <org.cru.godtools.base.ui.view.DaggerPicassoImageView
                 android:id="@+id/banner"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationName(toolViewModel.firstTranslation.value ?? toolViewModel.secondTranslation, toolViewModel.tool, context)}"
                 app:layout_constraintEnd_toStartOf="@id/margin_end"
                 app:layout_constraintStart_toEndOf="@id/selected"
                 app:layout_constraintTop_toBottomOf="@id/banner"
@@ -85,7 +85,7 @@
                 android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{ModelUtils.getTranslationTagline(toolViewModel.firstTranslation, toolViewModel.tool, context)}"
+                android:text="@{ModelUtils.getTranslationTagline(toolViewModel.firstTranslation.value, toolViewModel.tool, context)}"
                 android:textAppearance="@style/TextAppearance.GodTools.Tools.Card.Tagline"
                 app:layout_constraintEnd_toEndOf="@id/title"
                 app:layout_constraintStart_toStartOf="@id/title"
@@ -122,7 +122,7 @@
                 style="@style/Widget.GodTools.Tools.Card.Info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@{toolViewModel.primaryTranslation != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
+                android:drawableEnd="@{toolViewModel.primaryTranslation.value != null ? @drawable/ic_language_available : @drawable/ic_language_unavailable}"
                 android:text="@{toolViewModel.primaryLanguage.getDisplayName(context)}"
                 app:drawableStartCompat="@drawable/ic_bullet"
                 tools:text="English" />
