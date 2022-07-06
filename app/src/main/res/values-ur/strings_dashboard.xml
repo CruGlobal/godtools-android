@@ -19,21 +19,36 @@
     <string name="menu_copyright">کاپی رائٹ</string>
     <string name="share_story_subject">GodTools کہانی</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">اسباق</string>
+    <string name="dashboard_lessons_header_title">آپ کے لیے بنائے گئے اسباق</string>
+    <string name="dashboard_lessons_header_description">تعلقات بنانے اور معنی خیز گفتگو شروع کرنے کے لیے عملی خیالات۔</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">پسندیدگان</string>
-    <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>
+    <string name="dashboard_home_header_title">GodTools میں خوش آمدید</string>
+    <string name="dashboard_home_section_featured_lesson">نمایاں سبق</string>
+    <string name="dashboard_home_section_favorites_title">آپ کے پسندیدہ ٹولز</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">ڈسپلے کرنے کے لیے کوئی پسندیدہ ٹولز نہیں</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">کسی ٹول کو پسندیدہ بنانے کے لیے دل والے آئیکن پر ٹیپ کریں اور اسے آف لائن دستیاب کرائیں۔</string>
+    <string name="dashboard_home_section_favorites_action_view_all">سب دیکھیں &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ٹولز پر جائیں</string>
     <string name="tools_list_favorites_banner_text">دل کے آئیکن پر ٹیپ کر کے کسی ٹول کو آف لائن دستیاب کروائیں جو کہ اسے آپ کے پسندیدگان میں شامل کر دیتا ہے۔</string>
     <string name="tools_list_favorites_banner_action_dismiss">برخاست کریں</string>
     <!-- All Tools -->
     <string name="nav_all_tools">تمام ٹولز</string>
+    <string name="dashboard_tools_section_categories_label">زمرے</string>
+    <string name="dashboard_tools_section_categories_all">تمام ٹولز</string>
+    <string name="dashboard_tools_section_spotlight_label">ٹول سپاٹ لائٹ</string>
+    <string name="dashboard_tools_section_spotlight_description">یہاں کچھ ٹولز ہیں ہم نے سوچا کہ شاید آپ پسند کریًر</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">\"%1$s\" کو پسندیدگان سے ہٹائیں؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ہٹائیں</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ کریں</string>
+    <string name="tool_card_label_language_unavailable">%1$s میں دستیاب نہیں</string>
+    <string name="action_tools_about">تفصیلات</string>
+    <string name="action_tools_open">کھولیں</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">کیا آپ کوئی ثانوی زبان سیٹ کرنا چاہیں گے؟</string>
     <string name="languages_parallel_dialog_select">کوئی زبان منتخب کریں</string>
     <string name="languages_parallel_dialog_action_start">شروعات</string>
     <string name="languages_parallel_dialog_action_cancel">نہیں، شکریہ</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">ہمارے متعلق</string>
-    <string name="action_tools_open">کھولیں</string>
 </resources>

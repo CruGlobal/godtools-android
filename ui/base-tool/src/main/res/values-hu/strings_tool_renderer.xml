@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s kötelező</string>
     <string name="tract_content_input_error_invalid_email">Adj meg egy érvényes e-mail címet</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Képzési tippek</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Megosztás</string>
+    <string name="tool_share_sheet_more_apps">Tovább</string>
+    <string name="share_tool_message_article">Ezt a cikket szerettem volna megosztani veled, és szeretném hallani a véleményedet róla.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Hivatkozás megosztása</string>
     <string name="feature_discovery_desc_share_tool">Küldd el ezt az eszközt egy ismerősnek az ikonra kattintva</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Kép megosztása</string>
 </resources>

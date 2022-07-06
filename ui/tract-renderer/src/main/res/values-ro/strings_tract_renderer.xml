@@ -6,6 +6,7 @@
     <string name="tract_card_next">Următor</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Partajează ecranul</string>
+    <string name="menu_live_share_active">Partajare ecran activă</string>
     <string name="share_tool_message_tract_live_share">Bună, urmează-mă în GodTools prin partajarea ecranului. Iată linkul: %1$s\n\nDacă nu primești acest mesaj până mai târziu, este posibil ca linkul să nu funcționeze. Poți încerca ulterior.</string>
     <string name="tract_live_share_starting">Începe partajarea ecranului...</string>
     <string name="tract_live_share_unable_to_connect">Imposibil de conectat la partajarea ecranului</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Ieși</string>
     <string name="tract_live_share_exit_dialog_cancel">Anulează</string>
     <!-- Settings -->
+    <string name="menu_settings">Setări</string>
+    <string name="tract_settings_title">Opțiuni de instrumente</string>
+    <string name="tract_settings_action_share">Partajează un link</string>
+    <string name="tract_settings_action_tips_disable">Ascunde recomandările</string>
+    <string name="tract_settings_languages_title">Limbă secundară</string>
+    <string name="tract_settings_languages_description">Comută între două limbi diferite în acest instrument.</string>
+    <string name="tract_settings_languages_parallel">Limbă secundară</string>
+    <string name="tract_settings_languages_none">Niciuna</string>
+    <string name="tract_settings_shareables_title">Grafice asociate</string>
 </resources>

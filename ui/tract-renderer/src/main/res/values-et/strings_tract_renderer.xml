@@ -6,11 +6,21 @@
     <string name="tract_card_next">Järgmine</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Jaga ekraani</string>
-    <string name="share_tool_message_tract_live_share">Hei! Jälgi mind rakenduses GoodTools, jagades minuga ekraanikuva. Kasuta seda linki: %1$s\n\nKui saad selle sõnumi hiljem, et pruugi link töötada. Sel juhul võime mõni teine kord uuesti proovida.</string>
+    <string name="menu_live_share_active">Ekraani jagamine sees</string>
+    <string name="share_tool_message_tract_live_share">Hei! Jälgi mind rakenduses GoodTools, kasutades jagatud ekraani. Kasuta seda linki: %1$s\n\nKui saad selle sõnumi hiljem, et pruugi link töötada. Sel juhul võime mõni teine kord uuesti proovida.</string>
     <string name="tract_live_share_starting">Ekraanikuva jagamise alustamine...</string>
     <string name="tract_live_share_unable_to_connect">Ei saanud ekraanikuva jagamisega ühendust</string>
     <string name="tract_live_share_exit_dialog_message">Kas lõpetada ekraanikuva kaugjagamine kohe?</string>
     <string name="tract_live_share_exit_dialog_confirm">Välju</string>
     <string name="tract_live_share_exit_dialog_cancel">Tühista</string>
     <!-- Settings -->
+    <string name="menu_settings">Seaded</string>
+    <string name="tract_settings_title">Tööriistade suvandid</string>
+    <string name="tract_settings_action_share">Jaga linki</string>
+    <string name="tract_settings_action_tips_disable">Peida nõuanded</string>
+    <string name="tract_settings_languages_title">Teine keel</string>
+    <string name="tract_settings_languages_description">Selles tööriistas saab kasutada kahte keelt</string>
+    <string name="tract_settings_languages_parallel">Teine</string>
+    <string name="tract_settings_languages_none">Mitte ühtki</string>
+    <string name="tract_settings_shareables_title">Seotud pildid</string>
 </resources>

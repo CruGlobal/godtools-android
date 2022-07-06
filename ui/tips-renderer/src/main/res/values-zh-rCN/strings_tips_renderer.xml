@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">下一个</string>
+    <string name="tract_tips_tip_action_close">关闭</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">提问</string>
+    <string name="tract_tips_type_consider">考虑</string>
+    <string name="tract_tips_type_prepare">准备</string>
+    <string name="tract_tips_type_quote">引用</string>
+    <string name="tract_tips_type_tip">提示</string>
+</resources>

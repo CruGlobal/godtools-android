@@ -6,7 +6,7 @@
     <string name="menu_heading_share">Berbagi</string>
     <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Tentang</string>
-    <string name="menu_help">Tanya Jawab Umum</string>
+    <string name="menu_help">Pertanyaan-pertanyaan yg sering ditanyakan</string>
     <string name="menu_contact_us">Hubungi Kami</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Masuk</string>
@@ -20,25 +20,34 @@
     <string name="share_story_subject">Kisah GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pelajaran</string>
-    <!-- Favorites -->
+    <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Anda</string>
+    <string name="dashboard_lessons_header_description">Ide-ide praktis membangun hubungan dan memulai percakapan yang bermakna.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favorit</string>
-    <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="dashboard_home_header_title">Selamat datang di GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Pelajaran-pelajaran</string>
+    <string name="dashboard_home_section_favorites_title">Sarana favorit Anda</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada sarana favorit untuk ditampilkan</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">"Sentuh ikon untuk menjadikan sarana favorit dan menyediakannya offline. "</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Lihat semua</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Ke Sarana-sarana</string>
     <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
-    <string name="tools_list_favorites_banner_action_dismiss">Berhentikan</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Selesai</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Semua Alat</string>
+    <string name="nav_all_tools">Semua Sarana</string>
     <string name="dashboard_tools_section_categories_label">Kategori</string>
     <string name="dashboard_tools_section_categories_all">Semua Sarana</string>
     <string name="dashboard_tools_section_spotlight_label">Spotlight Sarana</string>
     <string name="dashboard_tools_section_spotlight_description">Ini beberapa sarama yang mungkin Anda suka</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="action_tools_about">Detail</string>
+    <string name="action_tools_open">Buka</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Apakah Anda ingin menyetel bahasa sekunder?</string>
+    <string name="languages_parallel_dialog_headline">Apakah Anda ingin memasang bahasa sekunder?</string>
     <string name="languages_parallel_dialog_select">Pilih bahasa</string>
     <string name="languages_parallel_dialog_action_start">Mari mulai</string>
     <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih.</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Tentang</string>
-    <string name="action_tools_open">Buka</string>
 </resources>

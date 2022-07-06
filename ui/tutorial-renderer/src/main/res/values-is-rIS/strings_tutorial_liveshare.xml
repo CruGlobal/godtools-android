@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">Spegluð upplifun</string>
     <string name="tutorial_live_share_mirrored_text">Þegar þú flettir í tólinu í síma þínum, mun skjár vinar þíns bregðast eins við. Þetta leyfir ykkur að skoða tól saman á 2 tækjum á sama tíma.</string>
     <string name="tutorial_live_share_start_headline">Byrja</string>
-    <string name="tutorial_live_share_start_text">Sendu tengilinn til eins eða fleiri aðila til að byrja lotu fyrir skjádeilingu núna.
-
-Þessi upplifun þarfnast þess sem stendur að allir þátttakendur hafi sótt GodTools appið á sínu tæki.</string>
+    <string name="tutorial_live_share_start_text">Sendu tengilinn til eins eða fleiri aðila til að byrja lotu fyrir skjádeilingu núna.</string>
     <string name="tutorial_live_share_action_continue">Halda áfram</string>
     <string name="tutorial_live_share_action_skip">Sleppa</string>
     <string name="tutorial_live_share_action_start">Deila tengli</string>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">Önskat verktyg hittades inte</string>
+    <string name="tool_loading">Önskat verktyg håller på att läsas in…</string>
+    <string name="tool_offline">För att kunna öppna det önskade verktyget behövs en internetanslutning</string>
+    <string name="tract_content_input_error_required">%1$s måste anges</string>
+    <string name="tract_content_input_error_invalid_email">Ange en giltig e-postadress</string>
+    <!-- Menu Items -->
+    <string name="menu_training_tips">Utbildningstips</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Dela</string>
+    <string name="tool_share_sheet_more_apps">Mer</string>
+    <string name="share_tool_message_article">Jag vill dela den här artikeln med dig och skulle vilja höra vad du tycker.\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Dela en länk</string>
+    <string name="feature_discovery_desc_share_tool">Skicka det här verktyget till en vän genom att klicka på denna ikon</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Dela bild</string>
+</resources>

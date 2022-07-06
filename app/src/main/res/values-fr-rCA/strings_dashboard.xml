@@ -19,21 +19,36 @@
     <string name="menu_copyright">Droit d\'auteur</string>
     <string name="share_story_subject">Histoire GodTols</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Cours</string>
+    <string name="dashboard_lessons_header_title">Cours faits pour vous</string>
+    <string name="dashboard_lessons_header_description">Des idées pratiques pour tisser des liens et entamer des conversations constructives.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favoris</string>
-    <string name="tools_list_remove_favorite_dialog_title">Retirer « %1$s » des favoris?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Retirer</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
+    <string name="dashboard_home_header_title">Bienvenue dans GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Cours mis en avant</string>
+    <string name="dashboard_home_section_favorites_title">Vos outils préférés</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Aucun outil favori à afficher</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Touchez l\'icône de cœur pour ajouter un outil à vos favoris et le rendre disponible hors ligne.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Tout afficher &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Accéder aux outils</string>
     <string name="tools_list_favorites_banner_text">Appuyez sur l\'icône en forme de cœur pour ajouter un outil à vos favoris et le rendre disponible hors ligne.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ignorer</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tous les outils</string>
+    <string name="dashboard_tools_section_categories_label">Catégories</string>
+    <string name="dashboard_tools_section_categories_all">Tous les outils</string>
+    <string name="dashboard_tools_section_spotlight_label">Outils mis en avant</string>
+    <string name="dashboard_tools_section_spotlight_description">Voici quelques outils qui seraient à votre goût</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Retirer « %1$s » des favoris?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Retirer</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
+    <string name="tool_card_label_language_unavailable">Indisponible en %1$s</string>
+    <string name="action_tools_about">Détails</string>
+    <string name="action_tools_open">Ouvrir</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Voudriez-vous définir une langue secondaire?</string>
     <string name="languages_parallel_dialog_select">Sélectionner une langue</string>
     <string name="languages_parallel_dialog_action_start">Commencer</string>
     <string name="languages_parallel_dialog_action_cancel">Non merci</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">À propos</string>
-    <string name="action_tools_open">Ouvrir</string>
 </resources>

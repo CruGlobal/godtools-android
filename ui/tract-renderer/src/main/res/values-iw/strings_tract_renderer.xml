@@ -6,6 +6,7 @@
     <string name="tract_card_next">הבא</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">שתף את המסך שלך</string>
+    <string name="menu_live_share_active">שיתוף מסך פעיל</string>
     <string name="share_tool_message_tract_live_share">היי, הצטרף אלי ב-GodTools באמצעות שיתוף מסך. הנה הקישור: %1$s\n\nאם לא תקבל הודעה זו עד מאוחר יותר, ייתכן שהקישור כבר לא יעבוד. אנחנו יכולים לנסות שוב בזמן אחר.</string>
     <string name="tract_live_share_starting">מתחיל שיתוף מסך...</string>
     <string name="tract_live_share_unable_to_connect">לא ניתן להתחבר לשיתוף המסך</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">יציאה</string>
     <string name="tract_live_share_exit_dialog_cancel">בטל</string>
     <!-- Settings -->
+    <string name="menu_settings">הגדרות</string>
+    <string name="tract_settings_title">הגדרות כלים</string>
+    <string name="tract_settings_action_share">שתף קישור</string>
+    <string name="tract_settings_action_tips_disable">הסתר טיפים</string>
+    <string name="tract_settings_languages_title">שפה מקבילה</string>
+    <string name="tract_settings_languages_description">החלף בין שתי שפות שונות בכלי זה.</string>
+    <string name="tract_settings_languages_parallel">מקביל</string>
+    <string name="tract_settings_languages_none">כלום</string>
+    <string name="tract_settings_shareables_title">גרפיקה מקושרת</string>
 </resources>

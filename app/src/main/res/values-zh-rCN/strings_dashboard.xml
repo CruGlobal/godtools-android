@@ -11,7 +11,7 @@
     <string name="menu_tutorial">教程</string>
     <string name="menu_login">登录</string>
     <string name="menu_signup">建立帳戶</string>
-    <string name="menu_logout">登出</string>
+    <string name="menu_logout">退出</string>
     <string name="menu_share_godtools">分享GodTools应用</string>
     <string name="menu_share_story">与我们分享故事</string>
     <string name="menu_terms_of_use">使用条款</string>
@@ -19,21 +19,36 @@
     <string name="menu_copyright">版权</string>
     <string name="share_story_subject">GodTools故事</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">"课程 "</string>
+    <string name="dashboard_lessons_header_title">为你制定的课程</string>
+    <string name="dashboard_lessons_header_description">建立关系，开启有意义对话的实用点子</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">收藏夹</string>
-    <string name="tools_list_remove_favorite_dialog_title">从收藏夹中删除 “%1$s”？</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">删除</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="dashboard_home_header_title">欢迎来到Godtools信仰分享工具</string>
+    <string name="dashboard_home_section_featured_lesson">特色课程</string>
+    <string name="dashboard_home_section_favorites_title">你最喜欢的工具</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">没有最喜欢的工具来显示</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">点击心形图标来收藏一个工具，并使其离线可用。</string>
+    <string name="dashboard_home_section_favorites_action_view_all">查看全部</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">去到工具包</string>
     <string name="tools_list_favorites_banner_text">要离线使用某个工具，请点击心形图标将其添加到收藏夹。</string>
     <string name="tools_list_favorites_banner_action_dismiss">取消</string>
     <!-- All Tools -->
     <string name="nav_all_tools">所有工具</string>
+    <string name="dashboard_tools_section_categories_label">分类</string>
+    <string name="dashboard_tools_section_categories_all">所有工具</string>
+    <string name="dashboard_tools_section_spotlight_label">热门工具</string>
+    <string name="dashboard_tools_section_spotlight_description">这是我们觉得你可能喜欢的一些工具</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">从收藏夹中删除 “%1$s”？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">删除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
+    <string name="tool_card_label_language_unavailable">语版本不可用 %1$s</string>
+    <string name="action_tools_about">细节</string>
+    <string name="action_tools_open">打开</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">您想设置第二语言吗？</string>
     <string name="languages_parallel_dialog_select">选择语言</string>
     <string name="languages_parallel_dialog_action_start">开始体验</string>
     <string name="languages_parallel_dialog_action_cancel">不了，谢谢</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">关于</string>
-    <string name="action_tools_open">打开</string>
 </resources>

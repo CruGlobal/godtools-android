@@ -15,4 +15,7 @@
         <item quantity="one">%1$,d idioma</item>
         <item quantity="other">%1$,d idiomas</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Idiomas disponibles</string>
+    <string name="tool_details_section_variants_label">Versiones</string>
+    <string name="tool_details_section_variants_description">Elija una versión diferente de esta herramienta a continuación. Cada versión tiene un estilo y un contenido únicos para que puedas encontrar la que mejor se adapte a tu conversación. Puedes marcar como favoritas varias versiones de la misma herramienta.</string>
 </resources>

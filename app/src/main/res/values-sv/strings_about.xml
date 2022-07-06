@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_about">Om</string>
+    <string name="general_about_1">GodTools hjälper dig att dela med dig av din tro på ett enkelt och tydligt sätt.</string>
+    <string name="general_about_2">Dessa verktyg hjälper dig att på ett självsäkert sätt förklara för andra hur de kan skapa en relation med Gud genom Jesus Kristus, även om du aldrig har delat med dig av din tro tidigare eller om de talar ett annat språk.</string>
+    <string name="general_about_3">Välj bland en mängd olika verktyg baserat på dina önskemål och din målgrupp. Alla verktyg finns inte på alla språk.</string>
+    <string name="general_about_4">Länkar till andra resurser finns i slutet av varje verktyg.</string>
+    <string name="general_about_5">En internetanslutning behövs för att kunna ladda ner varje nytt verktyg och/eller språk. När de har laddats ner kan de användas utan internetuppkoppling.</string>
+    <string name="general_about_6">Frågor? Förslag? Kontakta oss på support@godtoolsapp.com</string>
+    <string name="general_about_7">En webbversion av dessa verktyg finns på knowgod.com. Bädda in den på din egen webbplats!</string>
+    <string name="general_about_8">Gå till godtoolsapp.com för mer information.</string>
+    <string name="general_about_9">Kom ihåg att Gud är den som förändrar ditt hjärta när du tar initiativet att dela med dig av din tro. Älska varje person genom att lyssna efter förståelse.</string>
+    <string name="general_about_10">\"Se till att ni alltid uttrycker er på ett vänligt sätt och kryddar era ord med salt. Då kommer ni alltid att veta hur ni ska svara andra.\" Kolosserbrevet 4:6</string>
+</resources>

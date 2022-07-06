@@ -8,11 +8,11 @@
     <string name="tutorial_features_live_share_subhead">Sekarang Anda dapat membagikan layar Anda dari jarak jauh sehingga orang lain dapat mengikuti saat Anda menggunakan sarana untuk membahas Injil.</string>
     <string name="tutorial_features_lessons_headline">Pelajaran</string>
     <string name="tutorial_features_lessons_subhead">Dalam setiap pelajaran GodTools Anda mempelajari sesuatu untuk membantu Anda melakukan percakapan nyata tentang Tuhan.</string>
-    <string name="tutorial_features_final_headline">Tutorial ini tersedia untuk dilihat lagi di menu</string>
+    <string name="tutorial_features_final_headline">Temukan tutorial ini di menu saat Anda membutuhkannya.</string>
     <string name="tutorial_features_action_continue">Lanjutkan</string>
-    <string name="tutorial_features_action_close">Mulai menggunakan GodTools</string>
+    <string name="tutorial_features_action_close">Tutup tutorial</string>
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">Tunjukkan tutorial</string>
     <string name="tutorial_features_banner_action_open">Membuka tutorial</string>
-    <string name="tutorial_features_banner_action_dismiss">Memberhentikan</string>
+    <string name="tutorial_features_banner_action_dismiss">selesai</string>
 </resources>

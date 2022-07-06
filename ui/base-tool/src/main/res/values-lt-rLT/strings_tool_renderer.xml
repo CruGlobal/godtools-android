@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">Reikalingas %1$s</string>
     <string name="tract_content_input_error_invalid_email">Įrašykite teisingą el. pašto adresą</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Mokymo patarimai</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Dalytis</string>
+    <string name="tool_share_sheet_more_apps">Daugiau</string>
+    <string name="share_tool_message_article">Norėjau pasidalyti šiuo straipsniu su jumis ir norėčiau išgirsti jūsų mintis apie jį.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bendrinti nuorodą</string>
     <string name="feature_discovery_desc_share_tool">Siųsti šį įrankį draugui paspaudus šią piktogramą</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Bendrinti nuotrauką</string>
 </resources>

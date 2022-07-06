@@ -19,21 +19,36 @@
     <string name="menu_copyright">Πνευματικά δικαιώματα</string>
     <string name="share_story_subject">Ιστορία GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Μαθήματα</string>
+    <string name="dashboard_lessons_header_title">Κατηγορίες</string>
+    <string name="dashboard_lessons_header_description">Πρακτικές ιδέες για να χτίσετε σχέσεις και να ξεκινήσετε ουσιαστικές συζητήσεις.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Αγαπημένα</string>
-    <string name="tools_list_remove_favorite_dialog_title">Αφαίρεση “%1$s” από τα Αγαπημένα;</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Αφαίρεση</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Ακύρωση</string>
+    <string name="dashboard_home_header_title">Καλώς ήλθατε στο GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Προτεινόμενο μάθημα</string>
+    <string name="dashboard_home_section_favorites_title">Τα αγαπημένα σας εργαλεία</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Δεν υπάρχουν αγαπημένα εργαλεία για εμφάνιση</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Πατήστε στο εικονίδιο της καρδιάς για να προτιμήσετε ένα εργαλείο και να το κάνετε διαθέσιμο εκτός σύνδεσης.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Προβολή όλων &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Μεταβείτε στα Εργαλεία</string>
     <string name="tools_list_favorites_banner_text">Κάντε το εργαλείο διαθέσιμο offline πατώντας το εικονίδιο με την καρδιά που το προσθέτει στα αγαπημένα σας.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Απόρριψη</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Όλα τα Εργαλεία</string>
+    <string name="dashboard_tools_section_categories_label">Κατηγορίες</string>
+    <string name="dashboard_tools_section_categories_all">Όλα τα Εργαλεία</string>
+    <string name="dashboard_tools_section_spotlight_label">Εργαλείο Spotlight</string>
+    <string name="dashboard_tools_section_spotlight_description">Ακολουθούν ορισμένα εργαλεία που πιστεύαμε ότι μπορεί να σας αρέσουν</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Αφαίρεση “%1$s” από τα Αγαπημένα;</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Αφαίρεση</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ακύρωση</string>
+    <string name="tool_card_label_language_unavailable">Δεν είναι διαθέσιμο σε %1$s</string>
+    <string name="action_tools_about">Λεπτομέρειες</string>
+    <string name="action_tools_open">Άνοιγμα</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Θα θέλατε να ορίσετε μία δευτερεύουσα γλώσσα;</string>
     <string name="languages_parallel_dialog_select">Επιλέξτε μία γλώσσα</string>
     <string name="languages_parallel_dialog_action_start">Αρχίστε</string>
     <string name="languages_parallel_dialog_action_cancel">Όχι ευχαριστώ</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Σχετικά</string>
-    <string name="action_tools_open">Άνοιγμα</string>
 </resources>

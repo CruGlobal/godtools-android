@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Отворени алат</string>
     <string name="action_tools_add_favorite">Додај у Омиљене</string>
     <string name="action_tools_remove_favorite">Уклони из Омиљених</string>
+    <string name="action_tools_open_training">Сазнајте како да користиш овај алат</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d преглед</item>
         <item quantity="other">%1$,d прегледа</item>
@@ -16,4 +17,7 @@
         <item quantity="other">%1$,d језика</item>
         <item quantity="few">%1$,d језика</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Доступни језици</string>
+    <string name="tool_details_section_variants_label">Верзије</string>
+    <string name="tool_details_section_variants_description">Одаберите другу верзију овог алата у наставку. Свака верзија има јединствен стил и садржај тако да можете пронаћи ону која је најбоља за ваш разговор. Можете фаворизовати више верзија истог алата.</string>
 </resources>

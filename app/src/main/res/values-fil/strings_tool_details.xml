@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Buksan ang Tool</string>
     <string name="action_tools_add_favorite">Idagdag sa Mga Paborito</string>
     <string name="action_tools_remove_favorite">Alisin sa Mga Paborito</string>
+    <string name="action_tools_open_training">Alamin kung paano ibahagi ang tool na ito</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Pagtingin</item>
         <item quantity="other">%1$,d (na) Pagtingin</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d Wika</item>
         <item quantity="other">%1$,d (na) Wika</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Mga available na wika</string>
+    <string name="tool_details_section_variants_label">Mga Bersyon</string>
+    <string name="tool_details_section_variants_description">Pumili ng ibang bersyon ng tool na ito sa ibaba. Ang bawat bersyon ay nagpi-feature ng natatanging istilo at content para mahanap mo ang pinakamaganda para sa iyong pag-uusap. Puwede mong gawing paborito ang maraming bersyon ng parehong tool.</string>
 </resources>

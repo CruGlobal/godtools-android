@@ -6,10 +6,13 @@
     <string name="tract_content_input_error_required">Se requiere %1$s</string>
     <string name="tract_content_input_error_invalid_email">Ingresa una dirección de correo electrónico válida</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Consejos de entrenamiento</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Compartir</string>
+    <string name="tool_share_sheet_more_apps">Más</string>
     <string name="share_tool_message_article">Quería compartir este artículo contigo y me gustaría conocer tu opinión al respecto. \n%1$s</string>
     <string name="feature_discovery_title_share_tool">Comparte un enlace</string>
     <string name="feature_discovery_desc_share_tool">Haz clic en este icono para enviar esta herramienta a un amigo.</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Comparte una imagen</string>
 </resources>

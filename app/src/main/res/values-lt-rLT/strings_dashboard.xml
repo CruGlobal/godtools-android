@@ -19,21 +19,36 @@
     <string name="menu_copyright">Autoriaus teisės</string>
     <string name="share_story_subject">„GodTools“ istorija</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Pamokos</string>
+    <string name="dashboard_lessons_header_title">Jums paruoštos pamokos</string>
+    <string name="dashboard_lessons_header_description">Praktinės idėjos, kaip užmegzti santykius ir pradėti prasmingus pokalbius.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Mėgstamiausi</string>
-    <string name="tools_list_remove_favorite_dialog_title">Pašalinti „%1$s“ iš Mėgstamiausių?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Pašalinti</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Atšaukti</string>
+    <string name="dashboard_home_header_title">Jus sveikina „GodTools“</string>
+    <string name="dashboard_home_section_featured_lesson">Atrinkta pamoka</string>
+    <string name="dashboard_home_section_favorites_title">Jūsų mėgstamiausi įrankiai</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Nėra jokių mėgstamiausių įrankių</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Spustelėkite širdelės piktogramą, kad priskirtumėte įrankį prie mėgstamiausių ir jis būtų pasiekiamas neprisijungus.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Peržiūrėti visus &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Atidaryti įrankius</string>
     <string name="tools_list_favorites_banner_text">Įrankį galima naudoti atsijungus, paspaudus širdelės piktogramą, kuri prideda ją prie mėgstamiausių.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Išjungti</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Visi įrankiai</string>
+    <string name="dashboard_tools_section_categories_label">Kategorijos</string>
+    <string name="dashboard_tools_section_categories_all">Visi įrankiai</string>
+    <string name="dashboard_tools_section_spotlight_label">Rekomenduojami įrankiai</string>
+    <string name="dashboard_tools_section_spotlight_description">Čia pateikiami kai kurie įrankiai, kurie mūsų manymu, jums gali patikti.</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Pašalinti „%1$s“ iš Mėgstamiausių?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Pašalinti</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Atšaukti</string>
+    <string name="tool_card_label_language_unavailable">Nėra %1$s</string>
+    <string name="action_tools_about">Duomenys</string>
+    <string name="action_tools_open">Atidaryti</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Ar norėtumėte nustatyti papildomą kalbą?</string>
     <string name="languages_parallel_dialog_select">Pasirinkite kalbą</string>
     <string name="languages_parallel_dialog_action_start">Pradėkite</string>
     <string name="languages_parallel_dialog_action_cancel">Ne, ačiū</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Apie</string>
-    <string name="action_tools_open">Atidaryti</string>
 </resources>

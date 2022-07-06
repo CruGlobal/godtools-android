@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Xoş gəlmisiniz</string>
+    <string name="tutorial_onboarding_welcome_2">Hər söhbət üçün hazırdır</string>
+    <string name="tutorial_onboarding_welcome_action_video">Video izlə</string>
+    <string name="tutorial_onboarding_conversations_headline">İstənilən şəxslə Tanrı haqqında danış</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools Tanrı haqqında mənalı söhbətlər etməyə kömək edir.</string>
+    <string name="tutorial_onboarding_prepare_headline">Önəmli anlara hazırlaş</string>
+    <string name="tutorial_onboarding_prepare_subhead">İnanclar haqqında danışmağı həyatınızın ayrılmaz hissəsinə çevirməyi öyrənin.</string>
+    <string name="tutorial_onboarding_share_headline">Başqalarına İsanı kəşf etməyə kömək et</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools İncilin aydın və müvafiq qaydada çatdırılması üçün sizin bələdçinizdir.</string>
+    <string name="tutorial_onboarding_links_headline">Tez başlama keçidləri</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Mən xristian dinini öyrənmək istəyirəm</string>
+    <string name="tutorial_onboarding_links_articles_action">Məqalələrimizi oxu</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Mən Incillə bağlı danışmağı öyrənmək istəyirəm</string>
+    <string name="tutorial_onboarding_links_lessons_action">Dərslərimizi sınayın</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Mən İncili başqaları ilə paylaşmaq istəyirəm</string>
+    <string name="tutorial_onboarding_links_tools_action">Alətlərimizdən birini seç</string>
+    <string name="tutorial_onboarding_action_begin">Başla</string>
+    <string name="tutorial_onboarding_action_next">Növbəti</string>
+    <string name="tutorial_onboarding_action_skip">Burax</string>
+    <string name="tutorial_onboarding_action_start">Başla</string>
+</resources>

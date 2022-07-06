@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Ava tööriist</string>
     <string name="action_tools_add_favorite">Lisa lemmikutesse</string>
     <string name="action_tools_remove_favorite">Eemalda lemmikutest</string>
+    <string name="action_tools_open_training">Õpi seda tööriista jagama</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d külastus</item>
         <item quantity="other">%1$,d külastust</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d keel</item>
         <item quantity="other">%1$,d keelt</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Saadaval keeled</string>
+    <string name="tool_details_section_variants_label">Versioonid</string>
+    <string name="tool_details_section_variants_description">Vali allpool tööriista erinev versioon. Igal versioonil on ainulaadne stiil ja sisu, et leiaksid oma vestluse jaoks sobivaima. Saad lemmikuks märkida tööriista mitu versiooni.</string>
 </resources>

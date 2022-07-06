@@ -6,6 +6,7 @@
     <string name="tract_card_next">Seguinte</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Compartilhe a sua tela</string>
+    <string name="menu_live_share_active">Compartilhamento de tela ativado</string>
     <string name="share_tool_message_tract_live_share">Oi. Me acompanhe no GodTools através do compartilhamento de tela. Aqui está a ligação: %1$s\n\nSe você receber esta mensagem demasiado tarde, a ligação poderá não estar a funcionar. Podemos tentar novamente noutra altura.</string>
     <string name="tract_live_share_starting">A iniciar o compartilhamento de tela…</string>
     <string name="tract_live_share_unable_to_connect">Não é possível estabelecer a ligação para o compartilhamento de tela</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Sair</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
     <!-- Settings -->
+    <string name="menu_settings">Definições</string>
+    <string name="tract_settings_title">Opções da ferramenta</string>
+    <string name="tract_settings_action_share">Compartilhar ligação</string>
+    <string name="tract_settings_action_tips_disable">Ocultar dicas</string>
+    <string name="tract_settings_languages_title">Idioma paralelo</string>
+    <string name="tract_settings_languages_description">Alterne entre dois idiomas diferentes nessa ferramenta.</string>
+    <string name="tract_settings_languages_parallel">Paralelo</string>
+    <string name="tract_settings_languages_none">Nenhum</string>
+    <string name="tract_settings_shareables_title">Gráficos relacionados</string>
 </resources>

@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">အခြားစက်ပေါ်တွင် မျက်နှာပြင် ပြသခြင်း အတွေ့အကြုံ</string>
     <string name="tutorial_live_share_mirrored_text">သင့်ဖုန်းတွင် ကိရိယာကို လှိမ့်လျှင် သင့်မိတ်ဆွေ၏ မျက်နှာပြင်သည် ထိုသို့ တုံ့ပြန်ပါမည်။ ၎င်းသည် သင့်အား တစ်ချိန်တည်းတွင် စက် ၂ လုံးပေါ်၌ ကိရိယာကို ကြည့်ခွင့်ပေးပါသည်။</string>
     <string name="tutorial_live_share_start_headline">စတင်ရန်</string>
-    <string name="tutorial_live_share_start_text">မျက်နှာပြင် မျှဝေသည့် အပိုင်းကို ယခု စတင်ရန် တစ်ဦး သို့မဟုတ် တစ်ဦးထက်ပိုသော လူများထံ လင့်ခ်ကို ပို့ပေးပါ။
-
-ဤအတွေ့အကြုံသည် လက်ရှိတွင် ပါဝင်သူအားလုံးက GodTools အက်ပ်ကို ၎င်းတို့၏ စက်တွင် ဒေါင်းလုဒ်လုပ်ထားရန် လိုအပ်သည်။</string>
+    <string name="tutorial_live_share_start_text">မျက်နှာပြင် မျှဝေသည့် အပိုင်းကို ယခု စတင်ရန် တစ်ဦး သို့မဟုတ် တစ်ဦးထက်ပိုသော လူများထံ လင့်ခ်ကို ပို့ပေးပါ။ ဒေါင်းလုဒ်လုပ်ထားရန် လိုအပ်သည်။</string>
     <string name="tutorial_live_share_action_continue">ဆက်လုပ်ရန်</string>
     <string name="tutorial_live_share_action_skip">ကျော်ရန်</string>
     <string name="tutorial_live_share_action_start">လင့်ခ်တစ်ခုကို မျှဝေပါ</string>

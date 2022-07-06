@@ -6,11 +6,21 @@
     <string name="tract_card_next">آگے</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">اپنی اسکرین کا اشتراک کریں</string>
-    <string name="share_tool_message_tract_live_share">ہیلو، GodTools میں سکرین شیئرنگ کے ذریعے میری پیروی کریں۔ ربط یہ رہا: %1$s\n\nاگر آپ کو دیر تک یہ پیغام موصول نہیں ہوتا تو شاید ربط بھی کام نہ کرتا ہو۔ ہم کسی اور وقت دوبارہ کوشش کر سکتے ہیں۔</string>
+    <string name="menu_live_share_active">سکرین کا اشتراک فعال</string>
+    <string name="share_tool_message_tract_live_share">خوش آمدید، سکرین کے اشتراک کے ذریعے GodTools میں میرے ساتھ چلیں۔ لنک یہ ہے: %1$s\n\nاگر آپ کو کچھ دیر بعد تک یہ پیغام موصول نہیں ہوتا ہے، تو ہو سکتا ہے لنک اب بھی کام نہ کر رہی ہو۔ ہم کسی اور وقت دوبارہ کوشش کر سکتے ہیں۔</string>
     <string name="tract_live_share_starting">سکرین شیئرنگ شروع ہو رہی ہے۔۔۔</string>
     <string name="tract_live_share_unable_to_connect">سکرین شیئرنگ سے مربوط کرنے سے قاصر</string>
     <string name="tract_live_share_exit_dialog_message">ابھی ریموٹ سکرین شیئرنگ سیشن سے نکلیں؟</string>
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">منسوخ کریں</string>
     <!-- Settings -->
+    <string name="menu_settings">ترتیبات</string>
+    <string name="tract_settings_title">ٹول کے اختیارات</string>
+    <string name="tract_settings_action_share">لنک کا اشتراک کریں</string>
+    <string name="tract_settings_action_tips_disable">تجاویز پوشیدہ رکھیں</string>
+    <string name="tract_settings_languages_title">متوازی زبان</string>
+    <string name="tract_settings_languages_description">اس ٹول میں دو مختلف زبانوں کے درمیان ٹوگل کریں۔</string>
+    <string name="tract_settings_languages_parallel">متوازی</string>
+    <string name="tract_settings_languages_none">کوئی نہیں</string>
+    <string name="tract_settings_shareables_title">متعلقہ گرافکس</string>
 </resources>

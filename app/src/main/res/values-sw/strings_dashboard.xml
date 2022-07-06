@@ -19,21 +19,36 @@
     <string name="menu_copyright">Hati miliki</string>
     <string name="share_story_subject">Hadithi ya GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Masomo</string>
+    <string name="dashboard_lessons_header_title">Mafunzo kwa ajili yako</string>
+    <string name="dashboard_lessons_header_description">Mawazo ya vitendo ya kujenga mahusiano na kuanza mazungumzo yenye maana.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Vipendwa</string>
-    <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>
+    <string name="dashboard_home_header_title">Karibu kwenye GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Somo lililoangaziwa</string>
+    <string name="dashboard_home_section_favorites_title">Zana zako uzipendazo</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Hakuna zana unazopenda za kuonyesha</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Gonga ikoni ya moyo ili kuonyesha kupendezwa na zana na kuifanya ipatikane nje ya mtandao.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Tazama zote &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Nenda kwenye Zana</string>
     <string name="tools_list_favorites_banner_text">Fanya zana ipatikane nje ya mkondo kwa kudonoa ikoni ya moyo inayoiongeza kwenye Vipendwa vyako.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Puuza</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Zana Zote</string>
+    <string name="dashboard_tools_section_categories_label">Aina</string>
+    <string name="dashboard_tools_section_categories_all">Zana Zote</string>
+    <string name="dashboard_tools_section_spotlight_label">Mwangaza wa Zana</string>
+    <string name="dashboard_tools_section_spotlight_description">Hapa kuna baadhi ya zana ambazo tulifikiri unaweza kuzipenda</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>
+    <string name="tool_card_label_language_unavailable">Haipatikani kwenye %1$s</string>
+    <string name="action_tools_about">Maelezo</string>
+    <string name="action_tools_open">Fungua</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Je, ungependa kuweka lugha ya sekondari?</string>
     <string name="languages_parallel_dialog_select">Chagua lugha</string>
     <string name="languages_parallel_dialog_action_start">Anza</string>
     <string name="languages_parallel_dialog_action_cancel">Hapana Asante</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Kuhusu</string>
-    <string name="action_tools_open">Fungua</string>
 </resources>

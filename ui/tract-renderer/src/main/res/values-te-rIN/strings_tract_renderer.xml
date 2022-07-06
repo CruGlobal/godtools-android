@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">నిష్క్రమించండి</string>
     <string name="tract_live_share_exit_dialog_cancel">రద్దు చేయండి</string>
     <!-- Settings -->
+    <string name="menu_settings">సెట్టింగ్స్</string>
+    <string name="tract_settings_title">సాధనం ఎంపికలు</string>
+    <string name="tract_settings_action_share">లింకును పంచుకోండి</string>
+    <string name="tract_settings_action_tips_disable">చిట్కాలను దాయండి</string>
+    <string name="tract_settings_languages_title">సమాంతర భాష</string>
+    <string name="tract_settings_languages_description">ఈ సాధనంలో రెండు వేర్వేరు భాషల మధ్య టోగుల్ చేయండి.</string>
+    <string name="tract_settings_languages_parallel">సమాంతర</string>
+    <string name="tract_settings_languages_none">ఏదీ కాదు</string>
+    <string name="tract_settings_shareables_title">సంబంధిత గ్రాఫిక్స్</string>
 </resources>

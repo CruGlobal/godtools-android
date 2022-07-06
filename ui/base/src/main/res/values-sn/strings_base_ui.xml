@@ -8,13 +8,9 @@
     <string name="tool_category_growth">Kukura muchiKristu</string>
     <string name="tool_category_training">Kudzidza</string>
     <!-- Sharing -->
-    <string name="share_general_message">Chinongedzo chichakusvitsa kune zvatiri kutaura nezvazvo nhasi: %1$s 
+    <string name="share_general_message">Chinongedzo chichakusvitsa kune zvatiri kutaura nezvazvo nhasi: %1$s \n\n
 
-
-
-App yacho inogona kuwanikwa kubva pa https://godtoolsapp.com
-
-
+App yacho inogona kuwanikwa kubva pa https://godtoolsapp.com \n\n
 
 Ngatitaurei zvizhinji!</string>
 </resources>

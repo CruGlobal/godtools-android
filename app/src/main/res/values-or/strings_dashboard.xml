@@ -19,17 +19,18 @@
     <string name="menu_copyright">କପିରାଇଟ୍</string>
     <string name="share_story_subject">GodTools କାହାଣୀ |</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <string name="nav_favorite_tools">ପସନ୍ଦଗୁଡ଼ିକ</string>
-    <string name="tools_list_remove_favorite_dialog_title">" %1$s ପସନ୍ଦଗୁଡ଼ିକରୁ ଅପସାରଣ କରନ୍ତୁ?"</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">ଅପସାରଣ କରନ୍ତୁ</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">ବାତିଲ୍ କରନ୍ତୁ</string>
     <string name="tools_list_favorites_banner_text">ହୃଦୟ ଆଇକନ୍ ଟ୍ୟାପ୍ କରି ଅଫଲାଇନ୍ ରେ ଏକ ଉପକରଣ ଉପଲବ୍ଧ କରନ୍ତୁ ଯାହାକି ଏହାକୁ ଆପଣଙ୍କ ପସନ୍ଦଗୁଡ଼ିକରେ ଯୋଡିଥାଏ |</string>
     <string name="tools_list_favorites_banner_action_dismiss">ବାତିଲ୍ କରନ୍ତୁ</string>
     <!-- All Tools -->
     <string name="nav_all_tools">ସମସ୍ତ ଉପକରଣ</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
+    <string name="dashboard_tools_section_categories_all">ସମସ୍ତ ଉପକରଣ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">" %1$s ପସନ୍ଦଗୁଡ଼ିକରୁ ଅପସାରଣ କରନ୍ତୁ?"</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ଅପସାରଣ କରନ୍ତୁ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ବାତିଲ୍ କରନ୍ତୁ</string>
     <string name="action_tools_about">ବିଷୟ</string>
     <string name="action_tools_open">ଖୋଲନ୍ତୁ</string>
+    <!-- Parallel Language Dialog -->
 </resources>

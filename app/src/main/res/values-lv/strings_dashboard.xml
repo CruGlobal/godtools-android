@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_general">Vispārīgi</string>
+    <string name="menu_heading_account">Konts</string>
+    <string name="menu_heading_share">Dalies</string>
+    <string name="menu_heading_legal">Juridiskie paziņojumi (angļu val.)</string>
+    <string name="menu_about">Par lietotni</string>
+    <string name="menu_help">Biežāk uzdotie jautājumi</string>
+    <string name="menu_contact_us">Sazinies ar mums</string>
+    <string name="menu_tutorial">Pamācība</string>
+    <string name="menu_login">Pierakstīties</string>
+    <string name="menu_signup">Reģistrēt kontu</string>
+    <string name="menu_logout">Izrakstīties</string>
+    <string name="menu_share_godtools">Kopīgo \'GodTools\' lietotni</string>
+    <string name="menu_share_story">Pastāsti savu liecību</string>
+    <string name="menu_terms_of_use">Lietošanas noteikumi</string>
+    <string name="menu_privacy_policy">Privātuma politika</string>
+    <string name="menu_copyright">Informācija par autortiesībām</string>
+    <string name="share_story_subject">\'GodTools\' liecība</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Nodarbības</string>
+    <string name="dashboard_lessons_header_title">Nodarbības, kas pielāgotas tev</string>
+    <string name="dashboard_lessons_header_description">Praktiskas idejas attiecību veidošanai un nozīmīgu sarunu uzsākšanai.</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">Izlase</string>
+    <string name="dashboard_home_header_title">Sveiki!</string>
+    <string name="dashboard_home_section_featured_lesson">Piedāvātā nodarbība</string>
+    <string name="dashboard_home_section_favorites_title">Tava rīku izlase</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Nav iecienīto rīku, ko parādīt</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Nospiežot sirds ikonu, rīks tiks pievienots izlasei un būs pieejams bezsaistē.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Skatīt visus &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Skatīt rīkus</string>
+    <string name="tools_list_favorites_banner_text">Padari rīku pieejamu bezsaistē, nospiežot sirds ikonu, lai pievienotu to izlasei.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Aizvērt</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Rīki</string>
+    <string name="dashboard_tools_section_categories_label">Kategorijas</string>
+    <string name="dashboard_tools_section_categories_all">Visi rīki</string>
+    <string name="dashboard_tools_section_spotlight_label">Izmēģini rīku</string>
+    <string name="dashboard_tools_section_spotlight_description">Lūk, daži rīki, kas tev varētu patikt</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Izņemt \"%1$s\" no izlases?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Izņemt</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Atcelt</string>
+    <string name="tool_card_label_language_unavailable">Nav pieejams %1$s valodā</string>
+    <string name="action_tools_about">Apraksts</string>
+    <string name="action_tools_open">Atvērt</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Vai vēlies iestatīt paralēlo valodu?</string>
+    <string name="languages_parallel_dialog_select">Izvēlies valodu</string>
+    <string name="languages_parallel_dialog_action_start">Sākt</string>
+    <string name="languages_parallel_dialog_action_cancel">Nē, paldies</string>
+</resources>

@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">ເປີດເຄື່ອງມື</string>
     <string name="action_tools_add_favorite">ເພີ່ມໃສ່ລາຍການທີ່ມັກ</string>
     <string name="action_tools_remove_favorite">ລືບອອກຈາກລາຍການທີ່ມັກ</string>
+    <string name="action_tools_open_training">ຮຽນຮູ້ໃນການແບ່ງປັນເຄື່ອງມື</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d ຮັບຊົມ</item>
     </plurals>
@@ -12,4 +13,7 @@
     <plurals name="label_tools_languages">
         <item quantity="other">" %1$,d ພາສາ"</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">ພາສາທີ່ນຳໃຊ້ໄດ້</string>
+    <string name="tool_details_section_variants_label">ເວີຊັ່ນ</string>
+    <string name="tool_details_section_variants_description">ເລືອກເວີຊັ່ນອື່ນຂອງເຄື່ອງມືທີ່ຢູ່ຂ້າງລຸ່ມນີ້. ແຕ່ລະເວີຊັ່ນມີຮູບແບບ ແລະ ເນື້ອໃນທີ່ເປັນເອກະລັກ ສະນັ້ນ ທ່ານຈິ່ງສາມາດຄົ້ນຫາເວີຊັ່ນທີ່ເຫັນວ່າເໝາະສົມກັບການສົນທະນາຂອງຕົນໄດ້ຫຼາຍທີ່ສຸດ. ທ່ານຍັງສາມາດຕັ້ງເປັນລາຍການທີ່ມັກໄດ້ຫຼາຍເວີຊັ່ນຂອງເຄື່ອງມືດຽວກັນໄດ້.</string>
 </resources>

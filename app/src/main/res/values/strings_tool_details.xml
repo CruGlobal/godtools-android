@@ -18,5 +18,5 @@
     </plurals>
     <string name="tool_details_section_description_languages_available">Languages available</string>
     <string name="tool_details_section_variants_label">Versions</string>
-    <string name="tool_details_section_variants_description">Versions offer a different style of the same basic tool for various audiences. Select a version to view details.</string>
+    <string name="tool_details_section_variants_description">Choose a different version of this tool below. Each version features unique style and content so you can find the one that is best for your conversation. You can favorite multiple versions of the same tool.</string>
 </resources>

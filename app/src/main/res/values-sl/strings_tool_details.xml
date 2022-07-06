@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Odpri orodje</string>
     <string name="action_tools_add_favorite">Dodaj med priljubljene</string>
     <string name="action_tools_remove_favorite">Odstrani iz priljubljenih</string>
+    <string name="action_tools_open_training">Naučite se deliti to orodje</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ogled</item>
         <item quantity="other">%1$,d ogledov</item>
@@ -18,4 +19,7 @@
         <item quantity="few">%1$,d jezikov</item>
         <item quantity="two">%1$,d jezika</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Jeziki na voljo</string>
+    <string name="tool_details_section_variants_label">Različice</string>
+    <string name="tool_details_section_variants_description">Spodaj izberite drugo različico tega orodja. Vsaka različica ima edinstven slog in vsebino, zato lahko izberete tisto, ki je najprimernejša za vaš pogovor. Izberete lahko več različic istega orodja.</string>
 </resources>

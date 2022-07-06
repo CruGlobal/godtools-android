@@ -11,9 +11,9 @@
     <string name="tutorial_onboarding_share_headline">Bantu seseorang menemukan Yesus</string>
     <string name="tutorial_onboarding_share_subhead">GodTools adalah panduan Anda untuk mengomunikasikan Injil dengan cara yang jelas dan relevan.</string>
     <string name="tutorial_onboarding_links_headline">Tautan mulai cepat</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Saya ingin menjelajahi agama Kristen</string>
-    <string name="tutorial_onboarding_links_articles_action">Baca artikel kami</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Saya ingin belajar tentang melakukan percakapan Injil</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Saya ingin mengenal agama Kristen</string>
+    <string name="tutorial_onboarding_links_articles_action">Baca artikel-artikel kami</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Saya ingin belajar melakukan percakapan Injil</string>
     <string name="tutorial_onboarding_links_lessons_action">Coba Pelajaran kami</string>
     <string name="tutorial_onboarding_links_tools_subhead">Saya ingin membagikan Injil dengan seseorang</string>
     <string name="tutorial_onboarding_links_tools_action">Pilih salah satu alat kami</string>

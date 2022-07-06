@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">आफ्नो स्क्रिन साझा गर्नुहोस्</string>
+    <string name="tutorial_live_share_description_text">यो विकल्पले साथीलाई यो  टुलको लिङ्क पठाउनेछ। लिङ्क खोल्दा यसले स्क्रिन साझेदारी सत्र सुरु गर्नेछ।</string>
+    <string name="tutorial_live_share_mirrored_headline">प्रतिबिम्बित अनुभव</string>
+    <string name="tutorial_live_share_mirrored_text">तपाईले आफ्नो फोनमा टुल स्क्रोल गर्दा, तपाईको साथीको स्क्रिनले त्यसरी नै प्रतिक्रिया दिनेछ। यसले तपाईलाई एकै समयमा 2 वटा यन्त्रहरूमा सँगै एउटा उपकरण मार्फत जान अनुमति दिन्छ।</string>
+    <string name="tutorial_live_share_start_headline">सुरु गर्नुहोस्</string>
+    <string name="tutorial_live_share_start_text">अब स्क्रिन साझेदारी सत्र सुरु गर्न एक वा धेरै व्यक्तिहरूलाई लिङ्क पठाउनुहोस्।</string>
+    <string name="tutorial_live_share_action_continue">जारी राख्नुहोस्</string>
+    <string name="tutorial_live_share_action_skip">छोड्नुहोस्</string>
+    <string name="tutorial_live_share_action_start">लिङ्क साझा गर्नुहोस्</string>
+</resources>

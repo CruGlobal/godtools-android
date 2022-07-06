@@ -30,11 +30,11 @@
     <eat-comment />
     <string name="nav_favorite_tools">Favorites</string>
     <string name="dashboard_home_header_title">Welcome to GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Featured Lesson</string>
+    <string name="dashboard_home_section_featured_lesson">Featured lesson</string>
     <string name="dashboard_home_section_favorites_title">Your favorite tools</string>
     <string name="dashboard_home_section_favorites_no_tools_title">No favorite tools to display</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Tap on the heart icon to favorite a tool and make it available offline.</string>
-    <string name="dashboard_home_section_favorites_action_view_all">View all ></string>
+    <string name="dashboard_home_section_favorites_action_view_all">View all &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">Go to Tools</string>
     <string name="tools_list_favorites_banner_text">Make a tool available offline by tapping the heart icon which adds it to your favorites.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Dismiss</string>

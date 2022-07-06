@@ -15,4 +15,7 @@
         <item quantity="one">%1$,d భాష</item>
         <item quantity="other">%1$,d భాషలు</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">అందుబాటులో ఉన్న భాషలు</string>
+    <string name="tool_details_section_variants_label">వర్షన్స్</string>
+    <string name="tool_details_section_variants_description">దిగువన ఉన్న ఈ సాధనం యొక్క వేరొక వర్షన్‌ను ఎంచుకోండి. ప్రతి వర్షన్‌ ప్రత్యేక శైలి మరియు కంటెంట్‌ను కలిగి ఉంటుంది కాబట్టి మీరు మీ సంభాషణకు ఉత్తమమైనదాన్ని కనుగొనవచ్చు. మీరు ఒకే సాధనం యొక్క బహుళ వర్షన్‌లను ఇష్టపడవచ్చు.</string>
 </resources>

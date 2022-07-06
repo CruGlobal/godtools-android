@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">Expérience miroir</string>
     <string name="tutorial_live_share_mirrored_text">Lorsque vous faites défiler l\'outil sur votre téléphone, l\'écran de votre ami fera la même chose. Ceci vous permet d\'explorer un outil ensemble sur 2 appareils à la fois.</string>
     <string name="tutorial_live_share_start_headline">Commencer</string>
-    <string name="tutorial_live_share_start_text">Envoyez le lien à une personne ou plus pour débuter une session de partage d\'écran maintenant.
-
-Cette expérience nécessite présentement que tous les participants aient l\'application GodTools sur leur appareil.</string>
+    <string name="tutorial_live_share_start_text">Envoyez le lien à une personne ou plus pour débuter une session de partage d\'écran maintenant.</string>
     <string name="tutorial_live_share_action_continue">Continuer</string>
     <string name="tutorial_live_share_action_skip">Sauter</string>
     <string name="tutorial_live_share_action_start">Partagez un lien</string>

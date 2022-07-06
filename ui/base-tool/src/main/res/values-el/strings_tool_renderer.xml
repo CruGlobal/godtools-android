@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s απαιτείται</string>
     <string name="tract_content_input_error_invalid_email">Παρακαλώ εισάγετε έγκυρη διεύθυνση email</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Συμβουλές εξάσκησης</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Κοινοποίηση</string>
+    <string name="tool_share_sheet_more_apps">Περισσότερα</string>
+    <string name="share_tool_message_article">Ήθελα να μοιραστώ αυτό το άρθρο μαζί σας και θα ήθελα να ακούσω τις σκέψεις σας για αυτό.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Μοιραστείτε έναν σύνδεσμο</string>
     <string name="feature_discovery_desc_share_tool">Στείλτε αυτό το εργαλείο σε έναν φίλο πατώντας πάνω στο εικονίδιο</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Κοινή χρήση εικόνας</string>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Apprenez à partager cet outil avec n\'importe qui</string>
+    <string name="tutorial_tips_learn_text">Entraînez-vous à utiliser autant de conseils que nécessaire pour vous sentir en confiance et partager cet outil avec d\'autres personnes.</string>
+    <string name="tutorial_tips_light_headline">Des conseils pour éclairer le chemin</string>
+    <string name="tutorial_tips_light_text1">Sur certains écrans, vous verrez une variété d\'icônes. Appuyez sur l\'icône pour révéler une astuce qui vous aidera à parler du contenu de l\'écran.</string>
+    <string name="tutorial_tips_light_text2">"Pour les écrans sans conseils, nous vous recommandons de lire le contenu et d'en discuter si nécessaire. "</string>
+    <string name="tutorial_tips_start_headline">Illuminez les conseils</string>
+    <string name="tutorial_tips_start_text">Lorsqu\'un conseil s\'allume, vous avez terminé la formation en question. Il n\'est pas nécessaire d\'utiliser chaque conseil dans chaque conversation.</string>
+    <string name="tutorial_tips_action_continue">Continuer</string>
+    <string name="tutorial_tips_action_skip">Sauter</string>
+    <string name="tutorial_tips_action_start">Début de la formation</string>
+</resources>

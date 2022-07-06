@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_title">Mans konts</string>
+    <string name="menu_profile">Globālā aktivitāte</string>
+    <!-- Global Activity -->
+    <string name="profile_tab_activity">Aktivitāte</string>
+    <string name="profile_global_activity_heading">%s no globālās aktivitātes</string>
+    <string name="profile_activity_unique_users">Unikālie
+lietotāji</string>
+    <string name="profile_activity_gospel_presentations">Labās vēsts
+prezentācijas</string>
+    <string name="profile_activity_sessions">Sesijas</string>
+    <string name="profile_activity_countries">Valstis</string>
+</resources>

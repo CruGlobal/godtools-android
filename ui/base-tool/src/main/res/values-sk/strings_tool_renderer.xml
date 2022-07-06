@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">Vyžaduje sa %1$s</string>
     <string name="tract_content_input_error_invalid_email">Zadajte platnú e-mailovú adresu</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Tipy k školeniam</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Zdieľanie</string>
+    <string name="tool_share_sheet_more_apps">Viac</string>
+    <string name="share_tool_message_article">Chcem sa s vami podeliť o tento článkom a zaujíma ma, aký naň máte názor.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Zdieľajte odkaz</string>
     <string name="feature_discovery_desc_share_tool">Kliknite na túto ikonu a pošlite tento nástroj priateľovi</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Zdieľať obrázok</string>
 </resources>

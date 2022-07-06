@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_install">Installera</string>
+    <string name="menu_share_tract">Skicka detta verktyg</string>
+    <string name="tract_card_previous">Bakåt</string>
+    <string name="tract_card_next">Nästa</string>
+    <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Dela din skärm</string>
+    <string name="menu_live_share_active">Skärmdelning pågår</string>
+    <string name="share_tool_message_tract_live_share">Hej, följ mig i GodTools via delad skärm. Här är länken: %1$s\n\nOm du får detta meddelande försent fungerar kanske inte länken. I så fall kan vi prova igen någon annan gång.</string>
+    <string name="tract_live_share_starting">Startar skärmdelning…</string>
+    <string name="tract_live_share_unable_to_connect">Det går inte att ansluta till skärmdelningsfunktionen</string>
+    <string name="tract_live_share_exit_dialog_message">Vill du avsluta fjärrdelningssessionen nu?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Avsluta</string>
+    <string name="tract_live_share_exit_dialog_cancel">Avbryt</string>
+    <!-- Settings -->
+    <string name="menu_settings">Inställningar</string>
+    <string name="tract_settings_title">Verktygsalternativ</string>
+    <string name="tract_settings_action_share">Dela länk</string>
+    <string name="tract_settings_action_tips_disable">Göm tips</string>
+    <string name="tract_settings_languages_title">Parallellt språk</string>
+    <string name="tract_settings_languages_description">Växla mellan två olika språk med det här verktyget.</string>
+    <string name="tract_settings_languages_parallel">Parallellt</string>
+    <string name="tract_settings_languages_none">Ingen</string>
+    <string name="tract_settings_shareables_title">Relevant grafiskt material</string>
+</resources>
