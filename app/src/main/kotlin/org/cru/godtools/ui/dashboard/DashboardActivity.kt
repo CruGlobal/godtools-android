@@ -211,7 +211,7 @@ class DashboardActivity :
         super.isFeatureDiscoveryVisible() || isParallelLanguageDialogVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.FAVORITE_TOOLS
+        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.HOME
         FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }
