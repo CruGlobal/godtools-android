@@ -6,8 +6,10 @@
     <data>
         <import type="androidx.databinding.ObservableField"/>
         <import type="androidx.lifecycle.LiveData"/>
-        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
         <import type="java.util.Locale" />
+        <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="org.cru.godtools.R" />
 
         <variable name="category" type="String" />
         <variable name="selectedCategory" type="LiveData&lt;String>" />
@@ -34,7 +36,7 @@
             android:gravity="start|top"
             android:minLines="2"
             android:lines="2"
-            android:text="@{category != null ? ModelUtils.getToolCategoryName(category, context, primaryLanguage) : @string/dashboard_tools_section_categories_all}"
+            android:text="@{category != null ? ModelUtils.getToolCategoryName(category, context, primaryLanguage) : ContextKt.getString(context, primaryLanguage, R.string.dashboard_tools_section_categories_all)}"
             android:textColor="@{selectedCategory == null || selectedCategory == category ? @color/gray_5A : @color/gray_97, default=@color/gray_5A}"
             android:textStyle="bold"
             tools:text="@string/tool_category_conversation_starter" />
