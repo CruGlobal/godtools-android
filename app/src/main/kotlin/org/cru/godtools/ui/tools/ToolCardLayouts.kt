@@ -326,22 +326,23 @@ private fun ToolName(
         style = style,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
+        modifier = modifier
+            .invisibleIf { translation.isInitial }
+            .minLinesHeight(minLines = minLines, textStyle = style)
     )
 }
 
 @Composable
 private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-
     val context = LocalContext.current
-    val locale by remember { derivedStateOf { firstTranslation.value?.languageCode } }
+    val tool by viewModel.tool.collectAsState()
+    val translation by viewModel.firstTranslation.collectAsState()
+    val locale by remember { derivedStateOf { translation.value?.languageCode } }
 
     Text(
         tool.getCategory(context, locale),
         style = toolCategoryStyle,
         maxLines = 1,
-        modifier = modifier
+        modifier = modifier.invisibleIf { translation.isInitial }
     )
 }
