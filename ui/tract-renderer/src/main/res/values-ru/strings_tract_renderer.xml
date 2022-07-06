@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Выход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмена</string>
     <!-- Settings -->
+    <string name="menu_settings">Настройки</string>
+    <string name="tract_settings_title">Параметры инструмента</string>
+    <string name="tract_settings_action_share">Поделитесь ссылкой</string>
+    <string name="tract_settings_action_tips_disable">Скрыть подсказки</string>
+    <string name="tract_settings_languages_title">Дополнительный язык</string>
+    <string name="tract_settings_languages_description">Переключайтесь между двумя языками в этом инструменте.</string>
+    <string name="tract_settings_languages_parallel">Дополнительно</string>
+    <string name="tract_settings_languages_none">Нет</string>
+    <string name="tract_settings_shareables_title">Связанные изображения</string>
 </resources>

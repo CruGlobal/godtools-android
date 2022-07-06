@@ -19,21 +19,36 @@
     <string name="menu_copyright">ਕਾਪੀਰਾਈਟ</string>
     <string name="share_story_subject">ਗੌਡਟੂਲਜ਼ ਸਟੋਰੀ</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">ਸਬਕ</string>
+    <string name="dashboard_lessons_header_title">ਤੁਹਾਡੇ ਲਈ ਬਣਾਏ ਗਏ ਸਬਕ</string>
+    <string name="dashboard_lessons_header_description">ਰਿਸ਼ਤੇ ਬਣਾਉਣ ਅਤੇ ਅਰਥਪੂਰਨ ਗੱਲਬਾਤ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਵਿਹਾਰਕ ਵਿਚਾਰ।</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">ਮਨਪਸੰਦ</string>
-    <string name="tools_list_remove_favorite_dialog_title">ਮਨਪਸੰਦਾਂ ਤੋਂ \"%1$s\" ਨੂੰ ਹਟਾਉਣਾ ਹੈ?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">ਹਟਾਓ</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">ਰੱਦ ਕਰੋ</string>
+    <string name="dashboard_home_header_title">GodTools ਵਿੱਚ ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ</string>
+    <string name="dashboard_home_section_featured_lesson">ਫੀਚਰਡ ਸਬਕ</string>
+    <string name="dashboard_home_section_favorites_title">ਤੁਹਾਡੇ ਮਨਪਸੰਦ ਟੂਲ</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">ਪ੍ਰਦਰਸ਼ਿਤ ਕਰਨ ਲਈ ਕੋਈ ਮਨਪਸੰਦ ਟੂਲ ਨਹੀਂ ਹਨ</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">ਕਿਸੇ ਟੂਲ ਨੂੰ ਮਨਪਸੰਦ ਬਣਾਉਣ ਲਈ ਹਾਰਟ ਆਈਕਨ \'ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਇਸਨੂੰ ਔਫਲਾਈਨ ਉਪਲਬਧ ਕਰਾਓ।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">ਸਭ ਦੇਖੋ &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ਟੂਲਸ \'ਤੇ ਜਾਓ</string>
     <string name="tools_list_favorites_banner_text">ਦਿਲ ਦੇ ਆਈਕਨ ਨੂੰ ਟੈਪ ਕਰਕੇ ਇੱਕ ਟੂਲ ਨੂੰ ਔਫਲਾਈਨ ਉਪਲੱਬਧ ਕਰੋ ਜੋ ਇਸਨੂੰ ਤੁਹਾਡੇ ਮਨਪਸੰਦ ਵਿੱਚ ਜੋੜਦਾ ਹੈ।</string>
     <string name="tools_list_favorites_banner_action_dismiss">ਬਰਖਾਸਤ ਕਰੋ</string>
     <!-- All Tools -->
     <string name="nav_all_tools">ਸਾਰੇ ਟੂਲ</string>
+    <string name="dashboard_tools_section_categories_label">ਸ਼੍ਰੇਣੀਆਂ</string>
+    <string name="dashboard_tools_section_categories_all">ਸਾਰੇ ਟੂਲ</string>
+    <string name="dashboard_tools_section_spotlight_label">ਟੂਲ ਸਪੌਟਲਾਈਟ</string>
+    <string name="dashboard_tools_section_spotlight_description">ਇੱਥੇ ਕੁਝ ਟੂਲ ਹਨ ਜੋ ਅਸੀਂ ਸੋਚਿਆ ਕਿ ਸ਼ਾਇਦ ਤੁਹਾਨੂੰ ਪਸੰਦ ਆਉਣ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">ਮਨਪਸੰਦਾਂ ਤੋਂ \"%1$s\" ਨੂੰ ਹਟਾਉਣਾ ਹੈ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ਹਟਾਓ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ਰੱਦ ਕਰੋ</string>
+    <string name="tool_card_label_language_unavailable">%1$s ਵਿੱਚ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
+    <string name="action_tools_about">ਵੇਰਵੇ</string>
+    <string name="action_tools_open">ਖੋਲੋ</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">ਕੀ ਤੁਸੀਂ ਇੱਕ ਸੈਕੰਡਰੀ ਭਾਸ਼ਾ ਸੈਟ ਕਰਨਾ ਚਾਹੋਗੇ?</string>
     <string name="languages_parallel_dialog_select">ਇੱਕ ਭਾਸ਼ਾ ਚੁਣੋ</string>
     <string name="languages_parallel_dialog_action_start">ਸ਼ੁਰੂ ਕਰੋ</string>
     <string name="languages_parallel_dialog_action_cancel">ਨਹੀਂ ਧੰਨਵਾਦ</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">ਇਸਦੇ ਬਾਰੇ</string>
-    <string name="action_tools_open">ਖੋਲੋ</string>
 </resources>

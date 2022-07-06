@@ -3,9 +3,9 @@
     <string name="toast_unable_to_launch_activity">Tidak bisa membuka %s</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">Undangan Injil</string>
-    <string name="tool_category_articles">Artikel</string>
-    <string name="tool_category_conversation_starter">Permulaan Percakapan</string>
-    <string name="tool_category_growth">Pertumbuhan Kristen</string>
+    <string name="tool_category_articles">Artikel-artikel</string>
+    <string name="tool_category_conversation_starter">Memulai Percakapan</string>
+    <string name="tool_category_growth">Pertumbuhan Iman Kristen</string>
     <string name="tool_category_training">Latihan</string>
     <!-- Sharing -->
     <string name="share_general_message">Tautan ini akan membawa Anda ke versi web tentang apa yang kami bicarakan hari ini: %1$s \n\n

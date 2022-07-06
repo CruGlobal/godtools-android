@@ -6,11 +6,14 @@
     <string name="tract_content_input_error_required">%1$s ची गरज आहे</string>
     <string name="tract_content_input_error_invalid_email">योग्य ई-मेल पत्ता टाका</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">प्रशिक्षण टिपा</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">"सांगा
        "</string>
+    <string name="tool_share_sheet_more_apps">अधिक</string>
     <string name="share_tool_message_article">मला हा लेख आपल्याबरोबर सामायिक करायचा आहे आणि त्याबद्दल आपले विचार ऐकायला आवडेल.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">लिंक पाठवा</string>
     <string name="feature_discovery_desc_share_tool">हे आयकाॅन क्लिक करून हे टूल एका मित्राला पाठवा</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">प्रतिमा सामायिक करा</string>
 </resources>

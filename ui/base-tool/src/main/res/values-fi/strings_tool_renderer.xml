@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s on välttämätön</string>
     <string name="tract_content_input_error_invalid_email">Anna voimassa oleva sähköpostiosoite</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Harjoitteluvinkit</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Jaa</string>
+    <string name="tool_share_sheet_more_apps">Lisää</string>
+    <string name="share_tool_message_article">Tahtoisin jakaa tämän artikkelin kanssasi ja kuulla mielipiteesi siitä.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Jaa linkki</string>
     <string name="feature_discovery_desc_share_tool">Lähetä tämä työkalu ystävälle tätä kuvaketta napsauttamalla</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Jaa kuva</string>
 </resources>

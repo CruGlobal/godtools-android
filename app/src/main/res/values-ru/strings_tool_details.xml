@@ -19,4 +19,7 @@
         <item quantity="few">%1$,d языка</item>
         <item quantity="many">%1$,d языков</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Доступные языки</string>
+    <string name="tool_details_section_variants_label">Версии</string>
+    <string name="tool_details_section_variants_description">Выберите другую версию инструмента ниже. Каждая версия отличается уникальным стилем и содержанием, поэтому вы можете найти ту, которая лучше всего подойдёт для вашего разговора. Вы можете добавить в избранное несколько версий одного инструмента.</string>
 </resources>

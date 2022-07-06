@@ -19,22 +19,37 @@
     <string name="menu_copyright">Hak Cipta</string>
     <string name="share_story_subject">Kisah GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Pengajaran</string>
+    <string name="dashboard_lessons_header_title">Pengajaran disediakan khusus untuk anda</string>
+    <string name="dashboard_lessons_header_description">Idea praktikal untuk membina hubungan dan memulakan perbualan yang bermakna.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Kegemaran</string>
-    <string name="tools_list_remove_favorite_dialog_title">Buang “%1$s” daripada Kegemaran?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Buang</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="dashboard_home_header_title">Selamat datang ke GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Pengajaran ditampilkan</string>
+    <string name="dashboard_home_section_favorites_title">Alat kegemaran anda</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Tiada alat kegemaran untuk dipaparkan</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Ketik ikon hati untuk menjadikan suatu alat kegemaran dan tersedia semasa luar talian.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Lihat semua &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Pergi ke Alat</string>
     <string name="tools_list_favorites_banner_text">"Menjadikan sesuatu alat tersedia semasa luar talian dengan mengetik pada ikon hati yang akan menambahkannya ke kegemaran anda.
 "</string>
     <string name="tools_list_favorites_banner_action_dismiss">Surai</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Semua Alat</string>
+    <string name="dashboard_tools_section_categories_label">Kategori</string>
+    <string name="dashboard_tools_section_categories_all">Semua Alat</string>
+    <string name="dashboard_tools_section_spotlight_label">Tumpuan Alat</string>
+    <string name="dashboard_tools_section_spotlight_description">Di sini adalah beberapa alat yang anda mungkin berminat</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Buang “%1$s” daripada Kegemaran?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Buang</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="tool_card_label_language_unavailable">Tidak tersedia dalam %1$s</string>
+    <string name="action_tools_about">Butiran</string>
+    <string name="action_tools_open">Buka</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Adakah anda ingin menetapkan bahasa kedua?</string>
     <string name="languages_parallel_dialog_select">Pilih bahasa</string>
     <string name="languages_parallel_dialog_action_start">Mulakan</string>
     <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Perihal</string>
-    <string name="action_tools_open">Buka</string>
 </resources>

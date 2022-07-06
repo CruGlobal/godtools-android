@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Keluar</string>
     <string name="tract_live_share_exit_dialog_cancel">Batal</string>
     <!-- Settings -->
+    <string name="menu_settings">Pengaturan</string>
+    <string name="tract_settings_title">Pilihan Sarana</string>
+    <string name="tract_settings_action_share">"Bagikan tautan "</string>
+    <string name="tract_settings_action_tips_disable">Sembunyikan saran</string>
+    <string name="tract_settings_languages_title">Bahasa Paralel</string>
+    <string name="tract_settings_languages_description">Sandingkan dua bahasa pada sarana ini</string>
+    <string name="tract_settings_languages_parallel">Paralel</string>
+    <string name="tract_settings_languages_none">Tidak ada</string>
+    <string name="tract_settings_shareables_title">Grafis yang berhubungan</string>
 </resources>

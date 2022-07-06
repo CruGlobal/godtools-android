@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Pievienot sākumlapai</string>
+    <string name="action_tools_open_tool">Atvērt rīku</string>
+    <string name="action_tools_add_favorite">Pievienot izlasei</string>
+    <string name="action_tools_remove_favorite">Izņemt no izlases</string>
+    <string name="action_tools_open_training">Iemācīties koplietot šo rīku</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d skatījums</item>
+        <item quantity="other">%1$,d skatījumi</item>
+        <item quantity="zero">%1$,d skatījumu</item>
+    </plurals>
+    <string name="label_tools_about">Par rīku</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d valoda</item>
+        <item quantity="other">%1$,d valodas</item>
+        <item quantity="zero">%1$,d valodu</item>
+    </plurals>
+    <string name="tool_details_section_description_languages_available">Atbalstītās valodas</string>
+    <string name="tool_details_section_variants_label">Rīka versijas</string>
+    <string name="tool_details_section_variants_description">Tālāk vari izvēlēties citu šī rīka versiju. Katrai versijai ir unikāls stils un saturs, lai tu varētu atrast savai sarunai vispiemērotāko. Vari pievienot izlasei vairākas viena un tā paša rīka versijas.</string>
+</resources>

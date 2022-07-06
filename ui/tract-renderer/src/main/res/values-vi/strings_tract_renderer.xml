@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Thoát</string>
     <string name="tract_live_share_exit_dialog_cancel">Hủy</string>
     <!-- Settings -->
+    <string name="menu_settings">Cài đặt</string>
+    <string name="tract_settings_title">Những lựa chọn</string>
+    <string name="tract_settings_action_share">Chia sẻ đường link</string>
+    <string name="tract_settings_action_tips_disable">Ẩn phần gợi ý</string>
+    <string name="tract_settings_languages_title">Ngôn ngữ song song</string>
+    <string name="tract_settings_languages_description">Chuyển đổi giữa 2 ngôn ngữ khác nhau trong công cụ này.</string>
+    <string name="tract_settings_languages_parallel">Song song</string>
+    <string name="tract_settings_languages_none">Không</string>
+    <string name="tract_settings_shareables_title">Hình ảnh tương ứng</string>
 </resources>

@@ -19,21 +19,36 @@
     <string name="menu_copyright">Autorska prava</string>
     <string name="share_story_subject">GodTools priča</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Lekcije</string>
+    <string name="dashboard_lessons_header_title">Lekcije osmišljene baš za vas</string>
+    <string name="dashboard_lessons_header_description">Praktične ideje kako izgraditi odnos i započeti smislene razgovore.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favoriti</string>
-    <string name="tools_list_remove_favorite_dialog_title">Ukloniti “%1$s” iz favorita?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Ukloni</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Odustani</string>
+    <string name="dashboard_home_header_title">Dobro došli u GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Izdvojena lekcija</string>
+    <string name="dashboard_home_section_favorites_title">Vaši omiljeni alati</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Nema omiljenih alata za prikaz</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Dodirnite ikonu srca za omiljeni alat i učinite ga dostupnim i izvan mreže.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Vidi sve &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Idi na alate</string>
     <string name="tools_list_favorites_banner_text">Alat vam može biti raspoloživ i izvan mreže, samo dodirnite ikonu srca koja ga dodaje u vaše favorite.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Odbaci</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Svi alati</string>
+    <string name="dashboard_tools_section_categories_label">Kategorije</string>
+    <string name="dashboard_tools_section_categories_all">Svi alati</string>
+    <string name="dashboard_tools_section_spotlight_label">Naglašavanje alata</string>
+    <string name="dashboard_tools_section_spotlight_description">Evo neki od alata koji bi vam se mogli sviđati</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Ukloniti “%1$s” iz favorita?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Ukloni</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Odustani</string>
+    <string name="tool_card_label_language_unavailable">Nije dosutpno u %1$s</string>
+    <string name="action_tools_about">Pojedinosti</string>
+    <string name="action_tools_open">Otvori</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Želite li postaviti drugi jezik?</string>
     <string name="languages_parallel_dialog_select">Odaberite jezik</string>
     <string name="languages_parallel_dialog_action_start">Započnite</string>
     <string name="languages_parallel_dialog_action_cancel">Ne, hvala</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">O nama</string>
-    <string name="action_tools_open">Otvori</string>
 </resources>

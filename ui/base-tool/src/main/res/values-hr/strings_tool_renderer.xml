@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s  je obvezno</string>
     <string name="tract_content_input_error_invalid_email">Unesite valjanu adresu e-pošte</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Savjeti za učenje</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Podijeli</string>
+    <string name="tool_share_sheet_more_apps">Više</string>
+    <string name="share_tool_message_article">Želim podijeliti ovaj članak s tobom i bilo bi mi izuzetno drago čuti što ti misliš o njemu.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Podijeli vezu</string>
     <string name="feature_discovery_desc_share_tool">Pošalji ovaj alat prijatelju klikom na ikonu</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Podijeli sliku</string>
 </resources>

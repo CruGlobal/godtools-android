@@ -19,21 +19,36 @@
     <string name="menu_copyright">著作権</string>
     <string name="share_story_subject">神とのストーリーを聞いてみましょう。</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">レッスン</string>
+    <string name="dashboard_lessons_header_title">あなた専用のレッスン</string>
+    <string name="dashboard_lessons_header_description">信頼関係を築き、意義のある会話を始めるための実践的なアイデアです。</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">お気に入り</string>
-    <string name="tools_list_remove_favorite_dialog_title">お気に入りから『%1$s』を削除しますか？</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">削除</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">キャンセル</string>
+    <string name="dashboard_home_header_title">GodToolsへようこそ</string>
+    <string name="dashboard_home_section_featured_lesson">注目のレッスン</string>
+    <string name="dashboard_home_section_favorites_title">お気に入りのツール</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">表示できるお気に入りのツールはありません</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">ハートアイコンをタップしてツールをお気に入りに追加し、オフラインでも使用できるようにしましょう。</string>
+    <string name="dashboard_home_section_favorites_action_view_all">すべて表示 &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ツールに移動</string>
     <string name="tools_list_favorites_banner_text">ハートアイコンをタップすると、お気に入りに追加され、オフラインで利用できるようになります。</string>
     <string name="tools_list_favorites_banner_action_dismiss">閉じる</string>
     <!-- All Tools -->
     <string name="nav_all_tools">すべてのツール</string>
+    <string name="dashboard_tools_section_categories_label">カテゴリー</string>
+    <string name="dashboard_tools_section_categories_all">すべてのツール</string>
+    <string name="dashboard_tools_section_spotlight_label">注目のツール</string>
+    <string name="dashboard_tools_section_spotlight_description">あなたにおすすめのツールです</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">お気に入りから『%1$s』を削除しますか？</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">削除</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">キャンセル</string>
+    <string name="tool_card_label_language_unavailable">%1$sではご利用いただけません</string>
+    <string name="action_tools_about">詳細</string>
+    <string name="action_tools_open">開く</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">第二言語を設定しますか？</string>
     <string name="languages_parallel_dialog_select">言語を選択</string>
     <string name="languages_parallel_dialog_action_start">開始する</string>
     <string name="languages_parallel_dialog_action_cancel">いいえ、結構です</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">情報</string>
-    <string name="action_tools_open">開く</string>
 </resources>

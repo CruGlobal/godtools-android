@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tutorial_features_tools_headline">OUTILS</string>
+    <string name="tutorial_features_tools_subhead">Chaque outil est conçu pour une étape différente de la conversation - avant, pendant ou après.</string>
+    <string name="tutorial_features_tips_headline">Conseils pour les outils</string>
+    <string name="tutorial_features_tips_subhead">Les conseils de GodTools vous guident lorsque vous aidez quelqu\'un à comprendre l\'Évangile et à rencontrer Jésus.</string>
+    <string name="tutorial_features_live_share_headline">Partage d\'écran</string>
+    <string name="tutorial_features_live_share_subhead">Vous pouvez désormais partager votre écran à distance afin que l\'autre personne puisse suivre l\'utilisation d\'un outil pour discuter de l\'Évangile.</string>
+    <string name="tutorial_features_lessons_headline">Leçons</string>
+    <string name="tutorial_features_lessons_subhead">Dans chaque leçon GodTools, vous apprenez quelque chose qui vous aidera à avoir de vraies conversations sur Dieu.</string>
     <string name="tutorial_features_final_headline">Ce tutoriel peut être consulté à nouveau depuis le menu</string>
     <string name="tutorial_features_action_continue">Continuer</string>
     <string name="tutorial_features_action_close">Commencez à utiliser GodTools</string>

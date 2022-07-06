@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">باز کردن ابزار</string>
     <string name="action_tools_add_favorite">افزودن به موارد دلخواه</string>
     <string name="action_tools_remove_favorite">حذف از موارد دلخواه</string>
+    <string name="action_tools_open_training">یادگیری اشتراک‌گذاری این ابزار</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d مشاهده</item>
         <item quantity="other">%1$,d مشاهده</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d زبان</item>
         <item quantity="other">%1$,d زبان</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">زبان‌های موجود</string>
+    <string name="tool_details_section_variants_label">نسخه‌ها</string>
+    <string name="tool_details_section_variants_description">نسخه‌ای دیگر از این ابزار را در زیر انتخاب کنید. هر نسخه دارای محتوا و سبک منحصربه‌فردی است، بنابراین می‌توانید بهترین نسخه برای گفت‌وگوی خود را انتخاب کنید. می‌توانید چندین نسخه از یک ابزار را در موردعلاقه‌های خود قرار دهید.</string>
 </resources>

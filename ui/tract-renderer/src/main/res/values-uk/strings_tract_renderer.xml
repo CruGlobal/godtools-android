@@ -6,6 +6,7 @@
     <string name="tract_card_next">Далі</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Поділитися екраном</string>
+    <string name="menu_live_share_active">Увімкнена демонстрація екрана</string>
     <string name="share_tool_message_tract_live_share">Вітаю! Зайдіть у програму GodTools, щоб бачити мій екран за посиланням: %1$s\n\nЯкщо ви пізно отримали це повідомлення, посилання може бути застарілим. Спробуймо іншим разом.</string>
     <string name="tract_live_share_starting">Розпочинається демонстрація екрану...</string>
     <string name="tract_live_share_unable_to_connect">Помилка підключення до демонстрації екрану</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Закінчити</string>
     <string name="tract_live_share_exit_dialog_cancel">Скасувати</string>
     <!-- Settings -->
+    <string name="menu_settings">Налаштування</string>
+    <string name="tract_settings_title">Параметри інструмента</string>
+    <string name="tract_settings_action_share">Поширте посилання</string>
+    <string name="tract_settings_action_tips_disable">Приховати підказки</string>
+    <string name="tract_settings_languages_title">Додаткова мова</string>
+    <string name="tract_settings_languages_description">Перемикайтесь між двома мовами у цьому інструменті.</string>
+    <string name="tract_settings_languages_parallel">Додатково</string>
+    <string name="tract_settings_languages_none">Немає</string>
+    <string name="tract_settings_shareables_title">Пов\'язані зображення</string>
 </resources>

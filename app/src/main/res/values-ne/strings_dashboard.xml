@@ -20,12 +20,36 @@
     <string name="menu_copyright">कॉपीराइट</string>
     <string name="share_story_subject">गडटुल स्टोरी</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">पाठ</string>
+    <string name="dashboard_lessons_header_title">तपाईको लागि बनाइएको पाठ</string>
+    <string name="dashboard_lessons_header_description">सम्बन्ध निर्माण गर्न र अर्थपूर्ण कुराकानी सुरु गर्न व्यावहारिक विचार।</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">मनपर्ने</string>
+    <string name="dashboard_home_header_title">GodTools मा स्वागत छ</string>
+    <string name="dashboard_home_section_featured_lesson">विशेष पाठ</string>
+    <string name="dashboard_home_section_favorites_title">तपाईको मनपर्ने टुल</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">प्रदर्शन गर्न मनपर्ने टुल छैनन्</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">कुनै टुल मनपर्ने र यसलाई अफलाइन उपलब्ध गराउन हृदय आइकनमा ट्याप गर्नुहोस्।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">सबै हेर्नुहोस् &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">टुलमा जानुहोस्</string>
+    <string name="tools_list_favorites_banner_text">तपाईको मनपर्नेमा थप्ने मुटु आइकनमा ट्याप गरेर अफलाइन उपलब्ध उपकरण बनाउनुहोस्।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">खारेज गर्नुहोस्</string>
     <!-- All Tools -->
+    <string name="nav_all_tools">सबै उपकरण</string>
+    <string name="dashboard_tools_section_categories_label">"श्रेणी "</string>
+    <string name="dashboard_tools_section_categories_all">सबै टुल</string>
+    <string name="dashboard_tools_section_spotlight_label">टुल स्पटलाइट</string>
+    <string name="dashboard_tools_section_spotlight_description">यहाँ केहि टुलहरू छन् जुन हामीले तपाईलाई मन पर्न सक्छ भन्ने सोचेका छौं</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">मनपर्नेबाट \"%1$s\" हटाउने हो?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">हटाउनुहोस्</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द गर्नुहोस्</string>
+    <string name="tool_card_label_language_unavailable">%1$s मा उपलब्ध छैन</string>
+    <string name="action_tools_about">विवरण</string>
+    <string name="action_tools_open">खोल्नुहोस्</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">के तपाईले माध्यमिक भाषा सेट गर्न चाहन्नुहुन्छ?</string>
     <string name="languages_parallel_dialog_select">भाषा छनौट गर्नुहोस्</string>
     <string name="languages_parallel_dialog_action_start">सरू गर्नुहोस्</string>
     <string name="languages_parallel_dialog_action_cancel">होइन धन्यवाद</string>
-    <!-- Tools List -->
 </resources>

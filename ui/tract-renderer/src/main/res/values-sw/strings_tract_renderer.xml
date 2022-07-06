@@ -6,6 +6,7 @@
     <string name="tract_card_next">Ifuatayo</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Onyeshana skrini yako</string>
+    <string name="menu_live_share_active">Kuonyesha Skrini Kumetumika</string>
     <string name="share_tool_message_tract_live_share">Jambo, Fuatana na mimi kwenye GodTools kupitia kuchangia kupitia skrini.\nKiungo ni hiki: %1$s\n\nKama hutapokea ujumbe huu hadi baadaye, kiungo kinaweza kukosa kufanya kazi. Tunaweza kujaribu wakati mwingine.</string>
     <string name="tract_live_share_starting">Anza Kuchangia kupitia kuonyesha Skrini...</string>
     <string name="tract_live_share_unable_to_connect">Imeshindwa kuunganisha kwa Kuchangia kupitia Skrini</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Ondoka</string>
     <string name="tract_live_share_exit_dialog_cancel">Ghairi</string>
     <!-- Settings -->
+    <string name="menu_settings">Mipangilio</string>
+    <string name="tract_settings_title">Chaguo za Zana</string>
+    <string name="tract_settings_action_share">Sambaza kiungo</string>
+    <string name="tract_settings_action_tips_disable">Ficha vidolezo</string>
+    <string name="tract_settings_languages_title">Lugha Sambamba</string>
+    <string name="tract_settings_languages_description">Gura kati ya lugha mbili tofauti kwenye zana hii.</string>
+    <string name="tract_settings_languages_parallel">Sambamba</string>
+    <string name="tract_settings_languages_none">Hakuna</string>
+    <string name="tract_settings_shareables_title">Michoro inayohusiana</string>
 </resources>

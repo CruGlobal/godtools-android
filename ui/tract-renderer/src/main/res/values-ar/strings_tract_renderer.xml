@@ -6,6 +6,7 @@
     <string name="tract_card_next">التالي</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">مشاركة الشاشة</string>
+    <string name="menu_live_share_active">مشاركة الشاشة نشطة</string>
     <string name="share_tool_message_tract_live_share">مرحباً، تابعني في GodTools عبر مشاركة الشاشة. إليك الرابط: %1$s\n\nإذا لم تتلق هذه الرسالة حتى وقت لاحق، فقد لا يعمل الرابط. يمكننا المحاولة مرة أخرى في وقت آخر.</string>
     <string name="tract_live_share_starting">بدء مشاركة الشاشة جارٍ...</string>
     <string name="tract_live_share_unable_to_connect">تعذر الاتصال بمشاركة الشاشة</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">إلغاء</string>
     <!-- Settings -->
+    <string name="menu_settings">الإعدادات</string>
+    <string name="tract_settings_title">خيارات الأداة</string>
+    <string name="tract_settings_action_share">مشاركة الرابط</string>
+    <string name="tract_settings_action_tips_disable">إخفاء النصائح</string>
+    <string name="tract_settings_languages_title">اللغة الموازية</string>
+    <string name="tract_settings_languages_description">قم بالتبديل بين لغتين مختلفتين في هذه الأداة.</string>
+    <string name="tract_settings_languages_parallel">الموازية</string>
+    <string name="tract_settings_languages_none">لا شيء</string>
+    <string name="tract_settings_shareables_title">الرسومات ذات الصلة</string>
 </resources>

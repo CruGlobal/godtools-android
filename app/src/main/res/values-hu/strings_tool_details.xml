@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Eszköz megnyitása</string>
     <string name="action_tools_add_favorite">Hozzáadás Kedvencekhez</string>
     <string name="action_tools_remove_favorite">Eltávolítás Kedvencek közül</string>
+    <string name="action_tools_open_training">Ismerd meg az eszközmegosztást</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d megtekintés</item>
         <item quantity="other">%1$,d megtekintés</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d nyelv</item>
         <item quantity="other">%1$,d nyelv</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Elérhető nyelvek</string>
+    <string name="tool_details_section_variants_label">Verziók</string>
+    <string name="tool_details_section_variants_description">Válaszd ki alább az eszköz egy másik verzióját. Mindegyik változat egyedi stílusú és tartalmú, így megtalálhatod a beszélgetéshez legmegfelelőbbet. Ugyanannak az eszköznek több verzióját is kedvencévé teheted.</string>
 </resources>

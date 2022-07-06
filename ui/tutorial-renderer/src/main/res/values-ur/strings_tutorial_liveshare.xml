@@ -6,9 +6,9 @@
     <string name="tutorial_live_share_mirrored_headline">عکسی تجربہ</string>
     <string name="tutorial_live_share_mirrored_text">جب آپ اپنے فون پر ٹول کو سکرول کرتے ہیں تو آپ کے دوست کی سکرین بھی اسی طرح ردعمل ظاہر کرے گی۔ یہ آپ کو ایک ہی وقت میں 2 آلات پر ایک ٹول میں سے اکٹھے گزرنے کی سہولت دیتا ہے۔</string>
     <string name="tutorial_live_share_start_headline">شروع کریں</string>
-    <string name="tutorial_live_share_start_text">ابھی سکرین شیئرنگ سیشن شروع کرنے کے لیے ایک یا زیادہ افراد کو ربط ارسال کریں۔
+    <string name="tutorial_live_share_start_text">"ابھی مشترک سکرین اجلاس شروع کرنے کے لیے ایک یا زیادہ لوگوں کو لنک بھیجیں۔
 
-اس وقت اس تجربے کے لیے ضروری ہے کہ تمام شرکاء کے پاس اپنے آلے میں GodTools ایپ ڈاؤن لوڈ کی گئی ہو۔</string>
+"</string>
     <string name="tutorial_live_share_action_continue">جاری</string>
     <string name="tutorial_live_share_action_skip">چھوڑیں</string>
     <string name="tutorial_live_share_action_start">ایک لنک شیئر کریں</string>

@@ -19,21 +19,36 @@
     <string name="menu_copyright">Tekijänoikeudet</string>
     <string name="share_story_subject">GodTools-tarina</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Oppitunnit</string>
+    <string name="dashboard_lessons_header_title">Sinulle tehdyt oppitunnit</string>
+    <string name="dashboard_lessons_header_description">Käteviä ideoita kanssakäymisen luontiin ja merkityksellisten keskustelujen aloittamiseen.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Suosikit</string>
-    <string name="tools_list_remove_favorite_dialog_title">Poistetaanko “%1$s” suosikeista?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Poista</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Peruuta</string>
+    <string name="dashboard_home_header_title">Tervetuloa GodToolsiin</string>
+    <string name="dashboard_home_section_featured_lesson">Tämänkertainen oppitunti</string>
+    <string name="dashboard_home_section_favorites_title">Suosikkityökalusi</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Ei näytettäviä suosikkityökaluja</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Napauta sydänkuvaketta merkitäksesi työkalun suosikiksi ja tuodaksesi sen käytettäväksi offline-tilassa.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Näytä kaikki &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Siirry työkaluihin</string>
     <string name="tools_list_favorites_banner_text">Ota työkalu käyttöön offline-tilassa sydänkuvaketta napauttamalla, jolloin se lisätään suosikkeihisi.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Hylkää</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Kaikki työkalut</string>
+    <string name="dashboard_tools_section_categories_label">Kategoriat</string>
+    <string name="dashboard_tools_section_categories_all">Kaikki työkalut</string>
+    <string name="dashboard_tools_section_spotlight_label">Työkalujen valokeila</string>
+    <string name="dashboard_tools_section_spotlight_description">Tässä on työkaluja, joista saattaisit pitää</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Poistetaanko “%1$s” suosikeista?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Poista</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Peruuta</string>
+    <string name="tool_card_label_language_unavailable">Ei kielellä: %1$s</string>
+    <string name="action_tools_about">Lisätietoja</string>
+    <string name="action_tools_open">Avaa</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Haluatko määrittää toissijaisen kielen?</string>
     <string name="languages_parallel_dialog_select">Valitse kieli</string>
     <string name="languages_parallel_dialog_action_start">Aloittaminen</string>
     <string name="languages_parallel_dialog_action_cancel">Ei kiitos</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Info</string>
-    <string name="action_tools_open">Avaa</string>
 </resources>

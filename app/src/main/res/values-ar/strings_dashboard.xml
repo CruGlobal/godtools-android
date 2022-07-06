@@ -19,21 +19,36 @@
     <string name="menu_copyright">حق النشر والتأليف</string>
     <string name="share_story_subject">قصة GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">الدروس</string>
+    <string name="dashboard_lessons_header_title">الدروس المُعدة لأجلك</string>
+    <string name="dashboard_lessons_header_description">أفكار عملية لبناء علاقات وبدء محادثات هادفة.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">المفضلة</string>
-    <string name="tools_list_remove_favorite_dialog_title">إزالة “%1$s” من المفضلة؟</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>
+    <string name="dashboard_home_header_title">مرحبًا بك في GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">الدرس المميّز</string>
+    <string name="dashboard_home_section_favorites_title">أدواتك المفضلة</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">لا توجد أدوات مفضلة للعرض</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">اضغط على أيقونة القلب لتقوم بتفضيل أداة وجعلها متاحة في وضع عدم الاتصال.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">مشاهدة الكل &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ذهاب إلى الأدوات</string>
     <string name="tools_list_favorites_banner_text">اجعل الأداة متوفرة في وضع عدم الاتصال عبر النقر على أيقونة القلب الذي يضيفها إلى المفضلة.</string>
     <string name="tools_list_favorites_banner_action_dismiss">تجاهل</string>
     <!-- All Tools -->
     <string name="nav_all_tools">كل الأدوات</string>
+    <string name="dashboard_tools_section_categories_label">الفئات</string>
+    <string name="dashboard_tools_section_categories_all">كل الأدوات</string>
+    <string name="dashboard_tools_section_spotlight_label">تسليط الضوء على الأداة</string>
+    <string name="dashboard_tools_section_spotlight_description">إليك بعض الأدوات التي نعتقد أنها قد تنال إعجابك</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">إزالة “%1$s” من المفضلة؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>
+    <string name="tool_card_label_language_unavailable">غير متاحة في غضون %1$s</string>
+    <string name="action_tools_about">التفاصيل</string>
+    <string name="action_tools_open">فتح</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">هل ترغب في تعيين لغة ثانوية؟</string>
     <string name="languages_parallel_dialog_select">تحديد اللغة</string>
     <string name="languages_parallel_dialog_action_start">ابدأ</string>
     <string name="languages_parallel_dialog_action_cancel">لا شكراً</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">حول</string>
-    <string name="action_tools_open">فتح</string>
 </resources>

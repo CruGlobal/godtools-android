@@ -19,21 +19,36 @@
     <string name="menu_copyright">Авторське право</string>
     <string name="share_story_subject">Історія GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Уроки</string>
+    <string name="dashboard_lessons_header_title">Уроки, створені для вас</string>
+    <string name="dashboard_lessons_header_description">Практичні ідеї для побудови відносин і початку змістовних розмов.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Улюблене</string>
-    <string name="tools_list_remove_favorite_dialog_title">Вилучити «%1$s» з улюбленого?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Вилучити</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Скасувати</string>
+    <string name="dashboard_home_header_title">Вітаємо у GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Рекомендований урок</string>
+    <string name="dashboard_home_section_favorites_title">Ваші вибрані інструменти</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Немає вибраних інструментів</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Торкніться значка серця, щоб додати інструмент у вибране й зробити його доступним у режимі офлайн.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Переглянути все &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">До інструментів</string>
     <string name="tools_list_favorites_banner_text">Інструмент буде доступним у режимі офлайн, якщо торкнутись значка серця. Його буде додано до улюбленого.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Закрити</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Усі інструменти</string>
+    <string name="dashboard_tools_section_categories_label">Категорії</string>
+    <string name="dashboard_tools_section_categories_all">Усі інструменти</string>
+    <string name="dashboard_tools_section_spotlight_label">Огляд інструментів</string>
+    <string name="dashboard_tools_section_spotlight_description">Вам можуть сподобатися ці інструменти</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Вилучити «%1$s» з улюбленого?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Вилучити</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Скасувати</string>
+    <string name="tool_card_label_language_unavailable">Не доступно %1$s</string>
+    <string name="action_tools_about">Відомості</string>
+    <string name="action_tools_open">Відкрити</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Хочете встановити додаткову мову?</string>
     <string name="languages_parallel_dialog_select">Оберіть мову</string>
     <string name="languages_parallel_dialog_action_start">Розпочати</string>
     <string name="languages_parallel_dialog_action_cancel">Ні, дякую</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Про</string>
-    <string name="action_tools_open">Відкрити</string>
 </resources>

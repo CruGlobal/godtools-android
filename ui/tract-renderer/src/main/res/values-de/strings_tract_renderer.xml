@@ -6,11 +6,21 @@
     <string name="tract_card_next">Weiter</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Teile deinen Bildschirm</string>
-    <string name="share_tool_message_tract_live_share">Hallo! Folge mir in GodTools über die Bildschirmfreigabe. Hier ist der Link: %1$s \n\nWenn du diese Nachricht erst später erhältst, funktioniert der Link möglicherweise nicht mehr. Wir können es zu einem anderen Zeitpunkt erneut versuchen.</string>
+    <string name="menu_live_share_active">Bildschirmfreigabe aktiv</string>
+    <string name="share_tool_message_tract_live_share">Hallo, folge mir in GodTools über die Bildschirmfreigabe. Hier ist der Link: %1$s \n\nWenn du diese Nachricht erst später erhältst, funktioniert der Link vielleicht nicht mehr. Wir können es ein andermal erneut versuchen.</string>
     <string name="tract_live_share_starting">Bildschirmfreigabe wird gestartet…</string>
     <string name="tract_live_share_unable_to_connect">Keine Verbindung zur Bildschirmfreigabe</string>
     <string name="tract_live_share_exit_dialog_message">Fernfreigabe-Sitzung jetzt beenden?</string>
     <string name="tract_live_share_exit_dialog_confirm">Beenden</string>
     <string name="tract_live_share_exit_dialog_cancel">Abbrechen</string>
     <!-- Settings -->
+    <string name="menu_settings">Einstellungen</string>
+    <string name="tract_settings_title">Tool-Optionen</string>
+    <string name="tract_settings_action_share">Link teilen</string>
+    <string name="tract_settings_action_tips_disable">Tipps ausblenden</string>
+    <string name="tract_settings_languages_title">Zweite Sprache</string>
+    <string name="tract_settings_languages_description">Wechsle zwischen zwei verschiedenen Sprachen in diesem Tool.</string>
+    <string name="tract_settings_languages_parallel">Parallel</string>
+    <string name="tract_settings_languages_none">Keine</string>
+    <string name="tract_settings_shareables_title">Verwandte Grafiken</string>
 </resources>

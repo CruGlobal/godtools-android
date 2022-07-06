@@ -2,11 +2,13 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Almennt</string>
+    <string name="menu_heading_account">Reikningur</string>
     <string name="menu_heading_share">Deila</string>
     <string name="menu_heading_legal">Lagaleg atriði</string>
     <string name="menu_about">Um</string>
     <string name="menu_help">Algengar spurningar</string>
     <string name="menu_contact_us">Hafa samband við okkur</string>
+    <string name="menu_tutorial">Kennsluefni</string>
     <string name="menu_login">Innskrá</string>
     <string name="menu_signup">Búa til aðgang</string>
     <string name="menu_logout">Útskrá</string>
@@ -15,19 +17,39 @@
     <string name="menu_terms_of_use">Notkunarskilmálar</string>
     <string name="menu_privacy_policy">Persónuverndarstefna</string>
     <string name="menu_copyright">Höfundarréttur</string>
-    <string name="share_story_subject">Heyrðu hvernig Guð ferðast!</string>
+    <string name="share_story_subject">Saga GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Námsefni</string>
+    <string name="dashboard_lessons_header_title">Námefni gert fyrir þig</string>
+    <string name="dashboard_lessons_header_description">Góðar hugmyndir til að skapa tengsl og hefja meiningarfullar samræður.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Uppáhalds</string>
-    <string name="tools_list_remove_favorite_dialog_title">Fjarlægja \"%1$s\" úr Uppáhalds?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Fjarlægja</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Hætta við</string>
+    <string name="dashboard_home_header_title">Velkomin(n) til GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Vinsælt námsefni</string>
+    <string name="dashboard_home_section_favorites_title">Þín uppáhaldstól</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Engin uppáhaldstól til að birta</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Snertu hjartatáknið til að setja tólið í uppáhald og gera það
+tiltækt án netsambands.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Skoða allt &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Fara í tól</string>
     <string name="tools_list_favorites_banner_text">Gera tól tiltækt án netsambands með því að ýta á hjartatáknið sem bætir því við þitt uppáhald.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Hafna</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Öll tól</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
-    <string name="action_tools_about">Um</string>
+    <string name="dashboard_tools_section_categories_label">Flokkar</string>
+    <string name="dashboard_tools_section_categories_all">Öll tól</string>
+    <string name="dashboard_tools_section_spotlight_label">Áhugaverð tól</string>
+    <string name="dashboard_tools_section_spotlight_description">Hér eru nokkur tól sem við höldum að þér líki</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Fjarlægja \"%1$s\" úr Uppáhalds?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Fjarlægja</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Hætta við</string>
+    <string name="tool_card_label_language_unavailable">Ekki tiltækt í %1$s</string>
+    <string name="action_tools_about">Ítaratriði</string>
     <string name="action_tools_open">Opna</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Viltu setja upp annað samhliða tungumál?</string>
+    <string name="languages_parallel_dialog_select">Veldu tungumál</string>
+    <string name="languages_parallel_dialog_action_start">Hefjast handa</string>
+    <string name="languages_parallel_dialog_action_cancel">Nei takk</string>
 </resources>

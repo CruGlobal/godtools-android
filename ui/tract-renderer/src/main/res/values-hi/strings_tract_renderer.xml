@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">बाहर निकलें</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करें</string>
     <!-- Settings -->
+    <string name="menu_settings">सेटिंग्स</string>
+    <string name="tract_settings_title">टूल विकल्प</string>
+    <string name="tract_settings_action_share">लिंक साझा करें</string>
+    <string name="tract_settings_action_tips_disable">सुझाव छिपाएँ</string>
+    <string name="tract_settings_languages_title">समानांतर भाषा</string>
+    <string name="tract_settings_languages_description">इस टूल द्वारा दो अलग-अलग भाषाओं के बीच स्विच करें।</string>
+    <string name="tract_settings_languages_parallel">समानांतर</string>
+    <string name="tract_settings_languages_none">कोई नहीं</string>
+    <string name="tract_settings_shareables_title">संबंधित ग्राफिक्स</string>
 </resources>

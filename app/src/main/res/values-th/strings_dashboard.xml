@@ -19,21 +19,36 @@
     <string name="menu_copyright">ลิขสิทธิ์</string>
     <string name="share_story_subject">เรื่องราวของ GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">บทเรียน</string>
+    <string name="dashboard_lessons_header_title">บทเรียนที่สร้างมาเพื่อคุณ</string>
+    <string name="dashboard_lessons_header_description">แนวคิดเชิงปฏิบัติเพื่อสร้างความสัมพันธ์และเริ่มต้นบทสนทนาที่มีความหมาย</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">รายการโปรด</string>
-    <string name="tools_list_remove_favorite_dialog_title">ลบ “%1$s\" จากรายการโปรด</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">ลบ</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">ยกเลิก</string>
+    <string name="dashboard_home_header_title">ยินดีต้อนรับสู่ GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">บทเรียนแนะนำ</string>
+    <string name="dashboard_home_section_favorites_title">เครื่องมือโปรดของคุณ</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">ไม่มีเครื่องมือโปรดที่จะแสดง</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">แตะที่ไอคอนรูปหัวใจเพื่อตั้งเป็นเครื่องมือโปรดและตั้งค่าให้ใช้งานแบบออฟไลน์ได้</string>
+    <string name="dashboard_home_section_favorites_action_view_all">ดูทั้งหมด &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ไปที่เครื่องมือ</string>
     <string name="tools_list_favorites_banner_text">ทำให้เครื่องมือพร้อมใช้งานแบบออฟไลน์โดยแตะที่ไอคอนรูปหัวใจเพื่อเพิ่มไว้ในรายการโปรดของคุณ</string>
     <string name="tools_list_favorites_banner_action_dismiss">ยกเลิก</string>
     <!-- All Tools -->
     <string name="nav_all_tools">เครื่องมือทั้งหมด</string>
+    <string name="dashboard_tools_section_categories_label">หมวดหมู่</string>
+    <string name="dashboard_tools_section_categories_all">เครื่องมือทั้งหมด</string>
+    <string name="dashboard_tools_section_spotlight_label">เครื่องมือโดดเด่น</string>
+    <string name="dashboard_tools_section_spotlight_description">นี่คือเครื่องมือที่เราคิดว่าคุณอาจชอบ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">ลบ “%1$s\" จากรายการโปรด</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ลบ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ยกเลิก</string>
+    <string name="tool_card_label_language_unavailable">ไม่พร้อมใช้งานได้ใน %1$s</string>
+    <string name="action_tools_about">รายละเอียด</string>
+    <string name="action_tools_open">เปิด</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">คุณต้องการตั้งค่าภาษารองหรือไม่</string>
     <string name="languages_parallel_dialog_select">เลือกภาษา</string>
     <string name="languages_parallel_dialog_action_start">เริ่มต้นใช้งาน</string>
     <string name="languages_parallel_dialog_action_cancel">ไม่ ขอบคุณ</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">เกี่ยวกับ</string>
-    <string name="action_tools_open">เปิด</string>
 </resources>

@@ -6,11 +6,21 @@
     <string name="tract_card_next">Další</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Sdílet obrazovku</string>
-    <string name="share_tool_message_tract_live_share">Zdravím, pojďte sledovat prostřednictvím sdílení obrazovky v GodTools. Tady je odkaz: %1$s\n\nPokud vám tato zpráva přijde později, odkaz už nemusí fungovat. Můžeme to zkusit znovu jindy.</string>
+    <string name="menu_live_share_active">Sdílení obrazovky je aktivní</string>
+    <string name="share_tool_message_tract_live_share">Zdravím, pojď se mnou sledovat prostřednictvím sdílení obrazovky v GodTools. Tady je odkaz: %1$s\n\nPokud vám tato zpráva přijde později, odkaz už nemusí fungovat. Můžeme to zkusit znovu jindy.</string>
     <string name="tract_live_share_starting">Zahájit sdílení obrazovky...</string>
     <string name="tract_live_share_unable_to_connect">Nepodařilo se připojit ke sdílení obrazovky</string>
     <string name="tract_live_share_exit_dialog_message">Ukončit nyní vzdálené sdílení?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ukončit</string>
     <string name="tract_live_share_exit_dialog_cancel">Zrušit</string>
     <!-- Settings -->
+    <string name="menu_settings">Nastavení</string>
+    <string name="tract_settings_title">Možnosti nástroje</string>
+    <string name="tract_settings_action_share">Sdílet odkaz</string>
+    <string name="tract_settings_action_tips_disable">Skrýt tipy</string>
+    <string name="tract_settings_languages_title">Paralelní jazyk</string>
+    <string name="tract_settings_languages_description">Přepnout mezi dvěma různými jazyky v tomto nástroji.</string>
+    <string name="tract_settings_languages_parallel">Paralelní</string>
+    <string name="tract_settings_languages_none">Žádný</string>
+    <string name="tract_settings_shareables_title">Související grafika</string>
 </resources>

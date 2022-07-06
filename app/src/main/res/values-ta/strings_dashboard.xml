@@ -19,17 +19,18 @@
     <string name="menu_copyright">பதிப்புரிமை</string>
     <string name="share_story_subject">GodTools கதை</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <string name="nav_favorite_tools">பிடித்தவை</string>
-    <string name="tools_list_remove_favorite_dialog_title">பிடித்தவைகளிலிருந்து “%1$s” ஐ அகற்றவா?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">அகற்று</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">ரத்துசெய்</string>
     <string name="tools_list_favorites_banner_text">உங்கள் விருப்பங்களில் சேர்க்கும் இதய ஐகானைத் தட்டுவதன் மூலம் ஒரு கருவியை ஆஃப்லைனில் கிடைக்கும்.</string>
     <string name="tools_list_favorites_banner_action_dismiss">நிராகரி</string>
     <!-- All Tools -->
     <string name="nav_all_tools">அனைத்து கருவிகள்</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
+    <string name="dashboard_tools_section_categories_all">அனைத்து கருவிகள்</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">பிடித்தவைகளிலிருந்து “%1$s” ஐ அகற்றவா?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">அகற்று</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ரத்துசெய்</string>
     <string name="action_tools_about">பற்றி</string>
     <string name="action_tools_open">திற</string>
+    <!-- Parallel Language Dialog -->
 </resources>

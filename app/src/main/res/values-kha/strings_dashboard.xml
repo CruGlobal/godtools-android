@@ -19,12 +19,12 @@
     <string name="menu_copyright">ষ্বত্বাধিকার</string>
     <string name="share_story_subject">GodTools গল্প</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <!-- All Tools -->
+    <!-- Tool Cards -->
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">আপনি কি একটি মাধ্যমিক ভাষা সেট করতে চাইবেন?</string>
     <string name="languages_parallel_dialog_select">একটি ভাষা বেছে নিন</string>
     <string name="languages_parallel_dialog_action_start">শুরু করুন</string>
     <string name="languages_parallel_dialog_action_cancel">না ধন্যবাদ</string>
-    <!-- Tools List -->
 </resources>

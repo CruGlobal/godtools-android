@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Opna tól</string>
     <string name="action_tools_add_favorite">Bæta við Uppáhald</string>
     <string name="action_tools_remove_favorite">Fjarlægja frá Uppáhaldi</string>
+    <string name="action_tools_open_training">Lærðu að deila þessu tóli</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d skoðun</item>
         <item quantity="other">%1$,d skoðanir</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d Tungumál</item>
         <item quantity="other">%1$,d Tungumál</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Tiltæk tungumál</string>
+    <string name="tool_details_section_variants_label">Útgáfur</string>
+    <string name="tool_details_section_variants_description">Veldu aðra útgáfu af þessu tóli hér fyrir neðan. Hver útgáfa hefur einstakan stíl og innihald, svo þú getir fundið þá sem best hentar þínu samtali. Þú getur átt margar uppáhaldsútgáfur af sama tóli.</string>
 </resources>

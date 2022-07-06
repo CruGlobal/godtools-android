@@ -19,21 +19,36 @@
     <string name="menu_copyright">Autorské právo</string>
     <string name="share_story_subject">Príbeh GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Lekcie</string>
+    <string name="dashboard_lessons_header_title">Lekcie vytvorené pre vás</string>
+    <string name="dashboard_lessons_header_description">Praktické nápady, ako rozvíjať vzťahy a viesť zmysluplné konverzácie.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Obľúbené</string>
-    <string name="tools_list_remove_favorite_dialog_title">Odstrániť položku %1$s z Obľúbených?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Odstrániť</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušiť</string>
+    <string name="dashboard_home_header_title">Víta vás aplikácia GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Odporúčaná lekcia</string>
+    <string name="dashboard_home_section_favorites_title">Vaše obľúbené nástroje</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Žiadne obľúbené nástroje na zobrazenie</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Ťuknutím na ikonu srdiečka označíte nástroj ako obľúbený a sprístupníte ho offline.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Zobraziť všetko &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Prejsť na nástroje</string>
     <string name="tools_list_favorites_banner_text">Sprístupnite nástroj offline ťuknutím na ikonu srdiečka, čím sa pridá medzi vaše obľúbené.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Zavrieť</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Všetky nástroje</string>
+    <string name="dashboard_tools_section_categories_label">Kategórie</string>
+    <string name="dashboard_tools_section_categories_all">Všetky nástroje</string>
+    <string name="dashboard_tools_section_spotlight_label">Výber nástrojov</string>
+    <string name="dashboard_tools_section_spotlight_description">Tu nájdete niektoré nástroje, o ktorých sa domnievame, že by sa vám mohli páčiť</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Odstrániť položku %1$s z Obľúbených?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Odstrániť</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Zrušiť</string>
+    <string name="tool_card_label_language_unavailable">Nedostupné v jazyku %1$s</string>
+    <string name="action_tools_about">Podrobnosti</string>
+    <string name="action_tools_open">Otvoriť</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Chcete si nastaviť vedľajší jazyk?</string>
     <string name="languages_parallel_dialog_select">Vyberte jazyk</string>
     <string name="languages_parallel_dialog_action_start">Začať</string>
     <string name="languages_parallel_dialog_action_cancel">Nie, ďakujem</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">O nás</string>
-    <string name="action_tools_open">Otvoriť</string>
 </resources>

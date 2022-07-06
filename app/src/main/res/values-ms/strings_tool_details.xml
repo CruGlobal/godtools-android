@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Buka Alat</string>
     <string name="action_tools_add_favorite">Tambah ke Kegemaran</string>
     <string name="action_tools_remove_favorite">Buang daripada Kegemaran</string>
+    <string name="action_tools_open_training">Belajar untuk berkongsi alat ini</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d Melihat</item>
     </plurals>
@@ -12,4 +13,7 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Bahasa</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Bahasa tersedia</string>
+    <string name="tool_details_section_variants_label">Versi</string>
+    <string name="tool_details_section_variants_description">Pilih versi yang berbeza untuk alat ini di bawah. Setiap versi menampilkan gaya dan kandungan yang unik agar anda dapat menemui versi yang paling sesuai untuk perbualan anda. Anda boleh menjadikan alat yang sama dalam pelbagai versi sebagai kegemaran.</string>
 </resources>

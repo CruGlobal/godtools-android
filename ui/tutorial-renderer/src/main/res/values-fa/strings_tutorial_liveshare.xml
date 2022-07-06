@@ -6,7 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">تجربه انعکاسی</string>
     <string name="tutorial_live_share_mirrored_text">زمانی که ابزار را در تلفنتان پیمایش می‌کنید، صفحه دوستتان به همان صورت پاسخ خواهد داد. این امر به شما امکان می‌دهد تا از طریق یک ابزار روی 2 دستگاه در زمان یکسان پیش بروید.</string>
     <string name="tutorial_live_share_start_headline">شروع کنید</string>
-    <string name="tutorial_live_share_start_text">اکنون لینک را به یک یا چندین نفر برای شروع جلسه اشتراک‌گذاری صفحه ارسال کنید.</string>
+    <string name="tutorial_live_share_start_text">لینک را به یک یا چند نفر ارسال کنید تا نشست اشتراک‌گذاری صفحه همین الان شروع شود.</string>
     <string name="tutorial_live_share_action_continue">ادامه</string>
     <string name="tutorial_live_share_action_skip">ردکردن</string>
     <string name="tutorial_live_share_action_start">اشتراک‌گذاری یک پیوند</string>

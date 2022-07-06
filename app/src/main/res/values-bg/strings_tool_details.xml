@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Отворете инструмента</string>
     <string name="action_tools_add_favorite">Добави към любимите</string>
     <string name="action_tools_remove_favorite">Премахни от любимите</string>
+    <string name="action_tools_open_training">Научете как да споделяте това приложение</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Преглед</item>
         <item quantity="other">%1$,d Прегледи</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d език</item>
         <item quantity="other">%1$,d езика</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Достъпни езици</string>
+    <string name="tool_details_section_variants_label">Версии</string>
+    <string name="tool_details_section_variants_description">Изберете различна версия на приложението долу. Всяка версия има различен стил и съдържание, за да откриете най-подходящата за вашия разговор. Можете да имате повече от една любима версия на приложението.</string>
 </resources>

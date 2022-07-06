@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">"ຕ້ອງການ %1$s "</string>
     <string name="tract_content_input_error_invalid_email">ກະລຸນາໃສ່ອີເມວທີ່ຖືກຕ້ອງ</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">ເຄັດລັບການຝຶກອົບຮົມ</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ແບ່ງປັນ</string>
+    <string name="tool_share_sheet_more_apps">ເພີ່ມເຕີມ</string>
+    <string name="share_tool_message_article">ຂ້າພະເຈົ້າຕ້ອງການແບ່ງປັນບົດຄວາມນີ້ກັບທ່ານ ແລະ ຢາກໄດ້ຍິນຄຳຄິດເຫັນຂອງທ່ານກ່ຽວກັບເລື່ອງນີ້.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">ແບ່ງປັນລິ້ງ</string>
     <string name="feature_discovery_desc_share_tool">ສົ່ງເຄື່ອງມືນີ້ໄປໃຫ້ໝູ່ໂດຍການຄລິກໄອຄອນນີ້</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">ແບ່ງປັນຮູບພາບ</string>
 </resources>

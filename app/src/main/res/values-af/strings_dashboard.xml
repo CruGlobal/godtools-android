@@ -2,11 +2,13 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">Algemeen</string>
+    <string name="menu_heading_account">Rekening</string>
     <string name="menu_heading_share">Deel</string>
     <string name="menu_heading_legal">Wetlik</string>
     <string name="menu_about">Aangaande</string>
     <string name="menu_help">Veelgestelde vrae</string>
     <string name="menu_contact_us">Kontak ons</string>
+    <string name="menu_tutorial">Studieklas</string>
     <string name="menu_login">Meld aan</string>
     <string name="menu_signup">Skep rekening</string>
     <string name="menu_logout">Teken uit</string>
@@ -15,19 +17,38 @@
     <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
     <string name="menu_privacy_policy">Privaatheidsbeleid</string>
     <string name="menu_copyright">Kopiereg</string>
-    <string name="share_story_subject">Hoor hoe God beweeg!</string>
+    <string name="share_story_subject">GodTools-verhaal</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Lesse</string>
+    <string name="dashboard_lessons_header_title">Lesse vir jou gemaak</string>
+    <string name="dashboard_lessons_header_description">Praktiese idees om verhoudings te bou en betekenisvolle gesprekke te voer.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Gunstelinge</string>
-    <string name="tools_list_remove_favorite_dialog_title">Verwyder \"%1$s\" van Gunstelinge?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Verwyder</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselleer</string>
+    <string name="dashboard_home_header_title">Welkom by GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Les in die kollig</string>
+    <string name="dashboard_home_section_favorites_title">Jou gunsteling-gereedskap</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Geen gunsteling-gereedskap om te vertoon nie</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Tik op die hart-ikoon om dit ’n gunsteling gereedskap te maak wat vanlyn af beskikbaar is.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Besigtig almal&gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Gaan na Gereedskap</string>
     <string name="tools_list_favorites_banner_text">Maak \'n hulpmiddel beskikbaar wanneer jy van lyn af is deur op die hartikoon  te tik wat dit by jou gunstelinge voeg.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Laat gaan</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Alle hulpmiddels</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
-    <string name="action_tools_about">Aangaande</string>
+    <string name="dashboard_tools_section_categories_label">Kategorieë</string>
+    <string name="dashboard_tools_section_categories_all">Alle hulpmiddels</string>
+    <string name="dashboard_tools_section_spotlight_label">Gereedskap in die kollig</string>
+    <string name="dashboard_tools_section_spotlight_description">Hier is van die gereedskap wat ons dink jy van sal hou</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Verwyder \"%1$s\" van Gunstelinge?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Verwyder</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselleer</string>
+    <string name="tool_card_label_language_unavailable">Nie beskikbaar in %1$s</string>
+    <string name="action_tools_about">Besonderhede</string>
     <string name="action_tools_open">Maak oop</string>
+    <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">Sal jy graag ’n sekondêre taal wil instel?</string>
+    <string name="languages_parallel_dialog_select">Kies ’n taal</string>
+    <string name="languages_parallel_dialog_action_start">Kom ons begin</string>
+    <string name="languages_parallel_dialog_action_cancel">Nee dankie</string>
 </resources>

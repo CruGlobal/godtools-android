@@ -6,11 +6,21 @@
     <string name="tract_card_next">နောက်စာမျက်နှ</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">သင်၏မျက်နှာပြင်ကိုမျှဝေပါ</string>
-    <string name="share_tool_message_tract_live_share">မင်္ဂလာပါ၊ GodTools တွင် မျက်နှာပြင် မျှဝေခြင်းမှတစ်ဆင့် ကျွန်ုပ်နှင့်အတူ ပါဝင်ပါ။ လင့်ခ်- %1$s\n\nသင်သည် ခဏကြာသည်အထိ ဤမက်ဆေ့ချ်ကို မရရှိလျှင် လင့်ခ် အလုပ်မလုပ်သေးခြင်း ဖြစ်နိုင်သည်။ ကျွန်ုပ်တို့ နောက်တစ်ခါမှ ထပ်စမ်းကြည့်နိုင်ပါသည်။</string>
+    <string name="menu_live_share_active">မျက်နှာပြင် မျှဝေခြင်းကို အသုံးပြုနေသည်</string>
+    <string name="share_tool_message_tract_live_share">မင်္ဂလာပါ၊ မျက်နှာပြင် မျှဝေခြင်းမှတစ်ဆင့် ကျွန်ုပ်နှင့်အတူ GodTools တွင် ပါဝင်ပါ။ လင့်ခ်- %1$s\n\nသင်သည် ခဏကြာသည်အထိ ဤမက်ဆေ့ချ်ကို မရရှိလျှင် လင့်ခ် အလုပ်မလုပ်သေးခြင်း ဖြစ်နိုင်သည်။ ကျွန်ုပ်တို့ နောက်တစ်ခါမှ ထပ်စမ်းကြည့်နိုင်ပါသည်။</string>
     <string name="tract_live_share_starting">မျက်နှာပြင် မျှဝေခြင်း စတင်နေသည်…</string>
     <string name="tract_live_share_unable_to_connect">မျက်နှာပြင် မျှဝေခြင်းသို့ ချိတ်ဆက်၍ မရပါ</string>
     <string name="tract_live_share_exit_dialog_message">အဝေးမှ မျှဝေခြင်း အပိုင်းမှ ယခု ထွက်မလား။</string>
     <string name="tract_live_share_exit_dialog_confirm">ထွက်မည်</string>
     <string name="tract_live_share_exit_dialog_cancel">ပယ်ဖျက်မည်</string>
     <!-- Settings -->
+    <string name="menu_settings">ဆက်တင်များ</string>
+    <string name="tract_settings_title">ကိရိယာ ရွေးချယ်စရာများ</string>
+    <string name="tract_settings_action_share">လင့်ခ် မျှဝေရန်</string>
+    <string name="tract_settings_action_tips_disable">အကြံပြုချက်များ ဝှက်ရန်</string>
+    <string name="tract_settings_languages_title">ယှဉ်တွဲ အသုံးပြုနိုင်သော ဘာသာစကား</string>
+    <string name="tract_settings_languages_description">ဤကိရိယာတွင် ဘာသာစကားနှစ်ခုကြား ကူးပြောင်းပါ။</string>
+    <string name="tract_settings_languages_parallel">ယှဉ်တွဲ အသုံးပြုနိုင်သော</string>
+    <string name="tract_settings_languages_none">မရှိပါ</string>
+    <string name="tract_settings_shareables_title">သက်ဆိုင်ရာ ဂရပ်ဖစ်များ</string>
 </resources>

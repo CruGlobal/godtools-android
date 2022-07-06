@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Otwórz narzędzie</string>
     <string name="action_tools_add_favorite">Dodaj do ulubionych</string>
     <string name="action_tools_remove_favorite">Usuń z ulubionych</string>
+    <string name="action_tools_open_training">Naucz się dzielić tym narzędziem</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d odsłona</item>
         <item quantity="other">%1$,d odsłon</item>
@@ -18,4 +19,7 @@
         <item quantity="few">%1$,d języków</item>
         <item quantity="many">%1$,d języków</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Dostępne języki</string>
+    <string name="tool_details_section_variants_label">Wersje</string>
+    <string name="tool_details_section_variants_description">Poniżej możesz wybrać inną wersję tego narzędzia. Każda wersja charakteryzuje się unikalnym stylem i zawartością, więc możesz znaleźć tę, która najlepiej nadaje się do Twojej rozmowy. Możesz polubić wiele wersji tego samego narzędzia.</string>
 </resources>

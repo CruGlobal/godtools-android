@@ -6,11 +6,21 @@
     <string name="tract_card_next">下一頁</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">分享你的螢幕</string>
-    <string name="share_tool_message_tract_live_share">你好，歡迎與我一同在 GodTools 中參加螢幕分享會。連結為：%1$s\n\n如果你稍後才收到此訊息，該連結可能已經失效。我們可以改天再試一次。</string>
+    <string name="menu_live_share_active">開啟螢幕分享</string>
+    <string name="share_tool_message_tract_live_share">你好，歡迎透過 GodTools 螢幕分享和我一同學習。連結為：%1$s\n\n如果你稍後才收到此訊息，該連結可能已經失效。我們可以改天再試一次。</string>
     <string name="tract_live_share_starting">正在開始進行螢幕分享……</string>
     <string name="tract_live_share_unable_to_connect">無法連接到螢幕分享</string>
     <string name="tract_live_share_exit_dialog_message">確定要現在離開遠端分享會？</string>
     <string name="tract_live_share_exit_dialog_confirm">離開</string>
     <string name="tract_live_share_exit_dialog_cancel">取消</string>
     <!-- Settings -->
+    <string name="menu_settings">設定</string>
+    <string name="tract_settings_title">工具選項</string>
+    <string name="tract_settings_action_share">分享連結</string>
+    <string name="tract_settings_action_tips_disable">隱藏提示</string>
+    <string name="tract_settings_languages_title">同步語言</string>
+    <string name="tract_settings_languages_description">在此工具中切換兩種不同的語言。</string>
+    <string name="tract_settings_languages_parallel">同步</string>
+    <string name="tract_settings_languages_none">無</string>
+    <string name="tract_settings_shareables_title">相關圖形</string>
 </resources>

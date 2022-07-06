@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Изход</string>
     <string name="tract_live_share_exit_dialog_cancel">Отмяна</string>
     <!-- Settings -->
+    <string name="menu_settings">Настройки</string>
+    <string name="tract_settings_title">Възможности на приложението</string>
+    <string name="tract_settings_action_share">Споделяне на връзка</string>
+    <string name="tract_settings_action_tips_disable">Скриване на съвети</string>
+    <string name="tract_settings_languages_title">Още един език</string>
+    <string name="tract_settings_languages_description">Превключвайте между два езика с помощта на това приложение.</string>
+    <string name="tract_settings_languages_parallel">Още един</string>
+    <string name="tract_settings_languages_none">Нито един</string>
+    <string name="tract_settings_shareables_title">Свързани изображения</string>
 </resources>

@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">ٹول کھولیں</string>
     <string name="action_tools_add_favorite">پسندیدگان میں شامل کریں</string>
     <string name="action_tools_remove_favorite">پسندیدگان سے ہٹائیں</string>
+    <string name="action_tools_open_training">اس ٹول کو شیئر کرنا سیکھیں</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d وِیُو</item>
         <item quantity="other">%1$,d وِیُوز</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d زبان</item>
         <item quantity="other">%1$,d زبانیں</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">زبانیں دستیاب ہیں</string>
+    <string name="tool_details_section_variants_label">ورژنز</string>
+    <string name="tool_details_section_variants_description">ذیل میں اس ٹول کا ایک مختلف ورژن منتخب کریں۔ ہر ورژن میں منفرد انداز اور مواد ہوتا ہے تاکہ آپ اپنی گفتگو کے لیے سب سے بہتر تلاش کر سکیں۔ آپ ایک ہی ٹول کے متعدد ورژن پسند کر سکتے ہیں۔</string>
 </resources>

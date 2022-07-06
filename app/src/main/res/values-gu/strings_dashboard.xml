@@ -19,17 +19,18 @@
     <string name="menu_copyright">કોપિરાઇટ</string>
     <string name="share_story_subject">ઈશ્વર કેવી રીતે કાર્ય કરે છે તે સાંભળો! ગોડ ટુલ્સ વાર્તા</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <string name="nav_favorite_tools">મનપસંદ</string>
-    <string name="tools_list_remove_favorite_dialog_title">મનપસંદમાંથી \"%1s\" ને દૂર કરીએ?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">દૂર કરો</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">રદ કરો</string>
     <string name="tools_list_favorites_banner_text">હાર્ટ આઇકોનને ટેપ કરીને Tool ને ઓફ઼લાઇન ઉપલબ્ધ બનાવો જે તેને તમારા મનપસંદમાં ઉમેરે છે.</string>
     <string name="tools_list_favorites_banner_action_dismiss">કાઢી નાખો</string>
     <!-- All Tools -->
     <string name="nav_all_tools">બધા ટુલ્સ</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
+    <string name="dashboard_tools_section_categories_all">બધા ટુલ્સ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">મનપસંદમાંથી \"%1s\" ને દૂર કરીએ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">દૂર કરો</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">રદ કરો</string>
     <string name="action_tools_about">ના વિશે</string>
     <string name="action_tools_open">ખુલ્લું</string>
+    <!-- Parallel Language Dialog -->
 </resources>
