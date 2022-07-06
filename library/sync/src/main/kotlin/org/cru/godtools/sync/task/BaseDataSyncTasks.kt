@@ -75,6 +75,12 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
                 existingTools?.remove(it.id)
             }
         }
+        if (includes.include(Tool.JSON_DEFAULT_VARIANT)) {
+            tool.defaultVariant?.let {
+                storeTool(it, existingTools, includes.descendant(Tool.JSON_DEFAULT_VARIANT))
+                existingTools?.remove(it.id)
+            }
+        }
     }
     // endregion Tools
 

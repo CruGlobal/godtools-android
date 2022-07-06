@@ -30,8 +30,8 @@ private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
 
 private val API_GET_INCLUDES = arrayOf(
     Tool.JSON_ATTACHMENTS,
+    "${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}",
     "${Tool.JSON_LATEST_TRANSLATIONS}.${Translation.JSON_LANGUAGE}",
-    "${Tool.JSON_METATOOL}.${Tool.JSON_ATTACHMENTS}"
 )
 
 @Singleton
