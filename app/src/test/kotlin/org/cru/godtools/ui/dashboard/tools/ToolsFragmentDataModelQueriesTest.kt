@@ -63,7 +63,7 @@ class ToolsFragmentDataModelQueriesTest {
     fun `QUERY_TOOLS - return only default variants`() {
         val meta = createTool("meta") {
             type = Tool.Type.META
-            defaultVariant = "variant2"
+            defaultVariantCode = "variant2"
         }
         val variant1 = createTool("variant1") { metatoolCode = "meta" }
         val variant2 = createTool("variant2") { metatoolCode = "meta" }
@@ -80,7 +80,7 @@ class ToolsFragmentDataModelQueriesTest {
         val spotlight = createTool("spotlight") { isSpotlight = true }
         val meta = createTool("meta") {
             type = Tool.Type.META
-            defaultVariant = "normalVariant"
+            defaultVariantCode = "normalVariant"
         }
         val spotlightVariant = createTool("spotlightVariant") {
             metatoolCode = "meta"
