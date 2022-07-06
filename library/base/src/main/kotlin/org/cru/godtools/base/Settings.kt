@@ -31,8 +31,6 @@ private const val PREF_LAUNCHES = "launches"
 private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
-private const val VERSION_5_5_0 = 4037627
-
 @Singleton
 class Settings @Inject internal constructor(
     @ApplicationContext private val context: Context,
@@ -118,7 +116,7 @@ class Settings @Inject internal constructor(
         if (!discovered) {
             var changed = false
             when (feature) {
-                FEATURE_PARALLEL_LANGUAGE -> if (firstLaunchVersion <= VERSION_5_5_0 || parallelLanguage != null) {
+                FEATURE_PARALLEL_LANGUAGE -> if (parallelLanguage != null) {
                     setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
                     changed = true
                 }
