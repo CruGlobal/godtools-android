@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
 import java.util.Locale
-import org.ccci.gto.android.common.util.content.localize
+import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.ccci.gto.android.common.util.getOptionalDisplayName
 import timber.log.Timber
 
@@ -31,8 +31,6 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
             if (inLocale != null) getDisplayName(inLocale) else displayName
         }
 }
-
-fun Context.localizeIfPossible(locale: Locale?) = locale?.let { localize(it) } ?: this
 
 private fun Context.getLanguageNameStringRes(locale: Locale) =
     when (val stringId = resources.getIdentifier(locale.languageNameStringRes, "string", packageName)) {

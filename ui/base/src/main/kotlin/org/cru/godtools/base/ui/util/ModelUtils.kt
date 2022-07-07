@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.DeprecatedSinceApi
 import java.util.Locale
-import org.cru.godtools.base.util.localizeIfPossible
+import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
