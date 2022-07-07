@@ -1,6 +1,7 @@
 package org.cru.godtools.dagger
 
 import android.content.Context
+import android.os.Build
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.android.utils.FlipperUtils
 import com.facebook.flipper.core.FlipperClient
@@ -46,6 +47,10 @@ abstract class FlipperModule {
             @ApplicationContext context: Context,
             plugins: Lazy<Set<@JvmSuppressWildcards FlipperPlugin>>
         ): FlipperClient? {
+            // Flipper doesn't support Android Lollipop anymore
+            // see: https://github.com/facebook/flipper/issues/3572
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return null
+
             if (!FlipperUtils.shouldEnableFlipper(context)) return null
 
             SoLoader.init(context, false)
