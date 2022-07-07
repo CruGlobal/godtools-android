@@ -98,6 +98,9 @@ android {
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
 
+            isMinifyEnabled = true
+            isShrinkResources = false
+
             manifestPlaceholders += mapOf(
                 "appAuthRedirectScheme" to "org.cru.godtools.qa.okta",
                 "hostGodtoolsCustomUri" to "org.cru.godtools.qa"
