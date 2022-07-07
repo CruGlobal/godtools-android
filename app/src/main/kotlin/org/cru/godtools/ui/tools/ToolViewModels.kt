@@ -109,7 +109,10 @@ class ToolViewModels @Inject constructor(
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        fun pinTool() = viewModelScope.launch { toolsRepository.pinTool(code) }
+        fun pinTool() {
+            viewModelScope.launch { toolsRepository.pinTool(code) }
+            settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+        }
         fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
     }
 }
