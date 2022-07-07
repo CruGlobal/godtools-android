@@ -3,7 +3,6 @@ package org.cru.godtools
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.google.android.instantapps.InstantApps
@@ -41,9 +40,6 @@ open class GodToolsApplication : Application(), Configuration.Provider {
         configureLanguageFallbacks()
 
         super.onCreate()
-
-        // enable compat vector images
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
     }
 
     override fun attachBaseContext(base: Context) {
