@@ -46,7 +46,7 @@ fun DynamicFeatureExtension.baseConfiguration(project: Project) {
 private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions()
-    configureTestOptions()
+    configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
 
@@ -106,7 +106,10 @@ fun CommonExtension<*,*,*,*>.configureQaBuildType() {
     }
 }
 
-private fun TestedExtension.configureTestOptions() {
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+private fun TestedExtension.configureTestOptions(project: Project) {
     testOptions.unitTests {
         isIncludeAndroidResources = true
 
@@ -119,6 +122,8 @@ private fun TestedExtension.configureTestOptions() {
 
     testVariants.all { configureTestManifestPlaceholders() }
     unitTestVariants.all { configureTestManifestPlaceholders() }
+
+    project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
 }
 
 private fun InternalBaseVariant.configureTestManifestPlaceholders() {

@@ -46,13 +46,6 @@ subprojects {
 
                 implementation libs.timber
 
-                testImplementation libs.androidx.test.junit
-                testImplementation libs.junit
-                testImplementation libs.mockito
-                testImplementation libs.mockito.kotlin
-                testImplementation libs.mockk
-                testImplementation libs.robolectric
-
                 // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
                 androidTestImplementation(testFixtures(libs.gtoSupport.okta))
                 testImplementation(testFixtures(libs.gtoSupport.okta))
