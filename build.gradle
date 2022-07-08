@@ -23,7 +23,6 @@ plugins {
 allprojects {
     configurations.all { configuration ->
         configuration.resolutionStrategy {
-            force libs.androidx.annotation
             force libs.androidx.lifecycle.viewmodel.ktx
 
             dependencySubstitution {
@@ -40,8 +39,6 @@ subprojects {
     afterEvaluate { project ->
         if (project.hasProperty('android')) {
             dependencies {
-                compileOnly libs.androidx.annotation
-
                 implementation libs.kotlin.stdlib
 
                 implementation libs.timber
