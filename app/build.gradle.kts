@@ -52,22 +52,22 @@ android {
     }
 
     productFlavors {
-        val stage by existing {
+        named("stage") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
         }
-        val production by existing {
+        named("production") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_PRODUCTION\"")
         }
     }
 
     signingConfigs {
-        val firebaseAppDistribution by creating {
+        register("firebaseAppDistribution") {
             storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
             storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
             keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
             keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
         }
-        val release by creating {
+        register("release") {
             storeFile = project.properties["androidKeystorePath"]?.let { rootProject.file(it) }
             storePassword = project.properties["androidKeystoreStorePassword"]?.toString()
             keyAlias = project.properties["androidKeystoreKeyAlias"]?.toString()
