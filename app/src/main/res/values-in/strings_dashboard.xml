@@ -43,6 +43,7 @@
     <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
+    <string name="tool_card_label_language_unavailable">Tidak tersedia dalam %1$s</string>
     <string name="action_tools_about">Detail</string>
     <string name="action_tools_open">Buka</string>
     <!-- Parallel Language Dialog -->

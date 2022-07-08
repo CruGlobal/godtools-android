@@ -29,7 +29,7 @@
     <string name="dashboard_home_section_favorites_title">أدواتك المفضلة</string>
     <string name="dashboard_home_section_favorites_no_tools_title">لا توجد أدوات مفضلة للعرض</string>
     <string name="dashboard_home_section_favorites_no_tools_description">اضغط على أيقونة القلب لتقوم بتفضيل أداة وجعلها متاحة في وضع عدم الاتصال.</string>
-    <string name="dashboard_home_section_favorites_action_view_all">مشاهدة الكل &gt;</string>
+    <string name="dashboard_home_section_favorites_action_view_all">مشاهدة الكل</string>
     <string name="dashboard_home_section_favorites_action_all_tools">ذهاب إلى الأدوات</string>
     <string name="tools_list_favorites_banner_text">اجعل الأداة متوفرة في وضع عدم الاتصال عبر النقر على أيقونة القلب الذي يضيفها إلى المفضلة.</string>
     <string name="tools_list_favorites_banner_action_dismiss">تجاهل</string>

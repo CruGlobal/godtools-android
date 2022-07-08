@@ -6,7 +6,7 @@
     <!-- Global Activity -->
     <eat-comment />
     <string name="profile_tab_activity">Activity</string>
-    <string name="profile_global_activity_heading">%s Global Activity</string>
+    <string name="profile_global_activity_heading">%1$s Global Activity</string>
     <string name="profile_activity_unique_users">Unique Users</string>
     <string name="profile_activity_gospel_presentations">Gospel Presentations</string>
     <string name="profile_activity_sessions">Sessions</string>
