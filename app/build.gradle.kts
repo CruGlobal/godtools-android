@@ -13,6 +13,7 @@ plugins {
 android {
     baseConfiguration(project)
     configureCompose(project)
+    configureQaBuildType()
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -75,7 +76,7 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        named("debug") {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
 
@@ -90,10 +91,7 @@ android {
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug.okta\"")
             resValue("string", "app_name_debug", "GodTools (Dev)")
         }
-        val qa by creating {
-            initWith(debug)
-            matchingFallbacks += listOf("debug")
-
+        named("qa") {
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
 
@@ -121,7 +119,7 @@ android {
                 }
             }
         }
-        val release by existing {
+        named("release") {
             isMinifyEnabled = true
             signingConfigs.getByName("release")
                 .takeIf { it.storeFile?.exists() == true }
