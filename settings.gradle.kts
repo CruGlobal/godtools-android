@@ -8,7 +8,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositories {
         maven {
-            setUrl("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
+            url = uri("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
             content {
                 includeGroup("org.ccci.gto.android")
                 includeGroup("org.ccci.gto.android.testing")
@@ -17,7 +17,7 @@ dependencyResolutionManagement {
             }
         }
         maven {
-            setUrl("https://jitpack.io")
+            url = uri("https://jitpack.io")
             content {
                 includeGroupByRegex("com\\.github\\..*")
                 excludeGroup("com.github.ajalt.colormath")
