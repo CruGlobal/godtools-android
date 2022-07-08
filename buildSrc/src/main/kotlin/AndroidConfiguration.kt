@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExtension> {
     configureAndroidCommon(project)
     configureFlavorDimensions()
+    configureQaBuildType()
 
     dependencies {
         add("implementation", project(":app"))
@@ -91,6 +92,15 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
         addProvider("implementation", project.libs.findBundle("androidx-compose").get())
         addProvider("debugImplementation", project.libs.findBundle("androidx-compose-debug").get())
         addProvider("testDebugImplementation", project.libs.findBundle("androidx-compose-testing").get())
+    }
+}
+
+fun CommonExtension<*,*,*,*>.configureQaBuildType() {
+    buildTypes {
+        create("qa") {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("debug")
+        }
     }
 }
 
