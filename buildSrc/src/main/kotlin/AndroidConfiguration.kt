@@ -99,7 +99,7 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
 
 fun CommonExtension<*,*,*,*>.configureQaBuildType() {
     buildTypes {
-        create("qa") {
+        register("qa") {
             initWith(getByName("debug"))
             matchingFallbacks += listOf("debug")
         }
