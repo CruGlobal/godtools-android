@@ -80,7 +80,6 @@ android {
             versionNameSuffix = "-debug"
 
             isMinifyEnabled = false
-            isShrinkResources = false
 
             manifestPlaceholders += mapOf(
                 "appAuthRedirectScheme" to "org.cru.godtools.debug.okta",
@@ -97,6 +96,8 @@ android {
 
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
+
+            isMinifyEnabled = true
 
             manifestPlaceholders += mapOf(
                 "appAuthRedirectScheme" to "org.cru.godtools.qa.okta",
@@ -122,8 +123,8 @@ android {
         }
         val release by existing {
             isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfigs.getByName("release").takeIf { it.storeFile?.exists() == true }
+            signingConfigs.getByName("release")
+                .takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
 
             manifestPlaceholders += mapOf(

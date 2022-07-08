@@ -122,7 +122,7 @@ class TractActivity :
 
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
-            InstantApps.showInstallPrompt(this, -1, "instantapp")
+            InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
             true
         }
         item.itemId == R.id.action_settings -> {
