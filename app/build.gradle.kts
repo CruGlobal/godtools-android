@@ -61,12 +61,6 @@ android {
     }
 
     signingConfigs {
-        register("firebaseAppDistribution") {
-            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
-            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
-            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
-            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
-        }
         register("release") {
             storeFile = project.properties["androidKeystorePath"]?.let { rootProject.file(it) }
             storePassword = project.properties["androidKeystoreStorePassword"]?.toString()
@@ -105,19 +99,6 @@ android {
             buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.qa\"")
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
-
-            // Firebase App Distribution build
-            if (project.hasProperty("firebaseAppDistributionBuild")) {
-                signingConfig = signingConfigs.getByName("firebaseAppDistribution")
-
-                firebaseAppDistribution {
-                    artifactPath =
-                        buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
-                    releaseNotes = generateFirebaseAppDistributionReleaseNotes()
-                    serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
-                    groups = "android-testers"
-                }
-            }
         }
         named("release") {
             isMinifyEnabled = true
@@ -245,9 +226,30 @@ dependencies {
     kaptTest(libs.hilt.compiler)
 }
 
+// region Firebase App Distribution
+if (project.hasProperty("firebaseAppDistributionBuild")) {
+    firebaseAppDistribution {
+        artifactPath =
+            buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
+        releaseNotes = generateFirebaseAppDistributionReleaseNotes()
+        serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
+        groups = "android-testers"
+    }
+
+    android.buildTypes.named("qa") {
+        signingConfig = android.signingConfigs.create("firebaseAppDistribution") {
+            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
+            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
+            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
+            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
+        }
+    }
+}
+
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
         append("* ").append(it.shortMessage).append('\n')
     }
 }
+// endregion Firebase App Distribution
