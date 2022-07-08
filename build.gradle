@@ -23,8 +23,6 @@ plugins {
 allprojects {
     configurations.all { configuration ->
         configuration.resolutionStrategy {
-            force libs.androidx.lifecycle.viewmodel.ktx
-
             dependencySubstitution {
                 // use the new condensed version of hamcrest
                 substitute module('org.hamcrest:hamcrest-core') with module("${libs.hamcrest.get()}")
