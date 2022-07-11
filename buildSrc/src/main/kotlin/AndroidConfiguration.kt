@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
@@ -13,12 +14,16 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
+private const val FLAVOR_DIMENSION_ENV = "env"
+private const val FLAVOR_ENV_STAGE = "stage"
+private const val FLAVOR_ENV_PRODUCTION = "production"
+
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
 fun BaseAppModuleExtension.baseConfiguration(project: Project) {
     configureAndroidCommon(project)
-    configureFlavorDimensions()
+    configureFlavorDimensions(project)
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
@@ -34,7 +39,7 @@ fun LibraryExtension.baseConfiguration(project: Project) {
 fun DynamicFeatureExtension.baseConfiguration(project: Project) {
     configureAndroidCommon(project)
     configureQaBuildType(project)
-    configureFlavorDimensions()
+    configureFlavorDimensions(project)
 
     project.dependencies {
         add("implementation", project.project(":app"))
@@ -50,8 +55,6 @@ private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
-
-    filterStageVariants()
 }
 
 private fun BaseExtension.configureSdk() {
@@ -74,11 +77,23 @@ private fun BaseExtension.configureCompilerOptions() {
     }
 }
 
-fun BaseExtension.configureFlavorDimensions() {
-    flavorDimensions("env")
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+fun BaseExtension.configureFlavorDimensions(project: Project) {
+    flavorDimensions(FLAVOR_DIMENSION_ENV)
     productFlavors {
-        create("stage").dimension = "env"
-        create("production").dimension = "env"
+        register(FLAVOR_ENV_PRODUCTION) { dimension = FLAVOR_DIMENSION_ENV }
+        register(FLAVOR_ENV_STAGE) {
+            dimension = FLAVOR_DIMENSION_ENV
+
+            // only enable this flavor for debug buildTypes
+            project.extensions.configure<AndroidComponentsExtension<*, *, *>>("androidComponents") {
+                beforeVariants(selector().withFlavor(FLAVOR_DIMENSION_ENV to FLAVOR_ENV_STAGE)) {
+                    it.enable = it.buildType == "debug"
+                }
+            }
+        }
     }
 }
 
@@ -154,6 +169,3 @@ private fun TestedExtension.configureTestOptions(project: Project) {
 private fun InternalBaseVariant.configureTestManifestPlaceholders() {
     mergedFlavor.manifestPlaceholders += "hostGodtoolsCustomUri" to "org.cru.godtools.test"
 }
-
-private fun BaseExtension.filterStageVariants() =
-    variantFilter { if (flavors.any { it.name.contains("stage") } && buildType.name != "debug") ignore = true }
