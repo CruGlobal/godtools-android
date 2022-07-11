@@ -1,5 +1,10 @@
 package org.cru.godtools.article.aem.db
 
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerifyAll
+import io.mockk.coVerifySequence
+import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -9,14 +14,6 @@ import org.cru.godtools.model.Translation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.inOrder
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 
 private const val TOOL = "kgp"
 private val LOCALE = Locale.ENGLISH
@@ -36,11 +33,10 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     // region isProcessed()
     @Test
     fun `isProcessed() - Missing Translation`() = runTest {
-        whenFindingTranslation().thenReturn(null)
+        everyFindTranslation() returns null
 
         assertFalse(repo.isProcessed(translation))
-        verify(translationDao).find(TOOL, LOCALE, VERSION)
-        verifyNoMoreInteractions(translationDao)
+        coVerifyAll { translationDao.find(TOOL, LOCALE, VERSION) }
     }
 
     @Test
@@ -48,29 +44,27 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         translation.toolCode = null
 
         assertFalse(repo.isProcessed(translation))
-        verifyNoInteractions(translationDao)
+        verify { translationDao wasNot Called }
     }
 
     @Test
     fun `isProcessed() - Not Processed`() = runTest {
-        whenFindingTranslation().thenReturn(translationRef)
+        everyFindTranslation() returns translationRef
 
         assertFalse(repo.isProcessed(translation))
-        verify(translationDao).find(TOOL, LOCALE, VERSION)
-        verifyNoMoreInteractions(translationDao)
+        coVerifyAll { translationDao.find(TOOL, LOCALE, VERSION) }
     }
 
     @Test
     fun `isProcessed() - Processed`() = runTest {
         translationRef.processed = true
-        whenFindingTranslation().thenReturn(translationRef)
+        everyFindTranslation() returns translationRef
 
         assertTrue(repo.isProcessed(translation))
-        verify(translationDao).find(TOOL, LOCALE, VERSION)
-        verifyNoMoreInteractions(translationDao)
+        coVerifyAll { translationDao.find(TOOL, LOCALE, VERSION) }
     }
 
-    private suspend fun whenFindingTranslation() = whenever(translationDao.find(TOOL, LOCALE, VERSION))
+    private fun everyFindTranslation() = coEvery { translationDao.find(TOOL, LOCALE, VERSION) }
     // endregion isProcessed()
 
     // region removeMissingTranslations()
@@ -82,27 +76,25 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
             version = VERSION
         }
         val translationRef2 = TranslationRef(translation2.toTranslationRefKey()!!)
-        translationDao.stub {
-            onBlocking { getAll() } doReturn listOf(translationRef, translationRef2)
-        }
+        coEvery { translationDao.getAll() } returns listOf(translationRef, translationRef2)
 
         repo.removeMissingTranslations(listOf(translation))
-        inOrder(translationDao, aemImportRepository) {
-            verify(translationDao).remove(eq(listOf(translationRef2)))
-            verify(aemImportRepository).removeOrphanedAemImports()
-            verifyNoMoreInteractions()
+        coVerifySequence {
+            translationDao.getAll()
+            translationDao.remove(listOf(translationRef2))
+            aemImportRepository.removeOrphanedAemImports()
         }
     }
 
     @Test
     fun `removeMissingTranslations() - Nothing to remove`() = runTest {
-        translationDao.stub {
-            onBlocking { getAll() } doReturn listOf(translationRef)
-        }
+        coEvery { translationDao.getAll() } returns listOf(translationRef)
 
         repo.removeMissingTranslations(listOf(translation))
-        verify(translationDao).getAll()
-        verifyNoMoreInteractions(translationDao, aemImportRepository)
+        coVerifyAll {
+            translationDao.getAll()
+            aemImportRepository wasNot Called
+        }
     }
     // endregion removeMissingTranslations()
 }

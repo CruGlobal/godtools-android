@@ -1,23 +1,24 @@
 package org.cru.godtools.article.aem.db
 
-import org.mockito.kotlin.doReturn
+import io.mockk.every
+import io.mockk.mockk
 import org.mockito.kotlin.mock
 
 abstract class AbstractArticleRoomDatabaseTest {
     internal val aemImportDao = mock<AemImportDao>()
-    internal val aemImportRepository = mock<AemImportRepository>()
-    internal val articleDao = mock<ArticleDao>()
+    internal val aemImportRepository = mockk<AemImportRepository>(relaxUnitFun = true)
+    internal val articleDao = mockk<ArticleDao>(relaxUnitFun = true)
     internal val articleRepository = mock<ArticleRepository>()
     internal val resourceDao = mock<ResourceDao>()
     internal val resourceRepository = mock<ResourceRepository>()
-    internal val translationDao = mock<TranslationDao>()
-    protected val db = mock<ArticleRoomDatabase> {
-        on { aemImportDao() } doReturn aemImportDao
-        on { aemImportRepository() } doReturn aemImportRepository
-        on { articleDao() } doReturn articleDao
-        on { articleRepository() } doReturn articleRepository
-        on { resourceDao() } doReturn resourceDao
-        on { resourceRepository() } doReturn resourceRepository
-        on { translationDao() } doReturn translationDao
+    internal val translationDao = mockk<TranslationDao>(relaxUnitFun = true)
+    protected val db = mockk<ArticleRoomDatabase> {
+        every { aemImportDao() } returns aemImportDao
+        every { aemImportRepository() } returns aemImportRepository
+        every { articleDao() } returns articleDao
+        every { articleRepository() } returns articleRepository
+        every { resourceDao() } returns resourceDao
+        every { resourceRepository() } returns resourceRepository
+        every { translationDao() } returns translationDao
     }
 }
