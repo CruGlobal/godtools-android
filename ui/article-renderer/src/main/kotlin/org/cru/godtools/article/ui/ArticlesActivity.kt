@@ -80,13 +80,8 @@ class ArticlesActivity :
         pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "article"
     // endregion Intent Processing
 
-    override fun updateToolbarTitle() {
-        primaryNavigationFragmentTitle?.let {
-            title = it
-            return
-        }
-
-        super.updateToolbarTitle()
+    private fun updateToolbarTitle() {
+        title = primaryNavigationFragmentTitle.orEmpty()
     }
 
     // region Fragments
