@@ -13,7 +13,7 @@ plugins {
 android {
     baseConfiguration(project)
     configureCompose(project)
-    configureQaBuildType()
+    configureQaBuildType(project)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -119,18 +119,6 @@ android {
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
-
-    sourceSets {
-        getByName("qa") {
-            kotlin.srcDir("src/debug/kotlin")
-            res.srcDir("src/debug/res/values")
-            manifest.srcFile("src/debug/AndroidManifest.xml")
-        }
-    }
-}
-
-configurations {
-    named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
 }
 
 dependencies {

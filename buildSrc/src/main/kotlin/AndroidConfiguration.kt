@@ -10,6 +10,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 // TODO: provide Project using the new multiple context receivers functionality.
@@ -32,7 +33,7 @@ fun LibraryExtension.baseConfiguration(project: Project) {
 //context(Project)
 fun DynamicFeatureExtension.baseConfiguration(project: Project) {
     configureAndroidCommon(project)
-    configureQaBuildType()
+    configureQaBuildType(project)
     configureFlavorDimensions()
 
     project.dependencies {
@@ -97,12 +98,27 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
     }
 }
 
-fun CommonExtension<*,*,*,*>.configureQaBuildType() {
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+fun CommonExtension<*,*,*,*>.configureQaBuildType(project: Project) {
     buildTypes {
         register("qa") {
             initWith(getByName("debug"))
             matchingFallbacks += listOf("debug")
         }
+    }
+
+    sourceSets {
+        named("qa") {
+            kotlin.srcDir("src/debug/kotlin")
+            res.srcDir("src/debug/res/values")
+            manifest.srcFile("src/debug/AndroidManifest.xml")
+        }
+    }
+
+    project.configurations {
+        named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
     }
 }
 
