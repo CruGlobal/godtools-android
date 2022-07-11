@@ -140,6 +140,15 @@ private fun TestedExtension.configureTestOptions(project: Project) {
     unitTestVariants.all { configureTestManifestPlaceholders() }
 
     project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
+
+    project.configurations.configureEach {
+        resolutionStrategy.dependencySubstitution {
+            // use the new condensed version of hamcrest
+            val hamcrest = project.libs.findLibrary("hamcrest").get().get().toString()
+            substitute(module("org.hamcrest:hamcrest-core")).using(module(hamcrest))
+            substitute(module("org.hamcrest:hamcrest-library")).using(module(hamcrest))
+        }
+    }
 }
 
 private fun InternalBaseVariant.configureTestManifestPlaceholders() {

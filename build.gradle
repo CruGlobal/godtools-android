@@ -19,19 +19,6 @@ plugins {
     alias libs.plugins.ktlint
 }
 
-// configure dependency resolution
-allprojects {
-    configurations.all { configuration ->
-        configuration.resolutionStrategy {
-            dependencySubstitution {
-                // use the new condensed version of hamcrest
-                substitute module('org.hamcrest:hamcrest-core') with module("${libs.hamcrest.get()}")
-                substitute module('org.hamcrest:hamcrest-library') with module("${libs.hamcrest.get()}")
-            }
-        }
-    }
-}
-
 // common config
 subprojects {
     afterEvaluate { project ->
