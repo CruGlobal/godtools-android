@@ -13,7 +13,7 @@ plugins {
 android {
     baseConfiguration(project)
     configureCompose(project)
-    configureQaBuildType()
+    configureQaBuildType(project)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -52,22 +52,16 @@ android {
     }
 
     productFlavors {
-        val stage by existing {
+        named("stage") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
         }
-        val production by existing {
+        named("production") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_PRODUCTION\"")
         }
     }
 
     signingConfigs {
-        val firebaseAppDistribution by creating {
-            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
-            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
-            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
-            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
-        }
-        val release by creating {
+        register("release") {
             storeFile = project.properties["androidKeystorePath"]?.let { rootProject.file(it) }
             storePassword = project.properties["androidKeystoreStorePassword"]?.toString()
             keyAlias = project.properties["androidKeystoreKeyAlias"]?.toString()
@@ -105,19 +99,6 @@ android {
             buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.qa\"")
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
-
-            // Firebase App Distribution build
-            if (project.hasProperty("firebaseAppDistributionBuild")) {
-                signingConfig = signingConfigs.getByName("firebaseAppDistribution")
-
-                firebaseAppDistribution {
-                    artifactPath =
-                        buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
-                    releaseNotes = generateFirebaseAppDistributionReleaseNotes()
-                    serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
-                    groups = "android-testers"
-                }
-            }
         }
         named("release") {
             isMinifyEnabled = true
@@ -138,18 +119,6 @@ android {
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
-
-    sourceSets {
-        getByName("qa") {
-            kotlin.srcDir("src/debug/kotlin")
-            res.srcDir("src/debug/res/values")
-            manifest.srcFile("src/debug/AndroidManifest.xml")
-        }
-    }
-}
-
-configurations {
-    named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
 }
 
 dependencies {
@@ -245,9 +214,30 @@ dependencies {
     kaptTest(libs.hilt.compiler)
 }
 
+// region Firebase App Distribution
+if (project.hasProperty("firebaseAppDistributionBuild")) {
+    firebaseAppDistribution {
+        artifactPath =
+            buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
+        releaseNotes = generateFirebaseAppDistributionReleaseNotes()
+        serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
+        groups = "android-testers"
+    }
+
+    android.buildTypes.named("qa") {
+        signingConfig = android.signingConfigs.create("firebaseAppDistribution") {
+            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
+            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
+            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
+            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
+        }
+    }
+}
+
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
         append("* ").append(it.shortMessage).append('\n')
     }
 }
+// endregion Firebase App Distribution

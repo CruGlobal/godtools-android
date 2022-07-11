@@ -1,4 +1,5 @@
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
@@ -8,27 +9,21 @@ import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
-fun Project.configureAndroidFeature() = extensions.configure<DynamicFeatureExtension> {
-    configureAndroidCommon(project)
-    configureFlavorDimensions()
-    configureQaBuildType()
-
-    dependencies {
-        add("implementation", project(":app"))
-    }
-}
+private const val FLAVOR_DIMENSION_ENV = "env"
+private const val FLAVOR_ENV_STAGE = "stage"
+private const val FLAVOR_ENV_PRODUCTION = "production"
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
 fun BaseAppModuleExtension.baseConfiguration(project: Project) {
     configureAndroidCommon(project)
-    configureFlavorDimensions()
+    configureFlavorDimensions(project)
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
@@ -41,14 +36,25 @@ fun LibraryExtension.baseConfiguration(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
+fun DynamicFeatureExtension.baseConfiguration(project: Project) {
+    configureAndroidCommon(project)
+    configureQaBuildType(project)
+    configureFlavorDimensions(project)
+
+    project.dependencies {
+        add("implementation", project.project(":app"))
+    }
+}
+
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
 private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions()
-    configureTestOptions()
+    configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
-
-    filterStageVariants()
 }
 
 private fun BaseExtension.configureSdk() {
@@ -71,11 +77,23 @@ private fun BaseExtension.configureCompilerOptions() {
     }
 }
 
-fun BaseExtension.configureFlavorDimensions() {
-    flavorDimensions("env")
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+fun BaseExtension.configureFlavorDimensions(project: Project) {
+    flavorDimensions(FLAVOR_DIMENSION_ENV)
     productFlavors {
-        create("stage").dimension = "env"
-        create("production").dimension = "env"
+        register(FLAVOR_ENV_PRODUCTION) { dimension = FLAVOR_DIMENSION_ENV }
+        register(FLAVOR_ENV_STAGE) {
+            dimension = FLAVOR_DIMENSION_ENV
+
+            // only enable this flavor for debug buildTypes
+            project.extensions.configure<AndroidComponentsExtension<*, *, *>>("androidComponents") {
+                beforeVariants(selector().withFlavor(FLAVOR_DIMENSION_ENV to FLAVOR_ENV_STAGE)) {
+                    it.enable = it.buildType == "debug"
+                }
+            }
+        }
     }
 }
 
@@ -95,16 +113,34 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
     }
 }
 
-fun CommonExtension<*,*,*,*>.configureQaBuildType() {
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+fun CommonExtension<*,*,*,*>.configureQaBuildType(project: Project) {
     buildTypes {
-        create("qa") {
+        register("qa") {
             initWith(getByName("debug"))
             matchingFallbacks += listOf("debug")
         }
     }
+
+    sourceSets {
+        named("qa") {
+            kotlin.srcDir("src/debug/kotlin")
+            res.srcDir("src/debug/res/values")
+            manifest.srcFile("src/debug/AndroidManifest.xml")
+        }
+    }
+
+    project.configurations {
+        named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
+    }
 }
 
-private fun TestedExtension.configureTestOptions() {
+// TODO: provide Project using the new multiple context receivers functionality.
+//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//context(Project)
+private fun TestedExtension.configureTestOptions(project: Project) {
     testOptions.unitTests {
         isIncludeAndroidResources = true
 
@@ -117,11 +153,19 @@ private fun TestedExtension.configureTestOptions() {
 
     testVariants.all { configureTestManifestPlaceholders() }
     unitTestVariants.all { configureTestManifestPlaceholders() }
+
+    project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
+
+    project.configurations.configureEach {
+        resolutionStrategy.dependencySubstitution {
+            // use the new condensed version of hamcrest
+            val hamcrest = project.libs.findLibrary("hamcrest").get().get().toString()
+            substitute(module("org.hamcrest:hamcrest-core")).using(module(hamcrest))
+            substitute(module("org.hamcrest:hamcrest-library")).using(module(hamcrest))
+        }
+    }
 }
 
 private fun InternalBaseVariant.configureTestManifestPlaceholders() {
     mergedFlavor.manifestPlaceholders += "hostGodtoolsCustomUri" to "org.cru.godtools.test"
 }
-
-private fun BaseExtension.filterStageVariants() =
-    variantFilter { if (flavors.any { it.name.contains("stage") } && buildType.name != "debug") ignore = true }

@@ -19,39 +19,14 @@ plugins {
     alias libs.plugins.ktlint
 }
 
-// configure dependency resolution
-allprojects {
-    configurations.all { configuration ->
-        configuration.resolutionStrategy {
-            force libs.androidx.annotation
-            force libs.androidx.lifecycle.viewmodel.ktx
-
-            dependencySubstitution {
-                // use the new condensed version of hamcrest
-                substitute module('org.hamcrest:hamcrest-core') with module("${libs.hamcrest.get()}")
-                substitute module('org.hamcrest:hamcrest-library') with module("${libs.hamcrest.get()}")
-            }
-        }
-    }
-}
-
 // common config
 subprojects {
     afterEvaluate { project ->
         if (project.hasProperty('android')) {
             dependencies {
-                compileOnly libs.androidx.annotation
-
                 implementation libs.kotlin.stdlib
 
                 implementation libs.timber
-
-                testImplementation libs.androidx.test.junit
-                testImplementation libs.junit
-                testImplementation libs.mockito
-                testImplementation libs.mockito.kotlin
-                testImplementation libs.mockk
-                testImplementation libs.robolectric
 
                 // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
                 androidTestImplementation(testFixtures(libs.gtoSupport.okta))
@@ -103,17 +78,5 @@ allprojects {
     if (gradle.startParameter.excludedTaskNames.contains("test")) {
         // exclude all test type tasks when the test task is excluded
         tasks.withType(Test).all { gradle.startParameter.excludedTaskNames += it.name }
-    }
-}
-
-if (project.hasProperty('gradleEnterprise')) {
-    gradleEnterprise {
-        buildScan {
-            // automatically accept the scans.gradle.com TOS when running in GHA
-            if (System.getenv("GITHUB_ACTIONS")) {
-                termsOfServiceUrl = "https://gradle.com/terms-of-service"
-                termsOfServiceAgree = "yes"
-            }
-        }
     }
 }
