@@ -1,36 +1,37 @@
 package org.cru.godtools.article.aem.db
 
+import io.mockk.coVerifyAll
+import io.mockk.mockk
 import java.util.UUID
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.model.Article
 import org.junit.Test
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
 
 class ArticleRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : ArticleRepository(db) {}
 
     @Test
-    fun `updateContent()`() = runBlockingTest {
-        val article = Article(mock()).apply {
+    fun `updateContent()`() = runTest {
+        val article = Article(mockk()).apply {
             contentUuid = UUID.randomUUID().toString()
             content = UUID.randomUUID().toString()
-            resources = listOf(mock(), mock())
+            resources = listOf(mockk(), mockk())
         }
 
         repo.updateContent(article)
-        verify(articleDao).updateContent(article.uri, article.contentUuid, article.content)
-        verify(resourceRepository).storeResources(article, article.resources)
-        verifyNoMoreInteractions(articleDao, resourceRepository)
+        coVerifyAll {
+            articleDao.updateContent(article.uri, article.contentUuid, article.content)
+            resourceRepository.storeResources(article, article.resources)
+        }
     }
 
     @Test
-    fun `removeOrphanedArticles()`() = runBlockingTest {
+    fun `removeOrphanedArticles()`() = runTest {
         repo.removeOrphanedArticles()
 
-        verify(articleDao).removeOrphanedArticles()
-        verify(resourceDao).removeOrphanedResources()
-        verifyNoMoreInteractions(articleDao, resourceDao)
+        coVerifyAll {
+            articleDao.removeOrphanedArticles()
+            resourceDao.removeOrphanedResources()
+        }
     }
 }
