@@ -75,6 +75,11 @@ class DashboardActivity :
         binding.setupBottomNavigation()
     }
 
+    override fun onSetupActionBar() {
+        super.onSetupActionBar()
+        title = ""
+    }
+
     override fun onNewIntent(newIntent: Intent) {
         super.onNewIntent(newIntent)
         processIntent(newIntent)

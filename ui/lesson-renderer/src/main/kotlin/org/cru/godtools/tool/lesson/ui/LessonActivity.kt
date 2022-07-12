@@ -114,13 +114,7 @@ class LessonActivity :
     // endregion Intent Processing
 
     // region UI
-    // region Toolbar
     override val toolbar get() = binding.appbar
-
-    override fun updateToolbarTitle() {
-        title = ""
-    }
-    // endregion Toolbar
 
     // region Progress Indicator
     private fun setupProgressIndicator() {
