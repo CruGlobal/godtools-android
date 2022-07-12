@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.fragment.BaseFragment
@@ -15,14 +14,10 @@ import org.cru.godtools.databinding.ComposeLayoutBinding
 import org.cru.godtools.ui.dashboard.DashboardActivity
 import org.cru.godtools.ui.dashboard.DashboardSavedState
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layout) {
     private val dashboardSavedState: DashboardSavedState by activityViewModels()
-
-    @Inject
-    internal lateinit var eventBus: EventBus
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         ComposeLayoutBinding.inflate(inflater, container, false)
