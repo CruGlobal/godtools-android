@@ -4,8 +4,11 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
@@ -46,7 +49,8 @@ class ToolsFragmentDataModel @Inject constructor(
     val categories = tools.map { it.mapNotNull { it.category }.distinct() }
     val selectedCategory = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
 
-    val spotlightTools = dao.getLiveData(QUERY_TOOLS_SPOTLIGHT)
+    val spotlightTools = dao.getAsFlow(QUERY_TOOLS_SPOTLIGHT)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
     }

@@ -1,7 +1,12 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.os.Bundle
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ConcatAdapter.Config
 import androidx.recyclerview.widget.ConcatAdapter.Config.StableIdMode.ISOLATED_STABLE_IDS
@@ -18,6 +23,7 @@ import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ALL_TOOLS
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.DashboardToolsFragmentBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
@@ -76,15 +82,18 @@ class ToolsFragment :
             )
 
             // Tool Spotlight adapter
-            val spotlightAdapter =
-                ToolsAdapter(viewLifecycleOwner, toolViewModels, R.layout.dashboard_tools_spotlight_tool).also {
-                    dataModel.spotlightTools.observe(viewLifecycleOwner, it)
-                    it.callbacks.set(this@ToolsFragment)
-                }
             addLayout(R.layout.dashboard_tools_spotlight, 0) {
-                it.findViewById<RecyclerView>(R.id.tools)?.adapter = spotlightAdapter
+                it.findViewById<ComposeView>(R.id.compose)?.setContent {
+                    GodToolsTheme {
+                        ToolSpotlight(
+                            onOpenToolDetails = { findListener<Callbacks>()?.showToolDetails(it) },
+                            modifier = Modifier.padding(top = 16.dp)
+                        )
+                    }
+                }
             }.apply {
-                dataModel.spotlightTools.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 }
+                dataModel.spotlightTools.asLiveData()
+                    .observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 }
             }
 
             // Tool Categories
