@@ -208,6 +208,9 @@ fun ToolCard(
 fun SquareToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    showCategory: Boolean = true,
+    showActions: Boolean = true,
+    floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
@@ -217,8 +220,6 @@ fun SquareToolCard(
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
     val secondTranslation by viewModel.secondTranslation.collectAsState()
-    val secondLanguage by viewModel.secondLanguage.collectAsState()
-    val parallelLanguage by viewModel.parallelLanguage.collectAsState()
     val downloadProgress by viewModel.downloadProgress.collectAsState()
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
@@ -250,54 +251,40 @@ fun SquareToolCard(
                 Box {
                     Column {
                         ToolName(viewModel, minLines = 1, maxLines = 2, modifier = Modifier.fillMaxWidth())
-                        ToolCategory(
-                            viewModel,
-                            modifier = Modifier
-                                .padding(top = 2.dp)
-                                .fillMaxWidth()
-                        )
-                        if (parallelLanguage != null) {
-                            val available by remember { derivedStateOf { secondTranslation != null } }
-                            if (available) {
-                                AvailableInLanguage(
-                                    secondLanguage,
-                                    horizontalArrangement = Arrangement.Start,
-                                    modifier = Modifier.padding(top = 2.dp)
-                                )
-                            } else {
-                                Spacer(
-                                    modifier = Modifier
-                                        .padding(top = 2.dp)
-                                        .minLinesHeight(1, toolCardInfoLabelStyle)
-                                )
-                            }
+                        if (showCategory) {
+                            ToolCategory(
+                                viewModel,
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                                    .fillMaxWidth()
+                            )
                         }
+                        if (floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
                     }
 
-                    // use Spacers to reserve the maximum height consistently across all cards
-                    Column {
+                    // Reserve the maximum height consistently across all cards
+                    Column(modifier = Modifier.invisibleIf(true)) {
                         Spacer(modifier = Modifier.minLinesHeight(2, toolNameStyle(viewModel).value))
-                        Spacer(
-                            modifier = Modifier
-                                .padding(top = 2.dp)
-                                .minLinesHeight(1, toolCategoryStyle)
-                        )
-                        if (parallelLanguage != null) {
+                        if (showCategory) {
                             Spacer(
                                 modifier = Modifier
                                     .padding(top = 2.dp)
-                                    .minLinesHeight(1, toolCardInfoLabelStyle)
+                                    .minLinesHeight(1, toolCategoryStyle)
                             )
                         }
+                        if (floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
                     }
                 }
+                if (!floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
 
-                ToolCardActions(
-                    viewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+                if (showActions) {
+                    ToolCardActions(
+                        viewModel,
+                        onOpenTool = onOpenTool,
+                        onOpenToolDetails = onOpenToolDetails,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
             }
         }
     }
@@ -310,13 +297,6 @@ private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifi
     contentScale = ContentScale.Crop,
     modifier = modifier.background(GRAY_E6)
 )
-
-@Composable
-private inline fun ToolName(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    lines: Int,
-) = ToolName(viewModel = viewModel, modifier = modifier, minLines = lines, maxLines = lines)
 
 @Composable
 private fun ToolName(
@@ -353,4 +333,23 @@ private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modi
         maxLines = 1,
         modifier = modifier.invisibleIf { translation.isInitial }
     )
+}
+
+@Composable
+private fun SquareToolCardParallelLanguage(viewModel: ToolViewModels.ToolViewModel) {
+    val parallelLanguage by viewModel.parallelLanguage.collectAsState()
+
+    if (parallelLanguage != null) {
+        val secondTranslation by viewModel.secondTranslation.collectAsState()
+        val secondLanguage by viewModel.secondLanguage.collectAsState()
+        val available by remember { derivedStateOf { secondTranslation != null } }
+
+        AvailableInLanguage(
+            secondLanguage,
+            horizontalArrangement = Arrangement.Start,
+            modifier = Modifier
+                .padding(top = 2.dp)
+                .invisibleIf { !available }
+        )
+    }
 }
