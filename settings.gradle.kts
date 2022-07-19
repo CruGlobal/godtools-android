@@ -23,6 +23,13 @@ dependencyResolutionManagement {
                 excludeGroup("com.github.ajalt.colormath")
             }
         }
+        maven {
+            // This repository contains pre-release versions of the Compose Compiler
+            url = uri("https://androidx.dev/storage/compose-compiler/repository/")
+            content {
+                includeGroup("androidx.compose.compiler")
+            }
+        }
         google()
         mavenCentral()
         jcenter {
