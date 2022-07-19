@@ -62,7 +62,6 @@ class ToolsFragmentDataModel @Inject constructor(
 
     // region Filters
     val filterCategory = savedState.getStateFlow<String?>(ATTR_SELECTED_CATEGORY, null)
-    val selectedCategory = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
     fun setFilterCategory(category: String?) = savedState.set(ATTR_SELECTED_CATEGORY, category)
 
     val filteredTools = tools.combine(filterCategory) { tools, category ->

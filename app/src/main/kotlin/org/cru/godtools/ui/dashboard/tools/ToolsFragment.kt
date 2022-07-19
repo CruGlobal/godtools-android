@@ -36,7 +36,6 @@ import org.cru.godtools.widget.BannerType
 @AndroidEntryPoint
 class ToolsFragment :
     BasePlatformFragment<DashboardToolsFragmentBinding>(R.layout.dashboard_tools_fragment),
-    ToolCategoriesAdapter.Callbacks,
     ToolsAdapterCallbacks {
     interface Callbacks : ToolsAdapterCallbacks
 
@@ -97,16 +96,15 @@ class ToolsFragment :
             }
 
             // Tool Categories
-            val categories = dataModel.categories.asLiveData()
-            val categoriesAdapter =
-                ToolCategoriesAdapter(viewLifecycleOwner, dataModel.selectedCategory, settings.primaryLanguageLiveData)
-                    .also {
-                        categories.observe(viewLifecycleOwner, it)
-                        it.callbacks.set(this@ToolsFragment)
+            addLayout(R.layout.dashboard_tools_categories, 1) {
+                it.findViewById<ComposeView>(R.id.compose)?.setContent {
+                    GodToolsTheme {
+                        ToolFilters(
+                            modifier = Modifier.padding(top = 8.dp)
+                        )
                     }
-            addLayout(R.layout.dashboard_tools_categories, 0) {
-                it.findViewById<RecyclerView>(R.id.categories)?.adapter = categoriesAdapter
-            }.apply { categories.observe(viewLifecycleOwner) { repeat = if (it.isNotEmpty()) 1 else 0 } }
+                }
+            }
 
             // Tools
             addAdapter(
@@ -118,10 +116,6 @@ class ToolsFragment :
         }
     }
     // endregion UI
-
-    override fun onCategorySelected(category: String?) {
-        with(dataModel.selectedCategory) { value = if (value != category) category else null }
-    }
 
     // region ToolsAdapterCallbacks
     override fun onToolClicked(tool: Tool?, primary: Translation?, parallel: Translation?) = showToolDetails(tool?.code)
