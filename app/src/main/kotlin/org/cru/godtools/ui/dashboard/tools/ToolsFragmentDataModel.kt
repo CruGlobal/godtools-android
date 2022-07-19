@@ -3,13 +3,16 @@ package org.cru.godtools.ui.dashboard.tools
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
@@ -36,22 +39,34 @@ internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.typ
 internal val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_SPOTLIGHT eq true)
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class ToolsFragmentDataModel @Inject constructor(
     dao: GodToolsDao,
     settings: Settings,
-    savedState: SavedStateHandle
+    private val savedState: SavedStateHandle
 ) : ViewModel() {
+    val primaryLanguage = settings.primaryLanguageFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), settings.primaryLanguage)
+
     val banner = settings.isFeatureDiscoveredLiveData(FEATURE_TOOL_FAVORITE)
         .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
 
-    private val tools = dao.getLiveData(QUERY_TOOLS)
-
-    val categories = tools.map { it.mapNotNull { it.category }.distinct() }
-    val selectedCategory = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
-
     val spotlightTools = dao.getAsFlow(QUERY_TOOLS_SPOTLIGHT)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-    val filteredTools = tools.combineWith(selectedCategory) { tools, category ->
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
+
+    private val tools = dao.getAsFlow(QUERY_TOOLS)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
+
+    val categories = tools.mapLatest { it.mapNotNull { it.category }.distinct() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
+
+    // region Filters
+    val filterCategory = savedState.getStateFlow<String?>(ATTR_SELECTED_CATEGORY, null)
+    val selectedCategory = savedState.getLiveData<String?>(ATTR_SELECTED_CATEGORY, null)
+    fun setFilterCategory(category: String?) = savedState.set(ATTR_SELECTED_CATEGORY, category)
+
+    val filteredTools = tools.combine(filterCategory) { tools, category ->
         tools.filter { category == null || it.category == category }
-    }
+    }.asLiveData()
+    // endregion Filters
 }
