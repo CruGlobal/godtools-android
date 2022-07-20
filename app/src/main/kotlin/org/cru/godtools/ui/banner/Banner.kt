@@ -1,61 +1,136 @@
 package org.cru.godtools.ui.banner
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.offset
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun Banner(
     text: String,
     primaryButton: String,
-    modifier: Modifier = Modifier,
     primaryAction: () -> Unit = {},
     secondaryButton: String? = null,
-    secondaryAction: () -> Unit = {}
+    secondaryAction: () -> Unit = {},
+    modifier: Modifier = Modifier,
 ) = Surface(modifier = modifier.fillMaxWidth()) {
     Column {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .height(36.dp)
-                    .alignBy { it.measuredHeight }
-            )
-            Text(
-                text,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .alignBy(FirstBaseline)
-            )
-        }
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier
-                .padding(all = 8.dp)
-                .fillMaxWidth()
-        ) {
-            if (secondaryButton != null) {
-                TextButton(onClick = secondaryAction, modifier = Modifier.padding(end = 8.dp)) { Text(secondaryButton) }
+        CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+            val textNode = "text"
+            val primaryActionNode = "primaryAction"
+            val secondaryActionNode = "secondaryAction"
+
+            Layout({
+                Text(text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.layoutId(textNode))
+                TextButton(
+                    onClick = primaryAction,
+                    modifier = Modifier
+                        .layoutId(primaryActionNode)
+                        .heightIn(min = 36.dp)
+                ) { Text(primaryButton) }
+                if (secondaryButton != null) {
+                    TextButton(
+                        onClick = secondaryAction,
+                        modifier = Modifier
+                            .layoutId(secondaryActionNode)
+                            .heightIn(min = 36.dp)
+                    ) { Text(secondaryButton) }
+                }
+            }) { measurables, constraints ->
+                require(constraints.hasBoundedWidth) { "Banner requires a bounded width" }
+
+                val textMargin = 16.dp.roundToPx()
+                val actionMargin = 8.dp.roundToPx()
+
+                val textPlaceable = measurables.first { it.layoutId == textNode }
+                    .measure(constraints.offset(horizontal = -2 * textMargin))
+                val primaryActionPlaceable = measurables.first { it.layoutId == primaryActionNode }
+                    .measure(constraints.offset(horizontal = -2 * actionMargin))
+                val secondaryActionPlaceable = measurables.firstOrNull { it.layoutId == secondaryActionNode }
+                    ?.measure(constraints.offset(horizontal = -2 * actionMargin))
+
+                val bannerWidth = constraints.maxWidth
+                val actionsWidth =
+                    primaryActionPlaceable.width + (secondaryActionPlaceable?.let { it.width + actionMargin } ?: 0)
+
+                when {
+                    // single line layout
+                    textMargin + textPlaceable.width + 36.dp.roundToPx() + actionsWidth + actionMargin < bannerWidth -> {
+                        val bannerHeight = maxOf(
+                            textPlaceable.height,
+                            primaryActionPlaceable.height,
+                            secondaryActionPlaceable?.height ?: 0
+                        ) + 10.dp.roundToPx() + actionMargin
+
+                        // calculate placeable positions
+                        val centerLine = (bannerHeight + 2.dp.roundToPx()) / 2
+                        val primaryActionPosition = IntOffset(
+                            bannerWidth - actionMargin - primaryActionPlaceable.width,
+                            centerLine - (primaryActionPlaceable.height / 2)
+                        )
+                        val secondaryActionPosition = IntOffset(
+                            primaryActionPosition.x - actionMargin - (secondaryActionPlaceable?.width ?: 0),
+                            centerLine - ((secondaryActionPlaceable?.height ?: 0) / 2)
+                        )
+
+                        layout(bannerWidth, bannerHeight) {
+                            textPlaceable.placeRelative(textMargin, centerLine - (textPlaceable.height / 2))
+                            primaryActionPlaceable.placeRelative(primaryActionPosition)
+                            secondaryActionPlaceable?.placeRelative(secondaryActionPosition)
+                        }
+                    }
+                    // default layout
+                    else -> {
+                        val textPosition = IntOffset(textMargin, textMargin)
+                        val primaryActionPosition = IntOffset(
+                            bannerWidth - actionMargin - primaryActionPlaceable.width,
+                            textPosition.y + textPlaceable.height + 12.dp.roundToPx()
+                        )
+                        val secondaryActionPosition = when (secondaryActionPlaceable) {
+                            null -> IntOffset.Zero
+                            else -> {
+                                val sameLinePosition = IntOffset(
+                                    primaryActionPosition.x - actionMargin - secondaryActionPlaceable.width,
+                                    primaryActionPosition.y
+                                )
+                                val nextLinePosition = IntOffset(
+                                    bannerWidth - actionMargin - secondaryActionPlaceable.width,
+                                    primaryActionPosition.y + primaryActionPlaceable.height + actionMargin
+                                )
+                                sameLinePosition.takeUnless { it.x < actionMargin } ?: nextLinePosition
+                            }
+                        }
+
+                        val bannerHeight = maxOf(
+                            textPosition.y + textPlaceable.height + textMargin,
+                            primaryActionPosition.y + primaryActionPlaceable.height + actionMargin,
+                            secondaryActionPosition.y + (secondaryActionPlaceable?.height ?: 0) + actionMargin,
+                        )
+
+                        layout(bannerWidth, bannerHeight) {
+                            textPlaceable.placeRelative(textPosition)
+                            primaryActionPlaceable.placeRelative(primaryActionPosition)
+                            secondaryActionPlaceable?.placeRelative(secondaryActionPosition)
+                        }
+                    }
+                }
             }
-            TextButton(onClick = primaryAction) { Text(primaryButton) }
         }
         Divider(modifier = Modifier.alpha(0.12f))
     }
