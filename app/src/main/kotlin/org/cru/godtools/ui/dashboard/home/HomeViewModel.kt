@@ -21,7 +21,7 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.widget.BannerType
+import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository

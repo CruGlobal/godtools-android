@@ -184,7 +184,6 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
-    implementation(libs.materialBanner)
     implementation(libs.materialComponents)
     implementation(libs.okta)
     implementation(libs.splitties.fragmentargs)

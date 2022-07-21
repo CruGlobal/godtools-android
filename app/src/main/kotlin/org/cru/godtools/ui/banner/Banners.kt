@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.cru.godtools.widget.BannerType
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)

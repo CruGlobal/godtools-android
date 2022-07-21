@@ -19,7 +19,7 @@ import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.widget.BannerType
+import org.cru.godtools.ui.banner.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
