@@ -7,15 +7,18 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.widget.BannerType
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -41,7 +44,8 @@ internal val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_S
 class ToolsViewModel @Inject constructor(
     dao: GodToolsDao,
     settings: Settings,
-    private val savedState: SavedStateHandle
+    private val syncService: GodToolsSyncService,
+    private val savedState: SavedStateHandle,
 ) : ViewModel() {
     val primaryLanguage = settings.primaryLanguageFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), settings.primaryLanguage)
@@ -67,4 +71,21 @@ class ToolsViewModel @Inject constructor(
         tools.filter { category == null || it.category == category }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
     // endregion Filters
+
+    // region Sync logic
+    private val syncsRunning = MutableStateFlow(0)
+    val isSyncRunning = syncsRunning.map { it > 0 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+
+    fun triggerSync(force: Boolean = false) {
+        viewModelScope.launch {
+            syncsRunning.value++
+            syncService.suspendAndSyncTools(force)
+            syncsRunning.value--
+        }
+    }
+
+    init {
+        triggerSync()
+    }
+    // endregion Sync logic
 }

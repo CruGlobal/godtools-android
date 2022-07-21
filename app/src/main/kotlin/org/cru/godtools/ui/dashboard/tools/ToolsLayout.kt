@@ -22,6 +22,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.ui.banner.Banners
@@ -42,57 +44,62 @@ internal fun ToolsLayout(
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState) {
-        item("banners", "banners") {
-            Banners(
-                { banner },
-                modifier = Modifier
-                    .animateItemPlacement()
-                    .fillMaxWidth()
-            )
-        }
-
-        if (spotlightTools.isNotEmpty()) {
-            item("tool-spotlight", "tool-spotlight") {
-                ToolSpotlight(
-                    viewModel,
-                    onToolClicked = onToolClicked,
+    SwipeRefresh(
+        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
+        onRefresh = { viewModel.triggerSync(true) }
+    ) {
+        LazyColumn(state = columnState) {
+            item("banners", "banners") {
+                Banners(
+                    { banner },
                     modifier = Modifier
                         .animateItemPlacement()
-                        .padding(top = 16.dp)
+                        .fillMaxWidth()
                 )
             }
-        }
 
-        item("tool-filters", "tool-filters") {
-            ToolFilters(
-                viewModel,
-                modifier = Modifier
-                    .animateItemPlacement()
-                    .padding(vertical = 16.dp)
-            )
-        }
+            if (spotlightTools.isNotEmpty()) {
+                item("tool-spotlight", "tool-spotlight") {
+                    ToolSpotlight(
+                        viewModel,
+                        onToolClicked = onToolClicked,
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .padding(top = 16.dp)
+                    )
+                }
+            }
 
-        if (filteredTools.isNotEmpty()) {
-            item("tool-divider", "tool-divider") {
-                Divider(
+            item("tool-filters", "tool-filters") {
+                ToolFilters(
+                    viewModel,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, top = 8.dp, bottom = 24.dp)
-                        .alpha(0.12f)
+                        .animateItemPlacement()
+                        .padding(vertical = 16.dp)
                 )
             }
-        }
 
-        items(filteredTools, { "tool:${it.id}" }, { "tool" }) { tool ->
-            PreloadTool(tool)
-            ToolCard(
-                tool.code.orEmpty(),
-                showActions = false,
-                onClick = { it, _, _ -> it?.code?.let(onToolClicked) },
-                modifier = Modifier
-                    .animateItemPlacement()
-                    .padding(bottom = 16.dp, horizontal = 16.dp)
-            )
+            if (filteredTools.isNotEmpty()) {
+                item("tool-divider", "tool-divider") {
+                    Divider(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, top = 8.dp, bottom = 24.dp)
+                            .alpha(0.12f)
+                    )
+                }
+            }
+
+            items(filteredTools, { "tool:${it.id}" }, { "tool" }) { tool ->
+                PreloadTool(tool)
+                ToolCard(
+                    tool.code.orEmpty(),
+                    showActions = false,
+                    onClick = { it, _, _ -> it?.code?.let(onToolClicked) },
+                    modifier = Modifier
+                        .animateItemPlacement()
+                        .padding(bottom = 16.dp, horizontal = 16.dp)
+                )
+            }
         }
     }
 }
