@@ -123,6 +123,7 @@ fun ToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
     confirmRemovalFromFavorites: Boolean = false,
+    showActions: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
@@ -188,16 +189,18 @@ fun ToolCard(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                ToolCardActions(
-                    viewModel,
-                    buttonWeightFill = false,
-                    buttonModifier = Modifier.widthIn(min = 92.dp),
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails,
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .align(Alignment.End)
-                )
+                if (showActions) {
+                    ToolCardActions(
+                        viewModel,
+                        buttonWeightFill = false,
+                        buttonModifier = Modifier.widthIn(min = 92.dp),
+                        onOpenTool = onOpenTool,
+                        onOpenToolDetails = onOpenToolDetails,
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .align(Alignment.End)
+                    )
+                }
             }
         }
     }
