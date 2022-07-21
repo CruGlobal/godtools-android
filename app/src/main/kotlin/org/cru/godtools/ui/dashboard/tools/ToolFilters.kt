@@ -33,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.util.content.getString
@@ -49,7 +48,7 @@ private val filterCardLabelStyle: TextStyle
 
 @Composable
 internal fun ToolFilters(
-    viewModel: ToolsFragmentDataModel = viewModel(),
+    viewModel: ToolsViewModel = viewModel(),
     modifier: Modifier = Modifier,
 ) {
     val categories by viewModel.categories.collectAsState()
@@ -61,7 +60,7 @@ internal fun ToolFilters(
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, top = 8.dp)
+                .padding(horizontal = 16.dp)
         )
 
         val filterCardHeight = computeHeightForDefaultText(filterCardLabelStyle, 2) + 32.dp
@@ -71,7 +70,7 @@ internal fun ToolFilters(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(top = 8.dp)
                 .height((filterCardHeight * rows) + (8.dp * (rows - 1)))
         ) {
             item("all-tools") { AllToolsFilter(viewModel) }
@@ -81,7 +80,7 @@ internal fun ToolFilters(
 }
 
 @Composable
-private fun AllToolsFilter(viewModel: ToolsFragmentDataModel) {
+private fun AllToolsFilter(viewModel: ToolsViewModel) {
     val filterCategory by viewModel.filterCategory.collectAsState()
     val isSelected by remember { derivedStateOf { filterCategory == null } }
 
@@ -100,7 +99,7 @@ private fun AllToolsFilter(viewModel: ToolsFragmentDataModel) {
 }
 
 @Composable
-private fun CategoryFilter(category: String, viewModel: ToolsFragmentDataModel) {
+private fun CategoryFilter(category: String, viewModel: ToolsViewModel) {
     val filterCategory by viewModel.filterCategory.collectAsState()
     val isSelected by remember { derivedStateOf { filterCategory == category } }
 
