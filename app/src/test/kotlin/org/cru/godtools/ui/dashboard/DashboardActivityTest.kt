@@ -15,11 +15,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
-import org.cru.godtools.ui.dashboard.home.HomeFragment
-import org.cru.godtools.ui.dashboard.lessons.LessonsFragment
-import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,60 +41,42 @@ class DashboardActivityTest {
     @Test
     fun `Intent Processing - Normal Launch`() {
         scenario(intent = context.createDashboardIntent(null)) {
-            it.onActivity {
-                assertEquals(Page.HOME, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
-            }
+            it.onActivity { assertEquals(Page.HOME, it.viewModel.currentPage.value) }
         }
     }
 
     @Test
     fun `Intent Processing - Normal Launch - Lessons`() {
         scenario(intent = context.createDashboardIntent(Page.LESSONS)) {
-            it.onActivity {
-                assertEquals(Page.LESSONS, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
-            }
+            it.onActivity { assertEquals(Page.LESSONS, it.viewModel.currentPage.value) }
         }
     }
 
     @Test
     fun `Intent Processing - Normal Launch - Tools`() {
         scenario(intent = context.createDashboardIntent(Page.ALL_TOOLS)) {
-            it.onActivity {
-                assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsFragment)
-            }
+            it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
         }
     }
 
     @Test
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Home`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/home"))) {
-            it.onActivity {
-                assertEquals(Page.HOME, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
-            }
+            it.onActivity { assertEquals(Page.HOME, it.viewModel.currentPage.value) }
         }
     }
 
     @Test
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Lessons`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/lessons"))) {
-            it.onActivity {
-                assertEquals(Page.LESSONS, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
-            }
+            it.onActivity { assertEquals(Page.LESSONS, it.viewModel.currentPage.value) }
         }
     }
 
     @Test
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Tools`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/tools"))) {
-            it.onActivity {
-                assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value)
-                assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsFragment)
-            }
+            it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
         }
     }
     // endregion Intent Processing

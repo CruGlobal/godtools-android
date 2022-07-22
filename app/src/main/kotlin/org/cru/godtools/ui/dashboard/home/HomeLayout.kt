@@ -41,8 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -76,36 +74,31 @@ internal fun HomeLayout(
     val currentPage by remember { derivedStateOf { pageStack.last() } }
     LaunchedEffect(currentPage) { onUpdateCurrentPage(currentPage) }
 
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
-        when (currentPage) {
-            Page.HOME -> {
-                HomeContent(
-                    viewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails,
-                    onViewAllFavorites = { pageStack.add(Page.FAVORITE_TOOLS) },
-                    onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
-                )
-            }
-            Page.FAVORITE_TOOLS -> {
-                AllFavoritesList(
-                    viewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails
-                )
-            }
-            else -> Unit
+    when (currentPage) {
+        Page.HOME -> {
+            HomeContent(
+                viewModel,
+                onOpenTool = onOpenTool,
+                onOpenToolDetails = onOpenToolDetails,
+                onViewAllFavorites = { pageStack.add(Page.FAVORITE_TOOLS) },
+                onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
+            )
         }
+        Page.FAVORITE_TOOLS -> {
+            AllFavoritesList(
+                viewModel,
+                onOpenTool = onOpenTool,
+                onOpenToolDetails = onOpenToolDetails
+            )
+        }
+        else -> Unit
     }
 }
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun HomeContent(
-    viewModel: HomeViewModel,
+internal fun HomeContent(
+    viewModel: HomeViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
     onViewAllFavorites: () -> Unit,
@@ -308,8 +301,8 @@ private fun NoFavoriteTools(
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun AllFavoritesList(
-    viewModel: HomeViewModel,
+internal fun AllFavoritesList(
+    viewModel: HomeViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
 ) {

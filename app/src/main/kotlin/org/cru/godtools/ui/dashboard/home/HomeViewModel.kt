@@ -19,7 +19,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HO
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
-import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
@@ -32,7 +31,6 @@ class HomeViewModel @Inject constructor(
     private val eventBus: EventBus,
     lessonsRepository: LessonsRepository,
     settings: Settings,
-    private val syncService: GodToolsSyncService,
     private val toolsRepository: ToolsRepository
 ) : ViewModel() {
     val banner = settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
@@ -78,21 +76,4 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch { toolsRepository.updateToolOrder(favoriteToolsOrder.value.mapNotNull { it.code }) }
     }
     // endregion Favorite Tools
-
-    // region Sync logic
-    private val syncsRunning = MutableStateFlow(0)
-    val isSyncRunning = syncsRunning.map { it > 0 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
-
-    fun triggerSync(force: Boolean = false) {
-        viewModelScope.launch {
-            syncsRunning.value++
-            syncService.suspendAndSyncTools(force)
-            syncsRunning.value--
-        }
-    }
-
-    init {
-        triggerSync()
-    }
-    // endregion Sync logic
 }

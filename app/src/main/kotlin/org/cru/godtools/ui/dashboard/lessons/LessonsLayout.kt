@@ -16,8 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.dashboard.Page
@@ -33,24 +31,18 @@ fun LessonsLayout(
 ) {
     OnResume { viewModel.trackPageInAnalytics(Page.LESSONS) }
 
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
-        val lessons by viewModel.lessons.collectAsState()
+    val lessons by viewModel.lessons.collectAsState()
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        item("header", "header") { LessonsHeader() }
 
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
-            item("header", "header") { LessonsHeader() }
-
-            items(lessons.orEmpty(), { it }, { "lesson" }) {
-                LessonToolCard(
-                    it,
-                    onClick = { tool, translation -> onOpenLesson(tool, translation) },
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(top = 16.dp)
-                )
-            }
+        items(lessons.orEmpty(), { it }, { "lesson" }) {
+            LessonToolCard(
+                it,
+                onClick = { tool, translation -> onOpenLesson(tool, translation) },
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .padding(top = 16.dp)
+            )
         }
     }
 }

@@ -7,13 +7,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
@@ -22,7 +20,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
-import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -50,7 +47,6 @@ class ToolsViewModel @Inject constructor(
     dao: GodToolsDao,
     private val eventBus: EventBus,
     settings: Settings,
-    private val syncService: GodToolsSyncService,
     private val savedState: SavedStateHandle,
 ) : ViewModel() {
     val primaryLanguage = settings.primaryLanguageFlow
@@ -87,21 +83,4 @@ class ToolsViewModel @Inject constructor(
         else -> Unit
     }
     // endregion Analytics
-
-    // region Sync logic
-    private val syncsRunning = MutableStateFlow(0)
-    val isSyncRunning = syncsRunning.map { it > 0 }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
-
-    fun triggerSync(force: Boolean = false) {
-        viewModelScope.launch {
-            syncsRunning.value++
-            syncService.suspendAndSyncTools(force)
-            syncsRunning.value--
-        }
-    }
-
-    init {
-        triggerSync()
-    }
-    // endregion Sync logic
 }

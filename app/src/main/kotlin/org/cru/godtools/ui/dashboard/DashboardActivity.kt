@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -26,15 +25,13 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
-import org.cru.godtools.ui.dashboard.home.HomeFragment
-import org.cru.godtools.ui.dashboard.lessons.LessonsFragment
-import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
@@ -70,7 +67,14 @@ class DashboardActivity :
 
     override fun onBindingChanged() {
         super.onBindingChanged()
-        showPage(viewModel.currentPage.value)
+        binding.compose.setContent {
+            GodToolsTheme {
+                DashboardLayout(
+                    onOpenTool = { t, tr1, tr2 -> openTool(t, tr1, tr2) },
+                    onOpenToolDetails = { showToolDetails(it) }
+                )
+            }
+        }
         binding.selectedPage = viewModel.currentPage.asLiveData()
         binding.setupBottomNavigation()
     }
@@ -129,22 +133,6 @@ class DashboardActivity :
     }
 
     internal fun showPage(page: Page) {
-        // short-circuit if the page is already displayed
-        if (supportFragmentManager.primaryNavigationFragment != null && page == viewModel.currentPage.value) return
-
-        val fragment = when (page) {
-            Page.LESSONS -> LessonsFragment()
-            Page.HOME -> HomeFragment()
-            Page.ALL_TOOLS -> ToolsFragment()
-            Page.FAVORITE_TOOLS -> null
-        }
-
-        if (fragment != null) {
-            supportFragmentManager.commit {
-                replace(R.id.frame, fragment)
-                setPrimaryNavigationFragment(fragment)
-            }
-        }
         viewModel.updateCurrentPage(page)
     }
 
