@@ -24,8 +24,8 @@ object AnalyticsModule {
 
     @Provides
     @ElementsIntoSet
-    @EagerSingleton(threadMode = ThreadMode.MAIN_ASYNC)
-    internal fun mainAsyncEagerSingletons(firebase: FirebaseAnalyticsService) = setOf<Any>(firebase)
+    @EagerSingleton(threadMode = ThreadMode.MAIN)
+    internal fun mainEagerSingletons(firebase: FirebaseAnalyticsService) = setOf<Any>(firebase)
 
     @Provides
     @ElementsIntoSet
