@@ -27,7 +27,7 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Category(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
-class ToolsFragmentDataModelQueriesTest {
+class ToolsViewModelQueriesTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 

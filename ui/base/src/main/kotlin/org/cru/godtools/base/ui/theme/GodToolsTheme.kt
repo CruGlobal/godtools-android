@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.sp
 import org.cru.godtools.base.ui.util.openUrl
 
+const val DisabledAlpha = 0.38f
+
 private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
 val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 

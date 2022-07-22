@@ -21,6 +21,7 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -34,9 +35,14 @@ class HomeViewModel @Inject constructor(
     private val syncService: GodToolsSyncService,
     private val toolsRepository: ToolsRepository
 ) : ViewModel() {
-    val showTutorialFeaturesBanner = settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
-        .map { !it && PageSet.FEATURES.supportsLocale(Locale.getDefault()) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
+    val banner = settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
+        .map { featureTutorial ->
+            when {
+                !featureTutorial && PageSet.FEATURES.supportsLocale(Locale.getDefault()) -> BannerType.TUTORIAL_FEATURES
+                else -> null
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val spotlightLessons = lessonsRepository.spotlightLessons
         .map { it.mapNotNull { it.code } }

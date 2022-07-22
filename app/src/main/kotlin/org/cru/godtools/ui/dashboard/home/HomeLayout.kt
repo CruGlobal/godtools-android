@@ -1,20 +1,14 @@
 package org.cru.godtools.ui.dashboard.home
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -58,7 +52,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.ui.banner.TutorialFeaturesBanner
+import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -125,15 +119,13 @@ private fun HomeContent(
     val hasFavoriteTools by remember { derivedStateOf { !favoriteTools.isNullOrEmpty() } }
 
     val columnState = rememberLazyListState()
-    val showTutorialFeaturesBanner by viewModel.showTutorialFeaturesBanner.collectAsState()
-    LaunchedEffect(showTutorialFeaturesBanner) {
-        if (showTutorialFeaturesBanner) columnState.animateScrollToItem(0)
-    }
+    val banner by viewModel.banner.collectAsState()
+    LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
         item("banners", "banners") {
             Banners(
-                viewModel,
+                { banner },
                 modifier = Modifier
                     .animateItemPlacement()
                     .fillMaxWidth()
@@ -206,23 +198,6 @@ private fun HomeContent(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-@OptIn(ExperimentalAnimationApi::class)
-private fun Banners(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
-    val showTutorialFeaturesBanner by viewModel.showTutorialFeaturesBanner.collectAsState()
-
-    Box(modifier = modifier.heightIn(min = 1.dp)) {
-        AnimatedContent(
-            targetState = showTutorialFeaturesBanner,
-            transitionSpec = {
-                slideInVertically(initialOffsetY = { -it }) with slideOutVertically(targetOffsetY = { -it })
-            }
-        ) {
-            if (it) TutorialFeaturesBanner()
         }
     }
 }

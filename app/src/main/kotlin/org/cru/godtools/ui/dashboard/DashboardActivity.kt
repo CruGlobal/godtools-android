@@ -46,8 +46,7 @@ private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 @AndroidEntryPoint
 class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
-    ToolsAdapterCallbacks,
-    ToolsFragment.Callbacks {
+    ToolsAdapterCallbacks {
     private val dataModel: DashboardDataModel by viewModels()
     private val savedState: DashboardSavedState by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
