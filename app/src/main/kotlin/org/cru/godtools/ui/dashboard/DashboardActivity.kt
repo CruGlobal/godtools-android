@@ -7,13 +7,14 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
-import androidx.lifecycle.map
+import androidx.lifecycle.asLiveData
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.map
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
@@ -48,7 +49,7 @@ class DashboardActivity :
     BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
     ToolsAdapterCallbacks {
     private val dataModel: DashboardDataModel by viewModels()
-    private val savedState: DashboardSavedState by viewModels()
+    private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
     @Inject
@@ -69,8 +70,8 @@ class DashboardActivity :
 
     override fun onBindingChanged() {
         super.onBindingChanged()
-        showPage(savedState.selectedPage)
-        binding.selectedPage = savedState.selectedPageLiveData
+        showPage(viewModel.currentPage.value)
+        binding.selectedPage = viewModel.currentPage.asLiveData()
         binding.setupBottomNavigation()
     }
 
@@ -124,12 +125,12 @@ class DashboardActivity :
     override val drawerMenu get() = binding.drawerMenu
 
     override val isShowNavigationDrawerIndicator by lazy {
-        savedState.selectedPageLiveData.map { it != Page.FAVORITE_TOOLS }
+        viewModel.currentPage.map { it != Page.FAVORITE_TOOLS }.asLiveData()
     }
 
     internal fun showPage(page: Page) {
         // short-circuit if the page is already displayed
-        if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
+        if (supportFragmentManager.primaryNavigationFragment != null && page == viewModel.currentPage.value) return
 
         val fragment = when (page) {
             Page.LESSONS -> LessonsFragment()
@@ -144,15 +145,14 @@ class DashboardActivity :
                 setPrimaryNavigationFragment(fragment)
             }
         }
-        savedState.selectedPage = page
+        viewModel.updateCurrentPage(page)
     }
 
-    private var selectedPageMenuObserver: Observer<Page>? = null
     private fun Menu.observeSelectedPageChanges() {
-        selectedPageMenuObserver?.let { savedState.selectedPageLiveData.removeObserver(it) }
-        selectedPageMenuObserver = Observer<Page> {
-            findItem(R.id.action_switch_language)?.isVisible = it != Page.LESSONS
-        }.also { savedState.selectedPageLiveData.observe(this@DashboardActivity, it) }
+        findItem(R.id.action_switch_language)?.let { item ->
+            viewModel.currentPage.asLiveData()
+                .observe(this@DashboardActivity, item) { item.isVisible = it != Page.LESSONS }
+        }
     }
 
     // region ToolsAdapterCallbacks
@@ -203,7 +203,7 @@ class DashboardActivity :
         super.isFeatureDiscoveryVisible() || isParallelLanguageDialogVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.HOME
+        FEATURE_PARALLEL_LANGUAGE -> viewModel.currentPage.value == Page.HOME
         FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }

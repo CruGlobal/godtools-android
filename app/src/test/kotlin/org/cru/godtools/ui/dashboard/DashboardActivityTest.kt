@@ -46,7 +46,7 @@ class DashboardActivityTest {
     fun `Intent Processing - Normal Launch`() {
         scenario(intent = context.createDashboardIntent(null)) {
             it.onActivity {
-                assertEquals(Page.HOME, it.savedState.selectedPage)
+                assertEquals(Page.HOME, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
             }
         }
@@ -56,7 +56,7 @@ class DashboardActivityTest {
     fun `Intent Processing - Normal Launch - Lessons`() {
         scenario(intent = context.createDashboardIntent(Page.LESSONS)) {
             it.onActivity {
-                assertEquals(Page.LESSONS, it.savedState.selectedPage)
+                assertEquals(Page.LESSONS, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
             }
         }
@@ -66,7 +66,7 @@ class DashboardActivityTest {
     fun `Intent Processing - Normal Launch - Tools`() {
         scenario(intent = context.createDashboardIntent(Page.ALL_TOOLS)) {
             it.onActivity {
-                assertEquals(Page.ALL_TOOLS, it.savedState.selectedPage)
+                assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsFragment)
             }
         }
@@ -76,7 +76,7 @@ class DashboardActivityTest {
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Home`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/home"))) {
             it.onActivity {
-                assertEquals(Page.HOME, it.savedState.selectedPage)
+                assertEquals(Page.HOME, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is HomeFragment)
             }
         }
@@ -86,7 +86,7 @@ class DashboardActivityTest {
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Lessons`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/lessons"))) {
             it.onActivity {
-                assertEquals(Page.LESSONS, it.savedState.selectedPage)
+                assertEquals(Page.LESSONS, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is LessonsFragment)
             }
         }
@@ -96,12 +96,12 @@ class DashboardActivityTest {
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Tools`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/tools"))) {
             it.onActivity {
-                assertEquals(Page.ALL_TOOLS, it.savedState.selectedPage)
+                assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value)
                 assertTrue(it.supportFragmentManager.primaryNavigationFragment is ToolsFragment)
             }
         }
     }
     // endregion Intent Processing
 
-    private val DashboardActivity.savedState get() = viewModels<DashboardSavedState>().value
+    private val DashboardActivity.viewModel get() = viewModels<DashboardViewModel>().value
 }

@@ -12,12 +12,12 @@ import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ComposeLayoutBinding
 import org.cru.godtools.ui.dashboard.DashboardActivity
-import org.cru.godtools.ui.dashboard.DashboardSavedState
+import org.cru.godtools.ui.dashboard.DashboardViewModel
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layout) {
-    private val dashboardSavedState: DashboardSavedState by activityViewModels()
+    private val dashboardViewModel: DashboardViewModel by activityViewModels()
 
     override fun onCreateBinding(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         ComposeLayoutBinding.inflate(inflater, container, false)
@@ -31,7 +31,7 @@ class HomeFragment : BaseFragment<ComposeLayoutBinding>(R.layout.compose_layout)
                     onOpenTool = { tool, tr1, tr2 -> findListener<ToolsAdapterCallbacks>()?.openTool(tool, tr1, tr2) },
                     onOpenToolDetails = { findListener<ToolsAdapterCallbacks>()?.showToolDetails(it) },
                     onShowDashboardPage = { findListener<DashboardActivity>()?.showPage(it) },
-                    onUpdateCurrentPage = { dashboardSavedState.selectedPage = it }
+                    onUpdateCurrentPage = { dashboardViewModel.updateCurrentPage(it) }
                 )
             }
         }
