@@ -16,10 +16,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
+import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.BannerType
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -43,6 +48,7 @@ internal val QUERY_TOOLS_SPOTLIGHT = QUERY_TOOLS_BASE.andWhere(ToolTable.FIELD_S
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsViewModel @Inject constructor(
     dao: GodToolsDao,
+    private val eventBus: EventBus,
     settings: Settings,
     private val syncService: GodToolsSyncService,
     private val savedState: SavedStateHandle,
@@ -71,6 +77,16 @@ class ToolsViewModel @Inject constructor(
         tools.filter { category == null || it.category == category }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
     // endregion Filters
+
+    // region Analytics
+    fun trackPageInAnalytics(page: Page) = when (page) {
+        Page.ALL_TOOLS -> {
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_ALL_TOOLS))
+            eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS))
+        }
+        else -> Unit
+    }
+    // endregion Analytics
 
     // region Sync logic
     private val syncsRunning = MutableStateFlow(0)
