@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,16 +21,16 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
-import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -86,13 +85,16 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         tool?.let { downloadManager.getDownloadProgressLiveData(tool, locale) }.orEmpty()
     }
 
-    val availableLanguages = toolCodeLiveData
-        .switchMap {
-            it?.let {
-                Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(it)).getAsLiveData(dao)
-            }.orEmpty()
+    val availableLanguages = toolCode
+        .flatMapLatest {
+            when (it) {
+                null -> flowOf(emptyList())
+                else -> Query.select<Language>()
+                    .join(LanguageTable.SQL_JOIN_TRANSLATION.andOn(TranslationTable.FIELD_TOOL eq it))
+                    .getAsFlow(dao)
+            }
         }
-        .map { it?.map { translation -> translation.languageCode }?.distinct().orEmpty() }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val variants = tool.flatMapLatest {
         when (val metatool = it?.metatoolCode) {
