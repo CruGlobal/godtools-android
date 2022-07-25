@@ -15,6 +15,11 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ContentAnalyticsEventAnalyticsActionEventTest {
     @Test
+    fun testSanitizeAdobeNameForFirebase() {
+        assertEquals("a_b_c_d", "a.B c-d".sanitizeAdobeNameForFirebase())
+    }
+
+    @Test
     fun testFirebaseEventNameAdobeMigration() {
         val adobeEvent =
             ContentAnalyticsEventAnalyticsActionEvent(AnalyticsEvent(action = "A b_c.d-e", systems = setOf(ADOBE)))
@@ -30,7 +35,7 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
         val adobeEvent = ContentAnalyticsEventAnalyticsActionEvent(
             AnalyticsEvent(systems = setOf(ADOBE), attributes = mapOf("cru.Key" to "value"))
         )
-        assertThat(adobeEvent.adobeAttributes, hasEntry("cru.Key", "value"))
+        assertThat(adobeEvent.event.attributes, hasEntry("cru.Key", "value"))
         with(adobeEvent.firebaseParams) {
             assertTrue(containsKey("cru_key"))
             assertFalse(containsKey("cru.Key"))
