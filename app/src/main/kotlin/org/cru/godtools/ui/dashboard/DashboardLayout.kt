@@ -9,6 +9,7 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -24,6 +25,8 @@ internal fun DashboardLayout(
     onOpenToolDetails: (String) -> Unit
 ) {
     val currentPage by viewModel.currentPage.collectAsState()
+    OnResume(currentPage) { viewModel.trackPageInAnalytics(currentPage) }
+
     val hasBackStack by viewModel.hasBackStack.collectAsState()
     BackHandler(hasBackStack) { viewModel.popPageStack() }
 

@@ -23,9 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -37,8 +35,6 @@ internal fun ToolsLayout(
     viewModel: ToolsViewModel = viewModel(),
     onToolClicked: (String) -> Unit = {}
 ) {
-    OnResume { viewModel.trackPageInAnalytics(Page.ALL_TOOLS) }
-
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
     val filteredTools by viewModel.filteredTools.collectAsState()

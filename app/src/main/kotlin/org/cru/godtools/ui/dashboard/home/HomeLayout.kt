@@ -40,9 +40,7 @@ import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
-import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.Banners
@@ -62,8 +60,6 @@ internal fun HomeContent(
     onViewAllFavorites: () -> Unit,
     onViewAllTools: () -> Unit
 ) {
-    OnResume { viewModel.trackPageInAnalytics(Page.HOME) }
-
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
@@ -264,8 +260,6 @@ internal fun AllFavoritesList(
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
 ) {
-    OnResume { viewModel.trackPageInAnalytics(Page.FAVORITE_TOOLS) }
-
     val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
 
     val reorderableState = rememberReorderableLazyListState(

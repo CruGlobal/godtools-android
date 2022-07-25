@@ -10,14 +10,21 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
+import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.sync.GodToolsSyncService
+import org.greenrobot.eventbus.EventBus
 
 private const val KEY_PAGE_STACK = "pageStack"
 private val DEFAULT_PAGE = Page.HOME
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    private val eventBus: EventBus,
     private val syncService: GodToolsSyncService,
     private val savedState: SavedStateHandle
 ) : ViewModel() {
@@ -45,6 +52,24 @@ class DashboardViewModel @Inject constructor(
         pageStack = pageStack.dropLast(1)
     }
     // endregion Page Stack
+
+    // region Analytics
+    fun trackPageInAnalytics(page: Page) = when (page) {
+        Page.LESSONS -> {
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_LESSONS))
+            eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
+        }
+        Page.HOME, Page.FAVORITE_TOOLS -> {
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_HOME))
+            eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
+        }
+        Page.ALL_TOOLS -> {
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_ALL_TOOLS))
+            eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS))
+        }
+        else -> Unit
+    }
+    // endregion Analytics
 
     // region Sync logic
     private val syncsRunning = MutableStateFlow(0)
