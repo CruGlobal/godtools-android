@@ -6,15 +6,16 @@
     <data>
         <import type="android.text.util.Linkify" />
         <import type="androidx.lifecycle.LiveData" />
-        <import type="java.util.Locale" />
+        <import type="java.util.List" />
         <import type="kotlinx.coroutines.flow.StateFlow" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
+        <import type="org.cru.godtools.model.Language" />
         <import type="org.cru.godtools.model.Tool" />
 
         <variable name="autoLinkListener" type="org.cru.godtools.ui.tooldetails.LinkClickedListener" />
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />
         <variable name="translation" type="LiveData&lt;org.cru.godtools.model.Translation&gt;" />
-        <variable name="languages" type="LiveData&lt;java.util.List&lt;Locale&gt;&gt;" />
+        <variable name="languages" type="StateFlow&lt;List&lt;Language&gt;&gt;" />
     </data>
 
     <LinearLayout
