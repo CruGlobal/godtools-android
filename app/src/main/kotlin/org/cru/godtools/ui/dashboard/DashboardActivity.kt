@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
@@ -83,12 +82,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
     override fun onResume() {
         super.onResume()
         launchTrackingViewModel.trackLaunch()
-    }
-
-    override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
-        super.onSyncData(helper, force)
-        syncService.syncFollowups().sync()
-        syncService.syncToolShares().sync()
     }
     // endregion Lifecycle
 
