@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
 
+    implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.okta)
