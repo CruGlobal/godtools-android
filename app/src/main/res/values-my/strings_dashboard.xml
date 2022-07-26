@@ -19,21 +19,36 @@
     <string name="menu_copyright">မူပိုင်ခွင့်</string>
     <string name="share_story_subject">GodTools ဇာတ်လမ်း</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">သင်ခန်းစာများ</string>
+    <string name="dashboard_lessons_header_title">သင့်အတွက် ပြုလုပ်ထားသော သင်ခန်းစာများ</string>
+    <string name="dashboard_lessons_header_description">ဆက်နွှယ်မှုများ တည်ဆောက်ရန်နှင့် အဓိပ္ပာယ်ရှိသော ပြောဆိုမှုများ စတင်ရန် လက်တွေ့ကျသော အကြံပြုချက်များ။</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">အနှစ်သက်ဆုံးများ</string>
-    <string name="tools_list_remove_favorite_dialog_title">“%1$s” ကိုသင့်အကြိုက်ဆုံးမှ ပယ်ဖျက်မည်လား?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">ပယ်ဖျက်မည်</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">ဖျက်သိမ်းသည်</string>
+    <string name="dashboard_home_header_title">GodTools မှ ကြိုဆိုပါသည်</string>
+    <string name="dashboard_home_section_featured_lesson">ဖော်ပြထားသော သင်ခန်းစာ</string>
+    <string name="dashboard_home_section_favorites_title">သင်၏ အနှစ်သက်ဆုံး ကိရိယာများ</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">ပြသရန် အနှစ်သက်ဆုံး ကိရိယာများ မရှိပါ</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">အသည်းပုံကို နှိပ်၍ ကိရိယာတစ်ခုကို နှစ်သက်နိုင်ပြီး အော့ဖ်လိုင်းတွင် ရရှိအောင် လုပ်နိုင်ပါသည်။</string>
+    <string name="dashboard_home_section_favorites_action_view_all">အားလုံးကို ကြည့်ပါ &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ကိရိယာများသို့ သွားပါ</string>
     <string name="tools_list_favorites_banner_text">ကိရိယာတစ္ခုကိုအင္တာနက္ဆက္သြယ္မႈမရွိခ်ိန္တြင္ အသံုးျပဳႏိုင္ရန္အတြက္ သင္၏အႀကိဳက္ဆံုးမ်ားထဲသို႔ထည္႔သည္႔ အသဲပံုအိုင္ကြန္ကို ႏွိပ္ၿပီးျပဳလုပ္ပါ။</string>
     <string name="tools_list_favorites_banner_action_dismiss">ထုတ်ပစ်သည်</string>
     <!-- All Tools -->
     <string name="nav_all_tools">ကိရိယာများအားလုံး</string>
+    <string name="dashboard_tools_section_categories_label">အမျိုးအစားများ</string>
+    <string name="dashboard_tools_section_categories_all">ကိရိယာများအားလုံး</string>
+    <string name="dashboard_tools_section_spotlight_label">ကိရိယာ အသားပေးဖော်ပြမှု</string>
+    <string name="dashboard_tools_section_spotlight_description">သင်နှစ်သက်မည်ဟု ထင်သော ကိရိယာအချို့ကို ဤတွင်ကြည့်ပါ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” ကိုသင့်အကြိုက်ဆုံးမှ ပယ်ဖျက်မည်လား?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ပယ်ဖျက်မည်</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">ဖျက်သိမ်းသည်</string>
+    <string name="tool_card_label_language_unavailable">%1$s တွင် မရရှိနိုင်ပါ</string>
+    <string name="action_tools_about">အသေးစိတ်</string>
+    <string name="action_tools_open">ဖွင့်ရန်</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">အရန် ဘာသာစကား သတ်မှတ်ချင်ပါသလား။</string>
     <string name="languages_parallel_dialog_select">ဘာသာစကား ရွေးချယ်ပါ</string>
     <string name="languages_parallel_dialog_action_start">စတင်လိုက်ပါ</string>
     <string name="languages_parallel_dialog_action_cancel">လက်မခံသေးပါ</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">အကြောင်းအရာ</string>
-    <string name="action_tools_open">ဖွင့်ရန်</string>
 </resources>

@@ -6,6 +6,7 @@
     <string name="tract_card_next">Seuraava</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Jaa näyttösi</string>
+    <string name="menu_live_share_active">Ruudunjako käytössä</string>
     <string name="share_tool_message_tract_live_share">Hei, voit käyttää GodToolsia kanssani näytönjaon avulla. Tässä linkki: %1$s\n\nLinkki voi yhä olla toiminnassa, vaikka saisitkin tämän viestin myöhemmin. Voimme yrittää uudelleen toisen kerran.</string>
     <string name="tract_live_share_starting">Näytönjakoa käynnistetään…</string>
     <string name="tract_live_share_unable_to_connect">Näytönjakoon ei saatu yhteyttä</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Poistu</string>
     <string name="tract_live_share_exit_dialog_cancel">Peruuta</string>
     <!-- Settings -->
+    <string name="menu_settings">Asetukset</string>
+    <string name="tract_settings_title">Työkaluvaihtoehdot</string>
+    <string name="tract_settings_action_share">Jaa linkki</string>
+    <string name="tract_settings_action_tips_disable">Piilota vinkit</string>
+    <string name="tract_settings_languages_title">Rinnakkaiskieli</string>
+    <string name="tract_settings_languages_description">Voit siirtyä kielestä toiseen tässä työkalussa.</string>
+    <string name="tract_settings_languages_parallel">Rinnakkainen</string>
+    <string name="tract_settings_languages_none">Ei mitään</string>
+    <string name="tract_settings_shareables_title">Vastaavat grafiikat</string>
 </resources>

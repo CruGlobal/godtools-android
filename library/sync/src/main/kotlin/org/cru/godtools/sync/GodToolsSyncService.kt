@@ -98,6 +98,14 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) =
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
 
+    suspend fun executeSyncTask(task: SyncTask) = when (task) {
+        is GtSyncTask -> {
+            executeSyncTask(task)
+            true
+        }
+        else -> false
+    }
+
     // region Sync Tasks
     fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(
         bundleOf(
@@ -106,14 +114,14 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         )
     )
 
-    fun syncTools(force: Boolean): SyncTask = GtSyncTask(
-        bundleOf(
-            EXTRA_SYNCTYPE to SYNCTYPE_TOOLS,
-            ContentResolver.SYNC_EXTRAS_MANUAL to force
+    suspend fun syncTools(force: Boolean) = executeSyncTask(
+        GtSyncTask(
+            bundleOf(
+                EXTRA_SYNCTYPE to SYNCTYPE_TOOLS,
+                ContentResolver.SYNC_EXTRAS_MANUAL to force
+            )
         )
     )
-
-    suspend fun suspendAndSyncTools(force: Boolean) = executeSyncTask(syncTools(force) as GtSyncTask)
 
     fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(

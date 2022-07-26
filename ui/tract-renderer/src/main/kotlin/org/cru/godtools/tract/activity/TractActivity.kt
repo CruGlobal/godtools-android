@@ -23,7 +23,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.EXTRA_PAGE
@@ -122,7 +122,7 @@ class TractActivity :
 
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
-            InstantApps.showInstallPrompt(this, -1, "instantapp")
+            InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
             true
         }
         item.itemId == R.id.action_settings -> {
@@ -173,7 +173,8 @@ class TractActivity :
             when {
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]
-                    dataModel.primaryLocales.value = LocaleUtils.getFallbacks(Locale.forLanguageTag(path[3])).toList()
+                    dataModel.primaryLocales.value =
+                        sequenceOf(Locale.forLanguageTag(path[3])).includeFallbacks().toList()
                     path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
                 }
                 data.isTractDeepLink() -> {
@@ -206,19 +207,21 @@ class TractActivity :
         val selected = deepLinkSelectedLanguage
 
         if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
-            primary += LocaleUtils.getFallbacks(Locale.getDefault())
+            primary += sequenceOf(Locale.getDefault()).includeFallbacks()
         }
-        primary += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).toTypedArray())
-        parallel += LocaleUtils.getFallbacks(*extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).toTypedArray())
+        primary += extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).includeFallbacks()
+        parallel += extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).includeFallbacks()
 
-        if (selected !in primary && selected !in parallel) primary += LocaleUtils.getFallbacks(selected)
+        if (selected !in primary && selected !in parallel) primary += sequenceOf(selected).includeFallbacks()
 
         return Pair(primary.toList(), parallel.toList())
     }
 
     private fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
+        .asSequence()
         .flatMap { it.split(",") }
-        .map { it.trim() }.filterNot { it.isEmpty() }
+        .map { it.trim() }
+        .filterNot { it.isEmpty() }
         .map { Locale.forLanguageTag(it) }
     // endregion Intent Processing
 

@@ -6,6 +6,7 @@
     <string name="tract_card_next">次</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">画面を共有する</string>
+    <string name="menu_live_share_active">画面共有が有効です</string>
     <string name="share_tool_message_tract_live_share">こんにちは。画面共有を通してGodToolsを一緒に見てみましょう。リンクはこちらです: %1$s\n\nこのメッセージが後から届いた場合、リンクが使用できなくなっている場合があります。その場合は、またの機会に試しましょう。</string>
     <string name="tract_live_share_starting">「画面共有」を開始しています…</string>
     <string name="tract_live_share_unable_to_connect">「画面共有」に接続できません</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">終了</string>
     <string name="tract_live_share_exit_dialog_cancel">キャンセル</string>
     <!-- Settings -->
+    <string name="menu_settings">設定</string>
+    <string name="tract_settings_title">ツールオプション</string>
+    <string name="tract_settings_action_share">リンクをシェア</string>
+    <string name="tract_settings_action_tips_disable">ヒントを非表示</string>
+    <string name="tract_settings_languages_title">並列言語</string>
+    <string name="tract_settings_languages_description">本ツール内で2つの言語を切り替えることができます。</string>
+    <string name="tract_settings_languages_parallel">並列</string>
+    <string name="tract_settings_languages_none">なし</string>
+    <string name="tract_settings_shareables_title">関連する画像</string>
 </resources>

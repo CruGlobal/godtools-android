@@ -19,21 +19,36 @@
     <string name="menu_copyright">Copyright</string>
     <string name="share_story_subject">GodTools-verhaal</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Lessen</string>
+    <string name="dashboard_lessons_header_title">Speciaal voor jou</string>
+    <string name="dashboard_lessons_header_description">Praktische ideeën om relaties te ontwikkelen en zinvolle gesprekken te voeren.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favorieten</string>
-    <string name="tools_list_remove_favorite_dialog_title">“%1$s” uit Favorieten verwijderen?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Verwijderen</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Annuleren</string>
+    <string name="dashboard_home_header_title">Welkom bij GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Uitgelichte les</string>
+    <string name="dashboard_home_section_favorites_title">Je favoriete tools</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Geen favoriete tools</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Tik op het hartje om een tool toe te voegen zodat hij ook offline beschikbaar is.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Alles bekijken &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Naar Tools gaan</string>
     <string name="tools_list_favorites_banner_text">Maak een hulpmiddel offline beschikbaar door op het hartje te tikken en het zo aan je Favorieten toe te voegen.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Afwijzen</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Alle hulpmiddelen</string>
+    <string name="dashboard_tools_section_categories_label">Categorieën</string>
+    <string name="dashboard_tools_section_categories_all">Alle hulpmiddelen</string>
+    <string name="dashboard_tools_section_spotlight_label">Uitgelicht</string>
+    <string name="dashboard_tools_section_spotlight_description">Hier zijn wat tools die vast zullen bevallen</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” uit Favorieten verwijderen?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Verwijderen</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Annuleren</string>
+    <string name="tool_card_label_language_unavailable">Niet beschikbaar in het %1$s</string>
+    <string name="action_tools_about">Info</string>
+    <string name="action_tools_open">Openen</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Wil je een tweede taal instellen?</string>
     <string name="languages_parallel_dialog_select">Selecteer een taal</string>
     <string name="languages_parallel_dialog_action_start">Aan de slag</string>
     <string name="languages_parallel_dialog_action_cancel">Nee, bedankt</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Over</string>
-    <string name="action_tools_open">Openen</string>
 </resources>

@@ -19,21 +19,36 @@
     <string name="menu_copyright">Copyright</string>
     <string name="share_story_subject">Poveste cu GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Lecții</string>
+    <string name="dashboard_lessons_header_title">Lecții create pentru tine</string>
+    <string name="dashboard_lessons_header_description">Idei practice pentru a construi relații și a începe conversații relevante.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favorite</string>
-    <string name="tools_list_remove_favorite_dialog_title">Elimini “%1$s” din Favorite?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Elimină</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Anulează</string>
+    <string name="dashboard_home_header_title">Bun venit la GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Lecție recomandată</string>
+    <string name="dashboard_home_section_favorites_title">Instrumentele tale preferate</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Niciun instrument preferat de afișat</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Atinge pictograma inimă pentru a adăuga la favorite un instrument și a-l face disponibil offline.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Vezi tot &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Accesează Instrumentele</string>
     <string name="tools_list_favorites_banner_text">Fă un instrument disponibil offline apăsând pictograma inimă care o adaugă la favorite.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Anulează</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Toate instrumentele</string>
+    <string name="dashboard_tools_section_categories_label">Categorii</string>
+    <string name="dashboard_tools_section_categories_all">Toate instrumentele</string>
+    <string name="dashboard_tools_section_spotlight_label">Recomandări de instrumente</string>
+    <string name="dashboard_tools_section_spotlight_description">Iată câteva instrumente care credem că îți vor plăcea</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Elimini “%1$s” din Favorite?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Elimină</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Anulează</string>
+    <string name="tool_card_label_language_unavailable">Indisponibil în %1$s</string>
+    <string name="action_tools_about">Detalii</string>
+    <string name="action_tools_open">Deschide</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Vrei să setezi o limbă secundară?</string>
     <string name="languages_parallel_dialog_select">Selectează o limbă</string>
     <string name="languages_parallel_dialog_action_start">Să începem</string>
     <string name="languages_parallel_dialog_action_cancel">Nu, mulțumesc</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Despre</string>
-    <string name="action_tools_open">Deschide</string>
 </resources>

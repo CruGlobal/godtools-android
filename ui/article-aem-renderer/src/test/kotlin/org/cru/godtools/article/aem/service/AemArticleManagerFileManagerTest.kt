@@ -1,10 +1,22 @@
 package org.cru.godtools.article.aem.service
 
 import android.net.Uri
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.spyk
+import io.mockk.verify
 import java.io.File
 import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import kotlin.io.path.createTempDirectory
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
@@ -17,23 +29,13 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
-import org.mockito.Mockito.mockStatic
-import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.whenever
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerFileManagerTest {
     private val testDir = createTempDirectory().toFile()
 
-    private val resourceDao = mock<ResourceDao>()
-    private val fs = spy(AemFileSystem(mock { on { filesDir } doReturn testDir }))
+    private val resourceDao = mockk<ResourceDao>(relaxUnitFun = true)
+    private val fs = spyk(AemFileSystem(mockk { every { filesDir } returns testDir }))
 
     private val fileManager = AemArticleManager.FileManager(fs, resourceDao)
 
@@ -44,35 +46,35 @@ class AemArticleManagerFileManagerTest {
 
     // region storeResponse()
     @Test
-    fun `storeResponse()`() = runBlocking {
+    fun `storeResponse()`() = runTest {
         val data = "testWriteToDisk()"
-        val uri = mock<Uri>()
+        val uri = mockk<Uri>()
         val resource = Resource(uri)
 
         val file = fileManager.storeResponse(data.toByteArray().toResponseBody(), resource)
-        verify(resourceDao).updateLocalFile(eq(uri), anyOrNull(), any(), any())
+        coVerifyAll { resourceDao.updateLocalFile(uri, any(), any(), any()) }
         assertNotNull(file)
         assertArrayEquals(data.toByteArray(), file!!.readBytes())
     }
 
     @Test
-    fun `storeResponse() - Dedup`() = runBlocking {
+    fun `storeResponse() - Dedup`() = runTest {
         val data = "testWriteToDiskDedup()"
 
-        val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
-        val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
+        val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), Resource(mockk()))!!
+        val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), Resource(mockk()))!!
 
         assertEquals(file1, file2)
     }
 
     @Test
-    fun `storeResponse() - No Dedup Without Digest`() = runBlocking {
-        mockStatic(MessageDigest::class.java).use {
-            it.`when`<MessageDigest?> { MessageDigest.getInstance("SHA-1") } doReturn null
+    fun `storeResponse() - No Dedup Without Digest`() = runTest {
+        mockkStatic(MessageDigest::class) {
+            every { MessageDigest.getInstance(any()) } throws NoSuchAlgorithmException()
             val data = "testWriteToDiskNoDedupWithoutDigest()"
 
-            val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
-            val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), mock())!!
+            val file1 = fileManager.storeResponse(data.toByteArray().toResponseBody(), Resource(mockk()))!!
+            val file2 = fileManager.storeResponse(data.toByteArray().toResponseBody(), Resource(mockk()))!!
 
             assertNotEquals(file1, file2)
             assertNotEquals(file1.name, file2.name)
@@ -84,29 +86,31 @@ class AemArticleManagerFileManagerTest {
 
     // region removeOrphanedFiles()
     @Test
-    fun `removeOrphanedFiles()`(): Unit = runBlocking {
-        val validFile = mock<File>()
-        val invalidFile = mock<File>()
-        val resources = listOf<Resource>(mock { onBlocking { getLocalFile(any()) } doReturn validFile })
-        whenever(resourceDao.getAll()) doReturn resources
-        val rootDir = mock<File> {
-            on { listFiles() } doReturn arrayOf(validFile, invalidFile)
+    fun `removeOrphanedFiles()`() = runTest {
+        val validFile = mockk<File>()
+        val invalidFile = mockk<File>(relaxed = true)
+        coEvery { resourceDao.getAll() } returns listOf(mockk { coEvery { getLocalFile(any()) } returns validFile })
+        val rootDir = mockk<File> {
+            every { listFiles() } returns arrayOf(validFile, invalidFile)
         }
-        whenever(fs.rootDir()) doReturn rootDir
+        coEvery { fs.rootDir() } returns rootDir
 
         fileManager.removeOrphanedFiles()
-        verify(resourceDao).getAll()
-        verify(validFile, never()).delete()
-        verify(invalidFile).delete()
+        coVerify(exactly = 1) {
+            resourceDao.getAll()
+            invalidFile.delete()
+        }
+        coVerify(inverse = true) { validFile.delete() }
+        confirmVerified(resourceDao)
     }
 
     @Test
-    fun `removeOrphanedFiles() - Do nothing if FileSystem doesn't exist`(): Unit = runBlocking {
-        whenever(fs.exists()) doReturn false
+    fun `removeOrphanedFiles() - Do nothing if FileSystem doesn't exist`() = runTest {
+        coEvery { fs.exists() } returns false
 
         fileManager.removeOrphanedFiles()
-        verifyNoInteractions(resourceDao)
-        verify(fs, never()).rootDir()
+        verify { resourceDao wasNot Called }
+        coVerify(inverse = true) { fs.rootDir() }
     }
     // endregion removeOrphanedFiles()
 }

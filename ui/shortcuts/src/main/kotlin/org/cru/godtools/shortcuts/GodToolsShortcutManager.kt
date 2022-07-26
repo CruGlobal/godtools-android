@@ -27,8 +27,11 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -39,7 +42,7 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
@@ -55,6 +58,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
@@ -70,6 +74,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val fs: ToolFileSystem,
     private val picasso: Picasso,
     private val settings: Settings,
+    private val translationsRepository: TranslationsRepository,
     private val coroutineScope: CoroutineScope,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
@@ -80,7 +85,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         eventBus: EventBus,
         fs: ToolFileSystem,
         picasso: Picasso,
-        settings: Settings
+        settings: Settings,
+        translationsRepository: TranslationsRepository,
     ) : this(
         context,
         dao,
@@ -88,6 +94,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fs,
         picasso,
         settings,
+        translationsRepository,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
@@ -222,8 +229,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // generate the list of locales to use for this tool
         val locales = buildList {
-            val translation = dao.getLatestTranslation(code, settings.primaryLanguage)
-                ?: dao.getLatestTranslation(code, Locale.ENGLISH)
+            val translation = translationsRepository.getLatestTranslation(code, settings.primaryLanguage)
+                ?: translationsRepository.getLatestTranslation(code, Locale.ENGLISH)
                 ?: return@withContext null
             add(translation.languageCode)
             settings.parallelLanguage?.let { add(it) }
@@ -240,8 +247,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = LocaleUtils.getFallbacks(Locale.getDefault(), Locale.ENGLISH).asSequence()
-            .mapNotNull { dao.getLatestTranslation(code, it) }
+        val label = sequenceOf(Locale.getDefault(), Locale.ENGLISH).includeFallbacks().distinct().asFlow()
+            .mapNotNull { translationsRepository.getLatestTranslation(code, it) }
             .firstOrNull()
             .getName(tool, context)
 

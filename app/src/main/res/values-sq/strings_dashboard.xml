@@ -14,9 +14,9 @@
     <string name="menu_copyright">E drejta e autorit</string>
     <string name="share_story_subject">Dëgjo se si Perëndia po punon.</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <!-- All Tools -->
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
+    <!-- Tool Cards -->
     <string name="action_tools_about">Rreth</string>
+    <!-- Parallel Language Dialog -->
 </resources>

@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s 이(가) 필요합니다</string>
     <string name="tract_content_input_error_invalid_email">유효한 이메일 주소를 입력하세요</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">트레이닝 팁</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">공유</string>
+    <string name="tool_share_sheet_more_apps">더 보기</string>
+    <string name="share_tool_message_article">저는 이 글을 당신과 공유하고 싶었고 그것에 대한 당신의 생각을 듣고 싶어요.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">링크 공유하기</string>
     <string name="feature_discovery_desc_share_tool">이 아이콘을 클릭하면 이 툴을 친구에게 보냅니다</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">이미지 공유</string>
 </resources>

@@ -14,19 +14,11 @@ open class AnalyticsActionEvent(
     locale: Locale? = null,
     systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) : AnalyticsBaseEvent(locale, systems) {
-    companion object {
-        fun String.sanitizeAdobeNameForFirebase(): String = replace(Regex("[ \\-.]"), "_").lowercase(Locale.ROOT)
-    }
-
     constructor(action: String, label: String? = null, locale: Locale? = null, system: AnalyticsSystem) :
         this(action, label, locale, setOf(system))
 
-    open val adobeAttributes: Map<String, *>? get() = null
-
     open val firebaseEventName get() = action
-    open val firebaseParams get() = Bundle().apply {
-        adobeAttributes?.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value?.toString()) }
-    }
+    open val firebaseParams get() = Bundle()
 
     open val snowplowCategory = "action"
     override val snowplowPageTitle = listOfNotNull(action, label).joinToString(" : ")

@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s kreves</string>
     <string name="tract_content_input_error_invalid_email">Oppgi en gyldig e-postadresse</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Opplæringstips</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Del</string>
+    <string name="tool_share_sheet_more_apps">Mer</string>
+    <string name="share_tool_message_article">Jeg ville dele denne artikkelen med deg, og jeg vil gjerne høre hva du synes om den.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Del en kobling</string>
     <string name="feature_discovery_desc_share_tool">Send dette verktøyet til en venn ved å klikke på dette ikonet.</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Del bildet</string>
 </resources>

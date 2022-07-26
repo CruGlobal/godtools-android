@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">Neizdevās atvērt \"%s\"</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Labā vēsts</string>
+    <string name="tool_category_articles">Raksti</string>
+    <string name="tool_category_conversation_starter">Sarunas uzsākšanai</string>
+    <string name="tool_category_growth">Kristīgā izaugsme</string>
+    <string name="tool_category_training">Apmācība</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Šī saite atvērs tīmekļa lapu par to, ko šodien apspriedām: %1$s \n\n
+
+Lietotni var lejupielādēt savā tālrunī no https://ej.uz/GodTools \n\n
+
+Turpināsim sarunu!</string>
+</resources>

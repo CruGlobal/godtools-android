@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Avaa työkalu</string>
     <string name="action_tools_add_favorite">Lisää suosikkeihin</string>
     <string name="action_tools_remove_favorite">Poista suosikeista</string>
+    <string name="action_tools_open_training">Opi jakamaan tämä työkalu</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d tarkastelu</item>
         <item quantity="other">%1$,d tarkastelua</item>
@@ -14,4 +15,7 @@
         <item quantity="one">%1$,d kieli</item>
         <item quantity="other">%1$,d kieltä</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Saatavilla olevat kielet</string>
+    <string name="tool_details_section_variants_label">Versiot</string>
+    <string name="tool_details_section_variants_description">Vaihda tämän työkalun eri versioon. Jokaisella versiolla on oma tyylinsä ja sisältönsä, jotta voit löytää juuri omaan keskusteluusi sopivan. Voit merkitä useita saman työkalun versioita suosikeiksi.</string>
 </resources>

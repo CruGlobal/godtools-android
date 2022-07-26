@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">استخدام جهازين بالتزامن</string>
     <string name="tutorial_live_share_mirrored_text">أثناء تمرير الأداة على هاتفك، ستستجيب شاشة صديقك بنفس الطريقة. هذا يتيح لك بالتنقل عبر الأداة معاً على جهازين في نفس الوقت.</string>
     <string name="tutorial_live_share_start_headline">ابدأ</string>
-    <string name="tutorial_live_share_start_text">أرسل الرابط إلى شخص أو أكثر لبدء جلسة مشاركة الشاشة الآن.
-
-تتطلب هذه التجربة حالياً من جميع المشاركين تنزيل تطبيق GodTools على أجهزتهم.</string>
+    <string name="tutorial_live_share_start_text">أرسل الرابط إلى شخص أو أكثر لبدء جلسة مشاركة الشاشة الآن.</string>
     <string name="tutorial_live_share_action_continue">استمرار</string>
     <string name="tutorial_live_share_action_skip">تجاوز</string>
     <string name="tutorial_live_share_action_start">شارك رابطاً</string>

@@ -6,10 +6,13 @@
     <string name="tract_content_input_error_required">Необходимо ввести %1$s</string>
     <string name="tract_content_input_error_invalid_email">Введите правильный адрес эл. почты</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Подсказки по обучению</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Поделиться</string>
+    <string name="tool_share_sheet_more_apps">Больше</string>
     <string name="share_tool_message_article">Хочу поделиться с вами статьей и услышать ваше мнение о ней.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Поделитесь ссылкой</string>
     <string name="feature_discovery_desc_share_tool">Нажмите на значок, чтобы рассказать об этом инструменте друзьям</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Поделитесь изображением</string>
 </resources>

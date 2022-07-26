@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">打开工具</string>
     <string name="action_tools_add_favorite">加入收藏夹</string>
     <string name="action_tools_remove_favorite">移出收藏夹</string>
+    <string name="action_tools_open_training">学习分享工具</string>
     <plurals name="label_tools_shares">
         <item quantity="other">%1$,d 次浏览</item>
     </plurals>
@@ -12,4 +13,7 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 种语言</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">可用语言</string>
+    <string name="tool_details_section_variants_label">版本</string>
+    <string name="tool_details_section_variants_description">请在下面选择此工具的不同版本。每个版本都有独特的风格和内容，所以你可以找到一个最适合你的对话。您可以喜欢同一工具的多个版本。</string>
 </resources>

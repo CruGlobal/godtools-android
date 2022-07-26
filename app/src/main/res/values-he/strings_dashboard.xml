@@ -19,21 +19,36 @@
     <string name="menu_copyright">זכויות יוצרים</string>
     <string name="share_story_subject">סיפורי GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">שיעורים</string>
+    <string name="dashboard_lessons_header_title">שיעורים שנבנו בשבילך</string>
+    <string name="dashboard_lessons_header_description">רעיונות מעשיים לבניית מערכות יחסים ולהתחיל שיחות משמעותיות.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">מועדפים</string>
-    <string name="tools_list_remove_favorite_dialog_title">האם להסיר את \"%1$s\" מהמועדפים?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">הסר</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">בטל</string>
+    <string name="dashboard_home_header_title">ברוכים הבאים ל-GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">שיעור מומלץ</string>
+    <string name="dashboard_home_section_favorites_title">הכלים המועדפים שלך</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">אין כלים מועדפים לתצוגה</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">לחץ על סמל הלב כדי להוסיף למועדפים את הכלי ולהפוך אותו לזמין במצב לא מקוון.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">הצג הכל &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">עבור אל כלים</string>
     <string name="tools_list_favorites_banner_text">הפוך כלי לזמין במצב לא מקוון על ידי הקשה על סמל הלב שמוסיף אותו למועדפים שלך.</string>
     <string name="tools_list_favorites_banner_action_dismiss">שחרר</string>
     <!-- All Tools -->
     <string name="nav_all_tools">כל הכלים</string>
+    <string name="dashboard_tools_section_categories_label">קטגוריות</string>
+    <string name="dashboard_tools_section_categories_all">כל הכלים</string>
+    <string name="dashboard_tools_section_spotlight_label">הדגשת כלי</string>
+    <string name="dashboard_tools_section_spotlight_description">הנה כמה כלים שחשבנו שאולי תאהב</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">האם להסיר את \"%1$s\" מהמועדפים?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">הסר</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">בטל</string>
+    <string name="tool_card_label_language_unavailable">לא זמין ב-%1$s</string>
+    <string name="action_tools_about">פרטים</string>
+    <string name="action_tools_open">פתח</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">" האם ברצונכם להגדיר שפה שניה?"</string>
     <string name="languages_parallel_dialog_select">בחרו שפה</string>
     <string name="languages_parallel_dialog_action_start">בואו נתחיל</string>
     <string name="languages_parallel_dialog_action_cancel">לא תודה</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">אודות</string>
-    <string name="action_tools_open">פתח</string>
 </resources>

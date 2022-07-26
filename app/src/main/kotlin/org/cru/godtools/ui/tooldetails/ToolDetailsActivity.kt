@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.ui.R
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 

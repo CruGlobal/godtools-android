@@ -5,8 +5,8 @@
     <string name="tract_tips_tip_action_close">Fermer</string>
     <!-- Tip Types -->
     <string name="tract_tips_type_ask">Demandez</string>
-    <string name="tract_tips_type_consider">Considérez</string>
-    <string name="tract_tips_type_prepare">Préparez</string>
+    <string name="tract_tips_type_consider">Considérer</string>
+    <string name="tract_tips_type_prepare">Préparer</string>
     <string name="tract_tips_type_quote">Citation</string>
     <string name="tract_tips_type_tip">Conseil</string>
 </resources>

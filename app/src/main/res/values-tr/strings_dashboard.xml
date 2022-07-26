@@ -19,21 +19,36 @@
     <string name="menu_copyright">Telif Hakkı</string>
     <string name="share_story_subject">GodTools Hikayesi</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">Dersler</string>
+    <string name="dashboard_lessons_header_title">Senin için hazırlanmış dersler</string>
+    <string name="dashboard_lessons_header_description">İlişkiler kurmak ve anlamlı konuşmalar başlatmak için pratik fikirler.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">Favoriler</string>
-    <string name="tools_list_remove_favorite_dialog_title">“%1$s” Favorilerden Kaldırılsın mı?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Kaldır</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">İptal</string>
+    <string name="dashboard_home_header_title">GodTools\'a Hoş Geldin</string>
+    <string name="dashboard_home_section_featured_lesson">Öne çıkan ders</string>
+    <string name="dashboard_home_section_favorites_title">Favori araçların</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Gösterilecek favori araç yok</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Bir aracı favorilere eklemek ve çevrimdışı da kullanılabilir yapmak için kalp simgesine dokun.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Tümünü görüntüle &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Araçlara Git</string>
     <string name="tools_list_favorites_banner_text">Kalp simgesine dokunup favorilerine ekleyerek bir aracı çevrim dışı kullanılabilir hâle getir.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Kapat</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tüm Araçlar</string>
+    <string name="dashboard_tools_section_categories_label">Kategoriler</string>
+    <string name="dashboard_tools_section_categories_all">Tüm Araçlar</string>
+    <string name="dashboard_tools_section_spotlight_label">Aracın Öne Çıkanları</string>
+    <string name="dashboard_tools_section_spotlight_description">İşte beğenebileceğini düşündüğümüz bazı araçlar</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” Favorilerden Kaldırılsın mı?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Kaldır</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">İptal</string>
+    <string name="tool_card_label_language_unavailable">%1$s dili seçeneği yok</string>
+    <string name="action_tools_about">Ayrıntılar</string>
+    <string name="action_tools_open">Aç</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">İkinci bir dil ayarlamak ister misiniz?</string>
     <string name="languages_parallel_dialog_select">Bir dil seçin</string>
     <string name="languages_parallel_dialog_action_start">Başlayın</string>
     <string name="languages_parallel_dialog_action_cancel">Hayır Teşekkürler</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Hakkında</string>
-    <string name="action_tools_open">Aç</string>
 </resources>

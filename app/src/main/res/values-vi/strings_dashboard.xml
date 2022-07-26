@@ -20,11 +20,17 @@
     <string name="share_story_subject">Câu chuyện từ GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Bài học</string>
-    <!-- Favorites -->
-    <string name="nav_favorite_tools">Ưa thích</string>
-    <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>
+    <string name="dashboard_lessons_header_title">Bài học dành cho bạn</string>
+    <string name="dashboard_lessons_header_description">Những ý tưởng thiết thực giúp xây dựng mối quan hệ và bắt đầu cuộc trò chuyện đầy ý nghĩa.</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">Yêu thích</string>
+    <string name="dashboard_home_header_title">Chào mừng đến với GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Bài học đặc sắc</string>
+    <string name="dashboard_home_section_favorites_title">Công cụ yêu thích của bạn</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Không có công cụ yêu thích nào</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Bấm vào biểu tượng trái tim để đánh dấu công cụ yêu thích và sử dụng ngay cả khi không có internet.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Xem tất cả &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Đến kho Công cụ</string>
     <string name="tools_list_favorites_banner_text">Để sử dụng công cụ khi không có mạng internet, bấm vào biểu tượng trái tim để đưa công cụ vào phần Ưa thích của bạn.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Bỏ qua</string>
     <!-- All Tools -->
@@ -33,12 +39,16 @@
     <string name="dashboard_tools_section_categories_all">Tất cả công cụ</string>
     <string name="dashboard_tools_section_spotlight_label">Nổi bật công cụ</string>
     <string name="dashboard_tools_section_spotlight_description">Có lẽ bạn sẽ thích một số công cụ này</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>
+    <string name="tool_card_label_language_unavailable">Không có sẵn trong %1$s</string>
+    <string name="action_tools_about">Giới thiệu</string>
+    <string name="action_tools_open">Mở</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">Bạn có muốn thiết lập ngôn ngữ thứ hai không?</string>
     <string name="languages_parallel_dialog_select">Chọn một ngôn ngữ</string>
     <string name="languages_parallel_dialog_action_start">Bắt đầu</string>
     <string name="languages_parallel_dialog_action_cancel">Không, cám ơn</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">Giới thiệu</string>
-    <string name="action_tools_open">Mở</string>
 </resources>

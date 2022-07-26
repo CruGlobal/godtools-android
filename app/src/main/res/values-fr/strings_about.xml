@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_about">À propos</string>
-    <string name="general_about_1">GodTools vous aide à partager votre foi dans une façon facile et clair.</string>
+    <string name="general_about_1">GodTools vous aide à partager votre foi de manière simple et claire.</string>
     <string name="general_about_2">Ces outils vous aident à expliquer en toute confiance à quelqu\'un comment il est possible de démarrer une relation avec Dieu par l\'intermédiaire de Jésus-Christ, même si vous n\'avez jamais partagé votre foi auparavant ou si la personne parle une autre langue.</string>
     <string name="general_about_3">Choisissez parmi de nombreux outils basés sur vos préférences et votre public. Tous les outils ne sont pas disponibles dans toutes les langues.</string>
     <string name="general_about_4">Des liens vers d\'autres ressources sont inclus en bas de chaque outil.</string>
@@ -10,5 +10,5 @@
     <string name="general_about_7">Une version en ligne de ces outils se trouve sur knowgod.com. Intégrez-le à votre propre site !</string>
     <string name="general_about_8">Visitez godtoolsapp.com pour plus d\'information</string>
     <string name="general_about_9">Lorsque vous prenez l\'initiative de partager votre foi, rappelez-vous que Dieu est celui qui change le cœur. Aimez chacun bien en écoutant pour comprendre.</string>
-    <string name="general_about_10">« Que votre parole soit toujours accompagnée de grâce, assaisonnée de sel, afin que vous sachiez comment il faut répondre à chacun. » Colossiens 4:6</string>
+    <string name="general_about_10">\"Que votre parole soit toujours accompagnée de grâce, assaisonnée de sel, afin que vous sachiez comment il faut répondre à chacun.\" Colossiens 4:6</string>
 </resources>

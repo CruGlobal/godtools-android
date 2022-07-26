@@ -18,6 +18,7 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @Module
 @TestInstallIn(
@@ -35,7 +36,6 @@ class ExternalSingletonsModule {
     @get:Provides
     val dao by lazy {
         mockk<GodToolsDao> {
-            every { getLatestTranslationLiveData(any(), any(), any(), any(), any()) } answers { MutableLiveData(null) }
             every { updateSharesDeltaAsync(any(), any()) } returns Job().apply { complete() }
         }
     }
@@ -57,4 +57,10 @@ class ExternalSingletonsModule {
     }
     @get:Provides
     val toolSyncTasks by lazy { mockk<ToolSyncTasks>() }
+    @get:Provides
+    val translationsRepository by lazy {
+        mockk<TranslationsRepository> {
+            every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
+        }
+    }
 }

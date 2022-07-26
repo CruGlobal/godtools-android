@@ -8,7 +8,7 @@ plugins {
 
 android {
     baseConfiguration(project)
-    configureFlavorDimensions()
+    configureFlavorDimensions(project)
 
     libraryVariants.configureEach {
         val mobileContentApi =

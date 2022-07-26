@@ -155,11 +155,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private fun setupToolbar() {
-        activeManifestLiveData.observe(this) { updateToolbarTitle() }
-    }
-
-    protected open fun updateToolbarTitle() {
-        title = activeManifest?.title.orEmpty()
+        title = ""
     }
     // endregion Status Bar / Toolbar logic
 

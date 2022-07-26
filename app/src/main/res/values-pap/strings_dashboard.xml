@@ -19,17 +19,18 @@
     <string name="menu_copyright">Derecho di outor</string>
     <string name="share_story_subject">Testimonio di GodTools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <!-- Home -->
     <string name="nav_favorite_tools">Lista di Faboritonan</string>
-    <string name="tools_list_remove_favorite_dialog_title">Kita “%1$s” for di lista di Faboritonan?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">Kita</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselá</string>
     <string name="tools_list_favorites_banner_text">Hasi un hèrmènt aksesibel sin internèt dor di klek riba e boton di kurason i e lo bai den bo lista di faboritonan.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Deskartá</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tur hèrmènt</string>
-    <!-- Parallel Language Dialog -->
-    <!-- Tools List -->
+    <string name="dashboard_tools_section_categories_all">Tur hèrmènt</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Kita “%1$s” for di lista di Faboritonan?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Kita</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Kanselá</string>
     <string name="action_tools_about">Tokante</string>
     <string name="action_tools_open">Habri</string>
+    <!-- Parallel Language Dialog -->
 </resources>

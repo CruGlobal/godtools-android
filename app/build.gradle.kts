@@ -13,10 +13,11 @@ plugins {
 android {
     baseConfiguration(project)
     configureCompose(project)
+    configureQaBuildType(project)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
-        versionName = "6.0.0-SNAPSHOT"
+        versionName = "6.0.1-SNAPSHOT"
         versionCode = grgit.log(mapOf("includes" to listOf("HEAD"))).size + 4029265
 
         proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
@@ -51,22 +52,16 @@ android {
     }
 
     productFlavors {
-        val stage by existing {
+        named("stage") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
         }
-        val production by existing {
+        named("production") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_PRODUCTION\"")
         }
     }
 
     signingConfigs {
-        val firebaseAppDistribution by creating {
-            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
-            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
-            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
-            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
-        }
-        val release by creating {
+        register("release") {
             storeFile = project.properties["androidKeystorePath"]?.let { rootProject.file(it) }
             storePassword = project.properties["androidKeystoreStorePassword"]?.toString()
             keyAlias = project.properties["androidKeystoreKeyAlias"]?.toString()
@@ -75,12 +70,11 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        named("debug") {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
 
             isMinifyEnabled = false
-            isShrinkResources = false
 
             manifestPlaceholders += mapOf(
                 "appAuthRedirectScheme" to "org.cru.godtools.debug.okta",
@@ -91,12 +85,11 @@ android {
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug.okta\"")
             resValue("string", "app_name_debug", "GodTools (Dev)")
         }
-        val qa by creating {
-            initWith(debug)
-            matchingFallbacks += listOf("debug")
-
+        named("qa") {
             applicationIdSuffix = ".qa"
             versionNameSuffix = "-qa"
+
+            isMinifyEnabled = true
 
             manifestPlaceholders += mapOf(
                 "appAuthRedirectScheme" to "org.cru.godtools.qa.okta",
@@ -106,24 +99,11 @@ android {
             buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.qa\"")
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
-
-            // Firebase App Distribution build
-            if (project.hasProperty("firebaseAppDistributionBuild")) {
-                signingConfig = signingConfigs.getByName("firebaseAppDistribution")
-
-                firebaseAppDistribution {
-                    artifactPath =
-                        buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
-                    releaseNotes = generateFirebaseAppDistributionReleaseNotes()
-                    serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
-                    groups = "android-testers"
-                }
-            }
         }
-        val release by existing {
+        named("release") {
             isMinifyEnabled = true
-            isShrinkResources = true
-            signingConfigs.getByName("release").takeIf { it.storeFile?.exists() == true }
+            signingConfigs.getByName("release")
+                .takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
 
             manifestPlaceholders += mapOf(
@@ -139,18 +119,6 @@ android {
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
-
-    sourceSets {
-        getByName("qa") {
-            kotlin.srcDir("src/debug/kotlin")
-            res.srcDir("src/debug/res/values")
-            manifest.srcFile("src/debug/AndroidManifest.xml")
-        }
-    }
-}
-
-configurations {
-    named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
 }
 
 dependencies {
@@ -169,6 +137,7 @@ dependencies {
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
 
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
@@ -192,12 +161,12 @@ dependencies {
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.eventbus)
     implementation(libs.gtoSupport.firebase.crashlytics)
+    implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.napier)
     implementation(libs.gtoSupport.okta)
     implementation(libs.gtoSupport.picasso)
-    implementation(libs.gtoSupport.recyclerview.advrecyclerview)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
@@ -209,13 +178,12 @@ dependencies {
 
     api(libs.eventbus)
     implementation(libs.accompanist.swiperefresh)
-    implementation(libs.advrecyclerview)
     implementation(libs.coil.compose)
+    implementation(libs.compose.reorderable)
     implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
-    implementation(libs.materialBanner)
     implementation(libs.materialComponents)
     implementation(libs.okta)
     implementation(libs.splitties.fragmentargs)
@@ -245,9 +213,30 @@ dependencies {
     kaptTest(libs.hilt.compiler)
 }
 
+// region Firebase App Distribution
+if (project.hasProperty("firebaseAppDistributionBuild")) {
+    firebaseAppDistribution {
+        artifactPath =
+            buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
+        releaseNotes = generateFirebaseAppDistributionReleaseNotes()
+        serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
+        groups = "android-testers"
+    }
+
+    android.buildTypes.named("qa") {
+        signingConfig = android.signingConfigs.create("firebaseAppDistribution") {
+            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
+            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
+            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
+            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
+        }
+    }
+}
+
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
         append("* ").append(it.shortMessage).append('\n')
     }
 }
+// endregion Firebase App Distribution

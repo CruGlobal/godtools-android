@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Otevřít nástroj</string>
     <string name="action_tools_add_favorite">Přidat do oblíbených</string>
     <string name="action_tools_remove_favorite">Odstranit z oblíbených</string>
+    <string name="action_tools_open_training">Naučte se sdílet tento nástroj</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d zhlédnutí</item>
         <item quantity="other">%1$,d zhlédnutí</item>
@@ -18,4 +19,7 @@
         <item quantity="few">%1$,d jazyků</item>
         <item quantity="many">%1$,d jazyků</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Dostupné jazyky</string>
+    <string name="tool_details_section_variants_label">Verze</string>
+    <string name="tool_details_section_variants_description">Níže si vyberte jinou verzi tohoto nástroje. Každá verze se vyznačuje jedinečným stylem a obsahem, takže si můžete vybrat tu, která je pro vaši konverzaci nejvhodnější. Můžete si oblíbit více verzí stejného nástroje.</string>
 </resources>

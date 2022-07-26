@@ -18,4 +18,7 @@
 "</item>
         <item quantity="other">%1$,d भाषा</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">उपलब्ध असलेल्या भाषा</string>
+    <string name="tool_details_section_variants_label">आवृत्त्या</string>
+    <string name="tool_details_section_variants_description">या साधनाची वेगळी आवृत्ती खाली निवडा. प्रत्येक आवृत्तीमध्ये आगळी शैली आणि सामग्री वैशिष्ट्ये असतात म्हणजे तुम्ही तुमच्या संवादासाठी एक अत्युत्तम निवडू शकता. आपण एकाच साधनाच्या एकापेक्षा अधिक आवृत्त्या पसंत करू शकता.</string>
 </resources>

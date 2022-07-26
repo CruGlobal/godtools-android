@@ -72,7 +72,7 @@ class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBi
 
             commit {
                 val fragment = LanguagesFragment(primary)
-                replace(R.id.frame, fragment)
+                replace(org.cru.godtools.base.ui.R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
         }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">回顾</string>
+    <string name="lesson_feedback_question_helpful">这个课程对你有帮助吗？</string>
+    <string name="lesson_feedback_question_helpful_yes">是的</string>
+    <string name="lesson_feedback_question_helpful_no">没有</string>
+    <string name="lesson_feedback_question_readiness">对于开启一场属灵对话你感觉自己准备的程度如何？</string>
+    <string name="lesson_feedback_action_submit">发送反馈</string>
+    <string name="lesson_feedback_action_cancel">跳过</string>
+</resources>

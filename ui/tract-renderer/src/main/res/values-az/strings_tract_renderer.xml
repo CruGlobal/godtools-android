@@ -6,6 +6,7 @@
     <string name="tract_card_next">Növbəti</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Ekranınızı paylaşın</string>
+    <string name="menu_live_share_active">Ekran paylaşma aktivdir</string>
     <string name="share_tool_message_tract_live_share">Salam. Ektan paylaşma vasitəsilə GodTools-da məni izləyin. Keçid: %1$s\n\nSon anadək bu mesajı almasanız, daha sonra keçid işləməyə bilər. Başqa vaxt təkrar cəhd edə bilərik.\n</string>
     <string name="tract_live_share_starting">Ekran paylaşma başladılır...</string>
     <string name="tract_live_share_unable_to_connect">Ekran paylaşmaya qoşula bilmir</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Çıx</string>
     <string name="tract_live_share_exit_dialog_cancel">Ləğv et</string>
     <!-- Settings -->
+    <string name="menu_settings">Parametrlər</string>
+    <string name="tract_settings_title">Alət seçimləri</string>
+    <string name="tract_settings_action_share">Keçidi paylaş</string>
+    <string name="tract_settings_action_tips_disable">İpuclarını gizlət</string>
+    <string name="tract_settings_languages_title">Paralel dil</string>
+    <string name="tract_settings_languages_description">Bu alətdə iki müxtəlif dil arasında dəyiş.</string>
+    <string name="tract_settings_languages_parallel">Paralel</string>
+    <string name="tract_settings_languages_none">Heç biri</string>
+    <string name="tract_settings_shareables_title">Əlaqəli qrafiklər</string>
 </resources>

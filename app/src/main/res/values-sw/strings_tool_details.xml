@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Kifaa Wazi</string>
     <string name="action_tools_add_favorite">Ongeza kwenye Vipendwa</string>
     <string name="action_tools_remove_favorite">Ondoa kwenye Vipendwa</string>
+    <string name="action_tools_open_training">Jifunze kushiriki chombo hiki</string>
     <plurals name="label_tools_shares">
         <item quantity="one">Maoni %1$,d</item>
         <item quantity="other">Maoni %1$,d</item>
@@ -14,4 +15,7 @@
         <item quantity="one">Lugha %1$,d</item>
         <item quantity="other">Lugha %1$,d</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Lugha zinazopatikana</string>
+    <string name="tool_details_section_variants_label">Matoleo</string>
+    <string name="tool_details_section_variants_description">Chagua toleo tofauti la zana hii hapa chini. Kila toleo lina mtindo na maudhui ya kipekee ili uweze kupata ile ambayo ni bora zaidi kwa mazungumzo yako. Unaweza kupendelea matoleo mengi ya zana sawa.</string>
 </resources>

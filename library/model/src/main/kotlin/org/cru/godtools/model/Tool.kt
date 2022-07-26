@@ -24,7 +24,6 @@ private const val JSON_DETAILS_BANNER = "attr-banner-about"
 private const val JSON_DETAILS_BANNER_ANIMATION = "attr-about-banner-animation"
 private const val JSON_DETAILS_BANNER_YOUTUBE = "attr-about-overview-video-youtube"
 private const val JSON_DEFAULT_ORDER = "attr-default-order"
-private const val JSON_DEFAULT_VARIANT = "attr-default-variant"
 private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
@@ -34,6 +33,7 @@ class Tool : Base() {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
         const val JSON_METATOOL = "metatool"
+        const val JSON_DEFAULT_VARIANT = "default-variant"
     }
 
     enum class Type(val json: String?) {
@@ -107,15 +107,26 @@ class Tool : Base() {
     @JsonApiIgnore
     var metatoolCode: String? = null
         get() = field ?: metatool?.code
+        set(value) {
+            field = value
+            metatool = null
+        }
+    @JsonApiAttribute(JSON_DEFAULT_VARIANT)
+    var defaultVariant: Tool? = null
+        private set
+    @JsonApiIgnore
+    var defaultVariantCode: String? = null
+        get() = field ?: defaultVariant?.code
+        set(value) {
+            field = value
+            defaultVariant = null
+        }
     @JsonApiAttribute(JSON_ATTACHMENTS)
     var attachments: List<Attachment>? = null
         private set
     @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
     var latestTranslations: List<Translation>? = null
         private set
-
-    @JsonApiAttribute(JSON_DEFAULT_VARIANT)
-    var defaultVariant: String? = null
 
     @JsonApiIgnore
     var isAdded = false

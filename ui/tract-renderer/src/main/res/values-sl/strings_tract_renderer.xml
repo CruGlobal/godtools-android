@@ -6,6 +6,7 @@
     <string name="tract_card_next">Naprej</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Deli svoj zaslon</string>
+    <string name="menu_live_share_active">Deljenje zaslona aktivno</string>
     <string name="share_tool_message_tract_live_share">Živjo, sledi mi v GodTools z deljenjem zaslona. Tukaj je povezava: %1$s\n\nČe kasneje ne prejmete tega sporočila, morda povezava še ne deluje. Poskusite lahko znova kasneje.</string>
     <string name="tract_live_share_starting">Začni deljenje zaslona</string>
     <string name="tract_live_share_unable_to_connect">Povezava za deljenje zaslona ne deluje</string>
@@ -13,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Izhod</string>
     <string name="tract_live_share_exit_dialog_cancel">Prekliči</string>
     <!-- Settings -->
+    <string name="menu_settings">Nastavitve</string>
+    <string name="tract_settings_title">Možnosti orodja</string>
+    <string name="tract_settings_action_share">Deli povezavo</string>
+    <string name="tract_settings_action_tips_disable">Skrij nasvete</string>
+    <string name="tract_settings_languages_title">Vzporedni jezik</string>
+    <string name="tract_settings_languages_description">V tem orodju lahko preklapljate med dvema različnima jezikoma.</string>
+    <string name="tract_settings_languages_parallel">Vzporedno</string>
+    <string name="tract_settings_languages_none">Brez</string>
+    <string name="tract_settings_shareables_title">Povezane grafike</string>
 </resources>

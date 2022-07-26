@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.delegate
 import org.cru.godtools.analytics.model.LaunchAnalyticsActionEvent
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
@@ -12,11 +13,9 @@ import org.greenrobot.eventbus.EventBus
 class LaunchTrackingViewModel @Inject constructor(
     private val eventBus: EventBus,
     private val settings: Settings,
-    private val state: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel() {
-    private var launchTracked: Boolean
-        get() = state["launchTracked"] ?: false
-        set(value) = state.set("launchTracked", value)
+    private var launchTracked by state.delegate(ifNull = false)
 
     fun trackLaunch() {
         // short-circuit if we have already tracked this launch

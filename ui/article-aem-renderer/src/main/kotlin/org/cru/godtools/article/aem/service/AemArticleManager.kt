@@ -117,7 +117,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Translations
 
     // region AEM Import
-    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean) = coroutineScope {
+    suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean): Unit = coroutineScope {
         manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
     }
 

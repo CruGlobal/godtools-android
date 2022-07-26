@@ -2,16 +2,25 @@
 <resources>
     <string name="menu_install">Installer</string>
     <string name="menu_share_tract">Envoyer cet outil</string>
-    <string name="tract_card_previous">Précédent</string>
+    <string name="tract_card_previous">Préc.</string>
     <string name="tract_card_next">Suivant</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Partagez votre écran</string>
-    <string name="menu_live_share_active">Partage d\'écran active</string>
-    <string name="share_tool_message_tract_live_share">Bonjour, suivez-moi sur GodTools via le partage d\'écran. Voici le lien : %1$s\n\nSi vous recevez ce message avec du retard, le lien pourrait ne plus fonctionner. Nous réessaierons à une autre occasion.</string>
+    <string name="menu_live_share_active">Partage d\'écran actif</string>
+    <string name="share_tool_message_tract_live_share">Bonjour, suivez-moi sur GodTools via le partage d\'écran. Voici le lien : %1$s\n\nSi vous recevez ce message avec du retard, il se peut que le lien ne fonctionne pas encore. Nous pouvons réessayer à un autre moment.</string>
     <string name="tract_live_share_starting">Lancement du partage d\'écran...</string>
     <string name="tract_live_share_unable_to_connect">Échec de connexion au partage d\'écran</string>
     <string name="tract_live_share_exit_dialog_message">Quitter la session de partage à distance maintenant ?</string>
     <string name="tract_live_share_exit_dialog_confirm">Quitter</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuler</string>
     <!-- Settings -->
+    <string name="menu_settings">Paramètres</string>
+    <string name="tract_settings_title">Options de l\'outil</string>
+    <string name="tract_settings_action_share">Partager lien</string>
+    <string name="tract_settings_action_tips_disable">Cacher des astuces</string>
+    <string name="tract_settings_languages_title">Langue secondaire</string>
+    <string name="tract_settings_languages_description">Cet outil permet de basculer entre deux langues différentes.</string>
+    <string name="tract_settings_languages_parallel">Parallèle</string>
+    <string name="tract_settings_languages_none">Aucun</string>
+    <string name="tract_settings_shareables_title">Graphiques connexes</string>
 </resources>

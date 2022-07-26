@@ -28,9 +28,10 @@ dependencies {
     implementation(project(":library:model"))
 
     api(libs.androidx.appcompat)
+    compileOnly(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.compose.material3)
-    compileOnly(libs.androidx.fragment.ktx)
 
     api(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.databinding)

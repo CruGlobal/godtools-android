@@ -129,11 +129,8 @@ class AemArticleActivity :
         }
     }
 
-    override fun updateToolbarTitle() {
-        title = article?.title ?: run {
-            super.updateToolbarTitle()
-            return
-        }
+    private fun updateToolbarTitle() {
+        title = article?.title.orEmpty()
     }
 
     // region Sync logic

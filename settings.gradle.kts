@@ -8,7 +8,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositories {
         maven {
-            setUrl("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
+            url = uri("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
             content {
                 includeGroup("org.ccci.gto.android")
                 includeGroup("org.ccci.gto.android.testing")
@@ -17,10 +17,17 @@ dependencyResolutionManagement {
             }
         }
         maven {
-            setUrl("https://jitpack.io")
+            url = uri("https://jitpack.io")
             content {
                 includeGroupByRegex("com\\.github\\..*")
                 excludeGroup("com.github.ajalt.colormath")
+            }
+        }
+        maven {
+            // This repository contains pre-release versions of the Compose Compiler
+            url = uri("https://androidx.dev/storage/compose-compiler/repository/")
+            content {
+                includeGroup("androidx.compose.compiler")
             }
         }
         google()
@@ -60,3 +67,13 @@ include("ui:tutorial-renderer")
 include("app")
 
 include("feature:bundledcontent")
+
+// automatically accept the scans.gradle.com TOS when running in GHA
+if (System.getenv("GITHUB_ACTIONS")?.toBoolean() == true) {
+    extensions.findByName("gradleEnterprise")?.withGroovyBuilder {
+        getProperty("buildScan").withGroovyBuilder {
+            setProperty("termsOfServiceUrl", "https://gradle.com/terms-of-service")
+            setProperty("termsOfServiceAgree", "yes")
+        }
+    }
+}

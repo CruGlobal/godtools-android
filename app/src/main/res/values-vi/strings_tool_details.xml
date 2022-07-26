@@ -13,4 +13,7 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Ngôn ngữ</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Những ngôn ngữ sẵn có</string>
+    <string name="tool_details_section_variants_label">Phiên bản</string>
+    <string name="tool_details_section_variants_description">Chọn một phiên bản khác của công cụ này ở bên dưới. Mỗi phiên bản có các tính năng và nội dung riêng biệt nhằm phù hợp nhất cho cuộc trò chuyện của bạn. Bạn có thể đánh dấu yêu thích nhiều phiên bản khác nhau của cùng một công cụ.</string>
 </resources>

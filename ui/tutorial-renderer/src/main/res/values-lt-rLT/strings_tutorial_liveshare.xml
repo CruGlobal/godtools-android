@@ -6,9 +6,7 @@
     <string name="tutorial_live_share_mirrored_headline">Veidrodinė patirtis</string>
     <string name="tutorial_live_share_mirrored_text">Jums slenkant įrankiu savo telefone, jūsų draugo ekranas reaguos taip pat. Šitaip galėsite kartu apžvelgti įrankį 2 įrenginiuose vienu metu.</string>
     <string name="tutorial_live_share_start_headline">Pradėti</string>
-    <string name="tutorial_live_share_start_text">Nusiųskite nuorodą vienam ar daugiau žmonių, kad pradėtumėte ekranų bedrinimo sesiją jau dabar.
-
-Šiuo metu šiai patirčiai reikalinga, kad visi dalyviai savo įrenginyje turėtų atsisiuntę programėlę „GodTools“.</string>
+    <string name="tutorial_live_share_start_text">Nusiųskite nuorodą vienam ar daugiau žmonių, kad pradėtumėte ekranų bendrinimo sesiją jau dabar.</string>
     <string name="tutorial_live_share_action_continue">Tęsti</string>
     <string name="tutorial_live_share_action_skip">Praleisti</string>
     <string name="tutorial_live_share_action_start">Bendrinti nuorodą</string>

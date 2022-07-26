@@ -6,11 +6,21 @@
     <string name="tract_card_next">Næste</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Del din skærm</string>
-    <string name="share_tool_message_tract_live_share">Hej! Følg mig i GodTools via skærmdeling. Her er linket: %1$s\n\nHvis du først modtager denne besked senere, virker linket muligvis ikke. Vi kan prøve igen på et andet tidspunkt.</string>
+    <string name="menu_live_share_active">Skærmdeling aktiv</string>
+    <string name="share_tool_message_tract_live_share">Hej! Følg med mig i GodTools via skærmdeling. Her er linket: %1$s\n\nHvis du ikke modtager denne besked før senere, virker linket muligvis ikke længere. Vi kan prøve igen på et andet tidspunkt.</string>
     <string name="tract_live_share_starting">Starter skærmdeling...</string>
     <string name="tract_live_share_unable_to_connect">Kan ikke oprette forbindelse til skærmdeling</string>
     <string name="tract_live_share_exit_dialog_message">Afslut fjerndelingssessionen nu?</string>
     <string name="tract_live_share_exit_dialog_confirm">Afslut</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuller</string>
     <!-- Settings -->
+    <string name="menu_settings">Indstillinger</string>
+    <string name="tract_settings_title">Værktøjsindstillinger</string>
+    <string name="tract_settings_action_share">Del link</string>
+    <string name="tract_settings_action_tips_disable">Skjul tip</string>
+    <string name="tract_settings_languages_title">Parallelt sprog</string>
+    <string name="tract_settings_languages_description">Skift mellem to forskellige sprog i dette værktøj.</string>
+    <string name="tract_settings_languages_parallel">Parallel</string>
+    <string name="tract_settings_languages_none">Ingen</string>
+    <string name="tract_settings_shareables_title">Relateret grafik</string>
 </resources>

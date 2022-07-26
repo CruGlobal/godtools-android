@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">Det gick inte att öppna %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Inbjudan till gospel</string>
+    <string name="tool_category_articles">Artiklar</string>
+    <string name="tool_category_conversation_starter">Samtalsöppnare</string>
+    <string name="tool_category_growth">Främjande av kristen tro</string>
+    <string name="tool_category_training">Utbildning</string>
+    <!-- Sharing -->
+    <string name="share_general_message">Den här länken tar dig till en webbversion av det vi pratade om idag: %1$s \n\n
+
+Appen kan laddas ner från https://godtoolsapp.com \n\n
+
+Vi tar och pratar mer!</string>
+</resources>

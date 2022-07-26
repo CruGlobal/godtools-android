@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">Tere tulemast!</string>
+    <string name="tutorial_onboarding_welcome_2">Vestlusteks valmis</string>
+    <string name="tutorial_onboarding_welcome_action_video">Esita video</string>
+    <string name="tutorial_onboarding_conversations_headline">Räägi Jumalast kellega tahes</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools toetab sind tähendusrikastel vestlustel Jumalast.</string>
+    <string name="tutorial_onboarding_prepare_headline">Valmistu tähendusrikasteks vestlusteks</string>
+    <string name="tutorial_onboarding_prepare_subhead">Õpi, kuidas vestlused usust oma elu loomulikuks osaks muuta.</string>
+    <string name="tutorial_onboarding_share_headline">Aita inimestel Jeesust leida</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools aitab sul Jeesuse sõnumit selgel ja kohasel viisil jagada.</string>
+    <string name="tutorial_onboarding_links_headline">Otseteed</string>
+    <string name="tutorial_onboarding_links_articles_subhead">Soovin kristlust tundma õppida</string>
+    <string name="tutorial_onboarding_links_articles_action">Loe meie artikleid</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">Soovin õppida Jeesuse sõnumit jagama</string>
+    <string name="tutorial_onboarding_links_lessons_action">Proovi meie koolitust</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Soovin Jeesuse sõnumit jagada</string>
+    <string name="tutorial_onboarding_links_tools_action">Vali üks meie tööriistadest</string>
+    <string name="tutorial_onboarding_action_begin">Alusta</string>
+    <string name="tutorial_onboarding_action_next">Edasi</string>
+    <string name="tutorial_onboarding_action_skip">Jäta vahele</string>
+    <string name="tutorial_onboarding_action_start">Alustamine</string>
+</resources>

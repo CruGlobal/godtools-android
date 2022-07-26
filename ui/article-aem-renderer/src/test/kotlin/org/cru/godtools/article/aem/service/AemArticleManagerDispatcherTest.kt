@@ -1,6 +1,16 @@
 package org.cru.godtools.article.aem.service
 
 import androidx.room.InvalidationTracker
+import io.mockk.Called
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
+import io.mockk.confirmVerified
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,28 +29,26 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyBlocking
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerDispatcherTest {
     private val downloadedTranslationsFlow = MutableSharedFlow<List<Translation>>(extraBufferCapacity = 20)
 
-    private val aemArticleManager = mock<AemArticleManager>()
-    private val aemDb = mock<ArticleRoomDatabase>(defaultAnswer = RETURNS_DEEP_STUBS) {
-        onBlocking { aemImportDao().getAll() } doReturn emptyList()
+    private val aemArticleManager = mockk<AemArticleManager>(relaxUnitFun = true)
+    private val aemDbObservers = mutableListOf<InvalidationTracker.Observer>()
+    private val aemDb = mockk<ArticleRoomDatabase> {
+        every { invalidationTracker } returns mockk {
+            every { addObserver(capture(aemDbObservers)) } just Runs
+        }
+        every { aemImportDao() } returns mockk {
+            coEvery { getAll() } returns emptyList()
+        }
     }
     private val coroutineScope = TestCoroutineScope(SupervisorJob()).apply { pauseDispatcher() }
-    private val dao = mock<GodToolsDao> {
-        on { getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS) } doReturn downloadedTranslationsFlow
+    private val dao = mockk<GodToolsDao> {
+        every { getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS) } returns downloadedTranslationsFlow
     }
-    private val fileManager = mock<AemArticleManager.FileManager>()
+    private val fileManager = mockk<AemArticleManager.FileManager>(relaxUnitFun = true)
 
     private lateinit var dispatcher: AemArticleManager.Dispatcher
 
@@ -62,43 +70,41 @@ class AemArticleManagerDispatcherTest {
         val translations = emptyList<Translation>()
 
         assertTrue(downloadedTranslationsFlow.tryEmit(translations))
-        verifyBlocking(aemArticleManager) { processDownloadedTranslations(translations) }
+        coVerifyAll { aemArticleManager.processDownloadedTranslations(translations) }
     }
 
     // region cleanupActor
     @Test
     fun `cleanupActor - Runs after pre-set delays`() {
         coroutineScope.advanceTimeBy(CLEANUP_DELAY_INITIAL - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
+        verify { fileManager wasNot Called }
         coroutineScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-        clearInvocations(fileManager)
+        coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
 
         coroutineScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
+        coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
         coroutineScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
+        coVerify(exactly = 2) { fileManager.removeOrphanedFiles() }
+        confirmVerified(fileManager)
     }
 
     @Test
     fun `cleanupActor - Runs after db invalidation`() {
-        val captor = argumentCaptor<InvalidationTracker.Observer>()
-        verify(aemDb.invalidationTracker).addObserver(captor.capture())
-        val observer = captor.firstValue
+        val observer = aemDbObservers.first()
 
         // multiple invalidations should be conflated to a single invalidation
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
+        verify { fileManager wasNot Called }
         repeat(10) { observer.onInvalidated(setOf(Resource.TABLE_NAME)) }
         coroutineScope.runCurrent()
         assertEquals(0, coroutineScope.currentTime)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
-        clearInvocations(fileManager)
+        coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
 
         // any invalidations should reset the cleanup delay counter
         coroutineScope.advanceTimeBy(CLEANUP_DELAY - 1)
-        verifyBlocking(fileManager, never()) { removeOrphanedFiles() }
+        coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
         coroutineScope.advanceTimeBy(1)
-        verifyBlocking(fileManager) { removeOrphanedFiles() }
+        coVerify(exactly = 2) { fileManager.removeOrphanedFiles() }
+        confirmVerified(fileManager)
     }
     // endregion cleanupActor
 }

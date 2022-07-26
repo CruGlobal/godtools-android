@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">פתח כלי</string>
     <string name="action_tools_add_favorite">הוסף למועדפים</string>
     <string name="action_tools_remove_favorite">הסר מהמועדפים</string>
+    <string name="action_tools_open_training">למד לשתף את הכלי הזה</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d צפייה</item>
         <item quantity="other">%1$,d צפיות</item>
@@ -18,4 +19,7 @@
         <item quantity="many">%1$,d שפות</item>
         <item quantity="two">%1$,d שפות</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">שפות זמינות</string>
+    <string name="tool_details_section_variants_label">גרסאות</string>
+    <string name="tool_details_section_variants_description">בחר גרסה אחרת של הכלי הזה למטה. כל גרסה כוללת סגנון ותוכן ייחודי כך שתוכל למצוא את הגרסה המתאימה ביותר לשיחה שלך. אתה יכול להוסיף גרסאות מרובות של אותו כלי למועדפים.</string>
 </resources>

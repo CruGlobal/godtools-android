@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s gereklidir</string>
     <string name="tract_content_input_error_invalid_email">Lütfen geçerli bir e-posta adresi girin</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Eğitim ipuçları</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Paylaş</string>
+    <string name="tool_share_sheet_more_apps">Daha fazla</string>
+    <string name="share_tool_message_article">Bu yazıyı seninle paylaşmak istedim ve bu konudaki düşüncelerini duymak isterim.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bir bağlantı paylaş</string>
     <string name="feature_discovery_desc_share_tool">Bu simgeye tıklayarak bu aracı bir arkadaşına gönder</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Resim paylaş</string>
 </resources>

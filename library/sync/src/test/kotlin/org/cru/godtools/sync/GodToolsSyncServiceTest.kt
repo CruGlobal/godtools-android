@@ -25,7 +25,7 @@ class GodToolsSyncServiceTest {
     fun testSyncTools() = runTest(UnconfinedTestDispatcher()) {
         val syncService =
             GodToolsSyncService(mockk(relaxUnitFun = true), mockk(), syncTasks, UnconfinedTestDispatcher())
-        syncService.syncTools(false).sync()
+        syncService.syncTools(false)
         coVerify { toolsSyncTasks.syncTools(any()) }
     }
 }

@@ -5,6 +5,7 @@
     <string name="action_tools_open_tool">Otvori alat</string>
     <string name="action_tools_add_favorite">Dodaj u favorite</string>
     <string name="action_tools_remove_favorite">Ukloni iz favorita</string>
+    <string name="action_tools_open_training">Naučite kako dijeliti ovaj alat</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d pregled</item>
         <item quantity="other">%1$,d pregleda</item>
@@ -16,4 +17,7 @@
         <item quantity="other">%1$,d jezika</item>
         <item quantity="few">%1$,d jezika</item>
     </plurals>
+    <string name="tool_details_section_description_languages_available">Dostupni jezici</string>
+    <string name="tool_details_section_variants_label">Verzije</string>
+    <string name="tool_details_section_variants_description">U nastavku odaberite drugu verziju ovog alata. Svaka verzija ima jedinstven stil i sadržaj tako da možete pronaći onu koja je najbolja za vaš razgovor. Više verzija istog alata može biti vaš favorit.</string>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Tālāk</string>
+    <string name="tract_tips_tip_action_close">Aizvērt</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Jautā</string>
+    <string name="tract_tips_type_consider">Ņem vērā</string>
+    <string name="tract_tips_type_prepare">Sagatavojies</string>
+    <string name="tract_tips_type_quote">Citāts</string>
+    <string name="tract_tips_type_tip">Padoms</string>
+</resources>

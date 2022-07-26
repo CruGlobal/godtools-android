@@ -6,10 +6,13 @@
     <string name="tract_content_input_error_required">%1$s wajib diisi</string>
     <string name="tract_content_input_error_invalid_email">Silahkan masukkan alamat email yang valid</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Saran-saran latihan</string>
     <!-- Share Tool Functionality -->
-    <string name="menu_share_tool">Berbagi</string>
+    <string name="menu_share_tool">Bagikan</string>
+    <string name="tool_share_sheet_more_apps">lagi</string>
     <string name="share_tool_message_article">Saya ingin membagikan artikel ini dengan Anda dan ingin mendengar pendapat Anda tentang artikel ini.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
     <string name="feature_discovery_desc_share_tool">Kirim sarana ini ke teman dengan mengklik ikon ini</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Bagikan gambar</string>
 </resources>

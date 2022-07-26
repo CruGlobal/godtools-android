@@ -4,7 +4,9 @@ plugins {
     kotlin("kapt")
 }
 
-configureAndroidFeature()
+android {
+    baseConfiguration(project)
+}
 
 dependencies {
     implementation(project(":library:initial-content"))

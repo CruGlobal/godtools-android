@@ -12,6 +12,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 abstract class DebugAnalyticsModule {
     @Binds
     @IntoSet
-    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
+    @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
     abstract fun timberAnalyticsServiceEagerSingleton(timberAnalyticsService: TimberAnalyticsService): Any
 }

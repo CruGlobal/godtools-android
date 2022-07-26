@@ -73,6 +73,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -109,6 +110,7 @@ class GodToolsDownloadManagerTest {
     }
     private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
     private val translationsApi = mockk<TranslationsApi>()
+    private val translationsRepository = mockk<TranslationsRepository>()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
@@ -134,6 +136,7 @@ class GodToolsDownloadManagerTest {
             settings,
             toolsRepository,
             translationsApi,
+            translationsRepository,
             { workManager },
             this,
             dispatcher
@@ -413,7 +416,9 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadLatestPublishedTranslation() - Files`() = runTest {
         translation.manifestFileName = "manifest.xml"
-        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
+        coEvery {
+            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+        } returns translation
         every { dao.find<LocalFile>(any<String>()) } returns null
         val config = slot<ParserConfig>()
         coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
@@ -441,7 +446,7 @@ class GodToolsDownloadManagerTest {
         assertEquals(config.captured.withParseRelated(false), config.captured)
 
         coVerifyAll {
-            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
             dao.find<LocalFile>("manifest.xml")
             translationsApi.downloadFile("manifest.xml")
             dao.updateOrInsert(LocalFile("manifest.xml"))
@@ -465,7 +470,9 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `downloadLatestPublishedTranslation() - Zip`() = runTest {
-        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
+        coEvery {
+            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+        } returns translation
         every { dao.find<LocalFile>(any<String>()) } returns null
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
@@ -484,7 +491,7 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
 
         coVerifyAll {
-            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             dao.find<LocalFile>("a.txt")
             dao.find<LocalFile>("b.txt")
@@ -504,7 +511,9 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = runTest {
-        every { dao.getLatestTranslation(translation.toolCode, translation.languageCode, any()) } returns translation
+        coEvery {
+            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+        } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
 
         withDownloadManager { downloadManager ->
@@ -513,7 +522,7 @@ class GodToolsDownloadManagerTest {
         }
         assertNull(downloadProgress.last())
         coVerifyAll {
-            dao.getLatestTranslation(TOOL, Locale.FRENCH, isPublished = true)
+            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
             observer.onChanged(any())
@@ -523,7 +532,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportTranslation() = runTest {
-        every { dao.getLatestTranslation(any(), any(), any(), any()) } returns null
+        coEvery { translationsRepository.getLatestTranslation(any(), any(), any()) } returns null
         every { dao.find<LocalFile>(any<String>()) } returns null
 
         withDownloadManager { downloadManager ->
@@ -533,8 +542,8 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
-        verifyAll {
-            dao.getLatestTranslation(translation.toolCode, translation.languageCode, true, true)
+        coVerifyAll {
+            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode, true)
             dao.find<LocalFile>("a.txt")
             dao.updateOrInsert(LocalFile("a.txt"))
             dao.updateOrInsert(TranslationFile(translation, "a.txt"))

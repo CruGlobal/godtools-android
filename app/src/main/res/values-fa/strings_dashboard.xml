@@ -19,21 +19,36 @@
     <string name="menu_copyright">حق نسخه‌برداری</string>
     <string name="share_story_subject">داستان God tools</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">درس‌ها</string>
+    <string name="dashboard_lessons_header_title">درس‌های مناسب شما</string>
+    <string name="dashboard_lessons_header_description">ایده‌های عملی برای ایجاد روابط و شروع گفت‌وگوهای معنادار.</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">موارد دلخواه</string>
-    <string name="tools_list_remove_favorite_dialog_title">«%1$s» از موارد دلخواه حذف شود؟</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">حذف</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">لغو</string>
+    <string name="dashboard_home_header_title">به GodTools خوش آمدید</string>
+    <string name="dashboard_home_section_featured_lesson">درس منتخب</string>
+    <string name="dashboard_home_section_favorites_title">ابزارهای موردعلاقه شما</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">ابزار موردعلاقه‌ای برای نمایش وجود ندارد</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">برای قرار دادن ابزار در موردعلاقه‌ها و در دسترس قرار دادن آفلاین آن، روی آیکون قلب ضربه بزنید.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">مشاهدۀ همه &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">رفتن به ابزارها</string>
     <string name="tools_list_favorites_banner_text">روی آیکون قلب ضربه بزنید تا به موارد دلخواه شما اضافه شود و به صورت آفلاین در دسترس قرار بگیرد.</string>
     <string name="tools_list_favorites_banner_action_dismiss">مرخص</string>
     <!-- All Tools -->
     <string name="nav_all_tools">تمام ابزار</string>
+    <string name="dashboard_tools_section_categories_label">دسته‌بندی‌ها</string>
+    <string name="dashboard_tools_section_categories_all">تمام ابزار</string>
+    <string name="dashboard_tools_section_spotlight_label">ویژگی‌های مهم ابزار</string>
+    <string name="dashboard_tools_section_spotlight_description">ممکن است این ابزارها را بپسندید</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">«%1$s» از موارد دلخواه حذف شود؟</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">حذف</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">لغو</string>
+    <string name="tool_card_label_language_unavailable">به %1$s در دسترس نیست</string>
+    <string name="action_tools_about">جزئیات</string>
+    <string name="action_tools_open">باز کردن</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">مایلید زبان دومی تنظیم کنید؟</string>
     <string name="languages_parallel_dialog_select">انتخاب زبان</string>
     <string name="languages_parallel_dialog_action_start">شروع کنید</string>
     <string name="languages_parallel_dialog_action_cancel">خیر، متشکرم</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">درباره</string>
-    <string name="action_tools_open">باز کردن</string>
 </resources>

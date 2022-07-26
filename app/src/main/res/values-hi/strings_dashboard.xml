@@ -19,21 +19,36 @@
     <string name="menu_copyright">कॉपीराइट</string>
     <string name="share_story_subject">GodTools कहानी</string>
     <!-- Lessons -->
-    <!-- Favorites -->
+    <string name="nav_lessons">अध्याय</string>
+    <string name="dashboard_lessons_header_title">आपके लिए बनाए गए अध्याय</string>
+    <string name="dashboard_lessons_header_description">संबंध बनाने और अर्थपूर्ण वार्तालाप शुरू करने के लिए व्यावहारिक सुझाव।</string>
+    <!-- Home -->
     <string name="nav_favorite_tools">पसंदीदा</string>
-    <string name="tools_list_remove_favorite_dialog_title">पसंदीदा से “%1$s” को निकालें?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">निकालें</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करें</string>
+    <string name="dashboard_home_header_title">GodTools पर स्वागत है</string>
+    <string name="dashboard_home_section_featured_lesson">फीचर किए गए अध्याय</string>
+    <string name="dashboard_home_section_favorites_title">आपके पसंदीदा टूल</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">दिखाने के लिए कोई पसंदीदा टूल नहीं</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">किसी टूल को पसंदीदा बनाने के लिए दिल के चिन्ह पर टैप करें और उसे ऑफ़लाइन भी इस्तेमाल करें।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">सभी देखें &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">टूल्स पर जाएँ</string>
     <string name="tools_list_favorites_banner_text">टूल को पसंदीदा में जोड़ने वाले \'दिल\' चिन्ह को टैप करके आप उस टूल को ऑफलाइन उपलब्ध कर सकते हैं।</string>
     <string name="tools_list_favorites_banner_action_dismiss">खारिज करें</string>
     <!-- All Tools -->
     <string name="nav_all_tools">सभी टूल्स</string>
+    <string name="dashboard_tools_section_categories_label">श्रेणियाँ</string>
+    <string name="dashboard_tools_section_categories_all">सभी टूल्स</string>
+    <string name="dashboard_tools_section_spotlight_label">टूल स्पॉटलाइट</string>
+    <string name="dashboard_tools_section_spotlight_description">ये कुछ टूल्स हैं जो आपको पसंद आ सकते हैं</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">पसंदीदा से “%1$s” को निकालें?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">निकालें</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करें</string>
+    <string name="tool_card_label_language_unavailable">%1$s में उपलब्ध नहीं</string>
+    <string name="action_tools_about">विवरण</string>
+    <string name="action_tools_open">खोलें</string>
     <!-- Parallel Language Dialog -->
     <string name="languages_parallel_dialog_headline">क्या आप कोई द्वितीय भाषा सेट करना चाहेंगे?</string>
     <string name="languages_parallel_dialog_select">एक भाषा चुनें</string>
     <string name="languages_parallel_dialog_action_start">शुरू करें</string>
     <string name="languages_parallel_dialog_action_cancel">नहीं, धन्यवाद</string>
-    <!-- Tools List -->
-    <string name="action_tools_about">परिचय</string>
-    <string name="action_tools_open">खोलें</string>
 </resources>

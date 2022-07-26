@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">"इन्सटॉल  गर्नुहोस "</string>
+    <string name="menu_share_tract">यो टुल पठाउनुहोस्</string>
     <string name="tract_card_previous">अघिल्लो</string>
     <string name="tract_card_next">अर्को</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">आफ्नो स्क्रिन साझा गर्नुहोस्</string>
+    <string name="menu_live_share_active">स्क्रिन साझेदारी सक्रिय गर्नुहोस्</string>
+    <string name="share_tool_message_tract_live_share">नमस्ते, स्क्रिन साझेदारी मार्फत  GodTools मलाई पछ्याउनुहोस्। यहाँ लिङ्क छ: %1$s\n\nयदि तपाईले पछिसम्म यो सन्देश प्राप्त गर्नुभएन भने, लिङ्कले अझै काम नगर्न सक्छ। हामी अर्को समयमा पुन: प्रयास गर्न सक्छौं।</string>
+    <string name="tract_live_share_starting">स्क्रिन साझेदारी सुरु गर्दै...</string>
+    <string name="tract_live_share_unable_to_connect">स्क्रिन साझेदारीमा जडान गर्न सक्षम गर्नुहोस्</string>
+    <string name="tract_live_share_exit_dialog_message">अहिले रिमोट सेयरिङ सत्रबाट बाहिरिने हो?</string>
+    <string name="tract_live_share_exit_dialog_confirm">बाहिर निस्कनुहोस्</string>
+    <string name="tract_live_share_exit_dialog_cancel">रद्द गर्नुहोस्</string>
     <!-- Settings -->
+    <string name="menu_settings">सेटिङ</string>
+    <string name="tract_settings_title">टुल विकल्प</string>
+    <string name="tract_settings_action_share">लिङ्क साझा गर्नुहोस्</string>
+    <string name="tract_settings_action_tips_disable">सुझाव लुकाउनुहोस्</string>
+    <string name="tract_settings_languages_title">समानान्तर भाषा</string>
+    <string name="tract_settings_languages_description">यस टुलमा दुई फरक भाषाहरू बीच टगल गर्नुहोस्।</string>
+    <string name="tract_settings_languages_parallel">समानान्तर</string>
+    <string name="tract_settings_languages_none">कुनै पनि छैन</string>
+    <string name="tract_settings_shareables_title">सम्बन्धित ग्राफिक्स</string>
 </resources>

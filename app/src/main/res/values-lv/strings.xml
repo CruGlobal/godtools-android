@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">90+ valodas</string>
+    <string name="menu_language_settings">Valodas iestatījumi</string>
+    <string name="title_language_settings">Valodas iestatījumi</string>
+    <string name="title_language_primary">Pirmā valoda</string>
+    <string name="title_language_parallel">Paralēlā valoda</string>
+    <string name="action_language_parallel_select">Izvēlies paralēlo valodu</string>
+    <string name="text_language_parallel_description">Koplieto \'GodTools\' ar citiem viņu dzimtajā valodā.</string>
+    <string name="text_language_warning">Ne visi rīki ir pieejami visās valodās.</string>
+    <string name="label_language_none">Nav</string>
+    <string name="label_language_search">Atlasīt valodas</string>
+</resources>

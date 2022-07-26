@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">सोडा</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द करा</string>
     <!-- Settings -->
+    <string name="menu_settings">सेटिंग्ज</string>
+    <string name="tract_settings_title">साधन पर्याये</string>
+    <string name="tract_settings_action_share">लिन्क शेअर करा</string>
+    <string name="tract_settings_action_tips_disable">टिपा लपवा</string>
+    <string name="tract_settings_languages_title">समांतर भाषा</string>
+    <string name="tract_settings_languages_description">या टूलमध्ये दोन वेगळ्या भाषांमधून निवडा.</string>
+    <string name="tract_settings_languages_parallel">समांतर</string>
+    <string name="tract_settings_languages_none">काहीही नाही</string>
+    <string name="tract_settings_shareables_title">संबंधित ग्राफिक्स</string>
 </resources>

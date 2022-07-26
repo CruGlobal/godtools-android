@@ -6,9 +6,13 @@
     <string name="tract_content_input_error_required">%1$s ist erforderlich</string>
     <string name="tract_content_input_error_invalid_email">Bitte eine gültige E-Mail-Adresse eingeben.</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Training-Tipps</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Teilen</string>
+    <string name="tool_share_sheet_more_apps">Mehr</string>
+    <string name="share_tool_message_article">Ich möchte diesen Artikel mit dir teilen und würde gerne deine Meinung darüber hören.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Einen Link teilen</string>
     <string name="feature_discovery_desc_share_tool">Sende dieses Tool an einen Freund, indem Sie auf dieses Symbol klickst</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Bild teilen</string>
 </resources>
