@@ -16,8 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.cru.godtools.R
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -30,23 +28,17 @@ fun LessonsLayout(
     onOpenLesson: (Tool?, Translation?) -> Unit = { _, _ -> },
 ) {
     val lessons by viewModel.lessons.collectAsState()
+    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+        item("header", "header") { LessonsHeader() }
 
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
-        LazyColumn(contentPadding = PaddingValues(16.dp)) {
-            item("header", "header") { LessonsHeader() }
-
-            items(lessons.orEmpty(), { it }, { "lesson" }) {
-                LessonToolCard(
-                    it,
-                    onClick = { tool, translation -> onOpenLesson(tool, translation) },
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(top = 16.dp)
-                )
-            }
+        items(lessons.orEmpty(), { it }, { "lesson" }) {
+            LessonToolCard(
+                it,
+                onClick = { tool, translation -> onOpenLesson(tool, translation) },
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .padding(top = 16.dp)
+            )
         }
     }
 }

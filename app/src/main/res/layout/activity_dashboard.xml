@@ -25,8 +25,8 @@
                 app:layout_constraintBottom_toTopOf="@id/bottom_nav"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/frame"
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />

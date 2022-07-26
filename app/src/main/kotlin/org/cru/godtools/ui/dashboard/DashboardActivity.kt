@@ -6,54 +6,42 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
-import androidx.lifecycle.map
+import androidx.lifecycle.asLiveData
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
+import kotlinx.coroutines.flow.map
+import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.EXTRA_PAGE
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_PARALLEL_LANGUAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityDashboardBinding
-import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.activity.startTutorialActivity
-import org.cru.godtools.ui.dashboard.home.HomeFragment
-import org.cru.godtools.ui.dashboard.lessons.LessonsFragment
-import org.cru.godtools.ui.dashboard.tools.ToolsFragment
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
-class DashboardActivity :
-    BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard),
-    ToolsAdapterCallbacks {
+class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard) {
     private val dataModel: DashboardDataModel by viewModels()
-    private val savedState: DashboardSavedState by viewModels()
+    private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
-
-    @Inject
-    internal lateinit var lazyDownloadManager: Lazy<GodToolsDownloadManager>
-    private val downloadManager: GodToolsDownloadManager get() = lazyDownloadManager.get()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,8 +57,15 @@ class DashboardActivity :
 
     override fun onBindingChanged() {
         super.onBindingChanged()
-        showPage(savedState.selectedPage)
-        binding.selectedPage = savedState.selectedPageLiveData
+        binding.compose.setContent {
+            GodToolsTheme {
+                DashboardLayout(
+                    onOpenTool = { t, tr1, tr2 -> openTool(t, tr1, tr2) },
+                    onOpenToolDetails = { startToolDetailsActivity(it) }
+                )
+            }
+        }
+        binding.selectedPage = viewModel.currentPage.asLiveData()
         binding.setupBottomNavigation()
     }
 
@@ -88,25 +83,19 @@ class DashboardActivity :
         super.onResume()
         launchTrackingViewModel.trackLaunch()
     }
-
-    override fun onSyncData(helper: SwipeRefreshSyncHelper, force: Boolean) {
-        super.onSyncData(helper, force)
-        syncService.syncFollowups().sync()
-        syncService.syncToolShares().sync()
-    }
     // endregion Lifecycle
 
     // region Intent processing
     private fun processIntent(intent: Intent) {
         val page = (intent.getSerializableExtra(EXTRA_PAGE) as? Page)
         when {
-            page != null -> showPage(page)
+            page != null -> viewModel.updateCurrentPage(page)
             intent.action == Intent.ACTION_VIEW -> {
                 val data = intent.data
                 when {
                     data?.isDashboardCustomUriSchemeDeepLink() == true ->
-                        showPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
-                    data?.isDashboardLessonsDeepLink() == true -> showPage(Page.LESSONS)
+                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
+                    data?.isDashboardLessonsDeepLink() == true -> viewModel.updateCurrentPage(Page.LESSONS)
                 }
             }
         }
@@ -124,35 +113,14 @@ class DashboardActivity :
     override val drawerMenu get() = binding.drawerMenu
 
     override val isShowNavigationDrawerIndicator by lazy {
-        savedState.selectedPageLiveData.map { it != Page.FAVORITE_TOOLS }
+        viewModel.currentPage.map { it != Page.FAVORITE_TOOLS }.asLiveData()
     }
 
-    internal fun showPage(page: Page) {
-        // short-circuit if the page is already displayed
-        if (supportFragmentManager.primaryNavigationFragment != null && page == savedState.selectedPage) return
-
-        val fragment = when (page) {
-            Page.LESSONS -> LessonsFragment()
-            Page.HOME -> HomeFragment()
-            Page.ALL_TOOLS -> ToolsFragment()
-            Page.FAVORITE_TOOLS -> null
-        }
-
-        if (fragment != null) {
-            supportFragmentManager.commit {
-                replace(R.id.frame, fragment)
-                setPrimaryNavigationFragment(fragment)
-            }
-        }
-        savedState.selectedPage = page
-    }
-
-    private var selectedPageMenuObserver: Observer<Page>? = null
     private fun Menu.observeSelectedPageChanges() {
-        selectedPageMenuObserver?.let { savedState.selectedPageLiveData.removeObserver(it) }
-        selectedPageMenuObserver = Observer<Page> {
-            findItem(R.id.action_switch_language)?.isVisible = it != Page.LESSONS
-        }.also { savedState.selectedPageLiveData.observe(this@DashboardActivity, it) }
+        findItem(R.id.action_switch_language)?.let { item ->
+            viewModel.currentPage.asLiveData()
+                .observe(this@DashboardActivity, item) { item.isVisible = it != Page.LESSONS }
+        }
     }
 
     // region ToolsAdapterCallbacks
@@ -160,7 +128,7 @@ class DashboardActivity :
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
 
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         val code = tool?.code ?: return
         val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
         if (languages.isEmpty()) return
@@ -169,21 +137,6 @@ class DashboardActivity :
         eventBus.post(ToolOpenTapAnalyticsActionEvent)
         openToolActivity(code, tool.type, *languages.toTypedArray())
     }
-
-    override fun showToolDetails(code: String?) {
-        code?.let { startToolDetailsActivity(code) }
-    }
-
-    override fun pinTool(code: String?) {
-        if (code == null) return
-        downloadManager.pinToolAsync(code)
-        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-    }
-
-    override fun unpinTool(tool: Tool?) {
-        val code = tool?.code ?: return
-        downloadManager.unpinToolAsync(code)
-    }
     // endregion ToolsAdapterCallbacks
 
     private fun ActivityDashboardBinding.setupBottomNavigation() {
@@ -191,7 +144,7 @@ class DashboardActivity :
             dataModel.lessons.observe(this@DashboardActivity) { lessons.isVisible = !it.isNullOrEmpty() }
         }
         bottomNav.setOnItemSelectedListener {
-            Page.findPage(it.itemId)?.let { showPage(it) }
+            Page.findPage(it.itemId)?.let { viewModel.updateCurrentPage(it) }
             true
         }
     }
@@ -203,7 +156,7 @@ class DashboardActivity :
         super.isFeatureDiscoveryVisible() || isParallelLanguageDialogVisible() || featureDiscovery != null
 
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
-        FEATURE_PARALLEL_LANGUAGE -> savedState.selectedPage == Page.HOME
+        FEATURE_PARALLEL_LANGUAGE -> viewModel.currentPage.value == Page.HOME
         FEATURE_LANGUAGE_SETTINGS -> !binding.drawerLayout.isDrawerOpen(GravityCompat.START)
         else -> super.canShowFeatureDiscovery(feature)
     }

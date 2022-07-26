@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.home
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -29,11 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,15 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
-import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.Banners
@@ -60,59 +51,15 @@ import org.cru.godtools.ui.tools.ToolCard
 
 private val PADDING_HORIZONTAL = 16.dp
 
-@Preview(showBackground = true)
-@Composable
-internal fun HomeLayout(
-    viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolDetails: (String) -> Unit = {},
-    onShowDashboardPage: (Page) -> Unit = {},
-    onUpdateCurrentPage: (Page) -> Unit = {}
-) {
-    val pageStack = rememberSaveable(
-        saver = listSaver(save = { it }, restore = { it.toMutableStateList() })
-    ) { mutableStateListOf(Page.HOME) }
-    BackHandler(pageStack.size > 1) { pageStack.removeLast() }
-    val currentPage by remember { derivedStateOf { pageStack.last() } }
-    LaunchedEffect(currentPage) { onUpdateCurrentPage(currentPage) }
-
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
-        when (currentPage) {
-            Page.HOME -> {
-                HomeContent(
-                    viewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails,
-                    onViewAllFavorites = { pageStack.add(Page.FAVORITE_TOOLS) },
-                    onViewAllTools = { onShowDashboardPage(Page.ALL_TOOLS) }
-                )
-            }
-            Page.FAVORITE_TOOLS -> {
-                AllFavoritesList(
-                    viewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolDetails = onOpenToolDetails
-                )
-            }
-            else -> Unit
-        }
-    }
-}
-
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun HomeContent(
-    viewModel: HomeViewModel,
+internal fun HomeContent(
+    viewModel: HomeViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
     onViewAllFavorites: () -> Unit,
     onViewAllTools: () -> Unit
 ) {
-    OnResume { viewModel.trackPageInAnalytics(Page.HOME) }
-
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
@@ -308,13 +255,11 @@ private fun NoFavoriteTools(
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun AllFavoritesList(
-    viewModel: HomeViewModel,
+internal fun AllFavoritesList(
+    viewModel: HomeViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
 ) {
-    OnResume { viewModel.trackPageInAnalytics(Page.FAVORITE_TOOLS) }
-
     val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
 
     val reorderableState = rememberReorderableLazyListState(

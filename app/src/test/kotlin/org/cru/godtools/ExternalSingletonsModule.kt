@@ -41,9 +41,9 @@ class ExternalSingletonsModule {
 
         mockk<GodToolsSyncService> {
             every { syncFollowups() } returns completedSyncTask
-            every { syncTools(any()) } returns completedSyncTask
+            coEvery { syncTools(any()) } just Runs
             every { syncToolShares() } returns completedSyncTask
-            coEvery { suspendAndSyncTools(any()) } just Runs
+            coEvery { executeSyncTask(any()) } returns true
         }
     }
     @get:Provides
