@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
+
+internal val TUTORIAL_PAGE_HORIZONTAL_MARGIN = 32.dp
 
 @Composable
 internal fun TutorialPageLayout(
@@ -21,6 +25,7 @@ internal fun TutorialPageLayout(
         )
 ) {
     when (page) {
+        Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(nextPage, onTutorialAction)
         else -> Unit
     }
 }
