@@ -2,26 +2,29 @@ package org.cru.godtools.tutorial
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
+import org.ccci.gto.android.common.androidx.fragment.app.BindingFragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.tutorial.animation.animateViews
 import org.cru.godtools.tutorial.databinding.TutorialLiveShareDescriptionBinding
 import org.cru.godtools.tutorial.databinding.TutorialLiveShareMirroredBinding
 import org.cru.godtools.tutorial.databinding.TutorialLiveShareStartBinding
 import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
+import org.cru.godtools.tutorial.databinding.TutorialPageComposeBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLearnBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsLightBinding
 import org.cru.godtools.tutorial.databinding.TutorialTipsStartBinding
 import org.cru.godtools.tutorial.layout.TipsTutorialLayout
 import org.cru.godtools.tutorial.layout.TutorialLiveShareLayout
+import org.cru.godtools.tutorial.layout.TutorialPageLayout
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
 
-internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
+internal class TutorialPageFragment() : BindingFragment<ViewBinding>(), TutorialCallbacks {
     constructor(page: Page, formatArgs: Bundle?) : this() {
         this.page = page
         this.formatArgs = formatArgs
@@ -30,27 +33,37 @@ internal class TutorialPageFragment() : Fragment(), TutorialCallbacks {
     private var page by arg<Page>()
     private var formatArgs by argOrNull<Bundle>()
 
-    private var binding: ViewDataBinding? = null
-
     // region Lifecycle
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        DataBindingUtil.inflate<ViewDataBinding>(inflater, page.layout, container, false).also {
-            it.lifecycleOwner = viewLifecycleOwner
-            it.setVariable(BR.callbacks, this)
-            it.setVariable(BR.page, page)
-            it.setVariable(BR.formatArgs, formatArgs)
-            binding = it
-        }.root
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding?.setupCompose()
-        binding?.startAnimations()
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = when (page.layout) {
+        R.layout.tutorial_page_compose -> TutorialPageComposeBinding.inflate(inflater, container, false)
+        else -> DataBindingUtil.inflate<ViewDataBinding>(inflater, page.layout, container, false)
     }
 
-    override fun onDestroyView() {
-        binding = null
-        super.onDestroyView()
+    override fun onBindingCreated(binding: ViewBinding, savedInstanceState: Bundle?) {
+        when (binding) {
+            is TutorialPageComposeBinding -> {
+                binding.compose.setContent {
+                    GodToolsTheme {
+                        TutorialPageLayout(
+                            page,
+                            nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
+                            onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
+                        )
+                    }
+                }
+            }
+            is ViewDataBinding -> {
+                binding.setVariable(BR.callbacks, this)
+                binding.setVariable(BR.page, page)
+                binding.setVariable(BR.formatArgs, formatArgs)
+                binding.setupCompose()
+                binding.startAnimations()
+            }
+        }
     }
     // endregion Lifecycle
 
