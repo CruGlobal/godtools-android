@@ -8,6 +8,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
 
 internal val TUTORIAL_PAGE_HORIZONTAL_MARGIN = 32.dp
@@ -26,6 +27,10 @@ internal fun TutorialPageLayout(
 ) {
     when (page) {
         Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(nextPage, onTutorialAction)
+        Page.ONBOARDING_CONVERSATIONS,
+        Page.ONBOARDING_PREPARE,
+        Page.ONBOARDING_SHARE,
+        Page.ONBOARDING_SHARE_FINAL -> TutorialOnboardingLayout(page, nextPage, onTutorialAction)
         else -> Unit
     }
 }
