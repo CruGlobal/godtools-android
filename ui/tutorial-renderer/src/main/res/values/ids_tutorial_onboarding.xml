@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="action_onboarding_watch_video" type="id" />
+    <item name="action_onboarding_launch_articles" type="id" />
+    <item name="action_onboarding_launch_lessons" type="id" />
+    <item name="action_onboarding_launch_tools" type="id" />
+    <item name="action_onboarding_finish" type="id" />
 </resources>
