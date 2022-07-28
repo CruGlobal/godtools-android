@@ -9,8 +9,6 @@ import androidx.viewbinding.ViewBinding
 import org.ccci.gto.android.common.androidx.fragment.app.BindingFragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.animation.animateViews
-import org.cru.godtools.tutorial.databinding.TutorialOnboardingWelcomeBinding
 import org.cru.godtools.tutorial.databinding.TutorialPageComposeBinding
 import org.cru.godtools.tutorial.layout.TutorialPageLayout
 import splitties.fragmentargs.arg
@@ -52,18 +50,10 @@ internal class TutorialPageFragment() : BindingFragment<ViewBinding>(), Tutorial
                 binding.setVariable(BR.callbacks, this)
                 binding.setVariable(BR.page, page)
                 binding.setVariable(BR.formatArgs, formatArgs)
-                binding.startAnimations()
             }
         }
     }
     // endregion Lifecycle
-
-    private fun ViewDataBinding.startAnimations() {
-        when (this) {
-            is TutorialOnboardingWelcomeBinding -> animateViews()
-            else -> Unit
-        }
-    }
 
     // region TutorialCallbacks
     override fun nextPage() {

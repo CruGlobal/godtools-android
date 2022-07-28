@@ -14,7 +14,7 @@ internal enum class Page(
     val showMenu: Boolean = true
 ) {
     ONBOARDING_WELCOME(
-        R.layout.tutorial_onboarding_welcome,
+        R.layout.tutorial_page_compose,
         showIndicator = false,
         showMenu = false
     ),
