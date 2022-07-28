@@ -51,7 +51,7 @@ internal enum class Page(
         showMenu = false
     ),
     ONBOARDING_LINKS(
-        R.layout.tutorial_onboarding_links,
+        R.layout.tutorial_page_compose,
         supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
