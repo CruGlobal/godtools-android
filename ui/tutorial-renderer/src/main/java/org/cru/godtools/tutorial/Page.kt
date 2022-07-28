@@ -1,6 +1,8 @@
 package org.cru.godtools.tutorial
 
 import androidx.annotation.LayoutRes
+import androidx.annotation.RawRes
+import androidx.annotation.StringRes
 import java.util.Locale
 import org.ccci.gto.android.common.util.LocaleUtils
 
@@ -8,26 +10,48 @@ private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH, Locale.FRENCH, L
 
 internal enum class Page(
     @LayoutRes val layout: Int,
+    @StringRes val title: Int? = null,
+    @StringRes val content: Int? = null,
+    @RawRes val animation: Int? = null,
     private val supportedLocales: Set<Locale> = emptySet(),
     private val disabledLocales: Set<Locale> = emptySet(),
     val showIndicator: Boolean = true,
     val showMenu: Boolean = true
 ) {
     ONBOARDING_WELCOME(
-        R.layout.tutorial_onboarding_welcome,
+        R.layout.tutorial_page_compose,
         showIndicator = false,
         showMenu = false
     ),
-    ONBOARDING_CONVERSATIONS(R.layout.tutorial_onboarding_conversations),
-    ONBOARDING_PREPARE(R.layout.tutorial_onboarding_prepare),
-    ONBOARDING_SHARE(R.layout.tutorial_onboarding_share, supportedLocales = ONBOARDING_EXTENDED_LOCALES),
+    ONBOARDING_CONVERSATIONS(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_onboarding_conversations_headline,
+        content = R.string.tutorial_onboarding_conversations_subhead,
+        animation = R.raw.anim_tutorial_onboarding_guys
+    ),
+    ONBOARDING_PREPARE(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_onboarding_prepare_headline,
+        content = R.string.tutorial_onboarding_prepare_subhead,
+        animation = R.raw.anim_tutorial_onboarding_dog
+    ),
+    ONBOARDING_SHARE(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_onboarding_share_headline,
+        content = R.string.tutorial_onboarding_share_subhead,
+        animation = R.raw.anim_tutorial_onboarding_distance,
+        supportedLocales = ONBOARDING_EXTENDED_LOCALES
+    ),
     ONBOARDING_SHARE_FINAL(
-        R.layout.tutorial_onboarding_share,
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_onboarding_share_headline,
+        content = R.string.tutorial_onboarding_share_subhead,
+        animation = R.raw.anim_tutorial_onboarding_distance,
         disabledLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
     ONBOARDING_LINKS(
-        R.layout.tutorial_onboarding_links,
+        R.layout.tutorial_page_compose,
         supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
