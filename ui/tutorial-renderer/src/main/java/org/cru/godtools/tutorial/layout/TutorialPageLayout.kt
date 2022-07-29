@@ -11,6 +11,7 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLinksLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
+import org.cru.godtools.tutorial.layout.tips.TutorialTipsLayout
 
 internal val TUTORIAL_PAGE_HORIZONTAL_MARGIN = 32.dp
 
@@ -33,6 +34,9 @@ internal fun TutorialPageLayout(
         Page.ONBOARDING_SHARE,
         Page.ONBOARDING_SHARE_FINAL -> TutorialOnboardingLayout(page, nextPage, onTutorialAction)
         Page.ONBOARDING_LINKS -> TutorialOnboardingLinksLayout(onTutorialAction = onTutorialAction)
+        Page.TIPS_LEARN,
+        Page.TIPS_LIGHT,
+        Page.TIPS_START -> TutorialTipsLayout(page, nextPage = nextPage, onTutorialAction = onTutorialAction)
         else -> Unit
     }
 }
