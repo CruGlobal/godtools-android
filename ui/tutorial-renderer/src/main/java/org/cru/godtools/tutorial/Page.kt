@@ -12,6 +12,7 @@ internal enum class Page(
     @LayoutRes val layout: Int,
     @StringRes val title: Int? = null,
     @StringRes val content: Int? = null,
+    @StringRes val content2: Int? = null,
     @RawRes val animation: Int? = null,
     private val supportedLocales: Set<Locale> = emptySet(),
     private val disabledLocales: Set<Locale> = emptySet(),
@@ -63,9 +64,25 @@ internal enum class Page(
     LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
     LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
     LIVE_SHARE_START(R.layout.tutorial_live_share_start, showMenu = false),
-    TIPS_LEARN(R.layout.tutorial_tips_learn),
-    TIPS_LIGHT(R.layout.tutorial_tips_light),
-    TIPS_START(R.layout.tutorial_tips_start);
+    TIPS_LEARN(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_tips_learn_headline,
+        content = R.string.tutorial_tips_learn_text,
+        animation = R.raw.anim_tutorial_tips_people
+    ),
+    TIPS_LIGHT(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_tips_light_headline,
+        content = R.string.tutorial_tips_light_text1,
+        content2 = R.string.tutorial_tips_light_text2,
+        animation = R.raw.anim_tutorial_tips_tool
+    ),
+    TIPS_START(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_tips_start_headline,
+        content = R.string.tutorial_tips_start_text,
+        animation = R.raw.anim_tutorial_tips_light,
+    );
 
     fun supportsLocale(locale: Locale) =
         (supportedLocales.isEmpty() || LocaleUtils.getFallbacks(locale).any { it in supportedLocales }) &&
