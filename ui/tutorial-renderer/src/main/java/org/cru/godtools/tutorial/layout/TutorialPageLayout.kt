@@ -8,6 +8,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLinksLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
@@ -28,6 +29,9 @@ internal fun TutorialPageLayout(
         )
 ) {
     when (page) {
+        Page.LIVE_SHARE_DESCRIPTION,
+        Page.LIVE_SHARE_MIRRORED,
+        Page.LIVE_SHARE_START -> TutorialLiveShareLayout(page, nextPage = nextPage, onTutorialAction = onTutorialAction)
         Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(nextPage, onTutorialAction)
         Page.ONBOARDING_CONVERSATIONS,
         Page.ONBOARDING_PREPARE,
