@@ -1,5 +1,6 @@
 package org.cru.godtools.tutorial
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
@@ -13,7 +14,9 @@ internal enum class Page(
     @StringRes val title: Int? = null,
     @StringRes val content: Int? = null,
     @StringRes val content2: Int? = null,
+    @StringRes val action: Int? = null,
     @RawRes val animation: Int? = null,
+    @DrawableRes val image: Int? = null,
     private val supportedLocales: Set<Locale> = emptySet(),
     private val disabledLocales: Set<Locale> = emptySet(),
     val showIndicator: Boolean = true,
@@ -61,9 +64,28 @@ internal enum class Page(
     FEATURES_LIVE_SHARE(R.layout.tutorial_features_live_share),
     FEATURES_LESSONS(R.layout.tutorial_features_lessons),
     FEATURES_FINAL(R.layout.tutorial_features_final),
-    LIVE_SHARE_DESCRIPTION(R.layout.tutorial_live_share_description),
-    LIVE_SHARE_MIRRORED(R.layout.tutorial_live_share_mirrored),
-    LIVE_SHARE_START(R.layout.tutorial_live_share_start, showMenu = false),
+    LIVE_SHARE_DESCRIPTION(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_live_share_description_headline,
+        content = R.string.tutorial_live_share_description_text,
+        action = R.string.tutorial_live_share_action_continue,
+        image = R.drawable.img_tutorial_live_share_people
+    ),
+    LIVE_SHARE_MIRRORED(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_live_share_mirrored_headline,
+        content = R.string.tutorial_live_share_mirrored_text,
+        action = R.string.tutorial_live_share_action_continue,
+        animation = R.raw.anim_tutorial_live_share_devices
+    ),
+    LIVE_SHARE_START(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_live_share_start_headline,
+        content = R.string.tutorial_live_share_start_text,
+        action = R.string.tutorial_live_share_action_start,
+        animation = R.raw.anim_tutorial_live_share_messages,
+        showMenu = false
+    ),
     TIPS_LEARN(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_tips_learn_headline,
