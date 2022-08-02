@@ -44,6 +44,7 @@ import org.cru.godtools.R
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -102,7 +103,10 @@ internal fun HomeContent(
             items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
                 LessonToolCard(
                     it,
-                    onClick = { tool, translation -> onOpenTool(tool, translation, null) },
+                    onClick = { tool, translation ->
+                        viewModel.recordLessonClickInAnalytics(tool?.code, SOURCE_FEATURED)
+                        onOpenTool(tool, translation, null)
+                    },
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(horizontal = PADDING_HORIZONTAL)
@@ -128,8 +132,14 @@ internal fun HomeContent(
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
                         { favoriteTools.orEmpty().take(5) },
-                        onOpenTool = onOpenTool,
-                        onOpenToolDetails = onOpenToolDetails,
+                        onOpenTool = { tool, trans1, trans2 ->
+                            viewModel.recordToolClickInAnalytics(tool?.code)
+                            onOpenTool(tool, trans1, trans2)
+                        },
+                        onOpenToolDetails = {
+                            viewModel.recordToolDetailsClickInAnalytics(it)
+                            onOpenToolDetails(it)
+                        },
                         modifier = Modifier
                             .animateItemPlacement()
                             .fillMaxWidth()
@@ -210,7 +220,7 @@ private fun HorizontalFavoriteTools(
         SquareToolCard(
             toolCode = it.code.orEmpty(),
             confirmRemovalFromFavorites = true,
-            onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
+            onOpenTool = onOpenTool,
             onOpenToolDetails = onOpenToolDetails,
             modifier = Modifier.animateItemPlacement()
         )
@@ -300,8 +310,14 @@ internal fun AllFavoritesList(
                     toolCode = tool.code.orEmpty(),
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
-                    onOpenTool = { tool, trans1, trans2 -> onOpenTool(tool, trans1, trans2) },
-                    onOpenToolDetails = onOpenToolDetails,
+                    onOpenTool = { tool, trans1, trans2 ->
+                        viewModel.recordToolClickInAnalytics(tool?.code)
+                        onOpenTool(tool, trans1, trans2)
+                    },
+                    onOpenToolDetails = {
+                        viewModel.recordToolDetailsClickInAnalytics(it)
+                        onOpenToolDetails(it)
+                    },
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .fillMaxWidth()
