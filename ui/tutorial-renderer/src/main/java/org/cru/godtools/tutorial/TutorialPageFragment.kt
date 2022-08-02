@@ -3,6 +3,9 @@ package org.cru.godtools.tutorial
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.viewbinding.ViewBinding
@@ -42,6 +45,11 @@ internal class TutorialPageFragment() : BindingFragment<ViewBinding>(), Tutorial
                             page,
                             nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                             onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
+                            modifier = Modifier
+                                .padding(
+                                    top = dimensionResource(R.dimen.tutorial_page_inset_top),
+                                    bottom = dimensionResource(R.dimen.tutorial_page_inset_bottom)
+                                )
                         )
                     }
                 }

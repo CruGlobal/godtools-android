@@ -30,10 +30,11 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 @Composable
 internal fun TutorialOnboardingLayout(
     page: Page,
+    modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
     onTutorialAction: (Int) -> Unit = {},
 ) = ConstraintLayout(
-    modifier = Modifier
+    modifier = modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState())
 ) {
