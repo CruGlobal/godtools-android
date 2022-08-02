@@ -8,16 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
-import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
-import androidx.constraintlayout.compose.VerticalChainReference
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.tutorial.R
+import org.cru.godtools.tutorial.layout.TutorialPositionReferences
 
 @Composable
-internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): TutorialOnboardingPositioning {
-    val (title, content, anim) = createRefs()
-    val chain = createVerticalChain(title, content, anim, chainStyle = ChainStyle.Packed)
+internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): TutorialPositionReferences {
+    val (title, content, media) = createRefs()
+    val chain = createVerticalChain(title, content, media, chainStyle = ChainStyle.Packed)
 
     Spacer(
         modifier = Modifier
@@ -32,24 +31,17 @@ internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): Tutori
             .minLinesHeight(3, MaterialTheme.typography.bodyLarge)
             .constrainAs(content) {
                 top.linkTo(title.bottom, margin = 12.dp)
-                bottom.linkTo(anim.top)
+                bottom.linkTo(media.top)
             }
     )
     Spacer(
         modifier = Modifier
             .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
-            .constrainAs(anim) {
+            .constrainAs(media) {
                 top.linkTo(content.bottom)
                 bottom.linkTo(parent.bottom)
             }
     )
 
-    return TutorialOnboardingPositioning(title, content, anim, chain)
+    return TutorialPositionReferences(title, content, media, chain)
 }
-
-internal data class TutorialOnboardingPositioning(
-    val title: ConstrainedLayoutReference,
-    val content: ConstrainedLayoutReference,
-    val anim: ConstrainedLayoutReference,
-    val chain: VerticalChainReference,
-)
