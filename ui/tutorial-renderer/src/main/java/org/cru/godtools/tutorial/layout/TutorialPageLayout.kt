@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.tutorial.Page
+import org.cru.godtools.tutorial.layout.features.TutorialFeaturesLayout
 import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLinksLayout
@@ -19,6 +20,16 @@ internal fun TutorialPageLayout(
     nextPage: () -> Unit = {},
     onTutorialAction: (Int) -> Unit = {},
 ) = when (page) {
+    Page.FEATURES_LESSONS,
+    Page.FEATURES_TOOLS,
+    Page.FEATURES_TIPS,
+    Page.FEATURES_LIVE_SHARE,
+    Page.FEATURES_FINAL -> TutorialFeaturesLayout(
+        page,
+        nextPage = nextPage,
+        onTutorialAction = onTutorialAction,
+        modifier = modifier,
+    )
     Page.LIVE_SHARE_DESCRIPTION,
     Page.LIVE_SHARE_MIRRORED,
     Page.LIVE_SHARE_START -> TutorialLiveShareLayout(
