@@ -2,7 +2,6 @@ package org.cru.godtools.tutorial.activity
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -46,13 +45,10 @@ private val ARTICLES_SUPPORTED_LANGUAGES = setOf(
     Locale("vi")
 )
 
-fun Context.buildTutorialActivityIntent(pageSet: PageSet, formatArgs: Bundle? = null) =
-    Intent(this, TutorialActivity::class.java)
-        .putExtra(ARG_PAGE_SET, pageSet)
-        .putExtra(ARG_FRMT_ARGS, formatArgs)
+fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, TutorialActivity::class.java)
+    .putExtra(ARG_PAGE_SET, pageSet)
 
-fun Context.startTutorialActivity(pageSet: PageSet, stringArgs: Bundle? = null) =
-    startActivity(buildTutorialActivityIntent(pageSet, stringArgs))
+fun Context.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
@@ -124,7 +120,7 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
     // region ViewPager
     private fun setupViewPager() {
         binding.pages.apply {
-            adapter = TutorialPagerAdapter(this@TutorialActivity, pages, intent?.getBundleExtra(ARG_FRMT_ARGS))
+            adapter = TutorialPagerAdapter(this@TutorialActivity, pages)
             setupAnalytics()
             setupMenuVisibility()
             setupIndicator()
@@ -221,9 +217,8 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
 
 internal class TutorialPagerAdapter(
     activity: FragmentActivity,
-    private val pages: List<Page>,
-    private val formatArgs: Bundle? = null
+    private val pages: List<Page>
 ) : FragmentStateAdapter(activity) {
     override fun getItemCount() = pages.size
-    override fun createFragment(position: Int) = TutorialPageFragment(pages[position], formatArgs)
+    override fun createFragment(position: Int) = TutorialPageFragment(pages[position])
 }

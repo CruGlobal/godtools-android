@@ -42,11 +42,12 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 @Composable
 @Preview(showBackground = true, heightDp = 800)
 internal fun TutorialOnboardingWelcomeLayout(
+    modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
     onTutorialAction: (Int) -> Unit = {},
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
-    modifier = Modifier
+    modifier = modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState()),
 ) {

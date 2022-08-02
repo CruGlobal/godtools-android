@@ -59,11 +59,40 @@ internal enum class Page(
         supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
-    FEATURES_TOOLS(R.layout.tutorial_features_tools),
-    FEATURES_TIPS(R.layout.tutorial_features_tips),
-    FEATURES_LIVE_SHARE(R.layout.tutorial_features_live_share),
-    FEATURES_LESSONS(R.layout.tutorial_features_lessons),
-    FEATURES_FINAL(R.layout.tutorial_features_final),
+    FEATURES_TOOLS(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_features_tools_headline,
+        content = R.string.tutorial_features_tools_subhead,
+        action = R.string.tutorial_features_action_continue,
+        image = R.drawable.img_tutorial_features_tools
+    ),
+    FEATURES_TIPS(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_features_tips_headline,
+        content = R.string.tutorial_features_tips_subhead,
+        action = R.string.tutorial_features_action_continue,
+        animation = R.raw.anim_tutorial_features_tips
+    ),
+    FEATURES_LIVE_SHARE(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_features_live_share_headline,
+        content = R.string.tutorial_features_live_share_subhead,
+        action = R.string.tutorial_features_action_continue,
+        animation = R.raw.anim_tutorial_features_live_share
+    ),
+    FEATURES_LESSONS(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_features_lessons_headline,
+        content = R.string.tutorial_features_lessons_subhead,
+        action = R.string.tutorial_features_action_continue,
+        animation = R.raw.anim_tutorial_features_lessons
+    ),
+    FEATURES_FINAL(
+        R.layout.tutorial_page_compose,
+        title = R.string.tutorial_features_final_headline,
+        action = R.string.tutorial_features_action_close,
+        image = R.drawable.img_tutorial_training_menu
+    ),
     LIVE_SHARE_DESCRIPTION(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_live_share_description_headline,

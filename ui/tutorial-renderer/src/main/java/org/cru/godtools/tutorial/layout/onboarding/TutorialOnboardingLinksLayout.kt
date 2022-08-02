@@ -29,8 +29,11 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 
 @Composable
 @Preview(showBackground = true)
-internal fun TutorialOnboardingLinksLayout(onTutorialAction: (Int) -> Unit = {}) = ConstraintLayout(
-    modifier = Modifier
+internal fun TutorialOnboardingLinksLayout(
+    modifier: Modifier = Modifier,
+    onTutorialAction: (Int) -> Unit = {},
+) = ConstraintLayout(
+    modifier = modifier
         .fillMaxSize()
         .verticalScroll(rememberScrollState())
 ) {
