@@ -2,6 +2,7 @@ package org.cru.godtools.tutorial.layout.onboarding
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,27 +21,28 @@ internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): Tutori
 
     Spacer(
         modifier = Modifier
-            .minLinesHeight(2, MaterialTheme.typography.headlineMedium)
             .constrainAs(title) {
                 top.linkTo(parent.top)
                 bottom.linkTo(content.top)
             }
+            .minLinesHeight(2, MaterialTheme.typography.headlineMedium)
     )
     Spacer(
         modifier = Modifier
-            .minLinesHeight(3, MaterialTheme.typography.bodyLarge)
             .constrainAs(content) {
-                top.linkTo(title.bottom, margin = 12.dp)
+                top.linkTo(title.bottom)
                 bottom.linkTo(media.top)
             }
+            .padding(top = 12.dp)
+            .minLinesHeight(3, MaterialTheme.typography.bodyLarge)
     )
     Spacer(
         modifier = Modifier
-            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
             .constrainAs(media) {
                 top.linkTo(content.bottom)
                 bottom.linkTo(parent.bottom)
             }
+            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
     )
 
     return TutorialPositionReferences(title, content, media, chain)
