@@ -31,18 +31,21 @@ internal enum class Page(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_onboarding_conversations_headline,
         content = R.string.tutorial_onboarding_conversations_subhead,
+        action = R.string.tutorial_onboarding_action_next,
         animation = R.raw.anim_tutorial_onboarding_guys
     ),
     ONBOARDING_PREPARE(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_onboarding_prepare_headline,
         content = R.string.tutorial_onboarding_prepare_subhead,
+        action = R.string.tutorial_onboarding_action_next,
         animation = R.raw.anim_tutorial_onboarding_dog
     ),
     ONBOARDING_SHARE(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_onboarding_share_headline,
         content = R.string.tutorial_onboarding_share_subhead,
+        action = R.string.tutorial_onboarding_action_next,
         animation = R.raw.anim_tutorial_onboarding_distance,
         supportedLocales = ONBOARDING_EXTENDED_LOCALES
     ),
@@ -50,6 +53,7 @@ internal enum class Page(
         R.layout.tutorial_page_compose,
         title = R.string.tutorial_onboarding_share_headline,
         content = R.string.tutorial_onboarding_share_subhead,
+        action = R.string.tutorial_onboarding_action_start,
         animation = R.raw.anim_tutorial_onboarding_distance,
         disabledLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false

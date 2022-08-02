@@ -47,11 +47,9 @@ internal fun TutorialOnboardingLinksLayout(
         color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier
+            .constrainAs(title) { top.linkTo(positioning.title.top) }
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
-            .constrainAs(title) {
-                top.linkTo(positioning.title.top)
-                centerHorizontallyTo(parent)
-            }
+            .fillMaxWidth()
     )
 
     val articles = createRef()

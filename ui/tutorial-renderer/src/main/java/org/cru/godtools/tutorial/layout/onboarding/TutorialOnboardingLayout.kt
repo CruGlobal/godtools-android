@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial.layout.onboarding
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,21 +10,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
+import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
+import org.cru.godtools.tutorial.layout.TutorialMedia
 
 @Composable
 internal fun TutorialOnboardingLayout(
@@ -48,11 +43,9 @@ internal fun TutorialOnboardingLayout(
         color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
         modifier = Modifier
+            .constrainAs(title) { top.linkTo(positioning.title.top) }
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
-            .constrainAs(title) {
-                top.linkTo(positioning.title.top)
-                centerHorizontallyTo(parent)
-            }
+            .fillMaxWidth()
     )
     val titleBottom = createBottomBarrier(title, positioning.title)
 
@@ -62,31 +55,21 @@ internal fun TutorialOnboardingLayout(
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
         modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
-            .constrainAs(content) {
-                top.linkTo(titleBottom, margin = 12.dp)
-                centerHorizontallyTo(parent)
-            }
+            .constrainAs(content) { top.linkTo(titleBottom) }
+            .padding(top = 12.dp, horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
+            .fillMaxWidth()
     )
     val contentBottom = createBottomBarrier(content, positioning.content)
 
-    val mediaModifier = Modifier
-        .fillMaxWidth()
-        .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
-        .constrainAs(createRef()) { linkTo(top = contentBottom, bottom = action.top, bias = 0f) }
-    when {
-        page.animation != null -> {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(page.animation))
-            val progress by animateLottieCompositionAsState(
-                composition,
-                iterations = LottieConstants.IterateForever,
-                restartOnPlay = false,
-            )
-
-            LottieAnimation(composition, { progress }, modifier = mediaModifier)
-        }
-        else -> Spacer(modifier = mediaModifier)
-    }
+    val media = createRef()
+    TutorialMedia(
+        page,
+        modifier = Modifier
+            .constrainAs(media) { top.linkTo(contentBottom) }
+            .fillMaxWidth()
+            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
+    )
+    val mediaBottom = createBottomBarrier(media, positioning.media)
 
     constrain(positioning.chain) { bottom.linkTo(action.top) }
     Button(
@@ -97,20 +80,11 @@ internal fun TutorialOnboardingLayout(
             }
         },
         modifier = Modifier
+            .constrainAs(action) {
+                linkTo(top = mediaBottom, bottom = parent.bottom, bias = 1f)
+                centerHorizontallyTo(parent)
+            }
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
             .fillMaxWidth(0.8f)
-            .constrainAs(action) {
-                centerHorizontallyTo(parent)
-                bottom.linkTo(parent.bottom)
-            }
-    ) {
-        Text(
-            stringResource(
-                when (page) {
-                    Page.ONBOARDING_SHARE_FINAL -> R.string.tutorial_onboarding_action_start
-                    else -> R.string.tutorial_onboarding_action_next
-                }
-            )
-        )
-    }
+    ) { Text(page.action?.let { stringResource(it) }.orEmpty()) }
 }
