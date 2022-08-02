@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">點擊愛心圖示，將工具新增至你的最愛，就能離線使用工具。</string>
     <string name="tools_list_favorites_banner_action_dismiss">略過</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">所有工具</string>
+    <string name="nav_all_tools">工具</string>
     <string name="dashboard_tools_section_categories_label">類別</string>
     <string name="dashboard_tools_section_categories_all">所有工具</string>
     <string name="dashboard_tools_section_spotlight_label">工具精選</string>

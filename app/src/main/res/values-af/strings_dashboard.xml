@@ -29,7 +29,7 @@
     <string name="dashboard_home_section_favorites_title">Jou gunsteling-gereedskap</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Geen gunsteling-gereedskap om te vertoon nie</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Tik op die hart-ikoon om dit ’n gunsteling gereedskap te maak wat vanlyn af beskikbaar is.</string>
-    <string name="dashboard_home_section_favorites_action_view_all">Besigtig almal&gt;</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Besigtig almal &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">Gaan na Gereedskap</string>
     <string name="tools_list_favorites_banner_text">Maak \'n hulpmiddel beskikbaar wanneer jy van lyn af is deur op die hartikoon  te tik wat dit by jou gunstelinge voeg.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Laat gaan</string>

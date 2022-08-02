@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Gör ett verktyg tillgängligt utan internetuppkoppling genom att trycka på hjärtikonen. Då läggs det till i dina favoriter.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Avfärda</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Alla verktyg</string>
+    <string name="nav_all_tools">Verktyg</string>
     <string name="dashboard_tools_section_categories_label">Kategorier</string>
     <string name="dashboard_tools_section_categories_all">Alla verktyg</string>
     <string name="dashboard_tools_section_spotlight_label">Utvalda verktyg</string>

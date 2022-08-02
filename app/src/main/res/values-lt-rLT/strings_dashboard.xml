@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Įrankį galima naudoti atsijungus, paspaudus širdelės piktogramą, kuri prideda ją prie mėgstamiausių.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Išjungti</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Visi įrankiai</string>
+    <string name="nav_all_tools">Įrankiai</string>
     <string name="dashboard_tools_section_categories_label">Kategorijos</string>
     <string name="dashboard_tools_section_categories_all">Visi įrankiai</string>
     <string name="dashboard_tools_section_spotlight_label">Rekomenduojami įrankiai</string>

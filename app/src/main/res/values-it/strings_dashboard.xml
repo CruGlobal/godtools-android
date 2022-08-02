@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Tocca l\'icona a forma di cuore per rendere uno strumento disponibile offline aggiungendolo ai tuoi preferiti.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ignora</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Tutti gli strumenti</string>
+    <string name="nav_all_tools">Strumenti</string>
     <string name="dashboard_tools_section_categories_label">Categorie</string>
     <string name="dashboard_tools_section_categories_all">Tutti gli strumenti</string>
     <string name="dashboard_tools_section_spotlight_label">Strumenti in primo piano</string>

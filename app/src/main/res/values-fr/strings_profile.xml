@@ -4,7 +4,7 @@
     <string name="menu_profile">Activité mondiale</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">Activité</string>
-    <string name="profile_global_activity_heading">%s Activité Mondiale</string>
+    <string name="profile_global_activity_heading">%1$s  Activité Mondiale</string>
     <string name="profile_activity_unique_users">Utilisateurs Uniques</string>
     <string name="profile_activity_gospel_presentations">Présentations de l\'Evangile</string>
     <string name="profile_activity_sessions">Sessions</string>

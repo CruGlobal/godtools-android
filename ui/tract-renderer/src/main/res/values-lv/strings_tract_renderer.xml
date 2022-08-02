@@ -21,6 +21,6 @@
     <string name="tract_settings_languages_title">Paralēlā valoda</string>
     <string name="tract_settings_languages_description">Iespēja pārslēgties starp divām dažādām valodām šajā rīkā.</string>
     <string name="tract_settings_languages_parallel">paralēlā</string>
-    <string name="tract_settings_languages_none">Nav</string>
+    <string name="tract_settings_languages_none">Noņemt</string>
     <string name="tract_settings_shareables_title">Saistītie attēli</string>
 </resources>

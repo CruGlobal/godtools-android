@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Mach ein Tool offline verfügbar, indem du auf das Herz-Symbol tippst und es zu deinen Favoriten hinzufügt.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Verwerfen</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Alle Tools</string>
+    <string name="nav_all_tools">Tools</string>
     <string name="dashboard_tools_section_categories_label">Kategorien</string>
     <string name="dashboard_tools_section_categories_all">Alle Tools</string>
     <string name="dashboard_tools_section_spotlight_label">Tool-Highlights</string>

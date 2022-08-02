@@ -29,12 +29,12 @@
     <string name="dashboard_home_section_favorites_title">你最喜欢的工具</string>
     <string name="dashboard_home_section_favorites_no_tools_title">没有最喜欢的工具来显示</string>
     <string name="dashboard_home_section_favorites_no_tools_description">点击心形图标来收藏一个工具，并使其离线可用。</string>
-    <string name="dashboard_home_section_favorites_action_view_all">查看全部</string>
+    <string name="dashboard_home_section_favorites_action_view_all">查看全部 &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">去到工具包</string>
     <string name="tools_list_favorites_banner_text">要离线使用某个工具，请点击心形图标将其添加到收藏夹。</string>
     <string name="tools_list_favorites_banner_action_dismiss">取消</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">所有工具</string>
+    <string name="nav_all_tools">工具</string>
     <string name="dashboard_tools_section_categories_label">分类</string>
     <string name="dashboard_tools_section_categories_all">所有工具</string>
     <string name="dashboard_tools_section_spotlight_label">热门工具</string>

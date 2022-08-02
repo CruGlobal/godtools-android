@@ -14,4 +14,13 @@
     <string name="tract_live_share_exit_dialog_confirm">Buda</string>
     <string name="tract_live_share_exit_dialog_cancel">Regedza</string>
     <!-- Settings -->
+    <string name="menu_settings">Zvirongwa</string>
+    <string name="tract_settings_title">"Mikana yezvikwanisiro "</string>
+    <string name="tract_settings_action_share">Goverana link</string>
+    <string name="tract_settings_action_tips_disable">"Vanza mazano "</string>
+    <string name="tract_settings_languages_title">Mumwe mutauro</string>
+    <string name="tract_settings_languages_description">Enda nekudzoka pakati pemitauro miviri yakasiyana muchikwanisiro ichi.</string>
+    <string name="tract_settings_languages_parallel">Wakafanana</string>
+    <string name="tract_settings_languages_none">Hapana</string>
+    <string name="tract_settings_shareables_title">Mifananidzo ine hukama</string>
 </resources>

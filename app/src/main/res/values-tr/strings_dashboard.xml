@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Kalp simgesine dokunup favorilerine ekleyerek bir aracı çevrim dışı kullanılabilir hâle getir.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Kapat</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Tüm Araçlar</string>
+    <string name="nav_all_tools">Araçlar</string>
     <string name="dashboard_tools_section_categories_label">Kategoriler</string>
     <string name="dashboard_tools_section_categories_all">Tüm Araçlar</string>
     <string name="dashboard_tools_section_spotlight_label">Aracın Öne Çıkanları</string>

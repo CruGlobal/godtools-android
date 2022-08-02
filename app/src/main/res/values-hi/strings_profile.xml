@@ -4,7 +4,7 @@
     <string name="menu_profile">वैश्विक गतिविधि</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
-    <string name="profile_global_activity_heading">%s वैश्विक गतिविधि</string>
+    <string name="profile_global_activity_heading">%1$s  वैश्विक गतिविधि</string>
     <string name="profile_activity_unique_users">खास उपयोगकर्ता</string>
     <string name="profile_activity_gospel_presentations">सुसमाचार प्रस्तुतिकरण</string>
     <string name="profile_activity_sessions">सत्र</string>

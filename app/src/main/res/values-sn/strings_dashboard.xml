@@ -20,12 +20,21 @@
     <string name="share_story_subject">Nyaya yeGodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Zvidzidzo</string>
+    <string name="dashboard_lessons_header_title">Zvidzidzo zvakagadzirirwa iwe</string>
+    <string name="dashboard_lessons_header_description">Mazano anobatika kuti uvake hukama uye kutanga nhaurirano dzine zvadzinoreva.</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Zvinofarirwa</string>
+    <string name="dashboard_home_header_title">Tinokugamuchira kuGodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Chidzidzo chiripo</string>
+    <string name="dashboard_home_section_favorites_title">Zvikwanisiro zvaunofarira</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Hapana zvikwanisiro zvaunofarira zvokutaridza</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Baya pane mufananidzo wemwoyo kuti chikwanisiro chaunofarira chigowanikwa kunyangwe usiri pamasai-sai.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Ona zvose &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">"Enda kuzvikwanisiro "</string>
     <string name="tools_list_favorites_banner_text">It\'s kuti chombo chiwanikwa kana usiri pamasai-sai nekubata pakaiswa mwoyo kuti chigoinda pane zvinodikwa</string>
     <string name="tools_list_favorites_banner_action_dismiss">Bvisa</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Zvombo zvose</string>
+    <string name="nav_all_tools">Zvombo</string>
     <string name="dashboard_tools_section_categories_label">Zvikamu</string>
     <string name="dashboard_tools_section_categories_all">Zvombo zvose</string>
     <string name="dashboard_tools_section_spotlight_label">Kujekeswa kwemudziyo</string>
@@ -34,6 +43,7 @@
     <string name="tools_list_remove_favorite_dialog_title">Bvisa “%1$s” kubva pane zvinodikwa?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Bvisa</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Regedza</string>
+    <string name="tool_card_label_language_unavailable">Hachiwanikkwi pa %1$s</string>
     <string name="action_tools_about">Pamusoro</string>
     <string name="action_tools_open">Vhura</string>
     <!-- Parallel Language Dialog -->

@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">ハートアイコンをタップすると、お気に入りに追加され、オフラインで利用できるようになります。</string>
     <string name="tools_list_favorites_banner_action_dismiss">閉じる</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">すべてのツール</string>
+    <string name="nav_all_tools">てのツール</string>
     <string name="dashboard_tools_section_categories_label">カテゴリー</string>
     <string name="dashboard_tools_section_categories_all">すべてのツール</string>
     <string name="dashboard_tools_section_spotlight_label">注目のツール</string>

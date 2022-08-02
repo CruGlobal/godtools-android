@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_about">O aplikacji</string>
-    <string name="general_about_1">GodToold pomaga dzielić się wiarą w prosty i przejrzysty sposób.</string>
+    <string name="general_about_1">GodTools pomaga dzielić się wiarą w prosty i przejrzysty sposób.</string>
     <string name="general_about_2">Narzędzia te pomogą Ci  wytłumaczyć komuś, jak można zbudować własną relację z Bogiem poprzez Jezusa Chrystusa, nawet jeśli ta osoba nigdy wcześniej z nikim nie dzieliła się  własną wiarą lub mówi innym językiem.</string>
     <string name="general_about_3">Wybierz odpowiednie narzędzia w zależności od preferencji własnych i rodzaju odbiorców. Nie wszystkie narzędzia są dostępne w każdym języku.</string>
     <string name="general_about_4">Linki do innych zasobów podane są na końcu każdego z narzędzi.</string>

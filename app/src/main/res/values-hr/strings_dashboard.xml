@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Alat vam može biti raspoloživ i izvan mreže, samo dodirnite ikonu srca koja ga dodaje u vaše favorite.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Odbaci</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Svi alati</string>
+    <string name="nav_all_tools">Alati</string>
     <string name="dashboard_tools_section_categories_label">Kategorije</string>
     <string name="dashboard_tools_section_categories_all">Svi alati</string>
     <string name="dashboard_tools_section_spotlight_label">Naglašavanje alata</string>

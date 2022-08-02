@@ -2,12 +2,12 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_general">সাধারণ</string>
-    <string name="menu_heading_account">"পরিমাণ "</string>
+    <string name="menu_heading_account">একাউন্ট</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_heading_legal">"বৈধ "</string>
+    <string name="menu_heading_legal">বৈধ</string>
     <string name="menu_about">বিষয়ে</string>
-    <string name="menu_help">"সাহায্য করুন বারবার জিজ্ঞাসিত প্রশ্নগুলো "</string>
-    <string name="menu_contact_us">আমাদের সঙ্গে সম্পর্ক করুন</string>
+    <string name="menu_help">বারবার জিজ্ঞাসিত প্রশ্নগুলো</string>
+    <string name="menu_contact_us">আমাদের সঙ্গে যোগাযোগ করুন</string>
     <string name="menu_tutorial">"টিউটোরিয়াল "</string>
     <string name="menu_login">লগইন করুন</string>
     <string name="menu_signup">একাউন্ট খুলুন</string>
@@ -16,21 +16,39 @@
     <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
-    <string name="menu_copyright">"কপিরাইট "</string>
-    <string name="share_story_subject">"GodTools গল্প  "</string>
+    <string name="menu_copyright">কপিরাইট</string>
+    <string name="share_story_subject">God Tools গল্প</string>
     <!-- Lessons -->
+    <string name="nav_lessons">পাঠসমূহ</string>
+    <string name="dashboard_lessons_header_title">আপনার জন্য প্রস্তুত পাঠসমূহ</string>
+    <string name="dashboard_lessons_header_description">সম্পর্ক স্থাপন করতে এবং অর্থপূর্ণ কথোপকথন শুরু করার জন্য ব্যবহারিক ধারণা সমূহ।</string>
     <!-- Home -->
-    <string name="nav_favorite_tools">"পছন্দ "</string>
-    <string name="tools_list_favorites_banner_text">"একটি টুলকে অফলাইনে উপলব্ধ করুন হার্ট আইকনকে ট্যাপ করার দ্বারা যা এটিকে আপনার পছন্দের সঙ্গে যুক্ত করে I  "</string>
-    <string name="tools_list_favorites_banner_action_dismiss">"বাতিল করুন "</string>
+    <string name="nav_favorite_tools">পছন্দ গুলো</string>
+    <string name="dashboard_home_header_title">GodToolsএ স্বাগতম</string>
+    <string name="dashboard_home_section_featured_lesson">বিশেষ পাঠসমূহ</string>
+    <string name="dashboard_home_section_favorites_title">আপনার প্রিয় টুলসগুলো</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">প্রদর্শন করার মত কোন প্রিয় টুলস  নেই</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">একটি টুল পছন্দের তালিকায় যোগ করতে হার্ট আইকনে আলতো চাপুন এবং এটি অফলাইনে সহজলভ্য  করুন।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">সব দেখুন &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">টুলস এ যান</string>
+    <string name="tools_list_favorites_banner_text">একটি টুল পছন্দের তালিকায় যোগ করতে হার্ট আইকনে আলতো চাপুন এবং এটি অফলাইনে সহজলভ্য  করুন।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">বাতিল করুন</string>
     <!-- All Tools -->
     <string name="nav_all_tools">সমস্ত টুলগুলো</string>
+    <string name="dashboard_tools_section_categories_label">শ্রেণী বিভাগ</string>
     <string name="dashboard_tools_section_categories_all">সমস্ত টুলগুলো</string>
+    <string name="dashboard_tools_section_spotlight_label">টুল স্পটলাইট</string>
+    <string name="dashboard_tools_section_spotlight_description">এখানে কিছু টুল রয়েছে যা আমরা ভেবেছি যে আপনি পছন্দ করতে পারেন</string>
     <!-- Tool Cards -->
-    <string name="tools_list_remove_favorite_dialog_title">"পছন্দ থেকে \"%1$s\" সরিয়ে দিন "</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">"সরিয়ে দিন "</string>
+    <string name="tools_list_remove_favorite_dialog_title">পছন্দ থেকে \"%1$s\" সরিয়ে দিন ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">সরিয়ে দিন</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">"বাতিল করুন "</string>
-    <string name="action_tools_about">"বিষয়ে "</string>
-    <string name="action_tools_open">"খুলুন "</string>
+    <string name="tool_card_label_language_unavailable">%1$sএ সহজলভ্য নয়</string>
+    <string name="action_tools_about">বিস্তারিত</string>
+    <string name="action_tools_open">খুলুন</string>
     <!-- Parallel Language Dialog -->
+    <string name="languages_parallel_dialog_headline">আপনি কি একটি দ্বিতীয় ভাষা স্থাপন করতে চান?</string>
+    <string name="languages_parallel_dialog_select">একটি ভাষা বেছে নিন</string>
+    <string name="languages_parallel_dialog_action_start">শুরু করুন</string>
+    <string name="languages_parallel_dialog_action_cancel">না ধন্যবাদ</string>
 </resources>

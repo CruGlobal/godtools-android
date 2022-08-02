@@ -4,7 +4,7 @@
     <string name="menu_profile">全球活动</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">活动</string>
-    <string name="profile_global_activity_heading">%s 全球活动</string>
+    <string name="profile_global_activity_heading">%1$s  全球活动</string>
     <string name="profile_activity_unique_users">独特的用户</string>
     <string name="profile_activity_gospel_presentations">讲述福音</string>
     <string name="profile_activity_sessions">课时</string>

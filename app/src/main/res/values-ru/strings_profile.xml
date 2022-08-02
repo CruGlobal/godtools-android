@@ -4,7 +4,7 @@
     <string name="menu_profile">Активность по миру</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">Активность</string>
-    <string name="profile_global_activity_heading">%s активность по миру</string>
+    <string name="profile_global_activity_heading">%1$s  активность по миру</string>
     <string name="profile_activity_unique_users">Уникальные пользователи</string>
     <string name="profile_activity_gospel_presentations">Презентация Евангелия</string>
     <string name="profile_activity_sessions">Сессии</string>

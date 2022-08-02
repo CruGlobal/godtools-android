@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Para ficares com uma ferramenta disponível offline, toca no ícone de coração para a adicionares aos teus favoritos.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Cancelar</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Todas as ferramentas</string>
+    <string name="nav_all_tools">Ferramentas</string>
     <string name="dashboard_tools_section_categories_label">Categorias</string>
     <string name="dashboard_tools_section_categories_all">Todas as ferramentas</string>
     <string name="dashboard_tools_section_spotlight_label">Destaque de ferramentas</string>

@@ -6,10 +6,13 @@
     <string name="tract_content_input_error_required">%1$s zvinodiwa</string>
     <string name="tract_content_input_error_invalid_email">Isa email address inoshanda</string>
     <!-- Menu Items -->
+    <string name="menu_training_tips">Mazano ekudzidzisana</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Govera</string>
+    <string name="tool_share_sheet_more_apps">"Zvizhinji "</string>
     <string name="share_tool_message_article">Ndinoda kugoverana newe chinyorwa chino uye ndinoda kunzwa pfungwa dzako pamusoro pazvo\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Goverana pazvimowanikwa</string>
     <string name="feature_discovery_desc_share_tool">Tumira chombo ichi kushamwari uchidzvanya chakapiwa</string>
     <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Goverana mufananidzo</string>
 </resources>
