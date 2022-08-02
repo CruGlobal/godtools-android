@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial.layout.onboarding
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,21 +10,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
+import org.cru.godtools.tutorial.layout.TutorialMedia
 
 @Composable
 internal fun TutorialOnboardingLayout(
@@ -70,23 +64,13 @@ internal fun TutorialOnboardingLayout(
     )
     val contentBottom = createBottomBarrier(content, positioning.content)
 
-    val mediaModifier = Modifier
-        .fillMaxWidth()
-        .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
-        .constrainAs(createRef()) { linkTo(top = contentBottom, bottom = action.top, bias = 0f) }
-    when {
-        page.animation != null -> {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(page.animation))
-            val progress by animateLottieCompositionAsState(
-                composition,
-                iterations = LottieConstants.IterateForever,
-                restartOnPlay = false,
-            )
-
-            LottieAnimation(composition, { progress }, modifier = mediaModifier)
-        }
-        else -> Spacer(modifier = mediaModifier)
-    }
+    TutorialMedia(
+        page,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
+            .constrainAs(createRef()) { linkTo(top = contentBottom, bottom = action.top, bias = 0f) }
+    )
 
     constrain(positioning.chain) { bottom.linkTo(action.top) }
     Button(
