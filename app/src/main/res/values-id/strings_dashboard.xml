@@ -29,7 +29,7 @@
     <string name="dashboard_home_section_favorites_title">Sarana favorit Anda</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada sarana favorit untuk ditampilkan</string>
     <string name="dashboard_home_section_favorites_no_tools_description">"Sentuh ikon untuk menjadikan sarana favorit dan menyediakannya offline. "</string>
-    <string name="dashboard_home_section_favorites_action_view_all">Lihat semua</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Lihat semua &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">Ke Sarana-sarana</string>
     <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Selesai</string>

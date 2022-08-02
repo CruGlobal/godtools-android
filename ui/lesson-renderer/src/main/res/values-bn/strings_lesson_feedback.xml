@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">পর্যালোচনা</string>
+    <string name="lesson_feedback_question_helpful">এই পাঠটি কি আপনার জন্য সহায়ক ছিল?</string>
+    <string name="lesson_feedback_question_helpful_yes">হ্যাঁ</string>
+    <string name="lesson_feedback_question_helpful_no">না</string>
+    <string name="lesson_feedback_question_readiness">আপনি একটি আধ্যাত্মিক কথোপকথন শুরু করতে কতটা প্রস্তুত?</string>
+    <string name="lesson_feedback_action_submit">মতামত পাঠান</string>
+    <string name="lesson_feedback_action_cancel">এড়িয়ে যান</string>
+</resources>

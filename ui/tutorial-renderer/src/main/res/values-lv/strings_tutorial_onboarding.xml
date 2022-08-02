@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Onboarding Tutorial -->
-    <string name="tutorial_onboarding_welcome">Sveicināts!</string>
+    <string name="tutorial_onboarding_welcome">Sveiki!</string>
     <string name="tutorial_onboarding_welcome_2">Gatavs sarunai</string>
     <string name="tutorial_onboarding_welcome_action_video">Noskaties video</string>
     <string name="tutorial_onboarding_conversations_headline">Runā par Dievu ar citiem</string>

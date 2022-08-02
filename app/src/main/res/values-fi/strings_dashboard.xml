@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Ota työkalu käyttöön offline-tilassa sydänkuvaketta napauttamalla, jolloin se lisätään suosikkeihisi.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Hylkää</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Kaikki työkalut</string>
+    <string name="nav_all_tools">Työkalut</string>
     <string name="dashboard_tools_section_categories_label">Kategoriat</string>
     <string name="dashboard_tools_section_categories_all">Kaikki työkalut</string>
     <string name="dashboard_tools_section_spotlight_label">Työkalujen valokeila</string>

@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">మీకు ఇష్టమైన వాటికి జోడించే హృదయ ఐకాన్‌ను తట్టడం ద్వారా పరికరాన్ని ఆఫ్‌లైన్‌లో అందుబాటులో ఉండేలా చేయండి.</string>
     <string name="tools_list_favorites_banner_action_dismiss">తొలగించండి</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">అన్ని పరికరాలు</string>
+    <string name="nav_all_tools">పరికరాలు</string>
     <string name="dashboard_tools_section_categories_label">వర్గాలు</string>
     <string name="dashboard_tools_section_categories_all">అన్ని పరికరాలు</string>
     <string name="dashboard_tools_section_spotlight_label">సాధనం స్పాట్‌లైట్</string>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">অন্যের সাথে এই টুলটি শেয়ার করতে শিখুন</string>
+    <string name="tutorial_tips_learn_text">অন্যদের সাথে এই টুলটি শেয়ার করার জন্য আত্মবিশ্বাসী বোধ করুন। এইজন্য যতগুলি টিপস প্রয়োজন ততগুলি ব্যবহার করার অনুশীলন করুন৷</string>
+    <string name="tutorial_tips_light_headline">টিপস আলোকিত করার কৌশল</string>
+    <string name="tutorial_tips_light_text1">স্ক্রীন সিলেক্ট করতে গিয়ে  আপনি বিভিন্ন আইকন দেখতে পাবেন। কৌশল জানতে একটি আইকন চাপুন যা আপনাকে পর্দার/স্ক্রিনের বিষয়বস্তু সম্পর্কে কথা বলতে সাহায্য করবে ৷</string>
+    <string name="tutorial_tips_light_text2">কোন টিপস/নির্দেশনা ছাড়া পর্দার/স্ক্রিনের জন্য, আমরা বিষয়বস্তু পড়ার এবং প্রয়োজন অনুযায়ী আলোচনা করার পরামর্শ দিই ।</string>
+    <string name="tutorial_tips_start_headline">টিপস আলোকিত করুন</string>
+    <string name="tutorial_tips_start_text">যখন একটি টিপ আলোকিত হয়, এর মানে আপনি প্রশিক্ষণের সেই অংশটি সম্পূর্ণ করেছেন। আপনাকে প্রতিটি কথোপকথনের ক্ষেত্রে প্রতিটি টিপ ব্যবহার করতে হবে না।</string>
+    <string name="tutorial_tips_action_continue">চালিয়ে যান</string>
+    <string name="tutorial_tips_action_skip">এড়িয়ে যান</string>
+    <string name="tutorial_tips_action_start">প্রশিক্ষণ শুরু করুন</string>
+</resources>

@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Fanya zana ipatikane nje ya mkondo kwa kudonoa ikoni ya moyo inayoiongeza kwenye Vipendwa vyako.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Puuza</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Zana Zote</string>
+    <string name="nav_all_tools">Zana</string>
     <string name="dashboard_tools_section_categories_label">Aina</string>
     <string name="dashboard_tools_section_categories_all">Zana Zote</string>
     <string name="dashboard_tools_section_spotlight_label">Mwangaza wa Zana</string>

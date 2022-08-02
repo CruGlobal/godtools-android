@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Để sử dụng công cụ khi không có mạng internet, bấm vào biểu tượng trái tim để đưa công cụ vào phần Ưa thích của bạn.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Bỏ qua</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Tất cả công cụ</string>
+    <string name="nav_all_tools">Công cụ</string>
     <string name="dashboard_tools_section_categories_label">Các mục</string>
     <string name="dashboard_tools_section_categories_all">Tất cả công cụ</string>
     <string name="dashboard_tools_section_spotlight_label">Nổi bật công cụ</string>

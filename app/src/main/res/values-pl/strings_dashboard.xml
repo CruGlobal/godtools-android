@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Stukając w ikonę serca, dodasz narzędzie do ulubionych i sprawisz, że będzie dostępne offline.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Pomiń</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Wszystkie narzędzia</string>
+    <string name="nav_all_tools">Narzędzia</string>
     <string name="dashboard_tools_section_categories_label">Kategorie</string>
     <string name="dashboard_tools_section_categories_all">Wszystkie narzędzia</string>
     <string name="dashboard_tools_section_spotlight_label">Wybrane narzędzia</string>

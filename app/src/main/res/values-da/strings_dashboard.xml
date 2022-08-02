@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Gør et værktøj tilgængeligt offline ved at trykke på hjerteikonet, som tilføjer det til dine favoritter.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Afvis</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Alle værktøjer</string>
+    <string name="nav_all_tools">Værktøjer</string>
     <string name="dashboard_tools_section_categories_label">Kategorier</string>
     <string name="dashboard_tools_section_categories_all">Alle værktøjer</string>
     <string name="dashboard_tools_section_spotlight_label">Fremhævede værktøjer</string>

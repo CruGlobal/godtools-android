@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Нажав на значок сердца, вы добавите инструмент в избранное, что сделает его доступным, даже когда вы не в сети.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Скрыть</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Все инструменты</string>
+    <string name="nav_all_tools">инструменты</string>
     <string name="dashboard_tools_section_categories_label">Категории</string>
     <string name="dashboard_tools_section_categories_all">Все инструменты</string>
     <string name="dashboard_tools_section_spotlight_label">Обзор инструментов</string>

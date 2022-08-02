@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Κάντε το εργαλείο διαθέσιμο offline πατώντας το εικονίδιο με την καρδιά που το προσθέτει στα αγαπημένα σας.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Απόρριψη</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Όλα τα Εργαλεία</string>
+    <string name="nav_all_tools">Εργαλεία</string>
     <string name="dashboard_tools_section_categories_label">Κατηγορίες</string>
     <string name="dashboard_tools_section_categories_all">Όλα τα Εργαλεία</string>
     <string name="dashboard_tools_section_spotlight_label">Εργαλείο Spotlight</string>

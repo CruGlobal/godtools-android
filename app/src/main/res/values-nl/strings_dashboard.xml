@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Maak een hulpmiddel offline beschikbaar door op het hartje te tikken en het zo aan je Favorieten toe te voegen.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Afwijzen</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Alle hulpmiddelen</string>
+    <string name="nav_all_tools">Hulpmiddelen</string>
     <string name="dashboard_tools_section_categories_label">Categorieën</string>
     <string name="dashboard_tools_section_categories_all">Alle hulpmiddelen</string>
     <string name="dashboard_tools_section_spotlight_label">Uitgelicht</string>

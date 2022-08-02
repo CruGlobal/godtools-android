@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Rendre l\'outil disponible hors ligne en touchant l\'icône cœur qui l\'ajoute à vos favoris.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ignorer</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Tous les outils</string>
+    <string name="nav_all_tools">Outils</string>
     <string name="dashboard_tools_section_categories_label">Catégories</string>
     <string name="dashboard_tools_section_categories_all">Tous les outils</string>
     <string name="dashboard_tools_section_spotlight_label">Pleins feux sur les outils</string>

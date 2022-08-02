@@ -4,7 +4,7 @@
     <string name="menu_profile">Aktividat Global</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">Aktividat</string>
-    <string name="profile_global_activity_heading">%s Aktividat Global</string>
+    <string name="profile_global_activity_heading">%1$s Aktividat Global</string>
     <string name="profile_activity_unique_users">Usuarionan Úniko</string>
     <string name="profile_activity_gospel_presentations">Presentashonnan di e Evangelio</string>
     <string name="profile_activity_sessions">Seshonnan</string>

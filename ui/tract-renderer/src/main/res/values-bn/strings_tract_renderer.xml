@@ -6,12 +6,21 @@
     <string name="tract_card_next">"পরে "</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">"আপনার স্ক্রিন শেয়ার করুন "</string>
-    <string name="menu_live_share_active">"শ্রীন শেয়ার করা সক্রিয় করুন "</string>
-    <string name="share_tool_message_tract_live_share">হাই, স্ক্রিন শেয়ার করার মধ্য দিয়ে GodTools এর মধ্যে আমার সঙ্গে অনুসরণ করুন I এখানে লিঙ্কটি রয়েছে: %1$s   \n\nযদি আপনি এই লিঙ্কটি পরে পান, তাহলে লিঙ্কটি কাজ নাও করতে পারে। আমরা তাহলে অন্য সময় আবার চেষ্টা করতে পারি।</string>
+    <string name="menu_live_share_active">"'স্ক্রিন শেয়ার করা' সক্রিয় করুন "</string>
+    <string name="share_tool_message_tract_live_share">হাই, স্ক্রিন শেয়ার করার মধ্য দিয়ে GodTools এর মাধ্যমে আমার সাথে অনুসরণ করুন I এখানে লিঙ্কটি রয়েছে: %1$s   \n\nযদি আপনি এই লিঙ্কটি দেরিতে পান, তাহলে লিঙ্কটি কাজ নাও করতে পারে। তাহলে, আমরা অন্য সময় আবার চেষ্টা করতে পারি।</string>
     <string name="tract_live_share_starting">স্ক্রিন শেয়ার করা শুরু করুন ...</string>
-    <string name="tract_live_share_unable_to_connect">"স্ক্রিন শেয়ার করতে সংযোগ করতে অক্ষম "</string>
-    <string name="tract_live_share_exit_dialog_message">"এখন রিমোট শেয়ার করা সেশন থেকে বেরিয়ে আসুন "</string>
-    <string name="tract_live_share_exit_dialog_confirm">"বেরিয়ে আসুন "</string>
-    <string name="tract_live_share_exit_dialog_cancel">"বাতিল করুন "</string>
+    <string name="tract_live_share_unable_to_connect">\' স্ক্রীন শেয়ারিং\' এর সাথে সংযোগ করতে অক্ষম হলে-</string>
+    <string name="tract_live_share_exit_dialog_message">এখনই \'রিমোট শেয়ারিং সেশন\' থেকে প্রস্থান করবেন ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">বেরিয়ে আসুন</string>
+    <string name="tract_live_share_exit_dialog_cancel">বাতিল করুন</string>
     <!-- Settings -->
+    <string name="menu_settings">সেটিং</string>
+    <string name="tract_settings_title">টুল অপশনস</string>
+    <string name="tract_settings_action_share">লিংক শেয়ার করুন</string>
+    <string name="tract_settings_action_tips_disable">টিপস লুকান</string>
+    <string name="tract_settings_languages_title">সমান্তরাল ভাষা</string>
+    <string name="tract_settings_languages_description">এই টুলে দুটি ভিন্ন ভাষার মধ্যে বিনিময়/ তুলনা করুন।</string>
+    <string name="tract_settings_languages_parallel">সমান্তরাল</string>
+    <string name="tract_settings_languages_none">একটিও না</string>
+    <string name="tract_settings_shareables_title">সম্পর্কিত গ্রাফিক্স</string>
 </resources>

@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Sprístupnite nástroj offline ťuknutím na ikonu srdiečka, čím sa pridá medzi vaše obľúbené.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Zavrieť</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Všetky nástroje</string>
+    <string name="nav_all_tools">Nástroje</string>
     <string name="dashboard_tools_section_categories_label">Kategórie</string>
     <string name="dashboard_tools_section_categories_all">Všetky nástroje</string>
     <string name="dashboard_tools_section_spotlight_label">Výber nástrojov</string>

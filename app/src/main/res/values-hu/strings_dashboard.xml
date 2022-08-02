@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Offline elérhetővé teheted az eszközt a szív ikonra kattintva, amivel hozzáadod a kedvenceidhez.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Elvetés</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Minden eszköz</string>
+    <string name="nav_all_tools">Eszköz</string>
     <string name="dashboard_tools_section_categories_label">Kategóriák</string>
     <string name="dashboard_tools_section_categories_all">Minden eszköz</string>
     <string name="dashboard_tools_section_spotlight_label">Eszköz reflektorfényben</string>

@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Če želite, da bo orodje na voljo brez povezave, se dotaknite ikone srca in jo dodajte med priljubljene.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Zapri</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Vsa orodja</string>
+    <string name="nav_all_tools">Orodja</string>
     <string name="dashboard_tools_section_categories_label">Kategorije</string>
     <string name="dashboard_tools_section_categories_all">Vsa orodja</string>
     <string name="dashboard_tools_section_spotlight_label">Izpostavljena orodja</string>

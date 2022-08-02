@@ -4,7 +4,7 @@
     <string name="menu_profile">ప్రపంచ కార్యాచరణ</string>
     <!-- Global Activity -->
     <string name="profile_tab_activity">కార్యాచరణ</string>
-    <string name="profile_global_activity_heading">%ఎస్   ప్రపంచ కార్యాచరణ</string>
+    <string name="profile_global_activity_heading">%1$s    ప్రపంచ కార్యాచరణ</string>
     <string name="profile_activity_unique_users">ప్రత్యేక వినియోగదారులు</string>
     <string name="profile_activity_gospel_presentations">సువార్త ప్రదర్శనలు</string>
     <string name="profile_activity_sessions">సమావేశములు</string>

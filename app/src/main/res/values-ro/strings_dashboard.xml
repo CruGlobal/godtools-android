@@ -34,7 +34,7 @@
     <string name="tools_list_favorites_banner_text">Fă un instrument disponibil offline apăsând pictograma inimă care o adaugă la favorite.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Anulează</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Toate instrumentele</string>
+    <string name="nav_all_tools">Instrumentele</string>
     <string name="dashboard_tools_section_categories_label">Categorii</string>
     <string name="dashboard_tools_section_categories_all">Toate instrumentele</string>
     <string name="dashboard_tools_section_spotlight_label">Recomandări de instrumente</string>
