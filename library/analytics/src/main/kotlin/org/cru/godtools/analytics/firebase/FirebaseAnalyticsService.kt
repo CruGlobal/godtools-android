@@ -95,6 +95,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         }
         firebase.logEvent(event.firebaseEventName, params)
     }
+    // endregion Tracking Events
 
     @VisibleForTesting
     internal val userInfoJob = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
