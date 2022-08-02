@@ -103,14 +103,5 @@ internal fun TutorialOnboardingLayout(
                 centerHorizontallyTo(parent)
                 bottom.linkTo(parent.bottom)
             }
-    ) {
-        Text(
-            stringResource(
-                when (page) {
-                    Page.ONBOARDING_SHARE_FINAL -> R.string.tutorial_onboarding_action_start
-                    else -> R.string.tutorial_onboarding_action_next
-                }
-            )
-        )
-    }
+    ) { Text(page.action?.let { stringResource(it) }.orEmpty()) }
 }
