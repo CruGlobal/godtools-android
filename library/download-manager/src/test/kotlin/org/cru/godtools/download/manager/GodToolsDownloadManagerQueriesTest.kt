@@ -7,11 +7,11 @@ import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.random.Random
+import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.`in`
 import org.hamcrest.Matchers.not
@@ -22,8 +22,18 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.keynote.godtools.android.db.Contract
 import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.annotation.Config
+
+private val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
+    .joins(Contract.TranslationTable.SQL_JOIN_LANGUAGE, Contract.TranslationTable.SQL_JOIN_TOOL)
+    .where(
+        Contract.LanguageTable.SQL_WHERE_ADDED
+            .and(Contract.ToolTable.FIELD_ADDED.eq(true))
+            .and(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
+            .and(Contract.TranslationTable.FIELD_DOWNLOADED.eq(false))
+    )
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

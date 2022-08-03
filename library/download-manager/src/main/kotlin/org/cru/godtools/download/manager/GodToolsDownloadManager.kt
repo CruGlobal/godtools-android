@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -46,11 +47,13 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
+import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
@@ -90,15 +93,6 @@ internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
     )
     .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
 @VisibleForTesting
-internal val QUERY_PINNED_TRANSLATIONS = Query.select<Translation>()
-    .joins(TranslationTable.SQL_JOIN_LANGUAGE, TranslationTable.SQL_JOIN_TOOL)
-    .where(
-        LanguageTable.SQL_WHERE_ADDED
-            .and(ToolTable.FIELD_ADDED.eq(true))
-            .and(TranslationTable.SQL_WHERE_PUBLISHED)
-            .and(TranslationTable.FIELD_DOWNLOADED.eq(false))
-    )
-@VisibleForTesting
 internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
 @VisibleForTesting
@@ -137,7 +131,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val ioDispatcher: CoroutineContext = Dispatchers.IO
 ) {
     @Inject
-    constructor(
+    internal constructor(
         attachmentsApi: AttachmentsApi,
         dao: GodToolsDao,
         fs: ToolFileSystem,
@@ -525,16 +519,27 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
-    class Dispatcher @VisibleForTesting internal constructor(
+    internal class Dispatcher @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
+        repository: DownloadManagerRepository,
+        settings: Settings,
         coroutineScope: CoroutineScope
     ) {
         @Inject
-        constructor(dao: GodToolsDao, downloadManager: GodToolsDownloadManager) :
-            this(dao, downloadManager, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        internal constructor(
+            dao: GodToolsDao,
+            downloadManager: GodToolsDownloadManager,
+            repository: DownloadManagerRepository,
+            settings: Settings
+        ) : this(dao, downloadManager, repository, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
-        private val pinnedTranslationsJob = dao.getAsFlow(QUERY_PINNED_TRANSLATIONS).conflate()
+        /* Download favorite tool translations in the primary and parallel languages */
+        private val favoriteToolsJob = settings.primaryLanguageFlow
+            .combineTransformLatest(settings.parallelLanguageFlow) { prim, para ->
+                emitAll(repository.getFavoriteTranslationsThatNeedDownload(listOfNotNull(prim, para)))
+            }
+            .conflate()
             .onEach {
                 coroutineScope {
                     it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(TranslationKey(it)) } }
@@ -552,10 +557,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         @RestrictTo(RestrictTo.Scope.TESTS)
         internal suspend fun shutdown() {
-            pinnedTranslationsJob.cancel()
+            favoriteToolsJob.cancel()
             staleAttachmentsJob.cancel()
             toolBannerAttachmentsJob.cancel()
-            pinnedTranslationsJob.join()
+            favoriteToolsJob.join()
             staleAttachmentsJob.join()
             toolBannerAttachmentsJob.join()
         }

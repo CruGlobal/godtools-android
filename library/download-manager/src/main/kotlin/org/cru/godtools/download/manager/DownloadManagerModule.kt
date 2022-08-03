@@ -13,5 +13,5 @@ abstract class DownloadManagerModule {
     @Binds
     @IntoSet
     @EagerSingleton(on = EagerSingleton.LifecycleEvent.ACTIVITY_CREATED, threadMode = EagerSingleton.ThreadMode.ASYNC)
-    abstract fun downloadManagerDispatcherEagerSingleton(dispatcher: GodToolsDownloadManager.Dispatcher): Any
+    internal abstract fun downloadManagerDispatcherEagerSingleton(dispatcher: GodToolsDownloadManager.Dispatcher): Any
 }
