@@ -32,7 +32,6 @@ import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
-import org.cru.godtools.ui.tools.analytics.model.ToolOpenTapAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
@@ -134,7 +133,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
         if (languages.isEmpty()) return
 
         languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
-        eventBus.post(ToolOpenTapAnalyticsActionEvent)
         openToolActivity(code, tool.type, *languages.toTypedArray())
     }
     // endregion ToolsAdapterCallbacks

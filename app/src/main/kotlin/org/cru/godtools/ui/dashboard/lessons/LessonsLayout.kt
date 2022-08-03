@@ -34,7 +34,10 @@ fun LessonsLayout(
         items(lessons.orEmpty(), { it }, { "lesson" }) {
             LessonToolCard(
                 it,
-                onClick = { tool, translation -> onOpenLesson(tool, translation) },
+                onClick = { tool, translation ->
+                    viewModel.recordLessonClickInAnalytics(tool?.code)
+                    onOpenLesson(tool, translation)
+                },
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(top = 16.dp)

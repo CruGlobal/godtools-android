@@ -16,12 +16,18 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent
+import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
+import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel @Inject constructor(
+    private val eventBus: EventBus,
     lessonsRepository: LessonsRepository,
     settings: Settings,
     private val toolsRepository: ToolsRepository
@@ -59,4 +65,18 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch { toolsRepository.updateToolOrder(favoriteToolsOrder.value.mapNotNull { it.code }) }
     }
     // endregion Favorite Tools
+
+    // region Analytics
+    fun recordLessonClickInAnalytics(tool: String?, source: String? = null) {
+        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_LESSON, tool, source))
+    }
+
+    fun recordToolClickInAnalytics(tool: String?) {
+        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_TOOL, tool))
+    }
+
+    fun recordToolDetailsClickInAnalytics(tool: String?) {
+        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool))
+    }
+    // endregion Analytics
 }
