@@ -40,10 +40,7 @@ class ParallelLanguageDialogFragment :
 
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext())
         .setPositiveButton(R.string.languages_parallel_dialog_action_start) { _, _ ->
-            dataModel.selectedLocale.value?.let {
-                downloadManager.pinLanguageAsync(it)
-                settings.parallelLanguage = it
-            }
+            settings.parallelLanguage = dataModel.selectedLocale.value
         }
         .setNegativeButton(R.string.languages_parallel_dialog_action_cancel, null)
         .create()

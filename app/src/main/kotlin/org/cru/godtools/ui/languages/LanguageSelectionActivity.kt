@@ -49,7 +49,6 @@ class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBi
     }
 
     override fun onLocaleSelected(locale: Locale?) {
-        locale?.let { downloadManager.pinLanguageAsync(it) }
         storeLocale(locale)
         finish()
     }

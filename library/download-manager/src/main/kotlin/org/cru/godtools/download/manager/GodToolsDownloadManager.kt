@@ -56,7 +56,6 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
@@ -64,7 +63,6 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.tool.service.ManifestParser
 import org.cru.godtools.tool.service.ParserResult
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
@@ -165,27 +163,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @AnyThread
     fun unpinToolAsync(code: String) = coroutineScope.launch { toolsRepository.unpinTool(code) }
-
-    @AnyThread
-    fun pinLanguageAsync(locale: Locale) = coroutineScope.launch { pinLanguage(locale) }
-    suspend fun pinLanguage(locale: Locale) {
-        val language = Language().apply {
-            code = locale
-            isAdded = true
-        }
-        withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
-    }
-
-    suspend fun unpinLanguage(locale: Locale) {
-        if (settings.isLanguageProtected(locale)) return
-        if (settings.parallelLanguage == locale) settings.parallelLanguage = null
-
-        val language = Language().apply {
-            code = locale
-            isAdded = false
-        }
-        withContext(Dispatchers.IO) { dao.update(language, LanguageTable.COLUMN_ADDED) }
-    }
     // endregion Tool/Language pinning
 
     // region Download Progress
