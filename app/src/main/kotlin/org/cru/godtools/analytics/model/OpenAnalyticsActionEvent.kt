@@ -20,6 +20,8 @@ internal class OpenAnalyticsActionEvent(
         const val SOURCE_ALL_TOOLS = "all_tools"
         const val SOURCE_FEATURED = "featured"
         const val SOURCE_SPOTLIGHT = "spotlight"
+        const val SOURCE_TOOL_DETAILS = "tool_details"
+        const val SOURCE_VARIANTS = "versions"
     }
 
     override val firebaseParams get() = Bundle().apply {
