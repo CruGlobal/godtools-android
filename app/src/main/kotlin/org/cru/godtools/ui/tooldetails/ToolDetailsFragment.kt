@@ -27,6 +27,11 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_VARIANTS
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
@@ -43,7 +48,6 @@ import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
-import org.cru.godtools.ui.tools.analytics.model.AboutToolButtonAnalyticsActionEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
@@ -139,6 +143,8 @@ class ToolDetailsFragment() :
 
     override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         tool?.code?.let { code ->
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
+
             val primaryLanguage = primary?.languageCode ?: Locale.ENGLISH
             val parallelLanguage = parallel?.languageCode
 
@@ -149,10 +155,10 @@ class ToolDetailsFragment() :
                 requireActivity().openToolActivity(code, tool.type, primaryLanguage)
             }
         }
-        eventBus.post(AboutToolButtonAnalyticsActionEvent)
     }
 
     override fun showToolDetails(code: String?) {
+        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, code, SOURCE_VARIANTS))
         dataModel.toolCode.value = code
     }
 

@@ -41,10 +41,14 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import org.cru.godtools.R
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.Banners
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -104,7 +108,7 @@ internal fun HomeContent(
                 LessonToolCard(
                     it,
                     onClick = { tool, translation ->
-                        viewModel.recordLessonClickInAnalytics(tool?.code, SOURCE_FEATURED)
+                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, tool?.code, SOURCE_FEATURED)
                         onOpenTool(tool, translation, null)
                     },
                     modifier = Modifier
@@ -133,11 +137,11 @@ internal fun HomeContent(
                     HorizontalFavoriteTools(
                         { favoriteTools.orEmpty().take(5) },
                         onOpenTool = { tool, trans1, trans2 ->
-                            viewModel.recordToolClickInAnalytics(tool?.code)
+                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
                             onOpenTool(tool, trans1, trans2)
                         },
                         onOpenToolDetails = {
-                            viewModel.recordToolDetailsClickInAnalytics(it)
+                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
                             onOpenToolDetails(it)
                         },
                         modifier = Modifier
@@ -311,11 +315,11 @@ internal fun AllFavoritesList(
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
                     onOpenTool = { tool, trans1, trans2 ->
-                        viewModel.recordToolClickInAnalytics(tool?.code)
+                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
                         onOpenTool(tool, trans1, trans2)
                     },
                     onOpenToolDetails = {
-                        viewModel.recordToolDetailsClickInAnalytics(it)
+                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
                         onOpenToolDetails(it)
                     },
                     modifier = Modifier
