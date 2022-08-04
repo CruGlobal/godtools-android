@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -98,17 +97,6 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     @VisibleForTesting
     internal fun storeLanguage(language: Language) {
         if (!language.isValid) return
-
-        // this language doesn't exist yet, check to see if a different language shares the same id
-        if (language.id != Base.INVALID_ID && dao.refresh(language) == null) {
-            // update the language code to preserve the added state
-            Query.select<Language>().where(LanguageTable.FIELD_ID.eq(language.id)).limit(1)
-                .get(dao)
-                .firstOrNull()
-                ?.let { old ->
-                    dao.update(language, dao.getPrimaryKeyWhere(old), LanguageTable.COLUMN_CODE)
-                }
-        }
 
         dao.updateOrInsert(
             language, SQLiteDatabase.CONFLICT_REPLACE,
