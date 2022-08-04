@@ -64,5 +64,4 @@ internal fun TutorialPageLayout(
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )
-    else -> Unit
 }
