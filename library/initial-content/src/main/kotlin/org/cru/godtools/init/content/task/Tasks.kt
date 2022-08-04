@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,17 +17,13 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.init.content.BuildConfig
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -68,28 +63,6 @@ internal class Tasks @Inject constructor(
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
     }
-
-    suspend fun initSystemLanguages() {
-        if (dao.getCursor(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED)).count > 0) return
-
-        // add device languages if we haven't added languages before
-        if (dao.get(Query.select<Language>().where(LanguageTable.SQL_WHERE_ADDED).limit(1)).isEmpty()) {
-            coroutineScope {
-                sequenceOf(context.deviceLocale, Locale.ENGLISH).filterNotNull()
-                    .includeFallbacks().distinct().toList()
-                    // add all device languages and fallbacks
-                    .onEach { launch { downloadManager.pinLanguage(it) } }
-                    // set the first available language as the primary language
-                    .firstOrNull { dao.find<Language>(it) != null }?.let { settings.primaryLanguage = it }
-
-                // always add english and bundled languages
-                launch { downloadManager.pinLanguage(Locale.ENGLISH) }
-                BuildConfig.BUNDLED_LANGUAGES.forEach {
-                    launch { downloadManager.pinLanguage(Locale.forLanguageTag(it)) }
-                }
-            }
-        }
-    }
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
@@ -106,20 +79,6 @@ internal class Tasks @Inject constructor(
                 }
             }
         }
-    }
-
-    suspend fun initDefaultTools() {
-        // check to see if we have initialized the default tools before
-        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
-
-        // add any bundled tools as the default tools
-        coroutineScope {
-            BuildConfig.BUNDLED_TOOLS
-                .map { launch { toolsRepository.pinTool(it) } }
-                .joinAll()
-        }
-
-        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
 
     suspend fun initFavoriteTools() {
