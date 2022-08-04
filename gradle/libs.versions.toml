@@ -80,7 +80,7 @@ facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "fac
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = "com.facebook.soloader:soloader:0.10.4"
-firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.0.2"
+firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.0.3"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.1"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
