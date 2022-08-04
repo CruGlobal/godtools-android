@@ -14,11 +14,11 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -73,8 +73,8 @@ class ToolsViewModel @Inject constructor(
     // endregion Filters
 
     // region Analytics
-    fun recordToolClickInAnalytics(tool: String?, source: String? = null) {
-        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool, source))
+    fun recordOpenToolDetailsInAnalytics(tool: String?, source: String) {
+        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool, source))
     }
     // endregion Analytics
 }

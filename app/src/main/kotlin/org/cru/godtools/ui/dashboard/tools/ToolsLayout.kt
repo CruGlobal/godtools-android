@@ -24,8 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.ui.banner.Banners
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
@@ -90,7 +91,7 @@ internal fun ToolsLayout(
                 tool.code.orEmpty(),
                 showActions = false,
                 onClick = { it, _, _ ->
-                    viewModel.recordToolClickInAnalytics(it?.code)
+                    viewModel.recordOpenToolDetailsInAnalytics(it?.code, SOURCE_ALL_TOOLS)
                     it?.code?.let(onToolClicked)
                 },
                 modifier = Modifier
@@ -139,7 +140,7 @@ internal fun ToolSpotlight(
                 floatParallelLanguageUp = false,
                 confirmRemovalFromFavorites = false,
                 onClick = { tool, _, _ ->
-                    viewModel.recordToolClickInAnalytics(tool?.code, SOURCE_SPOTLIGHT)
+                    viewModel.recordOpenToolDetailsInAnalytics(tool?.code, SOURCE_SPOTLIGHT)
                     tool?.code?.let(onToolClicked)
                 }
             )

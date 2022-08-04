@@ -7,8 +7,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 
@@ -22,8 +23,8 @@ class LessonsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // region Analytics
-    fun recordLessonClickInAnalytics(tool: String?) {
-        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_LESSON, tool))
+    fun recordOpenLessonInAnalytics(tool: String?) {
+        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool, SOURCE_LESSONS))
     }
     // endregion Analytics
 }

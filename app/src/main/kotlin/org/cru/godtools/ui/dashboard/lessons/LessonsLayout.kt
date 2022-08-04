@@ -35,7 +35,7 @@ fun LessonsLayout(
             LessonToolCard(
                 it,
                 onClick = { tool, translation ->
-                    viewModel.recordLessonClickInAnalytics(tool?.code)
+                    viewModel.recordOpenLessonInAnalytics(tool?.code)
                     onOpenLesson(tool, translation)
                 },
                 modifier = Modifier

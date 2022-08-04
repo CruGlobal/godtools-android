@@ -12,14 +12,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
-import org.cru.godtools.ui.dashboard.analytics.model.DashboardToolClickedAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -67,16 +64,8 @@ class HomeViewModel @Inject constructor(
     // endregion Favorite Tools
 
     // region Analytics
-    fun recordLessonClickInAnalytics(tool: String?, source: String? = null) {
-        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_LESSON, tool, source))
-    }
-
-    fun recordToolClickInAnalytics(tool: String?) {
-        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_TOOL, tool))
-    }
-
-    fun recordToolDetailsClickInAnalytics(tool: String?) {
-        eventBus.post(DashboardToolClickedAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool))
+    fun recordOpenClickInAnalytics(action: String, tool: String?, source: String) {
+        eventBus.post(OpenAnalyticsActionEvent(action, tool, source))
     }
     // endregion Analytics
 }
