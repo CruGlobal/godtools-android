@@ -5,7 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import java.util.Locale
-import org.ccci.gto.android.common.util.LocaleUtils
+import org.ccci.gto.android.common.util.includeFallbacks
 
 private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH, Locale.FRENCH, Locale("es"), Locale("lv"), Locale("vi"))
 
@@ -140,6 +140,6 @@ internal enum class Page(
     );
 
     fun supportsLocale(locale: Locale) =
-        (supportedLocales.isEmpty() || LocaleUtils.getFallbacks(locale).any { it in supportedLocales }) &&
-            (disabledLocales.isEmpty() || LocaleUtils.getFallbacks(locale).none { it in disabledLocales })
+        (supportedLocales.isEmpty() || sequenceOf(locale).includeFallbacks().any { it in supportedLocales }) &&
+            (disabledLocales.isEmpty() || sequenceOf(locale).includeFallbacks().none { it in disabledLocales })
 }
