@@ -21,7 +21,7 @@ private val QUERY_FAVORITE_TRANSLATIONS = Query.select<Translation>()
 
 @Reusable
 internal class DownloadManagerRepository @Inject constructor(private val dao: GodToolsDao) {
-    fun getFavoriteTranslationsThatNeedDownload(languages: List<Locale>) =
+    fun getFavoriteTranslationsThatNeedDownload(languages: Collection<Locale>) =
         QUERY_FAVORITE_TRANSLATIONS
             .andWhere(TranslationTable.FIELD_LANGUAGE.oneOf(languages.map { bind(it) }))
             .getAsFlow(dao)

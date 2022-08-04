@@ -537,7 +537,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         /* Download favorite tool translations in the primary and parallel languages */
         private val favoriteToolsJob = settings.primaryLanguageFlow
             .combineTransformLatest(settings.parallelLanguageFlow) { prim, para ->
-                emitAll(repository.getFavoriteTranslationsThatNeedDownload(listOfNotNull(prim, para)))
+                val languages = listOfNotNull(prim, para, Settings.defaultLanguage)
+                emitAll(repository.getFavoriteTranslationsThatNeedDownload(languages))
             }
             .conflate()
             .onEach {

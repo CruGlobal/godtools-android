@@ -67,10 +67,14 @@ class GodToolsDownloadManagerDispatcherTest {
                 toolCode = "tool2"
                 languageCode = Locale.FRENCH
             }
-            primaryLanguageFlow.emit(Locale.ENGLISH)
+            primaryLanguageFlow.emit(Locale.GERMAN)
             parallelLanguageFlow.emit(Locale.FRENCH)
             runCurrent()
-            verifyAll { repository.getFavoriteTranslationsThatNeedDownload(listOf(Locale.ENGLISH, Locale.FRENCH)) }
+            verifyAll {
+                repository.getFavoriteTranslationsThatNeedDownload(
+                    match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+                )
+            }
             favoritedTranslationsFlow.emit(listOf(translation1, translation2))
             runCurrent()
             coVerifyAll {
