@@ -187,13 +187,9 @@ internal class Tasks @Inject constructor(
                     val id = file.substring(0, file.lastIndexOf('.'))
                     val translation = dao.find<Translation>(id)?.takeUnless { it.isDownloaded } ?: return@launch
 
-                    // ensure the tool and language are added to this device
-                    val toolCode = translation.toolCode ?: return@launch
-                    val tool = dao.find<Tool>(toolCode)?.takeIf { it.isAdded } ?: return@launch
-                    val languageCode = translation.languageCode
-                    val language = dao.find<Language>(languageCode)?.takeIf { it.isAdded } ?: return@launch
-
                     // short-circuit if a newer translation is already downloaded
+                    val toolCode = translation.toolCode ?: return@launch
+                    val languageCode = translation.languageCode
                     val latestTranslation =
                         translationsRepository.getLatestTranslation(toolCode, languageCode, isDownloaded = true)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
@@ -204,8 +200,12 @@ internal class Tasks @Inject constructor(
                                 .use { downloadManager.importTranslation(translation, it, -1) }
                         } catch (e: IOException) {
                             Timber.tag(TAG).e(
-                                e, "Error importing bundled translation %s-%s-%d (%s)", tool.code, language.code,
-                                translation.version, file
+                                e,
+                                "Error importing bundled translation %s-%s-%d (%s)",
+                                toolCode,
+                                languageCode,
+                                translation.version,
+                                file
                             )
                         }
                     }
