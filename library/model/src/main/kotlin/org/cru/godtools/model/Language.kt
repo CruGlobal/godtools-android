@@ -4,7 +4,6 @@ import android.content.Context
 import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
-import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.util.getDisplayName
 
@@ -29,8 +28,6 @@ class Language : Base() {
 
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
-    @JsonApiIgnore
-    var isAdded = false
 
     val isValid get() = code != null && code != INVALID_CODE
 

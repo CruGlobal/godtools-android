@@ -52,27 +52,23 @@ object Contract : BaseContract() {
 
         const val COLUMN_ID = BaseTable.COLUMN_ID
         const val COLUMN_CODE = "code"
-        const val COLUMN_ADDED = "added"
         const val COLUMN_NAME = "name"
 
         val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_CODE = TABLE.field(COLUMN_CODE)
-        private val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
 
-        internal val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_CODE, COLUMN_ADDED, COLUMN_NAME)
+        internal val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_CODE, COLUMN_NAME)
 
         private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT NOT NULL"
-        private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
         private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
         val SQL_JOIN_TRANSLATION = TABLE.join(TranslationTable.TABLE).on(FIELD_CODE.eq(TranslationTable.FIELD_LANGUAGE))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
-        val SQL_WHERE_ADDED = FIELD_ADDED.eq(true)
 
         internal val SQL_CREATE_TABLE =
-            create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_ADDED, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
+            create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         internal const val SQL_V39_ALTER_NAME = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_NAME"
