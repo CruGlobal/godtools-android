@@ -136,7 +136,7 @@
                     android:breakStrategy="balanced"
                     android:onClick="@{() -> fragment.openToolTraining(tool, primaryTranslation)}"
                     android:text="@string/action_tools_open_training"
-                    app:goneIf="@{manifest == null || manifest.tips.empty}"
+                    app:goneIf="@{manifest == null || !manifest.hasTips}"
                     app:layout_constraintTop_toBottomOf="@id/action_open" />
 
                 <com.google.android.material.button.MaterialButton
