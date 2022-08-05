@@ -20,19 +20,6 @@
         android:onClick="@{() -> listener.onLanguageSelected(language)}"
         app:selected="@{ObjectsCompat.equals(language.code, selected)}">
 
-        <ImageView
-            android:id="@+id/action_add"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="-8dp"
-            android:layout_marginEnd="8dp"
-            android:padding="8dp"
-            app:visibleIf="@{language != null &amp;&amp; !language.added}"
-            app:srcCompat="@drawable/ic_download"
-            app:tint="@color/gt_green" />
-
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
@@ -42,7 +29,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="8dp"
-            android:layout_toStartOf="@id/action_add"
             android:gravity="start|center_vertical"
             android:text="@{language.getDisplayName(context) ?? @string/label_language_none}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"

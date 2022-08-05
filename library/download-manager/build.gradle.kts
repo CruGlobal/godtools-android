@@ -41,6 +41,7 @@ dependencies {
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 
     kaptTest(libs.hilt.compiler)
 }

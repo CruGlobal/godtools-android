@@ -69,7 +69,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -171,38 +170,6 @@ class GodToolsDownloadManagerTest {
         coVerifyAll { toolsRepository.unpinTool(tool.captured) }
     }
     // endregion pinTool()/unpinTool()
-
-    // region pinLanguage()/unpinLanguage()
-    @Test
-    fun verifyPinLanguage() = runTest {
-        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.pinLanguage(Locale.FRENCH) }
-        assertEquals(Locale.FRENCH, language.captured.code)
-        assertTrue(language.captured.isAdded)
-        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
-    }
-
-    @Test
-    fun verifyPinLanguageAsync() = runTest {
-        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.pinLanguageAsync(Locale.FRENCH).join() }
-        assertEquals(Locale.FRENCH, language.captured.code)
-        assertTrue(language.captured.isAdded)
-        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
-    }
-
-    @Test
-    fun verifyUnpinLanguage() = runTest {
-        every { dao.update(capture(language), LanguageTable.COLUMN_ADDED) } returns 1
-
-        withDownloadManager { it.unpinLanguage(Locale.FRENCH) }
-        assertEquals(Locale.FRENCH, language.captured.code)
-        assertFalse(language.captured.isAdded)
-        verifyAll { dao.update(language.captured, LanguageTable.COLUMN_ADDED) }
-    }
-    // endregion pinLanguage()/unpinLanguage()
 
     // region Download Progress
     @Test
