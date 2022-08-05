@@ -190,7 +190,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // region Training Tips
     val showTips: MutableLiveData<Boolean> = savedState.getLiveData(EXTRA_SHOW_TIPS, false)
 
-    val hasTips = activeManifest.map { it?.tips?.isNotEmpty() == true }
+    val hasTips = activeManifest.map { it?.hasTips == true }
     val enableTips = hasTips and showTips
     // endregion Training Tips
 
