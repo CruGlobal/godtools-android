@@ -7,6 +7,7 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityGenericComposeWithNavDrawerBinding
 
@@ -22,7 +23,11 @@ class AboutActivity : BasePlatformActivity<ActivityGenericComposeWithNavDrawerBi
     // region Lifecycle
     override fun onBindingChanged() {
         super.onBindingChanged()
-        binding.genericActivity.frame.setContent { AboutLayout() }
+        binding.genericActivity.frame.setContent {
+            GodToolsTheme {
+                AboutLayout()
+            }
+        }
     }
 
     override fun onResume() {

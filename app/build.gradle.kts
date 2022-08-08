@@ -148,6 +148,7 @@ dependencies {
     implementation(libs.androidx.work)
 
     implementation(libs.gtoSupport.androidx.compose)
+    implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.drawerlayout)
     implementation(libs.gtoSupport.androidx.fragment)
