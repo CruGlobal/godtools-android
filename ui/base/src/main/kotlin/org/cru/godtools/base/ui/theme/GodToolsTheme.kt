@@ -3,6 +3,7 @@ package org.cru.godtools.base.ui.theme
 import android.net.Uri
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.lightColorScheme
@@ -56,6 +57,14 @@ fun GodToolsTheme(content: @Composable () -> Unit) {
         }
     }
 }
+
+val GodToolsAppBarColors @Composable get() = TopAppBarDefaults.smallTopAppBarColors(
+    containerColor = MaterialTheme.colorScheme.primary,
+    scrolledContainerColor = MaterialTheme.colorScheme.primary,
+    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+)
 
 @Composable
 private fun CompositionLocalUtils(content: @Composable () -> Unit) {
