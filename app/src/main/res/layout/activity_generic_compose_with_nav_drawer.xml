@@ -7,9 +7,10 @@
     android:layout_height="match_parent"
     tools:openDrawer="start">
 
-    <include
-        android:id="@+id/generic_activity"
-        layout="@layout/activity_generic_compose" />
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawer_menu"

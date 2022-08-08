@@ -21,9 +21,9 @@ import org.cru.godtools.R
 
 @Preview(showBackground = true)
 @Composable
-internal fun AboutLayout() = Column(
+internal fun AboutContent(modifier: Modifier = Modifier) = Column(
     verticalArrangement = Arrangement.spacedBy(8.dp),
-    modifier = Modifier
+    modifier = modifier
         .verticalScroll(rememberScrollState())
         .padding(horizontal = 32.dp, vertical = 16.dp)
 ) {

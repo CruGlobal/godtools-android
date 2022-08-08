@@ -47,12 +47,10 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.base.ui.databinding.ActivityGenericComposeBinding
 import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.dagger.OktaModule.IS_AUTHENTICATED_LIVE_DATA
-import org.cru.godtools.databinding.ActivityGenericComposeWithNavDrawerBinding
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
@@ -212,8 +210,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     // endregion Lifecycle
 
     override val toolbar get() = when (val it = binding) {
-        is ActivityGenericComposeBinding -> it.appbar
-        is ActivityGenericComposeWithNavDrawerBinding -> it.genericActivity.appbar
         is ActivityGenericFragmentBinding -> it.appbar
         is ActivityGenericFragmentWithNavDrawerBinding -> it.genericActivity.appbar
         else -> super.toolbar
