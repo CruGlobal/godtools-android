@@ -9,10 +9,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import kotlin.reflect.KClass
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,10 +81,10 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
         events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
 
-    private fun sendAnalyticsEvent(event: AnalyticsEvent) = GlobalScope.launch(Dispatchers.Main.immediate) {
+    private fun sendAnalyticsEvent(event: AnalyticsEvent) = lifecycleOwner?.lifecycleScope?.launch {
         if (event.delay > 0) delay(event.delay * 1000L)
         eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
-    }.takeUnless { it.isCompleted }
+    }?.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
     // endregion AnalyticsEvents
