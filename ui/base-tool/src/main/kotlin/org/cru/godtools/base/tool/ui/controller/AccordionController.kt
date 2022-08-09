@@ -3,10 +3,12 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionBinding
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionSectionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
@@ -48,12 +50,14 @@ class AccordionController @VisibleForTesting internal constructor(
 
         sectionControllers = binding.sections.bindModels(
             model?.sections.orEmpty(),
-            sectionControllers.toMutableList()
-        ) { sectionFactory.create(binding.sections, this) }
+            sectionControllers.toMutableList(),
+            acquireController = { sectionFactory.create(binding.sections, this) },
+            releaseController = { it.lifecycleOwner?.maxState = Lifecycle.State.DESTROYED }
+        )
     }
     // endregion Sections
 
-    class SectionController private constructor(
+    class SectionController @VisibleForTesting internal constructor(
         private val binding: ToolContentAccordionSectionBinding,
         private val accordionController: AccordionController,
         cacheFactory: UiControllerCache.Factory
@@ -74,13 +78,20 @@ class AccordionController @VisibleForTesting internal constructor(
             fun create(parent: ViewGroup, accordionController: AccordionController): SectionController
         }
 
+        override val lifecycleOwner =
+            accordionController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+
         init {
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
             binding.activeSection = accordionController.activeSection
+
+            accordionController.lifecycleOwner
+                ?.let { accordionController.activeSection.observe(it) { updateLifecycleMaxState() } }
         }
 
         override fun onBind() {
+            updateLifecycleMaxState()
             super.onBind()
             binding.model = model
         }
@@ -88,6 +99,14 @@ class AccordionController @VisibleForTesting internal constructor(
         fun toggleSection() {
             accordionController.activeSection.value =
                 model?.id?.takeUnless { it == accordionController.activeSection.value }
+        }
+
+        private fun updateLifecycleMaxState() {
+            lifecycleOwner?.maxState = when {
+                accordionController.isActiveSection(model) -> Lifecycle.State.RESUMED
+                model != null -> Lifecycle.State.STARTED
+                else -> Lifecycle.State.CREATED
+            }
         }
 
         override val childContainer get() = binding.content
