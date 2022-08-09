@@ -8,11 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.lifecycle.onPause
+import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionBinding
 import org.cru.godtools.base.tool.databinding.ToolContentAccordionSectionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.Accordion
+import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 
 class AccordionController @VisibleForTesting internal constructor(
     private val binding: ToolContentAccordionBinding,
@@ -78,6 +82,8 @@ class AccordionController @VisibleForTesting internal constructor(
             fun create(parent: ViewGroup, accordionController: AccordionController): SectionController
         }
 
+        private var pendingVisibleAnalyticsEvents: List<Job>? = null
+
         override val lifecycleOwner =
             accordionController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
 
@@ -88,6 +94,13 @@ class AccordionController @VisibleForTesting internal constructor(
 
             accordionController.lifecycleOwner
                 ?.let { accordionController.activeSection.observe(it) { updateLifecycleMaxState() } }
+
+            lifecycleOwner?.lifecycle?.apply {
+                onResume {
+                    pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
+                }
+                onPause { pendingVisibleAnalyticsEvents?.cancelPendingAnalyticsEvents() }
+            }
         }
 
         override fun onBind() {
