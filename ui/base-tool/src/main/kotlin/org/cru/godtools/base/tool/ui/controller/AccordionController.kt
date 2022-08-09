@@ -2,6 +2,7 @@ package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.MutableLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -11,7 +12,7 @@ import org.cru.godtools.base.tool.databinding.ToolContentAccordionSectionBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.Accordion
 
-class AccordionController private constructor(
+class AccordionController @VisibleForTesting internal constructor(
     private val binding: ToolContentAccordionBinding,
     parentController: BaseController<*>,
     private val sectionFactory: SectionController.Factory
@@ -91,4 +92,8 @@ class AccordionController private constructor(
 
         override val childContainer get() = binding.content
     }
+
+    @VisibleForTesting
+    internal fun isActiveSection(section: Accordion.Section?) =
+        section?.id.let { it != null && it == activeSection.value }
 }
