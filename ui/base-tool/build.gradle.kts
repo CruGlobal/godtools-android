@@ -70,6 +70,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.kotlin.coroutines.test)
     kaptTest(libs.androidx.databinding.compiler)
 }
