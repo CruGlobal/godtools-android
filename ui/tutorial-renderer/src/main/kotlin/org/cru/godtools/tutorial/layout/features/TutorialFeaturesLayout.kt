@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,8 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
 import org.cru.godtools.tutorial.layout.TutorialPositionReferences
+
+private val TUTORIAL_FEATURES_MEDIA_HEIGHT = 252.dp
 
 @Composable
 internal fun TutorialFeaturesLayout(
@@ -74,7 +75,7 @@ internal fun TutorialFeaturesLayout(
         modifier = Modifier
             .constrainAs(media) { top.linkTo(contentBottom) }
             .fillMaxWidth()
-            .height(dimensionResource(R.dimen.tutorial_page_features_anim_height))
+            .height(TUTORIAL_FEATURES_MEDIA_HEIGHT)
     )
     val mediaBottom = createBottomBarrier(media, positioning.media)
 
@@ -124,7 +125,7 @@ private fun ConstraintLayoutScope.createTutorialFeaturesPositioning(): TutorialP
                 top.linkTo(content.bottom)
                 bottom.linkTo(parent.bottom)
             }
-            .height(dimensionResource(R.dimen.tutorial_page_features_anim_height))
+            .height(TUTORIAL_FEATURES_MEDIA_HEIGHT)
     )
 
     return TutorialPositionReferences(title, content, media, chain)

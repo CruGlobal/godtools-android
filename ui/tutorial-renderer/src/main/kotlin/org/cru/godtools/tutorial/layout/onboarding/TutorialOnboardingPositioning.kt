@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
-import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TutorialPositionReferences
 
 @Composable
@@ -42,7 +40,7 @@ internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): Tutori
                 top.linkTo(content.bottom)
                 bottom.linkTo(parent.bottom)
             }
-            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
+            .height(TUTORIAL_ONBOARDING_MEDIA_HEIGHT)
     )
 
     return TutorialPositionReferences(title, content, media, chain)

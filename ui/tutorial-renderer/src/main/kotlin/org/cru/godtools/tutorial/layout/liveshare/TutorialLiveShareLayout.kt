@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -75,7 +74,7 @@ internal fun TutorialLiveShareLayout(
                 horizontal = if (page == Page.LIVE_SHARE_DESCRIPTION) TUTORIAL_PAGE_HORIZONTAL_MARGIN else 0.dp
             )
             .fillMaxWidth()
-            .height(dimensionResource(R.dimen.tutorial_page_live_share_anim_height))
+            .height(266.dp)
     )
 
     Spacer(modifier = Modifier.weight(1f))
