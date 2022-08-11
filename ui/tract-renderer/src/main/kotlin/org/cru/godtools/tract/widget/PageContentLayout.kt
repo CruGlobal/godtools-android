@@ -228,7 +228,7 @@ class PageContentLayout @JvmOverloads constructor(
         }
     )
 
-    override fun onInterceptTouchEvent(ev: MotionEvent?) = gestureDetector.onTouchEvent(ev)
+    override fun onInterceptTouchEvent(ev: MotionEvent) = gestureDetector.onTouchEvent(ev)
     override fun onTouchEvent(event: MotionEvent) = when {
         gestureDetector.onTouchEvent(event) -> true
         // we always consume the down event if it reaches us so that we can continue to process future events
