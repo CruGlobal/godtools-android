@@ -32,7 +32,6 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
 
 private const val ARG_PAGE_SET = "pageSet"
-private const val ARG_FRMT_ARGS = "formatArgs"
 
 // TODO: this should be dynamic based upon the available languages in the database
 private val ARTICLES_SUPPORTED_LANGUAGES = setOf(

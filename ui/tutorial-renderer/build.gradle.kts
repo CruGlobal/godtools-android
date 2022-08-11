@@ -24,9 +24,7 @@ dependencies {
     implementation(project(":ui:base"))
 
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.viewpager2)
 
     implementation(libs.gtoSupport.androidx.compose)
@@ -38,7 +36,6 @@ dependencies {
 
     implementation(libs.circleindicator)
     implementation(libs.hilt)
-    implementation(libs.lottie)
     implementation(libs.lottie.compose)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.splitties.intents)
