@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -21,6 +20,8 @@ import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
+
+internal val TUTORIAL_ONBOARDING_MEDIA_HEIGHT = 268.dp
 
 @Composable
 internal fun TutorialOnboardingLayout(
@@ -67,7 +68,7 @@ internal fun TutorialOnboardingLayout(
         modifier = Modifier
             .constrainAs(media) { top.linkTo(contentBottom) }
             .fillMaxWidth()
-            .height(dimensionResource(R.dimen.tutorial_page_onboarding_anim_height))
+            .height(TUTORIAL_ONBOARDING_MEDIA_HEIGHT)
     )
     val mediaBottom = createBottomBarrier(media, positioning.media)
 

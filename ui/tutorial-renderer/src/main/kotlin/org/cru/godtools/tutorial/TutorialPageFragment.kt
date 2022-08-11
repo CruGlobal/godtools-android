@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.fragment.app.BindingFragment
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -34,11 +34,7 @@ internal class TutorialPageFragment() : BindingFragment<TutorialPageComposeBindi
                     page,
                     nextPage = { findListener<TutorialCallbacks>()?.nextPage() },
                     onTutorialAction = { findListener<TutorialCallbacks>()?.onTutorialAction(it) },
-                    modifier = Modifier
-                        .padding(
-                            top = dimensionResource(R.dimen.tutorial_page_inset_top),
-                            bottom = dimensionResource(R.dimen.tutorial_page_inset_bottom)
-                        )
+                    modifier = Modifier.padding(top = 48.dp, bottom = 64.dp)
                 )
             }
         }
