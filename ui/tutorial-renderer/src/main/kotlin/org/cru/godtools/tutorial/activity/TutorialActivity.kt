@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import me.relex.circleindicator.CircleIndicator3
+import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
@@ -52,7 +53,7 @@ fun Context.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutoria
 
 @AndroidEntryPoint
 class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallbacks {
-    private val pageSet get() = intent?.getSerializableExtra(ARG_PAGE_SET) as? PageSet ?: PageSet.DEFAULT
+    private val pageSet get() = intent?.getSerializableExtraCompat(ARG_PAGE_SET, PageSet::class.java) ?: PageSet.DEFAULT
     private val pages get() = pageSet.pagesFor(Locale.getDefault())
 
     // region Lifecycle
