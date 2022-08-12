@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 
@@ -31,7 +32,7 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 @Preview(showBackground = true)
 internal fun TutorialOnboardingLinksLayout(
     modifier: Modifier = Modifier,
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = ConstraintLayout(
     modifier = modifier
         .fillMaxSize()
@@ -54,7 +55,7 @@ internal fun TutorialOnboardingLinksLayout(
 
     val articles = createRef()
     LinkBox(
-        onClick = { onTutorialAction(R.id.action_onboarding_launch_articles) },
+        onClick = { onTutorialAction(Action.ONBOARDING_LAUNCH_ARTICLES) },
         description = stringResource(R.string.tutorial_onboarding_links_articles_subhead),
         action = stringResource(R.string.tutorial_onboarding_links_articles_action),
         modifier = Modifier.constrainAs(articles) { top.linkTo(title.bottom, 16.dp) }
@@ -62,7 +63,7 @@ internal fun TutorialOnboardingLinksLayout(
 
     val lessons = createRef()
     LinkBox(
-        onClick = { onTutorialAction(R.id.action_onboarding_launch_lessons) },
+        onClick = { onTutorialAction(Action.ONBOARDING_LAUNCH_LESSONS) },
         description = stringResource(R.string.tutorial_onboarding_links_lessons_subhead),
         action = stringResource(R.string.tutorial_onboarding_links_lessons_action),
         modifier = Modifier.constrainAs(lessons) { top.linkTo(articles.bottom, 16.dp) }
@@ -70,7 +71,7 @@ internal fun TutorialOnboardingLinksLayout(
 
     val tools = createRef()
     LinkBox(
-        onClick = { onTutorialAction(R.id.action_onboarding_launch_tools) },
+        onClick = { onTutorialAction(Action.ONBOARDING_LAUNCH_TOOLS) },
         description = stringResource(R.string.tutorial_onboarding_links_tools_subhead),
         action = stringResource(R.string.tutorial_onboarding_links_tools_action),
         modifier = Modifier
@@ -79,7 +80,7 @@ internal fun TutorialOnboardingLinksLayout(
 
     constrain(positioning.chain) { bottom.linkTo(action.top) }
     Button(
-        onClick = { onTutorialAction(R.id.action_onboarding_finish) },
+        onClick = { onTutorialAction(Action.ONBOARDING_FINISH) },
         modifier = Modifier
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
             .fillMaxWidth(0.8f)

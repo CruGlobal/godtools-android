@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
 
@@ -28,7 +28,7 @@ internal fun TutorialOnboardingLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = ConstraintLayout(
     modifier = modifier
         .fillMaxSize()
@@ -76,7 +76,7 @@ internal fun TutorialOnboardingLayout(
     Button(
         onClick = {
             when (page) {
-                Page.ONBOARDING_SHARE_FINAL -> onTutorialAction(R.id.action_onboarding_finish)
+                Page.ONBOARDING_SHARE_FINAL -> onTutorialAction(Action.ONBOARDING_FINISH)
                 else -> nextPage()
             }
         },

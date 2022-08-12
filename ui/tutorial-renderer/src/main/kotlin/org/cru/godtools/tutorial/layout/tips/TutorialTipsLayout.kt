@@ -26,6 +26,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
@@ -35,7 +36,7 @@ internal fun TutorialTipsLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {}
+    onTutorialAction: (Action) -> Unit = {}
 ) = Column(
     modifier = modifier
         .fillMaxSize()
@@ -111,7 +112,7 @@ internal fun TutorialTipsLayout(
     Button(
         onClick = {
             when (page) {
-                Page.TIPS_START -> onTutorialAction(R.id.action_tips_finish)
+                Page.TIPS_START -> onTutorialAction(Action.TIPS_FINISH)
                 else -> nextPage()
             }
         },

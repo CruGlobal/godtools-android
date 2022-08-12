@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 
@@ -44,7 +45,7 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 internal fun TutorialOnboardingWelcomeLayout(
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = modifier
@@ -105,7 +106,7 @@ internal fun TutorialOnboardingWelcomeLayout(
     Spacer(modifier = Modifier.weight(1f))
 
     TextButton(
-        onClick = { onTutorialAction(R.id.action_onboarding_watch_video) },
+        onClick = { onTutorialAction(Action.ONBOARDING_WATCH_VIDEO) },
         enabled = readyAlpha > 0f,
         modifier = Modifier
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)

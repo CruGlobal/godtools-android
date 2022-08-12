@@ -19,6 +19,7 @@ import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.startDashboardActivity
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
@@ -178,31 +179,33 @@ class TutorialActivity : BaseActivity<TutorialActivityBinding>(), TutorialCallba
         }
     }
 
-    override fun onTutorialAction(id: Int) {
-        when (id) {
-            R.id.action_onboarding_watch_video -> startYoutubePlayerActivity("RvhZ_wuxAgE")
-            R.id.action_onboarding_launch_articles -> {
+    override fun onTutorialAction(action: Action) {
+        when (action) {
+            Action.ONBOARDING_WATCH_VIDEO -> startYoutubePlayerActivity("RvhZ_wuxAgE")
+            Action.ONBOARDING_LAUNCH_ARTICLES -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES))
                 val locale = sequenceOf(deviceLocale, Locale.ENGLISH).filterNotNull().includeFallbacks()
                     .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                 startArticlesActivity("es", locale)
                 finish()
             }
-            R.id.action_onboarding_launch_lessons -> {
+            Action.ONBOARDING_LAUNCH_LESSONS -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_LESSONS))
                 startDashboardActivity(DashboardPage.LESSONS)
                 finish()
             }
-            R.id.action_onboarding_launch_tools -> {
+            Action.ONBOARDING_LAUNCH_TOOLS -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS))
                 startDashboardActivity(DashboardPage.ALL_TOOLS)
                 finish()
             }
-            R.id.action_onboarding_finish -> {
+            Action.ONBOARDING_FINISH -> {
                 eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
                 finish()
             }
-            R.id.action_live_share_finish, R.id.action_features_finish, R.id.action_tips_finish -> {
+            Action.FEATURES_FINISH,
+            Action.LIVE_SHARE_FINISH,
+            Action.TIPS_FINISH -> {
                 setResult(RESULT_OK)
                 finish()
             }

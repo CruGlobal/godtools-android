@@ -3,6 +3,7 @@ package org.cru.godtools.tutorial.layout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.layout.features.TutorialFeaturesLayout
 import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
@@ -18,7 +19,7 @@ internal fun TutorialPageLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = when (page) {
     Page.FEATURES_LESSONS,
     Page.FEATURES_TOOLS,
