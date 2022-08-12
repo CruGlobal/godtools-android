@@ -1,4 +1,4 @@
-package org.cru.godtools.tutorial.activity
+package org.cru.godtools.tutorial
 
 import android.app.Activity
 import android.os.Bundle

@@ -30,6 +30,7 @@ import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.databinding.TutorialActivityBinding
+import org.cru.godtools.tutorial.startYoutubePlayerActivity
 
 private const val ARG_PAGE_SET = "pageSet"
 
