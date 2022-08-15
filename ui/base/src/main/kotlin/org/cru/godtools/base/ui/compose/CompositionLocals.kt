@@ -6,6 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.UriHandler
 import dagger.hilt.EntryPoint
@@ -20,8 +21,11 @@ val LocalEventBus = staticCompositionLocalOf<EventBus> { error("No EventBus avai
 @Composable
 internal fun CompositionLocals(content: @Composable () -> Unit) {
     val context = LocalContext.current
-    val daggerComponents = remember(context.applicationContext) {
-        EntryPointAccessors.fromApplication<ComposeEntryPoint>(context)
+    val daggerComponents = when {
+        LocalInspectionMode.current -> object : ComposeEntryPoint {
+            override val eventBus = EventBus()
+        }
+        else -> remember { EntryPointAccessors.fromApplication<ComposeEntryPoint>(context) }
     }
 
     val uriHandler = remember(context) {
