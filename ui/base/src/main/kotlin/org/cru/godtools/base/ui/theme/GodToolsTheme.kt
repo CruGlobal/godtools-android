@@ -1,6 +1,5 @@
 package org.cru.godtools.base.ui.theme
 
-import android.net.Uri
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -9,13 +8,9 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.unit.sp
-import org.cru.godtools.base.ui.util.openUrl
+import org.cru.godtools.base.ui.compose.CompositionLocals
 
 const val DisabledAlpha = 0.38f
 
@@ -49,7 +44,7 @@ fun GodToolsTheme(content: @Composable () -> Unit) {
         colorScheme = GodToolsLightColorScheme,
         typography = GodToolsTypography
     ) {
-        CompositionLocalUtils {
+        CompositionLocals {
             CompositionLocalProvider(
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),
                 content = content
@@ -65,21 +60,3 @@ val GodToolsAppBarColors @Composable get() = TopAppBarDefaults.smallTopAppBarCol
     titleContentColor = MaterialTheme.colorScheme.onPrimary,
     actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
 )
-
-@Composable
-private fun CompositionLocalUtils(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-
-    val uriHandler = remember {
-        object : UriHandler {
-            override fun openUri(uri: String) {
-                context.openUrl(Uri.parse(uri))
-            }
-        }
-    }
-
-    CompositionLocalProvider(
-        LocalUriHandler provides uriHandler,
-        content = content
-    )
-}
