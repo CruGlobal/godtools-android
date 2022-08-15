@@ -6,6 +6,7 @@ plugins {
 
 android {
     baseConfiguration(project)
+    configureCompose(project)
     createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
 
     defaultConfig {

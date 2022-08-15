@@ -65,4 +65,15 @@ open class AnalyticsScreenEvent(val screen: String, locale: Locale? = null) : An
             .appendPath(screen)
 
     override val userCounterName get() = screen
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        !super.equals(other) -> false
+        other !is AnalyticsScreenEvent -> false
+        screen != other.screen -> false
+        else -> true
+    }
+
+    override fun hashCode() = (super.hashCode() * 31) + screen.hashCode()
 }
