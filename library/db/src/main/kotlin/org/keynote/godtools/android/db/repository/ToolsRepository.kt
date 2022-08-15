@@ -31,7 +31,6 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
     val favoriteTools = Query.select<Tool>()
         .where(
             ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)) and
-                ToolTable.FIELD_HIDDEN.ne(true) and
                 ToolTable.FIELD_ADDED.eq(true)
         )
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
