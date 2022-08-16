@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name=".activity.TutorialActivity"
+            android:name=".TutorialActivity"
             android:screenOrientation="@integer/default_screen_orientation"
             android:exported="false"
             android:theme="@style/Theme.GodTools.Activity.Tutorial" />

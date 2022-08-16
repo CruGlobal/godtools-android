@@ -28,7 +28,7 @@ import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.languages.paralleldialog.ParallelLanguageDialogFragment
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity

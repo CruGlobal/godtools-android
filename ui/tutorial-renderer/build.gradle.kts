@@ -28,11 +28,14 @@ dependencies {
     implementation(libs.androidx.viewpager2)
 
     implementation(libs.gtoSupport.androidx.compose)
+    implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.util)
 
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
     implementation(libs.circleindicator)
     implementation(libs.hilt)
     implementation(libs.lottie.compose)
