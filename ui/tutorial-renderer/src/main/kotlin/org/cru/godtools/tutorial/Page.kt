@@ -137,6 +137,7 @@ internal enum class Page(
         title = R.string.tutorial_tips_start_headline,
         content = R.string.tutorial_tips_start_text,
         animation = R.raw.anim_tutorial_tips_light,
+        showMenu = false
     );
 
     fun supportsLocale(locale: Locale) =

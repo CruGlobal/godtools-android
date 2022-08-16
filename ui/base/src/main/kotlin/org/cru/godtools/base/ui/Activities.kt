@@ -16,14 +16,14 @@ import org.cru.godtools.base.ui.dashboard.Page
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SHOW_TIPS"
 
-// region DashboardActivity (MainActivity)
+// region DashboardActivity
 private const val ACTIVITY_CLASS_DASHBOARD = "org.cru.godtools.ui.dashboard.DashboardActivity"
 
 fun Activity.startDashboardActivity(page: Page? = null) = startActivity(createDashboardIntent(page))
 
 fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
     .putExtra(EXTRA_PAGE, page)
-// endregion DashboardActivity (MainActivity)
+// endregion DashboardActivity
 
 // region ArticlesActivity
 private const val ACTIVITY_CLASS_ARTICLES = "org.cru.godtools.article.ui.ArticlesActivity"
