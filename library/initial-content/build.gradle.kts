@@ -18,7 +18,7 @@ android {
             project,
             apiUrl = mobileContentApi,
             bundledTools = listOf("kgp", "fourlaws", "satisfied", "teachmetoshare"),
-            bundledAttachments = listOf("attr-banner", "attr-banner-about"),
+            bundledAttachments = listOf("attr-banner", "attr-banner-about", "attr-about-banner-animation"),
             bundledLanguages = listOf("en"),
             downloadTranslations = false
         )
