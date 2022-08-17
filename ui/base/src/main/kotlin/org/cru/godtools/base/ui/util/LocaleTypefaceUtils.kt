@@ -7,6 +7,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import androidx.annotation.DeprecatedSinceApi
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
@@ -31,8 +32,10 @@ private val typefaces = buildMap {
     }
 }
 
-private val FONT_SINHALA = FontFamily(Font(R.font.noto_sans_sinhala_regular))
-private val FONT_TIBETAN = FontFamily(Font(R.font.noto_sans_tibetan_regular))
+@VisibleForTesting
+internal val FONT_SINHALA = FontFamily(Font(R.font.noto_sans_sinhala_regular))
+@VisibleForTesting
+internal val FONT_TIBETAN = FontFamily(Font(R.font.noto_sans_tibetan_regular))
 
 @DeprecatedSinceApi(Build.VERSION_CODES.M)
 fun Context.getTypeface(locale: Locale?) = typefaces[locale]?.let { ResourcesCompat.getFont(this, it) }
