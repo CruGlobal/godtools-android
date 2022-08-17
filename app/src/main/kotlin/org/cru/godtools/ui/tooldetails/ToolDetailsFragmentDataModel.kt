@@ -17,14 +17,12 @@ import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
@@ -32,12 +30,14 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.AttachmentsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolDetailsFragmentDataModel @Inject constructor(
+    attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
@@ -56,12 +56,12 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val banner = tool
         .map { it?.detailsBannerId }.distinctUntilChanged()
-        .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val bannerAnimation = tool
         .map { it?.detailsBannerAnimationId }.distinctUntilChanged()
-        .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 

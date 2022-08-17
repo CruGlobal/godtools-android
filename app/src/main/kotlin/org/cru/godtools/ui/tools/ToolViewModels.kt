@@ -14,17 +14,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.AttachmentsRepository
 import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -32,6 +31,7 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolViewModels @Inject constructor(
+    private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
@@ -59,7 +59,7 @@ class ToolViewModels @Inject constructor(
 
         val banner = tool
             .map { it?.bannerId }.distinctUntilChanged()
-            .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val bannerFile = banner
