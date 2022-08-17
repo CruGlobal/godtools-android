@@ -158,8 +158,10 @@ class ToolDetailsFragment() :
     }
 
     override fun showToolDetails(code: String?) {
+        if (code == null) return
+
         eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, code, SOURCE_VARIANTS))
-        dataModel.toolCode.value = code
+        dataModel.setToolCode(code)
     }
 
     override fun pinTool(code: String?) {

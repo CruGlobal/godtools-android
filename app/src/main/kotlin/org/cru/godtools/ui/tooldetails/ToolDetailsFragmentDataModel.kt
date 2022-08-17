@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.db.Query
@@ -46,9 +44,10 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     private val shortcutManager: GodToolsShortcutManager,
     private val toolFileSystem: ToolFileSystem,
     translationsRepository: TranslationsRepository,
-    savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val toolCode = savedStateHandle.getStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
+    val toolCode = savedStateHandle.getStateFlow<String?>(EXTRA_TOOL, null)
+    fun setToolCode(code: String) = savedStateHandle.set(EXTRA_TOOL, code)
 
     val tool = toolCode
         .flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
