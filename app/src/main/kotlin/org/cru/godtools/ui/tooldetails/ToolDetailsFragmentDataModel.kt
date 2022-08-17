@@ -32,6 +32,7 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
@@ -43,6 +44,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     settings: Settings,
     private val shortcutManager: GodToolsShortcutManager,
     private val toolFileSystem: ToolFileSystem,
+    toolsRepository: ToolsRepository,
     translationsRepository: TranslationsRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -50,7 +52,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     fun setToolCode(code: String) = savedStateHandle.set(EXTRA_TOOL, code)
 
     val tool = toolCode
-        .flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { toolsRepository.getToolFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val banner = tool
         .map { it?.detailsBannerId }.distinctUntilChanged()
