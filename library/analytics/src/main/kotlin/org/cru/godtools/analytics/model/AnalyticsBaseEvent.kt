@@ -29,4 +29,14 @@ abstract class AnalyticsBaseEvent internal constructor(
             .scheme(SNOWPLOW_CONTENT_SCORING_URI_SCHEME)
 
     open val userCounterName: String? get() = null
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        other !is AnalyticsBaseEvent -> false
+        locale != other.locale -> false
+        else -> true
+    }
+
+    override fun hashCode() = locale?.hashCode() ?: 0
 }

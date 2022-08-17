@@ -10,6 +10,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
+import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
+import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
+import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -25,7 +32,7 @@ internal fun DashboardLayout(
     onOpenToolDetails: (String) -> Unit
 ) {
     val currentPage by viewModel.currentPage.collectAsState()
-    OnResume(currentPage) { viewModel.trackPageInAnalytics(currentPage) }
+    DashboardLayoutAnalytics(currentPage)
 
     val hasBackStack by viewModel.hasBackStack.collectAsState()
     BackHandler(hasBackStack) { viewModel.popPageStack() }
@@ -59,6 +66,25 @@ internal fun DashboardLayout(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun DashboardLayoutAnalytics(page: Page) {
+    val eventBus = LocalEventBus.current
+    when (page) {
+        Page.LESSONS -> {
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_LESSONS))
+            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS)) }
+        }
+        Page.HOME, Page.FAVORITE_TOOLS -> {
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_HOME))
+            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME)) }
+        }
+        Page.ALL_TOOLS -> {
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_ALL_TOOLS))
+            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS)) }
         }
     }
 }
