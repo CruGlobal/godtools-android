@@ -25,4 +25,9 @@
     <style name="TextAppearance.GodTools.Settings.Language.Description" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/gray_5A</item>
     </style>
+
+    <style name="TextAppearance.GodTools.Settings.Language.Dialog.Headline" parent="TextAppearance.GodTools.Headline">
+        <item name="android:textColor">@color/gt_blue</item>
+        <item name="android:textSize">28sp</item>
+    </style>
 </resources>
