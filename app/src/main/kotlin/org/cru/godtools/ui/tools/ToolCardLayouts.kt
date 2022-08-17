@@ -51,6 +51,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
+import org.cru.godtools.base.ui.util.withCompatFontFamilyFor
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
@@ -67,12 +68,9 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
     val baseStyle = MaterialTheme.typography.titleMedium
     return remember(baseStyle) {
         derivedStateOf {
-            baseStyle.merge(
-                TextStyle(
-                    fontFamily = translation.value?.getFontFamilyOrNull(),
-                    fontWeight = FontWeight.Bold
-                )
-            )
+            baseStyle
+                .withCompatFontFamilyFor(translation.value)
+                .merge(TextStyle(fontWeight = FontWeight.Bold))
         }
     }
 }

@@ -8,6 +8,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import androidx.annotation.DeprecatedSinceApi
 import androidx.annotation.VisibleForTesting
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
@@ -61,3 +62,7 @@ internal fun Locale.getFontFamilyOrNull() = sequenceOf(this).includeFallbacks()
         }
     }
     .firstOrNull()
+
+@DeprecatedSinceApi(Build.VERSION_CODES.M)
+fun TextStyle.withCompatFontFamilyFor(locale: Locale?) =
+    locale?.getFontFamilyOrNull()?.let { merge(TextStyle(fontFamily = it)) } ?: this
