@@ -12,9 +12,6 @@ android {
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
     }
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -25,18 +22,16 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.viewpager2)
 
     implementation(libs.gtoSupport.androidx.compose)
-    implementation(libs.gtoSupport.androidx.fragment)
+    implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.compat)
-    implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.circleindicator)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
     implementation(libs.hilt)
     implementation(libs.lottie.compose)
-    implementation(libs.splitties.fragmentargs)
     implementation(libs.splitties.intents)
     implementation(libs.youtubePlayer)
 

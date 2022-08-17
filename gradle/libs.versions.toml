@@ -28,6 +28,8 @@ scarlet = "0.1.12"
 splitties = "3.0.0"
 
 [libraries]
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
@@ -68,7 +70,6 @@ androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref =
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 appsflyer = "com.appsflyer:af-android-sdk:6.8.0"
-circleindicator = "me.relex:circleindicator:2.1.6"
 coil-compose = "io.coil-kt:coil-compose:2.2.0"
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.2"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }

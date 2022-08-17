@@ -11,9 +11,9 @@ import javax.inject.Inject
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.activity.startTutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
+import org.cru.godtools.tutorial.startTutorialActivity
 import org.greenrobot.eventbus.EventBus
 
 @Composable

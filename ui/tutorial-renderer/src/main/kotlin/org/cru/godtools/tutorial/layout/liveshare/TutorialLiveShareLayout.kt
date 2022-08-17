@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
 
@@ -30,7 +30,7 @@ internal fun TutorialLiveShareLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = Column(
     modifier = modifier
         .fillMaxSize()
@@ -82,7 +82,7 @@ internal fun TutorialLiveShareLayout(
     Button(
         onClick = {
             when (page) {
-                Page.LIVE_SHARE_START -> onTutorialAction(R.id.action_live_share_finish)
+                Page.LIVE_SHARE_START -> onTutorialAction(Action.LIVE_SHARE_FINISH)
                 else -> nextPage()
             }
         },

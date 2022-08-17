@@ -20,8 +20,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
+import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
 import org.cru.godtools.tutorial.layout.TutorialPositionReferences
@@ -33,7 +33,7 @@ internal fun TutorialFeaturesLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Int) -> Unit = {},
+    onTutorialAction: (Action) -> Unit = {},
 ) = ConstraintLayout(
     modifier = modifier
         .fillMaxSize()
@@ -83,7 +83,7 @@ internal fun TutorialFeaturesLayout(
     Button(
         onClick = {
             when (page) {
-                Page.FEATURES_FINAL -> onTutorialAction(R.id.action_features_finish)
+                Page.FEATURES_FINAL -> onTutorialAction(Action.FEATURES_FINISH)
                 else -> nextPage()
             }
         },

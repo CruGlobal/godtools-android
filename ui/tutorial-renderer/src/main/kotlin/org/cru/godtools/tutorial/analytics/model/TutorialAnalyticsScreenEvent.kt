@@ -26,4 +26,21 @@ class TutorialAnalyticsScreenEvent internal constructor(
         PageSet.LIVE_SHARE -> null
         PageSet.TIPS -> null
     }
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        !super.equals(other) -> false
+        other !is TutorialAnalyticsScreenEvent -> false
+        tutorial != other.tutorial -> false
+        page != other.page -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + tutorial.hashCode()
+        result = 31 * result + (page?.hashCode() ?: 0)
+        return result
+    }
 }

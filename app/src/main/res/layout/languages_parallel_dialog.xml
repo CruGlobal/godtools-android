@@ -35,7 +35,7 @@
                 android:breakStrategy="balanced"
                 android:gravity="center_horizontal"
                 android:text="@string/languages_parallel_dialog_headline"
-                android:textAppearance="@style/TextAppearance.GodTools.Tutorial.Headline2" />
+                android:textAppearance="@style/TextAppearance.GodTools.Settings.Language.Dialog.Headline" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"

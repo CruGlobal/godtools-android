@@ -55,7 +55,7 @@ import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.activity.startTutorialActivity
+import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
