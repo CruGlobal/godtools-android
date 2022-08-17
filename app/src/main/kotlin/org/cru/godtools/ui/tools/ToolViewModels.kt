@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -62,8 +63,7 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val bannerFile = banner
-            .map { it?.getFile(fileSystem) }
+        val bannerFile = tool.attachmentFileFlow { it?.bannerId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val availableLanguages = Query.select<Translation>()
@@ -115,4 +115,11 @@ class ToolViewModels @Inject constructor(
         }
         fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
     }
+
+    private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
+        .map(transform).distinctUntilChanged()
+        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+        .map { it?.takeIf { it.isDownloaded } }
+        .map { it?.getFile(fileSystem) }
+        .distinctUntilChanged()
 }
