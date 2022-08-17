@@ -6,7 +6,6 @@
     <data>
         <import type="android.text.TextUtils" />
         <import type="androidx.lifecycle.LiveData" />
-        <import type="java.io.File" />
         <import type="kotlinx.coroutines.flow.StateFlow" />
         <import type="org.cru.godtools.base.ui.util.ModelUtils" />
         <import type="org.cru.godtools.model.Tool" />
@@ -14,11 +13,8 @@
 
         <variable name="fragment" type="org.cru.godtools.ui.tooldetails.ToolDetailsFragment" />
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />
-        <variable name="banner" type="StateFlow&lt;File&gt;" />
-        <variable name="bannerAnimation" type="StateFlow&lt;File&gt;" />
         <variable name="primaryTranslation" type="LiveData&lt;Translation&gt;" />
         <variable name="parallelTranslation" type="LiveData&lt;Translation&gt;" />
-        <variable name="downloadProgress" type="LiveData&lt;org.cru.godtools.download.manager.DownloadProgress&gt;" />
         <variable name="manifest" type="LiveData&lt;org.cru.godtools.tool.model.Manifest>" />
     </data>
 
@@ -34,63 +30,18 @@
             android:background="@color/gray_E6"
             android:orientation="vertical">
 
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:elevation="4dp" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:elevation="4dp">
-
-                <org.cru.godtools.base.ui.view.DaggerPicassoImageView
-                    android:id="@+id/image_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:adjustViewBounds="true"
-                    android:background="@color/gray_E6"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintDimensionRatio="21:10"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:picassoFile="@{banner}"
-                    app:visibleIf="@{TextUtils.isEmpty(tool.detailsBannerYoutubeVideoId) &amp;&amp; bannerAnimation == null}" />
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animation_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:animation="@{bannerAnimation}"
-                    app:layout_constraintDimensionRatio="21:10"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:visibleIf="@{bannerAnimation != null &amp;&amp; TextUtils.isEmpty(tool.detailsBannerYoutubeVideoId)}" />
-
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/video_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:background="@color/gray_E6"
-                    app:layout_constraintDimensionRatio="21:10"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:lifecycleOwner="@{fragment.viewLifecycleOwner}"
-                    app:recue="@{true}"
-                    app:videoId="@{tool.detailsBannerYoutubeVideoId}"
-                    app:visibleIf="@{!TextUtils.isEmpty(tool.detailsBannerYoutubeVideoId)}" />
-
-                <androidx.constraintlayout.widget.Barrier
-                    android:id="@+id/banner_bottom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="image_banner,animation_banner,video_banner" />
-
-                <ProgressBar
-                    android:id="@+id/download_progress"
-                    style="@style/Widget.GodTools.Tools.Download.ProgressBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:progress="@{downloadProgress}"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@id/banner_bottom"
-                    tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/title"
@@ -101,7 +52,7 @@
                     android:layout_marginTop="40dp"
                     android:layout_marginRight="@dimen/tool_details_margin_horizontal"
                     android:text="@{ModelUtils.getTranslationName(primaryTranslation, tool, context)}"
-                    app:layout_constraintTop_toBottomOf="@id/banner_bottom"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Knowing God Personally" />
 
                 <androidx.appcompat.widget.AppCompatTextView

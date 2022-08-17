@@ -37,6 +37,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -85,14 +86,17 @@ class ToolDetailsFragment() :
         binding.fragment = this
         binding.tool = dataModel.tool
         binding.manifest = dataModel.primaryManifest
-        binding.banner = dataModel.banner
-        binding.bannerAnimation = dataModel.bannerAnimation
         binding.primaryTranslation = dataModel.primaryTranslation
         binding.parallelTranslation = dataModel.parallelTranslation
-        binding.setDownloadProgress(dataModel.downloadProgress)
 
         binding.setupScrollView()
         binding.setupPages()
+
+        binding.compose.setContent {
+            GodToolsTheme {
+                ToolDetailsLayout()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

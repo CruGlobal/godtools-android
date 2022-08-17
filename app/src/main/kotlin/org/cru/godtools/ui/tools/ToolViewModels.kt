@@ -66,6 +66,11 @@ class ToolViewModels @Inject constructor(
         val bannerFile = tool.attachmentFileFlow { it?.bannerId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+        val detailsBanner = tool.attachmentFileFlow { it?.detailsBannerId ?: it?.bannerId }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
         val availableLanguages = Query.select<Translation>()
             .where(TranslationTable.FIELD_TOOL.eq(code))
             .getAsFlow(dao)
