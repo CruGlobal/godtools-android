@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -37,6 +38,7 @@ class ToolViewModels @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
     private val languagesRepository: LanguagesRepository,
+    private val manifestManager: ManifestManager,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
@@ -105,6 +107,10 @@ class ToolViewModels @Inject constructor(
 
         val secondLanguage = secondTranslation
             .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+        val firstManifest = firstTranslation
+            .map { it.value?.let { manifestManager.getManifest(it) } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val downloadProgress = firstTranslation
