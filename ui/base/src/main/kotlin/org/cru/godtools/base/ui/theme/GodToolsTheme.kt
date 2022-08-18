@@ -15,6 +15,7 @@ import org.cru.godtools.base.ui.compose.CompositionLocals
 const val DisabledAlpha = 0.38f
 
 private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
+private val GRAY_BE = Color(red = 0xBE, green = 0xBE, blue = 0xBE)
 val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 
 private val GodToolsLightColorScheme = lightColorScheme(
@@ -27,7 +28,8 @@ private val GodToolsLightColorScheme = lightColorScheme(
     onSurfaceVariant = Color(90, 90, 90),
     // HACK: We are currently disabling surface tint to avoid using tonal elevation on surfaces.
     //       When we transition to using tonal elevation we can revert this back to the default value
-    surfaceTint = Color.White
+    surfaceTint = Color.White,
+    outline = GRAY_BE,
 )
 
 private val GodToolsTypography = with(Typography()) {
