@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
@@ -33,7 +35,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_VARIANTS
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -54,7 +55,7 @@ import splitties.bundle.put
 
 @AndroidEntryPoint
 class ToolDetailsFragment() :
-    BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
+    BasePlatformFragment<ToolDetailsFragmentBinding>(),
     LinkClickedListener,
     ToolsAdapterCallbacks {
     constructor(toolCode: String) : this() {
@@ -81,20 +82,26 @@ class ToolDetailsFragment() :
         triggerScreenAnalyticsEventWhenResumed()
     }
 
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ToolDetailsFragmentBinding.inflate(inflater, container, false)
+
     override fun onBindingCreated(binding: ToolDetailsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.fragment = this
-        binding.tool = dataModel.tool
-        binding.manifest = dataModel.primaryManifest
-        binding.primaryTranslation = dataModel.primaryTranslation
-        binding.parallelTranslation = dataModel.parallelTranslation
 
         binding.setupScrollView()
         binding.setupPages()
 
         binding.compose.setContent {
             GodToolsTheme {
-                ToolDetailsLayout()
+                ToolDetailsLayout(
+                    onOpenTool = { tool, trans1, trans2 -> openTool(tool, trans1, trans2) },
+                    onOpenToolTraining = { tool, translation ->
+                        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
+                    }
+                )
             }
         }
     }
@@ -167,22 +174,7 @@ class ToolDetailsFragment() :
         eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, code, SOURCE_VARIANTS))
         dataModel.setToolCode(code)
     }
-
-    override fun pinTool(code: String?) {
-        if (code == null) return
-        downloadManager.pinToolAsync(code)
-        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-    }
-
-    fun unpinTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
-    }
-
-    override fun unpinTool(tool: Tool?) = unpinTool(tool?.code)
     // endregion ToolsAdapterCallbacks
-
-    fun openToolTraining(tool: Tool?, translation: Translation?) =
-        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
     // endregion Data Binding
 
     // region Pin Shortcut

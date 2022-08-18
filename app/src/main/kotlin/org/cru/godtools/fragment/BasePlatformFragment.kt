@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.ThreadMode
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.fragment.BasePlatformFragment.SYNC_HELPER"
 
 abstract class BasePlatformFragment<B : ViewBinding>(@LayoutRes layoutId: Int) : BaseFragment<B>(layoutId) {
+    constructor() : this(0)
+
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
