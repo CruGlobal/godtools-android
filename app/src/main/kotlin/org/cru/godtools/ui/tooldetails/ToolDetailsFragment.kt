@@ -2,7 +2,6 @@ package org.cru.godtools.ui.tooldetails
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -28,7 +27,6 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.cru.godtools.R
-import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -54,10 +52,7 @@ import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
 @AndroidEntryPoint
-class ToolDetailsFragment() :
-    BasePlatformFragment<ToolDetailsFragmentBinding>(),
-    LinkClickedListener,
-    ToolsAdapterCallbacks {
+class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(), ToolsAdapterCallbacks {
     constructor(toolCode: String) : this() {
         arguments = Bundle().apply {
             put(EXTRA_TOOL, toolCode)
@@ -115,16 +110,6 @@ class ToolDetailsFragment() :
     override fun onResume() {
         super.onResume()
         dataModel.toolCode.value?.let { eventBus.post(ToolDetailsScreenEvent(it)) }
-    }
-
-    override fun onLinkClicked(url: String) {
-        eventBus.post(
-            ExitLinkActionEvent(
-                dataModel.toolCode.value,
-                Uri.parse(url),
-                dataModel.primaryTranslation.value?.languageCode
-            )
-        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -209,8 +194,7 @@ class ToolDetailsFragment() :
             ).also {
                 it.callbacks.set(this@ToolDetailsFragment)
                 dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
-            },
-            this@ToolDetailsFragment
+            }
         ).also { adapter ->
             dataModel.pages
                 .onEach { adapter.pages = it }

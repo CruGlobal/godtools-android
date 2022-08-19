@@ -70,3 +70,4 @@ class Translation : Base() {
 }
 
 fun Translation?.getName(tool: Tool?) = this?.name ?: tool?.name
+fun Translation?.getDescription(tool: Tool?) = this?.description ?: tool?.description

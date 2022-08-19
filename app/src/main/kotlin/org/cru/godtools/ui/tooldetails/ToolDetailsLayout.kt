@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
+import android.text.util.Linkify
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,9 +10,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,10 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -34,14 +41,22 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import java.text.Collator
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.androidx.compose.material3.ClickableText
+import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addUriAnnotations
+import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
+import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.R
+import org.cru.godtools.analytics.model.ExitLinkActionEvent
+import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GRAY_E6
 import org.cru.godtools.base.ui.theme.GT_RED
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.getDescription
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.ToolViewModels
@@ -197,6 +212,63 @@ internal fun ToolDetailsActions(
                 else R.string.action_tools_add_favorite
             ),
             modifier = Modifier.padding(start = 4.dp)
+        )
+    }
+}
+
+@Composable
+internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel) {
+    val eventBus = LocalEventBus.current
+    val uriHandler = LocalUriHandler.current
+    val tool by toolViewModel.tool.collectAsState()
+    val translation by toolViewModel.firstTranslation.collectAsState()
+
+    ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
+        Column {
+            val description = remember { derivedStateOf { translation.value.getDescription(tool).orEmpty() } }.value
+                .addUriAnnotations(Linkify.WEB_URLS)
+            ClickableText(
+                description,
+                onClick = {
+                    description.getUriAnnotations(it, it).firstOrNull()?.let { (url) ->
+                        eventBus.post(ExitLinkActionEvent(toolViewModel.code, url, translation.value?.languageCode))
+                        uriHandler.openUri(url)
+                    }
+                },
+                fontFamily = translation.value?.getFontFamilyOrNull(),
+            )
+
+            ToolDetailsLanguages(toolViewModel, modifier = Modifier.padding(top = 48.dp))
+        }
+    }
+}
+
+@Composable
+private fun ToolDetailsLanguages(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
+    val languages by viewModel.availableLanguages.collectAsState()
+    if (languages.isEmpty()) return
+
+    val context = LocalContext.current
+    val locale = LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY)
+    val displayLanguages by remember(context, locale) {
+        derivedStateOf {
+            languages
+                .map { it.getDisplayName(context) }
+                .sortedWith(Collator.getInstance(locale).apply { strength = Collator.PRIMARY })
+                .joinToString(", ")
+        }
+    }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            stringResource(R.string.tool_details_section_description_languages_available),
+            fontWeight = FontWeight.Bold
+        )
+        Divider(color = LocalContentColor.current.copy(alpha = 0.12f))
+        Text(
+            displayLanguages,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 8.dp)
         )
     }
 }
