@@ -45,10 +45,8 @@ import okio.source
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
@@ -103,18 +101,12 @@ class GodToolsDownloadManagerTest {
         every { defaultConfig } returns ParserConfig()
         excludeRecords { defaultConfig }
     }
-    private val settings = mockk<Settings> {
-        every { isLanguageProtected(any()) } returns false
-        every { parallelLanguage } returns null
-    }
     private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
     private val translationsApi = mockk<TranslationsApi>()
     private val translationsRepository = mockk<TranslationsRepository>()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
-
-    private val language = slot<Language>()
 
     private val downloadProgress = mutableListOf<DownloadProgress?>()
     private val observer = mockk<Observer<DownloadProgress?>> {
@@ -132,7 +124,6 @@ class GodToolsDownloadManagerTest {
             dao,
             fs,
             manifestParser,
-            settings,
             toolsRepository,
             translationsApi,
             translationsRepository,
