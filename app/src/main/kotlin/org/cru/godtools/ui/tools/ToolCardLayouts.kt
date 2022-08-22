@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -25,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -67,6 +71,10 @@ private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextSt
     }
 }
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
+private val toolCardInfoLabelColor: Color @Composable get() {
+    val baseColor = LocalContentColor.current
+    return remember(baseColor) { with(baseColor) { copy(alpha = alpha * 0.6f) } }
+}
 internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 @Composable
@@ -104,14 +112,16 @@ fun LessonToolCard(
                 val primaryTranslation by viewModel.primaryTranslation.collectAsState()
                 val primaryLanguage by viewModel.primaryLanguage.collectAsState()
 
-                AvailableInLanguage(
-                    language = primaryLanguage,
-                    translation = { primaryTranslation.value },
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .invisibleIf { primaryTranslation.isInitial || primaryLanguage == null }
-                )
+                ToolCardInfoContent {
+                    AvailableInLanguage(
+                        language = primaryLanguage,
+                        translation = { primaryTranslation.value },
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .invisibleIf { primaryTranslation.isInitial || primaryLanguage == null }
+                    )
+                }
             }
         }
     }
@@ -175,13 +185,15 @@ fun ToolCard(
                             .alignByBaseline()
                     )
                     if (hasSecondTranslation) {
-                        AvailableInLanguage(
-                            secondLanguage,
-                            horizontalArrangement = Arrangement.End,
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .alignByBaseline()
-                        )
+                        ToolCardInfoContent {
+                            AvailableInLanguage(
+                                secondLanguage,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                                    .alignByBaseline()
+                            )
+                        }
                     }
                 }
                 ToolCategory(
@@ -339,6 +351,13 @@ private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modi
 }
 
 @Composable
+private fun ToolCardInfoContent(content: @Composable () -> Unit) = CompositionLocalProvider(
+    LocalContentColor provides toolCardInfoLabelColor,
+    LocalTextStyle provides toolCardInfoLabelStyle,
+    content = content
+)
+
+@Composable
 private fun SquareToolCardParallelLanguage(viewModel: ToolViewModels.ToolViewModel) {
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
 
@@ -347,12 +366,14 @@ private fun SquareToolCardParallelLanguage(viewModel: ToolViewModels.ToolViewMod
         val secondLanguage by viewModel.secondLanguage.collectAsState()
         val available by remember { derivedStateOf { secondTranslation != null } }
 
-        AvailableInLanguage(
-            secondLanguage,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier
-                .padding(top = 2.dp)
-                .invisibleIf { !available }
-        )
+        ToolCardInfoContent {
+            AvailableInLanguage(
+                secondLanguage,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .padding(top = 2.dp)
+                    .invisibleIf { !available }
+            )
+        }
     }
 }
