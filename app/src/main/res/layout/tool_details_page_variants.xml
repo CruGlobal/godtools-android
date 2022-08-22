@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/Widget.GodTools.Tools.Details.Page.Content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/tool_details_margin_horizontal"
-            android:paddingTop="@dimen/tool_details_page_padding_vertical"
-            android:paddingRight="@dimen/tool_details_margin_horizontal"
-            android:text="@string/tool_details_section_variants_description" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/variants"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingTop="16dp"
-            android:paddingBottom="@dimen/tool_details_page_padding_vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/tool_details_page_variants_variant" />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 </layout>

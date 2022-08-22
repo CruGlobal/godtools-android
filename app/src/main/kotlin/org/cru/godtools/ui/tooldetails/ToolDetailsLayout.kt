@@ -3,6 +3,7 @@ package org.cru.godtools.ui.tooldetails
 import android.text.util.Linkify
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -59,7 +60,9 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getDescription
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
+import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.ToolViewModels
+import org.cru.godtools.ui.tools.VariantToolCard
 
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
@@ -239,6 +242,34 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel) {
             )
 
             ToolDetailsLanguages(toolViewModel, modifier = Modifier.padding(top = 48.dp))
+        }
+    }
+}
+
+@Composable
+internal fun ToolDetailsVariants(
+    viewModel: ToolDetailsFragmentDataModel,
+    modifier: Modifier = Modifier
+) {
+    val currentTool by viewModel.toolCode.collectAsState()
+    val variants by viewModel.variants.collectAsState()
+
+    Column(modifier = modifier, verticalArrangement = spacedBy(16.dp)) {
+        Text(
+            stringResource(R.string.tool_details_section_variants_description),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+
+        variants.forEach { tool ->
+            val code = tool.code ?: return@forEach
+
+            PreloadTool(tool)
+            VariantToolCard(
+                code,
+                isSelected = currentTool == code,
+                onClick = { viewModel.setToolCode(code) }
+            )
         }
     }
 }

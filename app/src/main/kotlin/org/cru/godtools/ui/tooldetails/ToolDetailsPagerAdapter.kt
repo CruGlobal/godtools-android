@@ -3,8 +3,11 @@ package org.cru.godtools.ui.tooldetails
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,7 +60,11 @@ internal class ToolDetailsPagerAdapter(
             }
         Page.VARIANTS ->
             ToolDetailsPageVariantsBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-                variants.adapter = variantsAdapter
+                compose.setContent {
+                    GodToolsTheme {
+                        ToolDetailsVariants(dataModel, modifier = Modifier.padding(all = 16.dp))
+                    }
+                }
             }
     }
 
