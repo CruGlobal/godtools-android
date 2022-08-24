@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -17,12 +19,17 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -42,9 +49,14 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import java.text.Collator
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ClickableText
+import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addUriAnnotations
 import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
 import org.ccci.gto.android.common.compat.util.LocaleCompat
@@ -67,67 +79,106 @@ import org.cru.godtools.ui.tools.VariantToolCard
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
 @Composable
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalPagerApi::class)
 fun ToolDetailsLayout(
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val viewModel = viewModel<ToolDetailsFragmentDataModel>()
     val toolCode by viewModel.toolCode.collectAsState()
-
-    toolCode?.let {
-        ToolDetailsLayout(it, onOpenTool = onOpenTool, onOpenToolTraining = onOpenToolTraining)
-    }
-}
-
-@Composable
-@OptIn(ExperimentalComposeUiApi::class)
-private fun ToolDetailsLayout(
-    toolCode: String,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
-    onOpenToolTraining: (Tool?, Translation?) -> Unit,
-) {
-    val toolViewModel = viewModel<ToolViewModels>()[toolCode]
+    val toolViewModel = viewModel<ToolViewModels>()[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
 
-    Column {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            ToolDetailsBanner(
-                toolViewModel,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(21f / 10f)
-            )
+    val scrollState = rememberScrollState()
+    val pagerState = rememberPagerState()
+    val pages by viewModel.pages.collectAsState()
 
-            val downloadProgress by toolViewModel.downloadProgress.collectAsState()
-            DownloadProgressIndicator(
-                { downloadProgress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            )
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .verticalScroll(scrollState)
+    ) {
+        Surface(shadowElevation = 4.dp) {
+            Column {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    ToolDetailsBanner(
+                        toolViewModel,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(21f / 10f)
+                    )
+
+                    val downloadProgress by toolViewModel.downloadProgress.collectAsState()
+                    DownloadProgressIndicator(
+                        { downloadProgress },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                    )
+                }
+
+                Text(
+                    translation.value.getName(tool).orEmpty(),
+                    fontFamily = translation.value?.getFontFamilyOrNull(),
+                    style = MaterialTheme.typography.headlineSmall,
+                    modifier = Modifier.padding(top = 40.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
+                )
+
+                val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
+                Text(
+                    pluralStringResource(R.plurals.label_tools_shares, shares, shares),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 10.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
+                )
+
+                ToolDetailsActions(
+                    toolViewModel,
+                    onOpenTool = onOpenTool,
+                    onOpenToolTraining = onOpenToolTraining,
+                    modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
+                )
+
+                TabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    indicator = { positions ->
+                        TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
+                    },
+                    modifier = Modifier.padding(horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
+                ) {
+                    pages.forEachIndexed { index, page ->
+                        Tab(
+                            text = { Text(stringResource(page.tabLabel)) },
+                            selected = pagerState.currentPage == index,
+                            onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                        )
+                    }
+                }
+            }
         }
 
-        Text(
-            translation.value.getName(tool).orEmpty(),
-            fontFamily = translation.value?.getFontFamilyOrNull(),
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(top = 40.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
-        )
-
-        val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
-        Text(
-            pluralStringResource(R.plurals.label_tools_shares, shares, shares),
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 10.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
-        )
-
-        ToolDetailsActions(
-            toolViewModel,
-            onOpenTool = onOpenTool,
-            onOpenToolTraining = onOpenToolTraining,
-            modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
-        )
+        HorizontalPager(
+            count = pages.size,
+            state = pagerState,
+            verticalAlignment = Alignment.Top,
+            key = { pages[it] }
+        ) {
+            when (pages[it]) {
+                ToolDetailsPagerAdapter.Page.DESCRIPTION -> ToolDetailsAbout(
+                    toolViewModel,
+                    modifier = Modifier.padding(32.dp)
+                )
+                ToolDetailsPagerAdapter.Page.VARIANTS -> ToolDetailsVariants(
+                    viewModel,
+                    onVariantSelected = {
+                        if (toolCode != it) coroutineScope.launch { scrollState.animateScrollTo(0) }
+                        viewModel.setToolCode(it)
+                    },
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
     }
 }
 
@@ -220,14 +271,14 @@ internal fun ToolDetailsActions(
 }
 
 @Composable
-internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel) {
+internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
     val eventBus = LocalEventBus.current
     val uriHandler = LocalUriHandler.current
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
 
     ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
-        Column {
+        Column(modifier = modifier) {
             val description = remember { derivedStateOf { translation.value.getDescription(tool).orEmpty() } }.value
                 .addUriAnnotations(Linkify.WEB_URLS)
             ClickableText(
@@ -249,7 +300,8 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel) {
 @Composable
 internal fun ToolDetailsVariants(
     viewModel: ToolDetailsFragmentDataModel,
-    modifier: Modifier = Modifier
+    onVariantSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val currentTool by viewModel.toolCode.collectAsState()
     val variants by viewModel.variants.collectAsState()
@@ -268,7 +320,7 @@ internal fun ToolDetailsVariants(
             VariantToolCard(
                 code,
                 isSelected = currentTool == code,
-                onClick = { viewModel.setToolCode(code) }
+                onClick = { onVariantSelected(code) }
             )
         }
     }

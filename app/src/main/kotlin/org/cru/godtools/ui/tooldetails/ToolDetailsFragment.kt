@@ -11,21 +11,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
@@ -85,10 +79,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
 
     override fun onBindingCreated(binding: ToolDetailsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-
-        binding.setupScrollView()
-        binding.setupPages()
-
         binding.compose.setContent {
             GodToolsTheme {
                 ToolDetailsLayout(
@@ -169,42 +159,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         }
     }
     // endregion Pin Shortcut
-
-    // region ScrollView
-    private fun ToolDetailsFragmentBinding.setupScrollView() {
-        dataModel.toolCode.drop(1)
-            .onEach { scrollView.smoothScrollTo(0, 0) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-    // endregion ScrollView
-
-    // region Pages
-    private fun ToolDetailsFragmentBinding.setupPages() {
-        // Setup the ViewPager
-        pages.setHeightWrapContent()
-        pages.offscreenPageLimit = 2
-        pages.adapter = ToolDetailsPagerAdapter(
-            viewLifecycleOwner,
-            dataModel,
-            VariantToolsAdapter(
-                viewLifecycleOwner,
-                toolViewModels,
-                R.layout.tool_details_page_variants_variant,
-                dataModel.toolCodeLiveData
-            ).also {
-                it.callbacks.set(this@ToolDetailsFragment)
-                dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
-            }
-        ).also { adapter ->
-            dataModel.pages
-                .onEach { adapter.pages = it }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-        }
-
-        // Setup the TabLayout
-        TabLayoutMediator(tabs, pages) { tab, i -> tab.setText(dataModel.pages.value[i].tabLabel) }.attach()
-    }
-    // endregion Pages
 
     // region Training Tips
     @Inject

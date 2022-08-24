@@ -62,7 +62,7 @@ internal class ToolDetailsPagerAdapter(
             ToolDetailsPageVariantsBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
                 compose.setContent {
                     GodToolsTheme {
-                        ToolDetailsVariants(dataModel, modifier = Modifier.padding(all = 16.dp))
+                        ToolDetailsVariants(dataModel, modifier = Modifier.padding(all = 16.dp), onVariantSelected = {})
                     }
                 }
             }
