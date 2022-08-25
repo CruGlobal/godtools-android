@@ -268,7 +268,7 @@ internal fun ToolDetailsActions(
 }
 
 @Composable
-internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
+private fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
     val eventBus = LocalEventBus.current
     val uriHandler = LocalUriHandler.current
     val tool by toolViewModel.tool.collectAsState()
@@ -295,7 +295,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
 }
 
 @Composable
-internal fun ToolDetailsVariants(
+private fun ToolDetailsVariants(
     viewModel: ToolDetailsFragmentDataModel,
     onVariantSelected: (String) -> Unit,
     modifier: Modifier = Modifier,

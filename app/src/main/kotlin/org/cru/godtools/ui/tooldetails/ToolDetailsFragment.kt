@@ -23,9 +23,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_VARIANTS
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
@@ -40,13 +38,11 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
-import org.cru.godtools.ui.tools.ToolViewModels
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
 @AndroidEntryPoint
-class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>(), ToolsAdapterCallbacks {
+class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>() {
     constructor(toolCode: String) : this() {
         arguments = Bundle().apply {
             put(EXTRA_TOOL, toolCode)
@@ -61,7 +57,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private val dataModel: ToolDetailsFragmentDataModel by viewModels()
-    private val toolViewModels: ToolViewModels by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,14 +115,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         }
     }
 
-    // region Data Binding
-
-    // region ToolsAdapterCallbacks
-    override fun onToolClicked(tool: Tool?, primary: Translation?, parallel: Translation?) {
-        showToolDetails(tool?.code)
-    }
-
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         tool?.code?.let { code ->
             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
 
@@ -142,15 +130,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
             }
         }
     }
-
-    override fun showToolDetails(code: String?) {
-        if (code == null) return
-
-        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, code, SOURCE_VARIANTS))
-        dataModel.setToolCode(code)
-    }
-    // endregion ToolsAdapterCallbacks
-    // endregion Data Binding
 
     // region Pin Shortcut
     private fun Menu.setupPinShortcutAction() {
