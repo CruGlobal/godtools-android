@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.tooldetails
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,16 +8,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
@@ -37,7 +32,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
-import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
@@ -63,7 +57,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         downloadLatestTranslation()
-        triggerScreenAnalyticsEventWhenResumed()
     }
 
     override fun onCreateBinding(
@@ -92,11 +85,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         menu.setupPinShortcutAction()
     }
 
-    override fun onResume() {
-        super.onResume()
-        dataModel.toolCode.value?.let { eventBus.post(ToolDetailsScreenEvent(it)) }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_pin_shortcut -> {
             dataModel.shortcut.value?.let { shortcutManager.pinShortcut(it) }
@@ -105,15 +93,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
-
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
-    private fun triggerScreenAnalyticsEventWhenResumed() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                dataModel.toolCode.collect { it?.let { eventBus.post(ToolDetailsScreenEvent(it)) } }
-            }
-        }
-    }
 
     private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         tool?.code?.let { code ->

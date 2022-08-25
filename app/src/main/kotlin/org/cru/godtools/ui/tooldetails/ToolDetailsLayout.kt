@@ -61,6 +61,7 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addUriAnno
 import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
 import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.R
+import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GRAY_E6
@@ -71,6 +72,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getDescription
 import org.cru.godtools.model.getName
+import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.ToolViewModels
@@ -94,6 +96,8 @@ fun ToolDetailsLayout(
     val scrollState = rememberScrollState()
     val pagerState = rememberPagerState()
     val pages by viewModel.pages.collectAsState()
+
+    toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
     Column(
         modifier = Modifier
