@@ -165,11 +165,8 @@ fun ToolDetailsLayout(
             key = { pages[it] }
         ) {
             when (pages[it]) {
-                ToolDetailsPagerAdapter.Page.DESCRIPTION -> ToolDetailsAbout(
-                    toolViewModel,
-                    modifier = Modifier.padding(32.dp)
-                )
-                ToolDetailsPagerAdapter.Page.VARIANTS -> ToolDetailsVariants(
+                ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(toolViewModel, modifier = Modifier.padding(32.dp))
+                ToolDetailsPage.VARIANTS -> ToolDetailsVariants(
                     viewModel,
                     onVariantSelected = {
                         if (toolCode != it) coroutineScope.launch { scrollState.animateScrollTo(0) }

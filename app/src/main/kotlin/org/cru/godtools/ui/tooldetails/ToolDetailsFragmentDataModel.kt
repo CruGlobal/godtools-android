@@ -106,8 +106,8 @@ class ToolDetailsFragmentDataModel @Inject constructor(
 
     internal val pages = variants.map {
         buildList {
-            add(ToolDetailsPagerAdapter.Page.DESCRIPTION)
-            if (it.isNotEmpty()) add(ToolDetailsPagerAdapter.Page.VARIANTS)
+            add(ToolDetailsPage.DESCRIPTION)
+            if (it.isNotEmpty()) add(ToolDetailsPage.VARIANTS)
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf(ToolDetailsPage.DESCRIPTION))
 }
