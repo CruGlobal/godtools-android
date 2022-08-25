@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -151,7 +153,8 @@ private fun ToolDetailsBanner(
 }
 
 @Composable
-private fun ToolDetailsActions(
+@VisibleForTesting
+internal fun ToolDetailsActions(
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
@@ -170,7 +173,9 @@ private fun ToolDetailsActions(
     if (manifest?.hasTips == true) {
         Button(
             onClick = { onOpenToolTraining(tool, translation.value) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .testTag("action_tool_training")
+                .fillMaxWidth()
         ) { Text(stringResource(R.string.action_tools_open_training)) }
     }
 
