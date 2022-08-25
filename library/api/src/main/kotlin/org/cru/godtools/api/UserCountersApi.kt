@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 
-private const val PATH_USER_COUNTERS = "user/counters"
+private const val PATH_USER_COUNTERS = "user/me/counters"
 
 private const val PARAM_COUNTER_ID = "counter_id"
 
