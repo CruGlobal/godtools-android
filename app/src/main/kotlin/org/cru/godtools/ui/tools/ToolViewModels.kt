@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -14,17 +15,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.AttachmentsRepository
 import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -32,10 +35,12 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolViewModels @Inject constructor(
+    private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
     private val languagesRepository: LanguagesRepository,
+    private val manifestManager: ManifestManager,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
@@ -59,17 +64,21 @@ class ToolViewModels @Inject constructor(
 
         val banner = tool
             .map { it?.bannerId }.distinctUntilChanged()
-            .flatMapLatest { it?.let { dao.findAsFlow<Attachment>(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val bannerFile = banner
-            .map { it?.getFile(fileSystem) }
+        val bannerFile = tool.attachmentFileFlow { it?.bannerId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val availableLanguages = Query.select<Translation>()
-            .where(TranslationTable.FIELD_TOOL.eq(code))
+        val detailsBanner = tool.attachmentFileFlow { it?.detailsBannerId ?: it?.bannerId }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+        val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+        val availableLanguages = Query.select<Language>()
+            .distinct(true)
+            .join(LanguageTable.SQL_JOIN_TRANSLATION.andOn(TranslationTable.FIELD_TOOL eq code))
             .getAsFlow(dao)
-            .map { it.map { it.languageCode }.distinct() }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow
@@ -102,6 +111,10 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { it?.languageCode?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+        val firstManifest = firstTranslation
+            .map { it.value?.let { manifestManager.getManifest(it) } }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
         val downloadProgress = firstTranslation
             .combine(secondTranslation) { f, s -> f.value ?: s }
             .flatMapLatest {
@@ -115,4 +128,11 @@ class ToolViewModels @Inject constructor(
         }
         fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
     }
+
+    private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
+        .map(transform).distinctUntilChanged()
+        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+        .map { it?.takeIf { it.isDownloaded } }
+        .map { it?.getFile(fileSystem) }
+        .distinctUntilChanged()
 }

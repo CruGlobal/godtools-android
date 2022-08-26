@@ -178,6 +178,7 @@ dependencies {
     implementation(libs.play.instantapps)
 
     api(libs.eventbus)
+    implementation(libs.accompanist.pager)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
@@ -185,6 +186,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
+    implementation(libs.lottie.compose)
     implementation(libs.materialComponents)
     implementation(libs.okta)
     implementation(libs.splitties.fragmentargs)

@@ -1,42 +1,29 @@
 package org.cru.godtools.ui.tooldetails
 
-import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
 import org.cru.godtools.R
-import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_VARIANTS
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
@@ -45,17 +32,11 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
-import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
-import org.cru.godtools.ui.tools.ToolViewModels
-import org.cru.godtools.ui.tools.ToolsAdapterCallbacks
 import org.cru.godtools.util.openToolActivity
 import splitties.bundle.put
 
 @AndroidEntryPoint
-class ToolDetailsFragment() :
-    BasePlatformFragment<ToolDetailsFragmentBinding>(R.layout.tool_details_fragment),
-    LinkClickedListener,
-    ToolsAdapterCallbacks {
+class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>() {
     constructor(toolCode: String) : this() {
         arguments = Bundle().apply {
             put(EXTRA_TOOL, toolCode)
@@ -70,50 +51,38 @@ class ToolDetailsFragment() :
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private val dataModel: ToolDetailsFragmentDataModel by viewModels()
-    private val toolViewModels: ToolViewModels by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         downloadLatestTranslation()
-        triggerScreenAnalyticsEventWhenResumed()
     }
+
+    override fun onCreateBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ) = ToolDetailsFragmentBinding.inflate(inflater, container, false)
 
     override fun onBindingCreated(binding: ToolDetailsFragmentBinding, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.fragment = this
-        binding.tool = dataModel.tool
-        binding.manifest = dataModel.primaryManifest
-        binding.banner = dataModel.banner
-        binding.bannerAnimation = dataModel.bannerAnimation
-        binding.primaryTranslation = dataModel.primaryTranslation
-        binding.parallelTranslation = dataModel.parallelTranslation
-        binding.setDownloadProgress(dataModel.downloadProgress)
-
-        binding.setupScrollView()
-        binding.setupPages()
+        binding.compose.setContent {
+            GodToolsTheme {
+                ToolDetailsLayout(
+                    onOpenTool = { tool, trans1, trans2 -> openTool(tool, trans1, trans2) },
+                    onOpenToolTraining = { tool, translation ->
+                        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
+                    }
+                )
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.fragment_tool_details, menu)
         menu.setupPinShortcutAction()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        dataModel.toolCode.value?.let { eventBus.post(ToolDetailsScreenEvent(it)) }
-    }
-
-    override fun onLinkClicked(url: String) {
-        eventBus.post(
-            ExitLinkActionEvent(
-                dataModel.toolCode.value,
-                Uri.parse(url),
-                dataModel.primaryTranslation.value?.languageCode
-            )
-        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -125,23 +94,7 @@ class ToolDetailsFragment() :
     }
     // endregion Lifecycle
 
-    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
-    private fun triggerScreenAnalyticsEventWhenResumed() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                dataModel.toolCode.collect { it?.let { eventBus.post(ToolDetailsScreenEvent(it)) } }
-            }
-        }
-    }
-
-    // region Data Binding
-
-    // region ToolsAdapterCallbacks
-    override fun onToolClicked(tool: Tool?, primary: Translation?, parallel: Translation?) {
-        showToolDetails(tool?.code)
-    }
-
-    override fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
         tool?.code?.let { code ->
             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
 
@@ -157,30 +110,6 @@ class ToolDetailsFragment() :
         }
     }
 
-    override fun showToolDetails(code: String?) {
-        if (code == null) return
-
-        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, code, SOURCE_VARIANTS))
-        dataModel.setToolCode(code)
-    }
-
-    override fun pinTool(code: String?) {
-        if (code == null) return
-        downloadManager.pinToolAsync(code)
-        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-    }
-
-    fun unpinTool(toolCode: String?) {
-        if (toolCode != null) downloadManager.unpinToolAsync(toolCode)
-    }
-
-    override fun unpinTool(tool: Tool?) = unpinTool(tool?.code)
-    // endregion ToolsAdapterCallbacks
-
-    fun openToolTraining(tool: Tool?, translation: Translation?) =
-        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
-    // endregion Data Binding
-
     // region Pin Shortcut
     private fun Menu.setupPinShortcutAction() {
         findItem(R.id.action_pin_shortcut)?.let { item ->
@@ -188,43 +117,6 @@ class ToolDetailsFragment() :
         }
     }
     // endregion Pin Shortcut
-
-    // region ScrollView
-    private fun ToolDetailsFragmentBinding.setupScrollView() {
-        dataModel.toolCode.drop(1)
-            .onEach { scrollView.smoothScrollTo(0, 0) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-    // endregion ScrollView
-
-    // region Pages
-    private fun ToolDetailsFragmentBinding.setupPages() {
-        // Setup the ViewPager
-        pages.setHeightWrapContent()
-        pages.offscreenPageLimit = 2
-        pages.adapter = ToolDetailsPagerAdapter(
-            viewLifecycleOwner,
-            dataModel,
-            VariantToolsAdapter(
-                viewLifecycleOwner,
-                toolViewModels,
-                R.layout.tool_details_page_variants_variant,
-                dataModel.toolCodeLiveData
-            ).also {
-                it.callbacks.set(this@ToolDetailsFragment)
-                dataModel.variants.asLiveData().observe(viewLifecycleOwner, it)
-            },
-            this@ToolDetailsFragment
-        ).also { adapter ->
-            dataModel.pages
-                .onEach { adapter.pages = it }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-        }
-
-        // Setup the TabLayout
-        TabLayoutMediator(tabs, pages) { tab, i -> tab.setText(dataModel.pages.value[i].tabLabel) }.attach()
-    }
-    // endregion Pages
 
     // region Training Tips
     @Inject

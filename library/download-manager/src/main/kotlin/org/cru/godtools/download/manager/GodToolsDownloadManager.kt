@@ -68,7 +68,6 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @VisibleForTesting
@@ -120,7 +119,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val dao: GodToolsDao,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
-    private val toolsRepository: ToolsRepository,
     private val translationsApi: TranslationsApi,
     private val translationsRepository: TranslationsRepository,
     private val workManager: Lazy<WorkManager>,
@@ -133,7 +131,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
-        toolsRepository: ToolsRepository,
         translationsApi: TranslationsApi,
         translationsRepository: TranslationsRepository,
         workManager: Lazy<WorkManager>
@@ -142,7 +139,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         dao,
         fs,
         manifestParser,
-        toolsRepository,
         translationsApi,
         translationsRepository,
         workManager,
@@ -153,14 +149,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val filesystemMutex = ReadWriteMutex()
     private val filesMutex = MutexMap()
     private val translationsMutex = MutexMap()
-
-    // region Tool/Language pinning
-    @AnyThread
-    fun pinToolAsync(code: String) = coroutineScope.launch { toolsRepository.pinTool(code) }
-
-    @AnyThread
-    fun unpinToolAsync(code: String) = coroutineScope.launch { toolsRepository.unpinTool(code) }
-    // endregion Tool/Language pinning
 
     // region Download Progress
     private val downloadProgressStateFlows = mutableMapOf<TranslationKey, MutableStateFlow<DownloadProgress?>>()

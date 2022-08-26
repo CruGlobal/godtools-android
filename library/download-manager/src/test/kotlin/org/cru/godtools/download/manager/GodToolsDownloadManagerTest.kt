@@ -6,7 +6,6 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import io.mockk.Called
-import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
@@ -15,7 +14,6 @@ import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
@@ -69,7 +67,6 @@ import org.junit.Test
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 import retrofit2.Response
 
@@ -101,7 +98,6 @@ class GodToolsDownloadManagerTest {
         every { defaultConfig } returns ParserConfig()
         excludeRecords { defaultConfig }
     }
-    private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
     private val translationsApi = mockk<TranslationsApi>()
     private val translationsRepository = mockk<TranslationsRepository>()
     private val workManager = mockk<WorkManager> {
@@ -124,7 +120,6 @@ class GodToolsDownloadManagerTest {
             dao,
             fs,
             manifestParser,
-            toolsRepository,
             translationsApi,
             translationsRepository,
             { workManager },
@@ -139,28 +134,6 @@ class GodToolsDownloadManagerTest {
             Dispatchers.resetMain()
         }
     }
-
-    // region pinTool()/unpinTool()
-    private val tool = slot<String>()
-
-    @Test
-    fun verifyPinToolAsync() = runTest {
-        coEvery { toolsRepository.pinTool(capture(tool)) } just Runs
-
-        withDownloadManager { it.pinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured)
-        coVerifyAll { toolsRepository.pinTool(tool.captured) }
-    }
-
-    @Test
-    fun verifyUnpinToolAsync() = runTest {
-        coEvery { toolsRepository.unpinTool(capture(tool)) } just Runs
-
-        withDownloadManager { it.unpinToolAsync(TOOL).join() }
-        assertEquals(TOOL, tool.captured)
-        coVerifyAll { toolsRepository.unpinTool(tool.captured) }
-    }
-    // endregion pinTool()/unpinTool()
 
     // region Download Progress
     @Test
