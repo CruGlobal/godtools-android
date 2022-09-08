@@ -140,6 +140,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.datastore)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.livedata.ktx)

@@ -13,6 +13,8 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import io.github.aakira.napier.Napier
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
@@ -33,6 +35,10 @@ abstract class ServicesModule {
     abstract fun eagerAccountListRegistrationService(service: AccountListRegistrationService): Any
 
     companion object {
+        @Provides
+        @Singleton
+        fun coroutineScope(): CoroutineScope = CoroutineScope(SupervisorJob())
+
         @Provides
         @Singleton
         fun picasso() = Picasso.get()

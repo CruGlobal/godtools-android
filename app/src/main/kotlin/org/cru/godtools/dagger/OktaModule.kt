@@ -1,10 +1,12 @@
 package org.cru.godtools.dagger
 
 import android.content.Context
+import android.os.Build
 import com.okta.authfoundation.AuthFoundationDefaults
 import com.okta.authfoundation.client.OidcClient
 import com.okta.authfoundation.client.OidcConfiguration
 import com.okta.authfoundation.client.SharedPreferencesCache
+import com.okta.authfoundation.credential.TokenStorage
 import com.okta.oidc.OIDCConfig
 import com.okta.oidc.Okta
 import com.okta.oidc.clients.sessions.SessionClient
@@ -18,9 +20,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
+import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage.Companion.makeChangeAware
+import org.ccci.gto.android.common.okta.authfoundation.credential.SharedPreferencesTokenStorage
+import org.ccci.gto.android.common.okta.authfoundation.credential.migrateTo
 import org.ccci.gto.android.common.okta.authfoundation.enableClockCompat
+import org.ccci.gto.android.common.okta.datastore.DataStoreTokenStorage
 import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
 import org.ccci.gto.android.common.okta.oidc.clients.sessions.isAuthenticatedLiveData
 import org.ccci.gto.android.common.okta.oidc.net.OkHttpOktaHttpClient
@@ -53,6 +61,24 @@ object OktaModule {
             "$OKTA_DISCOVERY_URI/.well-known/openid-configuration".toHttpUrl()
         )
     }
+
+    @Provides
+    @Singleton
+    fun OidcClient.oktaTokenStorage(
+        @ApplicationContext context: Context,
+        coroutineScope: CoroutineScope
+    ): TokenStorage = DataStoreTokenStorage(context)
+        .let { dataStore ->
+            when {
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> dataStore
+                else -> SharedPreferencesTokenStorage(this, context)
+                    .makeChangeAware()
+                    // migrate tokens if the user had previously used the DataStoreTokenStorage
+                    // TODO: this may race with loading tokens in the CredentialDataSource.
+                    //       We may want to create a "MergedTokenStorage" class instead to facilitate token migrations.
+                    .also { prefs -> coroutineScope.launch { dataStore.migrateTo(prefs) } }
+            }
+        }
 
     @Provides
     @Reusable
