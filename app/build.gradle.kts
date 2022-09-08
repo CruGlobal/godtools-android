@@ -189,6 +189,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.materialComponents)
     implementation(libs.okta)
+    implementation(libs.okta.auth.foundation)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.taptargetview)
     implementation(libs.weakdelegate)
