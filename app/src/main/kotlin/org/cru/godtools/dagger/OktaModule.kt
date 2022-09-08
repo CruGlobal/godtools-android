@@ -6,6 +6,7 @@ import com.okta.authfoundation.AuthFoundationDefaults
 import com.okta.authfoundation.client.OidcClient
 import com.okta.authfoundation.client.OidcConfiguration
 import com.okta.authfoundation.client.SharedPreferencesCache
+import com.okta.authfoundation.credential.CredentialDataSource.Companion.createCredentialDataSource
 import com.okta.authfoundation.credential.TokenStorage
 import com.okta.oidc.OIDCConfig
 import com.okta.oidc.Okta
@@ -79,6 +80,10 @@ object OktaModule {
                     .also { prefs -> coroutineScope.launch { dataStore.migrateTo(prefs) } }
             }
         }
+
+    @Provides
+    @Singleton
+    fun OidcClient.oktaCredentialDataSource(storage: TokenStorage) = createCredentialDataSource(storage)
 
     @Provides
     @Reusable
