@@ -16,6 +16,7 @@ import com.okta.oidc.Okta
 import com.okta.oidc.clients.sessions.SessionClient
 import com.okta.oidc.clients.web.WebAuthClient
 import com.okta.oidc.storage.SharedPreferenceStorage
+import com.okta.webauthenticationui.WebAuthenticationClient.Companion.createWebAuthenticationClient
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -99,6 +100,10 @@ object OktaModule {
         initialize(credentialDataSource)
         coroutineScope.launch { LegacyTokenMigration.migrate(context, sessionClient, defaultCredential()) }
     }
+
+    @Provides
+    @Singleton
+    fun OidcClient.oktaWebAuthenticationClient() = createWebAuthenticationClient()
 
     @Provides
     @Reusable

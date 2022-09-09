@@ -77,7 +77,7 @@ android {
             isMinifyEnabled = false
 
             manifestPlaceholders += mapOf(
-                "appAuthRedirectScheme" to "org.cru.godtools.debug.okta",
+                "webAuthenticationRedirectScheme" to "org.cru.godtools.debug.okta",
                 "hostGodtoolsCustomUri" to "org.cru.godtools.debug"
             )
 
@@ -92,7 +92,7 @@ android {
             isMinifyEnabled = true
 
             manifestPlaceholders += mapOf(
-                "appAuthRedirectScheme" to "org.cru.godtools.qa.okta",
+                "webAuthenticationRedirectScheme" to "org.cru.godtools.qa.okta",
                 "hostGodtoolsCustomUri" to "org.cru.godtools.qa"
             )
 
@@ -107,7 +107,7 @@ android {
                 ?.let { signingConfig = it }
 
             manifestPlaceholders += mapOf(
-                "appAuthRedirectScheme" to "org.cru.godtools.okta",
+                "webAuthenticationRedirectScheme" to "org.cru.godtools.okta",
                 "hostGodtoolsCustomUri" to "org.cru.godtools"
             )
 
@@ -193,6 +193,7 @@ dependencies {
     implementation(libs.okta.auth.foundation)
     implementation(libs.okta.auth.foundation.bootstrap)
     implementation(libs.okta.legacy.tokens)
+    implementation(libs.okta.web.authentication.ui)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.taptargetview)
     implementation(libs.weakdelegate)

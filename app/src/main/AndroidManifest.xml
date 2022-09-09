@@ -142,6 +142,11 @@
             android:label="@string/profile_title"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
+        <!-- Suppress legacy OktaRedirectActivity -->
+        <activity
+            android:name="com.okta.oidc.OktaRedirectActivity"
+            tools:node="remove" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"

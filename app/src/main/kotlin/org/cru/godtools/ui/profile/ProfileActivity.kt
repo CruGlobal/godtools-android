@@ -3,12 +3,18 @@ package org.cru.godtools.ui.profile
 import android.app.Activity
 import android.content.Intent
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.viewpager2.widget.setHeightWrapContent
-import org.ccci.gto.android.common.okta.oidc.clients.sessions.idTokenLiveData
+import org.ccci.gto.android.common.okta.authfoundation.credential.idTokenFlow
+import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -37,8 +43,11 @@ class ProfileActivity : BasePlatformActivity<ProfileActivityBinding>(R.layout.pr
     // endregion Lifecycle
 
     // region Data Binding
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun setupDataBinding() {
-        binding.idToken = oktaClient.sessionClient.idTokenLiveData
+        binding.idToken = oktaCredentials.defaultCredentialFlow()
+            .flatMapLatest { it.idTokenFlow() }
+            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), null)
     }
     // endregion Data Binding
 
