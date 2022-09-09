@@ -191,6 +191,8 @@ dependencies {
     implementation(libs.materialComponents)
     implementation(libs.okta)
     implementation(libs.okta.auth.foundation)
+    implementation(libs.okta.auth.foundation.bootstrap)
+    implementation(libs.okta.legacy.tokens)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.taptargetview)
     implementation(libs.weakdelegate)

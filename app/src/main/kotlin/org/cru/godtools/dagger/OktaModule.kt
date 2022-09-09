@@ -6,8 +6,11 @@ import com.okta.authfoundation.AuthFoundationDefaults
 import com.okta.authfoundation.client.OidcClient
 import com.okta.authfoundation.client.OidcConfiguration
 import com.okta.authfoundation.client.SharedPreferencesCache
+import com.okta.authfoundation.credential.CredentialDataSource
 import com.okta.authfoundation.credential.CredentialDataSource.Companion.createCredentialDataSource
 import com.okta.authfoundation.credential.TokenStorage
+import com.okta.authfoundationbootstrap.CredentialBootstrap
+import com.okta.legacytokenmigration.LegacyTokenMigration
 import com.okta.oidc.OIDCConfig
 import com.okta.oidc.Okta
 import com.okta.oidc.clients.sessions.SessionClient
@@ -84,6 +87,18 @@ object OktaModule {
     @Provides
     @Singleton
     fun OidcClient.oktaCredentialDataSource(storage: TokenStorage) = createCredentialDataSource(storage)
+
+    @Provides
+    @Singleton
+    fun oktaCredentials(
+        credentialDataSource: CredentialDataSource,
+        coroutineScope: CoroutineScope,
+        @ApplicationContext context: Context,
+        sessionClient: SessionClient,
+    ) = CredentialBootstrap.apply {
+        initialize(credentialDataSource)
+        coroutineScope.launch { LegacyTokenMigration.migrate(context, sessionClient, defaultCredential()) }
+    }
 
     @Provides
     @Reusable
