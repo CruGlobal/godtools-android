@@ -2,7 +2,7 @@ package org.cru.godtools.sync.task
 
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
-import com.okta.oidc.clients.sessions.SessionClient
+import com.okta.authfoundationbootstrap.CredentialBootstrap
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
+import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
 import org.cru.godtools.api.UserCountersApi
 import org.cru.godtools.model.UserCounter
 import org.keynote.godtools.android.db.Contract.UserCounterTable
@@ -30,13 +31,13 @@ internal val QUERY_DIRTY_COUNTERS =
 class UserCounterSyncTasks @Inject internal constructor(
     private val dao: GodToolsDao,
     private val countersApi: UserCountersApi,
-    private val sessionClient: SessionClient
+    private val credentials: CredentialBootstrap
 ) : BaseSyncTasks() {
     private val countersMutex = Mutex()
     private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
-        if (!sessionClient.isAuthenticated) return true
+        if (!credentials.defaultCredential().isAuthenticated) return true
 
         withContext(Dispatchers.IO) {
             // short-circuit if we aren't forcing a sync and the data isn't stale
@@ -56,7 +57,7 @@ class UserCounterSyncTasks @Inject internal constructor(
     }
 
     suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
-        if (!sessionClient.isAuthenticated) return true
+        if (!credentials.defaultCredential().isAuthenticated) return true
 
         withContext(Dispatchers.IO) {
             // process any counters that need to be updated
