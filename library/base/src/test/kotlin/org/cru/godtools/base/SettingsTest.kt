@@ -2,7 +2,8 @@ package org.cru.godtools.base
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.okta.oidc.clients.sessions.SessionClient
+import com.okta.authfoundation.credential.Credential
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import org.cru.godtools.base.Settings.Companion.FEATURE_LOGIN
@@ -18,12 +19,15 @@ private const val FEATURE_TEST = "testFeature"
 
 @RunWith(AndroidJUnit4::class)
 class SettingsTest {
-    private val sessionClient = mockk<SessionClient> { every { tokens } returns null }
+    private val credential = mockk<Credential>()
     private lateinit var settings: Settings
 
     @Before
     fun setup() {
-        settings = Settings(ApplicationProvider.getApplicationContext()) { sessionClient }
+        settings = Settings(
+            context = ApplicationProvider.getApplicationContext(),
+            oktaCredentials = { mockk { coEvery { defaultCredential() } returns credential } }
+        )
     }
 
     @Test
@@ -45,15 +49,13 @@ class SettingsTest {
 
     @Test
     fun verifyFeatureDiscoveryLoginAlreadyLoggedIn() {
-        // idToken: {}.{sub:"a"}.{}
-        every { sessionClient.tokens } returns mockk {
-            every { idToken } returns "e30.e3N1YjoiYSJ9.e30"
-        }
+        every { credential.token } returns mockk()
         assertTrue(settings.isFeatureDiscovered(FEATURE_LOGIN))
     }
 
     @Test
     fun verifyFeatureDiscoveryLoginNotLoggedIn() {
+        every { credential.token } returns null
         assertFalse(settings.isFeatureDiscovered(FEATURE_LOGIN))
     }
 }
