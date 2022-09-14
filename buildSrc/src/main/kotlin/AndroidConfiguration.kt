@@ -157,11 +157,19 @@ private fun TestedExtension.configureTestOptions(project: Project) {
     project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
 
     project.configurations.configureEach {
-        resolutionStrategy.dependencySubstitution {
-            // use the new condensed version of hamcrest
-            val hamcrest = project.libs.findLibrary("hamcrest").get().get().toString()
-            substitute(module("org.hamcrest:hamcrest-core")).using(module(hamcrest))
-            substitute(module("org.hamcrest:hamcrest-library")).using(module(hamcrest))
+        resolutionStrategy {
+            dependencySubstitution {
+                // use the new condensed version of hamcrest
+                val hamcrest = project.libs.findLibrary("hamcrest").get().get().toString()
+                substitute(module("org.hamcrest:hamcrest-core")).using(module(hamcrest))
+                substitute(module("org.hamcrest:hamcrest-library")).using(module(hamcrest))
+            }
+
+            // HACK: work around a IllegalAccessException when using robolectric >= 4.6.1 + Espresso < 3.5.0
+            // see: https://github.com/robolectric/robolectric/issues/6593
+            // see: https://github.com/android/android-test/pull/1000
+            val espressoCore = project.libs.findLibrary("androidx-test-espresso-core").get()
+            force(espressoCore)
         }
     }
 }
