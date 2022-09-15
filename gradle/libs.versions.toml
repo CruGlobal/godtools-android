@@ -83,7 +83,7 @@ facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-netw
 facebook-soloader = "com.facebook.soloader:soloader:0.10.4"
 firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.0.3"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
-firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.1"
+firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.2"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.1.3"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.0.8"
