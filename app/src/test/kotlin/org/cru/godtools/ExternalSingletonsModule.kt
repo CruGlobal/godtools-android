@@ -14,6 +14,7 @@ import io.mockk.mockk
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.sync.SyncRegistry
 import org.ccci.gto.android.common.sync.SyncTask
+import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.dagger.EventBusModule
 import org.cru.godtools.dagger.ServicesModule
 import org.cru.godtools.sync.GodToolsSyncService
@@ -22,7 +23,11 @@ import org.greenrobot.eventbus.EventBus
 @Module(includes = [EagerModule::class])
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [EventBusModule::class, ServicesModule::class]
+    replaces = [
+        AnalyticsModule::class,
+        EventBusModule::class,
+        ServicesModule::class,
+    ]
 )
 class ExternalSingletonsModule {
     @get:Provides
