@@ -25,12 +25,7 @@ subprojects {
         if (project.hasProperty('android')) {
             dependencies {
                 implementation libs.kotlin.stdlib
-
                 implementation libs.timber
-
-                // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
-                androidTestImplementation(testFixtures(libs.gtoSupport.okta))
-                testImplementation(testFixtures(libs.gtoSupport.okta))
             }
         }
     }
