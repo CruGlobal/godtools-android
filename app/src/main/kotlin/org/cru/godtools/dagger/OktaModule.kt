@@ -14,12 +14,10 @@ import com.okta.legacytokenmigration.LegacyTokenMigration
 import com.okta.oidc.OIDCConfig
 import com.okta.oidc.Okta
 import com.okta.oidc.clients.sessions.SessionClient
-import com.okta.oidc.clients.web.WebAuthClient
 import com.okta.oidc.storage.SharedPreferenceStorage
 import com.okta.webauthenticationui.WebAuthenticationClient.Companion.createWebAuthenticationClient
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -38,10 +36,6 @@ import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.ccci.gto.android.common.okta.authfoundation.enableClockCompat
 import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.ccci.gto.android.common.okta.datastore.DataStoreTokenStorage
-import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
-import org.ccci.gto.android.common.okta.oidc.clients.sessions.isAuthenticatedLiveData
-import org.ccci.gto.android.common.okta.oidc.net.OkHttpOktaHttpClient
-import org.ccci.gto.android.common.okta.oidc.storage.makeChangeAware
 import org.ccci.gto.android.common.okta.oidc.storage.security.NoopEncryptionManager
 import org.ccci.gto.android.common.okta.oidc.storage.security.createDefaultEncryptionManager
 import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
@@ -56,8 +50,6 @@ private const val OKTA_SCOPE = "openid profile email offline_access"
 @InstallIn(SingletonComponent::class)
 object OktaModule {
     private const val TAG = "OktaModule"
-
-    const val IS_AUTHENTICATED_LIVE_DATA = "LIVE_DATA_IS_AUTHENTICATED"
 
     @Provides
     @Singleton
@@ -121,18 +113,15 @@ object OktaModule {
     fun OidcClient.oktaWebAuthenticationClient() = createWebAuthenticationClient()
 
     @Provides
-    @Reusable
-    fun oktaConfig() = OIDCConfig.Builder()
-        .discoveryUri(OKTA_DISCOVERY_URI)
-        .clientId(OKTA_CLIENT_ID)
-        .redirectUri("$OKTA_AUTH_SCHEME:/auth")
-        .endSessionRedirectUri("$OKTA_AUTH_SCHEME:/auth/logout")
-        .scopes(*OKTA_SCOPE.split(" ").toTypedArray())
-        .create()
-
-    @Provides
     @Singleton
-    fun oktaClient(@ApplicationContext context: Context, config: OIDCConfig, okhttp: OkHttpClient): WebAuthClient {
+    fun oktaLegacySessionClient(@ApplicationContext context: Context): SessionClient {
+        val config = OIDCConfig.Builder()
+            .discoveryUri(OKTA_DISCOVERY_URI)
+            .clientId(OKTA_CLIENT_ID)
+            .redirectUri("$OKTA_AUTH_SCHEME:/auth")
+            .endSessionRedirectUri("$OKTA_AUTH_SCHEME:/auth/logout")
+            .scopes(*OKTA_SCOPE.split(" ").toTypedArray())
+            .create()
         val encryptionManager = try {
             createDefaultEncryptionManager(context)
         } catch (e: Exception) {
@@ -143,23 +132,10 @@ object OktaModule {
         return Okta.WebAuthBuilder()
             .withConfig(config)
             .withContext(context)
-            .withOktaHttpClient(OkHttpOktaHttpClient(okhttp))
-            .withStorage(SharedPreferenceStorage(context).makeChangeAware())
+            .withStorage(SharedPreferenceStorage(context))
             .withEncryptionManager(encryptionManager)
             .setRequireHardwareBackedKeyStore(false)
             .create()
+            .sessionClient
     }
-
-    @Provides
-    @Reusable
-    @Named(IS_AUTHENTICATED_LIVE_DATA)
-    fun SessionClient.isAuthenticatedLiveData() = isAuthenticatedLiveData
-
-    @Provides
-    @Reusable
-    fun WebAuthClient.oktaSession() = sessionClient
-
-    @Provides
-    @Singleton
-    fun SessionClient.oktaUserProfileProvider() = OktaUserProfileProvider(this)
 }
