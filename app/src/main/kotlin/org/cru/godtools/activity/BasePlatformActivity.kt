@@ -21,7 +21,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import com.okta.authfoundation.client.OidcClientResult
-import com.okta.authfoundation.credential.RevokeTokenType
 import com.okta.authfoundation.credential.Token
 import com.okta.authfoundationbootstrap.CredentialBootstrap
 import com.okta.webauthenticationui.WebAuthenticationClient
@@ -29,7 +28,6 @@ import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
@@ -151,13 +149,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             lifecycleScope.launch {
                 with(oktaCredentials.defaultCredential()) {
                     try {
-                        coroutineScope {
-                            // TODO: use credential.revokeAllTokens() once okta-mobile-kotlin ships a version with it
-                            // credential.revokeAllTokens()
-                            launch { revokeToken(RevokeTokenType.REFRESH_TOKEN) }
-                            launch { revokeToken(RevokeTokenType.DEVICE_SECRET) }
-                            launch { revokeToken(RevokeTokenType.ACCESS_TOKEN) }
-                        }
+                        revokeAllTokens()
                     } finally {
                         delete()
                     }
