@@ -3,6 +3,7 @@ package org.cru.godtools.analytics.snowplow
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.okta.authfoundation.client.dto.OidcUserInfo
 import com.snowplowanalytics.snowplow.Snowplow
 import com.snowplowanalytics.snowplow.configuration.NetworkConfiguration
 import com.snowplowanalytics.snowplow.configuration.SubjectConfiguration
@@ -13,15 +14,16 @@ import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
 import com.snowplowanalytics.snowplow.tracker.LogLevel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
-import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
-import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.grMasterPersonId
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.ccci.gto.android.common.snowplow.events.CustomEvent
 import org.ccci.gto.android.common.snowplow.events.CustomScreenView
 import org.ccci.gto.android.common.snowplow.events.CustomStructured
@@ -31,6 +33,7 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.DAGGER_OKTA_USER_INFO_FLOW
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,7 +53,8 @@ class SnowplowAnalyticsService @Inject internal constructor(
     @ApplicationContext context: Context,
     eventBus: EventBus,
     okhttp: OkHttpClient,
-    oktaUserProfileProvider: OktaUserProfileProvider
+    @Named(DAGGER_OKTA_USER_INFO_FLOW)
+    oktaUserInfoFlow: SharedFlow<OidcUserInfo?>,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val snowplowTracker = Snowplow.createTracker(
@@ -108,7 +112,7 @@ class SnowplowAnalyticsService @Inject internal constructor(
     private fun Event.send() = snowplowTracker.track(this)
 
     // region Contexts
-    private val userProfileStateFlow = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+    private val userProfileStateFlow = oktaUserInfoFlow
         .stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     @WorkerThread

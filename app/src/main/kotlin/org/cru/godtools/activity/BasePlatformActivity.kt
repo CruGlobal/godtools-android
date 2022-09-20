@@ -16,26 +16,32 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
-import com.okta.oidc.AuthenticationPayload
-import com.okta.oidc.clients.BaseAuth.REMOVE_TOKENS
-import com.okta.oidc.clients.BaseAuth.SIGN_OUT_SESSION
-import com.okta.oidc.clients.web.WebAuthClient
+import com.okta.authfoundation.client.OidcClientResult
+import com.okta.authfoundation.credential.RevokeTokenType
+import com.okta.authfoundation.credential.Token
+import com.okta.authfoundationbootstrap.CredentialBootstrap
+import com.okta.webauthenticationui.WebAuthenticationClient
 import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Named
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
-import org.ccci.gto.android.common.okta.oidc.clients.web.signOut
+import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticatedFlow
+import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.view.MenuUtils
+import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_CONTACT_US
@@ -50,7 +56,6 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
-import org.cru.godtools.dagger.OktaModule.IS_AUTHENTICATED_LIVE_DATA
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
@@ -61,6 +66,9 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import timber.log.Timber
+
+private const val TAG = "BasePlatformActivity"
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
@@ -74,11 +82,6 @@ private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformAct
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     BaseActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected constructor() : this(INVALID_LAYOUT_RES)
-    @Inject
-    internal lateinit var oktaClient: WebAuthClient
-    @Inject
-    @Named(IS_AUTHENTICATED_LIVE_DATA)
-    internal lateinit var isAuthenticatedLiveData: LiveData<Boolean>
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,7 +148,21 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_logout -> {
-            lifecycleScope.launch { oktaClient.signOut(this@BasePlatformActivity, SIGN_OUT_SESSION or REMOVE_TOKENS) }
+            lifecycleScope.launch {
+                with(oktaCredentials.defaultCredential()) {
+                    try {
+                        coroutineScope {
+                            // TODO: use credential.revokeAllTokens() once okta-mobile-kotlin ships a version with it
+                            // credential.revokeAllTokens()
+                            launch { revokeToken(RevokeTokenType.REFRESH_TOKEN) }
+                            launch { revokeToken(RevokeTokenType.DEVICE_SECRET) }
+                            launch { revokeToken(RevokeTokenType.ACCESS_TOKEN) }
+                        }
+                    } finally {
+                        delete()
+                    }
+                }
+            }
             true
         }
         R.id.action_help -> {
@@ -215,6 +232,13 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         else -> super.toolbar
     }
 
+    // region Okta
+    @Inject
+    internal lateinit var oktaCredentials: CredentialBootstrap
+    @Inject
+    internal lateinit var oktaWebAuthenticationClient: WebAuthenticationClient
+    // endregion Okta
+
     // region Navigation Drawer
     protected open val drawerLayout: DrawerLayout? get() = findViewById(R.id.drawer_layout)
     protected open val drawerMenu: NavigationView? get() = findViewById(R.id.drawer_menu)
@@ -223,6 +247,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
     protected open val isShowNavigationDrawerIndicator: LiveData<Boolean> = ImmutableLiveData(false)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun setupNavigationDrawer() {
         drawerLayout?.let { layout ->
             drawerToggle = ActionBarDrawerToggle(this, layout, INVALID_STRING_RES, INVALID_STRING_RES)
@@ -249,11 +274,18 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
                     val signupItem = findItem(R.id.action_signup)
                     val logoutItem = findItem(R.id.action_logout)
                     val profileItem = findItem(R.id.action_profile)
-                    isAuthenticatedLiveData.observe(this@BasePlatformActivity) { isAuthenticated ->
-                        loginItem?.isVisible = !isAuthenticated
-                        signupItem?.isVisible = !isAuthenticated
-                        logoutItem?.isVisible = isAuthenticated
-                        profileItem?.isVisible = isAuthenticated
+
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            oktaCredentials.defaultCredentialFlow()
+                                .flatMapLatest { it.isAuthenticatedFlow() }
+                                .collect { isAuthenticated ->
+                                    loginItem?.isVisible = !isAuthenticated
+                                    signupItem?.isVisible = !isAuthenticated
+                                    logoutItem?.isVisible = isAuthenticated
+                                    profileItem?.isVisible = isAuthenticated
+                                }
+                        }
                     }
                 } else {
                     // hide all menu items if we aren't showing login items for this language
@@ -278,7 +310,21 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     // region Navigation Menu actions
     private fun launchLogin() {
-        oktaClient.signIn(this, AuthenticationPayload.Builder().addParameter("prompt", "login").build())
+        lifecycleScope.launch {
+            when (
+                val result = oktaWebAuthenticationClient.login(
+                    this@BasePlatformActivity,
+                    "$OKTA_AUTH_SCHEME:/auth",
+                    extraRequestParameters = mapOf("prompt" to "login")
+                )
+            ) {
+                is OidcClientResult.Success<Token> -> oktaCredentials.defaultCredential().storeToken(result.result)
+                is OidcClientResult.Error -> {
+                    // log the login error
+                    Timber.tag(TAG).d(result.exception, "Error logging in to Okta.")
+                }
+            }
+        }
     }
 
     private fun launchContactUs() {

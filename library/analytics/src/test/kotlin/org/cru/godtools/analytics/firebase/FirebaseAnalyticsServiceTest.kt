@@ -2,7 +2,7 @@ package org.cru.godtools.analytics.firebase
 
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.okta.oidc.net.response.UserInfo
+import com.okta.authfoundation.client.dto.OidcUserInfo
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
@@ -16,8 +16,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
-import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before
@@ -27,18 +26,15 @@ import org.junit.Test
 class FirebaseAnalyticsServiceTest {
     private val firebase = mockk<FirebaseAnalytics>(relaxUnitFun = true)
     private val eventBus = mockk<EventBus>(relaxUnitFun = true)
-    private val userInfoFlow = MutableSharedFlow<UserInfo?>()
-    private val oktaUserProfileProvider = mockk<OktaUserProfileProvider> {
-        every { userInfoFlow(refreshIfStale = any()) } returns userInfoFlow
-    }
+    private val userInfoFlow = MutableSharedFlow<OidcUserInfo?>()
 
-    private fun userInfo(guid: String?) = mockk<UserInfo> {
-        every { this@mockk.get(any()) } returns null
+    private fun userInfo(guid: String?) = mockk<OidcUserInfo> {
+        every { this@mockk.deserializeClaim<Any>(any(), any()) } returns null
         every { ssoGuid } returns guid
     }
 
     private suspend fun TestScope.useAnalyticsService(block: suspend (FirebaseAnalyticsService) -> Unit) {
-        val service = FirebaseAnalyticsService(mockk(), eventBus, oktaUserProfileProvider, firebase, this)
+        val service = FirebaseAnalyticsService(mockk(), eventBus, userInfoFlow, firebase, this)
         try {
             block(service)
         } finally {

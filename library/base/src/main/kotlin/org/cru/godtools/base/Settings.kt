@@ -8,7 +8,7 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import com.okta.oidc.clients.sessions.SessionClient
+import com.okta.authfoundationbootstrap.CredentialBootstrap
 import dagger.Lazy
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
@@ -17,12 +17,13 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.kotlin.coroutines.getBooleanFlow
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
-import org.ccci.gto.android.common.okta.oidc.clients.sessions.oktaUserId
+import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
 import org.ccci.gto.android.common.util.toLocale
 
 private const val PREFS_SETTINGS = "GodTools"
@@ -34,7 +35,7 @@ private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 @Singleton
 class Settings @Inject internal constructor(
     @ApplicationContext private val context: Context,
-    private val oktaSessionClient: Lazy<SessionClient>
+    private val oktaCredentials: Lazy<CredentialBootstrap>,
 ) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
@@ -120,7 +121,7 @@ class Settings @Inject internal constructor(
                     setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
                     changed = true
                 }
-                FEATURE_LOGIN -> if (oktaSessionClient.get().oktaUserId != null) {
+                FEATURE_LOGIN -> if (runBlocking { oktaCredentials.get().defaultCredential().isAuthenticated }) {
                     setFeatureDiscovered(FEATURE_LOGIN)
                     changed = true
                 }

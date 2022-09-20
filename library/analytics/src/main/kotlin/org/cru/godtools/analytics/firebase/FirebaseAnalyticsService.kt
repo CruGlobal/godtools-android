@@ -6,21 +6,24 @@ import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.okta.authfoundation.client.dto.OidcUserInfo
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.ccci.gto.android.common.okta.oidc.OktaUserProfileProvider
-import org.ccci.gto.android.common.okta.oidc.net.response.grMasterPersonId
-import org.ccci.gto.android.common.okta.oidc.net.response.ssoGuid
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.grMasterPersonId
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.base.DAGGER_OKTA_USER_INFO_FLOW
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -47,7 +50,7 @@ const val PARAM_LANGUAGE_SECONDARY = "cru_contentlanguagesecondary"
 class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     app: Application,
     eventBus: EventBus,
-    oktaUserProfileProvider: OktaUserProfileProvider,
+    oktaUserInfoFlow: SharedFlow<OidcUserInfo?>,
     private val firebase: FirebaseAnalytics,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
@@ -56,8 +59,9 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     internal constructor(
         app: Application,
         eventBus: EventBus,
-        oktaUserProfileProvider: OktaUserProfileProvider
-    ) : this(app, eventBus, oktaUserProfileProvider, FirebaseAnalytics.getInstance(app))
+        @Named(DAGGER_OKTA_USER_INFO_FLOW)
+        oktaUserInfoFlow: SharedFlow<OidcUserInfo?>,
+    ) : this(app, eventBus, oktaUserInfoFlow, FirebaseAnalytics.getInstance(app))
 
     // region Tracking Events
     init {
@@ -98,7 +102,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     // endregion Tracking Events
 
     @VisibleForTesting
-    internal val userInfoJob = oktaUserProfileProvider.userInfoFlow(refreshIfStale = false)
+    internal val userInfoJob = oktaUserInfoFlow
         .onEach {
             firebase.setUserId(it?.ssoGuid)
             firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "${it != null}")
