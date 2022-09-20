@@ -14,9 +14,12 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
+import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
+import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
@@ -26,6 +29,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
+private const val SYNC_TIME_TOOL = "last_synced.tool."
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
 
 private val API_GET_INCLUDES = arrayOf(
@@ -41,6 +45,7 @@ class ToolSyncTasks @Inject internal constructor(
     private val viewsApi: ViewsApi
 ) : BaseDataSyncTasks(dao) {
     private val toolsMutex = Mutex()
+    private val toolMutex = MutexMap()
     private val sharesMutex = Mutex()
 
     @AnyThread
@@ -65,6 +70,26 @@ class ToolSyncTasks @Inject internal constructor(
             dao.updateLastSyncTime(SYNC_TIME_TOOLS)
             true
         }
+    }
+
+    internal suspend fun syncTool(toolCode: String, force: Boolean = false) = toolMutex.withLock(toolCode) {
+        // short-circuit if we aren't forcing a sync and the data isn't stale
+        val lastSyncKey = "$SYNC_TIME_TOOL$toolCode"
+        if (!force &&
+            System.currentTimeMillis() - dao.getLastSyncTime(lastSyncKey) < STALE_DURATION_TOOLS
+        ) return true
+
+        // fetch tools from the API, short-circuit if this response is invalid
+        val json = toolsApi.getTool(toolCode, JsonApiParams().include(*API_GET_INCLUDES))
+            .takeIf { it.code() == HTTP_OK }?.body() ?: return false
+
+        // store fetched tools
+        dao.transaction {
+            val existing = index(listOfNotNull(dao.find<Tool>(toolCode)))
+            storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+            dao.updateLastSyncTime(lastSyncKey)
+        }
+        true
     }
 
     /**
