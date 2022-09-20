@@ -22,6 +22,7 @@ import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -54,7 +55,7 @@ import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
-import org.cru.godtools.sync.task.ToolSyncTasks
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.shareable.ShareableImage
@@ -255,7 +256,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     // region Tool sync/download logic
     @Inject
-    internal lateinit var toolSyncTasks: ToolSyncTasks
+    internal lateinit var syncService: GodToolsSyncService
     protected open val isInitialSyncFinished = MutableLiveData<Boolean>()
 
     protected abstract val toolsToDownload: StateFlow<List<String>>
@@ -270,9 +271,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         isConnected.observe(this) { if (it) syncTools() }
     }
 
-    private fun syncTools() = lifecycleScope.launch {
+    private fun syncTools(tools: List<String> = toolsToDownload.value) = lifecycleScope.launch {
         try {
-            toolSyncTasks.syncTools(Bundle.EMPTY)
+            coroutineScope {
+                tools.forEach { launch { syncService.syncTool(it) } }
+            }
             isInitialSyncFinished.value = true
         } catch (ignored: IOException) {
         }

@@ -34,7 +34,7 @@ abstract class SyncTaskModule {
     @Binds
     @IntoMap
     @SyncTaskKey(ToolSyncTasks::class)
-    abstract fun toolSyncTasks(tasks: ToolSyncTasks): BaseSyncTasks
+    internal abstract fun toolSyncTasks(tasks: ToolSyncTasks): BaseSyncTasks
 
     @Binds
     @IntoMap

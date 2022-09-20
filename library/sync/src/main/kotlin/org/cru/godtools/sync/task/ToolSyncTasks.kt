@@ -39,7 +39,7 @@ private val API_GET_INCLUDES = arrayOf(
 )
 
 @Singleton
-class ToolSyncTasks @Inject internal constructor(
+internal class ToolSyncTasks @Inject internal constructor(
     dao: GodToolsDao,
     private val toolsApi: ToolsApi,
     private val viewsApi: ViewsApi

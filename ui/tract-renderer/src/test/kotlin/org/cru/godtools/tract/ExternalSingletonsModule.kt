@@ -25,7 +25,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.sync.SyncModule
 import org.cru.godtools.sync.task.SyncTaskModule
-import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -83,8 +82,6 @@ class ExternalSingletonsModule {
     }
     @get:Provides
     val syncService by lazy { mock<GodToolsSyncService>(defaultAnswer = RETURNS_DEEP_STUBS) }
-    @get:Provides
-    val toolSyncTasks by lazy { mock<ToolSyncTasks>() }
     @get:Provides
     val tractShareService by lazy { mock<TractShareService>() }
     @get:Provides
