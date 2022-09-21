@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -45,7 +44,7 @@ abstract class BaseController<T : Base> protected constructor(
         fun create(parent: ViewGroup, parentController: BaseController<*>): U
     }
 
-    @VisibleForTesting(otherwise = PROTECTED)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val eventBus: EventBus by lazy {
         eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
     }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PROTECTED
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
@@ -45,7 +44,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     private fun hasTool() = !dataModel.toolCode.value.isNullOrEmpty() && dataModel.locale.value != null
     // endregion Intent processing
 
-    @VisibleForTesting(otherwise = PROTECTED)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val tool: String
         get() = when {
             !requireTool -> throw UnsupportedOperationException(
@@ -54,7 +53,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             else -> checkNotNull(dataModel.toolCode.value) { "requireTool is true, but a tool wasn't specified" }
         }
 
-    @VisibleForTesting(otherwise = PROTECTED)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val locale: Locale
         get() = when {
             !requireTool -> throw UnsupportedOperationException(
