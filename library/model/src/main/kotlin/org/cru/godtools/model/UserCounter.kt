@@ -21,9 +21,9 @@ class UserCounter @JvmOverloads constructor(@JsonApiId val id: String = "") {
 
     @JsonApiAttribute(JSON_COUNT, serialize = false)
     var apiCount: Int = 0
-    val count get() = apiCount + (delta ?: 0)
+    val count get() = apiCount + delta
 
     @JsonApiAttribute(JSON_DECAYED_COUNT, serialize = false)
     var apiDecayedCount: Double = 0.0
-    val decayedCount get() = apiDecayedCount + (delta ?: 0)
+    val decayedCount get() = apiDecayedCount + delta
 }
