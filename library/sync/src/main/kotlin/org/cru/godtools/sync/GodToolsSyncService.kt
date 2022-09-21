@@ -12,6 +12,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,6 +30,8 @@ import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.greenrobot.eventbus.EventBus
+
+private const val SYNC_PARALLELISM = 8
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
@@ -49,11 +52,12 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
 ) {
     @Inject
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal constructor(
         eventBus: EventBus,
         workManager: WorkManager,
         syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
-    ) : this(eventBus, workManager, syncTasks, Dispatchers.IO)
+    ) : this(eventBus, workManager, syncTasks, Dispatchers.IO.limitedParallelism(SYNC_PARALLELISM))
 
     private suspend fun executeSyncTask(task: GtSyncTask, syncId: Int? = null): Unit =
         withContext(coroutineDispatcher) {
@@ -122,6 +126,10 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             )
         )
     )
+
+    suspend fun syncTool(toolCode: String, force: Boolean = false) = withContext(coroutineDispatcher) {
+        with<ToolSyncTasks> { syncTool(toolCode, force) }
+    }
 
     fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(

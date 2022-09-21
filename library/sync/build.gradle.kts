@@ -18,6 +18,7 @@ dependencies {
 
     api(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.base)
+    implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.okta) {
         exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
     }

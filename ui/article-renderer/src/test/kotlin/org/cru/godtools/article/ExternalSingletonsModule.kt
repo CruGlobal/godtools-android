@@ -14,8 +14,8 @@ import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.sync.task.SyncTaskModule
-import org.cru.godtools.sync.task.ToolSyncTasks
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -56,7 +56,7 @@ class ExternalSingletonsModule {
         }
     }
     @get:Provides
-    val toolSyncTasks by lazy { mockk<ToolSyncTasks>() }
+    val syncService by lazy { mockk<GodToolsSyncService>() }
     @get:Provides
     val translationsRepository by lazy {
         mockk<TranslationsRepository> {
