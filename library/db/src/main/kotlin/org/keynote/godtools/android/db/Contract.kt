@@ -70,8 +70,6 @@ object Contract : BaseContract() {
         internal val SQL_CREATE_TABLE =
             create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        internal const val SQL_V39_ALTER_NAME = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_NAME"
     }
 
     object ToolTable : BaseTable() {
