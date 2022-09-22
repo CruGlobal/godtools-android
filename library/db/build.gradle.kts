@@ -7,6 +7,11 @@ plugins {
 
 android.baseConfiguration(project)
 
+ksp {
+    arg("room.schemaLocation", file("room-schemas").toString())
+    arg("room.incremental", "true")
+}
+
 dependencies {
     api(project(":library:base"))
     implementation(project(":library:model"))
