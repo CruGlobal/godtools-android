@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import org.cru.godtools.db.room.entity.UserCounterEntity
+import org.cru.godtools.db.room.entity.partial.SyncUserCounter
 
 @Dao
 internal interface UserCountersDao {
@@ -13,4 +15,14 @@ internal interface UserCountersDao {
 
     @Query("UPDATE user_counters SET delta = delta + :delta WHERE name = :name")
     suspend fun updateUserCounterDelta(name: String, delta: Int)
+
+    // region Sync Methods
+    @Query("SELECT * FROM user_counters WHERE delta != 0")
+    suspend fun getDirtyCounters(): List<UserCounterEntity>
+
+    @Insert(entity = UserCounterEntity::class, onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrIgnore(counters: Collection<SyncUserCounter>)
+    @Update(entity = UserCounterEntity::class)
+    suspend fun update(counters: Collection<SyncUserCounter>)
+    // endregion Sync Methods
 }
