@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.hilt)
 
     kapt(libs.dagger.compiler)
+    kapt(libs.hilt.compiler)
 
     ksp(libs.androidx.room.compiler)
 
