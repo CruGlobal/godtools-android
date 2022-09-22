@@ -6,6 +6,7 @@ import androidx.room.withTransaction
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.UserCounterEntity
+import org.cru.godtools.db.room.entity.partial.MigrationUserCounter
 import org.cru.godtools.db.room.entity.partial.SyncUserCounter
 import org.cru.godtools.model.UserCounter
 
@@ -32,4 +33,14 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
         dao.update(syncCounters)
     }
     // endregion Sync methods
+
+    // region migration
+    @Transaction
+    internal open fun migrateCounter(name: String, count: Int, decayedCount: Double, delta: Int) {
+        val migrationCounter = MigrationUserCounter(name, count, decayedCount)
+        dao.insertOrIgnore(migrationCounter)
+        dao.update(migrationCounter)
+        dao.migrateDelta(name, delta)
+    }
+    // endregion migration
 }

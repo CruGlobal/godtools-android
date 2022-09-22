@@ -10,6 +10,10 @@ import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
+import org.ccci.gto.android.common.util.database.getDouble
+import org.ccci.gto.android.common.util.database.getInt
+import org.ccci.gto.android.common.util.database.getString
+import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
@@ -24,7 +28,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 51
+private const val DATABASE_VERSION = 52
 
 /*
  * Version history
@@ -46,11 +50,15 @@ private const val DATABASE_VERSION = 51
  * 49: 2022-04-08
  * 50: 2022-04-29
  * 51: 2022-05-02
+ * v6.0.0 - v6.0.1
+ * 52: 2022-09-22
  */
 
 @Singleton
-class GodToolsDatabase @Inject internal constructor(@ApplicationContext private val context: Context) :
-    WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class GodToolsDatabase @Inject internal constructor(
+    @ApplicationContext private val context: Context,
+    private val roomDb: GodToolsRoomDatabase,
+) : WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
         try {
             db.beginTransaction()
@@ -64,7 +72,6 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_CREATE_TABLE)
             db.execSQL(TrainingTipTable.SQL_CREATE_TABLE)
-            db.execSQL(UserCounterTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -98,6 +105,29 @@ class GodToolsDatabase @Inject internal constructor(@ApplicationContext private 
                     49 -> db.execSQL(ToolTable.SQL_V49_ALTER_DETAILS_BANNER_ANIMATION)
                     50 -> db.execSQL(ToolTable.SQL_V50_ALTER_META_TOOL)
                     51 -> db.execSQL(ToolTable.SQL_V51_ALTER_DEFAULT_VARIANT)
+                    52 -> {
+                        db.query(
+                            UserCounterTable.TABLE_NAME,
+                            arrayOf(
+                                UserCounterTable.COLUMN_COUNTER_ID,
+                                UserCounterTable.COLUMN_COUNT,
+                                UserCounterTable.COLUMN_DECAYED_COUNT,
+                                UserCounterTable.COLUMN_DELTA
+                            ),
+                            null, emptyArray(), null, null, null
+                        ).use {
+                            while (it.moveToNext()) {
+                                roomDb.userCountersRepository.migrateCounter(
+                                    it.getString(UserCounterTable.COLUMN_COUNTER_ID) ?: continue,
+                                    it.getInt(UserCounterTable.COLUMN_COUNT, 0),
+                                    it.getDouble(UserCounterTable.COLUMN_DECAYED_COUNT, 0.0),
+                                    it.getInt(UserCounterTable.COLUMN_DELTA, 0),
+                                )
+                            }
+                        }
+
+                        db.execSQL(UserCounterTable.SQL_DELETE_TABLE)
+                    }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
