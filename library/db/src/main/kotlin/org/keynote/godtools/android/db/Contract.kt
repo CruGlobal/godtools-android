@@ -8,7 +8,6 @@ import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Followup
-import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
@@ -404,38 +403,17 @@ object Contract : BaseContract() {
 
     internal object GlobalActivityAnalyticsTable : BaseTable() {
         internal const val TABLE_NAME = "global_activity_analytics"
-        private val TABLE = Table.forClass<GlobalActivityAnalytics>()
 
         internal const val COLUMN_USERS = "users"
         internal const val COLUMN_COUNTRIES = "countries"
         internal const val COLUMN_LAUNCHES = "launches"
         internal const val COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations"
 
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-
-        internal val PROJECTION_ALL = arrayOf(
-            COLUMN_ID,
-            COLUMN_USERS,
-            COLUMN_COUNTRIES,
-            COLUMN_LAUNCHES,
-            COLUMN_GOSPEL_PRESENTATIONS
-        )
-
         private const val SQL_COLUMN_USERS = "$COLUMN_USERS INTEGER"
         private const val SQL_COLUMN_COUNTRIES = "$COLUMN_COUNTRIES INTEGER"
         private const val SQL_COLUMN_LAUNCHES = "$COLUMN_LAUNCHES INTEGER"
         private const val SQL_COLUMN_GOSPEL_PRESENTATIONS = "$COLUMN_GOSPEL_PRESENTATIONS INTEGER"
 
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_USERS,
-            SQL_COLUMN_COUNTRIES,
-            SQL_COLUMN_LAUNCHES,
-            SQL_COLUMN_GOSPEL_PRESENTATIONS
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB Migrations

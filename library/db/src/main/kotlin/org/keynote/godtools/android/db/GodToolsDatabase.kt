@@ -14,6 +14,7 @@ import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
@@ -28,7 +29,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 52
+private const val DATABASE_VERSION = 53
 
 /*
  * Version history
@@ -52,6 +53,7 @@ private const val DATABASE_VERSION = 52
  * 51: 2022-05-02
  * v6.0.0 - v6.0.1
  * 52: 2022-09-22
+ * 53: 2022-09-23
  */
 
 @Singleton
@@ -70,7 +72,6 @@ class GodToolsDatabase @Inject internal constructor(
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
-            db.execSQL(GlobalActivityAnalyticsTable.SQL_CREATE_TABLE)
             db.execSQL(TrainingTipTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
@@ -127,6 +128,31 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(UserCounterTable.SQL_DELETE_TABLE)
+                    }
+                    53 -> {
+                        db.query(
+                            GlobalActivityAnalyticsTable.TABLE_NAME,
+                            arrayOf(
+                                GlobalActivityAnalyticsTable.COLUMN_USERS,
+                                GlobalActivityAnalyticsTable.COLUMN_COUNTRIES,
+                                GlobalActivityAnalyticsTable.COLUMN_LAUNCHES,
+                                GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS
+                            ),
+                            null, emptyArray(), null, null, null
+                        ).use {
+                            if (it.moveToFirst()) {
+                                roomDb.globalActivityDao.insertOrIgnore(
+                                    MigrationGlobalActivity(
+                                        it.getInt(GlobalActivityAnalyticsTable.COLUMN_USERS, 0),
+                                        it.getInt(GlobalActivityAnalyticsTable.COLUMN_COUNTRIES, 0),
+                                        it.getInt(GlobalActivityAnalyticsTable.COLUMN_LAUNCHES, 0),
+                                        it.getInt(GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS, 0),
+                                    )
+                                )
+                            }
+                        }
+
+                        db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
