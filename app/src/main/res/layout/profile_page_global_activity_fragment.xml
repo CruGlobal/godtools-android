@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="androidx.lifecycle.LiveData" />
         <import type="java.util.Calendar" />
+        <import type="kotlinx.coroutines.flow.StateFlow" />
 
-        <variable name="globalActivity" type="LiveData&lt;org.cru.godtools.model.GlobalActivityAnalytics&gt;" />
+        <variable name="globalActivity" type="StateFlow&lt;org.cru.godtools.model.GlobalActivityAnalytics&gt;" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
