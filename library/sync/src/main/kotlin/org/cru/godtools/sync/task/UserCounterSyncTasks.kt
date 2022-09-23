@@ -1,67 +1,66 @@
 package org.cru.godtools.sync.task
 
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import com.okta.authfoundationbootstrap.CredentialBootstrap
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.get
+import org.ccci.gto.android.common.okta.authfoundation.credential.getOktaUserId
 import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
 import org.cru.godtools.api.UserCountersApi
+import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.model.UserCounter
-import org.keynote.godtools.android.db.Contract.UserCounterTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_COUNTERS = "last_synced.user_counters"
 private const val STALE_DURATION_COUNTERS = TimeConstants.DAY_IN_MS
 
-@VisibleForTesting
-internal val QUERY_DIRTY_COUNTERS =
-    Query.select<UserCounter>().where(UserCounterTable.FIELD_DELTA.gt(0))
-
 @Singleton
 class UserCounterSyncTasks @Inject internal constructor(
-    private val dao: GodToolsDao,
     private val countersApi: UserCountersApi,
-    private val credentials: CredentialBootstrap
+    private val credentials: CredentialBootstrap,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
+    private val userCountersRepository: UserCountersRepository,
 ) : BaseSyncTasks() {
     private val countersMutex = Mutex()
     private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
-        if (!credentials.defaultCredential().isAuthenticated) return true
+        val credential = credentials.defaultCredential()
+        if (!credential.isAuthenticated) return true
+        val userId = credential.getOktaUserId().orEmpty()
 
-        withContext(Dispatchers.IO) {
-            // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!isForced(args) &&
-                System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_COUNTERS) < STALE_DURATION_COUNTERS
-            ) return@withContext true
+        // short-circuit if we aren't forcing a sync and the data isn't stale
+        if (!isForced(args) &&
+            !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_COUNTERS, userId, staleAfter = STALE_DURATION_COUNTERS)
+        ) return true
 
-            val counters = countersApi.getCounters().takeIf { it.isSuccessful }
-                ?.body()?.takeUnless { it.hasErrors() }
-                ?.data ?: return@withContext false
+        val counters = countersApi.getCounters().takeIf { it.isSuccessful }
+            ?.body()?.takeUnless { it.hasErrors() }
+            ?.data ?: return false
 
-            dao.transaction { storeUserCounters(counters) }
-            dao.updateLastSyncTime(SYNC_TIME_COUNTERS)
-
-            true
+        userCountersRepository.transaction {
+            val existing = userCountersRepository.getCounters().associateBy { it.id }.toMutableMap()
+            userCountersRepository.storeCountersFromSync(counters)
+            counters.forEach { existing.remove(it.id) }
+            userCountersRepository.resetCountersMissingFromSync(existing.values)
         }
+        lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_COUNTERS, userId)
+
+        true
     }
 
     suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
         if (!credentials.defaultCredential().isAuthenticated) return true
 
-        withContext(Dispatchers.IO) {
+        coroutineScope {
             // process any counters that need to be updated
-            QUERY_DIRTY_COUNTERS.get(dao)
+            userCountersRepository.getDirtyCounters()
                 .filter { UserCounter.VALID_NAME.matches(it.id) }
                 .map { counter ->
                     async {
@@ -69,20 +68,14 @@ class UserCounterSyncTasks @Inject internal constructor(
                             ?.body()?.takeUnless { it.hasErrors() }
                             ?.dataSingle ?: return@async false
 
-                        dao.transaction {
-                            dao.updateUserCounterDelta(counter.id, 0 - (counter.delta ?: 0))
-                            storeUserCounter(updated)
+                        userCountersRepository.transaction {
+                            userCountersRepository.updateCounter(counter.id, 0 - counter.delta)
+                            userCountersRepository.storeCounterFromSync(updated)
                         }
-
                         true
                     }
                 }
                 .awaitAll().all { it }
         }
-    }
-
-    private fun storeUserCounters(counters: List<UserCounter>) = counters.forEach { storeUserCounter(it) }
-    private fun storeUserCounter(counter: UserCounter) {
-        dao.updateOrInsert(counter, UserCounterTable.COLUMN_COUNT, UserCounterTable.COLUMN_DECAYED_COUNT)
     }
 }

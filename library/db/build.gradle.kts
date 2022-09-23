@@ -2,15 +2,23 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android.baseConfiguration(project)
+
+ksp {
+    arg("room.schemaLocation", file("room-schemas").toString())
+    arg("room.incremental", "true")
+}
 
 dependencies {
     api(project(":library:base"))
     implementation(project(":library:model"))
 
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.ktx)
 
     api(libs.gtoSupport.db)
     api(libs.gtoSupport.db.coroutines)
@@ -24,6 +32,9 @@ dependencies {
     implementation(libs.hilt)
 
     kapt(libs.dagger.compiler)
+    kapt(libs.hilt.compiler)
+
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.kotlin.coroutines.test)
 }
