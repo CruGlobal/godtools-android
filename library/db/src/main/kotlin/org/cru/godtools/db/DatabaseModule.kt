@@ -9,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
@@ -23,6 +24,10 @@ internal object DatabaseModule {
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
+
+    @Provides
+    @Reusable
+    fun GodToolsRoomDatabase.globalActivityRepository(): GlobalActivityRepository = globalActivityRepository
 
     @Provides
     @Reusable
