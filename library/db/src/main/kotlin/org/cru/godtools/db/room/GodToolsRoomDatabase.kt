@@ -24,11 +24,13 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     }
 
     // region DAOs
+    abstract val globalActivityDao: GlobalActivityDao
     abstract val userCountersDao: UserCountersDao
     abstract val lastSyncTimeDao: LastSyncTimeDao
     // endregion DAOs
 
     // region Repositories
+    abstract val globalActivityRepository: GlobalActivityRoomRepository
     abstract val userCountersRepository: UserCountersRoomRepository
     abstract val lastSyncTimeRepository: LastSyncTimeRoomRepository
     // endregion Repositories
