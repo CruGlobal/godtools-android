@@ -44,7 +44,12 @@ class UserCounterSyncTasks @Inject internal constructor(
             ?.body()?.takeUnless { it.hasErrors() }
             ?.data ?: return false
 
-        userCountersRepository.storeCountersFromSync(counters)
+        userCountersRepository.transaction {
+            val existing = userCountersRepository.getCounters().associateBy { it.id }.toMutableMap()
+            userCountersRepository.storeCountersFromSync(counters)
+            counters.forEach { existing.remove(it.id) }
+            userCountersRepository.resetCountersMissingFromSync(existing.values)
+        }
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_COUNTERS, userId)
 
         true

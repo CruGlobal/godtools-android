@@ -14,6 +14,9 @@ internal interface UserCountersDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnore(counter: UserCounterEntity)
 
+    @Query("SELECT * FROM user_counters")
+    suspend fun getUserCounters(): List<UserCounterEntity>
+
     @Query("UPDATE user_counters SET delta = delta + :delta WHERE name = :name")
     suspend fun updateUserCounterDelta(name: String, delta: Int)
 
