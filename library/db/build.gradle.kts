@@ -5,7 +5,13 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android.baseConfiguration(project)
+android {
+    baseConfiguration(project)
+
+    sourceSets {
+        named("test") { assets.srcDirs(file("room-schemas")) }
+    }
+}
 
 ksp {
     arg("room.schemaLocation", file("room-schemas").toString())
@@ -36,5 +42,7 @@ dependencies {
 
     ksp(libs.androidx.room.compiler)
 
+    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }

@@ -19,7 +19,7 @@ abstract class SyncTaskModule {
     @Binds
     @IntoMap
     @SyncTaskKey(AnalyticsSyncTasks::class)
-    abstract fun analyticsSyncTasks(tasks: AnalyticsSyncTasks): BaseSyncTasks
+    internal abstract fun analyticsSyncTasks(tasks: AnalyticsSyncTasks): BaseSyncTasks
 
     @Binds
     @IntoMap
