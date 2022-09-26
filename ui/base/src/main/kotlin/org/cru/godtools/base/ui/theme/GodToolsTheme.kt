@@ -34,7 +34,7 @@ private val GodToolsLightColorScheme = lightColorScheme(
     outline = GRAY_BE,
 )
 
-private val GodToolsTypography = with(Typography()) {
+private val GodToolsTypography = Typography().run {
     copy(
         titleMedium = titleMedium.copy(
             lineHeight = 22.sp
