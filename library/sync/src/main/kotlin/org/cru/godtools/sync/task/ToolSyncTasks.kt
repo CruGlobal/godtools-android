@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.os.Bundle
 import androidx.annotation.AnyThread
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_OK
@@ -49,10 +48,10 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val sharesMutex = Mutex()
 
     @AnyThread
-    suspend fun syncTools(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
+    suspend fun syncTools(force: Boolean = false) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!isForced(args) &&
+            if (!force &&
                 System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS
             ) return@withContext true
 
