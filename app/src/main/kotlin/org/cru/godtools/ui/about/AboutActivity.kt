@@ -9,8 +9,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,14 +41,14 @@ class AboutActivity : BasePlatformActivity<ActivityGenericComposeWithNavDrawerBi
             GodToolsTheme {
                 Scaffold(
                     topBar = {
-                        SmallTopAppBar(
+                        TopAppBar(
                             title = { Text(stringResource(R.string.title_about)) },
                             colors = GodToolsAppBarColors,
                             navigationIcon = {
                                 IconButton(onClick = { onSupportNavigateUp() }) {
                                     Icon(Icons.Filled.ArrowBack, null)
                                 }
-                            }
+                            },
                         )
                     }
                 ) { AboutContent(modifier = Modifier.padding(it)) }
