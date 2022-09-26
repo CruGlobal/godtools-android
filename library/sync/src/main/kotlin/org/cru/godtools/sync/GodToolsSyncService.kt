@@ -36,7 +36,6 @@ private const val SYNC_PARALLELISM = 8
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
-private const val SYNCTYPE_TOOLS = 3
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
@@ -67,9 +66,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
                         if (!syncLanguages(task.args)) workManager.scheduleSyncLanguagesWork()
                     }
-                    SYNCTYPE_TOOLS -> with<ToolSyncTasks> {
-                        if (!syncTools(task.args)) workManager.scheduleSyncToolsWork()
-                    }
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
                         if (!syncShares()) workManager.scheduleSyncToolSharesWork()
                     }
@@ -87,7 +83,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                 // queue up work tasks here because of the IOException
                 when (syncType) {
                     SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
-                    SYNCTYPE_TOOLS -> workManager.scheduleSyncToolsWork()
                     SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
                     SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
                 }
@@ -99,8 +94,19 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             }
         }
 
-    private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) =
+    private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) = with<T, Unit>(block)
+    private inline fun <reified T : BaseSyncTasks, R : Any?> with(block: T.() -> R) =
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
+
+    private suspend inline fun <reified T : BaseSyncTasks> executeSync(
+        crossinline block: suspend T.() -> Boolean
+    ) = withContext(coroutineDispatcher) {
+        try {
+            with<T, Boolean> { block() }
+        } catch (e: IOException) {
+            false
+        }
+    }
 
     suspend fun executeSyncTask(task: SyncTask) = when (task) {
         is GtSyncTask -> {
@@ -118,14 +124,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         )
     )
 
-    suspend fun syncTools(force: Boolean) = executeSyncTask(
-        GtSyncTask(
-            bundleOf(
-                EXTRA_SYNCTYPE to SYNCTYPE_TOOLS,
-                ContentResolver.SYNC_EXTRAS_MANUAL to force
-            )
-        )
-    )
+    suspend fun syncTools(force: Boolean) = executeSync<ToolSyncTasks> { syncTools(force) }
+        .also { if (!it) workManager.scheduleSyncToolsWork() }
 
     suspend fun syncTool(toolCode: String, force: Boolean = false) = withContext(coroutineDispatcher) {
         with<ToolSyncTasks> { syncTool(toolCode, force) }
