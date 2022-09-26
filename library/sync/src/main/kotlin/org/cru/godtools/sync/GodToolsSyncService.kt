@@ -127,9 +127,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncTools(force: Boolean) = executeSync<ToolSyncTasks> { syncTools(force) }
         .also { if (!it) workManager.scheduleSyncToolsWork() }
 
-    suspend fun syncTool(toolCode: String, force: Boolean = false) = withContext(coroutineDispatcher) {
-        with<ToolSyncTasks> { syncTool(toolCode, force) }
-    }
+    suspend fun syncTool(toolCode: String, force: Boolean = false) =
+        executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
 
     fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(
