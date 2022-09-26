@@ -149,6 +149,7 @@ fun ToolDetailsLayout(
                     indicator = { positions ->
                         TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
                     },
+                    divider = {},
                     modifier = Modifier.padding(horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 ) {
                     pages.forEachIndexed { index, page ->
