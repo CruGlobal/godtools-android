@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.shortcuts"
+
     baseConfiguration(project)
     createEventBusIndex("org.cru.godtools.shortcuts.ShortcutsEventBusIndex")
 }

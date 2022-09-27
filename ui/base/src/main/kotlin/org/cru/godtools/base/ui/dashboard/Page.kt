@@ -1,7 +1,7 @@
 package org.cru.godtools.base.ui.dashboard
 
 import androidx.annotation.IdRes
-import org.cru.godtools.base.ui.R
+import org.cru.godtools.ui.R
 
 enum class Page(@IdRes val id: Int) {
     LESSONS(R.id.dashboard_page_lessons),

@@ -7,6 +7,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.initialcontent"
+
     baseConfiguration(project)
     configureFlavorDimensions(project)
 

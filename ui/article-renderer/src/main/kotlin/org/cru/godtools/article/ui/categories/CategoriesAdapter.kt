@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.util.Ids
-import org.cru.godtools.article.databinding.ListItemCategoryBinding
+import org.cru.godtools.tool.article.databinding.ListItemCategoryBinding
 import org.cru.godtools.tool.model.Category
 
 internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :

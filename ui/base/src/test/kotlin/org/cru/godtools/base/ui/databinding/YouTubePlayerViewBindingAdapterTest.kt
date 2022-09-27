@@ -13,7 +13,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
-import org.cru.godtools.base.ui.R
+import org.cru.godtools.ui.R
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

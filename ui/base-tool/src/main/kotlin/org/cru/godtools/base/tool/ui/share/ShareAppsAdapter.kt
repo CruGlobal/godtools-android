@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
-import org.cru.godtools.base.tool.BR
-import org.cru.godtools.base.tool.R
+import org.cru.godtools.tool.BR
+import org.cru.godtools.tool.R
 
 internal class ShareAppsAdapter(private val items: List<ResolveInfo>, private val callbacks: Callbacks) :
     SimpleDataBindingAdapter<ViewDataBinding>() {

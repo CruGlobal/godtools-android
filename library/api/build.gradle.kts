@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.api"
+
     baseConfiguration(project)
 
     defaultConfig {

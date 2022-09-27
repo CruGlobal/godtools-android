@@ -1,9 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.article.aem">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".ui.AemArticleActivity"
+            android:name="org.cru.godtools.article.aem.ui.AemArticleActivity"
             android:exported="true"
             android:screenOrientation="user"
             android:theme="@style/Theme.GodTools.Tool">

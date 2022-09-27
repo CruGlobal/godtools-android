@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.tool.lesson"
+
     baseConfiguration(project)
 
     buildFeatures.dataBinding = true

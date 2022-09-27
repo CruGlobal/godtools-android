@@ -13,8 +13,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SELECTION
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 
 private const val EXTRA_PRIMARY = "org.cru.godtools.ui.languages.LanguageSelectionActivity.PRIMARY"
 
@@ -71,7 +71,7 @@ class LanguageSelectionActivity : BasePlatformActivity<ActivityGenericFragmentBi
 
             commit {
                 val fragment = LanguagesFragment(primary)
-                replace(org.cru.godtools.base.ui.R.id.frame, fragment)
+                replace(org.cru.godtools.ui.R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
         }

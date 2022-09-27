@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.databinding
+package org.cru.godtools.tool.tract.databinding
 
 import android.view.LayoutInflater
 import android.view.View

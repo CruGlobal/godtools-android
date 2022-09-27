@@ -9,11 +9,11 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.recyclerview.decorator.MarginItemDecoration
-import org.cru.godtools.article.R
-import org.cru.godtools.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
+import org.cru.godtools.tool.article.R
+import org.cru.godtools.tool.article.databinding.ArticleCategoriesFragmentBinding
 import org.cru.godtools.tool.model.Category
 import org.greenrobot.eventbus.EventBus
 

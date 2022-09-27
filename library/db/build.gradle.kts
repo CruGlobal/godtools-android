@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.db"
+
     baseConfiguration(project)
 
     sourceSets {

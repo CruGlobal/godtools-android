@@ -4,7 +4,11 @@ plugins {
     kotlin("kapt")
 }
 
-android.baseConfiguration(project)
+android {
+    namespace = "org.cru.godtools.base"
+
+    baseConfiguration(project)
+}
 
 dependencies {
     implementation(libs.androidx.core.ktx)

@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.tool.model.AnalyticsEvent
-import org.cru.godtools.tract.databinding.TractPageHeroBinding
+import org.cru.godtools.tool.tract.databinding.TractPageHeroBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before

@@ -7,7 +7,7 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.state.State
-import org.cru.godtools.tract.databinding.TractContentModalBinding
+import org.cru.godtools.tool.tract.databinding.TractContentModalBinding
 import org.greenrobot.eventbus.EventBus
 
 class ModalController @AssistedInject internal constructor(

@@ -15,16 +15,16 @@ import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
-import org.cru.godtools.article.R
 import org.cru.godtools.article.aem.db.ArticleDao
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.analytics.model.ArticlesAnalyticsScreenEvent
 import org.cru.godtools.article.analytics.model.ArticlesCategoryAnalyticsScreenEvent
-import org.cru.godtools.article.databinding.FragmentArticlesBinding
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
+import org.cru.godtools.tool.article.R
+import org.cru.godtools.tool.article.databinding.FragmentArticlesBinding
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.argOrNull
 

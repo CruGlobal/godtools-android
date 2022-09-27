@@ -40,16 +40,16 @@ import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
+import org.cru.godtools.tool.tract.R
+import org.cru.godtools.tool.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
 import org.cru.godtools.tract.PARAM_USE_DEVICE_LANGUAGE
-import org.cru.godtools.tract.R
 import org.cru.godtools.tract.adapter.ManifestPagerAdapter
 import org.cru.godtools.tract.analytics.model.ShareScreenEngagedActionEvent
 import org.cru.godtools.tract.analytics.model.ShareScreenOpenedActionEvent
 import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
-import org.cru.godtools.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.liveshare.State
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
@@ -106,7 +106,7 @@ class TractActivity :
     @CallSuper
     override fun onSetupActionBar() {
         super.onSetupActionBar()
-        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(org.cru.godtools.base.ui.R.drawable.ic_close)
+        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(org.cru.godtools.ui.R.drawable.ic_close)
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {

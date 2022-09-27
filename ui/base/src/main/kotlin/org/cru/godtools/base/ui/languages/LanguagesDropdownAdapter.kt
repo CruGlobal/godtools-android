@@ -4,9 +4,9 @@ import android.content.Context
 import android.widget.Filter
 import org.ccci.gto.android.common.androidx.databinding.widget.DataBindingArrayAdapter
 import org.ccci.gto.android.common.util.Ids
-import org.cru.godtools.base.ui.R
-import org.cru.godtools.base.ui.databinding.LanguagesDropdownItemBinding
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.R
+import org.cru.godtools.ui.databinding.LanguagesDropdownItemBinding
 
 class LanguagesDropdownAdapter(context: Context) :
     DataBindingArrayAdapter<LanguagesDropdownItemBinding, Language>(context, R.layout.languages_dropdown_item) {

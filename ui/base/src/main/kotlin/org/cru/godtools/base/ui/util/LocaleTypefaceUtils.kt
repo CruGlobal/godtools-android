@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
 import java.util.Locale
 import org.ccci.gto.android.common.util.includeFallbacks
-import org.cru.godtools.base.ui.R
+import org.cru.godtools.ui.R
 
 private val typefaces = buildMap {
     // Sinhala, only needed for Android pre-Marshmallow

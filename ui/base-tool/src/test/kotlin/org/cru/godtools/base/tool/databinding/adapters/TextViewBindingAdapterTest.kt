@@ -11,7 +11,7 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.random.Random
-import org.cru.godtools.base.tool.R
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.gravity

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.base.tool.databinding.ToolContentLinkBinding
+import org.cru.godtools.tool.databinding.ToolContentLinkBinding
 import org.cru.godtools.tool.model.Link
 
 internal class LinkController private constructor(
