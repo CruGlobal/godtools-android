@@ -267,7 +267,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 }
             }
             ?.let { IconCompat.createWithAdaptiveBitmap(it) }
-            ?: IconCompat.createWithResource(context, org.cru.godtools.base.ui.R.mipmap.ic_launcher)
+            ?: IconCompat.createWithResource(context, org.cru.godtools.ui.R.mipmap.ic_launcher)
 
         // build the shortcut
         ShortcutInfoCompat.Builder(context, tool.shortcutId)

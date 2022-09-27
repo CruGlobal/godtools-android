@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
-import org.cru.godtools.base.tool.R
-import org.cru.godtools.base.tool.databinding.ToolShareSheetBinding
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
+import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolShareSheetBinding
 import splitties.fragmentargs.arg
 import splitties.fragmentargs.argOrNull
 

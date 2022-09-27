@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import org.cru.godtools.article.aem.databinding.AemArticleFragmentBinding
 import org.cru.godtools.article.aem.ui.AemArticleViewModel
 import org.cru.godtools.base.ui.fragment.BaseFragment
+import org.cru.godtools.tool.article.aem.databinding.AemArticleFragmentBinding
 
 @AndroidEntryPoint
 class AemArticleFragment : BaseFragment<AemArticleFragmentBinding>() {

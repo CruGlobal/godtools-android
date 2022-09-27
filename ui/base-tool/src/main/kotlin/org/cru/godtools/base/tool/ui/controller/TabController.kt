@@ -3,8 +3,8 @@ package org.cru.godtools.base.tool.ui.controller
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.cru.godtools.base.tool.databinding.ToolContentTabBinding
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.tool.databinding.ToolContentTabBinding
 import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.Tabs.Tab
 

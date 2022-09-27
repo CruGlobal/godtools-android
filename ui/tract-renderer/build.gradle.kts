@@ -7,6 +7,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.tool.tract"
+
     baseConfiguration(project)
     createEventBusIndex("org.cru.godtools.tract.TractEventBusIndex")
 

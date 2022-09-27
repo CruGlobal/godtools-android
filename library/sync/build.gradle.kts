@@ -4,7 +4,11 @@ plugins {
     kotlin("kapt")
 }
 
-android.baseConfiguration(project)
+android {
+    namespace = "org.cru.godtools.sync"
+
+    baseConfiguration(project)
+}
 
 dependencies {
     implementation(project(":library:api"))

@@ -3,7 +3,7 @@ package org.cru.godtools.base.tool.activity
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
-import org.cru.godtools.base.tool.R
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.model.Manifest
 
 abstract class BaseArticleActivity<B : ViewDataBinding> protected constructor(

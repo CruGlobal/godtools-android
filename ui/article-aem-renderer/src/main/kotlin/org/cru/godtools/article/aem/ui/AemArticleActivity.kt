@@ -27,10 +27,10 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
-import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.ui.buildToolExtras
+import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 
 fun Activity.startAemArticleActivity(toolCode: String, language: Locale, articleUri: Uri) {
     val extras = buildToolExtras(toolCode, language).apply {

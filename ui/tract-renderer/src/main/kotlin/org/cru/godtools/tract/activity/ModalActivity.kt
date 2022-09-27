@@ -25,9 +25,9 @@ import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.tool.tract.R
+import org.cru.godtools.tool.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.EXTRA_MODAL
-import org.cru.godtools.tract.R
-import org.cru.godtools.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.ui.controller.ModalController
 import org.cru.godtools.tract.ui.controller.bindController
 import org.greenrobot.eventbus.Subscribe
@@ -44,8 +44,8 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
     ),
     ActivityOptions.makeCustomAnimation(
         this,
-        org.cru.godtools.base.ui.R.anim.activity_fade_in,
-        org.cru.godtools.base.ui.R.anim.activity_fade_out
+        org.cru.godtools.ui.R.anim.activity_fade_in,
+        org.cru.godtools.ui.R.anim.activity_fade_out
     ).toBundle()
 )
 

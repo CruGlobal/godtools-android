@@ -1,10 +1,8 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.tool.databinding
 
 import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.R
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.EnumSet
@@ -16,39 +14,35 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
-class ToolGenericFragmentActivityBindingTest {
-    private lateinit var binding: ToolGenericFragmentActivityBinding
+class ActivityToolMissingBindingTest {
+    private lateinit var binding: ActivityToolMissingBinding
 
     @Before
     fun createBinding() {
         val activity = Robolectric.buildActivity(AppCompatActivity::class.java).get()
-        val context = ContextThemeWrapper(activity, R.style.Theme_AppCompat)
 
-        binding = ToolGenericFragmentActivityBinding.inflate(LayoutInflater.from(context), null, false)
+        binding = ActivityToolMissingBinding.inflate(LayoutInflater.from(activity), null, false)
         binding.lifecycleOwner = activity
         binding.executePendingBindings()
     }
 
     @Test
-    fun verifyMainContentVisibility() {
-        val visible = setOf(BaseToolActivity.LoadingState.LOADED)
+    fun verifyNoContentVisibility() {
+        val visible = setOf(BaseToolActivity.LoadingState.NOT_FOUND, BaseToolActivity.LoadingState.INVALID_TYPE)
         val notVisible = EnumSet.allOf(BaseToolActivity.LoadingState::class.java) - visible
         visible.forEach {
             binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
             assertEquals(
-                "mainContent should be visible when tool state is $it",
-                View.VISIBLE, binding.mainContent.visibility
+                "noContent should be visible when tool state is $it",
+                View.VISIBLE, binding.noContent.visibility
             )
         }
 
         notVisible.forEach {
             binding.loadingState = MutableLiveData(it)
             binding.executePendingBindings()
-            assertEquals(
-                "mainContent should be hidden when tool state is $it",
-                View.GONE, binding.mainContent.visibility
-            )
+            assertEquals("noContent should be hidden when tool state is $it", View.GONE, binding.noContent.visibility)
         }
     }
 }

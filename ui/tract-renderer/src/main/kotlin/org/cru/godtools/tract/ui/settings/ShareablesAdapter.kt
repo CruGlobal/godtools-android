@@ -8,8 +8,8 @@ import androidx.lifecycle.LifecycleOwner
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.tool.model.shareable.Shareable
 import org.cru.godtools.tool.model.shareable.ShareableImage
-import org.cru.godtools.tract.BR
-import org.cru.godtools.tract.R
+import org.cru.godtools.tool.tract.BR
+import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks
 
 class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: TractSettingsSheetCallbacks) :

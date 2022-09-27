@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.tool.tips"
+
     baseConfiguration(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true

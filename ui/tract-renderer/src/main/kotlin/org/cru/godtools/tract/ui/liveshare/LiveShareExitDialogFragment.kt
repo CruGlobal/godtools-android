@@ -3,7 +3,7 @@ package org.cru.godtools.tract.ui.liveshare
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.cru.godtools.tract.R
+import org.cru.godtools.tool.tract.R
 
 class LiveShareExitDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext())

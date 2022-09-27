@@ -8,10 +8,10 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.ToolFileSystem
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.ShareShareableAnalyticsActionEvent
-import org.cru.godtools.base.tool.databinding.ToolShareableImageSheetBinding
 import org.cru.godtools.base.tool.model.shareable.buildShareIntent
+import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolShareableImageSheetBinding
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 

@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import org.cru.godtools.base.ui.R
+import org.cru.godtools.ui.R
 import timber.log.Timber
 
 fun Context.openUrl(url: Uri) = try {

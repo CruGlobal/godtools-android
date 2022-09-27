@@ -35,14 +35,11 @@ import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
-import org.cru.godtools.base.tool.BR
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
-import org.cru.godtools.base.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
@@ -56,6 +53,9 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tool.BR
+import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.shareable.ShareableImage
@@ -165,7 +165,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     protected open val shareLinkTitle get() = activeManifest?.title
     @get:StringRes
-    protected open val shareLinkMessageRes get() = org.cru.godtools.base.ui.R.string.share_general_message
+    protected open val shareLinkMessageRes get() = org.cru.godtools.ui.R.string.share_general_message
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 

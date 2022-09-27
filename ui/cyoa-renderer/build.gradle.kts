@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.tool.cyoa"
+
     baseConfiguration(project)
 
     buildFeatures.dataBinding = true

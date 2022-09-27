@@ -1,9 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.article">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".ui.ArticlesActivity"
+            android:name="org.cru.godtools.article.ui.ArticlesActivity"
             android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool">
@@ -20,7 +19,7 @@
         </activity>
 
         <activity
-            android:name=".aem.ui.AemArticleActivity"
-            android:parentActivityName=".ui.ArticlesActivity" />
+            android:name="org.cru.godtools.article.aem.ui.AemArticleActivity"
+            android:parentActivityName="org.cru.godtools.article.ui.ArticlesActivity" />
     </application>
 </manifest>

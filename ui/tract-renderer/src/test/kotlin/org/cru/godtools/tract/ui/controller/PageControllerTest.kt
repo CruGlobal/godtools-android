@@ -17,7 +17,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.state.State
-import org.cru.godtools.tract.databinding.TractPageBinding
+import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

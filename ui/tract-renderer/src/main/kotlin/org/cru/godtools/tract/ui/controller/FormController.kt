@@ -11,7 +11,7 @@ import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.tool.model.EventId
 import org.cru.godtools.tool.model.Form
-import org.cru.godtools.tract.databinding.TractContentFormBinding
+import org.cru.godtools.tool.tract.databinding.TractContentFormBinding
 
 class FormController private constructor(
     private val binding: TractContentFormBinding,

@@ -9,9 +9,9 @@ import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
-import org.cru.godtools.base.ui.R
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.ui.R
 
 fun Activity.startLanguageSettingsActivity() {
     Intent(this, LanguageSettingsActivity::class.java)

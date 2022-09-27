@@ -1,9 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.tool.lesson">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <activity
-            android:name=".ui.LessonActivity"
+            android:name="org.cru.godtools.tool.lesson.ui.LessonActivity"
             android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tool.Activity.Lesson">

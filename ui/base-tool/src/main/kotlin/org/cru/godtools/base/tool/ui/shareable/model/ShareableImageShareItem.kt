@@ -13,11 +13,11 @@ import java.util.Locale
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.base.ToolFileSystem
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.tool.model.shareable.buildShareIntent
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.model.shareable.ShareableImage
 
 @Parcelize

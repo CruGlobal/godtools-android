@@ -1,4 +1,4 @@
-package org.cru.godtools.base.tool.databinding
+package org.cru.godtools.tool.databinding
 
 import android.content.Context
 import android.view.LayoutInflater

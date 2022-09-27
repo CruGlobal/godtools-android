@@ -20,9 +20,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.navBarColor
 import org.cru.godtools.tool.model.navBarControlColor

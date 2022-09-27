@@ -6,8 +6,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import org.cru.godtools.base.ui.R
 import org.cru.godtools.base.ui.youtubeplayer.recueVideo
+import org.cru.godtools.ui.R
 
 @BindingAdapter("pauseVideoWhen")
 internal fun YouTubePlayerView.pauseVideoWhen(pause: Boolean) {

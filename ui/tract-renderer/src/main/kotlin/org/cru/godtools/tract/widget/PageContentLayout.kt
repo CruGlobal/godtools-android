@@ -41,7 +41,7 @@ import org.ccci.gto.android.common.base.Constants.INVALID_ID_RES
 import org.ccci.gto.android.common.util.view.calculateTopOffset
 import org.ccci.gto.android.common.util.view.calculateTopOffsetOrNull
 import org.cru.godtools.base.Settings
-import org.cru.godtools.tract.R
+import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.animation.BounceInterpolator
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION
 import org.cru.godtools.tract.widget.PageContentLayout.LayoutParams.Companion.CHILD_TYPE_CALL_TO_ACTION_TIP

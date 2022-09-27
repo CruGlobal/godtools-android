@@ -55,7 +55,7 @@ internal fun TutorialOnboardingWelcomeLayout(
     Spacer(modifier = Modifier.weight(2f))
 
     Image(
-        painterResource(org.cru.godtools.base.ui.R.mipmap.ic_launcher_foreground),
+        painterResource(org.cru.godtools.ui.R.mipmap.ic_launcher_foreground),
         contentDescription = null,
         modifier = Modifier.size(130.dp)
     )

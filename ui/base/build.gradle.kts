@@ -8,6 +8,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.ui"
+
     baseConfiguration(project)
     configureCompose(project)
 

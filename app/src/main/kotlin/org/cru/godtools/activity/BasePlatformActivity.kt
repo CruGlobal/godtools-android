@@ -51,7 +51,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.base.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
@@ -60,6 +59,7 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
+import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
@@ -337,8 +337,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
-            .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.base.ui.R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, getString(org.cru.godtools.base.ui.R.string.share_general_message, shareLink))
+            .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.ui.R.string.app_name))
+            .putExtra(Intent.EXTRA_TEXT, getString(org.cru.godtools.ui.R.string.share_general_message, shareLink))
             .let { Intent.createChooser(it, null) }
             .also { startActivity(it) }
     }

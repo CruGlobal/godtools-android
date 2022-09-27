@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.cru.godtools.tract">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <activity
-            android:name=".activity.TractActivity"
+            android:name="org.cru.godtools.tract.activity.TractActivity"
             android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation"
             android:theme="@style/Theme.GodTools.Tract.Activity.Tract">
@@ -35,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ModalActivity"
+            android:name="org.cru.godtools.tract.activity.ModalActivity"
             android:exported="false"
             android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>

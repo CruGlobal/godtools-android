@@ -26,7 +26,7 @@ import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.state.State
 import org.cru.godtools.tool.tips.ShowTipCallback
-import org.cru.godtools.tract.databinding.TractPageBinding
+import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao

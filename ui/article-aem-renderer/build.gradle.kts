@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.tool.article.aem"
+
     baseConfiguration(project)
 
     defaultConfig {

@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.downloadmanager"
+
     baseConfiguration(project)
 
     buildFeatures.dataBinding = true

@@ -9,11 +9,11 @@ import androidx.databinding.BindingAdapter
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableEndTarget
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
 import org.ccci.gto.android.common.util.dpToPixelSize
-import org.cru.godtools.base.tool.R
 import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.toolFileSystem
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.model.Resource
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.gravity
