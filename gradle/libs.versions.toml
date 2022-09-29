@@ -212,5 +212,5 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric", "mocki
 grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 junitJacoco = { id = "com.vanniktech.android.junit.jacoco", version = "0.16.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.7.10-1.0.6" }
+ksp = { id = "com.google.devtools.ksp", version = "1.7.20-1.0.6" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.0.0" }
