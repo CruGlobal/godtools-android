@@ -38,7 +38,6 @@ private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
-private const val SYNCTYPE_GLOBAL_ACTIVITY = 6
 private const val SYNCTYPE_USER_COUNTERS = 7
 private const val SYNCTYPE_DIRTY_USER_COUNTERS = 8
 
@@ -72,7 +71,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
                         if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
                     }
-                    SYNCTYPE_GLOBAL_ACTIVITY -> with<AnalyticsSyncTasks> { syncGlobalActivity(task.args) }
                     SYNCTYPE_USER_COUNTERS -> with<UserCounterSyncTasks> {
                         syncCounters(task.args)
                         syncDirtyCounters()
@@ -130,12 +128,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
 
-    fun syncGlobalActivity(force: Boolean = false): SyncTask = GtSyncTask(
-        bundleOf(
-            EXTRA_SYNCTYPE to SYNCTYPE_GLOBAL_ACTIVITY,
-            ContentResolver.SYNC_EXTRAS_MANUAL to force
-        )
-    )
+    suspend fun syncGlobalActivity(force: Boolean = false) =
+        executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }
 
     fun syncUserCounters(force: Boolean = false): SyncTask = GtSyncTask(
         bundleOf(
