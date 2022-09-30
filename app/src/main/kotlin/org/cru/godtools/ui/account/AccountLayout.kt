@@ -31,6 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.okta.authfoundation.claims.name
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
@@ -49,67 +51,72 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val pagerState = rememberPagerState()
     val pages by viewModel.pages.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .verticalScroll(scrollState)
+    SwipeRefresh(
+        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
+        onRefresh = { viewModel.triggerSync(true) }
     ) {
-        Surface(shadowElevation = 4.dp) {
-            Column {
-                TopAppBar(
-                    title = {},
-                    navigationIcon = {
-                        IconButton(onClick = { onEvent(AccountLayoutEvent.ACTION_UP) }) {
-                            Icon(Icons.Filled.ArrowBack, null)
-                        }
-                    },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(
-                        navigationIconContentColor = MaterialTheme.colorScheme.primary
-                    )
-                )
-
-                val idToken by viewModel.idToken.collectAsState()
-                Text(
-                    idToken?.name.orEmpty(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    modifier = Modifier
-                        .padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
-                        .align(Alignment.CenterHorizontally)
-                )
-                // TODO: add join date
-
-                TabRow(
-                    selectedTabIndex = pagerState.currentPage,
-                    indicator = { positions ->
-                        TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
-                    },
-                    divider = {},
-                    modifier = Modifier.padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
-                    // TODO: set the correct padding
-                ) {
-                    pages.forEachIndexed { index, page ->
-                        Tab(
-                            text = { Text(stringResource(page.tabLabel)) },
-                            selected = pagerState.currentPage == index,
-                            onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .verticalScroll(scrollState)
+        ) {
+            Surface(shadowElevation = 4.dp) {
+                Column {
+                    TopAppBar(
+                        title = {},
+                        navigationIcon = {
+                            IconButton(onClick = { onEvent(AccountLayoutEvent.ACTION_UP) }) {
+                                Icon(Icons.Filled.ArrowBack, null)
+                            }
+                        },
+                        colors = TopAppBarDefaults.smallTopAppBarColors(
+                            navigationIconContentColor = MaterialTheme.colorScheme.primary
                         )
+                    )
+
+                    val idToken by viewModel.idToken.collectAsState()
+                    Text(
+                        idToken?.name.orEmpty(),
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center,
+                        maxLines = 1,
+                        modifier = Modifier
+                            .padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                    // TODO: add join date
+
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        indicator = { positions ->
+                            TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
+                        },
+                        divider = {},
+                        modifier = Modifier.padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                        // TODO: set the correct padding
+                    ) {
+                        pages.forEachIndexed { index, page ->
+                            Tab(
+                                text = { Text(stringResource(page.tabLabel)) },
+                                selected = pagerState.currentPage == index,
+                                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        HorizontalPager(
-            count = pages.size,
-            state = pagerState,
-            verticalAlignment = Alignment.Top,
-            key = { pages[it] }
-        ) {
-            when (pages[it]) {
-                AccountPage.ACTIVITY -> TODO()
-                AccountPage.GLOBAL_ACTIVITY -> AccountGlobalActivityLayout()
+            HorizontalPager(
+                count = pages.size,
+                state = pagerState,
+                verticalAlignment = Alignment.Top,
+                key = { pages[it] }
+            ) {
+                when (pages[it]) {
+                    AccountPage.ACTIVITY -> TODO()
+                    AccountPage.GLOBAL_ACTIVITY -> AccountGlobalActivityLayout()
+                }
             }
         }
     }
