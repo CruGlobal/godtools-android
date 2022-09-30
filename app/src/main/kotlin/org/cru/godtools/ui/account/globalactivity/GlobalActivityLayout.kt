@@ -27,8 +27,7 @@ import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeig
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
-
-private val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
+import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
 fun AccountGlobalActivityLayout() = Column(modifier = Modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)) {
