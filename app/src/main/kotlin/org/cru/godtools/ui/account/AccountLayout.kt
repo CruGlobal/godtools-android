@@ -37,6 +37,9 @@ import com.okta.authfoundation.claims.name
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
+import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
 import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
 
 internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 32.dp
@@ -51,6 +54,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val pagerState = rememberPagerState()
     val pages by viewModel.pages.collectAsState()
 
+    RecordAccountPageAnalytics(pages.getOrNull(pagerState.currentPage))
     SwipeRefresh(
         rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
         onRefresh = { viewModel.triggerSync(true) }
@@ -120,6 +124,15 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
             }
         }
     }
+}
+
+@Composable
+private fun RecordAccountPageAnalytics(page: AccountPage?) {
+    val screen = when (page) {
+        AccountPage.GLOBAL_ACTIVITY -> AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD)
+        else -> null
+    }
+    if (screen != null) RecordAnalyticsScreen(screen)
 }
 
 internal enum class AccountLayoutEvent { ACTION_UP }
