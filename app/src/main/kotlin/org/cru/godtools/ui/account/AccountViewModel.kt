@@ -35,7 +35,7 @@ class AccountViewModel @Inject internal constructor(
     fun triggerSync(force: Boolean = false) {
         viewModelScope.launch {
             syncsRunning.value++
-            syncService.executeSyncTask(syncService.syncGlobalActivity(force))
+            syncService.syncGlobalActivity(force)
             syncsRunning.value--
         }
     }

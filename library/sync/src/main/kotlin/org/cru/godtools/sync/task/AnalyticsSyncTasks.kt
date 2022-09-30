@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.os.Bundle
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.sync.Mutex
@@ -21,15 +20,17 @@ internal class AnalyticsSyncTasks @Inject internal constructor(
 ) : BaseSyncTasks() {
     private val globalActivityMutex = Mutex()
 
-    suspend fun syncGlobalActivity(args: Bundle) = globalActivityMutex.withLock {
+    suspend fun syncGlobalActivity(force: Boolean): Boolean = globalActivityMutex.withLock {
         // short-circuit if we aren't forcing a sync and the data isn't stale
-        if (!isForced(args) && !lastSyncTimeRepository
+        if (!force && !lastSyncTimeRepository
             .isLastSyncStale(SYNC_TIME_GLOBAL_ACTIVITY, staleAfter = STALE_DURATION_GLOBAL_ACTIVITY)
-        ) return@withLock
+        ) return@withLock true
 
         analyticsApi.getGlobalActivity().takeIf { it.isSuccessful }?.body()?.let {
             globalActivityRepository.updateGlobalActivity(it)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_GLOBAL_ACTIVITY)
         }
+
+        true
     }
 }
