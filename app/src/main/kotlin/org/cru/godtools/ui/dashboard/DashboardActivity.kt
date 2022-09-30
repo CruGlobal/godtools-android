@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.observe
+import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
@@ -86,7 +87,7 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
 
     // region Intent processing
     private fun processIntent(intent: Intent) {
-        val page = (intent.getSerializableExtra(EXTRA_PAGE) as? Page)
+        val page = intent.getSerializableExtraCompat(EXTRA_PAGE, Page::class.java)
         when {
             page != null -> viewModel.updateCurrentPage(page)
             intent.action == Intent.ACTION_VIEW -> {
