@@ -59,9 +59,9 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
+import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
-import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
@@ -138,7 +138,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_profile -> {
-            startProfileActivity()
+            startAccountActivity()
             true
         }
         R.id.action_login, R.id.action_signup -> {

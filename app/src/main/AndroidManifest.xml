@@ -138,7 +138,7 @@
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
         <activity
-            android:name=".ui.profile.ProfileActivity"
+            android:name=".ui.account.AccountActivity"
             android:label="@string/profile_title"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
