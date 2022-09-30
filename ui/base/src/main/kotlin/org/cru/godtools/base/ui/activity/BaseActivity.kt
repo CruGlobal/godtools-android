@@ -8,18 +8,12 @@ import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
-import androidx.viewbinding.ViewBinding
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
-import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 
@@ -31,10 +25,7 @@ private const val EXTRA_LAUNCHING_COMPONENT = "org.cru.godtools.BaseActivity.lau
 @VisibleForTesting
 internal const val MSG_FEATURE_DISCOVERY = 1
 
-abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes private val contentLayoutId: Int) :
-    AppCompatActivity() {
-    protected constructor() : this(INVALID_LAYOUT_RES)
-
+abstract class BaseActivity protected constructor() : AppCompatActivity() {
     @Inject
     protected lateinit var eventBus: EventBus
     @Inject
@@ -43,16 +34,7 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupDataBinding()
         setupFeatureDiscovery(savedInstanceState)
-    }
-
-    protected open fun onBindingChanged() = Unit
-
-    @CallSuper
-    override fun onContentChanged() {
-        super.onContentChanged()
-        setupActionBar()
     }
 
     override fun onNewIntent(newIntent: Intent) {
@@ -62,42 +44,11 @@ abstract class BaseActivity<B : ViewBinding> protected constructor(@LayoutRes pr
         intent.putExtra(EXTRA_LAUNCHING_COMPONENT, newIntent.getParcelableExtra<Parcelable>(EXTRA_LAUNCHING_COMPONENT))
     }
 
-    @CallSuper
-    protected open fun onSetupActionBar() = Unit
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.saveFeatureDiscoveryState()
     }
     // endregion Lifecycle
-
-    // region View & Data Binding
-    protected lateinit var binding: B
-        private set
-
-    @Suppress("UNCHECKED_CAST")
-    protected open fun inflateBinding(): B =
-        DataBindingUtil.inflate<ViewDataBinding>(layoutInflater, contentLayoutId, null, false)
-            .also { it.lifecycleOwner = this } as B
-
-    private fun setupDataBinding() {
-        binding = inflateBinding()
-        setContentView(binding.root)
-        onBindingChanged()
-    }
-    // endregion View & Data Binding
-
-    // region ActionBar
-    protected open val toolbar: Toolbar? get() = null
-
-    private fun setupActionBar() {
-        toolbar?.let { setSupportActionBar(it) }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // trigger lifecycle event for subclasses
-        onSetupActionBar()
-    }
-    // endregion ActionBar
 
     // region Feature Discovery
     protected var featureDiscoveryActive: String? = null

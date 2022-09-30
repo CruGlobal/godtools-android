@@ -50,7 +50,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SH
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_STORY
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.URI_SHARE_BASE
-import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
@@ -59,9 +59,9 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.about.startAboutActivity
+import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
-import org.cru.godtools.ui.profile.startProfileActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
@@ -78,7 +78,7 @@ internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
-    BaseActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
+    BaseBindingActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected constructor() : this(INVALID_LAYOUT_RES)
 
     // region Lifecycle
@@ -138,7 +138,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_profile -> {
-            startProfileActivity()
+            startAccountActivity()
             true
         }
         R.id.action_login, R.id.action_signup -> {

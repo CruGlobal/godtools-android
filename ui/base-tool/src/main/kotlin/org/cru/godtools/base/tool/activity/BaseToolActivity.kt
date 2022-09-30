@@ -46,7 +46,7 @@ import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
-import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -64,7 +64,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
-    BaseActivity<B>(contentLayoutId) {
+    BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     internal lateinit var dao: GodToolsDao
     @Inject
