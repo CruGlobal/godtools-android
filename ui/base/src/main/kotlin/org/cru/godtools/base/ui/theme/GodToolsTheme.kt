@@ -17,21 +17,31 @@ const val DisabledAlpha = 0.38f
 
 private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
 val GT_RED = Color(red = 0xE5, green = 0x5B, blue = 0x36)
-private val GRAY_BE = Color(red = 0xBE, green = 0xBE, blue = 0xBE)
 val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 
 private val GodToolsLightColorScheme = lightColorScheme(
     primary = GT_BLUE,
-    background = Color.White,
     onBackground = Color(90, 90, 90),
-    surface = Color.White,
     onSurface = Color(90, 90, 90),
-    surfaceVariant = Color(243, 243, 243),
-    onSurfaceVariant = Color(90, 90, 90),
     // HACK: We are currently disabling surface tint to avoid using tonal elevation on surfaces.
     //       When we transition to using tonal elevation we can revert this back to the default value
     surfaceTint = Color.White,
-    outline = GRAY_BE,
+    // The following colors were automatically generated using the material 3 theme builder:
+    // https://m3.material.io/theme-builder#/custom
+    // Primary: #3ba4db
+    // Secondary: #3ba4db
+    // Neutral: #939094
+    primaryContainer = Color(0xffc7e7ff),
+    onPrimaryContainer = Color(0xff001e2e),
+    secondary = Color(0xff00658e),
+    onSecondary = Color(0xffffffff),
+    secondaryContainer = Color(0xffc7e7ff),
+    onSecondaryContainer = Color(0xff001e2e),
+    background = Color(0xffFFFBFE),
+    surface = Color(0xffFFFBFE),
+    surfaceVariant = Color(0xffE7E0EC),
+    onSurfaceVariant = Color(0xff49454F),
+    outline = Color(0xff79747E)
 )
 
 private val GodToolsTypography = Typography().run {
