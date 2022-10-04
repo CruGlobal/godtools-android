@@ -8,8 +8,6 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
-import com.okta.authfoundationbootstrap.CredentialBootstrap
-import dagger.Lazy
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -17,13 +15,11 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.kotlin.coroutines.getBooleanFlow
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
-import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
 import org.ccci.gto.android.common.util.toLocale
 
 private const val PREFS_SETTINGS = "GodTools"
@@ -33,10 +29,7 @@ private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 @Singleton
-class Settings @Inject internal constructor(
-    @ApplicationContext private val context: Context,
-    private val oktaCredentials: Lazy<CredentialBootstrap>,
-) {
+class Settings @Inject internal constructor(@ApplicationContext private val context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object {
@@ -48,7 +41,6 @@ class Settings @Inject internal constructor(
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
         const val FEATURE_PARALLEL_LANGUAGE = "parallelLanguage"
-        const val FEATURE_LOGIN = "login"
         const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TOOL_FAVORITE = "toolFavorite"
@@ -119,10 +111,6 @@ class Settings @Inject internal constructor(
             when (feature) {
                 FEATURE_PARALLEL_LANGUAGE -> if (parallelLanguage != null) {
                     setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
-                    changed = true
-                }
-                FEATURE_LOGIN -> if (runBlocking { oktaCredentials.get().defaultCredential().isAuthenticated }) {
-                    setFeatureDiscovered(FEATURE_LOGIN)
                     changed = true
                 }
             }
