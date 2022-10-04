@@ -22,7 +22,7 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
-import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.model.tract.TractPage
 import org.cru.godtools.tool.tract.R
@@ -50,7 +50,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
 )
 
 @AndroidEntryPoint
-class ModalActivity : BaseActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
+class ModalActivity : BaseBindingActivity<TractModalActivityBinding>(R.layout.tract_modal_activity) {
     private val dataModel: ModalActivityDataModel by viewModels()
     private val toolState: ToolStateHolder by viewModels()
     @Inject
