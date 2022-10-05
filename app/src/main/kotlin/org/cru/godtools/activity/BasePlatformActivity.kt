@@ -28,19 +28,17 @@ import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
-import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticatedFlow
-import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.view.MenuUtils
 import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
 import org.cru.godtools.R
+import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_CONTACT_US
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_COPYRIGHT
@@ -226,6 +224,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     // region Okta
     @Inject
+    internal lateinit var accountManager: GodToolsAccountManager
+    @Inject
     internal lateinit var oktaCredentials: CredentialBootstrap
     @Inject
     internal lateinit var oktaWebAuthenticationClient: WebAuthenticationClient
@@ -269,14 +269,12 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
                     lifecycleScope.launch {
                         repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            oktaCredentials.defaultCredentialFlow()
-                                .flatMapLatest { it.isAuthenticatedFlow() }
-                                .collect { isAuthenticated ->
-                                    loginItem?.isVisible = !isAuthenticated
-                                    signupItem?.isVisible = !isAuthenticated
-                                    logoutItem?.isVisible = isAuthenticated
-                                    profileItem?.isVisible = isAuthenticated
-                                }
+                            accountManager.isAuthenticatedFlow().collect { isAuthenticated ->
+                                loginItem?.isVisible = !isAuthenticated
+                                signupItem?.isVisible = !isAuthenticated
+                                logoutItem?.isVisible = isAuthenticated
+                                profileItem?.isVisible = isAuthenticated
+                            }
                         }
                     }
                 } else {

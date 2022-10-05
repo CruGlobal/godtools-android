@@ -125,6 +125,7 @@ dependencies {
     api(project(":library:api"))
     api(project(":library:db"))
     api(project(":library:download-manager"))
+    implementation(project(":library:account"))
     implementation(project(":library:base"))
     implementation(project(":library:model"))
     implementation(project(":library:sync"))
