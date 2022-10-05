@@ -11,7 +11,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.okta.authfoundation.credential.getOktaUserId
-import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
+import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserCountersApi
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.UserCountersRepository
@@ -22,6 +22,7 @@ private const val STALE_DURATION_COUNTERS = TimeConstants.DAY_IN_MS
 
 @Singleton
 class UserCounterSyncTasks @Inject internal constructor(
+    private val accountManager: GodToolsAccountManager,
     private val countersApi: UserCountersApi,
     private val credentials: CredentialBootstrap,
     private val lastSyncTimeRepository: LastSyncTimeRepository,
@@ -31,8 +32,8 @@ class UserCounterSyncTasks @Inject internal constructor(
     private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
+        if (!accountManager.isAuthenticated()) return true
         val credential = credentials.defaultCredential()
-        if (!credential.isAuthenticated) return true
         val userId = credential.getOktaUserId().orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
@@ -56,7 +57,7 @@ class UserCounterSyncTasks @Inject internal constructor(
     }
 
     suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
-        if (!credentials.defaultCredential().isAuthenticated) return true
+        if (!accountManager.isAuthenticated()) return true
 
         coroutineScope {
             // process any counters that need to be updated
