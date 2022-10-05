@@ -46,4 +46,6 @@ class GodToolsAccountManager @Inject internal constructor(
         // trigger a logout for any provider we happen to be logged into
         providers.forEach { launch { it.logout() } }
     }
+
+    internal suspend fun authenticateWithMobileContentApi() = activeProvider()?.authenticateWithMobileContentApi()
 }

@@ -10,6 +10,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":library:api"))
+
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.okta) {
         exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
