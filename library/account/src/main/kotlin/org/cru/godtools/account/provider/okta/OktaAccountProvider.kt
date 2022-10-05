@@ -40,7 +40,7 @@ internal class OktaAccountProvider @Inject constructor(
     override suspend fun authenticateWithMobileContentApi(): AuthToken? {
         val credential = credentials.defaultCredential()
         val request = credential.getValidAccessToken()?.let { AuthToken.Request(oktaAccessToken = it) } ?: return null
-        val token = authApi.authenticate(request).execute().takeIf { it.isSuccessful }
+        val token = authApi.authenticate(request).takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }
             ?.dataSingle
         token?.userId?.let { credential.setUserId(it) }

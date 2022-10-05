@@ -97,7 +97,7 @@ object ApiModule {
     fun mobileContentApiAuthenticatedRetrofit(
         @Named(MOBILE_CONTENT_API) retrofit: Retrofit,
         okhttp: OkHttpClient,
-        sessionInterceptor: GodToolsSessionInterceptor
+        sessionInterceptor: MobileContentApiSessionInterceptor
     ): Retrofit = retrofit.newBuilder()
         .callFactory(
             okhttp.newBuilder()
