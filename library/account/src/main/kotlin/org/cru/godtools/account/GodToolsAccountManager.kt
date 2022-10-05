@@ -36,6 +36,7 @@ class GodToolsAccountManager @Inject internal constructor(
         }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     suspend fun isAuthenticated() = activeProvider()?.isAuthenticated() ?: false
+    suspend fun userId() = activeProvider()?.userId()
     fun isAuthenticatedFlow() = activeProviderFlow
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)

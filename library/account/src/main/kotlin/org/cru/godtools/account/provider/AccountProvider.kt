@@ -7,6 +7,7 @@ internal interface AccountProvider : Ordered {
     val type: Type
 
     suspend fun isAuthenticated(): Boolean
+    suspend fun userId(): String?
     fun isAuthenticatedFlow(): Flow<Boolean>
 
     suspend fun logout()
