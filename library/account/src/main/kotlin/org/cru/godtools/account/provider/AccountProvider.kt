@@ -9,5 +9,7 @@ internal interface AccountProvider : Ordered {
     suspend fun isAuthenticated(): Boolean
     fun isAuthenticatedFlow(): Flow<Boolean>
 
+    suspend fun logout()
+
     enum class Type { OKTA }
 }

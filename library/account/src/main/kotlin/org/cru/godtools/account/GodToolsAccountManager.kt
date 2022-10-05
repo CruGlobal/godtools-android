@@ -6,6 +6,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.account.provider.AccountProvider
 
@@ -38,4 +40,9 @@ class GodToolsAccountManager @Inject internal constructor(
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
+
+    suspend fun logout() = coroutineScope {
+        // trigger a logout for any provider we happen to be logged into
+        providers.forEach { launch { it.logout() } }
+    }
 }

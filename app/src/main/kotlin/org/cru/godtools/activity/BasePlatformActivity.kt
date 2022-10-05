@@ -144,15 +144,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_logout -> {
-            lifecycleScope.launch {
-                with(oktaCredentials.defaultCredential()) {
-                    try {
-                        revokeAllTokens()
-                    } finally {
-                        delete()
-                    }
-                }
-            }
+            lifecycleScope.launch { accountManager.logout() }
             true
         }
         R.id.action_help -> {

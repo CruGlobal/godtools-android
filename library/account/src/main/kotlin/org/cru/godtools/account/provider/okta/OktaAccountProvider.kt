@@ -19,4 +19,14 @@ internal class OktaAccountProvider @Inject constructor(
 
     override suspend fun isAuthenticated() = credentials.defaultCredential().isAuthenticated
     override fun isAuthenticatedFlow() = credentials.defaultCredentialFlow().flatMapLatest { it.isAuthenticatedFlow() }
+
+    override suspend fun logout() {
+        with(credentials.defaultCredential()) {
+            try {
+                revokeAllTokens()
+            } finally {
+                delete()
+            }
+        }
+    }
 }
