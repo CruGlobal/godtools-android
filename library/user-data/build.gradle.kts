@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "org.cru.godtools.account"
+    namespace = "org.cru.godtools.user"
 
     baseConfiguration(project)
     createEventBusIndex("org.cru.godtools.user.data.UserEventBusIndex")
