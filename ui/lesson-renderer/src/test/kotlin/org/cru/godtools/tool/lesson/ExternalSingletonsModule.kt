@@ -11,6 +11,7 @@ import io.mockk.mockk
 import javax.inject.Named
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
@@ -40,6 +41,12 @@ class ExternalSingletonsModule {
     val downloadManager by lazy { mock<GodToolsDownloadManager>() }
     @get:Provides
     val eventBus by lazy { mock<EventBus>() }
+    @get:Provides
+    val manifestManager by lazy {
+        mockk<ManifestManager> {
+            every { getLatestPublishedManifestLiveData(any(), any()) } answers { MutableLiveData() }
+        }
+    }
     @get:Provides
     val picasso by lazy { mock<Picasso>(defaultAnswer = RETURNS_DEEP_STUBS) }
     @get:Provides
