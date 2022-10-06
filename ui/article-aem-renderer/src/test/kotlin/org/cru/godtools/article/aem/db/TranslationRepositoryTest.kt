@@ -1,9 +1,11 @@
 package org.cru.godtools.article.aem.db
 
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.coVerifySequence
+import io.mockk.just
 import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -77,6 +79,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         }
         val translationRef2 = TranslationRef(translation2.toTranslationRefKey()!!)
         coEvery { translationDao.getAll() } returns listOf(translationRef, translationRef2)
+        coEvery { aemImportRepository.removeOrphanedAemImports() } just Runs
 
         repo.removeMissingTranslations(listOf(translation))
         coVerifySequence {

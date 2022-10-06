@@ -1,20 +1,17 @@
 package org.cru.godtools.article.aem.db
 
 import android.net.Uri
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.coVerifySequence
+import io.mockk.just
+import io.mockk.mockk
 import java.util.Date
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.cru.godtools.article.aem.model.AemImport
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.lessThanOrEqualTo
-import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.inOrder
-import org.mockito.kotlin.mock
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AemImportRepositoryTest : AbstractArticleRoomDatabaseTest() {
@@ -22,33 +19,25 @@ class AemImportRepositoryTest : AbstractArticleRoomDatabaseTest() {
 
     @Test
     fun `accessAemImport()`() = runTest {
-        val uri = mock<Uri>()
+        val uri = mockk<Uri>()
         val start = Date()
         repo.accessAemImport(uri)
         val end = Date()
 
-        inOrder(aemImportDao) {
-            verify(aemImportDao).insertOrIgnore(argThat<AemImport> { this.uri == uri })
-            argumentCaptor<Date> {
-                verify(aemImportDao).updateLastAccessed(eq(uri), capture())
-
-                assertTrue(start == firstValue || start.before(firstValue))
-                assertTrue(end == firstValue || end.after(firstValue))
-            }
-            verifyNoMoreInteractions()
+        coVerifySequence {
+            aemImportDao.insertOrIgnore(match<AemImport> { it.uri === uri })
+            aemImportDao.updateLastAccessed(uri, match { it in start..end })
         }
     }
 
     @Test
     fun `removeOrphanedAemImports()`() = runTest {
-        repo.removeOrphanedAemImports()
+        coEvery { articleRepository.removeOrphanedArticles() } just Runs
 
-        val accessedBefore = argumentCaptor<Date>()
-        inOrder(aemImportDao, articleRepository) {
-            verify(aemImportDao).removeOrphanedAemImports(accessedBefore.capture())
-            verify(articleRepository).removeOrphanedArticles()
-            verifyNoMoreInteractions()
+        repo.removeOrphanedAemImports()
+        coVerifySequence {
+            aemImportDao.removeOrphanedAemImports(match { it.time <= System.currentTimeMillis() - WEEK_IN_MS })
+            articleRepository.removeOrphanedArticles()
         }
-        assertThat(accessedBefore.firstValue.time, lessThanOrEqualTo(System.currentTimeMillis() - WEEK_IN_MS))
     }
 }

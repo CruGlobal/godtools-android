@@ -2,15 +2,14 @@ package org.cru.godtools.article.aem.db
 
 import io.mockk.every
 import io.mockk.mockk
-import org.mockito.kotlin.mock
 
 abstract class AbstractArticleRoomDatabaseTest {
-    internal val aemImportDao = mock<AemImportDao>()
-    internal val aemImportRepository = mockk<AemImportRepository>(relaxUnitFun = true)
+    internal val aemImportDao = mockk<AemImportDao>(relaxUnitFun = true)
+    internal val aemImportRepository = mockk<AemImportRepository>()
     internal val articleDao = mockk<ArticleDao>(relaxUnitFun = true)
-    internal val articleRepository = mock<ArticleRepository>()
-    internal val resourceDao = mock<ResourceDao>()
-    internal val resourceRepository = mock<ResourceRepository>()
+    internal val articleRepository = mockk<ArticleRepository>()
+    internal val resourceDao = mockk<ResourceDao>(relaxUnitFun = true)
+    internal val resourceRepository = mockk<ResourceRepository>()
     internal val translationDao = mockk<TranslationDao>(relaxUnitFun = true)
     protected val db = mockk<ArticleRoomDatabase> {
         every { aemImportDao() } returns aemImportDao
