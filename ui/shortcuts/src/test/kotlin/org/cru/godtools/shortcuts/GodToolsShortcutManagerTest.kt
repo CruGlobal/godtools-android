@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.EnumSet
@@ -38,7 +39,6 @@ import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.spy
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
@@ -79,7 +79,7 @@ class GodToolsShortcutManagerTest {
             }
             on { packageManager } doReturn pm
             it.getSystemService<ShortcutManager>()?.let { sm ->
-                shortcutManagerService = spy(sm)
+                shortcutManagerService = spyk(sm)
                 on { getSystemService(ShortcutManager::class.java) } doReturn shortcutManagerService
             }
         }
@@ -142,8 +142,10 @@ class GodToolsShortcutManagerTest {
                 assertTrue(isCancelled)
             }
         }
-        verifyAll { dao.get(any<Query<Tool>>()) }
-        verifyNoInteractions(shortcutManagerService)
+        verifyAll {
+            dao.get(any<Query<Tool>>())
+            shortcutManagerService wasNot Called
+        }
     }
     // endregion Update Existing Shortcuts
 
