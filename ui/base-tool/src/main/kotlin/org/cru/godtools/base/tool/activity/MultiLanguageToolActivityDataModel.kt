@@ -24,7 +24,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.getStateFlow
+import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -61,7 +61,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
 ) : ViewModel() {
-    val toolCode = savedState.getStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
+    val toolCode = savedState.getMutableStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
