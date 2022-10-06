@@ -1,5 +1,6 @@
 package org.cru.godtools.account.provider.okta
 
+import androidx.annotation.VisibleForTesting
 import com.okta.authfoundation.credential.Credential
 import com.okta.authfoundationbootstrap.CredentialBootstrap
 import javax.inject.Inject
@@ -13,14 +14,20 @@ import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 
-private const val TAG_USER_ID = "mobileContentApiUserId"
-
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class OktaAccountProvider @Inject constructor(
     private val credentials: CredentialBootstrap,
     private val authApi: AuthApi
 ) : AccountProvider {
+    internal companion object {
+        @VisibleForTesting
+        internal const val TAG_USER_ID = "mobileContentApiUserId"
+
+        private val Credential.userId get() = tags[TAG_USER_ID]
+        private suspend fun Credential.setUserId(id: String) = storeToken(tags = tags + (TAG_USER_ID to id))
+    }
+
     override val type = AccountProvider.Type.OKTA
 
     override suspend fun isAuthenticated() = credentials.defaultCredential().isAuthenticated
@@ -47,6 +54,3 @@ internal class OktaAccountProvider @Inject constructor(
         return token
     }
 }
-
-private val Credential.userId get() = tags[TAG_USER_ID]
-private suspend fun Credential.setUserId(id: String) = storeToken(tags = tags + (TAG_USER_ID to id))
