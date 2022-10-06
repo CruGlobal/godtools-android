@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools.feature.bundledcontent"
     baseConfiguration(project)
 }
 
