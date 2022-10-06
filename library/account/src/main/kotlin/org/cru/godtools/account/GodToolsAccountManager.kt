@@ -1,5 +1,6 @@
 package org.cru.godtools.account
 
+import androidx.annotation.VisibleForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -24,8 +25,10 @@ class GodToolsAccountManager @Inject internal constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob())
     private val providers = rawProviders.sortedWith(Ordered.COMPARATOR)
 
-    private suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
-    private val activeProviderFlow =
+    @VisibleForTesting
+    internal suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
+    @VisibleForTesting
+    internal val activeProviderFlow =
         combine(providers.map { p -> p.isAuthenticatedFlow().map { p to it } }) {
             it.firstNotNullOfOrNull { (p, isAuthed) -> if (isAuthed) p else null }
         }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
