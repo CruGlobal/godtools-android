@@ -40,5 +40,6 @@ dependencies {
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
     kaptTest(libs.hilt.compiler)
 }

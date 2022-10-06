@@ -53,4 +53,5 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(project(":ui:tract-renderer"))
+    testImplementation(libs.mockito.kotlin)
 }
