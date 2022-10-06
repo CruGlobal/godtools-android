@@ -2,6 +2,7 @@ package org.cru.godtools.account
 
 import app.cash.turbine.test
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +17,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsAccountManagerTest {
-    private val provider1Authenticated = MutableStateFlow(true)
+    private val provider1Authenticated = MutableStateFlow(false)
     private val provider1 = mockk<AccountProvider>(relaxed = true) {
         every { order } returns 1
         coEvery { isAuthenticated() } answers { provider1Authenticated.value }
@@ -44,8 +45,8 @@ class GodToolsAccountManagerTest {
 
     @Test
     fun verifyActiveProviderFlow() = runTest {
+        provider1Authenticated.value = true
         manager.activeProviderFlow.test {
-            provider1Authenticated.value = true
             assertSame(provider1, awaitItem())
             assertSame(provider1, manager.activeProviderFlow.value)
 
@@ -82,6 +83,15 @@ class GodToolsAccountManagerTest {
 
             provider1Authenticated.value = false
             assertFalse(awaitItem())
+        }
+    }
+
+    @Test
+    fun verifyLogoutTriggersAllProviders() = runTest {
+        manager.logout()
+        coVerify {
+            provider1.logout()
+            provider2.logout()
         }
     }
 }
