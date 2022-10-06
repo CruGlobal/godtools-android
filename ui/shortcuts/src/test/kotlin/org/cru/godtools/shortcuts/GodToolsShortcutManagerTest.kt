@@ -35,9 +35,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.argThat
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
@@ -70,12 +68,12 @@ class GodToolsShortcutManagerTest {
         val rawApp = ApplicationProvider.getApplicationContext<Application>()
         Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
         app = spy(rawApp) {
-            val pm = spy(it.packageManager) { pm ->
+            val pm = spyk(it.packageManager) {
                 val shortcutReceiver = ResolveInfo().apply {
                     activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
                 }
-                doReturn(listOf(shortcutReceiver))
-                    .whenever(pm).queryBroadcastReceivers(argThat { action == ACTION_INSTALL_SHORTCUT }, eq(0))
+                every { queryBroadcastReceivers(match { it.action == ACTION_INSTALL_SHORTCUT }, 0) }
+                    .returns(listOf(shortcutReceiver))
             }
             on { packageManager } doReturn pm
             it.getSystemService<ShortcutManager>()?.let { sm ->
