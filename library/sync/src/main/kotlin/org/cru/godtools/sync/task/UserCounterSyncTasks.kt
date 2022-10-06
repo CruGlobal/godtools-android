@@ -1,7 +1,6 @@
 package org.cru.godtools.sync.task
 
 import android.os.Bundle
-import com.okta.authfoundationbootstrap.CredentialBootstrap
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
@@ -10,7 +9,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.okta.authfoundation.credential.getOktaUserId
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserCountersApi
 import org.cru.godtools.db.repository.LastSyncTimeRepository
@@ -24,7 +22,6 @@ private const val STALE_DURATION_COUNTERS = TimeConstants.DAY_IN_MS
 class UserCounterSyncTasks @Inject internal constructor(
     private val accountManager: GodToolsAccountManager,
     private val countersApi: UserCountersApi,
-    private val credentials: CredentialBootstrap,
     private val lastSyncTimeRepository: LastSyncTimeRepository,
     private val userCountersRepository: UserCountersRepository,
 ) : BaseSyncTasks() {
@@ -33,8 +30,7 @@ class UserCounterSyncTasks @Inject internal constructor(
 
     suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
         if (!accountManager.isAuthenticated()) return true
-        val credential = credentials.defaultCredential()
-        val userId = credential.getOktaUserId().orEmpty()
+        val userId = accountManager.userId().orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!isForced(args) &&
