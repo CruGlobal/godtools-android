@@ -8,8 +8,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.account.provider.AccountProvider
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -58,6 +60,28 @@ class GodToolsAccountManagerTest {
             provider2Authenticated.value = false
             assertNull(awaitItem())
             assertNull(manager.activeProviderFlow.value)
+        }
+    }
+
+    @Test
+    fun verifyIsAuthenticated() = runTest {
+        provider1Authenticated.value = false
+        assertFalse(manager.isAuthenticated())
+        provider1Authenticated.value = true
+        assertTrue(manager.isAuthenticated())
+    }
+
+    @Test
+    fun verifyIsAuthenticatedFlow() = runTest {
+        provider1Authenticated.value = false
+        manager.isAuthenticatedFlow().test {
+            assertFalse(awaitItem())
+
+            provider1Authenticated.value = true
+            assertTrue(awaitItem())
+
+            provider1Authenticated.value = false
+            assertFalse(awaitItem())
         }
     }
 }
