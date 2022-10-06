@@ -206,7 +206,7 @@ ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
 androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
 androidx-compose-testing = ["androidx-compose-ui-test"]
-test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric", "mockito", "mockito-kotlin"]
+test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric", "mockito-kotlin"]
 
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
