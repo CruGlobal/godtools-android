@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.onDestroy
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.base.Settings
 import org.greenrobot.eventbus.EventBus
 
@@ -41,7 +42,10 @@ abstract class BaseActivity protected constructor() : AppCompatActivity() {
         super.onNewIntent(newIntent)
 
         // update the Launching Component extra
-        intent.putExtra(EXTRA_LAUNCHING_COMPONENT, newIntent.getParcelableExtra<Parcelable>(EXTRA_LAUNCHING_COMPONENT))
+        intent.putExtra(
+            EXTRA_LAUNCHING_COMPONENT,
+            newIntent.getParcelableExtraCompat(EXTRA_LAUNCHING_COMPONENT, Parcelable::class.java)
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -142,7 +146,7 @@ abstract class BaseActivity protected constructor() : AppCompatActivity() {
     // region Up Navigation
     override fun supportNavigateUpTo(upIntent: Intent) {
         // if the upIntent already points to the original launching activity, just finish this activity
-        if (upIntent.component == intent.getParcelableExtra(EXTRA_LAUNCHING_COMPONENT)) {
+        if (upIntent.component == intent.getParcelableExtraCompat(EXTRA_LAUNCHING_COMPONENT, Parcelable::class.java)) {
             finish()
             return
         }
