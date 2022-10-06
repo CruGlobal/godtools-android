@@ -35,9 +35,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Config.NEWEST_SDK
@@ -67,18 +64,18 @@ class GodToolsShortcutManagerTest {
     fun setup() {
         val rawApp = ApplicationProvider.getApplicationContext<Application>()
         Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
-        app = spy(rawApp) {
-            val pm = spyk(it.packageManager) {
+        app = spyk(rawApp) {
+            val pm = spyk(packageManager) {
                 val shortcutReceiver = ResolveInfo().apply {
                     activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
                 }
                 every { queryBroadcastReceivers(match { it.action == ACTION_INSTALL_SHORTCUT }, 0) }
                     .returns(listOf(shortcutReceiver))
             }
-            on { packageManager } doReturn pm
-            it.getSystemService<ShortcutManager>()?.let { sm ->
+            every { packageManager } returns pm
+            getSystemService<ShortcutManager>()?.let { sm ->
                 shortcutManagerService = spyk(sm)
-                on { getSystemService(ShortcutManager::class.java) } doReturn shortcutManagerService
+                every { getSystemService(ShortcutManager::class.java) } returns shortcutManagerService
             }
         }
     }
@@ -152,7 +149,7 @@ class GodToolsShortcutManagerTest {
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() = runTest {
         // Instant Apps don't have access to the system ShortcutManager
-        whenever(app.getSystemService<ShortcutManager>()).thenReturn(null)
+        every { app.getSystemService<ShortcutManager>() } returns null
         val shortcutManager = createShortcutManager()
 
         shortcutManager.updateDynamicShortcuts(emptyMap())
