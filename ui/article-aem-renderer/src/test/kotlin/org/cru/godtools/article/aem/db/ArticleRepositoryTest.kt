@@ -1,6 +1,9 @@
 package org.cru.godtools.article.aem.db
 
+import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.coVerifyAll
+import io.mockk.just
 import io.mockk.mockk
 import java.util.UUID
 import kotlinx.coroutines.test.runTest
@@ -12,6 +15,7 @@ class ArticleRepositoryTest : AbstractArticleRoomDatabaseTest() {
 
     @Test
     fun `updateContent()`() = runTest {
+        coEvery { resourceRepository.storeResources(any(), any()) } just Runs
         val article = Article(mockk()).apply {
             contentUuid = UUID.randomUUID().toString()
             content = UUID.randomUUID().toString()

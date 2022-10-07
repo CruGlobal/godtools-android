@@ -71,7 +71,8 @@ dependencies {
     testImplementation(libs.gtoSupport.testing.picasso)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
-
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
     kaptTest(libs.androidx.databinding.compiler)
     kaptTest(libs.hilt.compiler)
 }

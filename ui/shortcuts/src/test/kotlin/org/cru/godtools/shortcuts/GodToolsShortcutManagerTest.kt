@@ -8,7 +8,12 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Called
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.verifyAll
 import java.util.EnumSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,19 +35,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argThat
-import org.mockito.kotlin.clearInvocations
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.doThrow
-import org.mockito.kotlin.eq
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
-import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Config.NEWEST_SDK
@@ -58,7 +50,9 @@ class GodToolsShortcutManagerTest {
     private lateinit var app: Application
     private lateinit var shortcutManagerService: ShortcutManager
 
-    private lateinit var dao: GodToolsDao
+    private val dao = mockk<GodToolsDao> {
+        every { find<Tool>(any<String>()) } returns null
+    }
     @Deprecated("Transition tests to use runTest closure")
     private val coroutineScope = TestScope()
 
@@ -70,21 +64,20 @@ class GodToolsShortcutManagerTest {
     fun setup() {
         val rawApp = ApplicationProvider.getApplicationContext<Application>()
         Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
-        app = spy(rawApp) {
-            val pm = spy(it.packageManager) { pm ->
+        app = spyk(rawApp) {
+            val pm = spyk(packageManager) {
                 val shortcutReceiver = ResolveInfo().apply {
                     activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
                 }
-                doReturn(listOf(shortcutReceiver))
-                    .whenever(pm).queryBroadcastReceivers(argThat { action == ACTION_INSTALL_SHORTCUT }, eq(0))
+                every { queryBroadcastReceivers(match { it.action == ACTION_INSTALL_SHORTCUT }, 0) }
+                    .returns(listOf(shortcutReceiver))
             }
-            on { packageManager } doReturn pm
-            it.getSystemService<ShortcutManager>()?.let { sm ->
-                shortcutManagerService = spy(sm)
-                on { getSystemService(ShortcutManager::class.java) } doReturn shortcutManagerService
+            every { packageManager } returns pm
+            getSystemService<ShortcutManager>()?.let { sm ->
+                shortcutManagerService = spyk(sm)
+                every { getSystemService(ShortcutManager::class.java) } returns shortcutManagerService
             }
         }
-        dao = mock()
     }
 
     // region Pending Shortcuts
@@ -108,7 +101,7 @@ class GodToolsShortcutManagerTest {
         val shortcutManager = createShortcutManager()
         val shortcut = shortcutManager.getPendingToolShortcut("invalid")!!
         joinLaunchedJobs()
-        verify(dao).find<Tool>("invalid")
+        verifyAll { dao.find<Tool>("invalid") }
         assertNull(shortcut.shortcut)
     }
 
@@ -118,12 +111,10 @@ class GodToolsShortcutManagerTest {
 
         val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
         joinLaunchedJobs()
-        clearInvocations(dao)
 
         // trigger update
         shortcutManager.updatePendingShortcuts()
-        verify(dao).find<Tool>("kgp")
-        verifyNoMoreInteractions(dao)
+        verifyAll { dao.find<Tool>("kgp") }
 
         // prevent garbage collection of the shortcut during the test
         assertNotNull(
@@ -137,7 +128,7 @@ class GodToolsShortcutManagerTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = runTest {
-        dao.stub { on { get(any<Query<Tool>>()) } doThrow CancellationException() }
+        every { dao.get(any<Query<Tool>>()) } throws CancellationException()
         val shortcutManager = createShortcutManager()
 
         ExceptionRaisingTree.plant().use {
@@ -146,8 +137,10 @@ class GodToolsShortcutManagerTest {
                 assertTrue(isCancelled)
             }
         }
-        verify(dao).get(any<Query<Tool>>())
-        verifyNoInteractions(shortcutManagerService)
+        verifyAll {
+            dao.get(any<Query<Tool>>())
+            shortcutManagerService wasNot Called
+        }
     }
     // endregion Update Existing Shortcuts
 
@@ -156,11 +149,11 @@ class GodToolsShortcutManagerTest {
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() = runTest {
         // Instant Apps don't have access to the system ShortcutManager
-        whenever(app.getSystemService<ShortcutManager>()).thenReturn(null)
+        every { app.getSystemService<ShortcutManager>() } returns null
         val shortcutManager = createShortcutManager()
 
         shortcutManager.updateDynamicShortcuts(emptyMap())
-        verifyNoInteractions(dao)
+        verify { dao wasNot Called }
     }
     // endregion Instant App
 
