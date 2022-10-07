@@ -11,7 +11,6 @@ annotation class UiControllerType(val value: KClass<out Base>, val variation: In
     companion object {
         const val DEFAULT_VARIATION = 0
 
-        fun create(value: KClass<out Base>, variation: Int = DEFAULT_VARIATION) =
-            UiControllerTypeCreator.createUiControllerType(value.java, variation)
+        fun create(value: KClass<out Base>, variation: Int = DEFAULT_VARIATION) = UiControllerType(value, variation)
     }
 }
