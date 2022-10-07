@@ -41,6 +41,10 @@ class GodToolsAccountManager @Inject internal constructor(
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
+    fun accountInfoFlow() = activeProviderFlow
+        .flatMapLatest { it?.accountInfoFlow() ?: flowOf(null) }
+        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
+        .distinctUntilChanged()
 
     suspend fun logout() = coroutineScope {
         // trigger a logout for any provider we happen to be logged into

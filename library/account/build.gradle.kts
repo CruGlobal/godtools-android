@@ -24,6 +24,7 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
 }

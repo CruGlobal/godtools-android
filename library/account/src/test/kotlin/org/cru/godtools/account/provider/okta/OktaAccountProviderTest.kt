@@ -1,8 +1,14 @@
 package org.cru.godtools.account.provider.okta
 
+import app.cash.turbine.test
+import com.okta.authfoundation.claims.email
+import com.okta.authfoundation.claims.name
+import com.okta.authfoundation.claims.subject
 import com.okta.authfoundation.client.OidcClient
+import com.okta.authfoundation.client.dto.OidcUserInfo
 import com.okta.authfoundation.credential.Credential
 import com.okta.authfoundation.credential.CredentialDataSource.Companion.createCredentialDataSource
+import com.okta.authfoundation.jwt.Jwt
 import com.okta.authfoundationbootstrap.CredentialBootstrap
 import io.mockk.Called
 import io.mockk.Runs
@@ -13,30 +19,50 @@ import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.grMasterPersonId
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.oktaUserId
+import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage
+import org.ccci.gto.android.common.okta.authfoundation.credential.idTokenFlow
+import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Before
-import org.junit.Test
 import retrofit2.Response
 
 private const val ACCESS_TOKEN = "access_token"
 private const val USER_ID = "user_id"
+private const val OKTA_ID = "okta_id"
+private const val SSO_GUID = "ssoGuid"
+private const val GR_MASTER_PERSON_ID = "gr_id"
+private const val NAME = "name"
+private const val EMAIL = "email"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OktaAccountProviderTest {
     private val api = mockk<AuthApi>()
+    private val idTokenFlow = MutableStateFlow<Jwt?>(null)
+    private val userInfoFlow = MutableStateFlow<OidcUserInfo?>(null)
     private val credential = mockk<Credential> {
-        every { tags } returns emptyMap()
+        every { tags } returns mapOf(OktaAccountProvider.TAG_USER_ID to USER_ID)
         every { token } returns mockk()
+
+        mockkStatic("org.ccci.gto.android.common.okta.authfoundation.credential.Credential_FlowKt")
+        every { idTokenFlow() } returns idTokenFlow
+        every { userInfoFlow() } returns userInfoFlow
 
         excludeRecords {
             tags
@@ -45,9 +71,9 @@ class OktaAccountProviderTest {
     }
     private lateinit var provider: OktaAccountProvider
 
-    @Before
+    @BeforeTest
     fun setupMocks() {
-        val storage = mockk<ChangeAwareTokenStorage>()
+        val storage = mockk<ChangeAwareTokenStorage>(relaxed = true)
         val credentials = mockk<CredentialBootstrap> {
             coEvery { defaultCredential() } returns credential
             every { credentialDataSource } returns mockk<OidcClient>().createCredentialDataSource(storage)
@@ -68,6 +94,92 @@ class OktaAccountProviderTest {
         }
     }
     // endregion logout()
+
+    // region accountInfoFlow()
+    private fun idToken(
+        subject: String? = OKTA_ID,
+        name: String? = NAME,
+        email: String? = EMAIL,
+    ) = mockk<Jwt> {
+        every { this@mockk.subject } returns subject
+        every { this@mockk.name } returns name
+        every { this@mockk.email } returns email
+    }
+
+    private fun userInfo(
+        oktaUserId: String? = OKTA_ID,
+        ssoGuid: String? = SSO_GUID,
+        grMasterPersonId: String? = GR_MASTER_PERSON_ID,
+        email: String? = EMAIL,
+    ) = mockk<OidcUserInfo> {
+        every { this@mockk.oktaUserId } returns oktaUserId
+        every { this@mockk.ssoGuid } returns ssoGuid
+        every { this@mockk.grMasterPersonId } returns grMasterPersonId
+        every { this@mockk.email } returns email
+    }
+
+    @Test
+    fun `accountInfoFlow() - no idToken or userInfo`() = runTest {
+        idTokenFlow.value = null
+        userInfoFlow.value = null
+        provider.accountInfoFlow().test {
+            assertNull(awaitItem(), "accountInfoFlow() should emit null if there is no idToken or userInfo")
+        }
+    }
+
+    @Test
+    fun `accountInfoFlow() - idToken only`() = runTest {
+        idTokenFlow.value = idToken()
+        userInfoFlow.value = null
+        provider.accountInfoFlow().test {
+            val info = assertNotNull(awaitItem())
+            assertEquals(OKTA_ID, info.oktaUserId)
+            assertEquals(NAME, info.name)
+            assertEquals(EMAIL, info.email)
+            assertNull(info.ssoGuid)
+            assertNull(info.grMasterPersonId)
+        }
+    }
+
+    @Test
+    fun `accountInfoFlow() - userInfo only`() = runTest {
+        idTokenFlow.value = null
+        userInfoFlow.value = userInfo()
+        provider.accountInfoFlow().test {
+            val info = assertNotNull(awaitItem())
+            assertEquals(OKTA_ID, info.oktaUserId)
+            assertEquals(SSO_GUID, info.ssoGuid)
+            assertEquals(GR_MASTER_PERSON_ID, info.grMasterPersonId)
+            assertNull(info.name)
+            assertEquals(EMAIL, info.email)
+        }
+    }
+
+    @Test
+    fun `accountInfoFlow() - idToken & userInfo`() = runTest {
+        idTokenFlow.value = idToken()
+        userInfoFlow.value = userInfo()
+        provider.accountInfoFlow().test {
+            assertNotNull(awaitItem()) { info ->
+                assertEquals(OKTA_ID, info.oktaUserId)
+                assertEquals(SSO_GUID, info.ssoGuid)
+                assertEquals(GR_MASTER_PERSON_ID, info.grMasterPersonId)
+                assertEquals(NAME, info.name)
+                assertEquals(EMAIL, info.email)
+            }
+
+            // we prefer attributes from idToken when we have both data sources
+            idTokenFlow.value = idToken(subject = "id_$OKTA_ID", email = "id_$EMAIL")
+            assertNotNull(awaitItem()) { info ->
+                assertEquals("id_$OKTA_ID", info.oktaUserId)
+                assertEquals(SSO_GUID, info.ssoGuid)
+                assertEquals(GR_MASTER_PERSON_ID, info.grMasterPersonId)
+                assertEquals(NAME, info.name)
+                assertEquals("id_$EMAIL", info.email)
+            }
+        }
+    }
+    // endregion accountInfoFlow()
 
     // region authenticateWithMobileContentApi()
     @Test
