@@ -39,7 +39,5 @@ dependencies {
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
-    testImplementation(libs.mockito)
-    testImplementation(libs.mockito.kotlin)
     kaptTest(libs.hilt.compiler)
 }

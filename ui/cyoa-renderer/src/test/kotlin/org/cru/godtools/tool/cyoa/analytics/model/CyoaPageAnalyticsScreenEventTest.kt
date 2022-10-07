@@ -1,5 +1,7 @@
 package org.cru.godtools.tool.cyoa.analytics.model
 
+import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.tool.model.Manifest
@@ -8,20 +10,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 
 private const val TOOL = "tool"
 private const val PAGE = "page"
 
 class CyoaPageAnalyticsScreenEventTest {
-    private val manifest: Manifest = mock {
-        on { code } doReturn TOOL
-        on { locale } doReturn Locale.ENGLISH
-    }
-    private val page: Page = mock {
-        on { manifest } doReturn manifest
-        on { id } doReturn PAGE
+    private val page: Page = mockk {
+        every { manifest } returns Manifest(code = TOOL, locale = Locale.ENGLISH)
+        every { id } returns PAGE
     }
 
     @Test
