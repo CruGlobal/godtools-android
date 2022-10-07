@@ -39,7 +39,5 @@ dependencies {
 
     testImplementation(project(":library:model"))
     testImplementation(libs.hilt.testing)
-    testImplementation(libs.mockito)
-    testImplementation(libs.mockito.kotlin)
     kaptTest(libs.hilt.compiler)
 }
