@@ -1,12 +1,12 @@
 package org.cru.godtools.account.model
 
-data class AccountInfo internal constructor(
-    val userId: String?,
-    val oktaUserId: String?,
-    val ssoGuid: String?,
-    val grMasterPersonId: String?,
-    val name: String?,
-    val givenName: String?,
-    val familyName: String?,
-    val email: String?,
+data class AccountInfo(
+    val userId: String? = null,
+    val oktaUserId: String? = null,
+    val ssoGuid: String? = null,
+    val grMasterPersonId: String? = null,
+    val name: String? = null,
+    val givenName: String? = null,
+    val familyName: String? = null,
+    val email: String? = null,
 )

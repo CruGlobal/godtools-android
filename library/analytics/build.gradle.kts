@@ -34,6 +34,7 @@ android {
 
 dependencies {
     api(project(":library:base"))
+    implementation(project(":library:account"))
     implementation(project(":ui:base"))
 
     implementation(libs.firebase.messaging)
