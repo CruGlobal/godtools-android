@@ -38,8 +38,7 @@ import org.cru.godtools.util.openToolActivity
 private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
 
 @AndroidEntryPoint
-class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layout.activity_dashboard) {
-    private val dataModel: DashboardDataModel by viewModels()
+class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
@@ -65,8 +64,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
                 )
             }
         }
-        binding.selectedPage = viewModel.currentPage.asLiveData()
-        binding.setupBottomNavigation()
     }
 
     override fun onSetupActionBar() {
@@ -116,6 +113,8 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
         viewModel.currentPage.map { it != Page.FAVORITE_TOOLS }.asLiveData()
     }
 
+    override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
+
     private fun Menu.observeSelectedPageChanges() {
         findItem(R.id.action_switch_language)?.let { item ->
             viewModel.currentPage.asLiveData()
@@ -137,16 +136,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>(R.layou
         openToolActivity(code, tool.type, *languages.toTypedArray())
     }
     // endregion ToolsAdapterCallbacks
-
-    private fun ActivityDashboardBinding.setupBottomNavigation() {
-        bottomNav.menu.findItem(R.id.dashboard_page_lessons)?.let { lessons ->
-            dataModel.lessons.observe(this@DashboardActivity) { lessons.isVisible = !it.isNullOrEmpty() }
-        }
-        bottomNav.setOnItemSelectedListener {
-            Page.findPage(it.itemId)?.let { viewModel.updateCurrentPage(it) }
-            true
-        }
-    }
     // endregion UI
 
     // region Feature Discovery
