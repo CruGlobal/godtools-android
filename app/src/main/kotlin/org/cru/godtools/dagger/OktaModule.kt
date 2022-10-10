@@ -21,27 +21,21 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage.Companion.makeChangeAware
 import org.ccci.gto.android.common.okta.authfoundation.credential.SharedPreferencesTokenStorage
 import org.ccci.gto.android.common.okta.authfoundation.credential.migrateTo
-import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.ccci.gto.android.common.okta.authfoundation.enableClockCompat
-import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.ccci.gto.android.common.okta.datastore.DataStoreTokenStorage
 import org.ccci.gto.android.common.okta.oidc.storage.security.NoopEncryptionManager
 import org.ccci.gto.android.common.okta.oidc.storage.security.createDefaultEncryptionManager
 import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
 import org.cru.godtools.BuildConfig.OKTA_CLIENT_ID
 import org.cru.godtools.BuildConfig.OKTA_DISCOVERY_URI
-import org.cru.godtools.base.DAGGER_OKTA_USER_INFO_FLOW
 import timber.log.Timber
 
 private const val OKTA_SCOPE = "openid profile email offline_access"
@@ -97,16 +91,6 @@ object OktaModule {
         initialize(credentialDataSource)
         coroutineScope.launch { LegacyTokenMigration.migrate(context, sessionClient, defaultCredential()) }
     }
-
-    @Provides
-    @Singleton
-    @Named(DAGGER_OKTA_USER_INFO_FLOW)
-    fun oktaUserInfoFlow(
-        credentials: CredentialBootstrap,
-        coroutineScope: CoroutineScope,
-    ) = credentials.defaultCredentialFlow()
-        .userInfoFlow()
-        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
 
     @Provides
     @Singleton
