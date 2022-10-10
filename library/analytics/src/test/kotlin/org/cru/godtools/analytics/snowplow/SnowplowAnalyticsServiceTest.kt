@@ -4,10 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.okta.authfoundation.client.dto.OidcUserInfo
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.greenrobot.eventbus.EventBus
@@ -18,7 +18,9 @@ import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class SnowplowAnalyticsServiceTest {
-    private val userInfoFlow = MutableStateFlow<OidcUserInfo?>(null)
+    private val accountManager = mockk<GodToolsAccountManager> {
+        every { accountInfoFlow() } returns flowOf(null)
+    }
 
     @Before
     fun setupShadows() {
@@ -38,9 +40,9 @@ class SnowplowAnalyticsServiceTest {
         }
         SnowplowAnalyticsService(
             ApplicationProvider.getApplicationContext(),
+            accountManager,
             eventBus,
             mockk(),
-            userInfoFlow
         )
     }
 }
