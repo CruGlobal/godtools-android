@@ -6,5 +6,7 @@ data class AccountInfo internal constructor(
     val ssoGuid: String?,
     val grMasterPersonId: String?,
     val name: String?,
+    val givenName: String?,
+    val familyName: String?,
     val email: String?,
 )

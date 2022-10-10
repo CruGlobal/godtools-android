@@ -2,6 +2,8 @@ package org.cru.godtools.account.provider.okta
 
 import androidx.annotation.VisibleForTesting
 import com.okta.authfoundation.claims.email
+import com.okta.authfoundation.claims.familyName
+import com.okta.authfoundation.claims.givenName
 import com.okta.authfoundation.claims.name
 import com.okta.authfoundation.claims.subject
 import com.okta.authfoundation.credential.Credential
@@ -67,6 +69,8 @@ internal class OktaAccountProvider @Inject constructor(
                             ssoGuid = userInfo?.ssoGuid,
                             grMasterPersonId = userInfo?.grMasterPersonId,
                             name = idToken?.name,
+                            givenName = userInfo?.givenName,
+                            familyName = userInfo?.familyName,
                             email = idToken?.email ?: userInfo?.email
                         )
                     } else null

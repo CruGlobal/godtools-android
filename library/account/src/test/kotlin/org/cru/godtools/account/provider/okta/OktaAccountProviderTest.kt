@@ -2,6 +2,8 @@ package org.cru.godtools.account.provider.okta
 
 import app.cash.turbine.test
 import com.okta.authfoundation.claims.email
+import com.okta.authfoundation.claims.familyName
+import com.okta.authfoundation.claims.givenName
 import com.okta.authfoundation.claims.name
 import com.okta.authfoundation.claims.subject
 import com.okta.authfoundation.client.OidcClient
@@ -116,6 +118,8 @@ class OktaAccountProviderTest {
         every { this@mockk.ssoGuid } returns ssoGuid
         every { this@mockk.grMasterPersonId } returns grMasterPersonId
         every { this@mockk.email } returns email
+        every { givenName } returns null
+        every { familyName } returns null
     }
 
     @Test
