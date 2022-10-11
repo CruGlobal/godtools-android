@@ -4,5 +4,6 @@ import okhttp3.HttpUrl
 
 class OktaBuildConfig(
     val clientId: String,
-    val discoveryUrl: HttpUrl
+    val discoveryUrl: HttpUrl,
+    val appUriScheme: String,
 )

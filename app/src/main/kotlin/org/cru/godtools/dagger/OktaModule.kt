@@ -40,7 +40,8 @@ object OktaModule {
     @Reusable
     fun oktaBuildConfig() = OktaBuildConfig(
         clientId = BuildConfig.OKTA_CLIENT_ID,
-        discoveryUrl = "${BuildConfig.OKTA_DISCOVERY_URI}/.well-known/openid-configuration".toHttpUrl()
+        discoveryUrl = "${BuildConfig.OKTA_DISCOVERY_URI}/.well-known/openid-configuration".toHttpUrl(),
+        appUriScheme = BuildConfig.OKTA_AUTH_SCHEME
     )
 
     @Provides

@@ -154,7 +154,13 @@ private fun TestedExtension.configureTestOptions(project: Project) {
     testVariants.all { configureTestManifestPlaceholders() }
     unitTestVariants.all { configureTestManifestPlaceholders() }
 
-    project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
+    project.dependencies.apply {
+        addProvider("testImplementation", project.libs.findBundle("test-framework").get())
+
+        // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
+        addProvider("androidTestImplementation", testFixtures(project.libs.findLibrary("gtoSupport-okta").get()))
+        addProvider("testImplementation", testFixtures(project.libs.findLibrary("gtoSupport-okta").get()))
+    }
 
     project.configurations.configureEach {
         resolutionStrategy {

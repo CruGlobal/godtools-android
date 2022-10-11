@@ -1,13 +1,17 @@
 package org.cru.godtools.account.provider.okta
 
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.okta.authfoundation.claims.email
 import com.okta.authfoundation.claims.familyName
 import com.okta.authfoundation.claims.givenName
 import com.okta.authfoundation.claims.name
 import com.okta.authfoundation.claims.subject
+import com.okta.authfoundation.client.OidcClientResult
 import com.okta.authfoundation.credential.Credential
+import com.okta.authfoundation.credential.Token
 import com.okta.authfoundationbootstrap.CredentialBootstrap
+import com.okta.webauthenticationui.WebAuthenticationClient
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -32,12 +36,17 @@ import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
+import timber.log.Timber
+
+private const val TAG = "OktaAccountProvider"
 
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class OktaAccountProvider @Inject constructor(
     private val credentials: CredentialBootstrap,
-    private val authApi: AuthApi
+    private val authApi: AuthApi,
+    private val buildConfig: OktaBuildConfig,
+    private val webAuthenticationClient: WebAuthenticationClient
 ) : AccountProvider {
     internal companion object {
         @VisibleForTesting
@@ -79,6 +88,22 @@ internal class OktaAccountProvider @Inject constructor(
         }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
+
+    override suspend fun login(context: Context) {
+        when (
+            val result = webAuthenticationClient.login(
+                context,
+                "${buildConfig.appUriScheme}:/auth",
+                extraRequestParameters = mapOf("prompt" to "login")
+            )
+        ) {
+            is OidcClientResult.Success<Token> -> credentials.defaultCredential().storeToken(result.result)
+            is OidcClientResult.Error -> {
+                // log the login error
+                Timber.tag(TAG).d(result.exception, "Error logging in to Okta.")
+            }
+        }
+    }
 
     override suspend fun logout() {
         with(credentials.defaultCredential()) {

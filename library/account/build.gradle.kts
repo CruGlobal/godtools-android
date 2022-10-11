@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.okta.auth.foundation.bootstrap)
+    implementation(libs.okta.web.authentication.ui)
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)

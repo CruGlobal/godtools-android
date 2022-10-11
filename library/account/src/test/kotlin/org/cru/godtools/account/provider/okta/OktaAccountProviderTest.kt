@@ -32,6 +32,7 @@ import kotlin.test.assertSame
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
@@ -56,6 +57,7 @@ private const val EMAIL = "email"
 @OptIn(ExperimentalCoroutinesApi::class)
 class OktaAccountProviderTest {
     private val api = mockk<AuthApi>()
+    private val buildConfig = OktaBuildConfig("", "http://example.com".toHttpUrl(), "")
     private val idTokenFlow = MutableStateFlow<Jwt?>(null)
     private val userInfoFlow = MutableStateFlow<OidcUserInfo?>(null)
     private val credential = mockk<Credential> {
@@ -80,7 +82,7 @@ class OktaAccountProviderTest {
             coEvery { defaultCredential() } returns credential
             every { credentialDataSource } returns mockk<OidcClient>().createCredentialDataSource(storage)
         }
-        provider = OktaAccountProvider(credentials, api)
+        provider = OktaAccountProvider(credentials, api, buildConfig, mockk())
     }
 
     // region logout()
