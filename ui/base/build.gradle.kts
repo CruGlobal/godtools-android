@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -19,10 +17,6 @@ android {
         dataBinding = true
         viewBinding = true
     }
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions.freeCompilerArgs += listOf("-module-name", "base-ui")
 }
 
 dependencies {
