@@ -52,7 +52,6 @@ private const val TOOL = "test"
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
-@Ignore("AGP 7.3.0-alpha03 broke using Data Binding classes from library unit tests.")
 class TractActivityTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
