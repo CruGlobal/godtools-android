@@ -32,6 +32,7 @@ import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticate
 import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticatedFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
+import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.api.AuthApi
@@ -57,7 +58,7 @@ internal class OktaAccountProvider @Inject constructor(
     }
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
-    override val type = AccountProvider.Type.OKTA
+    override val type = AccountType.OKTA
 
     private val credentialFlow = credentials.defaultCredentialFlow()
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
