@@ -13,7 +13,6 @@ import org.cru.godtools.tool.model.tract.CallToAction
 import org.cru.godtools.tool.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -72,7 +71,6 @@ class TractPageCallToActionBindingTest {
     }
 
     @Test
-    @Ignore("AGP 7.3.0-alpha03 broke using Data Binding classes from library unit tests.")
     fun verifyArrowOnClickNoEvents() {
         binding.callToAction = callToAction
         binding.executePendingBindings()
@@ -83,7 +81,6 @@ class TractPageCallToActionBindingTest {
     }
 
     @Test
-    @Ignore("AGP 7.3.0-alpha03 broke using Data Binding classes from library unit tests.")
     fun verifyArrowColor() {
         binding.callToAction = CallToAction(controlColor = Color.GREEN)
         binding.executePendingBindings()
@@ -93,7 +90,6 @@ class TractPageCallToActionBindingTest {
     // endregion Arrow Tests
 
     @Test
-    @Ignore("AGP 7.3.0-alpha03 broke using Data Binding classes from library unit tests.")
     fun verifyLabel() {
         binding.callToAction = CallToAction(
             label = { Text(it, text = "Label Test", textAlign = Text.Align.START) }

@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.EventBus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +33,6 @@ import org.robolectric.annotation.Config
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @Config(application = HiltTestApplication::class)
-@Ignore("AGP 7.3.0-alpha03 broke using Data Binding classes from library unit tests.")
 class PageControllerTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
