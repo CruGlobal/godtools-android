@@ -38,12 +38,6 @@ android {
         viewBinding = true
     }
 
-    packagingOptions {
-        // XXX: Exclude Kotlin metadata to reduce the size of the APK.
-        //      If we ever start utilizing kotlin reflection this will need to be removed.
-        resources.excludes += "**/*.kotlin_*"
-    }
-
     createEventBusIndex("org.cru.godtools.AppEventBusIndex")
     kapt {
         javacOptions {
