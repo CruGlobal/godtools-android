@@ -74,6 +74,5 @@ dependencies {
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.kotlin.coroutines.test)
-    testImplementation(libs.mockito.kotlin)
     kaptTest(libs.androidx.databinding.compiler)
 }

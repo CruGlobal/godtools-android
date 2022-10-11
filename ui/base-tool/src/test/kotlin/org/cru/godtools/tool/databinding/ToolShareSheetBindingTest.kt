@@ -5,11 +5,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.R
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
@@ -45,7 +45,7 @@ class ToolShareSheetBindingTest {
 
     @Test
     fun `otherActions - visible when otherShareItems contains items`() {
-        binding.otherShareItems = listOf(mock())
+        binding.otherShareItems = listOf(mockk())
         binding.executePendingBindings()
 
         assertEquals(View.VISIBLE, binding.otherActions.visibility)
