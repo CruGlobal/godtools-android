@@ -1,9 +1,11 @@
 package org.cru.godtools.db.room.repository
 
 import androidx.room.Dao
+import androidx.room.Transaction
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.LastSyncTimeEntity
+import org.cru.godtools.db.room.entity.LastSyncTimeEntity.Companion.KEY_SEPARATOR
 
 @Dao
 internal abstract class LastSyncTimeRoomRepository(private val db: GodToolsRoomDatabase) : LastSyncTimeRepository {
@@ -18,4 +20,17 @@ internal abstract class LastSyncTimeRoomRepository(private val db: GodToolsRoomD
     }
 
     override suspend fun updateLastSyncTime(vararg key: Any) = dao.insertOrReplace(LastSyncTimeEntity(key))
+
+    @Transaction
+    override suspend fun resetLastSyncTime(vararg key: Any, isPrefix: Boolean) {
+        val flattened = LastSyncTimeEntity.flattenKey(key)
+        dao.deleteLastSyncTime(flattened)
+        if (isPrefix) {
+            val prefix = "$flattened$KEY_SEPARATOR"
+            dao.delete(
+                dao.getLastSyncTimes("$prefix%")
+                    .filter { it.id.startsWith(prefix, ignoreCase = true) }
+            )
+        }
+    }
 }

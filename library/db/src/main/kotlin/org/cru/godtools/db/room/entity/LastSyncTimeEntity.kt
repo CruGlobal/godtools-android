@@ -8,6 +8,7 @@ internal class LastSyncTimeEntity(@PrimaryKey val id: String, val time: Long = S
     constructor(key: Array<out Any>) : this(flattenKey(key))
 
     companion object {
-        fun flattenKey(key: Array<out Any>) = key.joinToString(":")
+        const val KEY_SEPARATOR = ":"
+        fun flattenKey(key: Array<out Any>) = key.joinToString(KEY_SEPARATOR)
     }
 }
