@@ -37,7 +37,6 @@ class TractPageCallToActionBindingTest {
         binding = TractPageCallToActionBinding.inflate(LayoutInflater.from(context), null, false)
         binding.lifecycleOwner = activity
         binding.callbacks = mock()
-        binding.controller = mock()
         binding.executePendingBindings()
 
         page = mock()
@@ -67,7 +66,6 @@ class TractPageCallToActionBindingTest {
 
         binding.callToActionArrow.performClick()
         verify(binding.callbacks!!).goToNextPage()
-        verify(binding.controller!!, never()).sendEvents(any())
     }
 
     @Test
@@ -77,7 +75,6 @@ class TractPageCallToActionBindingTest {
 
         binding.callToActionArrow.performClick()
         verify(binding.callbacks!!).goToNextPage()
-        verify(binding.controller!!, never()).sendEvents(any())
     }
 
     @Test
