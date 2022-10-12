@@ -1,17 +1,21 @@
 package org.cru.godtools.account.provider.okta
 
 import app.cash.turbine.test
+import com.okta.authfoundation.InternalAuthFoundationApi
 import com.okta.authfoundation.claims.email
 import com.okta.authfoundation.claims.familyName
 import com.okta.authfoundation.claims.givenName
 import com.okta.authfoundation.claims.name
 import com.okta.authfoundation.claims.subject
 import com.okta.authfoundation.client.OidcClient
+import com.okta.authfoundation.client.OidcClientResult
 import com.okta.authfoundation.client.dto.OidcUserInfo
 import com.okta.authfoundation.credential.Credential
 import com.okta.authfoundation.credential.CredentialDataSource.Companion.createCredentialDataSource
+import com.okta.authfoundation.credential.Token
 import com.okta.authfoundation.jwt.Jwt
 import com.okta.authfoundationbootstrap.CredentialBootstrap
+import com.okta.webauthenticationui.WebAuthenticationClient.Companion.createWebAuthenticationClient
 import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -23,6 +27,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.spyk
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -54,10 +59,10 @@ private const val GR_MASTER_PERSON_ID = "gr_id"
 private const val NAME = "name"
 private const val EMAIL = "email"
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, InternalAuthFoundationApi::class)
 class OktaAccountProviderTest {
     private val api = mockk<AuthApi>()
-    private val buildConfig = OktaBuildConfig("", "http://example.com".toHttpUrl(), "")
+    private val buildConfig = OktaBuildConfig("", "http://example.com".toHttpUrl(), "appscheme")
     private val idTokenFlow = MutableStateFlow<Jwt?>(null)
     private val userInfoFlow = MutableStateFlow<OidcUserInfo?>(null)
     private val credential = mockk<Credential> {
@@ -73,6 +78,7 @@ class OktaAccountProviderTest {
             token
         }
     }
+    private val webAuthClient = spyk(mockk<OidcClient>(relaxed = true).createWebAuthenticationClient(mockk()))
     private lateinit var provider: OktaAccountProvider
 
     @BeforeTest
@@ -82,8 +88,23 @@ class OktaAccountProviderTest {
             coEvery { defaultCredential() } returns credential
             every { credentialDataSource } returns mockk<OidcClient>().createCredentialDataSource(storage)
         }
-        provider = OktaAccountProvider(credentials, api, buildConfig, mockk())
+        provider = OktaAccountProvider(credentials, api, buildConfig, webAuthClient)
     }
+
+    // region login()
+    @Test
+    fun `login()`() = runTest {
+        val token: Token = mockk()
+        coEvery { webAuthClient.login(any(), any(), any(), any()) } returns OidcClientResult.Success(token)
+        coEvery { credential.storeToken(any(), any()) } just Runs
+
+        provider.login(mockk())
+        coVerifyAll {
+            webAuthClient.login(any(), buildConfig.appUriScheme + ":/auth", mapOf("prompt" to "login"))
+            credential.storeToken(token, any())
+        }
+    }
+    // endregion login()
 
     // region logout()
     @Test
