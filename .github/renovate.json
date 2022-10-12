@@ -28,7 +28,10 @@
     },
     {
       "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [ "com.google.firebase:firebase-perf" ],
+      "matchPackagePrefixes": [
+        "com.google.firebase:firebase-perf",
+        "com.google.firebase:perf-plugin"
+      ],
       "groupName": "firebase-perf"
     }
   ]
