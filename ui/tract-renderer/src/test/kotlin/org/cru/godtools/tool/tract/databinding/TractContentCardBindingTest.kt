@@ -6,6 +6,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
 import org.cru.godtools.tool.model.tips.Tip
@@ -18,9 +21,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
@@ -34,22 +34,24 @@ class TractContentCardBindingTest {
 
     private lateinit var binding: TractContentCardBinding
 
-    private lateinit var page: TractPage
-    private lateinit var card: Card
-    private val callToAction get() = page.callToAction
-    private lateinit var tip: Tip
+    private val card: Card = mockk(relaxed = true) {
+        every { manifest } answers { this@TractContentCardBindingTest.page.manifest }
+        every { page } answers { this@TractContentCardBindingTest.page }
+        every { isLastVisibleCard } returns true
+    }
+    private val callToAction = spyk(CallToAction())
+    private val page = TractPage(cards = { listOf(card) }, callToAction = { callToAction })
+    private val tip = Tip(id = "tip")
 
     @Before
     fun setup() {
         val activity = Robolectric.buildActivity(HiltTestActivity::class.java).get()
 
         binding = TractContentCardBinding.inflate(LayoutInflater.from(activity), null, false)
-
-        tip = Tip(id = "tip")
-        card = mock { on { isLastVisibleCard } doReturn true }
-        page = TractPage(cards = { listOf(card) }, callToAction = { mock() })
-        whenever(card.page) doReturn page
     }
+
+    private fun Card.setTips(vararg tips: Tip) = every { this@setTips.tips } returns listOf(*tips)
+    private fun CallToAction.setTip(tip: Tip?) = every { this@setTip.tip } returns tip
 
     // region Tips Indicator
     @Test
@@ -94,7 +96,7 @@ class TractContentCardBindingTest {
 
     @Test
     fun verifyTipsIndicatorHiddenWhenCallToActionHasATipButThisIsntTheLastCard() {
-        whenever(card.isLastVisibleCard) doReturn false
+        every { card.isLastVisibleCard } returns false
         callToAction.setTip(tip)
         binding.enableTips = ImmutableLiveData(true)
         binding.model = card
@@ -123,6 +125,3 @@ class TractContentCardBindingTest {
     }
     // endregion Tips Indicator
 }
-
-private fun Card.setTips(vararg tips: Tip) = whenever(this.tips).thenReturn(listOf(*tips))
-private fun CallToAction.setTip(tip: Tip?) = whenever(this.tip).thenReturn(tip)

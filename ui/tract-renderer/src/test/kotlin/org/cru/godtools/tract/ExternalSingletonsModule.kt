@@ -6,7 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import javax.inject.Named
 import kotlinx.coroutines.flow.flowOf
@@ -28,10 +30,6 @@ import org.cru.godtools.sync.task.SyncTaskModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.mock
 
 @Module
 @TestInstallIn(
@@ -58,32 +56,34 @@ class ExternalSingletonsModule {
     }
     @get:Provides
     val downloadManager by lazy {
-        mock<GodToolsDownloadManager> {
-            on { getDownloadProgressLiveData(any(), any()) } doAnswer { ImmutableLiveData(null) }
+        mockk<GodToolsDownloadManager> {
+            every { getDownloadProgressLiveData(any(), any()) } answers { ImmutableLiveData(null) }
         }
     }
     @get:Provides
-    val eventBus by lazy { mock<EventBus>() }
+    val eventBus by lazy { mockk<EventBus>(relaxUnitFun = true) }
     @get:Provides
     val manifestManager by lazy {
-        mock<ManifestManager> {
-            on { getLatestPublishedManifestLiveData(any(), any()) } doAnswer { ImmutableLiveData(null) }
+        mockk<ManifestManager> {
+            every { getLatestPublishedManifestLiveData(any(), any()) } answers { ImmutableLiveData(null) }
         }
     }
     @get:Provides
-    val picasso by lazy { mock<Picasso>(defaultAnswer = RETURNS_DEEP_STUBS) }
+    val picasso by lazy { mockk<Picasso>(relaxed = true) }
     @get:Provides
-    val referenceLifecycle by lazy { mock<ReferenceLifecycle>() }
+    val referenceLifecycle = ReferenceLifecycle()
     @get:Provides
     val settings by lazy {
-        mock<Settings> {
-            on { isFeatureDiscoveredLiveData(any()) } doAnswer { ImmutableLiveData(true) }
+        mockk<Settings> {
+            every { setFeatureDiscovered(any()) } just Runs
+            every { isFeatureDiscovered(any()) } returns true
+            every { isFeatureDiscoveredLiveData(any()) } answers { ImmutableLiveData(true) }
         }
     }
     @get:Provides
-    val syncService by lazy { mock<GodToolsSyncService>(defaultAnswer = RETURNS_DEEP_STUBS) }
+    val syncService by lazy { mockk<GodToolsSyncService>() }
     @get:Provides
-    val tractShareService by lazy { mock<TractShareService>() }
+    val tractShareService by lazy { mockk<TractShareService>() }
     @get:Provides
     val translationsRepository by lazy {
         mockk<TranslationsRepository> {

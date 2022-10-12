@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.mockk
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
@@ -26,7 +27,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -74,7 +74,7 @@ class PageControllerTest {
 
     @Test
     fun verifyOnToggleCard() {
-        controller.model = TractPage(cards = { listOf(mock()) })
+        controller.model = TractPage(cards = { listOf(mockk(relaxed = true)) })
 
         val cardController = controller.cardControllers.first()
         assertNull(binding.pageContentLayout.activeCard)
@@ -87,7 +87,7 @@ class PageControllerTest {
     @Test
     fun verifyUpdateChildrenLifecycles() {
         controller.lifecycleOwner!!.maxState = Lifecycle.State.RESUMED
-        controller.model = TractPage(cards = { listOf(mock(), mock()) })
+        controller.model = TractPage(cards = { listOf(mockk(relaxed = true), mockk(relaxed = true)) })
 
         // initially hero is visible
         assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)

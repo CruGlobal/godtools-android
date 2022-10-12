@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.widget.ImageViewCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verifyAll
 import org.cru.godtools.tool.model.Text
 import org.cru.godtools.tool.model.tract.CallToAction
 import org.cru.godtools.tool.model.tract.TractPage
@@ -15,19 +19,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
 class TractPageCallToActionBindingTest {
     private lateinit var binding: TractPageCallToActionBinding
-
-    private lateinit var page: TractPage
-    private lateinit var callToAction: CallToAction
 
     @Before
     fun setup() {
@@ -36,26 +32,21 @@ class TractPageCallToActionBindingTest {
 
         binding = TractPageCallToActionBinding.inflate(LayoutInflater.from(context), null, false)
         binding.lifecycleOwner = activity
-        binding.callbacks = mock()
+        binding.callbacks = mockk(relaxUnitFun = true)
         binding.executePendingBindings()
-
-        page = mock()
-        callToAction = mock()
     }
 
     // region Arrow Tests
     @Test
     fun verifyArrowVisibilityLastPage() {
-        whenever(page.isLastPage).thenReturn(true)
-        binding.page = page
+        binding.page = spyk(TractPage()) { every { isLastPage } returns true }
         binding.executePendingBindings()
         assertEquals(View.GONE, binding.callToActionArrow.visibility)
     }
 
     @Test
     fun verifyArrowVisibilityNotLastPage() {
-        whenever(page.isLastPage).thenReturn(false)
-        binding.page = page
+        binding.page = spyk(TractPage()) { every { isLastPage } returns false }
         binding.executePendingBindings()
         assertEquals(View.VISIBLE, binding.callToActionArrow.visibility)
     }
@@ -65,16 +56,16 @@ class TractPageCallToActionBindingTest {
         binding.executePendingBindings()
 
         binding.callToActionArrow.performClick()
-        verify(binding.callbacks!!).goToNextPage()
+        verifyAll { binding.callbacks!!.goToNextPage() }
     }
 
     @Test
     fun verifyArrowOnClickNoEvents() {
-        binding.callToAction = callToAction
+        binding.callToAction = CallToAction()
         binding.executePendingBindings()
 
         binding.callToActionArrow.performClick()
-        verify(binding.callbacks!!).goToNextPage()
+        verifyAll { binding.callbacks!!.goToNextPage() }
     }
 
     @Test
