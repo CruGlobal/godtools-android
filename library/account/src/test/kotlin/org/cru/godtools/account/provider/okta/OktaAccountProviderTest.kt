@@ -8,6 +8,7 @@ import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
+import io.mockk.coVerifyOrder
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.just
@@ -53,6 +54,20 @@ class OktaAccountProviderTest {
         }
         provider = OktaAccountProvider(credentials, api)
     }
+
+    // region logout()
+    @Test
+    fun `logout()`() = runTest {
+        coEvery { credential.revokeAllTokens() } returns mockk()
+        coEvery { credential.delete() } just Runs
+
+        provider.logout()
+        coVerifyOrder {
+            credential.revokeAllTokens()
+            credential.delete()
+        }
+    }
+    // endregion logout()
 
     // region authenticateWithMobileContentApi()
     @Test
