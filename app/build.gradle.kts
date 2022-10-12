@@ -37,6 +37,9 @@ android {
         dataBinding = true
         viewBinding = true
     }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 
     createEventBusIndex("org.cru.godtools.AppEventBusIndex")
     kapt {
@@ -116,6 +119,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.android.desugaring)
+
     api(project(":library:api"))
     api(project(":library:db"))
     api(project(":library:download-manager"))
