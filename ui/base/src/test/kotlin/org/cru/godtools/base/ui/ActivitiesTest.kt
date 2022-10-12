@@ -1,10 +1,15 @@
 package org.cru.godtools.base.ui
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.slot
+import io.mockk.spyk
+import io.mockk.verify
 import java.util.Locale
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
@@ -13,49 +18,35 @@ import org.cru.godtools.tract.activity.TractActivity
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.argumentCaptor
-import org.mockito.kotlin.doNothing
-import org.mockito.kotlin.spy
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 
 private const val TOOL = "tool"
 
 @RunWith(AndroidJUnit4::class)
 class ActivitiesTest {
-    private lateinit var activity: Activity
-
-    @Before
-    fun setup() {
-        activity = spy(Robolectric.buildActivity(AppCompatActivity::class.java).get())
-        doNothing().whenever(activity).startActivity(any())
+    private val intent = slot<Intent>()
+    private val activity = spyk(Robolectric.buildActivity(AppCompatActivity::class.java).get()) {
+        every { startActivity(capture(this@ActivitiesTest.intent)) } just Runs
     }
 
     // region TractActivity
     @Test
     fun verifyStartTractActivity() {
         activity.startTractActivity(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA, showTips = false)
-        argumentCaptor<Intent> {
-            verify(activity).startActivity(capture())
-            firstValue.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA))
-        }
+        verify { activity.startActivity(any()) }
+        intent.captured.assertTractIntent(languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA))
     }
 
     @Test
     fun verifyStartTractActivityWithShowTips() {
         activity.startTractActivity(TOOL, Locale.ENGLISH, null, Locale.FRENCH, Locale.CANADA, showTips = true)
-        argumentCaptor<Intent> {
-            verify(activity).startActivity(capture())
-            firstValue.assertTractIntent(
-                languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA),
-                showTips = true
-            )
-        }
+        verify { activity.startActivity(any()) }
+        intent.captured.assertTractIntent(
+            languages = arrayOf(Locale.ENGLISH, Locale.FRENCH, Locale.CANADA),
+            showTips = true
+        )
     }
 
     @Test

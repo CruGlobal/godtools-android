@@ -11,10 +11,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -30,7 +32,7 @@ import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
-import org.junit.After
+import org.cru.godtools.tract.service.FollowupService
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -41,10 +43,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
-import org.mockito.MockedStatic
-import org.mockito.Mockito.mockStatic
-import org.mockito.kotlin.any
-import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -61,12 +59,12 @@ class TractActivityTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
     lateinit var dao: GodToolsDao
+    @BindValue
+    val followupService = mockk<FollowupService>()
     @Inject
     lateinit var manifestManager: ManifestManager
     @Inject
     lateinit var translationsRepository: TranslationsRepository
-
-    private lateinit var lottieUtils: MockedStatic<*>
 
     private fun <R> scenario(
         intent: Intent = context.createTractActivityIntent(TOOL, Locale.ENGLISH),
@@ -81,12 +79,6 @@ class TractActivityTest {
         every {
             dao.getLiveData(match<Query<Language>> { it.table.type == Language::class.java })
         } returns MutableLiveData(emptyList())
-        lottieUtils = mockStatic(Class.forName("org.cru.godtools.tract.util.LottieUtilsKt"))
-    }
-
-    @After
-    fun cleanup() {
-        lottieUtils.closeOnDemand()
     }
 
     // region Intent Processing
@@ -248,7 +240,7 @@ class TractActivityTest {
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisible() {
         everyGetTranslation() returns MutableLiveData(Translation())
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
+        everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         scenario {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -265,7 +257,7 @@ class TractActivityTest {
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisibleForDeepLink() {
         everyGetTranslation() returns MutableLiveData(Translation())
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
+        everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")) {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -282,7 +274,7 @@ class TractActivityTest {
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenNoManifest() {
         everyGetTranslation() returns MutableLiveData(Translation())
-        whenGetManifest().thenReturn(ImmutableLiveData(null))
+        everyGetManifest() returns ImmutableLiveData(null)
 
         scenario {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -299,8 +291,8 @@ class TractActivityTest {
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenShowingTips() {
         everyGetTranslation() returns MutableLiveData(Translation())
-        whenGetManifest()
-            .thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
+        everyGetManifest()
+            .returns(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
         scenario(context.createTractActivityIntent("test", Locale.ENGLISH, showTips = true)) {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -317,7 +309,7 @@ class TractActivityTest {
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
         everyGetTranslation() returns MutableLiveData(Translation())
-        whenGetManifest().thenReturn(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH)))
+        everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&$PARAM_LIVE_SHARE_STREAM=asdf")) {
             it.moveToState(Lifecycle.State.RESUMED)
@@ -336,6 +328,6 @@ class TractActivityTest {
 
     private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
         every { translationsRepository.getLatestTranslationLiveData(tool ?: any(), locale ?: any(), any(), any()) }
-    private fun whenGetManifest(tool: String = any(), locale: Locale = any()) =
-        whenever(manifestManager.getLatestPublishedManifestLiveData(tool, locale))
+    private fun everyGetManifest(tool: String? = null, locale: Locale? = null) =
+        every { (manifestManager.getLatestPublishedManifestLiveData(tool ?: any(), locale ?: any())) }
 }

@@ -90,7 +90,6 @@
                 layout="@layout/tract_page_call_to_action"
                 app:callToAction="@{page.callToAction}"
                 app:callbacks="@{callbacks}"
-                app:controller="@{controller}"
                 app:page="@{page}" />
 
             <com.google.android.material.imageview.ShapeableImageView

@@ -3,6 +3,7 @@ package org.cru.godtools.tool.cyoa.ui
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.graphics.Color
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.activity.viewModels
@@ -14,6 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
@@ -22,10 +25,16 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.model.EventId
+import org.cru.godtools.tool.model.Gravity
+import org.cru.godtools.tool.model.ImageScaleType
 import org.cru.godtools.tool.model.Manifest
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
+import org.cru.godtools.tool.model.page.backgroundColor
+import org.cru.godtools.tool.model.page.backgroundImageGravity
+import org.cru.godtools.tool.model.page.backgroundImageScaleType
+import org.cru.godtools.tool.model.page.controlColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -34,11 +43,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.KStubbing
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.stub
-import org.mockito.kotlin.whenever
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
@@ -80,9 +84,7 @@ class CyoaActivityTest {
     @Before
     fun setupMocks() {
         hiltRule.inject()
-        manifestManager.stub {
-            on { getLatestPublishedManifestLiveData(TOOL, Locale.ENGLISH) } doReturn manifestEnglish
-        }
+        every { manifestManager.getLatestPublishedManifestLiveData(TOOL, Locale.ENGLISH) } returns manifestEnglish
     }
 
     private fun manifest(pages: List<Page> = emptyList()) = Manifest(
@@ -92,33 +94,43 @@ class CyoaActivityTest {
         pages = { pages }
     )
 
-    private fun contentPage(id: String, stubbing: KStubbing<ContentPage>.(ContentPage) -> Unit = {}) =
-        mock<ContentPage> {
-            on { this.id } doReturn id
-            on { manifest } doReturn manifest()
-            stubbing(it)
-        }
-
-    private fun cardCollectionPage(
-        id: String,
-        stubbing: KStubbing<CardCollectionPage>.(CardCollectionPage) -> Unit = {}
-    ) = mock<CardCollectionPage> {
-        on { this.id } doReturn id
-        on { manifest } doReturn manifest()
-        stubbing(it)
+    private fun contentPage(id: String, block: ContentPage.() -> Unit = {}) = mockk<ContentPage> {
+        every { this@mockk.id } returns id
+        initializeMockk()
+        every { content } returns emptyList()
+        block()
     }
 
-    private fun EventId.event() = mock<Event> {
-        on { id } doReturn this@event
-        on { tool } doReturn TOOL
-        on { locale } doReturn Locale.ENGLISH
+    private fun cardCollectionPage(id: String, block: CardCollectionPage.() -> Unit = {}) = mockk<CardCollectionPage> {
+        every { this@mockk.id } returns id
+        initializeMockk()
+        every { cards } returns emptyList()
+        block()
     }
+
+    private fun Page.initializeMockk() {
+        every { manifest } returns manifest()
+        every { isHidden } returns false
+        every { parentPage } returns null
+        every { listeners } returns emptySet()
+        every { dismissListeners } returns emptySet()
+        every { getAnalyticsEvents(any()) } returns emptyList()
+        every { backgroundColor } returns Color.BLUE
+        every { backgroundImage } returns null
+        every { backgroundImageGravity } returns Gravity.CENTER
+        every { backgroundImageScaleType } returns ImageScaleType.FILL
+        every { controlColor } returns Color.CYAN
+    }
+
+    private fun EventId.event() = Event.Builder(manifest())
+        .id(this)
+        .build()
     // endregion Mocks
 
     @Test
     fun `Initial Page - Skip Hidden Pages`() {
         val hiddenPage = contentPage("hiddenPage") {
-            on { isHidden } doReturn true
+            every { isHidden } returns true
         }
         manifestEnglish.value = manifest(listOf(hiddenPage, page1, page2))
 
@@ -229,7 +241,7 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Simple`() {
-        whenever(page2.parentPage) doReturn page1
+        every { page2.parentPage } returns page1
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
@@ -245,7 +257,7 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Skip extra entries`() {
-        whenever(page3.parentPage) doReturn page1
+        every { page3.parentPage } returns page1
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
 
         scenario {
@@ -262,7 +274,7 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Parent not in backstack`() {
-        whenever(page3.parentPage) doReturn page2
+        every { page3.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
 
         scenario {
@@ -278,7 +290,7 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Parent not in backstack - Initial page`() {
-        whenever(page1.parentPage) doReturn page2
+        every { page1.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
@@ -293,9 +305,9 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Parent not in backstack - Grandparent exists`() {
-        whenever(page2.parentPage) doReturn page1
-        whenever(page3.parentPage) doReturn page1
-        whenever(page4.parentPage) doReturn page2
+        every { page2.parentPage } returns page1
+        every { page3.parentPage } returns page1
+        every { page4.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2, page3, page4))
 
         scenario {
@@ -312,9 +324,9 @@ class CyoaActivityTest {
 
     @Test
     fun `navigateToParentPage() - Cycle`() {
-        whenever(page1.parentPage) doReturn page2
-        whenever(page2.parentPage) doReturn page3
-        whenever(page3.parentPage) doReturn page2
+        every { page1.parentPage } returns page2
+        every { page2.parentPage } returns page3
+        every { page3.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
 
         scenario {
@@ -339,7 +351,7 @@ class CyoaActivityTest {
     // region checkForPageEvent()
     @Test
     fun `checkForPageEvent() - Single Event - Go to new page`() {
-        whenever(page2.listeners) doReturn setOf(eventId1)
+        every { page2.listeners } returns setOf(eventId1)
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
@@ -355,8 +367,8 @@ class CyoaActivityTest {
 
     @Test
     fun `checkForPageEvent() - Single Event - dismiss initial page & Go to new page`() {
-        whenever(page1.dismissListeners) doReturn setOf(eventId1)
-        whenever(page2.listeners) doReturn setOf(eventId1)
+        every { page1.dismissListeners } returns setOf(eventId1)
+        every { page2.listeners } returns setOf(eventId1)
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
@@ -369,8 +381,8 @@ class CyoaActivityTest {
 
     @Test
     fun `checkForPageEvent() - Multiple Events - Go to multiple new pages`() {
-        whenever(page2.listeners) doReturn setOf(eventId1)
-        whenever(page3.listeners) doReturn setOf(eventId2)
+        every { page2.listeners } returns setOf(eventId1)
+        every { page3.listeners } returns setOf(eventId2)
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
 
         scenario {
@@ -389,10 +401,8 @@ class CyoaActivityTest {
 
     @Test
     fun `checkForPageEvent() - Multiple Events - Go to page and then dismiss it`() {
-        page2.stub {
-            on { listeners } doReturn setOf(eventId1)
-            on { dismissListeners } doReturn setOf(eventId2)
-        }
+        every { page2.listeners } returns setOf(eventId1)
+        every { page2.dismissListeners } returns setOf(eventId2)
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
@@ -406,8 +416,8 @@ class CyoaActivityTest {
 
     @Test
     fun `checkForPageEvent() - Multiple Events - dismiss initial page & Go to new page`() {
-        whenever(page1.dismissListeners) doReturn setOf(eventId1)
-        whenever(page2.listeners) doReturn setOf(eventId2)
+        every { page1.dismissListeners } returns setOf(eventId1)
+        every { page2.listeners } returns setOf(eventId2)
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario {
