@@ -20,15 +20,12 @@ android {
 dependencies {
     api(project(":library:model"))
 
+    api(libs.gtoSupport.api.okhttp3)
     api(libs.gtoSupport.jsonapi.retrofit2)
     api(libs.gtoSupport.scarlet)
     api(libs.gtoSupport.scarlet.actioncable)
-    implementation(libs.gtoSupport.api.okhttp3)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.jsonapi.scarlet)
-    implementation(libs.gtoSupport.okta) {
-        exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
-    }
     implementation(libs.gtoSupport.retrofit2)
     implementation(libs.gtoSupport.util)
 
@@ -37,7 +34,6 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
-    implementation(libs.okta.auth.foundation.bootstrap)
     implementation(libs.scarlet.lifecycle.android)
     implementation(libs.scarlet.adapters.stream.coroutines)
     implementation(libs.scarlet.websockets.okhttp)

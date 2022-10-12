@@ -43,6 +43,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "godtools"
 
+include("library:account")
 include("library:analytics")
 include("library:api")
 include("library:base")

@@ -34,6 +34,7 @@ android {
 
 dependencies {
     api(project(":library:base"))
+    implementation(project(":library:account"))
     implementation(project(":ui:base"))
 
     implementation(libs.firebase.messaging)
@@ -42,9 +43,6 @@ dependencies {
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
-    implementation(libs.gtoSupport.okta) {
-        exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
-    }
     implementation(libs.gtoSupport.snowplow)
 
     implementation(libs.appsflyer)

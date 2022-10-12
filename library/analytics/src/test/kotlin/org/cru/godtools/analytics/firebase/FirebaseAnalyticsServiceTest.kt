@@ -2,7 +2,6 @@ package org.cru.godtools.analytics.firebase
 
 import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.okta.authfoundation.client.dto.OidcUserInfo
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
@@ -13,10 +12,12 @@ import io.mockk.verify
 import io.mockk.verifySequence
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
+import org.cru.godtools.account.GodToolsAccountManager
+import org.cru.godtools.account.model.AccountInfo
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Before
@@ -26,15 +27,14 @@ import org.junit.Test
 class FirebaseAnalyticsServiceTest {
     private val firebase = mockk<FirebaseAnalytics>(relaxUnitFun = true)
     private val eventBus = mockk<EventBus>(relaxUnitFun = true)
-    private val userInfoFlow = MutableSharedFlow<OidcUserInfo?>()
-
-    private fun userInfo(guid: String?) = mockk<OidcUserInfo> {
-        every { this@mockk.deserializeClaim<Any>(any(), any()) } returns null
-        every { ssoGuid } returns guid
+    private val accountInfoFlow = MutableSharedFlow<AccountInfo?>()
+    private val accountManager = mockk<GodToolsAccountManager> {
+        every { isAuthenticatedFlow() } returns flowOf(false)
+        every { accountInfoFlow() } returns accountInfoFlow
     }
 
     private suspend fun TestScope.useAnalyticsService(block: suspend (FirebaseAnalyticsService) -> Unit) {
-        val service = FirebaseAnalyticsService(mockk(), eventBus, userInfoFlow, firebase, this)
+        val service = FirebaseAnalyticsService(mockk(), accountManager, eventBus, firebase, this)
         try {
             block(service)
         } finally {
@@ -63,17 +63,17 @@ class FirebaseAnalyticsServiceTest {
             confirmVerified(firebase)
 
             // no active user
-            userInfoFlow.emit(null)
+            accountInfoFlow.emit(null)
             verify(exactly = 1) { firebase.setUserId(null) }
             confirmVerified(firebase)
 
             // active user
-            userInfoFlow.emit(userInfo("GUID"))
+            accountInfoFlow.emit(AccountInfo(ssoGuid = "GUID"))
             verify(exactly = 1) { firebase.setUserId("GUID") }
             confirmVerified(firebase)
 
             // user logs out
-            userInfoFlow.emit(null)
+            accountInfoFlow.emit(null)
             verifySequence {
                 firebase.setUserId(null)
                 firebase.setUserId("GUID")

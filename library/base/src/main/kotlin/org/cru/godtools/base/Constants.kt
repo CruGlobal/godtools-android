@@ -17,4 +17,3 @@ val URI_SHARE_BASE: Uri = Uri.parse("https://$HOST_KNOWGOD_COM/")
 
 // Dagger Qualifiers
 const val DAGGER_HOST_CUSTOM_URI = "godtoolsCustomUriHost"
-const val DAGGER_OKTA_USER_INFO_FLOW = "SHARED_FLOW_OKTA_USER_INFO"

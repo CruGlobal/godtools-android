@@ -33,7 +33,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.okta.authfoundation.claims.name
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
@@ -79,9 +78,9 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                         )
                     )
 
-                    val idToken by viewModel.idToken.collectAsState()
+                    val userInfo by viewModel.userInfo.collectAsState()
                     Text(
-                        idToken?.name.orEmpty(),
+                        userInfo?.name.orEmpty(),
                         style = MaterialTheme.typography.headlineSmall,
                         textAlign = TextAlign.Center,
                         maxLines = 1,

@@ -20,27 +20,21 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
-import com.okta.authfoundation.client.OidcClientResult
-import com.okta.authfoundation.credential.Token
-import com.okta.authfoundationbootstrap.CredentialBootstrap
-import com.okta.webauthenticationui.WebAuthenticationClient
 import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
-import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticatedFlow
-import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.ccci.gto.android.common.util.view.MenuUtils
-import org.cru.godtools.BuildConfig.OKTA_AUTH_SCHEME
 import org.cru.godtools.R
+import org.cru.godtools.account.AccountType
+import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_CONTACT_US
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_COPYRIGHT
@@ -64,9 +58,6 @@ import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import timber.log.Timber
-
-private const val TAG = "BasePlatformActivity"
 
 internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
 internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
@@ -80,6 +71,9 @@ private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformAct
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
     protected constructor() : this(INVALID_LAYOUT_RES)
+
+    @Inject
+    internal lateinit var accountManager: GodToolsAccountManager
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -146,15 +140,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_logout -> {
-            lifecycleScope.launch {
-                with(oktaCredentials.defaultCredential()) {
-                    try {
-                        revokeAllTokens()
-                    } finally {
-                        delete()
-                    }
-                }
-            }
+            lifecycleScope.launch { accountManager.logout() }
             true
         }
         R.id.action_help -> {
@@ -224,13 +210,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         else -> super.toolbar
     }
 
-    // region Okta
-    @Inject
-    internal lateinit var oktaCredentials: CredentialBootstrap
-    @Inject
-    internal lateinit var oktaWebAuthenticationClient: WebAuthenticationClient
-    // endregion Okta
-
     // region Navigation Drawer
     protected open val drawerLayout: DrawerLayout? get() = findViewById(R.id.drawer_layout)
     protected open val drawerMenu: NavigationView? get() = findViewById(R.id.drawer_menu)
@@ -269,14 +248,12 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
                     lifecycleScope.launch {
                         repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            oktaCredentials.defaultCredentialFlow()
-                                .flatMapLatest { it.isAuthenticatedFlow() }
-                                .collect { isAuthenticated ->
-                                    loginItem?.isVisible = !isAuthenticated
-                                    signupItem?.isVisible = !isAuthenticated
-                                    logoutItem?.isVisible = isAuthenticated
-                                    profileItem?.isVisible = isAuthenticated
-                                }
+                            accountManager.isAuthenticatedFlow().collect { isAuthenticated ->
+                                loginItem?.isVisible = !isAuthenticated
+                                signupItem?.isVisible = !isAuthenticated
+                                logoutItem?.isVisible = isAuthenticated
+                                profileItem?.isVisible = isAuthenticated
+                            }
                         }
                     }
                 } else {
@@ -302,21 +279,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     // region Navigation Menu actions
     private fun launchLogin() {
-        lifecycleScope.launch {
-            when (
-                val result = oktaWebAuthenticationClient.login(
-                    this@BasePlatformActivity,
-                    "$OKTA_AUTH_SCHEME:/auth",
-                    extraRequestParameters = mapOf("prompt" to "login")
-                )
-            ) {
-                is OidcClientResult.Success<Token> -> oktaCredentials.defaultCredential().storeToken(result.result)
-                is OidcClientResult.Error -> {
-                    // log the login error
-                    Timber.tag(TAG).d(result.exception, "Error logging in to Okta.")
-                }
-            }
-        }
+        lifecycleScope.launch { accountManager.login(this@BasePlatformActivity, AccountType.OKTA) }
     }
 
     private fun launchContactUs() {

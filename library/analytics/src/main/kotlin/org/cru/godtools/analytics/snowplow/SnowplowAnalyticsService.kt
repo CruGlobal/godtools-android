@@ -3,7 +3,6 @@ package org.cru.godtools.analytics.snowplow
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.WorkerThread
-import com.okta.authfoundation.client.dto.OidcUserInfo
 import com.snowplowanalytics.snowplow.Snowplow
 import com.snowplowanalytics.snowplow.configuration.NetworkConfiguration
 import com.snowplowanalytics.snowplow.configuration.SubjectConfiguration
@@ -14,26 +13,22 @@ import com.snowplowanalytics.snowplow.payload.SelfDescribingJson
 import com.snowplowanalytics.snowplow.tracker.LogLevel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.okta.authfoundation.client.dto.grMasterPersonId
-import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.ccci.gto.android.common.snowplow.events.CustomEvent
 import org.ccci.gto.android.common.snowplow.events.CustomScreenView
 import org.ccci.gto.android.common.snowplow.events.CustomStructured
 import org.ccci.gto.android.common.snowplow.utils.TimberLogger
+import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.base.DAGGER_OKTA_USER_INFO_FLOW
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -51,10 +46,9 @@ private const val CONTEXT_ATTR_SCORING_URI = "uri"
 @SuppressLint("RestrictedApi")
 class SnowplowAnalyticsService @Inject internal constructor(
     @ApplicationContext context: Context,
+    accountManager: GodToolsAccountManager,
     eventBus: EventBus,
     okhttp: OkHttpClient,
-    @Named(DAGGER_OKTA_USER_INFO_FLOW)
-    oktaUserInfoFlow: SharedFlow<OidcUserInfo?>,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val snowplowTracker = Snowplow.createTracker(
@@ -112,14 +106,14 @@ class SnowplowAnalyticsService @Inject internal constructor(
     private fun Event.send() = snowplowTracker.track(this)
 
     // region Contexts
-    private val userProfileStateFlow = oktaUserInfoFlow
+    private val accountInfoStateFlow = accountManager.accountInfoFlow()
         .stateIn(coroutineScope, SharingStarted.Eagerly, null)
 
     @WorkerThread
     private fun idContext() = SelfDescribingJson(
         CONTEXT_SCHEMA_IDS,
         buildMap {
-            userProfileStateFlow.value?.let { profile ->
+            accountInfoStateFlow.value?.let { profile ->
                 profile.ssoGuid?.let { put(CONTEXT_ATTR_ID_GUID, it) }
                 profile.grMasterPersonId?.let { put(CONTEXT_ATTR_ID_GR_MASTER_PERSON_ID, it) }
             }

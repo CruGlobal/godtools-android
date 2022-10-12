@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":library:account"))
     implementation(project(":library:api"))
     implementation(project(":library:db"))
     implementation(project(":library:model"))
@@ -23,15 +24,11 @@ dependencies {
     api(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.kotlin.coroutines)
-    implementation(libs.gtoSupport.okta) {
-        exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
-    }
 
     implementation(libs.dagger)
     implementation(libs.eventbus)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
-    implementation(libs.okta.auth.foundation.bootstrap)
 
     testImplementation(libs.kotlin.coroutines.test)
 
