@@ -47,6 +47,7 @@ class UserCounterSyncTasks @Inject internal constructor(
             counters.forEach { existing.remove(it.id) }
             userCountersRepository.resetCountersMissingFromSync(existing.values)
         }
+        lastSyncTimeRepository.resetLastSyncTime(SYNC_TIME_COUNTERS, isPrefix = true)
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_COUNTERS, userId)
 
         true
