@@ -30,7 +30,6 @@ import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage.Companion.makeChangeAware
 import org.ccci.gto.android.common.okta.authfoundation.credential.SharedPreferencesTokenStorage
 import org.ccci.gto.android.common.okta.authfoundation.credential.migrateTo
-import org.ccci.gto.android.common.okta.authfoundation.enableClockCompat
 import org.ccci.gto.android.common.okta.datastore.DataStoreTokenStorage
 import org.ccci.gto.android.common.okta.oidc.storage.security.NoopEncryptionManager
 import org.ccci.gto.android.common.okta.oidc.storage.security.createDefaultEncryptionManager
@@ -54,7 +53,6 @@ internal abstract class OktaModule {
             buildConfig: OktaBuildConfig,
             okhttp: OkHttpClient
         ): OidcClient {
-            AuthFoundationDefaults.enableClockCompat()
             AuthFoundationDefaults.cache = SharedPreferencesCache.create(context)
             AuthFoundationDefaults.okHttpClientFactory = { okhttp }
             val config = OidcConfiguration(buildConfig.clientId, OKTA_SCOPE)
