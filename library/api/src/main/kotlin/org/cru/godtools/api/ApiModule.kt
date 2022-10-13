@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType
 import org.ccci.gto.android.common.dagger.okhttp3.InterceptorType.Type.NETWORK_INTERCEPTOR
 import org.ccci.gto.android.common.dagger.okhttp3.OkHttp3Module
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
+import org.ccci.gto.android.common.jsonapi.converter.InstantConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiConverterFactory
 import org.ccci.gto.android.common.jsonapi.scarlet.JsonApiMessageAdapterFactory
@@ -38,6 +39,7 @@ import org.cru.godtools.model.GlobalActivityAnalytics
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.User
 import org.cru.godtools.model.UserCounter
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import retrofit2.Retrofit
@@ -67,9 +69,11 @@ object ApiModule {
         .addClasses(AuthToken.Request::class.java, AuthToken::class.java)
         .addClasses(GlobalActivityAnalytics::class.java)
         .addClasses(PublisherInfo::class.java, NavigationEvent::class.java)
+        .addClasses(User::class.java)
         .addClasses(UserCounter::class.java)
         .addConverters(ToolTypeConverter)
         .addConverters(LocaleTypeConverter)
+        .addConverters(InstantConverter())
         .build()
 
     // region mobile-content-api APIs
@@ -133,6 +137,10 @@ object ApiModule {
     @Provides
     @Reusable
     fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.translationsApi() = create<TranslationsApi>()
+
+    @Provides
+    @Reusable
+    fun @receiver:Named(MOBILE_CONTENT_API_AUTHENTICATED) Retrofit.userApi() = create<UserApi>()
 
     @Provides
     @Reusable
