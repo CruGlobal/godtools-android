@@ -1,0 +1,15 @@
+{
+  "data": {
+    "id": "11",
+    "type": "user",
+    "attributes": {
+      "sso-guid": "49E1F2F9-55CC-6C10-58FF-B9B46CA79579",
+      "created-at": "2022-01-28T14:47:48Z"
+    },
+    "relationships": {
+      "favorite-tools": {
+        "data": []
+      }
+    }
+  }
+}
