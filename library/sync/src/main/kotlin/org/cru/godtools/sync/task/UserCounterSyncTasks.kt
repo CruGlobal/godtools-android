@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.os.Bundle
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
@@ -28,12 +27,12 @@ class UserCounterSyncTasks @Inject internal constructor(
     private val countersMutex = Mutex()
     private val countersUpdateMutex = Mutex()
 
-    suspend fun syncCounters(args: Bundle = Bundle.EMPTY): Boolean = countersMutex.withLock {
+    suspend fun syncCounters(force: Boolean): Boolean = countersMutex.withLock {
         if (!accountManager.isAuthenticated()) return true
         val userId = accountManager.userId().orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
-        if (!isForced(args) &&
+        if (!force &&
             !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_COUNTERS, userId, staleAfter = STALE_DURATION_COUNTERS)
         ) return true
 
