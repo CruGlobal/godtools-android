@@ -14,16 +14,18 @@ import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.model.UserCounter
 
-private const val SYNC_TIME_COUNTERS = "last_synced.user_counters"
-private const val STALE_DURATION_COUNTERS = TimeConstants.DAY_IN_MS
-
 @Singleton
-class UserCounterSyncTasks @Inject internal constructor(
+internal class UserCounterSyncTasks @Inject internal constructor(
     private val accountManager: GodToolsAccountManager,
     private val countersApi: UserCountersApi,
     private val lastSyncTimeRepository: LastSyncTimeRepository,
     private val userCountersRepository: UserCountersRepository,
 ) : BaseSyncTasks() {
+    companion object {
+        const val SYNC_TIME_COUNTERS = "last_synced.user_counters"
+        private const val STALE_DURATION_COUNTERS = TimeConstants.DAY_IN_MS
+    }
+
     private val countersMutex = Mutex()
     private val countersUpdateMutex = Mutex()
 
