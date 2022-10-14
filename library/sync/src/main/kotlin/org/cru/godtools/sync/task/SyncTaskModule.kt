@@ -39,5 +39,5 @@ abstract class SyncTaskModule {
     @Binds
     @IntoMap
     @SyncTaskKey(UserCounterSyncTasks::class)
-    abstract fun userCounterSyncTasks(tasks: UserCounterSyncTasks): BaseSyncTasks
+    internal abstract fun userCounterSyncTasks(tasks: UserCounterSyncTasks): BaseSyncTasks
 }

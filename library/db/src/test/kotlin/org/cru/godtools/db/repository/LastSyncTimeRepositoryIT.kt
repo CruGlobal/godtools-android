@@ -4,7 +4,7 @@ import java.lang.Thread.sleep
 import java.util.UUID
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
+import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
@@ -63,13 +63,14 @@ abstract class LastSyncTimeRepositoryIT {
         )
     }
 
+    // region isLastSyncStale()
     @Test
     @Suppress("BlockingMethodInNonBlockingContext")
     fun `isLastSyncStale()`() = runTest {
         repository.updateLastSyncTime(KEY)
         sleep(10)
         assertTrue(repository.isLastSyncStale(KEY, staleAfter = 0))
-        assertFalse(repository.isLastSyncStale(KEY, staleAfter = MIN_IN_MS))
+        assertFalse(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
     }
 
     @Test
@@ -78,12 +79,65 @@ abstract class LastSyncTimeRepositoryIT {
         repository.updateLastSyncTime(*COMPOUND_KEY)
         sleep(10)
         assertTrue(repository.isLastSyncStale(*COMPOUND_KEY, staleAfter = 0))
-        assertFalse(repository.isLastSyncStale(*COMPOUND_KEY, staleAfter = MIN_IN_MS))
+        assertFalse(repository.isLastSyncStale(*COMPOUND_KEY, staleAfter = DAY_IN_MS))
     }
 
     @Test
     fun `isLastSyncStale() - always stale if not tracked yet`() = runTest {
         assertTrue(repository.isLastSyncStale(KEY, staleAfter = 0))
-        assertTrue(repository.isLastSyncStale(KEY, staleAfter = System.currentTimeMillis() + MIN_IN_MS))
+        assertTrue(repository.isLastSyncStale(KEY, staleAfter = System.currentTimeMillis() + DAY_IN_MS))
     }
+    // endregion isLastSyncStale()
+
+    // region resetLastSyncTime()
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun createMultipleSyncTimes() {
+        repository.updateLastSyncTime(KEY)
+        sleep(5)
+        repository.updateLastSyncTime(KEY, 1)
+    }
+
+    @Test
+    fun `resetLastSyncTime() - defaults to isPrefix=false`() = runTest {
+        createMultipleSyncTimes()
+
+        repository.resetLastSyncTime(KEY)
+        assertEquals(0, repository.getLastSyncTime(KEY))
+        assertTrue(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
+        assertFalse(repository.isLastSyncStale(KEY, 1, staleAfter = DAY_IN_MS))
+    }
+
+    @Test
+    fun `resetLastSyncTime() - isPrefix=false`() = runTest {
+        createMultipleSyncTimes()
+
+        repository.resetLastSyncTime(KEY, isPrefix = false)
+        assertEquals(0, repository.getLastSyncTime(KEY))
+        assertTrue(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
+        assertFalse(repository.isLastSyncStale(KEY, 1, staleAfter = DAY_IN_MS))
+    }
+
+    @Test
+    fun `resetLastSyncTime() - isPrefix=true`() = runTest {
+        createMultipleSyncTimes()
+
+        repository.resetLastSyncTime("%", isPrefix = true)
+
+        repository.resetLastSyncTime(KEY, isPrefix = true)
+        assertEquals(0, repository.getLastSyncTime(KEY))
+        assertEquals(0, repository.getLastSyncTime(KEY, 1))
+        assertTrue(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
+        assertTrue(repository.isLastSyncStale(KEY, 1, staleAfter = DAY_IN_MS))
+    }
+
+    @Test
+    fun `resetLastSyncTime() - Prevent SQL injection attack`() = runTest {
+        createMultipleSyncTimes()
+
+        // % is the LIKE wildcard, ensure that this doesn't actually match anything
+        repository.resetLastSyncTime("%", isPrefix = true)
+        assertFalse(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
+        assertFalse(repository.isLastSyncStale(KEY, 1, staleAfter = DAY_IN_MS))
+    }
+    // endregion resetLastSyncTime()
 }

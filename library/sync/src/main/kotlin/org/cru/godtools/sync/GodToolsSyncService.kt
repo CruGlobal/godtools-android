@@ -38,7 +38,6 @@ private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
-private const val SYNCTYPE_USER_COUNTERS = 7
 private const val SYNCTYPE_DIRTY_USER_COUNTERS = 8
 
 @Singleton
@@ -70,10 +69,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     }
                     SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
                         if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
-                    }
-                    SYNCTYPE_USER_COUNTERS -> with<UserCounterSyncTasks> {
-                        syncCounters(task.args)
-                        syncDirtyCounters()
                     }
                     SYNCTYPE_DIRTY_USER_COUNTERS -> with<UserCounterSyncTasks> { syncDirtyCounters() }
                 }
@@ -131,12 +126,11 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncGlobalActivity(force: Boolean = false) =
         executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }
 
-    fun syncUserCounters(force: Boolean = false): SyncTask = GtSyncTask(
-        bundleOf(
-            EXTRA_SYNCTYPE to SYNCTYPE_USER_COUNTERS,
-            ContentResolver.SYNC_EXTRAS_MANUAL to force
-        )
-    )
+    suspend fun syncUserCounters(force: Boolean = false) = executeSync<UserCounterSyncTasks> {
+        val resp = syncCounters(force)
+        coroutineScope.launch { syncDirtyCounters() }
+        resp
+    }
 
     fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
     fun syncFollowups(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_FOLLOWUPS))
