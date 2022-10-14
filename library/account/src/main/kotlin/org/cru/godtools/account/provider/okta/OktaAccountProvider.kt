@@ -75,10 +75,10 @@ internal class OktaAccountProvider @Inject constructor(
     override fun accountInfoFlow() = credentialFlow
         .transformLatest { cred ->
             emitAll(
-                combine(cred.idTokenFlow(), cred.userInfoFlow()) { idToken, userInfo ->
+                combine(cred.idTokenFlow(), cred.tagsFlow(), cred.userInfoFlow()) { idToken, tags, userInfo ->
                     if (idToken != null || userInfo != null) {
                         AccountInfo(
-                            userId = cred.userId,
+                            userId = tags.userId,
                             oktaUserId = idToken?.subject ?: userInfo?.oktaUserId,
                             ssoGuid = userInfo?.ssoGuid,
                             grMasterPersonId = userInfo?.grMasterPersonId,
