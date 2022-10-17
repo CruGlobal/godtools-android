@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.transformLatest
 import org.ccci.gto.android.common.okta.authfoundation.client.dto.grMasterPersonId
@@ -30,6 +31,7 @@ import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.ccci.gto.android.common.okta.authfoundation.credential.idTokenFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticated
 import org.ccci.gto.android.common.okta.authfoundation.credential.isAuthenticatedFlow
+import org.ccci.gto.android.common.okta.authfoundation.credential.tagsFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.ccci.gto.android.common.okta.authfoundationbootstrap.defaultCredentialFlow
 import org.cru.godtools.account.AccountType
@@ -53,7 +55,8 @@ internal class OktaAccountProvider @Inject constructor(
         @VisibleForTesting
         internal const val TAG_USER_ID = "mobileContentApiUserId"
 
-        private val Credential.userId get() = tags[TAG_USER_ID]
+        private val Credential.userId get() = tags.userId
+        private inline val Map<String, String>.userId get() = get(TAG_USER_ID)
         private suspend fun Credential.setUserId(id: String) = storeToken(tags = tags + (TAG_USER_ID to id))
     }
 
@@ -67,6 +70,7 @@ internal class OktaAccountProvider @Inject constructor(
     override suspend fun isAuthenticated() = credentials.defaultCredential().isAuthenticated
     override suspend fun userId() = credentials.defaultCredential().userId
     override fun isAuthenticatedFlow() = credentialFlow.flatMapLatest { it.isAuthenticatedFlow() }
+    override fun userIdFlow() = credentialFlow.flatMapLatest { it.tagsFlow().map { it.userId } }
 
     override fun accountInfoFlow() = credentialFlow
         .transformLatest { cred ->
