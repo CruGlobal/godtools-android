@@ -1,5 +1,6 @@
 package org.cru.godtools.sync.task
 
+import androidx.annotation.VisibleForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.sync.Mutex
@@ -10,9 +11,6 @@ import org.cru.godtools.api.UserApi
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.UserRepository
 
-private const val SYNC_TIME_USER = "last_synced.user"
-private const val STALE_DURATION_USER = WEEK_IN_MS
-
 @Singleton
 internal class UserSyncTasks @Inject constructor(
     private val accountManager: GodToolsAccountManager,
@@ -20,6 +18,12 @@ internal class UserSyncTasks @Inject constructor(
     private val userApi: UserApi,
     private val userRepository: UserRepository
 ) : BaseSyncTasks() {
+    companion object {
+        @VisibleForTesting
+        const val SYNC_TIME_USER = "last_synced.user"
+        private const val STALE_DURATION_USER = WEEK_IN_MS
+    }
+
     private val userMutex = Mutex()
 
     suspend fun syncUser(force: Boolean) = userMutex.withLock {
