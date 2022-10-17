@@ -25,6 +25,7 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
+import org.cru.godtools.sync.task.UserSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncFollowupWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
@@ -123,6 +124,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     suspend fun syncGlobalActivity(force: Boolean = false) =
         executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }
+
+    suspend fun syncUser(force: Boolean = false) = executeSync<UserSyncTasks> { syncUser(force) }
 
     suspend fun syncDirtyUserCounters() = executeSync<UserCounterSyncTasks> { syncDirtyCounters() }
     suspend fun syncUserCounters(force: Boolean = false) = executeSync<UserCounterSyncTasks> {
