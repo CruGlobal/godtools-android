@@ -33,9 +33,14 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
+import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
+import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
@@ -78,17 +83,30 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                         )
                     )
 
-                    val userInfo by viewModel.userInfo.collectAsState()
+                    val user by viewModel.user.collectAsState()
                     Text(
-                        userInfo?.name.orEmpty(),
+                        user?.name.orEmpty(),
                         style = MaterialTheme.typography.headlineSmall,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         modifier = Modifier
-                            .padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                            .padding(top = 40.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
                             .align(Alignment.CenterHorizontally)
                     )
-                    // TODO: add join date
+                    Text(
+                        stringResource(
+                            R.string.account_joined,
+                            user?.createdAt?.atZone(ZoneId.systemDefault())
+                                ?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                                .orEmpty()
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        modifier = Modifier
+                            .padding(top = 8.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                            .align(Alignment.CenterHorizontally)
+                            .invisibleIf { user?.createdAt == null }
+                    )
 
                     TabRow(
                         selectedTabIndex = pagerState.currentPage,
@@ -96,7 +114,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                             TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
                         },
                         divider = {},
-                        modifier = Modifier.padding(top = 48.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                        modifier = Modifier.padding(top = 12.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
                         // TODO: set the correct padding
                     ) {
                         pages.forEachIndexed { index, page ->

@@ -3,6 +3,8 @@
     <string name="profile_title">My Profile</string>
     <string name="menu_profile">Global Activity</string>
 
+    <string name="account_joined">Joined %1$s</string>
+
     <!-- Global Activity -->
     <eat-comment />
     <string name="profile_tab_activity">Activity</string>
