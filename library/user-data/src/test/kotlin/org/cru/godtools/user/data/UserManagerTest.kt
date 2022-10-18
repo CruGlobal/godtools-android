@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.account.GodToolsAccountManager
+import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.User
 
@@ -19,10 +20,12 @@ private const val USER_ID = "user_id"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserManagerTest {
+    private val accountInfoFlow = MutableStateFlow<AccountInfo?>(null)
     private val userIdFlow = MutableStateFlow<String?>(null)
     private val userFlow = MutableStateFlow<User?>(null)
 
     private val accountManager: GodToolsAccountManager = mockk {
+        coEvery { accountInfoFlow() } returns accountInfoFlow
         coEvery { userIdFlow() } returns userIdFlow
     }
     private val userRepository: UserRepository = mockk {

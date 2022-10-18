@@ -3,6 +3,7 @@ package org.cru.godtools.model
 import java.time.Instant
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 
 private const val JSON_API_TYPE = "user"
@@ -18,7 +19,9 @@ data class User @JvmOverloads constructor(
     @JsonApiAttribute(JSON_SSO_GUID)
     val ssoGuid: String? = null,
     @JsonApiAttribute(JSON_CREATED_AT)
-    val createdAt: Instant? = null
+    val createdAt: Instant? = null,
+    @JsonApiIgnore
+    val name: String? = null,
 ) {
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
     val apiFavoriteTools: List<Tool> = emptyList()
