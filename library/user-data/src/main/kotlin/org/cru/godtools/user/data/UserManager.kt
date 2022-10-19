@@ -35,11 +35,13 @@ private operator fun User?.plus(accountInfo: AccountInfo?): User? = when {
     accountInfo == null -> this
     this != null -> copy(
         ssoGuid = ssoGuid ?: accountInfo.ssoGuid,
+        grMasterPersonId = grMasterPersonId ?: accountInfo.grMasterPersonId,
         name = name ?: accountInfo.name
     )
     else -> User(
         id = accountInfo.userId.orEmpty(),
         ssoGuid = accountInfo.ssoGuid,
+        grMasterPersonId = accountInfo.grMasterPersonId,
         name = accountInfo.name
     )
 }
