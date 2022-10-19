@@ -1,11 +1,13 @@
 package org.cru.godtools.sync
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.WorkManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import javax.inject.Provider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.sync.task.BaseSyncTasks
@@ -17,14 +19,18 @@ import org.junit.runner.RunWith
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsSyncServiceTest {
     private val toolsSyncTasks = mockk<ToolSyncTasks> { coEvery { syncTools(any()) } returns true }
+
     private val syncTasks = mapOf<Class<out BaseSyncTasks>, Provider<BaseSyncTasks>>(
         ToolSyncTasks::class.java to Provider { toolsSyncTasks }
     )
+    private val workManager: WorkManager = mockk()
+    private val testScope = TestScope()
+
+    private val syncService =
+        GodToolsSyncService(mockk(relaxUnitFun = true), { workManager }, syncTasks, UnconfinedTestDispatcher())
 
     @Test
-    fun testSyncTools() = runTest(UnconfinedTestDispatcher()) {
-        val syncService =
-            GodToolsSyncService(mockk(relaxUnitFun = true), mockk(), syncTasks, UnconfinedTestDispatcher())
+    fun testSyncTools() = testScope.runTest {
         syncService.syncTools(false)
         coVerify { toolsSyncTasks.syncTools(any()) }
     }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.bundleOf
 import androidx.work.WorkManager
+import dagger.Lazy
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Provider
@@ -43,7 +44,7 @@ private const val SYNCTYPE_TOOL_SHARES = 5
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
     private val eventBus: EventBus,
-    private val workManager: WorkManager,
+    private val workManager: Lazy<WorkManager>,
     private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
     private val coroutineDispatcher: CoroutineDispatcher,
     private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
@@ -52,7 +53,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     internal constructor(
         eventBus: EventBus,
-        workManager: WorkManager,
+        workManager: Lazy<WorkManager>,
         syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
     ) : this(eventBus, workManager, syncTasks, Dispatchers.IO.limitedParallelism(SYNC_PARALLELISM))
 
@@ -62,21 +63,21 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             try {
                 when (syncType) {
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
-                        if (!syncLanguages(task.args)) workManager.scheduleSyncLanguagesWork()
+                        if (!syncLanguages(task.args)) workManager.get().scheduleSyncLanguagesWork()
                     }
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
-                        if (!syncShares()) workManager.scheduleSyncToolSharesWork()
+                        if (!syncShares()) workManager.get().scheduleSyncToolSharesWork()
                     }
                     SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
-                        if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
+                        if (!syncFollowups()) workManager.get().scheduleSyncFollowupWork()
                     }
                 }
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
                 when (syncType) {
-                    SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
-                    SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
-                    SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
+                    SYNCTYPE_LANGUAGES -> workManager.get().scheduleSyncLanguagesWork()
+                    SYNCTYPE_TOOL_SHARES -> workManager.get().scheduleSyncToolSharesWork()
+                    SYNCTYPE_FOLLOWUPS -> workManager.get().scheduleSyncFollowupWork()
                 }
             } finally {
                 if (syncId != null) {
@@ -117,7 +118,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     )
 
     suspend fun syncTools(force: Boolean) = executeSync<ToolSyncTasks> { syncTools(force) }
-        .also { if (!it) workManager.scheduleSyncToolsWork() }
+        .also { if (!it) workManager.get().scheduleSyncToolsWork() }
 
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
