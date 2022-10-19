@@ -3,7 +3,6 @@ package org.cru.godtools.user.data
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.cru.godtools.db.repository.UserCountersRepository
@@ -15,14 +14,13 @@ class Counters @Inject internal constructor(
     private val syncService: GodToolsSyncService,
     private val userCountersRepository: UserCountersRepository
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
-    fun updateCounterAsync(name: String, change: Int = 1) {
-        require(VALID_NAME.matches(name)) { "Invalid counter name: $name" }
-        coroutineScope.launch { updateCounter(name, change) }
-    }
-    private suspend fun updateCounter(name: String, change: Int = 1) {
+    fun isValidCounterName(name: String) = VALID_NAME.matches(name)
+
+    suspend fun updateCounter(name: String, change: Int = 1) {
+        require(isValidCounterName(name)) { "Invalid counter name: $name" }
         userCountersRepository.updateCounter(name, change)
-        syncService.syncDirtyUserCounters().sync()
+        coroutineScope.launch { syncService.syncDirtyUserCounters() }
     }
 }
