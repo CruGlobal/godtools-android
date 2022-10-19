@@ -15,7 +15,7 @@ class Counters @Inject internal constructor(
     private val syncService: GodToolsSyncService,
     private val userCountersRepository: UserCountersRepository
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val coroutineScope = CoroutineScope(SupervisorJob())
 
     fun isValidCounterName(name: String) = VALID_NAME.matches(name)
 
@@ -25,6 +25,6 @@ class Counters @Inject internal constructor(
     }
     private suspend fun updateCounter(name: String, change: Int = 1) {
         userCountersRepository.updateCounter(name, change)
-        syncService.syncDirtyUserCounters().sync()
+        coroutineScope.launch { syncService.syncDirtyUserCounters() }
     }
 }

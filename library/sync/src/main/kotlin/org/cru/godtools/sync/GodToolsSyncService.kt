@@ -38,7 +38,6 @@ private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
 private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
-private const val SYNCTYPE_DIRTY_USER_COUNTERS = 8
 
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
@@ -70,7 +69,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
                         if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
                     }
-                    SYNCTYPE_DIRTY_USER_COUNTERS -> with<UserCounterSyncTasks> { syncDirtyCounters() }
                 }
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
@@ -126,6 +124,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncGlobalActivity(force: Boolean = false) =
         executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }
 
+    suspend fun syncDirtyUserCounters() = executeSync<UserCounterSyncTasks> { syncDirtyCounters() }
     suspend fun syncUserCounters(force: Boolean = false) = executeSync<UserCounterSyncTasks> {
         val resp = syncCounters(force)
         coroutineScope.launch { syncDirtyCounters() }
@@ -134,7 +133,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
     fun syncFollowups(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_FOLLOWUPS))
-    fun syncDirtyUserCounters(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_DIRTY_USER_COUNTERS))
 
     private inner class GtSyncTask(val args: Bundle) : SyncTask {
         override fun sync(): Int {
