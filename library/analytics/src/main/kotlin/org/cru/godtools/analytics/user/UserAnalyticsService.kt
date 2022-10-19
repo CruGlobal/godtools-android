@@ -3,6 +3,9 @@ package org.cru.godtools.analytics.user
 import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.user.data.Counters
@@ -18,13 +21,15 @@ internal class UserAnalyticsService @Inject internal constructor(
     eventBus: EventBus,
     private val userCounters: Counters
 ) {
+    private val coroutineScope = CoroutineScope(SupervisorJob())
+
     // region Tracking Events
     init {
         eventBus.register(this)
     }
 
     @WorkerThread
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
         if (!event.isForSystem(AnalyticsSystem.USER)) return
 
@@ -34,7 +39,7 @@ internal class UserAnalyticsService @Inject internal constructor(
             return
         }
 
-        userCounters.updateCounterAsync(counterName)
+        coroutineScope.launch { userCounters.updateCounter(counterName) }
     }
     // endregion Tracking Events
 }
