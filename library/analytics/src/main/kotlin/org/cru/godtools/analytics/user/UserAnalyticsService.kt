@@ -1,11 +1,10 @@
-package org.cru.godtools.user.data.analytics
+package org.cru.godtools.analytics.user
 
 import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.model.UserCounter
 import org.cru.godtools.user.data.Counters
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -30,7 +29,7 @@ internal class UserAnalyticsService @Inject internal constructor(
         if (!event.isForSystem(AnalyticsSystem.USER)) return
 
         val counterName = event.userCounterName ?: return
-        if (!UserCounter.VALID_NAME.matches(counterName)) {
+        if (!userCounters.isValidCounterName(counterName)) {
             Timber.tag(TAG).e(IllegalArgumentException(), "Invalid User analytics event name: %s", counterName)
             return
         }

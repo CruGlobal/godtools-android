@@ -17,8 +17,10 @@ class Counters @Inject internal constructor(
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
+    fun isValidCounterName(name: String) = VALID_NAME.matches(name)
+
     fun updateCounterAsync(name: String, change: Int = 1) {
-        require(VALID_NAME.matches(name)) { "Invalid counter name: $name" }
+        require(isValidCounterName(name)) { "Invalid counter name: $name" }
         coroutineScope.launch { updateCounter(name, change) }
     }
     private suspend fun updateCounter(name: String, change: Int = 1) {
