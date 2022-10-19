@@ -58,9 +58,10 @@ dependencies {
     implementation(libs.snowplow)
     implementation(libs.weakdelegate)
 
-    testImplementation(libs.kotlin.coroutines.test)
-
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
     kapt(libs.eventbus.annotationProcessor)
+
+    testImplementation(kotlin("test"))
+    testImplementation(libs.kotlin.coroutines.test)
 }

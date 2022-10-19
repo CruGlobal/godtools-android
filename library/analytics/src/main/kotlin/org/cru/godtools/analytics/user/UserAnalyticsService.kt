@@ -1,5 +1,6 @@
 package org.cru.godtools.analytics.user
 
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,11 +18,16 @@ import timber.log.Timber
 private const val TAG = "UserAnalyticsService"
 
 @Singleton
-internal class UserAnalyticsService @Inject internal constructor(
+internal class UserAnalyticsService @VisibleForTesting internal constructor(
     eventBus: EventBus,
-    private val userCounters: Counters
+    private val userCounters: Counters,
+    private val coroutineScope: CoroutineScope
 ) {
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    @Inject
+    internal constructor(
+        eventBus: EventBus,
+        userCounters: Counters
+    ) : this(eventBus, userCounters, CoroutineScope(SupervisorJob()))
 
     // region Tracking Events
     init {
