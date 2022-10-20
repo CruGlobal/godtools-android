@@ -6,17 +6,20 @@ import androidx.room.RoomDatabase
 import org.cru.godtools.db.room.dao.GlobalActivityDao
 import org.cru.godtools.db.room.dao.LastSyncTimeDao
 import org.cru.godtools.db.room.dao.UserCountersDao
+import org.cru.godtools.db.room.dao.UserDao
 import org.cru.godtools.db.room.entity.GlobalActivityEntity
 import org.cru.godtools.db.room.entity.LastSyncTimeEntity
 import org.cru.godtools.db.room.entity.UserCounterEntity
+import org.cru.godtools.db.room.entity.UserEntity
 import org.cru.godtools.db.room.repository.GlobalActivityRoomRepository
 import org.cru.godtools.db.room.repository.LastSyncTimeRoomRepository
 import org.cru.godtools.db.room.repository.UserCountersRoomRepository
+import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 2,
-    entities = [GlobalActivityEntity::class, UserCounterEntity::class, LastSyncTimeEntity::class],
-    autoMigrations = [AutoMigration(from = 1, to = 2)]
+    version = 3,
+    entities = [GlobalActivityEntity::class, UserEntity::class, UserCounterEntity::class, LastSyncTimeEntity::class],
+    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)]
 )
 internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     companion object {
@@ -25,12 +28,14 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
 
     // region DAOs
     abstract val globalActivityDao: GlobalActivityDao
+    abstract val userDao: UserDao
     abstract val userCountersDao: UserCountersDao
     abstract val lastSyncTimeDao: LastSyncTimeDao
     // endregion DAOs
 
     // region Repositories
     abstract val globalActivityRepository: GlobalActivityRoomRepository
+    abstract val userRepository: UserRoomRepository
     abstract val userCountersRepository: UserCountersRoomRepository
     abstract val lastSyncTimeRepository: LastSyncTimeRoomRepository
     // endregion Repositories
@@ -43,6 +48,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * v6.0.1
  * 1: 2022-09-22
  * 2: 2022-09-23
+ * 3: 2022-10-12
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()

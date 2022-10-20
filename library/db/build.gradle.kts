@@ -33,6 +33,7 @@ dependencies {
     api(libs.gtoSupport.db.livedata)
     implementation(libs.gtoSupport.androidx.collection)
     implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.room)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.util)
 

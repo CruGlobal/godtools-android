@@ -5,6 +5,7 @@ package org.cru.godtools.db.repository
 class InMemoryLastSyncTimeRepository : LastSyncTimeRepository {
     val entries = mutableMapOf<List<Any>, Long>()
 
+    fun setLastSyncTime(vararg key: Any, time: Long) = entries.put(key.toList(), time)
     override suspend fun getLastSyncTime(vararg key: Any) = entries[key.toList()] ?: 0
 
     override suspend fun isLastSyncStale(vararg key: Any, staleAfter: Long): Boolean {
