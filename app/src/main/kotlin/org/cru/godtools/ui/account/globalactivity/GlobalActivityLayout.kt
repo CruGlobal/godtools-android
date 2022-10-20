@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Calendar
+import java.time.Year
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
@@ -35,7 +35,7 @@ fun AccountGlobalActivityLayout() = Column(modifier = Modifier.padding(horizonta
     val activity by viewModel.activity.collectAsState()
 
     Text(
-        stringResource(R.string.profile_global_activity_heading, Calendar.getInstance().get(Calendar.YEAR)),
+        stringResource(R.string.profile_global_activity_heading, Year.now().value),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(top = 32.dp)
     )
