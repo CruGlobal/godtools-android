@@ -19,6 +19,12 @@ android {
     }
 }
 
+onesky {
+    sourceStringFiles = listOf(
+        "strings_tract_renderer.xml"
+    )
+}
+
 dependencies {
     api(project(":ui:base-tool"))
     api(project(":ui:tutorial-renderer"))

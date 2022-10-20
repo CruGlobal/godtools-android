@@ -13,6 +13,12 @@ android {
     buildFeatures.dataBinding = true
 }
 
+onesky {
+    sourceStringFiles = listOf(
+        "strings_lesson_feedback.xml",
+    )
+}
+
 dependencies {
     api(project(":ui:base-tool"))
 
