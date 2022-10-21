@@ -4,21 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.user.data.UserManager
 
 @HiltViewModel
 class AccountViewModel @Inject internal constructor(
-    accountManager: GodToolsAccountManager,
-    private val syncService: GodToolsSyncService
+    private val syncService: GodToolsSyncService,
+    userManager: UserManager
 ) : ViewModel() {
-    val userInfo = accountManager.accountInfoFlow()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val user = userManager.userFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val pages = MutableStateFlow(listOf(AccountPage.GLOBAL_ACTIVITY))
 
@@ -29,7 +29,10 @@ class AccountViewModel @Inject internal constructor(
     fun triggerSync(force: Boolean = false) {
         viewModelScope.launch {
             syncsRunning.value++
-            syncService.syncGlobalActivity(force)
+            coroutineScope {
+                launch { syncService.syncUser(force) }
+                launch { syncService.syncGlobalActivity(force) }
+            }
             syncsRunning.value--
         }
     }

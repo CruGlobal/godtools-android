@@ -13,6 +13,7 @@ internal interface AccountProvider : Ordered {
     suspend fun isAuthenticated(): Boolean
     suspend fun userId(): String?
     fun isAuthenticatedFlow(): Flow<Boolean>
+    fun userIdFlow(): Flow<String?>
     fun accountInfoFlow(): Flow<AccountInfo?>
 
     suspend fun login(context: Context)

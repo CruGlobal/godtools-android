@@ -11,8 +11,9 @@ android {
 }
 
 dependencies {
+    api(project(":library:model"))
+    implementation(project(":library:account"))
     implementation(project(":library:db"))
-    implementation(project(":library:model"))
     implementation(project(":library:sync"))
 
     implementation(libs.gtoSupport.dagger)
@@ -21,4 +22,8 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(kotlin("test"))
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }

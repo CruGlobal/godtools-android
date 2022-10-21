@@ -46,6 +46,7 @@ import org.ccci.gto.android.common.okta.authfoundation.client.dto.oktaUserId
 import org.ccci.gto.android.common.okta.authfoundation.client.dto.ssoGuid
 import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage
 import org.ccci.gto.android.common.okta.authfoundation.credential.idTokenFlow
+import org.ccci.gto.android.common.okta.authfoundation.credential.tagsFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
@@ -64,6 +65,7 @@ class OktaAccountProviderTest {
     private val api = mockk<AuthApi>()
     private val buildConfig = OktaBuildConfig("", "http://example.com".toHttpUrl(), "appscheme")
     private val idTokenFlow = MutableStateFlow<Jwt?>(null)
+    private val tagsFlow = MutableStateFlow(emptyMap<String, String>())
     private val userInfoFlow = MutableStateFlow<OidcUserInfo?>(null)
     private val credential = mockk<Credential> {
         every { tags } returns mapOf(OktaAccountProvider.TAG_USER_ID to USER_ID)
@@ -71,6 +73,7 @@ class OktaAccountProviderTest {
 
         mockkStatic("org.ccci.gto.android.common.okta.authfoundation.credential.Credential_FlowKt")
         every { idTokenFlow() } returns idTokenFlow
+        every { tagsFlow() } returns tagsFlow
         every { userInfoFlow() } returns userInfoFlow
 
         excludeRecords {

@@ -42,6 +42,10 @@ class GodToolsAccountManager @Inject internal constructor(
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
+    fun userIdFlow() = activeProviderFlow
+        .flatMapLatest { it?.userIdFlow() ?: flowOf(null) }
+        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
+        .distinctUntilChanged()
     fun accountInfoFlow() = activeProviderFlow
         .flatMapLatest { it?.accountInfoFlow() ?: flowOf(null) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
