@@ -10,6 +10,12 @@ android {
     baseConfiguration(project)
 }
 
+onesky {
+    sourceStringFiles = listOf(
+        "strings_language_names.xml",
+    )
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)

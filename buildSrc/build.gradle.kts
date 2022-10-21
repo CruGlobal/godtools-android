@@ -5,6 +5,7 @@ plugins {
 repositories {
     google()
     mavenCentral()
+    gradlePluginPortal()
 }
 
 configurations.configureEach {
@@ -20,4 +21,5 @@ dependencies {
     implementation(libs.gradleDownloadTask)
     implementation(libs.json)
     implementation(libs.kotlin.gradlePlugin)
+    implementation(libs.onesky.gradlePlugin)
 }

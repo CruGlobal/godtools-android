@@ -16,6 +16,15 @@ android {
     }
 }
 
+onesky {
+    sourceStringFiles = listOf(
+        "strings_tutorial_features.xml",
+        "strings_tutorial_liveshare.xml",
+        "strings_tutorial_onboarding.xml",
+        "strings_tutorial_tips.xml",
+    )
+}
+
 dependencies {
     implementation(project(":library:analytics"))
     implementation(project(":library:base"))

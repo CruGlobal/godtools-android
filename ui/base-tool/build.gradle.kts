@@ -19,6 +19,12 @@ android {
     }
 }
 
+onesky {
+    sourceStringFiles = listOf(
+        "strings_tool_renderer.xml",
+    )
+}
+
 dependencies {
     api(project(":library:analytics"))
     api(project(":library:db"))
