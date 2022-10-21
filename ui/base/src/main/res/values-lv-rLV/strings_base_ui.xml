@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_unable_to_launch_activity">Nav iespējams atvērt %s</string>
+    <string name="toast_unable_to_launch_activity">Neizdevās atvērt \"%s\"</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">Labā vēsts</string>
     <string name="tool_category_articles">Raksti</string>

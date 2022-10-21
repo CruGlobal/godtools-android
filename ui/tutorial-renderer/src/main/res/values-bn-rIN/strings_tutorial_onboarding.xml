@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_welcome">স্বাগতম</string>
+    <string name="tutorial_onboarding_welcome_2">সব কথোপকথেনের জন্য তৈরি</string>
+    <string name="tutorial_onboarding_welcome_action_video">ভিডিও দেখুন</string>
+    <string name="tutorial_onboarding_conversations_headline">ঈশ্বরের বিষয়ে যে কারোর সাথে কথা বলুন</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools আপনাকে ঈশ্বরের বিষয়ে অর্থপূর্ণ কথোপকথন করতে সাহায্য করে।</string>
+    <string name="tutorial_onboarding_prepare_headline">যে মুগূর্তগুলির মূল্য আছে তার জন্য তৈরি হন</string>
+    <string name="tutorial_onboarding_prepare_subhead">বিশ্বাসের বিষয়ে কথোপকথন আপনার জীবনে এক স্বাভাবিক অংশ কিভাবে করতে হয় তা শিখুন।</string>
+    <string name="tutorial_onboarding_share_headline">কাউকে যীশুকে আবিষ্কার করতে সাহায্য করুন</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools হল আপনার নির্দেশিকা গসপেল স্পষ্ট আর প্রাসঙ্গিকভাবে জানানোর জন্য।</string>
+    <string name="tutorial_onboarding_links_headline">দ্রুত শুরুর লিঙ্কগুলি</string>
+    <string name="tutorial_onboarding_links_articles_subhead">আমি খ্রীষ্টধর্মের বিষয়ে আবিষ্কার করতে চাই</string>
+    <string name="tutorial_onboarding_links_articles_action">আমাদের প্রবন্ধগুডিল পড়ুন</string>
+    <string name="tutorial_onboarding_links_lessons_subhead">আমি গসপেলের কথোপকথনের বিষয়ে শিখতে চাই</string>
+    <string name="tutorial_onboarding_links_lessons_action">আমাদের পাঠগুলি পরখ করুন</string>
+    <string name="tutorial_onboarding_links_tools_subhead">আমি কারোর সাথে গসপেল শেয়ার করতে চাই</string>
+    <string name="tutorial_onboarding_links_tools_action">আমাদের সাধনগুলির একটি বেছে নিন</string>
+    <string name="tutorial_onboarding_action_begin">শুরু করুন</string>
+    <string name="tutorial_onboarding_action_next">পরবর্তী</string>
+    <string name="tutorial_onboarding_action_skip">বাদ দিয়ে যান</string>
+    <string name="tutorial_onboarding_action_start">শুরু করুন</string>
+</resources>

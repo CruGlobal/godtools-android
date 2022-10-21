@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lesson_feedback_title">Atsauksmes</string>
-    <string name="lesson_feedback_question_helpful">Vai šī nodarbībā bija tev noderīga?</string>
+    <string name="lesson_feedback_question_helpful">Vai šī nodarbība bija tev noderīga?</string>
     <string name="lesson_feedback_question_helpful_yes">Jā</string>
     <string name="lesson_feedback_question_helpful_no">Nē</string>
     <string name="lesson_feedback_question_readiness">Cik gatavs tu esi uzsākt sarunu par garīgiem jautājumiem?</string>

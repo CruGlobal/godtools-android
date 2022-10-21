@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tutorial_features_tools_headline">Rīki</string>
+    <string name="tutorial_features_tools_subhead">Katrs rīks ir paredzēts citam sarunas posmam – pirms sarunas, sarunas laikā vai pēc sarunas.</string>
+    <string name="tutorial_features_tips_headline">Padomi rīka lietošanā</string>
+    <string name="tutorial_features_tips_subhead">\'GodTools\' apmācības padomi palīdz paskaidrot Labo vēsti un iepazīt Jēzu.</string>
+    <string name="tutorial_features_live_share_headline">Ekrāna koplietošana</string>
+    <string name="tutorial_features_live_share_subhead">Tagad vari attālināti kopīgot savu ekrānu, lai sarunu biedrs varētu sekot tam, kā tu izmanto rīku sarunās par Labo vēsti.</string>
+    <string name="tutorial_features_lessons_headline">Nodarbības</string>
+    <string name="tutorial_features_lessons_subhead">Katrā \'GodTools\' nodarbībā uzzini kaut ko tādu, kas var palīdzēt veidot sarunas par Dievu.</string>
+    <string name="tutorial_features_final_headline">Šo pamācību vari atrast izvēlnē, kad vien tā ir nepieciešama.</string>
+    <string name="tutorial_features_action_continue">Turpināt</string>
+    <string name="tutorial_features_action_close">Aizvērt pamācību</string>
     <!-- Training Tutorial Banner -->
-    <string name="tutorial_features_banner_action_dismiss">OK</string>
+    <string name="tutorial_features_banner_text">Parādiet man pamācību</string>
+    <string name="tutorial_features_banner_action_open">Atvērt pamācību</string>
+    <string name="tutorial_features_banner_action_dismiss">Aizvērt</string>
 </resources>

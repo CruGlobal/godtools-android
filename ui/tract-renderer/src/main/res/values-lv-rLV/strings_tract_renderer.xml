@@ -5,13 +5,22 @@
     <string name="tract_card_previous">Atpakaļ</string>
     <string name="tract_card_next">Tālāk</string>
     <!-- Live Sharing -->
-    <string name="menu_live_share_publish">Kopīgo savu ekrānu</string>
-    <string name="menu_live_share_active">Ekrāna koplietošana ir tagad aktīva</string>
-    <string name="share_tool_message_tract_live_share">Sveiki! Pievienojies man lietotnē \'GodTools\', izmantojot ekrāna koplietošanas funkciju. Lūk, saite: %1$s\n\nJa saņēmi šo ziņojumu novēloti, iespējams, ka saite vairs nedarbojas. Mēs varam vēlreiz pamēģināt kādu citu reizi.</string>
-    <string name="tract_live_share_starting">Sākas ekrāna koplietošana...</string>
-    <string name="tract_live_share_unable_to_connect">Nevar izveidot ekrāna koplietošanas savienojumu</string>
-    <string name="tract_live_share_exit_dialog_message">Beigt attālināto koplietošanas sesiju?</string>
+    <string name="menu_live_share_publish">Kopīgot ekrānu</string>
+    <string name="menu_live_share_active">Ekrāna koplietošana tagad ir aktīva</string>
+    <string name="share_tool_message_tract_live_share">Sveiki! Pievienojies man lietotnē \'GodTools\', izmantojot ekrāna koplietošanas funkciju. Lūk, saite:  %1$s\n\nJa saņēmi šo ziņojumu novēloti, iespējams, ka saite vairs nedarbojas. Mēs varam vēlreiz pamēģināt kādu citu reizi.</string>
+    <string name="tract_live_share_starting">Sākas ekrāna koplietošana…</string>
+    <string name="tract_live_share_unable_to_connect">Neizdevās izveidot ekrāna koplietošanas savienojumu</string>
+    <string name="tract_live_share_exit_dialog_message">Beigt attālināto koplietošanu?</string>
     <string name="tract_live_share_exit_dialog_confirm">Beigt</string>
     <string name="tract_live_share_exit_dialog_cancel">Atcelt</string>
     <!-- Settings -->
+    <string name="menu_settings">Iestatījumi</string>
+    <string name="tract_settings_title">Rīka iestatījumi</string>
+    <string name="tract_settings_action_share">Kopīgot saiti</string>
+    <string name="tract_settings_action_tips_disable">Paslēpt padomus</string>
+    <string name="tract_settings_languages_title">Paralēlā valoda</string>
+    <string name="tract_settings_languages_description">Iespēja pārslēgties starp divām dažādām valodām šajā rīkā.</string>
+    <string name="tract_settings_languages_parallel">paralēlā</string>
+    <string name="tract_settings_languages_none">Noņemt</string>
+    <string name="tract_settings_shareables_title">Saistītie attēli</string>
 </resources>
