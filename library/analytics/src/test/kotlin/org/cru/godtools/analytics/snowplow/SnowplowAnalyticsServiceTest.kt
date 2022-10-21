@@ -7,9 +7,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.user.data.UserManager
 import org.greenrobot.eventbus.EventBus
 import org.junit.Before
 import org.junit.Test
@@ -18,8 +18,8 @@ import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class SnowplowAnalyticsServiceTest {
-    private val accountManager = mockk<GodToolsAccountManager> {
-        every { accountInfoFlow() } returns flowOf(null)
+    private val userManager: UserManager = mockk {
+        every { userFlow } returns flowOf(null)
     }
 
     @Before
@@ -40,9 +40,9 @@ class SnowplowAnalyticsServiceTest {
         }
         SnowplowAnalyticsService(
             ApplicationProvider.getApplicationContext(),
-            accountManager,
             eventBus,
             mockk(),
+            userManager,
         )
     }
 }
