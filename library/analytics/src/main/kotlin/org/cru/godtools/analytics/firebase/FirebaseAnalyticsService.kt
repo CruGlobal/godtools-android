@@ -19,6 +19,7 @@ import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.user.data.UserManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -46,6 +47,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     app: Application,
     accountManager: GodToolsAccountManager,
     eventBus: EventBus,
+    userManager: UserManager,
     private val firebase: FirebaseAnalytics,
     coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
@@ -55,7 +57,8 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         app: Application,
         accountManager: GodToolsAccountManager,
         eventBus: EventBus,
-    ) : this(app, accountManager, eventBus, FirebaseAnalytics.getInstance(app))
+        userManager: UserManager,
+    ) : this(app, accountManager, eventBus, userManager, FirebaseAnalytics.getInstance(app))
 
     // region Tracking Events
     init {
@@ -95,19 +98,19 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     }
     // endregion Tracking Events
 
-    private val loggedInFlow = accountManager.isAuthenticatedFlow()
-        .onEach { firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "$it") }
-        .launchIn(coroutineScope)
-    @VisibleForTesting
-    internal val userInfoJob = accountManager.accountInfoFlow()
-        .onEach {
-            firebase.setUserId(it?.ssoGuid)
-            firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
-            firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
-        }
-        .launchIn(coroutineScope)
-
     init {
+        userManager.userFlow
+            .onEach {
+                firebase.setUserId(it?.ssoGuid)
+                firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
+                firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
+            }
+            .launchIn(coroutineScope)
+
+        accountManager.isAuthenticatedFlow()
+            .onEach { firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "$it") }
+            .launchIn(coroutineScope)
+
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
         firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, Locale.getDefault().toLanguageTag())
         firebase.setUserProperty(

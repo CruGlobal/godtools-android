@@ -21,6 +21,8 @@ data class User @JvmOverloads constructor(
     @JsonApiAttribute(JSON_CREATED_AT)
     val createdAt: Instant? = null,
     @JsonApiIgnore
+    val grMasterPersonId: String? = null,
+    @JsonApiIgnore
     val name: String? = null,
 ) {
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
