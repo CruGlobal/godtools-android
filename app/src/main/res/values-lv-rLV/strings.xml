@@ -5,8 +5,8 @@
     <string name="menu_language_settings">Valodas iestatījumi</string>
     <string name="title_language_settings">Valodas iestatījumi</string>
     <string name="title_language_primary">Pirmā valoda</string>
-    <string name="title_language_parallel">Sekundārā valoda</string>
-    <string name="action_language_parallel_select">Izvēlies sekundāro valodu</string>
+    <string name="title_language_parallel">Paralēlā valoda</string>
+    <string name="action_language_parallel_select">Izvēlies paralēlo valodu</string>
     <string name="text_language_parallel_description">Koplieto \'GodTools\' ar citiem viņu dzimtajā valodā.</string>
     <string name="text_language_warning">Ne visi rīki ir pieejami visās valodās.</string>
     <string name="label_language_none">Nav</string>

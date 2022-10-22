@@ -1,0 +1,24 @@
+name: OneSky Translation Upload
+
+on:
+  push:
+    branches: [develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  upload:
+    name: Upload Latest Strings to OneSky
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Upload Strings to OneSky
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: uploadTranslations --scan
+        env:
+          ORG_GRADLE_PROJECT_ONESKY_API_KEY: ${{ secrets.ONESKY_API_KEY }}
+          ORG_GRADLE_PROJECT_ONESKY_API_SECRET: ${{ secrets.ONESKY_API_SECRET }}

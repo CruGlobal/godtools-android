@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Language Selection UI -->
+    <string name="feature_discovery_title_language_settings">৯০+ ভাষা</string>
+    <string name="menu_language_settings">ভাষার সেটিংগুলি</string>
+    <string name="title_language_settings">ভাষার সেটিংগুলি</string>
+    <string name="title_language_primary">প্রাথমিক ভাষা</string>
+    <string name="title_language_parallel">সমান্তরাল ভাষা</string>
+    <string name="action_language_parallel_select">একটি সমান্তরাল ভাষা বেছে নিন</string>
+    <string name="text_language_parallel_description">কারোর সাথে তার নিজস্ব ভাষায় GodTools শেয়ার করুন</string>
+    <string name="text_language_warning">সব সাধনী সব ভাষায় উপলভ্য নয়</string>
+    <string name="label_language_none">নেই</string>
+    <string name="label_language_search">ভাষা ফিল্টার করুন</string>
+</resources>
