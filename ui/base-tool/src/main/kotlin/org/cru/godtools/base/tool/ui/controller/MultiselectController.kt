@@ -10,13 +10,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
+import org.cru.godtools.shared.tool.parser.model.Base
+import org.cru.godtools.shared.tool.parser.model.Multiselect
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.databinding.ToolContentMultiselectBinding
 import org.cru.godtools.tool.databinding.ToolContentMultiselectOptionCardBinding
 import org.cru.godtools.tool.databinding.ToolContentMultiselectOptionFlatBinding
-import org.cru.godtools.tool.model.AnalyticsEvent
-import org.cru.godtools.tool.model.Base
-import org.cru.godtools.tool.model.Multiselect
 
 class MultiselectController private constructor(
     private val binding: ToolContentMultiselectBinding,

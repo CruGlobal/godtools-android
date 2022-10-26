@@ -8,7 +8,7 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.LOADING
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.NOT_FOUND
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.OFFLINE
 import org.cru.godtools.model.Translation
-import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

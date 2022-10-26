@@ -2,7 +2,7 @@ package org.cru.godtools.base.tool.ui.controller.cache
 
 import dagger.MapKey
 import kotlin.reflect.KClass
-import org.cru.godtools.tool.model.Base
+import org.cru.godtools.shared.tool.parser.model.Base
 
 @MapKey(unwrapValue = false)
 @Retention(AnnotationRetention.RUNTIME)

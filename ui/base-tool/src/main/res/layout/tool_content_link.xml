@@ -2,7 +2,7 @@
 <layout>
     <data>
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.LinkController" />
-        <variable name="model" type="org.cru.godtools.tool.model.Link" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.Link" />
     </data>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"

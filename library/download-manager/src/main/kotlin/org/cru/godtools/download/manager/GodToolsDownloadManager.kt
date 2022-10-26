@@ -60,8 +60,8 @@ import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.ParserResult
+import org.cru.godtools.shared.tool.parser.ManifestParser
+import org.cru.godtools.shared.tool.parser.ParserResult
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable

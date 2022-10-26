@@ -1,6 +1,6 @@
 package org.cru.godtools.base.tool.ui.controller.cache
 
-import org.cru.godtools.tool.model.Image
+import org.cru.godtools.shared.tool.parser.model.Image
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

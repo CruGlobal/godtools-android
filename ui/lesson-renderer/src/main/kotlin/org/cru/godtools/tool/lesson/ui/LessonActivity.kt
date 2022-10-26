@@ -33,13 +33,13 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.lesson.LessonPage
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @AndroidEntryPoint

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tips.R
 
 fun Tip.Type?.getDrawable(context: Context) = ContextCompat.getDrawable(context, drawableRes)

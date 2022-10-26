@@ -5,7 +5,7 @@
         <import type="androidx.lifecycle.LiveData" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.TextController" />
-        <variable name="model" type="org.cru.godtools.tool.model.Text" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.Text" />
         <variable name="isGone" type="LiveData&lt;Boolean&gt;" />
         <variable name="isInvisible" type="LiveData&lt;Boolean&gt;" />
     </data>

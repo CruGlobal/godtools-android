@@ -5,8 +5,9 @@
 
     <data>
         <import type="kotlinx.coroutines.flow.StateFlow" />
+        <import type="org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage" />
 
-        <variable name="shareable" type="StateFlow&lt;org.cru.godtools.tool.model.shareable.ShareableImage&gt;" />
+        <variable name="shareable" type="StateFlow&lt;ShareableImage&gt;" />
     </data>
 
     <LinearLayout

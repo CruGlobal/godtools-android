@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="model" type="org.cru.godtools.tool.model.tract.Hero" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.tract.Hero" />
     </data>
 
     <LinearLayout

@@ -7,11 +7,11 @@ import androidx.lifecycle.asLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.cru.godtools.shared.tool.parser.model.Base
+import org.cru.godtools.shared.tool.parser.model.Button
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.databinding.ToolContentButtonBinding
 import org.cru.godtools.tool.databinding.ToolContentButtonOutlinedBinding
-import org.cru.godtools.tool.model.Base
-import org.cru.godtools.tool.model.Button
 import org.greenrobot.eventbus.EventBus
 
 internal sealed class ButtonController<T : ViewDataBinding>(

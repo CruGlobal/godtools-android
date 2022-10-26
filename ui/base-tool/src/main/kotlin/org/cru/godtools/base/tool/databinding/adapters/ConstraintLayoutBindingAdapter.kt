@@ -5,7 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
 import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_PERCENT
 import androidx.databinding.BindingAdapter
-import org.cru.godtools.tool.model.Gravity
+import org.cru.godtools.shared.tool.parser.model.Gravity
 
 @BindingAdapter("layout_constraintWidth_percent")
 internal fun View.setConstraintLayoutWidthPercentage(width: Float) {

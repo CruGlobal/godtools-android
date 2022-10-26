@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import java.util.Locale
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.util.content.getString
+import org.cru.godtools.shared.tool.parser.model.Input
 import org.cru.godtools.tool.R
-import org.cru.godtools.tool.model.Input
 
 // TODO: formatArgs doesn't provide good encapsulation.
 //       The caller needs to know what formatArgs the strings being used internally require.

@@ -17,12 +17,12 @@ import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingViewHolder
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
+import org.cru.godtools.shared.tool.parser.model.tract.Modal
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.shared.tool.state.State
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.model.tract.Modal
-import org.cru.godtools.tool.model.tract.TractPage
-import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.ui.controller.PageController

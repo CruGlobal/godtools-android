@@ -4,10 +4,10 @@
 
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.tool.model.MultiselectKt" />
+        <import type="org.cru.godtools.shared.tool.parser.model.MultiselectKt" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController" />
-        <variable name="model" type="org.cru.godtools.tool.model.Multiselect.Option" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.Multiselect.Option" />
         <variable name="isSelected" type="LiveData&lt;Boolean&gt;" />
     </data>
 

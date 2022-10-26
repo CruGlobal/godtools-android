@@ -11,11 +11,11 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlin.random.Random
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Text
+import org.cru.godtools.shared.tool.parser.model.gravity
+import org.cru.godtools.shared.tool.parser.model.textColor
 import org.cru.godtools.tool.R
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.Text
-import org.cru.godtools.tool.model.gravity
-import org.cru.godtools.tool.model.textColor
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

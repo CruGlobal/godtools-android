@@ -20,9 +20,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.model.Translation
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.ParserResult
+import org.cru.godtools.shared.tool.parser.ManifestParser
+import org.cru.godtools.shared.tool.parser.ParserResult
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository

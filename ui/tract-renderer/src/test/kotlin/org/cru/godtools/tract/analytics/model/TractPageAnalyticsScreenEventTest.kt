@@ -5,8 +5,8 @@ import io.mockk.mockk
 import io.mockk.spyk
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -3,7 +3,7 @@ package org.cru.godtools.tract.databinding.adapters
 import android.text.InputType
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import org.cru.godtools.tool.model.Input
+import org.cru.godtools.shared.tool.parser.model.Input
 
 @BindingAdapter("android:inputType")
 internal fun TextView.bindInputType(type: Input.Type?) {

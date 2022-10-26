@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.content.FileProvider
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.toolFileSystem
-import org.cru.godtools.tool.model.shareable.ShareableImage
+import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 
 internal fun ShareableImage.buildShareIntent(context: Context): Intent? {
     return resource?.let { resource ->

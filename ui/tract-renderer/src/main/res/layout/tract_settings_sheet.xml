@@ -8,7 +8,7 @@
         <import type="kotlinx.coroutines.flow.StateFlow" />
         <import type="org.cru.godtools.model.Tool" />
         <import type="org.cru.godtools.model.Language" />
-        <import type="org.cru.godtools.tool.model.Manifest" />
+        <import type="org.cru.godtools.shared.tool.parser.model.Manifest" />
 
         <variable name="callbacks" type="org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks" />
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />

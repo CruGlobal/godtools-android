@@ -4,7 +4,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
-import org.cru.godtools.tool.model.Gravity.Horizontal
+import org.cru.godtools.shared.tool.parser.model.Gravity.Horizontal
 
 @BindingAdapter("android:layout_weight")
 internal fun View.setLayoutWeight(weight: Float) {

@@ -7,7 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType
-import org.cru.godtools.tool.model.tips.InlineTip
+import org.cru.godtools.shared.tool.parser.model.tips.InlineTip
 import org.cru.godtools.tool.tips.ui.controller.InlineTipController
 
 @Module

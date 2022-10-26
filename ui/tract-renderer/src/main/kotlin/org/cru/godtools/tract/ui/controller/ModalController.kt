@@ -5,8 +5,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.state.State
-import org.cru.godtools.tool.model.tract.Modal
 import org.cru.godtools.tool.tract.databinding.TractContentModalBinding
 import org.greenrobot.eventbus.EventBus
 

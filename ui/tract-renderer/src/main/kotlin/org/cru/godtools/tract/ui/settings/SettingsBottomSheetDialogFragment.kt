@@ -20,7 +20,7 @@ import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFr
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.model.Language
-import org.cru.godtools.tool.model.shareable.ShareableImage
+import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.databinding.TractSettingsSheetBinding
 import org.cru.godtools.tract.activity.TractActivity

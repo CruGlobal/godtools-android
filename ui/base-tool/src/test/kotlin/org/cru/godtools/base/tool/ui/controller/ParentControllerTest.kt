@@ -16,11 +16,11 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.tool.model.Base
-import org.cru.godtools.tool.model.Image
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.Paragraph
-import org.cru.godtools.tool.model.Text
+import org.cru.godtools.shared.tool.parser.model.Base
+import org.cru.godtools.shared.tool.parser.model.Image
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Paragraph
+import org.cru.godtools.shared.tool.parser.model.Text
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.instanceOf

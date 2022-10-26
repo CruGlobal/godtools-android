@@ -13,7 +13,7 @@ import io.mockk.slot
 import io.mockk.spyk
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityHorizontal
 import jp.wasabeef.picasso.transformations.CropTransformation.GravityVertical
-import org.cru.godtools.tool.model.ImageScaleType
+import org.cru.godtools.shared.tool.parser.model.ImageScaleType
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

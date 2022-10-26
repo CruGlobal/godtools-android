@@ -9,8 +9,8 @@ import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.toolFileSystem
-import org.cru.godtools.tool.model.Gravity
-import org.cru.godtools.tool.model.Resource
+import org.cru.godtools.shared.tool.parser.model.Gravity
+import org.cru.godtools.shared.tool.parser.model.Resource
 
 @BindingAdapter("icon", "iconSize")
 internal fun MaterialButton.bindIconResource(resource: Resource?, size: Int) {

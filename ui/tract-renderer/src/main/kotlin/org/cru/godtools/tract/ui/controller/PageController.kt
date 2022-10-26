@@ -20,11 +20,11 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
+import org.cru.godtools.shared.tool.parser.model.tract.Modal
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.shared.tool.state.State
-import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.model.tract.Modal
-import org.cru.godtools.tool.model.tract.TractPage
-import org.cru.godtools.tool.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout

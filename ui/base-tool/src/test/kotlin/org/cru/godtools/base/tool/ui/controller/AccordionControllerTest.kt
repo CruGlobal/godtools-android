@@ -3,8 +3,8 @@ package org.cru.godtools.base.tool.ui.controller
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.every
 import io.mockk.mockk
+import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.tool.databinding.ToolContentAccordionBinding
-import org.cru.godtools.tool.model.Accordion
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

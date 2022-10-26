@@ -27,7 +27,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.model.TrainingTip
-import org.cru.godtools.tool.model.tips.Tip
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tips.R
 import org.cru.godtools.tool.tips.analytics.model.TipAnalyticsScreenEvent
 import org.cru.godtools.tool.tips.databinding.ToolTipBinding

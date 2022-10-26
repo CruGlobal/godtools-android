@@ -8,9 +8,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.parser.model.Flow
 import org.cru.godtools.tool.databinding.ToolContentFlowBinding
 import org.cru.godtools.tool.databinding.ToolContentFlowItemBinding
-import org.cru.godtools.tool.model.Flow
 
 class FlowController private constructor(
     private val binding: ToolContentFlowBinding,

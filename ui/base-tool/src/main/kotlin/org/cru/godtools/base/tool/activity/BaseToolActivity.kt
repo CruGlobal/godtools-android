@@ -52,13 +52,13 @@ import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.navBarColor
+import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.navBarColor
-import org.cru.godtools.tool.model.shareable.ShareableImage
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.keynote.godtools.android.db.GodToolsDao

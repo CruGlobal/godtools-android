@@ -14,14 +14,14 @@ import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ContentEventAnalyticsHandler
-import org.cru.godtools.tool.FEATURE_ANIMATION
-import org.cru.godtools.tool.FEATURE_CONTENT_CARD
-import org.cru.godtools.tool.FEATURE_FLOW
-import org.cru.godtools.tool.FEATURE_MULTISELECT
-import org.cru.godtools.tool.ParserConfig
-import org.cru.godtools.tool.model.DeviceType
-import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.xml.AndroidXmlPullParserFactory
+import org.cru.godtools.shared.tool.parser.ManifestParser
+import org.cru.godtools.shared.tool.parser.ParserConfig
+import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_ANIMATION
+import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_CONTENT_CARD
+import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_FLOW
+import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_MULTISELECT
+import org.cru.godtools.shared.tool.parser.model.DeviceType
+import org.cru.godtools.shared.tool.parser.xml.AndroidXmlPullParserFactory
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @Module

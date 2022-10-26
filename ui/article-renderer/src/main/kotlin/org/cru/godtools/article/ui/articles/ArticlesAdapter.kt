@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView.NO_ID
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.article.aem.model.Article
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.tool.article.databinding.ListItemArticleBinding
-import org.cru.godtools.tool.model.Manifest
 
 class ArticlesAdapter(
     lifecycleOwner: LifecycleOwner?,

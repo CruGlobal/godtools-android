@@ -13,13 +13,13 @@ import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.toolFileSystem
+import org.cru.godtools.shared.tool.parser.model.Resource
+import org.cru.godtools.shared.tool.parser.model.Text
+import org.cru.godtools.shared.tool.parser.model.gravity
+import org.cru.godtools.shared.tool.parser.model.textAlign
+import org.cru.godtools.shared.tool.parser.model.textColor
+import org.cru.godtools.shared.tool.parser.model.textScale
 import org.cru.godtools.tool.R
-import org.cru.godtools.tool.model.Resource
-import org.cru.godtools.tool.model.Text
-import org.cru.godtools.tool.model.gravity
-import org.cru.godtools.tool.model.textAlign
-import org.cru.godtools.tool.model.textColor
-import org.cru.godtools.tool.model.textScale
 import splitties.bitflags.minusFlag
 import splitties.bitflags.withFlag
 

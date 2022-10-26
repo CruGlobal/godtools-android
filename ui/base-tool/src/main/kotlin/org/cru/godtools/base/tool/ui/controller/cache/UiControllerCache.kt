@@ -8,7 +8,7 @@ import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType.Companion.DEFAULT_VARIATION
-import org.cru.godtools.tool.model.Base
+import org.cru.godtools.shared.tool.parser.model.Base
 import timber.log.Timber
 
 class UiControllerCache @AssistedInject internal constructor(

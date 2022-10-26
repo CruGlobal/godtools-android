@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.junit.Rule
 import org.junit.Test

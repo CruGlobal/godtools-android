@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.AnalyticsEvent
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 
 class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event: AnalyticsEvent) :
     AnalyticsActionEvent(action = event.action.orEmpty(), locale = event.manifest.locale) {
