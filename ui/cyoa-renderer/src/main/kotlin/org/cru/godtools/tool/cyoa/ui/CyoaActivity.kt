@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -20,7 +21,6 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.Uri
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.page.Page
