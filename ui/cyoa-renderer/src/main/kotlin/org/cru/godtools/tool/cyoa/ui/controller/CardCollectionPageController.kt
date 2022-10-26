@@ -25,6 +25,7 @@ import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
@@ -32,7 +33,6 @@ import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.page.CardCollectionPage
 import org.cru.godtools.tool.model.page.CardCollectionPage.Card
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.state.State
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 

@@ -9,11 +9,11 @@ import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.model.page.ContentPage
 import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.state.State
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 
