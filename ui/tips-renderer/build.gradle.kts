@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.splitties.fragmentargs)
 
