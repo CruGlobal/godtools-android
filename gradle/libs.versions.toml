@@ -75,7 +75,7 @@ androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 appsflyer = "com.appsflyer:af-android-sdk:6.9.2"
 coil-compose = "io.coil-kt:coil-compose:2.2.2"
-compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.2"
+compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.4"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
