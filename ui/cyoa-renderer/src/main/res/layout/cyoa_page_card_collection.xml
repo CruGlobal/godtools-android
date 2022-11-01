@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="androidx.lifecycle.LiveData" />
-        <import type="org.cru.godtools.tool.model.page.PageKt" />
         <import type="org.cru.godtools.base.tool.ui.util.BaseUtilsKt" />
+        <import type="org.cru.godtools.shared.tool.parser.model.page.PageKt" />
 
-        <variable name="page" type="org.cru.godtools.tool.model.page.CardCollectionPage" />
+        <variable name="page" type="org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage" />
         <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController" />
         <variable name="contentInsets" type="LiveData&lt;androidx.core.graphics.Insets&gt;" />
         <variable name="currentCardIndex" type="LiveData&lt;Integer&gt;" />

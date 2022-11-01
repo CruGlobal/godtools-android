@@ -8,9 +8,9 @@ import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Translation
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.ParserResult
+import org.cru.godtools.shared.tool.parser.ManifestParser
+import org.cru.godtools.shared.tool.parser.ParserResult
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Before

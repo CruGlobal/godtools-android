@@ -11,10 +11,10 @@ import io.mockk.mockk
 import io.mockk.spyk
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
-import org.cru.godtools.tool.model.tips.Tip
-import org.cru.godtools.tool.model.tract.CallToAction
-import org.cru.godtools.tool.model.tract.TractPage
-import org.cru.godtools.tool.model.tract.TractPage.Card
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
+import org.cru.godtools.shared.tool.parser.model.tract.CallToAction
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.R
 import org.junit.Assert.assertEquals
 import org.junit.Before

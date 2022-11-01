@@ -9,8 +9,8 @@ import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
-import org.cru.godtools.tool.model.tract.Hero
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
+import org.cru.godtools.shared.tool.parser.model.tract.Hero
 import org.cru.godtools.tool.tract.databinding.TractPageHeroBinding
 
 class HeroController @AssistedInject internal constructor(

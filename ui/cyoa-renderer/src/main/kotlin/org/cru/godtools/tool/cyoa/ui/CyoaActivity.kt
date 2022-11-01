@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.cyoa.ui
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -17,14 +18,13 @@ import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
+import org.cru.godtools.shared.tool.parser.model.page.ContentPage
+import org.cru.godtools.shared.tool.parser.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.Uri
-import org.cru.godtools.tool.model.page.CardCollectionPage
-import org.cru.godtools.tool.model.page.ContentPage
-import org.cru.godtools.tool.model.page.Page
-import org.cru.godtools.tool.model.tips.Tip
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 

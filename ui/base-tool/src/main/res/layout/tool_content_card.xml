@@ -2,10 +2,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.cru.godtools.tool.model.CardKt" />
+        <import type="org.cru.godtools.shared.tool.parser.model.CardKt" />
 
         <variable name="controller" type="org.cru.godtools.base.tool.ui.controller.CardController" />
-        <variable name="model" type="org.cru.godtools.tool.model.Card" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.Card" />
     </data>
 
     <androidx.cardview.widget.CardView

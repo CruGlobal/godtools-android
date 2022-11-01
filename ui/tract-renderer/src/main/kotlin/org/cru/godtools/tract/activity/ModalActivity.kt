@@ -23,8 +23,8 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
-import org.cru.godtools.tool.model.tract.Modal
-import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.tract.Modal
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.databinding.TractModalActivityBinding
 import org.cru.godtools.tract.EXTRA_MODAL

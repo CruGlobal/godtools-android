@@ -56,7 +56,6 @@ dependencies {
     implementation(libs.gtoSupport.util)
 
     implementation(libs.dagger)
-    implementation(libs.godtoolsMpp.parser)
     implementation(libs.hilt)
     implementation(libs.lottie)
     implementation(libs.materialComponents)

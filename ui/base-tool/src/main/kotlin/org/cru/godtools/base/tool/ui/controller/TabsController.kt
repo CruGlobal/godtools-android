@@ -11,9 +11,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.shared.tool.parser.model.Tabs
+import org.cru.godtools.shared.tool.parser.model.primaryColor
 import org.cru.godtools.tool.databinding.ToolContentTabsBinding
-import org.cru.godtools.tool.model.Tabs
-import org.cru.godtools.tool.model.primaryColor
 
 class TabsController private constructor(
     private val binding: ToolContentTabsBinding,

@@ -19,7 +19,7 @@ import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.model.Translation
-import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

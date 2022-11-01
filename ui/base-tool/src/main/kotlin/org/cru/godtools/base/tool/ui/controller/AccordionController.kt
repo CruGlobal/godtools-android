@@ -13,10 +13,10 @@ import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleO
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.parser.model.Accordion
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.tool.databinding.ToolContentAccordionBinding
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
-import org.cru.godtools.tool.model.Accordion
-import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
 
 class AccordionController @VisibleForTesting internal constructor(
     private val binding: ToolContentAccordionBinding,

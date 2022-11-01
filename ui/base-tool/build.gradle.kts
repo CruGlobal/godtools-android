@@ -34,7 +34,7 @@ dependencies {
     implementation(project(":library:base"))
     implementation(project(":library:model"))
 
-    implementation(libs.kotlin.coroutines)
+    api(libs.godtoolsShared.parser)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
@@ -59,12 +59,11 @@ dependencies {
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.godtoolsMpp.parser)
-
     api(libs.taptargetview)
     implementation(libs.dagger)
     implementation(libs.google.auto.value.annotations)
     implementation(libs.hilt)
+    implementation(libs.kotlin.coroutines)
     implementation(libs.lottie)
     implementation(libs.picasso)
     implementation(libs.picasso.transformations)

@@ -1,7 +1,7 @@
 package org.cru.godtools.base.tool.analytics.model
 
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest
 
 private const val USER_COUNTER_PREFIX = "tool_opens."
 

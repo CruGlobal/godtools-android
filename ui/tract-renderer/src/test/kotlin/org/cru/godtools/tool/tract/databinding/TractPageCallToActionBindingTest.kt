@@ -12,9 +12,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verifyAll
-import org.cru.godtools.tool.model.Text
-import org.cru.godtools.tool.model.tract.CallToAction
-import org.cru.godtools.tool.model.tract.TractPage
+import org.cru.godtools.shared.tool.parser.model.Text
+import org.cru.godtools.shared.tool.parser.model.tract.CallToAction
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

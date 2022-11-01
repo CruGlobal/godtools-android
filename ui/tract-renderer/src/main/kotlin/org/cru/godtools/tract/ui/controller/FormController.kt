@@ -9,8 +9,8 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
-import org.cru.godtools.tool.model.EventId
-import org.cru.godtools.tool.model.Form
+import org.cru.godtools.shared.tool.parser.model.EventId
+import org.cru.godtools.shared.tool.parser.model.Form
 import org.cru.godtools.tool.tract.databinding.TractContentFormBinding
 
 class FormController private constructor(

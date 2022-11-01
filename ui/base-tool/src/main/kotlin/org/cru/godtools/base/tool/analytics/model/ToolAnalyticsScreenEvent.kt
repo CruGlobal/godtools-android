@@ -3,7 +3,7 @@ package org.cru.godtools.base.tool.analytics.model
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest
 
 const val SCREEN_CATEGORIES = "Categories"
 

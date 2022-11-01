@@ -1,7 +1,7 @@
 package org.cru.godtools.base.tool.analytics.model
 
 import androidx.core.os.bundleOf
-import org.cru.godtools.tool.model.shareable.Shareable
+import org.cru.godtools.shared.tool.parser.model.shareable.Shareable
 
 private const val ACTION_SHARE_SHAREABLE = "share_shareable"
 private const val PARAM_SHAREABLE_ID = "cru_shareable_id"

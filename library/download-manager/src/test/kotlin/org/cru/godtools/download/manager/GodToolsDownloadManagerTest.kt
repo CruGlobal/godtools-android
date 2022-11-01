@@ -49,9 +49,9 @@ import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
-import org.cru.godtools.tool.ParserConfig
-import org.cru.godtools.tool.service.ManifestParser
-import org.cru.godtools.tool.service.ParserResult
+import org.cru.godtools.shared.tool.parser.ManifestParser
+import org.cru.godtools.shared.tool.parser.ParserConfig
+import org.cru.godtools.shared.tool.parser.ParserResult
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasItem
 import org.junit.Assert.assertArrayEquals

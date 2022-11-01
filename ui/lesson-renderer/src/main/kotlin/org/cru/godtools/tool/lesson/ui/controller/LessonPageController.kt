@@ -10,10 +10,10 @@ import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
+import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
-import org.cru.godtools.tool.model.AnalyticsEvent.Trigger
-import org.cru.godtools.tool.model.lesson.LessonPage
-import org.cru.godtools.tool.state.State
 import org.greenrobot.eventbus.EventBus
 
 class LessonPageController @AssistedInject constructor(

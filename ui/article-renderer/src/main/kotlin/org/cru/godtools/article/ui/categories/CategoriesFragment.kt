@@ -12,9 +12,9 @@ import org.ccci.gto.android.common.androidx.recyclerview.decorator.MarginItemDec
 import org.cru.godtools.base.tool.analytics.model.SCREEN_CATEGORIES
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.fragment.BaseToolFragment
+import org.cru.godtools.shared.tool.parser.model.Category
 import org.cru.godtools.tool.article.R
 import org.cru.godtools.tool.article.databinding.ArticleCategoriesFragmentBinding
-import org.cru.godtools.tool.model.Category
 import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint

@@ -9,8 +9,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.tool.model.Image
-import org.cru.godtools.tool.model.Text
+import org.cru.godtools.shared.tool.parser.model.Image
+import org.cru.godtools.shared.tool.parser.model.Text
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.sameInstance

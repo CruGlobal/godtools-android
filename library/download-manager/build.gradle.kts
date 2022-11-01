@@ -18,6 +18,8 @@ dependencies {
     implementation(project(":library:db"))
     implementation(project(":library:model"))
 
+    implementation(libs.godtoolsShared.parser)
+
     api(libs.androidx.hilt.work)
     api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.work.ktx)
@@ -27,8 +29,6 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
-
-    implementation(libs.godtoolsMpp.parser)
 
     implementation(libs.dagger)
     implementation(libs.eventbus)

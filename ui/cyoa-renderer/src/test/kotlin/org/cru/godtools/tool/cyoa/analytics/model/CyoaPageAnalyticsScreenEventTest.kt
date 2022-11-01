@@ -4,8 +4,8 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

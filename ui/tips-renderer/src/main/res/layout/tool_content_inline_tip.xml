@@ -10,7 +10,7 @@
 
         <variable name="enableTips" type="LiveData&lt;Boolean&gt;" />
         <variable name="controller" type="org.cru.godtools.tool.tips.ui.controller.InlineTipController" />
-        <variable name="model" type="org.cru.godtools.tool.model.tips.InlineTip" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.tips.InlineTip" />
         <variable name="isCompleted" type="LiveData&lt;Boolean&gt;" />
     </data>
 

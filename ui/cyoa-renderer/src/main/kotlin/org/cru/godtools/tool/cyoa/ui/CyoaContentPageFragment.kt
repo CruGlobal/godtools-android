@@ -3,13 +3,13 @@ package org.cru.godtools.tool.cyoa.ui
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
+import org.cru.godtools.shared.tool.parser.model.page.ContentPage
+import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.analytics.model.CyoaPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.cyoa.ui.controller.ContentPageController
 import org.cru.godtools.tool.cyoa.ui.controller.bindController
-import org.cru.godtools.tool.model.page.ContentPage
-import org.cru.godtools.tool.model.page.Page
 
 @AndroidEntryPoint
 class CyoaContentPageFragment(

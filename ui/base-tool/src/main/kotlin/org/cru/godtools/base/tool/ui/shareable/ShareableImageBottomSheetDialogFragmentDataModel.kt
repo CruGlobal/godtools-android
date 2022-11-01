@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.tool.model.shareable.ShareableImage
+import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 
 @HiltViewModel
 class ShareableImageBottomSheetDialogFragmentDataModel @Inject constructor(manifestManager: ManifestManager) :

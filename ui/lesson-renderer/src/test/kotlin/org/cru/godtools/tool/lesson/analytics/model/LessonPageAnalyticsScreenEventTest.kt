@@ -4,7 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.tool.model.lesson.LessonPage
+import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

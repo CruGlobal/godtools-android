@@ -1,7 +1,7 @@
 package org.cru.godtools.base.tool.model
 
 import kotlin.math.abs
-import org.cru.godtools.tool.model.Dimension
+import org.cru.godtools.shared.tool.parser.model.Dimension
 
 private const val MAX_PRECISION_DELTA = 0.000001f
 internal fun Dimension.Percent.compareTo(other: Float) = when {

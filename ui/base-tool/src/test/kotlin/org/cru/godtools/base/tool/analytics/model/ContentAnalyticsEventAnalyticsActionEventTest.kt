@@ -1,9 +1,9 @@
 package org.cru.godtools.base.tool.analytics.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.cru.godtools.tool.model.AnalyticsEvent
-import org.cru.godtools.tool.model.AnalyticsEvent.System.ADOBE
-import org.cru.godtools.tool.model.AnalyticsEvent.System.FIREBASE
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.System.ADOBE
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.System.FIREBASE
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasEntry
 import org.junit.Assert.assertEquals

@@ -7,8 +7,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.model.Followup
+import org.cru.godtools.shared.tool.parser.model.EventId
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.tool.model.EventId
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

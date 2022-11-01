@@ -12,11 +12,11 @@ import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindi
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.util.Ids
+import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.lesson.databinding.LessonPageBinding
 import org.cru.godtools.tool.lesson.ui.controller.LessonPageController
 import org.cru.godtools.tool.lesson.ui.controller.bindController
-import org.cru.godtools.tool.model.lesson.LessonPage
-import org.cru.godtools.tool.state.State
 
 class LessonPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,

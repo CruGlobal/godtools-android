@@ -21,10 +21,10 @@ import org.cru.godtools.article.ui.categories.CategorySelectedListener
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
+import org.cru.godtools.shared.tool.parser.model.Category
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
-import org.cru.godtools.tool.model.Category
-import org.cru.godtools.tool.model.Manifest
 
 @AndroidEntryPoint
 class ArticlesActivity :

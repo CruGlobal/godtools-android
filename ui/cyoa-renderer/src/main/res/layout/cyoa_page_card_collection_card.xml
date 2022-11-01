@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <import type="org.cru.godtools.tool.model.page.PageKt" />
+        <import type="org.cru.godtools.shared.tool.parser.model.page.PageKt" />
 
-        <variable name="model" type="org.cru.godtools.tool.model.page.CardCollectionPage.Card" />
+        <variable name="model" type="org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage.Card" />
         <variable name="controller" type="org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController.CardController" />
         <variable name="position" type="int" />
         <variable name="totalCards" type="int" />

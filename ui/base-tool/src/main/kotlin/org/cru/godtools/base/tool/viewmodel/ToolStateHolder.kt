@@ -2,7 +2,7 @@ package org.cru.godtools.base.tool.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import org.cru.godtools.tool.state.State
+import org.cru.godtools.shared.tool.state.State
 
 private const val STATE_TOOL_STATE = "toolState"
 

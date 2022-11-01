@@ -1,7 +1,7 @@
 package org.cru.godtools.tool.cyoa.analytics.model
 
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
-import org.cru.godtools.tool.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.page.Page
 
 private const val SEPARATOR = ":"
 

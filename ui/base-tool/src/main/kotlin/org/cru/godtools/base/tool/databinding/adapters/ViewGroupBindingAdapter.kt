@@ -6,10 +6,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.BindingAdapter
 import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.model.compareTo
+import org.cru.godtools.shared.tool.parser.model.Dimension
+import org.cru.godtools.shared.tool.parser.model.Dimension.Percent
+import org.cru.godtools.shared.tool.parser.model.Dimension.Pixels
 import org.cru.godtools.tool.BuildConfig
-import org.cru.godtools.tool.model.Dimension
-import org.cru.godtools.tool.model.Dimension.Percent
-import org.cru.godtools.tool.model.Dimension.Pixels
 import timber.log.Timber
 
 @BindingAdapter("android:layout_width")

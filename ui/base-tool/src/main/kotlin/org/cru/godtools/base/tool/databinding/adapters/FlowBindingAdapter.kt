@@ -2,7 +2,7 @@ package org.cru.godtools.base.tool.databinding.adapters
 
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.databinding.BindingAdapter
-import org.cru.godtools.tool.model.Gravity.Horizontal
+import org.cru.godtools.shared.tool.parser.model.Gravity.Horizontal
 
 @BindingAdapter("flow_horizontalBias")
 internal fun Flow.setHorizontalBias(gravity: Horizontal) = setHorizontalBias(

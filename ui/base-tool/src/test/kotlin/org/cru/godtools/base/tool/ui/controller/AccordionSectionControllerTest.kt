@@ -22,9 +22,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.util.getDeclaredFieldOrNull
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
+import org.cru.godtools.shared.tool.parser.model.Accordion
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
-import org.cru.godtools.tool.model.Accordion
-import org.cru.godtools.tool.model.AnalyticsEvent
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Assert.assertEquals

@@ -22,10 +22,10 @@ import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.navBarColor
+import org.cru.godtools.shared.tool.parser.model.navBarControlColor
 import org.cru.godtools.tool.R
-import org.cru.godtools.tool.model.Manifest
-import org.cru.godtools.tool.model.navBarColor
-import org.cru.godtools.tool.model.navBarControlColor
 
 abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,
