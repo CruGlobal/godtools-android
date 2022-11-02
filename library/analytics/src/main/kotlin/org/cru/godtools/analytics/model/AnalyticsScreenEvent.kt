@@ -64,8 +64,6 @@ open class AnalyticsScreenEvent(val screen: String, locale: Locale? = null) : An
             .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
             .appendPath(screen)
 
-    override val userCounterName get() = screen
-
     override fun equals(other: Any?) = when {
         this === other -> true
         javaClass != other?.javaClass -> false

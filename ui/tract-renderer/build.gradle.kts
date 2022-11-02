@@ -35,6 +35,8 @@ dependencies {
     implementation(project(":library:sync"))
     implementation(project(":ui:tips-renderer"))
 
+    implementation(libs.godtoolsShared.user.activity)
+
     implementation(libs.androidx.cardview)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)

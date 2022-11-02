@@ -95,6 +95,7 @@ firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "f
 firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.2"
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
+godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
 google-services-gradlePlugin = "com.google.gms:google-services:4.3.14"

@@ -2,8 +2,7 @@ package org.cru.godtools.base.tool.analytics.model
 
 import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.shared.tool.parser.model.Manifest
-
-private const val USER_COUNTER_PREFIX = "tool_opens."
+import org.cru.godtools.shared.user.activity.UserCounterNames
 
 class ToolOpenedAnalyticsActionEvent(
     tool: String,
@@ -16,5 +15,8 @@ class ToolOpenedAnalyticsActionEvent(
         else -> false
     }
 
-    override val userCounterName = "$USER_COUNTER_PREFIX$tool"
+    override val userCounterName = when (type) {
+        Manifest.Type.LESSON -> UserCounterNames.LESSON_OPEN(tool)
+        else -> UserCounterNames.TOOL_OPEN(tool)
+    }
 }

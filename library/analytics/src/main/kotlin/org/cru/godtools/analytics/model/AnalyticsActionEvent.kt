@@ -25,6 +25,4 @@ open class AnalyticsActionEvent(
     override val snowplowContentScoringUri: Uri.Builder get() = super.snowplowContentScoringUri
         .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_ACTION)
         .appendPath(action)
-
-    override val userCounterName get() = action
 }
