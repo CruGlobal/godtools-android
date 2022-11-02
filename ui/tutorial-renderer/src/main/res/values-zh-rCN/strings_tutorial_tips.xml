@@ -5,7 +5,7 @@
     <string name="tutorial_tips_learn_text">练习尽可能多地使用你需要的提示，使你更自信地分享这个工具</string>
     <string name="tutorial_tips_light_headline">照亮前方的路之提示</string>
     <string name="tutorial_tips_light_text1">在选择屏幕上，您将看到各种图标。按下这个图标就会显示一个提示，帮助你谈论屏幕上的内容。</string>
-    <string name="tutorial_tips_light_text2">对于没有提示的屏幕，我们建议通读内容并根据需要进行讨论。</string>
+    <string name="tutorial_tips_light_text2">"对于没有提示的屏幕，我们建议通读内容并根据需要进行讨论。"</string>
     <string name="tutorial_tips_start_headline">点亮提示</string>
     <string name="tutorial_tips_start_text">如果一个提示亮了，表示你已经完成那块培训。你不需要在你所有的对话中使用所有提示</string>
     <string name="tutorial_tips_action_continue">继续</string>

@@ -2,8 +2,9 @@
 <resources>
     <string name="profile_title">Akosile mi</string>
     <string name="menu_profile">Ifisoju ise kaakiri Agbaye</string>
-    <!-- Global Activity -->
+    <!-- Activity -->
     <string name="profile_tab_activity">Ifisoju ise</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s Ifisoju ise kaakiri Agbaye</string>
     <string name="profile_activity_unique_users">Awon Olulo ohun elo yii</string>
     <string name="profile_activity_gospel_presentations">Awọn iwasu Ihinrere</string>

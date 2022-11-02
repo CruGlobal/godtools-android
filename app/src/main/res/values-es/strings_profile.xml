@@ -2,8 +2,10 @@
 <resources>
     <string name="profile_title">Mi perfil</string>
     <string name="menu_profile">Actividad global</string>
-    <!-- Global Activity -->
+    <string name="account_joined">Unirse %1$s</string>
+    <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  Actividad Global</string>
     <string name="profile_activity_unique_users">Usuarios únicos</string>
     <string name="profile_activity_gospel_presentations">Presentaciones del Evangelio</string>

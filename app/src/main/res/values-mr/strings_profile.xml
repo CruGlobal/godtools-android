@@ -2,8 +2,9 @@
 <resources>
     <string name="profile_title">माझे प्रोफाइल</string>
     <string name="menu_profile">जागतिक क्रियाकलाप</string>
-    <!-- Global Activity -->
+    <!-- Activity -->
     <string name="profile_tab_activity">क्रियाकलाप</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  जागतिक क्रियाकलाप</string>
     <string name="profile_activity_unique_users">अनन्य वापरकर्ते</string>
     <string name="profile_activity_gospel_presentations">सुवार्ता सादरीकरण</string>

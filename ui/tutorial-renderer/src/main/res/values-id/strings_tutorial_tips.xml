@@ -5,7 +5,7 @@
     <string name="tutorial_tips_learn_text">Berlatihlah menggunakan tips sebanyak yang Anda butuhkan untuk merasa percaya diri membagikan alat ini kepada orang lain.</string>
     <string name="tutorial_tips_light_headline">Saran untuk membuka jalan</string>
     <string name="tutorial_tips_light_text1">Pada layar tertentu, Anda akan melihat berbagai ikon. Tekan ikon untuk menampilkan tip yang akan membantu Anda berbicara tentang konten layar.</string>
-    <string name="tutorial_tips_light_text2">Untuk layar tanpa tip, kami sarankan untuk membaca konten dan berdiskusi sesuai kebutuhan.</string>
+    <string name="tutorial_tips_light_text2">"Untuk layar tanpa tip, kami sarankan untuk membaca konten dan berdiskusi sesuai kebutuhan."</string>
     <string name="tutorial_tips_start_headline">Buka tips</string>
     <string name="tutorial_tips_start_text">Ketika tip terbuka, Anda telah menyelesaikan bagian latihan itu. Anda tidak perlu menggunakan tip untuk setiap percakapan.</string>
     <string name="tutorial_tips_action_continue">Lanjutkan</string>

@@ -2,8 +2,9 @@
 <resources>
     <string name="profile_title">Mans konts</string>
     <string name="menu_profile">Globālā aktivitāte</string>
-    <!-- Global Activity -->
+    <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s no globālās aktivitātes</string>
     <string name="profile_activity_unique_users">Unikālie
 lietotāji</string>
