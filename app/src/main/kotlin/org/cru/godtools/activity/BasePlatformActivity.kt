@@ -23,7 +23,6 @@ import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
 import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -218,7 +217,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
     protected open val isShowNavigationDrawerIndicator: LiveData<Boolean> = ImmutableLiveData(false)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun setupNavigationDrawer() {
         drawerLayout?.let { layout ->
             drawerToggle = ActionBarDrawerToggle(this, layout, INVALID_STRING_RES, INVALID_STRING_RES)
