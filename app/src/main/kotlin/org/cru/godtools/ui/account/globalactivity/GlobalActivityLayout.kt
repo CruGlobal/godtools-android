@@ -42,7 +42,7 @@ fun AccountGlobalActivityLayout() = Column(modifier = Modifier.padding(horizonta
 
     Row(
         horizontalArrangement = spacedBy(16.dp),
-        modifier = Modifier.padding(top = 16.dp)
+        modifier = Modifier.padding(top = 8.dp)
     ) {
         GlobalActivityCard(
             stringResource(R.string.profile_activity_unique_users),
