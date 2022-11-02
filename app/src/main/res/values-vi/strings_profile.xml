@@ -2,8 +2,9 @@
 <resources>
     <string name="profile_title">Hồ sơ của tôi</string>
     <string name="menu_profile">Hoạt động toàn cầu</string>
-    <!-- Global Activity -->
+    <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  Hoạt động toàn cầu</string>
     <string name="profile_activity_unique_users">Người dùng duy nhất</string>
     <string name="profile_activity_gospel_presentations">Trình bày Phúc Âm</string>

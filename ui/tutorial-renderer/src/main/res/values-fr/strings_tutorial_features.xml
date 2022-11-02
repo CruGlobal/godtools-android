@@ -10,7 +10,7 @@
     <string name="tutorial_features_lessons_subhead">Dans chaque leçon GodTools, vous apprenez quelque chose qui vous aidera à avoir de vraies conversations sur Dieu.</string>
     <string name="tutorial_features_final_headline">Ce tutoriel peut être consulté à nouveau depuis le menu</string>
     <string name="tutorial_features_action_continue">Continuer</string>
-    <string name="tutorial_features_action_close">Commencez à utiliser GodTools</string>
+    <string name="tutorial_features_action_close">Fermer le tutoriel</string>
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">Me montrez un tutoriel</string>
     <string name="tutorial_features_banner_action_open">Ouvrir le tutoriel</string>

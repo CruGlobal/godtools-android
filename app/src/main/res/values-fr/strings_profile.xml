@@ -2,8 +2,18 @@
 <resources>
     <string name="profile_title">Mon profil</string>
     <string name="menu_profile">Activité mondiale</string>
-    <!-- Global Activity -->
+    <string name="account_joined">Rejoint %1$s</string>
+    <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
+    <string name="account_activity_header">Votre activité</string>
+    <string name="account_activity_tool_opens">L\'outil s\'ouvre</string>
+    <string name="account_activity_lesson_completions">Achèvement des leçons</string>
+    <string name="account_activity_screen_shares">Partage d\'écran</string>
+    <string name="account_activity_links_shared">Liens partagés</string>
+    <string name="account_activity_languages_used">Langues utilisées</string>
+    <string name="account_activity_sessions">Sessions</string>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Global Activity</string>
     <string name="profile_global_activity_heading">%1$s  Activité Mondiale</string>
     <string name="profile_activity_unique_users">Utilisateurs Uniques</string>
     <string name="profile_activity_gospel_presentations">Présentations de l\'Evangile</string>

@@ -2,8 +2,9 @@
 <resources>
     <string name="profile_title">मेरी प्रोफाइल</string>
     <string name="menu_profile">वैश्विक गतिविधि</string>
-    <!-- Global Activity -->
+    <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  वैश्विक गतिविधि</string>
     <string name="profile_activity_unique_users">खास उपयोगकर्ता</string>
     <string name="profile_activity_gospel_presentations">सुसमाचार प्रस्तुतिकरण</string>
