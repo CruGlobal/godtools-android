@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
@@ -29,14 +31,11 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.db.repository.TrainingTipsRepository
-import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tips.R
 import org.cru.godtools.tool.tips.analytics.model.TipAnalyticsScreenEvent
 import org.cru.godtools.tool.tips.databinding.ToolTipBinding
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.Contract.TrainingTipTable
-import org.keynote.godtools.android.db.GodToolsDao
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
@@ -58,9 +57,9 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
     private var tip: String by arg()
 
     @Inject
-    internal lateinit var dao: GodToolsDao
-    @Inject
     internal lateinit var eventBus: EventBus
+    @Inject
+    internal lateinit var tipsRepository: TrainingTipsRepository
 
     private val dataModel: TipBottomSheetDialogFragmentDataModel by viewModels()
     private val toolState: ToolStateHolder by activityViewModels()
@@ -126,12 +125,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
     }
 
     override fun closeTip(completed: Boolean) {
-        if (completed) {
-            val trainingTip = TrainingTip(tool, locale, tip)
-            trainingTip.isCompleted = true
-            @Suppress("DeferredResultUnused")
-            dao.updateOrInsertAsync(trainingTip, TrainingTipTable.COLUMN_IS_COMPLETED)
-        }
+        if (completed) lifecycleScope.launch { tipsRepository.markTipComplete(tool, locale, tip) }
         dismissAllowingStateLoss()
     }
     // endregion TipPageController.Callbacks
