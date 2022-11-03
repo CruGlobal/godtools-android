@@ -1,6 +1,7 @@
 package org.cru.godtools.analytics.model
 
 import kotlin.random.Random
+import org.cru.godtools.shared.user.activity.UserCounterNames
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -18,9 +19,20 @@ class LaunchAnalyticsActionEventTest {
     }
 
     @Test
-    fun verifyIsForSystem() {
+    fun `isForSystem(FIREBASE)`() {
         assertTrue(LaunchAnalyticsActionEvent(Random.nextInt(1, Int.MAX_VALUE)).isForSystem(AnalyticsSystem.FIREBASE))
         assertFalse(LaunchAnalyticsActionEvent(0).isForSystem(AnalyticsSystem.FIREBASE))
         assertFalse(LaunchAnalyticsActionEvent(Random.nextInt(Int.MIN_VALUE, 0)).isForSystem(AnalyticsSystem.FIREBASE))
+    }
+
+    @Test
+    fun `isForSystem(USER)`() {
+        assertTrue(LaunchAnalyticsActionEvent(0).isForSystem(AnalyticsSystem.USER))
+    }
+
+    @Test
+    fun verifyUserCounterName() {
+        val event = LaunchAnalyticsActionEvent(0)
+        assertEquals(UserCounterNames.SESSION, event.userCounterName)
     }
 }
