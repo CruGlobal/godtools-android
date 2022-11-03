@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -16,16 +16,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
-import org.ccci.gto.android.common.db.findLiveData
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tips.R
@@ -107,7 +110,7 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
     private fun ToolTipBinding.setupPages() {
         this@TipBottomSheetDialogFragment.pages = pages
         pages.adapter = tipPageAdapterFactory.create(viewLifecycleOwner, toolState.toolState).also {
-            dataModel.tip.observe(viewLifecycleOwner, it)
+            dataModel.tip.asLiveData().observe(viewLifecycleOwner, it)
             it.callbacks = callbacks
         }
         pages.currentItemLiveData.observe(viewLifecycleOwner) { trackScreenAnalytics(it) }
@@ -154,16 +157,17 @@ class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBin
 
 @HiltViewModel
 internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
-    dao: GodToolsDao,
-    manifestManager: ManifestManager
+    manifestManager: ManifestManager,
+    tipsRepository: TrainingTipsRepository,
 ) : LatestPublishedManifestDataModel(manifestManager) {
-    val tipId = MutableLiveData<String>()
+    val tipId = MutableStateFlow<String?>(null)
 
-    val tip = manifest.combineWith(tipId.distinctUntilChanged()) { m, t -> m?.findTip(t) }
-    val isCompleted = toolCode.switchCombineWith(locale, tipId) { tool, locale, tipId ->
+    val tip = manifest.asFlow().combine(tipId) { m, t -> m?.findTip(t) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val isCompleted = combineTransform(toolCode.asFlow(), locale.asFlow(), tipId) { tool, locale, tipId ->
         when {
-            tool == null || locale == null || tipId == null -> emptyLiveData()
-            else -> dao.findLiveData<TrainingTip>(tool, locale, tipId)
+            tool == null || locale == null || tipId == null -> emit(false)
+            else -> emitAll(tipsRepository.isTipCompleteFlow(tool, locale, tipId))
         }
-    }.map { it?.isCompleted == true }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 }
