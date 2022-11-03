@@ -11,10 +11,12 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
+import org.keynote.godtools.android.db.repository.LegacyTrainingTipsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,6 +31,10 @@ internal object DatabaseModule {
     @Provides
     @Reusable
     fun GodToolsRoomDatabase.globalActivityRepository(): GlobalActivityRepository = globalActivityRepository
+
+    @Provides
+    @Reusable
+    fun LegacyTrainingTipsRepository.trainingTipsRepository(): TrainingTipsRepository = this
 
     @Provides
     @Reusable

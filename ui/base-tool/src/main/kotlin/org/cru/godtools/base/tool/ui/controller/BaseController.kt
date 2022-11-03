@@ -7,22 +7,22 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.map
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
-import org.ccci.gto.android.common.db.findLiveData
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.model.TrainingTip
+import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.Base
@@ -32,7 +32,6 @@ import org.cru.godtools.shared.tool.parser.model.HasAnalyticsEvents
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.state.State
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseController<T : Base> protected constructor(
     private val modelClass: KClass<T>,
@@ -171,14 +170,13 @@ abstract class BaseController<T : Base> protected constructor(
         parentController?.showTip(tip)
     }
 
-    protected fun GodToolsDao.isTipComplete(tipId: String?): LiveData<Boolean> {
+    protected fun TrainingTipsRepository.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
         val tool = manifest?.code
         val locale = manifest?.locale
         return when {
             tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
-            else -> findLiveData<TrainingTip>(tool, locale, tipId).map { it?.isCompleted == true }
-                .distinctUntilChanged()
+            else -> isTipCompleteFlow(tool, locale, tipId).distinctUntilChanged().asLiveData()
         }
     }
     // endregion Tips

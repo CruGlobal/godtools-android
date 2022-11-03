@@ -26,7 +26,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
@@ -40,8 +39,6 @@ class PageControllerTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var binding: TractPageBinding
-    @Inject
-    lateinit var dao: GodToolsDao
     @Inject
     lateinit var eventBus: EventBus
     @Inject
@@ -64,9 +61,9 @@ class PageControllerTest {
             baseLifecycleOwner,
             ImmutableLiveData(false),
             State(),
-            dao,
             eventBus,
             settings,
+            mockk(),
             heroControllerFactory,
             cardControllerFactory
         )
