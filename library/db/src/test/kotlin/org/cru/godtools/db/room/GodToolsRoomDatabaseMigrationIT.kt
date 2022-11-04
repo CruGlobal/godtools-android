@@ -11,10 +11,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-private val MIGRATIONS = emptyArray<Migration>()
-
 @RunWith(AndroidJUnit4::class)
 class GodToolsRoomDatabaseMigrationIT {
+    companion object {
+        private val MIGRATIONS = emptyArray<Migration>()
+    }
+
     @get:Rule
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
@@ -60,5 +62,26 @@ class GodToolsRoomDatabaseMigrationIT {
                     }
                     .close()
             }
+    }
+
+    @Test
+    fun testMigrate3To4() {
+        // create v3 database
+        with(helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 3)) {
+            execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            close()
+        }
+
+        // run migration
+        with(helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 4, true, *MIGRATIONS)) {
+            with(query("SELECT id, time FROM last_sync_times")) {
+                assertEquals(1, count)
+                moveToFirst()
+                assertEquals("sync_time", getStringOrNull(0))
+                assertEquals(1234, getIntOrNull(1))
+                close()
+            }
+            close()
+        }
     }
 }
