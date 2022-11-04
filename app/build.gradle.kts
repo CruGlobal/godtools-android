@@ -11,6 +11,8 @@ plugins {
 }
 
 android {
+    namespace = "org.cru.godtools"
+
     baseConfiguration(project)
     configureCompose(project)
     configureQaBuildType(project)
