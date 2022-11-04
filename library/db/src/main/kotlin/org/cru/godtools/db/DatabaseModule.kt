@@ -16,7 +16,6 @@ import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
-import org.keynote.godtools.android.db.repository.LegacyTrainingTipsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -34,7 +33,7 @@ internal object DatabaseModule {
 
     @Provides
     @Reusable
-    fun LegacyTrainingTipsRepository.trainingTipsRepository(): TrainingTipsRepository = this
+    fun GodToolsRoomDatabase.trainingTipsRepository(): TrainingTipsRepository = trainingTipsRepository
 
     @Provides
     @Reusable

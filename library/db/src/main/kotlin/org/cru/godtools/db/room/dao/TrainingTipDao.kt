@@ -13,6 +13,9 @@ internal interface TrainingTipDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplace(tip: TrainingTipEntity)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnoreBlocking(tip: TrainingTipEntity)
+
     @Query("SELECT * FROM training_tips WHERE tool = :tool AND locale = :locale AND tipId = :tipId")
     fun findTrainingTipFlow(tool: String, locale: Locale, tipId: String): Flow<TrainingTipEntity?>
 }
