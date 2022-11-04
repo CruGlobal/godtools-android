@@ -12,7 +12,6 @@ import androidx.annotation.MainThread
 import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +23,7 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -259,7 +259,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     // region Tool sync/download logic
     @Inject
     internal lateinit var syncService: GodToolsSyncService
-    protected open val isInitialSyncFinished = MutableLiveData<Boolean>()
+    protected open val isInitialSyncFinished = MutableStateFlow(false)
 
     protected abstract val toolsToDownload: StateFlow<List<String>>
     protected abstract val localesToDownload: StateFlow<List<Locale>>
