@@ -6,7 +6,6 @@ import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import java.util.Locale
@@ -69,7 +68,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
     override val localesToDownload by lazy {
-        dataModel.locale.asFlow()
+        dataModel.locale
             .map { listOfNotNull(it) }
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }

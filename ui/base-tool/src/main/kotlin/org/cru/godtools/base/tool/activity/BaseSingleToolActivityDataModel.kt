@@ -1,13 +1,12 @@
 package org.cru.godtools.base.tool.activity
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
+import kotlinx.coroutines.flow.emitAll
+import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -19,27 +18,26 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     translationsRepository: TranslationsRepository
 ) : BaseToolRendererViewModel() {
     val toolCode = MutableStateFlow<String?>(null)
-    val locale = MutableLiveData<Locale?>()
+    val locale = MutableStateFlow<Locale?>(null)
 
-    private val toolCodeLiveData = toolCode.asLiveData()
-    val manifest = toolCodeLiveData.switchCombineWith(locale) { code, locale ->
+    val manifest = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
-            code == null || locale == null -> emptyLiveData()
-            else -> manifestManager.getLatestPublishedManifestLiveData(code, locale)
+            tool == null || locale == null -> emit(null)
+            else -> emitAll(manifestManager.getLatestPublishedManifestFlow(tool, locale))
         }
-    }
+    }.asLiveData()
 
-    val translation = toolCodeLiveData.switchCombineWith(locale) { code, locale ->
+    val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
-            code == null || locale == null -> emptyLiveData()
-            else -> translationsRepository.getLatestTranslationLiveData(code, locale, trackAccess = true)
+            tool == null || locale == null -> emit(null)
+            else -> emitAll(translationsRepository.getLatestTranslationFlow(tool, locale, trackAccess = true))
         }
-    }
+    }.asLiveData()
 
-    val downloadProgress = toolCodeLiveData.switchCombineWith(locale) { tool, locale ->
+    val downloadProgress = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
-            tool == null || locale == null -> emptyLiveData()
-            else -> downloadManager.getDownloadProgressLiveData(tool, locale)
+            tool == null || locale == null -> emit(null)
+            else -> emitAll(downloadManager.getDownloadProgressFlow(tool, locale))
         }
-    }
+    }.asLiveData()
 }
