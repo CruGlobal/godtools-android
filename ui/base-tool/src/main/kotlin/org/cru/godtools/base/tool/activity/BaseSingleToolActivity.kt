@@ -28,7 +28,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 ) : BaseToolActivity<B>(contentLayoutId) {
     override val activeManifestLiveData get() = dataModel.manifest
 
-    protected open val dataModel: BaseSingleToolActivityDataModel by viewModels()
+    override val viewModel: BaseSingleToolActivityDataModel by viewModels()
+    protected open val dataModel get() = viewModel
 
     // region Intent processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {

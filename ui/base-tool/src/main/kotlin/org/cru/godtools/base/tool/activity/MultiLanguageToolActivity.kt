@@ -66,7 +66,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // endregion Lifecycle
 
     // region Data Model
-    protected open val dataModel: MultiLanguageToolActivityDataModel by viewModels()
+    override val viewModel: MultiLanguageToolActivityDataModel by viewModels()
+    protected open val dataModel get() = viewModel
 
     private fun setupDataModel() {
         dataModel.supportedType.value = supportedType

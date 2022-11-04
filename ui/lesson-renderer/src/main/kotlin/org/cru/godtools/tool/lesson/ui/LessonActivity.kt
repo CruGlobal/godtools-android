@@ -50,7 +50,8 @@ class LessonActivity :
         supportedType = Manifest.Type.LESSON
     ),
     LessonPageAdapter.Callbacks {
-    override val dataModel: LessonActivityDataModel by viewModels()
+    override val viewModel: LessonActivityDataModel by viewModels()
+    override val dataModel get() = viewModel
     private val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle

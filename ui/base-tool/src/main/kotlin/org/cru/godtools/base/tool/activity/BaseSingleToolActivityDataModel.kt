@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
@@ -16,7 +15,7 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     downloadManager: GodToolsDownloadManager,
     translationsRepository: TranslationsRepository
-) : ViewModel() {
+) : BaseToolRendererViewModel() {
     val toolCode = MutableLiveData<String?>()
     val locale = MutableLiveData<Locale?>()
 
