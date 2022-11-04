@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.Manifest
 
@@ -30,7 +29,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     override val activeManifestLiveData get() = dataModel.manifest
 
     protected open val dataModel: BaseSingleToolActivityDataModel by viewModels()
-    protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
 
     // region Intent processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {

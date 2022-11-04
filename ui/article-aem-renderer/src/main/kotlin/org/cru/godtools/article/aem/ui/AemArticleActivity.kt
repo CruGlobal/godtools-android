@@ -122,9 +122,7 @@ class AemArticleActivity :
         if (!pendingAnalyticsEvent) return
 
         article?.let {
-            eventBus.post(
-                ArticleAnalyticsScreenEvent(it, manifestDataModel.toolCode.value, manifestDataModel.locale.value)
-            )
+            eventBus.post(ArticleAnalyticsScreenEvent(it, dataModel.toolCode.value, dataModel.locale.value))
             pendingAnalyticsEvent = false
         }
     }
