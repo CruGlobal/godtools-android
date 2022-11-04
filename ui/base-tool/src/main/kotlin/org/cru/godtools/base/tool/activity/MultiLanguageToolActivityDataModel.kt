@@ -15,6 +15,7 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -112,14 +113,14 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Resolved Data
 
     // region Loading State
-    val isInitialSyncFinished = MutableLiveData(false)
+    val isInitialSyncFinished = MutableStateFlow(false)
 
     val loadingState = locales.combineWith(
         manifests,
         translations,
         supportedType.asLiveData(),
         isConnected,
-        isInitialSyncFinished
+        isInitialSyncFinished.asLiveData()
     ) { l, m, t, type, connected, syncFinished ->
         l.associateWith {
             LoadingState.determineToolState(
@@ -143,7 +144,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
             translation,
             supportedType.asLiveData(),
             isConnected,
-            isInitialSyncFinished
+            isInitialSyncFinished.asLiveData()
         ) { m, t, type, c, s ->
             LoadingState.determineToolState(m, t, type, isConnected = c, isSyncFinished = s)
         }
