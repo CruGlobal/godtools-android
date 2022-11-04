@@ -184,11 +184,6 @@ object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
-        internal const val SQL_V40_ALTER_DETAILS_BANNER_YOUTUBE =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BANNER_YOUTUBE"
-        internal const val SQL_V42_ALTER_DEFAULT_ORDER = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DEFAULT_ORDER"
-        internal const val SQL_V42_POPULATE_DEFAULT_ORDER = "UPDATE $TABLE_NAME SET $COLUMN_DEFAULT_ORDER = 0"
-        internal const val SQL_V43_ALTER_CATEGORY = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_CATEGORY"
         internal const val SQL_V45_ALTER_HIDDEN = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_HIDDEN"
         internal const val SQL_V45_POPULATE_HIDDEN = "UPDATE $TABLE_NAME SET $COLUMN_HIDDEN = 0"
         internal const val SQL_V47_ALTER_SCREEN_SHARE_DISABLED =
@@ -408,23 +403,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_LAUNCHES = "launches"
         internal const val COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations"
 
-        private const val SQL_COLUMN_USERS = "$COLUMN_USERS INTEGER"
-        private const val SQL_COLUMN_COUNTRIES = "$COLUMN_COUNTRIES INTEGER"
-        private const val SQL_COLUMN_LAUNCHES = "$COLUMN_LAUNCHES INTEGER"
-        private const val SQL_COLUMN_GOSPEL_PRESENTATIONS = "$COLUMN_GOSPEL_PRESENTATIONS INTEGER"
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB Migrations
-        internal val SQL_V41_CREATE_GLOBAL_ANALYTICS = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_USERS,
-            SQL_COLUMN_COUNTRIES,
-            SQL_COLUMN_LAUNCHES,
-            SQL_COLUMN_GOSPEL_PRESENTATIONS
-        )
-        // endregion DB Migrations
     }
 
     internal object TrainingTipTable : Base {
@@ -435,22 +414,7 @@ object Contract : BaseContract() {
         internal const val COLUMN_TIP_ID = "tipId"
         const val COLUMN_IS_COMPLETED = "isCompleted"
 
-        private const val SQL_COLUMN_TIP_ID = "$COLUMN_TIP_ID TEXT"
-        private const val SQL_COLUMN_IS_COMPLETE = "$COLUMN_IS_COMPLETED INTEGER"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID)
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB Migrations
-        internal val SQL_V44_CREATE_TRAINING_TIPS = create(
-            TABLE_NAME,
-            ToolCode.SQL_COLUMN_TOOL,
-            LanguageCode.SQL_COLUMN_LANGUAGE,
-            SQL_COLUMN_TIP_ID,
-            SQL_COLUMN_IS_COMPLETE,
-            SQL_PRIMARY_KEY
-        )
-        // endregion DB Migrations
     }
 
     internal object UserCounterTable : Base {
