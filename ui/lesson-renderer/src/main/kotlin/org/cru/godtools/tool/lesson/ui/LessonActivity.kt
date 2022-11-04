@@ -8,9 +8,10 @@ import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,9 +20,13 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
@@ -160,7 +165,7 @@ class LessonActivity :
             override fun onPageSelected(position: Int) {
                 updateProgressIndicator(position = position)
                 trackPageInAnalytics(dataModel.pages.value?.getOrNull(position))
-                dataModel.pageReached.value = maxOf(position, dataModel.pageReached.value ?: 0)
+                dataModel.pageReached.value = maxOf(position, dataModel.pageReached.value)
             }
         })
     }
@@ -199,7 +204,7 @@ class LessonActivity :
     }
 
     private fun showFeedbackDialogIfNecessary() = if (dataModel.showFeedback.value == true) {
-        LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value ?: 0).show(supportFragmentManager, null)
+        LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value).show(supportFragmentManager, null)
         true
     } else false
     // endregion Feedback
@@ -216,6 +221,7 @@ class LessonActivity :
 }
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class LessonActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     downloadManager: GodToolsDownloadManager,
@@ -229,9 +235,9 @@ class LessonActivityDataModel @Inject constructor(
         manifest?.pages.orEmpty().filterIsInstance<LessonPage>().filter { !it.isHidden || it.id in visible }
     }.distinctUntilChanged()
 
-    val pageReached = savedState.getLiveData("pageReached", 0)
+    val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
     val showFeedback = toolCode
-        .switchMap { settings.isFeatureDiscoveredLiveData(FEATURE_LESSON_FEEDBACK + it) }
-        .combineWith(pageReached) { discovered, page -> !discovered && page > 3 }
-        .distinctUntilChanged()
+        .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
+        .combine(pageReached) { discovered, page -> !discovered && page > 3 }
+        .asLiveData()
 }

@@ -64,7 +64,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         }
 
     override val toolsToDownload by lazy {
-        dataModel.toolCode.asFlow()
+        dataModel.toolCode
             .map { listOfNotNull(it) }
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
