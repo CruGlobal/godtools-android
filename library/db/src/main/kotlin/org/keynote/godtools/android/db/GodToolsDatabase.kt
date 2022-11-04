@@ -37,14 +37,6 @@ private const val DATABASE_VERSION = 54
 /*
  * Version history
  *
- * v5.0.19 - v5.1.4
- * 40: 2019-11-12
- * 41: 2020-01-23
- * v5.1.5 - v5.2.1.1
- * 42: 2020-05-04
- * 43: 2020-06-03
- * v5.3.0
- * 44: 2020-08-10
  * v5.3.1 - v5.6.1
  * 45: 2021-12-02
  * 46: 2022-01-07
@@ -88,14 +80,6 @@ class GodToolsDatabase @Inject internal constructor(
             var upgradeTo = oldVersion + 1
             while (upgradeTo <= newVersion) {
                 when (upgradeTo) {
-                    40 -> db.execSQL(ToolTable.SQL_V40_ALTER_DETAILS_BANNER_YOUTUBE)
-                    41 -> db.execSQL(GlobalActivityAnalyticsTable.SQL_V41_CREATE_GLOBAL_ANALYTICS)
-                    42 -> {
-                        db.execSQL(ToolTable.SQL_V42_ALTER_DEFAULT_ORDER)
-                        db.execSQL(ToolTable.SQL_V42_POPULATE_DEFAULT_ORDER)
-                    }
-                    43 -> db.execSQL(ToolTable.SQL_V43_ALTER_CATEGORY)
-                    44 -> db.execSQL(TrainingTipTable.SQL_V44_CREATE_TRAINING_TIPS)
                     45 -> {
                         db.execSQL(ToolTable.SQL_V45_ALTER_HIDDEN)
                         db.execSQL(ToolTable.SQL_V45_POPULATE_HIDDEN)
