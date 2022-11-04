@@ -18,7 +18,6 @@ import org.cru.godtools.model.Followup
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -26,7 +25,6 @@ import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
-import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 
@@ -63,10 +61,6 @@ class GodToolsDao @Inject internal constructor(
             TranslationFile::class.java, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
             TranslationFileMapper, TranslationFileTable.SQL_WHERE_PRIMARY_KEY
         )
-        registerType(
-            TrainingTip::class.java, TrainingTipTable.TABLE_NAME, TrainingTipTable.PROJECTION_ALL, TrainingTipMapper,
-            TrainingTipTable.SQL_WHERE_PRIMARY_KEY
-        )
     }
 
     public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
@@ -74,7 +68,6 @@ class GodToolsDao @Inject internal constructor(
         is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.filename)
         is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)
         is Tool -> getPrimaryKeyWhere(Tool::class.java, obj.code!!)
-        is TrainingTip -> getPrimaryKeyWhere(TrainingTip::class.java, obj.tool, obj.locale, obj.tipId)
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
     }

@@ -9,11 +9,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
+import org.ccci.gto.android.common.db.util.CursorUtils
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
+import org.ccci.gto.android.common.util.database.getLocale
 import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
@@ -29,7 +32,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 53
+private const val DATABASE_VERSION = 54
 
 /*
  * Version history
@@ -54,6 +57,7 @@ private const val DATABASE_VERSION = 53
  * v6.0.0 - v6.0.1
  * 52: 2022-09-22
  * 53: 2022-09-23
+ * 54: 2022-11-04
  */
 
 @Singleton
@@ -72,7 +76,6 @@ class GodToolsDatabase @Inject internal constructor(
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
-            db.execSQL(TrainingTipTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -153,6 +156,36 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)
+                    }
+                    54 -> {
+                        db.query(
+                            TrainingTipTable.TABLE_NAME,
+                            arrayOf(
+                                TrainingTipTable.COLUMN_TOOL,
+                                TrainingTipTable.COLUMN_LANGUAGE,
+                                TrainingTipTable.COLUMN_TIP_ID,
+                                TrainingTipTable.COLUMN_IS_COMPLETED
+                            ),
+                            null, emptyArray(), null, null, null
+                        ).use {
+                            while (it.moveToNext()) {
+                                roomDb.trainingTipDao.insertOrIgnoreBlocking(
+                                    TrainingTipEntity(
+                                        TrainingTipEntity.Key(
+                                            tool = it.getString(TrainingTipTable.COLUMN_TOOL) ?: continue,
+                                            locale = it.getLocale(TrainingTipTable.COLUMN_LANGUAGE) ?: continue,
+                                            tipId = it.getString(TrainingTipTable.COLUMN_TIP_ID) ?: continue,
+                                        )
+                                    ).apply {
+                                        isCompleted =
+                                            CursorUtils.getBool(it, TrainingTipTable.COLUMN_IS_COMPLETED, false)
+                                        isNew = true
+                                    }
+                                )
+                            }
+                        }
+
+                        db.execSQL(TrainingTipTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }

@@ -11,7 +11,6 @@ import org.cru.godtools.model.Followup
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.TrainingTip
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
@@ -428,36 +427,18 @@ object Contract : BaseContract() {
         // endregion DB Migrations
     }
 
-    object TrainingTipTable : Base {
+    internal object TrainingTipTable : Base {
         internal const val TABLE_NAME = "training_tips"
-        private val TABLE = Table.forClass<TrainingTip>()
 
         internal const val COLUMN_TOOL = ToolCode.COLUMN_TOOL
         internal const val COLUMN_LANGUAGE = LanguageCode.COLUMN_LANGUAGE
         internal const val COLUMN_TIP_ID = "tipId"
         const val COLUMN_IS_COMPLETED = "isCompleted"
 
-        private val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
-        private val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
-        private val FIELD_TIP_ID = TABLE.field(COLUMN_TIP_ID)
-
-        internal val PROJECTION_ALL = arrayOf(COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID, COLUMN_IS_COMPLETED)
-
         private const val SQL_COLUMN_TIP_ID = "$COLUMN_TIP_ID TEXT"
         private const val SQL_COLUMN_IS_COMPLETE = "$COLUMN_IS_COMPLETED INTEGER"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TOOL, COLUMN_LANGUAGE, COLUMN_TIP_ID)
 
-        internal val SQL_WHERE_PRIMARY_KEY =
-            FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind())).and(FIELD_TIP_ID.eq(bind()))
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            ToolCode.SQL_COLUMN_TOOL,
-            LanguageCode.SQL_COLUMN_LANGUAGE,
-            SQL_COLUMN_TIP_ID,
-            SQL_COLUMN_IS_COMPLETE,
-            SQL_PRIMARY_KEY
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB Migrations

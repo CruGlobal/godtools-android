@@ -20,6 +20,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
@@ -29,16 +30,15 @@ import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.cru.godtools.tract.widget.PageContentLayout
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.GodToolsDao
 
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
     @Assisted baseLifecycleOwner: LifecycleOwner?,
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
-    private val dao: GodToolsDao,
     eventBus: EventBus,
     private val settings: Settings,
+    private val tipsRepository: TrainingTipsRepository,
     heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
 ) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
@@ -90,8 +90,8 @@ class PageController @AssistedInject internal constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-        binding.isHeaderTipComplete = dao.isTipComplete(model?.header?.tip?.id)
-        binding.isCallToActionTipComplete = dao.isTipComplete(model?.callToAction?.tip?.id)
+        binding.isHeaderTipComplete = tipsRepository.isTipComplete(model?.header?.tip?.id)
+        binding.isCallToActionTipComplete = tipsRepository.isTipComplete(model?.callToAction?.tip?.id)
         heroController.model = model?.hero
         updateVisibleCards()
     }
