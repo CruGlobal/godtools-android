@@ -95,6 +95,7 @@ firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "f
 firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.2"
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
+godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
 google-services-gradlePlugin = "com.google.gms:google-services:4.3.14"
@@ -164,6 +165,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.9.1"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+materialColorUtilities = "org.cru.mobile.fork.material-color-utilities:material-color-utilities:0.2.0_75"
 materialComponents = "com.google.android.material:material:1.7.0"
 mockk = "io.mockk:mockk:1.13.2"
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }

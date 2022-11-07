@@ -16,6 +16,8 @@ dependencies {
     implementation(project(":library:db"))
     implementation(project(":library:sync"))
 
+    api(libs.godtoolsShared.user.activity)
+
     implementation(libs.gtoSupport.dagger)
 
     implementation(libs.dagger)

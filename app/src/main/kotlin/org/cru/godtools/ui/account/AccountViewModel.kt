@@ -20,7 +20,7 @@ class AccountViewModel @Inject internal constructor(
 ) : ViewModel() {
     val user = userManager.userFlow.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val pages = MutableStateFlow(listOf(AccountPage.GLOBAL_ACTIVITY))
+    val pages = MutableStateFlow(listOf(AccountPage.ACTIVITY, AccountPage.GLOBAL_ACTIVITY))
 
     // region Sync logic
     private val syncsRunning = MutableStateFlow(0)
@@ -31,6 +31,7 @@ class AccountViewModel @Inject internal constructor(
             syncsRunning.value++
             coroutineScope {
                 launch { syncService.syncUser(force) }
+                launch { syncService.syncUserCounters(force) }
                 launch { syncService.syncGlobalActivity(force) }
             }
             syncsRunning.value--

@@ -16,7 +16,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-import org.cru.godtools.user.data.Counters
+import org.cru.godtools.user.activity.UserActivityManager
 import org.greenrobot.eventbus.EventBus
 
 private const val COUNTER_NAME = "counter"
@@ -24,12 +24,12 @@ private const val COUNTER_NAME = "counter"
 @OptIn(ExperimentalCoroutinesApi::class)
 class UserAnalyticsServiceTest {
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
-    private val userCounters: Counters = mockk {
+    private val userActivityManager: UserActivityManager = mockk {
         coEvery { updateCounter(any()) } just Runs
     }
     private val testScope = TestScope()
 
-    private val analyticsService = UserAnalyticsService(eventBus, userCounters, testScope.backgroundScope)
+    private val analyticsService = UserAnalyticsService(eventBus, userActivityManager, testScope.backgroundScope)
 
     @Test
     fun verifyRegisteredWithEventBus() = testScope.runTest {
@@ -46,7 +46,7 @@ class UserAnalyticsServiceTest {
         }
 
         analyticsService.onAnalyticsEvent(event)
-        verify { userCounters wasNot Called }
+        verify { userActivityManager wasNot Called }
     }
 
     @Test
@@ -57,7 +57,7 @@ class UserAnalyticsServiceTest {
         }
 
         analyticsService.onAnalyticsEvent(event)
-        verify { userCounters wasNot Called }
+        verify { userActivityManager wasNot Called }
     }
 
     @Test
@@ -66,12 +66,12 @@ class UserAnalyticsServiceTest {
             every { isForSystem(AnalyticsSystem.USER) } returns true
             every { userCounterName } returns COUNTER_NAME
         }
-        every { userCounters.isValidCounterName(COUNTER_NAME) } returns false
+        every { userActivityManager.isValidCounterName(COUNTER_NAME) } returns false
 
         analyticsService.onAnalyticsEvent(event)
         runCurrent()
         verifyAll {
-            userCounters.isValidCounterName(COUNTER_NAME)
+            userActivityManager.isValidCounterName(COUNTER_NAME)
         }
     }
 
@@ -81,13 +81,13 @@ class UserAnalyticsServiceTest {
             every { isForSystem(AnalyticsSystem.USER) } returns true
             every { userCounterName } returns COUNTER_NAME
         }
-        every { userCounters.isValidCounterName(COUNTER_NAME) } returns true
+        every { userActivityManager.isValidCounterName(COUNTER_NAME) } returns true
 
         analyticsService.onAnalyticsEvent(event)
         runCurrent()
         coVerifyAll {
-            userCounters.isValidCounterName(COUNTER_NAME)
-            userCounters.updateCounter(COUNTER_NAME)
+            userActivityManager.isValidCounterName(COUNTER_NAME)
+            userActivityManager.updateCounter(COUNTER_NAME)
         }
     }
     // endregion onAnalyticsEvent()

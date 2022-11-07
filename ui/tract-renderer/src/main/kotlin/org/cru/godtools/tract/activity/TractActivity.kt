@@ -380,7 +380,7 @@ class TractActivity :
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
-                eventBus.post(ShareScreenEngagedActionEvent)
+                eventBus.post(ShareScreenEngagedActionEvent(dataModel.toolCode.value))
                 showShareActivityChooser(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
             }
         }

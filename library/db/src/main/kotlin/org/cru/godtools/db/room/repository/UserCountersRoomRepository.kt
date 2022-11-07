@@ -3,6 +3,7 @@ package org.cru.godtools.db.room.repository
 import androidx.room.Dao
 import androidx.room.Transaction
 import androidx.room.withTransaction
+import kotlinx.coroutines.flow.map
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.UserCounterEntity
@@ -17,6 +18,7 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
     override suspend fun <R> transaction(block: suspend () -> R) = db.withTransaction(block)
 
     override suspend fun getCounters() = dao.getUserCounters().map { it.toModel() }
+    override fun getCountersFlow() = dao.getUserCountersFlow().map { it.map { it.toModel() } }
 
     @Transaction
     override suspend fun updateCounter(name: String, delta: Int) {

@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.db.room.entity.UserCounterEntity
 import org.cru.godtools.db.room.entity.partial.MigrationUserCounter
 import org.cru.godtools.db.room.entity.partial.SyncUserCounter
@@ -16,6 +17,8 @@ internal interface UserCountersDao {
 
     @Query("SELECT * FROM user_counters")
     suspend fun getUserCounters(): List<UserCounterEntity>
+    @Query("SELECT * FROM user_counters")
+    fun getUserCountersFlow(): Flow<List<UserCounterEntity>>
 
     @Query("UPDATE user_counters SET delta = delta + :delta WHERE name = :name")
     suspend fun updateUserCounterDelta(name: String, delta: Int)

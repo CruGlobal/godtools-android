@@ -2,12 +2,22 @@
 <resources>
     <string name="profile_title">My Profile</string>
     <string name="menu_profile">Global Activity</string>
-
     <string name="account_joined">Joined %1$s</string>
+
+    <!-- Activity -->
+    <eat-comment />
+    <string name="profile_tab_activity">Activity</string>
+    <string name="account_activity_header">Your activity</string>
+    <string name="account_activity_tool_opens">Tool opens</string>
+    <string name="account_activity_lesson_completions">Lesson completions</string>
+    <string name="account_activity_screen_shares">Screen shares</string>
+    <string name="account_activity_links_shared">Links shared</string>
+    <string name="account_activity_languages_used">Languages used</string>
+    <string name="account_activity_sessions">Sessions</string>
 
     <!-- Global Activity -->
     <eat-comment />
-    <string name="profile_tab_activity">Activity</string>
+    <string name="account_tab_global_activity">Global Activity</string>
     <string name="profile_global_activity_heading">%1$s Global Activity</string>
     <string name="profile_activity_unique_users">Unique Users</string>
     <string name="profile_activity_gospel_presentations">Gospel Presentations</string>

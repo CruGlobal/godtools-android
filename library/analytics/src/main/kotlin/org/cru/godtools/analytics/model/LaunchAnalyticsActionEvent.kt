@@ -1,10 +1,18 @@
 package org.cru.godtools.analytics.model
 
+import org.cru.godtools.shared.user.activity.UserCounterNames
+
 private const val ACTION_LAUNCH_PREFIX = "launch_"
 private const val ACTION_LAUNCH_AT_LEAST_PREFIX = "launch_atleast_"
 
 class LaunchAnalyticsActionEvent(private val launches: Int) : AnalyticsActionEvent(action = launches.buildAction()) {
-    override fun isForSystem(system: AnalyticsSystem) = launches > 0 && system == AnalyticsSystem.FIREBASE
+    override fun isForSystem(system: AnalyticsSystem) = when (system) {
+        AnalyticsSystem.FIREBASE -> launches > 0
+        AnalyticsSystem.USER -> true
+        else -> false
+    }
+
+    override val userCounterName = UserCounterNames.SESSION
 }
 
 private fun Int.buildAction() = when (this) {

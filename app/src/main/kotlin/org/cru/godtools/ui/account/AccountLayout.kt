@@ -44,9 +44,10 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
+import org.cru.godtools.ui.account.activity.AccountActivityLayout
 import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
 
-internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 32.dp
+internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
@@ -135,7 +136,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 key = { pages[it] }
             ) {
                 when (pages[it]) {
-                    AccountPage.ACTIVITY -> TODO()
+                    AccountPage.ACTIVITY -> AccountActivityLayout()
                     AccountPage.GLOBAL_ACTIVITY -> AccountGlobalActivityLayout()
                 }
             }
