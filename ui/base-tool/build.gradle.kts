@@ -77,6 +77,7 @@ dependencies {
     kapt(libs.google.auto.value)
     kapt(libs.hilt.compiler)
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.kotlin.coroutines.test)
