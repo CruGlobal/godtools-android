@@ -62,7 +62,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     userActivityManager: UserActivityManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel(manifestManager, userActivityManager, savedState) {
+) : BaseToolRendererViewModel(downloadManager, manifestManager, userActivityManager, savedState) {
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
@@ -151,13 +151,6 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     }.distinctUntilChanged()
 
     val activeManifest = manifest.asLiveData()
-
-    internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
-        when {
-            t == null || l == null -> emptyLiveData()
-            else -> downloadManager.getDownloadProgressLiveData(t, l)
-        }
-    }
     // endregion Active Tool
 
     // region Available Locales

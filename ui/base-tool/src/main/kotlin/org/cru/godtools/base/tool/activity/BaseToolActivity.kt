@@ -50,7 +50,6 @@ import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
-import org.cru.godtools.download.manager.DownloadProgress
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
@@ -101,7 +100,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @CallSuper
     override fun onBindingChanged() {
         binding.setVariable(BR.manifest, viewModel.manifest.asLiveData())
-        binding.setVariable(BR.loadingProgress, activeDownloadProgressLiveData)
+        binding.setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
         binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
     }
 
@@ -257,7 +256,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         }
     }
 
-    protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
     protected abstract val activeToolLoadingStateLiveData: LiveData<LoadingState>
     // endregion Tool state
 

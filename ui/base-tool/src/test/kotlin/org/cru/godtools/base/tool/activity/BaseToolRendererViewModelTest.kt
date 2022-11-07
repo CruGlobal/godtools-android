@@ -54,6 +54,7 @@ class BaseToolRendererViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
 
         viewModel = BaseToolRendererViewModel(
+            mockk(),
             manifestManager,
             userActivityManager,
             SavedStateHandle()

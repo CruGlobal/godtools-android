@@ -89,8 +89,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // endregion Intent Processing
 
     // region UI
-    override val activeDownloadProgressLiveData get() = dataModel.activeToolDownloadProgress
-
     private fun setupActionBarTitle() {
         combine(dataModel.visibleLocales, dataModel.activeLocale) { locales, active ->
             locales.isEmpty() || (locales.size < 2 && locales.contains(active))

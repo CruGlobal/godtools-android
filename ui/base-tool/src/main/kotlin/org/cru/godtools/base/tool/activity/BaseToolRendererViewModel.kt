@@ -17,11 +17,13 @@ import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.user.activity.UserCounterNames
 import org.cru.godtools.user.activity.UserActivityManager
 
 open class BaseToolRendererViewModel(
+    downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     userActivityManager: UserActivityManager,
     savedState: SavedStateHandle,
@@ -43,6 +45,13 @@ open class BaseToolRendererViewModel(
         }
         .combine(supportedType) { m, t -> m?.takeIf { t == null || it.type == t } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    internal val downloadProgress = toolCode.combineTransformLatest(locale) { tool, locale ->
+        when {
+            tool == null || locale == null -> emit(null)
+            else -> emitAll(downloadManager.getDownloadProgressFlow(tool, locale))
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // region User Counters
     private val toolLanguagesSeen = mutableSetOf<Locale>()
