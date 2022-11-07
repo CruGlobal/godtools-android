@@ -20,12 +20,12 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
@@ -158,7 +158,7 @@ internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
 
     val tip = manifest.asFlow().combine(tipId) { m, t -> m?.findTip(t) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-    val isCompleted = combineTransform(toolCode.asFlow(), locale.asFlow(), tipId) { tool, locale, tipId ->
+    val isCompleted = combineTransformLatest(toolCode.asFlow(), locale.asFlow(), tipId) { tool, locale, tipId ->
         when {
             tool == null || locale == null || tipId == null -> emit(false)
             else -> emitAll(tipsRepository.isTipCompleteFlow(tool, locale, tipId))
