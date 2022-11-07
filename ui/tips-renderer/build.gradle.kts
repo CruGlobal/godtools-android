@@ -32,6 +32,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.androidx.viewpager2)
     implementation(libs.gtoSupport.compat)
+    implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 
@@ -40,4 +41,8 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }
