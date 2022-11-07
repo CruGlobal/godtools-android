@@ -10,7 +10,6 @@ import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
-import io.mockk.verifySequence
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -308,7 +307,6 @@ class MultiLanguageToolActivityDataModelTest {
     }
     // endregion Property: loadingState
 
-    // region Active Tool
     // region Property: activeLocale
     @Test
     fun `Property activeLocale - Initialize when locales initialized`() {
@@ -384,33 +382,6 @@ class MultiLanguageToolActivityDataModelTest {
         assertEquals(Locale.ENGLISH, dataModel2.activeLocale.value)
     }
     // endregion Property: activeLocale
-
-    // region Property: activeManifest
-    @Test
-    fun `Property activeManifest - Change Active Locale`() {
-        val frenchManifest = Manifest(type = Manifest.Type.TRACT)
-        val observer = mockk<Observer<Manifest?>>(relaxUnitFun = true)
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(frenchManifest)
-        dataModel.toolCode.value = TOOL
-        dataModel.supportedType.value = Manifest.Type.TRACT
-        dataModel.activeLocale.value = Locale.ENGLISH
-
-        dataModel.activeManifest.observeForever(observer)
-        verifySequence {
-            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
-            observer.onChanged(null)
-        }
-        dataModel.activeLocale.value = Locale.FRENCH
-        verifySequence {
-            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.ENGLISH)
-            observer.onChanged(null)
-            manifestManager.getLatestPublishedManifestLiveData(any(), Locale.FRENCH)
-            observer.onChanged(frenchManifest)
-        }
-    }
-    // endregion Property: activeManifest
-    // endregion Active Tool
 
     // region Property: visibleLocales
     @Test

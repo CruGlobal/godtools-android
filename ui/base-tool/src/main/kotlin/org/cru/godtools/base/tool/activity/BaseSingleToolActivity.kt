@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import java.util.Locale
@@ -25,8 +26,6 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     private val requireTool: Boolean,
     private val supportedType: Manifest.Type?
 ) : BaseToolActivity<B>(contentLayoutId) {
-    override val activeManifestLiveData get() = dataModel.manifest
-
     override val viewModel: BaseSingleToolActivityDataModel by viewModels()
     protected open val dataModel get() = viewModel
 
@@ -75,7 +74,7 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolLoadingStateLiveData by lazy {
-        activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
+        viewModel.manifest.asLiveData().combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
             LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }

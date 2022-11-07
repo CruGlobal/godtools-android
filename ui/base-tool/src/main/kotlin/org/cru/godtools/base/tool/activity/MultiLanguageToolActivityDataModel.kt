@@ -5,6 +5,7 @@ import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -58,7 +59,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     translationsRepository: TranslationsRepository,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel(savedState) {
+) : BaseToolRendererViewModel(manifestManager, savedState) {
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
@@ -110,12 +111,11 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Loading State
     val isInitialSyncFinished = MutableLiveData(false)
-    val supportedType = MutableLiveData<Manifest.Type>()
 
     val loadingState = locales.combineWith(
         manifests,
         translations,
-        supportedType,
+        supportedType.asLiveData(),
         isConnected,
         isInitialSyncFinished
     ) { l, m, t, type, connected, syncFinished ->
@@ -136,14 +136,18 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val manifest = manifestCache.get(tool, l)
         val translation = translationCache.get(tool, l)
-        combine(manifest, translation, supportedType, isConnected, isInitialSyncFinished) { m, t, type, c, s ->
+        combine(
+            manifest,
+            translation,
+            supportedType.asLiveData(),
+            isConnected,
+            isInitialSyncFinished
+        ) { m, t, type, c, s ->
             LoadingState.determineToolState(m, t, type, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
-    val activeManifest =
-        distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
-            .combineWith(supportedType) { manifest, type -> manifest?.takeIf { it.type == type } }
+    val activeManifest = manifest.asLiveData()
 
     internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
         when {

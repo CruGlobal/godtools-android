@@ -166,7 +166,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     // endregion Tool sync
 
     // region Active Translation management
-    override val activeManifestLiveData get() = dataModel.activeManifest
     override val activeToolLoadingStateLiveData get() = dataModel.activeLoadingState
     // endregion Active Translation management
 }

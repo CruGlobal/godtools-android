@@ -231,7 +231,7 @@ class LessonActivityDataModel @Inject constructor(
 ) : BaseSingleToolActivityDataModel(manifestManager, downloadManager, translationsRepository, savedState) {
     val visiblePages = SetLiveData<String>(synchronous = true)
 
-    val pages = manifest.combineWith(visiblePages) { manifest, visible ->
+    val pages = manifest.asLiveData().combineWith(visiblePages) { manifest, visible ->
         manifest?.pages.orEmpty().filterIsInstance<LessonPage>().filter { !it.isHidden || it.id in visible }
     }.distinctUntilChanged()
 

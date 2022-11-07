@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
@@ -18,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
@@ -317,7 +319,7 @@ class TractActivity :
     }
 
     override val shareLinkUriLiveData by lazy {
-        activeManifestLiveData.map { it?.buildShareLink()?.build()?.toString() }
+        viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
     }
     private fun Manifest.buildShareLink(page: Int = pager.currentItem): Uri.Builder? {
         val tool = code ?: return null

@@ -16,14 +16,7 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     downloadManager: GodToolsDownloadManager,
     translationsRepository: TranslationsRepository,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel(savedState) {
-    val manifest = toolCode.combineTransformLatest(locale) { tool, locale ->
-        when {
-            tool == null || locale == null -> emit(null)
-            else -> emitAll(manifestManager.getLatestPublishedManifestFlow(tool, locale))
-        }
-    }.asLiveData()
-
+) : BaseToolRendererViewModel(manifestManager, savedState) {
     val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)
