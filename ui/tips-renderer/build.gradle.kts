@@ -40,4 +40,8 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }
