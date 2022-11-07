@@ -228,7 +228,7 @@ class LessonActivityDataModel @Inject constructor(
     settings: Settings,
     translationsRepository: TranslationsRepository,
     savedState: SavedStateHandle
-) : BaseSingleToolActivityDataModel(manifestManager, downloadManager, translationsRepository) {
+) : BaseSingleToolActivityDataModel(manifestManager, downloadManager, translationsRepository, savedState) {
     val visiblePages = SetLiveData<String>(synchronous = true)
 
     val pages = manifest.combineWith(visiblePages) { manifest, visible ->

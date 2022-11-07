@@ -1,10 +1,9 @@
 package org.cru.godtools.base.tool.activity
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emitAll
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -15,11 +14,9 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 open class BaseSingleToolActivityDataModel @Inject constructor(
     manifestManager: ManifestManager,
     downloadManager: GodToolsDownloadManager,
-    translationsRepository: TranslationsRepository
-) : BaseToolRendererViewModel() {
-    val toolCode = MutableStateFlow<String?>(null)
-    val locale = MutableStateFlow<Locale?>(null)
-
+    translationsRepository: TranslationsRepository,
+    savedState: SavedStateHandle,
+) : BaseToolRendererViewModel(savedState) {
     val manifest = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)

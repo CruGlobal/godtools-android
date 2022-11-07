@@ -23,7 +23,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -59,8 +58,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     translationsRepository: TranslationsRepository,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel() {
-    val toolCode = savedState.getMutableStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
+) : BaseToolRendererViewModel(savedState) {
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
@@ -133,7 +131,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Loading State
 
     // region Active Tool
-    val activeLocale by savedState.livedata<Locale?>()
+    val activeLocale by savedState.livedata<Locale?>(STATE_ACTIVE_LOCALE)
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val manifest = manifestCache.get(tool, l)

@@ -4,9 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyAll
 import io.mockk.verifySequence
 import java.util.Locale
@@ -98,7 +100,7 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.CHINESE)
 
         dataModel.translations.observeForever(observer)
-        verifyAll {
+        verify {
             translationsRepository.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
             translationsRepository.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
             translationsRepository.getLatestTranslationLiveData(TOOL, Locale.CHINESE, trackAccess = true)
@@ -116,6 +118,7 @@ class MultiLanguageToolActivityDataModelTest {
                 }
             )
         }
+        confirmVerified(observer)
     }
 
     @Test
@@ -142,10 +145,10 @@ class MultiLanguageToolActivityDataModelTest {
 
         dataModel.translations.observeForever(observer)
         french.value = Translation()
-        verifyAll {
+        verify {
             translationsRepository.getLatestTranslationLiveData(TOOL, Locale.ENGLISH, trackAccess = true)
             translationsRepository.getLatestTranslationLiveData(TOOL, Locale.FRENCH, trackAccess = true)
-            repeat(2) { observer.onChanged(any()) }
+            observer.onChanged(any())
         }
         assertThat(
             translations,
