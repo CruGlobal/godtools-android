@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.dagger.getValue
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.model.UserCounter
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
 class UserActivityManager @VisibleForTesting internal constructor(
-    private val syncService: Lazy<GodToolsSyncService>,
+    syncService: Lazy<GodToolsSyncService>,
     tipsRepository: TrainingTipsRepository,
     private val userCountersRepository: UserCountersRepository,
     private val coroutineScope: CoroutineScope,
@@ -32,6 +33,8 @@ class UserActivityManager @VisibleForTesting internal constructor(
         tipsRepository: TrainingTipsRepository,
         userCountersRepository: UserCountersRepository,
     ) : this(syncService, tipsRepository, userCountersRepository, CoroutineScope(SupervisorJob()))
+
+    private val syncService by syncService
 
     // region Counters
     fun isValidCounterName(name: String) = UserCounter.VALID_NAME.matches(name)
@@ -44,7 +47,7 @@ class UserActivityManager @VisibleForTesting internal constructor(
     suspend fun updateCounter(name: String, change: Int = 1) {
         require(isValidCounterName(name)) { "Invalid counter name: $name" }
         userCountersRepository.updateCounter(name, change)
-        coroutineScope.launch { syncService.get().syncDirtyUserCounters() }
+        coroutineScope.launch { syncService.syncDirtyUserCounters() }
     }
     // endregion Counters
 
