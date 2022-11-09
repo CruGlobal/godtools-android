@@ -11,7 +11,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton.ThreadMode
 import org.cru.godtools.analytics.facebook.FacebookAnalyticsService
 import org.cru.godtools.analytics.firebase.FirebaseAnalyticsService
-import org.cru.godtools.analytics.snowplow.SnowplowAnalyticsService
 import org.cru.godtools.analytics.user.UserAnalyticsService
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
@@ -33,7 +32,6 @@ object AnalyticsModule {
     @EagerSingleton(threadMode = ThreadMode.ASYNC)
     internal fun backgroundEagerSingletons(
         facebook: FacebookAnalyticsService,
-        snowplow: SnowplowAnalyticsService,
         user: UserAnalyticsService,
-    ) = setOf(facebook, snowplow, user)
+    ) = setOf(facebook, user)
 }
