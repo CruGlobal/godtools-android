@@ -3,8 +3,12 @@ package org.cru.godtools.base.tool.activity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import io.mockk.Called
+import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -24,6 +28,8 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.user.activity.UserCounterNames
+import org.cru.godtools.user.activity.UserActivityManager
 import org.junit.Rule
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,6 +44,7 @@ class BaseToolRendererViewModelTest {
     private val manifestManager: ManifestManager = mockk {
         every { getLatestPublishedManifestFlow(any(), any()) } returns flowOf(null)
     }
+    private val userActivityManager: UserActivityManager = mockk(relaxUnitFun = true)
     private val testScope = TestScope()
 
     private lateinit var viewModel: BaseToolRendererViewModel
@@ -48,6 +55,7 @@ class BaseToolRendererViewModelTest {
 
         viewModel = BaseToolRendererViewModel(
             manifestManager,
+            userActivityManager,
             SavedStateHandle()
         )
     }
@@ -117,4 +125,42 @@ class BaseToolRendererViewModelTest {
         }
     }
     // endregion Property: manifest
+
+    // region Job: Tool Language Used
+    @Test
+    fun `Job Tool Language Used`() = testScope.runTest {
+        val manifestFlow = MutableStateFlow<Manifest?>(null)
+        every { manifestManager.getLatestPublishedManifestFlow(TOOL, any()) } returns manifestFlow
+        viewModel.toolCode.value = TOOL
+        viewModel.locale.value = Locale("")
+        verify { userActivityManager wasNot Called }
+
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
+        coVerify { userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.ENGLISH)) }
+        confirmVerified(userActivityManager)
+
+        manifestFlow.value = Manifest(locale = Locale.FRENCH)
+        coVerify { userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.FRENCH)) }
+        confirmVerified(userActivityManager)
+    }
+
+    @Test
+    fun `Job Tool Language Used - Record Unique Languages Only`() = testScope.runTest {
+        val manifestFlow = MutableStateFlow<Manifest?>(null)
+        every { manifestManager.getLatestPublishedManifestFlow(TOOL, any()) } returns manifestFlow
+        viewModel.toolCode.value = TOOL
+        viewModel.locale.value = Locale("")
+        verify { userActivityManager wasNot Called }
+
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
+        manifestFlow.value = Manifest(locale = Locale.FRENCH)
+        manifestFlow.value = Manifest(locale = Locale.FRENCH)
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
+        coVerify(exactly = 1) {
+            userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.ENGLISH))
+            userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.FRENCH))
+        }
+        confirmVerified(userActivityManager)
+    }
+    // endregion Job: Tool Language Used
 }

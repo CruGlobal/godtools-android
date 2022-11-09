@@ -8,15 +8,17 @@ import kotlinx.coroutines.flow.emitAll
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.user.activity.UserActivityManager
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 open class BaseSingleToolActivityDataModel @Inject constructor(
-    manifestManager: ManifestManager,
     downloadManager: GodToolsDownloadManager,
+    manifestManager: ManifestManager,
     translationsRepository: TranslationsRepository,
+    userActivityManager: UserActivityManager,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel(manifestManager, savedState) {
+) : BaseToolRendererViewModel(manifestManager, userActivityManager, savedState) {
     val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)

@@ -45,6 +45,7 @@ import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEve
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
+import org.cru.godtools.user.activity.UserActivityManager
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @AndroidEntryPoint
@@ -223,12 +224,19 @@ class LessonActivity :
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonActivityDataModel @Inject constructor(
-    manifestManager: ManifestManager,
     downloadManager: GodToolsDownloadManager,
+    manifestManager: ManifestManager,
     settings: Settings,
     translationsRepository: TranslationsRepository,
+    userActivityManager: UserActivityManager,
     savedState: SavedStateHandle
-) : BaseSingleToolActivityDataModel(manifestManager, downloadManager, translationsRepository, savedState) {
+) : BaseSingleToolActivityDataModel(
+    downloadManager,
+    manifestManager,
+    translationsRepository,
+    userActivityManager,
+    savedState
+) {
     val visiblePages = SetLiveData<String>(synchronous = true)
 
     val pages = manifest.asLiveData().combineWith(visiblePages) { manifest, visible ->

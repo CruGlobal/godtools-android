@@ -30,6 +30,7 @@ dependencies {
     api(project(":library:db"))
     api(project(":library:download-manager"))
     api(project(":library:sync"))
+    api(project(":library:user-data"))
     api(project(":ui:base"))
     implementation(project(":library:base"))
     implementation(project(":library:model"))
