@@ -1,10 +1,7 @@
 package org.cru.godtools.analytics.model
 
-import android.net.Uri
 import java.util.Locale
 import javax.annotation.concurrent.Immutable
-
-private const val SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN = "screenview"
 
 /* App Sections */
 private const val APP_SECTION_MENU = "menu"
@@ -57,12 +54,6 @@ open class AnalyticsScreenEvent(val screen: String, locale: Locale? = null) : An
             SCREEN_LANGUAGE_SELECTION -> APP_SUB_SECTION_LANGUAGE_SETTINGS
             else -> super.appSubSection
         }
-
-    override val snowplowPageTitle get() = screen
-    override val snowplowContentScoringUri: Uri.Builder
-        get() = super.snowplowContentScoringUri
-            .authority(SNOWPLOW_CONTENT_SCORING_URI_PATH_SCREEN)
-            .appendPath(screen)
 
     override fun equals(other: Any?) = when {
         this === other -> true

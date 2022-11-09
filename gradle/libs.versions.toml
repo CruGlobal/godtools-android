@@ -141,7 +141,6 @@ gtoSupport-recyclerview-advrecyclerview = { module = "org.ccci.gto.android:gto-s
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
-gtoSupport-snowplow = { module = "org.ccci.gto.android:gto-support-snowplow", version.ref = "gtoSupport" }
 gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.ref = "gtoSupport" }
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
@@ -188,7 +187,6 @@ scarlet = { module = "com.tinder.scarlet:scarlet", version.ref = "scarlet" }
 scarlet-adapters-stream-coroutines = { module = "com.tinder.scarlet:stream-adapter-coroutines", version.ref = "scarlet" }
 scarlet-lifecycle-android = { module = "com.tinder.scarlet:lifecycle-android", version.ref = "scarlet" }
 scarlet-websockets-okhttp = { module = "com.tinder.scarlet:websocket-okhttp", version.ref = "scarlet" }
-snowplow = "com.snowplowanalytics:snowplow-android-tracker:4.0.0"
 splitties-bitflags = { module = "com.louiscad.splitties:splitties-bitflags", version.ref = "splitties" }
 splitties-fragmentargs = { module = "com.louiscad.splitties:splitties-fragmentargs", version.ref = "splitties" }
 splitties-intents = { module = "com.louiscad.splitties:splitties-intents", version.ref = "splitties" }

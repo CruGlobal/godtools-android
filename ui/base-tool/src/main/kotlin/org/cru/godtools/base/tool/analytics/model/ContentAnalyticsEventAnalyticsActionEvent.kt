@@ -14,7 +14,6 @@ class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event
         AnalyticsSystem.FACEBOOK -> event.isForSystem(AnalyticsEvent.System.FACEBOOK)
         AnalyticsSystem.FIREBASE ->
             event.isForSystem(AnalyticsEvent.System.ADOBE) || event.isForSystem(AnalyticsEvent.System.FIREBASE)
-        AnalyticsSystem.SNOWPLOW -> event.isForSystem(AnalyticsEvent.System.SNOWPLOW)
         AnalyticsSystem.USER -> event.isForSystem(AnalyticsEvent.System.USER)
     }
 
