@@ -140,7 +140,7 @@ class CyoaActivity :
         val pageFragment = pageFragment
 
         val dismissCurrentPage = pageFragment?.page?.value?.dismissListeners?.contains(event.id) == true
-        val newPage = dataModel.activeManifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
+        val newPage = dataModel.manifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
 
         // trigger any page content listeners if we aren't dismissing the current page
         if (!dismissCurrentPage) pageFragment?.onContentEvent(event)

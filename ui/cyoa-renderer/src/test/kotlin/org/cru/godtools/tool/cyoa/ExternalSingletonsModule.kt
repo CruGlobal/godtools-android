@@ -22,6 +22,7 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.user.activity.UserActivityManager
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -47,6 +48,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val downloadManager by lazy {
         mockk<GodToolsDownloadManager> {
+            every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
             every { getDownloadProgressLiveData(any(), any()) } answers { ImmutableLiveData(null) }
             every { downloadLatestPublishedTranslationAsync(any(), any()) } returns Job().apply { complete() }
         }
@@ -79,4 +81,6 @@ class ExternalSingletonsModule {
             every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
         }
     }
+    @get:Provides
+    val userActivityManager: UserActivityManager by lazy { mockk(relaxUnitFun = true) }
 }

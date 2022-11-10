@@ -30,6 +30,7 @@ dependencies {
     api(project(":library:db"))
     api(project(":library:download-manager"))
     api(project(":library:sync"))
+    api(project(":library:user-data"))
     api(project(":ui:base"))
     implementation(project(":library:base"))
     implementation(project(":library:model"))
@@ -77,8 +78,10 @@ dependencies {
     kapt(libs.google.auto.value)
     kapt(libs.hilt.compiler)
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
     kaptTest(libs.androidx.databinding.compiler)
 }

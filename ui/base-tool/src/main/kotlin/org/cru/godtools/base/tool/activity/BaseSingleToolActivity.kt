@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import java.util.Locale
@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.util.os.getLocale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.tool.viewmodel.LatestPublishedManifestDataModel
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.Manifest
 
@@ -27,10 +26,8 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
     private val requireTool: Boolean,
     private val supportedType: Manifest.Type?
 ) : BaseToolActivity<B>(contentLayoutId) {
-    override val activeManifestLiveData get() = dataModel.manifest
-
-    protected open val dataModel: BaseSingleToolActivityDataModel by viewModels()
-    protected val manifestDataModel: LatestPublishedManifestDataModel get() = dataModel
+    override val viewModel: BaseSingleToolActivityDataModel by viewModels()
+    protected open val dataModel get() = viewModel
 
     // region Intent processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
@@ -65,19 +62,19 @@ abstract class BaseSingleToolActivity<B : ViewDataBinding>(
         }
 
     override val toolsToDownload by lazy {
-        dataModel.toolCode.asFlow()
+        dataModel.toolCode
             .map { listOfNotNull(it) }
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
     override val localesToDownload by lazy {
-        dataModel.locale.asFlow()
+        dataModel.locale
             .map { listOfNotNull(it) }
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
 
     override val activeDownloadProgressLiveData get() = dataModel.downloadProgress
     override val activeToolLoadingStateLiveData by lazy {
-        activeManifestLiveData.combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
+        viewModel.manifest.asLiveData().combineWith(dataModel.translation, isConnected) { m, t, isConnected ->
             LoadingState.determineToolState(m, t, manifestType = supportedType, isConnected = isConnected)
         }.distinctUntilChanged()
     }

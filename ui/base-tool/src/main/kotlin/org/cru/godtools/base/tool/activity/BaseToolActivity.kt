@@ -13,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
@@ -73,6 +74,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
 
+    protected abstract val viewModel: BaseToolRendererViewModel
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +95,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     @CallSuper
     override fun onBindingChanged() {
-        binding.setVariable(BR.manifest, activeManifestLiveData)
+        binding.setVariable(BR.manifest, viewModel.manifest.asLiveData())
         binding.setVariable(BR.loadingProgress, activeDownloadProgressLiveData)
         binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
     }
@@ -138,7 +141,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     /**
      * @return The currently active manifest that is a valid supported type for this activity, otherwise return null.
      */
-    protected val activeManifest get() = activeManifestLiveData.value
+    protected val activeManifest get() = viewModel.manifest.value
 
     // region Status Bar / Toolbar logic
     override val toolbar get() = when (val it = binding) {
@@ -149,7 +152,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     private fun setupStatusBar() {
         window.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            activeManifestLiveData.observe(this@BaseToolActivity) {
+            viewModel.manifest.asLiveData().observe(this@BaseToolActivity) {
                 statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
             }
         }
@@ -250,7 +253,6 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     protected abstract val activeDownloadProgressLiveData: LiveData<DownloadProgress?>
-    protected abstract val activeManifestLiveData: LiveData<Manifest?>
     protected abstract val activeToolLoadingStateLiveData: LiveData<LoadingState>
     // endregion Tool state
 

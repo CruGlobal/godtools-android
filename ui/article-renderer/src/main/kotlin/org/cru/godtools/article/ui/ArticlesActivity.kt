@@ -7,11 +7,12 @@ import android.view.MenuItem
 import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import org.ccci.gto.android.common.androidx.lifecycle.notNull
+import kotlinx.coroutines.flow.filterNotNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.ui.startAemArticleActivity
@@ -91,7 +92,7 @@ class ArticlesActivity :
         supportFragmentManager.addOnBackStackChangedListener { updateToolbarTitle() }
 
         // load the primaryNavigationFragment if one doesn't already exist
-        dataModel.manifest.notNull().observeOnce(this) {
+        dataModel.manifest.filterNotNull().asLiveData().observeOnce(this) {
             if (supportFragmentManager.primaryNavigationFragment != null) return@observeOnce
 
             when (it.categories.size) {

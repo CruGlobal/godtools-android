@@ -8,7 +8,6 @@ import android.net.Uri
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +18,7 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -68,7 +68,7 @@ class CyoaActivityTest {
     @Inject
     internal lateinit var manifestManager: ManifestManager
 
-    private val manifestEnglish = MutableLiveData<Manifest?>(null)
+    private val manifestEnglish = MutableStateFlow<Manifest?>(null)
 
     private val page1 = contentPage("page1")
     private val page2 = contentPage("page2")
@@ -84,7 +84,7 @@ class CyoaActivityTest {
     @Before
     fun setupMocks() {
         hiltRule.inject()
-        every { manifestManager.getLatestPublishedManifestLiveData(TOOL, Locale.ENGLISH) } returns manifestEnglish
+        every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.ENGLISH) } returns manifestEnglish
     }
 
     private fun manifest(pages: List<Page> = emptyList()) = Manifest(

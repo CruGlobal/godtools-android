@@ -5,7 +5,7 @@ import androidx.collection.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
@@ -24,7 +24,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -47,6 +46,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.user.activity.UserActivityManager
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -58,10 +58,10 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
     translationsRepository: TranslationsRepository,
+    userActivityManager: UserActivityManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
-) : ViewModel() {
-    val toolCode = savedState.getMutableStateFlow<String?>(viewModelScope, EXTRA_TOOL, null)
+) : BaseToolRendererViewModel(manifestManager, userActivityManager, savedState) {
     val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
     val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
 
@@ -113,12 +113,11 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Loading State
     val isInitialSyncFinished = MutableLiveData(false)
-    val supportedType = MutableLiveData<Manifest.Type>()
 
     val loadingState = locales.combineWith(
         manifests,
         translations,
-        supportedType,
+        supportedType.asLiveData(),
         isConnected,
         isInitialSyncFinished
     ) { l, m, t, type, connected, syncFinished ->
@@ -134,19 +133,23 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Loading State
 
     // region Active Tool
-    val activeLocale by savedState.livedata<Locale?>()
+    val activeLocale by savedState.livedata<Locale?>(STATE_ACTIVE_LOCALE)
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         val manifest = manifestCache.get(tool, l)
         val translation = translationCache.get(tool, l)
-        combine(manifest, translation, supportedType, isConnected, isInitialSyncFinished) { m, t, type, c, s ->
+        combine(
+            manifest,
+            translation,
+            supportedType.asLiveData(),
+            isConnected,
+            isInitialSyncFinished
+        ) { m, t, type, c, s ->
             LoadingState.determineToolState(m, t, type, isConnected = c, isSyncFinished = s)
         }
     }.distinctUntilChanged()
 
-    val activeManifest =
-        distinctToolCode.switchCombineWith(activeLocale) { t, l -> manifestCache.get(t, l).withInitialValue(null) }
-            .combineWith(supportedType) { manifest, type -> manifest?.takeIf { it.type == type } }
+    val activeManifest = manifest.asLiveData()
 
     internal val activeToolDownloadProgress = distinctToolCode.switchCombineWith(activeLocale) { t, l ->
         when {

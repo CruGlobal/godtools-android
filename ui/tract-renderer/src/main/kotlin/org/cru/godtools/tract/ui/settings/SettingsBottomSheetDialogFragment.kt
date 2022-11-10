@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,7 @@ class SettingsBottomSheetDialogFragment :
     override fun onBindingCreated(binding: TractSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         binding.tool = activityDataModel.tool
-        binding.activeManifest = activityDataModel.activeManifest
+        binding.activeManifest = activityDataModel.manifest.asLiveData()
         binding.hasTips = activityDataModel.hasTips
         binding.showTips = activityDataModel.showTips
         binding.primaryLanguage = primaryLanguage
