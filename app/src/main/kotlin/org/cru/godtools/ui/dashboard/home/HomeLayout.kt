@@ -278,7 +278,7 @@ internal fun AllFavoritesList(
 
     val reorderableState = rememberReorderableLazyListState(
         // only support reordering tool items
-        canDragOver = { (_, k) -> (k as? String)?.startsWith("tool:") == true },
+        canDragOver = { (_, k), _ -> (k as? String)?.startsWith("tool:") == true },
         onMove = { from, to ->
             val fromPos = favoriteTools.indexOfFirst { it.code == (from.key as? String)?.removePrefix("tool:") }
             val toPos = favoriteTools.indexOfFirst { it.code == (to.key as? String)?.removePrefix("tool:") }
