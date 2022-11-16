@@ -3,7 +3,10 @@ package org.cru.godtools.db.repository
 import app.cash.turbine.test
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.TrainingTip
 import org.hamcrest.MatcherAssert.assertThat
@@ -23,10 +26,11 @@ abstract class TrainingTipsRepositoryIT {
         private const val TIPID2 = "tip2"
     }
 
+    protected val testScope = TestScope()
     abstract val repository: TrainingTipsRepository
 
     @Test
-    fun `markTipComplete()`() = runTest {
+    fun `markTipComplete()`() = testScope.runTest {
         assertFalse(repository.isTipCompleteFlow(TOOL, Locale.ENGLISH, TIPID).first())
         assertFalse(repository.isTipCompleteFlow(TOOL2, Locale.ENGLISH, TIPID).first())
         assertFalse(repository.isTipCompleteFlow(TOOL, Locale.FRENCH, TIPID).first())
@@ -40,13 +44,14 @@ abstract class TrainingTipsRepositoryIT {
     }
 
     @Test
-    fun `isTipCompleteFlow()`() = runTest {
-        repository.isTipCompleteFlow(TOOL, Locale.ENGLISH, TIPID).test {
+    fun `isTipCompleteFlow()`() = testScope.runTest {
+        repository.isTipCompleteFlow(TOOL, Locale.ENGLISH, TIPID).distinctUntilChanged().test {
             assertFalse(awaitItem())
 
             repository.markTipComplete(TOOL2, Locale.ENGLISH, TIPID)
             repository.markTipComplete(TOOL, Locale.FRENCH, TIPID)
             repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID2)
+            advanceUntilIdle()
             expectNoEvents()
 
             repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID)
@@ -55,7 +60,7 @@ abstract class TrainingTipsRepositoryIT {
     }
 
     @Test
-    fun `getCompletedTipsFlow()`() = runTest {
+    fun `getCompletedTipsFlow()`() = testScope.runTest {
         repository.getCompletedTipsFlow().test {
             assertThat(awaitItem(), empty())
 
