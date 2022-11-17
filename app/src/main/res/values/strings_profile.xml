@@ -15,6 +15,30 @@
     <string name="account_activity_languages_used">Languages used</string>
     <string name="account_activity_sessions">Sessions</string>
 
+    <!-- Badges -->
+    <eat-comment />
+    <string name="account_activity_badges_header">Your badges</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Opened %1$,d tool</item>
+        <item quantity="other">Opened %1$,d tools</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Completed %1$,d lesson</item>
+        <item quantity="other">Completed %1$,d lessons</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Opened %1$,d article</item>
+        <item quantity="other">Opened %1$,d articles</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Shared %1$,d image</item>
+        <item quantity="other">Shared %1$,d images</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Completed %1$,d training tips</item>
+        <item quantity="other">Completed %1$,d training tips</item>
+    </plurals>
+
     <!-- Global Activity -->
     <eat-comment />
     <string name="account_tab_global_activity">Global Activity</string>

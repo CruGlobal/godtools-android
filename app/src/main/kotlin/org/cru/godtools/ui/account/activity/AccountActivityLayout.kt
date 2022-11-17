@@ -42,6 +42,7 @@ fun AccountActivityLayout(
     val activity by viewModel.userActivity.collectAsState()
 
     AccountActivity(activity, modifier = Modifier.padding(top = 32.dp))
+    AccountActivityBadges(activity, modifier = Modifier.padding(vertical = 32.dp))
 }
 
 @Composable

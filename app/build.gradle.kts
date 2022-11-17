@@ -191,6 +191,7 @@ dependencies {
     implementation(libs.play.instantapps)
 
     api(libs.eventbus)
+    implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.coil.compose)
