@@ -7,10 +7,10 @@ import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_LANGUAGE_SETTINGS
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.R
 
 fun Activity.startLanguageSettingsActivity() {
@@ -31,7 +31,7 @@ class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWit
     override fun onResume() {
         super.onResume()
         settings.setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
-        eventBus.post(AnalyticsScreenEvent(SCREEN_LANGUAGE_SETTINGS))
+        eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.SETTINGS_LANGUAGES))
     }
     // endregion Lifecycle
 

@@ -38,6 +38,8 @@ dependencies {
     implementation(project(":library:user-data"))
     implementation(project(":ui:base"))
 
+    api(libs.godtoolsShared.analytics)
+
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
 

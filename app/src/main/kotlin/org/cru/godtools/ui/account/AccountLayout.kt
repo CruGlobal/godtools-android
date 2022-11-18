@@ -43,7 +43,7 @@ import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_GLOBAL_DASHBOARD
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.account.activity.AccountActivityLayout
 import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
 
@@ -147,7 +147,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
 @Composable
 private fun RecordAccountPageAnalytics(page: AccountPage?) {
     val screen = when (page) {
-        AccountPage.GLOBAL_ACTIVITY -> AnalyticsScreenEvent(SCREEN_GLOBAL_DASHBOARD)
+        AccountPage.GLOBAL_ACTIVITY -> AnalyticsScreenEvent(AnalyticsScreenNames.ACCOUNT_GLOBAL_ACTIVITY)
         else -> null
     }
     if (screen != null) RecordAnalyticsScreen(screen)
