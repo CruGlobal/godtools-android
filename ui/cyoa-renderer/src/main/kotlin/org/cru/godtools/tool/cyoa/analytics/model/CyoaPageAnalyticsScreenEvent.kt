@@ -1,15 +1,14 @@
 package org.cru.godtools.tool.cyoa.analytics.model
 
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsScreenNames
 import org.cru.godtools.shared.tool.parser.model.page.Page
 
-private const val SEPARATOR = ":"
-
-open class CyoaPageAnalyticsScreenEvent(page: Page, suffix: String? = null) : ToolAnalyticsScreenEvent(
-    screen = page.toAnalyticsScreenName(suffix),
+open class CyoaPageAnalyticsScreenEvent(
+    page: Page,
+    screen: String = ToolAnalyticsScreenNames.forCyoaPage(page)
+) : ToolAnalyticsScreenEvent(
+    screen = screen,
     tool = page.manifest.code,
     locale = page.manifest.locale
 )
-
-private fun Page.toAnalyticsScreenName(suffix: String?) =
-    listOfNotNull(manifest.code.orEmpty(), id, suffix).joinToString(SEPARATOR)
