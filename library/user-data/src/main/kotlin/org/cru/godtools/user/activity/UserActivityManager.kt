@@ -17,9 +17,10 @@ import org.cru.godtools.model.UserCounter
 import org.cru.godtools.shared.user.activity.UserCounterNames
 import org.cru.godtools.shared.user.activity.model.UserActivity
 import org.cru.godtools.sync.GodToolsSyncService
+import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-class UserActivityManager internal constructor(
+class UserActivityManager @VisibleForTesting internal constructor(
     private val syncService: Lazy<GodToolsSyncService>,
     tipsRepository: TrainingTipsRepository,
     private val userCountersRepository: UserCountersRepository,
