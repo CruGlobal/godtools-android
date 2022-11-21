@@ -42,6 +42,9 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     }
 
     private fun storeTool(tool: Tool, existingTools: LongSparseArray<Tool>?, includes: Includes) {
+        // don't store the tool if it's not valid
+        if (!tool.isValid) return
+
         dao.updateOrInsert(
             tool, SQLiteDatabase.CONFLICT_REPLACE,
             ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,

@@ -134,4 +134,6 @@ class Tool : Base() {
     var isHidden = false
     @JsonApiAttribute(JSON_SPOTLIGHT)
     var isSpotlight = false
+
+    val isValid get() = code != null
 }
