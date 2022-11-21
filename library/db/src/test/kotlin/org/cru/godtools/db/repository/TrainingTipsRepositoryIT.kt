@@ -5,7 +5,14 @@ import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.model.TrainingTip
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.contains
+import org.hamcrest.Matchers.containsInAnyOrder
+import org.hamcrest.Matchers.empty
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -19,10 +26,11 @@ abstract class TrainingTipsRepositoryIT {
         private const val TIPID2 = "tip2"
     }
 
+    protected val testScope = TestScope()
     abstract val repository: TrainingTipsRepository
 
     @Test
-    fun `markTipComplete()`() = runTest {
+    fun `markTipComplete()`() = testScope.runTest {
         assertFalse(repository.isTipCompleteFlow(TOOL, Locale.ENGLISH, TIPID).first())
         assertFalse(repository.isTipCompleteFlow(TOOL2, Locale.ENGLISH, TIPID).first())
         assertFalse(repository.isTipCompleteFlow(TOOL, Locale.FRENCH, TIPID).first())
@@ -36,17 +44,40 @@ abstract class TrainingTipsRepositoryIT {
     }
 
     @Test
-    fun `isTipCompleteFlow()`() = runTest {
+    fun `isTipCompleteFlow()`() = testScope.runTest {
         repository.isTipCompleteFlow(TOOL, Locale.ENGLISH, TIPID).distinctUntilChanged().test {
             assertFalse(awaitItem())
 
             repository.markTipComplete(TOOL2, Locale.ENGLISH, TIPID)
             repository.markTipComplete(TOOL, Locale.FRENCH, TIPID)
             repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID2)
+            advanceUntilIdle()
             expectNoEvents()
 
             repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID)
             assertTrue(awaitItem())
+        }
+    }
+
+    @Test
+    fun `getCompletedTipsFlow()`() = testScope.runTest {
+        repository.getCompletedTipsFlow().test {
+            assertThat(awaitItem(), empty())
+
+            repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID)
+            val tip1 = TrainingTip(TOOL, Locale.ENGLISH, TIPID, true)
+            assertThat(awaitItem(), containsInAnyOrder(tip1))
+
+            repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID2)
+            val tip2 = TrainingTip(TOOL, Locale.ENGLISH, TIPID2, true)
+            assertThat(awaitItem(), containsInAnyOrder(tip1, tip2))
+
+            repository.markTipComplete(TOOL, Locale.FRENCH, TIPID)
+            val tip3 = TrainingTip(TOOL, Locale.FRENCH, TIPID, true)
+            assertThat(awaitItem(), containsInAnyOrder(tip1, tip2, tip3))
+
+            repository.markTipComplete(TOOL, Locale.ENGLISH, TIPID)
+            assertThat(awaitItem(), containsInAnyOrder(tip1, tip2, tip3))
         }
     }
 }

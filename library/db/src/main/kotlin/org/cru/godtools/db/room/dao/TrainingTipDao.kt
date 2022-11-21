@@ -18,4 +18,7 @@ internal interface TrainingTipDao {
 
     @Query("SELECT * FROM training_tips WHERE tool = :tool AND locale = :locale AND tipId = :tipId")
     fun findTrainingTipFlow(tool: String, locale: Locale, tipId: String): Flow<TrainingTipEntity?>
+
+    @Query("SELECT * FROM training_tips WHERE isCompleted")
+    fun getCompletedTrainingTipsFlow(): Flow<List<TrainingTipEntity>>
 }
