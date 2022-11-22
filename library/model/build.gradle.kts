@@ -8,6 +8,9 @@ android {
     namespace = "org.cru.godtools.model"
 
     baseConfiguration(project)
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 }
 
 dependencies {

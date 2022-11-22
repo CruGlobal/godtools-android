@@ -1,6 +1,6 @@
 package org.cru.godtools.model
 
-import java.util.Date
+import java.time.Instant
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -26,7 +26,7 @@ class Followup(
     @JsonApiAttribute(JSON_NAME)
     val name: String? = null,
     @JsonApiIgnore
-    val createTime: Date = Date(),
+    val createTime: Instant = Instant.now(),
 ) {
     @JsonApiAttribute(JSON_LANGUAGE)
     private var languageId: Long? = null

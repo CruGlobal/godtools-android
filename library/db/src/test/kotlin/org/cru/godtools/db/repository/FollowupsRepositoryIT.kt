@@ -1,5 +1,6 @@
 package org.cru.godtools.db.repository
 
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
@@ -25,7 +26,10 @@ abstract class FollowupsRepositoryIT {
         assertEquals(followup.email, persisted.email)
         assertEquals(followup.destination, persisted.destination)
         assertEquals(followup.languageCode, persisted.languageCode)
-        assertEquals(followup.createTime, persisted.createTime)
+        assertEquals(
+            followup.createTime.truncatedTo(ChronoUnit.SECONDS),
+            persisted.createTime.truncatedTo(ChronoUnit.SECONDS)
+        )
     }
 
     @Test

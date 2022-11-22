@@ -3,7 +3,6 @@ package org.cru.godtools.db.room.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
-import java.util.Date
 import java.util.Locale
 import org.cru.godtools.model.Base
 import org.cru.godtools.model.Followup
@@ -23,7 +22,7 @@ internal class FollowupEntity(
         email = model.email,
         destination = model.destination,
         language = model.languageCode,
-        createdAt = model.createTime.toInstant()
+        createdAt = model.createTime
     )
 
     fun toModel() = Followup(
@@ -32,6 +31,6 @@ internal class FollowupEntity(
         languageCode = language,
         name = name,
         email = email,
-        createTime = Date.from(createdAt)
+        createTime = createdAt
     )
 }
