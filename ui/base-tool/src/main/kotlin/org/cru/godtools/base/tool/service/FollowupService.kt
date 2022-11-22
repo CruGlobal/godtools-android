@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.service
+package org.cru.godtools.base.tool.service
 
 import dagger.Lazy
 import javax.inject.Inject

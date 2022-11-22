@@ -42,6 +42,7 @@ import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.base.tool.service.FollowupService
 import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
@@ -75,6 +76,10 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     internal lateinit var isConnected: LiveData<Boolean>
 
     protected abstract val viewModel: BaseToolRendererViewModel
+
+    // Inject the FollowupService to ensure it is running to capture any followup forms
+    @Inject
+    internal lateinit var followupService: FollowupService
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
