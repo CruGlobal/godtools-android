@@ -32,7 +32,7 @@ internal class FollowupSyncTasks @Inject internal constructor(
                                 .also {
                                     if (it) {
                                         followup.restoreId()
-                                        dao.delete(followup)
+                                        followupsRepository.deleteFollowup(followup)
                                     }
                                 }
                         } catch (e: IOException) {

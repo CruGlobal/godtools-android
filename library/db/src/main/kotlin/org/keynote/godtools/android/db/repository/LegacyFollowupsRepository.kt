@@ -15,4 +15,8 @@ internal class LegacyFollowupsRepository @Inject constructor(private val dao: Go
     }
 
     override suspend fun getFollowups() = dao.getAsync(Query.select<Followup>()).await()
+
+    override suspend fun deleteFollowup(followup: Followup) = withContext(dao.coroutineDispatcher) {
+        dao.delete(followup)
+    }
 }
