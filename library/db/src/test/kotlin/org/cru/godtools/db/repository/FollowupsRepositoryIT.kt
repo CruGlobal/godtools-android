@@ -47,11 +47,11 @@ abstract class FollowupsRepositoryIT {
         assertEquals(0, repository.getFollowups().size)
     }
 
-    private fun randomFollowup() = Followup().apply {
-        id = Random.nextLong()
-        name = UUID.randomUUID().toString()
-        email = UUID.randomUUID().toString()
-        destination = Random.nextLong()
-        languageCode = Locale.FRENCH
-    }
+    private fun randomFollowup() = Followup(
+        id = Random.nextLong(),
+        destination = Random.nextLong(),
+        languageCode = Locale.FRENCH,
+        name = UUID.randomUUID().toString(),
+        email = UUID.randomUUID().toString(),
+    )
 }

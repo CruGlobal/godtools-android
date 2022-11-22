@@ -27,11 +27,9 @@ internal class FollowupSyncTasks @Inject internal constructor(
                     async {
                         try {
                             followup.languageCode?.let { followup.setLanguage(dao.find(it)) }
-                            followup.stashId()
                             followupApi.subscribe(followup).isSuccessful
                                 .also {
                                     if (it) {
-                                        followup.restoreId()
                                         followupsRepository.deleteFollowup(followup)
                                     }
                                 }

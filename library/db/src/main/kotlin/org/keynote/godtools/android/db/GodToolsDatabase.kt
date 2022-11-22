@@ -190,11 +190,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 roomDb.followupsDao.insertBlocking(
                                     FollowupEntity(
                                         name = it.getString(FollowupTable.COLUMN_NAME),
-                                        email = it.getString(FollowupTable.COLUMN_EMAIL),
-                                        language = it.getLocale(FollowupTable.COLUMN_LANGUAGE),
-                                        destination = it.getLong(FollowupTable.COLUMN_DESTINATION),
+                                        email = it.getString(FollowupTable.COLUMN_EMAIL) ?: continue,
+                                        language = it.getLocale(FollowupTable.COLUMN_LANGUAGE) ?: continue,
+                                        destination = it.getLong(FollowupTable.COLUMN_DESTINATION) ?: continue,
                                         createdAt = it.getLong(FollowupTable.COLUMN_CREATE_TIME)
-                                            ?.let { Instant.ofEpochMilli(it) }
+                                            ?.let { Instant.ofEpochMilli(it) } ?: Instant.now()
                                     )
                                 )
                             }

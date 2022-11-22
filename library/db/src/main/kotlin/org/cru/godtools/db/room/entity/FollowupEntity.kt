@@ -12,10 +12,10 @@ import org.cru.godtools.model.Followup
 internal class FollowupEntity(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     val name: String?,
-    val email: String?,
-    val destination: Long?,
-    val language: Locale?,
-    val createdAt: Instant?,
+    val email: String,
+    val destination: Long,
+    val language: Locale,
+    val createdAt: Instant,
 ) {
     constructor(model: Followup) : this(
         id = model.id.takeUnless { it == Base.INVALID_ID },
@@ -23,15 +23,15 @@ internal class FollowupEntity(
         email = model.email,
         destination = model.destination,
         language = model.languageCode,
-        createdAt = model.createTime?.toInstant()
+        createdAt = model.createTime.toInstant()
     )
 
-    fun toModel() = Followup().also { model ->
-        model.id = id ?: Base.INVALID_ID
-        model.name = name
-        model.email = email
-        model.destination = destination
-        model.languageCode = language
-        model.createTime = createdAt?.let { Date.from(it) }
-    }
+    fun toModel() = Followup(
+        id = id,
+        destination = destination,
+        languageCode = language,
+        name = name,
+        email = email,
+        createTime = Date.from(createdAt)
+    )
 }

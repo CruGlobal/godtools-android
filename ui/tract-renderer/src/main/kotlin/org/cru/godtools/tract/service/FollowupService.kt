@@ -35,12 +35,12 @@ class FollowupService @Inject internal constructor(
         if (event.id != EventId.FOLLOWUP) return
 
         coroutineScope.launch {
-            val followup = Followup().apply {
-                name = event.fields[FIELD_NAME]
-                email = event.fields[FIELD_EMAIL]
-                languageCode = event.locale
-                destination = event.fields[FIELD_DESTINATION]?.toLongOrNull()
-            }
+            val followup = Followup(
+                destination = event.fields[FIELD_DESTINATION]?.toLongOrNull() ?: return@launch,
+                languageCode = event.locale ?: return@launch,
+                name = event.fields[FIELD_NAME],
+                email = event.fields[FIELD_EMAIL] ?: return@launch,
+            )
 
             // only store this followup if it's valid
             if (followup.isValid) {
