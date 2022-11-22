@@ -2,9 +2,7 @@ package org.cru.godtools.db.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import java.time.Instant
-import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.cru.godtools.model.User
 
 @Entity(tableName = "users")

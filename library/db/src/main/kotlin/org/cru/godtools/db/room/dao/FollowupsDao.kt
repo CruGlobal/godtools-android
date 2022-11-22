@@ -11,6 +11,9 @@ internal interface FollowupsDao {
     @Insert
     suspend fun insert(followup: FollowupEntity)
 
+    @Insert
+    fun insertBlocking(followup: FollowupEntity)
+
     @Query("SELECT * FROM followups")
     suspend fun getFollowups(): List<FollowupEntity>
 

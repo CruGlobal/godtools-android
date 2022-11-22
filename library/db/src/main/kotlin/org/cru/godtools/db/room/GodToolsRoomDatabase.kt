@@ -6,7 +6,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
-import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.room.dao.FollowupsDao
 import org.cru.godtools.db.room.dao.GlobalActivityDao
 import org.cru.godtools.db.room.dao.LastSyncTimeDao

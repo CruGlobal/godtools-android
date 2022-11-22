@@ -17,7 +17,6 @@ import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
-import org.keynote.godtools.android.db.repository.LegacyFollowupsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,7 +30,7 @@ internal object DatabaseModule {
 
     @Provides
     @Reusable
-    fun LegacyFollowupsRepository.followupsRepository(): FollowupsRepository = this
+    fun GodToolsRoomDatabase.followupsRepository(): FollowupsRepository = followupsRepository
 
     @Provides
     @Reusable
