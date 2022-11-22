@@ -9,6 +9,9 @@ android {
     namespace = "org.cru.godtools.db"
 
     baseConfiguration(project)
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }

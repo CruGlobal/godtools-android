@@ -8,7 +8,6 @@ import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.cru.godtools.model.User
 
 @Entity(tableName = "users")
-@TypeConverters(Java8TimeConverters::class)
 internal class UserEntity(
     @PrimaryKey
     val id: String,
