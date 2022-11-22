@@ -1,10 +1,11 @@
 package org.cru.godtools.tract.service
 
-import androidx.annotation.WorkerThread
 import dagger.Lazy
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.dagger.getValue
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.db.repository.FollowupsRepository
@@ -13,7 +14,6 @@ import org.cru.godtools.shared.tool.parser.model.EventId
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 private const val FIELD_NAME = "name"
 private const val FIELD_EMAIL = "email"
@@ -23,14 +23,18 @@ private const val FIELD_DESTINATION = "destination_id"
 class FollowupService @Inject internal constructor(
     eventBus: EventBus,
     followupsRepository: Lazy<FollowupsRepository>,
-    private val syncService: GodToolsSyncService
+    syncService: Lazy<GodToolsSyncService>
 ) {
-    private val followupsRepository by followupsRepository
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    @WorkerThread
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    private val followupsRepository by followupsRepository
+    private val syncService by syncService
+
+    @Subscribe
     fun onContentEvent(event: Event) {
-        if (event.id == EventId.FOLLOWUP) {
+        if (event.id != EventId.FOLLOWUP) return
+
+        coroutineScope.launch {
             val followup = Followup().apply {
                 name = event.fields[FIELD_NAME]
                 email = event.fields[FIELD_EMAIL]
@@ -40,7 +44,7 @@ class FollowupService @Inject internal constructor(
 
             // only store this followup if it's valid
             if (followup.isValid) {
-                runBlocking { followupsRepository.createFollowup(followup) }
+                followupsRepository.createFollowup(followup)
                 @Suppress("DeferredResultUnused")
                 syncService.syncFollowupsAsync()
             }
@@ -49,7 +53,9 @@ class FollowupService @Inject internal constructor(
 
     init {
         eventBus.register(this)
-        @Suppress("DeferredResultUnused")
-        syncService.syncFollowupsAsync()
+        coroutineScope.launch {
+            @Suppress("DeferredResultUnused")
+            this@FollowupService.syncService.syncFollowupsAsync()
+        }
     }
 }
