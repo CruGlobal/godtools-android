@@ -3,47 +3,44 @@ package org.cru.godtools.sync.task
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.FollowupApi
-import org.cru.godtools.model.Followup
+import org.cru.godtools.db.repository.FollowupsRepository
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class FollowupSyncTasks @Inject internal constructor(
+internal class FollowupSyncTasks @Inject internal constructor(
     private val dao: GodToolsDao,
-    private val followupApi: FollowupApi
+    private val followupApi: FollowupApi,
+    private val followupsRepository: FollowupsRepository,
 ) : BaseSyncTasks() {
-    private val followupMutex = Mutex()
+    private val followupsMutex = Mutex()
 
-    suspend fun syncFollowups() = withContext(Dispatchers.IO) {
-        followupMutex.withLock {
-            coroutineScope {
-                dao.get(Query.select<Followup>())
-                    .map { followup ->
-                        async {
-                            try {
-                                followup.languageCode?.let { followup.setLanguage(dao.find(it)) }
-                                followup.stashId()
-                                followupApi.subscribe(followup).isSuccessful
-                                    .also {
-                                        if (it) {
-                                            followup.restoreId()
-                                            dao.delete(followup)
-                                        }
+    suspend fun syncFollowups() = followupsMutex.withLock {
+        coroutineScope {
+            followupsRepository.getFollowups()
+                .map { followup ->
+                    async {
+                        try {
+                            followup.languageCode?.let { followup.setLanguage(dao.find(it)) }
+                            followup.stashId()
+                            followupApi.subscribe(followup).isSuccessful
+                                .also {
+                                    if (it) {
+                                        followup.restoreId()
+                                        dao.delete(followup)
                                     }
-                            } catch (e: IOException) {
-                                false
-                            }
+                                }
+                        } catch (e: IOException) {
+                            false
                         }
-                    }.all { it.await() }
-            }
+                    }
+                }
+                .all { it.await() }
         }
     }
 }

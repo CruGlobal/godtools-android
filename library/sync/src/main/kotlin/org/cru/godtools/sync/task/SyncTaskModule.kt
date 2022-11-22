@@ -15,7 +15,7 @@ annotation class SyncTaskKey(val value: KClass<out BaseSyncTasks>)
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class SyncTaskModule {
+internal abstract class SyncTaskModule {
     @Binds
     @IntoMap
     @SyncTaskKey(AnalyticsSyncTasks::class)

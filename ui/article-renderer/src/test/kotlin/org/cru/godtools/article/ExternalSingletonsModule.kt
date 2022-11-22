@@ -17,7 +17,6 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.DownloadManagerModule
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.sync.task.SyncTaskModule
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -27,7 +26,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
     components = [SingletonComponent::class],
     replaces = [
         DownloadManagerModule::class,
-        SyncTaskModule::class
     ]
 )
 class ExternalSingletonsModule {
