@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.service
 
-import android.os.AsyncTask
 import androidx.annotation.WorkerThread
 import dagger.Lazy
 import javax.inject.Inject
@@ -24,15 +23,8 @@ private const val FIELD_DESTINATION = "destination_id"
 class FollowupService @Inject internal constructor(
     eventBus: EventBus,
     followupsRepository: Lazy<FollowupsRepository>,
-    private val syncService: Lazy<GodToolsSyncService>
+    private val syncService: GodToolsSyncService
 ) {
-    init {
-        eventBus.register(this)
-
-        // sync any currently pending followups
-        AsyncTask.THREAD_POOL_EXECUTOR.execute { syncPendingFollowups() }
-    }
-
     private val followupsRepository by followupsRepository
 
     @WorkerThread
@@ -48,15 +40,16 @@ class FollowupService @Inject internal constructor(
 
             // only store this followup if it's valid
             if (followup.isValid) {
-                runBlocking {
-                    followupsRepository.createFollowup(followup)
-                }
-
-                syncPendingFollowups()
+                runBlocking { followupsRepository.createFollowup(followup) }
+                @Suppress("DeferredResultUnused")
+                syncService.syncFollowupsAsync()
             }
         }
     }
 
-    @WorkerThread
-    private fun syncPendingFollowups() = syncService.get().syncFollowups().sync()
+    init {
+        eventBus.register(this)
+        @Suppress("DeferredResultUnused")
+        syncService.syncFollowupsAsync()
+    }
 }

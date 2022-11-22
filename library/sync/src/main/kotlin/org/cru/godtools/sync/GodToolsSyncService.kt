@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.getValue
@@ -28,7 +29,7 @@ import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
 import org.cru.godtools.sync.task.UserSyncTasks
-import org.cru.godtools.sync.work.scheduleSyncFollowupWork
+import org.cru.godtools.sync.work.scheduleSyncFollowupsWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
@@ -39,7 +40,6 @@ private const val SYNC_PARALLELISM = 8
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
 private const val SYNCTYPE_NONE = 0
 private const val SYNCTYPE_LANGUAGES = 2
-private const val SYNCTYPE_FOLLOWUPS = 4
 private const val SYNCTYPE_TOOL_SHARES = 5
 
 @Singleton
@@ -71,16 +71,12 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
                         if (!syncShares()) workManager.scheduleSyncToolSharesWork()
                     }
-                    SYNCTYPE_FOLLOWUPS -> with<FollowupSyncTasks> {
-                        if (!syncFollowups()) workManager.scheduleSyncFollowupWork()
-                    }
                 }
             } catch (e: IOException) {
                 // queue up work tasks here because of the IOException
                 when (syncType) {
                     SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
                     SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
-                    SYNCTYPE_FOLLOWUPS -> workManager.scheduleSyncFollowupWork()
                 }
             } finally {
                 if (syncId != null) {
@@ -104,14 +100,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         }
     }
 
-    suspend fun executeSyncTask(task: SyncTask) = when (task) {
-        is GtSyncTask -> {
-            executeSyncTask(task)
-            true
-        }
-        else -> false
-    }
-
     // region Sync Tasks
     fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(
         bundleOf(
@@ -131,6 +119,10 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     suspend fun syncUser(force: Boolean = false) = executeSync<UserSyncTasks> { syncUser(force) }
 
+    fun syncFollowupsAsync() = coroutineScope.async { syncFollowups() }
+    private suspend fun syncFollowups() = executeSync<FollowupSyncTasks> { syncFollowups() }
+        .also { if (!it) workManager.scheduleSyncFollowupsWork() }
+
     suspend fun syncDirtyUserCounters() = executeSync<UserCounterSyncTasks> { syncDirtyCounters() }
     suspend fun syncUserCounters(force: Boolean = false) = executeSync<UserCounterSyncTasks> {
         val resp = syncCounters(force)
@@ -139,7 +131,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     }
 
     fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
-    fun syncFollowups(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_FOLLOWUPS))
 
     private inner class GtSyncTask(val args: Bundle) : SyncTask {
         override fun sync(): Int {

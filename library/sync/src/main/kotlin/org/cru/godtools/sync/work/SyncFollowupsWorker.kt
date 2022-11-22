@@ -12,11 +12,11 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 
 private const val WORK_NAME = "SyncFollowup"
 
-internal fun WorkManager.scheduleSyncFollowupWork() =
-    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.KEEP, SyncWorkRequestBuilder<SyncFollowupWorker>().build())
+internal fun WorkManager.scheduleSyncFollowupsWork() =
+    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.KEEP, SyncWorkRequestBuilder<SyncFollowupsWorker>().build())
 
 @HiltWorker
-internal class SyncFollowupWorker @AssistedInject constructor(
+internal class SyncFollowupsWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
     private val followupSyncTasks: FollowupSyncTasks
