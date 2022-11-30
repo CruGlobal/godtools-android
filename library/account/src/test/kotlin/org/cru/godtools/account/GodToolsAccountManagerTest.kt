@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
@@ -38,6 +39,12 @@ class GodToolsAccountManagerTest {
         providers = listOf(provider1, provider2),
         coroutineScope = testScope.backgroundScope
     )
+
+    @Test
+    fun verifyInjectedProvidersSorted() {
+        val manager = GodToolsAccountManager(setOf(provider2, provider1))
+        assertEquals(listOf(provider1, provider2), manager.providers)
+    }
 
     @Test
     fun verifyActiveProvider() = testScope.runTest {

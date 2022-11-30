@@ -23,7 +23,8 @@ import org.cru.godtools.account.provider.AccountProvider
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsAccountManager @VisibleForTesting internal constructor(
-    private val providers: List<AccountProvider>,
+    @get:VisibleForTesting
+    internal val providers: List<AccountProvider>,
     private val coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
     @Inject
