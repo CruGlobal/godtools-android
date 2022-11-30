@@ -22,11 +22,13 @@ import org.cru.godtools.account.provider.AccountProvider
 
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
-class GodToolsAccountManager @Inject internal constructor(
-    rawProviders: Set<@JvmSuppressWildcards AccountProvider>
+class GodToolsAccountManager @VisibleForTesting internal constructor(
+    private val providers: List<AccountProvider>,
+    private val coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
-    private val coroutineScope = CoroutineScope(SupervisorJob())
-    private val providers = rawProviders.sortedWith(Ordered.COMPARATOR)
+    @Inject
+    internal constructor(providers: Set<@JvmSuppressWildcards AccountProvider>) :
+        this(providers.sortedWith(Ordered.COMPARATOR))
 
     @VisibleForTesting
     internal suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
