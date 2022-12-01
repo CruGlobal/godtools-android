@@ -49,7 +49,8 @@ class DashboardViewModel @Inject constructor(
 
     fun triggerSync(force: Boolean = false) {
         viewModelScope.launch {
-            launch { syncService.executeSyncTask(syncService.syncFollowups()) }
+            @Suppress("DeferredResultUnused")
+            syncService.syncFollowupsAsync()
             syncsRunning.value++
             syncService.syncTools(force)
             syncsRunning.value--

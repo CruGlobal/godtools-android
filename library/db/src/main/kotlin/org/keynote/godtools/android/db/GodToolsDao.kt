@@ -1,9 +1,6 @@
 package org.keynote.godtools.android.db
 
-import android.database.SQLException
-import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.RestrictTo
-import androidx.annotation.WorkerThread
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.launch
@@ -14,14 +11,12 @@ import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
-import org.cru.godtools.model.Followup
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -33,10 +28,6 @@ class GodToolsDao @Inject internal constructor(
     database: GodToolsDatabase
 ) : AbstractDao(database), CoroutinesAsyncDao, CoroutinesFlowDao, LiveDataDao {
     init {
-        registerType(
-            Followup::class.java, FollowupTable.TABLE_NAME, FollowupTable.PROJECTION_ALL, FollowupMapper,
-            FollowupTable.SQL_WHERE_PRIMARY_KEY
-        )
         registerType(
             Language::class.java, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, LanguageMapper,
             LanguageTable.SQL_WHERE_PRIMARY_KEY
@@ -78,20 +69,6 @@ class GodToolsDao @Inject internal constructor(
     override val coroutineScope get() = super<CoroutinesAsyncDao>.coroutineScope
 
     // region Custom DAO methods
-    @WorkerThread
-    fun insertNew(obj: Base): Long {
-        var attempts = 10
-        while (true) {
-            obj.initNew()
-            try {
-                return insert(obj, SQLiteDatabase.CONFLICT_ABORT)
-            } catch (e: SQLException) {
-                // propagate exception if we've exhausted our attempts
-                if (--attempts < 0) throw e
-            }
-        }
-    }
-
     fun updateSharesDeltaAsync(toolCode: String?, shares: Int) =
         coroutineScope.launch { updateSharesDelta(toolCode, shares) }
     suspend fun updateSharesDelta(toolCode: String?, shares: Int) {

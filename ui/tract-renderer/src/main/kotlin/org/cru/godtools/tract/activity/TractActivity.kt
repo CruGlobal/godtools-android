@@ -55,7 +55,6 @@ import org.cru.godtools.tract.analytics.model.TractPageAnalyticsScreenEvent
 import org.cru.godtools.tract.liveshare.State
 import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
-import org.cru.godtools.tract.service.FollowupService
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
@@ -72,10 +71,6 @@ class TractActivity :
     ManifestPagerAdapter.Callbacks,
     TipBottomSheetDialogFragment.Callbacks {
     private val savedState: TractActivitySavedState by viewModels()
-
-    // Inject the FollowupService to ensure it is running to capture any followup forms
-    @Inject
-    internal lateinit var followupService: FollowupService
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

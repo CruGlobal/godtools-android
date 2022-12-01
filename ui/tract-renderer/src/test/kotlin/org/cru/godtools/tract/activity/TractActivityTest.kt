@@ -11,12 +11,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
-import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -32,7 +30,6 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
-import org.cru.godtools.tract.service.FollowupService
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -59,8 +56,6 @@ class TractActivityTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
     lateinit var dao: GodToolsDao
-    @BindValue
-    val followupService = mockk<FollowupService>()
     @Inject
     lateinit var manifestManager: ManifestManager
     @Inject

@@ -7,7 +7,6 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Followup
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
@@ -363,7 +362,6 @@ object Contract : BaseContract() {
 
     internal object FollowupTable : BaseTable() {
         const val TABLE_NAME = "followups"
-        private val TABLE = Table.forClass<Followup>()
 
         const val COLUMN_NAME = "name"
         const val COLUMN_EMAIL = "email"
@@ -371,27 +369,6 @@ object Contract : BaseContract() {
         const val COLUMN_LANGUAGE = "language"
         const val COLUMN_CREATE_TIME = "created_at"
 
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-
-        val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_NAME, COLUMN_EMAIL, COLUMN_DESTINATION, COLUMN_LANGUAGE)
-
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private const val SQL_COLUMN_EMAIL = "$COLUMN_EMAIL TEXT"
-        private const val SQL_COLUMN_DESTINATION = "$COLUMN_DESTINATION INTEGER"
-        private const val SQL_COLUMN_LANGUAGE = "$COLUMN_LANGUAGE TEXT NOT NULL"
-        private const val SQL_COLUMN_CREATE_TIME = "$COLUMN_CREATE_TIME INTEGER"
-
-        val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-
-        val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_NAME,
-            SQL_COLUMN_EMAIL,
-            SQL_COLUMN_DESTINATION,
-            SQL_COLUMN_LANGUAGE,
-            SQL_COLUMN_CREATE_TIME
-        )
         val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 

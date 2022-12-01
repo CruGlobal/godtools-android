@@ -1,6 +1,6 @@
 package org.cru.godtools.model
 
-import java.util.Date
+import java.time.Instant
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -14,17 +14,20 @@ private const val JSON_LANGUAGE = "language_id"
 private const val JSON_DESTINATION = "destination_id"
 
 @JsonApiType(JSON_API_TYPE_FOLLOWUP)
-class Followup : Base() {
-    @JsonApiAttribute(JSON_DESTINATION)
-    var destination: Long? = null
-
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-    @JsonApiAttribute(JSON_EMAIL)
-    var email: String? = null
-
+class Followup(
     @JsonApiIgnore
-    var languageCode: Locale? = null
+    val id: Long? = null,
+    @JsonApiAttribute(JSON_DESTINATION)
+    val destination: Long,
+    @JsonApiIgnore
+    val languageCode: Locale,
+    @JsonApiAttribute(JSON_EMAIL)
+    val email: String,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
+    @JsonApiIgnore
+    val createTime: Instant = Instant.now(),
+) {
     @JsonApiAttribute(JSON_LANGUAGE)
     private var languageId: Long? = null
 
@@ -32,11 +35,5 @@ class Followup : Base() {
         languageId = language?.id
     }
 
-    @JsonApiIgnore
-    var createTime: Date? = Date()
-        set(time) {
-            field = time ?: Date()
-        }
-
-    val isValid get() = destination != null && languageCode != null && !email.isNullOrEmpty()
+    val isValid get() = email.isNotEmpty()
 }

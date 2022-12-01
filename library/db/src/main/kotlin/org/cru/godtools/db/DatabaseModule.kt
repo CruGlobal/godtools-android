@@ -6,9 +6,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.hilt.InstallIn
+import dagger.hilt.android.internal.ThreadUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
@@ -16,6 +20,7 @@ import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
+import org.keynote.godtools.android.db.GodToolsDatabase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -29,11 +34,24 @@ internal object DatabaseModule {
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.globalActivityRepository(): GlobalActivityRepository = globalActivityRepository
+    fun GodToolsRoomDatabase.followupsRepository(legacyDb: GodToolsDatabase): FollowupsRepository {
+        legacyDb.triggerDataMigration()
+        return followupsRepository
+    }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.trainingTipsRepository(): TrainingTipsRepository = trainingTipsRepository
+    fun GodToolsRoomDatabase.globalActivityRepository(legacyDb: GodToolsDatabase): GlobalActivityRepository {
+        legacyDb.triggerDataMigration()
+        return globalActivityRepository
+    }
+
+    @Provides
+    @Reusable
+    fun GodToolsRoomDatabase.trainingTipsRepository(legacyDb: GodToolsDatabase): TrainingTipsRepository {
+        legacyDb.triggerDataMigration()
+        return trainingTipsRepository
+    }
 
     @Provides
     @Reusable
@@ -41,9 +59,21 @@ internal object DatabaseModule {
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.userCountersRepository(): UserCountersRepository = userCountersRepository
+    fun GodToolsRoomDatabase.userCountersRepository(legacyDb: GodToolsDatabase): UserCountersRepository {
+        legacyDb.triggerDataMigration()
+        return userCountersRepository
+    }
 
     @Provides
     @Reusable
     fun GodToolsRoomDatabase.lastSyncTimeRepository(): LastSyncTimeRepository = lastSyncTimeRepository
+
+    private fun GodToolsDatabase.triggerDataMigration() {
+        // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,
+        //       until then we trigger it before returning a repository that depends on the migrated data
+        when {
+            ThreadUtil.isMainThread() -> GlobalScope.launch { writableDatabase }
+            else -> writableDatabase
+        }
+    }
 }

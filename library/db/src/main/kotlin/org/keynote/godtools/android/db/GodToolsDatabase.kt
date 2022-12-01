@@ -5,6 +5,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
@@ -14,8 +15,10 @@ import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLocale
+import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -32,7 +35,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 54
+private const val DATABASE_VERSION = 55
 
 /*
  * Version history
@@ -50,6 +53,7 @@ private const val DATABASE_VERSION = 54
  * 52: 2022-09-22
  * 53: 2022-09-23
  * 54: 2022-11-04
+ * 55: 2022-11-22
  */
 
 @Singleton
@@ -61,7 +65,6 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(FollowupTable.SQL_CREATE_TABLE)
             db.execSQL(LanguageTable.SQL_CREATE_TABLE)
             db.execSQL(ToolTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationTable.SQL_CREATE_TABLE)
@@ -170,6 +173,34 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(TrainingTipTable.SQL_DELETE_TABLE)
+                    }
+                    55 -> {
+                        db.query(
+                            FollowupTable.TABLE_NAME,
+                            arrayOf(
+                                FollowupTable.COLUMN_NAME,
+                                FollowupTable.COLUMN_EMAIL,
+                                FollowupTable.COLUMN_LANGUAGE,
+                                FollowupTable.COLUMN_DESTINATION,
+                                FollowupTable.COLUMN_CREATE_TIME
+                            ),
+                            null, emptyArray(), null, null, null
+                        ).use {
+                            while (it.moveToNext()) {
+                                roomDb.followupsDao.insertBlocking(
+                                    FollowupEntity(
+                                        name = it.getString(FollowupTable.COLUMN_NAME),
+                                        email = it.getString(FollowupTable.COLUMN_EMAIL) ?: continue,
+                                        language = it.getLocale(FollowupTable.COLUMN_LANGUAGE) ?: continue,
+                                        destination = it.getLong(FollowupTable.COLUMN_DESTINATION) ?: continue,
+                                        createdAt = it.getLong(FollowupTable.COLUMN_CREATE_TIME)
+                                            ?.let { Instant.ofEpochMilli(it) } ?: Instant.now()
+                                    )
+                                )
+                            }
+                        }
+
+                        db.execSQL(FollowupTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
