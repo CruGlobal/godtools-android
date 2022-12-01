@@ -147,6 +147,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
 @Composable
 private fun RecordAccountPageAnalytics(page: AccountPage?) {
     val screen = when (page) {
+        AccountPage.ACTIVITY -> AnalyticsScreenEvent(AnalyticsScreenNames.ACCOUNT_ACTIVITY)
         AccountPage.GLOBAL_ACTIVITY -> AnalyticsScreenEvent(AnalyticsScreenNames.ACCOUNT_GLOBAL_ACTIVITY)
         else -> null
     }
