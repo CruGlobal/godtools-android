@@ -45,3 +45,6 @@ fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale
 
 fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
     toDisplayNameSortedMap(context, displayLocale).values.toList()
+
+fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
+    toDisplayNameSortedMap(context, displayLocale).keys.toList()

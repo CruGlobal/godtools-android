@@ -52,7 +52,6 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import java.text.Collator
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ClickableText
@@ -72,6 +71,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getDescription
 import org.cru.godtools.model.getName
+import org.cru.godtools.model.getSortedDisplayNames
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.PreloadTool
@@ -340,12 +340,7 @@ internal fun ToolDetailsLanguages(viewModel: ToolViewModels.ToolViewModel, modif
     val context = LocalContext.current
     val locale = LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY)
     val displayLanguages by remember(context, locale) {
-        derivedStateOf {
-            languages
-                .map { it.getDisplayName(context) }
-                .sortedWith(Collator.getInstance(locale).apply { strength = Collator.PRIMARY })
-                .joinToString(", ")
-        }
+        derivedStateOf { languages.getSortedDisplayNames(context, locale).joinToString(", ") }
     }
 
     Column(modifier = modifier.fillMaxWidth()) {
