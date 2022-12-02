@@ -162,7 +162,10 @@ class TractActivity :
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
 
         // deep link parsing
-        if (savedInstanceState == null || dataModel.locales.value.isNullOrEmpty()) {
+        if (
+            savedInstanceState == null ||
+            (dataModel.primaryLocales.value.isNullOrEmpty() && dataModel.parallelLocales.value.isNullOrEmpty())
+        ) {
             if (intent.action != Intent.ACTION_VIEW) return
             val data = intent.data?.normalizeScheme() ?: return
             val path = data.pathSegments ?: return
@@ -403,7 +406,7 @@ class TractActivity :
         event.locale?.takeUnless { it == dataModel.activeLocale.value }?.let {
             dataModel.toolCode.value?.let { tool -> downloadManager.downloadLatestPublishedTranslationAsync(tool, it) }
             // The requested locale is not an available locale, so add it as a parallelLocale
-            if (it !in dataModel.locales.value.orEmpty()) {
+            if (it !in dataModel.locales.value) {
                 dataModel.parallelLocales.value = dataModel.parallelLocales.value.orEmpty() + it
             }
             dataModel.activeLocale.value = it
