@@ -11,13 +11,13 @@ private const val JSON_LAUNCHES = "launches"
 private const val JSON_GOSPEL_PRESENTATIONS = "gospel-presentations"
 
 @JsonApiType(JSON_API_TYPE_GLOBAL_ANALYTICS)
-class GlobalActivityAnalytics : Base() {
+data class GlobalActivityAnalytics(
     @JsonApiAttribute(JSON_USERS)
-    var users = 0
+    var users: Int = 0,
     @JsonApiAttribute(JSON_COUNTRIES)
-    var countries = 0
+    var countries: Int = 0,
     @JsonApiAttribute(JSON_LAUNCHES)
-    var launches = 0
+    var launches: Int = 0,
     @JsonApiAttribute(JSON_GOSPEL_PRESENTATIONS)
-    var gospelPresentations = 0
-}
+    var gospelPresentations: Int = 0,
+)

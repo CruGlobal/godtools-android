@@ -25,10 +25,10 @@ internal class GlobalActivityEntity(
     @PrimaryKey
     var id = ID
 
-    fun toModel() = GlobalActivityAnalytics().also {
-        it.users = users
-        it.countries = countries
-        it.launches = launches
-        it.gospelPresentations = gospelPresentations
-    }
+    fun toModel() = GlobalActivityAnalytics(
+        users = users,
+        countries = countries,
+        launches = launches,
+        gospelPresentations = gospelPresentations
+    )
 }
