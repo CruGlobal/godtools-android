@@ -2,13 +2,10 @@ package org.cru.godtools.sync.task
 
 import android.database.sqlite.SQLiteDatabase
 import io.mockk.Called
-import io.mockk.every
-import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.model.Language
 import org.junit.Assert.assertFalse
 import org.junit.Before
@@ -27,16 +24,9 @@ class BaseDataSyncTasksTest {
 
     @Test
     fun `storeLanguage()`() {
-        // setup test
         val language = Language().apply {
             id = 1
             code = Locale("lt")
-        }
-        every { dao.refresh(any()) } returns null
-        every { dao.get(any<Query<Language>>()) } returns emptyList()
-        excludeRecords {
-            dao.refresh(any())
-            dao.get(any<Query<Language>>())
         }
 
         // run test
