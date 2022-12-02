@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -28,7 +29,6 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.AttachmentsRepository
-import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 

@@ -11,16 +11,17 @@ import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.findAsFlow
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class LanguagesRepository @Inject constructor(private val dao: GodToolsDao) {
+internal class LegacyLanguagesRepository @Inject constructor(private val dao: GodToolsDao) : LanguagesRepository {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val languagesCache = WeakLruCache<Locale, Flow<Language?>>(3)
 
-    fun getLanguageFlow(locale: Locale) = languagesCache.getOrPut(locale) {
+    override fun getLanguageFlow(locale: Locale) = languagesCache.getOrPut(locale) {
         dao.findAsFlow<Language>(it)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
