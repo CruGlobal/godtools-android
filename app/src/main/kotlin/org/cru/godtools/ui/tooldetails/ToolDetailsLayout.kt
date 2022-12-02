@@ -80,6 +80,9 @@ import org.cru.godtools.ui.tools.VariantToolCard
 
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
+internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
+internal const val TEST_TAG_LANGUAGES_AVAILABLE = "languages_available"
+
 @Composable
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPagerApi::class)
 fun ToolDetailsLayout(
@@ -245,7 +248,7 @@ internal fun ToolDetailsActions(
         Button(
             onClick = { onOpenToolTraining(tool, translation.value) },
             modifier = Modifier
-                .testTag("action_tool_training")
+                .testTag(TEST_TAG_ACTION_TOOL_TRAINING)
                 .fillMaxWidth()
         ) { Text(stringResource(R.string.action_tools_open_training)) }
     }
@@ -329,7 +332,8 @@ private fun ToolDetailsVariants(
 }
 
 @Composable
-private fun ToolDetailsLanguages(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
+@VisibleForTesting
+internal fun ToolDetailsLanguages(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
     val languages by viewModel.availableLanguages.collectAsState()
     if (languages.isEmpty()) return
 
@@ -353,7 +357,9 @@ private fun ToolDetailsLanguages(viewModel: ToolViewModels.ToolViewModel, modifi
         Text(
             displayLanguages,
             style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier
+                .testTag(TEST_TAG_LANGUAGES_AVAILABLE)
+                .padding(top = 8.dp)
         )
     }
 }
