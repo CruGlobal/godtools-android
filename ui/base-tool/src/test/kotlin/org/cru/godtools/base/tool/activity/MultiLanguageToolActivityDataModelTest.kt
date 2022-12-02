@@ -70,6 +70,7 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel = MultiLanguageToolActivityDataModel(
             dao,
             mockk(),
+            mockk(),
             manifestManager,
             translationsRepository,
             mockk(),
@@ -377,6 +378,7 @@ class MultiLanguageToolActivityDataModelTest {
         // creating a new DataModel using the same SavedState emulates recreation after process death
         val dataModel2 = MultiLanguageToolActivityDataModel(
             dao,
+            mockk(),
             mockk(),
             manifestManager,
             translationsRepository,
