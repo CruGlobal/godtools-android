@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
@@ -43,22 +44,23 @@ internal class Tasks @Inject constructor(
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
+    private val languagesRepository: LanguagesRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
 ) {
     // region Language Initial Content Tasks
-    suspend fun loadBundledLanguages() = withContext(Dispatchers.IO) {
+    suspend fun loadBundledLanguages() {
         // short-circuit if we already have any languages loaded
-        if (dao.getCursor(Language::class.java).count > 0) return@withContext
+        if (languagesRepository.getLanguages().isNotEmpty()) return
 
         try {
-            val languages = context.assets.open("languages.json").reader().use { it.readText() }
-                .let { jsonApiConverter.fromJson(it, Language::class.java) }
-
-            dao.transaction {
-                languages.data.filter { it.isValid }.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+            val languages = withContext(Dispatchers.IO) {
+                context.assets.open("languages.json").reader().use { it.readText() }
+                    .let { jsonApiConverter.fromJson(it, Language::class.java) }
             }
+
+            languagesRepository.storeInitialLanguages(languages.data)
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }

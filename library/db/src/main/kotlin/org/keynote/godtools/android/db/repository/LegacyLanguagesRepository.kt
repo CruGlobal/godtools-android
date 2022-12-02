@@ -31,9 +31,15 @@ internal class LegacyLanguagesRepository @Inject constructor(private val dao: Go
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
 
+    override suspend fun getLanguages() = dao.getAsync(Query.select<Language>()).await()
+
     override fun getLanguagesForLocalesFlow(locales: Collection<Locale>) = Query.select<Language>()
         .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*locales.toTypedArray())))
         .getAsFlow(dao)
+
+    override suspend fun storeInitialLanguages(languages: Collection<Language>) = dao.transaction {
+        languages.filter { it.isValid }.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+    }
 
     override fun storeLanguagesFromSync(languages: Collection<Language>) = dao.transaction {
         languages.filter { it.isValid }.forEach {
