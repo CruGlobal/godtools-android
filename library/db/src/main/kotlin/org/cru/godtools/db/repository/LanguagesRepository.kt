@@ -6,4 +6,10 @@ import org.cru.godtools.model.Language
 
 interface LanguagesRepository {
     fun getLanguageFlow(locale: Locale): Flow<Language?>
+
+    // region Sync Methods
+    fun storeLanguageFromSync(language: Language) = storeLanguagesFromSync(listOf(language))
+    fun storeLanguagesFromSync(languages: Collection<Language>)
+    suspend fun removeLanguagesMissingFromSync(syncedLanguages: Collection<Language>)
+    // endregion Sync Methods
 }
