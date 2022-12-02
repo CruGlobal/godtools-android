@@ -5,28 +5,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsLiveData
+import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.toDisplayNameSortedMap
-import org.keynote.godtools.android.db.Contract
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class LanguagesFragmentViewModel @Inject constructor(
     @ApplicationContext context: Context,
     dao: GodToolsDao,
+    languagesRepository: LanguagesRepository,
     settings: Settings,
     private val savedState: SavedStateHandle
 ) : ViewModel() {
@@ -50,10 +57,13 @@ class LanguagesFragmentViewModel @Inject constructor(
     }
 
     val sortLocale = MutableLiveData<Locale>()
-    private val rawLanguages = Query.select<Language>()
-        .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
-        .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
-        .getAsLiveData(dao)
+    private val rawLanguages = Query.select<Translation>()
+        .distinct(true)
+        .projection(TranslationTable.COLUMN_LANGUAGE)
+        .where(TranslationTable.SQL_WHERE_PUBLISHED)
+        .getAsFlow(dao)
+        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it.map { it.languageCode }) }
+        .asLiveData()
     private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
         .combineWith(rawLanguages) { locale, languages -> languages.toDisplayNameSortedMap(context, locale) }
     private val filteredLanguages = query.distinctUntilChanged().combineWith(sortedLanguages) { query, languages ->

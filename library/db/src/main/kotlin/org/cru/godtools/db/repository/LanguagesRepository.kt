@@ -6,6 +6,7 @@ import org.cru.godtools.model.Language
 
 interface LanguagesRepository {
     fun getLanguageFlow(locale: Locale): Flow<Language?>
+    fun getLanguagesForLocalesFlow(locales: Collection<Locale>): Flow<Collection<Language>>
 
     // region Sync Methods
     fun storeLanguageFromSync(language: Language) = storeLanguagesFromSync(listOf(language))
