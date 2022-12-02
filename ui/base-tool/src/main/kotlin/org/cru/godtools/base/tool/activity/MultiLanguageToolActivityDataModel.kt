@@ -52,6 +52,9 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
+private const val STATE_PRIMARY_LOCALES = "primaryLocales"
+private const val STATE_PARALLEL_LOCALES = "parallelLocales"
+
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class MultiLanguageToolActivityDataModel @Inject constructor(
@@ -63,8 +66,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
 ) : BaseToolRendererViewModel(downloadManager, manifestManager, userActivityManager, savedState) {
-    val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
-    val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
+    val primaryLocales = savedState.getLiveData<List<Locale>>(STATE_PRIMARY_LOCALES, emptyList())
+    val parallelLocales = savedState.getLiveData<List<Locale>>(STATE_PARALLEL_LOCALES, emptyList())
 
     // region LiveData Caches
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
