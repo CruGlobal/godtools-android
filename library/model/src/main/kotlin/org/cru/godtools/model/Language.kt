@@ -33,7 +33,7 @@ class Language : Base() {
 
     fun getDisplayName(context: Context?) = getDisplayName(context, null)
     fun getDisplayName(context: Context?, inLocale: Locale?) =
-        _code?.getDisplayName(context, name, inLocale).orEmpty()
+        _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes
     override fun toString() = "Language{id=$id, code=$_code}"

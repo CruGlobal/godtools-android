@@ -27,4 +27,16 @@ class LanguageTest {
     private fun parseJson(file: String) = this::class.java.getResourceAsStream(file)!!.reader()
         .use { jsonApiConverter.fromJson(it.readText(), Language::class.java).dataSingle!! }
     // endregion jsonapi parsing
+
+    // region getDisplayName()
+    @Test
+    fun `getDisplayName() - Missing Locale and Default Name`() {
+        assertEquals("", Language().getDisplayName(null))
+    }
+
+    @Test
+    fun `getDisplayName() - Missing Locale`() {
+        assertEquals("Default Name", Language().apply { name = "Default Name" }.getDisplayName(null))
+    }
+    // endregion getDisplayName()
 }
