@@ -1,7 +1,6 @@
 package org.cru.godtools.model
 
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
-import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 
 abstract class Base {
     companion object {
@@ -15,12 +14,4 @@ abstract class Base {
         set(id) {
             _id = id
         }
-
-    @JsonApiIgnore
-    private var stashedId: Long? = null
-
-    fun stashId() {
-        stashedId = _id
-        _id = null
-    }
 }
