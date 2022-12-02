@@ -17,12 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_ABOUT
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsAppBarColors
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityGenericComposeWithNavDrawerBinding
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 
 fun Activity.startAboutActivity() {
     Intent(this, AboutActivity::class.java)
@@ -58,7 +58,7 @@ class AboutActivity : BasePlatformActivity<ActivityGenericComposeWithNavDrawerBi
 
     override fun onResume() {
         super.onResume()
-        eventBus.post(AnalyticsScreenEvent(SCREEN_ABOUT, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_ABOUT, deviceLocale))
     }
     // endregion Lifecycle
 

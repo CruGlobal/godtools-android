@@ -33,6 +33,7 @@ import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
 import org.cru.godtools.ui.dashboard.home.HomeContent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
@@ -94,15 +95,15 @@ private fun DashboardLayoutAnalytics(page: Page) {
     val eventBus = LocalEventBus.current
     when (page) {
         Page.LESSONS -> {
-            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_LESSONS))
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_LESSONS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS)) }
         }
         Page.HOME, Page.FAVORITE_TOOLS -> {
-            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_HOME))
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME)) }
         }
         Page.ALL_TOOLS -> {
-            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenEvent.SCREEN_ALL_TOOLS))
+            RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS)) }
         }
     }

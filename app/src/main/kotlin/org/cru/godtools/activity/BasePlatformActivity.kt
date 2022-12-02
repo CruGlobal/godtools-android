@@ -35,19 +35,14 @@ import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_CONTACT_US
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_COPYRIGHT
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_HELP
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_PRIVACY_POLICY
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_GODTOOLS
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_SHARE_STORY
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent.Companion.SCREEN_TERMS_OF_USE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
+import org.cru.godtools.shared.analytics.AnalyticsActionNames
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
@@ -143,7 +138,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_help -> {
-            eventBus.post(AnalyticsScreenEvent(SCREEN_HELP, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_HELP, deviceLocale))
             openUrl(URI_HELP)
             true
         }
@@ -164,17 +159,17 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             true
         }
         R.id.action_terms_of_use -> {
-            eventBus.post(AnalyticsScreenEvent(SCREEN_TERMS_OF_USE, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_TERMS_OF_USE, deviceLocale))
             openUrl(URI_TERMS_OF_USE)
             true
         }
         R.id.action_privacy_policy -> {
-            eventBus.post(AnalyticsScreenEvent(SCREEN_PRIVACY_POLICY, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_PRIVACY_POLICY, deviceLocale))
             openUrl(URI_PRIVACY)
             true
         }
         R.id.action_copyright -> {
-            eventBus.post(AnalyticsScreenEvent(SCREEN_COPYRIGHT, deviceLocale))
+            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_COPYRIGHT, deviceLocale))
             openUrl(URI_COPYRIGHT)
             true
         }
@@ -281,7 +276,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     }
 
     private fun launchContactUs() {
-        eventBus.post(AnalyticsScreenEvent(SCREEN_CONTACT_US, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_CONTACT_US, deviceLocale))
         try {
             startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
         } catch (e: ActivityNotFoundException) {
@@ -290,7 +285,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     }
 
     private fun launchShare() {
-        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_GODTOOLS, settings.primaryLanguage))
+        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, settings.primaryLanguage))
         val shareLink = URI_SHARE_BASE.buildUpon()
             .appendPath(settings.primaryLanguage.toLanguageTag().lowercase(Locale.US))
             .appendPath("")
@@ -305,7 +300,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     }
 
     private fun launchShareStory() {
-        eventBus.post(AnalyticsScreenEvent(SCREEN_SHARE_STORY, deviceLocale))
+        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_STORY, deviceLocale))
         try {
             startActivity(
                 Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
