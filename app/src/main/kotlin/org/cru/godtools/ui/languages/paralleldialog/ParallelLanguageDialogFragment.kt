@@ -6,26 +6,29 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import org.ccci.gto.android.common.androidx.fragment.app.DataBindingDialogFragment
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsLiveData
+import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.databinding.LanguagesParallelDialogBinding
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Language
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.sortedByDisplayName
-import org.keynote.godtools.android.db.Contract
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
@@ -64,19 +67,24 @@ class ParallelLanguageDialogFragment :
 }
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class ParallelLanguageDialogDataModel @Inject constructor(
     @ApplicationContext context: Context,
     dao: GodToolsDao,
+    languagesRepository: LanguagesRepository,
     settings: Settings,
     savedState: SavedStateHandle
 ) : ViewModel() {
     val deviceLocale = MutableLiveData(context.deviceLocale)
-    val selectedLocale = savedState.getLiveData<Locale?>("selectedLocale", settings.parallelLanguage)
+    val selectedLocale = savedState.getLiveData("selectedLocale", settings.parallelLanguage)
 
-    private val rawLanguages = Query.select<Language>()
-        .join(Contract.LanguageTable.SQL_JOIN_TRANSLATION)
-        .where(Contract.TranslationTable.SQL_WHERE_PUBLISHED)
-        .getAsLiveData(dao)
+    private val rawLanguages = Query.select<Translation>()
+        .distinct(true)
+        .projection(TranslationTable.COLUMN_LANGUAGE)
+        .where(TranslationTable.SQL_WHERE_PUBLISHED)
+        .getAsFlow(dao)
+        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it.map { it.languageCode }) }
+        .asLiveData()
     val sortedLanguages = deviceLocale.distinctUntilChanged().combineWith(rawLanguages) { locale, languages ->
         languages.sortedByDisplayName(context, locale)
     }
