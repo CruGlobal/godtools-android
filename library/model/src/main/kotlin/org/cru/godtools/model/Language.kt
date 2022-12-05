@@ -37,6 +37,22 @@ class Language : Base() {
 
     // XXX: output the language id and code for debugging purposes
     override fun toString() = "Language{id=$id, code=$_code}"
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Language).id -> false
+        _code != other._code -> false
+        name != other.name -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (_code?.hashCode() ?: 0)
+        result = 31 * result + (name?.hashCode() ?: 0)
+        return result
+    }
 }
 
 fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
