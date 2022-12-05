@@ -17,6 +17,7 @@ import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
@@ -52,6 +53,9 @@ import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
+private const val STATE_PRIMARY_LOCALES = "primaryLocales"
+private const val STATE_PARALLEL_LOCALES = "parallelLocales"
+
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class MultiLanguageToolActivityDataModel @Inject constructor(
@@ -63,8 +67,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
     savedState: SavedStateHandle,
 ) : BaseToolRendererViewModel(downloadManager, manifestManager, userActivityManager, savedState) {
-    val primaryLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
-    val parallelLocales by savedState.livedata<List<Locale>>(initialValue = emptyList())
+    val primaryLocales = savedState.getLiveData<List<Locale>>(STATE_PRIMARY_LOCALES, emptyList())
+    val parallelLocales = savedState.getLiveData<List<Locale>>(STATE_PARALLEL_LOCALES, emptyList())
 
     // region LiveData Caches
     private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
@@ -84,12 +88,16 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     // region Resolved Data
     private val distinctToolCode = savedState.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged()
-    val locales = combine(primaryLocales, parallelLocales) { prim, para -> prim + para }.distinctUntilChanged()
+    val locales = combine(
+        savedState.getStateFlow<List<Locale>>(STATE_PRIMARY_LOCALES, emptyList()),
+        savedState.getStateFlow<List<Locale>>(STATE_PARALLEL_LOCALES, emptyList())
+    ) { prim, para -> (prim + para).distinct() }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     val tool = toolCode.flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    val languages = locales.switchMap {
+    val languages = locales.asLiveData().switchMap {
         Query.select<Language>()
             .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*it.toTypedArray())))
             .getAsLiveData(dao)
@@ -97,7 +105,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     @VisibleForTesting
     internal val translations =
-        locales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
+        locales.asLiveData().switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
             distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
@@ -105,7 +113,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     @VisibleForTesting
     internal val manifests =
-        locales.switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
+        locales.asLiveData().switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
             distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
@@ -115,7 +123,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // region Loading State
     val isInitialSyncFinished = MutableStateFlow(false)
 
-    val loadingState = locales.combineWith(
+    val loadingState = locales.asLiveData().combineWith(
         manifests,
         translations,
         supportedType.asLiveData(),
@@ -193,7 +201,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     init {
         // initialize the activeLocale if it hasn't been initialized yet
-        locales.map { it.firstOrNull() }.notNull().observeOnce(this) {
+        locales.asLiveData().map { it.firstOrNull() }.notNull().observeOnce(this) {
             if (activeLocale.value == null) activeLocale.value = it
         }
 

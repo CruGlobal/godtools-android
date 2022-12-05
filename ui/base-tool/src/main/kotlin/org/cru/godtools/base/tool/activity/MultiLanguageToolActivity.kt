@@ -8,7 +8,6 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
@@ -76,7 +75,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     // region Intent Processing
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
-        if (dataModel.locales.value.isNullOrEmpty()) {
+        if (dataModel.primaryLocales.value.isNullOrEmpty() && dataModel.parallelLocales.value.isNullOrEmpty()) {
             val extras = intent.extras ?: return
             val locales = extras.getLocaleArray(EXTRA_LANGUAGES)?.filterNotNull().orEmpty()
             dataModel.primaryLocales.value = locales.take(1)
@@ -85,7 +84,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     }
 
     override val isValidStartState
-        get() = !dataModel.toolCode.value.isNullOrEmpty() && !dataModel.locales.value.isNullOrEmpty()
+        get() = !dataModel.toolCode.value.isNullOrEmpty() &&
+            (!dataModel.primaryLocales.value.isNullOrEmpty() || !dataModel.parallelLocales.value.isNullOrEmpty())
     // endregion Intent Processing
 
     // region UI
@@ -157,10 +157,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         dataModel.toolCode.map { listOfNotNull(it) }
             .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
     }
-    override val localesToDownload by lazy {
-        dataModel.locales.asFlow()
-            .stateIn(lifecycleScope, SharingStarted.WhileSubscribed(), emptyList())
-    }
+    override val localesToDownload by lazy { dataModel.locales }
     // endregion Tool sync
 
     // region Active Translation management
