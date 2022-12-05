@@ -33,7 +33,7 @@ class Language : Base() {
 
     fun getDisplayName(context: Context?) = getDisplayName(context, null)
     fun getDisplayName(context: Context?, inLocale: Locale?) =
-        _code?.getDisplayName(context, name, inLocale).orEmpty()
+        _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes
     override fun toString() = "Language{id=$id, code=$_code}"
@@ -45,3 +45,6 @@ fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale
 
 fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
     toDisplayNameSortedMap(context, displayLocale).values.toList()
+
+fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
+    toDisplayNameSortedMap(context, displayLocale).keys.toList()
