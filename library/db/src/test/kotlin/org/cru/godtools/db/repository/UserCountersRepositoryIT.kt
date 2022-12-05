@@ -15,7 +15,7 @@ private const val COUNTER = "counter"
 private const val COUNTER2 = "counter2"
 
 @OptIn(ExperimentalCoroutinesApi::class)
-abstract class UserCountersRepositoryTest {
+abstract class UserCountersRepositoryIT {
     internal abstract val repository: UserCountersRepository
 
     @Test
