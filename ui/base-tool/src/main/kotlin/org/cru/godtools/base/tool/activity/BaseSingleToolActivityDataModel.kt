@@ -18,18 +18,11 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     translationsRepository: TranslationsRepository,
     userActivityManager: UserActivityManager,
     savedState: SavedStateHandle,
-) : BaseToolRendererViewModel(manifestManager, userActivityManager, savedState) {
+) : BaseToolRendererViewModel(downloadManager, manifestManager, userActivityManager, savedState) {
     val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)
             else -> emitAll(translationsRepository.getLatestTranslationFlow(tool, locale, trackAccess = true))
-        }
-    }.asLiveData()
-
-    val downloadProgress = toolCode.combineTransformLatest(locale) { tool, locale ->
-        when {
-            tool == null || locale == null -> emit(null)
-            else -> emitAll(downloadManager.getDownloadProgressFlow(tool, locale))
         }
     }.asLiveData()
 }
