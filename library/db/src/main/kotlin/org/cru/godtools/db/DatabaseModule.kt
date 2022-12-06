@@ -22,7 +22,6 @@ import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
-import org.keynote.godtools.android.db.repository.LegacyLanguagesRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,7 +35,10 @@ internal object DatabaseModule {
 
     @Provides
     @Reusable
-    fun LegacyLanguagesRepository.languagesRepository(): LanguagesRepository = this
+    fun GodToolsRoomDatabase.languagesRepository(legacyDb: GodToolsDatabase): LanguagesRepository {
+        legacyDb.triggerDataMigration()
+        return languagesRepository
+    }
 
     @Provides
     @Reusable

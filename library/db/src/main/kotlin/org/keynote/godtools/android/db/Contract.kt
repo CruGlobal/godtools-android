@@ -7,7 +7,6 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -42,29 +41,13 @@ object Contract : BaseContract() {
         val SQL_DELETE_RESOURCES = drop("resources")
     }
 
-    object LanguageTable : BaseTable() {
+    internal object LanguageTable : BaseTable() {
         internal const val TABLE_NAME = "languages"
-        internal val TABLE = Table.forClass<Language>()
 
         const val COLUMN_ID = BaseTable.COLUMN_ID
         const val COLUMN_CODE = "code"
         const val COLUMN_NAME = "name"
 
-        val FIELD_ID = TABLE.field(COLUMN_ID)
-        val FIELD_CODE = TABLE.field(COLUMN_CODE)
-
-        internal val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_CODE, COLUMN_NAME)
-
-        private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT NOT NULL"
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
-
-        val SQL_JOIN_TRANSLATION = TABLE.join(TranslationTable.TABLE).on(FIELD_CODE.eq(TranslationTable.FIELD_LANGUAGE))
-
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
-
-        internal val SQL_CREATE_TABLE =
-            create(TABLE_NAME, SQL_COLUMN_ROWID, SQL_COLUMN_CODE, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
@@ -242,7 +225,6 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
         private const val SQL_COLUMN_LAST_ACCESSED = "$COLUMN_LAST_ACCESSED INTEGER"
 
-        val SQL_JOIN_LANGUAGE = TABLE.join(LanguageTable.TABLE).on(FIELD_LANGUAGE.eq(LanguageTable.FIELD_CODE))
         val SQL_JOIN_TOOL = TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())

@@ -11,16 +11,16 @@ import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.cru.godtools.api.LanguagesApi
 import org.cru.godtools.db.repository.LanguagesRepository
-import org.keynote.godtools.android.db.GodToolsDao
+import org.cru.godtools.db.repository.LastSyncTimeRepository
 
 private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS
 
 @Singleton
 internal class LanguagesSyncTasks @Inject constructor(
-    private val dao: GodToolsDao,
     private val languagesApi: LanguagesApi,
     private val languagesRepository: LanguagesRepository,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
 ) : BaseSyncTasks() {
     private val languagesMutex = Mutex()
 
@@ -28,7 +28,7 @@ internal class LanguagesSyncTasks @Inject constructor(
         languagesMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
-                System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
+                !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_LANGUAGES, staleAfter = STALE_DURATION_LANGUAGES)
             ) return@withContext true
 
             // fetch languages from the API
@@ -38,7 +38,7 @@ internal class LanguagesSyncTasks @Inject constructor(
             val languages = json.data.filter { it.isValid }
             languagesRepository.removeLanguagesMissingFromSync(languages)
             languagesRepository.storeLanguagesFromSync(languages)
-            dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_LANGUAGES)
         }
         return@withContext true
     }

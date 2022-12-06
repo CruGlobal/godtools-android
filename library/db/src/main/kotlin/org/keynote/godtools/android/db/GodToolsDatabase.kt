@@ -17,8 +17,10 @@ import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLocale
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
+import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.FollowupEntity
+import org.cru.godtools.db.room.entity.LanguageEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -35,7 +37,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 55
+private const val DATABASE_VERSION = 56
 
 /*
  * Version history
@@ -54,6 +56,7 @@ private const val DATABASE_VERSION = 55
  * 53: 2022-09-23
  * 54: 2022-11-04
  * 55: 2022-11-22
+ * 56: 2022-12-06
  */
 
 @Singleton
@@ -65,7 +68,6 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(LanguageTable.SQL_CREATE_TABLE)
             db.execSQL(ToolTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationTable.SQL_CREATE_TABLE)
             db.execSQL(LocalFileTable.SQL_CREATE_TABLE)
@@ -201,6 +203,29 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(FollowupTable.SQL_DELETE_TABLE)
+                    }
+                    56 -> {
+                        db.query(
+                            LanguageTable.TABLE_NAME,
+                            arrayOf(
+                                LanguageTable.COLUMN_ID,
+                                LanguageTable.COLUMN_CODE,
+                                LanguageTable.COLUMN_NAME
+                            ),
+                            null, emptyArray(), null, null, null
+                        ).use {
+                            roomDb.languagesDao.insertOrIgnoreLanguages(
+                                it.map {
+                                    LanguageEntity(
+                                        code = it.getLocale(LanguageTable.COLUMN_CODE) ?: return@map null,
+                                        id = it.getLong(LanguageTable.COLUMN_ID) ?: return@map null,
+                                        name = it.getString(LanguageTable.COLUMN_NAME)
+                                    )
+                                }.filterNotNull()
+                            )
+                        }
+
+                        db.execSQL(LanguageTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
