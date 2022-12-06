@@ -48,6 +48,7 @@ dependencies {
 
     ksp(libs.androidx.room.compiler)
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)

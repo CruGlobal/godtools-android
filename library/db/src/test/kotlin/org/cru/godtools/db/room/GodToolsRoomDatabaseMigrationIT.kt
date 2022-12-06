@@ -1,11 +1,13 @@
 package org.cru.godtools.db.room
 
+import android.database.SQLException
 import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlin.test.assertFailsWith
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -82,6 +84,50 @@ class GodToolsRoomDatabaseMigrationIT {
                 close()
             }
             close()
+        }
+    }
+
+    @Test
+    fun testMigrate4To5() {
+        val followupsQuery = "SELECT * FROM followups"
+
+        // create v4 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 4).use { db ->
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(followupsQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 5, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(followupsQuery)
+        }
+    }
+
+    @Test
+    fun testMigrate5To6() {
+        val languagesQuery = "SELECT * FROM languages"
+
+        // create v5 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 5).use { db ->
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(languagesQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 6, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(languagesQuery)
         }
     }
 }
