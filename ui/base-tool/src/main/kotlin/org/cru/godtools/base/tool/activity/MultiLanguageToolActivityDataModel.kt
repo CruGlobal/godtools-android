@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.and
@@ -33,23 +34,19 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
-import org.ccci.gto.android.common.db.Expression
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
-import org.ccci.gto.android.common.db.getAsLiveData
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.user.activity.UserActivityManager
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
@@ -61,6 +58,7 @@ private const val STATE_PARALLEL_LOCALES = "parallelLocales"
 class MultiLanguageToolActivityDataModel @Inject constructor(
     dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
+    languagesRepository: LanguagesRepository,
     manifestManager: ManifestManager,
     translationsRepository: TranslationsRepository,
     userActivityManager: UserActivityManager,
@@ -97,11 +95,10 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val tool = toolCode.flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    val languages = locales.asLiveData().switchMap {
-        Query.select<Language>()
-            .where(LanguageTable.FIELD_CODE.`in`(*Expression.constants(*it.toTypedArray())))
-            .getAsLiveData(dao)
-    }.map { it.associateBy { it.code } }
+    val languages = locales
+        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
+        .map { it.associateBy { it.code } }
+        .asLiveData()
 
     @VisibleForTesting
     internal val translations =

@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -41,8 +42,9 @@ private val API_GET_INCLUDES = arrayOf(
 internal class ToolSyncTasks @Inject internal constructor(
     dao: GodToolsDao,
     private val toolsApi: ToolsApi,
-    private val viewsApi: ViewsApi
-) : BaseDataSyncTasks(dao) {
+    private val viewsApi: ViewsApi,
+    languagesRepository: LanguagesRepository,
+) : BaseDataSyncTasks(dao, languagesRepository) {
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
     private val sharesMutex = Mutex()

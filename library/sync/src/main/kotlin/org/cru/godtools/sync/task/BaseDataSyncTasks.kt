@@ -1,27 +1,27 @@
 package org.cru.godtools.sync.task
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.forEach
 import androidx.collection.valueIterator
-import java.util.Locale
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-@RestrictTo(RestrictTo.Scope.LIBRARY)
-abstract class BaseDataSyncTasks internal constructor(protected val dao: GodToolsDao) : BaseSyncTasks() {
+internal abstract class BaseDataSyncTasks internal constructor(
+    protected val dao: GodToolsDao,
+    private val languagesRepository: LanguagesRepository,
+) : BaseSyncTasks() {
     // region Tools
     protected fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
         tools.forEach {
@@ -87,24 +87,10 @@ abstract class BaseDataSyncTasks internal constructor(protected val dao: GodTool
     // endregion Tools
 
     // region Languages
-    protected fun storeLanguages(languages: List<Language>, existing: MutableMap<Locale, Language>?) {
-        languages.filter { it.isValid }.forEach {
-            storeLanguage(it)
-            existing?.remove(it.code)
-        }
-
-        // prune any existing languages that weren't synced and aren't already added to the device
-        existing?.values?.forEach { dao.delete(it) }
-    }
-
     @VisibleForTesting
     internal fun storeLanguage(language: Language) {
         if (!language.isValid) return
-
-        dao.updateOrInsert(
-            language, SQLiteDatabase.CONFLICT_REPLACE,
-            LanguageTable.COLUMN_ID, LanguageTable.COLUMN_NAME
-        )
+        languagesRepository.storeLanguageFromSync(language)
     }
     // endregion Languages
 

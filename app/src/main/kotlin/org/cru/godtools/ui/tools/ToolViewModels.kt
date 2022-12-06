@@ -20,15 +20,13 @@ import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.AttachmentsRepository
-import org.keynote.godtools.android.db.repository.LanguagesRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
@@ -75,10 +73,12 @@ class ToolViewModels @Inject constructor(
         val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val availableLanguages = Query.select<Language>()
+        val availableLanguages = Query.select<Translation>()
             .distinct(true)
-            .join(LanguageTable.SQL_JOIN_TRANSLATION.andOn(TranslationTable.FIELD_TOOL eq code))
+            .projection(TranslationTable.COLUMN_LANGUAGE)
+            .where(TranslationTable.FIELD_TOOL eq code)
             .getAsFlow(dao)
+            .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it.map { it.languageCode }) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow

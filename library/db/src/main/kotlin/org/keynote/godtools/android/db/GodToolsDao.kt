@@ -11,13 +11,11 @@ import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.AttachmentTable
-import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
@@ -28,10 +26,6 @@ class GodToolsDao @Inject internal constructor(
     database: GodToolsDatabase
 ) : AbstractDao(database), CoroutinesAsyncDao, CoroutinesFlowDao, LiveDataDao {
     init {
-        registerType(
-            Language::class.java, LanguageTable.TABLE_NAME, LanguageTable.PROJECTION_ALL, LanguageMapper,
-            LanguageTable.SQL_WHERE_PRIMARY_KEY
-        )
         registerType(
             Tool::class.java, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, ToolMapper,
             ToolTable.SQL_WHERE_PRIMARY_KEY
@@ -57,7 +51,6 @@ class GodToolsDao @Inject internal constructor(
     public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
         is LocalFile -> getPrimaryKeyWhere(LocalFile::class.java, obj.filename)
         is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.filename)
-        is Language -> getPrimaryKeyWhere(Language::class.java, obj.code)
         is Tool -> getPrimaryKeyWhere(Tool::class.java, obj.code!!)
         is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)

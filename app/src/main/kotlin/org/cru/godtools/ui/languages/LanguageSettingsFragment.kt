@@ -3,18 +3,18 @@ package org.cru.godtools.ui.languages
 import android.os.Bundle
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import org.ccci.gto.android.common.androidx.lifecycle.orEmpty
-import org.ccci.gto.android.common.db.findLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 import org.cru.godtools.databinding.LanguageSettingsFragmentBinding
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.fragment.BasePlatformFragment
-import org.cru.godtools.model.Language
-import org.keynote.godtools.android.db.GodToolsDao
 
 @AndroidEntryPoint
 class LanguageSettingsFragment :
@@ -36,11 +36,17 @@ class LanguageSettingsFragment :
 }
 
 @HiltViewModel
-class LanguageSettingsFragmentDataModel @Inject constructor(dao: GodToolsDao, settings: Settings) :
-    ViewModel() {
-    val primaryLanguage = settings.primaryLanguageLiveData.switchMap { dao.findLiveData<Language>(it) }
-    val parallelLanguage =
-        settings.parallelLanguageLiveData.switchMap { it?.let { dao.findLiveData<Language>(it) }.orEmpty() }
+@OptIn(ExperimentalCoroutinesApi::class)
+class LanguageSettingsFragmentDataModel @Inject constructor(
+    languagesRepository: LanguagesRepository,
+    settings: Settings
+) : ViewModel() {
+    val primaryLanguage = settings.primaryLanguageFlow
+        .flatMapLatest { languagesRepository.getLanguageFlow(it) }
+        .asLiveData()
+    val parallelLanguage = settings.parallelLanguageFlow
+        .flatMapLatest { it?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
+        .asLiveData()
 }
 
 interface LanguageSettingsFragmentBindingCallbacks {

@@ -14,6 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
@@ -31,6 +32,13 @@ internal object DatabaseModule {
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
+
+    @Provides
+    @Reusable
+    fun GodToolsRoomDatabase.languagesRepository(legacyDb: GodToolsDatabase): LanguagesRepository {
+        legacyDb.triggerDataMigration()
+        return languagesRepository
+    }
 
     @Provides
     @Reusable

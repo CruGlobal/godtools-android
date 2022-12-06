@@ -8,53 +8,37 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.db.Expression.Companion.constants
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.cru.godtools.api.LanguagesApi
-import org.cru.godtools.model.Language
-import org.keynote.godtools.android.db.Contract.LanguageTable
-import org.keynote.godtools.android.db.GodToolsDao
-import timber.log.Timber
+import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.LastSyncTimeRepository
 
 private const val SYNC_TIME_LANGUAGES = "last_synced.languages"
 private const val STALE_DURATION_LANGUAGES = TimeConstants.WEEK_IN_MS
 
 @Singleton
-class LanguagesSyncTasks @Inject internal constructor(dao: GodToolsDao, private val languagesApi: LanguagesApi) :
-    BaseDataSyncTasks(dao) {
+internal class LanguagesSyncTasks @Inject constructor(
+    private val languagesApi: LanguagesApi,
+    private val languagesRepository: LanguagesRepository,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
+) : BaseSyncTasks() {
     private val languagesMutex = Mutex()
 
     suspend fun syncLanguages(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
         languagesMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
-                System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_LANGUAGES) < STALE_DURATION_LANGUAGES
+                !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_LANGUAGES, staleAfter = STALE_DURATION_LANGUAGES)
             ) return@withContext true
 
             // fetch languages from the API
             val json = languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body() ?: return@withContext false
 
-            // fetch & store languages
-            dao.transaction {
-                val existing = dao.get(Query.select<Language>())
-                    .groupingBy { it.code }
-                    .reduce { _, lang1, lang2 ->
-                        Timber.tag("LanguagesSyncTask").d(
-                            RuntimeException("Duplicate Language sync error"),
-                            "Duplicate languages detected: %s %s", lang1, lang2
-                        )
-                        dao.delete(
-                            Language::class.java,
-                            LanguageTable.FIELD_ID.`in`(*constants(lang1.id, lang2.id))
-                        )
-                        lang1
-                    }
-                    .toMutableMap()
-                storeLanguages(json.data, existing)
-            }
-
-            dao.updateLastSyncTime(SYNC_TIME_LANGUAGES)
+            // store languages
+            val languages = json.data.filter { it.isValid }
+            languagesRepository.removeLanguagesMissingFromSync(languages)
+            languagesRepository.storeLanguagesFromSync(languages)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_LANGUAGES)
         }
         return@withContext true
     }
