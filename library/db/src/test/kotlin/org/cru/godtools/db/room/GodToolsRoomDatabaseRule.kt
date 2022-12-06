@@ -1,5 +1,6 @@
 package org.cru.godtools.db.room
 
+import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,6 +15,7 @@ internal class GodToolsRoomDatabaseRule(private val dispatcher: CoroutineDispatc
         db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), GodToolsRoomDatabase::class.java)
             .allowMainThreadQueries()
             .apply { if (dispatcher != null) setQueryExecutor(dispatcher.asExecutor()) }
+            .setTransactionExecutor(ArchTaskExecutor.getIOThreadExecutor())
             .build()
     }
 
