@@ -116,7 +116,9 @@ internal abstract class BaseDataSyncTasks internal constructor(
             translation,
             TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
             TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_TAGLINE,
-            TranslationTable.COLUMN_MANIFEST, TranslationTable.COLUMN_PUBLISHED
+            TranslationTable.COLUMN_DETAILS_OUTLINE, TranslationTable.COLUMN_DETAILS_BIBLE_REFERENCES,
+            TranslationTable.COLUMN_DETAILS_CONVERSATION_STARTERS, TranslationTable.COLUMN_MANIFEST,
+            TranslationTable.COLUMN_PUBLISHED
         )
 
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
