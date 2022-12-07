@@ -16,6 +16,9 @@
         <item quantity="one">%1$,d Language</item>
         <item quantity="other">%1$,d Languages</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">Conversation starters</string>
+    <string name="tool_details_section_description_outline">Outline</string>
+    <string name="tool_details_section_description_bible_references">Bible references</string>
     <string name="tool_details_section_description_languages_available">Languages available</string>
     <string name="tool_details_section_variants_label">Versions</string>
     <string name="tool_details_section_variants_description">Choose a different version of this tool below. Each version features unique style and content so you can find the one that is best for your conversation. You can favorite multiple versions of the same tool.</string>

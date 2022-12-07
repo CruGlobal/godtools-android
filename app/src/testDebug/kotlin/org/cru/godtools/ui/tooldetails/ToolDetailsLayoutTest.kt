@@ -79,7 +79,7 @@ class ToolDetailsLayoutTest {
     // region ToolDetailsLanguages()
     @Test
     fun `ToolDetailsLanguages() - No Languages`() {
-        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel) }
+        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel, true, {}) }
         availableLanguagesFlow.value = emptyList()
 
         // The entire ToolDetailsLanguages() composable should be gone if there are no languages
@@ -88,7 +88,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `ToolDetailsLanguages() - Sorted Languages`() {
-        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel) }
+        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel, true, {}) }
         availableLanguagesFlow.value = listOf(
             Language().apply { name = "Language 2" },
             Language().apply { name = "Language 1" },
