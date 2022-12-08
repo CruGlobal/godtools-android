@@ -4,6 +4,8 @@ import android.text.util.Linkify
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -162,10 +165,15 @@ private fun ToolDetailsAboutAccordionSection(
     content: @Composable () -> Unit = {}
 ) = Column(modifier = modifier.fillMaxWidth()) {
     Divider()
+    val headerInteractions = remember { MutableInteractionSource() }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clickable(onClick = onToggleSection)
+            .clickable(
+                onClick = onToggleSection,
+                interactionSource = headerInteractions,
+                indication = null,
+            )
             .padding(vertical = 16.dp)
     ) {
         Text(
@@ -175,7 +183,8 @@ private fun ToolDetailsAboutAccordionSection(
         )
         Icon(
             if (expanded) Icons.Filled.Remove else Icons.Filled.Add,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.indication(headerInteractions, rememberRipple(bounded = false, radius = 20.dp))
         )
     }
     AnimatedVisibility(visible = expanded) {
