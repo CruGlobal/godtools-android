@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -59,15 +58,12 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
     val translation by toolViewModel.firstTranslation.collectAsState()
 
     ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier
-        ) {
+        Column(modifier = modifier) {
             val description by remember { derivedStateOf { translation.value.getDescription(tool).orEmpty() } }
             ToolDetailsLinkifiedText(
                 text = description,
                 viewModel = toolViewModel,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 32.dp)
             )
 
             var expandedSection by remember { mutableStateOf<ToolDetailsAboutAccordionSection?>(null) }
@@ -79,6 +75,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                 derivedStateOf { translation.value?.toolDetailsConversationStarters.orEmpty() }
             }
             if (conversationStarters.isNotBlank()) {
+                Divider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_conversation_starters),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.CONVERSATION_STARTERS,
@@ -91,6 +88,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
             // Outline section
             val outline by remember { derivedStateOf { translation.value?.toolDetailsOutline.orEmpty() } }
             if (outline.isNotBlank()) {
+                Divider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_outline),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.OUTLINE,
@@ -105,6 +103,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                 derivedStateOf { translation.value?.toolDetailsBibleReferences.orEmpty() }
             }
             if (bibleReferences.isNotBlank()) {
+                Divider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_bible_references),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.BIBLE_REFERENCES,
@@ -115,11 +114,13 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
             }
 
             // Languages section
+            Divider()
             ToolDetailsLanguages(
                 toolViewModel,
                 expanded = expandedSection == ToolDetailsAboutAccordionSection.LANGUAGES,
                 onToggleLanguages = { toggleSection(ToolDetailsAboutAccordionSection.LANGUAGES) },
             )
+            Divider()
         }
     }
 }
@@ -164,7 +165,6 @@ private fun ToolDetailsAboutAccordionSection(
     onToggleSection: () -> Unit = {},
     content: @Composable () -> Unit = {}
 ) = Column(modifier = modifier.fillMaxWidth()) {
-    Divider()
     val headerInteractions = remember { MutableInteractionSource() }
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -196,7 +196,6 @@ private fun ToolDetailsAboutAccordionSection(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
-    Divider()
 }
 
 @Composable
