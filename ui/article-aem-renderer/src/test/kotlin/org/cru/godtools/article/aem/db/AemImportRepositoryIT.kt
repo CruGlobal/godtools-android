@@ -6,7 +6,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
-import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
 import org.junit.Rule
 import org.junit.Test
@@ -26,6 +25,6 @@ internal class AemImportRepositoryIT {
         val aemImportUri = Uri.parse("https://example.com")
         val article = Article(aemImportUri.buildUpon().appendPath("article1").build())
 
-        repository.processAemImportSync(AemImport(aemImportUri), listOf(article))
+        repository.processAemImportSync(aemImportUri, listOf(article))
     }
 }

@@ -130,7 +130,9 @@ class AemArticleManager @VisibleForTesting internal constructor(
     private suspend fun syncAemImport(baseUri: Uri, force: Boolean) {
         if (!baseUri.isAbsolute || !baseUri.isHierarchical) return
         aemImportMutex.withLock(baseUri) {
-            val aemImport = aemDb.aemImportDao().find(baseUri)?.takeIf { force || it.isStale() } ?: return
+            // don't process this import if it's not found in the database
+            val aemImport = aemDb.aemImportDao().find(baseUri)
+            if (aemImport == null || !(force || aemImport.isStale())) return
 
             // fetch the raw json
             val t = System.currentTimeMillis().let { if (force) it else it.roundTimestamp(CACHE_BUSTING_INTERVAL_JSON) }
@@ -143,7 +145,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
             // parse & store articles
             val articles = json.findAemArticles(baseUri).toList()
-            aemDb.aemImportRepository().processAemImportSync(aemImport, articles)
+            aemDb.aemImportRepository().processAemImportSync(baseUri, articles)
 
             // launch download of all the articles
             articles.forEach { coroutineScope.launch { downloadArticle(it.uri, false) } }
