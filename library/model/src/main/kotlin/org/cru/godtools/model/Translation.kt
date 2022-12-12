@@ -20,6 +20,10 @@ private const val JSON_TAGLINE = "translated-tagline"
 class Translation : Base() {
     companion object {
         const val JSON_LANGUAGE = "language"
+        private const val JSON_TOOL_DETAILS_CONVERSATION_STARTERS = "attr-tool-details-conversation-starters"
+        private const val JSON_TOOL_DETAILS_BIBLE_REFERENCES = "attr-tool-details-bible-references"
+        private const val JSON_TOOL_DETAILS_OUTLINE = "attr-tool-details-outline"
+
         const val DEFAULT_PUBLISHED = false
         const val DEFAULT_VERSION = 0
         val DEFAULT_LAST_ACCESSED = Date(0)
@@ -50,12 +54,20 @@ class Translation : Base() {
     var version = DEFAULT_VERSION
     @JsonApiAttribute(JSON_IS_PUBLISHED)
     var isPublished = DEFAULT_PUBLISHED
+
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
     @JsonApiAttribute(JSON_DESCRIPTION)
     var description: String? = null
     @JsonApiAttribute(JSON_TAGLINE)
     var tagline: String? = null
+    @JsonApiAttribute(JSON_TOOL_DETAILS_CONVERSATION_STARTERS)
+    var toolDetailsConversationStarters: String? = null
+    @JsonApiAttribute(JSON_TOOL_DETAILS_OUTLINE)
+    var toolDetailsOutline: String? = null
+    @JsonApiAttribute(JSON_TOOL_DETAILS_BIBLE_REFERENCES)
+    var toolDetailsBibleReferences: String? = null
+
     @JsonApiAttribute(JSON_MANIFEST)
     var manifestFileName: String? = null
 

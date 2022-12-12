@@ -190,6 +190,9 @@ object Contract : BaseContract() {
         const val COLUMN_NAME = "name"
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_TAGLINE = "tagline"
+        const val COLUMN_DETAILS_OUTLINE = "detailsOutline"
+        const val COLUMN_DETAILS_BIBLE_REFERENCES = "detailsBibleReferences"
+        const val COLUMN_DETAILS_CONVERSATION_STARTERS = "detailsConversationStarters"
         const val COLUMN_MANIFEST = "manifest"
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_DOWNLOADED = "downloaded"
@@ -210,6 +213,9 @@ object Contract : BaseContract() {
             COLUMN_NAME,
             COLUMN_DESCRIPTION,
             COLUMN_TAGLINE,
+            COLUMN_DETAILS_OUTLINE,
+            COLUMN_DETAILS_BIBLE_REFERENCES,
+            COLUMN_DETAILS_CONVERSATION_STARTERS,
             COLUMN_MANIFEST,
             COLUMN_PUBLISHED,
             COLUMN_DOWNLOADED,
@@ -220,6 +226,9 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
         private const val SQL_COLUMN_DESCRIPTION = "$COLUMN_DESCRIPTION TEXT"
         private const val SQL_COLUMN_TAGLINE = "$COLUMN_TAGLINE TEXT"
+        private const val SQL_COLUMN_DETAILS_OUTLINE = "$COLUMN_DETAILS_OUTLINE TEXT"
+        private const val SQL_COLUMN_DETAILS_BIBLE_REFERENCES = "$COLUMN_DETAILS_BIBLE_REFERENCES TEXT"
+        private const val SQL_COLUMN_DETAILS_CONVERSATION_STARTERS = "$COLUMN_DETAILS_CONVERSATION_STARTERS TEXT"
         private const val SQL_COLUMN_MANIFEST = "$COLUMN_MANIFEST TEXT"
         private const val SQL_COLUMN_PUBLISHED = "$COLUMN_PUBLISHED INTEGER"
         private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
@@ -242,12 +251,24 @@ object Contract : BaseContract() {
             SQL_COLUMN_NAME,
             SQL_COLUMN_DESCRIPTION,
             SQL_COLUMN_TAGLINE,
+            SQL_COLUMN_DETAILS_OUTLINE,
+            SQL_COLUMN_DETAILS_BIBLE_REFERENCES,
+            SQL_COLUMN_DETAILS_CONVERSATION_STARTERS,
             SQL_COLUMN_MANIFEST,
             SQL_COLUMN_PUBLISHED,
             SQL_COLUMN_DOWNLOADED,
             SQL_COLUMN_LAST_ACCESSED
         )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
+
+        // region DB migrations
+        internal const val SQL_V57_ALTER_DETAILS_OUTLINE =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_OUTLINE"
+        internal const val SQL_V57_ALTER_DETAILS_BIBLE_REFERENCES =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BIBLE_REFERENCES"
+        internal const val SQL_V57_ALTER_DETAILS_CONVERSATION_STARTERS =
+            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_CONVERSATION_STARTERS"
+        // endregion DB migrations
     }
 
     object AttachmentTable : BaseTable() {

@@ -151,6 +151,7 @@ dependencies {
     implementation(project(":ui:tutorial-renderer"))
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.datastore)

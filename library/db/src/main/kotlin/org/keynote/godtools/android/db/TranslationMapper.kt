@@ -8,6 +8,9 @@ import org.ccci.gto.android.common.util.database.getString
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION
+import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_BIBLE_REFERENCES
+import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_CONVERSATION_STARTERS
+import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_OUTLINE
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LAST_ACCESSED
@@ -27,6 +30,9 @@ internal object TranslationMapper : BaseMapper<Translation>() {
             COLUMN_NAME -> values.put(field, obj.name)
             COLUMN_DESCRIPTION -> values.put(field, obj.description)
             COLUMN_TAGLINE -> values.put(field, obj.tagline)
+            COLUMN_DETAILS_OUTLINE -> values.put(field, obj.toolDetailsOutline)
+            COLUMN_DETAILS_BIBLE_REFERENCES -> values.put(field, obj.toolDetailsBibleReferences)
+            COLUMN_DETAILS_CONVERSATION_STARTERS -> values.put(field, obj.toolDetailsConversationStarters)
             COLUMN_MANIFEST -> values.put(field, obj.manifestFileName)
             COLUMN_PUBLISHED -> values.put(field, obj.isPublished)
             COLUMN_DOWNLOADED -> values.put(field, obj.isDownloaded)
@@ -43,6 +49,9 @@ internal object TranslationMapper : BaseMapper<Translation>() {
         name = c.getString(COLUMN_NAME)
         description = c.getString(COLUMN_DESCRIPTION)
         tagline = c.getString(COLUMN_TAGLINE)
+        toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE)
+        toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES)
+        toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)
         manifestFileName = c.getString(COLUMN_MANIFEST)
         isPublished = getBool(c, COLUMN_PUBLISHED, Translation.DEFAULT_PUBLISHED)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
