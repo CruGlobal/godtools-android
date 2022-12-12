@@ -10,8 +10,10 @@ import org.cru.godtools.article.aem.model.Article
 
 @Dao
 internal abstract class AemImportRepository(private val db: ArticleRoomDatabase) {
+    private val aemImportDao get() = db.aemImportDao()
+
     @Transaction
-    open suspend fun processAemImportSync(aemImport: AemImport, articles: List<Article>) {
+    open suspend fun processAemImportSync(aemImportUri: Uri, articles: List<Article>) {
         // insert/update any supplied articles
         with(db.articleDao()) {
             articles.forEach {
@@ -25,12 +27,13 @@ internal abstract class AemImportRepository(private val db: ArticleRoomDatabase)
         }
 
         // update associations between the AemImport and the articles
-        with(db.aemImportDao()) {
-            insertOrIgnoreArticles(articles.map { AemImport.AemImportArticle(aemImport, it) })
-            removeOldArticles(aemImport.uri, articles.map { it.uri })
+        val aemImport = aemImportDao.find(aemImportUri)
+        if (aemImport != null) {
+            aemImportDao.insertOrIgnoreArticles(articles.map { AemImport.AemImportArticle(aemImport, it) })
+            aemImportDao.removeOldArticles(aemImportUri, articles.map { it.uri })
 
             // update the last processed time
-            updateLastProcessed(aemImport.uri, Date())
+            aemImportDao.updateLastProcessed(aemImportUri, Date())
         }
 
         // remove any orphaned articles
