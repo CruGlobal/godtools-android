@@ -32,6 +32,17 @@ abstract class LanguagesRepositoryIT {
     }
 
     @Test
+    fun `findLanguage()`() = testScope.runTest {
+        assertNull(repository.findLanguage(Locale.ENGLISH))
+
+        repository.storeLanguageFromSync(language1)
+        assertEquals(language1, repository.findLanguage(Locale.ENGLISH))
+
+        repository.removeLanguagesMissingFromSync(syncedLanguages = emptyList())
+        assertNull(repository.findLanguage(Locale.ENGLISH))
+    }
+
+    @Test
     fun `getLanguageFlow()`() = testScope.runTest {
         repository.getLanguageFlow(Locale.ENGLISH).test {
             assertNull(awaitItem())

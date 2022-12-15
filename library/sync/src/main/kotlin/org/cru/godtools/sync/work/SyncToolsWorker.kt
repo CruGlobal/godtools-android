@@ -12,8 +12,10 @@ import org.cru.godtools.sync.task.ToolSyncTasks
 
 private const val WORK_NAME = "SyncTools"
 
+private val SYNC_TOOLS_WORK_REQUEST = SyncWorkRequestBuilder<SyncToolsWorker>().build()
+
 internal fun WorkManager.scheduleSyncToolsWork() =
-    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.KEEP, SyncWorkRequestBuilder<SyncToolsWorker>().build())
+    enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.KEEP, SYNC_TOOLS_WORK_REQUEST)
 
 @HiltWorker
 internal class SyncToolsWorker @AssistedInject constructor(

@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Language
 
 interface LanguagesRepository {
+    suspend fun findLanguage(locale: Locale): Language?
     fun getLanguageFlow(locale: Locale): Flow<Language?>
     suspend fun getLanguages(): List<Language>
     fun getLanguagesForLocalesFlow(locales: Collection<Locale>): Flow<Collection<Language>>

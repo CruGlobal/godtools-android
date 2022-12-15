@@ -5,6 +5,7 @@ import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.jetbrains.annotations.VisibleForTesting
 
 private const val JSON_API_TYPE_FOLLOWUP = "follow_up"
 
@@ -28,8 +29,10 @@ class Followup(
     @JsonApiIgnore
     val createTime: Instant = Instant.now(),
 ) {
+    @VisibleForTesting
     @JsonApiAttribute(JSON_LANGUAGE)
-    private var languageId: Long? = null
+    var languageId: Long? = null
+        private set
 
     fun setLanguage(language: Language?) {
         languageId = language?.id

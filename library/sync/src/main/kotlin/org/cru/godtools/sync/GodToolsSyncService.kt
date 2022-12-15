@@ -34,7 +34,9 @@ import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.greenrobot.eventbus.EventBus
+import timber.log.Timber
 
+private const val TAG = "GodToolsSyncService"
 private const val SYNC_PARALLELISM = 8
 
 private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
@@ -96,6 +98,9 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         try {
             with<T, Boolean> { block() }
         } catch (e: IOException) {
+            false
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Unhandled sync exception")
             false
         }
     }
