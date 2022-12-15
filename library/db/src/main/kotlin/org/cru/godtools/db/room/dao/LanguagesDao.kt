@@ -17,6 +17,8 @@ internal interface LanguagesDao {
     fun insertOrReplaceLanguages(languages: Collection<LanguageEntity>)
 
     @Query("SELECT * FROM languages WHERE code = :locale")
+    suspend fun findLanguage(locale: Locale): LanguageEntity?
+    @Query("SELECT * FROM languages WHERE code = :locale")
     fun findLanguageFlow(locale: Locale): Flow<LanguageEntity?>
 
     @Query("SELECT * FROM languages")
