@@ -88,12 +88,6 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
     val parallelLanguageFlow
         get() = prefs.getStringFlow(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
             .map { it?.toLocale() }
-
-    fun isLanguageProtected(locale: Locale) = when (locale) {
-        defaultLanguage -> true
-        primaryLanguage -> true
-        else -> false
-    }
     // endregion Language Settings
 
     // region Feature Discovery Tracking
