@@ -32,4 +32,5 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }
