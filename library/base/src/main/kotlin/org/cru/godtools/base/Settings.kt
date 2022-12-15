@@ -74,6 +74,7 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
         get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, null)
             .map { it?.toLocale() ?: defaultLanguage }
             .distinctUntilChanged()
+    val isPrimaryLanguageSet: Boolean get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null) != null
 
     var parallelLanguage
         get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()

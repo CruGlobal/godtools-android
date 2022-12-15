@@ -30,15 +30,21 @@ class SettingsTest {
     // region primaryLanguage
     @Test
     fun `Property primaryLanguage`() {
+        assertFalse(settings.isPrimaryLanguageSet)
+
         settings.primaryLanguage = Locale.FRENCH
         assertEquals(Locale.FRENCH, settings.primaryLanguage)
+        assertTrue(settings.isPrimaryLanguageSet)
+
         settings.primaryLanguage = Locale.GERMAN
         assertEquals(Locale.GERMAN, settings.primaryLanguage)
+        assertTrue(settings.isPrimaryLanguageSet)
     }
 
     @Test
     fun `Property primaryLanguage - Defaults to defaultLanguage`() {
         assertEquals(Settings.defaultLanguage, settings.primaryLanguage)
+        assertFalse(settings.isPrimaryLanguageSet)
     }
 
     @Test
