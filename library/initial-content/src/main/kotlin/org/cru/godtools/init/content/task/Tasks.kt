@@ -17,7 +17,9 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
+import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
@@ -64,6 +66,14 @@ internal class Tasks @Inject constructor(
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
+    }
+
+    suspend fun initPrimaryLanguage() {
+        if (settings.isPrimaryLanguageSet) return
+
+        sequenceOf(context.deviceLocale).filterNotNull().includeFallbacks().distinct()
+            // set the first available language as the primary language
+            .firstOrNull { languagesRepository.findLanguage(it) != null }?.let { settings.primaryLanguage = it }
     }
     // endregion Language Initial Content Tasks
 
