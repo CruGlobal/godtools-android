@@ -58,8 +58,7 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
 
     // region Language Settings
     var primaryLanguage: Locale
-        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale()
-            ?: defaultLanguage.also { primaryLanguage = it }
+        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale() ?: defaultLanguage
         set(value) {
             prefs.edit {
                 putString(PREF_PRIMARY_LANGUAGE, value.toLanguageTag())
@@ -67,12 +66,15 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
             }
         }
     val primaryLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
-            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
+        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, null)
+            .map { it?.toLocale() ?: defaultLanguage }
+            .distinctUntilChanged()
     }
     val primaryLanguageFlow
-        get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, defaultLanguage.toLanguageTag()).distinctUntilChanged()
-            .map { it?.toLocale() ?: defaultLanguage.also { primaryLanguage = it } }
+        get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, null)
+            .map { it?.toLocale() ?: defaultLanguage }
+            .distinctUntilChanged()
+    val isPrimaryLanguageSet: Boolean get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null) != null
 
     var parallelLanguage
         get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()
@@ -88,12 +90,6 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
     val parallelLanguageFlow
         get() = prefs.getStringFlow(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
             .map { it?.toLocale() }
-
-    fun isLanguageProtected(locale: Locale) = when (locale) {
-        defaultLanguage -> true
-        primaryLanguage -> true
-        else -> false
-    }
     // endregion Language Settings
 
     // region Feature Discovery Tracking

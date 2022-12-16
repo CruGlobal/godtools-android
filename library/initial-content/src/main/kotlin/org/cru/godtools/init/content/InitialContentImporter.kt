@@ -13,7 +13,10 @@ class InitialContentImporter @Inject internal constructor(tasks: Tasks) {
 
     init {
         coroutineScope.launch {
-            launch { tasks.loadBundledLanguages() }
+            launch {
+                tasks.loadBundledLanguages()
+                tasks.initPrimaryLanguage()
+            }
 
             tasks.loadBundledTools()
             launch { tasks.initFavoriteTools() }
