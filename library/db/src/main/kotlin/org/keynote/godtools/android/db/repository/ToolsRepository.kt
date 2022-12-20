@@ -7,7 +7,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression.Companion.constants
@@ -54,17 +53,15 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
     }
 
     suspend fun updateToolOrder(tools: List<String>) {
-        val tool = Tool()
-        withContext(dao.coroutineDispatcher) {
-            dao.transaction(exclusive = false) {
-                dao.update(tool, null, ToolTable.COLUMN_ORDER)
+        dao.transactionAsync(exclusive = false) {
+            val tool = Tool()
+            dao.update(tool, null, ToolTable.COLUMN_ORDER)
 
-                // set order for each specified tool
-                tools.forEachIndexed { index, code ->
-                    tool.order = index
-                    dao.update(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ORDER)
-                }
+            // set order for each specified tool
+            tools.forEachIndexed { index, code ->
+                tool.order = index
+                dao.update(tool, ToolTable.FIELD_CODE.eq(code), ToolTable.COLUMN_ORDER)
             }
-        }
+        }.await()
     }
 }
