@@ -42,7 +42,7 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
             it.code = code
             it.isAdded = true
         }
-        withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+        dao.updateAsync(tool, ToolTable.COLUMN_ADDED).await()
     }
 
     suspend fun unpinTool(code: String) {
@@ -50,7 +50,7 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
             it.code = code
             it.isAdded = false
         }
-        withContext(dao.coroutineDispatcher) { dao.update(tool, ToolTable.COLUMN_ADDED) }
+        dao.updateAsync(tool, ToolTable.COLUMN_ADDED).await()
     }
 
     suspend fun updateToolOrder(tools: List<String>) {
