@@ -12,6 +12,7 @@
     <string name="account_activity_links_shared">Liens partagés</string>
     <string name="account_activity_languages_used">Langues utilisées</string>
     <string name="account_activity_sessions">Sessions</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Global Activity</string>
     <string name="profile_global_activity_heading">%1$s  Activité Mondiale</string>

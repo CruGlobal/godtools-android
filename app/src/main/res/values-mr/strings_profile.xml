@@ -4,6 +4,7 @@
     <string name="menu_profile">जागतिक क्रियाकलाप</string>
     <!-- Activity -->
     <string name="profile_tab_activity">क्रियाकलाप</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  जागतिक क्रियाकलाप</string>
     <string name="profile_activity_unique_users">अनन्य वापरकर्ते</string>

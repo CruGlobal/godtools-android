@@ -4,6 +4,7 @@
     <string name="menu_profile">Weltweite Aktivitäten</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivität</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  Weltweite Aktivitäten</string>
     <string name="profile_activity_unique_users">Unique Users</string>

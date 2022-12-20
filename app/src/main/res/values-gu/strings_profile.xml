@@ -4,6 +4,7 @@
     <string name="menu_profile">વૈશ્વિક પ્રવૃત્તિ</string>
     <!-- Activity -->
     <string name="profile_tab_activity">પ્રવૃત્તિ</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s વૈશ્વિક પ્રવૃત્તિ</string>
     <string name="profile_activity_unique_users">અનન્ય વપરાશકર્તાઓ</string>
