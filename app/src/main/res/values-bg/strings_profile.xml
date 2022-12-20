@@ -4,6 +4,7 @@
     <string name="menu_profile">Глобална активност</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Активност</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  глобална активност</string>
     <string name="profile_activity_unique_users">Уникални потребители</string>

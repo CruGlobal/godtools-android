@@ -5,7 +5,37 @@
     <string name="account_joined">Unirse %1$s</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
+    <string name="account_activity_header">Tu actividad</string>
+    <string name="account_activity_tool_opens">Herramientas abiertas</string>
+    <string name="account_activity_lesson_completions">Lecciones completada</string>
+    <string name="account_activity_screen_shares">Pantalla Compartidas</string>
+    <string name="account_activity_links_shared">Enlace compartido</string>
+    <string name="account_activity_languages_used">Idioma utilizados</string>
+    <string name="account_activity_sessions">Sesiones</string>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Tus insignias</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Herramienta %1$,d abierta</item>
+        <item quantity="other">Herramienta %1$,d abierta</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Lección %1$,d completada</item>
+        <item quantity="other">Lección %1$,d completada</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Artículo %1$,d abierto</item>
+        <item quantity="other">Artículo %1$,d abierto</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Imagen %1$,d compartida</item>
+        <item quantity="other">Imagen %1$,d compartida</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Tips de entrenamiento %1$,d completado</item>
+        <item quantity="other">Tips de entrenamiento %1$,d completado</item>
+    </plurals>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">Actividad Global</string>
     <string name="profile_global_activity_heading">%1$s  Actividad Global</string>
     <string name="profile_activity_unique_users">Usuarios únicos</string>
     <string name="profile_activity_gospel_presentations">Presentaciones del Evangelio</string>

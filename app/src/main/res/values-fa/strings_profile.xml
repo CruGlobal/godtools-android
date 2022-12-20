@@ -4,6 +4,7 @@
     <string name="menu_profile">فعالیت جهانی</string>
     <!-- Activity -->
     <string name="profile_tab_activity">"فعالیت "</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s   فعالیت جهانی</string>
     <string name="profile_activity_unique_users">کاربران بی نظیر</string>

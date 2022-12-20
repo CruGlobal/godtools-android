@@ -4,6 +4,7 @@
     <string name="menu_profile">Zviri kuitika pasi rose</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Zviri kuitika</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s  Zviri kuitika pasi rose</string>
     <string name="profile_activity_unique_users">Vashandisi vakashanangurwa</string>

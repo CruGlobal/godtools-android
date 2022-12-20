@@ -4,6 +4,7 @@
     <string name="menu_profile">Atividade global</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_activity_unique_users">Utilizadores únicos</string>
     <string name="profile_activity_gospel_presentations">Apresentações do evangelho</string>

@@ -4,6 +4,7 @@
     <string name="menu_profile">ప్రపంచ కార్యాచరణ</string>
     <!-- Activity -->
     <string name="profile_tab_activity">కార్యాచరణ</string>
+    <!-- Badges -->
     <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s    ప్రపంచ కార్యాచరణ</string>
     <string name="profile_activity_unique_users">ప్రత్యేక వినియోగదారులు</string>
