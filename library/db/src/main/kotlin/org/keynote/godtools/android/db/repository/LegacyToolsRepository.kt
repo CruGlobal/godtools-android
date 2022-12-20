@@ -12,27 +12,29 @@ import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
+internal class LegacyToolsRepository @Inject constructor(private val dao: GodToolsDao) : ToolsRepository {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val toolsCache = WeakLruCache<String, Flow<Tool?>>(15)
-    fun getToolFlow(code: String) = toolsCache.getOrPut(code) {
+    override fun findToolFlow(code: String) = toolsCache.getOrPut(code) {
         dao.findAsFlow<Tool>(code)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
 
-    val favoriteTools = Query.select<Tool>()
+    private val favoriteTools = Query.select<Tool>()
         .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and ToolTable.FIELD_ADDED.eq(true))
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
         .getAsFlow(dao)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
+    override fun getFavoriteToolsFlow() = favoriteTools
 
-    suspend fun pinTool(code: String) {
+    override suspend fun pinTool(code: String) {
         val tool = Tool().also {
             it.code = code
             it.isAdded = true
@@ -40,7 +42,7 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
         dao.updateAsync(tool, ToolTable.COLUMN_ADDED).await()
     }
 
-    suspend fun unpinTool(code: String) {
+    override suspend fun unpinTool(code: String) {
         val tool = Tool().also {
             it.code = code
             it.isAdded = false
@@ -48,7 +50,7 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
         dao.updateAsync(tool, ToolTable.COLUMN_ADDED).await()
     }
 
-    suspend fun updateToolOrder(tools: List<String>) {
+    override suspend fun updateToolOrder(tools: List<String>) {
         dao.transactionAsync(exclusive = false) {
             val tool = Tool()
             dao.update(tool, null, ToolTable.COLUMN_ORDER)

@@ -18,6 +18,7 @@ import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
@@ -26,6 +27,7 @@ import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
 import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
 import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
+import org.keynote.godtools.android.db.repository.LegacyToolsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -87,6 +89,10 @@ internal object DatabaseModule {
     @Provides
     @Reusable
     fun GodToolsRoomDatabase.lastSyncTimeRepository(): LastSyncTimeRepository = lastSyncTimeRepository
+
+    @Provides
+    @Reusable
+    fun LegacyToolsRepository.toolsRepository(): ToolsRepository = this
 
     private fun GodToolsDatabase.triggerDataMigration() {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,

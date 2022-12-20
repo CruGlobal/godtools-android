@@ -21,7 +21,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 private const val TOOL = "tool"
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ToolsRepositoryTest {
+class LegacyToolsRepositoryTest {
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
         every { getAsFlow(any<Query<*>>()) } answers { flowOf(emptyList()) }
         excludeRecords {
@@ -30,8 +30,8 @@ class ToolsRepositoryTest {
         }
     }
 
-    private inline fun withRepository(body: (ToolsRepository) -> Unit) {
-        val repository = ToolsRepository(dao)
+    private inline fun withRepository(body: (LegacyToolsRepository) -> Unit) {
+        val repository = LegacyToolsRepository(dao)
         body(repository)
     }
 

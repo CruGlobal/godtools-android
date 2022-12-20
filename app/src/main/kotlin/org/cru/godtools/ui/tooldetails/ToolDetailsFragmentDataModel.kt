@@ -19,11 +19,11 @@ import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,7 +39,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
     fun setToolCode(code: String) = savedStateHandle.set(EXTRA_TOOL, code)
 
     val tool = toolCode
-        .flatMapLatest { it?.let { toolsRepository.getToolFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { toolsRepository.findToolFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val banner = tool
         .map { it?.detailsBannerId }.distinctUntilChanged()

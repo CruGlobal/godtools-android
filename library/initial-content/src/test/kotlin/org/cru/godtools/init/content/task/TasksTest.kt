@@ -17,12 +17,12 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TasksTest {
