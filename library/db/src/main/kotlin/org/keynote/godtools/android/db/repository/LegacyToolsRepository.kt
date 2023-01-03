@@ -27,6 +27,13 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
 
+    private val toolsFlow = Query.select<Tool>()
+        .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE)
+        .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
+        .getAsFlow(dao)
+        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
+    override fun getToolsFlow() = toolsFlow
+
     private val favoriteTools = Query.select<Tool>()
         .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and ToolTable.FIELD_ADDED.eq(true))
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)

@@ -5,15 +5,61 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.ToolMatchers.tool
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class ToolsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: ToolsRepository
+
+    // region getToolsFlow()
+    @Test
+    fun `getToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
+        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        repository.insert(*tools.toTypedArray())
+
+        assertThat(
+            repository.getToolsFlow().first(),
+            containsInAnyOrder(
+                tools
+                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
+                    .map { tool(it) }
+            )
+        )
+    }
+
+    @Test
+    fun `getToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
+        val hidden = Tool("hidden") { isHidden = true }
+        val visible = Tool("visible") { isHidden = false }
+        repository.insert(hidden, visible)
+
+        assertThat(
+            repository.getToolsFlow().first(),
+            containsInAnyOrder(tool(hidden), tool(visible))
+        )
+    }
+
+    @Test
+    fun `getToolsFlow() - Don't filter metatool variants`() = testScope.runTest {
+        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
+        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
+        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
+        repository.insert(meta, defaultVariant, otherVariant)
+
+        assertThat(
+            repository.getToolsFlow().first(),
+            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
+        )
+    }
+    // endregion getToolsFlow()
 
     @Test
     fun verifyPinTool() = testScope.runTest {

@@ -11,6 +11,7 @@ android {
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -19,6 +20,8 @@ dependencies {
     implementation(libs.androidx.annotation)
 
     implementation(libs.gtoSupport.jsonapi)
+
+    testFixturesImplementation(libs.hamcrest)
 
     testImplementation(libs.json)
 }
