@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -25,10 +24,9 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 private const val ATTR_SELECTED_CATEGORY = "selectedCategory"
 
-private val QUERY_TOOLS_BASE = Query.select<Tool>().where(
-    ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)) and
-        (ToolTable.FIELD_HIDDEN ne true)
-).orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
+private val QUERY_TOOLS_BASE = Query.select<Tool>()
+    .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and (ToolTable.FIELD_HIDDEN ne true))
+    .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
 
 @VisibleForTesting
 internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.type("LEFT"))

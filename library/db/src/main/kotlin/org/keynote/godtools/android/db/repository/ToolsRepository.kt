@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
-import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.getAsFlow
@@ -28,10 +27,7 @@ class ToolsRepository @Inject constructor(private val dao: GodToolsDao) {
     }
 
     val favoriteTools = Query.select<Tool>()
-        .where(
-            ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA)) and
-                ToolTable.FIELD_ADDED.eq(true)
-        )
+        .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and ToolTable.FIELD_ADDED.eq(true))
         .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
         .getAsFlow(dao)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
