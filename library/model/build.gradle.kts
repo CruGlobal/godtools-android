@@ -16,6 +16,8 @@ android {
 dependencies {
     implementation(project(":library:base"))
 
+    implementation(libs.androidx.annotation)
+
     implementation(libs.gtoSupport.jsonapi)
 
     testImplementation(libs.json)

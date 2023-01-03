@@ -62,4 +62,9 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
             }
         }.await()
     }
+
+    // TODO: For testing only
+    override fun insert(vararg tool: Tool) {
+        tool.forEach { dao.insert(it) }
+    }
 }

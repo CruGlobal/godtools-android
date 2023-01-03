@@ -1,5 +1,7 @@
 package org.cru.godtools.model
 
+import androidx.annotation.RestrictTo
+import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
@@ -28,7 +30,7 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(JSON_API_TYPE)
-class Tool : Base() {
+class Tool() : Base() {
     companion object {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
@@ -54,6 +56,18 @@ class Tool : Base() {
                 else -> values().firstOrNull { json == it.json } ?: DEFAULT
             }
         }
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    constructor(
+        code: String,
+        type: Type = Type.TRACT,
+        config: Tool.() -> Unit = {},
+    ) : this() {
+        id = Random.nextLong()
+        this.code = code
+        this.type = type
+        config()
     }
 
     @JsonApiAttribute(JSON_ABBREVIATION)
