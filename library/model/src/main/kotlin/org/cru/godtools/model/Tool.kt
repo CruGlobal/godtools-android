@@ -36,6 +36,8 @@ class Tool() : Base() {
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
         const val JSON_METATOOL = "metatool"
         const val JSON_DEFAULT_VARIANT = "default-variant"
+
+        val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
     }
 
     enum class Type(val json: String?) {
@@ -62,11 +64,13 @@ class Tool() : Base() {
     constructor(
         code: String,
         type: Type = Type.TRACT,
+        defaultOrder: Int = 0,
         config: Tool.() -> Unit = {},
     ) : this() {
         id = Random.nextLong()
         this.code = code
         this.type = type
+        this.defaultOrder = defaultOrder
         config()
     }
 
