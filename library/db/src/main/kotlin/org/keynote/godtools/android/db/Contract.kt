@@ -5,6 +5,7 @@ import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Expression.Companion.bind
+import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
@@ -136,6 +137,7 @@ object Contract : BaseContract() {
             TABLE.join(TABLE_META).on(TABLE_META.field(COLUMN_CODE).eq(TABLE.field(COLUMN_META_TOOL)))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
+        val SQL_WHERE_IS_TOOL_TYPE = FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
         val SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0)
         const val SQL_ORDER_BY_ORDER = "$COLUMN_ORDER,$COLUMN_DEFAULT_ORDER"
 
