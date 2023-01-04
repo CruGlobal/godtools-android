@@ -12,15 +12,23 @@ import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
+import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
+private val QUERY_TOOLS = Query.select<Tool>()
+    .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE)
+    .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
+
 @Singleton
 internal class LegacyToolsRepository @Inject constructor(private val dao: GodToolsDao) : ToolsRepository {
     private val coroutineScope = CoroutineScope(SupervisorJob())
+
+    override suspend fun findTool(code: String) = dao.findAsync<Tool>(code).await()
+    override suspend fun getTools() = dao.getAsync(QUERY_TOOLS).await()
 
     private val toolsCache = WeakLruCache<String, Flow<Tool?>>(15)
     override fun findToolFlow(code: String) = toolsCache.getOrPut(code) {
@@ -28,10 +36,7 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
 
-    private val toolsFlow = Query.select<Tool>()
-        .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE)
-        .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
-        .getAsFlow(dao)
+    private val toolsFlow = QUERY_TOOLS.getAsFlow(dao)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     override fun getToolsFlow() = toolsFlow
 

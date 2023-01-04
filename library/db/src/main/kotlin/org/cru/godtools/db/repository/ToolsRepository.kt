@@ -4,6 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Tool
 
 interface ToolsRepository {
+    suspend fun findTool(code: String): Tool?
+    suspend fun getTools(): List<Tool>
+
     fun findToolFlow(code: String): Flow<Tool?>
     fun getToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>>

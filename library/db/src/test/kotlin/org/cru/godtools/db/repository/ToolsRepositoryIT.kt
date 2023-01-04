@@ -3,6 +3,7 @@ package org.cru.godtools.db.repository
 import app.cash.turbine.test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -18,6 +19,59 @@ import org.junit.Test
 abstract class ToolsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: ToolsRepository
+
+    // region findTool()
+    @Test
+    fun `findTool()`() = testScope.runTest {
+        val tool = Tool("tool")
+        repository.insert(tool)
+
+        assertNull(repository.findTool("other"))
+        assertThat(repository.findTool("tool"), tool(tool))
+    }
+    // endregion findTool()
+
+    // region getTools()
+    @Test
+    fun `getTools() - Supported Tool Types Only`() = testScope.runTest {
+        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        repository.insert(*tools.toTypedArray())
+
+        assertThat(
+            repository.getTools(),
+            containsInAnyOrder(
+                tools
+                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
+                    .map { tool(it) }
+            )
+        )
+    }
+
+    @Test
+    fun `getTools() - Don't filter hidden tools`() = testScope.runTest {
+        val hidden = Tool("hidden") { isHidden = true }
+        val visible = Tool("visible") { isHidden = false }
+        repository.insert(hidden, visible)
+
+        assertThat(
+            repository.getTools(),
+            containsInAnyOrder(tool(hidden), tool(visible))
+        )
+    }
+
+    @Test
+    fun `getTools() - Don't filter metatool variants`() = testScope.runTest {
+        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
+        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
+        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
+        repository.insert(meta, defaultVariant, otherVariant)
+
+        assertThat(
+            repository.getTools(),
+            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
+        )
+    }
+    // endregion getTools()
 
     // region getToolsFlow()
     @Test
