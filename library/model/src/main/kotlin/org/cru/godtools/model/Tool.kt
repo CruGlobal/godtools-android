@@ -38,6 +38,7 @@ class Tool() : Base() {
         const val JSON_DEFAULT_VARIANT = "default-variant"
 
         val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
+        val COMPARATOR_FAVORITE_ORDER = compareBy<Tool> { it.order }.then(COMPARATOR_DEFAULT_ORDER)
     }
 
     enum class Type(val json: String?) {

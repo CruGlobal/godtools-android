@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
@@ -34,10 +35,8 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     override fun getToolsFlow() = toolsFlow
 
-    private val favoriteTools = Query.select<Tool>()
-        .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and ToolTable.FIELD_ADDED.eq(true))
-        .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
-        .getAsFlow(dao)
+    private val favoriteTools = toolsFlow
+        .map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     override fun getFavoriteToolsFlow() = favoriteTools
 

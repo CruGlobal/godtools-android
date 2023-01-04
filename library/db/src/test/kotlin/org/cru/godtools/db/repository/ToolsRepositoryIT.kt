@@ -61,6 +61,22 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getToolsFlow()
 
+    // region getFavoriteToolsFlow()
+    @Test
+    fun `getFavoriteToolsFlow()`() = testScope.runTest {
+        val tool1 = Tool("tool1") { isAdded = false }
+        val tool2 = Tool("tool2") { isAdded = false }
+        val fav1 = Tool("fav1") { isAdded = true }
+        val fav2 = Tool("fav2") { isAdded = true }
+        repository.insert(tool1, tool2, fav1, fav2)
+
+        assertThat(
+            repository.getFavoriteToolsFlow().first(),
+            containsInAnyOrder(tool(fav1), tool(fav2))
+        )
+    }
+    // endregion getFavoriteToolsFlow()
+
     @Test
     fun verifyPinTool() = testScope.runTest {
         val code = "pinTool"
