@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -129,7 +130,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
     }
 
     private fun downloadLatestTranslation() {
-        observe(dataModel.toolCodeLiveData, settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
+        observe(dataModel.toolCode.asLiveData(), settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
             if (t != null) downloadManager.downloadLatestPublishedTranslationAsync(t, l)
         }
     }

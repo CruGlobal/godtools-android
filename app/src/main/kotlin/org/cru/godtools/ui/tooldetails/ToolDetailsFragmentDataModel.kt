@@ -3,7 +3,6 @@ package org.cru.godtools.ui.tooldetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -46,8 +45,6 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    internal val toolCodeLiveData = savedStateHandle.getLiveData<String?>(EXTRA_TOOL).distinctUntilChanged<String?>()
 
     val shortcut = tool.map {
         it?.takeIf { shortcutManager.canPinToolShortcut(it) }
