@@ -39,6 +39,11 @@ class ToolTest {
     }
 
     @Test
+    fun `testJsonApiParsing - No Default Order`() {
+        assertEquals(0, parseJson("tool_no_default_order.json").defaultOrder)
+    }
+
+    @Test
     fun `testJsonApiParsing - isHidden`() {
         assertTrue(parseJson("tool_hidden_true.json").isHidden)
         assertFalse(parseJson("tool_hidden_null.json").isHidden)

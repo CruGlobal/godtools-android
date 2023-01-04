@@ -97,7 +97,7 @@ class Tool : Base() {
     var isScreenShareDisabled = false
 
     @JsonApiAttribute(JSON_DEFAULT_ORDER)
-    var defaultOrder: Int? = 0
+    var defaultOrder = 0
     @JsonApiIgnore
     var order = Int.MAX_VALUE
 
