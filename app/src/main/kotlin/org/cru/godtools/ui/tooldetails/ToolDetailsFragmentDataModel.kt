@@ -13,22 +13,16 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-import org.keynote.godtools.android.db.Contract.ToolTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolDetailsFragmentDataModel @Inject constructor(
     attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val shortcutManager: GodToolsShortcutManager,
     private val toolFileSystem: ToolFileSystem,
     toolsRepository: ToolsRepository,
@@ -51,12 +45,15 @@ class ToolDetailsFragmentDataModel @Inject constructor(
             ?.let { shortcutManager.getPendingToolShortcut(it.code) }
     }.asLiveData()
 
-    val variants = tool.flatMapLatest {
-        when (val metatool = it?.metatoolCode) {
-            null -> flowOf(emptyList())
-            else -> Query.select<Tool>().where(ToolTable.FIELD_META_TOOL.eq(metatool)).getAsFlow(dao)
+    val variants = tool.map { it?.metatoolCode }
+        .distinctUntilChanged()
+        .flatMapLatest { metatool ->
+            when (metatool) {
+                null -> flowOf(emptyList())
+                else -> toolsRepository.getToolsFlow().map { it.filter { it.metatoolCode == metatool } }
+            }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     internal val pages = variants.map {
         buildList {

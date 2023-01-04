@@ -65,12 +65,14 @@ class Tool() : Base() {
     constructor(
         code: String,
         type: Type = Type.TRACT,
+        metatool: String? = null,
         defaultOrder: Int = 0,
         config: Tool.() -> Unit = {},
     ) : this() {
         id = Random.nextLong()
         this.code = code
         this.type = type
+        this.metatoolCode = metatool
         this.defaultOrder = defaultOrder
         config()
     }
