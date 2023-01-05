@@ -49,7 +49,6 @@ class ExternalSingletonsModule {
     val downloadManager by lazy {
         mockk<GodToolsDownloadManager> {
             every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
-            every { getDownloadProgressLiveData(any(), any()) } answers { ImmutableLiveData(null) }
             every { downloadLatestPublishedTranslationAsync(any(), any()) } returns Job().apply { complete() }
         }
     }

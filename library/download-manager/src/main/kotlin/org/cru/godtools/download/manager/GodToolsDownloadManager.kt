@@ -164,7 +164,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         getDownloadProgressStateFlow(TranslationKey(tool, locale))
 
     @MainThread
-    fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
+    internal fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
         TranslationKey(tool, locale).let {
             downloadProgressLiveData.getOrPut(it) { getDownloadProgressStateFlow(it).asLiveData() }
         }
