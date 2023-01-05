@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.service
 
 import android.net.Uri
 import androidx.annotation.AnyThread
-import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.room.InvalidationTracker
 import java.io.File
@@ -14,11 +13,9 @@ import java.security.NoSuchAlgorithmException
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
@@ -206,13 +203,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
     }
     // endregion Download Resource
 
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    internal suspend fun shutdown() {
-        val job = coroutineScope.coroutineContext[Job]
-        if (job is CompletableJob) job.complete()
-        job?.join()
-    }
-
     @Singleton
     internal class Dispatcher(
         aemArticleManager: AemArticleManager,
@@ -230,23 +220,26 @@ class AemArticleManager @VisibleForTesting internal constructor(
         ) : this(aemArticleManager, aemDb, dao, fileManager, CoroutineScope(Dispatchers.Default))
 
         // region Translations
-        private val articleTranslationsJob = dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS).conflate()
-            .onEach { aemArticleManager.processDownloadedTranslations(it) }
-            .launchIn(coroutineScope)
+        init {
+            dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS).conflate()
+                .onEach { aemArticleManager.processDownloadedTranslations(it) }
+                .launchIn(coroutineScope)
+        }
         // endregion Translations
 
         // region Stale AemImports Refresh
-        private val staleAemImportsJob = coroutineScope.launch {
-            aemDb.aemImportDao().getAll()
-                .filter { it.isStale() }
-                .forEach { launch { aemArticleManager.syncAemImport(it.uri, false) } }
+        init {
+            coroutineScope.launch {
+                aemDb.aemImportDao().getAll()
+                    .filter { it.isStale() }
+                    .forEach { launch { aemArticleManager.syncAemImport(it.uri, false) } }
+            }
         }
         // endregion Stale AemImports Refresh
 
         // region Cleanup
-        @VisibleForTesting
         @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-        internal val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
+        private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
             withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
             while (!channel.isClosedForReceive) {
                 fileManager.removeOrphanedFiles()
@@ -262,13 +255,6 @@ class AemArticleManager @VisibleForTesting internal constructor(
             })
         }
         // endregion Cleanup
-
-        @RestrictTo(RestrictTo.Scope.TESTS)
-        internal fun shutdown() {
-            staleAemImportsJob.cancel()
-            articleTranslationsJob.cancel()
-            cleanupActor.close()
-        }
     }
 
     @Singleton
