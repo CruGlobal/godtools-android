@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.currentTime
@@ -20,6 +21,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Translation
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -40,13 +42,22 @@ class AemArticleManagerDispatcherTest {
         }
     }
     private val dao = mockk<GodToolsDao> {
-        every { getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS) } returns downloadedTranslationsFlow
+        every { getAsFlow<Translation>(any()) } returns downloadedTranslationsFlow
     }
     private val fileManager = mockk<AemArticleManager.FileManager>(relaxUnitFun = true)
     private val testScope = TestScope()
+    private val toolsRepository: ToolsRepository = mockk {
+        every { getToolsFlow() } returns flowOf(emptyList())
+    }
 
-    private val dispatcher =
-        AemArticleManager.Dispatcher(aemArticleManager, aemDb, dao, fileManager, testScope.backgroundScope)
+    private val dispatcher = AemArticleManager.Dispatcher(
+        aemArticleManager,
+        aemDb,
+        dao,
+        fileManager,
+        toolsRepository,
+        coroutineScope = testScope.backgroundScope,
+    )
 
     @Test
     fun verifyArticleTranslationsJob() = testScope.runTest {
@@ -55,7 +66,7 @@ class AemArticleManagerDispatcherTest {
         downloadedTranslationsFlow.value = translations
         runCurrent()
         coVerifyAll {
-            dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS)
+            dao.getAsFlow<Translation>(any())
             aemArticleManager.processDownloadedTranslations(translations)
         }
     }

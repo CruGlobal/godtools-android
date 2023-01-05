@@ -22,7 +22,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
@@ -32,7 +35,9 @@ import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.ResponseBody
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
+import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -45,10 +50,10 @@ import org.cru.godtools.article.aem.service.support.findAemArticles
 import org.cru.godtools.article.aem.util.AemFileSystem
 import org.cru.godtools.article.aem.util.addExtension
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
@@ -60,11 +65,6 @@ internal const val CLEANUP_DELAY = HOUR_IN_MS
 @VisibleForTesting
 internal const val CLEANUP_DELAY_INITIAL = MIN_IN_MS
 private const val CACHE_BUSTING_INTERVAL_JSON = HOUR_IN_MS
-
-@VisibleForTesting
-internal val QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS = Query.select<Translation>()
-    .join(TranslationTable.SQL_JOIN_TOOL)
-    .where(ToolTable.FIELD_TYPE.eq(Tool.Type.ARTICLE).and(TranslationTable.SQL_WHERE_DOWNLOADED))
 
 @Singleton
 class AemArticleManager @VisibleForTesting internal constructor(
@@ -204,11 +204,13 @@ class AemArticleManager @VisibleForTesting internal constructor(
     // endregion Download Resource
 
     @Singleton
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher(
         aemArticleManager: AemArticleManager,
         aemDb: ArticleRoomDatabase,
         dao: GodToolsDao,
         fileManager: FileManager,
+        toolsRepository: ToolsRepository,
         coroutineScope: CoroutineScope
     ) {
         @Inject
@@ -216,12 +218,27 @@ class AemArticleManager @VisibleForTesting internal constructor(
             aemArticleManager: AemArticleManager,
             aemDb: ArticleRoomDatabase,
             dao: GodToolsDao,
-            fileManager: FileManager
-        ) : this(aemArticleManager, aemDb, dao, fileManager, CoroutineScope(Dispatchers.Default))
+            fileManager: FileManager,
+            toolsRepository: ToolsRepository,
+        ) : this(aemArticleManager, aemDb, dao, fileManager, toolsRepository, CoroutineScope(Dispatchers.Default))
 
         // region Translations
         init {
-            dao.getAsFlow(QUERY_DOWNLOADED_ARTICLE_TRANSLATIONS).conflate()
+            toolsRepository.getToolsFlow()
+                .map { tools ->
+                    tools
+                        .filter { it.type == Tool.Type.ARTICLE }
+                        .mapNotNull { it.code }
+                        .toSet()
+                }
+                .distinctUntilChanged()
+                .flatMapLatest {
+                    Query.select<Translation>()
+                        .where(TranslationTable.FIELD_TOOL.oneOf(it.map { Expression.bind(it) }))
+                        .andWhere(TranslationTable.SQL_WHERE_DOWNLOADED)
+                        .getAsFlow(dao)
+                }
+                .conflate()
                 .onEach { aemArticleManager.processDownloadedTranslations(it) }
                 .launchIn(coroutineScope)
         }
