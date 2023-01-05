@@ -2,12 +2,9 @@ package org.cru.godtools.download.manager
 
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
-import androidx.annotation.MainThread
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -152,7 +149,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     // region Download Progress
     private val downloadProgressStateFlows = mutableMapOf<TranslationKey, MutableStateFlow<DownloadProgress?>>()
-    private val downloadProgressLiveData = mutableMapOf<TranslationKey, LiveData<DownloadProgress?>>()
 
     @AnyThread
     private fun getDownloadProgressStateFlow(translation: TranslationKey) = synchronized(downloadProgressStateFlows) {
@@ -162,12 +158,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @AnyThread
     fun getDownloadProgressFlow(tool: String, locale: Locale): Flow<DownloadProgress?> =
         getDownloadProgressStateFlow(TranslationKey(tool, locale))
-
-    @MainThread
-    fun getDownloadProgressLiveData(tool: String, locale: Locale): LiveData<DownloadProgress?> =
-        TranslationKey(tool, locale).let {
-            downloadProgressLiveData.getOrPut(it) { getDownloadProgressStateFlow(it).asLiveData() }
-        }
 
     @AnyThread
     @VisibleForTesting
