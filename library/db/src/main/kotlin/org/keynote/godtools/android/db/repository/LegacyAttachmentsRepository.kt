@@ -10,15 +10,16 @@ import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.findAsFlow
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.model.Attachment
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class AttachmentsRepository @Inject constructor(private val dao: GodToolsDao) {
+internal class LegacyAttachmentsRepository @Inject constructor(private val dao: GodToolsDao) : AttachmentsRepository {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val attachmentsCache = WeakLruCache<Long, Flow<Attachment?>>(15)
-    fun getAttachmentFlow(id: Long) = attachmentsCache.getOrPut(id) {
+    override fun getAttachmentFlow(id: Long) = attachmentsCache.getOrPut(id) {
         dao.findAsFlow<Attachment>(id)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
     }

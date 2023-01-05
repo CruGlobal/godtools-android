@@ -18,11 +18,11 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.AttachmentsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
