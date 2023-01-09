@@ -10,8 +10,6 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.flow.filterNotNull
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.cru.godtools.article.aem.model.Article
@@ -19,12 +17,12 @@ import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.ui.articles.ArticlesFragment
 import org.cru.godtools.article.ui.categories.CategoriesFragment
 import org.cru.godtools.article.ui.categories.CategorySelectedListener
-import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.shared.tool.parser.model.Category
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.tool.R
+import org.cru.godtools.tool.article.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 
 @AndroidEntryPoint
@@ -56,10 +54,6 @@ class ArticlesActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    @Inject
-    @Named(DAGGER_HOST_CUSTOM_URI)
-    internal lateinit var hostCustomUriScheme: String
-
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         val data = intent.data?.normalizeScheme() ?: return
@@ -77,7 +71,7 @@ class ArticlesActivity :
     }
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
         pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "article"
     // endregion Intent Processing
 

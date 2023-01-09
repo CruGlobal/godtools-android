@@ -7,8 +7,10 @@ plugins {
 
 android {
     namespace = "org.cru.godtools.tool.lesson"
-
     baseConfiguration(project)
+
+    configureQaBuildType(project)
+    configureGodToolsCustomUri()
 
     buildFeatures.dataBinding = true
 }

@@ -15,6 +15,7 @@ import java.util.Locale
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.createLessonActivityIntent
+import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThrows
@@ -78,7 +79,7 @@ class LessonActivityTest {
 
     @Test
     fun `processIntent() - Custom URI Deep Link`() {
-        val intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/lesson/$TOOL/en"))
+        val intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/lesson/$TOOL/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)

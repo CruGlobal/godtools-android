@@ -10,9 +10,7 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import javax.inject.Named
 import kotlinx.coroutines.Job
-import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.download.manager.DownloadManagerModule
@@ -28,10 +26,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
     replaces = [DownloadManagerModule::class]
 )
 class ExternalSingletonsModule {
-    @get:Provides
-    @get:Named(DAGGER_HOST_CUSTOM_URI)
-    val hostCustomUri = "org.cru.godtools.test"
-
     @get:Provides
     val dao by lazy {
         mockk<GodToolsDao> {

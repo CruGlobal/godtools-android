@@ -16,6 +16,7 @@ android {
     baseConfiguration(project)
     configureCompose(project)
     configureQaBuildType(project)
+    configureGodToolsCustomUri()
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -75,12 +76,7 @@ android {
 
             isMinifyEnabled = false
 
-            manifestPlaceholders += mapOf(
-                "webAuthenticationRedirectScheme" to "org.cru.godtools.debug.okta",
-                "hostGodtoolsCustomUri" to "org.cru.godtools.debug"
-            )
-
-            buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.debug\"")
+            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.debug.okta"
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug.okta\"")
             resValue("string", "app_name_debug", "GodTools (Dev)")
         }
@@ -90,12 +86,7 @@ android {
 
             isMinifyEnabled = true
 
-            manifestPlaceholders += mapOf(
-                "webAuthenticationRedirectScheme" to "org.cru.godtools.qa.okta",
-                "hostGodtoolsCustomUri" to "org.cru.godtools.qa"
-            )
-
-            buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools.qa\"")
+            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.qa.okta"
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
@@ -105,12 +96,7 @@ android {
                 .takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
 
-            manifestPlaceholders += mapOf(
-                "webAuthenticationRedirectScheme" to "org.cru.godtools.okta",
-                "hostGodtoolsCustomUri" to "org.cru.godtools"
-            )
-
-            buildConfigField("String", "HOST_GODTOOLS_CUSTOM_URI", "\"org.cru.godtools\"")
+            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.okta"
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.okta\"")
         }
     }

@@ -3,7 +3,6 @@ import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
-import com.android.build.gradle.internal.core.InternalBaseVariant
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
@@ -14,6 +13,7 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
+internal const val BUILD_TYPE_QA = "qa"
 private const val FLAVOR_DIMENSION_ENV = "env"
 private const val FLAVOR_ENV_STAGE = "stage"
 private const val FLAVOR_ENV_PRODUCTION = "production"
@@ -116,16 +116,16 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
-fun CommonExtension<*,*,*,*>.configureQaBuildType(project: Project) {
+fun CommonExtension<*, *, *, *>.configureQaBuildType(project: Project) {
     buildTypes {
-        register("qa") {
+        register(BUILD_TYPE_QA) {
             initWith(getByName("debug"))
             matchingFallbacks += listOf("debug")
         }
     }
 
     sourceSets {
-        named("qa") {
+        named(BUILD_TYPE_QA) {
             kotlin.srcDir("src/debug/kotlin")
             res.srcDir("src/debug/res/values")
             manifest.srcFile("src/debug/AndroidManifest.xml")
@@ -133,7 +133,7 @@ fun CommonExtension<*,*,*,*>.configureQaBuildType(project: Project) {
     }
 
     project.configurations {
-        named("qaImplementation") { extendsFrom(getByName("debugImplementation")) }
+        named("${BUILD_TYPE_QA}Implementation") { extendsFrom(getByName("debugImplementation")) }
     }
 }
 
@@ -150,9 +150,6 @@ private fun TestedExtension.configureTestOptions(project: Project) {
             it.maxHeapSize = "2g"
         }
     }
-
-    testVariants.all { configureTestManifestPlaceholders() }
-    unitTestVariants.all { configureTestManifestPlaceholders() }
 
     project.dependencies.apply {
         addProvider("testImplementation", project.libs.findBundle("test-framework").get())
@@ -178,8 +175,4 @@ private fun TestedExtension.configureTestOptions(project: Project) {
             force(espressoCore)
         }
     }
-}
-
-private fun InternalBaseVariant.configureTestManifestPlaceholders() {
-    mergedFlavor.manifestPlaceholders += "hostGodtoolsCustomUri" to "org.cru.godtools.test"
 }

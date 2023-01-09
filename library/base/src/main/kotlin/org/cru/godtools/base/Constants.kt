@@ -14,6 +14,3 @@ const val HOST_GET_GODTOOLSAPP_COM = "get.godtoolsapp.com"
 const val HOST_KNOWGOD_COM = "knowgod.com"
 
 val URI_SHARE_BASE: Uri = Uri.parse("https://$HOST_KNOWGOD_COM/")
-
-// Dagger Qualifiers
-const val DAGGER_HOST_CUSTOM_URI = "godtoolsCustomUriHost"

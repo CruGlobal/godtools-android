@@ -34,6 +34,7 @@ import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
 import org.cru.godtools.shared.tool.parser.model.page.controlColor
+import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -198,7 +199,7 @@ class CyoaActivityTest {
     fun `Intent Processing - Uri Scheme Deep Link`() {
         manifestEnglish.value = manifest(listOf(page1, page2))
 
-        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/cyoa/test/en"))) {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/cyoa/test/en"))) {
             it.onActivity {
                 assertEquals("test", it.dataModel.toolCode.value)
                 assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
@@ -211,7 +212,7 @@ class CyoaActivityTest {
     fun `Intent Processing - Uri Scheme Deep Link - Specific Page`() {
         manifestEnglish.value = manifest(listOf(page1, page2))
 
-        scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://org.cru.godtools.test/tool/cyoa/test/en/page2"))) {
+        scenario(Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/cyoa/test/en/page2"))) {
             it.onActivity {
                 assertEquals("test", it.dataModel.toolCode.value)
                 assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
