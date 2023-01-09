@@ -69,7 +69,7 @@ android {
     }
 
     buildTypes {
-        named("debug") {
+        debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
 
@@ -99,7 +99,7 @@ android {
             buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
-        named("release") {
+        release {
             isMinifyEnabled = true
             signingConfigs.getByName("release")
                 .takeIf { it.storeFile?.exists() == true }
