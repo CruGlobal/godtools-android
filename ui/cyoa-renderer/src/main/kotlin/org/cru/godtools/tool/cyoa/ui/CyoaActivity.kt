@@ -10,11 +10,8 @@ import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Named
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
-import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
@@ -23,6 +20,7 @@ import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
+import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
@@ -71,10 +69,6 @@ class CyoaActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    @Inject
-    @Named(DAGGER_HOST_CUSTOM_URI)
-    internal lateinit var hostCustomUri: String
-
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null || !isValidStartState) {
@@ -91,7 +85,7 @@ class CyoaActivity :
 
     private inline val Uri.isCustomUriSchemeDeepLink
         get() = SCHEME_GODTOOLS.equals(scheme, true) &&
-            hostCustomUri.equals(host, true) &&
+            HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
             pathSegments.size >= 4 && path?.startsWith("/tool/cyoa/") == true
     // endregion Intent Processing
 

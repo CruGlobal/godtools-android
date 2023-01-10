@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
 import org.cru.godtools.base.ui.createArticlesIntent
+import org.cru.godtools.tool.article.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Rule
@@ -53,7 +54,7 @@ class ArticlesActivityTest {
 
     @Test
     fun `processIntent() - Custom URI Deep Link`() {
-        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/article/$TOOL/en")) {
+        deepLinkScenario(Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/article/$TOOL/en")) {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
                 assertEquals(Locale.ENGLISH, it.locale)

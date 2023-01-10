@@ -18,7 +18,6 @@ import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -27,7 +26,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
-import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
@@ -42,6 +40,7 @@ import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
+import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
@@ -153,10 +152,6 @@ class TractActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    @Inject
-    @Named(DAGGER_HOST_CUSTOM_URI)
-    internal lateinit var hostCustomUriScheme: String
-
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null) initialPage = intent.getIntExtra(EXTRA_PAGE, initialPage)
@@ -192,7 +187,7 @@ class TractActivity :
     }
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
         pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "tract"
 
     @VisibleForTesting

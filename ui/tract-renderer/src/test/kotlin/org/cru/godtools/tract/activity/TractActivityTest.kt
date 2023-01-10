@@ -28,6 +28,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
+import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.junit.Assert.assertEquals
@@ -143,7 +144,7 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Deep Link - Custom Uri Scheme`() {
-        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr")) {
+        deepLinkScenario(Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/tract/$TOOL/fr")) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
@@ -154,14 +155,14 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Deep Link - Custom Uri Scheme - Missing Language`() {
-        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/")) {
+        deepLinkScenario(Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/tract/$TOOL/")) {
             assertEquals(Lifecycle.State.DESTROYED, it.state)
         }
     }
 
     @Test
     fun `processIntent() - Deep Link - Custom Uri Scheme - With Page Num`() {
-        deepLinkScenario(Uri.parse("godtools://org.cru.godtools.test/tool/tract/$TOOL/fr/3")) {
+        deepLinkScenario(Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/tract/$TOOL/fr/3")) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())

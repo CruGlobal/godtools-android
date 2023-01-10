@@ -11,18 +11,20 @@ android {
 
     baseConfiguration(project)
     configureFlavorDimensions(project)
+}
 
-    libraryVariants.configureEach {
-        val mobileContentApi =
-            if (flavorName.contains("stage")) URI_MOBILE_CONTENT_API_STAGE else URI_MOBILE_CONTENT_API_PRODUCTION
-
-        configureBundledContent(
+androidComponents {
+    onVariants {
+        it.configureBundledContent(
             project,
-            apiUrl = mobileContentApi,
+            apiUrl = when (it.productFlavors.toMap()[FLAVOR_DIMENSION_ENV]) {
+                FLAVOR_ENV_STAGE -> URI_MOBILE_CONTENT_API_STAGE
+                else -> URI_MOBILE_CONTENT_API_PRODUCTION
+            },
             bundledTools = listOf("kgp", "fourlaws", "satisfied", "teachmetoshare"),
             bundledAttachments = listOf("attr-banner", "attr-banner-about", "attr-about-banner-animation"),
             bundledLanguages = listOf("en"),
-            downloadTranslations = false
+            downloadTranslations = false,
         )
     }
 }

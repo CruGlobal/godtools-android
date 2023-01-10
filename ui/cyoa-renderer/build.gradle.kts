@@ -7,8 +7,10 @@ plugins {
 
 android {
     namespace = "org.cru.godtools.tool.cyoa"
-
     baseConfiguration(project)
+
+    configureQaBuildType(project)
+    configureGodToolsCustomUri()
 
     buildFeatures.dataBinding = true
 }

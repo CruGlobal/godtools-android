@@ -1,11 +1,12 @@
 package org.cru.godtools.gradle.bundledcontent
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
@@ -28,8 +29,10 @@ abstract class PruneJsonApiResponseTask : DefaultTask() {
     @get:Input
     var sortRelationships = true
 
-    @get:OutputFile
-    abstract val output: RegularFileProperty
+    @get:OutputDirectory
+    abstract val output: DirectoryProperty
+    @get:Input
+    lateinit var outputFilename: String
 
     @TaskAction
     fun pruneJsonApi() {
@@ -45,7 +48,7 @@ abstract class PruneJsonApiResponseTask : DefaultTask() {
         if (sortData) json.optJSONArray("data")?.sortJsonApiObjects()
         json.optJSONArray("included")?.sortJsonApiObjects()
 
-        json.writeJson(output.asFile.get())
+        json.writeJson(output.file(outputFilename).get().asFile)
     }
 
     private fun JSONObject.removeJsonApiAttributes() {

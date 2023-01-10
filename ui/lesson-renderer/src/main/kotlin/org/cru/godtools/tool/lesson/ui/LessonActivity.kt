@@ -18,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Named
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
@@ -28,7 +27,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
-import org.cru.godtools.base.DAGGER_HOST_CUSTOM_URI
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
@@ -40,6 +38,7 @@ import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
+import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
@@ -90,10 +89,6 @@ class LessonActivity :
     // endregion Lifecycle
 
     // region Intent Processing
-    @Inject
-    @Named(DAGGER_HOST_CUSTOM_URI)
-    internal lateinit var hostCustomUriScheme: String
-
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         val data = intent.data?.normalizeScheme() ?: return
@@ -116,7 +111,7 @@ class LessonActivity :
     }
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        hostCustomUriScheme.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
         pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "lesson"
     // endregion Intent Processing
 
