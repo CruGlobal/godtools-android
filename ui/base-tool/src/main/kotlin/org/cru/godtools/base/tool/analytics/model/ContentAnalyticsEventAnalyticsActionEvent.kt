@@ -34,6 +34,8 @@ class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event
                     event.attributes.forEach { putString(it.key.sanitizeAdobeNameForFirebase(), it.value) }
             }
         }
+
+    override val userCounterName = action
 }
 
 @VisibleForTesting

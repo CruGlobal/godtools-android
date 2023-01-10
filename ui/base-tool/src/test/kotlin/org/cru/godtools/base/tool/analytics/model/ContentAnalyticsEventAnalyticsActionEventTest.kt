@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.System.ADOBE
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.System.FIREBASE
+import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.System.USER
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasEntry
 import org.junit.Assert.assertEquals
@@ -50,5 +51,12 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
             assertTrue(containsKey("cru.Key"))
             assertEquals("value", getString("cru.Key"))
         }
+    }
+
+    @Test
+    fun testUserAnalyticsEvent() {
+        val event =
+            ContentAnalyticsEventAnalyticsActionEvent(AnalyticsEvent(action = "userEvent", systems = setOf(USER)))
+        assertEquals("userEvent", event.userCounterName)
     }
 }
