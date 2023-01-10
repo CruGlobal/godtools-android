@@ -11,6 +11,7 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal const val BUILD_TYPE_QA = "qa"
@@ -51,7 +52,7 @@ fun DynamicFeatureExtension.baseConfiguration(project: Project) {
 //context(Project)
 private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
-    configureCompilerOptions()
+    configureCompilerOptions(project)
     configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
@@ -66,13 +67,18 @@ private fun BaseExtension.configureSdk() {
     }
 }
 
-private fun BaseExtension.configureCompilerOptions() {
+private fun BaseExtension.configureCompilerOptions(project: Project) {
+    project.extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
+        jvmToolchain(11)
+    }
+
     compileOptions {
+        // HACK: workaround a kotlin.jvmToolchain bug
+        //       see: https://issuetracker.google.com/issues/260059413
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
     (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
-        jvmTarget = JavaVersion.VERSION_11.toString()
         freeCompilerArgs += "-Xjvm-default=all"
     }
 }
