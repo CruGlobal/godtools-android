@@ -2,6 +2,7 @@ package org.cru.godtools.gradle.bundledcontent
 
 import de.undercouch.gradle.tasks.download.DownloadAction
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
@@ -21,17 +22,20 @@ abstract class DownloadApiResourcesTask : DefaultTask() {
     lateinit var api: String
 
     @get:OutputDirectory
-    abstract val output: RegularFileProperty
+    abstract val output: DirectoryProperty
+    @get:Input
+    var outputSubDir: String? = null
 
     @TaskAction
     fun downloadApiResources() {
         val resourcesJson = resources.asFile.get().loadJson()
+        val downloadDir = output.dir(outputSubDir ?: ".").get().asFile
 
         resourcesJson.keySet().map { resource ->
             val fileName = resourcesJson.getString(resource)
             DownloadAction(project).apply {
                 src("$api$resource")
-                dest(output.asFile.get().resolve(fileName))
+                dest(downloadDir.resolve(fileName))
                 overwrite(false)
                 retries(2)
                 tempAndMove(true)

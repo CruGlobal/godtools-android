@@ -14,8 +14,8 @@ import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal const val BUILD_TYPE_QA = "qa"
-private const val FLAVOR_DIMENSION_ENV = "env"
-private const val FLAVOR_ENV_STAGE = "stage"
+const val FLAVOR_DIMENSION_ENV = "env"
+const val FLAVOR_ENV_STAGE = "stage"
 private const val FLAVOR_ENV_PRODUCTION = "production"
 
 // TODO: provide Project using the new multiple context receivers functionality.
