@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -15,6 +16,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 
 @HiltViewModel
+@OptIn(ExperimentalCoroutinesApi::class)
 class ShareableImageBottomSheetDialogFragmentDataModel @Inject constructor(manifestManager: ManifestManager) :
     ViewModel() {
     val tool = MutableStateFlow<String?>(null)
