@@ -220,7 +220,7 @@ dependencies {
 if (project.hasProperty("firebaseAppDistributionBuild")) {
     firebaseAppDistribution {
         artifactPath =
-            buildDir.resolve("outputs/universal_apk/productionQa/app-production-qa-universal.apk").path
+            buildDir.resolve("outputs/apk_from_bundle/productionQa/app-production-qa-universal.apk").path
         releaseNotes = generateFirebaseAppDistributionReleaseNotes()
         serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
         groups = "android-testers"
