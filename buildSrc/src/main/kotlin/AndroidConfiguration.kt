@@ -14,6 +14,7 @@ import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
+private const val BUILD_TYPE_DEBUG = "debug"
 internal const val BUILD_TYPE_QA = "qa"
 const val FLAVOR_DIMENSION_ENV = "env"
 const val FLAVOR_ENV_STAGE = "stage"
@@ -125,8 +126,8 @@ fun CommonExtension<*, *, *, *>.configureCompose(project: Project) {
 fun CommonExtension<*, *, *, *>.configureQaBuildType(project: Project) {
     buildTypes {
         register(BUILD_TYPE_QA) {
-            initWith(getByName("debug"))
-            matchingFallbacks += listOf("debug")
+            initWith(getByName(BUILD_TYPE_DEBUG))
+            matchingFallbacks += listOf(BUILD_TYPE_DEBUG)
         }
     }
 
@@ -139,7 +140,8 @@ fun CommonExtension<*, *, *, *>.configureQaBuildType(project: Project) {
     }
 
     project.configurations {
-        named("${BUILD_TYPE_QA}Implementation") { extendsFrom(getByName("debugImplementation")) }
+        named("${BUILD_TYPE_QA}Api") { extendsFrom(getByName("${BUILD_TYPE_DEBUG}Api")) }
+        named("${BUILD_TYPE_QA}Implementation") { extendsFrom(getByName("${BUILD_TYPE_DEBUG}Implementation")) }
     }
 }
 
