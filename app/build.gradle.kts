@@ -177,6 +177,8 @@ dependencies {
     implementation(libs.play.core)
     implementation(libs.play.instantapps)
 
+    implementation(libs.godtoolsShared.common)
+
     api(libs.eventbus)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.pager)
@@ -187,7 +189,6 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
-    implementation(libs.materialColorUtilities)
     implementation(libs.materialComponents)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.taptargetview)
