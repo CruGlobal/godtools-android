@@ -62,7 +62,7 @@ class ToolViewModels @Inject constructor(
 
         val banner = tool
             .map { it?.bannerId }.distinctUntilChanged()
-            .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val bannerFile = tool.attachmentFileFlow { it?.bannerId }
@@ -131,7 +131,7 @@ class ToolViewModels @Inject constructor(
 
     private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
         .map(transform).distinctUntilChanged()
-        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded } }
         .map { it?.getFile(fileSystem) }
         .distinctUntilChanged()

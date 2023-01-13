@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Attachment
 
 interface AttachmentsRepository {
-    fun getAttachmentFlow(id: Long): Flow<Attachment?>
+    fun findAttachmentFlow(id: Long): Flow<Attachment?>
 
     // TODO: temporary for testing
     fun insert(vararg attachments: Attachment)

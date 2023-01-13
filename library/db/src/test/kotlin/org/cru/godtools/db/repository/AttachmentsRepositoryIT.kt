@@ -22,7 +22,7 @@ abstract class AttachmentsRepositoryIT {
             filename = "test.ext"
         }
 
-        repository.getAttachmentFlow(1).test {
+        repository.findAttachmentFlow(1).test {
             assertNull(awaitItem())
 
             repository.insert(attachment)

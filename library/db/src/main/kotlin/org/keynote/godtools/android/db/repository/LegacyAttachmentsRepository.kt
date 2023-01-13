@@ -19,7 +19,7 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val attachmentsCache = WeakLruCache<Long, Flow<Attachment?>>(15)
-    override fun getAttachmentFlow(id: Long) = attachmentsCache.getOrPut(id) {
+    override fun findAttachmentFlow(id: Long) = attachmentsCache.getOrPut(id) {
         dao.findAsFlow<Attachment>(id)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
     }

@@ -43,7 +43,7 @@ class ToolDetailsFragmentDataModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val banner = tool
         .map { it?.detailsBannerId }.distinctUntilChanged()
-        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded }?.getFile(toolFileSystem) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
