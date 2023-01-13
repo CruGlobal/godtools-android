@@ -189,7 +189,6 @@ dependencies {
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
-    implementation(libs.materialColorUtilities)
     implementation(libs.materialComponents)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.taptargetview)

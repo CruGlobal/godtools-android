@@ -168,7 +168,6 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.10"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
-materialColorUtilities = "org.cru.mobile.fork.material-color-utilities:material-color-utilities:0.2.0_75"
 materialComponents = "com.google.android.material:material:1.7.0"
 mockk = "io.mockk:mockk:1.13.3"
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
