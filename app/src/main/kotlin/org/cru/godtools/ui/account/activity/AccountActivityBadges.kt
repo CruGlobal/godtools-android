@@ -14,14 +14,11 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -34,12 +31,15 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
+import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.DisabledAlpha
+import org.cru.godtools.shared.common.model.ThemeType
 import org.cru.godtools.shared.user.activity.model.Badge
 import org.cru.godtools.shared.user.activity.model.Badge.BadgeType
 import org.cru.godtools.shared.user.activity.model.UserActivity
-import palettes.TonalPalette
+
+private val BADGE_SIZE = 48.dp
 
 @Composable
 internal fun AccountActivityBadges(
@@ -66,90 +66,110 @@ internal fun AccountActivityBadges(
 
 @Composable
 @OptIn(ExperimentalTextApi::class)
-private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) = ElevatedCard(
-    elevation = CardDefaults.elevatedCardElevation(defaultElevation = if (badge.isEarned) 4.dp else 0.dp),
-    modifier = modifier.size(100.dp)
-) {
-    Spacer(modifier = Modifier.weight(1f))
-    BadgeImage(
-        badge,
-        modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 8.dp)
-    )
-    Text(
-        badge.label,
-        style = MaterialTheme.typography.labelSmall.merge(ParagraphStyle(lineBreak = LineBreak.Heading)),
-        maxLines = 2,
-        textAlign = TextAlign.Center,
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .minLinesHeight(2, MaterialTheme.typography.labelSmall)
-            .alpha(if (badge.isEarned) 1f else DisabledAlpha)
-    )
-    Spacer(modifier = Modifier.weight(1f))
+private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) {
+    val textStyle = MaterialTheme.typography.labelSmall.merge(ParagraphStyle(lineBreak = LineBreak.Heading))
+    val contentHeight = 8.dp + BADGE_SIZE + 8.dp + computeHeightForDefaultText(textStyle, 2) + 8.dp
+
+    ElevatedCard(
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = if (badge.isEarned) 4.dp else 0.dp),
+        modifier = modifier.size(contentHeight.coerceAtLeast(100.dp))
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        BadgeImage(
+            badge,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 8.dp)
+        )
+        Text(
+            badge.label,
+            style = textStyle,
+            maxLines = 2,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+                .minLinesHeight(2, textStyle)
+                .alpha(if (badge.isEarned) 1f else DisabledAlpha)
+        )
+        Spacer(modifier = Modifier.weight(1f))
+    }
 }
 
 @Composable
-private fun BadgeImage(badge: Badge, modifier: Modifier, enabled: Boolean = badge.isEarned) {
-    val baseColor = remember(badge.type, enabled) {
-        when {
-            !enabled -> Color(0xffd5d5d5)
-            else -> when (badge.type) {
-                BadgeType.TOOLS_OPENED -> Color(0xFF05699B)
-                BadgeType.LESSONS_COMPLETED -> Color(0xFFA6EDE8)
-                BadgeType.ARTICLES_OPENED -> Color(0xff6750a4)
-                BadgeType.IMAGES_SHARED -> Color(0xFF2F3676)
-                BadgeType.TIPS_COMPLETED -> Color(0xffE53660)
-            }
-        }
-    }
-    val palette = remember(baseColor) { TonalPalette.fromInt(baseColor.toArgb()) }
-    val (color, containerColor) = when {
-        MaterialTheme.colorScheme.isLight -> Pair(Color(palette.tone(40)), Color(palette.tone(90)))
-        else -> Pair(Color(palette.tone(80)), Color(palette.tone(30)))
+private fun BadgeImage(badge: Badge, modifier: Modifier) {
+    val themeType = when {
+        MaterialTheme.colorScheme.isLight -> ThemeType.LIGHT
+        else -> ThemeType.DARK
     }
 
     Image(
         badge.icon,
         contentDescription = badge.label,
-        colorFilter = ColorFilter.tint(color.copy(alpha = if (!enabled) 0.38f else 1f)),
+        colorFilter = ColorFilter.tint(badge.colors.color(themeType)),
         modifier = modifier
-            .size(36.dp)
-            .background(containerColor.copy(alpha = if (!enabled) 0.38f else 1f), CircleShape)
+            .size(BADGE_SIZE)
+            .background(badge.colors.containerColor(themeType), CircleShape)
     )
 }
 
 private val Badge.icon
     @Composable
     get() = when (type) {
-        BadgeType.TOOLS_OPENED -> painterResource(R.drawable.ic_badge_trophy)
-        BadgeType.LESSONS_COMPLETED -> painterResource(R.drawable.ic_badge_medal)
-        BadgeType.ARTICLES_OPENED -> painterResource(R.drawable.ic_badge_trophy)
-        BadgeType.IMAGES_SHARED -> painterResource(R.drawable.ic_badge_medal)
-        BadgeType.TIPS_COMPLETED -> painterResource(R.drawable.ic_badge_flag)
+        BadgeType.TOOLS_OPENED -> when (variant) {
+            1 -> painterResource(R.drawable.ic_badge_tools_opened_1)
+            2 -> painterResource(R.drawable.ic_badge_tools_opened_2)
+            else -> painterResource(R.drawable.ic_badge_tools_opened_3)
+        }
+        BadgeType.LESSONS_COMPLETED -> when (variant) {
+            1 -> painterResource(R.drawable.ic_badge_lesson_completed_1)
+            2 -> painterResource(R.drawable.ic_badge_lesson_completed_2)
+            else -> painterResource(R.drawable.ic_badge_lesson_completed_3)
+        }
+        BadgeType.ARTICLES_OPENED -> when (variant) {
+            1 -> painterResource(R.drawable.ic_badge_articles_opened_1)
+            2 -> painterResource(R.drawable.ic_badge_articles_opened_2)
+            else -> painterResource(R.drawable.ic_badge_articles_opened_3)
+        }
+        BadgeType.IMAGES_SHARED -> when (variant) {
+            1 -> painterResource(R.drawable.ic_badge_images_shared_1)
+            2 -> painterResource(R.drawable.ic_badge_images_shared_2)
+            else -> painterResource(R.drawable.ic_badge_images_shared_3)
+        }
+        BadgeType.TIPS_COMPLETED -> when (variant) {
+            1 -> painterResource(R.drawable.ic_badge_tips_completed_1)
+            2 -> painterResource(R.drawable.ic_badge_tips_completed_2)
+            else -> painterResource(R.drawable.ic_badge_tips_completed_3)
+        }
     }
 
 @OptIn(ExperimentalComposeUiApi::class)
 private val Badge.label
     @Composable
     get() = when (type) {
-        BadgeType.TOOLS_OPENED -> pluralStringResource(R.plurals.account_activity_badge_tools_opened, target, target)
+        BadgeType.TOOLS_OPENED -> pluralStringResource(
+            R.plurals.account_activity_badge_tools_opened,
+            progressTarget,
+            progressTarget
+        )
         BadgeType.LESSONS_COMPLETED -> pluralStringResource(
             R.plurals.account_activity_badge_lessons_completed,
-            target,
-            target
+            progressTarget,
+            progressTarget
         )
         BadgeType.ARTICLES_OPENED -> pluralStringResource(
             R.plurals.account_activity_badge_articles_opened,
-            target,
-            target
+            progressTarget,
+            progressTarget
         )
-        BadgeType.IMAGES_SHARED -> pluralStringResource(R.plurals.account_activity_badge_images_shared, target, target)
+        BadgeType.IMAGES_SHARED -> pluralStringResource(
+            R.plurals.account_activity_badge_images_shared,
+            progressTarget,
+            progressTarget
+        )
         BadgeType.TIPS_COMPLETED -> pluralStringResource(
             R.plurals.account_activity_badge_tips_completed,
-            target,
-            target
+            progressTarget,
+            progressTarget
         )
     }
