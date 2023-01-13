@@ -14,12 +14,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,9 +27,10 @@ import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
+import org.cru.godtools.shared.common.model.ThemeType
+import org.cru.godtools.shared.user.activity.model.IconColors
 import org.cru.godtools.shared.user.activity.model.UserActivity
 import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
-import palettes.TonalPalette
 
 @Composable
 fun AccountActivityLayout(
@@ -60,14 +58,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
                 label = stringResource(R.string.account_activity_tool_opens),
                 icon = painterResource(R.drawable.ic_all_tools),
                 count = activity.toolOpens,
-                color = Color(0xFF05699B),
+                colors = UserActivity.Colors.toolOpens,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
                 label = stringResource(R.string.account_activity_lesson_completions),
                 icon = painterResource(R.drawable.ic_lessons),
                 count = activity.lessonCompletions,
-                color = Color(0xFFA6EDE8),
+                colors = UserActivity.Colors.lessonCompletions,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -79,14 +77,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
                 label = stringResource(R.string.account_activity_screen_shares),
                 icon = painterResource(org.cru.godtools.tool.tract.R.drawable.ic_tract_live_share),
                 count = activity.screenShares,
-                color = Color(0xFFE55B36),
+                colors = UserActivity.Colors.screenShares,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
                 label = stringResource(R.string.account_activity_links_shared),
                 icon = painterResource(org.cru.godtools.tool.R.drawable.ic_share),
                 count = activity.linksShared,
-                color = Color(0xFF2F3676),
+                colors = UserActivity.Colors.linksShared,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -98,14 +96,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
                 label = stringResource(R.string.account_activity_languages_used),
                 icon = painterResource(R.drawable.ic_language),
                 count = activity.languagesUsed,
-                color = Color(0xFFCEFFC1),
+                colors = UserActivity.Colors.languagesUsed,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
                 label = stringResource(R.string.account_activity_sessions),
                 icon = painterResource(R.drawable.ic_activity_sessions),
                 count = activity.sessions,
-                color = Color(0xFFE0CE26),
+                colors = UserActivity.Colors.sessions,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -117,33 +115,32 @@ private fun AccountActivityItem(
     label: String,
     icon: Painter,
     count: Int,
-    color: Color,
+    colors: IconColors,
     modifier: Modifier = Modifier
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier
 ) {
-    val palette = remember(color) { TonalPalette.fromInt(color.toArgb()) }
-    val (primaryColor, primaryContainerColor) = when {
-        MaterialTheme.colorScheme.isLight -> Pair(Color(palette.tone(40)), Color(palette.tone(90)))
-        else -> Pair(Color(palette.tone(80)), Color(palette.tone(30)))
+    val themeType = when {
+        MaterialTheme.colorScheme.isLight -> ThemeType.LIGHT
+        else -> ThemeType.DARK
     }
 
     Icon(
         icon,
         contentDescription = null,
-        tint = primaryColor,
+        tint = colors.color(themeType),
         modifier = Modifier
             .align(Alignment.Top)
             .padding(end = 8.dp)
             .size(44.dp)
-            .background(primaryContainerColor, CircleShape)
+            .background(colors.containerColor(themeType), CircleShape)
             .padding(10.dp)
     )
     Column(modifier = Modifier.weight(1f)) {
         Text(
             count.format(),
-            color = primaryColor,
+            color = colors.color(themeType),
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
             style = MaterialTheme.typography.titleLarge,

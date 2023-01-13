@@ -177,6 +177,8 @@ dependencies {
     implementation(libs.play.core)
     implementation(libs.play.instantapps)
 
+    implementation(libs.godtoolsShared.common)
+
     api(libs.eventbus)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.pager)
