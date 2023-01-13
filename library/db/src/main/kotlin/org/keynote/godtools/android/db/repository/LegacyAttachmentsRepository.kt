@@ -23,4 +23,8 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         dao.findAsFlow<Attachment>(id)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
     }
+
+    override fun insert(vararg attachments: Attachment) {
+        attachments.forEach { dao.insert(it) }
+    }
 }
