@@ -32,6 +32,14 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
         }
     }
 
+    // only enable unit tests for debug builds targeting production
+    project.androidComponents {
+        beforeVariants { builder ->
+            val env = builder.productFlavors.toMap()[FLAVOR_DIMENSION_ENV] ?: FLAVOR_ENV_PRODUCTION
+            builder.enableUnitTest = builder.buildType == BUILD_TYPE_DEBUG && env == FLAVOR_ENV_PRODUCTION
+        }
+    }
+
     // Kotlin Kover
     project.apply(plugin = "org.jetbrains.kotlinx.kover")
     project.extensions.configure<KoverReportExtension> {
