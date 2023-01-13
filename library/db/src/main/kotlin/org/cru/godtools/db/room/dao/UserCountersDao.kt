@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.db.room.entity.UserCounterEntity
 import org.cru.godtools.db.room.entity.partial.MigrationUserCounter
@@ -27,10 +28,10 @@ internal interface UserCountersDao {
     @Query("SELECT * FROM user_counters WHERE delta != 0")
     suspend fun getDirtyCounters(): List<UserCounterEntity>
 
-    @Insert(entity = UserCounterEntity::class, onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertOrIgnore(counters: Collection<SyncUserCounter>)
     @Update(entity = UserCounterEntity::class)
     suspend fun update(counters: Collection<SyncUserCounter>)
+    @Upsert(entity = UserCounterEntity::class)
+    suspend fun upsert(counters: Collection<SyncUserCounter>)
     // endregion Sync Methods
 
     // region Migration

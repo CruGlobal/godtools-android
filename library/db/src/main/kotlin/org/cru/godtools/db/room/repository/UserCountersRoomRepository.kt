@@ -31,10 +31,7 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
 
     @Transaction
     override suspend fun storeCountersFromSync(counters: Collection<UserCounter>) {
-        val syncCounters = counters.map { SyncUserCounter(it) }
-        // TODO: switch to an Upsert operation after we upgrade to Room 2.5.0
-        dao.insertOrIgnore(syncCounters)
-        dao.update(syncCounters)
+        dao.upsert(counters.map { SyncUserCounter(it) })
     }
 
     override suspend fun resetCountersMissingFromSync(counters: Collection<UserCounter>) {
