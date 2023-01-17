@@ -260,6 +260,7 @@ class GodToolsDownloadManagerTest {
     }
     // endregion downloadAttachment()
 
+    // region importAttachment()
     @Test
     fun verifyImportAttachment() = runTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
@@ -317,6 +318,7 @@ class GodToolsDownloadManagerTest {
         }
         coVerify(exactly = 0) { fs.file(any()) }
     }
+    // endregion importAttachment()
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
     // endregion Attachments
