@@ -51,6 +51,7 @@ import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.Attachment
@@ -114,6 +115,7 @@ internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
+    private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
@@ -126,6 +128,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @Inject
     internal constructor(
         attachmentsApi: AttachmentsApi,
+        attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
@@ -134,6 +137,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         workManager: Lazy<WorkManager>
     ) : this(
         attachmentsApi,
+        attachmentsRepository,
         dao,
         fs,
         manifestParser,
@@ -185,7 +189,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment = dao.find<Attachment>(attachmentId) ?: return
+            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
             val wasDownloaded = attachment.isDownloaded
 
@@ -211,7 +215,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     }
 
                     if (attachment.isDownloaded || wasDownloaded) {
-                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                        attachmentsRepository.updateAttachmentDownloaded(attachmentId, attachment.isDownloaded)
                     }
                 }
             }
@@ -222,7 +226,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
 
             filesystemMutex.read.withLock {
@@ -246,7 +250,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                             attachment.isDownloaded = true
                         } finally {
                             // update attachment download state
-                            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                            attachmentsRepository.updateAttachmentDownloaded(attachmentId, attachment.isDownloaded)
                         }
                     }
                 }

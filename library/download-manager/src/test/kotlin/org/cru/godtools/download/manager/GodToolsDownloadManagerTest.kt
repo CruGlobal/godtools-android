@@ -9,6 +9,7 @@ import app.cash.turbine.test
 import app.cash.turbine.testIn
 import io.mockk.Called
 import io.mockk.coEvery
+import io.mockk.coExcludeRecords
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.coVerifyOrder
@@ -22,7 +23,6 @@ import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
 import io.mockk.verifyOrder
-import io.mockk.verifySequence
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -49,6 +49,7 @@ import org.ccci.gto.android.common.db.find
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
@@ -67,7 +68,6 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -84,6 +84,7 @@ class GodToolsDownloadManagerTest {
     }
 
     private val attachmentsApi = mockk<AttachmentsApi>()
+    private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
         excludeRecords { transaction(any(), any()) }
@@ -121,6 +122,7 @@ class GodToolsDownloadManagerTest {
         Dispatchers.setMain(dispatcher)
         val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
+            attachmentsRepository,
             dao,
             fs,
             manifestParser,
@@ -176,12 +178,11 @@ class GodToolsDownloadManagerTest {
 
     @Before
     fun setupAttachmentMocks() {
-        every { dao.find<Attachment>(attachment.id) } returns attachment
+        coEvery { attachmentsRepository.findAttachment(attachment.id) } returns attachment
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns attachment.asLocalFile()
-        every { dao.update(any<Attachment>(), AttachmentTable.COLUMN_DOWNLOADED) } returns 1
 
-        excludeRecords {
-            dao.find<Attachment>(attachment.id)
+        coExcludeRecords {
+            attachmentsRepository.findAttachment(attachment.id)
             dao.find<LocalFile>(attachment.localFilename!!)
         }
     }
@@ -200,7 +201,7 @@ class GodToolsDownloadManagerTest {
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             dao.updateOrInsert(attachment.asLocalFile())
-            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
 
@@ -227,7 +228,7 @@ class GodToolsDownloadManagerTest {
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             dao.updateOrInsert(attachment.asLocalFile())
-            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
 
@@ -244,7 +245,7 @@ class GodToolsDownloadManagerTest {
         verify(inverse = true) { dao.updateOrInsert(attachment.asLocalFile()) }
         coVerifySequence {
             attachmentsApi.download(attachment.id)
-            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            attachmentsRepository.updateAttachmentDownloaded(attachment.id, false)
         }
     }
 
@@ -269,9 +270,9 @@ class GodToolsDownloadManagerTest {
         }
         assertArrayEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
-        verifySequence {
+        coVerifySequence {
             dao.updateOrInsert(attachment.asLocalFile())
-            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
 
@@ -310,12 +311,11 @@ class GodToolsDownloadManagerTest {
             testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         }
         assertTrue(attachment.isDownloaded)
-        verify { dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED) }
-        coVerify(inverse = true) {
-            fs.file(any())
-            dao.updateOrInsert(any())
+        coVerify {
+            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
+            dao wasNot Called
         }
-        confirmVerified(dao)
+        coVerify(exactly = 0) { fs.file(any()) }
     }
 
     private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
@@ -327,6 +327,11 @@ class GodToolsDownloadManagerTest {
         toolCode = TOOL
         languageCode = Locale.FRENCH
         isDownloaded = false
+    }
+
+    @Before
+    fun setupTranslationMocks() {
+        every { dao.update(any<Translation>(), TranslationTable.COLUMN_DOWNLOADED) } returns 1
     }
 
     // region downloadLatestPublishedTranslation()
