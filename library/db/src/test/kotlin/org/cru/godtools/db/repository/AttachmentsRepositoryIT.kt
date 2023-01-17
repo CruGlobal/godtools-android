@@ -45,6 +45,30 @@ abstract class AttachmentsRepositoryIT {
     }
 
     @Test
+    fun `getAttachments()`() = testScope.runTest {
+        repository.insert(
+            Attachment().apply {
+                id = 1
+                filename = "name1.bin"
+                isDownloaded = true
+            },
+            Attachment().apply {
+                id = 2
+                filename = "name2.bin"
+            }
+        )
+
+        val attachments = repository.getAttachments()
+        assertEquals(2, attachments.size)
+        val attachment1 = attachments.first { it.id == 1L }
+        val attachment2 = attachments.first { it.id == 2L }
+        assertEquals("name1.bin", attachment1.filename)
+        assertTrue(attachment1.isDownloaded)
+        assertEquals("name2.bin", attachment2.filename)
+        assertFalse(attachment2.isDownloaded)
+    }
+
+    @Test
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
         repository.insert(
             Attachment().apply {

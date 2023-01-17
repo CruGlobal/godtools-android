@@ -563,6 +563,7 @@ class GodToolsDownloadManagerTest {
     private fun setupCleanupActorMocks() {
         every { dao.get(QUERY_LOCAL_FILES) } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
+        coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns emptyList()
     }
 
@@ -601,13 +602,15 @@ class GodToolsDownloadManagerTest {
         }
     }
 
+    // region cleanFilesystem()
     @Test
-    fun verifyCleanupFilesystem() = runTest {
+    fun `cleanFilesystem()`() = runTest {
         val orphan = spyk(getTmpFile(true))
         val keep = spyk(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
         every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns listOf(translation)
+        coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(localFile)
         keep.name.let {
             every { dao.find<LocalFile>(it) } returns LocalFile(it)
@@ -625,9 +628,45 @@ class GodToolsDownloadManagerTest {
         }
         verify(inverse = true) { keep.delete() }
     }
+
+    @Test
+    fun `cleanFilesystem() - keep downloaded attachments`() = runTest {
+        val keep = spyk(getTmpFile(suffix = ".bin", create = true))
+        val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
+        val orphanName = orphan.name
+        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
+        coEvery { attachmentsRepository.getAttachments() } returns listOf(
+            Attachment().apply {
+                filename = keep.name
+                sha256 = keep.name.substringBeforeLast(".")
+                isDownloaded = true
+            },
+            Attachment().apply {
+                filename = orphan.name
+                sha256 = orphan.name.substringBeforeLast(".")
+                isDownloaded = false
+            }
+        )
+        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(LocalFile(orphan.name), LocalFile(keep.name))
+        keep.name.let {
+            every { dao.find<LocalFile>(it) } returns LocalFile(it)
+            coEvery { fs.file(it) } returns keep
+        }
+        orphan.name.let { coEvery { fs.file(it) } returns orphan }
+
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
+        withDownloadManager { it.cleanFilesystem() }
+        assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+        verifyOrder {
+            dao.delete(LocalFile(orphanName))
+            orphan.delete()
+        }
+        verify(exactly = 0) { keep.delete() }
+    }
+    // endregion cleanFilesystem()
     // endregion Cleanup
 
-    private fun getTmpFile(create: Boolean = false) =
-        File.createTempFile("test-", null, resourcesDir).also { if (!create) it.delete() }
+    private fun getTmpFile(create: Boolean = false, suffix: String? = null) =
+        File.createTempFile("test-", suffix, resourcesDir).also { if (!create) it.delete() }
     private fun getInputStreamForResource(name: String) = this::class.java.getResourceAsStream(name)!!
 }

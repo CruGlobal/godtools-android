@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
+import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findAsync
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -27,6 +28,8 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         dao.findAsFlow<Attachment>(id)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
     }
+
+    override suspend fun getAttachments() = dao.getAsync(Query.select<Attachment>()).await()
 
     override suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean) {
         val attachment = Attachment().apply {

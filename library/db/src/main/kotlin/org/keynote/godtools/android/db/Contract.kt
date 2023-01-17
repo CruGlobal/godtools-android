@@ -329,8 +329,6 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME)
 
-        val SQL_JOIN_ATTACHMENT =
-            TABLE.join(AttachmentTable.TABLE).on(FIELD_NAME.eq(AttachmentTable.FIELD_LOCALFILENAME))
         val SQL_JOIN_TRANSLATION_FILE =
             TABLE.join(TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE))
 

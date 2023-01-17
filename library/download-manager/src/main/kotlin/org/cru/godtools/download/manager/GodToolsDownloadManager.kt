@@ -105,12 +105,8 @@ internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFi
     .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
 @VisibleForTesting
 internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
-    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
     .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-    .where(
-        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
-            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
-    )
+    .where(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -456,10 +452,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
 
                 // delete any LocalFiles that are no longer being used
-                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES).forEach {
-                    dao.delete(it)
-                    it.getFile(fs).delete()
-                }
+                val attachments = attachmentsRepository.getAttachments()
+                    .filter { it.isDownloaded }
+                    .mapNotNullTo(mutableSetOf()) { it.localFilename }
+                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                    .filterNot { it.filename in attachments }
+                    .forEach {
+                        dao.delete(it)
+                        it.getFile(fs).delete()
+                    }
 
                 // delete any orphaned files
                 fs.rootDir().listFiles()
