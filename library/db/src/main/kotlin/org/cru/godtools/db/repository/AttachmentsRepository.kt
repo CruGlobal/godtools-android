@@ -7,6 +7,7 @@ interface AttachmentsRepository {
     suspend fun findAttachment(id: Long): Attachment?
     fun findAttachmentFlow(id: Long): Flow<Attachment?>
     suspend fun getAttachments(): List<Attachment>
+    fun getAttachmentsFlow(): Flow<List<Attachment>>
 
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 

@@ -73,11 +73,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 internal const val CLEANUP_DELAY = 30_000L
 
 @VisibleForTesting
-internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
-    .distinct(true)
-    .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
-    .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.isNull()))
-@VisibleForTesting
 internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
     .distinct(true)
     .join(
@@ -479,6 +474,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @Singleton
     @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher @VisibleForTesting internal constructor(
+        attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
         repository: DownloadManagerRepository,
@@ -487,11 +483,19 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) {
         @Inject
         internal constructor(
+            attachmentsRepository: AttachmentsRepository,
             dao: GodToolsDao,
             downloadManager: GodToolsDownloadManager,
             repository: DownloadManagerRepository,
             settings: Settings
-        ) : this(dao, downloadManager, repository, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        ) : this(
+            attachmentsRepository,
+            dao,
+            downloadManager,
+            repository,
+            settings,
+            CoroutineScope(Dispatchers.Default + SupervisorJob())
+        )
 
         init {
             // Download Favorite tool translations in the primary, parallel, and default languages
@@ -509,8 +513,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .launchIn(coroutineScope)
 
             // Stale Downloaded Attachments
-            dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            attachmentsRepository.getAttachmentsFlow()
+                .combineTransform(dao.getAsFlow(Query.select<LocalFile>())) { attachments, files ->
+                    val filenames = files.mapTo(mutableSetOf()) { it.filename }
+                    emit(attachments.filter { it.isDownloaded && it.localFilename !in filenames }.map { it.id }.toSet())
+                }
+                .distinctUntilChanged()
+                .conflate()
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
                 .launchIn(coroutineScope)
 
             // Tool Banner Attachments

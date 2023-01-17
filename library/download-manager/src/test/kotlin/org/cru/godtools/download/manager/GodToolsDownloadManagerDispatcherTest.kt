@@ -19,9 +19,12 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.junit.Before
@@ -33,11 +36,15 @@ class GodToolsDownloadManagerDispatcherTest {
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1)
     private val favoritedTranslationsFlow = MutableSharedFlow<List<Translation>>()
-    private val staleAttachmentsChannel = Channel<List<Attachment>>()
+    private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
+    private val localFilesFlow = MutableSharedFlow<List<LocalFile>>(replay = 1)
     private val toolBannerAttachmentsChannel = Channel<List<Attachment>>()
 
+    private val attachmentsRepository: AttachmentsRepository = mockk {
+        every { getAttachmentsFlow() } returns attachmentsFlow
+    }
     private val dao = mockk<GodToolsDao> {
-        every { getAsFlow(QUERY_STALE_ATTACHMENTS) } returns staleAttachmentsChannel.consumeAsFlow()
+        every { getAsFlow(Query.select<LocalFile>()) } returns localFilesFlow
         every { getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS) } returns toolBannerAttachmentsChannel.consumeAsFlow()
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
@@ -56,6 +63,7 @@ class GodToolsDownloadManagerDispatcherTest {
     @Before
     fun startDispatcher() {
         GodToolsDownloadManager.Dispatcher(
+            attachmentsRepository,
             dao,
             downloadManager,
             repository,
@@ -96,16 +104,28 @@ class GodToolsDownloadManagerDispatcherTest {
     }
 
     @Test
-    fun `staleAttachmentsJob should download any banner attachments`() = testScope.runTest {
+    fun `staleAttachmentsJob should download any downloaded attachments missing the local file`() = testScope.runTest {
         verify { downloadManager wasNot Called }
-
-        val attachment1 = Attachment().apply { id = Random.nextLong() }
-        val attachment2 = Attachment().apply { id = Random.nextLong() }
-        staleAttachmentsChannel.send(listOf(attachment1, attachment2))
+        val attachment1 = Attachment().apply {
+            id = Random.nextLong()
+            sha256 = "sha1"
+            isDownloaded = true
+        }
+        val attachment2 = Attachment().apply {
+            id = Random.nextLong()
+            sha256 = "sha2"
+            isDownloaded = true
+        }
+        val attachment3 = Attachment().apply {
+            id = Random.nextLong()
+            sha256 = "sha3"
+            isDownloaded = false
+        }
+        attachmentsFlow.emit(listOf(attachment1, attachment2, attachment3))
+        localFilesFlow.emit(listOf(LocalFile("sha2.bin")))
         runCurrent()
         coVerify(exactly = 1) {
             downloadManager.downloadAttachment(attachment1.id)
-            downloadManager.downloadAttachment(attachment2.id)
         }
         confirmVerified(downloadManager)
     }
