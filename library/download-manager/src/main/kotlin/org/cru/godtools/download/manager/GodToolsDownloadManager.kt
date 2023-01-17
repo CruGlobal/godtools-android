@@ -2,7 +2,6 @@ package org.cru.godtools.download.manager
 
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
-import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.work.WorkManager
@@ -29,10 +28,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
@@ -44,7 +46,6 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
-import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
@@ -471,6 +472,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
+    @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
@@ -486,36 +488,30 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             settings: Settings
         ) : this(dao, downloadManager, repository, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
-        /* Download favorite tool translations in the primary and parallel languages */
-        private val favoriteToolsJob = settings.primaryLanguageFlow
-            .combineTransformLatest(settings.parallelLanguageFlow) { prim, para ->
-                val languages = listOfNotNull(prim, para, Settings.defaultLanguage)
-                emitAll(repository.getFavoriteTranslationsThatNeedDownload(languages))
-            }
-            .conflate()
-            .onEach {
-                coroutineScope {
-                    it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(TranslationKey(it)) } }
+        init {
+            // Download Favorite tool translations in the primary, parallel, and default languages
+            settings.primaryLanguageFlow
+                .combineTransform(settings.parallelLanguageFlow) { prim, para ->
+                    emit(listOfNotNull(prim, para, Settings.defaultLanguage))
                 }
-            }
-            .launchIn(coroutineScope)
+                .flatMapLatest { repository.getFavoriteTranslationsThatNeedDownload(it) }
+                .map { it.map { TranslationKey(it) }.toSet() }
+                .distinctUntilChanged()
+                .conflate()
+                .onEach {
+                    coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
+                }
+                .launchIn(coroutineScope)
 
-        private val staleAttachmentsJob = dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
-            .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
-            .launchIn(coroutineScope)
+            // Stale Downloaded Attachments
+            dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+                .launchIn(coroutineScope)
 
-        private val toolBannerAttachmentsJob = dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
-            .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
-            .launchIn(coroutineScope)
-
-        @RestrictTo(RestrictTo.Scope.TESTS)
-        internal suspend fun shutdown() {
-            favoriteToolsJob.cancel()
-            staleAttachmentsJob.cancel()
-            toolBannerAttachmentsJob.cancel()
-            favoriteToolsJob.join()
-            staleAttachmentsJob.join()
-            toolBannerAttachmentsJob.join()
+            // Tool Banner Attachments
+            dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+                .launchIn(coroutineScope)
         }
     }
 }
