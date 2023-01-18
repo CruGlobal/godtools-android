@@ -15,6 +15,7 @@ import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.get
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -56,6 +57,10 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(toolId)).get(dao)
             .filterNot { it.id in keep }
             .forEach { dao.delete(it) }
+    }
+
+    override fun deleteAttachmentsFor(tool: Tool) {
+        dao.delete(Attachment::class.java, AttachmentTable.FIELD_TOOL.eq(tool.id))
     }
     // endregion Sync Methods
 }

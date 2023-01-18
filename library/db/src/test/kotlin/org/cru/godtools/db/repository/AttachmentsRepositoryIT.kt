@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Tool
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class AttachmentsRepositoryIT {
@@ -158,4 +159,20 @@ abstract class AttachmentsRepositoryIT {
         }
     }
     // endregion removeAttachmentsMissingFromSync()
+
+    // region deleteAttachmentsFor()
+    @Test
+    fun `deleteAttachmentsFor()`() = testScope.runTest {
+        val tool = Tool().apply { id = Random.nextLong() }
+        val attachments = List(2) { Attachment().apply { id = Random.nextLong() } }
+        attachments[0].toolId = tool.id
+        repository.storeAttachmentsFromSync(attachments)
+
+        repository.deleteAttachmentsFor(tool)
+        assertNotNull(repository.getAttachments()) {
+            assertEquals(1, it.size)
+            assertEquals(attachments[1].id, it[0].id)
+        }
+    }
+    // endregion deleteAttachmentsFor()
 }
