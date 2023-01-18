@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.db.repository
 
+import android.database.sqlite.SQLiteDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +42,12 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         }
         dao.updateAsync(attachment, AttachmentTable.COLUMN_DOWNLOADED).await()
     }
+
+    // region Initial Content Methods
+    override fun storeInitialAttachments(attachments: Collection<Attachment>) {
+        attachments.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+    }
+    // endregion Initial Content Methods
 
     // region Sync Methods
     override fun storeAttachmentsFromSync(attachments: Collection<Attachment>) {

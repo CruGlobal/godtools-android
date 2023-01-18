@@ -27,7 +27,7 @@ abstract class AttachmentsRepositoryIT {
             id = 1
             filename = "test.ext"
         }
-        repository.storeAttachmentsFromSync(listOf(attachment))
+        repository.storeInitialAttachments(listOf(attachment))
         assertEquals(attachment.filename, assertNotNull(repository.findAttachment(1)).filename)
     }
 
@@ -41,14 +41,14 @@ abstract class AttachmentsRepositoryIT {
         repository.findAttachmentFlow(1).test {
             assertNull(awaitItem())
 
-            repository.storeAttachmentsFromSync(listOf(attachment))
+            repository.storeInitialAttachments(listOf(attachment))
             assertEquals(attachment.filename, assertNotNull(awaitItem()).filename)
         }
     }
 
     @Test
     fun `getAttachments()`() = testScope.runTest {
-        repository.storeAttachmentsFromSync(
+        repository.storeInitialAttachments(
             listOf(
                 Attachment().apply {
                     id = 1
@@ -74,7 +74,7 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
-        repository.storeAttachmentsFromSync(
+        repository.storeInitialAttachments(
             listOf(
                 Attachment().apply {
                     id = 1
@@ -93,6 +93,23 @@ abstract class AttachmentsRepositoryIT {
         repository.updateAttachmentDownloaded(1, false)
         assertFalse(assertNotNull(repository.findAttachment(1)).isDownloaded)
     }
+
+    // region storeInitialAttachments()
+    @Test
+    fun `storeInitialAttachments() - Don't replace already existing attachments`() = testScope.runTest {
+        val attachment = Attachment().apply {
+            id = Random.nextLong()
+            filename = "sync.bin"
+        }
+        repository.storeAttachmentsFromSync(listOf(attachment))
+
+        attachment.filename = "initial.bin"
+        repository.storeInitialAttachments(listOf(attachment))
+        assertNotNull(repository.findAttachment(attachment.id)) {
+            assertEquals("sync.bin", it.filename)
+        }
+    }
+    // endregion storeInitialAttachments()
 
     // region storeAttachmentsFromSync()
     @Test

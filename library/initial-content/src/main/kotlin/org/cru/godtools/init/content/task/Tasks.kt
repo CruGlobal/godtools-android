@@ -87,7 +87,7 @@ internal class Tasks @Inject constructor(
                 tools.forEach { tool ->
                     if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
                     tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
-                    tool.attachments?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+                    tool.attachments?.let { attachmentsRepository.storeInitialAttachments(it) }
                 }
             }
         }
