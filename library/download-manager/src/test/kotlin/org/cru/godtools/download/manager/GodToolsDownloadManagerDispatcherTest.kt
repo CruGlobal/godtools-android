@@ -24,6 +24,7 @@ import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
+import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -50,77 +51,77 @@ class GodToolsDownloadManagerDispatcherTest {
         every { primaryLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.primaryLanguageFlow
         every { parallelLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.parallelLanguageFlow
     }
+    private val testScope = TestScope()
+
+    @Before
+    fun startDispatcher() {
+        GodToolsDownloadManager.Dispatcher(
+            dao,
+            downloadManager,
+            repository,
+            settings,
+            testScope.backgroundScope,
+        )
+    }
 
     @Test
-    fun `favoriteToolsJob should trigger downloadLatestPublishedTranslation()`() = runTest {
-        testDispatcher {
-            verify {
-                downloadManager wasNot Called
-                repository wasNot Called
-            }
+    fun `favoriteToolsJob should trigger downloadLatestPublishedTranslation()`() = testScope.runTest {
+        verify {
+            downloadManager wasNot Called
+            repository wasNot Called
+        }
 
-            val translation1 = Translation().apply {
-                toolCode = "tool1"
-                languageCode = Locale.ENGLISH
-            }
-            val translation2 = Translation().apply {
-                toolCode = "tool2"
-                languageCode = Locale.FRENCH
-            }
-            primaryLanguageFlow.emit(Locale.GERMAN)
-            parallelLanguageFlow.emit(Locale.FRENCH)
-            runCurrent()
-            verifyAll {
-                repository.getFavoriteTranslationsThatNeedDownload(
-                    match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
-                )
-            }
-            favoritedTranslationsFlow.emit(listOf(translation1, translation2))
-            runCurrent()
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
-                downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.FRENCH))
-            }
+        val translation1 = Translation().apply {
+            toolCode = "tool1"
+            languageCode = Locale.ENGLISH
+        }
+        val translation2 = Translation().apply {
+            toolCode = "tool2"
+            languageCode = Locale.FRENCH
+        }
+        primaryLanguageFlow.emit(Locale.GERMAN)
+        parallelLanguageFlow.emit(Locale.FRENCH)
+        runCurrent()
+        verifyAll {
+            repository.getFavoriteTranslationsThatNeedDownload(
+                match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+            )
+        }
+        favoritedTranslationsFlow.emit(listOf(translation1, translation2))
+        runCurrent()
+        coVerifyAll {
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.FRENCH))
         }
     }
 
     @Test
-    fun `staleAttachmentsJob should download any banner attachments`() = runTest {
-        testDispatcher {
-            verify { downloadManager wasNot Called }
+    fun `staleAttachmentsJob should download any banner attachments`() = testScope.runTest {
+        verify { downloadManager wasNot Called }
 
-            val attachment1 = Attachment().apply { id = Random.nextLong() }
-            val attachment2 = Attachment().apply { id = Random.nextLong() }
-            staleAttachmentsChannel.send(listOf(attachment1, attachment2))
-            runCurrent()
-            coVerify(exactly = 1) {
-                downloadManager.downloadAttachment(attachment1.id)
-                downloadManager.downloadAttachment(attachment2.id)
-            }
-            confirmVerified(downloadManager)
+        val attachment1 = Attachment().apply { id = Random.nextLong() }
+        val attachment2 = Attachment().apply { id = Random.nextLong() }
+        staleAttachmentsChannel.send(listOf(attachment1, attachment2))
+        runCurrent()
+        coVerify(exactly = 1) {
+            downloadManager.downloadAttachment(attachment1.id)
+            downloadManager.downloadAttachment(attachment2.id)
         }
+        confirmVerified(downloadManager)
     }
 
     @Test
-    fun `toolBannerAttachmentsJob should download any banner attachments`() = runTest {
-        testDispatcher {
-            verify { downloadManager wasNot Called }
+    fun `toolBannerAttachmentsJob should download any banner attachments`() = testScope.runTest {
+        verify { downloadManager wasNot Called }
 
-            val attachment1 = Attachment().apply { id = Random.nextLong() }
-            val attachment2 = Attachment().apply { id = Random.nextLong() }
-            toolBannerAttachmentsChannel.send(listOf(attachment1, attachment2))
-            runCurrent()
-            coVerify(exactly = 1) {
-                downloadManager.downloadAttachment(attachment1.id)
-                downloadManager.downloadAttachment(attachment2.id)
-            }
-            confirmVerified(downloadManager)
+        val attachment1 = Attachment().apply { id = Random.nextLong() }
+        val attachment2 = Attachment().apply { id = Random.nextLong() }
+        toolBannerAttachmentsChannel.send(listOf(attachment1, attachment2))
+        runCurrent()
+        coVerify(exactly = 1) {
+            downloadManager.downloadAttachment(attachment1.id)
+            downloadManager.downloadAttachment(attachment2.id)
         }
-    }
-
-    private suspend inline fun TestScope.testDispatcher(block: () -> Unit) {
-        val dispatcher = GodToolsDownloadManager.Dispatcher(dao, downloadManager, repository, settings, this)
-        block()
-        dispatcher.shutdown()
+        confirmVerified(downloadManager)
     }
 }
