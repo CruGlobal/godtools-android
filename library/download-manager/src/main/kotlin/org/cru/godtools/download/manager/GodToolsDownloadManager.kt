@@ -54,16 +54,14 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -72,17 +70,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
 
-@VisibleForTesting
-internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
-    .distinct(true)
-    .join(
-        AttachmentTable.SQL_JOIN_TOOL.andOn(
-            ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID)
-                .or(ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID))
-                .or(ToolTable.FIELD_DETAILS_BANNER_ANIMATION.eq(AttachmentTable.FIELD_ID))
-        )
-    )
-    .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
 @VisibleForTesting
 internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
@@ -524,8 +511,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .launchIn(coroutineScope)
 
             // Tool Banner Attachments
-            dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            attachmentsRepository.getAttachmentsFlow()
+                .combineTransform(dao.getAsFlow(Query.select<Tool>())) { attachments, tools ->
+                    val banners =
+                        tools.flatMap { listOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId) }
+                    emit(attachments.filter { !it.isDownloaded && it.id in banners }.map { it.id }.toSet())
+                }
+                .distinctUntilChanged()
+                .conflate()
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
                 .launchIn(coroutineScope)
         }
     }
