@@ -20,7 +20,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -43,12 +42,8 @@ class TasksTest {
     }
     private val toolsRepository = mockk<ToolsRepository>(relaxUnitFun = true)
 
-    private lateinit var tasks: Tasks
-
-    @Before
-    fun setup() {
-        tasks = Tasks(context, dao, downloadManager, jsonApiConverter, mockk(), settings, toolsRepository, mockk())
-    }
+    private val tasks =
+        Tasks(context, mockk(), dao, downloadManager, jsonApiConverter, mockk(), settings, toolsRepository, mockk())
 
     // region initFavoriteTools()
     @Test
