@@ -18,7 +18,7 @@ class BaseDataSyncTasksTest {
 
     @Before
     fun setup() {
-        tasks = object : BaseDataSyncTasks(mockk(), languagesRepository) {}
+        tasks = object : BaseDataSyncTasks(mockk(), mockk(), languagesRepository) {}
     }
 
     @Test
