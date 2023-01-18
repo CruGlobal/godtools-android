@@ -12,6 +12,7 @@ import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findAsync
+import org.ccci.gto.android.common.db.get
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.model.Attachment
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -40,7 +41,21 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         dao.updateAsync(attachment, AttachmentTable.COLUMN_DOWNLOADED).await()
     }
 
-    override fun insert(vararg attachments: Attachment) {
-        attachments.forEach { dao.insert(it) }
+    // region Sync Methods
+    override fun storeAttachmentsFromSync(attachments: Collection<Attachment>) {
+        attachments.forEach {
+            dao.updateOrInsert(
+                it,
+                AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
+            )
+        }
     }
+
+    override fun removeAttachmentsMissingFromSync(toolId: Long, syncedAttachments: Collection<Attachment>) {
+        val keep = syncedAttachments.mapTo(mutableSetOf()) { it.id }
+        Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(toolId)).get(dao)
+            .filterNot { it.id in keep }
+            .forEach { dao.delete(it) }
+    }
+    // endregion Sync Methods
 }

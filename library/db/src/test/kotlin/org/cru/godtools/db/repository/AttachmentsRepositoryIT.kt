@@ -1,6 +1,7 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -25,7 +26,7 @@ abstract class AttachmentsRepositoryIT {
             id = 1
             filename = "test.ext"
         }
-        repository.insert(attachment)
+        repository.storeAttachmentsFromSync(listOf(attachment))
         assertEquals(attachment.filename, assertNotNull(repository.findAttachment(1)).filename)
     }
 
@@ -39,23 +40,25 @@ abstract class AttachmentsRepositoryIT {
         repository.findAttachmentFlow(1).test {
             assertNull(awaitItem())
 
-            repository.insert(attachment)
+            repository.storeAttachmentsFromSync(listOf(attachment))
             assertEquals(attachment.filename, assertNotNull(awaitItem()).filename)
         }
     }
 
     @Test
     fun `getAttachments()`() = testScope.runTest {
-        repository.insert(
-            Attachment().apply {
-                id = 1
-                filename = "name1.bin"
-                isDownloaded = true
-            },
-            Attachment().apply {
-                id = 2
-                filename = "name2.bin"
-            }
+        repository.storeAttachmentsFromSync(
+            listOf(
+                Attachment().apply {
+                    id = 1
+                    filename = "name1.bin"
+                    isDownloaded = true
+                },
+                Attachment().apply {
+                    id = 2
+                    filename = "name2.bin"
+                }
+            )
         )
 
         val attachments = repository.getAttachments()
@@ -70,11 +73,13 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
-        repository.insert(
-            Attachment().apply {
-                id = 1
-                isDownloaded = false
-            }
+        repository.storeAttachmentsFromSync(
+            listOf(
+                Attachment().apply {
+                    id = 1
+                    isDownloaded = false
+                }
+            )
         )
         assertFalse(assertNotNull(repository.findAttachment(1)).isDownloaded)
 
@@ -87,4 +92,70 @@ abstract class AttachmentsRepositoryIT {
         repository.updateAttachmentDownloaded(1, false)
         assertFalse(assertNotNull(repository.findAttachment(1)).isDownloaded)
     }
+
+    // region storeAttachmentsFromSync()
+    @Test
+    fun `storeAttachmentsFromSync() - Update existing attachment`() = testScope.runTest {
+        val attachment = Attachment().apply {
+            id = Random.nextLong()
+            filename = "initial.ext"
+            sha256 = "initial"
+        }
+
+        repository.storeAttachmentsFromSync(listOf(attachment))
+        assertNotNull(repository.findAttachment(attachment.id)) {
+            assertEquals("initial.ext", it.filename)
+            assertEquals("initial", it.sha256)
+        }
+
+        attachment.filename = "updated.ext"
+        attachment.sha256 = "updated"
+        repository.storeAttachmentsFromSync(listOf(attachment))
+        assertNotNull(repository.findAttachment(attachment.id)) {
+            assertEquals("updated.ext", it.filename)
+            assertEquals("updated", it.sha256)
+        }
+    }
+
+    @Test
+    fun `storeAttachmentsFromSync() - Don't overwrite downloaded flag`() = testScope.runTest {
+        val attachment = Attachment().apply {
+            id = Random.nextLong()
+            filename = "file.ext"
+            sha256 = "file"
+        }
+
+        repository.storeAttachmentsFromSync(listOf(attachment))
+        assertFalse(assertNotNull(repository.findAttachment(attachment.id)).isDownloaded)
+        repository.updateAttachmentDownloaded(attachment.id, true)
+        assertTrue(assertNotNull(repository.findAttachment(attachment.id)).isDownloaded)
+        repository.storeAttachmentsFromSync(listOf(attachment))
+        assertTrue(assertNotNull(repository.findAttachment(attachment.id)).isDownloaded)
+    }
+    // endregion storeAttachmentsFromSync()
+
+    // region removeAttachmentsMissingFromSync()
+    @Test
+    fun `removeAttachmentsMissingFromSync()`() = testScope.runTest {
+        val attachment1 = Attachment().apply {
+            id = Random.nextLong()
+            toolId = 1
+        }
+        val attachment2 = Attachment().apply {
+            id = Random.nextLong()
+            toolId = 1
+        }
+        val attachment3 = Attachment().apply {
+            id = Random.nextLong()
+            toolId = 2
+        }
+        repository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
+
+        repository.removeAttachmentsMissingFromSync(1, listOf(attachment2))
+        assertNotNull(repository.getAttachments()) {
+            assertEquals(2, it.size)
+            assertEquals(setOf(attachment2.id, attachment3.id), it.map { it.id }.toSet())
+        }
+    }
+    // endregion removeAttachmentsMissingFromSync()
 }

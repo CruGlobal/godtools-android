@@ -11,6 +11,8 @@ interface AttachmentsRepository {
 
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 
-    // TODO: temporary for testing
-    fun insert(vararg attachments: Attachment)
+    // region Sync Methods
+    fun storeAttachmentsFromSync(attachments: Collection<Attachment>)
+    fun removeAttachmentsMissingFromSync(toolId: Long, syncedAttachments: Collection<Attachment>)
+    // endregion Sync Methods
 }
