@@ -488,8 +488,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             // Download Favorite tool translations in the primary, parallel, and default languages
             settings.primaryLanguageFlow
                 .combineTransform(settings.parallelLanguageFlow) { prim, para ->
-                    emit(listOfNotNull(prim, para, Settings.defaultLanguage))
+                    emit(setOfNotNull(prim, para, Settings.defaultLanguage))
                 }
+                .distinctUntilChanged()
                 .flatMapLatest { repository.getFavoriteTranslationsThatNeedDownload(it) }
                 .map { it.map { TranslationKey(it) }.toSet() }
                 .distinctUntilChanged()
