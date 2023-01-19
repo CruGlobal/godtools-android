@@ -8,17 +8,17 @@ import androidx.collection.valueIterator
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 internal abstract class BaseDataSyncTasks internal constructor(
+    private val attachmentsRepository: AttachmentsRepository,
     protected val dao: GodToolsDao,
     private val languagesRepository: LanguagesRepository,
 ) : BaseSyncTasks() {
@@ -36,7 +36,7 @@ internal abstract class BaseDataSyncTasks internal constructor(
             dao.delete(tool)
 
             // delete any orphaned objects for this tool
-            dao.delete(Attachment::class.java, AttachmentTable.FIELD_TOOL.eq(tool.id))
+            attachmentsRepository.deleteAttachmentsFor(tool)
             tool.code?.let { dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(it)) }
         }
     }
@@ -66,10 +66,8 @@ internal abstract class BaseDataSyncTasks internal constructor(
             )
         }
         if (includes.include(Tool.JSON_ATTACHMENTS)) tool.attachments?.let { attachments ->
-            storeAttachments(
-                attachments,
-                existing = index(Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(tool.id)).get(dao))
-            )
+            attachmentsRepository.storeAttachmentsFromSync(attachments)
+            attachmentsRepository.removeAttachmentsMissingFromSync(tool.id, attachments)
         }
         if (includes.include(Tool.JSON_METATOOL)) {
             tool.metatool?.let {
@@ -124,21 +122,4 @@ internal abstract class BaseDataSyncTasks internal constructor(
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
     }
     // endregion Translations
-
-    // region Attachments
-    private fun storeAttachments(attachments: List<Attachment>, existing: LongSparseArray<Attachment>?) {
-        attachments.forEach {
-            storeAttachment(it)
-            existing?.remove(it.id)
-        }
-
-        // prune any existing attachments that weren't synced
-        existing?.valueIterator()?.forEach { dao.delete(it) }
-    }
-
-    private fun storeAttachment(attachment: Attachment) = dao.updateOrInsert(
-        attachment,
-        AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
-    )
-    // endregion Attachments
 }

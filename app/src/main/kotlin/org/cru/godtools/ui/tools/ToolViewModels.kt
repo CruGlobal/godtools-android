@@ -20,13 +20,13 @@ import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.AttachmentsRepository
 import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
@@ -62,7 +62,7 @@ class ToolViewModels @Inject constructor(
 
         val banner = tool
             .map { it?.bannerId }.distinctUntilChanged()
-            .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+            .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
             .map { it?.takeIf { it.isDownloaded } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
         val bannerFile = tool.attachmentFileFlow { it?.bannerId }
@@ -131,7 +131,7 @@ class ToolViewModels @Inject constructor(
 
     private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
         .map(transform).distinctUntilChanged()
-        .flatMapLatest { it?.let { attachmentsRepository.getAttachmentFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
         .map { it?.takeIf { it.isDownloaded } }
         .map { it?.getFile(fileSystem) }
         .distinctUntilChanged()

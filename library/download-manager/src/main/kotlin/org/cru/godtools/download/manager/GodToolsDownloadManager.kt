@@ -51,18 +51,17 @@ import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.LocalFile
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.LocalFileTable
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -71,22 +70,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
 
-@VisibleForTesting
-internal val QUERY_STALE_ATTACHMENTS = Query.select<Attachment>()
-    .distinct(true)
-    .join(AttachmentTable.SQL_JOIN_LOCAL_FILE.type("LEFT"))
-    .where(AttachmentTable.SQL_WHERE_DOWNLOADED.and(LocalFileTable.FIELD_NAME.isNull()))
-@VisibleForTesting
-internal val QUERY_TOOL_BANNER_ATTACHMENTS = Query.select<Attachment>()
-    .distinct(true)
-    .join(
-        AttachmentTable.SQL_JOIN_TOOL.andOn(
-            ToolTable.FIELD_BANNER.eq(AttachmentTable.FIELD_ID)
-                .or(ToolTable.FIELD_DETAILS_BANNER.eq(AttachmentTable.FIELD_ID))
-                .or(ToolTable.FIELD_DETAILS_BANNER_ANIMATION.eq(AttachmentTable.FIELD_ID))
-        )
-    )
-    .where(AttachmentTable.FIELD_DOWNLOADED.eq(false))
 @VisibleForTesting
 internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
@@ -104,16 +87,13 @@ internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFi
     .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
 @VisibleForTesting
 internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
-    .join(LocalFileTable.SQL_JOIN_ATTACHMENT.type("LEFT"))
     .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-    .where(
-        AttachmentTable.FIELD_ID.`is`(Expression.NULL)
-            .and(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
-    )
+    .where(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
+    private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
@@ -126,6 +106,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @Inject
     internal constructor(
         attachmentsApi: AttachmentsApi,
+        attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
@@ -134,6 +115,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         workManager: Lazy<WorkManager>
     ) : this(
         attachmentsApi,
+        attachmentsRepository,
         dao,
         fs,
         manifestParser,
@@ -185,7 +167,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment = dao.find<Attachment>(attachmentId) ?: return
+            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
             val wasDownloaded = attachment.isDownloaded
 
@@ -211,7 +193,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     }
 
                     if (attachment.isDownloaded || wasDownloaded) {
-                        dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                        attachmentsRepository.updateAttachmentDownloaded(attachmentId, attachment.isDownloaded)
                     }
                 }
             }
@@ -222,7 +204,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (!fs.exists()) return
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment: Attachment = dao.find(attachmentId) ?: return
+            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
             val filename = attachment.localFilename ?: return
 
             filesystemMutex.read.withLock {
@@ -246,7 +228,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                             attachment.isDownloaded = true
                         } finally {
                             // update attachment download state
-                            dao.update(attachment, AttachmentTable.COLUMN_DOWNLOADED)
+                            attachmentsRepository.updateAttachmentDownloaded(attachmentId, attachment.isDownloaded)
                         }
                     }
                 }
@@ -452,10 +434,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
 
                 // delete any LocalFiles that are no longer being used
-                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES).forEach {
-                    dao.delete(it)
-                    it.getFile(fs).delete()
-                }
+                val attachments = attachmentsRepository.getAttachments()
+                    .filter { it.isDownloaded }
+                    .mapNotNullTo(mutableSetOf()) { it.localFilename }
+                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                    .filterNot { it.filename in attachments }
+                    .forEach {
+                        dao.delete(it)
+                        it.getFile(fs).delete()
+                    }
 
                 // delete any orphaned files
                 fs.rootDir().listFiles()
@@ -474,6 +461,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @Singleton
     @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher @VisibleForTesting internal constructor(
+        attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
         repository: DownloadManagerRepository,
@@ -482,11 +470,19 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) {
         @Inject
         internal constructor(
+            attachmentsRepository: AttachmentsRepository,
             dao: GodToolsDao,
             downloadManager: GodToolsDownloadManager,
             repository: DownloadManagerRepository,
             settings: Settings
-        ) : this(dao, downloadManager, repository, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        ) : this(
+            attachmentsRepository,
+            dao,
+            downloadManager,
+            repository,
+            settings,
+            CoroutineScope(Dispatchers.Default + SupervisorJob())
+        )
 
         init {
             // Download Favorite tool translations in the primary, parallel, and default languages
@@ -504,13 +500,26 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .launchIn(coroutineScope)
 
             // Stale Downloaded Attachments
-            dao.getAsFlow(QUERY_STALE_ATTACHMENTS)
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            attachmentsRepository.getAttachmentsFlow()
+                .combineTransform(dao.getAsFlow(Query.select<LocalFile>())) { attachments, files ->
+                    val filenames = files.mapTo(mutableSetOf()) { it.filename }
+                    emit(attachments.filter { it.isDownloaded && it.localFilename !in filenames }.map { it.id }.toSet())
+                }
+                .distinctUntilChanged()
+                .conflate()
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
                 .launchIn(coroutineScope)
 
             // Tool Banner Attachments
-            dao.getAsFlow(QUERY_TOOL_BANNER_ATTACHMENTS)
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it.id) } } } }
+            attachmentsRepository.getAttachmentsFlow()
+                .combineTransform(dao.getAsFlow(Query.select<Tool>())) { attachments, tools ->
+                    val banners =
+                        tools.flatMap { listOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId) }
+                    emit(attachments.filter { !it.isDownloaded && it.id in banners }.map { it.id }.toSet())
+                }
+                .distinctUntilChanged()
+                .conflate()
+                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
                 .launchIn(coroutineScope)
         }
     }

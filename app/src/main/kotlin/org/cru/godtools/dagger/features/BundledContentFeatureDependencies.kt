@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.greenrobot.eventbus.EventBus
@@ -19,6 +20,7 @@ interface BundledContentFeatureDependencies {
     fun application(): Application
     @ApplicationContext
     fun appContext(): Context
+    fun attachmentsRepository(): AttachmentsRepository
     fun dao(): GodToolsDao
     fun downloadManager(): GodToolsDownloadManager
     fun eventBus(): EventBus

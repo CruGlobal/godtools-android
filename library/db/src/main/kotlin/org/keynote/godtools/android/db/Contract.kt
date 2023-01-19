@@ -273,7 +273,7 @@ object Contract : BaseContract() {
         // endregion DB migrations
     }
 
-    object AttachmentTable : BaseTable() {
+    internal object AttachmentTable : BaseTable() {
         internal const val TABLE_NAME = "attachments"
         internal val TABLE = Table.forClass<Attachment>()
 
@@ -283,10 +283,8 @@ object Contract : BaseContract() {
         internal const val COLUMN_LOCALFILENAME = "local_filename"
         const val COLUMN_DOWNLOADED = "downloaded"
 
-        val FIELD_ID = TABLE.field(COLUMN_ID)
+        private val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
-        internal val FIELD_LOCALFILENAME = TABLE.field(COLUMN_LOCALFILENAME)
-        val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)
 
         internal val PROJECTION_ALL =
             arrayOf(COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_LOCALFILENAME, COLUMN_DOWNLOADED)
@@ -297,12 +295,7 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_LOCALFILENAME = "$COLUMN_LOCALFILENAME TEXT"
         private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
 
-        val SQL_JOIN_TOOL = TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_ID))
-        val SQL_JOIN_LOCAL_FILE = TABLE.join(LocalFileTable.TABLE).on(FIELD_LOCALFILENAME.eq(LocalFileTable.FIELD_NAME))
-
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-        val SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true)
-        val SQL_WHERE_NOT_DOWNLOADED = FIELD_DOWNLOADED.eq(false)
 
         internal val SQL_CREATE_TABLE = create(
             TABLE_NAME,
@@ -329,8 +322,6 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME)
 
-        val SQL_JOIN_ATTACHMENT =
-            TABLE.join(AttachmentTable.TABLE).on(FIELD_NAME.eq(AttachmentTable.FIELD_LOCALFILENAME))
         val SQL_JOIN_TRANSLATION_FILE =
             TABLE.join(TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE))
 

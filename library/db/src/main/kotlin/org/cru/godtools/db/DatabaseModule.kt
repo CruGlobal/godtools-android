@@ -12,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -22,6 +23,7 @@ import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
+import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,6 +34,10 @@ internal object DatabaseModule {
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
+
+    @Provides
+    @Reusable
+    fun LegacyAttachmentsRepository.attachmentsRepository(): AttachmentsRepository = this
 
     @Provides
     @Reusable

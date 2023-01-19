@@ -20,13 +20,12 @@ import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.ToolsRepository
@@ -43,6 +42,7 @@ internal const val NUMBER_OF_FAVORITES = 4
 @Reusable
 internal class Tasks @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
@@ -87,7 +87,7 @@ internal class Tasks @Inject constructor(
                 tools.forEach { tool ->
                     if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
                     tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
-                    tool.attachments?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+                    tool.attachments?.let { attachmentsRepository.storeInitialAttachments(it) }
                 }
             }
         }
@@ -136,8 +136,8 @@ internal class Tasks @Inject constructor(
             val files = context.assets.list("attachments")?.toSet().orEmpty()
 
             // find any attachments that aren't downloaded, but came bundled with the resource for
-            dao.get(Query.select<Attachment>().where(AttachmentTable.SQL_WHERE_NOT_DOWNLOADED))
-                .filter { files.contains(it.localFilename) }
+            attachmentsRepository.getAttachments()
+                .filter { !it.isDownloaded && it.localFilename in files }
                 .forEach { attachment ->
                     launch(Dispatchers.IO) {
                         context.assets.open("attachments/${attachment.localFilename}").use {
