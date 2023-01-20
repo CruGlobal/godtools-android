@@ -91,7 +91,7 @@ android {
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             signingConfigs.getByName("release")
                 .takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
