@@ -91,7 +91,7 @@ firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistrib
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.2"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
-firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.2.0"
+firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.3.0"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.1.1"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.2"
