@@ -35,7 +35,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -123,14 +122,13 @@ class GodToolsDownloadManagerTest {
             translationsApi,
             translationsRepository,
             { workManager },
-            this,
+            backgroundScope,
             dispatcher
         )
         try {
             if (!enableCleanupActor) downloadManager.cleanupActor.close()
             block(downloadManager)
         } finally {
-            downloadManager.cleanupActor.close()
             Dispatchers.resetMain()
         }
     }
@@ -538,7 +536,7 @@ class GodToolsDownloadManagerTest {
             assertCleanupActorRan(0)
             runCurrent()
             assertCleanupActorRan(1)
-            advanceUntilIdle()
+            advanceTimeBy(50 * CLEANUP_DELAY)
             assertCleanupActorRan(1)
         }
     }
@@ -548,10 +546,10 @@ class GodToolsDownloadManagerTest {
         setupCleanupActorMocks()
 
         withDownloadManager(enableCleanupActor = true) {
-            advanceUntilIdle()
+            advanceTimeBy(50 * CLEANUP_DELAY)
             assertCleanupActorRan(1)
             it.cleanupActor.send(Unit)
-            advanceUntilIdle()
+            advanceTimeBy(50 * CLEANUP_DELAY)
             assertCleanupActorRan(2)
         }
     }
