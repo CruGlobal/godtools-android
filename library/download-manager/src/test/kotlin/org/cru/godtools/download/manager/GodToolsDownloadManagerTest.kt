@@ -1,6 +1,5 @@
 package org.cru.godtools.download.manager
 
-import androidx.lifecycle.Observer
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -103,11 +102,6 @@ class GodToolsDownloadManagerTest {
     private val translationsRepository = mockk<TranslationsRepository>()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
-    }
-
-    private val downloadProgress = mutableListOf<DownloadProgress?>()
-    private val observer = mockk<Observer<DownloadProgress?>> {
-        every { onChanged(captureNullable(downloadProgress)) } returns Unit
     }
 
     @OptIn(ExperimentalContracts::class)
