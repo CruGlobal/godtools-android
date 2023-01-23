@@ -30,15 +30,12 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.random.Random
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
@@ -113,7 +110,6 @@ class GodToolsDownloadManagerTest {
         contract {
             callsInPlace(block, InvocationKind.EXACTLY_ONCE)
         }
-        Dispatchers.setMain(dispatcher)
         val downloadManager = GodToolsDownloadManager(
             attachmentsApi,
             attachmentsRepository,
@@ -126,12 +122,8 @@ class GodToolsDownloadManagerTest {
             testScope.backgroundScope,
             dispatcher
         )
-        try {
-            if (!enableCleanupActor) downloadManager.cleanupActor.close()
-            block(downloadManager)
-        } finally {
-            Dispatchers.resetMain()
-        }
+        if (!enableCleanupActor) downloadManager.cleanupActor.close()
+        block(downloadManager)
     }
 
     // region Download Progress
