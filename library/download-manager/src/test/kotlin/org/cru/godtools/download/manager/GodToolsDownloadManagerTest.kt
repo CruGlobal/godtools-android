@@ -102,6 +102,7 @@ class GodToolsDownloadManagerTest {
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
+    private val testScope = TestScope()
 
     @OptIn(ExperimentalContracts::class)
     private inline fun TestScope.withDownloadManager(
@@ -122,7 +123,7 @@ class GodToolsDownloadManagerTest {
             translationsApi,
             translationsRepository,
             { workManager },
-            backgroundScope,
+            testScope.backgroundScope,
             dispatcher
         )
         try {
@@ -135,7 +136,7 @@ class GodToolsDownloadManagerTest {
 
     // region Download Progress
     @Test
-    fun verifyDownloadProgressFlow() = runTest {
+    fun verifyDownloadProgressFlow() = testScope.runTest {
         val translationKey = TranslationKey(TOOL, Locale.ENGLISH)
         withDownloadManager { downloadManager ->
             downloadManager.getDownloadProgressFlow(TOOL, Locale.ENGLISH).test {
@@ -181,7 +182,7 @@ class GodToolsDownloadManagerTest {
 
     // region downloadAttachment()
     @Test
-    fun `downloadAttachment()`() = runTest {
+    fun `downloadAttachment()`() = testScope.runTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
@@ -198,7 +199,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadAttachment() - Already Downloaded`() = runTest {
+    fun `downloadAttachment() - Already Downloaded`() = testScope.runTest {
         attachment.isDownloaded = true
 
         withDownloadManager { it.downloadAttachment(attachment.id) }
@@ -207,7 +208,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = runTest {
+    fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = testScope.runTest {
         attachment.isDownloaded = true
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
@@ -225,7 +226,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = runTest {
+    fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = testScope.runTest {
         attachment.isDownloaded = true
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
@@ -242,7 +243,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadAttachment() - Download fails`() = runTest {
+    fun `downloadAttachment() - Download fails`() = testScope.runTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
 
@@ -254,7 +255,7 @@ class GodToolsDownloadManagerTest {
 
     // region importAttachment()
     @Test
-    fun verifyImportAttachment() = runTest {
+    fun verifyImportAttachment() = testScope.runTest {
         every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
         coEvery { attachment.getFile(fs) } returns file
 
@@ -270,7 +271,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentUnableToCreateResourcesDir() = runTest {
+    fun verifyImportAttachmentUnableToCreateResourcesDir() = testScope.runTest {
         coEvery { fs.exists() } returns false
         coEvery { attachment.getFile(fs) } returns file
 
@@ -282,7 +283,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentAttachmentAlreadyDownloaded() = runTest {
+    fun verifyImportAttachmentAttachmentAlreadyDownloaded() = testScope.runTest {
         attachment.isDownloaded = true
 
         withDownloadManager { downloadManager ->
@@ -297,7 +298,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyImportAttachmentLocalFileExists() = runTest {
+    fun verifyImportAttachmentLocalFileExists() = testScope.runTest {
         attachment.isDownloaded = false
 
         withDownloadManager { downloadManager ->
@@ -330,7 +331,7 @@ class GodToolsDownloadManagerTest {
 
     // region downloadLatestPublishedTranslation()
     @Test
-    fun `downloadLatestPublishedTranslation() - Files`() = runTest {
+    fun `downloadLatestPublishedTranslation() - Files`() = testScope.runTest {
         val progressFlow: ReceiveTurbine<DownloadProgress?>
         translation.manifestFileName = "manifest.xml"
         coEvery {
@@ -388,7 +389,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadLatestPublishedTranslation() - Zip`() = runTest {
+    fun `downloadLatestPublishedTranslation() - Zip`() = testScope.runTest {
         val progressFlow: ReceiveTurbine<DownloadProgress?>
         coEvery {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
@@ -432,7 +433,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = runTest {
+    fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = testScope.runTest {
         val progressFlow: ReceiveTurbine<DownloadProgress?>
         coEvery {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
@@ -456,7 +457,7 @@ class GodToolsDownloadManagerTest {
     // endregion downloadLatestPublishedTranslation()
 
     @Test
-    fun verifyImportTranslation() = runTest {
+    fun verifyImportTranslation() = testScope.runTest {
         val progressFlow: ReceiveTurbine<DownloadProgress?>
         coEvery { translationsRepository.getLatestTranslation(any(), any(), any()) } returns null
         every { dao.find<LocalFile>(any<String>()) } returns null
@@ -488,7 +489,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPruneStaleTranslations() = runTest {
+    fun verifyPruneStaleTranslations() = testScope.runTest {
         val valid1 = Translation().apply {
             toolCode = TOOL
             languageCode = Locale.ENGLISH
@@ -528,7 +529,7 @@ class GodToolsDownloadManagerTest {
 
     // region Cleanup
     @Test
-    fun verifyCleanupActorInitialRun() = runTest {
+    fun verifyCleanupActorInitialRun() = testScope.runTest {
         setupCleanupActorMocks()
 
         withDownloadManager(enableCleanupActor = true) {
@@ -542,7 +543,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyCleanupActorRunsWhenTriggered() = runTest {
+    fun verifyCleanupActorRunsWhenTriggered() = testScope.runTest {
         setupCleanupActorMocks()
 
         withDownloadManager(enableCleanupActor = true) {
@@ -582,7 +583,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyDetectMissingFiles() = runTest {
+    fun verifyDetectMissingFiles() = testScope.runTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
         every { dao.get(QUERY_LOCAL_FILES) } returns listOf(LocalFile(file.name), LocalFile(missingFile.name))
@@ -598,7 +599,7 @@ class GodToolsDownloadManagerTest {
 
     // region cleanFilesystem()
     @Test
-    fun `cleanFilesystem()`() = runTest {
+    fun `cleanFilesystem()`() = testScope.runTest {
         val orphan = spyk(getTmpFile(true))
         val keep = spyk(getTmpFile(true))
         val translation = TranslationFile(1, orphan.name)
@@ -624,7 +625,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `cleanFilesystem() - keep downloaded attachments`() = runTest {
+    fun `cleanFilesystem() - keep downloaded attachments`() = testScope.runTest {
         val keep = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphanName = orphan.name
