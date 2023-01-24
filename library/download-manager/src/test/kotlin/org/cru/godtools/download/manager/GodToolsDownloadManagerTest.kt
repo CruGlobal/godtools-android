@@ -25,6 +25,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -49,7 +50,10 @@ import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.hasItem
+import org.hamcrest.Matchers.hasItems
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -76,7 +80,9 @@ class GodToolsDownloadManagerTest {
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
+        every { deleteAsync(any()) } returns CompletableDeferred(Unit)
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
+        every { find<LocalFile>(any<String>()) } returns null
         excludeRecords { transaction(any(), any()) }
     }
     private val files = mutableMapOf<String, File>()
@@ -511,7 +517,7 @@ class GodToolsDownloadManagerTest {
 
     private fun setupCleanupActorMocks() {
         every { dao.get(QUERY_LOCAL_FILES) } returns emptyList()
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
+        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(emptyList())
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns emptyList()
     }
@@ -520,15 +526,19 @@ class GodToolsDownloadManagerTest {
         if (times > 0) {
             coVerifyOrder {
                 repeat(times) {
-                    // detectMissingFiles()
                     fs.exists()
+
+                    // detectMissingFiles()
                     fs.rootDir()
                     dao.get(QUERY_LOCAL_FILES)
 
+                    // deleteOrphanedTranslationFiles()
+                    dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+
                     // cleanupFilesystem()
-                    fs.exists()
-                    dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
                     dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+
+                    // deleteOrphanedFiles()
                     fs.rootDir()
                 }
             }
@@ -551,14 +561,21 @@ class GodToolsDownloadManagerTest {
         }
     }
 
-    // region cleanFilesystem()
     @Test
-    fun `cleanFilesystem()`() = testScope.runTest {
+    fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
+        val file = TranslationFile(1, "file")
+        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(listOf(file))
+
+        downloadManager.deleteOrphanedTranslationFiles()
+        verify { dao.deleteAsync(file) }
+    }
+
+    // region deleteUnusedDownloadedFiles()
+    @Test
+    fun `deleteUnusedDownloadedFiles()`() = testScope.runTest {
         val orphan = spyk(getTmpFile(true))
         val keep = spyk(getTmpFile(true))
-        val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns listOf(translation)
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(localFile)
         keep.name.let {
@@ -568,10 +585,9 @@ class GodToolsDownloadManagerTest {
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        downloadManager.cleanFilesystem()
+        downloadManager.deleteUnusedDownloadedFiles()
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
         verifyOrder {
-            dao.delete(translation)
             dao.delete(localFile)
             orphan.delete()
         }
@@ -579,11 +595,10 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `cleanFilesystem() - keep downloaded attachments`() = testScope.runTest {
+    fun `deleteUnusedDownloadedFiles() - keep downloaded attachments`() = testScope.runTest {
         val keep = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphanName = orphan.name
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
         coEvery { attachmentsRepository.getAttachments() } returns listOf(
             Attachment().apply {
                 filename = keep.name
@@ -603,16 +618,29 @@ class GodToolsDownloadManagerTest {
         }
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        downloadManager.cleanFilesystem()
-        assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
+        downloadManager.deleteUnusedDownloadedFiles()
+        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
         verifyOrder {
             dao.delete(LocalFile(orphanName))
             orphan.delete()
         }
         verify(exactly = 0) { keep.delete() }
     }
-    // endregion cleanFilesystem()
+    // endregion deleteUnusedDownloadedFiles()
+
+    // region deleteOrphanedFiles()
+    @Test
+    fun `deleteOrphanedFiles()`() = testScope.runTest {
+        val keep = getTmpFile(create = true)
+        val orphan = getTmpFile(create = true)
+        every { dao.find<LocalFile>(keep.name) } returns LocalFile(keep.name)
+
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
+        downloadManager.deleteOrphanedFiles()
+        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
+    }
+    // endregion deleteOrphanedFiles()
     // endregion Cleanup
 
     private fun getTmpFile(create: Boolean = false, suffix: String? = null) =

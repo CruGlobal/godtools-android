@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -403,52 +404,56 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             delay(CLEANUP_DELAY)
             emit(Unit)
         }.conflate().collect {
-            detectMissingFiles()
-            cleanFilesystem()
-        }
-    }
-
-    @VisibleForTesting
-    internal suspend fun detectMissingFiles() {
-        if (!fs.exists()) return
-
-        filesystemMutex.write.withLock {
-            withContext(ioDispatcher) {
-                // get the set of all downloaded files
-                val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
-
-                // check for missing files
-                dao.get(QUERY_LOCAL_FILES)
-                    .filterNot { files.contains(it.getFile(fs)) }
-                    .forEach { dao.delete(it) }
+            if (fs.exists()) {
+                detectMissingFiles()
+                deleteOrphanedTranslationFiles()
+                deleteUnusedDownloadedFiles()
+                deleteOrphanedFiles()
             }
         }
     }
 
     @VisibleForTesting
-    internal suspend fun cleanFilesystem() {
-        if (!fs.exists()) return
-        filesystemMutex.write.withLock {
-            withContext(ioDispatcher) {
-                // remove any TranslationFiles for translations that are no longer downloaded
-                dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
+    internal suspend fun detectMissingFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            // get the set of all downloaded files
+            val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
-                // delete any LocalFiles that are no longer being used
-                val attachments = attachmentsRepository.getAttachments()
-                    .filter { it.isDownloaded }
-                    .mapNotNullTo(mutableSetOf()) { it.localFilename }
-                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
-                    .filterNot { it.filename in attachments }
-                    .forEach {
-                        dao.delete(it)
-                        it.getFile(fs).delete()
-                    }
+            // check for missing files
+            dao.get(QUERY_LOCAL_FILES)
+                .filterNot { files.contains(it.getFile(fs)) }
+                .forEach { dao.delete(it) }
+        }
+    }
 
-                // delete any orphaned files
-                fs.rootDir().listFiles()
-                    ?.filter { dao.find<LocalFile>(it.name) == null }
-                    ?.forEach { it.delete() }
-            }
+    @VisibleForTesting
+    internal suspend fun deleteOrphanedTranslationFiles() = filesystemMutex.write.withLock {
+        dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).await()
+            .map { dao.deleteAsync(it) }
+            .joinAll()
+    }
+
+    @VisibleForTesting
+    internal suspend fun deleteUnusedDownloadedFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            val attachments = attachmentsRepository.getAttachments()
+                .filter { it.isDownloaded }
+                .mapNotNullTo(mutableSetOf()) { it.localFilename }
+            dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                .filterNot { it.filename in attachments }
+                .forEach {
+                    dao.delete(it)
+                    it.getFile(fs).delete()
+                }
+        }
+    }
+
+    @VisibleForTesting
+    internal suspend fun deleteOrphanedFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            fs.rootDir().listFiles()
+                ?.filter { dao.find<LocalFile>(it.name) == null }
+                ?.forEach { it.delete() }
         }
     }
     // endregion Cleanup
