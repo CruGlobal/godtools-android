@@ -570,9 +570,9 @@ class GodToolsDownloadManagerTest {
         verify { dao.deleteAsync(file) }
     }
 
-    // region cleanFilesystem()
+    // region deleteUnusedDownloadedFiles()
     @Test
-    fun `cleanFilesystem()`() = testScope.runTest {
+    fun `deleteUnusedDownloadedFiles()`() = testScope.runTest {
         val orphan = spyk(getTmpFile(true))
         val keep = spyk(getTmpFile(true))
         val localFile = LocalFile(orphan.name)
@@ -585,7 +585,7 @@ class GodToolsDownloadManagerTest {
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
-        downloadManager.cleanFilesystem()
+        downloadManager.deleteUnusedDownloadedFiles()
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
         verifyOrder {
             dao.delete(localFile)
@@ -595,7 +595,7 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun `cleanFilesystem() - keep downloaded attachments`() = testScope.runTest {
+    fun `deleteUnusedDownloadedFiles() - keep downloaded attachments`() = testScope.runTest {
         val keep = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphanName = orphan.name
@@ -619,7 +619,7 @@ class GodToolsDownloadManagerTest {
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
-        downloadManager.cleanFilesystem()
+        downloadManager.deleteUnusedDownloadedFiles()
         assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
         verifyOrder {
             dao.delete(LocalFile(orphanName))
@@ -627,7 +627,7 @@ class GodToolsDownloadManagerTest {
         }
         verify(exactly = 0) { keep.delete() }
     }
-    // endregion cleanFilesystem()
+    // endregion deleteUnusedDownloadedFiles()
 
     // region deleteOrphanedFiles()
     @Test

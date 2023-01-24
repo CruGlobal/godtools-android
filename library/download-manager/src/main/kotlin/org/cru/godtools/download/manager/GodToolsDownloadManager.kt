@@ -407,7 +407,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             if (fs.exists()) {
                 detectMissingFiles()
                 deleteOrphanedTranslationFiles()
-                cleanFilesystem()
+                deleteUnusedDownloadedFiles()
                 deleteOrphanedFiles()
             }
         }
@@ -434,20 +434,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
-    internal suspend fun cleanFilesystem() {
-        filesystemMutex.write.withLock {
-            withContext(ioDispatcher) {
-                // delete any LocalFiles that are no longer being used
-                val attachments = attachmentsRepository.getAttachments()
-                    .filter { it.isDownloaded }
-                    .mapNotNullTo(mutableSetOf()) { it.localFilename }
-                dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
-                    .filterNot { it.filename in attachments }
-                    .forEach {
-                        dao.delete(it)
-                        it.getFile(fs).delete()
-                    }
-            }
+    internal suspend fun deleteUnusedDownloadedFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            val attachments = attachmentsRepository.getAttachments()
+                .filter { it.isDownloaded }
+                .mapNotNullTo(mutableSetOf()) { it.localFilename }
+            dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                .filterNot { it.filename in attachments }
+                .forEach {
+                    dao.delete(it)
+                    it.getFile(fs).delete()
+                }
         }
     }
 
