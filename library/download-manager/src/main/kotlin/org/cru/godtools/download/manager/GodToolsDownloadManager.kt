@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -405,6 +406,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         }.conflate().collect {
             if (fs.exists()) {
                 detectMissingFiles()
+                deleteOrphanedTranslationFiles()
                 cleanFilesystem()
                 deleteOrphanedFiles()
             }
@@ -425,12 +427,16 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @VisibleForTesting
+    internal suspend fun deleteOrphanedTranslationFiles() = filesystemMutex.write.withLock {
+        dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).await()
+            .map { dao.deleteAsync(it) }
+            .joinAll()
+    }
+
+    @VisibleForTesting
     internal suspend fun cleanFilesystem() {
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
-                // remove any TranslationFiles for translations that are no longer downloaded
-                dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).forEach { dao.delete(it) }
-
                 // delete any LocalFiles that are no longer being used
                 val attachments = attachmentsRepository.getAttachments()
                     .filter { it.isDownloaded }

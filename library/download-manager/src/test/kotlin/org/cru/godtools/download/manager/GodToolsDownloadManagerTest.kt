@@ -25,6 +25,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -79,6 +80,7 @@ class GodToolsDownloadManagerTest {
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
+        every { deleteAsync(any()) } returns CompletableDeferred(Unit)
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
         every { find<LocalFile>(any<String>()) } returns null
         excludeRecords { transaction(any(), any()) }
@@ -515,7 +517,7 @@ class GodToolsDownloadManagerTest {
 
     private fun setupCleanupActorMocks() {
         every { dao.get(QUERY_LOCAL_FILES) } returns emptyList()
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
+        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(emptyList())
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns emptyList()
     }
@@ -530,8 +532,10 @@ class GodToolsDownloadManagerTest {
                     fs.rootDir()
                     dao.get(QUERY_LOCAL_FILES)
 
+                    // deleteOrphanedTranslationFiles()
+                    dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+
                     // cleanupFilesystem()
-                    dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
                     dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
 
                     // deleteOrphanedFiles()
@@ -557,14 +561,21 @@ class GodToolsDownloadManagerTest {
         }
     }
 
+    @Test
+    fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
+        val file = TranslationFile(1, "file")
+        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(listOf(file))
+
+        downloadManager.deleteOrphanedTranslationFiles()
+        verify { dao.deleteAsync(file) }
+    }
+
     // region cleanFilesystem()
     @Test
     fun `cleanFilesystem()`() = testScope.runTest {
         val orphan = spyk(getTmpFile(true))
         val keep = spyk(getTmpFile(true))
-        val translation = TranslationFile(1, orphan.name)
         val localFile = LocalFile(orphan.name)
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns listOf(translation)
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(localFile)
         keep.name.let {
@@ -577,7 +588,6 @@ class GodToolsDownloadManagerTest {
         downloadManager.cleanFilesystem()
         assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
         verifyOrder {
-            dao.delete(translation)
             dao.delete(localFile)
             orphan.delete()
         }
@@ -589,7 +599,6 @@ class GodToolsDownloadManagerTest {
         val keep = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
         val orphanName = orphan.name
-        every { dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns emptyList()
         coEvery { attachmentsRepository.getAttachments() } returns listOf(
             Attachment().apply {
                 filename = keep.name
@@ -609,9 +618,9 @@ class GodToolsDownloadManagerTest {
         }
         orphan.name.let { coEvery { fs.file(it) } returns orphan }
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
         downloadManager.cleanFilesystem()
-        assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
         verifyOrder {
             dao.delete(LocalFile(orphanName))
             orphan.delete()
