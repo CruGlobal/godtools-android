@@ -41,7 +41,6 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
@@ -61,7 +60,6 @@ import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
@@ -73,14 +71,6 @@ internal const val CLEANUP_DELAY = 30_000L
 internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
     .where(TranslationTable.SQL_WHERE_DOWNLOADED)
     .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
-
-@VisibleForTesting
-internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFile>()
-    .join(
-        TranslationFileTable.SQL_JOIN_TRANSLATION.type("LEFT")
-            .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
-    )
-    .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -422,7 +412,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun deleteOrphanedTranslationFiles() = filesystemMutex.write.withLock {
-        dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES).await()
+        val downloadedTranslations = dao.getAsync(Query.select<Translation>()).await()
+            .filter { it.isDownloaded }
+            .map { it.id }
+
+        downloadedFilesRepository.getDownloadedTranslationFiles()
+            .filterNot { it.translationId in downloadedTranslations }
             .map { dao.deleteAsync(it) }
             .joinAll()
     }
@@ -433,7 +428,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             val attachments = attachmentsRepository.getAttachments()
                 .filter { it.isDownloaded }
                 .mapNotNullTo(mutableSetOf()) { it.localFilename }
-            val translationFiles = dao.get(TranslationFile::class.java)
+            val translationFiles = downloadedFilesRepository.getDownloadedTranslationFiles()
                 .mapTo(mutableSetOf()) { it.filename }
             downloadedFilesRepository.getDownloadedFiles()
                 .filterNot { it.filename in attachments }

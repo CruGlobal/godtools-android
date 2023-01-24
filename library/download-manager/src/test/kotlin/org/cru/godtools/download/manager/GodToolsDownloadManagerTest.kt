@@ -35,6 +35,7 @@ import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
 import okio.source
+import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
@@ -42,6 +43,7 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
+import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -86,6 +88,7 @@ class GodToolsDownloadManagerTest {
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk(relaxUnitFun = true) {
         coEvery { findDownloadedFile(any()) } returns null
         coEvery { getDownloadedFiles() } returns emptyList()
+        coEvery { getDownloadedTranslationFiles() } returns emptyList()
     }
     private val files = mutableMapOf<String, File>()
     private val fs = mockk<ToolFileSystem> {
@@ -517,9 +520,8 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun setupCleanupActorMocks() {
-        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(emptyList())
+        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(emptyList())
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
-        every { dao.get(TranslationFile::class.java) } returns emptyList()
     }
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {
@@ -533,11 +535,12 @@ class GodToolsDownloadManagerTest {
                     downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedTranslationFiles()
-                    dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+                    dao.getAsync(Query.select<Translation>())
+                    downloadedFilesRepository.getDownloadedTranslationFiles()
 
                     // deleteUnusedDownloadedFiles()
                     attachmentsRepository.getAttachments()
-                    dao.get(TranslationFile::class.java)
+                    downloadedFilesRepository.getDownloadedTranslationFiles()
                     downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedFiles()
@@ -566,8 +569,13 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
-        val file = TranslationFile(1, "file")
-        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(listOf(file))
+        val translation = Translation().apply {
+            id = 1
+            isDownloaded = false
+        }
+        val file = DownloadedTranslationFile(translation, "file")
+        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(listOf(translation))
+        coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)
 
         downloadManager.deleteOrphanedTranslationFiles()
         verify { dao.deleteAsync(file) }
