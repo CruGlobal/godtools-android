@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
+import org.cru.godtools.db.room.dao.DownloadedFilesDao
 import org.cru.godtools.db.room.dao.FollowupsDao
 import org.cru.godtools.db.room.dao.GlobalActivityDao
 import org.cru.godtools.db.room.dao.LanguagesDao
@@ -13,6 +14,7 @@ import org.cru.godtools.db.room.dao.LastSyncTimeDao
 import org.cru.godtools.db.room.dao.TrainingTipDao
 import org.cru.godtools.db.room.dao.UserCountersDao
 import org.cru.godtools.db.room.dao.UserDao
+import org.cru.godtools.db.room.entity.DownloadedFileEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.GlobalActivityEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
@@ -20,6 +22,7 @@ import org.cru.godtools.db.room.entity.LastSyncTimeEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.UserCounterEntity
 import org.cru.godtools.db.room.entity.UserEntity
+import org.cru.godtools.db.room.repository.DownloadedFilesRoomRepository
 import org.cru.godtools.db.room.repository.FollowupsRoomRepository
 import org.cru.godtools.db.room.repository.GlobalActivityRoomRepository
 import org.cru.godtools.db.room.repository.LanguagesRoomRepository
@@ -29,9 +32,10 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 7,
+    version = 8,
     entities = [
         LanguageEntity::class,
+        DownloadedFileEntity::class,
         FollowupEntity::class,
         GlobalActivityEntity::class,
         TrainingTipEntity::class,
@@ -46,6 +50,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 4, to = 5),
         AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -55,6 +60,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     }
 
     // region DAOs
+    abstract val downloadedFilesDao: DownloadedFilesDao
     abstract val followupsDao: FollowupsDao
     abstract val globalActivityDao: GlobalActivityDao
     abstract val languagesDao: LanguagesDao
@@ -65,6 +71,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     // endregion DAOs
 
     // region Repositories
+    abstract val downloadedFilesRepository: DownloadedFilesRoomRepository
     abstract val followupsRepository: FollowupsRoomRepository
     abstract val globalActivityRepository: GlobalActivityRoomRepository
     abstract val languagesRepository: LanguagesRoomRepository
@@ -89,6 +96,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * v6.1.0-v6.1.1
  * 7: 2023-03-27
  * v6.2.0
+ * 8: 2023-01-24
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()

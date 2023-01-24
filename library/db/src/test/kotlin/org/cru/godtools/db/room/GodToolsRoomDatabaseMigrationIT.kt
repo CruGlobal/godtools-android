@@ -161,4 +161,26 @@ class GodToolsRoomDatabaseMigrationIT {
             }
         }
     }
+
+    @Test
+    fun testMigrate7To8() {
+        val filesQuery = "SELECT * FROM downloadedFiles"
+
+        // create v7 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 7).use { db ->
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(filesQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 8, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(filesQuery)
+        }
+    }
 }
