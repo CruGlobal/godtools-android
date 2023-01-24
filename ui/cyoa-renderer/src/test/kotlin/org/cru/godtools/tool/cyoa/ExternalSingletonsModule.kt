@@ -9,6 +9,7 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
@@ -43,7 +44,7 @@ class ExternalSingletonsModule {
     val downloadManager by lazy {
         mockk<GodToolsDownloadManager> {
             every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
-            every { downloadLatestPublishedTranslationAsync(any(), any()) } returns Job().apply { complete() }
+            every { downloadLatestPublishedTranslationAsync(any(), any()) } returns CompletableDeferred(true)
         }
     }
     @get:Provides

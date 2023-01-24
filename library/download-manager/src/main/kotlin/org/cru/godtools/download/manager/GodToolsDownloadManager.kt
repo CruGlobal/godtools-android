@@ -223,7 +223,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     // region Translations
     @AnyThread
-    fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.launch {
+    fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.async {
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
     }
 
