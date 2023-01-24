@@ -406,6 +406,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             if (fs.exists()) {
                 detectMissingFiles()
                 cleanFilesystem()
+                deleteOrphanedFiles()
             }
         }
     }
@@ -440,12 +441,16 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                         dao.delete(it)
                         it.getFile(fs).delete()
                     }
-
-                // delete any orphaned files
-                fs.rootDir().listFiles()
-                    ?.filter { dao.find<LocalFile>(it.name) == null }
-                    ?.forEach { it.delete() }
             }
+        }
+    }
+
+    @VisibleForTesting
+    internal suspend fun deleteOrphanedFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            fs.rootDir().listFiles()
+                ?.filter { dao.find<LocalFile>(it.name) == null }
+                ?.forEach { it.delete() }
         }
     }
     // endregion Cleanup

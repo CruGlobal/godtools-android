@@ -49,7 +49,10 @@ import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.hasItem
+import org.hamcrest.Matchers.hasItems
+import org.hamcrest.Matchers.not
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -77,6 +80,7 @@ class GodToolsDownloadManagerTest {
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
+        every { find<LocalFile>(any<String>()) } returns null
         excludeRecords { transaction(any(), any()) }
     }
     private val files = mutableMapOf<String, File>()
@@ -529,6 +533,8 @@ class GodToolsDownloadManagerTest {
                     // cleanupFilesystem()
                     dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
                     dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+
+                    // deleteOrphanedFiles()
                     fs.rootDir()
                 }
             }
@@ -613,6 +619,19 @@ class GodToolsDownloadManagerTest {
         verify(exactly = 0) { keep.delete() }
     }
     // endregion cleanFilesystem()
+
+    // region deleteOrphanedFiles()
+    @Test
+    fun `deleteOrphanedFiles()`() = testScope.runTest {
+        val keep = getTmpFile(create = true)
+        val orphan = getTmpFile(create = true)
+        every { dao.find<LocalFile>(keep.name) } returns LocalFile(keep.name)
+
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
+        downloadManager.deleteOrphanedFiles()
+        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
+    }
+    // endregion deleteOrphanedFiles()
     // endregion Cleanup
 
     private fun getTmpFile(create: Boolean = false, suffix: String? = null) =
