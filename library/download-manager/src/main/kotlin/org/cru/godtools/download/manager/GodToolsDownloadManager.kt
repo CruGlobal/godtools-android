@@ -3,7 +3,6 @@ package org.cru.godtools.download.manager
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -44,7 +43,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -53,16 +51,16 @@ import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
-import org.cru.godtools.model.LocalFile
+import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -70,9 +68,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
-
-@VisibleForTesting
-internal val QUERY_LOCAL_FILES = Query.select<LocalFile>()
 
 @VisibleForTesting
 internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
@@ -86,16 +81,13 @@ internal val QUERY_CLEAN_ORPHANED_TRANSLATION_FILES = Query.select<TranslationFi
             .andOn(TranslationTable.SQL_WHERE_DOWNLOADED)
     )
     .where(TranslationTable.FIELD_ID.`is`(Expression.NULL))
-@VisibleForTesting
-internal val QUERY_CLEAN_ORPHANED_LOCAL_FILES = Query.select<LocalFile>()
-    .join(LocalFileTable.SQL_JOIN_TRANSLATION_FILE.type("LEFT"))
-    .where(TranslationFileTable.FIELD_FILE.`is`(Expression.NULL))
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
+    private val downloadedFilesRepository: DownloadedFilesRepository,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
     private val translationsApi: TranslationsApi,
@@ -109,6 +101,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsApi: AttachmentsApi,
         attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
+        downloadedFilesRepository: DownloadedFilesRepository,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
         translationsApi: TranslationsApi,
@@ -118,6 +111,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsApi,
         attachmentsRepository,
         dao,
+        downloadedFilesRepository,
         fs,
         manifestParser,
         translationsApi,
@@ -174,19 +168,19 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             filesystemMutex.read.withLock {
                 filesMutex.withLock(filename) {
-                    val localFile = dao.find<LocalFile>(filename)
-                    if (attachment.isDownloaded && localFile != null) return
-                    attachment.isDownloaded = localFile != null
+                    val downloadedFile = downloadedFilesRepository.findDownloadedFile(filename)
+                    if (attachment.isDownloaded && downloadedFile != null) return
+                    attachment.isDownloaded = downloadedFile != null
 
-                    if (localFile == null) {
+                    if (downloadedFile == null) {
                         // create a new local file object
                         try {
                             // download attachment
                             attachmentsApi.download(attachmentId).takeIf { it.isSuccessful }?.body()?.byteStream()
                                 ?.use {
-                                    val file = LocalFile(filename)
+                                    val file = DownloadedFile(filename)
                                     it.copyTo(file)
-                                    dao.updateOrInsert(file)
+                                    downloadedFilesRepository.insertOrIgnore(file)
                                     attachment.isDownloaded = true
                                 }
                         } catch (ignored: IOException) {
@@ -212,17 +206,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 filesMutex.withLock(filename) {
                     withContext(Dispatchers.IO) {
                         // short-circuit if the attachment is already downloaded
-                        val localFile: LocalFile? = dao.find(filename)
-                        if (attachment.isDownloaded && localFile != null) return@withContext
+                        val downloadedFile = downloadedFilesRepository.findDownloadedFile(filename)
+                        if (attachment.isDownloaded && downloadedFile != null) return@withContext
 
                         // download the attachment
                         attachment.isDownloaded = false
                         try {
                             // we don't have a local file, so create it
-                            if (localFile == null) {
-                                val file = LocalFile(filename)
+                            if (downloadedFile == null) {
+                                val file = DownloadedFile(filename)
                                 data.copyTo(file)
-                                dao.updateOrInsert(file)
+                                downloadedFilesRepository.insertOrIgnore(file)
                             }
 
                             // mark attachment as downloaded
@@ -323,12 +317,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     private suspend fun downloadTranslationFileIfNecessary(fileName: String): Boolean = filesMutex.withLock(fileName) {
-        if (dao.find<LocalFile>(fileName) != null) return true
+        if (downloadedFilesRepository.findDownloadedFile(fileName) != null) return true
         try {
             val body = translationsApi.downloadFile(fileName).takeIf { it.isSuccessful }?.body() ?: return false
-            val localFile = LocalFile(fileName)
-            withContext(ioDispatcher) { body.byteStream().copyTo(localFile) }
-            dao.updateOrInsert(localFile)
+            val downloadedFile = DownloadedFile(fileName)
+            withContext(Dispatchers.IO) { body.byteStream().copyTo(downloadedFile) }
+            downloadedFilesRepository.insertOrIgnore(downloadedFile)
             return true
         } catch (e: IOException) {
             return false
@@ -357,10 +351,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                         val filename = ze.name
                         filesMutex.withLock(filename) {
                             // write the file if it hasn't been downloaded before
-                            if (dao.find<LocalFile>(filename) == null) {
-                                val newFile = LocalFile(filename)
+                            if (downloadedFilesRepository.findDownloadedFile(filename) == null) {
+                                val newFile = DownloadedFile(filename)
                                 zin.copyTo(newFile)
-                                dao.updateOrInsert(newFile)
+                                downloadedFilesRepository.insertOrIgnore(newFile)
                             }
 
                             // associate this file with this translation
@@ -420,7 +414,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
 
             // check for missing files
-            dao.get(QUERY_LOCAL_FILES)
+            downloadedFilesRepository.getDownloadedFiles()
                 .filterNot { files.contains(it.getFile(fs)) }
                 .forEach { dao.delete(it) }
         }
@@ -439,10 +433,13 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             val attachments = attachmentsRepository.getAttachments()
                 .filter { it.isDownloaded }
                 .mapNotNullTo(mutableSetOf()) { it.localFilename }
-            dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+            val translationFiles = dao.get(TranslationFile::class.java)
+                .mapTo(mutableSetOf()) { it.filename }
+            downloadedFilesRepository.getDownloadedFiles()
                 .filterNot { it.filename in attachments }
+                .filterNot { it.filename in translationFiles }
                 .forEach {
-                    dao.delete(it)
+                    downloadedFilesRepository.delete(it)
                     it.getFile(fs).delete()
                 }
         }
@@ -452,15 +449,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal suspend fun deleteOrphanedFiles() = filesystemMutex.write.withLock {
         withContext(ioDispatcher) {
             fs.rootDir().listFiles()
-                ?.filter { dao.find<LocalFile>(it.name) == null }
+                ?.filter { downloadedFilesRepository.findDownloadedFile(it.name) == null }
                 ?.forEach { it.delete() }
         }
     }
     // endregion Cleanup
 
-    @WorkerThread
-    private suspend fun InputStream.copyTo(localFile: LocalFile) {
-        withContext(Dispatchers.IO) { localFile.getFile(fs).outputStream().use { copyTo(it) } }
+    private suspend fun InputStream.copyTo(file: DownloadedFile) = withContext(Dispatchers.IO) {
+        file.getFile(fs).outputStream().use { copyTo(it) }
     }
 
     @Singleton
@@ -469,6 +465,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
+        downloadedFilesRepository: DownloadedFilesRepository,
         repository: DownloadManagerRepository,
         settings: Settings,
         coroutineScope: CoroutineScope
@@ -478,12 +475,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             attachmentsRepository: AttachmentsRepository,
             dao: GodToolsDao,
             downloadManager: GodToolsDownloadManager,
+            downloadedFilesRepository: DownloadedFilesRepository,
             repository: DownloadManagerRepository,
             settings: Settings
         ) : this(
             attachmentsRepository,
             dao,
             downloadManager,
+            downloadedFilesRepository,
             repository,
             settings,
             CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -507,7 +506,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // Stale Downloaded Attachments
             attachmentsRepository.getAttachmentsFlow()
-                .combineTransform(dao.getAsFlow(Query.select<LocalFile>())) { attachments, files ->
+                .combineTransform(downloadedFilesRepository.getDownloadedFilesFlow()) { attachments, files ->
                     val filenames = files.mapTo(mutableSetOf()) { it.filename }
                     emit(attachments.filter { it.isDownloaded && it.localFilename !in filenames }.map { it.id }.toSet())
                 }
