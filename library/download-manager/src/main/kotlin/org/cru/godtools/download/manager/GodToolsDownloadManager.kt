@@ -403,31 +403,28 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             delay(CLEANUP_DELAY)
             emit(Unit)
         }.conflate().collect {
-            detectMissingFiles()
-            cleanFilesystem()
-        }
-    }
-
-    @VisibleForTesting
-    internal suspend fun detectMissingFiles() {
-        if (!fs.exists()) return
-
-        filesystemMutex.write.withLock {
-            withContext(ioDispatcher) {
-                // get the set of all downloaded files
-                val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
-
-                // check for missing files
-                dao.get(QUERY_LOCAL_FILES)
-                    .filterNot { files.contains(it.getFile(fs)) }
-                    .forEach { dao.delete(it) }
+            if (fs.exists()) {
+                detectMissingFiles()
+                cleanFilesystem()
             }
         }
     }
 
     @VisibleForTesting
+    internal suspend fun detectMissingFiles() = filesystemMutex.write.withLock {
+        withContext(ioDispatcher) {
+            // get the set of all downloaded files
+            val files = fs.rootDir().listFiles()?.filterTo(mutableSetOf()) { it.isFile }.orEmpty()
+
+            // check for missing files
+            dao.get(QUERY_LOCAL_FILES)
+                .filterNot { files.contains(it.getFile(fs)) }
+                .forEach { dao.delete(it) }
+        }
+    }
+
+    @VisibleForTesting
     internal suspend fun cleanFilesystem() {
-        if (!fs.exists()) return
         filesystemMutex.write.withLock {
             withContext(ioDispatcher) {
                 // remove any TranslationFiles for translations that are no longer downloaded

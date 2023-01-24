@@ -520,13 +520,13 @@ class GodToolsDownloadManagerTest {
         if (times > 0) {
             coVerifyOrder {
                 repeat(times) {
-                    // detectMissingFiles()
                     fs.exists()
+
+                    // detectMissingFiles()
                     fs.rootDir()
                     dao.get(QUERY_LOCAL_FILES)
 
                     // cleanupFilesystem()
-                    fs.exists()
                     dao.get(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
                     dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
                     fs.rootDir()
