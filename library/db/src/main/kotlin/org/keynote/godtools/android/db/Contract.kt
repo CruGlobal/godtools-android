@@ -3,12 +3,10 @@ package org.keynote.godtools.android.db
 import org.ccci.gto.android.common.db.BaseContract
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
-import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
@@ -291,22 +289,10 @@ object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
-    object LocalFileTable : Base {
+    internal object DownloadedFileTable : Base {
         internal const val TABLE_NAME = "files"
-        internal val TABLE = Table.forClass<LocalFile>()
-
         internal const val COLUMN_NAME = "name"
 
-        private val FIELD_NAME = TABLE.field(COLUMN_NAME)
-
-        internal val PROJECTION_ALL = arrayOf(COLUMN_NAME)
-
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME)
-
-        internal val SQL_WHERE_PRIMARY_KEY: Expression = FIELD_NAME.eq(bind())
-
-        internal val SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
