@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transformLatest
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -54,9 +53,9 @@ import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
+import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
@@ -284,24 +283,22 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         val successful = coroutineScope {
             relatedFiles.map {
                 async {
-                    val resp = downloadTranslationFileIfNecessary(it)
-                    do {
-                        val completed = completedFiles.get()
-                        updateProgress(key, completed + 1, relatedFiles.size.toLong())
-                    } while (!completedFiles.compareAndSet(completed, completed + 1))
-                    resp
+                    downloadTranslationFileIfNecessary(it).also {
+                        do {
+                            val completed = completedFiles.get()
+                            updateProgress(key, completed + 1, relatedFiles.size.toLong())
+                        } while (!completedFiles.compareAndSet(completed, completed + 1))
+                    }
                 }
             }.awaitAll().all { it }
         }
         if (!successful) return false
 
         // record the translation as downloaded
+        downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, manifestFileName))
+        relatedFiles.forEach { downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it)) }
         translation.isDownloaded = true
-        dao.transaction {
-            dao.updateOrInsert(TranslationFile(translation, manifestFileName))
-            relatedFiles.forEach { dao.updateOrInsert(TranslationFile(translation, it)) }
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
-        }
+        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
 
         return true
     }
@@ -348,7 +345,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                             }
 
                             // associate this file with this translation
-                            dao.updateOrInsert(TranslationFile(translation, filename))
+                            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, filename))
                         }
                         updateProgress(key, count.count, size)
                     }
@@ -405,8 +402,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // check for missing files
             downloadedFilesRepository.getDownloadedFiles()
-                .filterNot { files.contains(it.getFile(fs)) }
-                .forEach { dao.delete(it) }
+                .filterNot { it.getFile(fs) in files }
+                .forEach { downloadedFilesRepository.delete(it) }
         }
     }
 
@@ -416,10 +413,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             .filter { it.isDownloaded }
             .map { it.id }
 
-        downloadedFilesRepository.getDownloadedTranslationFiles()
-            .filterNot { it.translationId in downloadedTranslations }
-            .map { dao.deleteAsync(it) }
-            .joinAll()
+        coroutineScope {
+            downloadedFilesRepository.getDownloadedTranslationFiles()
+                .filterNot { it.translationId in downloadedTranslations }
+                .forEach { launch { downloadedFilesRepository.delete(it) } }
+        }
     }
 
     @VisibleForTesting

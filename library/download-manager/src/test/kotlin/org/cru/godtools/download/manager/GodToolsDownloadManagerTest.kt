@@ -81,7 +81,6 @@ class GodToolsDownloadManagerTest {
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
-        every { deleteAsync(any()) } returns CompletableDeferred(Unit)
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
         excludeRecords { transaction(any(), any()) }
     }
@@ -351,9 +350,9 @@ class GodToolsDownloadManagerTest {
             translationsApi.downloadFile("b.txt")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "manifest.xml"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "manifest.xml"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
             workManager wasNot Called
         }
@@ -392,9 +391,9 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("c.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
             workManager wasNot Called
         }
@@ -438,13 +437,13 @@ class GodToolsDownloadManagerTest {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode, true)
             downloadedFilesRepository.findDownloadedFile("a.txt")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
             downloadedFilesRepository.findDownloadedFile("b.txt")
             downloadedFilesRepository.findDownloadedFile("c.txt")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("c.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -563,7 +562,7 @@ class GodToolsDownloadManagerTest {
         downloadManager.detectMissingFiles()
         coVerifyAll {
             downloadedFilesRepository.getDownloadedFiles()
-            dao.delete(DownloadedFile(missingFile.name))
+            downloadedFilesRepository.delete(DownloadedFile(missingFile.name))
         }
     }
 
@@ -578,7 +577,7 @@ class GodToolsDownloadManagerTest {
         coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)
 
         downloadManager.deleteOrphanedTranslationFiles()
-        verify { dao.deleteAsync(file) }
+        coVerify { downloadedFilesRepository.delete(file) }
     }
 
     // region deleteUnusedDownloadedFiles()

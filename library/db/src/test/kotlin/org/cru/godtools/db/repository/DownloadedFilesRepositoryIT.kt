@@ -8,6 +8,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.DownloadedFile
+import org.cru.godtools.model.DownloadedTranslationFile
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
@@ -20,6 +21,7 @@ abstract class DownloadedFilesRepositoryIT {
 
     private val file1 = DownloadedFile("file1.ext")
     private val file2 = DownloadedFile("file2.ext")
+    private val translation1 = DownloadedTranslationFile(1, "file1.ext")
 
     @Test
     fun `findDownloadedFile() & insertOrIgnore() & delete()`() = testScope.runTest {
@@ -51,5 +53,16 @@ abstract class DownloadedFilesRepositoryIT {
             runCurrent()
             assertThat(expectMostRecentItem(), containsInAnyOrder(file1, file2))
         }
+    }
+
+    @Test
+    fun `getDownloadedTranslationFiles() & insertOrIgnore() & delete()`() = testScope.runTest {
+        assertThat(repository.getDownloadedTranslationFiles(), empty())
+
+        repository.insertOrIgnore(translation1)
+        assertThat(repository.getDownloadedTranslationFiles(), containsInAnyOrder(translation1))
+
+        repository.delete(translation1)
+        assertThat(repository.getDownloadedTranslationFiles(), empty())
     }
 }

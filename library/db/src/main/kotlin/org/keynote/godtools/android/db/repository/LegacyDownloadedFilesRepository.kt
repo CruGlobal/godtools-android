@@ -22,8 +22,10 @@ internal class LegacyDownloadedFilesRepository @Inject constructor(private val d
     override fun insertOrIgnore(file: DownloadedFile) {
         dao.insert(file, SQLiteDatabase.CONFLICT_IGNORE)
     }
-
-    override fun delete(file: DownloadedFile) {
-        dao.delete(file)
+    override fun insertOrIgnore(translationFile: DownloadedTranslationFile) {
+        dao.insert(translationFile, SQLiteDatabase.CONFLICT_IGNORE)
     }
+
+    override fun delete(file: DownloadedFile) = dao.delete(file)
+    override suspend fun delete(file: DownloadedTranslationFile) = dao.deleteAsync(file).join()
 }
