@@ -3,11 +3,6 @@ package org.keynote.godtools.android.db
 import org.ccci.gto.android.common.db.BaseContract
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
-import org.ccci.gto.android.common.db.Expression.Companion.bind
-import org.ccci.gto.android.common.db.Table
-import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
-import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
 import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
@@ -45,9 +40,8 @@ internal object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
-    object ToolTable : BaseTable() {
+    internal object ToolTable : BaseTable() {
         internal const val TABLE_NAME = "tools"
-        internal val TABLE = Table.forClass<Tool>()
 
         const val COLUMN_CODE = "code"
         const val COLUMN_TYPE = "type"
@@ -118,7 +112,6 @@ internal object Contract : BaseContract() {
 
     internal object TranslationTable : BaseTable() {
         internal const val TABLE_NAME = "translations"
-        internal val TABLE = Table.forClass<Translation>()
 
         const val COLUMN_TOOL = ToolCode.COLUMN_TOOL
         const val COLUMN_LANGUAGE = LanguageCode.COLUMN_LANGUAGE
@@ -186,25 +179,13 @@ internal object Contract : BaseContract() {
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
-    object TranslationFileTable : Base {
+    internal object TranslationFileTable : Base {
         internal const val TABLE_NAME = "translation_files"
-        internal val TABLE = Table.forClass<TranslationFile>()
-
         internal const val COLUMN_TRANSLATION = "translation"
         internal const val COLUMN_FILE = "file"
 
-        private val FIELD_TRANSLATION = TABLE.field(COLUMN_TRANSLATION)
-        private val FIELD_FILE = TABLE.field(COLUMN_FILE)
-
         internal val PROJECTION_ALL = arrayOf(COLUMN_TRANSLATION, COLUMN_FILE)
 
-        private const val SQL_COLUMN_TRANSLATION = "$COLUMN_TRANSLATION INTEGER NOT NULL"
-        private const val SQL_COLUMN_NAME = "$COLUMN_FILE TEXT NOT NULL"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE)
-
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_FILE.eq(bind()))
-
-        internal val SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_TRANSLATION, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
