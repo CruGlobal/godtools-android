@@ -168,7 +168,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.10"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
-materialComponents = "com.google.android.material:material:1.7.0"
+materialComponents = "com.google.android.material:material:1.8.0"
 mockk = "io.mockk:mockk:1.13.3"
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 okta-auth-foundation = { module = "com.okta.kotlin:auth-foundation", version.ref = "okta" }
