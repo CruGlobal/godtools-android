@@ -47,7 +47,12 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(): DownloadedFilesRepository = this
+    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(
+        legacyDb: GodToolsDatabase,
+    ): DownloadedFilesRepository {
+        legacyDb.triggerDataMigration()
+        return this
+    }
 
     @Provides
     @Reusable
