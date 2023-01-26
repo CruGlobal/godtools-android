@@ -16,6 +16,7 @@ interface ToolsRepository {
     suspend fun unpinTool(code: String)
 
     suspend fun updateToolOrder(tools: List<String>)
+    suspend fun updateToolViews(code: String, delta: Int)
 
     // TODO: temporary for testing
     fun insert(vararg tool: Tool)

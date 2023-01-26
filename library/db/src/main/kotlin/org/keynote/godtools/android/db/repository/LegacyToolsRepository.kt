@@ -76,6 +76,7 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
             }
         }.await()
     }
+    override suspend fun updateToolViews(code: String, delta: Int) = dao.updateSharesDelta(code, delta)
 
     // TODO: For testing only
     override fun insert(vararg tool: Tool) {

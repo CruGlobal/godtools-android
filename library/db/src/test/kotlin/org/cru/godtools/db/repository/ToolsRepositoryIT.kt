@@ -2,15 +2,19 @@ package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
@@ -175,4 +179,30 @@ abstract class ToolsRepositoryIT {
             assertFalse(assertNotNull(awaitItem()).isAdded)
         }
     }
+
+    // region updateToolShares()
+    @Test
+    fun `updateToolViews()`() = testScope.runTest {
+        val code = "shares"
+        repository.insert(Tool(code))
+        assertNotNull(repository.findTool(code)) { assertEquals(0, it.pendingShares) }
+
+        repository.updateToolViews(code, 10)
+        assertNotNull(repository.findTool(code)) { assertEquals(10, it.pendingShares) }
+
+        repository.updateToolViews(code, -5)
+        assertNotNull(repository.findTool(code)) { assertEquals(5, it.pendingShares) }
+    }
+
+    @Test
+    fun `updateToolViews() - Concurrent Updates`() = testScope.runTest {
+        val code = "shares"
+        repository.insert(Tool(code))
+
+        withContext(Dispatchers.IO) {
+            repeat(1000) { launch { repository.updateToolViews(code, 1) } }
+        }
+        assertNotNull(repository.findTool(code)) { assertEquals(1000, it.pendingShares) }
+    }
+    // endregion updateToolShares()
 }
