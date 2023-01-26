@@ -27,11 +27,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -43,6 +44,7 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
+import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
@@ -50,7 +52,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
-import org.cru.godtools.download.manager.db.DownloadManagerRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -459,9 +461,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
         downloadedFilesRepository: DownloadedFilesRepository,
-        repository: DownloadManagerRepository,
         settings: Settings,
-        coroutineScope: CoroutineScope
+        toolsRepository: ToolsRepository,
+        translationsRepository: TranslationsRepository,
+        coroutineScope: CoroutineScope,
     ) {
         @Inject
         internal constructor(
@@ -469,27 +472,37 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             dao: GodToolsDao,
             downloadManager: GodToolsDownloadManager,
             downloadedFilesRepository: DownloadedFilesRepository,
-            repository: DownloadManagerRepository,
-            settings: Settings
+            settings: Settings,
+            toolsRepository: ToolsRepository,
+            translationsRepository: TranslationsRepository,
         ) : this(
             attachmentsRepository,
             dao,
             downloadManager,
             downloadedFilesRepository,
-            repository,
             settings,
+            toolsRepository,
+            translationsRepository,
             CoroutineScope(Dispatchers.Default + SupervisorJob())
         )
 
         init {
             // Download Favorite tool translations in the primary, parallel, and default languages
-            settings.primaryLanguageFlow
-                .combineTransform(settings.parallelLanguageFlow) { prim, para ->
-                    emit(setOfNotNull(prim, para, Settings.defaultLanguage))
-                }
+            toolsRepository.getFavoriteToolsFlow()
+                .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
-                .flatMapLatest { repository.getFavoriteTranslationsThatNeedDownload(it) }
-                .map { it.map { TranslationKey(it) }.toSet() }
+                .combineTransformLatest(
+                    settings.primaryLanguageFlow
+                        .combine(settings.parallelLanguageFlow) { prim, para ->
+                            setOfNotNull(prim, para, Settings.defaultLanguage)
+                        }
+                        .distinctUntilChanged()
+                ) { t, l -> emitAll(translationsRepository.getTranslationsFlowFor(tools = t, languages = l)) }
+                .map {
+                    it.filter { it.isPublished && !it.isDownloaded }
+                        .map { TranslationKey(it) }
+                        .toSet()
+                }
                 .distinctUntilChanged()
                 .conflate()
                 .onEach {
