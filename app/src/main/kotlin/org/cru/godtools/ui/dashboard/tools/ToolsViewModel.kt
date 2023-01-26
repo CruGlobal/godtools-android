@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.base.Settings
@@ -20,26 +18,12 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.Contract.ToolTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val ATTR_SELECTED_CATEGORY = "selectedCategory"
-
-private val QUERY_TOOLS_BASE = Query.select<Tool>()
-    .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE and (ToolTable.FIELD_HIDDEN ne true))
-    .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
-
-@VisibleForTesting
-internal val QUERY_TOOLS = QUERY_TOOLS_BASE.join(ToolTable.SQL_JOIN_METATOOL.type("LEFT"))
-    .andWhere(
-        ToolTable.FIELD_META_TOOL.isNull() or
-            (ToolTable.FIELD_CODE eq ToolTable.TABLE_META.field(ToolTable.COLUMN_DEFAULT_VARIANT))
-    )
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsViewModel @Inject constructor(
-    dao: GodToolsDao,
     private val eventBus: EventBus,
     settings: Settings,
     toolsRepository: ToolsRepository,
@@ -56,7 +40,13 @@ class ToolsViewModel @Inject constructor(
         .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
 
-    private val tools = dao.getAsFlow(QUERY_TOOLS)
+    private val tools = toolsRepository.getToolsFlow()
+        .map { it.filterNot { it.isHidden } }
+        .combine(
+            toolsRepository.getMetaToolsFlow().map { it.associateBy({ it.code }, { it.defaultVariantCode }) }
+        ) { tools, defaultVariants ->
+            tools.filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), emptyList())
 
     val categories = tools.mapLatest { it.mapNotNull { it.category }.distinct() }
