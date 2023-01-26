@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
@@ -44,6 +45,7 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val toolsApi: ToolsApi,
     private val viewsApi: ViewsApi,
     private val syncRepository: SyncRepository,
+    private val toolsRepository: ToolsRepository,
 ) : BaseSyncTasks() {
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
@@ -99,12 +101,13 @@ internal class ToolSyncTasks @Inject internal constructor(
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
             Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
-                .map {
+                .map { tool ->
                     async {
+                        val code = tool.code ?: return@async true
+                        val views = ToolViews(tool)
                         try {
-                            val views = ToolViews(it)
                             viewsApi.submitViews(views).isSuccessful
-                                .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
+                                .also { if (it) toolsRepository.updateToolViews(code, 0 - views.quantity) }
                         } catch (ignored: IOException) {
                             false
                         }
