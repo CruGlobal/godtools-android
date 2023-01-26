@@ -7,13 +7,10 @@ import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
-import org.cru.godtools.model.Tool
-import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @Module
@@ -22,12 +19,6 @@ import org.keynote.godtools.android.db.repository.TranslationsRepository
     replaces = [DatabaseModule::class]
 )
 class MockDatabaseModule {
-    @get:Provides
-    val dao: GodToolsDao by lazy {
-        mockk {
-            every { findAsFlow(Tool::class.java, any()) } returns flowOf(null)
-        }
-    }
     @get:Provides
     val languagesRepository: LanguagesRepository by lazy { mockk() }
     @get:Provides

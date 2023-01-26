@@ -34,20 +34,18 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
-import org.ccci.gto.android.common.db.findAsFlow
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.user.activity.UserActivityManager
-import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val STATE_PRIMARY_LOCALES = "primaryLocales"
@@ -56,10 +54,10 @@ private const val STATE_PARALLEL_LOCALES = "parallelLocales"
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class MultiLanguageToolActivityDataModel @Inject constructor(
-    dao: GodToolsDao,
     downloadManager: GodToolsDownloadManager,
     languagesRepository: LanguagesRepository,
     manifestManager: ManifestManager,
+    toolsRepository: ToolsRepository,
     translationsRepository: TranslationsRepository,
     userActivityManager: UserActivityManager,
     @Named(IS_CONNECTED_LIVE_DATA) isConnected: LiveData<Boolean>,
@@ -92,7 +90,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     ) { prim, para -> (prim + para).distinct() }
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    val tool = toolCode.flatMapLatest { it?.let { dao.findAsFlow<Tool>(it) } ?: flowOf(null) }
+    val tool = toolCode.flatMapLatest { it?.let { toolsRepository.findToolFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val languages = locales
