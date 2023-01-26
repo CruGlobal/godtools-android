@@ -20,9 +20,10 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.download.manager.db.DownloadManagerRepository
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.LocalFile
+import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
@@ -36,19 +37,21 @@ class GodToolsDownloadManagerDispatcherTest {
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1)
     private val favoritedTranslationsFlow = MutableSharedFlow<List<Translation>>()
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
-    private val localFilesFlow = MutableSharedFlow<List<LocalFile>>(replay = 1)
+    private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { getAttachmentsFlow() } returns attachmentsFlow
     }
     private val dao = mockk<GodToolsDao> {
-        every { getAsFlow(Query.select<LocalFile>()) } returns localFilesFlow
         every { getAsFlow(Query.select<Tool>()) } returns toolsFlow
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
         coEvery { downloadLatestPublishedTranslation(any()) } returns true
         coJustRun { downloadAttachment(any()) }
+    }
+    private val downloadedFilesRepository: DownloadedFilesRepository = mockk {
+        every { getDownloadedFilesFlow() } returns downloadedFilesFlow
     }
     private val repository = mockk<DownloadManagerRepository> {
         every { getFavoriteTranslationsThatNeedDownload(any()) } returns favoritedTranslationsFlow
@@ -65,6 +68,7 @@ class GodToolsDownloadManagerDispatcherTest {
             attachmentsRepository,
             dao,
             downloadManager,
+            downloadedFilesRepository,
             repository,
             settings,
             testScope.backgroundScope,
@@ -121,7 +125,7 @@ class GodToolsDownloadManagerDispatcherTest {
             isDownloaded = false
         }
         attachmentsFlow.emit(listOf(attachment1, attachment2, attachment3))
-        localFilesFlow.emit(listOf(LocalFile("sha2.bin")))
+        downloadedFilesFlow.emit(listOf(DownloadedFile("sha2.bin")))
         runCurrent()
         coVerify(exactly = 1) {
             downloadManager.downloadAttachment(attachment1.id)

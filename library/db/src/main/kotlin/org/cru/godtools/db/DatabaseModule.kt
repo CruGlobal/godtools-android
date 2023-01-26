@@ -13,6 +13,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -24,6 +25,7 @@ import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
 import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
+import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -38,6 +40,10 @@ internal object DatabaseModule {
     @Provides
     @Reusable
     fun LegacyAttachmentsRepository.attachmentsRepository(): AttachmentsRepository = this
+
+    @Provides
+    @Reusable
+    fun LegacyDownloadedFilesRepository.downloadedFilesRepository(): DownloadedFilesRepository = this
 
     @Provides
     @Reusable

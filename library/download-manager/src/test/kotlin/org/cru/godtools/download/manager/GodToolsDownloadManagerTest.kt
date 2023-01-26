@@ -19,7 +19,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
-import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import java.io.File
 import java.io.IOException
@@ -36,13 +35,15 @@ import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
 import okio.source
-import org.ccci.gto.android.common.db.find
+import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.LocalFile
+import org.cru.godtools.model.DownloadedFile
+import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
@@ -80,10 +81,13 @@ class GodToolsDownloadManagerTest {
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
     private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
-        every { deleteAsync(any()) } returns CompletableDeferred(Unit)
         every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
-        every { find<LocalFile>(any<String>()) } returns null
         excludeRecords { transaction(any(), any()) }
+    }
+    private val downloadedFilesRepository: DownloadedFilesRepository = mockk(relaxUnitFun = true) {
+        coEvery { findDownloadedFile(any()) } returns null
+        coEvery { getDownloadedFiles() } returns emptyList()
+        coEvery { getDownloadedTranslationFiles() } returns emptyList()
     }
     private val files = mutableMapOf<String, File>()
     private val fs = mockk<ToolFileSystem> {
@@ -106,6 +110,7 @@ class GodToolsDownloadManagerTest {
         attachmentsApi,
         attachmentsRepository,
         dao,
+        downloadedFilesRepository,
         fs,
         manifestParser,
         translationsApi,
@@ -151,18 +156,19 @@ class GodToolsDownloadManagerTest {
     @Before
     fun setupAttachmentMocks() {
         coEvery { attachmentsRepository.findAttachment(attachment.id) } returns attachment
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns attachment.asLocalFile()
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) }
+            .returns(attachment.asDownloadedFile())
 
         coExcludeRecords {
             attachmentsRepository.findAttachment(attachment.id)
-            dao.find<LocalFile>(attachment.localFilename!!)
+            downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!)
         }
     }
 
     // region downloadAttachment()
     @Test
     fun `downloadAttachment()`() = testScope.runTest {
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
@@ -172,7 +178,7 @@ class GodToolsDownloadManagerTest {
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
-            dao.updateOrInsert(attachment.asLocalFile())
+            downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
@@ -189,7 +195,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadAttachment() - Already Downloaded, LocalFile missing`() = testScope.runTest {
         attachment.isDownloaded = true
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         val response = RealResponseBody(null, 0, testData.inputStream().source().buffer())
         coEvery { attachmentsApi.download(attachment.id) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
@@ -199,7 +205,7 @@ class GodToolsDownloadManagerTest {
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
-            dao.updateOrInsert(attachment.asLocalFile())
+            downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
@@ -207,14 +213,14 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadAttachment() - Already Downloaded, LocalFile missing, fails download`() = testScope.runTest {
         attachment.isDownloaded = true
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
         assertFalse(file.exists())
         assertFalse(attachment.isDownloaded)
-        verify(inverse = true) { dao.updateOrInsert(attachment.asLocalFile()) }
+        verify(inverse = true) { downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile()) }
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, false)
@@ -223,7 +229,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `downloadAttachment() - Download fails`() = testScope.runTest {
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
 
         downloadManager.downloadAttachment(attachment.id)
@@ -235,14 +241,14 @@ class GodToolsDownloadManagerTest {
     // region importAttachment()
     @Test
     fun verifyImportAttachment() = testScope.runTest {
-        every { dao.find<LocalFile>(attachment.localFilename!!) } returns null
+        coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertArrayEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
-            dao.updateOrInsert(attachment.asLocalFile())
+            downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
         }
     }
@@ -284,7 +290,7 @@ class GodToolsDownloadManagerTest {
     }
     // endregion importAttachment()
 
-    private fun Attachment.asLocalFile() = LocalFile(localFilename!!)
+    private fun Attachment.asDownloadedFile() = DownloadedFile(localFilename!!)
     // endregion Attachments
 
     // region Translations
@@ -308,7 +314,6 @@ class GodToolsDownloadManagerTest {
         coEvery {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
-        every { dao.find<LocalFile>(any<String>()) } returns null
         val config = slot<ParserConfig>()
         coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
             ParserResult.Data(mockk { every { relatedFiles } returns setOf("a.txt", "b.txt") })
@@ -334,20 +339,20 @@ class GodToolsDownloadManagerTest {
         assertEquals(config.captured.withParseRelated(false), config.captured)
         coVerifyAll {
             translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
-            dao.find<LocalFile>("manifest.xml")
+            downloadedFilesRepository.findDownloadedFile("manifest.xml")
             translationsApi.downloadFile("manifest.xml")
-            dao.updateOrInsert(LocalFile("manifest.xml"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("manifest.xml"))
             manifestParser.parseManifest("manifest.xml", any())
 
-            dao.find<LocalFile>("a.txt")
-            dao.find<LocalFile>("b.txt")
+            downloadedFilesRepository.findDownloadedFile("a.txt")
+            downloadedFilesRepository.findDownloadedFile("b.txt")
             translationsApi.downloadFile("a.txt")
             translationsApi.downloadFile("b.txt")
-            dao.updateOrInsert(LocalFile("a.txt"))
-            dao.updateOrInsert(LocalFile("b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "manifest.xml"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "manifest.xml"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
             workManager wasNot Called
         }
@@ -362,7 +367,6 @@ class GodToolsDownloadManagerTest {
         coEvery {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
-        every { dao.find<LocalFile>(any<String>()) } returns null
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
@@ -381,15 +385,15 @@ class GodToolsDownloadManagerTest {
         coVerifyAll {
             translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
-            dao.find<LocalFile>("a.txt")
-            dao.find<LocalFile>("b.txt")
-            dao.find<LocalFile>("c.txt")
-            dao.updateOrInsert(LocalFile("a.txt"))
-            dao.updateOrInsert(LocalFile("b.txt"))
-            dao.updateOrInsert(LocalFile("c.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            downloadedFilesRepository.findDownloadedFile("a.txt")
+            downloadedFilesRepository.findDownloadedFile("b.txt")
+            downloadedFilesRepository.findDownloadedFile("c.txt")
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("c.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
             workManager wasNot Called
         }
@@ -422,7 +426,6 @@ class GodToolsDownloadManagerTest {
     @Test
     fun verifyImportTranslation() = testScope.runTest {
         coEvery { translationsRepository.getLatestTranslation(any(), any(), any()) } returns null
-        every { dao.find<LocalFile>(any<String>()) } returns null
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
 
@@ -432,15 +435,15 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
         coVerifyAll {
             translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode, true)
-            dao.find<LocalFile>("a.txt")
-            dao.updateOrInsert(LocalFile("a.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "a.txt"))
-            dao.find<LocalFile>("b.txt")
-            dao.find<LocalFile>("c.txt")
-            dao.updateOrInsert(LocalFile("b.txt"))
-            dao.updateOrInsert(LocalFile("c.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "b.txt"))
-            dao.updateOrInsert(TranslationFile(translation, "c.txt"))
+            downloadedFilesRepository.findDownloadedFile("a.txt")
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+            downloadedFilesRepository.findDownloadedFile("b.txt")
+            downloadedFilesRepository.findDownloadedFile("c.txt")
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("c.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
             dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -516,10 +519,8 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun setupCleanupActorMocks() {
-        every { dao.get(QUERY_LOCAL_FILES) } returns emptyList()
-        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(emptyList())
+        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(emptyList())
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
-        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns emptyList()
     }
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {
@@ -530,13 +531,16 @@ class GodToolsDownloadManagerTest {
 
                     // detectMissingFiles()
                     fs.rootDir()
-                    dao.get(QUERY_LOCAL_FILES)
+                    downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedTranslationFiles()
-                    dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES)
+                    dao.getAsync(Query.select<Translation>())
+                    downloadedFilesRepository.getDownloadedTranslationFiles()
 
-                    // cleanupFilesystem()
-                    dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES)
+                    // deleteUnusedDownloadedFiles()
+                    attachmentsRepository.getAttachments()
+                    downloadedFilesRepository.getDownloadedTranslationFiles()
+                    downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedFiles()
                     fs.rootDir()
@@ -550,55 +554,56 @@ class GodToolsDownloadManagerTest {
     fun verifyDetectMissingFiles() = testScope.runTest {
         val file = getTmpFile(true)
         val missingFile = getTmpFile()
-        every { dao.get(QUERY_LOCAL_FILES) } returns listOf(LocalFile(file.name), LocalFile(missingFile.name))
+        val downloadedFiles = listOf(DownloadedFile(file.name), DownloadedFile(missingFile.name))
+        coEvery { downloadedFilesRepository.getDownloadedFiles() } returns downloadedFiles
         coEvery { fs.rootDir() } returns file.parentFile!!
         coEvery { fs.file(any()) } answers { File(file.parentFile, it.invocation.args[0] as String) }
 
         downloadManager.detectMissingFiles()
-        verifyAll {
-            dao.get(QUERY_LOCAL_FILES)
-            dao.delete(LocalFile(missingFile.name))
+        coVerifyAll {
+            downloadedFilesRepository.getDownloadedFiles()
+            downloadedFilesRepository.delete(DownloadedFile(missingFile.name))
         }
     }
 
     @Test
     fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
-        val file = TranslationFile(1, "file")
-        every { dao.getAsync(QUERY_CLEAN_ORPHANED_TRANSLATION_FILES) } returns CompletableDeferred(listOf(file))
+        val translation = Translation().apply {
+            id = 1
+            isDownloaded = false
+        }
+        val file = DownloadedTranslationFile(translation, "file")
+        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(listOf(translation))
+        coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)
 
         downloadManager.deleteOrphanedTranslationFiles()
-        verify { dao.deleteAsync(file) }
+        coVerify { downloadedFilesRepository.delete(file) }
     }
 
     // region deleteUnusedDownloadedFiles()
     @Test
     fun `deleteUnusedDownloadedFiles()`() = testScope.runTest {
-        val orphan = spyk(getTmpFile(true))
-        val keep = spyk(getTmpFile(true))
-        val localFile = LocalFile(orphan.name)
+        val file = spyk(getTmpFile(true))
+        val fileName = file.name
+        coEvery { fs.file(fileName) } returns file
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
-        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(localFile)
-        keep.name.let {
-            every { dao.find<LocalFile>(it) } returns LocalFile(it)
-            coEvery { fs.file(it) } returns keep
-        }
-        orphan.name.let { coEvery { fs.file(it) } returns orphan }
+        every { dao.get(TranslationFile::class.java) } returns emptyList()
+        coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(DownloadedFile(fileName))
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItem(orphan))
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(file))
         downloadManager.deleteUnusedDownloadedFiles()
-        assertEquals(setOf(keep), resourcesDir.listFiles()!!.toSet())
+        assertThat(resourcesDir.listFiles()!!.toSet(), not(hasItems(file)))
         verifyOrder {
-            dao.delete(localFile)
-            orphan.delete()
+            downloadedFilesRepository.delete(DownloadedFile(fileName))
+            file.delete()
         }
-        verify(inverse = true) { keep.delete() }
     }
 
     @Test
     fun `deleteUnusedDownloadedFiles() - keep downloaded attachments`() = testScope.runTest {
         val keep = spyk(getTmpFile(suffix = ".bin", create = true))
-        val orphan = spyk(getTmpFile(suffix = ".bin", create = true))
-        val orphanName = orphan.name
+        val remove = spyk(getTmpFile(suffix = ".bin", create = true))
+        val removeName = remove.name
         coEvery { attachmentsRepository.getAttachments() } returns listOf(
             Attachment().apply {
                 filename = keep.name
@@ -606,24 +611,25 @@ class GodToolsDownloadManagerTest {
                 isDownloaded = true
             },
             Attachment().apply {
-                filename = orphan.name
-                sha256 = orphan.name.substringBeforeLast(".")
+                filename = remove.name
+                sha256 = remove.name.substringBeforeLast(".")
                 isDownloaded = false
             }
         )
-        every { dao.get(QUERY_CLEAN_ORPHANED_LOCAL_FILES) } returns listOf(LocalFile(orphan.name), LocalFile(keep.name))
-        keep.name.let {
-            every { dao.find<LocalFile>(it) } returns LocalFile(it)
-            coEvery { fs.file(it) } returns keep
-        }
-        orphan.name.let { coEvery { fs.file(it) } returns orphan }
+        every { dao.get(TranslationFile::class.java) } returns emptyList()
+        coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(
+            DownloadedFile(keep.name),
+            DownloadedFile(remove.name),
+        )
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
+        coEvery { fs.file(removeName) } returns remove
+
+        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, remove))
         downloadManager.deleteUnusedDownloadedFiles()
-        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
+        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(remove))))
         verifyOrder {
-            dao.delete(LocalFile(orphanName))
-            orphan.delete()
+            downloadedFilesRepository.delete(DownloadedFile(removeName))
+            remove.delete()
         }
         verify(exactly = 0) { keep.delete() }
     }
@@ -634,7 +640,7 @@ class GodToolsDownloadManagerTest {
     fun `deleteOrphanedFiles()`() = testScope.runTest {
         val keep = getTmpFile(create = true)
         val orphan = getTmpFile(create = true)
-        every { dao.find<LocalFile>(keep.name) } returns LocalFile(keep.name)
+        coEvery { downloadedFilesRepository.findDownloadedFile(keep.name) } returns DownloadedFile(keep.name)
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
         downloadManager.deleteOrphanedFiles()
