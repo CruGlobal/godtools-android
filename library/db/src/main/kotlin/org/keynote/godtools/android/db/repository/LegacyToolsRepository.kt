@@ -22,6 +22,8 @@ import org.keynote.godtools.android.db.GodToolsDao
 private val QUERY_TOOLS = Query.select<Tool>()
     .where(ToolTable.SQL_WHERE_IS_TOOL_TYPE)
     .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
+private val QUERY_META_TOOLS = Query.select<Tool>()
+    .where(ToolTable.FIELD_TYPE eq Tool.Type.META)
 
 @Singleton
 internal class LegacyToolsRepository @Inject constructor(private val dao: GodToolsDao) : ToolsRepository {
@@ -39,6 +41,7 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
     private val toolsFlow = QUERY_TOOLS.getAsFlow(dao)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     override fun getToolsFlow() = toolsFlow
+    override fun getMetaToolsFlow() = dao.getAsFlow(QUERY_META_TOOLS)
 
     private val favoriteTools = toolsFlow
         .map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }

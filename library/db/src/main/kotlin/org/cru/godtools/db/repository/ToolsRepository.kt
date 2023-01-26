@@ -9,6 +9,7 @@ interface ToolsRepository {
 
     fun findToolFlow(code: String): Flow<Tool?>
     fun getToolsFlow(): Flow<List<Tool>>
+    fun getMetaToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>>
 
     suspend fun pinTool(code: String)

@@ -1,6 +1,7 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
+import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -8,12 +9,13 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
-import org.junit.Test
+import org.hamcrest.Matchers.empty
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class ToolsRepositoryIT {
@@ -130,6 +132,23 @@ abstract class ToolsRepositoryIT {
         )
     }
     // endregion getFavoriteToolsFlow()
+
+    // region getMetaToolsFlow()
+    @Test
+    fun `getMetaToolsFlow()`() = testScope.runTest {
+        val meta1 = Tool("meta1", Tool.Type.META)
+        val meta2 = Tool("meta2", Tool.Type.META)
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        repository.getMetaToolsFlow().test {
+            assertThat(awaitItem(), empty())
+
+            repository.insert(meta1, meta2, tool1, tool2)
+            runCurrent()
+            assertThat(expectMostRecentItem(), containsInAnyOrder(tool(meta1), tool(meta2)))
+        }
+    }
+    // endregion getMetaToolsFlow()
 
     @Test
     fun verifyPinTool() = testScope.runTest {
