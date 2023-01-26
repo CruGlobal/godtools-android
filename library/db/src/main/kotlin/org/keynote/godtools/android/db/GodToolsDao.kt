@@ -3,7 +3,6 @@ package org.keynote.godtools.android.db
 import androidx.annotation.RestrictTo
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.CoroutinesAsyncDao
@@ -62,10 +61,7 @@ class GodToolsDao @Inject internal constructor(
     override val coroutineScope get() = super<CoroutinesAsyncDao>.coroutineScope
 
     // region Custom DAO methods
-    fun updateSharesDeltaAsync(toolCode: String?, shares: Int) =
-        coroutineScope.launch { updateSharesDelta(toolCode, shares) }
-    suspend fun updateSharesDelta(toolCode: String?, shares: Int) {
-        if (toolCode == null) return
+    internal suspend fun updateSharesDelta(toolCode: String, shares: Int) {
         if (shares == 0) return
 
         // build query
