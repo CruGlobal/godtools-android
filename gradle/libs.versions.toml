@@ -216,4 +216,4 @@ grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 junitJacoco = { id = "com.vanniktech.android.junit.jacoco", version = "0.16.0" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.0-1.0.9" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.0.0" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.1.0" }
