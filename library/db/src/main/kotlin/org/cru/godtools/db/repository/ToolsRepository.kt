@@ -18,6 +18,11 @@ interface ToolsRepository {
     suspend fun updateToolOrder(tools: List<String>)
     suspend fun updateToolViews(code: String, delta: Int)
 
+    // region Sync Methods
+    fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
+    fun storeToolFromSync(tool: Tool)
+    // endregion Sync Methods
+
     // TODO: temporary for testing
     fun insert(vararg tool: Tool)
 }

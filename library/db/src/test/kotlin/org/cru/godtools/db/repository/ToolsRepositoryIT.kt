@@ -205,4 +205,28 @@ abstract class ToolsRepositoryIT {
         assertNotNull(repository.findTool(code)) { assertEquals(1000, it.pendingShares) }
     }
     // endregion updateToolShares()
+
+    // region Sync Methods
+    // region storeToolFromSync()
+    @Test
+    fun `storeToolFromSync()`() = testScope.runTest {
+        assertNull(repository.findTool("tool"))
+        val tool = Tool("tool")
+
+        repository.storeToolFromSync(tool)
+        assertThat(repository.findTool("tool"), tool(tool))
+    }
+
+    @Test
+    fun `storeToolFromSync() - Don't pave over added flag`() = testScope.runTest {
+        val tool = Tool("tool") { isAdded = false }
+        repository.storeToolFromSync(tool)
+        repository.pinTool("tool")
+        assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
+
+        repository.storeToolFromSync(tool)
+        assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
+    }
+    // endregion storeToolFromSync()
+    // endregion Sync Methods
 }

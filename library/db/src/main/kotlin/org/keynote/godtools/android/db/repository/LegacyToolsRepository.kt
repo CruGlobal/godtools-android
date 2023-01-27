@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.db.repository
 
+import android.database.sqlite.SQLiteDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +78,20 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
         }.await()
     }
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateSharesDelta(code, delta)
+
+    // region Sync Methods
+    override fun storeToolFromSync(tool: Tool) {
+        dao.updateOrInsert(
+            tool, SQLiteDatabase.CONFLICT_REPLACE,
+            ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
+            ToolTable.COLUMN_CATEGORY, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
+            ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_DETAILS_BANNER_ANIMATION,
+            ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_HIDDEN,
+            ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT, ToolTable.COLUMN_META_TOOL,
+            ToolTable.COLUMN_DEFAULT_VARIANT
+        )
+    }
+    // endregion Sync Methods
 
     // TODO: For testing only
     override fun insert(vararg tool: Tool) {

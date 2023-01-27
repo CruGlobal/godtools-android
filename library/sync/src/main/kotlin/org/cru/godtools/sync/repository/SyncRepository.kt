@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.repository
 
-import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.forEach
@@ -12,11 +11,11 @@ import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.task.BaseSyncTasks
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -25,6 +24,7 @@ internal class SyncRepository @Inject constructor(
     private val attachmentsRepository: AttachmentsRepository,
     private val dao: GodToolsDao,
     private val languagesRepository: LanguagesRepository,
+    private val toolsRepository: ToolsRepository,
 ) {
     // region Tools
     fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
@@ -49,15 +49,7 @@ internal class SyncRepository @Inject constructor(
         // don't store the tool if it's not valid
         if (!tool.isValid) return
 
-        dao.updateOrInsert(
-            tool, SQLiteDatabase.CONFLICT_REPLACE,
-            ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
-            ToolTable.COLUMN_CATEGORY, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
-            ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_DETAILS_BANNER_ANIMATION,
-            ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_HIDDEN,
-            ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT, ToolTable.COLUMN_META_TOOL,
-            ToolTable.COLUMN_DEFAULT_VARIANT
-        )
+        toolsRepository.storeToolFromSync(tool)
 
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) tool.latestTranslations?.let { translations ->
