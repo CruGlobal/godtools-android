@@ -1,7 +1,6 @@
 package org.cru.godtools.sync.task
 
 import android.database.sqlite.SQLiteDatabase
-import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.forEach
 import androidx.collection.valueIterator
@@ -9,10 +8,9 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.AttachmentsRepository
-import org.cru.godtools.db.repository.LanguagesRepository
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.sync.repository.SyncRepository
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -20,7 +18,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 internal abstract class BaseDataSyncTasks internal constructor(
     private val attachmentsRepository: AttachmentsRepository,
     protected val dao: GodToolsDao,
-    private val languagesRepository: LanguagesRepository,
+    private val syncRepository: SyncRepository,
 ) : BaseSyncTasks() {
     // region Tools
     protected fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
@@ -84,14 +82,6 @@ internal abstract class BaseDataSyncTasks internal constructor(
     }
     // endregion Tools
 
-    // region Languages
-    @VisibleForTesting
-    internal fun storeLanguage(language: Language) {
-        if (!language.isValid) return
-        languagesRepository.storeLanguageFromSync(language)
-    }
-    // endregion Languages
-
     // region Translations
     private fun storeTranslations(
         translations: List<Translation>,
@@ -119,7 +109,7 @@ internal abstract class BaseDataSyncTasks internal constructor(
             TranslationTable.COLUMN_PUBLISHED
         )
 
-        if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
+        if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { syncRepository.storeLanguage(it) }
     }
     // endregion Translations
 }
