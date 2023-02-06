@@ -22,10 +22,9 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
-import org.cru.godtools.db.repository.AttachmentsRepository
-import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.sync.repository.SyncRepository
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -41,12 +40,11 @@ private val API_GET_INCLUDES = arrayOf(
 
 @Singleton
 internal class ToolSyncTasks @Inject internal constructor(
-    attachmentsRepository: AttachmentsRepository,
-    dao: GodToolsDao,
+    private val dao: GodToolsDao,
     private val toolsApi: ToolsApi,
     private val viewsApi: ViewsApi,
-    languagesRepository: LanguagesRepository,
-) : BaseDataSyncTasks(attachmentsRepository, dao, languagesRepository) {
+    private val syncRepository: SyncRepository,
+) : BaseSyncTasks() {
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
     private val sharesMutex = Mutex()
@@ -66,7 +64,7 @@ internal class ToolSyncTasks @Inject internal constructor(
             // store fetched tools
             dao.transaction {
                 val existing = index(Query.select<Tool>().get(dao))
-                storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+                syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
             }
 
             // update the sync time
@@ -89,7 +87,7 @@ internal class ToolSyncTasks @Inject internal constructor(
         // store fetched tools
         dao.transaction {
             val existing = index(listOfNotNull(dao.find<Tool>(toolCode)))
-            storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+            syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
             dao.updateLastSyncTime(lastSyncKey)
         }
         true

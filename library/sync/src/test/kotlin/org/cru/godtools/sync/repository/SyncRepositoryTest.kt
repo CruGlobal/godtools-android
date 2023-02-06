@@ -1,4 +1,4 @@
-package org.cru.godtools.sync.task
+package org.cru.godtools.sync.repository
 
 import io.mockk.Called
 import io.mockk.mockk
@@ -8,18 +8,16 @@ import java.util.Locale
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.junit.Assert.assertFalse
-import org.junit.Before
 import org.junit.Test
 
-class BaseDataSyncTasksTest {
+class SyncRepositoryTest {
     private val languagesRepository: LanguagesRepository = mockk(relaxUnitFun = true)
 
-    private lateinit var tasks: BaseDataSyncTasks
-
-    @Before
-    fun setup() {
-        tasks = object : BaseDataSyncTasks(mockk(), mockk(), languagesRepository) {}
-    }
+    private val syncRepository = SyncRepository(
+        attachmentsRepository = mockk(),
+        dao = mockk(),
+        languagesRepository = languagesRepository,
+    )
 
     @Test
     fun `storeLanguage()`() {
@@ -29,7 +27,7 @@ class BaseDataSyncTasksTest {
         }
 
         // run test
-        tasks.storeLanguage(language)
+        syncRepository.storeLanguage(language)
         verifyAll {
             languagesRepository.storeLanguageFromSync(language)
         }
@@ -40,7 +38,7 @@ class BaseDataSyncTasksTest {
         val language = Language()
 
         assertFalse(language.isValid)
-        tasks.storeLanguage(language)
+        syncRepository.storeLanguage(language)
         verify { languagesRepository wasNot Called }
     }
 }

@@ -1,10 +1,12 @@
-package org.cru.godtools.sync.task
+package org.cru.godtools.sync.repository
 
 import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
 import androidx.collection.forEach
 import androidx.collection.valueIterator
+import javax.inject.Inject
+import javax.inject.Singleton
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
@@ -13,17 +15,19 @@ import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.sync.task.BaseSyncTasks
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
-internal abstract class BaseDataSyncTasks internal constructor(
+@Singleton
+internal class SyncRepository @Inject constructor(
     private val attachmentsRepository: AttachmentsRepository,
-    protected val dao: GodToolsDao,
+    private val dao: GodToolsDao,
     private val languagesRepository: LanguagesRepository,
-) : BaseSyncTasks() {
+) {
     // region Tools
-    protected fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
+    fun storeTools(tools: List<Tool>, existingTools: LongSparseArray<Tool>?, includes: Includes) {
         tools.forEach {
             storeTool(it, existingTools, includes)
             existingTools?.remove(it.id)
@@ -61,7 +65,9 @@ internal abstract class BaseDataSyncTasks internal constructor(
                 translations,
                 includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
                 existing = tool.code?.let { code ->
-                    index(Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao))
+                    BaseSyncTasks.index(
+                        Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao)
+                    )
                 }
             )
         }
@@ -86,7 +92,7 @@ internal abstract class BaseDataSyncTasks internal constructor(
 
     // region Languages
     @VisibleForTesting
-    internal fun storeLanguage(language: Language) {
+    fun storeLanguage(language: Language) {
         if (!language.isValid) return
         languagesRepository.storeLanguageFromSync(language)
     }
