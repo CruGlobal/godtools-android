@@ -1,5 +1,6 @@
 package org.cru.godtools.db.repository
 
+import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Tool
 
@@ -17,6 +18,9 @@ interface ToolsRepository {
 
     suspend fun updateToolOrder(tools: List<String>)
     suspend fun updateToolViews(code: String, delta: Int)
+
+    @WorkerThread
+    fun deleteBlocking(tool: Tool)
 
     // region Sync Methods
     fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }

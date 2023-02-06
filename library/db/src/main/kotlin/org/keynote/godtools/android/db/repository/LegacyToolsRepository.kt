@@ -15,9 +15,12 @@ import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.ToolTable
+import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private val QUERY_TOOLS = Query.select<Tool>()
@@ -27,7 +30,10 @@ private val QUERY_META_TOOLS = Query.select<Tool>()
     .where(ToolTable.FIELD_TYPE eq Tool.Type.META)
 
 @Singleton
-internal class LegacyToolsRepository @Inject constructor(private val dao: GodToolsDao) : ToolsRepository {
+internal class LegacyToolsRepository @Inject constructor(
+    private val dao: GodToolsDao,
+    private val attachmentsRepository: AttachmentsRepository
+) : ToolsRepository {
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     override suspend fun findTool(code: String) = dao.findAsync<Tool>(code).await()
@@ -78,6 +84,13 @@ internal class LegacyToolsRepository @Inject constructor(private val dao: GodToo
         }.await()
     }
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateSharesDelta(code, delta)
+
+    override fun deleteBlocking(tool: Tool) = dao.transaction {
+        dao.delete(tool)
+        // TODO: switch this to the TranslationsRepository eventually
+        tool.code?.let { dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(it)) }
+        attachmentsRepository.deleteAttachmentsFor(tool)
+    }
 
     // region Sync Methods
     override fun storeToolFromSync(tool: Tool) {

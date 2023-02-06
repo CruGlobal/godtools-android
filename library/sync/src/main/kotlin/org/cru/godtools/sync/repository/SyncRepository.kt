@@ -37,11 +37,7 @@ internal class SyncRepository @Inject constructor(
         existingTools?.forEach { _, tool ->
             if (tool.isAdded) return@forEach
 
-            dao.delete(tool)
-
-            // delete any orphaned objects for this tool
-            attachmentsRepository.deleteAttachmentsFor(tool)
-            tool.code?.let { dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(it)) }
+            toolsRepository.deleteBlocking(tool)
         }
     }
 

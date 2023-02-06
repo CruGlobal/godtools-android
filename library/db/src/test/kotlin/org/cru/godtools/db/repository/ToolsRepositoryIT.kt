@@ -15,16 +15,21 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
+import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
+import org.hamcrest.Matchers.hasSize
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class ToolsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: ToolsRepository
+    abstract val attachmentsRepository: AttachmentsRepository
 
     // region findTool()
     @Test
@@ -205,6 +210,48 @@ abstract class ToolsRepositoryIT {
         assertNotNull(repository.findTool(code)) { assertEquals(1000, it.pendingShares) }
     }
     // endregion updateToolShares()
+
+    // region deleteBlocking()
+    @Test
+    fun `deleteBlocking()`() = testScope.runTest {
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        repository.storeToolsFromSync(listOf(tool1, tool2))
+        assertThat(repository.getTools(), allOf(hasSize(2), containsInAnyOrder(tool(tool1), tool(tool2))))
+
+        repository.deleteBlocking(tool1)
+        assertThat(repository.getTools(), allOf(hasSize(1), contains(tool(tool2))))
+    }
+
+    @Test
+    fun `deleteBlocking() - delete related attachments`() = testScope.runTest {
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        repository.storeToolsFromSync(listOf(tool1, tool2))
+        attachmentsRepository.storeAttachmentsFromSync(
+            listOf(
+                Attachment().apply {
+                    id = 1
+                    toolId = tool1.id
+                },
+                Attachment().apply {
+                    id = 2
+                    toolId = tool1.id
+                },
+                Attachment().apply {
+                    id = 3
+                    toolId = tool2.id
+                }
+            )
+        )
+        assertThat(repository.getTools(), containsInAnyOrder(tool(tool1), tool(tool2)))
+        assertEquals(setOf(1L, 2L, 3L), attachmentsRepository.getAttachments().map { it.id }.toSet())
+
+        repository.deleteBlocking(tool1)
+        assertThat(repository.getTools(), contains(tool(tool2)))
+        assertEquals(setOf(3L), attachmentsRepository.getAttachments().map { it.id }.toSet())
+    }
+    // endregion deleteBlocking()
 
     // region Sync Methods
     // region storeToolFromSync()
