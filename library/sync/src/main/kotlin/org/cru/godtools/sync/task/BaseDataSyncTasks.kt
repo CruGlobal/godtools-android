@@ -3,7 +3,6 @@ package org.cru.godtools.sync.task
 import android.database.sqlite.SQLiteDatabase
 import androidx.collection.LongSparseArray
 import androidx.collection.forEach
-import androidx.collection.valueIterator
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
@@ -55,7 +54,7 @@ internal abstract class BaseDataSyncTasks internal constructor(
 
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) tool.latestTranslations?.let { translations ->
-            storeTranslations(
+            syncRepository.storeTranslations(
                 translations,
                 includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
                 existing = tool.code?.let { code ->
@@ -81,35 +80,4 @@ internal abstract class BaseDataSyncTasks internal constructor(
         }
     }
     // endregion Tools
-
-    // region Translations
-    private fun storeTranslations(
-        translations: List<Translation>,
-        existing: LongSparseArray<Translation>?,
-        includes: Includes
-    ) {
-        translations.forEach {
-            storeTranslation(it, includes)
-            existing?.remove(it.id)
-        }
-
-        // prune any existing translations that weren't synced and aren't downloaded to the device
-        existing?.valueIterator()?.forEach { translation ->
-            dao.refresh(translation)?.takeUnless { it.isDownloaded }?.let { dao.delete(it) }
-        }
-    }
-
-    private fun storeTranslation(translation: Translation, includes: Includes) {
-        dao.updateOrInsert(
-            translation,
-            TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
-            TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_TAGLINE,
-            TranslationTable.COLUMN_DETAILS_OUTLINE, TranslationTable.COLUMN_DETAILS_BIBLE_REFERENCES,
-            TranslationTable.COLUMN_DETAILS_CONVERSATION_STARTERS, TranslationTable.COLUMN_MANIFEST,
-            TranslationTable.COLUMN_PUBLISHED
-        )
-
-        if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { syncRepository.storeLanguage(it) }
-    }
-    // endregion Translations
 }

@@ -14,6 +14,7 @@ class SyncRepositoryTest {
     private val languagesRepository: LanguagesRepository = mockk(relaxUnitFun = true)
 
     private val syncRepository = SyncRepository(
+        dao = mockk(),
         languagesRepository = languagesRepository,
     )
 
