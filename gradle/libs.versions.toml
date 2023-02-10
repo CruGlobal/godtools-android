@@ -12,7 +12,7 @@ androidx-work = "2.8.0"
 dagger = "2.45"
 eventbus = "3.3.1"
 facebook-flipper = "0.179.0"
-firebase-crashlytics = "18.3.3"
+firebase-crashlytics = "18.3.4"
 firebase-perf = "20.3.1"
 godtoolsShared = "0.8.1"
 google-auto-value = "1.10.1"
@@ -89,7 +89,7 @@ facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-netw
 facebook-soloader = "com.facebook.soloader:soloader:0.10.5"
 firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:3.2.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
-firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.2"
+firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.4"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.3.0"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.1.1"
