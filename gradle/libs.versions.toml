@@ -75,7 +75,7 @@ androidx-test-junit = "androidx.test.ext:junit:1.1.5"
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
-appsflyer = "com.appsflyer:af-android-sdk:6.9.4"
+appsflyer = "com.appsflyer:af-android-sdk:6.10.0"
 coil-compose = "io.coil-kt:coil-compose:2.2.2"
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
