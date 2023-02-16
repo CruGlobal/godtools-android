@@ -26,7 +26,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
@@ -100,7 +99,8 @@ internal class ToolSyncTasks @Inject internal constructor(
      */
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
-            Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
+            toolsRepository.getTools()
+                .filter { it.pendingShares > 0 }
                 .map { tool ->
                     async {
                         val code = tool.code ?: return@async true
