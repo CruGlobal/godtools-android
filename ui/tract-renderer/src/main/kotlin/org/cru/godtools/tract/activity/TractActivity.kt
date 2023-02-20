@@ -27,6 +27,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
@@ -166,12 +167,6 @@ class TractActivity :
             val path = data.pathSegments ?: return
 
             when {
-                data.isCustomUriDeepLink() -> {
-                    dataModel.toolCode.value = path[2]
-                    dataModel.primaryLocales.value =
-                        sequenceOf(Locale.forLanguageTag(path[3])).includeFallbacks().toList()
-                    path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
-                }
                 data.isTractDeepLink() -> {
                     dataModel.toolCode.value = path[1]
                     val (primary, parallel) = data.deepLinkLanguages
@@ -182,9 +177,25 @@ class TractActivity :
                         data.deepLinkPage?.let { initialPage = it }
                     }
                 }
+                data.isGodToolsDeepLink() -> {
+                    dataModel.toolCode.value = path[3]
+                    dataModel.primaryLocales.value =
+                        sequenceOf(Locale.forLanguageTag(path[4])).includeFallbacks().toList()
+                    path.getOrNull(5)?.toIntOrNull()?.let { initialPage = it }
+                }
+                data.isCustomUriDeepLink() -> {
+                    dataModel.toolCode.value = path[2]
+                    dataModel.primaryLocales.value =
+                        sequenceOf(Locale.forLanguageTag(path[3])).includeFallbacks().toList()
+                    path.getOrNull(4)?.toIntOrNull()?.let { initialPage = it }
+                }
             }
         }
     }
+
+    private fun Uri.isGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        path?.startsWith("/deeplink/tool/tract/") == true
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
         HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&

@@ -21,6 +21,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
@@ -136,6 +137,36 @@ class TractActivityTest {
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
                 assertEquals(Locale.FRENCH, it.dataModel.activeLocale.value)
+                assertEquals(3, it.initialPage)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - godtoolsapp_com`() {
+        deepLinkScenario(Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/tract/$TOOL/fr")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - godtoolsapp_com - Missing Language`() {
+        deepLinkScenario(Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/tract/$TOOL/")) {
+            assertEquals(Lifecycle.State.DESTROYED, it.state)
+        }
+    }
+
+    @Test
+    fun `processIntent() - Deep Link - godtoolsapp_com - With Page Num`() {
+        deepLinkScenario(Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/tract/$TOOL/fr/3")) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(Locale.FRENCH, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(3, it.initialPage)
                 assertFalse(it.isFinishing)
             }
