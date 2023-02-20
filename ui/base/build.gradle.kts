@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.compose.material3)
 
+    implementation(libs.firebase.dynamic.links)
+
     api(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.lifecycle)
