@@ -92,6 +92,8 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
                 when {
                     data?.isDashboardCustomUriSchemeDeepLink() == true ->
                         viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
+                    data?.isDashboardGodToolsDeepLink() == true ->
+                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(2)))
                     data?.isDashboardLessonsDeepLink() == true -> viewModel.updateCurrentPage(Page.LESSONS)
                 }
             }

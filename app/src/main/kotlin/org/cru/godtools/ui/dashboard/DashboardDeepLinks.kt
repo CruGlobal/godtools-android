@@ -9,6 +9,10 @@ import org.cru.godtools.base.ui.dashboard.Page
 internal fun Uri.isDashboardLessonsDeepLink() =
     (scheme == "http" || scheme == "https") && host.equals(HOST_GODTOOLSAPP_COM, true) && path == "/lessons"
 
+internal fun Uri.isDashboardGodToolsDeepLink() =
+    (scheme == "http" || scheme == "https") && host.equals(HOST_GODTOOLSAPP_COM, true) &&
+        pathSegments[0] == "deeplink" && pathSegments[1] == "dashboard"
+
 internal fun Uri.isDashboardCustomUriSchemeDeepLink() = SCHEME_GODTOOLS.equals(scheme, true) &&
     HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
     pathSegments.getOrNull(0) == "dashboard"
