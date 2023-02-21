@@ -11,6 +11,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.tool.article.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Assert.assertEquals
@@ -44,6 +45,17 @@ class ArticlesActivityTest {
     @Test
     fun `processIntent() - Valid direct`() {
         scenario(context.createArticlesIntent(TOOL, Locale.ENGLISH)) {
+            it.onActivity {
+                assertEquals(TOOL, it.tool)
+                assertEquals(Locale.ENGLISH, it.locale)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - godtoolsapp_com Deep Link`() {
+        deepLinkScenario(Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/article/$TOOL/en")) {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
                 assertEquals(Locale.ENGLISH, it.locale)

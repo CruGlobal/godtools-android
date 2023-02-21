@@ -27,6 +27,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
@@ -96,19 +97,27 @@ class LessonActivity :
 
         when (intent.action) {
             ACTION_VIEW -> when {
-                // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
-                data.isLessonDeepLink() -> {
-                    dataModel.toolCode.value = path[1]
-                    dataModel.locale.value = Locale.forLanguageTag(path[2])
+                data.isGodToolsDeepLink() -> {
+                    dataModel.toolCode.value = path[3]
+                    dataModel.locale.value = Locale.forLanguageTag(path[4])
                 }
                 // Sample deep link: godtools://org.cru.godtools/tool/lesson/{tool}/{locale}
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]
                     dataModel.locale.value = Locale.forLanguageTag(path[3])
                 }
+                // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
+                data.isLessonDeepLink() -> {
+                    dataModel.toolCode.value = path[1]
+                    dataModel.locale.value = Locale.forLanguageTag(path[2])
+                }
             }
         }
     }
+
+    private fun Uri.isGodToolsDeepLink() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        path?.startsWith("/deeplink/tool/lesson/") == true
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
         HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&

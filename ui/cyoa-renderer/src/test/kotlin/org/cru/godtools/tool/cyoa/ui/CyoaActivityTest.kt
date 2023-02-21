@@ -19,6 +19,7 @@ import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -190,6 +191,32 @@ class CyoaActivityTest {
                 assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertNull(it.pageFragment)
                 manifestEnglish.value = manifest(listOf(page1, page2))
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - godtoolsapp_com Deep Link`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/cyoa/test/en"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - godtoolsapp_com Deep Link - Specific Page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/cyoa/test/en/page2"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
                 assertEquals("page2", it.pageFragment!!.pageId)
             }
         }

@@ -13,6 +13,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
 import org.junit.Assert.assertEquals
@@ -60,6 +61,13 @@ class DashboardActivityTest {
     }
 
     @Test
+    fun `Intent Processing - Deep Link - Legacy Lessons`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/lessons"))) {
+            it.onActivity { assertEquals(Page.LESSONS, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Home`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/home"))) {
             it.onActivity { assertEquals(Page.HOME, it.viewModel.currentPage.value) }
@@ -76,6 +84,27 @@ class DashboardActivityTest {
     @Test
     fun `Intent Processing - Deep Link - Custom Uri Scheme - Tools`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/dashboard/tools"))) {
+            it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - godtoolsapp_com - Home`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/dashboard/home"))) {
+            it.onActivity { assertEquals(Page.HOME, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - godtoolsapp_com - Lessons`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/dashboard/lessons"))) {
+            it.onActivity { assertEquals(Page.LESSONS, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - godtoolsapp_com - Tools`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/dashboard/tools"))) {
             it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
         }
     }

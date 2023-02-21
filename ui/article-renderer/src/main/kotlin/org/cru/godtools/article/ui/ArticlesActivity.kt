@@ -17,6 +17,7 @@ import org.cru.godtools.article.aem.ui.startAemArticleActivity
 import org.cru.godtools.article.ui.articles.ArticlesFragment
 import org.cru.godtools.article.ui.categories.CategoriesFragment
 import org.cru.godtools.article.ui.categories.CategorySelectedListener
+import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
 import org.cru.godtools.shared.tool.parser.model.Category
@@ -61,6 +62,10 @@ class ArticlesActivity :
 
         when (intent.action) {
             Intent.ACTION_VIEW -> when {
+                data.isGodToolsDeepLink() -> {
+                    dataModel.toolCode.value = path[3]
+                    dataModel.locale.value = Locale.forLanguageTag(path[4])
+                }
                 // Sample deep link: godtools://org.cru.godtools/tool/article/{tool}/{locale}
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]
@@ -69,6 +74,11 @@ class ArticlesActivity :
             }
         }
     }
+
+    private fun Uri.isGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        pathSegments?.getOrNull(0) == "deeplink" &&
+        pathSegments?.getOrNull(1) == "tool" && pathSegments?.getOrNull(2) == "article"
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
         HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
