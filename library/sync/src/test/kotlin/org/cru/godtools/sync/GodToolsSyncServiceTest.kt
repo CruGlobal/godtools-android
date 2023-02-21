@@ -11,13 +11,18 @@ import io.mockk.mockk
 import java.io.IOException
 import javax.inject.Provider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,12 +54,31 @@ class GodToolsSyncServiceTest {
         Timber.uproot(timber)
     }
 
+    // region syncTools()
     @Test
     fun `syncTools()`() = testScope.runTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
+            timber wasNot Called
             workManager wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncTools() - Cancelled`() = testScope.runTest {
+        // the Semaphore will deadlock and suspend indefinitely
+        coEvery { toolsSyncTasks.syncTools(any()) } coAnswers { Semaphore(1, 1).acquire(); true }
+        every { workManager.scheduleSyncToolsWork() } returns mockk()
+
+        val job = async { syncService.syncTools(false) }
+        runCurrent()
+        job.cancelAndJoin()
+        assertTrue(job.isCancelled)
+        coVerifyAll {
+            toolsSyncTasks.syncTools(false)
+            timber wasNot Called
+            workManager.scheduleSyncToolsWork()
         }
     }
 
@@ -66,6 +90,7 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
+            timber wasNot Called
             workManager.scheduleSyncToolsWork()
         }
     }
@@ -78,6 +103,7 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
+            timber wasNot Called
             workManager.scheduleSyncToolsWork()
         }
     }
@@ -95,4 +121,5 @@ class GodToolsSyncServiceTest {
             workManager.scheduleSyncToolsWork()
         }
     }
+    // endregion syncTools()
 }

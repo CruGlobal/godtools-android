@@ -10,6 +10,7 @@ import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +98,8 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     ) = withContext(coroutineDispatcher) {
         try {
             with<T, Boolean> { block() }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: IOException) {
             false
         } catch (e: Exception) {
@@ -113,8 +116,12 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         )
     )
 
-    suspend fun syncTools(force: Boolean) = executeSync<ToolSyncTasks> { syncTools(force) }
-        .also { if (!it) workManager.scheduleSyncToolsWork() }
+    suspend fun syncTools(force: Boolean) = try {
+        executeSync<ToolSyncTasks> { syncTools(force) }.also { if (!it) workManager.scheduleSyncToolsWork() }
+    } catch (e: CancellationException) {
+        workManager.scheduleSyncToolsWork()
+        throw e
+    }
 
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
