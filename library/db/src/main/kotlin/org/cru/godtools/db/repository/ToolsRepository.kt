@@ -24,6 +24,10 @@ interface ToolsRepository {
     @WorkerThread
     fun deleteBlocking(tool: Tool)
 
+    // region Initial Content Methods
+    suspend fun storeInitialResources(tools: Collection<Resource>)
+    // endregion Initial Content Methods
+
     // region Sync Methods
     fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
     fun storeToolFromSync(tool: Tool)

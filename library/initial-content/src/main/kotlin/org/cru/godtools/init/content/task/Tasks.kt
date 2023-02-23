@@ -80,16 +80,16 @@ internal class Tasks @Inject constructor(
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
-    suspend fun loadBundledTools() = withContext(Dispatchers.IO) {
-        // short-circuit if we already have any tools loaded
-        if (dao.getCursor(Tool::class.java).count > 0) return@withContext
+    suspend fun loadBundledResources() = withContext(Dispatchers.IO) {
+        // short-circuit if we already have any resources loaded
+        if (toolsRepository.getResources().isNotEmpty()) return@withContext
 
-        bundledTools.let { tools ->
+        bundledTools.let { resources ->
+            toolsRepository.storeInitialResources(resources)
+            attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
             dao.transaction {
-                tools.forEach { tool ->
-                    if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
-                    tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
-                    tool.attachments?.let { attachmentsRepository.storeInitialAttachments(it) }
+                resources.flatMap { it.latestTranslations.orEmpty() }.forEach { translation ->
+                    dao.insert(translation, SQLiteDatabase.CONFLICT_IGNORE)
                 }
             }
         }

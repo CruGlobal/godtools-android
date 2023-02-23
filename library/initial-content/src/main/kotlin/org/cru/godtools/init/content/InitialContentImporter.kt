@@ -18,7 +18,7 @@ class InitialContentImporter @Inject internal constructor(tasks: Tasks) {
                 tasks.initPrimaryLanguage()
             }
 
-            tasks.loadBundledTools()
+            tasks.loadBundledResources()
             launch { tasks.initFavoriteTools() }
             launch { tasks.importBundledAttachments() }
             launch { tasks.importBundledTranslations() }

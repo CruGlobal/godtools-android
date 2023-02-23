@@ -94,6 +94,12 @@ internal class LegacyToolsRepository @Inject constructor(
         attachmentsRepository.deleteAttachmentsFor(tool)
     }
 
+    // region Initial Content Methods
+    override suspend fun storeInitialResources(tools: Collection<Tool>) = dao.transactionAsync {
+        tools.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+    }.await()
+    // endregion Initial Content Methods
+
     // region Sync Methods
     override fun storeToolFromSync(tool: Tool) {
         dao.updateOrInsert(
