@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
@@ -41,6 +42,19 @@ abstract class ToolsRepositoryIT {
         assertThat(repository.findTool("tool"), tool(tool))
     }
     // endregion findTool()
+
+    // region getResources()
+    @Test
+    fun `getResources() - Returns All Resource Types`() = testScope.runTest {
+        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        repository.insert(*resources.toTypedArray())
+
+        assertThat(
+            repository.getResources(),
+            containsInAnyOrder(resources.map { tool(it) })
+        )
+    }
+    // endregion getResources()
 
     // region getTools()
     @Test

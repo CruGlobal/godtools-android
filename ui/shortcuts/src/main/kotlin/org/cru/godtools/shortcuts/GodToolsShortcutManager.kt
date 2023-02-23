@@ -214,7 +214,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
-        toolsRepository.getTools()
+        toolsRepository.getResources()
             .map { async { createToolShortcut(it) } }.awaitAll()
             .filterNotNull()
             .associateBy { it.id }

@@ -99,7 +99,7 @@ internal class ToolSyncTasks @Inject internal constructor(
      */
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
-            toolsRepository.getTools()
+            toolsRepository.getResources()
                 .filter { it.pendingShares > 0 }
                 .map { tool ->
                     async {

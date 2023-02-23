@@ -17,6 +17,7 @@ import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.ToolTable
@@ -37,6 +38,7 @@ internal class LegacyToolsRepository @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     override suspend fun findTool(code: String) = dao.findAsync<Tool>(code).await()
+    override suspend fun getResources() = dao.getAsync(Query.select<Resource>()).await()
     override suspend fun getTools() = dao.getAsync(QUERY_TOOLS).await()
 
     private val toolsCache = WeakLruCache<String, Flow<Tool?>>(15)
