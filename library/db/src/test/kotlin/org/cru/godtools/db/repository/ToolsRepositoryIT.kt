@@ -43,6 +43,17 @@ abstract class ToolsRepositoryIT {
     }
     // endregion findTool()
 
+    // region findResourceBlocking()
+    @Test
+    fun `findResourceBlocking()`() = testScope.runTest {
+        val resource = Resource("tool")
+        repository.insert(resource)
+
+        assertNull(repository.findResourceBlocking("other"))
+        assertThat(repository.findResourceBlocking("tool"), tool(resource))
+    }
+    // endregion findResourceBlocking()
+
     // region getResources()
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {
@@ -55,6 +66,19 @@ abstract class ToolsRepositoryIT {
         )
     }
     // endregion getResources()
+
+    // region getResourcesBlocking()
+    @Test
+    fun `getResourcesBlocking() - Returns All Resource Types`() = testScope.runTest {
+        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        repository.insert(*resources.toTypedArray())
+
+        assertThat(
+            repository.getResourcesBlocking(),
+            containsInAnyOrder(resources.map { tool(it) })
+        )
+    }
+    // endregion getResourcesBlocking()
 
     // region getTools()
     @Test

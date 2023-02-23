@@ -12,9 +12,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
@@ -64,8 +61,11 @@ internal class ToolSyncTasks @Inject internal constructor(
 
             // store fetched tools
             dao.transaction {
-                val existing = index(Query.select<Tool>().get(dao))
-                syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+                syncRepository.storeTools(
+                    json.data,
+                    existingTools = index(toolsRepository.getResourcesBlocking()),
+                    includes = Includes(*API_GET_INCLUDES)
+                )
             }
 
             // update the sync time
@@ -87,8 +87,11 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         // store fetched tools
         dao.transaction {
-            val existing = index(listOfNotNull(dao.find<Tool>(toolCode)))
-            syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+            syncRepository.storeTools(
+                json.data,
+                existingTools = index(listOfNotNull(toolsRepository.findResourceBlocking(toolCode))),
+                includes = Includes(*API_GET_INCLUDES)
+            )
             dao.updateLastSyncTime(lastSyncKey)
         }
         true

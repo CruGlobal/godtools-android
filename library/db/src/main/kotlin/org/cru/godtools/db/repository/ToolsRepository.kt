@@ -7,7 +7,11 @@ import org.cru.godtools.model.Tool
 
 interface ToolsRepository {
     suspend fun findTool(code: String): Tool?
+    @WorkerThread
+    fun findResourceBlocking(code: String): Tool?
     suspend fun getResources(): List<Resource>
+    @WorkerThread
+    fun getResourcesBlocking(): List<Resource>
     suspend fun getTools(): List<Tool>
 
     fun findToolFlow(code: String): Flow<Tool?>

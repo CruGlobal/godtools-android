@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.findAsFlow
 import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
@@ -38,7 +39,9 @@ internal class LegacyToolsRepository @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     override suspend fun findTool(code: String) = dao.findAsync<Tool>(code).await()
+    override fun findResourceBlocking(code: String) = dao.find<Resource>(code)
     override suspend fun getResources() = dao.getAsync(Query.select<Resource>()).await()
+    override fun getResourcesBlocking() = dao.get(Query.select<Resource>())
     override suspend fun getTools() = dao.getAsync(QUERY_TOOLS).await()
 
     private val toolsCache = WeakLruCache<String, Flow<Tool?>>(15)
