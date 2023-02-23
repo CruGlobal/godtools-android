@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
@@ -30,7 +29,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,13 +38,10 @@ class GodToolsDownloadManagerDispatcherTest {
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
     private val favoriteToolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
-    private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
+    private val resourcesFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { getAttachmentsFlow() } returns attachmentsFlow
-    }
-    private val dao = mockk<GodToolsDao> {
-        every { getAsFlow(Query.select<Tool>()) } returns toolsFlow
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
         coEvery { downloadLatestPublishedTranslation(any()) } returns true
@@ -61,6 +56,7 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val toolsRepository: ToolsRepository by lazy {
         mockk {
+            every { getResourcesFlow() } returns resourcesFlow
             every { getFavoriteToolsFlow() } returns favoriteToolsFlow
         }
     }
@@ -75,7 +71,6 @@ class GodToolsDownloadManagerDispatcherTest {
     fun startDispatcher() {
         GodToolsDownloadManager.Dispatcher(
             attachmentsRepository,
-            dao,
             downloadManager,
             downloadedFilesRepository,
             settings,
@@ -174,7 +169,7 @@ class GodToolsDownloadManagerDispatcherTest {
         }
 
         attachmentsFlow.emit(attachments)
-        toolsFlow.emit(listOf(tool1, tool2))
+        resourcesFlow.emit(listOf(tool1, tool2))
         runCurrent()
         coVerify(exactly = 1) {
             downloadManager.downloadAttachment(attachments[3].id)

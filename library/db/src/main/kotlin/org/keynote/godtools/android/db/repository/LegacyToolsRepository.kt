@@ -49,6 +49,7 @@ internal class LegacyToolsRepository @Inject constructor(
         dao.findAsFlow<Tool>(code)
             .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     }
+    override fun getResourcesFlow() = dao.getAsFlow(Query.select<Resource>())
 
     private val toolsFlow = QUERY_TOOLS.getAsFlow(dao)
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)

@@ -122,6 +122,19 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getTools()
 
+    // region getResourcesFlow()
+    @Test
+    fun `getResourcesFlow() - Returns All Resource Types`() = testScope.runTest {
+        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        repository.insert(*resources.toTypedArray())
+
+        assertThat(
+            repository.getResourcesFlow().first(),
+            containsInAnyOrder(resources.map { tool(it) })
+        )
+    }
+    // endregion getResourcesFlow()
+
     // region getToolsFlow()
     @Test
     fun `getToolsFlow() - Supported Tool Types Only`() = testScope.runTest {

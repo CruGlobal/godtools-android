@@ -15,6 +15,7 @@ interface ToolsRepository {
     suspend fun getTools(): List<Tool>
 
     fun findToolFlow(code: String): Flow<Tool?>
+    fun getResourcesFlow(): Flow<List<Resource>>
     fun getToolsFlow(): Flow<List<Tool>>
     fun getMetaToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>>

@@ -56,7 +56,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
@@ -458,7 +457,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
-        dao: GodToolsDao,
         private val downloadManager: GodToolsDownloadManager,
         downloadedFilesRepository: DownloadedFilesRepository,
         settings: Settings,
@@ -469,7 +467,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         @Inject
         internal constructor(
             attachmentsRepository: AttachmentsRepository,
-            dao: GodToolsDao,
             downloadManager: GodToolsDownloadManager,
             downloadedFilesRepository: DownloadedFilesRepository,
             settings: Settings,
@@ -477,7 +474,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             translationsRepository: TranslationsRepository,
         ) : this(
             attachmentsRepository,
-            dao,
             downloadManager,
             downloadedFilesRepository,
             settings,
@@ -523,14 +519,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // Tool Banner Attachments
             attachmentsRepository.getAttachmentsFlow()
-                .combineTransform(dao.getAsFlow(Query.select<Tool>())) { attachments, tools ->
+                .combine(toolsRepository.getResourcesFlow()) { attachments, tools ->
                     val banners =
                         tools.flatMap { listOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId) }
-                    emit(attachments.filter { !it.isDownloaded && it.id in banners }.map { it.id }.toSet())
+                    attachments.filter { !it.isDownloaded && it.id in banners }.map { it.id }.toSet()
                 }
                 .distinctUntilChanged()
                 .conflate()
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
+                .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
                 .launchIn(coroutineScope)
         }
     }
