@@ -22,6 +22,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
@@ -47,6 +48,7 @@ internal class Tasks @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
     private val languagesRepository: LanguagesRepository,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
@@ -95,7 +97,8 @@ internal class Tasks @Inject constructor(
 
     suspend fun initFavoriteTools() {
         // check to see if we have initialized the default tools before
-        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+        if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+        if (toolsRepository.getTools().any { it.isAdded }) return
 
         coroutineScope {
             val preferred = async {
@@ -116,7 +119,7 @@ internal class Tasks @Inject constructor(
                 .toList().joinAll()
         }
 
-        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
+        lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
 
     private val bundledTools: List<Tool>
