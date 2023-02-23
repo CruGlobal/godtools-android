@@ -27,15 +27,15 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTokenStorage.Companion.makeChangeAware
+import org.ccci.gto.android.common.okta.authfoundation.credential.MigrationTokenStorage
 import org.ccci.gto.android.common.okta.authfoundation.credential.SharedPreferencesTokenStorage
-import org.ccci.gto.android.common.okta.authfoundation.credential.migrateTo
 import org.ccci.gto.android.common.okta.datastore.DataStoreTokenStorage
 import org.ccci.gto.android.common.okta.oidc.storage.security.NoopEncryptionManager
 import org.ccci.gto.android.common.okta.oidc.storage.security.createDefaultEncryptionManager
 import org.cru.godtools.account.provider.AccountProvider
 import timber.log.Timber
 
+private const val TAG = "OktaModule"
 private const val OKTA_SCOPE = "openid profile email offline_access"
 
 @Module
@@ -61,19 +61,18 @@ internal abstract class OktaModule {
 
         @Provides
         @Singleton
-        fun OidcClient.oktaTokenStorage(
-            @ApplicationContext context: Context,
-            coroutineScope: CoroutineScope
-        ): TokenStorage = DataStoreTokenStorage(context).let { dataStore ->
-            when {
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.M -> dataStore
-                else -> SharedPreferencesTokenStorage(this, context)
-                    .makeChangeAware()
-                    // migrate tokens if the user had previously used the DataStoreTokenStorage
-                    // TODO: this may race with loading tokens in the CredentialDataSource.
-                    //       We may want to create a "MergedTokenStorage" class instead to facilitate token migrations.
-                    .also { prefs -> coroutineScope.launch { dataStore.migrateTo(prefs) } }
+        fun OidcClient.oktaTokenStorage(@ApplicationContext context: Context): TokenStorage {
+            val dataStore = DataStoreTokenStorage(context)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return dataStore
+
+            val sharedPreferences = try {
+                SharedPreferencesTokenStorage(this, context, verify = true)
+            } catch (e: Exception) {
+                Timber.tag(TAG).e(e, "Error creating Okta SharedPreferencesTokenStorage")
+                null
             }
+            if (sharedPreferences != null) return MigrationTokenStorage(sharedPreferences, dataStore)
+            return dataStore
         }
 
         @Provides
