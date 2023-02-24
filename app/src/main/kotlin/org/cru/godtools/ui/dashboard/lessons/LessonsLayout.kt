@@ -31,7 +31,7 @@ fun LessonsLayout(
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item("header", "header") { LessonsHeader() }
 
-        items(lessons.orEmpty(), { it }, { "lesson" }) {
+        items(lessons, { it }, { "lesson" }) {
             LessonToolCard(
                 it,
                 onClick = { tool, translation ->

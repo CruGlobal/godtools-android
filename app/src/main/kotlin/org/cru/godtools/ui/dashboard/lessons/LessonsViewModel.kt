@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.stateIn
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
+import org.cru.godtools.db.repository.ToolsRepository
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.repository.LessonsRepository
 
 @HiltViewModel
 class LessonsViewModel @Inject constructor(
     private val eventBus: EventBus,
-    lessonsRepository: LessonsRepository,
+    toolsRepository: ToolsRepository,
 ) : ViewModel() {
-    val lessons = lessonsRepository.lessons
-        .map { it.mapNotNull { it.code } }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+    val lessons = toolsRepository.getLessonsFlow()
+        .map { it.filterNot { it.isHidden }.mapNotNull { it.code } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     // region Analytics
     fun recordOpenLessonInAnalytics(tool: String?) {
