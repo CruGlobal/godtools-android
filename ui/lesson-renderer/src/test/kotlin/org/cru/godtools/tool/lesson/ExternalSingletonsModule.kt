@@ -10,6 +10,7 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -35,7 +36,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val downloadManager by lazy {
         mockk<GodToolsDownloadManager> {
-            every { downloadLatestPublishedTranslationAsync(any(), any()) } returns Job().apply { complete() }
+            every { downloadLatestPublishedTranslationAsync(any(), any()) } returns CompletableDeferred(true)
         }
     }
     @get:Provides
