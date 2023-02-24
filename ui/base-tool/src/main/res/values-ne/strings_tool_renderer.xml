@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">"साझा गर्नुहोस "</string>
     <string name="tool_share_sheet_more_apps">थप</string>
+    <string name="share_tool_message">यो लिङ्कले तपाईलाई आज हामीले के कुरा गरिरहेका थियौं भन्ने वेब संस्करणमा लैजान्छ: %1$s \n\n
+
+एप https://godtoolsapp.com बाट डाउनलोड गर्न सकिन्छ \n\n
+
+थप कुरा गरौं!</string>
     <string name="share_tool_message_article">म तपाईसँग यो लेख साझा गर्न चाहान्छु र यसको बारेमा तपाईको विचार सुन्न चाहन्छु।\n%1$s</string>
     <string name="feature_discovery_title_share_tool">लिङ्क साझा गर्नुहोस्</string>
     <string name="feature_discovery_desc_share_tool">यो आइकनमा क्लिक गरेर साथीलाई यो टुल पठाउनुहोस्</string>

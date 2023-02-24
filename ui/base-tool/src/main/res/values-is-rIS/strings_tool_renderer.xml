@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Deila</string>
     <string name="tool_share_sheet_more_apps">Meira</string>
+    <string name="share_tool_message">Þessi tengill mun fara með þig á vefútgáfuna af því sem við vorum að tala um í dag: %1$s \n\n
+
+Hægt er að niðurhala appinu frá https://godtoolsapp.com \n\n
+
+Tölum meira saman!</string>
     <string name="share_tool_message_article">Ég vildi deila þessari grein með þér og hefði gaman af að heyra hvað þér finnst um hana.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Deila tengli</string>
     <string name="feature_discovery_desc_share_tool">Sendu þetta tól til vinar með því að smella á þetta tákn</string>

@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Kristen vekst</string>
     <string name="tool_category_training">Opplæring</string>
     <!-- Sharing -->
-    <string name="share_general_message">Denne koblingen tar deg til nettversjonen av det vi snakket om i dag: %1$s \n\n
-
-Appen kan lastes ned fra https://godtoolsapp.com \n\n
-
-La oss snakke mer!</string>
 </resources>

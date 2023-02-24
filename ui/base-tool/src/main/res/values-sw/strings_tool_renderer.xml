@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Shikisha</string>
     <string name="tool_share_sheet_more_apps">Zaidi</string>
+    <string name="share_tool_message">Hili litakupeleka kwenye toleo la wavu kuhusu tunachozungumzia leo: %1$s \n\n
+
+Programu hii inaweza kupakuliwa kutoka https://godtoolsapp.com 
+ 
+Tuzungumze Zaidi!</string>
     <string name="share_tool_message_article">Nilitaka kukusambazia makala hii na ningependa kusikia maoni yako kuihusu.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Shirikisha wengine na kiungo</string>
     <string name="feature_discovery_desc_share_tool">Tuma zana hii kwa rafiki kwa kubofya ikoni hii</string>

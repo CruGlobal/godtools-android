@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Dela</string>
     <string name="tool_share_sheet_more_apps">Mer</string>
+    <string name="share_tool_message">Den här länken tar dig till en webbversion av det vi pratade om idag: %1$s \n\n
+
+Appen kan laddas ner från https://godtoolsapp.com \n\n
+
+Vi tar och pratar mer!</string>
     <string name="share_tool_message_article">Jag vill dela den här artikeln med dig och skulle vilja höra vad du tycker.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Dela en länk</string>
     <string name="feature_discovery_desc_share_tool">Skicka det här verktyget till en vän genom att klicka på denna ikon</string>

@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Переслати</string>
     <string name="tool_share_sheet_more_apps">Більше</string>
+    <string name="share_tool_message">Ось посилання, за яким можна подивитися додаткову інформацію стосовно нашої розмови сьогодні: %1$s\n\n
+
+Ось посилання, за яким можна завантажити програму: https://godtoolsapp.com \n\n
+
+Поговорімо іще :-)</string>
     <string name="share_tool_message_article">Я хочу поділитись цією статтею з вами й почути вашу думку щодо неї:\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Поширте посилання</string>
     <string name="feature_discovery_desc_share_tool">Нажміть цю іконку, щоб відправити програму другові чи подружці</string>

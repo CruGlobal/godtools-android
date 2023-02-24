@@ -10,6 +10,9 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Jagamine</string>
     <string name="tool_share_sheet_more_apps">Veel</string>
+    <string name="share_tool_message">Link viib sind täna käsitletu veebiversioonile: %1$s \n\n
+
+Rakenduse saab alla laadida lehelt godtoolsapp.com\n\n</string>
     <string name="share_tool_message_article">Soovin seda artiklit Sinuga jagada ja kuulda, mis Sa sellest arvad.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Jaga linki</string>
     <string name="feature_discovery_desc_share_tool">Saada tööriist sõbrale, klõpsates sellele ikoonile</string>

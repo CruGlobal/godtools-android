@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Hitbeli növekedés</string>
     <string name="tool_category_training">Képzés</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ez a hivatkozás vezet el a webes verzióra, amelyről ma beszélgettünk: %1$s \n\n
-
-Ez az alkalmazás innen tölthető le: https://godtoolsapp.com \n\n
-
-Beszélgessünk még!</string>
 </resources>

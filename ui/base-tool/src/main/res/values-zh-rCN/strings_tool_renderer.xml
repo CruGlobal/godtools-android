@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">分享</string>
     <string name="tool_share_sheet_more_apps">更多</string>
+    <string name="share_tool_message">点击这个链接，您会看到我们今天谈论内容的网页版：%1$s \n\n
+
+应用下载地址：https://godtoolsapp.com \n\n
+
+让我们畅谈吧！</string>
     <string name="share_tool_message_article">我想分享这篇文章给你并期待听到你对它的看法。%1$s</string>
     <string name="feature_discovery_title_share_tool">分享链接</string>
     <string name="feature_discovery_desc_share_tool">点击此图标，将这款工具发送给朋友</string>

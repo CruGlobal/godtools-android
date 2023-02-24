@@ -294,7 +294,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
             .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.ui.R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, getString(org.cru.godtools.ui.R.string.share_general_message, shareLink))
+            .putExtra(Intent.EXTRA_TEXT, getString(org.cru.godtools.ui.R.string.share_tool_message, shareLink))
             .let { Intent.createChooser(it, null) }
             .also { startActivity(it) }
     }

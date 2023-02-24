@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Zdieľanie</string>
     <string name="tool_share_sheet_more_apps">Viac</string>
+    <string name="share_tool_message">Tento odkaz vás nasmeruje na webovú verziu obsahu, o ktorom sme sa dnes rozprávali: %1$s \n\n
+
+Aplikácia sa dá stiahnuť na https://godtoolsapp.com \n\n
+
+Porozprávajme sa podrobnejšie!</string>
     <string name="share_tool_message_article">Chcem sa s vami podeliť o tento článkom a zaujíma ma, aký naň máte názor.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Zdieľajte odkaz</string>
     <string name="feature_discovery_desc_share_tool">Kliknite na túto ikonu a pošlite tento nástroj priateľovi</string>

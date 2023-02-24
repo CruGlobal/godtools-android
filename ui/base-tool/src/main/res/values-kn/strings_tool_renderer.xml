@@ -8,6 +8,12 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_tool_message">"ಈ ಲಿಂಕ್ ನಾವು ಇಂದು ಮಾತನಾಡುತ್ತಿದ್ದ ವೆಬ್ ಆವೃತ್ತಿಗೆ ನಿಮ್ಮನ್ನು ಕರೆದೊಯ್ಯುತ್ತದೆ: %1$s
+
+ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು https://godtoolsapp.com ನಿಂದ ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು
+
+ಹೆಚ್ಚು ಮಾತನಾಡೋಣ! 
+"</string>
     <string name="share_tool_message_article">ನಾನು ಈ ಲೇಖನವನ್ನು ನಿಮ್ಮೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲು ಬಯಸಿದ್ದೇನೆ ಮತ್ತು ಅದರ ಬಗ್ಗೆ ನಿಮ್ಮ ಆಲೋಚನೆಗಳನ್ನು ಕೇಳಲು ಬಯಸುತ್ತೇನೆ. %1$s</string>
     <string name="feature_discovery_title_share_tool">ಲಿಂಕ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
     <string name="feature_discovery_desc_share_tool">ಈ ಐಕಾನ್ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ಈ ಸಾಧನ ಸ್ನೇಹಿತರಿಗೆ ಕಳುಹಿಸಿ</string>

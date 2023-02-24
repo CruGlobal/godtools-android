@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Dalytis</string>
     <string name="tool_share_sheet_more_apps">Daugiau</string>
+    <string name="share_tool_message">Ši nuoroda nuves į internetinę versiją to, apie ką šiandien kalbame: %1$s \n\n
+
+Programėlę galima atsisiųsti adresu https://godtoolsapp.com \n\n
+
+Pakalbėkime daugiau!</string>
     <string name="share_tool_message_article">Norėjau pasidalyti šiuo straipsniu su jumis ir norėčiau išgirsti jūsų mintis apie jį.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bendrinti nuorodą</string>
     <string name="feature_discovery_desc_share_tool">Siųsti šį įrankį draugui paspaudus šią piktogramą</string>

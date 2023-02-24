@@ -8,6 +8,11 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Kompartí</string>
+    <string name="share_tool_message">E lenk aki lo hiba bo na e wèpsait di loke nos tabata papia: %1$s \n\n
+
+Bo por baha e app na: https://godtoolsapp.com \n\n
+
+Laga nos papia un tiki mas!</string>
     <string name="share_tool_message_article">Mi ke a kompartí e artíkulo aki ku bo i lo mi ke tende ki bo ta pensa di dje.\n\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Kompartí un lenk</string>
     <string name="feature_discovery_desc_share_tool">Manda e hèrmènt aki pa un amigu dor di primi riba e boton aki</string>

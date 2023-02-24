@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Kongsi</string>
     <string name="tool_share_sheet_more_apps">Lagi</string>
+    <string name="share_tool_message">Pautan ini akan membawa anda ke versi web yang sedang kami perkatakan hari ini: %1$s \n\n
+
+Apl ini boleh dimuat turunkan daripada https://godtoolsapp.com\n\n
+
+Jom berbincang selanjutnya!</string>
     <string name="share_tool_message_article">Saya ingin berkongsi artikel ini dengan anda dan berharap dapat mendengar pandangan anda.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Kongsi pautan</string>
     <string name="feature_discovery_desc_share_tool">Hantar alat ini kepada rakan dengan mengklik ikon ini</string>

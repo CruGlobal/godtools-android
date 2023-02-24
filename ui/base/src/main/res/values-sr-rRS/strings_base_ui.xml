@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Хришћанско узрастање</string>
     <string name="tool_category_training">Обука</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ова веза ће вас одвести на веб верзију онога о чему смо данас разговарали %1$s \n\n
-
-		Ево апликације која се може преузети саhttps://godtoolsapp.com
-
-		Хајде да разговарамо више!</string>
 </resources>

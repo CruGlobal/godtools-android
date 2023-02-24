@@ -8,6 +8,11 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شارك</string>
+    <string name="share_tool_message">سينقلك هذا الرابط إلى إصدار ويب لما كنا نتحدث عنه اليوم: %1$s \n\n
+
+يمكن تنزيل التطبيق من https://godtoolsapp.com \n\n
+
+لنتحدث أكثر!</string>
     <string name="feature_discovery_title_share_tool">شارك رابطاً</string>
     <string name="feature_discovery_desc_share_tool">أرسل هذه الأداة إلى صديق بالضغط على هذه الأيقونة</string>
     <!-- Shareables -->

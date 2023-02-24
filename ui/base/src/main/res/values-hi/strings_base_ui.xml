@@ -8,9 +8,4 @@
     <string name="tool_category_growth">मसीही विकास</string>
     <string name="tool_category_training">प्रशिक्षण</string>
     <!-- Sharing -->
-    <string name="share_general_message">यह लिंक आपको हमारे आज के विषय के वैब संस्करण पर ले जाएगा: %1$s \n \n
-
-ऐप यहां से डाउनलोड किया जा सकता है https://godtoolsapp.com \n \n
-
-चलो और अधिक बात करते हैं!</string>
 </resources>

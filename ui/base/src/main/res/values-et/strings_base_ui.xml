@@ -8,7 +8,4 @@
     <string name="tool_category_growth">Areng kristlasena</string>
     <string name="tool_category_training">Ettevalmistus</string>
     <!-- Sharing -->
-    <string name="share_general_message">Link viib sind täna käsitletu veebiversioonile: %1$s \n\n
-
-Rakenduse saab alla laadida lehelt godtoolsapp.com\n\n</string>
 </resources>

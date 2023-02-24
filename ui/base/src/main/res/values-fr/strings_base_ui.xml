@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Croissance chrétienne</string>
     <string name="tool_category_training">Formation</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ce lien vous redirigera vers une version web de ce dont nous avons parlé aujourd\'hui : %1$s \n\n
-
-L\'application est téléchargeable depuis https://godtoolsapp.com \n\n
-
-Continuons à en parler !</string>
 </resources>

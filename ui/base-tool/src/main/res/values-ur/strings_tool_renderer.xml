@@ -10,6 +10,12 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شیئر کریں</string>
     <string name="tool_share_sheet_more_apps">"مزید "</string>
+    <string name="share_tool_message">آج ہم جس بارے میں بات کر رہے تھے یہ لنک آپ کو اس کے ویب ورژن پر لے جائے گا:
+%1$s \n\n
+
+ایپ کو یہاں سے ڈاؤن لوڈ کیا جا سکتا ہے https://godtoolsapp.com \n\n
+
+آئیے مزید بات کرتے ہیں!</string>
     <string name="share_tool_message_article">میں آپ کے ساتھ اس مضمون کو ساجھا کرنا چاہتا ہوں اور اس کے بارے میں آپ کے افکار سننے کا خواہاں ہوں۔\n%1$s</string>
     <string name="feature_discovery_title_share_tool">ایک لنک شیئر کریں</string>
     <string name="feature_discovery_desc_share_tool">اس آئکن پر کلک کر کے یہ ٹول کسی دوست کو بھیجیں</string>

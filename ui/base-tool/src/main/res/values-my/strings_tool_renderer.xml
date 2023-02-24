@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ဝေငှ ပါ</string>
     <string name="tool_share_sheet_more_apps">နောက်ထပ်</string>
+    <string name="share_tool_message">ယနေ့ကျွန်ုပ်တို့ဆွေးနွေးခဲ့သည်များ၏ ဝက်ဘ်ဗားရှင်းကို ယခုလင့်ခ်မှ သင်ဝင်ရောက်နိုင်သည်။ http://godtoolsapp.com%1$s \n\n
+
+ထိုအက်ပ်ကို https://godtoolsapp.com \n\n တွင် ဒေါင်းလုပ်ချရယူနိုင်ပါသည်။
+
+ဆက်ဆွေးနွေးကြပါစို့</string>
     <string name="share_tool_message_article">ဤဆောင်းပါးကို သင်နှင့် မျှဝေပြီး သင်၏ ထင်မြင်ချက်ကို ကြားလိုပါသည်။\n%1$s</string>
     <string name="feature_discovery_title_share_tool">လင့်ခ်တစ်ခုကို မျှဝေပါ</string>
     <string name="feature_discovery_desc_share_tool">ဤအိုင်ကွန်ကို နှိပ်ခြင်းဖြင့် ဤကိရိယာကို မိတ်ဆွေတစ်ဦးထံ ပေးပို့ပါ</string>

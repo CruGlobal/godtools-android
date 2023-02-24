@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Bagikan</string>
     <string name="tool_share_sheet_more_apps">lagi</string>
+    <string name="share_tool_message">Tautan ini akan membawa Anda ke versi web tentang apa yang kami bicarakan hari ini: %1$s \n\n
+
+Aplikasi ini dapat diunduh di https://godtoolsapp.com \n\n
+
+Mari bicara lebih banyak!</string>
     <string name="share_tool_message_article">Saya ingin membagikan artikel ini dengan Anda dan ingin mendengar pendapat Anda tentang artikel ini.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
     <string name="feature_discovery_desc_share_tool">Kirim sarana ini ke teman dengan mengklik ikon ini</string>
