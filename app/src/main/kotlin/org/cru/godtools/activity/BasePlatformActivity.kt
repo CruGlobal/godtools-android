@@ -21,7 +21,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
@@ -35,7 +34,6 @@ import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.base.util.deviceLocale
@@ -286,15 +284,11 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     private fun launchShare() {
         eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, settings.primaryLanguage))
-        val shareLink = URI_SHARE_BASE.buildUpon()
-            .appendPath(settings.primaryLanguage.toLanguageTag().lowercase(Locale.US))
-            .appendPath("")
-            .build().toString()
 
         Intent(Intent.ACTION_SEND)
             .setType("text/plain")
             .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.ui.R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, getString(org.cru.godtools.ui.R.string.share_tool_message, shareLink))
+            .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_message))
             .let { Intent.createChooser(it, null) }
             .also { startActivity(it) }
     }
