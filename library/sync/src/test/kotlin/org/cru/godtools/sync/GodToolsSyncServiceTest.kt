@@ -2,18 +2,19 @@ package org.cru.godtools.sync
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
+import io.mockk.Awaits
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.excludeRecords
+import io.mockk.just
 import io.mockk.mockk
 import java.io.IOException
 import javax.inject.Provider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
@@ -67,8 +68,7 @@ class GodToolsSyncServiceTest {
 
     @Test
     fun `syncTools() - Cancelled`() = testScope.runTest {
-        // the Semaphore will deadlock and suspend indefinitely
-        coEvery { toolsSyncTasks.syncTools(any()) } coAnswers { Semaphore(1, 1).acquire(); true }
+        coEvery { toolsSyncTasks.syncTools(any()) } just Awaits
         every { workManager.scheduleSyncToolsWork() } returns mockk()
 
         val job = async { syncService.syncTools(false) }
