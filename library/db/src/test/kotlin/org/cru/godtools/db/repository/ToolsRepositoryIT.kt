@@ -36,7 +36,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `findTool()`() = testScope.runTest {
         val tool = Tool("tool")
-        repository.insert(tool)
+        repository.storeToolFromSync(tool)
 
         assertNull(repository.findTool("other"))
         assertThat(repository.findTool("tool"), tool(tool))
@@ -47,7 +47,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `findResourceBlocking()`() = testScope.runTest {
         val resource = Resource("tool")
-        repository.insert(resource)
+        repository.storeToolFromSync(resource)
 
         assertNull(repository.findResourceBlocking("other"))
         assertThat(repository.findResourceBlocking("tool"), tool(resource))
@@ -58,7 +58,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {
         val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.insert(*resources.toTypedArray())
+        repository.storeToolsFromSync(resources)
 
         assertThat(
             repository.getResources(),
@@ -71,7 +71,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `getResourcesBlocking() - Returns All Resource Types`() = testScope.runTest {
         val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.insert(*resources.toTypedArray())
+        repository.storeToolsFromSync(resources)
 
         assertThat(
             repository.getResourcesBlocking(),
@@ -84,7 +84,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `getTools() - Supported Tool Types Only`() = testScope.runTest {
         val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
-        repository.insert(*tools.toTypedArray())
+        repository.storeToolsFromSync(tools)
 
         assertThat(
             repository.getTools(),
@@ -100,7 +100,7 @@ abstract class ToolsRepositoryIT {
     fun `getTools() - Don't filter hidden tools`() = testScope.runTest {
         val hidden = Tool("hidden") { isHidden = true }
         val visible = Tool("visible") { isHidden = false }
-        repository.insert(hidden, visible)
+        repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
             repository.getTools(),
@@ -113,7 +113,7 @@ abstract class ToolsRepositoryIT {
         val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
         val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
         val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
-        repository.insert(meta, defaultVariant, otherVariant)
+        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
 
         assertThat(
             repository.getTools(),
@@ -126,7 +126,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `getResourcesFlow() - Returns All Resource Types`() = testScope.runTest {
         val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.insert(*resources.toTypedArray())
+        repository.storeToolsFromSync(resources)
 
         assertThat(
             repository.getResourcesFlow().first(),
@@ -139,7 +139,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `getToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
         val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
-        repository.insert(*tools.toTypedArray())
+        repository.storeToolsFromSync(tools)
 
         assertThat(
             repository.getToolsFlow().first(),
@@ -155,7 +155,7 @@ abstract class ToolsRepositoryIT {
     fun `getToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
         val hidden = Tool("hidden") { isHidden = true }
         val visible = Tool("visible") { isHidden = false }
-        repository.insert(hidden, visible)
+        repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
             repository.getToolsFlow().first(),
@@ -168,7 +168,7 @@ abstract class ToolsRepositoryIT {
         val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
         val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
         val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
-        repository.insert(meta, defaultVariant, otherVariant)
+        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
 
         assertThat(
             repository.getToolsFlow().first(),
@@ -184,7 +184,7 @@ abstract class ToolsRepositoryIT {
         val tool2 = Tool("tool2") { isAdded = false }
         val fav1 = Tool("fav1") { isAdded = true }
         val fav2 = Tool("fav2") { isAdded = true }
-        repository.insert(tool1, tool2, fav1, fav2)
+        repository.storeToolsFromSync(listOf(tool1, tool2, fav1, fav2))
 
         assertThat(
             repository.getFavoriteToolsFlow().first(),
@@ -203,7 +203,7 @@ abstract class ToolsRepositoryIT {
         repository.getMetaToolsFlow().test {
             assertThat(awaitItem(), empty())
 
-            repository.insert(meta1, meta2, tool1, tool2)
+            repository.storeToolsFromSync(listOf(meta1, meta2, tool1, tool2))
             runCurrent()
             assertThat(expectMostRecentItem(), containsInAnyOrder(tool(meta1), tool(meta2)))
         }
@@ -213,7 +213,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun verifyPinTool() = testScope.runTest {
         val code = "pinTool"
-        repository.insert(Tool(code))
+        repository.storeToolFromSync(Tool(code))
 
         repository.findToolFlow(code).test {
             assertFalse(assertNotNull(awaitItem()).isAdded)
@@ -226,7 +226,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun verifyUnpinTool() = testScope.runTest {
         val code = "pinTool"
-        repository.insert(Tool(code) { isAdded = true })
+        repository.storeToolFromSync(Tool(code) { isAdded = true })
 
         repository.findToolFlow(code).test {
             assertTrue(assertNotNull(awaitItem()).isAdded)
@@ -240,7 +240,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `updateToolViews()`() = testScope.runTest {
         val code = "shares"
-        repository.insert(Tool(code))
+        repository.storeToolFromSync(Tool(code))
         assertNotNull(repository.findTool(code)) { assertEquals(0, it.pendingShares) }
 
         repository.updateToolViews(code, 10)
@@ -253,7 +253,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `updateToolViews() - Concurrent Updates`() = testScope.runTest {
         val code = "shares"
-        repository.insert(Tool(code))
+        repository.storeToolFromSync(Tool(code))
 
         withContext(Dispatchers.IO) {
             repeat(1000) { launch { repository.updateToolViews(code, 1) } }

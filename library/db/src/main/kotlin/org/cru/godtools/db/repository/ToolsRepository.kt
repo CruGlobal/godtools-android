@@ -37,7 +37,4 @@ interface ToolsRepository {
     fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
     fun storeToolFromSync(tool: Tool)
     // endregion Sync Methods
-
-    // TODO: temporary for testing
-    fun insert(vararg tool: Tool)
 }

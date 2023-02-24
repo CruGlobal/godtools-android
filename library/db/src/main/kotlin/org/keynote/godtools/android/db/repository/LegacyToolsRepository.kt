@@ -117,9 +117,4 @@ internal class LegacyToolsRepository @Inject constructor(
         )
     }
     // endregion Sync Methods
-
-    // TODO: For testing only
-    override fun insert(vararg tool: Tool) {
-        tool.forEach { dao.insert(it) }
-    }
 }
