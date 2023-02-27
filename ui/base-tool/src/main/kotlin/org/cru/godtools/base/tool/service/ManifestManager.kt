@@ -15,13 +15,13 @@ import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val COROUTINES_PARALLELISM = 8
 
@@ -39,13 +39,13 @@ class ManifestManager @Inject constructor(
 
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         coroutineScope.launch {
-            val t = translationsRepository.getLatestTranslation(toolCode, locale, isDownloaded = true)
+            val t = translationsRepository.findLatestTranslation(toolCode, locale, isDownloaded = true)
             if (t != null) getManifest(t)
         }
     }
 
     fun getLatestPublishedManifestFlow(toolCode: String, locale: Locale) =
-        translationsRepository.getLatestTranslationFlow(toolCode, locale, isDownloaded = true, trackAccess = true)
+        translationsRepository.findLatestTranslationFlow(toolCode, locale, isDownloaded = true, trackAccess = true)
             .mapLatest { it?.let { getManifest(it) } }
 
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =
