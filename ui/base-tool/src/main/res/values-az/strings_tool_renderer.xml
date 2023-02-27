@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Paylaş</string>
     <string name="tool_share_sheet_more_apps">Daha çox</string>
+    <string name="share_tool_message">Bu gün haqqında danışdıqlarımızın veb versiyasına buradan keçə bilərsiniz: %1$s \n\n
+
+Tətbiqi https://godtoolsapp.com səhifəsindən yükləyə bilərsiniz \n\n
+
+Gəlin daha çox danışaq!</string>
     <string name="share_tool_message_article">Bu məqaləni sizinlə paylaşmaq və fikirlərinizi öyrənmək istərdim.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Linki paylaş</string>
     <string name="feature_discovery_desc_share_tool">Bu ikonanı klikləyərək bu aləti dostuna göndər</string>

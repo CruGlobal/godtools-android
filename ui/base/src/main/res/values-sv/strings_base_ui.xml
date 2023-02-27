@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Främjande av kristen tro</string>
     <string name="tool_category_training">Utbildning</string>
     <!-- Sharing -->
-    <string name="share_general_message">Den här länken tar dig till en webbversion av det vi pratade om idag: %1$s \n\n
-
-Appen kan laddas ner från https://godtoolsapp.com \n\n
-
-Vi tar och pratar mer!</string>
 </resources>

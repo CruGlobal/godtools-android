@@ -8,9 +8,4 @@
     <string name="tool_category_growth">ชีวิตคริสเตียนเจริญขึ้น</string>
     <string name="tool_category_training">การฝึกอบรม</string>
     <!-- Sharing -->
-    <string name="share_general_message">ลิงก์นี้จะนำคุณไปยังหน้าเพจที่เราพูดถึงกันวันนี้: %1$s \n\n
-
-สามารถดาวน์โหลดแอปได้ที่ https://godtoolsapp.com \n\n
-
-มาคุยกัน!</string>
 </resources>

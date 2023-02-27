@@ -18,6 +18,9 @@
     <string name="menu_terms_of_use">Terms of Use</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
     <string name="menu_copyright">Copyright</string>
+    <string name="share_app_message">Download the GodTools app: https://godtoolsapp.com
+
+An online version can be found at https://knowgod.com/</string>
     <string name="share_story_subject">GodTools Story</string>
 
     <!-- Lessons -->

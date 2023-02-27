@@ -8,10 +8,4 @@
     <string name="tool_category_growth">খ্রিষ্টীয় বিকাশ</string>
     <string name="tool_category_training">প্রশিক্ষণ</string>
     <!-- Sharing -->
-    <string name="share_general_message">এই লিঙ্কটি আপনাকে একটি ওয়েব সংস্করণে নিয়ে যাবে যার সম্বন্ধে আমরা আজ কথা বলছি; %1$s \n\n 
-
-
-http://godtoolsapp.com \n\n থেকে app টিকে ডাউনলোড করা যেতে পারে
-
-আরও কথা বলা যাক !</string>
 </resources>

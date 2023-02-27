@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Crescita di vita cristiana</string>
     <string name="tool_category_training">Apprendimento</string>
     <!-- Sharing -->
-    <string name="share_general_message">Questo link ti porterà alla versione web dell\'argomento di oggi: %1$s \n\n
-
-È possibile scaricare l\'app da https://godtoolsapp.com \n\n
-
-Parliamone ancora!</string>
 </resources>

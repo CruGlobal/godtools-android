@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Kasvaminen kristittynä</string>
     <string name="tool_category_training">Koulutus</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tämä linkki siirtää sinut tämänpäiväisen puheenaiheemme verkkoversioon: %1$s \n\n
-
-Sovelluksen voi ladata osoitteesta https://godtoolsapp.com \n\n
-
-Jutellaan asiasta lisää!</string>
 </resources>

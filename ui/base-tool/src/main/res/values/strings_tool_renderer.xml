@@ -15,6 +15,11 @@
     <eat-comment />
     <string name="menu_share_tool">Share</string>
     <string name="tool_share_sheet_more_apps">More</string>
+    <string name="share_tool_message">This link will take you to a web version of what we were talking about today: %1$s \n\n
+
+The app can be downloaded from https://godtoolsapp.com \n\n
+
+Let’s talk more!</string>
     <string name="share_tool_message_article">I wanted to share this article with you and would like to hear your thoughts about it.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Share a link</string>
     <string name="feature_discovery_desc_share_tool">Send this tool to a friend by clicking this icon</string>

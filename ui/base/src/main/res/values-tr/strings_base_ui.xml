@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Hristiyan Büyümesi</string>
     <string name="tool_category_training">Eğitim</string>
     <!-- Sharing -->
-    <string name="share_general_message">Bu bağlantı seni bugün hakkında konuştuklarımızın web sürümüne götürür: %1$s \n\n
-
-Uygulama https://godtoolsapp.com adresinden indirilebilir\n\n
-
-Daha fazla görüşelim!</string>
 </resources>

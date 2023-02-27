@@ -8,10 +8,4 @@
     <string name="tool_category_growth">ಕ್ರಿಸ್ತನಲ್ಲಿ ಬೆಳವಣಿಗೆ</string>
     <string name="tool_category_training">ತರಬೇತಿ</string>
     <!-- Sharing -->
-    <string name="share_general_message">"ಈ ಲಿಂಕ್ ನಾವು ಇಂದು ಮಾತನಾಡುತ್ತಿದ್ದ ವೆಬ್ ಆವೃತ್ತಿಗೆ ನಿಮ್ಮನ್ನು ಕರೆದೊಯ್ಯುತ್ತದೆ: %1$s
-
-ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು https://godtoolsapp.com ನಿಂದ ಡೌನ್‌ಲೋಡ್ ಮಾಡಬಹುದು
-
-ಹೆಚ್ಚು ಮಾತನಾಡೋಣ! 
-"</string>
 </resources>

@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Rozwój Chrześcijanina</string>
     <string name="tool_category_training">Trening</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ten link kieruje do strony o tematyce, którą dziś omawialiśmy: %1$s \n\n
-
-Możesz pobrać tę aplikację z https://godtoolsapp.com \n\n
-
-Rozmawiajmy!</string>
 </resources>

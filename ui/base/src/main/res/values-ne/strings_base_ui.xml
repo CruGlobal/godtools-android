@@ -8,9 +8,4 @@
     <string name="tool_category_growth">ईसाई वृद्धि</string>
     <string name="tool_category_training">तालिम</string>
     <!-- Sharing -->
-    <string name="share_general_message">यो लिङ्कले तपाईलाई आज हामीले के कुरा गरिरहेका थियौं भन्ने वेब संस्करणमा लैजान्छ: %1$s \n\n
-
-एप https://godtoolsapp.com बाट डाउनलोड गर्न सकिन्छ \n\n
-
-थप कुरा गरौं!</string>
 </resources>

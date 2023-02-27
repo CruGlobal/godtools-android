@@ -7,5 +7,10 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ያጋሩ</string>
+    <string name="share_tool_message">ዛሬ ስንመለከተዉ የነበረዉ መተግብሪያ(App) በዚህ መጠቆሚያ በኩል ማግኘት ይችላሉ: %1$s \n\n
+
+ይህን መተግበሪያ ዌብ ላይ ለመጠቀም መጠቆሚያዉ: https://godtoolsapp.com\n\n
+
+ተጨማሪ እንነጋገር !</string>
     <!-- Shareables -->
 </resources>

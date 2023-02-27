@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Духовний ріст</string>
     <string name="tool_category_training">Тренування</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ось посилання, за яким можна подивитися додаткову інформацію стосовно нашої розмови сьогодні: %1$s\n\n
-
-Ось посилання, за яким можна завантажити програму: https://godtoolsapp.com \n\n
-
-Поговорімо іще :-)</string>
 </resources>

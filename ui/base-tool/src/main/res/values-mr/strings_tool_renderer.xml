@@ -11,6 +11,11 @@
     <string name="menu_share_tool">"सांगा
        "</string>
     <string name="tool_share_sheet_more_apps">अधिक</string>
+    <string name="share_tool_message">हे लिंक तुम्हाला वेब आवृत्तीकडे नेईल ज्यावर आपण आज बोल होतो: %1$s \n\n
+
+app इथून डाऊनलोड करा: https://godtoolsapp.com \n\n
+
+आपण आणखी बोलू या!</string>
     <string name="share_tool_message_article">मला हा लेख आपल्याबरोबर सामायिक करायचा आहे आणि त्याबद्दल आपले विचार ऐकायला आवडेल.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">लिंक पाठवा</string>
     <string name="feature_discovery_desc_share_tool">हे आयकाॅन क्लिक करून हे टूल एका मित्राला पाठवा</string>

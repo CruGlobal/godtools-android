@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Chia sẻ</string>
     <string name="tool_share_sheet_more_apps">Xem thêm</string>
+    <string name="share_tool_message">Đường dẫn này sẽ dẫn bạn tới một phiên bản web của những gì chúng ta đang trao đổi ngày hôm nay: %1$s \n\n
+
+Ứng dụng có thể được tải về từ https://godtoolsapp.com/vi/ \n\n
+
+Hãy trò chuyện thêm nhé!</string>
     <string name="share_tool_message_article">Tôi muốn chia sẻ bài viết này với bạn và cũng muốn lắng nghe suy nghĩ của bạn sau khi đọc.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Chia sẻ một liên kết</string>
     <string name="feature_discovery_desc_share_tool">Gửi công cụ này đến một người bạn bằng cách nhấp vào biểu tượng này</string>

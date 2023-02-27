@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Podijeli</string>
     <string name="tool_share_sheet_more_apps">Više</string>
+    <string name="share_tool_message">Ova poveznica vodi do web verzije onoga o čemu danas govorimo: %1$s \n\n
+
+Aplikaciju možete preuzeti s https://godtoolsapp.com \n\n
+
+Razgovarajmo još više!!</string>
     <string name="share_tool_message_article">Želim podijeliti ovaj članak s tobom i bilo bi mi izuzetno drago čuti što ti misliš o njemu.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Podijeli vezu</string>
     <string name="feature_discovery_desc_share_tool">Pošalji ovaj alat prijatelju klikom na ikonu</string>

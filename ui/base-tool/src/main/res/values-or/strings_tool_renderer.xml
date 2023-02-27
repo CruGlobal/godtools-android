@@ -8,6 +8,11 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="share_tool_message">ଏହି ଲିଙ୍କ୍ ଆପଣଙ୍କୁ ଆଜି ଆମେ ଯେଉଁ ବିଷୟରେ ଅଲୋଚନା କରୁଥିଲେ ତାହାର ଏକ ୱେବ୍ ସଂସ୍କରଣକୁ ନେଇଯିବ: %1$s|
+
+https://godtoolsapp.com ରୁ ଆପ୍  ଡାଉନଲୋଡ୍ ହୋଇପାରିବ |
+
+ଆସନ୍ତୁ ଏବିଷୟରେ ଅଧିକ ଜାଣିବା!</string>
     <string name="share_tool_message_article">ମୁଁ ଆପଣଙ୍କ ସହିତ ଏହି ପ୍ରବନ୍ଧ ଅଂଶୀଦାର କରିବାକୁ ଚାହୁଁଥିଲି ଏବଂ ଏହା ବିଷୟରେ ଆପଣଙ୍କର ଚିନ୍ତାଧାରା ଶୁଣିବାକୁ ପସନ୍ଦ କରିବି |\n%1$s</string>
     <string name="feature_discovery_title_share_tool">"ଏକ ଲିଙ୍କ୍ ଅଂଶୀଦାର କରନ୍ତୁ "</string>
     <string name="feature_discovery_desc_share_tool">ଏହି ଆଇକନ୍ କ୍ଲିକ୍ କରି ଆପଣଙ୍କ ଏକ ବନ୍ଧୁଙ୍କୁ ଏହି ଉପକରଣ ପଠାନ୍ତୁ |</string>

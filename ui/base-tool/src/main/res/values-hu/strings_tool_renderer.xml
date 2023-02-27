@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Megosztás</string>
     <string name="tool_share_sheet_more_apps">Tovább</string>
+    <string name="share_tool_message">Ez a hivatkozás vezet el a webes verzióra, amelyről ma beszélgettünk: %1$s \n\n
+
+Ez az alkalmazás innen tölthető le: https://godtoolsapp.com \n\n
+
+Beszélgessünk még!</string>
     <string name="share_tool_message_article">Ezt a cikket szerettem volna megosztani veled, és szeretném hallani a véleményedet róla.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Hivatkozás megosztása</string>
     <string name="feature_discovery_desc_share_tool">Küldd el ezt az eszközt egy ismerősnek az ikonra kattintva</string>

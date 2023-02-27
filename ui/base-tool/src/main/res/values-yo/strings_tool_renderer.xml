@@ -8,6 +8,11 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Se ajopin</string>
+    <string name="share_tool_message">Adiresi ayelujara yii yoo mu ọ lọ si eda ori alatagba ohun ti a sọrọ nipa loni: %1$s\n\ n
+
+O le se  igbasilẹ app yi lati https://godtoolsapp.com\n\n
+
+Jẹ ki a so ọrọ diẹ sii!</string>
     <string name="share_tool_message_article">Mo fẹ lati se ajopin akosile yii pẹlu rẹ, a si wu milati gbọ awọn ero rẹ nipa rẹ.\n% 1 $ s</string>
     <string name="feature_discovery_title_share_tool">Se ajopin adiresi ero ayelujara</string>
     <string name="feature_discovery_desc_share_tool">Fi ohun elo yii ranse si ọrẹ re kan nipa titẹ aami yi</string>

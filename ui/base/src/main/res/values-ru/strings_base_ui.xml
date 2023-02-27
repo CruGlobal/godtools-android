@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Духовный рост</string>
     <string name="tool_category_training">Обучение</string>
     <!-- Sharing -->
-    <string name="share_general_message">По данной ссылке вы перейдете на веб-страницу с описанием того, о чем мы говорили сегодня: %1$s \n\n
-
-Приложение можно загрузить отсюда: https://godtoolsapp.com \n\n
-
-Давайте общаться!</string>
 </resources>

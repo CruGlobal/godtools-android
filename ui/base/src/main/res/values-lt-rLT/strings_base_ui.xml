@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Krikščionio augimas</string>
     <string name="tool_category_training">Mokymas</string>
     <!-- Sharing -->
-    <string name="share_general_message">Ši nuoroda nuves į internetinę versiją to, apie ką šiandien kalbame: %1$s \n\n
-
-Programėlę galima atsisiųsti adresu https://godtoolsapp.com \n\n
-
-Pakalbėkime daugiau!</string>
 </resources>

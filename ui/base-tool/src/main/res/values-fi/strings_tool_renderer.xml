@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Jaa</string>
     <string name="tool_share_sheet_more_apps">Lisää</string>
+    <string name="share_tool_message">Tämä linkki siirtää sinut tämänpäiväisen puheenaiheemme verkkoversioon: %1$s \n\n
+
+Sovelluksen voi ladata osoitteesta https://godtoolsapp.com \n\n
+
+Jutellaan asiasta lisää!</string>
     <string name="share_tool_message_article">Tahtoisin jakaa tämän artikkelin kanssasi ja kuulla mielipiteesi siitä.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Jaa linkki</string>
     <string name="feature_discovery_desc_share_tool">Lähetä tämä työkalu ystävälle tätä kuvaketta napsauttamalla</string>

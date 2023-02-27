@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Християнско израстване</string>
     <string name="tool_category_training">Обучение</string>
     <!-- Sharing -->
-    <string name="share_general_message">Тази връзка води към интернет-версия на последната страница, която преглеждахме заедно днес: %1$s \n\n
-
-Приложението може да бъде изтеглено от https://godtoolsapp.com \n\n
-
-Да поговорим още!</string>
 </resources>

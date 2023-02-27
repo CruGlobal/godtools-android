@@ -13,9 +13,4 @@
 
     <!-- Sharing -->
     <eat-comment />
-    <string name="share_general_message">This link will take you to a web version of what we were talking about today: %1$s \n\n
-
-The app can be downloaded from https://godtoolsapp.com \n\n
-
-Let’s talk more!</string>
 </resources>

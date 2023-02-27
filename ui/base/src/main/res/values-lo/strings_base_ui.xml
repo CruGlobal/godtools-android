@@ -8,9 +8,4 @@
     <string name="tool_category_growth">ການເຕີບໃຫຍ່ຂອງຊາວຄຣິດ</string>
     <string name="tool_category_training">ການຝຶກອົບຮົມ</string>
     <!-- Sharing -->
-    <string name="share_general_message">ລິ້ງນີ້ຈະນໍາທ່ານໄປໜ້າເວັບໃນເວີຊັນທີ່ພວກເຮົາລົມກັນໃນມື້ນີ້: %1$s\n\n
-
-ທ່ານສາມາດດາວໂຫຼດແອັບຈາກ https://godtoolsapp.com \n\n
-
-ມາລົມກັນຕື່ມ!</string>
 </resources>

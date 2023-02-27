@@ -10,6 +10,11 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Govera</string>
     <string name="tool_share_sheet_more_apps">"Zvizhinji "</string>
+    <string name="share_tool_message">Chinongedzo chichakusvitsa kune zvatiri kutaura nezvazvo nhasi: %1$s \n\n
+
+App yacho inogona kuwanikwa kubva pa https://godtoolsapp.com \n\n
+
+Ngatitaurei zvizhinji!</string>
     <string name="share_tool_message_article">Ndinoda kugoverana newe chinyorwa chino uye ndinoda kunzwa pfungwa dzako pamusoro pazvo\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Goverana pazvimowanikwa</string>
     <string name="feature_discovery_desc_share_tool">Tumira chombo ichi kushamwari uchidzvanya chakapiwa</string>

@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Křesťanský růst ve víře</string>
     <string name="tool_category_training">Školení</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tento odkaz vás přivede na webovou verzi stránky, o které jsme dnes spolu mluvili: %1$s\n\n
-
-Aplikaci si můžete stáhnout z https://godtoolsapp.com \n\n
-
-Pojďme si o tom ještě povykládat!</string>
 </resources>

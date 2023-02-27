@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Vöxtur kristni</string>
     <string name="tool_category_training">Þjálfun</string>
     <!-- Sharing -->
-    <string name="share_general_message">Þessi tengill mun fara með þig á vefútgáfuna af því sem við vorum að tala um í dag: %1$s \n\n
-
-Hægt er að niðurhala appinu frá https://godtoolsapp.com \n\n
-
-Tölum meira saman!</string>
 </resources>

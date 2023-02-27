@@ -8,7 +8,4 @@
     <string name="tool_category_growth">Πνευματική Ανάπτυξη</string>
     <string name="tool_category_training">Εξάσκηση</string>
     <!-- Sharing -->
-    <string name="share_general_message">Αυτός ο σύνδεσμος θα σας μεταφέρει σε μια έκδοση ιστού για αυτό που συζητούσαμε σήμερα: %1$s \n\n
-
-Μπορείτε να κατεβάσετε την εφαρμογή από τη διεύθυνση https://godtoolsapp.com \n\n</string>
 </resources>

@@ -8,9 +8,4 @@
     <string name="tool_category_growth">Krščanska rast</string>
     <string name="tool_category_training">Učenje</string>
     <!-- Sharing -->
-    <string name="share_general_message">Tukaj je povezava do spletne različice današnjega pogovora: %1$s \n\n
-
-Aplikacijo lahko prenesete iz https://godtoolsapp.com \n\n
-
-Govorimo več!</string>
 </resources>
