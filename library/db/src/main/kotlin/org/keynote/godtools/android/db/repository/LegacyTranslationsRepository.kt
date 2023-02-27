@@ -8,12 +8,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
@@ -22,8 +20,10 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 internal class LegacyTranslationsRepository @Inject constructor(private val dao: GodToolsDao) : TranslationsRepository {
-    override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) =
-        getLatestTranslation(code, locale, isDownloaded)
+    override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) = when {
+        code == null || locale == null -> null
+        else -> dao.getAsync(getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded)).await().firstOrNull()
+    }
     override fun findLatestTranslationFlow(
         code: String?,
         locale: Locale?,
@@ -46,17 +46,6 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
             .run { if (isDownloaded) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
-
-    suspend fun getLatestTranslation(
-        code: String?,
-        locale: Locale?,
-        isDownloaded: Boolean = false
-    ): Translation? = when {
-        code == null || locale == null -> null
-        else -> withContext(dao.coroutineDispatcher) {
-            getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded).get(dao).firstOrNull()
-        }
-    }
 
     private val latestTranslationFlowCache =
         WeakLruCache<Triple<String, Locale, Boolean>, Flow<Translation?>>(maxSize = 20)
@@ -85,4 +74,10 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         }
     }
     // endregion Latest Translations
+
+    override fun insert(vararg translations: Translation) {
+        dao.transaction {
+            translations.forEach { dao.insert(it) }
+        }
+    }
 }

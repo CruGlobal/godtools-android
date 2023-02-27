@@ -17,4 +17,7 @@ interface TranslationsRepository {
         trackAccess: Boolean = false
     ): Flow<Translation?>
     fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>): Flow<List<Translation>>
+
+    // TODO: this is temporary for testing
+    fun insert(vararg translations: Translation)
 }
