@@ -20,8 +20,21 @@ import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
-    fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>) = Query.select<Translation>()
+class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) :
+    org.cru.godtools.db.repository.TranslationsRepository {
+    override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) =
+        getLatestTranslation(code, locale, isDownloaded)
+    override fun findLatestTranslationFlow(
+        code: String?,
+        locale: Locale?,
+        isDownloaded: Boolean,
+        trackAccess: Boolean,
+    ) = getLatestTranslationFlow(code, locale, isDownloaded, trackAccess)
+
+    override fun getTranslationsFlowFor(
+        tools: Collection<String>,
+        languages: Collection<Locale>
+    ) = Query.select<Translation>()
         .where(TranslationTable.FIELD_TOOL.oneOf(tools.map { Expression.bind(it) }))
         .andWhere(TranslationTable.FIELD_LANGUAGE.oneOf(languages.map { Expression.bind(it) }))
         .getAsFlow(dao)
