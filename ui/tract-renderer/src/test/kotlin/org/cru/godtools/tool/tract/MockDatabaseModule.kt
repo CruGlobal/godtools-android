@@ -1,6 +1,5 @@
 package org.cru.godtools.tool.tract
 
-import androidx.lifecycle.MutableLiveData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -38,7 +37,7 @@ class MockDatabaseModule {
     @get:Provides
     val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
+            every { getLatestTranslationFlow(any(), any(), any(), any()) } returns flowOf(null)
         }
     }
 }

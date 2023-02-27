@@ -17,6 +17,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.EXTRA_LANGUAGES
@@ -266,7 +267,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisible() {
-        everyGetTranslation() returns MutableLiveData(Translation())
+        everyGetTranslation() returns flowOf(Translation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         scenario {
@@ -283,7 +284,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisibleForDeepLink() {
-        everyGetTranslation() returns MutableLiveData(Translation())
+        everyGetTranslation() returns flowOf(Translation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")) {
@@ -300,7 +301,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenNoManifest() {
-        everyGetTranslation() returns MutableLiveData(Translation())
+        everyGetTranslation() returns flowOf(Translation())
         everyGetManifest() returns ImmutableLiveData(null)
 
         scenario {
@@ -317,7 +318,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenShowingTips() {
-        everyGetTranslation() returns MutableLiveData(Translation())
+        everyGetTranslation() returns flowOf(Translation())
         everyGetManifest()
             .returns(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
@@ -335,7 +336,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
-        everyGetTranslation() returns MutableLiveData(Translation())
+        everyGetTranslation() returns flowOf(Translation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&$PARAM_LIVE_SHARE_STREAM=asdf")) {
@@ -354,7 +355,7 @@ class TractActivityTest {
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
-        every { translationsRepository.getLatestTranslationLiveData(tool ?: any(), locale ?: any(), any(), any()) }
+        every { translationsRepository.getLatestTranslationFlow(tool ?: any(), locale ?: any(), any(), any()) }
     private fun everyGetManifest(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestLiveData(tool ?: any(), locale ?: any())) }
 }

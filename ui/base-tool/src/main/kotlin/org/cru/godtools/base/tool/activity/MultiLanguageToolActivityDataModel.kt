@@ -18,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -77,8 +78,9 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
-            translationsRepository.getLatestTranslationLiveData(key.tool, key.locale, trackAccess = true)
+            translationsRepository.getLatestTranslationFlow(key.tool, key.locale, trackAccess = true)
                 .distinctUntilChanged()
+                .asLiveData()
     }
     // endregion LiveData Caches
 
