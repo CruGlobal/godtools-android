@@ -23,12 +23,12 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,17 +82,18 @@ class ToolViewModels @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow
-            .flatMapLatest { translationsRepository.getLatestTranslationFlow(code, it) }
+            .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        private val defaultTranslation = translationsRepository.getLatestTranslationFlow(code, Settings.defaultLanguage)
+        private val defaultTranslation = translationsRepository
+            .findLatestTranslationFlow(code, Settings.defaultLanguage)
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
                 else -> settings.parallelLanguageFlow.flatMapLatest {
-                    translationsRepository.getLatestTranslationFlow(t.code, it)
+                    translationsRepository.findLatestTranslationFlow(t.code, it)
                 }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
