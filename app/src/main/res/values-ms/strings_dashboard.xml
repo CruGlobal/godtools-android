@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Terma Penggunaan</string>
     <string name="menu_privacy_policy">Dasar Privasi</string>
     <string name="menu_copyright">Hak Cipta</string>
+    <string name="share_app_message">Muat turun aplikasi GodTools: https://godtoolsapp.com
+
+Versi dalam talian boleh ditemui di https://knowgod.com/</string>
     <string name="share_story_subject">Kisah GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pengajaran</string>

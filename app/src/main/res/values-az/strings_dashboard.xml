@@ -17,6 +17,7 @@
     <string name="menu_terms_of_use">İstifadə şərtləri</string>
     <string name="menu_privacy_policy">Məxfilik siyasəti</string>
     <string name="menu_copyright">Müəllif hüququ</string>
+    <string name="share_app_message">GodTools tətbiqini yükləyəyin:  https://godtoolsapp.com</string>
     <string name="share_story_subject">GodTools əhvalatı</string>
     <!-- Lessons -->
     <string name="nav_lessons">Dərslər</string>

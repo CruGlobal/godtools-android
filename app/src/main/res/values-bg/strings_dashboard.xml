@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Условия за употреба</string>
     <string name="menu_privacy_policy">Политика за поверителност</string>
     <string name="menu_copyright">Авторско право</string>
+    <string name="share_app_message">Изтеглете приложението GodTools: https://godtoolsapp.com
+
+Онлайн версия може да бъде намерена на https://knowgod.com/</string>
     <string name="share_story_subject">GodTools истории</string>
     <!-- Lessons -->
     <string name="nav_lessons">Уроци</string>

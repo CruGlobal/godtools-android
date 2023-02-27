@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Zmluvné podmienky</string>
     <string name="menu_privacy_policy">Pravidlá ochrany súkromia</string>
     <string name="menu_copyright">Autorské právo</string>
+    <string name="share_app_message">Stiahnite si aplikáciu GodTools: https://godtoolsapp.com
+
+Online verzia je k dispozícii na https://knowgod.com/</string>
     <string name="share_story_subject">Príbeh GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lekcie</string>

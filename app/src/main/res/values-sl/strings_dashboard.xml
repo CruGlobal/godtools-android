@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Pogoji uporabe</string>
     <string name="menu_privacy_policy">Pravilnik o zasebnosti</string>
     <string name="menu_copyright">Založniške pravice</string>
+    <string name="share_app_message">Prenesite aplikacijo GodTools tukaj: https://godtoolsapp.com
+
+Spletna različica je na voljo na https://knowgod.com/</string>
     <string name="share_story_subject">Zgodba iz GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lekcije</string>

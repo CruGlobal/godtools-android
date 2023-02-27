@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
     <string name="menu_privacy_policy">Privaatheidsbeleid</string>
     <string name="menu_copyright">Kopiereg</string>
+    <string name="share_app_message">Laai die GodTools-toep af: http://godtoolsapp.com
+
+\'n Aanlynweergawe kan gevind word by https://knowgod.com/</string>
     <string name="share_story_subject">GodTools-verhaal</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lesse</string>
