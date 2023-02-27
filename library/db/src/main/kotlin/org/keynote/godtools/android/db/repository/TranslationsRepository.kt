@@ -1,6 +1,5 @@
 package org.keynote.godtools.android.db.repository
 
-import androidx.lifecycle.asLiveData
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -72,12 +71,5 @@ class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
                 )
         }
     }
-
-    fun getLatestTranslationLiveData(
-        code: String?,
-        locale: Locale?,
-        isDownloaded: Boolean = false,
-        trackAccess: Boolean = false
-    ) = getLatestTranslationFlow(code, locale, isDownloaded = isDownloaded, trackAccess = trackAccess).asLiveData()
     // endregion Latest Translations
 }
