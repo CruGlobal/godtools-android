@@ -15,13 +15,13 @@ import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
-class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) :
-    org.cru.godtools.db.repository.TranslationsRepository {
+internal class LegacyTranslationsRepository @Inject constructor(private val dao: GodToolsDao) : TranslationsRepository {
     override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) =
         getLatestTranslation(code, locale, isDownloaded)
     override fun findLatestTranslationFlow(
@@ -61,11 +61,11 @@ class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) :
     private val latestTranslationFlowCache =
         WeakLruCache<Triple<String, Locale, Boolean>, Flow<Translation?>>(maxSize = 20)
 
-    fun getLatestTranslationFlow(
+    private fun getLatestTranslationFlow(
         code: String?,
         locale: Locale?,
         isDownloaded: Boolean = false,
-        trackAccess: Boolean = false
+        trackAccess: Boolean = false,
     ): Flow<Translation?> {
         if (code == null || locale == null) return flowOf(null)
         if (trackAccess) {

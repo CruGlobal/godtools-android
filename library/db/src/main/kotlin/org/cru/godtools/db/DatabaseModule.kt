@@ -29,7 +29,7 @@ import org.keynote.godtools.android.db.GodToolsDatabase
 import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
 import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
 import org.keynote.godtools.android.db.repository.LegacyToolsRepository
-import org.keynote.godtools.android.db.repository.TranslationsRepository as LegacyTranslationsRepository
+import org.keynote.godtools.android.db.repository.LegacyTranslationsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
