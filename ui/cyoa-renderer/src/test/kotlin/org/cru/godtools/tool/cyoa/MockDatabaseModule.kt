@@ -1,12 +1,12 @@
 package org.cru.godtools.tool.cyoa
 
-import androidx.lifecycle.MutableLiveData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
@@ -28,7 +28,7 @@ class MockDatabaseModule {
     @get:Provides
     val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
+            every { getLatestTranslationFlow(any(), any(), any(), any()) } returns flowOf(null)
         }
     }
 }
