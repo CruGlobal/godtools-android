@@ -24,13 +24,13 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
@@ -165,7 +165,7 @@ internal class Tasks @Inject constructor(
                     val toolCode = translation.toolCode ?: return@launch
                     val languageCode = translation.languageCode
                     val latestTranslation =
-                        translationsRepository.getLatestTranslation(toolCode, languageCode, isDownloaded = true)
+                        translationsRepository.findLatestTranslation(toolCode, languageCode, isDownloaded = true)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
                     withContext(Dispatchers.IO) {
