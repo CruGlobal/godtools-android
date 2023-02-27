@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -60,6 +61,10 @@ internal class LegacyToolsRepository @Inject constructor(
         .map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(replayExpirationMillis = REPLAY_EXPIRATION), 1)
     override fun getFavoriteToolsFlow() = favoriteTools
+    override fun getLessonsFlow() = Query.select<Lesson>()
+        .where(ToolTable.FIELD_TYPE.eq(Tool.Type.LESSON))
+        .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
+        .getAsFlow(dao)
 
     override suspend fun pinTool(code: String) {
         val tool = Tool().also {

@@ -210,6 +210,34 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getMetaToolsFlow()
 
+    // region getLessonsFlow()
+    @Test
+    fun `getLessonsFlow()`() = testScope.runTest {
+        val tool = Tool("tool", type = Tool.Type.TRACT)
+        val lesson = Tool("lesson", type = Tool.Type.LESSON)
+
+        repository.getLessonsFlow().test {
+            assertThat(awaitItem(), empty())
+
+            repository.storeToolsFromSync(listOf(tool, lesson))
+            runCurrent()
+            assertThat(expectMostRecentItem(), contains(tool(lesson)))
+        }
+    }
+
+    @Test
+    fun `getLessonsFlow() - Don't filter hidden lessons`() = testScope.runTest {
+        val hidden = Tool("hidden", type = Tool.Type.LESSON) { isHidden = true }
+        val visible = Tool("visible", type = Tool.Type.LESSON) { isHidden = false }
+        repository.storeToolsFromSync(listOf(hidden, visible))
+
+        assertThat(
+            repository.getLessonsFlow().first(),
+            containsInAnyOrder(tool(hidden), tool(visible))
+        )
+    }
+    // endregion getLessonsFlow()
+
     @Test
     fun verifyPinTool() = testScope.runTest {
         val code = "pinTool"

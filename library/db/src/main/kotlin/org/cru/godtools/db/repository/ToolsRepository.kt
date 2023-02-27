@@ -2,6 +2,7 @@ package org.cru.godtools.db.repository
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
+import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 
@@ -19,6 +20,7 @@ interface ToolsRepository {
     fun getToolsFlow(): Flow<List<Tool>>
     fun getMetaToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>>
+    fun getLessonsFlow(): Flow<List<Lesson>>
 
     suspend fun pinTool(code: String)
     suspend fun unpinTool(code: String)

@@ -19,13 +19,11 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.repository.LessonsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel @Inject constructor(
     private val eventBus: EventBus,
-    lessonsRepository: LessonsRepository,
     settings: Settings,
     private val toolsRepository: ToolsRepository
 ) : ViewModel() {
@@ -38,8 +36,8 @@ class HomeViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val spotlightLessons = lessonsRepository.spotlightLessons
-        .map { it.mapNotNull { it.code } }
+    val spotlightLessons = toolsRepository.getLessonsFlow()
+        .map { it.filter { !it.isHidden && it.isSpotlight }.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     // region Favorites Tools
