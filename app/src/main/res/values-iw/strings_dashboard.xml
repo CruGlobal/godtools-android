@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">תנאי שימוש</string>
     <string name="menu_privacy_policy">מדיניות פרטיות</string>
     <string name="menu_copyright">זכויות יוצרים</string>
+    <string name="share_app_message">הורידו את אפליקציית GodTools כאן: https://godtoolsapp.com
+
+ניתן למצוא כאן https://knowgod.com/ גרסה מקוונת</string>
     <string name="share_story_subject">סיפורי GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">שיעורים</string>

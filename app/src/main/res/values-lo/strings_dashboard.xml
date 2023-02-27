@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">ເງື່ອນໄຂການໃຊ້ງານ</string>
     <string name="menu_privacy_policy">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</string>
     <string name="menu_copyright">ລິຂະສິດ</string>
+    <string name="share_app_message">ດາວໂຫຼດແອັບ GodTools: http://godtoolsapp.com
+
+ສາມາດຊອກຫາເວີຊັນອອນໄລນ໌ໄດ້ທີ່ https://knowgod.com/</string>
     <string name="share_story_subject">ເລື່ອງຂອງ GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">ບົດຮຽນ</string>

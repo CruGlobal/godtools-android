@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Vilkår for brug</string>
     <string name="menu_privacy_policy">Fortrolighedspolitik</string>
     <string name="menu_copyright">Copyright</string>
+    <string name="share_app_message">Download GodTools-appen: https://godtoolsapp.com
+
+Du kan finde en onlineversion på https://knowgod.com/</string>
     <string name="share_story_subject">GodTools historie</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lektioner</string>

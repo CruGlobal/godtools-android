@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">ఉపయోగ నిబంధనలు</string>
     <string name="menu_privacy_policy">గోప్యత విధానం</string>
     <string name="menu_copyright">కాపీరైట్</string>
+    <string name="share_app_message">GodTools ఆప్‌ను డౌన్లోడ్ చేసుకోండి: http://godtoolsapp.com
+
+ఆన్‌లైన్ వర్షన్  https://knowgod.com/ వద్ద కనుగొనవచ్చు</string>
     <string name="share_story_subject">GodTools కధ</string>
     <!-- Lessons -->
     <string name="nav_lessons">పాఠాలు</string>

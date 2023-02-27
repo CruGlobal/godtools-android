@@ -17,6 +17,7 @@
     <string name="menu_terms_of_use">Услови коришћења</string>
     <string name="menu_privacy_policy">Политика приватности</string>
     <string name="menu_copyright">Ауторско право</string>
+    <string name="share_app_message">Преузмите апликацију GodTools: https://godtoolsapp.com</string>
     <string name="share_story_subject">GodTools Прича</string>
     <!-- Lessons -->
     <string name="nav_lessons">Лекције</string>

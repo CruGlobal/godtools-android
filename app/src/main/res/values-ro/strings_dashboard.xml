@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">Condiții de utilizare</string>
     <string name="menu_privacy_policy">Politica de confidențialitate</string>
     <string name="menu_copyright">Copyright</string>
+    <string name="share_app_message">Descarcă aplicația GodTools: https://godtoolsapp.com
+
+Găsești versiunea online aici https://knowgod.com/</string>
     <string name="share_story_subject">Poveste cu GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lecții</string>

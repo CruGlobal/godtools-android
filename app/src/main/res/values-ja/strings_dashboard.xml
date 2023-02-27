@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">利用規約</string>
     <string name="menu_privacy_policy">プライバシーポリシー</string>
     <string name="menu_copyright">著作権</string>
+    <string name="share_app_message">GodToolsをダウンロード: https://godtoolsapp.com
+
+オンライン版はこちらです: https://knowgod.com/</string>
     <string name="share_story_subject">神とのストーリーを聞いてみましょう。</string>
     <!-- Lessons -->
     <string name="nav_lessons">レッスン</string>

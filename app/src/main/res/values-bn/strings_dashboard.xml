@@ -17,6 +17,7 @@
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
     <string name="menu_copyright">কপিরাইট</string>
+    <string name="share_app_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন: http://godtoolsapp.com</string>
     <string name="share_story_subject">God Tools গল্প</string>
     <!-- Lessons -->
     <string name="nav_lessons">পাঠসমূহ</string>

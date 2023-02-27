@@ -17,6 +17,11 @@
     <string name="menu_terms_of_use">استعمال کرنے کی شرائط</string>
     <string name="menu_privacy_policy">رازداری کی پالیسی</string>
     <string name="menu_copyright">کاپی رائٹ</string>
+    <string name="share_app_message">گاڈ ٹُولز ایپ ڈاؤن لوڈ کریں: 
+https://godtoolsapp.com
+
+ایک آن لائن ورژن اس لِنک پر ملاحظہ فرمائیں 
+https://knowgod.com</string>
     <string name="share_story_subject">GodTools کہانی</string>
     <!-- Lessons -->
     <string name="nav_lessons">اسباق</string>

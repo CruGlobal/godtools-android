@@ -17,6 +17,9 @@
     <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
     <string name="menu_privacy_policy">निजता नीति</string>
     <string name="menu_copyright">कॉपीराइट</string>
+    <string name="share_app_message">यहां आप GodTools ऐप डाउनलोड कर सकते हैं: https://godtoolsapp.com
+
+ऑनलाइन संस्करण यहां देखा जा सकता है: https://knowgod.com</string>
     <string name="share_story_subject">GodTools कहानी</string>
     <!-- Lessons -->
     <string name="nav_lessons">अध्याय</string>
