@@ -41,6 +41,7 @@ import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -65,7 +66,6 @@ import org.junit.Before
 import org.junit.Test
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -100,7 +100,7 @@ class GodToolsDownloadManagerTest {
         excludeRecords { defaultConfig }
     }
     private val translationsApi = mockk<TranslationsApi>()
-    private val translationsRepository = mockk<TranslationsRepository>()
+    private val translationsRepository: TranslationsRepository = mockk()
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
@@ -312,7 +312,7 @@ class GodToolsDownloadManagerTest {
         downloadManager.cleanupActor.close()
         translation.manifestFileName = "manifest.xml"
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
         val config = slot<ParserConfig>()
         coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
@@ -338,7 +338,7 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertEquals(config.captured.withParseRelated(false), config.captured)
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             downloadedFilesRepository.findDownloadedFile("manifest.xml")
             translationsApi.downloadFile("manifest.xml")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("manifest.xml"))
@@ -365,7 +365,7 @@ class GodToolsDownloadManagerTest {
     fun `downloadLatestPublishedTranslation() - Zip`() = testScope.runTest {
         downloadManager.cleanupActor.close()
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
@@ -383,7 +383,7 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
 
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             downloadedFilesRepository.findDownloadedFile("a.txt")
             downloadedFilesRepository.findDownloadedFile("b.txt")
@@ -405,7 +405,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = testScope.runTest {
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
@@ -413,7 +413,7 @@ class GodToolsDownloadManagerTest {
 
         assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
         }
@@ -425,7 +425,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportTranslation() = testScope.runTest {
-        coEvery { translationsRepository.getLatestTranslation(any(), any(), any()) } returns null
+        coEvery { translationsRepository.findLatestTranslation(any(), any(), any()) } returns null
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
 
@@ -434,7 +434,7 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
         coVerifyAll {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode, true)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode, true)
             downloadedFilesRepository.findDownloadedFile("a.txt")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))

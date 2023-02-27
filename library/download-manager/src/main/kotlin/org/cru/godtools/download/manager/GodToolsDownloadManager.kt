@@ -53,6 +53,7 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -62,7 +63,6 @@ import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -232,7 +232,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         require(fs.exists())
 
         translationsMutex.withLock(key) {
-            val translation = translationsRepository.getLatestTranslation(key.tool, key.locale)
+            val translation = translationsRepository.findLatestTranslation(key.tool, key.locale)
                 ?.takeUnless { it.isDownloaded }
                 ?: return true
 
@@ -253,7 +253,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
-            val current = translationsRepository.getLatestTranslation(key.tool, key.locale, isDownloaded = true)
+            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, isDownloaded = true)
             if (current != null && current.version >= translation.version) return
 
             startProgress(key)
