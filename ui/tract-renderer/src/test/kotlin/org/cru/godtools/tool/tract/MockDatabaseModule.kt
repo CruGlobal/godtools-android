@@ -12,9 +12,9 @@ import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @Module
 @TestInstallIn(
@@ -37,7 +37,7 @@ class MockDatabaseModule {
     @get:Provides
     val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { getLatestTranslationFlow(any(), any(), any(), any()) } returns flowOf(null)
+            every { findLatestTranslationFlow(any(), any(), any(), any()) } returns flowOf(null)
         }
     }
 }

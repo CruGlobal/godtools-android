@@ -7,9 +7,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.emitAll
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.user.activity.UserActivityManager
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
 open class BaseSingleToolActivityDataModel @Inject constructor(
@@ -22,7 +22,7 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)
-            else -> emitAll(translationsRepository.getLatestTranslationFlow(tool, locale, trackAccess = true))
+            else -> emitAll(translationsRepository.findLatestTranslationFlow(tool, locale, trackAccess = true))
         }
     }.asLiveData()
 }

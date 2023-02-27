@@ -26,6 +26,7 @@ import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -42,7 +43,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -355,7 +355,7 @@ class TractActivityTest {
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
-        every { translationsRepository.getLatestTranslationFlow(tool ?: any(), locale ?: any(), any(), any()) }
+        every { translationsRepository.findLatestTranslationFlow(tool ?: any(), locale ?: any(), any(), any()) }
     private fun everyGetManifest(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestLiveData(tool ?: any(), locale ?: any())) }
 }
