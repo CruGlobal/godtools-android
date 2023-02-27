@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
+import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
@@ -21,6 +22,11 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 class TranslationsRepository @Inject constructor(private val dao: GodToolsDao) {
+    fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>) = Query.select<Translation>()
+        .where(TranslationTable.FIELD_TOOL.oneOf(tools.map { Expression.bind(it) }))
+        .andWhere(TranslationTable.FIELD_LANGUAGE.oneOf(languages.map { Expression.bind(it) }))
+        .getAsFlow(dao)
+
     // region Latest Translations
     private fun getLatestTranslationQuery(code: String, locale: Locale, isDownloaded: Boolean) =
         Query.select<Translation>()

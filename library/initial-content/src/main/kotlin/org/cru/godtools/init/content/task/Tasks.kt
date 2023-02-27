@@ -22,13 +22,14 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
@@ -47,6 +48,7 @@ internal class Tasks @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
     private val languagesRepository: LanguagesRepository,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
@@ -78,16 +80,16 @@ internal class Tasks @Inject constructor(
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
-    suspend fun loadBundledTools() = withContext(Dispatchers.IO) {
-        // short-circuit if we already have any tools loaded
-        if (dao.getCursor(Tool::class.java).count > 0) return@withContext
+    suspend fun loadBundledResources() = withContext(Dispatchers.IO) {
+        // short-circuit if we already have any resources loaded
+        if (toolsRepository.getResources().isNotEmpty()) return@withContext
 
-        bundledTools.let { tools ->
+        bundledTools.let { resources ->
+            toolsRepository.storeInitialResources(resources)
+            attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
             dao.transaction {
-                tools.forEach { tool ->
-                    if (dao.insert(tool, SQLiteDatabase.CONFLICT_IGNORE) == -1L) return@forEach
-                    tool.latestTranslations?.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
-                    tool.attachments?.let { attachmentsRepository.storeInitialAttachments(it) }
+                resources.flatMap { it.latestTranslations.orEmpty() }.forEach { translation ->
+                    dao.insert(translation, SQLiteDatabase.CONFLICT_IGNORE)
                 }
             }
         }
@@ -95,7 +97,8 @@ internal class Tasks @Inject constructor(
 
     suspend fun initFavoriteTools() {
         // check to see if we have initialized the default tools before
-        if (dao.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+        if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
+        if (toolsRepository.getTools().any { it.isAdded }) return
 
         coroutineScope {
             val preferred = async {
@@ -116,7 +119,7 @@ internal class Tasks @Inject constructor(
                 .toList().joinAll()
         }
 
-        dao.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
+        lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
 
     private val bundledTools: List<Tool>

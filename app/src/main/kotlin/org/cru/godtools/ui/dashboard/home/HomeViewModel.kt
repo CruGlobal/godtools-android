@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
 import org.keynote.godtools.android.db.repository.LessonsRepository
-import org.keynote.godtools.android.db.repository.ToolsRepository
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -43,7 +43,7 @@ class HomeViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     // region Favorites Tools
-    val favoriteTools = toolsRepository.favoriteTools
+    val favoriteTools = toolsRepository.getFavoriteToolsFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val favoriteToolsOrder = MutableStateFlow(emptyList<Tool>())

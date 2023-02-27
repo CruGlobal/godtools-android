@@ -63,4 +63,15 @@ class ToolTest {
 
         assertEquals(3, tool.totalShares)
     }
+
+    @Test
+    fun testComparatorDefaultOrder() {
+        val tool1 = Tool("", defaultOrder = 1)
+        val tool2 = Tool("", defaultOrder = 2)
+
+        assertEquals(0, Tool.COMPARATOR_DEFAULT_ORDER.compare(tool1, tool1))
+        assertEquals(0, Tool.COMPARATOR_DEFAULT_ORDER.compare(tool2, tool2))
+        assertTrue(Tool.COMPARATOR_DEFAULT_ORDER.compare(tool1, tool2) < 0)
+        assertTrue(Tool.COMPARATOR_DEFAULT_ORDER.compare(tool2, tool1) > 0)
+    }
 }

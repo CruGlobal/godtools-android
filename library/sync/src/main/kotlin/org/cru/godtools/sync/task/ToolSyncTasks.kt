@@ -12,9 +12,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
@@ -22,10 +19,10 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
@@ -44,6 +41,7 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val toolsApi: ToolsApi,
     private val viewsApi: ViewsApi,
     private val syncRepository: SyncRepository,
+    private val toolsRepository: ToolsRepository,
 ) : BaseSyncTasks() {
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
@@ -63,8 +61,11 @@ internal class ToolSyncTasks @Inject internal constructor(
 
             // store fetched tools
             dao.transaction {
-                val existing = index(Query.select<Tool>().get(dao))
-                syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+                syncRepository.storeTools(
+                    json.data,
+                    existingTools = index(toolsRepository.getResourcesBlocking()),
+                    includes = Includes(*API_GET_INCLUDES)
+                )
             }
 
             // update the sync time
@@ -86,8 +87,11 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         // store fetched tools
         dao.transaction {
-            val existing = index(listOfNotNull(dao.find<Tool>(toolCode)))
-            syncRepository.storeTools(json.data, existing, Includes(*API_GET_INCLUDES))
+            syncRepository.storeTools(
+                json.data,
+                existingTools = index(listOfNotNull(toolsRepository.findResourceBlocking(toolCode))),
+                includes = Includes(*API_GET_INCLUDES)
+            )
             dao.updateLastSyncTime(lastSyncKey)
         }
         true
@@ -98,13 +102,15 @@ internal class ToolSyncTasks @Inject internal constructor(
      */
     suspend fun syncShares() = withContext(Dispatchers.IO) {
         sharesMutex.withLock {
-            Query.select<Tool>().where(ToolTable.SQL_WHERE_HAS_PENDING_SHARES).get(dao)
-                .map {
+            toolsRepository.getResources()
+                .filter { it.pendingShares > 0 }
+                .map { tool ->
                     async {
+                        val code = tool.code ?: return@async true
+                        val views = ToolViews(tool)
                         try {
-                            val views = ToolViews(it)
                             viewsApi.submitViews(views).isSuccessful
-                                .also { if (it) dao.updateSharesDelta(views.toolCode, 0 - views.quantity) }
+                                .also { if (it) toolsRepository.updateToolViews(code, 0 - views.quantity) }
                         } catch (ignored: IOException) {
                             false
                         }

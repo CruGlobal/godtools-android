@@ -18,6 +18,7 @@ import org.cru.godtools.db.repository.FollowupsRepository
 import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
@@ -26,67 +27,72 @@ import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
 import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
 import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
+import org.keynote.godtools.android.db.repository.LegacyToolsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal object DatabaseModule {
+object DatabaseModule {
     @Provides
     @Singleton
-    fun roomDatabase(@ApplicationContext context: Context) =
+    internal fun roomDatabase(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
 
     @Provides
     @Reusable
-    fun LegacyAttachmentsRepository.attachmentsRepository(): AttachmentsRepository = this
+    internal fun LegacyAttachmentsRepository.attachmentsRepository(): AttachmentsRepository = this
 
     @Provides
     @Reusable
-    fun LegacyDownloadedFilesRepository.downloadedFilesRepository(): DownloadedFilesRepository = this
+    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(): DownloadedFilesRepository = this
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.languagesRepository(legacyDb: GodToolsDatabase): LanguagesRepository {
+    internal fun GodToolsRoomDatabase.languagesRepository(legacyDb: GodToolsDatabase): LanguagesRepository {
         legacyDb.triggerDataMigration()
         return languagesRepository
     }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.followupsRepository(legacyDb: GodToolsDatabase): FollowupsRepository {
+    internal fun GodToolsRoomDatabase.followupsRepository(legacyDb: GodToolsDatabase): FollowupsRepository {
         legacyDb.triggerDataMigration()
         return followupsRepository
     }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.globalActivityRepository(legacyDb: GodToolsDatabase): GlobalActivityRepository {
+    internal fun GodToolsRoomDatabase.globalActivityRepository(legacyDb: GodToolsDatabase): GlobalActivityRepository {
         legacyDb.triggerDataMigration()
         return globalActivityRepository
     }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.trainingTipsRepository(legacyDb: GodToolsDatabase): TrainingTipsRepository {
+    internal fun GodToolsRoomDatabase.trainingTipsRepository(legacyDb: GodToolsDatabase): TrainingTipsRepository {
         legacyDb.triggerDataMigration()
         return trainingTipsRepository
     }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.userRepository(): UserRepository = userRepository
+    internal fun GodToolsRoomDatabase.userRepository(): UserRepository = userRepository
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.userCountersRepository(legacyDb: GodToolsDatabase): UserCountersRepository {
+    internal fun GodToolsRoomDatabase.userCountersRepository(legacyDb: GodToolsDatabase): UserCountersRepository {
         legacyDb.triggerDataMigration()
         return userCountersRepository
     }
 
     @Provides
     @Reusable
-    fun GodToolsRoomDatabase.lastSyncTimeRepository(): LastSyncTimeRepository = lastSyncTimeRepository
+    internal fun GodToolsRoomDatabase.lastSyncTimeRepository(): LastSyncTimeRepository = lastSyncTimeRepository
+
+    @Provides
+    @Reusable
+    internal fun LegacyToolsRepository.toolsRepository(): ToolsRepository = this
 
     private fun GodToolsDatabase.triggerDataMigration() {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,

@@ -14,14 +14,14 @@ import java.util.Locale
 import kotlin.random.Random
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
-import org.cru.godtools.download.manager.db.DownloadManagerRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.Tool
@@ -29,22 +29,19 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.GodToolsDao
+import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1)
-    private val favoritedTranslationsFlow = MutableSharedFlow<List<Translation>>()
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
-    private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
+    private val favoriteToolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
+    private val resourcesFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { getAttachmentsFlow() } returns attachmentsFlow
-    }
-    private val dao = mockk<GodToolsDao> {
-        every { getAsFlow(Query.select<Tool>()) } returns toolsFlow
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
         coEvery { downloadLatestPublishedTranslation(any()) } returns true
@@ -53,12 +50,20 @@ class GodToolsDownloadManagerDispatcherTest {
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk {
         every { getDownloadedFilesFlow() } returns downloadedFilesFlow
     }
-    private val repository = mockk<DownloadManagerRepository> {
-        every { getFavoriteTranslationsThatNeedDownload(any()) } returns favoritedTranslationsFlow
-    }
     private val settings = mockk<Settings> {
         every { primaryLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.primaryLanguageFlow
         every { parallelLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.parallelLanguageFlow
+    }
+    private val toolsRepository: ToolsRepository by lazy {
+        mockk {
+            every { getResourcesFlow() } returns resourcesFlow
+            every { getFavoriteToolsFlow() } returns favoriteToolsFlow
+        }
+    }
+    private val translationsRepository: TranslationsRepository by lazy {
+        mockk {
+            every { getTranslationsFlowFor(any(), any()) } returns flowOf(emptyList())
+        }
     }
     private val testScope = TestScope()
 
@@ -66,39 +71,48 @@ class GodToolsDownloadManagerDispatcherTest {
     fun startDispatcher() {
         GodToolsDownloadManager.Dispatcher(
             attachmentsRepository,
-            dao,
             downloadManager,
             downloadedFilesRepository,
-            repository,
             settings,
+            toolsRepository,
+            translationsRepository,
             testScope.backgroundScope,
         )
     }
 
     @Test
     fun `favoriteToolsJob should trigger downloadLatestPublishedTranslation()`() = testScope.runTest {
-        verify {
-            downloadManager wasNot Called
-            repository wasNot Called
+        val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
+        every {
+            translationsRepository.getTranslationsFlowFor(
+                tools = match { it.toSet() == setOf("tool1", "tool2") },
+                languages = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+            )
+        } returns translationsFlow
+        verify { downloadManager wasNot Called }
+
+        favoriteToolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
+        primaryLanguageFlow.emit(Locale.GERMAN)
+        parallelLanguageFlow.emit(Locale.FRENCH)
+        runCurrent()
+        verifyAll {
+            translationsRepository.getTranslationsFlowFor(
+                tools = match { it.toSet() == setOf("tool1", "tool2") },
+                languages = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+            )
         }
 
         val translation1 = Translation().apply {
             toolCode = "tool1"
             languageCode = Locale.ENGLISH
+            isPublished = true
         }
         val translation2 = Translation().apply {
             toolCode = "tool2"
             languageCode = Locale.FRENCH
+            isPublished = true
         }
-        primaryLanguageFlow.emit(Locale.GERMAN)
-        parallelLanguageFlow.emit(Locale.FRENCH)
-        runCurrent()
-        verifyAll {
-            repository.getFavoriteTranslationsThatNeedDownload(
-                match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
-            )
-        }
-        favoritedTranslationsFlow.emit(listOf(translation1, translation2))
+        translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()
         coVerifyAll {
             downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
@@ -155,7 +169,7 @@ class GodToolsDownloadManagerDispatcherTest {
         }
 
         attachmentsFlow.emit(attachments)
-        toolsFlow.emit(listOf(tool1, tool2))
+        resourcesFlow.emit(listOf(tool1, tool2))
         runCurrent()
         coVerify(exactly = 1) {
             downloadManager.downloadAttachment(attachments[3].id)

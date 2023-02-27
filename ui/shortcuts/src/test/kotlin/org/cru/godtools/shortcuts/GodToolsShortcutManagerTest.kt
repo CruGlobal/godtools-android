@@ -9,11 +9,12 @@ import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import io.mockk.verifyAll
 import java.util.EnumSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,9 +23,8 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -34,7 +34,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Config.NEWEST_SDK
@@ -50,15 +49,24 @@ class GodToolsShortcutManagerTest {
     private lateinit var app: Application
     private lateinit var shortcutManagerService: ShortcutManager
 
-    private val dao = mockk<GodToolsDao> {
-        every { find<Tool>(any<String>()) } returns null
+    private val toolsRepository: ToolsRepository = mockk {
+        coEvery { findTool(any()) } returns null
     }
     @Deprecated("Transition tests to use runTest closure")
     private val coroutineScope = TestScope()
 
     private val shortcutManager by lazy { coroutineScope.createShortcutManager() }
-    private fun TestScope.createShortcutManager() =
-        GodToolsShortcutManager(app, dao, mockk(relaxUnitFun = true), mockk(), mockk(), mockk(), mockk(), this)
+    private fun TestScope.createShortcutManager() = GodToolsShortcutManager(
+        app,
+        mockk(),
+        mockk(relaxUnitFun = true),
+        mockk(),
+        mockk(),
+        mockk(),
+        toolsRepository = toolsRepository,
+        translationsRepository = mockk(),
+        coroutineScope = this
+    )
 
     @Before
     fun setup() {
@@ -101,7 +109,7 @@ class GodToolsShortcutManagerTest {
         val shortcutManager = createShortcutManager()
         val shortcut = shortcutManager.getPendingToolShortcut("invalid")!!
         joinLaunchedJobs()
-        verifyAll { dao.find<Tool>("invalid") }
+        coVerifyAll { toolsRepository.findTool("invalid") }
         assertNull(shortcut.shortcut)
     }
 
@@ -114,7 +122,7 @@ class GodToolsShortcutManagerTest {
 
         // trigger update
         shortcutManager.updatePendingShortcuts()
-        verifyAll { dao.find<Tool>("kgp") }
+        coVerifyAll { toolsRepository.findTool("kgp") }
 
         // prevent garbage collection of the shortcut during the test
         assertNotNull(
@@ -128,7 +136,7 @@ class GodToolsShortcutManagerTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = runTest {
-        every { dao.get(any<Query<Tool>>()) } throws CancellationException()
+        coEvery { toolsRepository.getTools() } throws CancellationException()
         val shortcutManager = createShortcutManager()
 
         ExceptionRaisingTree.plant().use {
@@ -137,8 +145,8 @@ class GodToolsShortcutManagerTest {
                 assertTrue(isCancelled)
             }
         }
-        verifyAll {
-            dao.get(any<Query<Tool>>())
+        coVerifyAll {
+            toolsRepository.getTools()
             shortcutManagerService wasNot Called
         }
     }
@@ -153,7 +161,7 @@ class GodToolsShortcutManagerTest {
         val shortcutManager = createShortcutManager()
 
         shortcutManager.updateDynamicShortcuts(emptyMap())
-        verify { dao wasNot Called }
+        verify { toolsRepository wasNot Called }
     }
     // endregion Instant App
 

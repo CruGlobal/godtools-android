@@ -50,6 +50,7 @@ import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
@@ -62,17 +63,16 @@ import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.keynote.godtools.android.db.GodToolsDao
 
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId) {
-    @Inject
-    internal lateinit var dao: GodToolsDao
     @Inject
     protected lateinit var downloadManager: GodToolsDownloadManager
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
+    @Inject
+    internal lateinit var toolsRepository: ToolsRepository
 
     protected abstract val viewModel: BaseToolRendererViewModel
 
@@ -397,7 +397,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
             settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
         }
 
-        dao.updateSharesDeltaAsync(tool, 1)
+        lifecycleScope.launch { toolsRepository.updateToolViews(tool, 1) }
     }
 
     private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false

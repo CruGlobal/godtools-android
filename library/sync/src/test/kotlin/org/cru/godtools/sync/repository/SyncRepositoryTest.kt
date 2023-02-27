@@ -17,6 +17,7 @@ class SyncRepositoryTest {
         attachmentsRepository = mockk(),
         dao = mockk(),
         languagesRepository = languagesRepository,
+        toolsRepository = mockk()
     )
 
     @Test

@@ -22,12 +22,12 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.ToolsRepository
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @HiltViewModel
@@ -57,7 +57,7 @@ class ToolViewModels @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     inner class ToolViewModel(val code: String, initialTool: Tool? = null) {
-        val tool = toolsRepository.getToolFlow(code)
+        val tool = toolsRepository.findToolFlow(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialTool)
 
         val banner = tool

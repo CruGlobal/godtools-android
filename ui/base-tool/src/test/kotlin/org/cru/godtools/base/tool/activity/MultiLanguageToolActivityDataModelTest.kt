@@ -7,7 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import io.mockk.confirmVerified
 import io.mockk.every
-import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
@@ -15,16 +14,14 @@ import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
-import org.ccci.gto.android.common.db.findAsFlow
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.model.Tool
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
@@ -40,7 +37,6 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val TOOL = "kgp"
@@ -51,15 +47,13 @@ class MultiLanguageToolActivityDataModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     // region Objects & Mocks
-    private val dao: GodToolsDao = mockk {
-        every { findAsFlow<Tool>(any<String>()) } returns emptyFlow()
-    }
     private val manifestManager: ManifestManager = mockk {
         every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
     }
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
     private val savedStateHandle = SavedStateHandle()
+    private val toolsRepository: ToolsRepository = mockk()
     private val translationsRepository = mockk<TranslationsRepository> {
         every { getLatestTranslationLiveData(any(), any(), trackAccess = true) } returns MutableLiveData()
     }
@@ -68,16 +62,15 @@ class MultiLanguageToolActivityDataModelTest {
     fun setupDataModel() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         dataModel = MultiLanguageToolActivityDataModel(
-            dao,
             mockk(),
             mockk(),
             manifestManager,
+            toolsRepository,
             translationsRepository,
             mockk(),
             isConnnected,
             savedStateHandle
         )
-        excludeRecords { dao.findAsFlow<Tool>(any<String>()) }
     }
 
     @After
@@ -377,10 +370,10 @@ class MultiLanguageToolActivityDataModelTest {
 
         // creating a new DataModel using the same SavedState emulates recreation after process death
         val dataModel2 = MultiLanguageToolActivityDataModel(
-            dao,
             mockk(),
             mockk(),
             manifestManager,
+            toolsRepository,
             translationsRepository,
             mockk(),
             isConnnected,

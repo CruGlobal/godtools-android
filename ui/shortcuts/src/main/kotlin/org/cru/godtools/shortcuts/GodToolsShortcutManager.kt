@@ -37,10 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Expression.Companion.constants
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
@@ -50,13 +47,13 @@ import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.GodToolsDao
 import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
@@ -74,9 +71,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val fs: ToolFileSystem,
     private val picasso: Picasso,
     private val settings: Settings,
+    private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
     private val coroutineScope: CoroutineScope,
-    private val ioDispatcher: CoroutineContext = Dispatchers.IO
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) {
     @Inject
     constructor(
@@ -86,6 +84,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fs: ToolFileSystem,
         picasso: Picasso,
         settings: Settings,
+        toolsRepository: ToolsRepository,
         translationsRepository: TranslationsRepository,
     ) : this(
         context,
@@ -94,6 +93,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         fs,
         picasso,
         settings,
+        toolsRepository,
         translationsRepository,
         CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
@@ -161,7 +161,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
-        withContext(ioDispatcher) { dao.find<Tool>(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) } }
+        toolsRepository.findTool(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
     }
     // endregion Pending Shortcuts
 
@@ -182,13 +182,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         val manager = shortcutManager ?: return
 
         val dynamicShortcuts = withContext(ioDispatcher) {
-            Query.select<Tool>()
-                .where(
-                    ToolTable.FIELD_TYPE.`in`(*constants(Tool.Type.ARTICLE, Tool.Type.TRACT))
-                        .and(ToolTable.FIELD_ADDED.eq(true))
-                )
-                .orderBy(ToolTable.SQL_ORDER_BY_ORDER)
-                .get(dao).asSequence()
+            toolsRepository.getTools()
+                .filter { it.isAdded }
+                .sortedWith(Tool.COMPARATOR_FAVORITE_ORDER)
+                .asSequence()
                 .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
                 .take(manager.maxShortcutCountPerActivity)
                 .toList()
@@ -217,7 +214,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
-        dao.get(Tool::class.java)
+        toolsRepository.getResources()
             .map { async { createToolShortcut(it) } }.awaitAll()
             .filterNotNull()
             .associateBy { it.id }
