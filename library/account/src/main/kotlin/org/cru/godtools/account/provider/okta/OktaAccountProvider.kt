@@ -1,6 +1,5 @@
 package org.cru.godtools.account.provider.okta
 
-import android.content.Context
 import androidx.annotation.VisibleForTesting
 import com.okta.authfoundation.claims.email
 import com.okta.authfoundation.claims.familyName
@@ -96,10 +95,11 @@ internal class OktaAccountProvider @Inject constructor(
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
 
-    override suspend fun login(context: Context) {
+    // region Login/Logout
+    override suspend fun login(state: AccountProvider.LoginState) {
         when (
             val result = webAuthenticationClient.login(
-                context,
+                state.activity,
                 "${buildConfig.appUriScheme}:/auth",
                 extraRequestParameters = mapOf("prompt" to "login")
             )
@@ -121,6 +121,7 @@ internal class OktaAccountProvider @Inject constructor(
             }
         }
     }
+    // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(): AuthToken? {
         val credential = credentials.defaultCredential()

@@ -48,10 +48,12 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     @Inject
     internal lateinit var accountManager: GodToolsAccountManager
+    private lateinit var accountManagerLoginState: GodToolsAccountManager.LoginState
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        accountManagerLoginState = accountManager.prepareForLogin(this)
 
         // restore any saved state
         savedInstanceState?.restoreSyncState()
@@ -174,7 +176,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     // region Navigation Menu actions
     private fun launchLogin() {
-        lifecycleScope.launch { accountManager.login(this@BasePlatformActivity, AccountType.OKTA) }
+        lifecycleScope.launch { accountManager.login(AccountType.OKTA, accountManagerLoginState) }
     }
     // endregion Navigation Menu actions
 

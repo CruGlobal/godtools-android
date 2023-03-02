@@ -48,6 +48,7 @@ import org.ccci.gto.android.common.okta.authfoundation.credential.ChangeAwareTok
 import org.ccci.gto.android.common.okta.authfoundation.credential.idTokenFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.tagsFlow
 import org.ccci.gto.android.common.okta.authfoundation.credential.userInfoFlow
+import org.cru.godtools.account.provider.AccountProvider.LoginState
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import retrofit2.Response
@@ -101,7 +102,7 @@ class OktaAccountProviderTest {
         coEvery { webAuthClient.login(any(), any(), any(), any()) } returns OidcClientResult.Success(token)
         coEvery { credential.storeToken(any(), any()) } just Runs
 
-        provider.login(mockk())
+        provider.login(LoginState(mockk()))
         coVerifyAll {
             webAuthClient.login(any(), buildConfig.appUriScheme + ":/auth", mapOf("prompt" to "login"))
             credential.storeToken(token, any())

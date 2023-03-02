@@ -1,6 +1,6 @@
 package org.cru.godtools.account
 
-import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.annotation.VisibleForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,11 +57,20 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
 
-    suspend fun login(context: Context, type: AccountType) = providers.first { it.type == type }.login(context)
+    // region Login/Logout
+    class LoginState internal constructor(internal val providerState: Map<AccountType, AccountProvider.LoginState?>)
+
+    fun prepareForLogin(activity: ComponentActivity) =
+        LoginState(providers.associate { it.type to it.prepareForLogin(activity) })
+    suspend fun login(type: AccountType, state: LoginState) {
+        val providerState = state.providerState[type] ?: return
+        providers.first { it.type == type }.login(providerState)
+    }
     suspend fun logout() = coroutineScope {
         // trigger a logout for any provider we happen to be logged into
         providers.forEach { launch { it.logout() } }
     }
+    // endregion Login/Logout
 
     internal suspend fun authenticateWithMobileContentApi() = activeProvider()?.authenticateWithMobileContentApi()
 }

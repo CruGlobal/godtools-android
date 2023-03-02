@@ -34,6 +34,7 @@ class ExternalSingletonsModule {
     val accountManager by lazy {
         mockk<GodToolsAccountManager> {
             every { isAuthenticatedFlow() } returns flowOf(false)
+            every { prepareForLogin(any()) } returns mockk()
         }
     }
     @get:Provides
