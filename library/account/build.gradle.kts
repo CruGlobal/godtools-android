@@ -9,9 +9,15 @@ dependencies {
     implementation(project(":library:api"))
 
     implementation(libs.gtoSupport.core)
+    implementation(libs.gtoSupport.facebook)
+    implementation(libs.gtoSupport.kotlin.coroutines)
 
     implementation(libs.dagger)
     implementation(libs.hilt)
+
+    // region Facebook
+    implementation(libs.facebook.login)
+    // endregion Facebook
 
     // region Okta
     implementation(libs.gtoSupport.okta) {

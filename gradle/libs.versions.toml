@@ -12,6 +12,7 @@ androidx-viewpager2 = "1.0.0"
 androidx-work = "2.8.1"
 dagger = "2.45"
 eventbus = "3.3.1"
+facebook = "16.0.0"
 facebook-flipper = "0.187.1"
 firebase-crashlytics = "18.3.6"
 firebase-perf = "20.3.1"
@@ -84,7 +85,8 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-processor", version.ref = "eventbus" }
-facebook = "com.facebook.android:facebook-core:16.0.0"
+facebook = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
+facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook" }
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
@@ -130,6 +132,7 @@ gtoSupport-db = { module = "org.ccci.gto.android:gto-support-db", version.ref = 
 gtoSupport-db-coroutines = { module = "org.ccci.gto.android:gto-support-db-coroutines", version.ref = "gtoSupport" }
 gtoSupport-db-livedata = { module = "org.ccci.gto.android:gto-support-db-livedata", version.ref = "gtoSupport" }
 gtoSupport-eventbus = { module = "org.ccci.gto.android:gto-support-eventbus", version.ref = "gtoSupport" }
+gtoSupport-facebook = { module = "org.ccci.gto.android:gto-support-facebook", version.ref = "gtoSupport" }
 gtoSupport-facebook-flipper = { module = "org.ccci.gto.android:gto-support-facebook-flipper", version.ref = "gtoSupport" }
 gtoSupport-firebase-crashlytics = { module = "org.ccci.gto.android:gto-support-firebase-crashlytics", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
