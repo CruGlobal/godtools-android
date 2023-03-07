@@ -250,10 +250,7 @@ internal fun ToolDetailsActions(
             contentDescription = null
         )
         Text(
-            stringResource(
-                if (isAdded) R.string.action_tools_remove_favorite
-                else R.string.action_tools_add_favorite
-            ),
+            stringResource(if (isAdded) R.string.action_tools_remove_favorite else R.string.action_tools_add_favorite),
             modifier = Modifier.padding(start = 4.dp)
         )
     }

@@ -35,7 +35,8 @@ class ActivityToolLoadingBindingTest {
             binding.executePendingBindings()
             assertEquals(
                 "contentLoading should be visible when tool state is $it",
-                View.VISIBLE, binding.contentLoading.visibility
+                View.VISIBLE,
+                binding.contentLoading.visibility
             )
         }
 
@@ -44,7 +45,8 @@ class ActivityToolLoadingBindingTest {
             binding.executePendingBindings()
             assertEquals(
                 "contentLoading should be hidden when tool state is $it",
-                View.GONE, binding.contentLoading.visibility
+                View.GONE,
+                binding.contentLoading.visibility
             )
         }
     }

@@ -31,13 +31,16 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     internal constructor(providers: Set<@JvmSuppressWildcards AccountProvider>) :
         this(providers.sortedWith(Ordered.COMPARATOR))
 
+    // region Active Provider
     @VisibleForTesting
     internal suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
+
     @VisibleForTesting
     internal val activeProviderFlow =
         combine(providers.map { p -> p.isAuthenticatedFlow().map { p to it } }) {
             it.firstNotNullOfOrNull { (p, isAuthed) -> if (isAuthed) p else null }
         }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
+    // endregion Active Provider
 
     suspend fun isAuthenticated() = activeProvider()?.isAuthenticated() ?: false
     suspend fun userId() = activeProvider()?.userId()

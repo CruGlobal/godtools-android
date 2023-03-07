@@ -7,7 +7,11 @@ import java.util.Locale
 import org.cru.godtools.model.TrainingTip
 
 @Entity(tableName = "training_tips")
-internal class TrainingTipEntity(@PrimaryKey @Embedded val key: Key) {
+internal class TrainingTipEntity(
+    @PrimaryKey
+    @Embedded
+    val key: Key,
+) {
     internal data class Key(val tool: String, val locale: Locale, val tipId: String)
 
     var isCompleted = false
@@ -17,6 +21,6 @@ internal class TrainingTipEntity(@PrimaryKey @Embedded val key: Key) {
         tool = key.tool,
         locale = key.locale,
         tipId = key.tipId,
-        isCompleted = isCompleted
+        isCompleted = isCompleted,
     )
 }

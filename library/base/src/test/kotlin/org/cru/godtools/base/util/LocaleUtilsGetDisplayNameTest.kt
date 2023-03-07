@@ -74,7 +74,9 @@ class LocaleUtilsGetDisplayNameTest {
         val resources = context.resources
         every {
             resources.getIdentifier(
-                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}", "string", PACKAGE_NAME
+                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}",
+                "string",
+                PACKAGE_NAME
             )
         } returns id
         return every { resources.getString(id) }

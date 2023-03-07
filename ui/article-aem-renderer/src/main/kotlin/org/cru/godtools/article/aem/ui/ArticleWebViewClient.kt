@@ -50,7 +50,8 @@ internal class ArticleWebViewClient @Inject constructor(
         val data = resource.getData() ?: return null
         return WebResourceResponse(
             type?.let { "${type.type}/${type.subtype}" } ?: "application/octet-stream",
-            type?.charset()?.name(), data
+            type?.charset()?.name(),
+            data
         )
     }
 

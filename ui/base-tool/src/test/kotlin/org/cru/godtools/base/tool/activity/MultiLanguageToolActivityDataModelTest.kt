@@ -405,7 +405,8 @@ class MultiLanguageToolActivityDataModelTest {
         // run logic and verify results
         assertThat(
             "first language should be visible because it is downloaded",
-            dataModel.visibleLocales.value, contains(Locale.FRENCH)
+            dataModel.visibleLocales.value,
+            contains(Locale.FRENCH)
         )
     }
 
@@ -425,11 +426,13 @@ class MultiLanguageToolActivityDataModelTest {
         // run logic and verify results
         assertThat(
             "french is available because it is currently active and potentially available",
-            dataModel.availableLocales.value, contains(Locale.FRENCH)
+            dataModel.availableLocales.value,
+            contains(Locale.FRENCH)
         )
         assertThat(
             "neither language should be visible because the preferred primary is still loading",
-            dataModel.visibleLocales.value, empty()
+            dataModel.visibleLocales.value,
+            empty()
         )
     }
 
@@ -450,11 +453,13 @@ class MultiLanguageToolActivityDataModelTest {
         // run logic and verify results
         assertThat(
             "german should be available because it is potentially available",
-            dataModel.availableLocales.value, contains(Locale.GERMAN)
+            dataModel.availableLocales.value,
+            contains(Locale.GERMAN)
         )
         assertThat(
             "neither language should be visible because the primary is still loading",
-            dataModel.visibleLocales.value, empty()
+            dataModel.visibleLocales.value,
+            empty()
         )
     }
 
@@ -474,11 +479,13 @@ class MultiLanguageToolActivityDataModelTest {
         // run logic and verify results
         assertThat(
             "german should be available because it is potentially available",
-            dataModel.availableLocales.value, contains(Locale.GERMAN)
+            dataModel.availableLocales.value,
+            contains(Locale.GERMAN)
         )
         assertThat(
             "neither language should be visible because the primary is still loading",
-            dataModel.visibleLocales.value, empty()
+            dataModel.visibleLocales.value,
+            empty()
         )
     }
     // endregion Property: visibleLocales

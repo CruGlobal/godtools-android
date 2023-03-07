@@ -24,10 +24,8 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
         ?: defaultName
         // just rely on Locale.getDisplayName() which will default to the language code at this point
         ?: run {
-            Timber.tag("LocaleUtils").e(
-                RuntimeException("Unable to find display name for $this"),
-                "LocaleUtils.getDisplayName(%s, %s)", this, inLocale
-            )
+            val e = RuntimeException("Unable to find display name for $this")
+            Timber.tag("LocaleUtils").e(e, "LocaleUtils.getDisplayName(%s, %s)", this, inLocale)
             if (inLocale != null) getDisplayName(inLocale) else displayName
         }
 }

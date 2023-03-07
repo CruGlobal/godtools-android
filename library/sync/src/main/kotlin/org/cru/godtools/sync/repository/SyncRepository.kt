@@ -48,20 +48,24 @@ internal class SyncRepository @Inject constructor(
         toolsRepository.storeToolFromSync(tool)
 
         // persist related included objects
-        if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) tool.latestTranslations?.let { translations ->
-            storeTranslations(
-                translations,
-                includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
-                existing = tool.code?.let { code ->
-                    BaseSyncTasks.index(
-                        Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao)
-                    )
-                }
-            )
+        if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
+            tool.latestTranslations?.let { translations ->
+                storeTranslations(
+                    translations,
+                    includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
+                    existing = tool.code?.let { code ->
+                        BaseSyncTasks.index(
+                            Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao)
+                        )
+                    }
+                )
+            }
         }
-        if (includes.include(Tool.JSON_ATTACHMENTS)) tool.attachments?.let { attachments ->
-            attachmentsRepository.storeAttachmentsFromSync(attachments)
-            attachmentsRepository.removeAttachmentsMissingFromSync(tool.id, attachments)
+        if (includes.include(Tool.JSON_ATTACHMENTS)) {
+            tool.attachments?.let { attachments ->
+                attachmentsRepository.storeAttachmentsFromSync(attachments)
+                attachmentsRepository.removeAttachmentsMissingFromSync(tool.id, attachments)
+            }
         }
         if (includes.include(Tool.JSON_METATOOL)) {
             tool.metatool?.let {

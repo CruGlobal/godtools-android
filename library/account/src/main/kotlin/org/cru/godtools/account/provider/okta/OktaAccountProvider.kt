@@ -87,7 +87,9 @@ internal class OktaAccountProvider @Inject constructor(
                             familyName = userInfo?.familyName,
                             email = idToken?.email ?: userInfo?.email
                         )
-                    } else null
+                    } else {
+                        null
+                    }
                 }
             )
         }

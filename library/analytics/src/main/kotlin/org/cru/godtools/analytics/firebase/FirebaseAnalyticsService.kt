@@ -68,7 +68,8 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     fun onAnalyticsEvent(event: AnalyticsBaseEvent) {
-        if (event.isForSystem(AnalyticsSystem.FIREBASE)) when (event) {
+        if (!event.isForSystem(AnalyticsSystem.FIREBASE)) return
+        when (event) {
             is AnalyticsScreenEvent -> handleScreenEvent(event)
             is AnalyticsActionEvent -> handleActionEvent(event)
         }
@@ -114,7 +115,8 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
         firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, Locale.getDefault().toLanguageTag())
         firebase.setUserProperty(
-            USER_PROP_APP_TYPE, if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
+            USER_PROP_APP_TYPE,
+            if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
         )
         firebase.setUserProperty(USER_PROP_DEBUG, BuildConfig.DEBUG.toString())
     }

@@ -24,13 +24,17 @@ class AemImport(@field:PrimaryKey val uri: Uri) {
         foreignKeys = [
             ForeignKey(
                 entity = AemImport::class,
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                parentColumns = ["uri"], childColumns = ["aemImportUri"]
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE,
+                parentColumns = ["uri"],
+                childColumns = ["aemImportUri"]
             ),
             ForeignKey(
                 entity = Article::class,
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE,
-                parentColumns = ["uri"], childColumns = ["articleUri"]
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE,
+                parentColumns = ["uri"],
+                childColumns = ["articleUri"]
             )
         ]
     )

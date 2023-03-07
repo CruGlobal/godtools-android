@@ -37,8 +37,10 @@ class Article(@field:PrimaryKey val uri: Uri) {
         foreignKeys = [
             ForeignKey(
                 entity = Article::class,
-                parentColumns = ["uri"], childColumns = ["articleUri"],
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+                parentColumns = ["uri"],
+                childColumns = ["articleUri"],
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE
             )
         ]
     )
@@ -55,13 +57,17 @@ class Article(@field:PrimaryKey val uri: Uri) {
         foreignKeys = [
             ForeignKey(
                 entity = Article::class,
-                parentColumns = ["uri"], childColumns = ["articleUri"],
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+                parentColumns = ["uri"],
+                childColumns = ["articleUri"],
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE
             ),
             ForeignKey(
                 entity = Resource::class,
-                parentColumns = ["uri"], childColumns = ["resourceUri"],
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+                parentColumns = ["uri"],
+                childColumns = ["resourceUri"],
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE
             )
         ]
     )

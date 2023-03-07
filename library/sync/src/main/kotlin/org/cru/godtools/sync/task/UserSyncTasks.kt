@@ -33,7 +33,9 @@ internal class UserSyncTasks @Inject constructor(
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!force &&
             !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_USER, userId, staleAfter = STALE_DURATION_USER)
-        ) return true
+        ) {
+            return true
+        }
 
         val user = userApi.getUser().takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }

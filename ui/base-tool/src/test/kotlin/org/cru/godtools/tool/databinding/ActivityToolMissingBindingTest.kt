@@ -35,7 +35,8 @@ class ActivityToolMissingBindingTest {
             binding.executePendingBindings()
             assertEquals(
                 "noContent should be visible when tool state is $it",
-                View.VISIBLE, binding.noContent.visibility
+                View.VISIBLE,
+                binding.noContent.visibility
             )
         }
 

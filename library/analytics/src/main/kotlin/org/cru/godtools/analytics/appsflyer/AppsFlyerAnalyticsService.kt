@@ -54,15 +54,13 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsScreenEvent(event: AnalyticsScreenEvent) {
-        if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.logEvent(app, event.screen, emptyMap())
+        if (event.isForSystem(AnalyticsSystem.APPSFLYER)) appsFlyer.logEvent(app, event.screen, emptyMap())
     }
 
     @WorkerThread
     @Subscribe(threadMode = ThreadMode.ASYNC)
     fun onAnalyticsActionEvent(event: AnalyticsActionEvent) {
-        if (event.isForSystem(AnalyticsSystem.APPSFLYER))
-            appsFlyer.logEvent(app, event.action, emptyMap())
+        if (event.isForSystem(AnalyticsSystem.APPSFLYER)) appsFlyer.logEvent(app, event.action, emptyMap())
     }
     // endregion Analytics Events
 

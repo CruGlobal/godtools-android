@@ -50,8 +50,9 @@ class LanguageToggleController(private val tabs: TabLayout) {
                 if (locale == selected) while (tabs.selectedTabPosition > i) tabs.removeTabAt(i)
 
                 // insert a new tab if the current tab isn't correct
-                if (tabs.getTabAt(i)?.tag != locale)
+                if (tabs.getTabAt(i)?.tag != locale) {
                     tabs.addTab(tabs.newTab().setTag(locale), i, locale == activeLocale)
+                }
             }
 
             // remove any excess tabs

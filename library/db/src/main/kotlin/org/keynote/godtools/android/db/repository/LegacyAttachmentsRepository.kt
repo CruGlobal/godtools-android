@@ -54,7 +54,9 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         attachments.forEach {
             dao.updateOrInsert(
                 it,
-                AttachmentTable.COLUMN_TOOL, AttachmentTable.COLUMN_FILENAME, AttachmentTable.COLUMN_SHA256
+                AttachmentTable.COLUMN_TOOL,
+                AttachmentTable.COLUMN_FILENAME,
+                AttachmentTable.COLUMN_SHA256
             )
         }
     }

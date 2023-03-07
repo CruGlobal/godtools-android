@@ -29,7 +29,9 @@ internal class LanguagesSyncTasks @Inject constructor(
             // short-circuit if we aren't forcing a sync and the data isn't stale
             if (!isForced(args) &&
                 !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_LANGUAGES, staleAfter = STALE_DURATION_LANGUAGES)
-            ) return@withContext true
+            ) {
+                return@withContext true
+            }
 
             // fetch languages from the API
             val json = languagesApi.list(JsonApiParams()).takeIf { it.isSuccessful }?.body() ?: return@withContext false
