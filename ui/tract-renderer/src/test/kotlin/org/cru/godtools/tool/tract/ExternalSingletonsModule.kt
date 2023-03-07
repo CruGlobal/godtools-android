@@ -35,13 +35,6 @@ import org.greenrobot.eventbus.EventBus
     ]
 )
 class ExternalSingletonsModule {
-//    @get:Provides
-//    val dao by lazy {
-//        mockk<GodToolsDao> {
-//            every { findAsFlow<Tool>(any<String>()) } returns flowOf(null)
-//            every { updateSharesDeltaAsync(any(), any()) } returns mockk()
-//        }
-//    }
     @get:Provides
     val downloadManager: GodToolsDownloadManager by lazy { mockk() }
     @get:Provides
@@ -70,12 +63,6 @@ class ExternalSingletonsModule {
     val syncService by lazy { mockk<GodToolsSyncService>() }
     @get:Provides
     val tractShareService by lazy { mockk<TractShareService>() }
-//    @get:Provides
-//    val translationsRepository by lazy {
-//        mockk<TranslationsRepository> {
-//            every { getLatestTranslationLiveData(any(), any(), any(), any()) } answers { MutableLiveData(null) }
-//        }
-//    }
     @get:Provides
     val userActivityManager: UserActivityManager by lazy { mockk() }
 }
