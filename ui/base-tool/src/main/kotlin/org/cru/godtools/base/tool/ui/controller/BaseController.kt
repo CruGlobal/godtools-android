@@ -8,7 +8,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Job
