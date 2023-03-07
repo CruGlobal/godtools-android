@@ -1,14 +1,11 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "org.cru.godtools.tool.article.aem"
-
-    baseConfiguration(project)
 
     defaultConfig {
         javaCompileOptions {

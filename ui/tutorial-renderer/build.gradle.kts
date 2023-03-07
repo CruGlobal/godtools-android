@@ -1,6 +1,5 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
     alias(libs.plugins.hilt)
 }
@@ -8,7 +7,6 @@ plugins {
 android {
     namespace = "org.cru.godtools.tutorial"
 
-    baseConfiguration(project)
     configureCompose(project)
 
     defaultConfig {
