@@ -1,14 +1,9 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
 }
 
-android {
-    namespace = "org.cru.godtools.user"
-
-    baseConfiguration(project)
-}
+android.namespace = "org.cru.godtools.user"
 
 dependencies {
     api(project(":library:model"))

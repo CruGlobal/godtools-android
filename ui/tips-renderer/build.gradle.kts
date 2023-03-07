@@ -1,14 +1,11 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
     alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "org.cru.godtools.tool.tips"
-
-    baseConfiguration(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
     buildFeatures.dataBinding = true

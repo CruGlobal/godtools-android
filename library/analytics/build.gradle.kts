@@ -1,13 +1,11 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
 }
 
 android {
     namespace = "org.cru.godtools.analytics"
 
-    baseConfiguration(project)
     configureCompose(project)
     createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
 

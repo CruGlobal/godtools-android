@@ -1,6 +1,5 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
     id("kotlin-parcelize")
     alias(libs.plugins.hilt)
@@ -9,7 +8,6 @@ plugins {
 android {
     namespace = "org.cru.godtools.tool"
 
-    baseConfiguration(project)
     createEventBusIndex("org.cru.godtools.base.tool.BaseToolEventBusIndex")
 
     defaultConfig.vectorDrawables.useSupportLibrary = true

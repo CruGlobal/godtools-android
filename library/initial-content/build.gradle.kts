@@ -1,15 +1,13 @@
 import org.cru.godtools.gradle.bundledcontent.configureBundledContent
 
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
 }
 
 android {
     namespace = "org.cru.godtools.initialcontent"
 
-    baseConfiguration(project)
     configureFlavorDimensions(project)
 }
 

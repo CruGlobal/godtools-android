@@ -1,13 +1,10 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
 }
 
 android {
     namespace = "org.cru.godtools.api"
-
-    baseConfiguration(project)
 
     defaultConfig {
         buildConfigField("String", "CAMPAIGN_FORMS_API", "\"https://campaign-forms.cru.org/\"")

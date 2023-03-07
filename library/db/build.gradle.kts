@@ -1,6 +1,5 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
     alias(libs.plugins.ksp)
 }
@@ -8,7 +7,6 @@ plugins {
 android {
     namespace = "org.cru.godtools.db"
 
-    baseConfiguration(project)
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

@@ -1,13 +1,10 @@
 plugins {
-    id("com.android.library")
-    kotlin("android")
+    id("godtools.library-conventions")
     kotlin("kapt")
 }
 
 android {
     namespace = "org.cru.godtools.downloadmanager"
-
-    baseConfiguration(project)
 
     buildFeatures.dataBinding = true
 }
