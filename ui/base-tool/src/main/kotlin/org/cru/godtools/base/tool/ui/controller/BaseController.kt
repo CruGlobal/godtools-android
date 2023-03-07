@@ -48,7 +48,8 @@ abstract class BaseController<T : Base> protected constructor(
     }
 
     open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
-    protected open val toolState: State get() = checkNotNull(parentController?.toolState)
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    open val toolState: State get() = checkNotNull(parentController?.toolState)
 
     var model: T? = null
         set(value) {
@@ -80,7 +81,9 @@ abstract class BaseController<T : Base> protected constructor(
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = lifecycleOwner?.lifecycleScope?.launch {
         if (event.delay > 0) delay(event.delay * 1000L)
+        if (!event.shouldTrigger(toolState)) return@launch
         eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event))
+        event.recordTriggered(toolState)
     }?.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
