@@ -10,8 +10,6 @@ android {
     createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
 
     defaultConfig {
-        consumerProguardFiles += file("proguard-rules-snowplow.pro")
-
         buildConfigField("String", "APPSFLYER_DEV_KEY", "\"QdbVaVHi9bHRchUTWtoaij\"")
     }
 
