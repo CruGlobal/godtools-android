@@ -76,7 +76,7 @@ abstract class BaseController<T : Base> protected constructor(
 
     // region AnalyticsEvents
     protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
-        events?.mapNotNull { sendAnalyticsEvent(it) }.orEmpty()
+        events.orEmpty().mapNotNull { sendAnalyticsEvent(it) }
 
     private fun sendAnalyticsEvent(event: AnalyticsEvent) = lifecycleOwner?.lifecycleScope?.launch {
         if (event.delay > 0) delay(event.delay * 1000L)
