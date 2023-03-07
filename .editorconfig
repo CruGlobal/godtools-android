@@ -2,5 +2,13 @@
 insert_final_newline=true
 
 [*.{kt,kts}]
+ij_kotlin_imports_layout=*,^
+ij_kotlin_allow_trailing_comma=true
+# ij_kotlin_allow_trailing_comma_on_call_site=true
 indent_size=4
+ktlint_code_style=android
+ktlint_standard_filename = disabled
+ktlint_standard_spacing-between-declarations-with-annotations = disabled
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
 max_line_length = 120
