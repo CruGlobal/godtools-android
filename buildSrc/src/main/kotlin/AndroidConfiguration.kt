@@ -57,6 +57,8 @@ private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
+
+    project.dependencies.addProvider("implementation", project.libs.findBundle("common").get())
 }
 
 private fun BaseExtension.configureSdk() {
