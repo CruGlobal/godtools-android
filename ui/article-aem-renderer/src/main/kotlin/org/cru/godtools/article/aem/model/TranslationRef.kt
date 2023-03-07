@@ -18,7 +18,11 @@ fun Translation.toTranslationRefKey(): TranslationRef.Key? {
 }
 
 @Entity(tableName = "translations")
-class TranslationRef(@field:Embedded @field:PrimaryKey val key: Key) {
+class TranslationRef(
+    @field:PrimaryKey
+    @field:Embedded
+    val key: Key,
+) {
     var processed = false
 
     @Immutable
@@ -32,13 +36,17 @@ class TranslationRef(@field:Embedded @field:PrimaryKey val key: Key) {
         foreignKeys = [
             ForeignKey(
                 entity = TranslationRef::class,
-                parentColumns = ["tool", "language", "version"], childColumns = ["tool", "language", "version"],
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+                parentColumns = ["tool", "language", "version"],
+                childColumns = ["tool", "language", "version"],
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE
             ),
             ForeignKey(
                 entity = AemImport::class,
-                parentColumns = ["uri"], childColumns = ["aemImportUri"],
-                onUpdate = ForeignKey.RESTRICT, onDelete = ForeignKey.CASCADE
+                parentColumns = ["uri"],
+                childColumns = ["aemImportUri"],
+                onUpdate = ForeignKey.RESTRICT,
+                onDelete = ForeignKey.CASCADE
             )
         ]
     )

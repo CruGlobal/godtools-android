@@ -129,7 +129,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     ) { l, m, t, type, connected, syncFinished ->
         l.associateWith {
             LoadingState.determineToolState(
-                m[it], t[it],
+                m[it],
+                t[it],
                 manifestType = type,
                 isConnected = connected,
                 isSyncFinished = syncFinished

@@ -11,7 +11,6 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.startDashboardActivity
 import org.cru.godtools.base.util.deviceLocale
@@ -23,6 +22,7 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.layout.TutorialLayout
 import org.cru.godtools.tutorial.theme.GodToolsTutorialTheme
 import org.greenrobot.eventbus.EventBus
+import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
 
 private const val ARG_PAGE_SET = "pageSet"
 

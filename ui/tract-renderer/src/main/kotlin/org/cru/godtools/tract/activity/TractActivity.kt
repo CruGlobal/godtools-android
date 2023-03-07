@@ -276,14 +276,16 @@ class TractActivity :
             pager.layoutDirection = TextUtils.getLayoutDirectionFromLocale(it.firstOrNull())
         }
 
-        if (initialPage >= 0) dataModel.activeManifest.notNull().observeOnce(this) {
-            if (initialPage < 0) return@observeOnce
+        if (initialPage >= 0) {
+            dataModel.activeManifest.notNull().observeOnce(this) {
+                if (initialPage < 0) return@observeOnce
 
-            // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
-            //       This is normally handled by the pager adapter observer.
-            pagerAdapter.manifest = it
-            pager.setCurrentItem(initialPage, false)
-            initialPage = -1
+                // HACK: set the manifest in the pager adapter to ensure setCurrentItem works.
+                //       This is normally handled by the pager adapter observer.
+                pagerAdapter.manifest = it
+                pager.setCurrentItem(initialPage, false)
+                initialPage = -1
+            }
         }
     }
 

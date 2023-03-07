@@ -28,8 +28,11 @@ internal fun TextView.bindTextNode(text: Text?, textSize: Float?) {
     this.text = text?.text
     setTypeface(text?.manifest?.getTypeface(context), text?.typefaceStyle ?: Typeface.NORMAL)
     paintFlags = paintFlags.let {
-        if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
-        else it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
+        if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) {
+            it.withFlag(Paint.UNDERLINE_TEXT_FLAG)
+        } else {
+            it.minusFlag(Paint.UNDERLINE_TEXT_FLAG)
+        }
     }
     val size = text.textScale * (textSize ?: context.resources.getDimension(R.dimen.tool_content_text_size_base))
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())

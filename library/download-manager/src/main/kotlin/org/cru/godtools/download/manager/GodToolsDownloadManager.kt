@@ -84,7 +84,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val translationsRepository: TranslationsRepository,
     private val workManager: Lazy<WorkManager>,
     private val coroutineScope: CoroutineScope,
-    private val ioDispatcher: CoroutineContext = Dispatchers.IO
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) {
     @Inject
     internal constructor(
@@ -96,7 +96,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         manifestParser: ManifestParser,
         translationsApi: TranslationsApi,
         translationsRepository: TranslationsRepository,
-        workManager: Lazy<WorkManager>
+        workManager: Lazy<WorkManager>,
     ) : this(
         attachmentsApi,
         attachmentsRepository,
@@ -322,7 +322,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         if (body != null) {
             body.byteStream().extractZipFor(translation, body.contentLength())
             true
-        } else false
+        } else {
+            false
+        }
     } catch (e: IOException) {
         false
     }

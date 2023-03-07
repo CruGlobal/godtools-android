@@ -208,10 +208,13 @@ class LessonActivity :
         )
     }
 
-    private fun showFeedbackDialogIfNecessary() = if (dataModel.showFeedback.value == true) {
-        LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value).show(supportFragmentManager, null)
-        true
-    } else false
+    private fun showFeedbackDialogIfNecessary(): Boolean {
+        if (dataModel.showFeedback.value == true) {
+            LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value).show(supportFragmentManager, null)
+            return true
+        }
+        return false
+    }
     // endregion Feedback
     // endregion UI
 

@@ -45,7 +45,8 @@ class TractActivityBindingTest {
             binding.executePendingBindings()
             assertEquals(
                 "mainContent should be visible when tool state is $it",
-                View.VISIBLE, binding.mainContent.visibility
+                View.VISIBLE,
+                binding.mainContent.visibility
             )
         }
 
@@ -54,7 +55,8 @@ class TractActivityBindingTest {
             binding.executePendingBindings()
             assertEquals(
                 "mainContent should be hidden when tool state is $it",
-                View.GONE, binding.mainContent.visibility
+                View.GONE,
+                binding.mainContent.visibility
             )
         }
     }

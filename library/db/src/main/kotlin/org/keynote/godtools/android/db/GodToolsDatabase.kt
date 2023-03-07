@@ -108,7 +108,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 UserCounterTable.COLUMN_DECAYED_COUNT,
                                 UserCounterTable.COLUMN_DELTA
                             ),
-                            null, emptyArray(), null, null, null
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
                         ).use {
                             while (it.moveToNext()) {
                                 roomDb.userCountersRepository.migrateCounter(
@@ -131,7 +135,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 GlobalActivityAnalyticsTable.COLUMN_LAUNCHES,
                                 GlobalActivityAnalyticsTable.COLUMN_GOSPEL_PRESENTATIONS
                             ),
-                            null, emptyArray(), null, null, null
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
                         ).use {
                             if (it.moveToFirst()) {
                                 roomDb.globalActivityDao.insertOrIgnore(
@@ -156,7 +164,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 TrainingTipTable.COLUMN_TIP_ID,
                                 TrainingTipTable.COLUMN_IS_COMPLETED
                             ),
-                            null, emptyArray(), null, null, null
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
                         ).use {
                             while (it.moveToNext()) {
                                 roomDb.trainingTipDao.insertOrIgnoreBlocking(
@@ -187,7 +199,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 FollowupTable.COLUMN_DESTINATION,
                                 FollowupTable.COLUMN_CREATE_TIME
                             ),
-                            null, emptyArray(), null, null, null
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
                         ).use {
                             while (it.moveToNext()) {
                                 roomDb.followupsDao.insertBlocking(
@@ -213,7 +229,11 @@ class GodToolsDatabase @Inject internal constructor(
                                 LanguageTable.COLUMN_CODE,
                                 LanguageTable.COLUMN_NAME
                             ),
-                            null, emptyArray(), null, null, null
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
                         ).use {
                             roomDb.languagesDao.insertOrIgnoreLanguages(
                                 it.map {

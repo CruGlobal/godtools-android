@@ -26,24 +26,39 @@ class GodToolsDao @Inject internal constructor(
 ) : AbstractDao(database), CoroutinesAsyncDao, CoroutinesFlowDao, LiveDataDao {
     init {
         registerType(
-            Tool::class.java, ToolTable.TABLE_NAME, ToolTable.PROJECTION_ALL, ToolMapper,
+            Tool::class.java,
+            ToolTable.TABLE_NAME,
+            ToolTable.PROJECTION_ALL,
+            ToolMapper,
             ToolTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            Attachment::class.java, AttachmentTable.TABLE_NAME, AttachmentTable.PROJECTION_ALL, AttachmentMapper,
+            Attachment::class.java,
+            AttachmentTable.TABLE_NAME,
+            AttachmentTable.PROJECTION_ALL,
+            AttachmentMapper,
             AttachmentTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            Translation::class.java, TranslationTable.TABLE_NAME, TranslationTable.PROJECTION_ALL, TranslationMapper,
+            Translation::class.java,
+            TranslationTable.TABLE_NAME,
+            TranslationTable.PROJECTION_ALL,
+            TranslationMapper,
             TranslationTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            LocalFile::class.java, LocalFileTable.TABLE_NAME, LocalFileTable.PROJECTION_ALL, LocalFileMapper,
+            LocalFile::class.java,
+            LocalFileTable.TABLE_NAME,
+            LocalFileTable.PROJECTION_ALL,
+            LocalFileMapper,
             LocalFileTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
-            TranslationFile::class.java, TranslationFileTable.TABLE_NAME, TranslationFileTable.PROJECTION_ALL,
-            TranslationFileMapper, TranslationFileTable.SQL_WHERE_PRIMARY_KEY
+            TranslationFile::class.java,
+            TranslationFileTable.TABLE_NAME,
+            TranslationFileTable.PROJECTION_ALL,
+            TranslationFileMapper,
+            TranslationFileTable.SQL_WHERE_PRIMARY_KEY
         )
     }
 

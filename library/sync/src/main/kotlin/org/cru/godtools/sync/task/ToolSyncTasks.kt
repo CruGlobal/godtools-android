@@ -51,9 +51,9 @@ internal class ToolSyncTasks @Inject internal constructor(
     suspend fun syncTools(force: Boolean = false) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!force &&
-                System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS
-            ) return@withContext true
+            if (!force && System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS) {
+                return@withContext true
+            }
 
             // fetch tools from the API, short-circuit if this response is invalid
             val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
@@ -77,9 +77,7 @@ internal class ToolSyncTasks @Inject internal constructor(
     internal suspend fun syncTool(toolCode: String, force: Boolean = false) = toolMutex.withLock(toolCode) {
         // short-circuit if we aren't forcing a sync and the data isn't stale
         val lastSyncKey = "$SYNC_TIME_TOOL$toolCode"
-        if (!force &&
-            System.currentTimeMillis() - dao.getLastSyncTime(lastSyncKey) < STALE_DURATION_TOOLS
-        ) return true
+        if (!force && System.currentTimeMillis() - dao.getLastSyncTime(lastSyncKey) < STALE_DURATION_TOOLS) return true
 
         // fetch tools from the API, short-circuit if this response is invalid
         val json = toolsApi.getTool(toolCode, JsonApiParams().include(*API_GET_INCLUDES))

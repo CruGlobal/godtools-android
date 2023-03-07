@@ -36,7 +36,9 @@ internal class UserCounterSyncTasks @Inject internal constructor(
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!force &&
             !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_COUNTERS, userId, staleAfter = STALE_DURATION_COUNTERS)
-        ) return true
+        ) {
+            return true
+        }
 
         val counters = countersApi.getCounters().takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }

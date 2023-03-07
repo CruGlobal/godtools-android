@@ -347,7 +347,8 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
                     // show language settings feature discovery
                     val target = TapTarget.forToolbarMenuItem(
-                        toolbar, R.id.action_share,
+                        toolbar,
+                        R.id.action_share,
                         getString(R.string.feature_discovery_title_share_tool),
                         getString(R.string.feature_discovery_desc_share_tool)
                     )

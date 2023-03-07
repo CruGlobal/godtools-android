@@ -330,8 +330,10 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     private fun SwipeRefreshSyncHelper.triggerSync(force: Boolean = false) {
         onSyncData(this, force)
-        if (handleChildrenSyncs) supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
-            .forEach { with(it) { triggerSync(force) } }
+        if (handleChildrenSyncs) {
+            supportFragmentManager.fragments.filterIsInstance<BasePlatformFragment<*>>()
+                .forEach { with(it) { triggerSync(force) } }
+        }
         updateState()
     }
 
