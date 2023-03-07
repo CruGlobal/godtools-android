@@ -24,6 +24,7 @@ import org.ccci.gto.android.common.util.getDeclaredFieldOrNull
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
@@ -44,6 +45,7 @@ class AccordionSectionControllerTest {
         mockk {
             every { eventBus } returns this@AccordionSectionControllerTest.eventBus
             every { lifecycleOwner } returns baseLifecycleOwner
+            every { toolState } returns State()
         },
         mockk()
     )

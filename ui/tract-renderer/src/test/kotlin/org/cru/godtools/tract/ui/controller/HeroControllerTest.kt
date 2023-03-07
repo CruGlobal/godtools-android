@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleO
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.tract.databinding.TractPageHeroBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
@@ -46,6 +47,7 @@ class HeroControllerTest {
         val pageController = mockk<PageController> {
             every { lifecycleOwner } returns ConstrainedStateLifecycleOwner(baseLifecycleOwner)
             every { eventBus } returns this@HeroControllerTest.eventBus
+            every { toolState } returns State()
         }
 
         controller = HeroController(binding, pageController, mockk())
