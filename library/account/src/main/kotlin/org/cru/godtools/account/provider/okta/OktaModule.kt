@@ -108,8 +108,6 @@ internal abstract class OktaModule {
             val encryptionManager = try {
                 createDefaultEncryptionManager(context)
             } catch (e: Exception) {
-                Timber.tag("OktaModule")
-                    .e(e, "Error loading the DefaultEncryptionManager, disabling optional encryption")
                 NoopEncryptionManager
             }
 
