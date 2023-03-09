@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
@@ -23,7 +22,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
-import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -46,8 +44,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
-    @Inject
-    internal lateinit var manifestManager: Lazy<ManifestManager>
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
