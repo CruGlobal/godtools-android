@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
@@ -47,7 +48,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
-    private val dataModel: ToolDetailsFragmentDataModel by viewModels()
+    private val dataModel: ToolDetailsFragmentDataModel by activityViewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
