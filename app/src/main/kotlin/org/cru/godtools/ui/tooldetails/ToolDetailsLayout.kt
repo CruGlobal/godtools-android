@@ -70,7 +70,7 @@ internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 @Composable
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPagerApi::class)
 fun ToolDetailsLayout(
-    viewModel: ToolDetailsFragmentDataModel = viewModel(),
+    viewModel: ToolDetailsViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
 ) {
@@ -258,7 +258,7 @@ internal fun ToolDetailsActions(
 
 @Composable
 private fun ToolDetailsVariants(
-    viewModel: ToolDetailsFragmentDataModel,
+    viewModel: ToolDetailsViewModel,
     onVariantSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

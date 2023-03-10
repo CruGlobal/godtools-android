@@ -21,7 +21,7 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
-class ToolDetailsFragmentDataModel @Inject constructor(
+class ToolDetailsViewModel @Inject constructor(
     attachmentsRepository: AttachmentsRepository,
     private val shortcutManager: GodToolsShortcutManager,
     private val toolFileSystem: ToolFileSystem,

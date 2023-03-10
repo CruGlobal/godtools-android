@@ -48,7 +48,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
     @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
-    private val dataModel: ToolDetailsFragmentDataModel by activityViewModels()
+    private val dataModel: ToolDetailsViewModel by activityViewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
