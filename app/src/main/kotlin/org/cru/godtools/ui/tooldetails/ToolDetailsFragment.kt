@@ -67,6 +67,7 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         binding.compose.setContent {
             GodToolsTheme {
                 ToolDetailsLayout(
+                    viewModel = dataModel,
                     onOpenTool = { tool, trans1, trans2 -> openTool(tool, trans1, trans2) },
                     onOpenToolTraining = { tool, translation ->
                         launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)

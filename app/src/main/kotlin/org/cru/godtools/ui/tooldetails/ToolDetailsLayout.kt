@@ -70,11 +70,11 @@ internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 @Composable
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalPagerApi::class)
 fun ToolDetailsLayout(
+    viewModel: ToolDetailsFragmentDataModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
     onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val viewModel = viewModel<ToolDetailsFragmentDataModel>()
     val toolCode by viewModel.toolCode.collectAsState()
     val toolViewModel = viewModel<ToolViewModels>()[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
