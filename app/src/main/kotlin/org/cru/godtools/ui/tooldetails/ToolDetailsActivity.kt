@@ -6,22 +6,31 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.annotation.MainThread
-import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.tool.BaseToolRendererModule
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.databinding.ToolDetailsActivityBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.TutorialActivityResultContract
+import org.cru.godtools.util.openToolActivity
 
 fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
@@ -30,7 +39,7 @@ fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
 )
 
 @AndroidEntryPoint
-class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
+class ToolDetailsActivity : BasePlatformActivity<ToolDetailsActivityBinding>() {
     private val viewModel: ToolDetailsViewModel by viewModels()
 
     // region Lifecycle
@@ -44,7 +53,6 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
         }
 
         downloadLatestTranslation()
-        createFragmentIfNeeded()
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
@@ -57,6 +65,20 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
         title = ""
     }
 
+    override fun onBindingChanged() {
+        binding.compose.setContent {
+            GodToolsTheme {
+                ToolDetailsLayout(
+                    viewModel = viewModel,
+                    onOpenTool = { tool, trans1, trans2 -> openTool(tool, trans1, trans2) },
+                    onOpenToolTraining = { tool, translation ->
+                        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
+                    }
+                )
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_pin_shortcut -> {
             viewModel.shortcut.value?.let { shortcutManager.pinShortcut(it) }
@@ -66,19 +88,28 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
     }
     // endregion Lifecycle
 
-    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
-
     private val isValidStartState get() = viewModel.toolCode.value != null
 
-    @MainThread
-    private fun createFragmentIfNeeded() {
-        with(supportFragmentManager) {
-            if (primaryNavigationFragment != null) return
+    // region UI
+    override val toolbar get() = binding.appbar
+    override val drawerLayout get() = binding.drawerLayout
+    override val drawerMenu get() = binding.drawerMenu
 
-            commit {
-                val fragment = ToolDetailsFragment()
-                replace(org.cru.godtools.ui.R.id.frame, fragment)
-                setPrimaryNavigationFragment(fragment)
+    override fun inflateBinding() = ToolDetailsActivityBinding.inflate(layoutInflater)
+    // endregion UI
+
+    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+        tool?.code?.let { code ->
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
+
+            val primaryLanguage = primary?.languageCode ?: Locale.ENGLISH
+            val parallelLanguage = parallel?.languageCode
+
+            // start pre-loading the tool in the primary language
+            if (parallelLanguage != null) {
+                openToolActivity(code, tool.type, primaryLanguage, parallelLanguage)
+            } else {
+                openToolActivity(code, tool.type, primaryLanguage)
             }
         }
     }
@@ -101,9 +132,33 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
     @Named(BaseToolRendererModule.IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
 
+    private val selectedTool by viewModels<SelectedToolSavedState>()
+    private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
+        if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
+    }
+
     private fun downloadLatestTranslation() {
         observe(viewModel.toolCode.asLiveData(), settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
             if (t != null) downloadManager.downloadLatestPublishedTranslationAsync(t, l)
+        }
+    }
+
+    private fun launchTrainingTips(
+        code: String? = selectedTool.tool,
+        type: Tool.Type? = selectedTool.type,
+        locale: Locale? = selectedTool.language,
+        skipTutorial: Boolean = false,
+    ): Unit = when {
+        code == null || type == null || locale == null -> Unit
+        skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
+            openToolActivity(code, type, locale, showTips = true)
+        }
+        else -> {
+            selectedTool.tool = code
+            selectedTool.type = type
+            selectedTool.language = locale
+            tipsTutorialLauncher.launch(PageSet.TIPS)
         }
     }
     // endregion Training Tips
