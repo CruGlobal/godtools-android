@@ -8,14 +8,19 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.tool.BaseToolRendererModule
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 
 fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
@@ -38,6 +43,7 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
         // finish now if we couldn't process the intent
         if (!processIntent()) finish()
 
+        downloadLatestTranslation()
         createFragmentIfNeeded()
     }
 
@@ -93,4 +99,18 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
         }
     }
     // endregion Pin Shortcut
+
+    // region Training Tips
+    @Inject
+    internal lateinit var downloadManager: GodToolsDownloadManager
+    @Inject
+    @Named(BaseToolRendererModule.IS_CONNECTED_LIVE_DATA)
+    internal lateinit var isConnected: LiveData<Boolean>
+
+    private fun downloadLatestTranslation() {
+        observe(viewModel.toolCode.asLiveData(), settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
+            if (t != null) downloadManager.downloadLatestPublishedTranslationAsync(t, l)
+        }
+    }
+    // endregion Training Tips
 }

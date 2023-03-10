@@ -6,22 +6,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Named
-import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
-import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
-import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -38,17 +31,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
         }
     }
 
-    @Inject
-    internal lateinit var downloadManager: GodToolsDownloadManager
-
     private val dataModel: ToolDetailsViewModel by activityViewModels()
 
     // region Lifecycle
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        downloadLatestTranslation()
-    }
-
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -88,19 +73,9 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
     }
 
     // region Training Tips
-    @Inject
-    @Named(IS_CONNECTED_LIVE_DATA)
-    internal lateinit var isConnected: LiveData<Boolean>
-
     private val selectedTool by viewModels<SelectedToolSavedState>()
     private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
         if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
-    }
-
-    private fun downloadLatestTranslation() {
-        observe(dataModel.toolCode.asLiveData(), settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
-            if (t != null) downloadManager.downloadLatestPublishedTranslationAsync(t, l)
-        }
     }
 
     private fun launchTrainingTips(
