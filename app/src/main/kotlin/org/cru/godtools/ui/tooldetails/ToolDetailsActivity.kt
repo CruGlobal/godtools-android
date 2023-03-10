@@ -3,14 +3,20 @@ package org.cru.godtools.ui.tooldetails
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.observe
+import org.cru.godtools.R
 import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
-import org.cru.godtools.ui.R
+import org.cru.godtools.shortcuts.GodToolsShortcutManager
 
 fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
@@ -20,6 +26,8 @@ fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
 
 @AndroidEntryPoint
 class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
+    private val viewModel: ToolDetailsViewModel by viewModels()
+
     // these properties should be treated as final and only set/modified in onCreate()
     private lateinit var initialTool: String
 
@@ -33,9 +41,22 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
         createFragmentIfNeeded()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
+        menuInflater.inflate(R.menu.fragment_tool_details, menu)
+        menu.setupPinShortcutAction()
+    }
+
     override fun onSetupActionBar() {
         super.onSetupActionBar()
         title = ""
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_pin_shortcut -> {
+            viewModel.shortcut.value?.let { shortcutManager.pinShortcut(it) }
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
 
@@ -56,9 +77,20 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
 
             commit {
                 val fragment = ToolDetailsFragment(initialTool)
-                replace(R.id.frame, fragment)
+                replace(org.cru.godtools.ui.R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
         }
     }
+
+    // region Pin Shortcut
+    @Inject
+    internal lateinit var shortcutManager: GodToolsShortcutManager
+
+    private fun Menu.setupPinShortcutAction() {
+        findItem(R.id.action_pin_shortcut)?.let { item ->
+            viewModel.shortcut.observe(this@ToolDetailsActivity, item) { isVisible = it != null }
+        }
+    }
+    // endregion Pin Shortcut
 }

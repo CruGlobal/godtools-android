@@ -3,9 +3,6 @@ package org.cru.godtools.ui.tooldetails
 import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,7 +13,6 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
@@ -29,7 +25,6 @@ import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.util.openToolActivity
@@ -45,15 +40,12 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
 
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
-    @Inject
-    internal lateinit var shortcutManager: GodToolsShortcutManager
 
     private val dataModel: ToolDetailsViewModel by activityViewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         downloadLatestTranslation()
     }
 
@@ -77,20 +69,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
             }
         }
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_tool_details, menu)
-        menu.setupPinShortcutAction()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_pin_shortcut -> {
-            dataModel.shortcut.value?.let { shortcutManager.pinShortcut(it) }
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
-    }
     // endregion Lifecycle
 
     private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
@@ -108,14 +86,6 @@ class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>()
             }
         }
     }
-
-    // region Pin Shortcut
-    private fun Menu.setupPinShortcutAction() {
-        findItem(R.id.action_pin_shortcut)?.let { item ->
-            dataModel.shortcut.observe(this@ToolDetailsFragment, item) { isVisible = it != null }
-        }
-    }
-    // endregion Pin Shortcut
 
     // region Training Tips
     @Inject
