@@ -11,7 +11,6 @@ import java.util.Locale
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
-import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsFragmentBinding
@@ -21,16 +20,9 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.util.openToolActivity
-import splitties.bundle.put
 
 @AndroidEntryPoint
-class ToolDetailsFragment() : BasePlatformFragment<ToolDetailsFragmentBinding>() {
-    constructor(toolCode: String) : this() {
-        arguments = Bundle().apply {
-            put(EXTRA_TOOL, toolCode)
-        }
-    }
-
+class ToolDetailsFragment : BasePlatformFragment<ToolDetailsFragmentBinding>() {
     private val dataModel: ToolDetailsViewModel by activityViewModels()
 
     // region Lifecycle

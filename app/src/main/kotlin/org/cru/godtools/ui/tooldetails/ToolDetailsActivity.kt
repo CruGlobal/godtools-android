@@ -33,15 +33,15 @@ fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
 class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
     private val viewModel: ToolDetailsViewModel by viewModels()
 
-    // these properties should be treated as final and only set/modified in onCreate()
-    private lateinit var initialTool: String
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // finish now if we couldn't process the intent
-        if (!processIntent()) finish()
+        // finish now if we don't have a valid start state
+        if (!isValidStartState) {
+            finish()
+            return
+        }
 
         downloadLatestTranslation()
         createFragmentIfNeeded()
@@ -68,13 +68,7 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
 
     override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
 
-    /**
-     * @return true if the intent was successfully processed, otherwise return false
-     */
-    private fun processIntent(): Boolean {
-        initialTool = intent?.extras?.getString(EXTRA_TOOL) ?: return false
-        return true
-    }
+    private val isValidStartState get() = viewModel.toolCode.value != null
 
     @MainThread
     private fun createFragmentIfNeeded() {
@@ -82,7 +76,7 @@ class ToolDetailsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavD
             if (primaryNavigationFragment != null) return
 
             commit {
-                val fragment = ToolDetailsFragment(initialTool)
+                val fragment = ToolDetailsFragment()
                 replace(org.cru.godtools.ui.R.id.frame, fragment)
                 setPrimaryNavigationFragment(fragment)
             }
