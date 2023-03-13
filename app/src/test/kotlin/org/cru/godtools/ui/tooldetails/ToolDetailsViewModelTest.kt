@@ -26,7 +26,7 @@ import org.junit.Test
 private const val TOOL = "tool"
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ToolDetailsFragmentDataModelTest {
+class ToolDetailsViewModelTest {
     private val toolFlow = MutableStateFlow<Tool?>(null)
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
 
@@ -36,12 +36,12 @@ class ToolDetailsFragmentDataModelTest {
     }
     private val testScope = TestScope()
 
-    private lateinit var viewModel: ToolDetailsFragmentDataModel
+    private lateinit var viewModel: ToolDetailsViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
-        viewModel = ToolDetailsFragmentDataModel(
+        viewModel = ToolDetailsViewModel(
             attachmentsRepository = mockk(),
             shortcutManager = mockk(),
             toolFileSystem = mockk(),
