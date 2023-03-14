@@ -1,14 +1,14 @@
 package org.cru.godtools.activity
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -16,10 +16,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.navigation.NavigationView
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -29,39 +27,26 @@ import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
 import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
-import org.ccci.gto.android.common.util.view.MenuUtils
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
-import org.cru.godtools.base.ui.util.openUrl
-import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.shared.analytics.AnalyticsActionNames
-import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.startTutorialActivity
-import org.cru.godtools.ui.about.startAboutActivity
-import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
+import org.cru.godtools.ui.drawer.DrawerContentLayout
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-internal val MAILTO_SUPPORT = Uri.parse("mailto:support@godtoolsapp.com")
-internal val URI_SUPPORT = Uri.parse("https://godtoolsapp.com/#contact")
-internal val URI_HELP = Uri.parse("https://godtoolsapp.com/faq/")
-internal val URI_PRIVACY = Uri.parse("https://www.cru.org/about/privacy.html")
-internal val URI_TERMS_OF_USE = Uri.parse("https://godtoolsapp.com/terms-of-use/")
-internal val URI_COPYRIGHT = Uri.parse("https://godtoolsapp.com/copyright/")
-
 private const val EXTRA_SYNC_HELPER = "org.cru.godtools.activity.BasePlatformActivity.SYNC_HELPER"
 
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
-    BaseBindingActivity<B>(contentLayoutId), NavigationView.OnNavigationItemSelectedListener {
+    BaseBindingActivity<B>(contentLayoutId) {
     protected constructor() : this(INVALID_LAYOUT_RES)
 
     @Inject
@@ -117,63 +102,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         else -> super.onOptionsItemSelected(item)
     }
 
-    @CallSuper
-    override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_about -> {
-            startAboutActivity()
-            true
-        }
-        R.id.action_profile -> {
-            startAccountActivity()
-            true
-        }
-        R.id.action_login, R.id.action_signup -> {
-            launchLogin()
-            true
-        }
-        R.id.action_logout -> {
-            lifecycleScope.launch { accountManager.logout() }
-            true
-        }
-        R.id.action_help -> {
-            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_HELP, deviceLocale))
-            openUrl(URI_HELP)
-            true
-        }
-        R.id.action_share -> {
-            launchShare()
-            true
-        }
-        R.id.action_share_story -> {
-            launchShareStory()
-            true
-        }
-        R.id.action_contact_us -> {
-            launchContactUs()
-            true
-        }
-        R.id.action_tutorial -> {
-            launchTrainingTutorial()
-            true
-        }
-        R.id.action_terms_of_use -> {
-            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_TERMS_OF_USE, deviceLocale))
-            openUrl(URI_TERMS_OF_USE)
-            true
-        }
-        R.id.action_privacy_policy -> {
-            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_PRIVACY_POLICY, deviceLocale))
-            openUrl(URI_PRIVACY)
-            true
-        }
-        R.id.action_copyright -> {
-            eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_COPYRIGHT, deviceLocale))
-            openUrl(URI_COPYRIGHT)
-            true
-        }
-        else -> onOptionsItemSelected(item)
-    }
-
     override fun onBackPressed() = when {
         closeNavigationDrawer() -> Unit
         else -> super.onBackPressed()
@@ -204,7 +132,7 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     // region Navigation Drawer
     protected open val drawerLayout: DrawerLayout? get() = findViewById(R.id.drawer_layout)
-    protected open val drawerMenu: NavigationView? get() = findViewById(R.id.drawer_menu)
+    protected open val drawerMenu: ComposeView? get() = findViewById(R.id.drawer_menu)
     private var drawerToggle: ActionBarDrawerToggle? = null
 
     private val showLoginItems by lazy { resources.getBoolean(R.bool.show_login_menu_items) }
@@ -220,39 +148,26 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
                     toggle.syncState()
                 }
         }
-        drawerMenu?.apply {
-            setNavigationItemSelectedListener { item ->
-                onNavigationItemSelected(item)
-                    .also { selected -> if (selected) closeNavigationDrawer() }
-            }
-
-            with(menu) {
-                // the tutorial menu item is currently only available in English
-                findItem(R.id.action_tutorial)?.isVisible = PageSet.FEATURES.supportsLocale(deviceLocale)
-
-                // login items visibility
-                if (showLoginItems) {
-                    val loginItem = findItem(R.id.action_login)
-                    val signupItem = findItem(R.id.action_signup)
-                    val logoutItem = findItem(R.id.action_logout)
-                    val profileItem = findItem(R.id.action_profile)
-
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            accountManager.isAuthenticatedFlow().collect { isAuthenticated ->
-                                loginItem?.isVisible = !isAuthenticated
-                                signupItem?.isVisible = !isAuthenticated
-                                logoutItem?.isVisible = isAuthenticated
-                                profileItem?.isVisible = isAuthenticated
-                            }
-                        }
-                    }
-                } else {
-                    // hide all menu items if we aren't showing login items for this language
-                    MenuUtils.setGroupVisibleRecursively(this, R.id.group_login_items, false)
-                }
+        drawerMenu?.setContent {
+            GodToolsTheme {
+                DrawerContentLayout(
+                    onItemSelected = { onNavigationItemSelected(it).also { if (it) closeNavigationDrawer() } },
+                    dismissDrawer = { closeNavigationDrawer() },
+                )
             }
         }
+    }
+
+    private fun onNavigationItemSelected(@IdRes id: Int) = when (id) {
+        R.id.action_login -> {
+            launchLogin()
+            true
+        }
+        R.id.action_share -> {
+            launchShare()
+            true
+        }
+        else -> false
     }
 
     /**
@@ -273,15 +188,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         lifecycleScope.launch { accountManager.login(this@BasePlatformActivity, AccountType.OKTA) }
     }
 
-    private fun launchContactUs() {
-        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_CONTACT_US, deviceLocale))
-        try {
-            startActivity(Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT))
-        } catch (e: ActivityNotFoundException) {
-            openUrl(URI_SUPPORT)
-        }
-    }
-
     private fun launchShare() {
         eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, settings.primaryLanguage))
 
@@ -292,20 +198,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             .let { Intent.createChooser(it, null) }
             .also { startActivity(it) }
     }
-
-    private fun launchShareStory() {
-        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_STORY, deviceLocale))
-        try {
-            startActivity(
-                Intent(Intent.ACTION_SENDTO, MAILTO_SUPPORT)
-                    .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_story_subject))
-            )
-        } catch (e: ActivityNotFoundException) {
-            openUrl(URI_SUPPORT)
-        }
-    }
-
-    private fun launchTrainingTutorial() = startTutorialActivity(PageSet.FEATURES)
     // endregion Navigation Menu actions
 
     // region Sync Logic
