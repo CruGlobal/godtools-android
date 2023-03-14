@@ -73,15 +73,17 @@ fun DrawerContentLayout(
 
             // region Get Started
             NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_heading_get_started)) })
-            NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.School, null) },
-                label = { Text(stringResource(R.string.menu_tutorial)) },
-                selected = false,
-                onClick = {
-                    context.startTutorialActivity(PageSet.FEATURES)
-                    dismissDrawer()
-                }
-            )
+            if (booleanResource(org.cru.godtools.tutorial.R.bool.show_tutorial_features)) {
+                NavigationDrawerItem(
+                    icon = { Icon(Icons.Outlined.School, null) },
+                    label = { Text(stringResource(R.string.menu_tutorial)) },
+                    selected = false,
+                    onClick = {
+                        context.startTutorialActivity(PageSet.FEATURES)
+                        dismissDrawer()
+                    }
+                )
+            }
             NavigationDrawerItem(
                 icon = { Icon(Icons.Outlined.Translate, null) },
                 label = { Text(stringResource(R.string.menu_language_settings)) },
