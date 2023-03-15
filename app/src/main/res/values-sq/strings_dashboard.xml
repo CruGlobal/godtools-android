@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">I përgjithshëm.</string>
     <string name="menu_heading_share">Ndaj</string>
-    <string name="menu_heading_legal">I ligjshëm</string>
     <string name="menu_about">Rreth</string>
-    <string name="menu_help">Ndihmë</string>
-    <string name="menu_contact_us">Na kontakto</string>
     <string name="menu_share_godtools">Ndaj GodTools</string>
     <string name="menu_share_story">Ndaj një histori me ne</string>
     <string name="menu_terms_of_use">Termat e përdorimit</string>

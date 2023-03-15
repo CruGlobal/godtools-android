@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">ทั่วไป</string>
     <string name="menu_heading_account">บัญชี</string>
     <string name="menu_heading_share">แชร์</string>
-    <string name="menu_heading_legal">กฎหมาย</string>
     <string name="menu_about">เกี่ยวกับ</string>
-    <string name="menu_help">คำถามที่พบบ่อย</string>
-    <string name="menu_contact_us">ติดต่อเรา</string>
     <string name="menu_tutorial">คู่มือ</string>
     <string name="menu_login">เข้าสู่ระบบ</string>
     <string name="menu_signup">สร้างบัญชี</string>

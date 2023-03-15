@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">通用</string>
     <string name="menu_heading_account">账户</string>
     <string name="menu_heading_share">分享</string>
-    <string name="menu_heading_legal">法律</string>
     <string name="menu_about">关于</string>
-    <string name="menu_help">常见问题</string>
-    <string name="menu_contact_us">联系我们</string>
     <string name="menu_tutorial">教程</string>
     <string name="menu_login">登录</string>
     <string name="menu_signup">建立帳戶</string>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Общая информация</string>
     <string name="menu_heading_account">Учетная запись</string>
     <string name="menu_heading_share">Поделиться</string>
-    <string name="menu_heading_legal">Юридическая информация</string>
     <string name="menu_about">О приложении</string>
-    <string name="menu_help">Частые вопросы</string>
-    <string name="menu_contact_us">Связаться с нами</string>
     <string name="menu_tutorial">Руководство для использования</string>
     <string name="menu_login">Войти</string>
     <string name="menu_signup">Создать учетную запись</string>

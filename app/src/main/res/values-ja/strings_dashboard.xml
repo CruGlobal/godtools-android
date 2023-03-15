@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">一般</string>
     <string name="menu_heading_account">アカウント</string>
     <string name="menu_heading_share">シェア</string>
-    <string name="menu_heading_legal">法定事項</string>
     <string name="menu_about">情報</string>
-    <string name="menu_help">よくある質問</string>
-    <string name="menu_contact_us">お問い合わせ</string>
     <string name="menu_tutorial">チュートリアル</string>
     <string name="menu_login">ログイン</string>
     <string name="menu_signup">アカウント作成</string>

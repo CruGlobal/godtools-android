@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Genel</string>
     <string name="menu_heading_account">Hesap</string>
     <string name="menu_heading_share">Paylaş</string>
-    <string name="menu_heading_legal">Yasal</string>
     <string name="menu_about">Hakkında</string>
-    <string name="menu_help">Sık Sorulan Sorular</string>
-    <string name="menu_contact_us">Bize Ulaşın</string>
     <string name="menu_tutorial">Öğretici</string>
     <string name="menu_login">Oturum Aç</string>
     <string name="menu_signup">Hesap Oluştur</string>

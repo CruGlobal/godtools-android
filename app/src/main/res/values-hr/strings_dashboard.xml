@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Općenito</string>
     <string name="menu_heading_account">Račun</string>
     <string name="menu_heading_share">Podijeli</string>
-    <string name="menu_heading_legal">Pravno</string>
     <string name="menu_about">O nama</string>
-    <string name="menu_help">Često postavljana pitanja</string>
-    <string name="menu_contact_us">Kontaktirajte nas</string>
     <string name="menu_tutorial">Priručnik</string>
     <string name="menu_login">Prijava</string>
     <string name="menu_signup">Stvori račun</string>

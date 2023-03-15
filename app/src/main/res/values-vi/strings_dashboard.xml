@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Tổng quát</string>
     <string name="menu_heading_account">Tài khoản</string>
     <string name="menu_heading_share">Chia sẻ</string>
-    <string name="menu_heading_legal">Hợp pháp</string>
     <string name="menu_about">Giới thiệu</string>
-    <string name="menu_help">Câu hỏi thường gặp</string>
-    <string name="menu_contact_us">Liên hệ</string>
     <string name="menu_tutorial">Hướng dẫn</string>
     <string name="menu_login">Đăng nhập</string>
     <string name="menu_signup">Tạo tài khoản</string>

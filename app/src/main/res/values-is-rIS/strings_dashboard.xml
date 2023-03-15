@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Almennt</string>
     <string name="menu_heading_account">Reikningur</string>
     <string name="menu_heading_share">Deila</string>
-    <string name="menu_heading_legal">Lagaleg atriði</string>
     <string name="menu_about">Um</string>
-    <string name="menu_help">Algengar spurningar</string>
-    <string name="menu_contact_us">Hafa samband við okkur</string>
     <string name="menu_tutorial">Kennsluefni</string>
     <string name="menu_login">Innskrá</string>
     <string name="menu_signup">Búa til aðgang</string>

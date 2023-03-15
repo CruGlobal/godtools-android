@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Üldised</string>
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Jagamine</string>
-    <string name="menu_heading_legal">Juriidiline teave</string>
     <string name="menu_about">Teave</string>
-    <string name="menu_help">Korduvalt küsitud küsimused</string>
-    <string name="menu_contact_us">Kontakt</string>
     <string name="menu_tutorial">Juhend</string>
     <string name="menu_login">Logi sisse</string>
     <string name="menu_signup">Loo konto</string>

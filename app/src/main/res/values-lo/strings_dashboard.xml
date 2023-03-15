@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">ທົ່ວໄປ</string>
     <string name="menu_heading_account">ບັນຊີ</string>
     <string name="menu_heading_share">ແບ່ງປັນ</string>
-    <string name="menu_heading_legal">ກົດໝາຍ</string>
     <string name="menu_about">ກ່ຽວກັບ</string>
-    <string name="menu_help">ຊ່ອຍເຫຼືອ</string>
-    <string name="menu_contact_us">ຕິດຕໍ່ພວກເຮົາ</string>
     <string name="menu_tutorial">ການສອນເພື່ອການສຶກສາ</string>
     <string name="menu_login">ເຂົ້າສູ່ລະບົບ</string>
     <string name="menu_signup">ສ້າງບັນຊີ</string>

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Ankapobeny</string>
     <string name="menu_heading_share">Mizara</string>
-    <string name="menu_heading_legal">Ara-dalàna</string>
     <string name="menu_about">Mikasika</string>
-    <string name="menu_help">Fanampiana</string>
-    <string name="menu_contact_us">Te Hifandray Aminay</string>
     <string name="menu_share_godtools">Hizara GodTools</string>
     <string name="menu_share_story">Hizara Tantara Aminay</string>
     <string name="menu_terms_of_use">Voambolana Fampiasa</string>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Опште</string>
     <string name="menu_heading_account">Налог</string>
     <string name="menu_heading_share">Подели</string>
-    <string name="menu_heading_legal">Правно</string>
     <string name="menu_about">О</string>
-    <string name="menu_help">Често постављана питања</string>
-    <string name="menu_contact_us">Контактирајте нас</string>
     <string name="menu_tutorial">Приручник</string>
     <string name="menu_login">Пријава</string>
     <string name="menu_signup">Креирајте налог</string>

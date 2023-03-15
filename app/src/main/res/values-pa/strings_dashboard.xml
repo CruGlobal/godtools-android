@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">ਆਮ</string>
     <string name="menu_heading_account">ਖਾਤਾ</string>
     <string name="menu_heading_share">ਦੱਸੋ</string>
-    <string name="menu_heading_legal">ਕਾਨੂੰਨੀ</string>
     <string name="menu_about">ਇਸਦੇ ਬਾਰੇ</string>
-    <string name="menu_help">ਅਕਸਰ ਪੁੱਛੇ ਜਾਣ ਵਾਲੇ ਸਵਾਲ</string>
-    <string name="menu_contact_us">ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ</string>
     <string name="menu_tutorial">ਟਿਊਟੋਰਿਅਲ</string>
     <string name="menu_login">ਲਾਗਿਨ</string>
     <string name="menu_signup">ਖਾਤਾ ਬਣਾਉ</string>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Основне</string>
     <string name="menu_heading_account">Обліковий запис</string>
     <string name="menu_heading_share">Переслати</string>
-    <string name="menu_heading_legal">Правові відомості</string>
     <string name="menu_about">Про програму</string>
-    <string name="menu_help">Часті запитання</string>
-    <string name="menu_contact_us">Зв\'язок з нами</string>
     <string name="menu_tutorial">Тренування</string>
     <string name="menu_login">Увійти</string>
     <string name="menu_signup">Створити обліковий запис</string>

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">አጠቃላይ</string>
     <string name="menu_heading_share">አጋራ</string>
-    <string name="menu_heading_legal">ሕጋዊ</string>
     <string name="menu_about">ስለ</string>
-    <string name="menu_help">እገዛ</string>
-    <string name="menu_contact_us">አግኙን</string>
     <string name="menu_login">ግባ</string>
     <string name="menu_signup">ይመዝገቡ</string>
     <string name="menu_logout">ዉጣ</string>

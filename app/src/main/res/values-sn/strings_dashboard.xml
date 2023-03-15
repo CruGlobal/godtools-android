@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Zvakangodarowo</string>
     <string name="menu_heading_account">Akaundi</string>
     <string name="menu_heading_share">Goverana</string>
-    <string name="menu_heading_legal">Zviri pamutemo</string>
     <string name="menu_about">Maererano</string>
-    <string name="menu_help">Mibvunzo Inonyanya Kubvunzwa</string>
-    <string name="menu_contact_us">Tibate</string>
     <string name="menu_tutorial">Zvidzidzo</string>
     <string name="menu_login">Pekupinda napo</string>
     <string name="menu_signup">Vhura akaundi</string>

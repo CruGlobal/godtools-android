@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Allmänt</string>
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Dela</string>
-    <string name="menu_heading_legal">Juridisk information</string>
     <string name="menu_about">Om</string>
-    <string name="menu_help">Vanliga frågor</string>
-    <string name="menu_contact_us">Kontakta oss</string>
     <string name="menu_tutorial">Guide</string>
     <string name="menu_login">Logga in</string>
     <string name="menu_signup">Öppna konto</string>

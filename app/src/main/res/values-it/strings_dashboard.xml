@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Generale</string>
     <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Condividi</string>
-    <string name="menu_heading_legal">Legale</string>
     <string name="menu_about">Informazioni</string>
-    <string name="menu_help">Domande frequenti</string>
-    <string name="menu_contact_us">Contattaci</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Accesso</string>
     <string name="menu_signup">Crea account</string>

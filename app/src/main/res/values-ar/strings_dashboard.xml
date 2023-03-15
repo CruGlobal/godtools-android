@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">عام</string>
     <string name="menu_heading_account">حساب</string>
     <string name="menu_heading_share">شارك</string>
-    <string name="menu_heading_legal">قانوني</string>
     <string name="menu_about">حول</string>
-    <string name="menu_help">الأسئلة المتكررة</string>
-    <string name="menu_contact_us">اتصل بنا</string>
     <string name="menu_tutorial">شرح</string>
     <string name="menu_login">تسجيل الدخول</string>
     <string name="menu_signup">إنشاء حساب</string>

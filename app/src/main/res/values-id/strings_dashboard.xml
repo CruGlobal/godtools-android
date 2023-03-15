@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Umum</string>
     <string name="menu_heading_account">Akun</string>
     <string name="menu_heading_share">Berbagi</string>
-    <string name="menu_heading_legal">Legal</string>
     <string name="menu_about">Tentang</string>
-    <string name="menu_help">Pertanyaan-pertanyaan yg sering ditanyakan</string>
-    <string name="menu_contact_us">Hubungi Kami</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Masuk</string>
     <string name="menu_signup">Buat Akun</string>

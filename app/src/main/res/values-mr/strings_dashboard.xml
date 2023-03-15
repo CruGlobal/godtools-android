@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">सर्वसामान्य</string>
     <string name="menu_heading_account">खाते</string>
     <string name="menu_heading_share">सांगा</string>
-    <string name="menu_heading_legal">कायदेशीर</string>
     <string name="menu_about">विषयी</string>
-    <string name="menu_help">वारंवार विचारले जाणारे प्रश्न</string>
-    <string name="menu_contact_us">आमच्याशी संपर्क साधा</string>
     <string name="menu_tutorial">"
 प्रशिक्षण"</string>
     <string name="menu_login">लाॅगिन</string>

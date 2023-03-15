@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Algemeen</string>
     <string name="menu_heading_account">Rekening</string>
     <string name="menu_heading_share">Deel</string>
-    <string name="menu_heading_legal">Wetlik</string>
     <string name="menu_about">Aangaande</string>
-    <string name="menu_help">Veelgestelde vrae</string>
-    <string name="menu_contact_us">Kontak ons</string>
     <string name="menu_tutorial">Studieklas</string>
     <string name="menu_login">Meld aan</string>
     <string name="menu_signup">Skep rekening</string>
