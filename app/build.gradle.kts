@@ -174,7 +174,7 @@ dependencies {
     implementation(libs.firebase.inappmessaging)
     implementation(libs.firebase.perf)
 
-    implementation(libs.play.core)
+    implementation(libs.play.feature.delivery)
     implementation(libs.play.instantapps)
 
     implementation(libs.godtoolsShared.common)
