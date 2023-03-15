@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Udostępnij</string>
-    <string name="menu_about">O aplikacji</string>
+    <string name="menu_heading_about">O aplikacji</string>
     <string name="menu_tutorial">Samouczek</string>
     <string name="menu_login">Zaloguj</string>
     <string name="menu_signup">Utwórz konto</string>

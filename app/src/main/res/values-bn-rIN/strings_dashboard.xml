@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">অ্যাকাউন্ট</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_about">যার বিষয়ে</string>
+    <string name="menu_heading_about">যার বিষয়ে</string>
     <string name="menu_tutorial">টিউটোরিয়াল</string>
     <string name="menu_login">লগইন</string>
     <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>

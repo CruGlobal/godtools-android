@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">계정</string>
     <string name="menu_heading_share">공유</string>
-    <string name="menu_about">정보</string>
+    <string name="menu_heading_about">정보</string>
     <string name="menu_tutorial">튜토리얼</string>
     <string name="menu_login">로그인</string>
     <string name="menu_signup">계정 생성</string>

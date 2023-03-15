@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">ఖాతా</string>
     <string name="menu_heading_share">పంచుకోండి</string>
-    <string name="menu_about">గురించి</string>
+    <string name="menu_heading_about">గురించి</string>
     <string name="menu_tutorial">ట్యుటోరియల్</string>
     <string name="menu_login">లాగిన్</string>
     <string name="menu_signup">ఖాతాను సృష్టించు</string>

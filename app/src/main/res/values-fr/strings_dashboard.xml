@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Compte</string>
     <string name="menu_heading_share">Partager</string>
-    <string name="menu_about">À propos</string>
+    <string name="menu_heading_about">À propos</string>
     <string name="menu_tutorial">Tutoriel</string>
     <string name="menu_login">Connexion</string>
     <string name="menu_signup">Créer un compte</string>

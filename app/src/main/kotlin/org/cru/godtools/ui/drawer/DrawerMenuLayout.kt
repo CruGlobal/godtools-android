@@ -219,7 +219,7 @@ fun DrawerContentLayout(
             // endregion Share
 
             // region About
-            NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_about)) })
+            NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_heading_about)) })
             NavigationDrawerItem(
                 icon = { Icon(Icons.Outlined.FormatListBulleted, null) },
                 label = { Text(stringResource(R.string.menu_terms_of_use)) },

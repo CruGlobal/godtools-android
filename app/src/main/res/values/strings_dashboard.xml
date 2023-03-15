@@ -21,7 +21,7 @@
 An online version can be found at https://knowgod.com/</string>
     <string name="share_story_subject">GodTools Story</string>
     <!-- TODO: rename to menu_heading_about -->
-    <string name="menu_about">About</string>
+    <string name="menu_heading_about">About</string>
     <string name="menu_terms_of_use">Terms of use</string>
     <string name="menu_privacy_policy">Privacy policy</string>
     <string name="menu_copyright">Copyright info</string>

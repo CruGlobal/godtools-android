@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">አጋራ</string>
-    <string name="menu_about">ስለ</string>
+    <string name="menu_heading_about">ስለ</string>
     <string name="menu_login">ግባ</string>
     <string name="menu_signup">ይመዝገቡ</string>
     <string name="menu_logout">ዉጣ</string>

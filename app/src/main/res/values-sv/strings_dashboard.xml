@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Dela</string>
-    <string name="menu_about">Om</string>
+    <string name="menu_heading_about">Om</string>
     <string name="menu_tutorial">Guide</string>
     <string name="menu_login">Logga in</string>
     <string name="menu_signup">Öppna konto</string>

@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">साझा करें</string>
-    <string name="menu_about">के बारे में</string>
+    <string name="menu_heading_about">के बारे में</string>
     <string name="menu_login">भीतर आएँ</string>
     <string name="menu_signup">एकाउन्ट खोलें</string>
     <string name="menu_logout">बाहर निकलें</string>

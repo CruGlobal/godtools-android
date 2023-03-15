@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">ಖಾತೆ</string>
     <string name="menu_heading_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
-    <string name="menu_about">ಕುರಿತು</string>
+    <string name="menu_heading_about">ಕುರಿತು</string>
     <string name="menu_tutorial">ಶಿಕ್ಷಣ</string>
     <string name="menu_login">ಲಾಗಿನ್ ಮಾಡಿ</string>
     <string name="menu_signup">ಖಾತೆ ತೆರೆಯಿರಿ</string>

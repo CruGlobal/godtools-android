@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Akaundi</string>
     <string name="menu_heading_share">Goverana</string>
-    <string name="menu_about">Maererano</string>
+    <string name="menu_heading_about">Maererano</string>
     <string name="menu_tutorial">Zvidzidzo</string>
     <string name="menu_login">Pekupinda napo</string>
     <string name="menu_signup">Vhura akaundi</string>

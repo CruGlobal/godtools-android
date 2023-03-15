@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">खाते</string>
     <string name="menu_heading_share">सांगा</string>
-    <string name="menu_about">विषयी</string>
+    <string name="menu_heading_about">विषयी</string>
     <string name="menu_tutorial">"
 प्रशिक्षण"</string>
     <string name="menu_login">लाॅगिन</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">အကောင့်</string>
     <string name="menu_heading_share">ဝေငှပါ</string>
-    <string name="menu_about">အ ကြောင်း</string>
+    <string name="menu_heading_about">အ ကြောင်း</string>
     <string name="menu_tutorial">ဗီဒီယိုသင်ခန်းစာ</string>
     <string name="menu_login">"  အ ကောင့် ဝင်ရန်"</string>
     <string name="menu_signup">" အကောင့်အသစ်ဖွင့်ပါ"</string>

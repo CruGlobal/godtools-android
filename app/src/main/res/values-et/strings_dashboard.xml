@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Jagamine</string>
-    <string name="menu_about">Teave</string>
+    <string name="menu_heading_about">Teave</string>
     <string name="menu_tutorial">Juhend</string>
     <string name="menu_login">Logi sisse</string>
     <string name="menu_signup">Loo konto</string>

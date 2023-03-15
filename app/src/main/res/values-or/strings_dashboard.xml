@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">"ଖାତା "</string>
     <string name="menu_heading_share">"ଅଂଶୀଦାର କରନ୍ତୁ "</string>
-    <string name="menu_about">ବିଷୟରେ</string>
+    <string name="menu_heading_about">ବିଷୟରେ</string>
     <string name="menu_tutorial">ଟ୍ୟୁଟୋରିଆଲ୍</string>
     <string name="menu_login">ଲଗଇନ୍ କରନ୍ତୁ</string>
     <string name="menu_signup">ଖାତା ଖୋଲନ୍ତୁ</string>

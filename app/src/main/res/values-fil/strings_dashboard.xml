@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Magbahagi</string>
-    <string name="menu_about">Tungkol dito</string>
+    <string name="menu_heading_about">Tungkol dito</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Mag-log in</string>
     <string name="menu_signup">Gumawa ng Account</string>

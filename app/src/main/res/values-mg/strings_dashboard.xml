@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">Mizara</string>
-    <string name="menu_about">Mikasika</string>
+    <string name="menu_heading_about">Mikasika</string>
     <string name="menu_share_godtools">Hizara GodTools</string>
     <string name="menu_share_story">Hizara Tantara Aminay</string>
     <string name="menu_terms_of_use">Voambolana Fampiasa</string>

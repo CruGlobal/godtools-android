@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Tài khoản</string>
     <string name="menu_heading_share">Chia sẻ</string>
-    <string name="menu_about">Giới thiệu</string>
+    <string name="menu_heading_about">Giới thiệu</string>
     <string name="menu_tutorial">Hướng dẫn</string>
     <string name="menu_login">Đăng nhập</string>
     <string name="menu_signup">Tạo tài khoản</string>

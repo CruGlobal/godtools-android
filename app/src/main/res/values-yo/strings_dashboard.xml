@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Accounti</string>
     <string name="menu_heading_share">Se ajopin</string>
-    <string name="menu_about">Nipa</string>
+    <string name="menu_heading_about">Nipa</string>
     <string name="menu_tutorial">Itoni</string>
     <string name="menu_login">Wo inu app naa</string>
     <string name="menu_signup">Si akanti fun ara re</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">கணக்கு</string>
     <string name="menu_heading_share">பகிர்</string>
-    <string name="menu_about">பற்றி</string>
+    <string name="menu_heading_about">பற்றி</string>
     <string name="menu_tutorial">பயிற்சி</string>
     <string name="menu_login">உள்நுழைய</string>
     <string name="menu_signup">உங்கள் கணக்கை துவங்குங்கள்</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">账户</string>
     <string name="menu_heading_share">分享</string>
-    <string name="menu_about">关于</string>
+    <string name="menu_heading_about">关于</string>
     <string name="menu_tutorial">教程</string>
     <string name="menu_login">登录</string>
     <string name="menu_signup">建立帳戶</string>

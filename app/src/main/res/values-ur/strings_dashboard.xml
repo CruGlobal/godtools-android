@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">اکاؤنٹ</string>
     <string name="menu_heading_share">شیئر کریں</string>
-    <string name="menu_about">ہمارے متعلق</string>
+    <string name="menu_heading_about">ہمارے متعلق</string>
     <string name="menu_tutorial">ٹیوٹوریل</string>
     <string name="menu_login">میں لاگ ان کریں</string>
     <string name="menu_signup">اپنا کھاتا شروع کریں</string>

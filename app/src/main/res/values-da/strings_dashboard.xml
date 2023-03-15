@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Konto</string>
     <string name="menu_heading_share">Del</string>
-    <string name="menu_about">Om</string>
+    <string name="menu_heading_about">Om</string>
     <string name="menu_tutorial">Vejledning</string>
     <string name="menu_login">Log på</string>
     <string name="menu_signup">Opret konto</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">खाता</string>
     <string name="menu_heading_share">साझा करें</string>
-    <string name="menu_about">परिचय</string>
+    <string name="menu_heading_about">परिचय</string>
     <string name="menu_tutorial">ट्यूटोरियल</string>
     <string name="menu_login">लॉग-इन</string>
     <string name="menu_signup">खाता बनाएंँ</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Fiók</string>
     <string name="menu_heading_share">Megosztás</string>
-    <string name="menu_about">Rólunk</string>
+    <string name="menu_heading_about">Rólunk</string>
     <string name="menu_tutorial">Oktatóanyag</string>
     <string name="menu_login">Bejelentkezés</string>
     <string name="menu_signup">Fiók létrehozása</string>

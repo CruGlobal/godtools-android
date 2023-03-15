@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Akaun</string>
     <string name="menu_heading_share">Kongsi</string>
-    <string name="menu_about">Perihal</string>
+    <string name="menu_heading_about">Perihal</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Log Masuk</string>
     <string name="menu_signup">Cipta Akaun</string>

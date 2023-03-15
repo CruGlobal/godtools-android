@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">شارك</string>
-    <string name="menu_about">حول</string>
+    <string name="menu_heading_about">حول</string>
     <string name="menu_login">تسجيل الدخول</string>
     <string name="menu_signup">إنشاء حساب</string>
     <string name="menu_logout">تسجيل الخروج</string>

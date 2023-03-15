@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">പങ്കിടുക</string>
-    <string name="menu_about">കുറിച്ച്</string>
+    <string name="menu_heading_about">കുറിച്ച്</string>
     <string name="menu_login">ലോഗിൻ</string>
     <string name="menu_signup">അക്കൗണ്ട് ഉണ്ടാക്കുക</string>
     <string name="menu_logout">ലോഗൗട്ട്</string>

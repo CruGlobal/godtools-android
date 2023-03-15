@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Paskyra</string>
     <string name="menu_heading_share">Dalytis</string>
-    <string name="menu_about">Apie</string>
+    <string name="menu_heading_about">Apie</string>
     <string name="menu_tutorial">Mokomasis įrašas</string>
     <string name="menu_login">Prisijungti</string>
     <string name="menu_signup">Susikurti paskyrą</string>

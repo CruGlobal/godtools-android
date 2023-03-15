@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">حساب کاربری</string>
     <string name="menu_heading_share">اشتراک‌گذاری</string>
-    <string name="menu_about">درباره</string>
+    <string name="menu_heading_about">درباره</string>
     <string name="menu_tutorial">آموزش</string>
     <string name="menu_login">ورود</string>
     <string name="menu_signup">ایجاد حساب کاربری</string>

@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Акаунт</string>
     <string name="menu_heading_share">Споделете</string>
-    <string name="menu_about">За приложението</string>
+    <string name="menu_heading_about">За приложението</string>
     <string name="menu_tutorial">Ръководство</string>
     <string name="menu_login">Вписване</string>
     <string name="menu_signup">Създаване на акаунт</string>

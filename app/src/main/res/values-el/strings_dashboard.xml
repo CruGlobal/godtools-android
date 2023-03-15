@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Λογαριασμός</string>
     <string name="menu_heading_share">Κοινοποίηση</string>
-    <string name="menu_about">Σχετικά</string>
+    <string name="menu_heading_about">Σχετικά</string>
     <string name="menu_tutorial">Εκπαιδευτικό υλικό</string>
     <string name="menu_login">Σύνδεση</string>
     <string name="menu_signup">Δημιουργία Λογαριασμού</string>

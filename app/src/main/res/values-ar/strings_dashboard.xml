@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">حساب</string>
     <string name="menu_heading_share">شارك</string>
-    <string name="menu_about">حول</string>
+    <string name="menu_heading_about">حول</string>
     <string name="menu_tutorial">شرح</string>
     <string name="menu_login">تسجيل الدخول</string>
     <string name="menu_signup">إنشاء حساب</string>

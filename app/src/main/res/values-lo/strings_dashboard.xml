@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">ບັນຊີ</string>
     <string name="menu_heading_share">ແບ່ງປັນ</string>
-    <string name="menu_about">ກ່ຽວກັບ</string>
+    <string name="menu_heading_about">ກ່ຽວກັບ</string>
     <string name="menu_tutorial">ການສອນເພື່ອການສຶກສາ</string>
     <string name="menu_login">ເຂົ້າສູ່ລະບົບ</string>
     <string name="menu_signup">ສ້າງບັນຊີ</string>

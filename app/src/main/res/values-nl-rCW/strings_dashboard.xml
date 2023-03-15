@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Kuenta</string>
     <string name="menu_heading_share">Kompartí</string>
-    <string name="menu_about">Tokante</string>
+    <string name="menu_heading_about">Tokante</string>
     <string name="menu_tutorial">Instrukshon</string>
     <string name="menu_login">Inisiá seshon</string>
     <string name="menu_signup">Krea un Kuenta di Miembro</string>

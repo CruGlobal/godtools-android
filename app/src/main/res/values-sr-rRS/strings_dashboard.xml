@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Налог</string>
     <string name="menu_heading_share">Подели</string>
-    <string name="menu_about">О</string>
+    <string name="menu_heading_about">О</string>
     <string name="menu_tutorial">Приручник</string>
     <string name="menu_login">Пријава</string>
     <string name="menu_signup">Креирајте налог</string>

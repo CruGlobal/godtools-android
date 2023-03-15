@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">ખાતું</string>
     <string name="menu_heading_share">વહેંચો</string>
-    <string name="menu_about">વિશે</string>
+    <string name="menu_heading_about">વિશે</string>
     <string name="menu_tutorial">ટ્યુટોરિયલ</string>
     <string name="menu_login">લોગ ઇન કરો</string>
     <string name="menu_signup">ખાતું બનાવો</string>

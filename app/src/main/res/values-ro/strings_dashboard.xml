@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Cont</string>
     <string name="menu_heading_share">Distribuie</string>
-    <string name="menu_about">Despre</string>
+    <string name="menu_heading_about">Despre</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Conectare</string>
     <string name="menu_signup">Creează cont</string>

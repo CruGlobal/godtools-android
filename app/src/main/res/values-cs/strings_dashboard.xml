@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Účet</string>
     <string name="menu_heading_share">Sdílet</string>
-    <string name="menu_about">O nás</string>
+    <string name="menu_heading_about">O nás</string>
     <string name="menu_tutorial">Návod</string>
     <string name="menu_login">Přihlášení</string>
     <string name="menu_signup">Vytvořit účet</string>

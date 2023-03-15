@@ -2,7 +2,7 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">Ndaj</string>
-    <string name="menu_about">Rreth</string>
+    <string name="menu_heading_about">Rreth</string>
     <string name="menu_share_godtools">Ndaj GodTools</string>
     <string name="menu_share_story">Ndaj një histori me ne</string>
     <string name="menu_terms_of_use">Termat e përdorimit</string>

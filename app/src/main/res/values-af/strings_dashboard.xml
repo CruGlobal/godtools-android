@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Rekening</string>
     <string name="menu_heading_share">Deel</string>
-    <string name="menu_about">Aangaande</string>
+    <string name="menu_heading_about">Aangaande</string>
     <string name="menu_tutorial">Studieklas</string>
     <string name="menu_login">Meld aan</string>
     <string name="menu_signup">Skep rekening</string>

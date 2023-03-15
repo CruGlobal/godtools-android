@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">Обліковий запис</string>
     <string name="menu_heading_share">Переслати</string>
-    <string name="menu_about">Про програму</string>
+    <string name="menu_heading_about">Про програму</string>
     <string name="menu_tutorial">Тренування</string>
     <string name="menu_login">Увійти</string>
     <string name="menu_signup">Створити обліковий запис</string>

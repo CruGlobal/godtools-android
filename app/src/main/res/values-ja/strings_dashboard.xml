@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">アカウント</string>
     <string name="menu_heading_share">シェア</string>
-    <string name="menu_about">情報</string>
+    <string name="menu_heading_about">情報</string>
     <string name="menu_tutorial">チュートリアル</string>
     <string name="menu_login">ログイン</string>
     <string name="menu_signup">アカウント作成</string>

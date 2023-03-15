@@ -3,7 +3,7 @@
     <!-- Navigation Menu -->
     <string name="menu_heading_account">חשבון</string>
     <string name="menu_heading_share">שתף</string>
-    <string name="menu_about">אודות</string>
+    <string name="menu_heading_about">אודות</string>
     <string name="menu_tutorial">הדרכה</string>
     <string name="menu_login">כניסה</string>
     <string name="menu_signup">יצירת חשבון</string>
