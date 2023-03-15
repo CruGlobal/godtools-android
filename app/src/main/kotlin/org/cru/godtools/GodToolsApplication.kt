@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.google.android.instantapps.InstantApps
-import com.google.android.play.core.missingsplits.MissingSplitsManagerFactory
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Lazy
@@ -27,14 +26,6 @@ open class GodToolsApplication : Application(), Configuration.Provider {
     override fun onCreate() {
         // Enable application monitoring
         initializeCrashlytics()
-
-        // TODO: remove this logic once the minimum Android version is Android 10 or higher.
-        //       Also ensure we are no longer seeing missing splits errors showing up in Crashlytics.
-        if (MissingSplitsManagerFactory.create(this).disableAppIfMissingRequiredSplits()) {
-            Timber.tag("GodToolsApplication")
-                .e(IllegalStateException("Missing Splits"), "App is missing splits, it was probably sideloaded.")
-            return
-        }
 
         // configure components
         configureLanguageFallbacks()
