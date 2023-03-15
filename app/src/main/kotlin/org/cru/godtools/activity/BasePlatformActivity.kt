@@ -3,7 +3,6 @@ package org.cru.godtools.activity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -36,6 +35,7 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.drawer.DrawerContentLayout
+import org.cru.godtools.ui.drawer.DrawerMenuEvent
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -148,19 +148,15 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         drawerMenu?.setContent {
             GodToolsTheme {
                 DrawerContentLayout(
-                    onItemSelected = { onNavigationItemSelected(it).also { if (it) closeNavigationDrawer() } },
-                    dismissDrawer = { closeNavigationDrawer() },
+                    onEvent = {
+                        when (it) {
+                            DrawerMenuEvent.LOGIN, DrawerMenuEvent.SIGNUP -> launchLogin()
+                        }
+                        closeNavigationDrawer()
+                    }
                 )
             }
         }
-    }
-
-    private fun onNavigationItemSelected(@IdRes id: Int) = when (id) {
-        R.id.action_login -> {
-            launchLogin()
-            true
-        }
-        else -> false
     }
 
     /**

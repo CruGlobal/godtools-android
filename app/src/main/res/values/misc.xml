@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="show_login_menu_items">false</bool>
-
-    <!-- TODO: remove these ids once DrawerMenu migration is complete -->
-    <item name="action_login" type="id"/>
 </resources>

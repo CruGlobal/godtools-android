@@ -66,7 +66,7 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 @OptIn(ExperimentalMaterial3Api::class)
 fun DrawerContentLayout(
     viewModel: DrawerViewModel = viewModel(),
-    onItemSelected: (id: Int) -> Unit = {},
+    onEvent: (event: DrawerMenuEvent) -> Unit = {},
     dismissDrawer: () -> Unit = {},
 ) = ModalDrawerSheet {
     val scope = rememberCoroutineScope()
@@ -115,13 +115,13 @@ fun DrawerContentLayout(
                         icon = { Icon(Icons.Outlined.Login, null) },
                         label = { Text(stringResource(R.string.menu_login)) },
                         selected = false,
-                        onClick = { onItemSelected(R.id.action_login) },
+                        onClick = { onEvent(DrawerMenuEvent.LOGIN) },
                     )
                     NavigationDrawerItem(
                         icon = { Icon(Icons.Outlined.PersonAdd, null) },
                         label = { Text(stringResource(R.string.menu_signup)) },
                         selected = false,
-                        onClick = { onItemSelected(R.id.action_login) },
+                        onClick = { onEvent(DrawerMenuEvent.SIGNUP) },
                     )
                 } else {
                     NavigationDrawerItem(
