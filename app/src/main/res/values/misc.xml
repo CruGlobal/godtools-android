@@ -4,5 +4,4 @@
 
     <!-- TODO: remove these ids once DrawerMenu migration is complete -->
     <item name="action_login" type="id"/>
-    <item name="action_share" type="id"/>
 </resources>

@@ -1,6 +1,5 @@
 package org.cru.godtools.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.CallSuper
@@ -30,12 +29,10 @@ import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSy
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.fragment.BasePlatformFragment
-import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.drawer.DrawerContentLayout
@@ -163,10 +160,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             launchLogin()
             true
         }
-        R.id.action_share -> {
-            launchShare()
-            true
-        }
         else -> false
     }
 
@@ -186,17 +179,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     // region Navigation Menu actions
     private fun launchLogin() {
         lifecycleScope.launch { accountManager.login(this@BasePlatformActivity, AccountType.OKTA) }
-    }
-
-    private fun launchShare() {
-        eventBus.post(AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, settings.primaryLanguage))
-
-        Intent(Intent.ACTION_SEND)
-            .setType("text/plain")
-            .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.ui.R.string.app_name))
-            .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_message))
-            .let { Intent.createChooser(it, null) }
-            .also { startActivity(it) }
     }
     // endregion Navigation Menu actions
 

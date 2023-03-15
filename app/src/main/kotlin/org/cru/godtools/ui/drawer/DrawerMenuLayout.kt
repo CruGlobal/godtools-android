@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.drawer
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -52,6 +54,7 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
@@ -204,7 +207,13 @@ fun DrawerContentLayout(
                 icon = { Icon(Icons.Outlined.Share, null) },
                 label = { Text(stringResource(R.string.menu_share_godtools)) },
                 selected = false,
-                onClick = { onItemSelected(R.id.action_share) }
+                onClick = {
+                    eventBus.post(
+                        AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, context.deviceLocale)
+                    )
+                    context.shareGodTools()
+                    dismissDrawer()
+                }
             )
             Divider(modifier = Modifier.padding(horizontal = 16.dp))
             // endregion Share
@@ -256,3 +265,13 @@ fun DrawerContentLayout(
         }
     }
 }
+
+private fun Context.shareGodTools() = startActivity(
+    Intent.createChooser(
+        Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_SUBJECT, getString(org.cru.godtools.ui.R.string.app_name))
+            .putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_message)),
+        null
+    )
+)
