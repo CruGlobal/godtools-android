@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Vispārīgi</string>
     <string name="menu_heading_account">Konts</string>
     <string name="menu_heading_share">Dalies</string>
-    <string name="menu_heading_legal">Juridiskie paziņojumi (angļu val.)</string>
-    <string name="menu_about">Par lietotni</string>
-    <string name="menu_help">Biežāk uzdotie jautājumi</string>
-    <string name="menu_contact_us">Sazinies ar mums</string>
+    <string name="menu_heading_about">Par lietotni</string>
     <string name="menu_tutorial">Pamācība</string>
     <string name="menu_login">Pierakstīties</string>
     <string name="menu_signup">Reģistrēt kontu</string>

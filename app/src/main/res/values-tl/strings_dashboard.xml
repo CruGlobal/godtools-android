@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Pangkalahatan</string>
     <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Magbahagi</string>
-    <string name="menu_heading_legal">Ayon sa Batas</string>
-    <string name="menu_about">Tungkol dito</string>
-    <string name="menu_help">Mga Madalas Itanong</string>
-    <string name="menu_contact_us">Kontakin Kami</string>
+    <string name="menu_heading_about">Tungkol dito</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Mag-log in</string>
     <string name="menu_signup">Gumawa ng Account</string>

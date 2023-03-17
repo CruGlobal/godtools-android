@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_about">туралы</string>
+    <string name="menu_heading_about">туралы</string>
     <!-- Lessons -->
     <!-- Home -->
     <!-- All Tools -->

@@ -176,6 +176,7 @@ dependencies {
 
     implementation(libs.play.feature.delivery)
     implementation(libs.play.instantapps)
+    implementation(libs.play.review)
 
     implementation(libs.godtoolsShared.common)
 

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">General</string>
     <string name="menu_heading_account">Cont</string>
     <string name="menu_heading_share">Distribuie</string>
-    <string name="menu_heading_legal">Juridic</string>
-    <string name="menu_about">Despre</string>
-    <string name="menu_help">Întrebări frecvente</string>
-    <string name="menu_contact_us">Contactează-ne</string>
+    <string name="menu_heading_about">Despre</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_login">Conectare</string>
     <string name="menu_signup">Creează cont</string>

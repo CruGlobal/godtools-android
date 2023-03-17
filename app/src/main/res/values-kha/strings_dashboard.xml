@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">সাধারণ</string>
     <string name="menu_heading_account">অ্যাকাউন্ট</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_heading_legal">আইনি</string>
-    <string name="menu_about">যার বিষয়ে</string>
-    <string name="menu_help">প্রায়শ করা প্রশ্নাবলী</string>
-    <string name="menu_contact_us">আমাদের যোগাযোগ করুন</string>
+    <string name="menu_heading_about">যার বিষয়ে</string>
     <string name="menu_tutorial">টিউটোরিয়াল</string>
     <string name="menu_login">লগইন</string>
     <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>

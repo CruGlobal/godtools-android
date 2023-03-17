@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">പൊതുവെ</string>
     <string name="menu_heading_share">പങ്കിടുക</string>
-    <string name="menu_heading_legal">നിയമപരമായി</string>
-    <string name="menu_about">കുറിച്ച്</string>
-    <string name="menu_help">സഹായം</string>
-    <string name="menu_contact_us">ഞങ്ങളെ ബന്ധപ്പെടുക</string>
+    <string name="menu_heading_about">കുറിച്ച്</string>
     <string name="menu_login">ലോഗിൻ</string>
     <string name="menu_signup">അക്കൗണ്ട് ഉണ്ടാക്കുക</string>
     <string name="menu_logout">ലോഗൗട്ട്</string>

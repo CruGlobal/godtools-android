@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Apapo</string>
     <string name="menu_heading_account">Accounti</string>
     <string name="menu_heading_share">Se ajopin</string>
-    <string name="menu_heading_legal">Ofin</string>
-    <string name="menu_about">Nipa</string>
-    <string name="menu_help">Awon ibeere ti awon eniyan saaba ma n beere</string>
-    <string name="menu_contact_us">Kan si wa</string>
+    <string name="menu_heading_about">Nipa</string>
     <string name="menu_tutorial">Itoni</string>
     <string name="menu_login">Wo inu app naa</string>
     <string name="menu_signup">Si akanti fun ara re</string>

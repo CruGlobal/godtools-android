@@ -29,10 +29,9 @@
         </com.google.android.material.appbar.AppBarLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.google.android.material.navigation.NavigationView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/drawer_menu"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/activity_generic_left_menu" />
+        android:layout_gravity="start" />
 </org.ccci.gto.android.common.androidx.drawerlayout.widget.HackyDrawerLayout>

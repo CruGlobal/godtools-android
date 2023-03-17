@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Általános</string>
     <string name="menu_heading_account">Fiók</string>
     <string name="menu_heading_share">Megosztás</string>
-    <string name="menu_heading_legal">Jogi információk</string>
-    <string name="menu_about">Rólunk</string>
-    <string name="menu_help">Gyakran ismételt kérdések</string>
-    <string name="menu_contact_us">Kapcsolatfelvétel</string>
+    <string name="menu_heading_about">Rólunk</string>
     <string name="menu_tutorial">Oktatóanyag</string>
     <string name="menu_login">Bejelentkezés</string>
     <string name="menu_signup">Fiók létrehozása</string>

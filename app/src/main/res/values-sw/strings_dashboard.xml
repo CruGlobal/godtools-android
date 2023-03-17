@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Ujumla</string>
     <string name="menu_heading_account">Akaunti</string>
     <string name="menu_heading_share">Shirikisha</string>
-    <string name="menu_heading_legal">Kisheria</string>
-    <string name="menu_about">Kuhusu</string>
-    <string name="menu_help">Maswali Yanayoulizwa Mara kwa Mara</string>
-    <string name="menu_contact_us">Wasiliana Nasi</string>
+    <string name="menu_heading_about">Kuhusu</string>
     <string name="menu_tutorial">Mafunzo</string>
     <string name="menu_login">Ingia</string>
     <string name="menu_signup">Unda Akaunti</string>

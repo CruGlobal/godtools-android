@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">सामान्य</string>
     <string name="menu_heading_account">एकाउन्ट</string>
     <string name="menu_heading_share">"साझा गर्नुहोस "</string>
-    <string name="menu_heading_legal">वैद्य</string>
-    <string name="menu_about">"को बारेमा "</string>
-    <string name="menu_help">प्राय सोधिने प्रश्नहरू</string>
-    <string name="menu_contact_us">"सम्पर्क गर्नुहोस "</string>
+    <string name="menu_heading_about">"को बारेमा "</string>
     <string name="menu_tutorial">ट्यूटोरियल</string>
     <string name="menu_login">"भित्र  आउनुहोस "</string>
     <string name="menu_signup">"एकाउन्ट खोल्नुहोस "</string>

@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Общая информация</string>
     <string name="menu_heading_share">Поделиться</string>
-    <string name="menu_heading_legal">Юридическая информация</string>
-    <string name="menu_about">О приложении</string>
-    <string name="menu_help">Справка</string>
-    <string name="menu_contact_us">Связаться с нами</string>
+    <string name="menu_heading_about">О приложении</string>
     <string name="menu_share_godtools">Поделиться GodTools</string>
     <string name="menu_share_story">Поделитесь с нами историей</string>
     <string name="menu_terms_of_use">Условия использования</string>

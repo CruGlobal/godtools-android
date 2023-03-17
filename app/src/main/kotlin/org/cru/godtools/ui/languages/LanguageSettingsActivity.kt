@@ -1,6 +1,6 @@
 package org.cru.godtools.ui.languages
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.annotation.MainThread
 import androidx.fragment.app.commit
@@ -13,7 +13,7 @@ import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.R
 
-fun Activity.startLanguageSettingsActivity() {
+fun Context.startLanguageSettingsActivity() {
     Intent(this, LanguageSettingsActivity::class.java)
         .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         .putExtras(BaseActivity.buildExtras(this))

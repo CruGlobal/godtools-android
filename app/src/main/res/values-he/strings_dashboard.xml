@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">כללי</string>
     <string name="menu_heading_account">חשבון</string>
     <string name="menu_heading_share">שתף</string>
-    <string name="menu_heading_legal">חוקיות</string>
-    <string name="menu_about">אודות</string>
-    <string name="menu_help">שאלות נפוצות</string>
-    <string name="menu_contact_us">צרו איתנו קשר</string>
+    <string name="menu_heading_about">אודות</string>
     <string name="menu_tutorial">הדרכה</string>
     <string name="menu_login">כניסה</string>
     <string name="menu_signup">יצירת חשבון</string>

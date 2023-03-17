@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Ümumi</string>
     <string name="menu_heading_account">Hesab</string>
     <string name="menu_heading_share">Paylaş</string>
-    <string name="menu_heading_legal">Hüquqi</string>
-    <string name="menu_about">Haqqında</string>
-    <string name="menu_help">Tez-tez verilən suallar</string>
-    <string name="menu_contact_us">Bizimlə əlaqə</string>
+    <string name="menu_heading_about">Haqqında</string>
     <string name="menu_tutorial">Təlimat</string>
     <string name="menu_login">Daxil ol</string>
     <string name="menu_signup">Hesab yarat</string>

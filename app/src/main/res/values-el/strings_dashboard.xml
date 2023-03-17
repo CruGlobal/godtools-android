@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Γενικά</string>
     <string name="menu_heading_account">Λογαριασμός</string>
     <string name="menu_heading_share">Κοινοποίηση</string>
-    <string name="menu_heading_legal">Νομικά</string>
-    <string name="menu_about">Σχετικά</string>
-    <string name="menu_help">Συχνές Ερωτήσεις</string>
-    <string name="menu_contact_us">Επικοινωνήστε μαζί μας</string>
+    <string name="menu_heading_about">Σχετικά</string>
     <string name="menu_tutorial">Εκπαιδευτικό υλικό</string>
     <string name="menu_login">Σύνδεση</string>
     <string name="menu_signup">Δημιουργία Λογαριασμού</string>

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">ଜେନେରାଲ୍ |</string>
     <string name="menu_heading_account">"ଖାତା "</string>
     <string name="menu_heading_share">"ଅଂଶୀଦାର କରନ୍ତୁ "</string>
-    <string name="menu_heading_legal">ବୈଧ</string>
-    <string name="menu_about">ବିଷୟରେ</string>
-    <string name="menu_help">ବାରମ୍ବାର ପଚରାଯାଉଥିବା ପ୍ରଶ୍ନଗୁଡ଼ିକ</string>
-    <string name="menu_contact_us">"ଆମ ସହିତ ଯୋଗାଯୋଗ କରନ୍ତୁ "</string>
+    <string name="menu_heading_about">ବିଷୟରେ</string>
     <string name="menu_tutorial">ଟ୍ୟୁଟୋରିଆଲ୍</string>
     <string name="menu_login">ଲଗଇନ୍ କରନ୍ତୁ</string>
     <string name="menu_signup">ଖାତା ଖୋଲନ୍ତୁ</string>

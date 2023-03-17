@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">General</string>
     <string name="menu_heading_account">Kuenta</string>
     <string name="menu_heading_share">Kompartí</string>
-    <string name="menu_heading_legal">Legal</string>
-    <string name="menu_about">Tokante</string>
-    <string name="menu_help">Preguntanan Frekuente</string>
-    <string name="menu_contact_us">Tuma Kontakto Ku Nos</string>
+    <string name="menu_heading_about">Tokante</string>
     <string name="menu_tutorial">Instrukshon</string>
     <string name="menu_login">Inisiá seshon</string>
     <string name="menu_signup">Krea un Kuenta di Miembro</string>

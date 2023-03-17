@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_general">Algemeen</string>
     <string name="menu_heading_account">Account</string>
     <string name="menu_heading_share">Delen</string>
-    <string name="menu_heading_legal">Legaal</string>
-    <string name="menu_about">Over</string>
-    <string name="menu_help">Veelgestelde vragen</string>
-    <string name="menu_contact_us">Contacteer Ons</string>
+    <string name="menu_heading_about">Over</string>
     <string name="menu_tutorial">Uitleg</string>
     <string name="menu_login">Inloggen</string>
     <string name="menu_signup">Account aanmaken</string>

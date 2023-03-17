@@ -1,6 +1,6 @@
 package org.cru.godtools.ui.account
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
-fun Activity.startAccountActivity() = startActivity(
+fun Context.startAccountActivity() = startActivity(
     Intent(this, AccountActivity::class.java)
         .putExtras(BaseActivity.buildExtras(this))
 )
