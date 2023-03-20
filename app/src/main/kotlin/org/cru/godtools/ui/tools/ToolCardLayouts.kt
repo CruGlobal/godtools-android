@@ -47,7 +47,7 @@ import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.GRAY_E6
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
@@ -388,7 +388,7 @@ private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifi
     model = viewModel.bannerFile.collectAsState().value,
     contentDescription = null,
     contentScale = ContentScale.Crop,
-    modifier = modifier.background(GRAY_E6)
+    modifier = modifier.background(GodToolsTheme.GRAY_E6)
 )
 
 @Composable

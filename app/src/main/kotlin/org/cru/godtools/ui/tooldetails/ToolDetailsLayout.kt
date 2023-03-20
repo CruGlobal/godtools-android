@@ -50,8 +50,7 @@ import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
-import org.cru.godtools.base.ui.theme.GRAY_E6
-import org.cru.godtools.base.ui.theme.GT_RED
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.Tool
@@ -206,7 +205,7 @@ private fun ToolDetailsBanner(
             contentScale = ContentScale.Crop,
             modifier = modifier
         )
-        else -> Spacer(modifier = modifier.background(GRAY_E6))
+        else -> Spacer(modifier = modifier.background(GodToolsTheme.GRAY_E6))
     }
 }
 
@@ -241,7 +240,7 @@ internal fun ToolDetailsActions(
     OutlinedButton(
         onClick = { if (isAdded) toolViewModel.unpinTool() else toolViewModel.pinTool() },
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = if (isAdded) GT_RED else MaterialTheme.colorScheme.primary
+            contentColor = if (isAdded) GodToolsTheme.GT_RED else MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
