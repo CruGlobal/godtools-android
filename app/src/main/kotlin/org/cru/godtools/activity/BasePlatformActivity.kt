@@ -153,7 +153,8 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
                             DrawerMenuEvent.LOGIN, DrawerMenuEvent.SIGNUP -> launchLogin()
                         }
                         closeNavigationDrawer()
-                    }
+                    },
+                    dismissDrawer = { closeNavigationDrawer() },
                 )
             }
         }
