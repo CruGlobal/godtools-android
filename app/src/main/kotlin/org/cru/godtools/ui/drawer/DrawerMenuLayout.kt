@@ -23,13 +23,16 @@ import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -46,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.play.core.ktx.launchReview
 import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewManagerFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.NavigationDrawerHeadline
@@ -62,14 +66,32 @@ import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun DrawerMenuLayout(content: @Composable () -> Unit) {
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerContentLayout(
+                scope = scope,
+                dismissDrawer = { scope.launch { drawerState.close() } }
+            )
+        },
+        content = content
+    )
+}
+
+@Composable
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 fun DrawerContentLayout(
+    scope: CoroutineScope = rememberCoroutineScope(),
     viewModel: DrawerViewModel = viewModel(),
     onEvent: (event: DrawerMenuEvent) -> Unit = {},
     dismissDrawer: () -> Unit = {},
 ) = ModalDrawerSheet {
-    val scope = rememberCoroutineScope()
     CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelLarge) {
         Column(
             modifier = Modifier

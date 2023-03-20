@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.ui.drawer.DrawerMenuLayout
 
 fun Context.startAccountActivity() = startActivity(
     Intent(this, AccountActivity::class.java)
@@ -20,11 +21,13 @@ class AccountActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GodToolsTheme {
-                AccountLayout(onEvent = {
-                    when (it) {
-                        AccountLayoutEvent.ACTION_UP -> onSupportNavigateUp()
-                    }
-                })
+                DrawerMenuLayout {
+                    AccountLayout(onEvent = {
+                        when (it) {
+                            AccountLayoutEvent.ACTION_UP -> onSupportNavigateUp()
+                        }
+                    })
+                }
             }
         }
     }
