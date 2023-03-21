@@ -115,13 +115,19 @@ fun DrawerContentLayout(
                         icon = { Icon(Icons.Outlined.Login, null) },
                         label = { Text(stringResource(R.string.menu_login)) },
                         selected = false,
-                        onClick = { onEvent(DrawerMenuEvent.LOGIN) },
+                        onClick = {
+                            onEvent(DrawerMenuEvent.LOGIN)
+                            dismissDrawer()
+                        },
                     )
                     NavigationDrawerItem(
                         icon = { Icon(Icons.Outlined.PersonAdd, null) },
                         label = { Text(stringResource(R.string.menu_signup)) },
                         selected = false,
-                        onClick = { onEvent(DrawerMenuEvent.SIGNUP) },
+                        onClick = {
+                            onEvent(DrawerMenuEvent.SIGNUP)
+                            dismissDrawer()
+                        },
                     )
                 } else {
                     NavigationDrawerItem(
