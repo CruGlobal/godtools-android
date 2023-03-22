@@ -64,6 +64,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
+import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +90,6 @@ fun DrawerMenuLayout(content: @Composable () -> Unit) {
 fun DrawerContentLayout(
     scope: CoroutineScope = rememberCoroutineScope(),
     viewModel: DrawerViewModel = viewModel(),
-    onEvent: (event: DrawerMenuEvent) -> Unit = {},
     dismissDrawer: () -> Unit = {},
 ) = ModalDrawerSheet {
     CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelLarge) {
@@ -138,7 +138,7 @@ fun DrawerContentLayout(
                         label = { Text(stringResource(R.string.menu_login)) },
                         selected = false,
                         onClick = {
-                            onEvent(DrawerMenuEvent.LOGIN)
+                            context.startLoginActivity()
                             dismissDrawer()
                         },
                     )
@@ -147,7 +147,7 @@ fun DrawerContentLayout(
                         label = { Text(stringResource(R.string.menu_signup)) },
                         selected = false,
                         onClick = {
-                            onEvent(DrawerMenuEvent.SIGNUP)
+                            context.startLoginActivity()
                             dismissDrawer()
                         },
                     )

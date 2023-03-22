@@ -13,12 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewbinding.ViewBinding
 import dagger.Lazy
 import javax.inject.Inject
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.drawerlayout.widget.toggleDrawer
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.base.Constants.INVALID_LAYOUT_RES
@@ -26,8 +24,6 @@ import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.ccci.gto.android.common.sync.swiperefreshlayout.widget.SwipeRefreshSyncHelper
 import org.cru.godtools.R
-import org.cru.godtools.account.AccountType
-import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
@@ -35,7 +31,6 @@ import org.cru.godtools.fragment.BasePlatformFragment
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.drawer.DrawerContentLayout
-import org.cru.godtools.ui.drawer.DrawerMenuEvent
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -46,14 +41,9 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
     BaseBindingActivity<B>(contentLayoutId) {
     protected constructor() : this(INVALID_LAYOUT_RES)
 
-    @Inject
-    internal lateinit var accountManager: GodToolsAccountManager
-    private lateinit var accountManagerLoginState: GodToolsAccountManager.LoginState
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        accountManagerLoginState = accountManager.prepareForLogin(this)
 
         // restore any saved state
         savedInstanceState?.restoreSyncState()
@@ -150,11 +140,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         drawerMenu?.setContent {
             GodToolsTheme {
                 DrawerContentLayout(
-                    onEvent = {
-                        when (it) {
-                            DrawerMenuEvent.LOGIN, DrawerMenuEvent.SIGNUP -> launchLogin()
-                        }
-                    },
                     dismissDrawer = { closeNavigationDrawer() },
                 )
             }
@@ -173,12 +158,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
         return false
     }
     // endregion Navigation Drawer
-
-    // region Navigation Menu actions
-    private fun launchLogin() {
-        lifecycleScope.launch { accountManager.login(AccountType.OKTA, accountManagerLoginState) }
-    }
-    // endregion Navigation Menu actions
 
     // region Sync Logic
     protected open val swipeRefreshLayout: SwipeRefreshLayout? get() = null
