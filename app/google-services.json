@@ -39,14 +39,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_id": "71275134527-ce3brdpatbtsn54sk1ngvro0en2nnaf6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_id": "71275134527-4stabhk838h3jpkt9mfrt1r8tisaj9r1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.cru.godtools.beta"
+                "bundle_id": "org.cru.godtools",
+                "app_store_id": "542773210"
               }
             }
           ]
@@ -94,14 +95,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_id": "71275134527-ce3brdpatbtsn54sk1ngvro0en2nnaf6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_id": "71275134527-4stabhk838h3jpkt9mfrt1r8tisaj9r1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.cru.godtools.beta"
+                "bundle_id": "org.cru.godtools",
+                "app_store_id": "542773210"
               }
             }
           ]
@@ -117,11 +119,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "71275134527-jdnh5ufkvj7r8a2g0bs1rbnm80qrhht5.apps.googleusercontent.com",
+          "client_id": "71275134527-05m3p8s0tnjkvc8kk1nqdrii1qmvb173.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "org.keynote.godtools.android.qa",
-            "certificate_hash": "fe255d5171453b47b0e045e45ef214d230aface6"
+            "certificate_hash": "e759fc0eb96d7e32a0c627209ea35bb84fd28866"
           }
         },
         {
@@ -141,14 +143,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
+              "client_id": "71275134527-ce3brdpatbtsn54sk1ngvro0en2nnaf6.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "71275134527-st5s63prkvuh46t7ohb1gmhq39qokh78.apps.googleusercontent.com",
+              "client_id": "71275134527-4stabhk838h3jpkt9mfrt1r8tisaj9r1.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "org.cru.godtools.beta"
+                "bundle_id": "org.cru.godtools",
+                "app_store_id": "542773210"
               }
             }
           ]
