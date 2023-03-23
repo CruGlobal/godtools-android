@@ -142,7 +142,6 @@
 
         <activity
             android:name=".ui.account.AccountActivity"
-            android:label="@string/profile_title"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
         <provider

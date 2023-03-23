@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">我的个人资料</string>
     <string name="menu_profile">全球活动</string>
     <!-- Activity -->
     <string name="profile_tab_activity">活动</string>

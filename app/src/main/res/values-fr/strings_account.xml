@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">Mon profil</string>
     <string name="menu_profile">Activité mondiale</string>
     <string name="account_joined">Rejoint %1$s</string>
     <!-- Activity -->

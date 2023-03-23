@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">મારી પ્રોફાઈલ</string>
     <string name="menu_profile">વૈશ્વિક પ્રવૃત્તિ</string>
     <!-- Activity -->
     <string name="profile_tab_activity">પ્રવૃત્તિ</string>
