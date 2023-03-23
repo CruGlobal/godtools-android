@@ -1,12 +1,16 @@
 package org.cru.godtools.ui.account
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,19 +34,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.model.User
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.account.activity.AccountActivityLayout
 import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
@@ -50,85 +56,30 @@ import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
 internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
 internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
-    val coroutineScope = rememberCoroutineScope()
     val viewModel = viewModel<AccountViewModel>()
-
-    val scrollState = rememberScrollState()
-    val pagerState = rememberPagerState()
+    val user by viewModel.user.collectAsState()
     val pages by viewModel.pages.collectAsState()
+    val refreshing by viewModel.isSyncRunning.collectAsState()
+
+    val pagerState = rememberPagerState()
+    val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
 
     RecordAccountPageAnalytics(pages.getOrNull(pagerState.currentPage))
-    SwipeRefresh(
-        rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-        onRefresh = { viewModel.triggerSync(true) }
-    ) {
+    Box(Modifier.pullRefresh(refreshState)) {
         Column(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
-                .verticalScroll(scrollState)
+                .verticalScroll(rememberScrollState())
         ) {
-            Surface(shadowElevation = 4.dp) {
-                Column {
-                    TopAppBar(
-                        title = {},
-                        navigationIcon = {
-                            IconButton(onClick = { onEvent(AccountLayoutEvent.ACTION_UP) }) {
-                                Icon(Icons.Filled.ArrowBack, null)
-                            }
-                        },
-                        colors = TopAppBarDefaults.smallTopAppBarColors(
-                            navigationIconContentColor = MaterialTheme.colorScheme.primary
-                        )
-                    )
-
-                    val user by viewModel.user.collectAsState()
-                    Text(
-                        user?.name.orEmpty(),
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        modifier = Modifier
-                            .padding(top = 40.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
-                            .align(Alignment.CenterHorizontally)
-                    )
-                    Text(
-                        stringResource(
-                            R.string.account_joined,
-                            user?.createdAt?.atZone(ZoneId.systemDefault())
-                                ?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
-                                .orEmpty()
-                        ),
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1,
-                        modifier = Modifier
-                            .padding(top = 8.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
-                            .align(Alignment.CenterHorizontally)
-                            .invisibleIf { user?.createdAt == null }
-                    )
-
-                    TabRow(
-                        selectedTabIndex = pagerState.currentPage,
-                        indicator = { positions ->
-                            TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
-                        },
-                        divider = {},
-                        modifier = Modifier.padding(top = 12.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
-                        // TODO: set the correct padding
-                    ) {
-                        pages.forEachIndexed { index, page ->
-                            Tab(
-                                text = { Text(stringResource(page.tabLabel)) },
-                                selected = pagerState.currentPage == index,
-                                onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                            )
-                        }
-                    }
-                }
-            }
-
+            AccountLayoutHeader(
+                user = user,
+                pages = pages,
+                pagerState = pagerState,
+                onEvent = onEvent,
+            )
             HorizontalPager(
                 count = pages.size,
                 state = pagerState,
@@ -138,6 +89,76 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 when (pages[it]) {
                     AccountPage.ACTIVITY -> AccountActivityLayout()
                     AccountPage.GLOBAL_ACTIVITY -> AccountGlobalActivityLayout()
+                }
+            }
+        }
+
+        PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+private fun AccountLayoutHeader(
+    user: User? = null,
+    pages: List<AccountPage> = emptyList(),
+    onEvent: (AccountLayoutEvent) -> Unit = {},
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    pagerState: PagerState = rememberPagerState(),
+) {
+    Surface(shadowElevation = 4.dp) {
+        Column {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = { onEvent(AccountLayoutEvent.ACTION_UP) }) {
+                        Icon(Icons.Filled.ArrowBack, null)
+                    }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    navigationIconContentColor = MaterialTheme.colorScheme.primary
+                )
+            )
+
+            Text(
+                user?.name.orEmpty(),
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(top = 40.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                    .align(Alignment.CenterHorizontally)
+            )
+            Text(
+                stringResource(
+                    R.string.account_joined,
+                    user?.createdAt?.atZone(ZoneId.systemDefault())
+                        ?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                        .orEmpty()
+                ),
+                style = MaterialTheme.typography.labelSmall,
+                maxLines = 1,
+                modifier = Modifier
+                    .padding(top = 8.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                    .align(Alignment.CenterHorizontally)
+                    .invisibleIf { user?.createdAt == null }
+            )
+
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                indicator = { positions ->
+                    TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
+                },
+                divider = {},
+                modifier = Modifier.padding(top = 12.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+                // TODO: set the correct padding
+            ) {
+                pages.forEachIndexed { index, page ->
+                    Tab(
+                        text = { Text(stringResource(page.tabLabel)) },
+                        selected = pagerState.currentPage == index,
+                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
+                    )
                 }
             }
         }
