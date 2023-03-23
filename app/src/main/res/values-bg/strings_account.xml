@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">Моят профил</string>
     <string name="menu_profile">Глобална активност</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Активност</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">আমার প্রোফাইল</string>
     <string name="menu_profile">বৈশ্বিক ক্রিয়া কলাপ</string>
     <!-- Activity -->
     <string name="profile_tab_activity">ক্রিয়াকলাপ</string>

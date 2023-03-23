@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">నా జీవన వివరణ</string>
     <string name="menu_profile">ప్రపంచ కార్యాచరణ</string>
     <!-- Activity -->
     <string name="profile_tab_activity">కార్యాచరణ</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">मेरी प्रोफाइल</string>
     <string name="menu_profile">वैश्विक गतिविधि</string>
     <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>

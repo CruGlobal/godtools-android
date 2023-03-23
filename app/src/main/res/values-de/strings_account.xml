@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">Mein Profil</string>
     <string name="menu_profile">Weltweite Aktivitäten</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivität</string>

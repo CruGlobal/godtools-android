@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">Pamusoro pangu</string>
     <string name="menu_profile">Zviri kuitika pasi rose</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Zviri kuitika</string>

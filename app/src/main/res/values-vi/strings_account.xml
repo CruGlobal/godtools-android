@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_title">Hồ sơ của tôi</string>
     <string name="menu_profile">Hoạt động toàn cầu</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
