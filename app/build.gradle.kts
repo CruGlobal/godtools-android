@@ -110,9 +110,9 @@ onesky {
     sourceStringFiles = listOf(
         "strings.xml",
         "strings_about.xml",
+        "strings_account.xml",
         "strings_dashboard.xml",
         "strings_features.xml",
-        "strings_profile.xml",
         "strings_tool_details.xml",
     )
 }
