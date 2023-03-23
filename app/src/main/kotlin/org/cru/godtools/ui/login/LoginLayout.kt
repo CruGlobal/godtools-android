@@ -72,14 +72,14 @@ fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
             Spacer(Modifier.weight(1f))
 
             Text(
-                "Sign in",
+                stringResource(R.string.account_login_heading),
                 style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier
                     .padding(horizontal = MARGIN_HORIZONTAL)
                     .align(Alignment.Start)
             )
             Text(
-                "Create an account to have real stories, encouragement, and practical tips at your fingertips.",
+                stringResource(R.string.account_login_description),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
             )
@@ -134,7 +134,7 @@ fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
                     contentDescription = null,
                     modifier = Modifier.padding(end = 8.dp)
                 )
-                Text("Log in with Okta")
+                Text(stringResource(R.string.account_login_action_login_okta))
             }
             Spacer(Modifier.height(32.dp))
         }

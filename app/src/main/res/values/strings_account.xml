@@ -3,6 +3,12 @@
     <string name="menu_profile">Activity</string>
     <string name="account_joined">Joined %1$s</string>
 
+    <!-- Login -->
+    <eat-comment />
+    <string name="account_login_heading">Sign in</string>
+    <string name="account_login_description">Create an account to have real stories, encouragement, and practical tips at your fingertips.</string>
+    <string name="account_login_action_login_okta">Sign in with Okta</string>
+
     <!-- Activity -->
     <eat-comment />
     <string name="profile_tab_activity">Activity</string>
