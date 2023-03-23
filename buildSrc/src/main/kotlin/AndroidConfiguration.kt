@@ -165,8 +165,8 @@ private fun TestedExtension.configureTestOptions(project: Project) {
         addProvider("testImplementation", project.libs.findBundle("test-framework").get())
 
         // HACK: Fix Manifest merge errors for any classpath that contains the Okta module
-        addProvider("androidTestImplementation", testFixtures(project.libs.findLibrary("gtoSupport-okta").get()))
-        addProvider("testImplementation", testFixtures(project.libs.findLibrary("gtoSupport-okta").get()))
+        testVariants.configureEach { mergedFlavor.manifestPlaceholders["webAuthenticationRedirectScheme"] = "test" }
+        unitTestVariants.configureEach { mergedFlavor.manifestPlaceholders["webAuthenticationRedirectScheme"] = "test" }
     }
 
     project.configurations.configureEach {
