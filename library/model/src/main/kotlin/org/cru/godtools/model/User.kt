@@ -9,6 +9,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 private const val JSON_API_TYPE = "user"
 
 private const val JSON_SSO_GUID = "sso-guid"
+private const val JSON_NAME = "name"
 private const val JSON_CREATED_AT = "created-at"
 private const val JSON_FAVORITE_TOOLS = "favorite-tools"
 
@@ -22,7 +23,7 @@ data class User @JvmOverloads constructor(
     val createdAt: Instant? = null,
     @JsonApiIgnore
     val grMasterPersonId: String? = null,
-    @JsonApiIgnore
+    @JsonApiAttribute(JSON_NAME)
     val name: String? = null,
 ) {
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
