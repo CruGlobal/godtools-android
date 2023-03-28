@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": "authtoken",
+    "type": "auth-token",
+    "attributes": {
+      "token": "jwt_auth_token",
+      "expiration": "2023-03-30T15:55:01.032Z",
+      "user-id": 1
+    }
+  }
+}
