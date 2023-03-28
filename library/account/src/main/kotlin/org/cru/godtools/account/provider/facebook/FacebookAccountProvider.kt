@@ -2,6 +2,7 @@ package org.cru.godtools.account.provider.facebook
 
 import android.content.Context
 import androidx.activity.ComponentActivity
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import com.facebook.AccessToken
 import com.facebook.AccessTokenManager
@@ -36,12 +37,14 @@ internal class FacebookAccountProvider @Inject constructor(
     context: Context,
     private val loginManager: LoginManager,
 ) : AccountProvider {
-    private companion object {
+    @VisibleForTesting
+    internal companion object {
         fun PREF_USER_ID(accessToken: AccessToken) = "$PREF_USER_ID_PREFIX${accessToken.userId}"
     }
 
     override val type = AccountType.FACEBOOK
-    private val prefs by lazy { context.getSharedPreferences(PREFS_FACEBOOK_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
+    @VisibleForTesting
+    internal val prefs by lazy { context.getSharedPreferences(PREFS_FACEBOOK_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
 
     override suspend fun userId() =
         accessTokenManager.currentAccessToken?.let { prefs.getString(PREF_USER_ID(it), null) }
