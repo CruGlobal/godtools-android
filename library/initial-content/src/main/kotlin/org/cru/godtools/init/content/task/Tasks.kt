@@ -1,7 +1,6 @@
 package org.cru.godtools.init.content.task
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.VisibleForTesting
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -86,12 +85,8 @@ internal class Tasks @Inject constructor(
 
         bundledTools.let { resources ->
             toolsRepository.storeInitialResources(resources)
+            translationsRepository.storeInitialTranslations(resources.flatMap { it.latestTranslations.orEmpty() })
             attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
-            dao.transaction {
-                resources.flatMap { it.latestTranslations.orEmpty() }.forEach { translation ->
-                    dao.insert(translation, SQLiteDatabase.CONFLICT_IGNORE)
-                }
-            }
         }
     }
 

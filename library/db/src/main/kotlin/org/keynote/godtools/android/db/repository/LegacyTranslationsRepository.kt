@@ -1,5 +1,6 @@
 package org.keynote.godtools.android.db.repository
 
+import android.database.sqlite.SQLiteDatabase
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,6 +13,7 @@ import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
@@ -20,6 +22,7 @@ import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 internal class LegacyTranslationsRepository @Inject constructor(private val dao: GodToolsDao) : TranslationsRepository {
+    override suspend fun findTranslation(id: Long) = dao.findAsync<Translation>(id).await()
     override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) = when {
         code == null || locale == null -> null
         else -> dao.getAsync(getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded)).await().firstOrNull()
@@ -75,9 +78,7 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     }
     // endregion Latest Translations
 
-    override fun insert(vararg translations: Translation) {
-        dao.transaction {
-            translations.forEach { dao.insert(it) }
-        }
-    }
+    override suspend fun storeInitialTranslations(translations: Collection<Translation>) = dao.transactionAsync {
+        translations.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
+    }.await()
 }

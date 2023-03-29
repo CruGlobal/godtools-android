@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Translation
 
 interface TranslationsRepository {
+    suspend fun findTranslation(id: Long): Translation?
     suspend fun findLatestTranslation(
         code: String?,
         locale: Locale?,
@@ -18,6 +19,7 @@ interface TranslationsRepository {
     ): Flow<Translation?>
     fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>): Flow<List<Translation>>
 
-    // TODO: this is temporary for testing
-    fun insert(vararg translations: Translation)
+    // region Initial Content Methods
+    suspend fun storeInitialTranslations(translations: Collection<Translation>)
+    // endregion Initial Content Methods
 }

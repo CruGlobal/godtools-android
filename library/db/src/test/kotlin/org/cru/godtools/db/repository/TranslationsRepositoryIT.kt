@@ -21,27 +21,29 @@ abstract class TranslationsRepositoryIT {
     // region findLatestTranslation()
     @Test
     fun `findLatestTranslation()`() = testScope.runTest {
-        repository.insert(
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 1,
-            ),
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 2,
-            ),
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.GERMAN,
-                version = 3,
-            ),
-            createTranslation(
-                toolCode = "${TOOL}other",
-                languageCode = Locale.ENGLISH,
-                version = 3,
-            ),
+        repository.storeInitialTranslations(
+            listOf(
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 1,
+                ),
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 2,
+                ),
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.GERMAN,
+                    version = 3,
+                ),
+                createTranslation(
+                    toolCode = "${TOOL}other",
+                    languageCode = Locale.ENGLISH,
+                    version = 3,
+                ),
+            )
         )
 
         assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH)) {
@@ -53,19 +55,21 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `findLatestTranslation() - Published only`() = testScope.runTest {
-        repository.insert(
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 1,
-                isPublished = true,
-            ),
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 2,
-                isPublished = false,
-            ),
+        repository.storeInitialTranslations(
+            listOf(
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 1,
+                    isPublished = true,
+                ),
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 2,
+                    isPublished = false,
+                ),
+            )
         )
 
         assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH)) {
@@ -77,19 +81,21 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `findLatestTranslation(isDownloaded=true)`() = testScope.runTest {
-        repository.insert(
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 1,
-                isDownloaded = true,
-            ),
-            createTranslation(
-                toolCode = TOOL,
-                languageCode = Locale.ENGLISH,
-                version = 2,
-                isDownloaded = false,
-            ),
+        repository.storeInitialTranslations(
+            listOf(
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 1,
+                    isDownloaded = true,
+                ),
+                createTranslation(
+                    toolCode = TOOL,
+                    languageCode = Locale.ENGLISH,
+                    version = 2,
+                    isDownloaded = false,
+                ),
+            )
         )
 
         assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH, isDownloaded = true)) {
@@ -99,6 +105,20 @@ abstract class TranslationsRepositoryIT {
         }
     }
     // endregion findLatestTranslation()
+
+    // region storeInitialTranslations()
+    @Test
+    fun `storeInitialTranslations()`() = testScope.runTest {
+        val translation = createTranslation()
+        repository.storeInitialTranslations(listOf(translation))
+
+        assertNotNull(repository.findTranslation(translation.id)) {
+            assertEquals(translation.toolCode, it.toolCode)
+            assertEquals(translation.languageCode, it.languageCode)
+            assertEquals(translation.version, it.version)
+        }
+    }
+    // endregion storeInitialTranslations()
 
     private fun createTranslation(
         id: Long = Random.nextLong(),
