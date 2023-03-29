@@ -13,7 +13,7 @@ interface AttachmentsRepository {
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 
     // region Initial Content Methods
-    fun storeInitialAttachments(attachments: Collection<Attachment>)
+    suspend fun storeInitialAttachments(attachments: Collection<Attachment>)
     // endregion Initial Content Methods
 
     // region Sync Methods

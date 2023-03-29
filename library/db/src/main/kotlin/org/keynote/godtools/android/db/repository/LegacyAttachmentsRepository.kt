@@ -44,9 +44,9 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
     }
 
     // region Initial Content Methods
-    override fun storeInitialAttachments(attachments: Collection<Attachment>) {
+    override suspend fun storeInitialAttachments(attachments: Collection<Attachment>) = dao.transactionAsync {
         attachments.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
-    }
+    }.await()
     // endregion Initial Content Methods
 
     // region Sync Methods
