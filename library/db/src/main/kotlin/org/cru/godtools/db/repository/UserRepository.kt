@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.User
 
 interface UserRepository {
-    fun getUserFlow(userId: String): Flow<User?>
+    fun findUserFlow(userId: String): Flow<User?>
 
     // region Sync Methods
     suspend fun storeUserFromSync(user: User)

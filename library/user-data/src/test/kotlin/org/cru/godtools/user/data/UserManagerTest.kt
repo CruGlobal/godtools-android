@@ -29,7 +29,7 @@ class UserManagerTest {
         coEvery { userIdFlow() } returns userIdFlow
     }
     private val userRepository: UserRepository = mockk {
-        every { getUserFlow(USER_ID) } returns userFlow
+        every { findUserFlow(USER_ID) } returns userFlow
     }
     private val testScope = TestScope()
 
