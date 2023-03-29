@@ -11,7 +11,7 @@ import org.cru.godtools.model.User
 internal abstract class UserRoomRepository(private val db: GodToolsRoomDatabase) : UserRepository {
     private val dao get() = db.userDao
 
-    override fun getUserFlow(userId: String) = dao.findUserFlow(userId).map { it?.toModel() }
+    override fun findUserFlow(userId: String) = dao.findUserFlow(userId).map { it?.toModel() }
 
     override suspend fun storeUserFromSync(user: User) {
         dao.insertOrReplace(UserEntity(user))

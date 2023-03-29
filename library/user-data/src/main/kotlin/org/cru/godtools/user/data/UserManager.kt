@@ -25,7 +25,7 @@ class UserManager @Inject internal constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     val userFlow = accountManager.userIdFlow()
-        .flatMapLatest { it?.let { userRepository.getUserFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { userRepository.findUserFlow(it) } ?: flowOf(null) }
         .combine(accountManager.accountInfoFlow()) { user, accountInfo -> user + accountInfo }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
         .distinctUntilChanged()
