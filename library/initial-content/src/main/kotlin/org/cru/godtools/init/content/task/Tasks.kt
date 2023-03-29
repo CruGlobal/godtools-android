@@ -13,7 +13,6 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.includeFallbacks
@@ -153,8 +152,9 @@ internal class Tasks @Inject constructor(
             context.assets.list("translations")?.forEach { file ->
                 launch {
                     // load the translation unless it's downloaded already
-                    val id = file.substring(0, file.lastIndexOf('.'))
-                    val translation = dao.find<Translation>(id)?.takeUnless { it.isDownloaded } ?: return@launch
+                    val id = file.substring(0, file.lastIndexOf('.')).toLongOrNull()
+                    val translation = id?.let { translationsRepository.findTranslation(id) }
+                        ?.takeUnless { it.isDownloaded } ?: return@launch
 
                     // short-circuit if a newer translation is already downloaded
                     val toolCode = translation.toolCode ?: return@launch
