@@ -37,4 +37,6 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
+
+    testImplementation(libs.json)
 }
