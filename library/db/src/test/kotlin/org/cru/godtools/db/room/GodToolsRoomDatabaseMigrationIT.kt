@@ -7,7 +7,10 @@ import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import java.util.UUID
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
+import org.ccci.gto.android.common.util.database.getString
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -128,6 +131,34 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(1234, it.getIntOrNull(1))
             }
             db.query(languagesQuery)
+        }
+    }
+
+    @Test
+    fun testMigrate6To7() {
+        val guid = UUID.randomUUID().toString()
+        val usersQuery = "SELECT * FROM users"
+
+        // create v6 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 6).use { db ->
+            db.execSQL("INSERT INTO users (id, ssoGuid) VALUES (?, ?)", arrayOf("user1", guid))
+            db.query(usersQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("user1", it.getString("id"))
+                assertEquals(guid, it.getString("ssoGuid"))
+            }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 7, true, *MIGRATIONS).use { db ->
+            db.query(usersQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("user1", it.getString("id"))
+                assertEquals(guid, it.getString("ssoGuid"))
+                assertNotEquals(-1, it.getColumnIndex("name"))
+            }
         }
     }
 }
