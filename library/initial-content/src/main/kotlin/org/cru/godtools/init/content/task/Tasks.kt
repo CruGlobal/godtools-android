@@ -12,8 +12,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
@@ -26,9 +24,6 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
@@ -42,7 +37,6 @@ internal const val NUMBER_OF_FAVORITES = 4
 internal class Tasks @Inject constructor(
     @ApplicationContext private val context: Context,
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
     private val languagesRepository: LanguagesRepository,
@@ -98,12 +92,8 @@ internal class Tasks @Inject constructor(
             val preferred = async {
                 bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
-            val available = Query.select<Translation>()
-                .where(
-                    TranslationTable.FIELD_LANGUAGE.eq(settings.primaryLanguage)
-                        .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                )
-                .get(dao)
+            val available = translationsRepository.getTranslationsFor(languages = listOf(settings.primaryLanguage))
+                .filter { it.isPublished }
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
 
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
