@@ -35,9 +35,6 @@ import kotlinx.coroutines.withTimeoutOrNull
 import okhttp3.ResponseBody
 import org.ccci.gto.android.common.base.TimeConstants.HOUR_IN_MS
 import org.ccci.gto.android.common.base.TimeConstants.MIN_IN_MS
-import org.ccci.gto.android.common.db.Expression
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
@@ -51,11 +48,10 @@ import org.cru.godtools.article.aem.util.AemFileSystem
 import org.cru.godtools.article.aem.util.addExtension
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 import timber.log.Timber
 
 private const val TAG = "AemArticleManager"
@@ -208,19 +204,26 @@ class AemArticleManager @VisibleForTesting internal constructor(
     internal class Dispatcher(
         aemArticleManager: AemArticleManager,
         aemDb: ArticleRoomDatabase,
-        dao: GodToolsDao,
         fileManager: FileManager,
         toolsRepository: ToolsRepository,
+        translationsRepository: TranslationsRepository,
         coroutineScope: CoroutineScope
     ) {
         @Inject
         constructor(
             aemArticleManager: AemArticleManager,
             aemDb: ArticleRoomDatabase,
-            dao: GodToolsDao,
             fileManager: FileManager,
             toolsRepository: ToolsRepository,
-        ) : this(aemArticleManager, aemDb, dao, fileManager, toolsRepository, CoroutineScope(Dispatchers.Default))
+            translationsRepository: TranslationsRepository,
+        ) : this(
+            aemArticleManager,
+            aemDb,
+            fileManager,
+            toolsRepository,
+            translationsRepository,
+            CoroutineScope(Dispatchers.Default)
+        )
 
         // region Translations
         init {
@@ -232,12 +235,8 @@ class AemArticleManager @VisibleForTesting internal constructor(
                         .toSet()
                 }
                 .distinctUntilChanged()
-                .flatMapLatest {
-                    Query.select<Translation>()
-                        .where(TranslationTable.FIELD_TOOL.oneOf(it.map { Expression.bind(it) }))
-                        .andWhere(TranslationTable.SQL_WHERE_DOWNLOADED)
-                        .getAsFlow(dao)
-                }
+                .flatMapLatest { translationsRepository.getTranslationsFlowFor(tools = it) }
+                .map { it.filter { it.isDownloaded } }
                 .conflate()
                 .onEach { aemArticleManager.processDownloadedTranslations(it) }
                 .launchIn(coroutineScope)

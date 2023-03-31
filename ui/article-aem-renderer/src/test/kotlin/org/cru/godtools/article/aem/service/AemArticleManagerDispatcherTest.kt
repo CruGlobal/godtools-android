@@ -22,14 +22,15 @@ import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.GodToolsDao
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerDispatcherTest {
-    private val downloadedTranslationsFlow = MutableStateFlow(emptyList<Translation>())
+    private val translationsFlow = MutableStateFlow(emptyList<Translation>())
 
     private val aemArticleManager = mockk<AemArticleManager>(relaxUnitFun = true)
     private val aemDbObservers = mutableListOf<InvalidationTracker.Observer>()
@@ -41,32 +42,34 @@ class AemArticleManagerDispatcherTest {
             coEvery { getAll() } returns emptyList()
         }
     }
-    private val dao = mockk<GodToolsDao> {
-        every { getAsFlow<Translation>(any()) } returns downloadedTranslationsFlow
-    }
     private val fileManager = mockk<AemArticleManager.FileManager>(relaxUnitFun = true)
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
         every { getToolsFlow() } returns flowOf(emptyList())
     }
+    private val translationsRepository: TranslationsRepository = mockk {
+        every { getTranslationsFlowFor(tools = any()) } returns translationsFlow
+    }
 
-    private val dispatcher = AemArticleManager.Dispatcher(
-        aemArticleManager,
-        aemDb,
-        dao,
-        fileManager,
-        toolsRepository,
-        coroutineScope = testScope.backgroundScope,
-    )
+    @Before
+    fun startDispatcher() {
+        AemArticleManager.Dispatcher(
+            aemArticleManager,
+            aemDb,
+            fileManager,
+            toolsRepository,
+            translationsRepository = translationsRepository,
+            coroutineScope = testScope.backgroundScope,
+        )
+    }
 
     @Test
     fun verifyArticleTranslationsJob() = testScope.runTest {
-        val translations = listOf(Translation())
+        val translations = listOf(Translation().apply { isDownloaded = true })
 
-        downloadedTranslationsFlow.value = translations
+        translationsFlow.value = translations
         runCurrent()
         coVerifyAll {
-            dao.getAsFlow<Translation>(any())
             aemArticleManager.processDownloadedTranslations(translations)
         }
     }
