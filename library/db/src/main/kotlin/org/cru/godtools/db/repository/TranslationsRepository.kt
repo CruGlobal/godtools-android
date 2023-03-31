@@ -22,7 +22,10 @@ interface TranslationsRepository {
         tools: Collection<String>? = null,
         languages: Collection<Locale>? = null,
     ): List<Translation>
-    fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>): Flow<List<Translation>>
+    fun getTranslationsFlowFor(
+        tools: Collection<String>? = null,
+        languages: Collection<Locale>? = null,
+    ): Flow<List<Translation>>
 
     // region Initial Content Methods
     suspend fun storeInitialTranslations(translations: Collection<Translation>)
