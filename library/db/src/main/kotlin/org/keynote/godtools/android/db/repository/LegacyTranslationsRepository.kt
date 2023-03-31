@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression
+import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.getAsFlow
@@ -33,6 +34,24 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         isDownloaded: Boolean,
         trackAccess: Boolean,
     ) = getLatestTranslationFlow(code, locale, isDownloaded, trackAccess)
+
+    override suspend fun getTranslationsFor(
+        tools: Collection<String>?,
+        languages: Collection<Locale>?,
+    ) = Query.select<Translation>()
+        .run {
+            when (tools) {
+                null -> this
+                else -> andWhere(TranslationTable.FIELD_TOOL.oneOf(tools.map { bind(it) }))
+            }
+        }
+        .run {
+            when (languages) {
+                null -> this
+                else -> andWhere(TranslationTable.FIELD_LANGUAGE.oneOf(languages.map { bind(it) }))
+            }
+        }
+        .let { dao.getAsync(it).await() }
 
     override fun getTranslationsFlowFor(
         tools: Collection<String>,

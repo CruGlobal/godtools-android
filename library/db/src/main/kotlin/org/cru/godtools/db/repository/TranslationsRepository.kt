@@ -17,6 +17,11 @@ interface TranslationsRepository {
         isDownloaded: Boolean = false,
         trackAccess: Boolean = false
     ): Flow<Translation?>
+
+    suspend fun getTranslationsFor(
+        tools: Collection<String>? = null,
+        languages: Collection<Locale>? = null,
+    ): List<Translation>
     fun getTranslationsFlowFor(tools: Collection<String>, languages: Collection<Locale>): Flow<List<Translation>>
 
     // region Initial Content Methods
