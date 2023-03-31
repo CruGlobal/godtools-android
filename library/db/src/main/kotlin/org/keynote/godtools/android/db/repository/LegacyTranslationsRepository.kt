@@ -91,6 +91,16 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     }
     // endregion Latest Translations
 
+    // region DownloadManager Methods
+    override suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean) {
+        val translation = Translation().also {
+            it.id = id
+            it.isDownloaded = isDownloaded
+        }
+        dao.updateAsync(translation, TranslationTable.COLUMN_DOWNLOADED).await()
+    }
+    // endregion DownloadManager Methods
+
     override suspend fun storeInitialTranslations(translations: Collection<Translation>) = dao.transactionAsync {
         translations.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
     }.await()

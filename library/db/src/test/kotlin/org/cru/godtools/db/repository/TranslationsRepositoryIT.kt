@@ -5,7 +5,9 @@ import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -156,6 +158,20 @@ abstract class TranslationsRepositoryIT {
         )
     }
     // endregion getTranslationsFor()
+
+    // region markTranslationDownloaded()
+    @Test
+    fun `markTranslationDownloaded()`() = testScope.runTest {
+        val translation = createTranslation(isDownloaded = false)
+        repository.storeInitialTranslations(listOf(translation))
+
+        assertNotNull(repository.findTranslation(translation.id)) { assertFalse(it.isDownloaded) }
+        repository.markTranslationDownloaded(translation.id, true)
+        assertNotNull(repository.findTranslation(translation.id)) { assertTrue(it.isDownloaded) }
+        repository.markTranslationDownloaded(translation.id, false)
+        assertNotNull(repository.findTranslation(translation.id)) { assertFalse(it.isDownloaded) }
+    }
+    // endregion markTranslationDownloaded()
 
     // region storeInitialTranslations()
     @Test

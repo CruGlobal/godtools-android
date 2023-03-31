@@ -27,6 +27,10 @@ interface TranslationsRepository {
         languages: Collection<Locale>? = null,
     ): Flow<List<Translation>>
 
+    // region DownloadManager Methods
+    suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean)
+    // endregion DownloadManager Methods
+
     // region Initial Content Methods
     suspend fun storeInitialTranslations(translations: Collection<Translation>)
     // endregion Initial Content Methods

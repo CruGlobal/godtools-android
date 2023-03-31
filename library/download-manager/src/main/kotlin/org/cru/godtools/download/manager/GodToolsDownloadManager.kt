@@ -298,8 +298,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         // record the translation as downloaded
         downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, manifestFileName))
         relatedFiles.forEach { downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it)) }
-        translation.isDownloaded = true
-        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        translationsRepository.markTranslationDownloaded(translation.id, true)
 
         return true
     }
@@ -356,8 +355,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             }
 
             // mark translation as downloaded
-            translation.isDownloaded = true
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            translationsRepository.markTranslationDownloaded(translation.id, true)
         }
     }
 
