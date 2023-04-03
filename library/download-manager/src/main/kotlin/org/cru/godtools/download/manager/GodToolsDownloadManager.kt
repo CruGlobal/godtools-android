@@ -62,7 +62,6 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -76,7 +75,6 @@ internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val downloadedFilesRepository: DownloadedFilesRepository,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
@@ -90,7 +88,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal constructor(
         attachmentsApi: AttachmentsApi,
         attachmentsRepository: AttachmentsRepository,
-        dao: GodToolsDao,
         downloadedFilesRepository: DownloadedFilesRepository,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
@@ -100,7 +97,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) : this(
         attachmentsApi,
         attachmentsRepository,
-        dao,
         downloadedFilesRepository,
         fs,
         manifestParser,

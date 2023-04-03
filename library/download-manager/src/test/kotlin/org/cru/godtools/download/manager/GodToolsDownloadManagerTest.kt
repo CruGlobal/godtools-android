@@ -11,7 +11,6 @@ import io.mockk.coEvery
 import io.mockk.coExcludeRecords
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
-import io.mockk.coVerifyOrder
 import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -46,7 +45,6 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
@@ -64,8 +62,6 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -80,10 +76,6 @@ class GodToolsDownloadManagerTest {
 
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
-    private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
-        every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
-        excludeRecords { transaction(any(), any()) }
-    }
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk(relaxUnitFun = true) {
         coEvery { findDownloadedFile(any()) } returns null
         coEvery { getDownloadedFiles() } returns emptyList()
@@ -111,7 +103,6 @@ class GodToolsDownloadManagerTest {
     private val downloadManager = GodToolsDownloadManager(
         attachmentsApi,
         attachmentsRepository,
-        dao,
         downloadedFilesRepository,
         fs,
         manifestParser,
@@ -262,7 +253,10 @@ class GodToolsDownloadManagerTest {
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertFalse(file.exists())
-        verify { dao wasNot Called }
+        verify {
+            attachmentsRepository wasNot Called
+            downloadedFilesRepository wasNot Called
+        }
     }
 
     @Test
@@ -273,8 +267,7 @@ class GodToolsDownloadManagerTest {
         assertTrue(attachment.isDownloaded)
         coVerify(inverse = true) {
             fs.file(any())
-            dao.updateOrInsert(any())
-            dao.update(any())
+            translationsRepository.markTranslationDownloaded(any(), any())
         }
     }
 
@@ -284,11 +277,9 @@ class GodToolsDownloadManagerTest {
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertTrue(attachment.isDownloaded)
-        coVerify {
-            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
-            dao wasNot Called
-        }
+        coVerify { attachmentsRepository.updateAttachmentDownloaded(attachment.id, true) }
         coVerify(exactly = 0) { fs.file(any()) }
+        confirmVerified(attachmentsRepository, downloadedFilesRepository)
     }
     // endregion importAttachment()
 
@@ -301,11 +292,6 @@ class GodToolsDownloadManagerTest {
         toolCode = TOOL
         languageCode = Locale.FRENCH
         isDownloaded = false
-    }
-
-    @Before
-    fun setupTranslationMocks() {
-        every { dao.update(any<Translation>(), TranslationTable.COLUMN_DOWNLOADED) } returns 1
     }
 
     // region downloadLatestPublishedTranslation()
@@ -328,10 +314,6 @@ class GodToolsDownloadManagerTest {
             Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("b".repeat(1024))))
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
-
-        // HACK: suppress dao calls from pruneTranslations()
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
-        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         assertEquals(setOf("manifest.xml", "a.txt", "b.txt"), files.keys)
@@ -375,10 +357,6 @@ class GodToolsDownloadManagerTest {
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
-
-        // HACK: suppress dao calls from pruneTranslations()
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
-        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
 
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
@@ -501,7 +479,7 @@ class GodToolsDownloadManagerTest {
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {
         if (times > 0) {
-            coVerifyOrder {
+            coVerifySequence {
                 repeat(times) {
                     fs.exists()
 
@@ -523,7 +501,6 @@ class GodToolsDownloadManagerTest {
                 }
             }
         }
-        confirmVerified(dao, fs)
     }
 
     @Test
@@ -563,7 +540,6 @@ class GodToolsDownloadManagerTest {
         val fileName = file.name
         coEvery { fs.file(fileName) } returns file
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
-        every { dao.get(TranslationFile::class.java) } returns emptyList()
         coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(DownloadedFile(fileName))
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(file))
@@ -592,7 +568,6 @@ class GodToolsDownloadManagerTest {
                 isDownloaded = false
             }
         )
-        every { dao.get(TranslationFile::class.java) } returns emptyList()
         coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(
             DownloadedFile(keep.name),
             DownloadedFile(remove.name),
