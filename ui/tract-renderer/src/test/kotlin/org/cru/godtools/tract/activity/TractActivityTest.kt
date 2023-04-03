@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,7 +18,6 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
@@ -27,7 +25,6 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -42,7 +39,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.keynote.godtools.android.db.GodToolsDao
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -58,8 +54,6 @@ class TractActivityTest {
 
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
-    lateinit var dao: GodToolsDao
-    @Inject
     lateinit var manifestManager: ManifestManager
     @Inject
     lateinit var translationsRepository: TranslationsRepository
@@ -74,9 +68,6 @@ class TractActivityTest {
     @Before
     fun setup() {
         hiltRule.inject()
-        every {
-            dao.getLiveData(match<Query<Language>> { it.table.type == Language::class.java })
-        } returns MutableLiveData(emptyList())
     }
 
     // region Intent Processing
