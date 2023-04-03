@@ -26,7 +26,6 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -37,7 +36,6 @@ import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
 import okio.source
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
@@ -522,7 +520,7 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun setupCleanupActorMocks() {
-        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(emptyList())
+        coEvery { translationsRepository.getTranslations() } returns emptyList()
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
     }
 
@@ -537,7 +535,7 @@ class GodToolsDownloadManagerTest {
                     downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedTranslationFiles()
-                    dao.getAsync(Query.select<Translation>())
+                    translationsRepository.getTranslations()
                     downloadedFilesRepository.getDownloadedTranslationFiles()
 
                     // deleteUnusedDownloadedFiles()
@@ -576,7 +574,7 @@ class GodToolsDownloadManagerTest {
             isDownloaded = false
         }
         val file = DownloadedTranslationFile(translation, "file")
-        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(listOf(translation))
+        coEvery { translationsRepository.getTranslations() } returns listOf(translation)
         coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)
 
         downloadManager.deleteOrphanedTranslationFiles()

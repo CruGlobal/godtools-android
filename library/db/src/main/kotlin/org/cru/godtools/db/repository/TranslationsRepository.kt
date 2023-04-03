@@ -18,6 +18,7 @@ interface TranslationsRepository {
         trackAccess: Boolean = false
     ): Flow<Translation?>
 
+    suspend fun getTranslations() = getTranslationsFor()
     suspend fun getTranslationsFor(
         tools: Collection<String>? = null,
         languages: Collection<Locale>? = null,

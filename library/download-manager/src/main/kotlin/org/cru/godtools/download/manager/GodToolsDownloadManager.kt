@@ -410,7 +410,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun deleteOrphanedTranslationFiles() = filesystemMutex.write.withLock {
-        val downloadedTranslations = dao.getAsync(Query.select<Translation>()).await()
+        val downloadedTranslations = translationsRepository.getTranslations()
             .filter { it.isDownloaded }
             .map { it.id }
 
