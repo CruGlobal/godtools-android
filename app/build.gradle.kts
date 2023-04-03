@@ -54,15 +54,33 @@ android {
     productFlavors {
         named("stage") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
+
+            // Facebook
             resValue("string", "facebook_app_id", "448969905944197")
             resValue("string", "fb_login_protocol_scheme", "fb448969905944197")
             resValue("string", "facebook_client_token", "be1edf48d86ed54a24951ededa62eda2")
+
+            // Google
+            buildConfigField(
+                "String",
+                "GOOGLE_SERVER_CLIENT_ID",
+                "\"71275134527-nvu2ehje1j6g459ofg5aldn1n21fadpg.apps.googleusercontent.com\""
+            )
         }
         named("production") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_PRODUCTION\"")
+
+            // Facebook
             resValue("string", "facebook_app_id", "2236701616451487")
             resValue("string", "fb_login_protocol_scheme", "fb2236701616451487")
             resValue("string", "facebook_client_token", "3b6bf5b7c128a970337c4fa1860ffa6e")
+
+            // Google
+            buildConfigField(
+                "String",
+                "GOOGLE_SERVER_CLIENT_ID",
+                "\"71275134527-h5adpeeefcevhhhng1ggi5ngn6ko6d3k.apps.googleusercontent.com\""
+            )
         }
     }
 

@@ -7,11 +7,18 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.cru.godtools.BuildConfig
+import org.cru.godtools.account.provider.google.GoogleBuildConfig
 import org.cru.godtools.account.provider.okta.OktaBuildConfig
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AccountModule {
+    @Provides
+    @Reusable
+    fun googleBuildConfig() = GoogleBuildConfig(
+        serverClientId = BuildConfig.GOOGLE_SERVER_CLIENT_ID
+    )
+
     @Provides
     @Reusable
     fun oktaBuildConfig() = OktaBuildConfig(
