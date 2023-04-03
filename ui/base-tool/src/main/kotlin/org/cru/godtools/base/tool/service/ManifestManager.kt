@@ -1,6 +1,5 @@
 package org.cru.godtools.base.tool.service
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.asLiveData
 import dagger.Reusable
 import java.util.Locale
@@ -20,15 +19,12 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.cru.godtools.shared.tool.parser.model.Manifest
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val COROUTINES_PARALLELISM = 8
 
 @Reusable
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManifestManager @Inject constructor(
-    private val dao: GodToolsDao,
     private val parser: ManifestParser,
     private val translationsRepository: TranslationsRepository
 ) {
@@ -55,7 +51,7 @@ class ManifestManager @Inject constructor(
         val manifestFileName = translation.manifestFileName ?: return null
         return when (val result = parseManifest(manifestFileName)) {
             is ParserResult.Error.Corrupted, is ParserResult.Error.NotFound -> {
-                withContext(coroutineDispatcher) { brokenManifest(manifestFileName) }
+                translationsRepository.markBrokenManifestNotDownloaded(manifestFileName)
                 null
             }
             is ParserResult.Data -> result.manifest
@@ -67,14 +63,5 @@ class ManifestManager @Inject constructor(
         cache[name] ?: withContext(coroutineDispatcher) {
             parser.parseManifest(name).also { if (it is ParserResult.Data) cache.put(name, it) }
         }
-    }
-
-    @WorkerThread
-    private fun brokenManifest(manifestName: String) {
-        dao.update(
-            Translation().apply { isDownloaded = false },
-            TranslationTable.FIELD_MANIFEST.eq(manifestName),
-            TranslationTable.COLUMN_DOWNLOADED
-        )
     }
 }

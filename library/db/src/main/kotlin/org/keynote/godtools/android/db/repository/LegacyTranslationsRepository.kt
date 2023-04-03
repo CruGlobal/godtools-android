@@ -121,4 +121,12 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     override suspend fun storeInitialTranslations(translations: Collection<Translation>) = dao.transactionAsync {
         translations.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
     }.await()
+
+    override suspend fun markBrokenManifestNotDownloaded(manifestName: String) {
+        dao.updateAsync(
+            Translation().apply { isDownloaded = false },
+            TranslationTable.FIELD_MANIFEST.eq(manifestName),
+            TranslationTable.COLUMN_DOWNLOADED
+        ).await()
+    }
 }

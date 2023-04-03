@@ -2,37 +2,31 @@ package org.cru.godtools.base.tool.service
 
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.confirmVerified
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
-import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val MANIFEST_NAME = "manifest.xml"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ManifestManagerTest {
-    private val dao: GodToolsDao = mockk(relaxed = true)
     private val parser: ManifestParser = mockk()
-    private lateinit var manager: ManifestManager
+    private val translationsRepository: TranslationsRepository = mockk(relaxUnitFun = true)
+
+    private val manager: ManifestManager = ManifestManager(parser, translationsRepository)
 
     private val translation = Translation().apply {
         manifestFileName = MANIFEST_NAME
-    }
-
-    @Before
-    fun setup() {
-        manager = ManifestManager(dao, parser, mockk())
     }
 
     @Test
@@ -61,8 +55,7 @@ class ManifestManagerTest {
 
         val result = manager.getManifest(translation)
         assertNull(result)
-        verifyMarkTranslationAsNotDownloaded()
-        confirmVerified(dao)
+        coVerifyAll { translationsRepository.markBrokenManifestNotDownloaded(MANIFEST_NAME) }
     }
 
     @Test
@@ -71,15 +64,6 @@ class ManifestManagerTest {
 
         val result = manager.getManifest(translation)
         assertNull(result)
-        verifyMarkTranslationAsNotDownloaded()
-        confirmVerified(dao)
-    }
-
-    private fun verifyMarkTranslationAsNotDownloaded() = verify {
-        dao.update(
-            match<Translation> { !it.isDownloaded },
-            TranslationTable.FIELD_MANIFEST.eq(MANIFEST_NAME),
-            TranslationTable.COLUMN_DOWNLOADED
-        )
+        coVerifyAll { translationsRepository.markBrokenManifestNotDownloaded(MANIFEST_NAME) }
     }
 }

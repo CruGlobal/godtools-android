@@ -37,4 +37,8 @@ interface TranslationsRepository {
     // region Initial Content Methods
     suspend fun storeInitialTranslations(translations: Collection<Translation>)
     // endregion Initial Content Methods
+
+    // region ManifestManager Methods
+    suspend fun markBrokenManifestNotDownloaded(manifestName: String)
+    // endregion ManifestManager Methods
 }

@@ -253,11 +253,25 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion storeInitialTranslations()
 
+    // region markBrokenManifestNotDownloaded()
+    @Test
+    fun `markBrokenManifestNotDownloaded()`() = testScope.runTest {
+        val broken = List(2) { createTranslation(manifestFileName = "broken.xml", isDownloaded = true) }
+        val valid = List(2) { createTranslation(isDownloaded = true) }
+        repository.storeInitialTranslations(broken + valid)
+
+        repository.markBrokenManifestNotDownloaded("broken.xml")
+        broken.forEach { assertNotNull(repository.findTranslation(it.id)) { assertFalse(it.isDownloaded) } }
+        valid.forEach { assertNotNull(repository.findTranslation(it.id)) { assertTrue(it.isDownloaded) } }
+    }
+    // endregion markBrokenManifestNotDownloaded()
+
     private fun createTranslation(
         id: Long = Random.nextLong(),
         toolCode: String = UUID.randomUUID().toString(),
         languageCode: Locale = Locale.ENGLISH,
         version: Int = Random.nextInt(),
+        manifestFileName: String? = UUID.randomUUID().toString(),
         isPublished: Boolean = true,
         isDownloaded: Boolean = true,
     ) = Translation().also {
@@ -265,6 +279,7 @@ abstract class TranslationsRepositoryIT {
         it.toolCode = toolCode
         it.languageCode = languageCode
         it.version = version
+        it.manifestFileName = manifestFileName
         it.isPublished = isPublished
         it.isDownloaded = isDownloaded
     }
