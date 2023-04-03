@@ -30,6 +30,7 @@ interface TranslationsRepository {
 
     // region DownloadManager Methods
     suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean)
+    suspend fun markStaleTranslationsAsNotDownloaded(): Boolean
     // endregion DownloadManager Methods
 
     // region Initial Content Methods

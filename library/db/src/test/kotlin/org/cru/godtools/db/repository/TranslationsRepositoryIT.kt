@@ -173,6 +173,40 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion markTranslationDownloaded()
 
+    // region markStaleTranslationsAsNotDownloaded()
+    @Test
+    fun `markStaleTranslationsAsNotDownloaded()`() = testScope.runTest {
+        val translation1 = createTranslation(
+            toolCode = "tool",
+            languageCode = Locale.ENGLISH,
+            version = 1,
+            isDownloaded = true
+        )
+        val translation2 = createTranslation(
+            toolCode = "tool",
+            languageCode = Locale.ENGLISH,
+            version = 2,
+            isDownloaded = true
+        )
+        repository.storeInitialTranslations(listOf(translation1, translation2))
+
+        assertTrue(repository.markStaleTranslationsAsNotDownloaded())
+        assertNotNull(repository.findTranslation(translation1.id)) { assertFalse(it.isDownloaded) }
+        assertNotNull(repository.findTranslation(translation2.id)) { assertTrue(it.isDownloaded) }
+    }
+
+    @Test
+    fun `markStaleTranslationsAsNotDownloaded() - no changes`() = testScope.runTest {
+        val translation1 = createTranslation(isDownloaded = true)
+        val translation2 = createTranslation(isDownloaded = true)
+        repository.storeInitialTranslations(listOf(translation1, translation2))
+
+        assertFalse(repository.markStaleTranslationsAsNotDownloaded())
+        assertNotNull(repository.findTranslation(translation1.id)) { assertTrue(it.isDownloaded) }
+        assertNotNull(repository.findTranslation(translation2.id)) { assertTrue(it.isDownloaded) }
+    }
+    // endregion markStaleTranslationsAsNotDownloaded()
+
     // region storeInitialTranslations()
     @Test
     fun `storeInitialTranslations()`() = testScope.runTest {

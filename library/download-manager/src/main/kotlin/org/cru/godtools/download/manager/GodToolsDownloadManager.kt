@@ -361,20 +361,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
-        val changes = dao.transaction(true) {
-            val seen = mutableSetOf<TranslationKey>()
-            dao.get(QUERY_STALE_TRANSLATIONS).asSequence()
-                .filterNot { seen.add(TranslationKey(it)) }
-                .filter { it.isDownloaded }
-                .onEach {
-                    it.isDownloaded = false
-                    dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
-                }
-                .count()
-        }
-
         // if any translations were updated, send a broadcast
-        if (changes > 0) cleanupActor.send(Unit)
+        translationsRepository.markStaleTranslationsAsNotDownloaded()
+            .also { if (it) cleanupActor.send(Unit) }
     }
     // endregion Translations
 

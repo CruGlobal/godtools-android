@@ -100,7 +100,9 @@ class GodToolsDownloadManagerTest {
         excludeRecords { defaultConfig }
     }
     private val translationsApi = mockk<TranslationsApi>()
-    private val translationsRepository: TranslationsRepository = mockk()
+    private val translationsRepository: TranslationsRepository = mockk {
+        coEvery { markStaleTranslationsAsNotDownloaded() } returns false
+    }
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
@@ -354,6 +356,7 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             translationsRepository.markTranslationDownloaded(translation.id, true)
+            translationsRepository.markStaleTranslationsAsNotDownloaded()
             workManager wasNot Called
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -395,6 +398,7 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
             translationsRepository.markTranslationDownloaded(translation.id, true)
+            translationsRepository.markStaleTranslationsAsNotDownloaded()
             workManager wasNot Called
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -453,41 +457,12 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPruneStaleTranslations() = testScope.runTest {
-        val valid1 = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        val valid2 = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.FRENCH
-            isDownloaded = true
-        }
-        val valid3 = Translation().apply {
-            toolCode = "$TOOL$TOOL"
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        val invalid = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns listOf(valid1, valid2, invalid, valid3)
+    fun `pruneStaleTranslations()`() = testScope.runTest {
+        coEvery { translationsRepository.markStaleTranslationsAsNotDownloaded() } returns true
         setupCleanupActorMocks()
 
         downloadManager.pruneStaleTranslations()
-        assertFalse(invalid.isDownloaded)
-        assertTrue(valid1.isDownloaded)
-        assertTrue(valid2.isDownloaded)
-        assertTrue(valid3.isDownloaded)
-        verify { dao.update(invalid, TranslationTable.COLUMN_DOWNLOADED) }
-        verify(inverse = true) {
-            dao.update(valid1, TranslationTable.COLUMN_DOWNLOADED)
-            dao.update(valid2, TranslationTable.COLUMN_DOWNLOADED)
-            dao.update(valid3, TranslationTable.COLUMN_DOWNLOADED)
-        }
+        coVerify { translationsRepository.markStaleTranslationsAsNotDownloaded() }
     }
     // endregion Translations
 

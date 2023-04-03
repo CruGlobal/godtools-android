@@ -14,9 +14,11 @@ import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.db.findAsync
+import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.TranslationKey
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
 
@@ -99,6 +101,21 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         }
         dao.updateAsync(translation, TranslationTable.COLUMN_DOWNLOADED).await()
     }
+
+    override suspend fun markStaleTranslationsAsNotDownloaded() = dao.transactionAsync {
+        val seen = mutableSetOf<TranslationKey>()
+        val changes = Query.select<Translation>()
+            .where(TranslationTable.SQL_WHERE_DOWNLOADED)
+            .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
+            .get(dao).asSequence()
+            .filterNot { seen.add(TranslationKey(it)) }
+            .sumOf {
+                it.isDownloaded = false
+                dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
+            }
+
+        return@transactionAsync changes > 0
+    }.await()
     // endregion DownloadManager Methods
 
     override suspend fun storeInitialTranslations(translations: Collection<Translation>) = dao.transactionAsync {
