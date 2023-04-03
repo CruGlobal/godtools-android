@@ -19,6 +19,12 @@ dependencies {
     implementation(libs.facebook.login)
     // endregion Facebook
 
+    // region Google
+    implementation(libs.gtoSupport.play.auth)
+    implementation(libs.kotlin.coroutines.play.services)
+    implementation(libs.play.auth)
+    // endregion Google
+
     // region Okta
     implementation(libs.gtoSupport.okta) {
         exclude(group = "org.ccci.gto.android", module = "gto-support-okta-oidc")
