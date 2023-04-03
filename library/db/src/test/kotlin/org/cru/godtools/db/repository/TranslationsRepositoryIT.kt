@@ -1,5 +1,6 @@
 package org.cru.godtools.db.repository
 
+import app.cash.turbine.test
 import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
@@ -10,6 +11,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Translation
 
@@ -158,6 +160,36 @@ abstract class TranslationsRepositoryIT {
         )
     }
     // endregion getTranslationsFor()
+
+    // region getTranslationsForToolFlow()
+    @Test
+    fun `getTranslationsForToolFlow()`() = testScope.runTest {
+        val tool1 = createTranslation(toolCode = "tool")
+        val tool2 = createTranslation(toolCode = "tool")
+
+        repository.getTranslationsForToolFlow("tool").test {
+            repository.storeInitialTranslations(listOf(createTranslation()))
+            runCurrent()
+            assertTrue(expectMostRecentItem().isEmpty())
+
+            repository.storeInitialTranslations(List(5) { createTranslation() })
+            repository.storeInitialTranslations(listOf(tool1))
+            runCurrent()
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(1, it.size)
+                assertEquals(tool1.id, it.first().id)
+            }
+
+            repository.storeInitialTranslations(List(5) { createTranslation() })
+            repository.storeInitialTranslations(listOf(tool2))
+            runCurrent()
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(2, it.size)
+                assertEquals(setOf(tool1.id, tool2.id), it.mapTo(mutableSetOf()) { it.id })
+            }
+        }
+    }
+    // endregion getTranslationsForToolFlow()
 
     // region markTranslationDownloaded()
     @Test
