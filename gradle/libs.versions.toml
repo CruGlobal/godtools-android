@@ -186,7 +186,7 @@ okta-web-authentication-ui = { module = "com.okta.kotlin:web-authentication-ui",
 onesky-gradlePlugin = "co.brainly:plugin:1.5.0"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
-play-auth = "com.google.android.gms:play-services-auth:20.4.1"
+play-auth = "com.google.android.gms:play-services-auth:20.5.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.0.1"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
