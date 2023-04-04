@@ -18,10 +18,10 @@ import io.mockk.verify
 import java.util.EnumSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.job
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.db.repository.ToolsRepository
@@ -48,25 +48,12 @@ private const val INSTALL_SHORTCUT_PERMISSION = "com.android.launcher.permission
 class GodToolsShortcutManagerTest {
     private lateinit var app: Application
     private lateinit var shortcutManagerService: ShortcutManager
-
+    private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
         coEvery { findTool(any()) } returns null
     }
-    @Deprecated("Transition tests to use runTest closure")
-    private val coroutineScope = TestScope()
 
-    private val shortcutManager by lazy { coroutineScope.createShortcutManager() }
-    private fun TestScope.createShortcutManager() = GodToolsShortcutManager(
-        app,
-        mockk(),
-        mockk(relaxUnitFun = true),
-        mockk(),
-        mockk(),
-        mockk(),
-        toolsRepository = toolsRepository,
-        translationsRepository = mockk(),
-        coroutineScope = this
-    )
+    private lateinit var shortcutManager: GodToolsShortcutManager
 
     @Before
     fun setup() {
@@ -86,6 +73,19 @@ class GodToolsShortcutManagerTest {
                 every { getSystemService(ShortcutManager::class.java) } returns shortcutManagerService
             }
         }
+
+        shortcutManager = GodToolsShortcutManager(
+            app,
+            dao = mockk(),
+            eventBus = mockk(relaxUnitFun = true),
+            fs = mockk(),
+            picasso = mockk(),
+            settings = mockk(),
+            toolsRepository = toolsRepository,
+            translationsRepository = mockk(),
+            coroutineScope = testScope.backgroundScope,
+            ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler)
+        )
     }
 
     // region Pending Shortcuts
@@ -105,20 +105,17 @@ class GodToolsShortcutManagerTest {
     // endregion canPinShortcut(tool)
 
     @Test
-    fun verifyGetPendingToolShortcutInvalidTool() = runTest {
-        val shortcutManager = createShortcutManager()
+    fun verifyGetPendingToolShortcutInvalidTool() = testScope.runTest {
         val shortcut = shortcutManager.getPendingToolShortcut("invalid")!!
-        joinLaunchedJobs()
+        runCurrent()
         coVerifyAll { toolsRepository.findTool("invalid") }
         assertNull(shortcut.shortcut)
     }
 
     @Test
-    fun verifyUpdatePendingToolShortcuts() = runTest {
-        val shortcutManager = createShortcutManager()
-
+    fun verifyUpdatePendingToolShortcuts() = testScope.runTest {
         val shortcut = shortcutManager.getPendingToolShortcut("kgp")!!
-        joinLaunchedJobs()
+        runCurrent()
 
         // trigger update
         shortcutManager.updatePendingShortcuts()
@@ -135,9 +132,8 @@ class GodToolsShortcutManagerTest {
     // region Update Existing Shortcuts
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = runTest {
+    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = testScope.runTest {
         coEvery { toolsRepository.getTools() } throws CancellationException()
-        val shortcutManager = createShortcutManager()
 
         ExceptionRaisingTree.plant().use {
             launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.apply {
@@ -155,15 +151,12 @@ class GodToolsShortcutManagerTest {
     // region Instant App
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() = runTest {
+    fun verifyUpdateDynamicShortcutsOnInstantAppIsANoop() = testScope.runTest {
         // Instant Apps don't have access to the system ShortcutManager
         every { app.getSystemService<ShortcutManager>() } returns null
-        val shortcutManager = createShortcutManager()
 
         shortcutManager.updateDynamicShortcuts(emptyMap())
         verify { toolsRepository wasNot Called }
     }
     // endregion Instant App
-
-    private suspend fun TestScope.joinLaunchedJobs() = coroutineContext.job.children.toList().joinAll()
 }
