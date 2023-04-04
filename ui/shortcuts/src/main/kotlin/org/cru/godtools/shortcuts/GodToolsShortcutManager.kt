@@ -221,7 +221,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @AnyThread
-    private suspend fun createToolShortcut(tool: Tool) = withContext(Dispatchers.IO) {
+    private suspend fun createToolShortcut(tool: Tool) = withContext(ioDispatcher) {
         val code = tool.code ?: return@withContext null
 
         // generate the list of locales to use for this tool
@@ -287,7 +287,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         constructor(
             manager: GodToolsShortcutManager,
             dao: GodToolsDao,
-            settings: Settings
+            settings: Settings,
         ) : this(manager, dao, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
 
         @VisibleForTesting
