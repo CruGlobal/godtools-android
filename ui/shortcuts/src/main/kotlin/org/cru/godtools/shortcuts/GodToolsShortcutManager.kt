@@ -6,7 +6,6 @@ import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
 import androidx.annotation.RequiresApi
-import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -314,12 +313,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 delay(DELAY_UPDATE_SHORTCUTS)
                 manager.updateShortcuts()
             }
-        }
-
-        @RestrictTo(RestrictTo.Scope.TESTS)
-        internal fun shutdown() {
-            updatePendingShortcutsJob.cancel()
-            updateShortcutsJob.cancel()
         }
     }
 }

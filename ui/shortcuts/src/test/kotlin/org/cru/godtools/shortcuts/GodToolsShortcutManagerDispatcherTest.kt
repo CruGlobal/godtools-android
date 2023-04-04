@@ -51,126 +51,118 @@ class GodToolsShortcutManagerDispatcherTest {
         every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true)
+    private val testScope = TestScope()
 
-    private fun TestScope.testDispatcher(block: (GodToolsShortcutManager.Dispatcher) -> Unit) {
-        val dispatcher = GodToolsShortcutManager.Dispatcher(shortcutManager, dao, settings, this)
-        block(dispatcher)
-        dispatcher.shutdown()
+    private val dispatcher by lazy {
+        GodToolsShortcutManager.Dispatcher(
+            shortcutManager,
+            dao,
+            settings,
+            coroutineScope = testScope.backgroundScope
+        )
     }
 
     @Test
-    fun verifyUpdatePendingToolShortcuts() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updateShortcutsJob.cancel()
+    fun verifyUpdatePendingToolShortcuts() = testScope.runTest {
+        dispatcher.updateShortcutsJob.cancel()
 
-            // trigger update
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            verify { shortcutManager wasNot Called }
-            advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-            runCurrent()
-            coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
-            confirmVerified(shortcutManager)
-            clearMocks(shortcutManager)
+        // trigger update
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+        runCurrent()
+        coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
+        confirmVerified(shortcutManager)
+        clearMocks(shortcutManager)
 
-            // trigger multiple updates simultaneously, it should conflate to a single update
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            advanceTimeBy(1)
-            runCurrent()
-            verify { shortcutManager wasNot Called }
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
-            runCurrent()
-            coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
-            confirmVerified(shortcutManager)
-            advanceUntilIdle()
-            confirmVerified(shortcutManager)
-        }
+        // trigger multiple updates simultaneously, it should conflate to a single update
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        advanceTimeBy(1)
+        runCurrent()
+        verify { shortcutManager wasNot Called }
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        advanceTimeBy(DELAY_UPDATE_PENDING_SHORTCUTS)
+        runCurrent()
+        coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
+        confirmVerified(shortcutManager)
+        advanceUntilIdle()
+        confirmVerified(shortcutManager)
     }
 
     // region updateShortcutsActor
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Triggers once on startup`() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updatePendingShortcutsJob.cancel()
-            verify { shortcutManager wasNot Called }
-            advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
-            verify { shortcutManager wasNot Called }
-            runCurrent()
-            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-            advanceUntilIdle()
-            confirmVerified(shortcutManager)
-        }
+    fun `updateShortcutsJob - Triggers once on startup`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
+        verify { shortcutManager wasNot Called }
+        runCurrent()
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        advanceUntilIdle()
+        confirmVerified(shortcutManager)
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Trigger on primaryLanguage Update`() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updatePendingShortcutsJob.cancel()
-            advanceUntilIdle()
-            clearMocks(shortcutManager)
+    fun `updateShortcutsJob - Trigger on primaryLanguage Update`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        runCurrent()
+        clearMocks(shortcutManager)
 
-            // trigger a primary language update
-            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-            verify { shortcutManager wasNot Called }
-            advanceUntilIdle()
-            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-            confirmVerified(shortcutManager)
-        }
+        // trigger a primary language update
+        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Trigger on parallelLanguage Update`() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updatePendingShortcutsJob.cancel()
-            advanceUntilIdle()
-            clearMocks(shortcutManager)
+    fun `updateShortcutsJob - Trigger on parallelLanguage Update`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        runCurrent()
+        clearMocks(shortcutManager)
 
-            // trigger a parallel language update
-            assertTrue(parallelLanguageFlow.tryEmit(null))
-            verify { shortcutManager wasNot Called }
-            advanceUntilIdle()
-            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-            confirmVerified(shortcutManager)
-        }
+        // trigger a parallel language update
+        assertTrue(parallelLanguageFlow.tryEmit(null))
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
     }
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Aggregates multiple events`() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updatePendingShortcutsJob.cancel()
+    fun `updateShortcutsJob - Aggregates multiple events`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
 
-            // trigger multiple updates simultaneously, it should aggregate to a single update
-            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-            assertTrue(parallelLanguageFlow.tryEmit(null))
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
-            verify { shortcutManager wasNot Called }
-            assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-            assertTrue(parallelLanguageFlow.tryEmit(null))
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            assertTrue(invalidationFlow.tryEmit(Unit))
-            advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
-            verify { shortcutManager wasNot Called }
-            runCurrent()
-            coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-            advanceUntilIdle()
-            confirmVerified(shortcutManager)
-        }
+        // trigger multiple updates simultaneously, it should aggregate to a single update
+        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
+        verify { shortcutManager wasNot Called }
+        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        assertTrue(invalidationFlow.tryEmit(Unit))
+        advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
+        verify { shortcutManager wasNot Called }
+        runCurrent()
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
+        confirmVerified(shortcutManager)
     }
 
     @Test
     @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
-    fun `updateShortcutsJob - Not Available For Old Sdks`() = runTest {
-        testDispatcher { dispatcher ->
-            dispatcher.updatePendingShortcutsJob.cancel()
-            advanceUntilIdle()
-            assertTrue(dispatcher.updateShortcutsJob.isCompleted)
-            verify { shortcutManager wasNot Called }
-        }
+    fun `updateShortcutsJob - Not Available For Old Sdks`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        runCurrent()
+        assertTrue(dispatcher.updateShortcutsJob.isCompleted)
+        verify { shortcutManager wasNot Called }
     }
     // endregion updateShortcutsActor
 }
