@@ -93,6 +93,9 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     }
     // endregion Latest Translations
 
+    override fun translationsChangeFlow(emitOnStart: Boolean) =
+        dao.invalidationFlow(Translation::class.java, emitOnStart = emitOnStart)
+
     // region DownloadManager Methods
     override suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean) {
         val translation = Translation().also {
