@@ -137,9 +137,11 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     suspend fun syncDirtyUserCounters() = executeSync<UserCounterSyncTasks> { syncDirtyCounters() }
     suspend fun syncUserCounters(force: Boolean = false) = executeSync<UserCounterSyncTasks> {
-        val resp = syncCounters(force)
-        coroutineScope.launch { syncDirtyCounters() }
-        resp
+        try {
+            syncCounters(force)
+        } finally {
+            coroutineScope.launch { syncDirtyUserCounters() }
+        }
     }
 
     fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
