@@ -1,6 +1,5 @@
 package org.cru.godtools.sync
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import io.mockk.Awaits
 import io.mockk.Called
@@ -19,30 +18,31 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.cru.godtools.sync.task.BaseSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import timber.log.Timber
 
-@RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsSyncServiceTest {
     private val toolsSyncTasks = mockk<ToolSyncTasks> { coEvery { syncTools(any()) } returns true }
 
-    private val syncTasks = mapOf<Class<out BaseSyncTasks>, Provider<BaseSyncTasks>>(
-        ToolSyncTasks::class.java to Provider { toolsSyncTasks }
-    )
     private val timber: Timber.Tree = mockk(relaxed = true)
     private val workManager: WorkManager = mockk()
     private val testScope = TestScope()
 
-    private val syncService =
-        GodToolsSyncService(mockk(relaxUnitFun = true), { workManager }, syncTasks, UnconfinedTestDispatcher())
+    private val syncService = GodToolsSyncService(
+        eventBus = mockk(relaxUnitFun = true),
+        workManager = { workManager },
+        syncTasks = mapOf(
+            ToolSyncTasks::class.java to Provider { toolsSyncTasks },
+        ),
+        coroutineDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
+        coroutineScope = testScope
+    )
 
     @Before
     fun setup() {
