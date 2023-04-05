@@ -19,7 +19,7 @@ import org.cru.godtools.ui.BuildConfig
 const val DisabledAlpha = 0.38f
 
 object GodToolsTheme {
-    private val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
+    val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
     val GT_RED = Color(red = 0xE5, green = 0x5B, blue = 0x36)
     val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 
