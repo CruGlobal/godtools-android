@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import com.facebook.AccessToken
 import com.facebook.AccessTokenManager
+import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.isAuthenticatedFlow
+import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.model.AccountInfo
@@ -69,12 +71,24 @@ internal class FacebookAccountProvider @Inject constructor(
     // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        val accessToken = accessTokenManager.currentAccessToken
-        val request = accessToken?.token?.let { AuthToken.Request(fbAccessToken = it) } ?: return null
-        val token = authApi.authenticate(request).takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors() }
-            ?.dataSingle
+        var accessToken = accessTokenManager.currentAccessToken ?: return null
+        var resp = authenticateWithMobileContentApi(accessToken) ?: return null
+
+        // try refreshing the access token if the API rejected it
+        if (resp.code() == 400) {
+            accessToken = try {
+                accessTokenManager.refreshCurrentAccessToken() ?: return null
+            } catch (e: FacebookException) {
+                return null
+            }
+            resp = authenticateWithMobileContentApi(accessToken) ?: return null
+        }
+
+        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors() }?.dataSingle
         if (token != null) prefs.edit { putString(PREF_USER_ID(accessToken), token.userId) }
         return token
     }
+
+    private suspend fun authenticateWithMobileContentApi(accessToken: AccessToken?) =
+        accessToken?.token?.let { authApi.authenticate(AuthToken.Request(fbAccessToken = it)) }
 }

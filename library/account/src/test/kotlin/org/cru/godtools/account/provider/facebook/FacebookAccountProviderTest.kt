@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.facebook.AccessToken
 import com.facebook.AccessTokenManager
+import com.facebook.FacebookException
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
@@ -26,6 +27,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
+import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.api.AuthApi
@@ -51,6 +53,7 @@ class FacebookAccountProviderTest {
     fun setup() {
         mockkStatic(CLASS_ACCESS_TOKEN_MANAGER_KTX)
         every { accessTokenManager.currentAccessTokenFlow() } returns currentAccessTokenFlow
+        coEvery { accessTokenManager.refreshCurrentAccessToken() } returns null
         provider = FacebookAccountProvider(
             accessTokenManager = accessTokenManager,
             authApi = api,
@@ -123,7 +126,7 @@ class FacebookAccountProviderTest {
         assertEquals(token, provider.authenticateWithMobileContentApi())
         assertEquals(token.userId, provider.userId())
         coVerifyAll {
-            api.authenticate(match { it.fbAccessToken == accessToken.token })
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
 
@@ -137,14 +140,51 @@ class FacebookAccountProviderTest {
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - HTTP 401`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh successful`() = runTest {
+        val accessToken = accessToken()
+        val accessToken2 = accessToken()
+        val token = AuthToken(userId = UUID.randomUUID().toString())
+        currentAccessTokenFlow.value = accessToken
+        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token)) }
+            .returns(Response.error(400, "".toResponseBody()))
+        coEvery { accessTokenManager.refreshCurrentAccessToken() } returns accessToken2
+        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token)) }
+            .returns(Response.success(JsonApiObject.of(token)))
+
+        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(token.userId, provider.userId())
+        coVerifyAll {
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            accessTokenManager.refreshCurrentAccessToken()
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token))
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh doesn't return access_token`() = runTest {
         val accessToken = accessToken()
         currentAccessTokenFlow.value = accessToken
-        coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
+        coEvery { api.authenticate(any()) } returns Response.error(400, "".toResponseBody())
+        coEvery { accessTokenManager.refreshCurrentAccessToken() } returns null
 
         assertNull(provider.authenticateWithMobileContentApi())
         coVerifyAll {
-            api.authenticate(match { it.fbAccessToken == accessToken.token })
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            accessTokenManager.refreshCurrentAccessToken()
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh throws exception`() = runTest {
+        val accessToken = accessToken()
+        currentAccessTokenFlow.value = accessToken
+        coEvery { api.authenticate(any()) } returns Response.error(400, "".toResponseBody())
+        coEvery { accessTokenManager.refreshCurrentAccessToken() } throws FacebookException()
+
+        assertNull(provider.authenticateWithMobileContentApi())
+        coVerifyAll {
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            accessTokenManager.refreshCurrentAccessToken()
         }
     }
 
@@ -156,7 +196,7 @@ class FacebookAccountProviderTest {
 
         assertNull(provider.authenticateWithMobileContentApi())
         coVerifyAll {
-            api.authenticate(match { it.fbAccessToken == accessToken.token })
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
 
@@ -168,7 +208,7 @@ class FacebookAccountProviderTest {
 
         assertNull(provider.authenticateWithMobileContentApi())
         coVerifyAll {
-            api.authenticate(match { it.fbAccessToken == accessToken.token })
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
 
@@ -182,7 +222,7 @@ class FacebookAccountProviderTest {
         assertEquals(token, provider.authenticateWithMobileContentApi())
         assertNull(provider.userId())
         coVerifyAll {
-            api.authenticate(match { it.fbAccessToken == accessToken.token })
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
     // endregion authenticateWithMobileContentApi()
