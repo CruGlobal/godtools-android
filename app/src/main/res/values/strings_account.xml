@@ -40,7 +40,7 @@
         <item quantity="other">Shared %1$,d images</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="one">Completed %1$,d training tips</item>
+        <item quantity="one">Completed %1$,d training tip</item>
         <item quantity="other">Completed %1$,d training tips</item>
     </plurals>
 
