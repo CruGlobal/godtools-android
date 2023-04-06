@@ -24,6 +24,7 @@ interface TranslationsRepository {
         tools: Collection<String>? = null,
         languages: Collection<Locale>? = null,
     ): List<Translation>
+    fun getTranslationsFlow() = getTranslationsFlowFor()
     fun getTranslationsFlowFor(
         tools: Collection<String>? = null,
         languages: Collection<Locale>? = null,

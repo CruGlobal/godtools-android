@@ -161,6 +161,29 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion getTranslationsFor()
 
+    // region getTranslationsFlow()
+    @Test
+    fun `getTranslationsFlow()`() = testScope.runTest {
+        repository.getTranslationsFlow().test {
+            assertTrue(awaitItem().isEmpty())
+
+            val translations1 = List(2) { createTranslation() }
+            repository.storeInitialTranslations(translations1)
+            assertNotNull(awaitItem()) {
+                assertEquals(2, it.size)
+                assertEquals(translations1.map { it.id }.toSet(), it.map { it.id }.toSet())
+            }
+
+            val translations2 = List(8) { createTranslation() }
+            repository.storeInitialTranslations(translations2)
+            assertNotNull(awaitItem()) {
+                assertEquals(10, it.size)
+                assertEquals((translations1 + translations2).map { it.id }.toSet(), it.map { it.id }.toSet())
+            }
+        }
+    }
+    // endregion getTranslationsFlow()
+
     // region getTranslationsForToolFlow()
     @Test
     fun `getTranslationsForToolFlow()`() = testScope.runTest {
