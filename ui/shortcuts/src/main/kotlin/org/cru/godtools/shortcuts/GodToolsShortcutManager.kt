@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.picasso.getBitmap
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
@@ -46,8 +45,8 @@ import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createCyoaActivityIntent
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
@@ -64,8 +63,8 @@ internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
+    private val attachmentsRepository: AttachmentsRepository,
     private val context: Context,
-    private val dao: GodToolsDao,
     eventBus: EventBus,
     private val fs: ToolFileSystem,
     private val picasso: Picasso,
@@ -77,8 +76,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 ) {
     @Inject
     constructor(
+        attachmentsRepository: AttachmentsRepository,
         @ApplicationContext context: Context,
-        dao: GodToolsDao,
         eventBus: EventBus,
         fs: ToolFileSystem,
         picasso: Picasso,
@@ -86,15 +85,15 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         toolsRepository: ToolsRepository,
         translationsRepository: TranslationsRepository,
     ) : this(
+        attachmentsRepository,
         context,
-        dao,
         eventBus,
         fs,
         picasso,
         settings,
         toolsRepository,
         translationsRepository,
-        CoroutineScope(Dispatchers.Default + SupervisorJob())
+        coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
@@ -250,7 +249,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
-            ?.let { dao.find<Attachment>(it) }
+            ?.let { attachmentsRepository.findAttachment(it) }
             ?.getFile(fs)
             ?.let {
                 try {
@@ -278,6 +277,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Singleton
     class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
+        attachmentsRepository: AttachmentsRepository,
         private val dao: GodToolsDao,
         settings: Settings,
         coroutineScope: CoroutineScope
@@ -285,16 +285,24 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @Inject
         constructor(
             manager: GodToolsShortcutManager,
+            attachmentsRepository: AttachmentsRepository,
             dao: GodToolsDao,
             settings: Settings,
-        ) : this(manager, dao, settings, CoroutineScope(Dispatchers.Default + SupervisorJob()))
+        ) : this(
+            manager = manager,
+            attachmentsRepository = attachmentsRepository,
+            dao = dao,
+            settings = settings,
+            coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+        )
 
         @VisibleForTesting
         internal val updatePendingShortcutsJob = coroutineScope.launch {
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
+                attachmentsRepository.attachmentsChangeFlow(),
+                dao.invalidationFlow(Tool::class.java, Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
                 manager.updatePendingShortcuts()
@@ -308,7 +316,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
-                dao.invalidationFlow(Tool::class.java, Attachment::class.java, Translation::class.java)
+                attachmentsRepository.attachmentsChangeFlow(),
+                dao.invalidationFlow(Tool::class.java, Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_SHORTCUTS)
                 manager.updateShortcuts()

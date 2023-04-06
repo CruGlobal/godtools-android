@@ -75,8 +75,8 @@ class GodToolsShortcutManagerTest {
         }
 
         shortcutManager = GodToolsShortcutManager(
-            app,
-            dao = mockk(),
+            attachmentsRepository = mockk(),
+            context = app,
             eventBus = mockk(relaxUnitFun = true),
             fs = mockk(),
             picasso = mockk(),

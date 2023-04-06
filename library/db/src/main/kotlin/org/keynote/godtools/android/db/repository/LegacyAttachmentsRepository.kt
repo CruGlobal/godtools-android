@@ -35,6 +35,9 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
     override suspend fun getAttachments() = dao.getAsync(Query.select<Attachment>()).await()
     override fun getAttachmentsFlow() = dao.getAsFlow(Query.select<Attachment>())
 
+    override fun attachmentsChangeFlow(emitOnStart: Boolean) =
+        dao.invalidationFlow(Attachment::class.java, emitOnStart = emitOnStart)
+
     override suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean) {
         val attachment = Attachment().apply {
             this.id = id

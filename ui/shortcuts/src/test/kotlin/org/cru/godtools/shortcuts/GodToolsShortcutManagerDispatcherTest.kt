@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +35,7 @@ class GodToolsShortcutManagerDispatcherTest {
     // various flows
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1, extraBufferCapacity = 20)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
+    private val attachmentsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val invalidationFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
 
     @Before
@@ -42,6 +44,10 @@ class GodToolsShortcutManagerDispatcherTest {
         assertTrue(parallelLanguageFlow.tryEmit(null))
     }
 
+    private val attachmentsRepository: AttachmentsRepository = mockk {
+        every { attachmentsChangeFlow(false) } returns attachmentsChangeFlow
+        every { attachmentsChangeFlow(true) } returns attachmentsChangeFlow.onStart { emit(Unit) }
+    }
     private val dao: GodToolsDao = mockk {
         every { invalidationFlow(*anyVararg(), emitOnStart = false) } returns invalidationFlow
         every { invalidationFlow(*anyVararg(), emitOnStart = true) } returns invalidationFlow.onStart { emit(Unit) }
@@ -56,8 +62,9 @@ class GodToolsShortcutManagerDispatcherTest {
     private val dispatcher by lazy {
         GodToolsShortcutManager.Dispatcher(
             shortcutManager,
-            dao,
-            settings,
+            attachmentsRepository = attachmentsRepository,
+            dao = dao,
+            settings = settings,
             coroutineScope = testScope.backgroundScope
         )
     }
@@ -135,17 +142,35 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
+    fun `updateShortcutsJob - Trigger on attachments Update`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        runCurrent()
+        clearMocks(shortcutManager)
+
+        // trigger a primary language update
+        assertTrue(attachmentsChangeFlow.tryEmit(Unit))
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Aggregates multiple events`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verify { shortcutManager wasNot Called }
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(attachmentsChangeFlow.tryEmit(Unit))
+        assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS)

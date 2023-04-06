@@ -10,6 +10,8 @@ interface AttachmentsRepository {
     suspend fun getAttachments(): List<Attachment>
     fun getAttachmentsFlow(): Flow<List<Attachment>>
 
+    fun attachmentsChangeFlow(emitOnStart: Boolean = true): Flow<Any?>
+
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 
     // region Initial Content Methods
