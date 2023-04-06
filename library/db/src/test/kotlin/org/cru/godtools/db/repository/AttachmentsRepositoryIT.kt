@@ -10,6 +10,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
@@ -71,6 +72,36 @@ abstract class AttachmentsRepositoryIT {
         assertEquals("name2.bin", attachment2.filename)
         assertFalse(attachment2.isDownloaded)
     }
+
+    // region attachmentsChangeFlow()
+    @Test
+    fun `attachmentsChangeFlow(emitOnStart = true)`() = testScope.runTest {
+        repository.attachmentsChangeFlow(emitOnStart = true).test {
+            expectMostRecentItem()
+
+            val attachment = Attachment().apply {
+                id = 1
+                filename = "name1.bin"
+                isDownloaded = false
+            }
+            repository.storeInitialAttachments(listOf(attachment))
+            runCurrent()
+            expectMostRecentItem()
+
+            repository.updateAttachmentDownloaded(attachment.id, true)
+            runCurrent()
+            expectMostRecentItem()
+        }
+    }
+
+    @Test
+    fun `attachmentsChangeFlow(emitOnStart = false)`() = testScope.runTest {
+        repository.attachmentsChangeFlow(emitOnStart = false).test {
+            runCurrent()
+            expectNoEvents()
+        }
+    }
+    // endregion attachmentsChangeFlow()
 
     @Test
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
