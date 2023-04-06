@@ -280,6 +280,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
         private val dao: GodToolsDao,
         settings: Settings,
+        toolsRepository: ToolsRepository,
         coroutineScope: CoroutineScope
     ) {
         @Inject
@@ -288,11 +289,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             attachmentsRepository: AttachmentsRepository,
             dao: GodToolsDao,
             settings: Settings,
+            toolsRepository: ToolsRepository,
         ) : this(
             manager = manager,
             attachmentsRepository = attachmentsRepository,
             dao = dao,
             settings = settings,
+            toolsRepository = toolsRepository,
             coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
         )
 
@@ -302,7 +305,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
-                dao.invalidationFlow(Tool::class.java, Translation::class.java)
+                toolsRepository.toolsChangeFlow(),
+                dao.invalidationFlow(Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
                 manager.updatePendingShortcuts()
@@ -317,7 +321,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
-                dao.invalidationFlow(Tool::class.java, Translation::class.java)
+                toolsRepository.toolsChangeFlow(),
+                dao.invalidationFlow(Translation::class.java)
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_SHORTCUTS)
                 manager.updateShortcuts()

@@ -238,6 +238,35 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getLessonsFlow()
 
+    // region toolsChangeFlow()
+    @Test
+    fun `toolsChangeFlow(emitOnStart = true)`() = testScope.runTest {
+        repository.toolsChangeFlow(emitOnStart = true).test {
+            expectMostRecentItem()
+
+            val tool = Tool().apply {
+                id = 1
+                code = "tool"
+            }
+            repository.storeInitialResources(listOf(tool))
+            runCurrent()
+            expectMostRecentItem()
+
+            repository.pinTool("tool")
+            runCurrent()
+            expectMostRecentItem()
+        }
+    }
+
+    @Test
+    fun `toolsChangeFlow(emitOnStart = false)`() = testScope.runTest {
+        repository.toolsChangeFlow(emitOnStart = false).test {
+            runCurrent()
+            expectNoEvents()
+        }
+    }
+    // endregion toolsChangeFlow()
+
     @Test
     fun verifyPinTool() = testScope.runTest {
         val code = "pinTool"
