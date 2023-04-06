@@ -14,8 +14,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
@@ -27,14 +25,11 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolViewModels @Inject constructor(
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
     private val languagesRepository: LanguagesRepository,
@@ -73,12 +68,10 @@ class ToolViewModels @Inject constructor(
         val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val availableLanguages = Query.select<Translation>()
-            .distinct(true)
-            .projection(TranslationTable.COLUMN_LANGUAGE)
-            .where(TranslationTable.FIELD_TOOL eq code)
-            .getAsFlow(dao)
-            .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it.map { it.languageCode }) }
+        val availableLanguages = translationsRepository.getTranslationsForToolFlow(code)
+            .map { it.filter { it.isPublished }.map { it.languageCode }.toSet() }
+            .distinctUntilChanged()
+            .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
         val primaryTranslation = settings.primaryLanguageFlow
