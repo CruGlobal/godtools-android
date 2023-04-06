@@ -17,7 +17,7 @@ data class AuthToken(
     var token: String? = null
 ) {
     @JsonApiType("auth-token-request")
-    class Request(
+    data class Request(
         @JsonApiAttribute(ATTR_FACEBOOK_ACCESS_TOKEN) val fbAccessToken: String? = null,
         @JsonApiAttribute(ATTR_GOOGLE_ID_TOKEN) val googleIdToken: String? = null,
         @JsonApiAttribute(ATTR_OKTA_TOKEN) val oktaAccessToken: String? = null,
