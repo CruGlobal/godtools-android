@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -36,6 +37,7 @@ class GodToolsShortcutManagerDispatcherTest {
     private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1, extraBufferCapacity = 20)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
     private val attachmentsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
+    private val toolsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val invalidationFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 20)
 
     @Before
@@ -58,6 +60,10 @@ class GodToolsShortcutManagerDispatcherTest {
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true)
     private val testScope = TestScope()
+    private val toolsRepository: ToolsRepository = mockk {
+        every { toolsChangeFlow(false) } returns toolsChangeFlow
+        every { toolsChangeFlow(true) } returns toolsChangeFlow.onStart { emit(Unit) }
+    }
 
     private val dispatcher by lazy {
         GodToolsShortcutManager.Dispatcher(
@@ -65,6 +71,7 @@ class GodToolsShortcutManagerDispatcherTest {
             attachmentsRepository = attachmentsRepository,
             dao = dao,
             settings = settings,
+            toolsRepository = toolsRepository,
             coroutineScope = testScope.backgroundScope
         )
     }
@@ -157,6 +164,21 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
+    fun `updateShortcutsJob - Trigger on tools Update`() = testScope.runTest {
+        dispatcher.updatePendingShortcutsJob.cancel()
+        runCurrent()
+        clearMocks(shortcutManager)
+
+        // trigger a Tools update
+        assertTrue(toolsChangeFlow.tryEmit(Unit))
+        verify { shortcutManager wasNot Called }
+        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
+        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
+        confirmVerified(shortcutManager)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Aggregates multiple events`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
 
@@ -164,6 +186,7 @@ class GodToolsShortcutManagerDispatcherTest {
         assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
+        assertTrue(toolsChangeFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verify { shortcutManager wasNot Called }
@@ -171,6 +194,8 @@ class GodToolsShortcutManagerDispatcherTest {
         assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
+        assertTrue(toolsChangeFlow.tryEmit(Unit))
+        assertTrue(toolsChangeFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         assertTrue(invalidationFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS)
