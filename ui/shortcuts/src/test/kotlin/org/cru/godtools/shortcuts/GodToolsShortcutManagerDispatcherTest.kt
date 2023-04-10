@@ -99,7 +99,7 @@ class GodToolsShortcutManagerDispatcherTest {
         runCurrent()
         coVerify(exactly = 1) { shortcutManager.updatePendingShortcuts() }
         confirmVerified(shortcutManager)
-        advanceUntilIdle()
+        advanceTimeBy(10 * DELAY_UPDATE_PENDING_SHORTCUTS)
         confirmVerified(shortcutManager)
     }
 
@@ -154,7 +154,7 @@ class GodToolsShortcutManagerDispatcherTest {
         runCurrent()
         clearMocks(shortcutManager)
 
-        // trigger a primary language update
+        // trigger an Attachments update
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         verify { shortcutManager wasNot Called }
         advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
