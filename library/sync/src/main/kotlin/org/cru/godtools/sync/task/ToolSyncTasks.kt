@@ -63,7 +63,7 @@ internal class ToolSyncTasks @Inject internal constructor(
             dao.transaction {
                 syncRepository.storeTools(
                     json.data,
-                    existingTools = index(toolsRepository.getResourcesBlocking()),
+                    existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
                     includes = Includes(*API_GET_INCLUDES)
                 )
             }
@@ -87,7 +87,7 @@ internal class ToolSyncTasks @Inject internal constructor(
         dao.transaction {
             syncRepository.storeTools(
                 json.data,
-                existingTools = index(listOfNotNull(toolsRepository.findResourceBlocking(toolCode))),
+                existingTools = mutableSetOf(toolCode),
                 includes = Includes(*API_GET_INCLUDES)
             )
             dao.updateLastSyncTime(lastSyncKey)

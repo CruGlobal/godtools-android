@@ -30,9 +30,6 @@ interface ToolsRepository {
     suspend fun updateToolOrder(tools: List<String>)
     suspend fun updateToolViews(code: String, delta: Int)
 
-    @WorkerThread
-    fun deleteBlocking(tool: Tool)
-
     // region Initial Content Methods
     suspend fun storeInitialResources(tools: Collection<Resource>)
     // endregion Initial Content Methods
@@ -40,5 +37,7 @@ interface ToolsRepository {
     // region Sync Methods
     fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
     fun storeToolFromSync(tool: Tool)
+    @WorkerThread
+    fun deleteIfNotFavoriteBlocking(code: String)
     // endregion Sync Methods
 }

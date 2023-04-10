@@ -1,5 +1,7 @@
 package org.cru.godtools.model
 
+import androidx.annotation.RestrictTo
+import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
@@ -34,4 +36,17 @@ class Attachment : Base() {
 
     suspend fun getFile(fs: FileSystem) = localFilename?.let { fs.file(it) }
     fun getFileBlocking(fs: FileSystem) = localFilename?.let { fs.getFileBlocking(it) }
+}
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun Attachment(
+    id: Long = Random.nextLong(),
+    tool: Tool? = null,
+    toolId: Long? = tool?.id,
+    block: Attachment.() -> Unit = {},
+) = Attachment().apply {
+    this.id = id
+    this.toolId = toolId
+    block()
 }

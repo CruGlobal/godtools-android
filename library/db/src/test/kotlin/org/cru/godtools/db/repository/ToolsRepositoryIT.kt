@@ -20,11 +20,9 @@ import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.hasSize
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class ToolsRepositoryIT {
@@ -319,49 +317,6 @@ abstract class ToolsRepositoryIT {
     }
     // endregion updateToolShares()
 
-    // region deleteBlocking()
-    @Test
-    fun `deleteBlocking()`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
-        repository.storeToolsFromSync(listOf(tool1, tool2))
-        assertThat(repository.getTools(), allOf(hasSize(2), containsInAnyOrder(tool(tool1), tool(tool2))))
-
-        repository.deleteBlocking(tool1)
-        assertThat(repository.getTools(), allOf(hasSize(1), contains(tool(tool2))))
-    }
-
-    @Test
-    fun `deleteBlocking() - delete related attachments`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
-        repository.storeToolsFromSync(listOf(tool1, tool2))
-        attachmentsRepository.storeAttachmentsFromSync(
-            listOf(
-                Attachment().apply {
-                    id = 1
-                    toolId = tool1.id
-                },
-                Attachment().apply {
-                    id = 2
-                    toolId = tool1.id
-                },
-                Attachment().apply {
-                    id = 3
-                    toolId = tool2.id
-                }
-            )
-        )
-        assertThat(repository.getTools(), containsInAnyOrder(tool(tool1), tool(tool2)))
-        assertEquals(setOf(1L, 2L, 3L), attachmentsRepository.getAttachments().map { it.id }.toSet())
-
-        repository.deleteBlocking(tool1)
-        assertThat(repository.getTools(), contains(tool(tool2)))
-        assertEquals(setOf(3L), attachmentsRepository.getAttachments().map { it.id }.toSet())
-    }
-    // endregion deleteBlocking()
-
-    // region Sync Methods
     // region storeToolFromSync()
     @Test
     fun `storeToolFromSync()`() = testScope.runTest {
@@ -383,5 +338,50 @@ abstract class ToolsRepositoryIT {
         assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
     }
     // endregion storeToolFromSync()
-    // endregion Sync Methods
+
+    // region deleteIfNotFavoriteBlocking()
+    @Test
+    fun `deleteIfNotFavoriteBlocking()`() = testScope.runTest {
+        repository.storeToolFromSync(Tool("tool"))
+        assertNotNull(repository.findTool("tool"))
+
+        repository.deleteIfNotFavoriteBlocking("tool")
+        assertNull(repository.findTool("tool"))
+    }
+
+    @Test
+    fun `deleteIfNotFavoriteBlocking() - Delete related Attachments`() = testScope.runTest {
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        val tool3 = Tool("tool3") { isAdded = true }
+        val attachment1 = Attachment(tool = tool1)
+        val attachment2 = Attachment(tool = tool2)
+        val attachment3 = Attachment(tool = tool3)
+        repository.storeToolsFromSync(listOf(tool1, tool2, tool3))
+        attachmentsRepository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
+        assertNotNull(attachmentsRepository.findAttachment(attachment1.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
+
+        repository.deleteIfNotFavoriteBlocking("tool1")
+        assertNull(attachmentsRepository.findAttachment(attachment1.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
+
+        // tool 3 is favorited, so it shouldn't be deleted or any associated attachments
+        repository.deleteIfNotFavoriteBlocking("tool3")
+        assertNull(attachmentsRepository.findAttachment(attachment1.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
+        assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
+    }
+
+    @Test
+    fun `deleteIfNotFavoriteBlocking() - Don't delete favorited tools`() = testScope.runTest {
+        repository.storeToolFromSync(Tool("tool") { isAdded = true })
+        assertNotNull(repository.findTool("tool"))
+
+        repository.deleteIfNotFavoriteBlocking("tool")
+        assertNotNull(repository.findTool("tool"))
+    }
+    // endregion deleteIfNotFavoriteBlocking()
 }

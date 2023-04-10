@@ -99,13 +99,6 @@ internal class LegacyToolsRepository @Inject constructor(
     }
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateSharesDelta(code, delta)
 
-    override fun deleteBlocking(tool: Tool) = dao.transaction {
-        dao.delete(tool)
-        // TODO: switch this to the TranslationsRepository eventually
-        tool.code?.let { dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(it)) }
-        attachmentsRepository.deleteAttachmentsFor(tool)
-    }
-
     // region Initial Content Methods
     override suspend fun storeInitialResources(tools: Collection<Tool>) = dao.transactionAsync {
         tools.forEach { dao.insert(it, SQLiteDatabase.CONFLICT_IGNORE) }
@@ -123,6 +116,19 @@ internal class LegacyToolsRepository @Inject constructor(
             ToolTable.COLUMN_SCREEN_SHARE_DISABLED, ToolTable.COLUMN_SPOTLIGHT, ToolTable.COLUMN_META_TOOL,
             ToolTable.COLUMN_DEFAULT_VARIANT
         )
+    }
+
+    override fun deleteIfNotFavoriteBlocking(code: String) {
+        dao.transaction {
+            dao.find<Tool>(code)
+                ?.takeUnless { it.isAdded }
+                ?.let {
+                    dao.delete(it)
+                    // TODO: switch this to the TranslationsRepository eventually
+                    dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(code))
+                    attachmentsRepository.deleteAttachmentsFor(it)
+                }
+        }
     }
     // endregion Sync Methods
 }
