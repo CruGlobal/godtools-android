@@ -1,6 +1,7 @@
 package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
+import androidx.annotation.VisibleForTesting
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -131,7 +132,8 @@ class Tool : Base() {
         private set
     @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
     var latestTranslations: List<Translation>? = null
-        private set
+        @VisibleForTesting
+        internal set
 
     @JsonApiIgnore
     var isAdded = false
@@ -148,10 +150,12 @@ class Tool : Base() {
 fun Tool(
     code: String,
     type: Tool.Type = Tool.Type.TRACT,
+    translations: List<Translation>? = null,
     config: Tool.() -> Unit = {},
 ) = Tool().apply {
     id = Random.nextLong()
     this.code = code
     this.type = type
+    latestTranslations = translations
     config()
 }

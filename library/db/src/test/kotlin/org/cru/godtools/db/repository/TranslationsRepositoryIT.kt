@@ -111,6 +111,20 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion findLatestTranslation()
 
+    // region getTranslationsForToolBlocking()
+    @Test
+    fun `getTranslationsForToolBlocking()`() = testScope.runTest {
+        val tool1 = Translation("tool1")
+        val tool2 = Translation("tool2")
+        repository.storeInitialTranslations(listOf(tool1, tool2))
+
+        assertEquals(
+            setOf(tool1.id),
+            repository.getTranslationsForToolBlocking("tool1").map { it.id }.toSet()
+        )
+    }
+    // endregion getTranslationsForToolBlocking()
+
     // region getTranslationsFor()
     @Test
     fun `getTranslationsFor()`() = testScope.runTest {
