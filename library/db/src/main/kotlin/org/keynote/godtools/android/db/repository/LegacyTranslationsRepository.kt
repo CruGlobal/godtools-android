@@ -13,6 +13,7 @@ import org.ccci.gto.android.common.androidx.collection.WeakLruCache
 import org.ccci.gto.android.common.androidx.collection.getOrPut
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Query
+import org.ccci.gto.android.common.db.find
 import org.ccci.gto.android.common.db.findAsync
 import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.db.getAsFlow
@@ -132,4 +133,14 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
             TranslationTable.COLUMN_DOWNLOADED
         ).await()
     }
+
+    // region Sync Methods
+    override fun deleteTranslationIfNotDownloadedBlocking(id: Long) {
+        dao.transaction {
+            dao.find<Translation>(id)
+                ?.takeUnless { it.isDownloaded }
+                ?.let { dao.delete(it) }
+        }
+    }
+    // endregion Sync Methods
 }

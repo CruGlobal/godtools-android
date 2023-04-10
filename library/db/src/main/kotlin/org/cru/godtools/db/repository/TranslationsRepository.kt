@@ -44,4 +44,8 @@ interface TranslationsRepository {
     // region ManifestManager Methods
     suspend fun markBrokenManifestNotDownloaded(manifestName: String)
     // endregion ManifestManager Methods
+
+    // region Sync Methods
+    fun deleteTranslationIfNotDownloadedBlocking(id: Long)
+    // endregion Sync Methods
 }

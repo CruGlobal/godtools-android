@@ -2,7 +2,7 @@ package org.cru.godtools.sync.repository
 
 import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSparseArray
-import androidx.collection.valueIterator
+import androidx.collection.keyIterator
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.ccci.gto.android.common.db.Query
@@ -11,6 +11,7 @@ import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -24,6 +25,7 @@ internal class SyncRepository @Inject constructor(
     private val dao: GodToolsDao,
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
+    private val translationsRepository: TranslationsRepository,
 ) {
     // region Tools
     fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) {
@@ -97,9 +99,7 @@ internal class SyncRepository @Inject constructor(
         }
 
         // prune any existing translations that weren't synced and aren't downloaded to the device
-        existing?.valueIterator()?.forEach { translation ->
-            dao.refresh(translation)?.takeUnless { it.isDownloaded }?.let { dao.delete(it) }
-        }
+        existing?.keyIterator()?.forEach { translationsRepository.deleteTranslationIfNotDownloadedBlocking(it) }
     }
 
     private fun storeTranslation(translation: Translation, includes: Includes) {

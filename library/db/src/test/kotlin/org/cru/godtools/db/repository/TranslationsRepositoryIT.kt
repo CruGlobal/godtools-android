@@ -8,6 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -314,6 +315,28 @@ abstract class TranslationsRepositoryIT {
         valid.forEach { assertNotNull(repository.findTranslation(it.id)) { assertTrue(it.isDownloaded) } }
     }
     // endregion markBrokenManifestNotDownloaded()
+
+    // region deleteTranslationIfNotDownloadedBlocking()
+    @Test
+    fun `deleteTranslationIfNotDownloadedBlocking()`() = testScope.runTest {
+        val translation = Translation("tool", Locale.ENGLISH, 1) { isDownloaded = false }
+        repository.storeInitialTranslations(listOf(translation))
+        assertNotNull(repository.findTranslation(translation.id))
+
+        repository.deleteTranslationIfNotDownloadedBlocking(translation.id)
+        assertNull(repository.findTranslation(translation.id))
+    }
+
+    @Test
+    fun `deleteTranslationIfNotDownloadedBlocking() - Translation Downloaded`() = testScope.runTest {
+        val translation = Translation("tool", Locale.ENGLISH, 1) { isDownloaded = true }
+        repository.storeInitialTranslations(listOf(translation))
+        assertNotNull(repository.findTranslation(translation.id))
+
+        repository.deleteTranslationIfNotDownloadedBlocking(translation.id)
+        assertNotNull(repository.findTranslation(translation.id))
+    }
+    // endregion deleteTranslationIfNotDownloadedBlocking()
 
     private fun createTranslation(
         id: Long = Random.nextLong(),
