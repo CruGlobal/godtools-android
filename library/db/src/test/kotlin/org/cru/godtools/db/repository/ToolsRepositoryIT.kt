@@ -44,7 +44,7 @@ abstract class ToolsRepositoryIT {
     // region findResourceBlocking()
     @Test
     fun `findResourceBlocking()`() = testScope.runTest {
-        val resource = Resource("tool")
+        val resource = Resource("tool", Tool.Type.TRACT)
         repository.storeToolFromSync(resource)
 
         assertNull(repository.findResourceBlocking("other"))
@@ -108,7 +108,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getTools() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
+        val meta = Resource("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
         val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
         val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
         repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))

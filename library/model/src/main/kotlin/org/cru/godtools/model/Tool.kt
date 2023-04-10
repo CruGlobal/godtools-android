@@ -30,7 +30,7 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(JSON_API_TYPE)
-class Tool() : Base() {
+class Tool : Base() {
     companion object {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
@@ -59,22 +59,6 @@ class Tool() : Base() {
                 else -> values().firstOrNull { json == it.json } ?: DEFAULT
             }
         }
-    }
-
-    @RestrictTo(RestrictTo.Scope.TESTS)
-    constructor(
-        code: String,
-        type: Type = Type.TRACT,
-        metatool: String? = null,
-        defaultOrder: Int = 0,
-        config: Tool.() -> Unit = {},
-    ) : this() {
-        id = Random.nextLong()
-        this.code = code
-        this.type = type
-        this.metatoolCode = metatool
-        this.defaultOrder = defaultOrder
-        config()
     }
 
     @JsonApiAttribute(JSON_ABBREVIATION)
@@ -157,4 +141,17 @@ class Tool() : Base() {
     var isSpotlight = false
 
     val isValid get() = code != null
+}
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun Tool(
+    code: String,
+    type: Tool.Type = Tool.Type.TRACT,
+    config: Tool.() -> Unit = {},
+) = Tool().apply {
+    id = Random.nextLong()
+    this.code = code
+    this.type = type
+    config()
 }

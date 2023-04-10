@@ -66,8 +66,8 @@ class ToolTest {
 
     @Test
     fun testComparatorDefaultOrder() {
-        val tool1 = Tool("", defaultOrder = 1)
-        val tool2 = Tool("", defaultOrder = 2)
+        val tool1 = Tool("") { defaultOrder = 1 }
+        val tool2 = Tool("") { defaultOrder = 2 }
 
         assertEquals(0, Tool.COMPARATOR_DEFAULT_ORDER.compare(tool1, tool1))
         assertEquals(0, Tool.COMPARATOR_DEFAULT_ORDER.compare(tool2, tool2))

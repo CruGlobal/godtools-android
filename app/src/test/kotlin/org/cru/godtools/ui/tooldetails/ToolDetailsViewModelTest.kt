@@ -57,8 +57,8 @@ class ToolDetailsViewModelTest {
 
     @Test
     fun `Property variants`() = testScope.runTest {
-        val tool = Tool(TOOL, metatool = "meta")
-        val variant1 = Tool("variant1", metatool = "meta")
+        val tool = Tool(TOOL) { metatoolCode = "meta" }
+        val variant1 = Tool("variant1") { metatoolCode = "meta" }
         val tool2 = Tool("tool2")
         viewModel.setToolCode(TOOL)
         toolsFlow.value = listOf(tool, tool2, variant1)
