@@ -330,6 +330,17 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion markBrokenManifestNotDownloaded()
 
+    @Test
+    fun `storeTranslationsFromSync()`() = testScope.runTest {
+        val translation = Translation("tool")
+
+        repository.storeTranslationFromSync(translation)
+        assertNotNull(repository.findTranslation(translation.id)) {
+            assertEquals(translation.toolCode, it.toolCode)
+            assertEquals(translation.manifestFileName, it.manifestFileName)
+        }
+    }
+
     // region deleteTranslationIfNotDownloadedBlocking()
     @Test
     fun `deleteTranslationIfNotDownloadedBlocking()`() = testScope.runTest {

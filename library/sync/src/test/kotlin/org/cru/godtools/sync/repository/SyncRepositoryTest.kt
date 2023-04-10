@@ -23,7 +23,6 @@ class SyncRepositoryTest {
 
     private val syncRepository = SyncRepository(
         attachmentsRepository = mockk(),
-        dao = mockk(relaxUnitFun = true),
         languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
@@ -116,6 +115,8 @@ class SyncRepositoryTest {
         verifyAll {
             toolsRepository.storeToolFromSync(tool)
             translationsRepository.getTranslationsForToolBlocking("tool")
+            translationsRepository.storeTranslationFromSync(trans1)
+            translationsRepository.storeTranslationFromSync(trans2)
             translationsRepository.deleteTranslationIfNotDownloadedBlocking(trans3.id)
         }
     }
