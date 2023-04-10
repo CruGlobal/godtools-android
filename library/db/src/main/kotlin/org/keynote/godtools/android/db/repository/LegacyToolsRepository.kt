@@ -124,5 +124,18 @@ internal class LegacyToolsRepository @Inject constructor(
             ToolTable.COLUMN_DEFAULT_VARIANT
         )
     }
+
+    override fun deleteIfNotFavoriteBlocking(code: String) {
+        dao.transaction {
+            dao.find<Tool>(code)
+                ?.takeUnless { it.isAdded }
+                ?.let {
+                    dao.delete(it)
+                    // TODO: switch this to the TranslationsRepository eventually
+                    dao.delete(Translation::class.java, TranslationTable.FIELD_TOOL.eq(code))
+                    attachmentsRepository.deleteAttachmentsFor(it)
+                }
+        }
+    }
     // endregion Sync Methods
 }
