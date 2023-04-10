@@ -30,9 +30,6 @@ interface ToolsRepository {
     suspend fun updateToolOrder(tools: List<String>)
     suspend fun updateToolViews(code: String, delta: Int)
 
-    @WorkerThread
-    fun deleteBlocking(tool: Tool)
-
     // region Initial Content Methods
     suspend fun storeInitialResources(tools: Collection<Resource>)
     // endregion Initial Content Methods
