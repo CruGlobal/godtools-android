@@ -53,6 +53,7 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -61,8 +62,6 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
 import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -76,7 +75,6 @@ internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val downloadedFilesRepository: DownloadedFilesRepository,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
@@ -90,7 +88,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal constructor(
         attachmentsApi: AttachmentsApi,
         attachmentsRepository: AttachmentsRepository,
-        dao: GodToolsDao,
         downloadedFilesRepository: DownloadedFilesRepository,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
@@ -100,7 +97,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) : this(
         attachmentsApi,
         attachmentsRepository,
-        dao,
         downloadedFilesRepository,
         fs,
         manifestParser,
@@ -232,7 +228,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         require(fs.exists())
 
         translationsMutex.withLock(key) {
-            val translation = translationsRepository.getLatestTranslation(key.tool, key.locale)
+            val translation = translationsRepository.findLatestTranslation(key.tool, key.locale)
                 ?.takeUnless { it.isDownloaded }
                 ?: return true
 
@@ -253,7 +249,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
-            val current = translationsRepository.getLatestTranslation(key.tool, key.locale, isDownloaded = true)
+            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, isDownloaded = true)
             if (current != null && current.version >= translation.version) return
 
             startProgress(key)
@@ -298,8 +294,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         // record the translation as downloaded
         downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, manifestFileName))
         relatedFiles.forEach { downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it)) }
-        translation.isDownloaded = true
-        dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+        translationsRepository.markTranslationDownloaded(translation.id, true)
 
         return true
     }
@@ -356,27 +351,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             }
 
             // mark translation as downloaded
-            translation.isDownloaded = true
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            translationsRepository.markTranslationDownloaded(translation.id, true)
         }
     }
 
     @VisibleForTesting
     internal suspend fun pruneStaleTranslations() = withContext(Dispatchers.Default) {
-        val changes = dao.transaction(true) {
-            val seen = mutableSetOf<TranslationKey>()
-            dao.get(QUERY_STALE_TRANSLATIONS).asSequence()
-                .filterNot { seen.add(TranslationKey(it)) }
-                .filter { it.isDownloaded }
-                .onEach {
-                    it.isDownloaded = false
-                    dao.update(it, TranslationTable.COLUMN_DOWNLOADED)
-                }
-                .count()
-        }
-
         // if any translations were updated, send a broadcast
-        if (changes > 0) cleanupActor.send(Unit)
+        translationsRepository.markStaleTranslationsAsNotDownloaded()
+            .also { if (it) cleanupActor.send(Unit) }
     }
     // endregion Translations
 
@@ -412,7 +395,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun deleteOrphanedTranslationFiles() = filesystemMutex.write.withLock {
-        val downloadedTranslations = dao.getAsync(Query.select<Translation>()).await()
+        val downloadedTranslations = translationsRepository.getTranslations()
             .filter { it.isDownloaded }
             .map { it.id }
 

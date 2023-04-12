@@ -6,15 +6,16 @@ import androidx.work.WorkManager
 import app.cash.turbine.test
 import app.cash.turbine.testIn
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coExcludeRecords
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
-import io.mockk.coVerifyOrder
 import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
@@ -24,7 +25,6 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -35,17 +35,16 @@ import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
 import okio.buffer
 import okio.source
-import org.ccci.gto.android.common.db.Query
 import org.cru.godtools.api.AttachmentsApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation
-import org.cru.godtools.model.TranslationFile
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
@@ -63,9 +62,6 @@ import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -80,10 +76,6 @@ class GodToolsDownloadManagerTest {
 
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
-    private val dao = mockk<GodToolsDao>(relaxUnitFun = true) {
-        every { transaction(any(), any<() -> Any>()) } answers { (it.invocation.args[1] as () -> Any).invoke() }
-        excludeRecords { transaction(any(), any()) }
-    }
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk(relaxUnitFun = true) {
         coEvery { findDownloadedFile(any()) } returns null
         coEvery { getDownloadedFiles() } returns emptyList()
@@ -100,7 +92,9 @@ class GodToolsDownloadManagerTest {
         excludeRecords { defaultConfig }
     }
     private val translationsApi = mockk<TranslationsApi>()
-    private val translationsRepository = mockk<TranslationsRepository>()
+    private val translationsRepository: TranslationsRepository = mockk {
+        coEvery { markStaleTranslationsAsNotDownloaded() } returns false
+    }
     private val workManager = mockk<WorkManager> {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
@@ -109,7 +103,6 @@ class GodToolsDownloadManagerTest {
     private val downloadManager = GodToolsDownloadManager(
         attachmentsApi,
         attachmentsRepository,
-        dao,
         downloadedFilesRepository,
         fs,
         manifestParser,
@@ -260,7 +253,10 @@ class GodToolsDownloadManagerTest {
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertFalse(file.exists())
-        verify { dao wasNot Called }
+        verify {
+            attachmentsRepository wasNot Called
+            downloadedFilesRepository wasNot Called
+        }
     }
 
     @Test
@@ -271,8 +267,7 @@ class GodToolsDownloadManagerTest {
         assertTrue(attachment.isDownloaded)
         coVerify(inverse = true) {
             fs.file(any())
-            dao.updateOrInsert(any())
-            dao.update(any())
+            translationsRepository.markTranslationDownloaded(any(), any())
         }
     }
 
@@ -282,11 +277,9 @@ class GodToolsDownloadManagerTest {
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
         assertTrue(attachment.isDownloaded)
-        coVerify {
-            attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
-            dao wasNot Called
-        }
+        coVerify { attachmentsRepository.updateAttachmentDownloaded(attachment.id, true) }
         coVerify(exactly = 0) { fs.file(any()) }
+        confirmVerified(attachmentsRepository, downloadedFilesRepository)
     }
     // endregion importAttachment()
 
@@ -301,19 +294,15 @@ class GodToolsDownloadManagerTest {
         isDownloaded = false
     }
 
-    @Before
-    fun setupTranslationMocks() {
-        every { dao.update(any<Translation>(), TranslationTable.COLUMN_DOWNLOADED) } returns 1
-    }
-
     // region downloadLatestPublishedTranslation()
     @Test
     fun `downloadLatestPublishedTranslation() - Files`() = testScope.runTest {
         downloadManager.cleanupActor.close()
         translation.manifestFileName = "manifest.xml"
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
+        coEvery { translationsRepository.markTranslationDownloaded(any(), any()) } just Runs
         val config = slot<ParserConfig>()
         coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
             ParserResult.Data(mockk { every { relatedFiles } returns setOf("a.txt", "b.txt") })
@@ -326,19 +315,14 @@ class GodToolsDownloadManagerTest {
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
 
-        // HACK: suppress dao calls from pruneTranslations()
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
-        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
-
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-        assertTrue(translation.isDownloaded)
         assertEquals(setOf("manifest.xml", "a.txt", "b.txt"), files.keys)
         assertArrayEquals("manifest".toByteArray(), files["manifest.xml"]!!.readBytes())
         assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertEquals(config.captured.withParseRelated(false), config.captured)
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             downloadedFilesRepository.findDownloadedFile("manifest.xml")
             translationsApi.downloadFile("manifest.xml")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("manifest.xml"))
@@ -353,7 +337,8 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "manifest.xml"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            translationsRepository.markTranslationDownloaded(translation.id, true)
+            translationsRepository.markStaleTranslationsAsNotDownloaded()
             workManager wasNot Called
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -365,25 +350,21 @@ class GodToolsDownloadManagerTest {
     fun `downloadLatestPublishedTranslation() - Zip`() = testScope.runTest {
         downloadManager.cleanupActor.close()
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
+        coEvery { translationsRepository.markTranslationDownloaded(any(), any()) } just Runs
         val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
         coEvery { translationsApi.download(translation.id) } returns Response.success(response)
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
 
-        // HACK: suppress dao calls from pruneTranslations()
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns emptyList()
-        excludeRecords { dao.get(QUERY_STALE_TRANSLATIONS) }
-
         assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-        assertTrue(translation.isDownloaded)
         assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
 
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             downloadedFilesRepository.findDownloadedFile("a.txt")
             downloadedFilesRepository.findDownloadedFile("b.txt")
@@ -394,7 +375,8 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            translationsRepository.markTranslationDownloaded(translation.id, true)
+            translationsRepository.markStaleTranslationsAsNotDownloaded()
             workManager wasNot Called
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
@@ -405,7 +387,7 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadLatestPublishedTranslation() - Zip - API IOException`() = testScope.runTest {
         coEvery {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
         coEvery { translationsApi.download(translation.id) } throws IOException()
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
@@ -413,7 +395,7 @@ class GodToolsDownloadManagerTest {
 
         assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
         coVerifyAll {
-            translationsRepository.getLatestTranslation(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
             translationsApi.download(translation.id)
             workManager.enqueueUniqueWork(any(), ExistingWorkPolicy.KEEP, any<OneTimeWorkRequest>())
         }
@@ -425,7 +407,8 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun verifyImportTranslation() = testScope.runTest {
-        coEvery { translationsRepository.getLatestTranslation(any(), any(), any()) } returns null
+        coEvery { translationsRepository.findLatestTranslation(any(), any(), any()) } returns null
+        coEvery { translationsRepository.markTranslationDownloaded(any(), any()) } just Runs
         val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
         assertNull(progressFlow.awaitItem())
 
@@ -434,7 +417,7 @@ class GodToolsDownloadManagerTest {
         assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
         assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
         coVerifyAll {
-            translationsRepository.getLatestTranslation(translation.toolCode, translation.languageCode, true)
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode, true)
             downloadedFilesRepository.findDownloadedFile("a.txt")
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
@@ -444,7 +427,7 @@ class GodToolsDownloadManagerTest {
             downloadedFilesRepository.insertOrIgnore(DownloadedFile("c.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
             downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "c.txt"))
-            dao.update(translation, TranslationTable.COLUMN_DOWNLOADED)
+            translationsRepository.markTranslationDownloaded(translation.id, true)
         }
         assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
         assertNull(progressFlow.expectMostRecentItem())
@@ -452,41 +435,12 @@ class GodToolsDownloadManagerTest {
     }
 
     @Test
-    fun verifyPruneStaleTranslations() = testScope.runTest {
-        val valid1 = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        val valid2 = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.FRENCH
-            isDownloaded = true
-        }
-        val valid3 = Translation().apply {
-            toolCode = "$TOOL$TOOL"
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        val invalid = Translation().apply {
-            toolCode = TOOL
-            languageCode = Locale.ENGLISH
-            isDownloaded = true
-        }
-        every { dao.get(QUERY_STALE_TRANSLATIONS) } returns listOf(valid1, valid2, invalid, valid3)
+    fun `pruneStaleTranslations()`() = testScope.runTest {
+        coEvery { translationsRepository.markStaleTranslationsAsNotDownloaded() } returns true
         setupCleanupActorMocks()
 
         downloadManager.pruneStaleTranslations()
-        assertFalse(invalid.isDownloaded)
-        assertTrue(valid1.isDownloaded)
-        assertTrue(valid2.isDownloaded)
-        assertTrue(valid3.isDownloaded)
-        verify { dao.update(invalid, TranslationTable.COLUMN_DOWNLOADED) }
-        verify(inverse = true) {
-            dao.update(valid1, TranslationTable.COLUMN_DOWNLOADED)
-            dao.update(valid2, TranslationTable.COLUMN_DOWNLOADED)
-            dao.update(valid3, TranslationTable.COLUMN_DOWNLOADED)
-        }
+        coVerify { translationsRepository.markStaleTranslationsAsNotDownloaded() }
     }
     // endregion Translations
 
@@ -519,13 +473,13 @@ class GodToolsDownloadManagerTest {
     }
 
     private fun setupCleanupActorMocks() {
-        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(emptyList())
+        coEvery { translationsRepository.getTranslations() } returns emptyList()
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
     }
 
     private suspend fun assertCleanupActorRan(times: Int = 1) {
         if (times > 0) {
-            coVerifyOrder {
+            coVerifySequence {
                 repeat(times) {
                     fs.exists()
 
@@ -534,7 +488,7 @@ class GodToolsDownloadManagerTest {
                     downloadedFilesRepository.getDownloadedFiles()
 
                     // deleteOrphanedTranslationFiles()
-                    dao.getAsync(Query.select<Translation>())
+                    translationsRepository.getTranslations()
                     downloadedFilesRepository.getDownloadedTranslationFiles()
 
                     // deleteUnusedDownloadedFiles()
@@ -547,7 +501,6 @@ class GodToolsDownloadManagerTest {
                 }
             }
         }
-        confirmVerified(dao, fs)
     }
 
     @Test
@@ -573,7 +526,7 @@ class GodToolsDownloadManagerTest {
             isDownloaded = false
         }
         val file = DownloadedTranslationFile(translation, "file")
-        every { dao.getAsync(Query.select<Translation>()) } returns CompletableDeferred(listOf(translation))
+        coEvery { translationsRepository.getTranslations() } returns listOf(translation)
         coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)
 
         downloadManager.deleteOrphanedTranslationFiles()
@@ -587,7 +540,6 @@ class GodToolsDownloadManagerTest {
         val fileName = file.name
         coEvery { fs.file(fileName) } returns file
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
-        every { dao.get(TranslationFile::class.java) } returns emptyList()
         coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(DownloadedFile(fileName))
 
         assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(file))
@@ -616,7 +568,6 @@ class GodToolsDownloadManagerTest {
                 isDownloaded = false
             }
         )
-        every { dao.get(TranslationFile::class.java) } returns emptyList()
         coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(
             DownloadedFile(keep.name),
             DownloadedFile(remove.name),

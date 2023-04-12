@@ -1,7 +1,10 @@
 package org.cru.godtools.model
 
+import androidx.annotation.RestrictTo
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
+import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
@@ -84,3 +87,21 @@ class Translation : Base() {
 fun Translation?.getName(tool: Tool?) = this?.name ?: tool?.name
 fun Translation?.getDescription(tool: Tool?) = this?.description ?: tool?.description
 fun Translation?.getTagline(tool: Tool?) = this?.tagline ?: getDescription(tool)
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun Translation(
+    toolCode: String = UUID.randomUUID().toString(),
+    languageCode: Locale = Locale.ENGLISH,
+    version: Int = Translation.DEFAULT_VERSION,
+    id: Long = Random.nextLong(),
+    manifestFileName: String? = UUID.randomUUID().toString(),
+    block: Translation.() -> Unit = {},
+) = Translation().apply {
+    this.id = id
+    this.toolCode = toolCode
+    this.languageCode = languageCode
+    this.version = version
+    this.manifestFileName = manifestFileName
+    block()
+}

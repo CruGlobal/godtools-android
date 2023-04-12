@@ -12,9 +12,9 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.greenrobot.eventbus.EventBus
-import org.keynote.godtools.android.db.GodToolsDao
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
@@ -23,7 +23,6 @@ interface BundledContentFeatureDependencies {
     @ApplicationContext
     fun appContext(): Context
     fun attachmentsRepository(): AttachmentsRepository
-    fun dao(): GodToolsDao
     fun downloadManager(): GodToolsDownloadManager
     fun eventBus(): EventBus
     fun jsonApiConverter(): JsonApiConverter
@@ -31,4 +30,5 @@ interface BundledContentFeatureDependencies {
     fun lastSyncTimeRepository(): LastSyncTimeRepository
     fun settings(): Settings
     fun toolsRepository(): ToolsRepository
+    fun translationsRepository(): TranslationsRepository
 }

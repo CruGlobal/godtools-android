@@ -22,6 +22,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.Tool
@@ -29,7 +30,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.junit.Before
 import org.junit.Test
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {

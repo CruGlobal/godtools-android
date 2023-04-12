@@ -8,7 +8,7 @@ import io.mockk.mockk
 import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
-import org.keynote.godtools.android.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 
 @Module
 @TestInstallIn(

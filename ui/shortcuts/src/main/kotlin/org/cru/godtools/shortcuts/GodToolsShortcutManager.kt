@@ -47,13 +47,11 @@ import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.base.ui.util.getName
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
 private const val TYPE_TOOL = "tool|"
@@ -224,8 +222,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // generate the list of locales to use for this tool
         val locales = buildList {
-            val translation = translationsRepository.getLatestTranslation(code, settings.primaryLanguage)
-                ?: translationsRepository.getLatestTranslation(code, Locale.ENGLISH)
+            val translation = translationsRepository.findLatestTranslation(code, settings.primaryLanguage)
+                ?: translationsRepository.findLatestTranslation(code, Locale.ENGLISH)
                 ?: return@withContext null
             add(translation.languageCode)
             settings.parallelLanguage?.let { add(it) }
@@ -243,7 +241,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // Generate the shortcut label
         val label = sequenceOf(Locale.getDefault(), Locale.ENGLISH).includeFallbacks().distinct().asFlow()
-            .mapNotNull { translationsRepository.getLatestTranslation(code, it) }
+            .mapNotNull { translationsRepository.findLatestTranslation(code, it) }
             .firstOrNull()
             .getName(tool, context)
 
@@ -278,24 +276,24 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
         attachmentsRepository: AttachmentsRepository,
-        private val dao: GodToolsDao,
         settings: Settings,
         toolsRepository: ToolsRepository,
+        translationsRepository: TranslationsRepository,
         coroutineScope: CoroutineScope
     ) {
         @Inject
         constructor(
             manager: GodToolsShortcutManager,
             attachmentsRepository: AttachmentsRepository,
-            dao: GodToolsDao,
             settings: Settings,
             toolsRepository: ToolsRepository,
+            translationsRepository: TranslationsRepository,
         ) : this(
             manager = manager,
             attachmentsRepository = attachmentsRepository,
-            dao = dao,
             settings = settings,
             toolsRepository = toolsRepository,
+            translationsRepository = translationsRepository,
             coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
         )
 
@@ -306,7 +304,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
-                dao.invalidationFlow(Translation::class.java)
+                translationsRepository.translationsChangeFlow(),
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_PENDING_SHORTCUTS)
                 manager.updatePendingShortcuts()
@@ -322,7 +320,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
-                dao.invalidationFlow(Translation::class.java)
+                translationsRepository.translationsChangeFlow(),
             ).conflate().collectLatest {
                 delay(DELAY_UPDATE_SHORTCUTS)
                 manager.updateShortcuts()

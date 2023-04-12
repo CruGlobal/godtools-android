@@ -36,6 +36,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
@@ -46,7 +47,6 @@ import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
 import org.cru.godtools.user.activity.UserActivityManager
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 @AndroidEntryPoint
 class LessonActivity :

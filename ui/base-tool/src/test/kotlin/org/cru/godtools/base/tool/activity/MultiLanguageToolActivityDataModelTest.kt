@@ -26,6 +26,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
@@ -41,7 +42,6 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val TOOL = "kgp"
 
@@ -58,8 +58,8 @@ class MultiLanguageToolActivityDataModelTest {
     private val isConnnected = MutableLiveData(true)
     private val savedStateHandle = SavedStateHandle()
     private val toolsRepository: ToolsRepository = mockk()
-    private val translationsRepository = mockk<TranslationsRepository> {
-        every { getLatestTranslationFlow(any(), any(), trackAccess = true) } returns emptyFlow()
+    private val translationsRepository: TranslationsRepository = mockk {
+        every { findLatestTranslationFlow(any(), any(), trackAccess = true) } returns emptyFlow()
     }
     private val testScope = TestScope()
 
@@ -86,7 +86,7 @@ class MultiLanguageToolActivityDataModelTest {
     private fun everyGetManifest(tool: String, locale: Locale) =
         every { manifestManager.getLatestPublishedManifestLiveData(tool, locale) }
     private fun everyGetTranslation(tool: String, locale: Locale) =
-        every { translationsRepository.getLatestTranslationFlow(tool, locale, trackAccess = true) }
+        every { translationsRepository.findLatestTranslationFlow(tool, locale, trackAccess = true) }
     // endregion Objects & Mocks
 
     // region Resolved Data
@@ -103,9 +103,9 @@ class MultiLanguageToolActivityDataModelTest {
 
         dataModel.translations.observeForever(observer)
         verify {
-            translationsRepository.getLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
-            translationsRepository.getLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
-            translationsRepository.getLatestTranslationFlow(TOOL, Locale.CHINESE, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.CHINESE, trackAccess = true)
             observer.onChanged(
                 withArg {
                     assertThat(
@@ -148,8 +148,8 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.translations.observeForever(observer)
         french.value = Translation()
         verify {
-            translationsRepository.getLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
-            translationsRepository.getLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
             observer.onChanged(any())
         }
         assertThat(

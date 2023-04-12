@@ -1,29 +1,23 @@
 package org.cru.godtools.sync.repository
 
 import androidx.annotation.VisibleForTesting
-import androidx.collection.LongSparseArray
-import androidx.collection.valueIterator
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.sync.task.BaseSyncTasks
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 @Singleton
 internal class SyncRepository @Inject constructor(
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
+    private val translationsRepository: TranslationsRepository,
 ) {
     // region Tools
     fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) {
@@ -48,11 +42,9 @@ internal class SyncRepository @Inject constructor(
                 storeTranslations(
                     translations,
                     includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
-                    existing = tool.code?.let { code ->
-                        BaseSyncTasks.index(
-                            Query.select<Translation>().where(TranslationTable.FIELD_TOOL.eq(code)).get(dao)
-                        )
-                    }
+                    existing = tool.code?.let { translationsRepository.getTranslationsForToolBlocking(it) }
+                        ?.map { it.id }
+                        ?.toMutableSet()
                 )
             }
         }
@@ -88,7 +80,7 @@ internal class SyncRepository @Inject constructor(
     // region Translations
     private fun storeTranslations(
         translations: List<Translation>,
-        existing: LongSparseArray<Translation>?,
+        existing: MutableSet<Long>?,
         includes: Includes
     ) {
         translations.forEach {
@@ -97,21 +89,11 @@ internal class SyncRepository @Inject constructor(
         }
 
         // prune any existing translations that weren't synced and aren't downloaded to the device
-        existing?.valueIterator()?.forEach { translation ->
-            dao.refresh(translation)?.takeUnless { it.isDownloaded }?.let { dao.delete(it) }
-        }
+        existing?.forEach { translationsRepository.deleteTranslationIfNotDownloadedBlocking(it) }
     }
 
     private fun storeTranslation(translation: Translation, includes: Includes) {
-        dao.updateOrInsert(
-            translation,
-            TranslationTable.COLUMN_TOOL, TranslationTable.COLUMN_LANGUAGE, TranslationTable.COLUMN_VERSION,
-            TranslationTable.COLUMN_NAME, TranslationTable.COLUMN_DESCRIPTION, TranslationTable.COLUMN_TAGLINE,
-            TranslationTable.COLUMN_DETAILS_OUTLINE, TranslationTable.COLUMN_DETAILS_BIBLE_REFERENCES,
-            TranslationTable.COLUMN_DETAILS_CONVERSATION_STARTERS, TranslationTable.COLUMN_MANIFEST,
-            TranslationTable.COLUMN_PUBLISHED
-        )
-
+        translationsRepository.storeTranslationFromSync(translation)
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
     }
     // endregion Translations

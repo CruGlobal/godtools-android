@@ -42,12 +42,12 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.EXTRA_SHOW_TIPS
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.user.activity.UserActivityManager
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 
 private const val STATE_PRIMARY_LOCALES = "primaryLocales"
 private const val STATE_PARALLEL_LOCALES = "parallelLocales"
@@ -78,7 +78,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
-            translationsRepository.getLatestTranslationFlow(key.tool, key.locale, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(key.tool, key.locale, trackAccess = true)
                 .distinctUntilChanged()
                 .asLiveData()
     }

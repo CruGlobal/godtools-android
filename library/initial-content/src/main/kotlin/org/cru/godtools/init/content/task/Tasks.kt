@@ -1,7 +1,6 @@
 package org.cru.godtools.init.content.task
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.annotation.VisibleForTesting
 import dagger.Reusable
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -13,9 +12,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.find
-import org.ccci.gto.android.common.db.get
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
@@ -24,13 +20,10 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
-import org.keynote.godtools.android.db.repository.TranslationsRepository
 import timber.log.Timber
 
 private const val TAG = "InitialContentTasks"
@@ -44,7 +37,6 @@ internal const val NUMBER_OF_FAVORITES = 4
 internal class Tasks @Inject constructor(
     @ApplicationContext private val context: Context,
     private val attachmentsRepository: AttachmentsRepository,
-    private val dao: GodToolsDao,
     private val downloadManager: GodToolsDownloadManager,
     private val jsonApiConverter: JsonApiConverter,
     private val languagesRepository: LanguagesRepository,
@@ -86,12 +78,8 @@ internal class Tasks @Inject constructor(
 
         bundledTools.let { resources ->
             toolsRepository.storeInitialResources(resources)
+            translationsRepository.storeInitialTranslations(resources.flatMap { it.latestTranslations.orEmpty() })
             attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
-            dao.transaction {
-                resources.flatMap { it.latestTranslations.orEmpty() }.forEach { translation ->
-                    dao.insert(translation, SQLiteDatabase.CONFLICT_IGNORE)
-                }
-            }
         }
     }
 
@@ -104,12 +92,8 @@ internal class Tasks @Inject constructor(
             val preferred = async {
                 bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
-            val available = Query.select<Translation>()
-                .where(
-                    TranslationTable.FIELD_LANGUAGE.eq(settings.primaryLanguage)
-                        .and(TranslationTable.SQL_WHERE_PUBLISHED)
-                )
-                .get(dao)
+            val available = translationsRepository.getTranslationsFor(languages = listOf(settings.primaryLanguage))
+                .filter { it.isPublished }
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
 
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
@@ -158,14 +142,15 @@ internal class Tasks @Inject constructor(
             context.assets.list("translations")?.forEach { file ->
                 launch {
                     // load the translation unless it's downloaded already
-                    val id = file.substring(0, file.lastIndexOf('.'))
-                    val translation = dao.find<Translation>(id)?.takeUnless { it.isDownloaded } ?: return@launch
+                    val id = file.substring(0, file.lastIndexOf('.')).toLongOrNull()
+                    val translation = id?.let { translationsRepository.findTranslation(id) }
+                        ?.takeUnless { it.isDownloaded } ?: return@launch
 
                     // short-circuit if a newer translation is already downloaded
                     val toolCode = translation.toolCode ?: return@launch
                     val languageCode = translation.languageCode
                     val latestTranslation =
-                        translationsRepository.getLatestTranslation(toolCode, languageCode, isDownloaded = true)
+                        translationsRepository.findLatestTranslation(toolCode, languageCode, isDownloaded = true)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
                     withContext(Dispatchers.IO) {

@@ -14,16 +14,13 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.db.Query
-import org.ccci.gto.android.common.db.getAsFlow
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.toDisplayNameSortedMap
-import org.keynote.godtools.android.db.Contract.TranslationTable
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
@@ -32,9 +29,9 @@ private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"
 @OptIn(ExperimentalCoroutinesApi::class)
 class LanguagesFragmentViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    dao: GodToolsDao,
     languagesRepository: LanguagesRepository,
     settings: Settings,
+    translationsRepository: TranslationsRepository,
     private val savedState: SavedStateHandle
 ) : ViewModel() {
     val isPrimary = MutableLiveData(true)
@@ -57,12 +54,9 @@ class LanguagesFragmentViewModel @Inject constructor(
     }
 
     val sortLocale = MutableLiveData<Locale>()
-    private val rawLanguages = Query.select<Translation>()
-        .distinct(true)
-        .projection(TranslationTable.COLUMN_LANGUAGE)
-        .where(TranslationTable.SQL_WHERE_PUBLISHED)
-        .getAsFlow(dao)
-        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it.map { it.languageCode }) }
+    private val rawLanguages = translationsRepository.getTranslationsFlowFor()
+        .map { it.filter { it.isPublished }.mapTo(mutableSetOf()) { it.languageCode } }
+        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
         .asLiveData()
     private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
         .combineWith(rawLanguages) { locale, languages -> languages.toDisplayNameSortedMap(context, locale) }
