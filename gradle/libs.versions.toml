@@ -223,7 +223,7 @@ common = ["kotlin-stdlib", "timber"]
 test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
-grgit = { id = "org.ajoberstar.grgit", version = "5.0.0" }
+grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 junitJacoco = { id = "com.vanniktech.android.junit.jacoco", version = "0.16.0" }
 ksp = { id = "com.google.devtools.ksp", version = "1.8.20-1.0.11" }
