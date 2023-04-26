@@ -183,7 +183,7 @@ okta-auth-foundation = { module = "com.okta.kotlin:auth-foundation", version.ref
 okta-auth-foundation-bootstrap = { module = "com.okta.kotlin:auth-foundation-bootstrap", version.ref = "okta" }
 okta-legacy-tokens = { module = "com.okta.kotlin:legacy-token-migration", version.ref = "okta" }
 okta-web-authentication-ui = { module = "com.okta.kotlin:web-authentication-ui", version.ref = "okta" }
-onesky-gradlePlugin = "co.brainly:plugin:1.5.0"
+onesky-gradlePlugin = "co.brainly:plugin:1.6.0"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-auth = "com.google.android.gms:play-services-auth:20.5.0"
