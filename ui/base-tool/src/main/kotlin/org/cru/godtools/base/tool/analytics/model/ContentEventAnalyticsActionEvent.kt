@@ -2,12 +2,11 @@ package org.cru.godtools.base.tool.analytics.model
 
 import androidx.core.os.bundleOf
 import org.cru.godtools.base.tool.model.Event
-
-private const val ACTION_CONTENT_EVENT = "content_event"
-private const val PARAM_EVENT_ID = "event_id"
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_CONTENT_EVENT
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.PARAM_CONTENT_EVENT_ID
 
 internal class ContentEventAnalyticsActionEvent(private val event: Event) :
     ToolAnalyticsActionEvent(event.tool, ACTION_CONTENT_EVENT, locale = event.locale) {
 
-    override val firebaseParams get() = bundleOf(PARAM_EVENT_ID to event.id.toString())
+    override val firebaseParams get() = bundleOf(PARAM_CONTENT_EVENT_ID to event.id.toString())
 }
