@@ -31,6 +31,13 @@ dependencyResolutionManagement {
                 includeGroup("androidx.compose.compiler")
             }
         }
+        maven {
+            // This repo is for resolution of the transitive kustomexport annotation dependency used in godtools-shared
+            url = uri("https://raw.githubusercontent.com/Deezer/KustomExport/mvn-repo")
+            content {
+                includeGroup("deezer.kustomexport")
+            }
+        }
         google()
         mavenCentral()
         jcenter {

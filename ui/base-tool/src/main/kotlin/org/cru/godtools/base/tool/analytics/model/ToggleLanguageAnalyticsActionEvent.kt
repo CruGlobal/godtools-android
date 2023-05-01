@@ -5,8 +5,7 @@ import java.util.Locale
 import org.cru.godtools.analytics.firebase.PARAM_LANGUAGE_SECONDARY
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
-
-private const val ACTION_TOGGLE_LANGUAGE = "parallel_language_toggled"
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_TOGGLE_LANGUAGE
 
 class ToggleLanguageAnalyticsActionEvent(tool: String?, private val selectedLocale: Locale) :
     AnalyticsActionEvent(action = ACTION_TOGGLE_LANGUAGE) {
