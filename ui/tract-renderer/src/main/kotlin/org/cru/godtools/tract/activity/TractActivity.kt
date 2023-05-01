@@ -32,8 +32,10 @@ import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -123,6 +125,7 @@ class TractActivity :
             true
         }
         item.itemId == R.id.action_settings -> {
+            eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
             SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
             true
         }
