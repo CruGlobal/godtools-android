@@ -12,6 +12,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -25,6 +26,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -91,21 +93,50 @@ class AemArticleManagerDispatcherTest {
 
     @Test
     fun `cleanupActor - Runs after db invalidation`() = testScope.runTest {
-        val observer = aemDbObservers.first()
-
-        // multiple invalidations should be conflated to a single invalidation
+        // make sure we don't have any runs to start with
+        runCurrent()
         verify { fileManager wasNot Called }
-        repeat(10) { observer.onInvalidated(setOf(Resource.TABLE_NAME)) }
+
+        // invalidation before the initial delay should trigger orphaned files cleanup
+        aemDbObservers[0].onInvalidated(setOf(Resource.TABLE_NAME))
         runCurrent()
         assertEquals(0, currentTime)
         coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
 
-        // any invalidations should reset the cleanup delay counter
+        // invalidations should reset the cleanup delay counter
         advanceTimeBy(CLEANUP_DELAY)
         coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
         runCurrent()
         coVerify(exactly = 2) { fileManager.removeOrphanedFiles() }
+
+        // verify there were no other calls made to fileManager
         confirmVerified(fileManager)
+    }
+
+    @Test
+    fun `cleanupActor - Conflate pending invalidations`() = testScope.runTest {
+        // we use a rendezvous channel to control execution of removeOrphanedFiles()
+        val removeOrphanedFilesResponse = Channel<Unit>()
+        coEvery { fileManager.removeOrphanedFiles() } coAnswers { removeOrphanedFilesResponse.receive() }
+
+        // trigger initial removeOrphanedFiles()
+        advanceTimeBy(CLEANUP_DELAY_INITIAL)
+        runCurrent()
+        coVerify(exactly = 1) { fileManager.removeOrphanedFiles() }
+
+        // trigger multiple invalidations while first removeOrphanedFiles is suspended
+        repeat(10) { aemDbObservers[0].onInvalidated(setOf(Resource.TABLE_NAME)) }
+        removeOrphanedFilesResponse.send(Unit)
+
+        // verify that a second execution of removeOrphanedFiles() triggers immediately
+        runCurrent()
+        coVerify(exactly = 2) { fileManager.removeOrphanedFiles() }
+        removeOrphanedFilesResponse.send(Unit)
+
+        // verify that no more executions of removeOrphanedFiles() happen
+        runCurrent()
+        assertTrue(removeOrphanedFilesResponse.trySend(Unit).isFailure)
+        coVerify(exactly = 2) { fileManager.removeOrphanedFiles() }
     }
     // endregion cleanupActor
 }
