@@ -119,23 +119,6 @@ fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
                 )
                 Text(stringResource(com.facebook.common.R.string.com_facebook_loginview_log_in_button_long))
             }
-            Button(
-                onClick = { onEvent(LoginLayoutEvent.Login(AccountType.OKTA)) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = OKTA_BLUE
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MARGIN_HORIZONTAL)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_account_logo_okta),
-                    contentDescription = null,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-                Text(stringResource(R.string.account_login_action_login_okta))
-            }
             Spacer(Modifier.height(32.dp))
         }
     }

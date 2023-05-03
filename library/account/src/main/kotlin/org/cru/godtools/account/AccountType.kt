@@ -1,3 +1,3 @@
 package org.cru.godtools.account
 
-enum class AccountType { FACEBOOK, GOOGLE, OKTA }
+enum class AccountType { FACEBOOK, GOOGLE }

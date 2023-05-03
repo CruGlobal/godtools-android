@@ -28,13 +28,9 @@ android {
         proguardFile("proguard-rules-crashlytics.pro")
         proguardFile("proguard-rules-eventbus.pro")
         proguardFile("proguard-rules-guava.pro")
-        proguardFile("proguard-rules-okta-oidc.pro")
         proguardFile("proguard-searchview.pro")
 
         vectorDrawables.useSupportLibrary = true
-
-        buildConfigField("String", "OKTA_CLIENT_ID", "\"0oa1ju0zx08vYGgbB0h8\"")
-        buildConfigField("String", "OKTA_DISCOVERY_URI", "\"https://signon.okta.com\"")
     }
     buildFeatures {
         dataBinding = true
@@ -100,8 +96,6 @@ android {
 
             isMinifyEnabled = false
 
-            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.debug.okta"
-            buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.debug.okta\"")
             resValue("string", "app_name_debug", "GodTools (Dev)")
         }
         named("qa") {
@@ -110,8 +104,6 @@ android {
 
             isMinifyEnabled = true
 
-            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.qa.okta"
-            buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.qa.okta\"")
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
         release {
@@ -119,9 +111,6 @@ android {
             signingConfigs.getByName("release")
                 .takeIf { it.storeFile?.exists() == true }
                 ?.let { signingConfig = it }
-
-            manifestPlaceholders += "webAuthenticationRedirectScheme" to "org.cru.godtools.okta"
-            buildConfigField("String", "OKTA_AUTH_SCHEME", "\"org.cru.godtools.okta\"")
         }
     }
     bundle {
