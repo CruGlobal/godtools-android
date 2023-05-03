@@ -9,7 +9,7 @@ abstract class AnalyticsBaseEvent internal constructor(
     private val systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) {
     protected companion object {
-        val DEFAULT_SYSTEMS = setOf(*AnalyticsSystem.values()) - setOf(AnalyticsSystem.APPSFLYER, AnalyticsSystem.USER)
+        val DEFAULT_SYSTEMS = setOf(*AnalyticsSystem.values()) - AnalyticsSystem.USER
     }
 
     /**
