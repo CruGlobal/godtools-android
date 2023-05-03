@@ -21,7 +21,6 @@ class LessonPageAnalyticsScreenEventTest {
         }
         val event = LessonPageAnalyticsScreenEvent(page)
         assertTrue(event.isForSystem(AnalyticsSystem.FIREBASE))
-        assertFalse(event.isForSystem(AnalyticsSystem.APPSFLYER))
         assertFalse(event.isForSystem(AnalyticsSystem.USER))
     }
 }
