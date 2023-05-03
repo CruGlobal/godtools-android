@@ -281,7 +281,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
-    class Dispatcher @VisibleForTesting internal constructor(
+    internal class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
         attachmentsRepository: AttachmentsRepository,
         settings: Settings,
