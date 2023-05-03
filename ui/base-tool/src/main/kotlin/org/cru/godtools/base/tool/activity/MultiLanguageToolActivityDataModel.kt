@@ -15,6 +15,7 @@ import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -22,12 +23,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.and
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.livedata
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -68,11 +69,13 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val parallelLocales = savedState.getLiveData<List<Locale>>(STATE_PARALLEL_LOCALES, emptyList())
 
     // region LiveData Caches
-    private val manifestCache = object : LruCache<TranslationKey, LiveData<Manifest?>>(10) {
-        override fun create(key: TranslationKey): LiveData<Manifest?> {
-            val tool = key.tool ?: return emptyLiveData()
-            val locale = key.locale ?: return emptyLiveData()
-            return manifestManager.getLatestPublishedManifestLiveData(tool, locale).distinctUntilChanged()
+    private val manifestCache = object : LruCache<TranslationKey, Flow<Manifest?>>(10) {
+        override fun create(key: TranslationKey): Flow<Manifest?> {
+            val tool = key.tool ?: return flowOf(null)
+            val locale = key.locale ?: return flowOf(null)
+            return manifestManager.getLatestPublishedManifestFlow(tool, locale)
+                .distinctUntilChanged()
+                .shareIn(viewModelScope, SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000), replay = 1)
         }
     }
 
@@ -111,7 +114,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @VisibleForTesting
     internal val manifests =
         locales.asLiveData().switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
-            distinctToolCode.switchMap { manifestCache.get(it, locale).withInitialValue(null) }
+            distinctToolCode.switchMap { manifestCache.get(it, locale).asLiveData().withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
         }.map { it.toMap() }
@@ -143,11 +146,9 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     val activeLocale by savedState.livedata<Locale?>(STATE_ACTIVE_LOCALE)
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
-        val manifest = manifestCache.get(tool, l)
-        val translation = translationCache.get(tool, l)
         combine(
-            manifest,
-            translation,
+            manifestCache.get(tool, l).asLiveData(),
+            translationCache.get(tool, l),
             supportedType.asLiveData(),
             isConnected,
             isInitialSyncFinished.asLiveData()

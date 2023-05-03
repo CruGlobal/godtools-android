@@ -4,10 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.asLiveData
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
@@ -20,9 +20,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.ToolsRepository
@@ -52,12 +52,14 @@ class MultiLanguageToolActivityDataModelTest {
 
     // region Objects & Mocks
     private val manifestManager: ManifestManager = mockk {
-        every { getLatestPublishedManifestLiveData(any(), any()) } returns MutableLiveData()
+        every { getLatestPublishedManifestFlow(any(), any()) } returns flowOf()
     }
     private lateinit var dataModel: MultiLanguageToolActivityDataModel
     private val isConnnected = MutableLiveData(true)
     private val savedStateHandle = SavedStateHandle()
-    private val toolsRepository: ToolsRepository = mockk()
+    private val toolsRepository: ToolsRepository = mockk {
+        every { findToolFlow(any()) } returns flowOf(null)
+    }
     private val translationsRepository: TranslationsRepository = mockk {
         every { findLatestTranslationFlow(any(), any(), trackAccess = true) } returns emptyFlow()
     }
@@ -84,7 +86,7 @@ class MultiLanguageToolActivityDataModelTest {
     }
 
     private fun everyGetManifest(tool: String, locale: Locale) =
-        every { manifestManager.getLatestPublishedManifestLiveData(tool, locale) }
+        every { manifestManager.getLatestPublishedManifestFlow(tool, locale) }
     private fun everyGetTranslation(tool: String, locale: Locale) =
         every { translationsRepository.findLatestTranslationFlow(tool, locale, trackAccess = true) }
     // endregion Objects & Mocks
@@ -175,9 +177,9 @@ class MultiLanguageToolActivityDataModelTest {
     fun `Property manifests`() {
         val observer = mockk<Observer<Map<Locale, Manifest?>>>(relaxUnitFun = true)
         every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.ENGLISH) } returns flowOf(null)
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
+        everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
         every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.FRENCH) } returns flowOf(null)
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf()
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
@@ -209,34 +211,34 @@ class MultiLanguageToolActivityDataModelTest {
     }
 
     @Test
-    fun `Property manifests - Update Locales`() {
+    fun `Property manifests - Update Locales`() = testScope.runTest {
         val french = MutableStateFlow(Manifest())
-        val manifests = mutableListOf<Map<Locale, Manifest?>>()
+        val manifests = slot<Map<Locale, Manifest?>>()
         val observer = mockk<Observer<Map<Locale, Manifest?>>> {
             every { onChanged(capture(manifests)) } returns Unit
         }
-        every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.ENGLISH) } returns flowOf(null)
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
-        every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.FRENCH) } returns french
-        everyGetManifest(TOOL, Locale.FRENCH) returns french.asLiveData()
+        everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
+        everyGetManifest(TOOL, Locale.FRENCH) returns french
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.manifests.observeForever(observer)
-        dataModel.primaryLocales.value = listOf(Locale.FRENCH)
-        verifyAll {
-            repeat(2) { observer.onChanged(any()) }
-        }
+        runCurrent()
         assertThat(
-            manifests,
-            contains(
-                allOf(
-                    aMapWithSize(2),
-                    hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
-                    hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
-                ),
-                allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value))
+            manifests.captured,
+            allOf(
+                aMapWithSize(2),
+                hasEntry<Locale, Manifest?>(Locale.ENGLISH, null),
+                hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value)
             )
+        )
+
+        dataModel.primaryLocales.value = listOf(Locale.FRENCH)
+        runCurrent()
+        verify { observer.onChanged(any()) }
+        assertThat(
+            manifests.captured,
+            allOf(aMapWithSize(1), hasEntry<Locale, Manifest?>(Locale.FRENCH, french.value))
         )
     }
 
@@ -247,10 +249,8 @@ class MultiLanguageToolActivityDataModelTest {
         val observer = mockk<Observer<Map<Locale, Manifest?>>> {
             every { onChanged(capture(manifests)) } returns Unit
         }
-        every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.ENGLISH) } returns flowOf(null)
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
-        every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.FRENCH) } returns french
-        everyGetManifest(TOOL, Locale.FRENCH) returns french.asLiveData()
+        everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
+        everyGetManifest(TOOL, Locale.FRENCH) returns french
         dataModel.toolCode.value = TOOL
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
         dataModel.manifests.observeForever(observer)
@@ -319,19 +319,19 @@ class MultiLanguageToolActivityDataModelTest {
     }
 
     @Test
-    fun `Property activeLocale - Updates when activeLoadingState is INVALID_TYPE`() {
-        val englishManifest = MutableLiveData<Manifest?>()
+    fun `Property activeLocale - Updates when activeLoadingState is INVALID_TYPE`() = testScope.runTest {
+        val englishManifest = MutableSharedFlow<Manifest?>()
         everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(Translation())
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
         everyGetManifest(TOOL, Locale.ENGLISH) returns englishManifest
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = Manifest.Type.TRACT
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
         dataModel.isInitialSyncFinished.value = true
 
         assertEquals(Locale.ENGLISH, dataModel.activeLocale.value)
-        englishManifest.value = Manifest(type = Manifest.Type.LESSON)
+        englishManifest.emit(Manifest(type = Manifest.Type.LESSON))
         assertEquals(Locale.FRENCH, dataModel.activeLocale.value)
     }
 
@@ -340,8 +340,8 @@ class MultiLanguageToolActivityDataModelTest {
         val englishTranslation = MutableSharedFlow<Translation?>()
         everyGetTranslation(TOOL, Locale.ENGLISH) returns englishTranslation
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = Manifest.Type.TRACT
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
@@ -356,8 +356,8 @@ class MultiLanguageToolActivityDataModelTest {
     fun `Property activeLocale - Updates when activeLoadingState is OFFLINE`() {
         everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(Translation())
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
-        everyGetManifest(TOOL, Locale.ENGLISH) returns emptyLiveData()
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest(type = Manifest.Type.TRACT))
+        everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = Manifest.Type.TRACT
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
@@ -394,8 +394,8 @@ class MultiLanguageToolActivityDataModelTest {
         // setup test
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
         everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf()
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest())
-        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest())
+        everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.FRENCH
@@ -415,8 +415,8 @@ class MultiLanguageToolActivityDataModelTest {
         // setup test
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
         everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData()
-        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData(Manifest())
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf()
+        everyGetManifest(TOOL, Locale.GERMAN) returns flowOf(Manifest())
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.FRENCH
@@ -441,8 +441,8 @@ class MultiLanguageToolActivityDataModelTest {
         // setup test
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(null)
         everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(null)
-        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(null)
+        everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.ENGLISH
@@ -468,8 +468,8 @@ class MultiLanguageToolActivityDataModelTest {
         // setup test
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
         everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
-        everyGetManifest(TOOL, Locale.FRENCH) returns MutableLiveData(Manifest())
-        everyGetManifest(TOOL, Locale.GERMAN) returns MutableLiveData()
+        everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest())
+        everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
         dataModel.toolCode.value = TOOL
         dataModel.supportedType.value = null
         dataModel.activeLocale.value = Locale.GERMAN

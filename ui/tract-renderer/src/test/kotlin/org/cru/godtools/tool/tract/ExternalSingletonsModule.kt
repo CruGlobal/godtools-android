@@ -9,6 +9,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.cru.godtools.analytics.AnalyticsModule
@@ -44,7 +45,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val manifestManager by lazy {
         mockk<ManifestManager> {
-            every { getLatestPublishedManifestLiveData(any(), any()) } answers { ImmutableLiveData(null) }
+            every { getLatestPublishedManifestFlow(any(), any()) } returns flowOf(null)
         }
     }
     @get:Provides
