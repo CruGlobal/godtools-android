@@ -7,6 +7,7 @@ import io.mockk.clearMocks
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every
+import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
@@ -54,7 +55,10 @@ class GodToolsShortcutManagerDispatcherTest {
         every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
         every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
     }
-    private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true)
+    private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true) {
+        every { isEnabled } returns true
+        excludeRecords { isEnabled }
+    }
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
         every { toolsChangeFlow(false) } returns toolsChangeFlow

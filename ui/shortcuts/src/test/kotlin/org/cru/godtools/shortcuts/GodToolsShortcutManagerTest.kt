@@ -164,6 +164,14 @@ class GodToolsShortcutManagerTest {
 
     // region Instant App
     @Test
+    fun `Instant App - Don't register with EventBus`() {
+        every { InstantApps.isInstantApp(any()) } returns true
+
+        assertFalse(shortcutManager.isEnabled)
+        verify { eventBus wasNot Called }
+    }
+
+    @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `Instant App - canPinToolShortcut() - GT-1977`() {
         every { InstantApps.isInstantApp(any()) } returns true
