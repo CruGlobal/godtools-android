@@ -11,6 +11,7 @@ import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import com.google.android.gms.common.wrappers.InstantApps
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -97,12 +98,15 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @get:RequiresApi(Build.VERSION_CODES.N_MR1)
     private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
-    init {
-        // register event listeners
-        eventBus.register(this)
-    }
+    @VisibleForTesting
+    internal val isEnabled = !InstantApps.isInstantApp(context)
 
     // region Events
+    init {
+        // register event listeners
+        if (isEnabled) eventBus.register(this)
+    }
+
     @AnyThread
     @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
@@ -116,15 +120,19 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val pendingShortcuts = mutableMapOf<String, WeakReference<PendingShortcut>>()
 
     @AnyThread
-    fun canPinToolShortcut(tool: Tool?) = when (tool?.type) {
-        Tool.Type.ARTICLE,
-        Tool.Type.CYOA,
-        Tool.Type.TRACT -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
-        else -> false
+    fun canPinToolShortcut(tool: Tool?) = when {
+        !isEnabled -> false
+        else -> when (tool?.type) {
+            Tool.Type.ARTICLE,
+            Tool.Type.CYOA,
+            Tool.Type.TRACT -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+            else -> false
+        }
     }
 
     @AnyThread
     fun getPendingToolShortcut(code: String?): PendingShortcut? {
+        if (!isEnabled) return null
         val id = code?.toolShortcutId ?: return null
 
         return synchronized(pendingShortcuts) {
@@ -273,7 +281,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
-    class Dispatcher @VisibleForTesting internal constructor(
+    internal class Dispatcher @VisibleForTesting internal constructor(
         private val manager: GodToolsShortcutManager,
         attachmentsRepository: AttachmentsRepository,
         settings: Settings,
@@ -299,6 +307,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         @VisibleForTesting
         internal val updatePendingShortcutsJob = coroutineScope.launch {
+            if (!manager.isEnabled) return@launch
+
             merge(
                 settings.primaryLanguageFlow,
                 settings.parallelLanguageFlow,
@@ -313,6 +323,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         @VisibleForTesting
         internal val updateShortcutsJob = coroutineScope.launch {
+            if (!manager.isEnabled) return@launch
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
 
             merge(

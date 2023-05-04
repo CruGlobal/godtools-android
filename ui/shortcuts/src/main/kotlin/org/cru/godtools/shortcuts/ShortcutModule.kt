@@ -12,7 +12,7 @@ import org.greenrobot.eventbus.meta.SubscriberInfoIndex
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ShortcutModule {
+internal abstract class ShortcutModule {
     @Binds
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.ASYNC)
