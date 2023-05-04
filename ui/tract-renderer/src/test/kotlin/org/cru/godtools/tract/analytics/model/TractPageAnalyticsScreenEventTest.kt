@@ -38,7 +38,6 @@ class TractPageAnalyticsScreenEventTest {
     fun testSupportedSystems() {
         val event = TractPageAnalyticsScreenEvent(page)
         assertTrue(event.isForSystem(AnalyticsSystem.FIREBASE))
-        assertFalse(event.isForSystem(AnalyticsSystem.APPSFLYER))
         assertFalse(event.isForSystem(AnalyticsSystem.USER))
     }
 }

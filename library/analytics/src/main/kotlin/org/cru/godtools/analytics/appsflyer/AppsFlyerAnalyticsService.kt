@@ -7,7 +7,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.annotation.VisibleForTesting
-import androidx.annotation.WorkerThread
 import com.appsflyer.AFLogger
 import com.appsflyer.AppsFlyerConversionListener
 import com.appsflyer.AppsFlyerLib
@@ -18,13 +17,7 @@ import com.karumi.weak.weak
 import javax.inject.Inject
 import javax.inject.Singleton
 import org.cru.godtools.analytics.BuildConfig
-import org.cru.godtools.analytics.model.AnalyticsActionEvent
-import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.base.HOST_GET_GODTOOLSAPP_COM
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import timber.log.Timber
 
 private const val TAG = "AppsFlyerAnalytics"
@@ -39,30 +32,14 @@ private const val STATUS_NON_ORGANIC = "Non-organic"
 @Singleton
 class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
     private val app: Application,
-    eventBus: EventBus,
     private val deepLinkResolvers: Set<AppsFlyerDeepLinkResolver>,
-    private val appsFlyer: AppsFlyerLib
+    appsFlyer: AppsFlyerLib
 ) : Application.ActivityLifecycleCallbacks {
     @Inject
     internal constructor(
         app: Application,
-        eventBus: EventBus,
         deepLinkResolvers: Set<@JvmSuppressWildcards AppsFlyerDeepLinkResolver>
-    ) : this(app, eventBus, deepLinkResolvers, AppsFlyerLib.getInstance())
-
-    // region Analytics Events
-    @WorkerThread
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onAnalyticsScreenEvent(event: AnalyticsScreenEvent) {
-        if (event.isForSystem(AnalyticsSystem.APPSFLYER)) appsFlyer.logEvent(app, event.screen, emptyMap())
-    }
-
-    @WorkerThread
-    @Subscribe(threadMode = ThreadMode.ASYNC)
-    fun onAnalyticsActionEvent(event: AnalyticsActionEvent) {
-        if (event.isForSystem(AnalyticsSystem.APPSFLYER)) appsFlyer.logEvent(app, event.action, emptyMap())
-    }
-    // endregion Analytics Events
+    ) : this(app, deepLinkResolvers, AppsFlyerLib.getInstance())
 
     // region Application.ActivityLifecycleCallbacks
     private var activeActivity: Activity? by weak()
@@ -119,7 +96,6 @@ class AppsFlyerAnalyticsService @VisibleForTesting internal constructor(
             start(app)
         }
         app.registerActivityLifecycleCallbacks(this)
-        eventBus.register(this)
     }
 }
 

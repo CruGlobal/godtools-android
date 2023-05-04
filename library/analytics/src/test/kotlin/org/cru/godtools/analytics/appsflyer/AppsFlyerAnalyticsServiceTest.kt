@@ -27,7 +27,6 @@ class AppsFlyerAnalyticsServiceTest {
 
         analyticsService = AppsFlyerAnalyticsService(
             mockk(relaxUnitFun = true),
-            eventBus = mockk(relaxUnitFun = true),
             deepLinkResolvers = setOf(deepLinkResolver),
             appsFlyer = mockk(relaxed = true)
         )

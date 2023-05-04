@@ -22,7 +22,7 @@ class CyoaPageAnalyticsScreenEventTest {
 
     @Test
     fun `Property - screen`() {
-        assertEquals("tool:page", CyoaPageAnalyticsScreenEvent(page).screen)
+        assertEquals("$TOOL:$PAGE", CyoaPageAnalyticsScreenEvent(page).screen)
     }
 
     @Test
@@ -34,6 +34,6 @@ class CyoaPageAnalyticsScreenEventTest {
     @Test
     fun `isForSystem() - Not Supported`() {
         val event = CyoaPageAnalyticsScreenEvent(page)
-        assertFalse(event.isForSystem(AnalyticsSystem.APPSFLYER))
+        assertFalse(event.isForSystem(AnalyticsSystem.USER))
     }
 }
