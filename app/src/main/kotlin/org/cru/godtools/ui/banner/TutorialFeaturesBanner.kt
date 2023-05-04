@@ -9,9 +9,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.cru.godtools.base.Settings
+import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.analytics.model.TUTORIAL_HOME_DISMISS
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.greenrobot.eventbus.EventBus
@@ -35,7 +35,7 @@ internal fun TutorialFeaturesBanner(modifier: Modifier = Modifier) {
 internal class TutorialFeaturesBannerViewModel @Inject constructor(val eventBus: EventBus, val settings: Settings) :
     ViewModel() {
     fun dismiss() {
-        eventBus.post(TutorialAnalyticsActionEvent(TUTORIAL_HOME_DISMISS))
+        eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.BANNER_DISMISS))
         settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_FEATURES)
     }
 }

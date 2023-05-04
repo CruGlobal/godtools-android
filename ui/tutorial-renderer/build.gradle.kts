@@ -28,6 +28,8 @@ dependencies {
     implementation(project(":library:base"))
     implementation(project(":ui:base"))
 
+    implementation(libs.godtoolsShared.analytics)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout.compose)

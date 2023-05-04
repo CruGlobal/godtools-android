@@ -2,6 +2,7 @@ package org.cru.godtools.tutorial.analytics.model
 
 import java.util.Locale
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.shared.analytics.TutorialAnalyticsAppSectionNames
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 
@@ -12,7 +13,7 @@ class TutorialAnalyticsScreenEvent internal constructor(
     locale: Locale?
 ) : AnalyticsScreenEvent("${tutorial.analyticsBaseScreenName}-${pagePos + 1}", locale) {
     override val appSection get() = when (tutorial) {
-        PageSet.ONBOARDING -> APP_SECTION_ONBOARDING
+        PageSet.ONBOARDING -> TutorialAnalyticsAppSectionNames.ONBOARDING
         PageSet.FEATURES -> APP_SECTION_TUTORIAL
         // TODO: what should the app section actually be?
         PageSet.LIVE_SHARE -> null
