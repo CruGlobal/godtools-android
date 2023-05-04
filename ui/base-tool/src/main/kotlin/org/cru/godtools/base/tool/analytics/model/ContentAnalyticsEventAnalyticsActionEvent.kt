@@ -8,7 +8,7 @@ import org.cru.godtools.analytics.model.AnalyticsSystem
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 
 class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event: AnalyticsEvent) :
-    AnalyticsActionEvent(action = event.action.orEmpty(), locale = event.manifest.locale) {
+    AnalyticsActionEvent(action = event.action, locale = event.manifest.locale) {
     override fun isForSystem(system: AnalyticsSystem) = when (system) {
         AnalyticsSystem.FACEBOOK -> event.isForSystem(AnalyticsEvent.System.FACEBOOK)
         AnalyticsSystem.FIREBASE ->
@@ -20,7 +20,7 @@ class ContentAnalyticsEventAnalyticsActionEvent(@get:VisibleForTesting val event
 
     override val firebaseEventName get() = when {
         event.isForSystem(AnalyticsEvent.System.FIREBASE) -> super.firebaseEventName
-        event.isForSystem(AnalyticsEvent.System.ADOBE) -> event.action?.sanitizeAdobeNameForFirebase().orEmpty()
+        event.isForSystem(AnalyticsEvent.System.ADOBE) -> event.action.sanitizeAdobeNameForFirebase()
         else -> super.firebaseEventName
     }
 
