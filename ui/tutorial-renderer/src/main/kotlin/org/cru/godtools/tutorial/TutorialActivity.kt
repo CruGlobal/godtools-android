@@ -14,10 +14,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.startDashboardActivity
 import org.cru.godtools.base.util.deviceLocale
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_FINISH
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_LESSONS
-import org.cru.godtools.tutorial.analytics.model.ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS
+import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.layout.TutorialLayout
 import org.cru.godtools.tutorial.theme.GodToolsTutorialTheme
@@ -84,27 +81,32 @@ class TutorialActivity : AppCompatActivity() {
             }
             Action.ONBOARDING_WATCH_VIDEO -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             Action.ONBOARDING_LAUNCH_ARTICLES -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_ARTICLES))
+                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
                 val locale = sequenceOf(deviceLocale, Locale.ENGLISH).filterNotNull().includeFallbacks()
                     .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                 startArticlesActivity("es", locale)
                 finish()
             }
             Action.ONBOARDING_LAUNCH_LESSONS -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_LESSONS))
+                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
                 startDashboardActivity(DashboardPage.LESSONS)
                 finish()
             }
             Action.ONBOARDING_LAUNCH_TOOLS -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_LINK_TOOLS))
+                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
                 startDashboardActivity(DashboardPage.ALL_TOOLS)
                 finish()
             }
-            Action.ONBOARDING_FINISH -> {
-                eventBus.post(TutorialAnalyticsActionEvent(ACTION_TUTORIAL_ONBOARDING_FINISH))
+            Action.ONBOARDING_SKIP -> {
+                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
+                setResult(RESULT_OK)
                 finish()
             }
-            Action.ONBOARDING_SKIP,
+            Action.ONBOARDING_FINISH -> {
+                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
+                setResult(RESULT_OK)
+                finish()
+            }
             Action.FEATURES_FINISH,
             Action.LIVE_SHARE_SKIP,
             Action.LIVE_SHARE_FINISH,
