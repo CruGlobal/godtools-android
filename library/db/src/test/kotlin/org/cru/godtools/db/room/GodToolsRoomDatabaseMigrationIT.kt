@@ -205,4 +205,26 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(toolsQuery)
         }
     }
+
+    @Test
+    fun testMigrate9To10() {
+        val attachmentsQuery = "SELECT * FROM attachments"
+
+        // create v9 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 9).use { db ->
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(attachmentsQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 10, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(attachmentsQuery)
+        }
+    }
 }
