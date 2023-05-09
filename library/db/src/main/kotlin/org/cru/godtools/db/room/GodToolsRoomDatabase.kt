@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
+import org.cru.godtools.db.room.dao.AttachmentsDao
 import org.cru.godtools.db.room.dao.DownloadedFilesDao
 import org.cru.godtools.db.room.dao.FollowupsDao
 import org.cru.godtools.db.room.dao.GlobalActivityDao
@@ -25,6 +26,7 @@ import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.UserCounterEntity
 import org.cru.godtools.db.room.entity.UserEntity
+import org.cru.godtools.db.room.repository.AttachmentsRoomRepository
 import org.cru.godtools.db.room.repository.DownloadedFilesRoomRepository
 import org.cru.godtools.db.room.repository.FollowupsRoomRepository
 import org.cru.godtools.db.room.repository.GlobalActivityRoomRepository
@@ -68,6 +70,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     }
 
     // region DAOs
+    abstract val attachmentsDao: AttachmentsDao
     abstract val downloadedFilesDao: DownloadedFilesDao
     abstract val followupsDao: FollowupsDao
     abstract val globalActivityDao: GlobalActivityDao
@@ -80,6 +83,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     // endregion DAOs
 
     // region Repositories
+    abstract val attachmentsRepository: AttachmentsRoomRepository
     abstract val downloadedFilesRepository: DownloadedFilesRoomRepository
     abstract val followupsRepository: FollowupsRoomRepository
     abstract val globalActivityRepository: GlobalActivityRoomRepository
