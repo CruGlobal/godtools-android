@@ -19,6 +19,7 @@ import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
 import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.AttachmentEntity
 import org.cru.godtools.db.room.entity.DownloadedFileEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
@@ -39,7 +40,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 59
+private const val DATABASE_VERSION = 60
 
 /*
  * Version history
@@ -63,6 +64,7 @@ private const val DATABASE_VERSION = 59
  * v6.1.0 - v6.2.0
  * 58: 2023-01-25
  * 59: 2023-05-15
+ * 60: 2023-05-09
  */
 
 @Singleton
@@ -76,7 +78,6 @@ class GodToolsDatabase @Inject internal constructor(
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
-            db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -293,6 +294,28 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(ToolTable.SQL_DELETE_TABLE)
+                    }
+                    60 -> {
+                        db.query(
+                            AttachmentTable.TABLE_NAME,
+                            AttachmentTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            while (it.moveToNext()) {
+                                val attachment = AttachmentMapper.toObject(it)
+                                attachment.toolId
+                                    ?.let { roomDb.toolsDao.findToolByIdBlocking(it) }?.code
+                                    ?.let { attachment.toolCode = it }
+
+                                roomDb.attachmentsDao.insertOrIgnore(AttachmentEntity(attachment))
+                            }
+                        }
+
+                        db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }

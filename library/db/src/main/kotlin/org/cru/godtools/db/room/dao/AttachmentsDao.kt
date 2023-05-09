@@ -25,6 +25,8 @@ internal interface AttachmentsDao {
     fun getAttachmentsForTool(toolCode: String): List<AttachmentEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnore(attachment: AttachmentEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreAttachments(attachments: Collection<AttachmentEntity>)
     @Upsert(entity = AttachmentEntity::class)
     fun upsertSyncAttachments(attachments: Collection<SyncAttachment>)
