@@ -22,6 +22,7 @@ import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.keynote.godtools.android.db.Contract.BaseTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
 import org.keynote.godtools.android.db.GodToolsDao
@@ -108,7 +109,7 @@ internal class LegacyToolsRepository @Inject constructor(
     override fun storeToolFromSync(tool: Tool) {
         dao.updateOrInsert(
             tool, SQLiteDatabase.CONFLICT_REPLACE,
-            ToolTable.COLUMN_CODE, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
+            BaseTable.COLUMN_ID, ToolTable.COLUMN_TYPE, ToolTable.COLUMN_NAME, ToolTable.COLUMN_DESCRIPTION,
             ToolTable.COLUMN_CATEGORY, ToolTable.COLUMN_SHARES, ToolTable.COLUMN_BANNER,
             ToolTable.COLUMN_DETAILS_BANNER, ToolTable.COLUMN_DETAILS_BANNER_ANIMATION,
             ToolTable.COLUMN_DETAILS_BANNER_YOUTUBE, ToolTable.COLUMN_DEFAULT_ORDER, ToolTable.COLUMN_HIDDEN,
