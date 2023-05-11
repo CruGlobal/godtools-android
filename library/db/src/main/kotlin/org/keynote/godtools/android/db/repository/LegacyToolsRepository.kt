@@ -66,8 +66,7 @@ internal class LegacyToolsRepository @Inject constructor(
         .orderBy(ToolTable.COLUMN_DEFAULT_ORDER)
         .getAsFlow(dao)
 
-    override fun toolsChangeFlow(emitOnStart: Boolean) =
-        dao.invalidationFlow(Tool::class.java, emitOnStart = emitOnStart)
+    override fun toolsChangeFlow() = dao.invalidationFlow(Tool::class.java)
 
     override suspend fun pinTool(code: String) {
         val tool = Tool().also {

@@ -238,8 +238,9 @@ abstract class ToolsRepositoryIT {
 
     // region toolsChangeFlow()
     @Test
-    fun `toolsChangeFlow(emitOnStart = true)`() = testScope.runTest {
-        repository.toolsChangeFlow(emitOnStart = true).test {
+    fun `toolsChangeFlow()`() = testScope.runTest {
+        repository.toolsChangeFlow().test {
+            runCurrent()
             expectMostRecentItem()
 
             val tool = Tool().apply {
@@ -253,14 +254,6 @@ abstract class ToolsRepositoryIT {
             repository.pinTool("tool")
             runCurrent()
             expectMostRecentItem()
-        }
-    }
-
-    @Test
-    fun `toolsChangeFlow(emitOnStart = false)`() = testScope.runTest {
-        repository.toolsChangeFlow(emitOnStart = false).test {
-            runCurrent()
-            expectNoEvents()
         }
     }
     // endregion toolsChangeFlow()

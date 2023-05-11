@@ -22,7 +22,7 @@ interface ToolsRepository {
     fun getFavoriteToolsFlow(): Flow<List<Tool>>
     fun getLessonsFlow(): Flow<List<Lesson>>
 
-    fun toolsChangeFlow(emitOnStart: Boolean = true): Flow<Any?>
+    fun toolsChangeFlow(): Flow<Any?>
 
     suspend fun pinTool(code: String)
     suspend fun unpinTool(code: String)
