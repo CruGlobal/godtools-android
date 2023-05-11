@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun commitFavoriteToolOrder() {
-        viewModelScope.launch { toolsRepository.updateToolOrder(favoriteToolsOrder.value.mapNotNull { it.code }) }
+        viewModelScope.launch { toolsRepository.storeToolOrder(favoriteToolsOrder.value.mapNotNull { it.code }) }
     }
     // endregion Favorite Tools
 

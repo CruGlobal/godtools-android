@@ -284,6 +284,26 @@ abstract class ToolsRepositoryIT {
         }
     }
 
+    // region storeToolOrder()
+    @Test
+    fun `storeToolOrder()`() = testScope.runTest {
+        val tool1 = Tool("tool1") { order = 7 }
+        val tool2 = Tool("tool2") { order = 6 }
+        val tool3 = Tool("tool3") { order = 5 }
+        repository.storeInitialResources(listOf(tool1, tool2, tool3))
+        assertEquals(
+            listOf("tool3", "tool2", "tool1"),
+            repository.getTools().sortedBy { it.order }.map { it.code }
+        )
+
+        repository.storeToolOrder(listOf("tool1", "tool3"))
+        assertEquals(
+            listOf("tool1", "tool3", "tool2"),
+            repository.getTools().sortedBy { it.order }.map { it.code }
+        )
+    }
+    // endregion storeToolOrder()
+
     // region updateToolShares()
     @Test
     fun `updateToolViews()`() = testScope.runTest {

@@ -84,7 +84,7 @@ internal class LegacyToolsRepository @Inject constructor(
         dao.updateAsync(tool, ToolTable.COLUMN_ADDED).await()
     }
 
-    override suspend fun updateToolOrder(tools: List<String>) {
+    override suspend fun storeToolOrder(tools: List<String>) {
         dao.transactionAsync(exclusive = false) {
             val tool = Tool()
             dao.update(tool, null, ToolTable.COLUMN_ORDER)

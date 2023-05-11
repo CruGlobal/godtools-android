@@ -27,7 +27,7 @@ interface ToolsRepository {
     suspend fun pinTool(code: String)
     suspend fun unpinTool(code: String)
 
-    suspend fun updateToolOrder(tools: List<String>)
+    suspend fun storeToolOrder(tools: List<String>)
     suspend fun updateToolViews(code: String, delta: Int)
 
     // region Initial Content Methods
