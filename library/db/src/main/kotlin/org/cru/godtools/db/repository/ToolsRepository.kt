@@ -2,6 +2,7 @@ package org.cru.godtools.db.repository
 
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
@@ -19,7 +20,8 @@ interface ToolsRepository {
     fun getResourcesFlow(): Flow<List<Resource>>
     fun getToolsFlow(): Flow<List<Tool>>
     fun getMetaToolsFlow(): Flow<List<Tool>>
-    fun getFavoriteToolsFlow(): Flow<List<Tool>>
+    fun getFavoriteToolsFlow(): Flow<List<Tool>> =
+        getToolsFlow().map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
     fun getLessonsFlow(): Flow<List<Lesson>>
 
     fun toolsChangeFlow(): Flow<Any?>
