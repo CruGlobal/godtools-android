@@ -48,8 +48,7 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
-        every { attachmentsChangeFlow(false) } returns attachmentsChangeFlow
-        every { attachmentsChangeFlow(true) } returns attachmentsChangeFlow.onStart { emit(Unit) }
+        every { attachmentsChangeFlow() } returns attachmentsChangeFlow.onStart { emit(Unit) }
     }
     private val settings: Settings = mockk {
         every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
@@ -61,8 +60,7 @@ class GodToolsShortcutManagerDispatcherTest {
     }
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
-        every { toolsChangeFlow(false) } returns toolsChangeFlow
-        every { toolsChangeFlow(true) } returns toolsChangeFlow.onStart { emit(Unit) }
+        every { toolsChangeFlow() } returns toolsChangeFlow.onStart { emit(Unit) }
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { translationsChangeFlow(false) } returns translationsChangeFlow

@@ -2,6 +2,7 @@ package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
+import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -157,5 +158,35 @@ fun Tool(
     this.code = code
     this.type = type
     latestTranslations = translations
+    config()
+}
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun randomTool(
+    code: String = UUID.randomUUID().toString(),
+    type: Tool.Type = Tool.Type.values().random(),
+    config: Tool.() -> Unit = {},
+) = Tool(code, type) {
+    id = Random.nextLong()
+    this.code = code
+    this.type = type
+    name = UUID.randomUUID().toString()
+    category = UUID.randomUUID().toString()
+    description = UUID.randomUUID().toString()
+    shares = Random.nextInt()
+    pendingShares = Random.nextInt()
+    bannerId = Random.nextLong()
+    detailsBannerId = Random.nextLong()
+    detailsBannerAnimationId = Random.nextLong()
+    detailsBannerYoutubeVideoId = UUID.randomUUID().toString()
+    isScreenShareDisabled = Random.nextBoolean()
+    defaultOrder = Random.nextInt()
+    order = Random.nextInt()
+    metatoolCode = UUID.randomUUID().toString()
+    defaultVariantCode = UUID.randomUUID().toString()
+    isAdded = Random.nextBoolean()
+    isHidden = Random.nextBoolean()
+    isSpotlight = Random.nextBoolean()
     config()
 }

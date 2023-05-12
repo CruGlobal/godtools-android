@@ -10,7 +10,11 @@ interface AttachmentsRepository {
     suspend fun getAttachments(): List<Attachment>
     fun getAttachmentsFlow(): Flow<List<Attachment>>
 
-    fun attachmentsChangeFlow(emitOnStart: Boolean = true): Flow<Any?>
+    /**
+     * Returns a Flow that emits a value every time the Attachments table changes.
+     * This will always emit an initial value on collection.
+     */
+    fun attachmentsChangeFlow(): Flow<Any?>
 
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 

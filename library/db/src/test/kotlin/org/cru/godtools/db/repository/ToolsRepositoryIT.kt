@@ -19,6 +19,7 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
+import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -182,7 +183,7 @@ abstract class ToolsRepositoryIT {
         val tool2 = Tool("tool2") { isAdded = false }
         val fav1 = Tool("fav1") { isAdded = true }
         val fav2 = Tool("fav2") { isAdded = true }
-        repository.storeToolsFromSync(listOf(tool1, tool2, fav1, fav2))
+        repository.storeInitialResources(listOf(tool1, tool2, fav1, fav2))
 
         assertThat(
             repository.getFavoriteToolsFlow().first(),
@@ -238,8 +239,9 @@ abstract class ToolsRepositoryIT {
 
     // region toolsChangeFlow()
     @Test
-    fun `toolsChangeFlow(emitOnStart = true)`() = testScope.runTest {
-        repository.toolsChangeFlow(emitOnStart = true).test {
+    fun `toolsChangeFlow()`() = testScope.runTest {
+        repository.toolsChangeFlow().test {
+            runCurrent()
             expectMostRecentItem()
 
             val tool = Tool().apply {
@@ -255,20 +257,12 @@ abstract class ToolsRepositoryIT {
             expectMostRecentItem()
         }
     }
-
-    @Test
-    fun `toolsChangeFlow(emitOnStart = false)`() = testScope.runTest {
-        repository.toolsChangeFlow(emitOnStart = false).test {
-            runCurrent()
-            expectNoEvents()
-        }
-    }
     // endregion toolsChangeFlow()
 
     @Test
     fun verifyPinTool() = testScope.runTest {
         val code = "pinTool"
-        repository.storeToolFromSync(Tool(code))
+        repository.storeInitialResources(listOf(Tool(code)))
 
         repository.findToolFlow(code).test {
             assertFalse(assertNotNull(awaitItem()).isAdded)
@@ -281,7 +275,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun verifyUnpinTool() = testScope.runTest {
         val code = "pinTool"
-        repository.storeToolFromSync(Tool(code) { isAdded = true })
+        repository.storeInitialResources(listOf(Tool(code) { isAdded = true }))
 
         repository.findToolFlow(code).test {
             assertTrue(assertNotNull(awaitItem()).isAdded)
@@ -290,6 +284,26 @@ abstract class ToolsRepositoryIT {
             assertFalse(assertNotNull(awaitItem()).isAdded)
         }
     }
+
+    // region storeToolOrder()
+    @Test
+    fun `storeToolOrder()`() = testScope.runTest {
+        val tool1 = Tool("tool1") { order = 7 }
+        val tool2 = Tool("tool2") { order = 6 }
+        val tool3 = Tool("tool3") { order = 5 }
+        repository.storeInitialResources(listOf(tool1, tool2, tool3))
+        assertEquals(
+            listOf("tool3", "tool2", "tool1"),
+            repository.getTools().sortedBy { it.order }.map { it.code }
+        )
+
+        repository.storeToolOrder(listOf("tool1", "tool3"))
+        assertEquals(
+            listOf("tool1", "tool3", "tool2"),
+            repository.getTools().sortedBy { it.order }.map { it.code }
+        )
+    }
+    // endregion storeToolOrder()
 
     // region updateToolShares()
     @Test
@@ -319,12 +333,58 @@ abstract class ToolsRepositoryIT {
 
     // region storeToolFromSync()
     @Test
-    fun `storeToolFromSync()`() = testScope.runTest {
+    fun `storeToolFromSync() - New Tool`() = testScope.runTest {
         assertNull(repository.findTool("tool"))
-        val tool = Tool("tool")
+        val tool = randomTool("tool", Tool.Type.LESSON)
 
         repository.storeToolFromSync(tool)
-        assertThat(repository.findTool("tool"), tool(tool))
+        assertNotNull(repository.findTool("tool")) {
+            assertEquals(tool.id, it.id)
+            assertEquals(tool.code, it.code)
+            assertEquals(tool.type, it.type)
+            assertEquals(tool.name, it.name)
+            assertEquals(tool.category, it.category)
+            assertEquals(tool.description, it.description)
+            assertEquals(tool.shares, it.shares)
+            assertEquals(tool.bannerId, it.bannerId)
+            assertEquals(tool.detailsBannerId, it.detailsBannerId)
+            assertEquals(tool.detailsBannerAnimationId, it.detailsBannerAnimationId)
+            assertEquals(tool.detailsBannerYoutubeVideoId, it.detailsBannerYoutubeVideoId)
+            assertEquals(tool.isScreenShareDisabled, it.isScreenShareDisabled)
+            assertEquals(tool.defaultOrder, it.defaultOrder)
+            assertEquals(tool.metatoolCode, it.metatoolCode)
+            assertEquals(tool.defaultVariantCode, it.defaultVariantCode)
+            assertEquals(tool.isHidden, it.isHidden)
+            assertEquals(tool.isSpotlight, it.isSpotlight)
+        }
+    }
+
+    @Test
+    fun `storeToolFromSync() - Update Tool`() = testScope.runTest {
+        val initial = randomTool("tool", Tool.Type.TRACT)
+        repository.storeToolFromSync(initial)
+        val updated = randomTool("tool", Tool.Type.LESSON)
+
+        repository.storeToolFromSync(updated)
+        assertNotNull(repository.findTool("tool")) {
+            assertEquals(updated.id, it.id)
+            assertEquals(updated.code, it.code)
+            assertEquals(updated.type, it.type)
+            assertEquals(updated.name, it.name)
+            assertEquals(updated.category, it.category)
+            assertEquals(updated.description, it.description)
+            assertEquals(updated.shares, it.shares)
+            assertEquals(updated.bannerId, it.bannerId)
+            assertEquals(updated.detailsBannerId, it.detailsBannerId)
+            assertEquals(updated.detailsBannerAnimationId, it.detailsBannerAnimationId)
+            assertEquals(updated.detailsBannerYoutubeVideoId, it.detailsBannerYoutubeVideoId)
+            assertEquals(updated.isScreenShareDisabled, it.isScreenShareDisabled)
+            assertEquals(updated.defaultOrder, it.defaultOrder)
+            assertEquals(updated.metatoolCode, it.metatoolCode)
+            assertEquals(updated.defaultVariantCode, it.defaultVariantCode)
+            assertEquals(updated.isHidden, it.isHidden)
+            assertEquals(updated.isSpotlight, it.isSpotlight)
+        }
     }
 
     @Test
@@ -336,6 +396,18 @@ abstract class ToolsRepositoryIT {
 
         repository.storeToolFromSync(tool)
         assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
+    }
+
+    @Test
+    fun `storeToolFromSync() - Don't pave over pending tool views`() = testScope.runTest {
+        val tool = Tool("tool") { pendingShares = 0 }
+        repository.storeToolFromSync(tool)
+        assertNotNull(repository.findTool("tool")) { assertEquals(0, it.pendingShares) }
+        repository.updateToolViews("tool", 5)
+        assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
+
+        repository.storeToolFromSync(tool)
+        assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
     }
     // endregion storeToolFromSync()
 
@@ -357,7 +429,7 @@ abstract class ToolsRepositoryIT {
         val attachment1 = Attachment(tool = tool1)
         val attachment2 = Attachment(tool = tool2)
         val attachment3 = Attachment(tool = tool3)
-        repository.storeToolsFromSync(listOf(tool1, tool2, tool3))
+        repository.storeInitialResources(listOf(tool1, tool2, tool3))
         attachmentsRepository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
         assertNotNull(attachmentsRepository.findAttachment(attachment1.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
@@ -377,7 +449,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `deleteIfNotFavoriteBlocking() - Don't delete favorited tools`() = testScope.runTest {
-        repository.storeToolFromSync(Tool("tool") { isAdded = true })
+        repository.storeInitialResources(listOf(Tool("tool") { isAdded = true }))
         assertNotNull(repository.findTool("tool"))
 
         repository.deleteIfNotFavoriteBlocking("tool")

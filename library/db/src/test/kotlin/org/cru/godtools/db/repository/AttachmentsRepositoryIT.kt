@@ -75,8 +75,9 @@ abstract class AttachmentsRepositoryIT {
 
     // region attachmentsChangeFlow()
     @Test
-    fun `attachmentsChangeFlow(emitOnStart = true)`() = testScope.runTest {
-        repository.attachmentsChangeFlow(emitOnStart = true).test {
+    fun `attachmentsChangeFlow()`() = testScope.runTest {
+        repository.attachmentsChangeFlow().test {
+            runCurrent()
             expectMostRecentItem()
 
             val attachment = Attachment().apply {
@@ -91,14 +92,6 @@ abstract class AttachmentsRepositoryIT {
             repository.updateAttachmentDownloaded(attachment.id, true)
             runCurrent()
             expectMostRecentItem()
-        }
-    }
-
-    @Test
-    fun `attachmentsChangeFlow(emitOnStart = false)`() = testScope.runTest {
-        repository.attachmentsChangeFlow(emitOnStart = false).test {
-            runCurrent()
-            expectNoEvents()
         }
     }
     // endregion attachmentsChangeFlow()
