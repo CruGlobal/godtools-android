@@ -22,6 +22,7 @@ import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.DownloadedFileEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
+import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
@@ -38,7 +39,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 58
+private const val DATABASE_VERSION = 59
 
 /*
  * Version history
@@ -61,6 +62,7 @@ private const val DATABASE_VERSION = 58
  * 57: 2022-12-06
  * v6.1.0 - v6.2.0
  * 58: 2023-01-25
+ * 59: 2023-05-15
  */
 
 @Singleton
@@ -72,7 +74,6 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(ToolTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
@@ -274,6 +275,24 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(DownloadedFileTable.SQL_DELETE_TABLE)
+                    }
+                    59 -> {
+                        db.query(
+                            ToolTable.TABLE_NAME,
+                            ToolTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.map { ToolMapper.toObject(it) }
+                                .filter { it.isValid }
+                                .map { ToolEntity(it) }
+                                .let { roomDb.toolsDao.insertOrIgnoreTools(it) }
+                        }
+
+                        db.execSQL(ToolTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }

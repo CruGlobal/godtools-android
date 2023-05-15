@@ -143,7 +143,7 @@ class Tool : Base() {
     @JsonApiAttribute(JSON_SPOTLIGHT)
     var isSpotlight = false
 
-    val isValid get() = code != null
+    val isValid get() = code != null && id != INVALID_ID
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
