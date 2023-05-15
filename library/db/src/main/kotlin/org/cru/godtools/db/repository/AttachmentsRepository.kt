@@ -24,7 +24,7 @@ interface AttachmentsRepository {
 
     // region Sync Methods
     fun storeAttachmentsFromSync(attachments: Collection<Attachment>)
-    fun removeAttachmentsMissingFromSync(toolId: Long, syncedAttachments: Collection<Attachment>)
+    fun removeAttachmentsMissingFromSync(tool: Tool, syncedAttachments: Collection<Attachment>)
     fun deleteAttachmentsFor(tool: Tool)
     // endregion Sync Methods
 }

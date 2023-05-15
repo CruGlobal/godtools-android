@@ -63,9 +63,9 @@ internal class LegacyAttachmentsRepository @Inject constructor(private val dao: 
         }
     }
 
-    override fun removeAttachmentsMissingFromSync(toolId: Long, syncedAttachments: Collection<Attachment>) {
+    override fun removeAttachmentsMissingFromSync(tool: Tool, syncedAttachments: Collection<Attachment>) {
         val keep = syncedAttachments.mapTo(mutableSetOf()) { it.id }
-        Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(toolId)).get(dao)
+        Query.select<Attachment>().where(AttachmentTable.FIELD_TOOL.eq(tool.id)).get(dao)
             .filterNot { it.id in keep }
             .forEach { dao.delete(it) }
     }

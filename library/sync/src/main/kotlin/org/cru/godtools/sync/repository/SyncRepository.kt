@@ -51,7 +51,7 @@ internal class SyncRepository @Inject constructor(
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
             tool.attachments?.let { attachments ->
                 attachmentsRepository.storeAttachmentsFromSync(attachments)
-                attachmentsRepository.removeAttachmentsMissingFromSync(tool.id, attachments)
+                attachmentsRepository.removeAttachmentsMissingFromSync(tool, attachments)
             }
         }
         if (includes.include(Tool.JSON_METATOOL)) {
