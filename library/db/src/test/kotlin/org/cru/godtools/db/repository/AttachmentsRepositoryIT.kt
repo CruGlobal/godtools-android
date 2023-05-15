@@ -19,6 +19,7 @@ import org.cru.godtools.model.Tool
 abstract class AttachmentsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: AttachmentsRepository
+    abstract val toolsRepository: ToolsRepository
 
     @Test
     fun `findAttachment()`() = testScope.runTest {
@@ -181,18 +182,10 @@ abstract class AttachmentsRepositoryIT {
     fun `removeAttachmentsMissingFromSync()`() = testScope.runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
-        val attachment1 = Attachment().apply {
-            id = Random.nextLong()
-            toolId = tool1.id
-        }
-        val attachment2 = Attachment().apply {
-            id = Random.nextLong()
-            toolId = tool1.id
-        }
-        val attachment3 = Attachment().apply {
-            id = Random.nextLong()
-            toolId = tool2.id
-        }
+        val attachment1 = Attachment(tool = tool1)
+        val attachment2 = Attachment(tool = tool1)
+        val attachment3 = Attachment(tool = tool2)
+        toolsRepository.storeToolsFromSync(listOf(tool1, tool2))
         repository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
 
         repository.removeAttachmentsMissingFromSync(tool1, listOf(attachment2))
@@ -206,12 +199,16 @@ abstract class AttachmentsRepositoryIT {
     // region deleteAttachmentsFor()
     @Test
     fun `deleteAttachmentsFor()`() = testScope.runTest {
-        val tool = Tool().apply { id = Random.nextLong() }
-        val attachments = List(2) { Attachment().apply { id = Random.nextLong() } }
-        attachments[0].toolId = tool.id
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        toolsRepository.storeToolsFromSync(setOf(tool1, tool2))
+        val attachments = listOf(
+            Attachment(tool = tool1),
+            Attachment(tool = tool2)
+        )
         repository.storeAttachmentsFromSync(attachments)
 
-        repository.deleteAttachmentsFor(tool)
+        repository.deleteAttachmentsFor(tool1)
         assertNotNull(repository.getAttachments()) {
             assertEquals(1, it.size)
             assertEquals(attachments[1].id, it[0].id)
