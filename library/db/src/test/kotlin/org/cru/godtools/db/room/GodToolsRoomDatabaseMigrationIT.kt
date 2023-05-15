@@ -183,4 +183,26 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(filesQuery)
         }
     }
+
+    @Test
+    fun testMigrate8To9() {
+        val toolsQuery = "SELECT * FROM tools"
+
+        // create v8 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 8).use { db ->
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(toolsQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 9, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(toolsQuery)
+        }
+    }
 }
