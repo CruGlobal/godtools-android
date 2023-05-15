@@ -55,7 +55,6 @@ object Contract : BaseContract() {
     object ToolTable : BaseTable() {
         internal const val TABLE_NAME = "tools"
         internal val TABLE = Table.forClass<Tool>()
-        val TABLE_META = TABLE.`as`("meta")
 
         const val COLUMN_CODE = "code"
         const val COLUMN_TYPE = "type"
@@ -77,17 +76,8 @@ object Contract : BaseContract() {
         const val COLUMN_HIDDEN = "isHidden"
         const val COLUMN_SPOTLIGHT = "isSpotlight"
 
-        internal val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_CODE = TABLE.field(COLUMN_CODE)
         val FIELD_TYPE = TABLE.field(COLUMN_TYPE)
-        val FIELD_BANNER = TABLE.field(COLUMN_BANNER)
-        val FIELD_DETAILS_BANNER = TABLE.field(COLUMN_DETAILS_BANNER)
-        val FIELD_DETAILS_BANNER_ANIMATION = TABLE.field(COLUMN_DETAILS_BANNER_ANIMATION)
-        val FIELD_META_TOOL = TABLE.field(COLUMN_META_TOOL)
-        val FIELD_ADDED = TABLE.field(COLUMN_ADDED)
-        val FIELD_HIDDEN = TABLE.field(COLUMN_HIDDEN)
-        val FIELD_SPOTLIGHT = TABLE.field(COLUMN_SPOTLIGHT)
-        private val FIELD_PENDING_SHARES = TABLE.field(COLUMN_PENDING_SHARES)
 
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
@@ -133,13 +123,8 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
-        val SQL_JOIN_METATOOL =
-            TABLE.join(TABLE_META).on(TABLE_META.field(COLUMN_CODE).eq(TABLE.field(COLUMN_META_TOOL)))
-
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
         val SQL_WHERE_IS_TOOL_TYPE = FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
-        val SQL_WHERE_HAS_PENDING_SHARES = FIELD_PENDING_SHARES.gt(0)
-        const val SQL_ORDER_BY_ORDER = "$COLUMN_ORDER,$COLUMN_DEFAULT_ORDER"
 
         internal val SQL_CREATE_TABLE = create(
             TABLE_NAME,
@@ -200,12 +185,12 @@ object Contract : BaseContract() {
         const val COLUMN_DOWNLOADED = "downloaded"
         internal const val COLUMN_LAST_ACCESSED = "last_accessed"
 
-        val FIELD_ID = TABLE.field(COLUMN_ID)
+        private val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
         val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
         val FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST)
         private val FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED)
-        val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)
+        private val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)
 
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
@@ -235,8 +220,6 @@ object Contract : BaseContract() {
         private const val SQL_COLUMN_PUBLISHED = "$COLUMN_PUBLISHED INTEGER"
         private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
         private const val SQL_COLUMN_LAST_ACCESSED = "$COLUMN_LAST_ACCESSED INTEGER"
-
-        val SQL_JOIN_TOOL = TABLE.join(ToolTable.TABLE).on(FIELD_TOOL.eq(ToolTable.FIELD_CODE))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
         internal val SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()))
@@ -315,15 +298,12 @@ object Contract : BaseContract() {
 
         internal const val COLUMN_NAME = "name"
 
-        val FIELD_NAME = TABLE.field(COLUMN_NAME)
+        private val FIELD_NAME = TABLE.field(COLUMN_NAME)
 
         internal val PROJECTION_ALL = arrayOf(COLUMN_NAME)
 
         private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME)
-
-        val SQL_JOIN_TRANSLATION_FILE =
-            TABLE.join(TranslationFileTable.TABLE).on(FIELD_NAME.eq(TranslationFileTable.FIELD_FILE))
 
         internal val SQL_WHERE_PRIMARY_KEY: Expression = FIELD_NAME.eq(bind())
 
@@ -339,16 +319,13 @@ object Contract : BaseContract() {
         internal const val COLUMN_FILE = "file"
 
         private val FIELD_TRANSLATION = TABLE.field(COLUMN_TRANSLATION)
-        val FIELD_FILE = TABLE.field(COLUMN_FILE)
+        private val FIELD_FILE = TABLE.field(COLUMN_FILE)
 
         internal val PROJECTION_ALL = arrayOf(COLUMN_TRANSLATION, COLUMN_FILE)
 
         private const val SQL_COLUMN_TRANSLATION = "$COLUMN_TRANSLATION INTEGER NOT NULL"
         private const val SQL_COLUMN_NAME = "$COLUMN_FILE TEXT NOT NULL"
         private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_TRANSLATION, COLUMN_FILE)
-
-        val SQL_JOIN_TRANSLATION =
-            TABLE.join(TranslationTable.TABLE).on(FIELD_TRANSLATION.eq(TranslationTable.FIELD_ID))
 
         internal val SQL_WHERE_PRIMARY_KEY = FIELD_TRANSLATION.eq(bind()).and(FIELD_FILE.eq(bind()))
 
