@@ -179,21 +179,23 @@ abstract class AttachmentsRepositoryIT {
     // region removeAttachmentsMissingFromSync()
     @Test
     fun `removeAttachmentsMissingFromSync()`() = testScope.runTest {
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
         val attachment1 = Attachment().apply {
             id = Random.nextLong()
-            toolId = 1
+            toolId = tool1.id
         }
         val attachment2 = Attachment().apply {
             id = Random.nextLong()
-            toolId = 1
+            toolId = tool1.id
         }
         val attachment3 = Attachment().apply {
             id = Random.nextLong()
-            toolId = 2
+            toolId = tool2.id
         }
         repository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
 
-        repository.removeAttachmentsMissingFromSync(1, listOf(attachment2))
+        repository.removeAttachmentsMissingFromSync(tool1, listOf(attachment2))
         assertNotNull(repository.getAttachments()) {
             assertEquals(2, it.size)
             assertEquals(setOf(attachment2.id, attachment3.id), it.map { it.id }.toSet())
