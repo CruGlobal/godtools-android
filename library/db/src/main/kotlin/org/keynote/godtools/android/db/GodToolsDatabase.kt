@@ -58,6 +58,7 @@ private const val DATABASE_VERSION = 57
  * 55: 2022-11-22
  * 56: 2022-12-06
  * 57: 2022-12-06
+ * v6.1.0 - v6.2.0
  */
 
 @Singleton

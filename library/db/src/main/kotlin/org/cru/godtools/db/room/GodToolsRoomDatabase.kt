@@ -88,6 +88,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 6: 2022-12-05
  * v6.1.0-v6.1.1
  * 7: 2023-03-27
+ * v6.2.0
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
