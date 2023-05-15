@@ -8,12 +8,10 @@ import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.CoroutinesAsyncDao
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Base
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
-import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
 import org.keynote.godtools.android.db.Contract.TranslationTable
@@ -29,13 +27,6 @@ class GodToolsDao @Inject internal constructor(
             ToolTable.PROJECTION_ALL,
             ToolMapper,
             ToolTable.SQL_WHERE_PRIMARY_KEY
-        )
-        registerType(
-            Attachment::class.java,
-            AttachmentTable.TABLE_NAME,
-            AttachmentTable.PROJECTION_ALL,
-            AttachmentMapper,
-            AttachmentTable.SQL_WHERE_PRIMARY_KEY
         )
         registerType(
             Translation::class.java,

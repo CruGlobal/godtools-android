@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROW
 import org.ccci.gto.android.common.db.Expression.Companion.bind
 import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Table
-import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
@@ -255,7 +254,6 @@ object Contract : BaseContract() {
 
     internal object AttachmentTable : BaseTable() {
         internal const val TABLE_NAME = "attachments"
-        internal val TABLE = Table.forClass<Attachment>()
 
         const val COLUMN_TOOL = "tool"
         const val COLUMN_FILENAME = "filename"
@@ -263,29 +261,8 @@ object Contract : BaseContract() {
         internal const val COLUMN_LOCALFILENAME = "local_filename"
         const val COLUMN_DOWNLOADED = "downloaded"
 
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-        val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
+        internal val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_DOWNLOADED)
 
-        internal val PROJECTION_ALL =
-            arrayOf(COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_LOCALFILENAME, COLUMN_DOWNLOADED)
-
-        private const val SQL_COLUMN_TOOL = "$COLUMN_TOOL INTEGER"
-        private const val SQL_COLUMN_FILENAME = "$COLUMN_FILENAME TEXT"
-        private const val SQL_COLUMN_SHA256 = "$COLUMN_SHA256 TEXT"
-        private const val SQL_COLUMN_LOCALFILENAME = "$COLUMN_LOCALFILENAME TEXT"
-        private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
-
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_TOOL,
-            SQL_COLUMN_FILENAME,
-            SQL_COLUMN_SHA256,
-            SQL_COLUMN_LOCALFILENAME,
-            SQL_COLUMN_DOWNLOADED
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
