@@ -11,6 +11,7 @@ import org.cru.godtools.db.room.dao.FollowupsDao
 import org.cru.godtools.db.room.dao.GlobalActivityDao
 import org.cru.godtools.db.room.dao.LanguagesDao
 import org.cru.godtools.db.room.dao.LastSyncTimeDao
+import org.cru.godtools.db.room.dao.ToolsDao
 import org.cru.godtools.db.room.dao.TrainingTipDao
 import org.cru.godtools.db.room.dao.UserCountersDao
 import org.cru.godtools.db.room.dao.UserDao
@@ -29,6 +30,7 @@ import org.cru.godtools.db.room.repository.FollowupsRoomRepository
 import org.cru.godtools.db.room.repository.GlobalActivityRoomRepository
 import org.cru.godtools.db.room.repository.LanguagesRoomRepository
 import org.cru.godtools.db.room.repository.LastSyncTimeRoomRepository
+import org.cru.godtools.db.room.repository.ToolsRoomRepository
 import org.cru.godtools.db.room.repository.TrainingTipsRoomRepository
 import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
@@ -70,6 +72,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     abstract val followupsDao: FollowupsDao
     abstract val globalActivityDao: GlobalActivityDao
     abstract val languagesDao: LanguagesDao
+    abstract val toolsDao: ToolsDao
     abstract val trainingTipDao: TrainingTipDao
     abstract val userDao: UserDao
     abstract val userCountersDao: UserCountersDao
@@ -85,6 +88,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     abstract val userRepository: UserRoomRepository
     abstract val userCountersRepository: UserCountersRoomRepository
     abstract val lastSyncTimeRepository: LastSyncTimeRoomRepository
+    abstract val toolsRepository: ToolsRoomRepository
     // endregion Repositories
 }
 
