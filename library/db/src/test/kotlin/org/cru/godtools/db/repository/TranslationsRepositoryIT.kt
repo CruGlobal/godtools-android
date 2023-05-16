@@ -2,8 +2,6 @@ package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
 import java.util.Locale
-import java.util.UUID
-import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -14,40 +12,39 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.junit.Before
 
 private const val TOOL = "tool"
+private const val TOOL2 = "tool2"
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class TranslationsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: TranslationsRepository
+    abstract val toolsRepository: ToolsRepository
+    abstract val languagesRepository: LanguagesRepository
+
+    @Before
+    fun createToolAndLanguage() {
+        toolsRepository.storeToolFromSync(Tool(TOOL))
+        toolsRepository.storeToolFromSync(Tool(TOOL2))
+        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.ENGLISH })
+        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.FRENCH })
+        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.GERMAN })
+    }
 
     // region findLatestTranslation()
     @Test
     fun `findLatestTranslation()`() = testScope.runTest {
         repository.storeInitialTranslations(
             listOf(
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 1,
-                ),
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 2,
-                ),
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.GERMAN,
-                    version = 3,
-                ),
-                createTranslation(
-                    toolCode = "${TOOL}other",
-                    languageCode = Locale.ENGLISH,
-                    version = 3,
-                ),
+                Translation(TOOL, Locale.ENGLISH, 1),
+                Translation(TOOL, Locale.ENGLISH, 2),
+                Translation(TOOL, Locale.GERMAN, 3),
+                Translation(TOOL2, Locale.ENGLISH, 3),
             )
         )
 
@@ -62,18 +59,8 @@ abstract class TranslationsRepositoryIT {
     fun `findLatestTranslation(downloadedOnly=true)`() = testScope.runTest {
         repository.storeInitialTranslations(
             listOf(
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 1,
-                    isDownloaded = true,
-                ),
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 2,
-                    isDownloaded = false,
-                ),
+                Translation(TOOL, Locale.ENGLISH, 1, isDownloaded = true),
+                Translation(TOOL, Locale.ENGLISH, 2, isDownloaded = false),
             )
         )
 
@@ -88,7 +75,7 @@ abstract class TranslationsRepositoryIT {
     // region getTranslations()
     @Test
     fun `getTranslations()`() = testScope.runTest {
-        val translations = List(10) { createTranslation() }
+        val translations = List(10) { Translation(TOOL, Locale.ENGLISH) }
         repository.storeInitialTranslations(translations)
 
         assertEquals(translations.map { it.id }.toSet(), repository.getTranslations().map { it.id }.toSet())
@@ -98,9 +85,9 @@ abstract class TranslationsRepositoryIT {
     // region getTranslationsForLanguages()
     @Test
     fun `getTranslationsForLanguages()`() = testScope.runTest {
-        val english = createTranslation(languageCode = Locale.ENGLISH)
-        val french = createTranslation(languageCode = Locale.FRENCH)
-        val german = createTranslation(languageCode = Locale.GERMAN)
+        val english = Translation(TOOL, Locale.ENGLISH)
+        val french = Translation(TOOL, Locale.FRENCH)
+        val german = Translation(TOOL, Locale.GERMAN)
         repository.storeInitialTranslations(listOf(english, french, german))
 
         assertEquals(
@@ -113,13 +100,13 @@ abstract class TranslationsRepositoryIT {
     // region getTranslationsForToolBlocking()
     @Test
     fun `getTranslationsForToolBlocking()`() = testScope.runTest {
-        val tool1 = Translation("tool1")
-        val tool2 = Translation("tool2")
+        val tool1 = Translation(TOOL)
+        val tool2 = Translation(TOOL2)
         repository.storeInitialTranslations(listOf(tool1, tool2))
 
         assertEquals(
             setOf(tool1.id),
-            repository.getTranslationsForToolBlocking("tool1").map { it.id }.toSet()
+            repository.getTranslationsForToolBlocking(TOOL).map { it.id }.toSet()
         )
     }
     // endregion getTranslationsForToolBlocking()
@@ -130,14 +117,14 @@ abstract class TranslationsRepositoryIT {
         repository.getTranslationsFlow().test {
             assertTrue(awaitItem().isEmpty())
 
-            val translations1 = List(2) { createTranslation() }
+            val translations1 = List(2) { Translation(TOOL) }
             repository.storeInitialTranslations(translations1)
             assertNotNull(awaitItem()) {
                 assertEquals(2, it.size)
                 assertEquals(translations1.map { it.id }.toSet(), it.map { it.id }.toSet())
             }
 
-            val translations2 = List(8) { createTranslation() }
+            val translations2 = List(8) { Translation(TOOL) }
             repository.storeInitialTranslations(translations2)
             assertNotNull(awaitItem()) {
                 assertEquals(10, it.size)
@@ -150,28 +137,28 @@ abstract class TranslationsRepositoryIT {
     // region getTranslationsForToolFlow()
     @Test
     fun `getTranslationsForToolFlow()`() = testScope.runTest {
-        val tool1 = createTranslation(toolCode = "tool")
-        val tool2 = createTranslation(toolCode = "tool")
+        val trans1 = Translation(TOOL)
+        val trans2 = Translation(TOOL)
 
-        repository.getTranslationsForToolFlow("tool").test {
-            repository.storeInitialTranslations(listOf(createTranslation()))
+        repository.getTranslationsForToolFlow(TOOL).test {
+            repository.storeInitialTranslations(listOf(Translation(TOOL2)))
             runCurrent()
             assertTrue(expectMostRecentItem().isEmpty())
 
-            repository.storeInitialTranslations(List(5) { createTranslation() })
-            repository.storeInitialTranslations(listOf(tool1))
+            repository.storeInitialTranslations(List(5) { Translation(TOOL2) })
+            repository.storeInitialTranslations(listOf(trans1))
             runCurrent()
             assertNotNull(expectMostRecentItem()) {
                 assertEquals(1, it.size)
-                assertEquals(tool1.id, it.first().id)
+                assertEquals(trans1.id, it.first().id)
             }
 
-            repository.storeInitialTranslations(List(5) { createTranslation() })
-            repository.storeInitialTranslations(listOf(tool2))
+            repository.storeInitialTranslations(List(5) { Translation(TOOL2) })
+            repository.storeInitialTranslations(listOf(trans2))
             runCurrent()
             assertNotNull(expectMostRecentItem()) {
                 assertEquals(2, it.size)
-                assertEquals(setOf(tool1.id, tool2.id), it.mapTo(mutableSetOf()) { it.id })
+                assertEquals(setOf(trans1.id, trans2.id), it.map { it.id }.toSet())
             }
         }
     }
@@ -184,7 +171,7 @@ abstract class TranslationsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val translation = createTranslation(isDownloaded = false)
+            val translation = Translation(TOOL, Locale.ENGLISH, isDownloaded = false)
             repository.storeInitialTranslations(listOf(translation))
             runCurrent()
             expectMostRecentItem()
@@ -199,7 +186,7 @@ abstract class TranslationsRepositoryIT {
     // region markTranslationDownloaded()
     @Test
     fun `markTranslationDownloaded()`() = testScope.runTest {
-        val translation = createTranslation(isDownloaded = false)
+        val translation = Translation(TOOL, Locale.ENGLISH, isDownloaded = false)
         repository.storeInitialTranslations(listOf(translation))
 
         assertNotNull(repository.findTranslation(translation.id)) { assertFalse(it.isDownloaded) }
@@ -213,18 +200,8 @@ abstract class TranslationsRepositoryIT {
     // region markStaleTranslationsAsNotDownloaded()
     @Test
     fun `markStaleTranslationsAsNotDownloaded()`() = testScope.runTest {
-        val translation1 = createTranslation(
-            toolCode = "tool",
-            languageCode = Locale.ENGLISH,
-            version = 1,
-            isDownloaded = true
-        )
-        val translation2 = createTranslation(
-            toolCode = "tool",
-            languageCode = Locale.ENGLISH,
-            version = 2,
-            isDownloaded = true
-        )
+        val translation1 = Translation(TOOL, Locale.ENGLISH, 1, isDownloaded = true)
+        val translation2 = Translation(TOOL, Locale.ENGLISH, 2, isDownloaded = true)
         repository.storeInitialTranslations(listOf(translation1, translation2))
 
         assertTrue(repository.markStaleTranslationsAsNotDownloaded())
@@ -234,8 +211,8 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `markStaleTranslationsAsNotDownloaded() - no changes`() = testScope.runTest {
-        val translation1 = createTranslation(isDownloaded = true)
-        val translation2 = createTranslation(isDownloaded = true)
+        val translation1 = Translation(TOOL, Locale.ENGLISH, isDownloaded = true)
+        val translation2 = Translation(TOOL2, Locale.ENGLISH, isDownloaded = true)
         repository.storeInitialTranslations(listOf(translation1, translation2))
 
         assertFalse(repository.markStaleTranslationsAsNotDownloaded())
@@ -247,7 +224,7 @@ abstract class TranslationsRepositoryIT {
     // region storeInitialTranslations()
     @Test
     fun `storeInitialTranslations()`() = testScope.runTest {
-        val translation = createTranslation()
+        val translation = Translation(TOOL, Locale.ENGLISH)
         repository.storeInitialTranslations(listOf(translation))
 
         assertNotNull(repository.findTranslation(translation.id)) {
@@ -261,8 +238,8 @@ abstract class TranslationsRepositoryIT {
     // region markBrokenManifestNotDownloaded()
     @Test
     fun `markBrokenManifestNotDownloaded()`() = testScope.runTest {
-        val broken = List(2) { createTranslation(manifestFileName = "broken.xml", isDownloaded = true) }
-        val valid = List(2) { createTranslation(isDownloaded = true) }
+        val broken = List(2) { Translation(TOOL, Locale.ENGLISH, manifestFileName = "broken.xml", isDownloaded = true) }
+        val valid = List(2) { Translation(TOOL, Locale.ENGLISH, isDownloaded = true) }
         repository.storeInitialTranslations(broken + valid)
 
         repository.markBrokenManifestNotDownloaded("broken.xml")
@@ -273,7 +250,7 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `storeTranslationsFromSync()`() = testScope.runTest {
-        val translation = Translation("tool")
+        val translation = Translation(TOOL)
 
         repository.storeTranslationFromSync(translation)
         assertNotNull(repository.findTranslation(translation.id)) {
@@ -303,20 +280,4 @@ abstract class TranslationsRepositoryIT {
         assertNotNull(repository.findTranslation(translation.id))
     }
     // endregion deleteTranslationIfNotDownloadedBlocking()
-
-    private fun createTranslation(
-        id: Long = Random.nextLong(),
-        toolCode: String = UUID.randomUUID().toString(),
-        languageCode: Locale = Locale.ENGLISH,
-        version: Int = Random.nextInt(),
-        manifestFileName: String? = UUID.randomUUID().toString(),
-        isDownloaded: Boolean = true,
-    ) = Translation().also {
-        it.id = id
-        it.toolCode = toolCode
-        it.languageCode = languageCode
-        it.version = version
-        it.manifestFileName = manifestFileName
-        it.isDownloaded = isDownloaded
-    }
 }

@@ -99,6 +99,7 @@ fun Translation(
     version: Int = Translation.DEFAULT_VERSION,
     id: Long = Random.nextLong(),
     manifestFileName: String? = UUID.randomUUID().toString(),
+    isDownloaded: Boolean = false,
     block: Translation.() -> Unit = {},
 ) = Translation().apply {
     this.id = id
@@ -106,5 +107,6 @@ fun Translation(
     this.languageCode = languageCode
     this.version = version
     this.manifestFileName = manifestFileName
+    this.isDownloaded = isDownloaded
     block()
 }
