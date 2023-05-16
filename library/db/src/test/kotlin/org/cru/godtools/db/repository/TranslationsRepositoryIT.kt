@@ -124,36 +124,6 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion getTranslationsForToolBlocking()
 
-    // region getTranslationsFor()
-    @Test
-    fun `getTranslationsFor(tools=list())`() = testScope.runTest {
-        val tool1 = createTranslation(toolCode = "tool1")
-        val tool2 = createTranslation(toolCode = "tool2")
-        val tool3 = createTranslation(toolCode = "tool3")
-        repository.storeInitialTranslations(listOf(tool1, tool2, tool3))
-
-        assertEquals(
-            setOf(tool1.id, tool2.id),
-            repository.getTranslationsFor(tools = listOf("tool1", "tool2")).map { it.id }.toSet()
-        )
-    }
-
-    @Test
-    fun `getTranslationsFor(tools=list(), languages=list())`() = testScope.runTest {
-        val tool1English = createTranslation(toolCode = "tool1", languageCode = Locale.ENGLISH)
-        val tool1French = createTranslation(toolCode = "tool1", languageCode = Locale.FRENCH)
-        val tool2English = createTranslation(toolCode = "tool2", languageCode = Locale.ENGLISH)
-        val tool2French = createTranslation(toolCode = "tool2", languageCode = Locale.FRENCH)
-        repository.storeInitialTranslations(listOf(tool1English, tool1French, tool2English, tool2French))
-
-        assertEquals(
-            setOf(tool1English.id),
-            repository.getTranslationsFor(tools = setOf("tool1"), languages = setOf(Locale.ENGLISH))
-                .map { it.id }.toSet()
-        )
-    }
-    // endregion getTranslationsFor()
-
     // region getTranslationsFlow()
     @Test
     fun `getTranslationsFlow()`() = testScope.runTest {

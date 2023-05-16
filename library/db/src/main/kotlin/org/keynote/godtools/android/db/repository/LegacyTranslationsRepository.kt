@@ -37,16 +37,17 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         trackAccess: Boolean,
     ) = getLatestTranslationFlow(code, locale, isDownloaded, trackAccess)
 
+    override suspend fun getTranslations() = dao.getAsync(Query.select<Translation>()).await()
+    override suspend fun getTranslationsForLanguages(languages: Collection<Locale>) =
+        dao.getAsync(getTranslationsForQuery(languages = languages)).await()
     override fun getTranslationsForToolBlocking(tool: String) = Query.select<Translation>()
         .where(TranslationTable.FIELD_TOOL.eq(bind(tool)))
         .get(dao)
-    override suspend fun getTranslationsFor(tools: Collection<String>?, languages: Collection<Locale>?) =
-        dao.getAsync(getTranslationsForQuery(tools = tools, languages = languages)).await()
     override fun getTranslationsFlowFor(tools: Collection<String>?, languages: Collection<Locale>?) =
         getTranslationsForQuery(tools = tools, languages = languages).getAsFlow(dao)
     private fun getTranslationsForQuery(
-        tools: Collection<String>?,
-        languages: Collection<Locale>?,
+        tools: Collection<String>? = null,
+        languages: Collection<Locale>? = null,
     ) = Query.select<Translation>()
         .run {
             when (tools) {

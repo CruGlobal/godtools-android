@@ -18,14 +18,10 @@ interface TranslationsRepository {
         trackAccess: Boolean = false
     ): Flow<Translation?>
 
-    suspend fun getTranslations() = getTranslationsFor()
-    suspend fun getTranslationsForLanguages(languages: Collection<Locale>) = getTranslationsFor(languages = languages)
+    suspend fun getTranslations(): List<Translation>
+    suspend fun getTranslationsForLanguages(languages: Collection<Locale>): List<Translation>
     fun getTranslationsForToolBlocking(tool: String): List<Translation>
     fun getTranslationsForToolFlow(tool: String): Flow<List<Translation>> = getTranslationsFlowFor(tools = listOf(tool))
-    suspend fun getTranslationsFor(
-        tools: Collection<String>? = null,
-        languages: Collection<Locale>? = null,
-    ): List<Translation>
     fun getTranslationsFlow() = getTranslationsFlowFor()
     fun getTranslationsFlowFor(
         tools: Collection<String>? = null,
