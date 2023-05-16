@@ -85,6 +85,21 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion findLatestTranslation()
 
+    // region getTranslationsForLanguages()
+    @Test
+    fun `getTranslationsForLanguages()`() = testScope.runTest {
+        val english = createTranslation(languageCode = Locale.ENGLISH)
+        val french = createTranslation(languageCode = Locale.FRENCH)
+        val german = createTranslation(languageCode = Locale.GERMAN)
+        repository.storeInitialTranslations(listOf(english, french, german))
+
+        assertEquals(
+            setOf(english.id, french.id),
+            repository.getTranslationsForLanguages(setOf(Locale.ENGLISH, Locale.FRENCH)).map { it.id }.toSet()
+        )
+    }
+    // endregion getTranslationsForLanguages()
+
     // region getTranslationsForToolBlocking()
     @Test
     fun `getTranslationsForToolBlocking()`() = testScope.runTest {
@@ -118,19 +133,6 @@ abstract class TranslationsRepositoryIT {
         assertEquals(
             setOf(tool1.id, tool2.id),
             repository.getTranslationsFor(tools = listOf("tool1", "tool2")).map { it.id }.toSet()
-        )
-    }
-
-    @Test
-    fun `getTranslationsFor(languages=list())`() = testScope.runTest {
-        val english = createTranslation(languageCode = Locale.ENGLISH)
-        val french = createTranslation(languageCode = Locale.FRENCH)
-        val german = createTranslation(languageCode = Locale.GERMAN)
-        repository.storeInitialTranslations(listOf(english, french, german))
-
-        assertEquals(
-            setOf(english.id, french.id),
-            repository.getTranslationsFor(languages = setOf(Locale.ENGLISH, Locale.FRENCH)).map { it.id }.toSet()
         )
     }
 

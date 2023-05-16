@@ -88,7 +88,7 @@ class TasksTest {
         val tools = Array(5) { Tool("${it + 1}") }
         val translations = listOf("1", "5").map { Translation(it) }
         coEvery { toolsRepository.getTools() } returns tools.toList()
-        coEvery { translationsRepository.getTranslationsFor(languages = any()) } returns translations
+        coEvery { translationsRepository.getTranslationsForLanguages(any()) } returns translations
         every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
 
         tasks.initFavoriteTools()

@@ -92,7 +92,7 @@ internal class Tasks @Inject constructor(
             val preferred = async {
                 bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
-            val available = translationsRepository.getTranslationsFor(languages = listOf(settings.primaryLanguage))
+            val available = translationsRepository.getTranslationsForLanguages(listOf(settings.primaryLanguage))
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
 
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
