@@ -149,7 +149,7 @@ internal class Tasks @Inject constructor(
                     val toolCode = translation.toolCode ?: return@launch
                     val languageCode = translation.languageCode
                     val latestTranslation =
-                        translationsRepository.findLatestTranslation(toolCode, languageCode, isDownloaded = true)
+                        translationsRepository.findLatestTranslation(toolCode, languageCode, downloadedOnly = true)
                     if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
                     withContext(Dispatchers.IO) {

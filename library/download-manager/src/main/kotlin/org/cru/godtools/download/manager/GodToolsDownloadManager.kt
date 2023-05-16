@@ -249,7 +249,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
-            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, isDownloaded = true)
+            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, downloadedOnly = true)
             if (current != null && current.version >= translation.version) return
 
             startProgress(key)

@@ -59,7 +59,7 @@ abstract class TranslationsRepositoryIT {
     }
 
     @Test
-    fun `findLatestTranslation(isDownloaded=true)`() = testScope.runTest {
+    fun `findLatestTranslation(downloadedOnly=true)`() = testScope.runTest {
         repository.storeInitialTranslations(
             listOf(
                 createTranslation(
@@ -77,7 +77,7 @@ abstract class TranslationsRepositoryIT {
             )
         )
 
-        assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH, isDownloaded = true)) {
+        assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH, downloadedOnly = true)) {
             assertEquals(TOOL, it.toolCode)
             assertEquals(Locale.ENGLISH, it.languageCode)
             assertEquals(1, it.version)

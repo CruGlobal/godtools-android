@@ -26,16 +26,16 @@ import org.keynote.godtools.android.db.GodToolsDao
 @Singleton
 internal class LegacyTranslationsRepository @Inject constructor(private val dao: GodToolsDao) : TranslationsRepository {
     override suspend fun findTranslation(id: Long) = dao.findAsync<Translation>(id).await()
-    override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) = when {
+    override suspend fun findLatestTranslation(code: String?, locale: Locale?, downloadedOnly: Boolean) = when {
         code == null || locale == null -> null
-        else -> dao.getAsync(getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded)).await().firstOrNull()
+        else -> dao.getAsync(getLatestTranslationQuery(code, locale, downloadedOnly)).await().firstOrNull()
     }
     override fun findLatestTranslationFlow(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean,
+        downloadedOnly: Boolean,
         trackAccess: Boolean,
-    ) = getLatestTranslationFlow(code, locale, isDownloaded, trackAccess)
+    ) = getLatestTranslationFlow(code, locale, downloadedOnly, trackAccess)
 
     override suspend fun getTranslations() = dao.getAsync(Query.select<Translation>()).await()
     override suspend fun getTranslationsForLanguages(languages: Collection<Locale>) =
@@ -63,10 +63,10 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         }
 
     // region Latest Translations
-    private fun getLatestTranslationQuery(code: String, locale: Locale, isDownloaded: Boolean) =
+    private fun getLatestTranslationQuery(code: String, locale: Locale, downloadedOnly: Boolean) =
         Query.select<Translation>()
             .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale) and TranslationTable.SQL_WHERE_PUBLISHED)
-            .run { if (isDownloaded) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
+            .run { if (downloadedOnly) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
 

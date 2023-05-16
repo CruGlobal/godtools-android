@@ -9,12 +9,12 @@ interface TranslationsRepository {
     suspend fun findLatestTranslation(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean = false
+        downloadedOnly: Boolean = false
     ): Translation?
     fun findLatestTranslationFlow(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean = false,
+        downloadedOnly: Boolean = false,
         trackAccess: Boolean = false
     ): Flow<Translation?>
 
