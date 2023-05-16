@@ -31,7 +31,7 @@ interface TranslationsRepository {
         languages: Collection<Locale>? = null,
     ): Flow<List<Translation>>
 
-    fun translationsChangeFlow(emitOnStart: Boolean = true): Flow<Any?>
+    fun translationsChangeFlow(): Flow<Any?>
 
     // region DownloadManager Methods
     suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean)

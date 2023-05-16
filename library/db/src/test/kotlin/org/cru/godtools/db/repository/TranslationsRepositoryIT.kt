@@ -205,8 +205,9 @@ abstract class TranslationsRepositoryIT {
 
     // region translationsChangeFlow()
     @Test
-    fun `translationsChangeFlow(emitOnStart = true)`() = testScope.runTest {
-        repository.translationsChangeFlow(emitOnStart = true).test {
+    fun `translationsChangeFlow()`() = testScope.runTest {
+        repository.translationsChangeFlow().test {
+            runCurrent()
             expectMostRecentItem()
 
             val translation = createTranslation(isDownloaded = false)
@@ -217,14 +218,6 @@ abstract class TranslationsRepositoryIT {
             repository.markTranslationDownloaded(translation.id, true)
             runCurrent()
             expectMostRecentItem()
-        }
-    }
-
-    @Test
-    fun `translationsChangeFlow(emitOnStart = false)`() = testScope.runTest {
-        repository.translationsChangeFlow(emitOnStart = false).test {
-            runCurrent()
-            expectNoEvents()
         }
     }
     // endregion translationsChangeFlow()
