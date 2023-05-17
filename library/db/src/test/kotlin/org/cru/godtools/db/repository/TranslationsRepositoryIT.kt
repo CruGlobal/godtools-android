@@ -1,10 +1,12 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
+import java.util.Date
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -15,6 +17,7 @@ import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Before
 
 private const val TOOL = "tool"
@@ -248,16 +251,74 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion markBrokenManifestNotDownloaded()
 
+    // region storeTranslationsFromSync()
     @Test
-    fun `storeTranslationsFromSync()`() = testScope.runTest {
-        val translation = Translation(TOOL)
+    fun `storeTranslationsFromSync() - New Translation`() = testScope.runTest {
+        val translation = randomTranslation(TOOL)
 
         repository.storeTranslationFromSync(translation)
         assertNotNull(repository.findTranslation(translation.id)) {
             assertEquals(translation.toolCode, it.toolCode)
+            assertEquals(translation.languageCode, it.languageCode)
+            assertEquals(translation.version, it.version)
+            assertEquals(translation.name, it.name)
+            assertEquals(translation.description, it.description)
+            assertEquals(translation.tagline, it.tagline)
+            assertEquals(translation.toolDetailsConversationStarters, it.toolDetailsConversationStarters)
+            assertEquals(translation.toolDetailsOutline, it.toolDetailsOutline)
+            assertEquals(translation.toolDetailsBibleReferences, it.toolDetailsBibleReferences)
             assertEquals(translation.manifestFileName, it.manifestFileName)
         }
     }
+
+    @Test
+    fun `storeTranslationsFromSync() - Update Translation`() = testScope.runTest {
+        val initial = randomTranslation(TOOL)
+        val updated = randomTranslation(TOOL, id = initial.id)
+
+        repository.storeInitialTranslations(listOf(initial))
+        repository.storeTranslationFromSync(updated)
+        assertNotNull(repository.findTranslation(updated.id)) {
+            assertEquals(updated.toolCode, it.toolCode)
+            assertEquals(updated.languageCode, it.languageCode)
+            assertEquals(updated.version, it.version)
+            assertEquals(updated.name, it.name)
+            assertEquals(updated.description, it.description)
+            assertEquals(updated.tagline, it.tagline)
+            assertEquals(updated.toolDetailsConversationStarters, it.toolDetailsConversationStarters)
+            assertEquals(updated.toolDetailsOutline, it.toolDetailsOutline)
+            assertEquals(updated.toolDetailsBibleReferences, it.toolDetailsBibleReferences)
+            assertEquals(updated.manifestFileName, it.manifestFileName)
+        }
+    }
+
+    @Test
+    fun `storeTranslationsFromSync() - Don't update isDownloaded`() = testScope.runTest {
+        val initial = Translation(TOOL)
+        repository.storeTranslationFromSync(initial)
+        assertFalse(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+
+        repository.markTranslationDownloaded(initial.id, true)
+        assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+
+        val updated = Translation(TOOL, id = initial.id, isDownloaded = false)
+        repository.storeTranslationFromSync(updated)
+        assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+    }
+
+    @Test
+    fun `storeTranslationsFromSync() - Don't update lastAccessed`() = testScope.runTest {
+        val initial = Translation(TOOL)
+        val updated = Translation(TOOL, id = initial.id) { lastAccessed = Date() }
+        repository.storeTranslationFromSync(initial)
+
+        repository.storeTranslationFromSync(updated)
+        assertNotNull(repository.findTranslation(initial.id)) {
+            assertEquals(Translation.DEFAULT_LAST_ACCESSED, it.lastAccessed)
+            assertNotEquals(updated.lastAccessed, it.lastAccessed)
+        }
+    }
+    // endregion storeTranslationsFromSync()
 
     // region deleteTranslationIfNotDownloadedBlocking()
     @Test
