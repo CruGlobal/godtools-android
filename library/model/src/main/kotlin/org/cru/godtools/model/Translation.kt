@@ -79,6 +79,8 @@ class Translation : Base() {
     @JsonApiIgnore
     var lastAccessed = DEFAULT_LAST_ACCESSED
 
+    val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
+
     fun updateLastAccessed() {
         lastAccessed = Date()
     }

@@ -84,17 +84,18 @@ internal class SyncRepository @Inject constructor(
         includes: Includes
     ) {
         translations.forEach {
-            storeTranslation(it, includes)
-            existing?.remove(it.id)
+            if (storeTranslation(it, includes)) existing?.remove(it.id)
         }
 
         // prune any existing translations that weren't synced and aren't downloaded to the device
         existing?.forEach { translationsRepository.deleteTranslationIfNotDownloadedBlocking(it) }
     }
 
-    private fun storeTranslation(translation: Translation, includes: Includes) {
-        translationsRepository.storeTranslationFromSync(translation)
+    private fun storeTranslation(translation: Translation, includes: Includes): Boolean {
+        if (!translation.isValid) return false
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
+        translationsRepository.storeTranslationFromSync(translation)
+        return true
     }
     // endregion Translations
 }
