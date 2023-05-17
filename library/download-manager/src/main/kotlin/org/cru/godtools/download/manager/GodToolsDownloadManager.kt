@@ -480,7 +480,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                         .distinctUntilChanged()
                 ) { t, l -> emitAll(translationsRepository.getTranslationsFlowFor(tools = t, languages = l)) }
                 .map {
-                    it.filter { it.isPublished && !it.isDownloaded }
+                    it.filter { !it.isDownloaded }
                         .map { TranslationKey(it) }
                         .toSet()
                 }

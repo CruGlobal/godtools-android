@@ -34,7 +34,7 @@ internal object TranslationMapper : BaseMapper<Translation>() {
             COLUMN_DETAILS_BIBLE_REFERENCES -> values.put(field, obj.toolDetailsBibleReferences)
             COLUMN_DETAILS_CONVERSATION_STARTERS -> values.put(field, obj.toolDetailsConversationStarters)
             COLUMN_MANIFEST -> values.put(field, obj.manifestFileName)
-            COLUMN_PUBLISHED -> values.put(field, obj.isPublished)
+            COLUMN_PUBLISHED -> values.put(field, true)
             COLUMN_DOWNLOADED -> values.put(field, obj.isDownloaded)
             COLUMN_LAST_ACCESSED -> values.put(field, serialize(obj.lastAccessed))
             else -> super.mapField(values, field, obj)
@@ -53,7 +53,6 @@ internal object TranslationMapper : BaseMapper<Translation>() {
         toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES)
         toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)
         manifestFileName = c.getString(COLUMN_MANIFEST)
-        isPublished = getBool(c, COLUMN_PUBLISHED, Translation.DEFAULT_PUBLISHED)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
         lastAccessed = getDate(c, COLUMN_LAST_ACCESSED, Translation.DEFAULT_LAST_ACCESSED)!!
     }

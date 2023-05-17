@@ -27,7 +27,7 @@ class Translation : Base() {
         private const val JSON_TOOL_DETAILS_BIBLE_REFERENCES = "attr-tool-details-bible-references"
         private const val JSON_TOOL_DETAILS_OUTLINE = "attr-tool-details-outline"
 
-        const val DEFAULT_PUBLISHED = false
+        const val DEFAULT_PUBLISHED = true
         const val DEFAULT_VERSION = 0
         val DEFAULT_LAST_ACCESSED = Date(0)
     }
@@ -56,7 +56,8 @@ class Translation : Base() {
     @JsonApiAttribute(JSON_VERSION)
     var version = DEFAULT_VERSION
     @JsonApiAttribute(JSON_IS_PUBLISHED)
-    var isPublished = DEFAULT_PUBLISHED
+    internal var isPublished = DEFAULT_PUBLISHED
+        private set
 
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
@@ -78,6 +79,8 @@ class Translation : Base() {
     var isDownloaded = false
     @JsonApiIgnore
     var lastAccessed = DEFAULT_LAST_ACCESSED
+
+    val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
 
     fun updateLastAccessed() {
         lastAccessed = Date()

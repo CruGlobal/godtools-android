@@ -55,7 +55,7 @@ class LanguagesFragmentViewModel @Inject constructor(
 
     val sortLocale = MutableLiveData<Locale>()
     private val rawLanguages = translationsRepository.getTranslationsFlowFor()
-        .map { it.filter { it.isPublished }.mapTo(mutableSetOf()) { it.languageCode } }
+        .map { it.map { it.languageCode }.toSet() }
         .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
         .asLiveData()
     private val sortedLanguages: LiveData<Map<String, Language>> = sortLocale.distinctUntilChanged()
