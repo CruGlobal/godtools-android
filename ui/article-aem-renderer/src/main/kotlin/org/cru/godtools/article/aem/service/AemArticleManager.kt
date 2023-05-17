@@ -235,7 +235,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
                         .toSet()
                 }
                 .distinctUntilChanged()
-                .flatMapLatest { translationsRepository.getTranslationsFlowFor(tools = it) }
+                .flatMapLatest { translationsRepository.getTranslationsForToolsFlow(it) }
                 .map { it.filter { it.isDownloaded } }
                 .conflate()
                 .onEach { aemArticleManager.processDownloadedTranslations(it) }

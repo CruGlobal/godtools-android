@@ -43,8 +43,15 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     override fun getTranslationsForToolBlocking(tool: String) = Query.select<Translation>()
         .where(TranslationTable.FIELD_TOOL.eq(bind(tool)))
         .get(dao)
-    override fun getTranslationsFlowFor(tools: Collection<String>?, languages: Collection<Locale>?) =
-        getTranslationsForQuery(tools = tools, languages = languages).getAsFlow(dao)
+
+    override fun getTranslationsFlow() = getTranslationsForQuery().getAsFlow(dao)
+    override fun getTranslationsForToolsFlow(tools: Collection<String>) =
+        getTranslationsForQuery(tools = tools).getAsFlow(dao)
+    override fun getTranslationsForToolsAndLanguagesFlow(
+        tools: Collection<String>,
+        languages: Collection<Locale>,
+    ) = getTranslationsForQuery(tools = tools, languages = languages).getAsFlow(dao)
+
     private fun getTranslationsForQuery(
         tools: Collection<String>? = null,
         languages: Collection<Locale>? = null,

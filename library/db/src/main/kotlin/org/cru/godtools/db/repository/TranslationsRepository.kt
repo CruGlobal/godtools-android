@@ -21,11 +21,13 @@ interface TranslationsRepository {
     suspend fun getTranslations(): List<Translation>
     suspend fun getTranslationsForLanguages(languages: Collection<Locale>): List<Translation>
     fun getTranslationsForToolBlocking(tool: String): List<Translation>
-    fun getTranslationsForToolFlow(tool: String): Flow<List<Translation>> = getTranslationsFlowFor(tools = listOf(tool))
-    fun getTranslationsFlow() = getTranslationsFlowFor()
-    fun getTranslationsFlowFor(
-        tools: Collection<String>? = null,
-        languages: Collection<Locale>? = null,
+
+    fun getTranslationsFlow(): Flow<List<Translation>>
+    fun getTranslationsForToolFlow(tool: String) = getTranslationsForToolsFlow(listOf(tool))
+    fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<Translation>>
+    fun getTranslationsForToolsAndLanguagesFlow(
+        tools: Collection<String>,
+        languages: Collection<Locale>,
     ): Flow<List<Translation>>
 
     fun translationsChangeFlow(): Flow<Any?>
