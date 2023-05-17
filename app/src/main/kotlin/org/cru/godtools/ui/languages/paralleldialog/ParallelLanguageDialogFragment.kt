@@ -77,7 +77,7 @@ internal class ParallelLanguageDialogDataModel @Inject constructor(
     val selectedLocale = savedState.getLiveData("selectedLocale", settings.parallelLanguage)
 
     private val rawLanguages = translationsRepository.getTranslationsFlow()
-        .map { it.filter { it.isPublished }.map { it.languageCode }.toSet() }
+        .map { it.map { it.languageCode }.toSet() }
         .distinctUntilChanged()
         .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
         .asLiveData()

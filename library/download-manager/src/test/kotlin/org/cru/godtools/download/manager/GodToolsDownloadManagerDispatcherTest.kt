@@ -105,12 +105,10 @@ class GodToolsDownloadManagerDispatcherTest {
         val translation1 = Translation().apply {
             toolCode = "tool1"
             languageCode = Locale.ENGLISH
-            isPublished = true
         }
         val translation2 = Translation().apply {
             toolCode = "tool2"
             languageCode = Locale.FRENCH
-            isPublished = true
         }
         translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()

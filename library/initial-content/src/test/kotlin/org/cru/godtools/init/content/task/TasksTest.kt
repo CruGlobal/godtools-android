@@ -106,6 +106,5 @@ class TasksTest {
     private fun Tool(tool: String) = Tool().apply { code = tool }
     private fun Translation(tool: String) = Translation().apply {
         toolCode = tool
-        isPublished = true
     }
 }

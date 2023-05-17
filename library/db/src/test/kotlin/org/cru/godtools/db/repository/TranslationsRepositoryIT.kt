@@ -59,32 +59,6 @@ abstract class TranslationsRepositoryIT {
     }
 
     @Test
-    fun `findLatestTranslation() - Published only`() = testScope.runTest {
-        repository.storeInitialTranslations(
-            listOf(
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 1,
-                    isPublished = true,
-                ),
-                createTranslation(
-                    toolCode = TOOL,
-                    languageCode = Locale.ENGLISH,
-                    version = 2,
-                    isPublished = false,
-                ),
-            )
-        )
-
-        assertNotNull(repository.findLatestTranslation(TOOL, Locale.ENGLISH)) {
-            assertEquals(TOOL, it.toolCode)
-            assertEquals(Locale.ENGLISH, it.languageCode)
-            assertEquals(1, it.version)
-        }
-    }
-
-    @Test
     fun `findLatestTranslation(isDownloaded=true)`() = testScope.runTest {
         repository.storeInitialTranslations(
             listOf(
@@ -369,7 +343,6 @@ abstract class TranslationsRepositoryIT {
         languageCode: Locale = Locale.ENGLISH,
         version: Int = Random.nextInt(),
         manifestFileName: String? = UUID.randomUUID().toString(),
-        isPublished: Boolean = true,
         isDownloaded: Boolean = true,
     ) = Translation().also {
         it.id = id
@@ -377,7 +350,6 @@ abstract class TranslationsRepositoryIT {
         it.languageCode = languageCode
         it.version = version
         it.manifestFileName = manifestFileName
-        it.isPublished = isPublished
         it.isDownloaded = isDownloaded
     }
 }

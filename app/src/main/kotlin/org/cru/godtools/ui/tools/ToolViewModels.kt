@@ -69,7 +69,7 @@ class ToolViewModels @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val availableLanguages = translationsRepository.getTranslationsForToolFlow(code)
-            .map { it.filter { it.isPublished }.map { it.languageCode }.toSet() }
+            .map { it.map { it.languageCode }.toSet() }
             .distinctUntilChanged()
             .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
