@@ -68,7 +68,7 @@ class ToolViewModels @Inject constructor(
         val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val availableLanguages = translationsRepository.getTranslationsForToolFlow(code)
+        val availableLanguages = translationsRepository.getTranslationsFlowForTool(code)
             .map { it.map { it.languageCode }.toSet() }
             .distinctUntilChanged()
             .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
