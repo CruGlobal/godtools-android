@@ -471,7 +471,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                             setOfNotNull(prim, para, Settings.defaultLanguage)
                         }
                         .distinctUntilChanged()
-                ) { t, l -> emitAll(translationsRepository.getTranslationsForToolsAndLanguagesFlow(t, l)) }
+                ) { t, l -> emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l)) }
                 .map {
                     it.filter { !it.isDownloaded }
                         .map { TranslationKey(it) }
