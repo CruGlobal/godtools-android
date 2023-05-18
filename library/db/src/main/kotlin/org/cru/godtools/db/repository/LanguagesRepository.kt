@@ -8,7 +8,7 @@ interface LanguagesRepository {
     suspend fun findLanguage(locale: Locale): Language?
     fun getLanguageFlow(locale: Locale): Flow<Language?>
     suspend fun getLanguages(): List<Language>
-    fun getLanguagesForLocalesFlow(locales: Collection<Locale>): Flow<Collection<Language>>
+    fun getLanguagesFlowForLocales(locales: Collection<Locale>): Flow<Collection<Language>>
 
     // region Initial Content Methods
     suspend fun storeInitialLanguages(languages: Collection<Language>)
