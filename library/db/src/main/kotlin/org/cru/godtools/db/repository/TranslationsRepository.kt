@@ -24,9 +24,9 @@ interface TranslationsRepository {
     fun getTranslationsFlow(): Flow<List<Translation>>
     fun getTranslationsForToolFlow(tool: String) = getTranslationsForToolsFlow(listOf(tool))
     fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<Translation>>
-    fun getTranslationsForToolsAndLanguagesFlow(
+    fun getTranslationsForToolsAndLocalesFlow(
         tools: Collection<String>,
-        languages: Collection<Locale>,
+        locales: Collection<Locale>,
     ): Flow<List<Translation>>
 
     fun translationsChangeFlow(): Flow<Any?>
