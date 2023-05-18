@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import org.ccci.gto.android.common.db.Query
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
@@ -61,15 +60,9 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
-
-@VisibleForTesting
-internal val QUERY_STALE_TRANSLATIONS = Query.select<Translation>()
-    .where(TranslationTable.SQL_WHERE_DOWNLOADED)
-    .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -249,7 +242,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         val key = TranslationKey(translation)
         translationsMutex.withLock(TranslationKey(translation)) {
-            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, isDownloaded = true)
+            val current = translationsRepository.findLatestTranslation(key.tool, key.locale, downloadedOnly = true)
             if (current != null && current.version >= translation.version) return
 
             startProgress(key)
@@ -478,7 +471,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                             setOfNotNull(prim, para, Settings.defaultLanguage)
                         }
                         .distinctUntilChanged()
-                ) { t, l -> emitAll(translationsRepository.getTranslationsFlowFor(tools = t, languages = l)) }
+                ) { t, l -> emitAll(translationsRepository.getTranslationsForToolsAndLanguagesFlow(t, l)) }
                 .map {
                     it.filter { !it.isDownloaded }
                         .map { TranslationKey(it) }

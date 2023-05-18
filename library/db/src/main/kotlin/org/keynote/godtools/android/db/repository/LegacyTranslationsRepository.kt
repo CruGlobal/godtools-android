@@ -26,27 +26,35 @@ import org.keynote.godtools.android.db.GodToolsDao
 @Singleton
 internal class LegacyTranslationsRepository @Inject constructor(private val dao: GodToolsDao) : TranslationsRepository {
     override suspend fun findTranslation(id: Long) = dao.findAsync<Translation>(id).await()
-    override suspend fun findLatestTranslation(code: String?, locale: Locale?, isDownloaded: Boolean) = when {
+    override suspend fun findLatestTranslation(code: String?, locale: Locale?, downloadedOnly: Boolean) = when {
         code == null || locale == null -> null
-        else -> dao.getAsync(getLatestTranslationQuery(code, locale, isDownloaded = isDownloaded)).await().firstOrNull()
+        else -> dao.getAsync(getLatestTranslationQuery(code, locale, downloadedOnly)).await().firstOrNull()
     }
     override fun findLatestTranslationFlow(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean,
+        downloadedOnly: Boolean,
         trackAccess: Boolean,
-    ) = getLatestTranslationFlow(code, locale, isDownloaded, trackAccess)
+    ) = getLatestTranslationFlow(code, locale, downloadedOnly, trackAccess)
 
+    override suspend fun getTranslations() = dao.getAsync(Query.select<Translation>()).await()
+    override suspend fun getTranslationsForLanguages(languages: Collection<Locale>) =
+        dao.getAsync(getTranslationsForQuery(languages = languages)).await()
     override fun getTranslationsForToolBlocking(tool: String) = Query.select<Translation>()
         .where(TranslationTable.FIELD_TOOL.eq(bind(tool)))
         .get(dao)
-    override suspend fun getTranslationsFor(tools: Collection<String>?, languages: Collection<Locale>?) =
-        dao.getAsync(getTranslationsForQuery(tools = tools, languages = languages)).await()
-    override fun getTranslationsFlowFor(tools: Collection<String>?, languages: Collection<Locale>?) =
-        getTranslationsForQuery(tools = tools, languages = languages).getAsFlow(dao)
+
+    override fun getTranslationsFlow() = getTranslationsForQuery().getAsFlow(dao)
+    override fun getTranslationsForToolsFlow(tools: Collection<String>) =
+        getTranslationsForQuery(tools = tools).getAsFlow(dao)
+    override fun getTranslationsForToolsAndLanguagesFlow(
+        tools: Collection<String>,
+        languages: Collection<Locale>,
+    ) = getTranslationsForQuery(tools = tools, languages = languages).getAsFlow(dao)
+
     private fun getTranslationsForQuery(
-        tools: Collection<String>?,
-        languages: Collection<Locale>?,
+        tools: Collection<String>? = null,
+        languages: Collection<Locale>? = null,
     ) = Query.select<Translation>()
         .run {
             when (tools) {
@@ -62,10 +70,10 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         }
 
     // region Latest Translations
-    private fun getLatestTranslationQuery(code: String, locale: Locale, isDownloaded: Boolean) =
+    private fun getLatestTranslationQuery(code: String, locale: Locale, downloadedOnly: Boolean) =
         Query.select<Translation>()
             .where(TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale) and TranslationTable.SQL_WHERE_PUBLISHED)
-            .run { if (isDownloaded) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
+            .run { if (downloadedOnly) andWhere(TranslationTable.SQL_WHERE_DOWNLOADED) else this }
             .orderBy(TranslationTable.SQL_ORDER_BY_VERSION_DESC)
             .limit(1)
 
@@ -97,8 +105,7 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
     }
     // endregion Latest Translations
 
-    override fun translationsChangeFlow(emitOnStart: Boolean) =
-        dao.invalidationFlow(Translation::class.java, emitOnStart = emitOnStart)
+    override fun translationsChangeFlow() = dao.invalidationFlow(Translation::class.java, emitOnStart = true)
 
     // region DownloadManager Methods
     override suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean) {

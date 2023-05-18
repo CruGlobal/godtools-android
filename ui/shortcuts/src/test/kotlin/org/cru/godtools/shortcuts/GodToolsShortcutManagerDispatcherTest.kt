@@ -63,8 +63,7 @@ class GodToolsShortcutManagerDispatcherTest {
         every { toolsChangeFlow() } returns toolsChangeFlow.onStart { emit(Unit) }
     }
     private val translationsRepository: TranslationsRepository = mockk {
-        every { translationsChangeFlow(false) } returns translationsChangeFlow
-        every { translationsChangeFlow(true) } returns translationsChangeFlow.onStart { emit(Unit) }
+        every { translationsChangeFlow() } returns translationsChangeFlow.onStart { emit(Unit) }
     }
 
     private val dispatcher by lazy {

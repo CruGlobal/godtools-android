@@ -5,6 +5,8 @@ import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
+import kotlin.random.nextInt
+import kotlin.random.nextLong
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
@@ -99,6 +101,7 @@ fun Translation(
     version: Int = Translation.DEFAULT_VERSION,
     id: Long = Random.nextLong(),
     manifestFileName: String? = UUID.randomUUID().toString(),
+    isDownloaded: Boolean = false,
     block: Translation.() -> Unit = {},
 ) = Translation().apply {
     this.id = id
@@ -106,5 +109,27 @@ fun Translation(
     this.languageCode = languageCode
     this.version = version
     this.manifestFileName = manifestFileName
+    this.isDownloaded = isDownloaded
     block()
+}
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun randomTranslation(
+    toolCode: String = UUID.randomUUID().toString(),
+    languageCode: Locale = Locale.ENGLISH,
+    id: Long = Random.nextLong(),
+    config: Translation.() -> Unit = {},
+) = Translation(toolCode, languageCode, id = id) {
+    version = Random.nextInt(1..Int.MAX_VALUE)
+    name = UUID.randomUUID().toString()
+    description = UUID.randomUUID().toString()
+    tagline = UUID.randomUUID().toString()
+    toolDetailsConversationStarters = UUID.randomUUID().toString()
+    toolDetailsOutline = UUID.randomUUID().toString()
+    toolDetailsBibleReferences = UUID.randomUUID().toString()
+    manifestFileName = UUID.randomUUID().toString()
+    isDownloaded = Random.nextBoolean()
+    lastAccessed = Date(Random.nextLong(1..Long.MAX_VALUE))
+    config()
 }

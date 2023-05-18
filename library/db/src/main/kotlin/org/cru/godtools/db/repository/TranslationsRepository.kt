@@ -9,29 +9,28 @@ interface TranslationsRepository {
     suspend fun findLatestTranslation(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean = false
+        downloadedOnly: Boolean = false
     ): Translation?
     fun findLatestTranslationFlow(
         code: String?,
         locale: Locale?,
-        isDownloaded: Boolean = false,
+        downloadedOnly: Boolean = false,
         trackAccess: Boolean = false
     ): Flow<Translation?>
 
-    suspend fun getTranslations() = getTranslationsFor()
+    suspend fun getTranslations(): List<Translation>
+    suspend fun getTranslationsForLanguages(languages: Collection<Locale>): List<Translation>
     fun getTranslationsForToolBlocking(tool: String): List<Translation>
-    fun getTranslationsForToolFlow(tool: String): Flow<List<Translation>> = getTranslationsFlowFor(tools = listOf(tool))
-    suspend fun getTranslationsFor(
-        tools: Collection<String>? = null,
-        languages: Collection<Locale>? = null,
-    ): List<Translation>
-    fun getTranslationsFlow() = getTranslationsFlowFor()
-    fun getTranslationsFlowFor(
-        tools: Collection<String>? = null,
-        languages: Collection<Locale>? = null,
+
+    fun getTranslationsFlow(): Flow<List<Translation>>
+    fun getTranslationsForToolFlow(tool: String) = getTranslationsForToolsFlow(listOf(tool))
+    fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<Translation>>
+    fun getTranslationsForToolsAndLanguagesFlow(
+        tools: Collection<String>,
+        languages: Collection<Locale>,
     ): Flow<List<Translation>>
 
-    fun translationsChangeFlow(emitOnStart: Boolean = true): Flow<Any?>
+    fun translationsChangeFlow(): Flow<Any?>
 
     // region DownloadManager Methods
     suspend fun markTranslationDownloaded(id: Long, isDownloaded: Boolean)

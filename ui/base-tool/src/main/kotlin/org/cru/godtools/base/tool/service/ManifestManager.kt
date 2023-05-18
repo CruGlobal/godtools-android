@@ -35,13 +35,13 @@ class ManifestManager @Inject constructor(
 
     fun preloadLatestPublishedManifest(toolCode: String, locale: Locale) {
         coroutineScope.launch {
-            val t = translationsRepository.findLatestTranslation(toolCode, locale, isDownloaded = true)
+            val t = translationsRepository.findLatestTranslation(toolCode, locale, downloadedOnly = true)
             if (t != null) getManifest(t)
         }
     }
 
     fun getLatestPublishedManifestFlow(toolCode: String, locale: Locale) =
-        translationsRepository.findLatestTranslationFlow(toolCode, locale, isDownloaded = true, trackAccess = true)
+        translationsRepository.findLatestTranslationFlow(toolCode, locale, downloadedOnly = true, trackAccess = true)
             .mapLatest { it?.let { getManifest(it) } }
 
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =

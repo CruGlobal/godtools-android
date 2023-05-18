@@ -62,7 +62,7 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { getTranslationsFlowFor(any(), any()) } returns flowOf(emptyList())
+            every { getTranslationsForToolsAndLanguagesFlow(any(), any()) } returns flowOf(emptyList())
         }
     }
     private val testScope = TestScope()
@@ -84,7 +84,7 @@ class GodToolsDownloadManagerDispatcherTest {
     fun `favoriteToolsJob should trigger downloadLatestPublishedTranslation()`() = testScope.runTest {
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
-            translationsRepository.getTranslationsFlowFor(
+            translationsRepository.getTranslationsForToolsAndLanguagesFlow(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 languages = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
             )
@@ -96,7 +96,7 @@ class GodToolsDownloadManagerDispatcherTest {
         parallelLanguageFlow.emit(Locale.FRENCH)
         runCurrent()
         verifyAll {
-            translationsRepository.getTranslationsFlowFor(
+            translationsRepository.getTranslationsForToolsAndLanguagesFlow(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 languages = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
             )
