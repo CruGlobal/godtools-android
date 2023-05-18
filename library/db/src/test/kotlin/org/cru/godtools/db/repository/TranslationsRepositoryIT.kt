@@ -234,6 +234,45 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion getTranslationsForToolFlow()
 
+    // region getTranslationsForToolsAndLocalesFlow()
+    @Test
+    fun `getTranslationsForToolsAndLocalesFlow()`() = testScope.runTest {
+        val trans1 = Translation(TOOL, Locale.ENGLISH)
+        val trans2 = Translation(TOOL, Locale.FRENCH)
+        val trans3 = Translation(TOOL, Locale.GERMAN)
+
+        repository.getTranslationsForToolsAndLocalesFlow(setOf(TOOL), setOf(Locale.ENGLISH, Locale.GERMAN)).test {
+            repository.storeInitialTranslations(listOf(Translation(TOOL2)))
+            runCurrent()
+            assertTrue(expectMostRecentItem().isEmpty())
+
+            repository.storeInitialTranslations(List(5) { Translation(TOOL2, Locale.FRENCH) })
+            repository.storeInitialTranslations(listOf(trans1))
+            runCurrent()
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(1, it.size)
+                assertEquals(trans1.id, it.first().id)
+            }
+
+            repository.storeInitialTranslations(List(5) { Translation(TOOL2, Locale.GERMAN) })
+            repository.storeInitialTranslations(listOf(trans2))
+            runCurrent()
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(1, it.size)
+                assertEquals(setOf(trans1.id), it.map { it.id }.toSet())
+            }
+
+            repository.storeInitialTranslations(List(5) { Translation(TOOL2, Locale.FRENCH) })
+            repository.storeInitialTranslations(listOf(trans3))
+            runCurrent()
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(2, it.size)
+                assertEquals(setOf(trans1.id, trans3.id), it.map { it.id }.toSet())
+            }
+        }
+    }
+    // endregion getTranslationsForToolsAndLocalesFlow()
+
     // region translationsChangeFlow()
     @Test
     fun `translationsChangeFlow()`() = testScope.runTest {
