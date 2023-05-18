@@ -81,7 +81,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     private val translationCache = object : LruCache<TranslationKey, LiveData<Translation?>>(10) {
         override fun create(key: TranslationKey) =
-            translationsRepository.findLatestTranslationFlow(key.tool, key.locale, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(key.tool, key.locale)
                 .distinctUntilChanged()
                 .asLiveData()
     }

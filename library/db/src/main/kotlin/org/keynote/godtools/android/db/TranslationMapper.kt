@@ -13,7 +13,6 @@ import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_OUTLINE
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DOWNLOADED
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LANGUAGE
-import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_LAST_ACCESSED
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_MANIFEST
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_NAME
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_PUBLISHED
@@ -36,7 +35,6 @@ internal object TranslationMapper : BaseMapper<Translation>() {
             COLUMN_MANIFEST -> values.put(field, obj.manifestFileName)
             COLUMN_PUBLISHED -> values.put(field, true)
             COLUMN_DOWNLOADED -> values.put(field, obj.isDownloaded)
-            COLUMN_LAST_ACCESSED -> values.put(field, serialize(obj.lastAccessed))
             else -> super.mapField(values, field, obj)
         }
     }
@@ -54,6 +52,5 @@ internal object TranslationMapper : BaseMapper<Translation>() {
         toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)
         manifestFileName = c.getString(COLUMN_MANIFEST)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
-        lastAccessed = getDate(c, COLUMN_LAST_ACCESSED, Translation.DEFAULT_LAST_ACCESSED)!!
     }
 }

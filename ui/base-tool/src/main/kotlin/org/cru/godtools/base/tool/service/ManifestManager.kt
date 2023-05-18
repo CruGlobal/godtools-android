@@ -41,7 +41,7 @@ class ManifestManager @Inject constructor(
     }
 
     fun getLatestPublishedManifestFlow(toolCode: String, locale: Locale) =
-        translationsRepository.findLatestTranslationFlow(toolCode, locale, downloadedOnly = true, trackAccess = true)
+        translationsRepository.findLatestTranslationFlow(toolCode, locale, downloadedOnly = true)
             .mapLatest { it?.let { getManifest(it) } }
 
     fun getLatestPublishedManifestLiveData(toolCode: String, locale: Locale) =

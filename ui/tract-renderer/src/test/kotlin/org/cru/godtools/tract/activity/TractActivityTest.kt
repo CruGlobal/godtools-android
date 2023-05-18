@@ -346,7 +346,7 @@ class TractActivityTest {
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
     private fun everyGetTranslation(tool: String? = null, locale: Locale? = null) =
-        every { translationsRepository.findLatestTranslationFlow(tool ?: any(), locale ?: any(), any(), any()) }
+        every { translationsRepository.findLatestTranslationFlow(tool ?: any(), locale ?: any(), any()) }
     private fun everyGetManifest(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestLiveData(tool ?: any(), locale ?: any())) }
 }

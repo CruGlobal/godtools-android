@@ -183,7 +183,7 @@ object Contract : BaseContract() {
         const val COLUMN_MANIFEST = "manifest"
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_DOWNLOADED = "downloaded"
-        internal const val COLUMN_LAST_ACCESSED = "last_accessed"
+        private const val COLUMN_LAST_ACCESSED = "last_accessed"
 
         private val FIELD_ID = TABLE.field(COLUMN_ID)
         val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
@@ -206,7 +206,6 @@ object Contract : BaseContract() {
             COLUMN_MANIFEST,
             COLUMN_PUBLISHED,
             COLUMN_DOWNLOADED,
-            COLUMN_LAST_ACCESSED
         )
 
         private const val SQL_COLUMN_VERSION = "$COLUMN_VERSION INTEGER"

@@ -28,7 +28,7 @@ class MockDatabaseModule {
     @get:Provides
     val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { findLatestTranslationFlow(any(), any(), any(), any()) } returns flowOf(null)
+            every { findLatestTranslationFlow(any(), any(), any()) } returns flowOf(null)
         }
     }
 }
