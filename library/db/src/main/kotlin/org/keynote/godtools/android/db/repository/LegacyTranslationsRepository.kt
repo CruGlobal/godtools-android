@@ -34,8 +34,7 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         code: String?,
         locale: Locale?,
         downloadedOnly: Boolean,
-        trackAccess: Boolean,
-    ) = getLatestTranslationFlow(code, locale, downloadedOnly, trackAccess)
+    ) = getLatestTranslationFlow(code, locale, downloadedOnly)
 
     override suspend fun getTranslations() = dao.getAsync(Query.select<Translation>()).await()
     override suspend fun getTranslationsForLanguages(languages: Collection<Locale>) =
@@ -84,7 +83,6 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         code: String?,
         locale: Locale?,
         isDownloaded: Boolean = false,
-        trackAccess: Boolean = false,
     ): Flow<Translation?> {
         if (code == null || locale == null) return flowOf(null)
         return latestTranslationFlowCache.getOrPut(Triple(code, locale, isDownloaded)) { (code, locale, isDownloaded) ->

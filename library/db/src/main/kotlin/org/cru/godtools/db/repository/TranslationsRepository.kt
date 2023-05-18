@@ -15,7 +15,6 @@ interface TranslationsRepository {
         code: String?,
         locale: Locale?,
         downloadedOnly: Boolean = false,
-        trackAccess: Boolean = false
     ): Flow<Translation?>
 
     suspend fun getTranslations(): List<Translation>

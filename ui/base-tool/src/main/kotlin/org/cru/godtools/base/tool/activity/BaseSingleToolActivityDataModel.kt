@@ -22,7 +22,7 @@ open class BaseSingleToolActivityDataModel @Inject constructor(
     val translation = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)
-            else -> emitAll(translationsRepository.findLatestTranslationFlow(tool, locale, trackAccess = true))
+            else -> emitAll(translationsRepository.findLatestTranslationFlow(tool, locale))
         }
     }.asLiveData()
 }

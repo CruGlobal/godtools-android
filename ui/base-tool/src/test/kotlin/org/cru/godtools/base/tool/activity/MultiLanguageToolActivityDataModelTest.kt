@@ -61,7 +61,7 @@ class MultiLanguageToolActivityDataModelTest {
         every { findToolFlow(any()) } returns flowOf(null)
     }
     private val translationsRepository: TranslationsRepository = mockk {
-        every { findLatestTranslationFlow(any(), any(), trackAccess = true) } returns emptyFlow()
+        every { findLatestTranslationFlow(any(), any()) } returns emptyFlow()
     }
     private val testScope = TestScope()
 
@@ -88,7 +88,7 @@ class MultiLanguageToolActivityDataModelTest {
     private fun everyGetManifest(tool: String, locale: Locale) =
         every { manifestManager.getLatestPublishedManifestFlow(tool, locale) }
     private fun everyGetTranslation(tool: String, locale: Locale) =
-        every { translationsRepository.findLatestTranslationFlow(tool, locale, trackAccess = true) }
+        every { translationsRepository.findLatestTranslationFlow(tool, locale) }
     // endregion Objects & Mocks
 
     // region Resolved Data
@@ -105,9 +105,9 @@ class MultiLanguageToolActivityDataModelTest {
 
         dataModel.translations.observeForever(observer)
         verify {
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.CHINESE, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.CHINESE)
             observer.onChanged(
                 withArg {
                     assertThat(
@@ -150,8 +150,8 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.translations.observeForever(observer)
         french.value = Translation()
         verify {
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, trackAccess = true)
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH, trackAccess = true)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH)
             observer.onChanged(any())
         }
         assertThat(
