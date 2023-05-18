@@ -15,7 +15,7 @@ internal abstract class LanguagesRoomRepository(private val db: GodToolsRoomData
     val dao get() = db.languagesDao
 
     override suspend fun findLanguage(locale: Locale) = dao.findLanguage(locale)?.toModel()
-    override fun getLanguageFlow(locale: Locale) = dao.findLanguageFlow(locale).map { it?.toModel() }
+    override fun findLanguageFlow(locale: Locale) = dao.findLanguageFlow(locale).map { it?.toModel() }
     override suspend fun getLanguages() = dao.getLanguages().map { it.toModel() }
     override fun getLanguagesFlowForLocales(locales: Collection<Locale>): Flow<Collection<Language>> =
         dao.getLanguagesFlow(locales).map { it.map { it.toModel() } }
