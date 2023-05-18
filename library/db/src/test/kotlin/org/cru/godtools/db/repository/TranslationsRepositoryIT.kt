@@ -1,12 +1,10 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
-import java.util.Date
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -371,19 +369,6 @@ abstract class TranslationsRepositoryIT {
         val updated = Translation(TOOL, id = initial.id, isDownloaded = false)
         repository.storeTranslationFromSync(updated)
         assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
-    }
-
-    @Test
-    fun `storeTranslationsFromSync() - Don't update lastAccessed`() = testScope.runTest {
-        val initial = Translation(TOOL)
-        val updated = Translation(TOOL, id = initial.id) { lastAccessed = Date() }
-        repository.storeTranslationFromSync(initial)
-
-        repository.storeTranslationFromSync(updated)
-        assertNotNull(repository.findTranslation(initial.id)) {
-            assertEquals(Translation.DEFAULT_LAST_ACCESSED, it.lastAccessed)
-            assertNotEquals(updated.lastAccessed, it.lastAccessed)
-        }
     }
     // endregion storeTranslationsFromSync()
 

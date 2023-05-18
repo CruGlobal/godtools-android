@@ -87,12 +87,6 @@ internal class LegacyTranslationsRepository @Inject constructor(private val dao:
         trackAccess: Boolean = false,
     ): Flow<Translation?> {
         if (code == null || locale == null) return flowOf(null)
-        if (trackAccess) {
-            val obj = Translation().apply { updateLastAccessed() }
-            val where = TranslationTable.SQL_WHERE_TOOL_LANGUAGE.args(code, locale)
-            @Suppress("DeferredResultUnused")
-            dao.updateAsync(obj, where, TranslationTable.COLUMN_LAST_ACCESSED)
-        }
         return latestTranslationFlowCache.getOrPut(Triple(code, locale, isDownloaded)) { (code, locale, isDownloaded) ->
             getLatestTranslationQuery(code, locale, isDownloaded)
                 .getAsFlow(dao).map { it.firstOrNull() }

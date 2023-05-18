@@ -1,7 +1,6 @@
 package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
-import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
@@ -31,7 +30,6 @@ class Translation : Base() {
 
         const val DEFAULT_PUBLISHED = true
         const val DEFAULT_VERSION = 0
-        val DEFAULT_LAST_ACCESSED = Date(0)
     }
 
     @JsonApiAttribute(JSON_RESOURCE)
@@ -79,14 +77,8 @@ class Translation : Base() {
 
     @JsonApiIgnore
     var isDownloaded = false
-    @JsonApiIgnore
-    var lastAccessed = DEFAULT_LAST_ACCESSED
 
     val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
-
-    fun updateLastAccessed() {
-        lastAccessed = Date()
-    }
 }
 
 fun Translation?.getName(tool: Tool?) = this?.name ?: tool?.name
@@ -130,6 +122,5 @@ fun randomTranslation(
     toolDetailsBibleReferences = UUID.randomUUID().toString()
     manifestFileName = UUID.randomUUID().toString()
     isDownloaded = Random.nextBoolean()
-    lastAccessed = Date(Random.nextLong(1..Long.MAX_VALUE))
     config()
 }
