@@ -24,6 +24,7 @@ import org.cru.godtools.db.room.entity.LanguageEntity
 import org.cru.godtools.db.room.entity.LastSyncTimeEntity
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
+import org.cru.godtools.db.room.entity.TranslationEntity
 import org.cru.godtools.db.room.entity.UserCounterEntity
 import org.cru.godtools.db.room.entity.UserEntity
 import org.cru.godtools.db.room.repository.AttachmentsRoomRepository
@@ -38,7 +39,7 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 10,
+    version = 11,
     entities = [
         AttachmentEntity::class,
         LanguageEntity::class,
@@ -47,6 +48,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         GlobalActivityEntity::class,
         ToolEntity::class,
         TrainingTipEntity::class,
+        TranslationEntity::class,
         UserEntity::class,
         UserCounterEntity::class,
         LastSyncTimeEntity::class,
@@ -61,6 +63,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
+        AutoMigration(from = 10, to = 11),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -113,6 +116,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 8: 2023-01-24
  * 9: 2023-05-09
  * 10: 2023-05-08
+ * 11: 2023-05-15
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
