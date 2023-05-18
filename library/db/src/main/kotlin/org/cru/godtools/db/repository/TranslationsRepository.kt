@@ -22,7 +22,7 @@ interface TranslationsRepository {
     fun getTranslationsForToolBlocking(tool: String): List<Translation>
 
     fun getTranslationsFlow(): Flow<List<Translation>>
-    fun getTranslationsForToolFlow(tool: String) = getTranslationsForToolsFlow(listOf(tool))
+    fun getTranslationsFlowForTool(tool: String) = getTranslationsForToolsFlow(listOf(tool))
     fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<Translation>>
     fun getTranslationsForToolsAndLocalesFlow(
         tools: Collection<String>,

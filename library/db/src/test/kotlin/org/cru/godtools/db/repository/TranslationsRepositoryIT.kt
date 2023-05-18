@@ -208,7 +208,7 @@ abstract class TranslationsRepositoryIT {
         val trans1 = Translation(TOOL)
         val trans2 = Translation(TOOL)
 
-        repository.getTranslationsForToolFlow(TOOL).test {
+        repository.getTranslationsFlowForTool(TOOL).test {
             repository.storeInitialTranslations(listOf(Translation(TOOL2)))
             runCurrent()
             assertTrue(expectMostRecentItem().isEmpty())

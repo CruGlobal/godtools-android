@@ -31,7 +31,7 @@ class SettingsBottomSheetDialogFragmentDataModel @Inject constructor(
     val deviceLocale = MutableLiveData(context.deviceLocale)
 
     private val rawLanguages = toolCode
-        .flatMapLatest { it?.let { translationsRepository.getTranslationsForToolFlow(it) } ?: flowOf(emptyList()) }
+        .flatMapLatest { it?.let { translationsRepository.getTranslationsFlowForTool(it) } ?: flowOf(emptyList()) }
         .map { it.map { it.languageCode }.toSet() }
         .distinctUntilChanged()
         .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
