@@ -11,6 +11,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -74,6 +75,72 @@ abstract class TranslationsRepositoryIT {
         }
     }
     // endregion findLatestTranslation()
+
+    // region findLatestTranslationFlow()
+    @Test
+    fun `findLatestTranslationFlow(downloadedOnly=false)`() = testScope.runTest {
+        val version1 = Translation(TOOL, Locale.ENGLISH, 1)
+        val version2 = Translation(TOOL, Locale.ENGLISH, 2)
+        val version3 = Translation(TOOL, Locale.ENGLISH, 3)
+
+        repository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, downloadedOnly = false).test {
+            runCurrent()
+            assertNull(expectMostRecentItem())
+
+            repository.storeTranslationFromSync(version1)
+            runCurrent()
+            assertEquals(version1.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.storeTranslationFromSync(version3)
+            runCurrent()
+            assertEquals(version3.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.storeTranslationFromSync(version2)
+            runCurrent()
+            assertEquals(version3.id, assertNotNull(expectMostRecentItem()).id)
+        }
+    }
+
+    @Test
+    fun `findLatestTranslationFlow(downloadedOnly=true)`() = testScope.runTest {
+        val version1 = Translation(TOOL, Locale.ENGLISH, 1, isDownloaded = true)
+        val version2 = Translation(TOOL, Locale.ENGLISH, 2, isDownloaded = true)
+        val version3 = Translation(TOOL, Locale.ENGLISH, 3)
+
+        repository.findLatestTranslationFlow(TOOL, Locale.ENGLISH, downloadedOnly = true).test {
+            runCurrent()
+            assertNull(expectMostRecentItem())
+
+            repository.storeInitialTranslations(setOf(version1))
+            runCurrent()
+            assertEquals(version1.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.storeInitialTranslations(setOf(version3))
+            runCurrent()
+            assertEquals(version1.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.storeInitialTranslations(setOf(version2))
+            runCurrent()
+            assertEquals(version2.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.markTranslationDownloaded(version2.id, false)
+            runCurrent()
+            assertEquals(version1.id, assertNotNull(expectMostRecentItem()).id)
+
+            repository.markTranslationDownloaded(version3.id, true)
+            runCurrent()
+            assertEquals(version3.id, assertNotNull(expectMostRecentItem()).id)
+        }
+    }
+
+    @Test
+    fun `findLatestTranslationFlow() - Missing tool or locale`() = testScope.runTest {
+        repository.storeInitialTranslations(setOf(Translation(TOOL, Locale.ENGLISH, isDownloaded = true)))
+        assertNull(repository.findLatestTranslationFlow(null, Locale.ENGLISH).first())
+        assertNull(repository.findLatestTranslationFlow(TOOL, null).first())
+        assertNull(repository.findLatestTranslationFlow(null, null).first())
+    }
+    // endregion findLatestTranslationFlow()
 
     // region getTranslations()
     @Test
