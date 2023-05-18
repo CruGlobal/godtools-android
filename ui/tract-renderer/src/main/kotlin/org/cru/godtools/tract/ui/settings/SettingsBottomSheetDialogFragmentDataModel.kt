@@ -34,7 +34,7 @@ class SettingsBottomSheetDialogFragmentDataModel @Inject constructor(
         .flatMapLatest { it?.let { translationsRepository.getTranslationsForToolFlow(it) } ?: flowOf(emptyList()) }
         .map { it.map { it.languageCode }.toSet() }
         .distinctUntilChanged()
-        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
+        .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
         .asLiveData()
     val sortedLanguages = deviceLocale.distinctUntilChanged()
         .combineWith(rawLanguages) { locale, languages -> languages.sortedByDisplayName(context, locale) }

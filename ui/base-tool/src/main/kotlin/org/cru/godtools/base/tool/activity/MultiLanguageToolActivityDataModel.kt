@@ -99,7 +99,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val languages = locales
-        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
+        .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
         .map { it.associateBy { it.code } }
         .asLiveData()
 

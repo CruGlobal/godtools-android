@@ -79,7 +79,7 @@ internal class ParallelLanguageDialogDataModel @Inject constructor(
     private val rawLanguages = translationsRepository.getTranslationsFlow()
         .map { it.map { it.languageCode }.toSet() }
         .distinctUntilChanged()
-        .flatMapLatest { languagesRepository.getLanguagesForLocalesFlow(it) }
+        .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
         .asLiveData()
     val sortedLanguages = deviceLocale.distinctUntilChanged().combineWith(rawLanguages) { locale, languages ->
         languages.sortedByDisplayName(context, locale)
