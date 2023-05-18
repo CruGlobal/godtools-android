@@ -42,10 +42,10 @@ class LanguageSettingsFragmentDataModel @Inject constructor(
     settings: Settings
 ) : ViewModel() {
     val primaryLanguage = settings.primaryLanguageFlow
-        .flatMapLatest { languagesRepository.getLanguageFlow(it) }
+        .flatMapLatest { languagesRepository.findLanguageFlow(it) }
         .asLiveData()
     val parallelLanguage = settings.parallelLanguageFlow
-        .flatMapLatest { it?.let { languagesRepository.getLanguageFlow(it) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null) }
         .asLiveData()
 }
 
