@@ -7,7 +7,8 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,13 +34,13 @@ jobs:
             /shared/onesky/SECRET_KEY = ORG_GRADLE_PROJECT_ONESKY_API_SECRET
       - name: Remove previous strings
         run: |
-          git rm */src/main/res/values-*/strings*.xml
-          git rm */*/src/main/res/values-*/strings*.xml
+          rm */src/main/res/values-*/strings*.xml
+          rm */*/src/main/res/values-*/strings*.xml
       - name: Download Strings from OneSky
         uses: gradle/gradle-build-action@v2
         with:
           arguments: downloadTranslations --max-workers 1 --scan
-      - name: Create Version Bump Pull Request
+      - name: Create Translation Update Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           branch: "chore/oneskyTranslations"
