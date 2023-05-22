@@ -1,0 +1,47 @@
+name: OneSky Translation Download
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  upload:
+    name: Download Latest Strings from OneSky
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ONESKY_ROLE_ARN }}
+          aws-region: us-east-1
+      - name: Import OneSky Keys
+        uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+          parameterPairs: |
+            /shared/onesky/PUBLIC_KEY = ORG_GRADLE_PROJECT_ONESKY_API_KEY,
+            /shared/onesky/SECRET_KEY = ORG_GRADLE_PROJECT_ONESKY_API_SECRET
+      - name: Remove previous strings
+        run: |
+          git rm */src/main/res/values-*/strings*.xml
+          git rm */*/src/main/res/values-*/strings*.xml
+      - name: Download Strings from OneSky
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: downloadTranslations --max-workers 1 --scan
+      - name: Create Version Bump Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: "chore/oneskyTranslations"
+          title: "Update Translations"
+          commit-message: "Download the latest strings from OneSky"
