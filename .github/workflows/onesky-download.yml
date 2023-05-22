@@ -34,8 +34,8 @@ jobs:
             /shared/onesky/SECRET_KEY = ORG_GRADLE_PROJECT_ONESKY_API_SECRET
       - name: Remove previous strings
         run: |
-          git rm */src/main/res/values-*/strings*.xml
-          git rm */*/src/main/res/values-*/strings*.xml
+          rm */src/main/res/values-*/strings*.xml
+          rm */*/src/main/res/values-*/strings*.xml
       - name: Download Strings from OneSky
         uses: gradle/gradle-build-action@v2
         with:
