@@ -111,6 +111,12 @@
             android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
+            android:name=".ui.languages.app.AppLanguageActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.dashboard.DashboardActivity"
+            android:screenOrientation="@integer/default_screen_orientation" />
+
+        <activity
             android:name=".ui.languages.LanguageSettingsActivity"
             android:label="@string/title_language_settings"
             android:parentActivityName=".ui.dashboard.DashboardActivity"
@@ -161,6 +167,7 @@
                 tools:node="remove" />
         </provider>
 
+        <!-- region LocaleConfig -->
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -169,6 +176,11 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <meta-data
+            android:name="org.ccci.gto.support.compat.LocaleConfig"
+            android:resource="@xml/locales_config" />
+        <!-- endregion LocaleConfig -->
 
         <!-- region Facebook -->
         <meta-data
