@@ -23,6 +23,7 @@ class AppLanguageActivity : BaseActivity() {
                 AppLanguageLayout(
                     onEvent = {
                         when (it) {
+                            is AppLanguageEvent.NavigateBack -> finish()
                             is AppLanguageEvent.LanguageSelected -> {
                                 settings.appLanguage = it.language
                                 finish()
