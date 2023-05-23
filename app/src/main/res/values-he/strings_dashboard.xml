@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">חשבון</string>
-    <string name="menu_heading_share">שתף</string>
-    <string name="menu_heading_about">אודות</string>
     <string name="menu_tutorial">הדרכה</string>
+    <string name="menu_heading_account">חשבון</string>
     <string name="menu_login">כניסה</string>
     <string name="menu_signup">יצירת חשבון</string>
     <string name="menu_logout">יציאה</string>
-    <string name="menu_share_godtools">שתפו את אפליקציית GodTools</string>
+    <string name="menu_heading_share">שתף</string>
     <string name="menu_share_story">שתפו איתנו סיפור</string>
-    <string name="menu_terms_of_use">תנאי שימוש</string>
-    <string name="menu_privacy_policy">מדיניות פרטיות</string>
-    <string name="menu_copyright">זכויות יוצרים</string>
+    <string name="menu_share_godtools">שתפו את אפליקציית GodTools</string>
     <string name="share_app_message">הורידו את אפליקציית GodTools כאן: https://godtoolsapp.com \n\n
 
 ניתן למצוא כאן https://knowgod.com/ גרסה מקוונת</string>
     <string name="share_story_subject">סיפורי GodTools</string>
+    <string name="menu_heading_about">אודות</string>
+    <string name="menu_terms_of_use">תנאי שימוש</string>
+    <string name="menu_privacy_policy">מדיניות פרטיות</string>
+    <string name="menu_copyright">זכויות יוצרים</string>
     <!-- Lessons -->
     <string name="nav_lessons">שיעורים</string>
     <string name="dashboard_lessons_header_title">שיעורים שנבנו בשבילך</string>

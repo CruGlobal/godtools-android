@@ -2,14 +2,14 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">Ndaj</string>
-    <string name="menu_heading_about">Rreth</string>
-    <string name="menu_share_godtools">Ndaj GodTools</string>
     <string name="menu_share_story">Ndaj një histori me ne</string>
+    <string name="menu_share_godtools">Ndaj GodTools</string>
+    <string name="share_app_message">Këtu mund të  shkarkosh aplikacionin e GodTools: http://godtoolsapp.com</string>
+    <string name="share_story_subject">Dëgjo se si Perëndia po punon.</string>
+    <string name="menu_heading_about">Rreth</string>
     <string name="menu_terms_of_use">Termat e përdorimit</string>
     <string name="menu_privacy_policy">Politika e Privatësisë</string>
     <string name="menu_copyright">E drejta e autorit</string>
-    <string name="share_app_message">Këtu mund të  shkarkosh aplikacionin e GodTools: http://godtoolsapp.com</string>
-    <string name="share_story_subject">Dëgjo se si Perëndia po punon.</string>
     <!-- Lessons -->
     <!-- Home -->
     <!-- All Tools -->

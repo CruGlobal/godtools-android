@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Fiók</string>
-    <string name="menu_heading_share">Megosztás</string>
-    <string name="menu_heading_about">Rólunk</string>
     <string name="menu_tutorial">Oktatóanyag</string>
+    <string name="menu_heading_account">Fiók</string>
     <string name="menu_login">Bejelentkezés</string>
     <string name="menu_signup">Fiók létrehozása</string>
     <string name="menu_logout">Kijelentkezés</string>
-    <string name="menu_share_godtools">A GodTools alkalmazás megosztása</string>
+    <string name="menu_heading_share">Megosztás</string>
     <string name="menu_share_story">Ossz meg velünk egy történetet</string>
-    <string name="menu_terms_of_use">Használati feltételek</string>
-    <string name="menu_privacy_policy">Adatvédelmi irányelvek</string>
-    <string name="menu_copyright">Copyright</string>
+    <string name="menu_share_godtools">A GodTools alkalmazás megosztása</string>
     <string name="share_app_message">Töltsd le a GodTools alkalmazást: https://godtoolsapp.com \n\n
 
 A https://knowgod.com/ címen egy online verzió található</string>
     <string name="share_story_subject">GodTools-történet</string>
+    <string name="menu_heading_about">Rólunk</string>
+    <string name="menu_terms_of_use">Használati feltételek</string>
+    <string name="menu_privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="menu_copyright">Copyright</string>
     <!-- Lessons -->
     <string name="nav_lessons">Szentleckék</string>
     <string name="dashboard_lessons_header_title">Neked szóló szentleckék</string>

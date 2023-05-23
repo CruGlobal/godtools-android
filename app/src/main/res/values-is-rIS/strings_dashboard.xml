@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Reikningur</string>
-    <string name="menu_heading_share">Deila</string>
-    <string name="menu_heading_about">Um</string>
     <string name="menu_tutorial">Kennsluefni</string>
+    <string name="menu_heading_account">Reikningur</string>
     <string name="menu_login">Innskrá</string>
     <string name="menu_signup">Búa til aðgang</string>
     <string name="menu_logout">Útskrá</string>
-    <string name="menu_share_godtools">Deila GodTools appinu</string>
+    <string name="menu_heading_share">Deila</string>
     <string name="menu_share_story">Deila sögu með okkur</string>
+    <string name="menu_share_godtools">Deila GodTools appinu</string>
+    <string name="share_story_subject">Saga GodTools</string>
+    <string name="menu_heading_about">Um</string>
     <string name="menu_terms_of_use">Notkunarskilmálar</string>
     <string name="menu_privacy_policy">Persónuverndarstefna</string>
     <string name="menu_copyright">Höfundarréttur</string>
-    <string name="share_story_subject">Saga GodTools</string>
     <!-- Lessons -->
     <string name="nav_lessons">Námsefni</string>
     <string name="dashboard_lessons_header_title">Námefni gert fyrir þig</string>

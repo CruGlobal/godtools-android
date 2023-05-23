@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">অ্যাকাউন্ট</string>
-    <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_heading_about">যার বিষয়ে</string>
     <string name="menu_tutorial">টিউটোরিয়াল</string>
+    <string name="menu_heading_account">অ্যাকাউন্ট</string>
     <string name="menu_login">লগইন</string>
     <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>
     <string name="menu_logout">লগআউট</string>
-    <string name="menu_share_godtools">GodTools অ্যাপ শেয়ার করুন</string>
+    <string name="menu_heading_share">শেয়ার করুন</string>
     <string name="menu_share_story">আমাদের সাথে একটি গল্প শেয়ার করুন</string>
+    <string name="menu_share_godtools">GodTools অ্যাপ শেয়ার করুন</string>
+    <string name="share_story_subject">GodTools গল্প</string>
+    <string name="menu_heading_about">যার বিষয়ে</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">একান্ততার নীতি</string>
     <string name="menu_copyright">ষ্বত্বাধিকার</string>
-    <string name="share_story_subject">GodTools গল্প</string>
     <!-- Lessons -->
     <!-- Home -->
     <!-- All Tools -->

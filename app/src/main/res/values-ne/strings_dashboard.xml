@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">एकाउन्ट</string>
-    <string name="menu_heading_share">"साझा गर्नुहोस "</string>
-    <string name="menu_heading_about">"को बारेमा "</string>
     <string name="menu_tutorial">ट्यूटोरियल</string>
+    <string name="menu_heading_account">एकाउन्ट</string>
     <string name="menu_login">"भित्र  आउनुहोस "</string>
     <string name="menu_signup">"एकाउन्ट खोल्नुहोस "</string>
     <string name="menu_logout">"बाहिर निक्ल्नुहोस "</string>
-    <string name="menu_share_godtools">"GodTools ऐपलाई  साझा गरिदिनुहोस "</string>
+    <string name="menu_heading_share">"साझा गर्नुहोस "</string>
     <string name="menu_share_story">"हामीहरु मध्य आफ्नो  कथा साझा गर्नुहोस "</string>
+    <string name="menu_share_godtools">"GodTools ऐपलाई  साझा गरिदिनुहोस "</string>
+    <string name="share_story_subject">गडटुल स्टोरी</string>
+    <string name="menu_heading_about">"को बारेमा "</string>
     <string name="menu_terms_of_use">"उपयोगको शर्तहरु "</string>
     <string name="menu_privacy_policy">"गोपनीय नीति
 "</string>
     <string name="menu_copyright">कॉपीराइट</string>
-    <string name="share_story_subject">गडटुल स्टोरी</string>
     <!-- Lessons -->
     <string name="nav_lessons">पाठ</string>
     <string name="dashboard_lessons_header_title">तपाईको लागि बनाइएको पाठ</string>

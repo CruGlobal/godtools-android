@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">একাউন্ট</string>
-    <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_heading_about">বিষয়ে</string>
     <string name="menu_tutorial">"টিউটোরিয়াল "</string>
+    <string name="menu_heading_account">একাউন্ট</string>
     <string name="menu_login">লগইন করুন</string>
     <string name="menu_signup">একাউন্ট খুলুন</string>
     <string name="menu_logout">লগ আউট করুন</string>
-    <string name="menu_share_godtools">GodTools App শেয়ার করুন</string>
+    <string name="menu_heading_share">শেয়ার করুন</string>
     <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
+    <string name="menu_share_godtools">GodTools App শেয়ার করুন</string>
+    <string name="share_app_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন: http://godtoolsapp.com</string>
+    <string name="share_story_subject">God Tools গল্প</string>
+    <string name="menu_heading_about">বিষয়ে</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
     <string name="menu_copyright">কপিরাইট</string>
-    <string name="share_app_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন: http://godtoolsapp.com</string>
-    <string name="share_story_subject">God Tools গল্প</string>
     <!-- Lessons -->
     <string name="nav_lessons">পাঠসমূহ</string>
     <string name="dashboard_lessons_header_title">আপনার জন্য প্রস্তুত পাঠসমূহ</string>

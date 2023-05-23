@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_profile">Globālā aktivitāte</string>
-    <!-- Global Activity -->
+    <string name="menu_profile">Aktivitātes</string>
+    <string name="account_joined">Pievienojās %1$s</string>
+    <!-- Login -->
+    <string name="account_login_heading">Pierakstīties</string>
+    <string name="account_login_description">Izveido kontu, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
+    <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
+    <string name="account_activity_header">Tava aktivitāte</string>
+    <string name="account_activity_tool_opens">Atvērtie rīki</string>
+    <string name="account_activity_lesson_completions">Pabeigtās nodarbības</string>
+    <string name="account_activity_screen_shares">Kopīgotie ekrāni</string>
+    <string name="account_activity_links_shared">Kopīgotās saites</string>
+    <string name="account_activity_languages_used">Izmantotās valodas</string>
+    <string name="account_activity_sessions">Sesijas</string>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Tavi žetoni</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Atvērto rīku skaits: %1$,d</item>
+        <item quantity="other">Atvērto rīku skaits: %1$,d</item>
+        <item quantity="zero">Atvērto rīku skaits: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Pabeigta(s) nodarbība(s): %1$,d</item>
+        <item quantity="other">Pabeigta(s) nodarbība(s): %1$,d</item>
+        <item quantity="zero">Pabeigta(s) nodarbība(s): %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Atvērto rakstu skaits: %1$,d</item>
+        <item quantity="other">Atvērto rakstu skaits: %1$,d</item>
+        <item quantity="zero">Atvērto rakstu skaits: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Kopīgoto attēlu skaits: %1$,d</item>
+        <item quantity="other">Kopīgoto attēlu skaits: %1$,d</item>
+        <item quantity="zero">Kopīgoto attēlu skaits: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Izmantoti apmācības padomi: %1$,d</item>
+        <item quantity="other">Izmantoti apmācības padomi: %1$,d</item>
+        <item quantity="zero">Izmantoti apmācības padomi: %1$,d</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Globālā aktivitāte</string>
     <string name="profile_global_activity_heading">%1$s no globālās aktivitātes</string>
     <string name="profile_activity_unique_users">Unikālie
 lietotāji</string>

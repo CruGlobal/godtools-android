@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Accounti</string>
-    <string name="menu_heading_share">Se ajopin</string>
-    <string name="menu_heading_about">Nipa</string>
     <string name="menu_tutorial">Itoni</string>
+    <string name="menu_heading_account">Accounti</string>
     <string name="menu_login">Wo inu app naa</string>
     <string name="menu_signup">Si akanti fun ara re</string>
     <string name="menu_logout">Kuro ninu app na</string>
-    <string name="menu_share_godtools">Se ajopin awọn Ohun elo GodTools</string>
+    <string name="menu_heading_share">Se ajopin</string>
     <string name="menu_share_story">Se ajopin Itan kan Pẹlu Wa</string>
+    <string name="menu_share_godtools">Se ajopin awọn Ohun elo GodTools</string>
+    <string name="share_story_subject">Ìtàn GodTools</string>
+    <string name="menu_heading_about">Nipa</string>
     <string name="menu_terms_of_use">Awọn ofin lilo</string>
     <string name="menu_privacy_policy">Ilakale fun idaabobo</string>
     <string name="menu_copyright">Asekiko</string>
-    <string name="share_story_subject">Ìtàn GodTools</string>
     <!-- Lessons -->
     <!-- Home -->
     <string name="nav_favorite_tools">Aayo</string>

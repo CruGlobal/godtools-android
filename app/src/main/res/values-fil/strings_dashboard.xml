@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Account</string>
-    <string name="menu_heading_share">Magbahagi</string>
-    <string name="menu_heading_about">Tungkol dito</string>
     <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_heading_account">Account</string>
     <string name="menu_login">Mag-log in</string>
     <string name="menu_signup">Gumawa ng Account</string>
     <string name="menu_logout">Mag-log out</string>
-    <string name="menu_share_godtools">I-share ang GodTools App</string>
+    <string name="menu_heading_share">Magbahagi</string>
     <string name="menu_share_story">Magbahagi ng Kuwento sa Amin</string>
-    <string name="menu_terms_of_use">Mga Tuntunin ng Paggamit</string>
-    <string name="menu_privacy_policy">Patakaran sa Pagkapribado</string>
-    <string name="menu_copyright">Copyright</string>
+    <string name="menu_share_godtools">I-share ang GodTools App</string>
     <string name="share_app_message">I-download ang GodTools app: https://godtoolsapp.com \n\n
 
 Makikita ang online na bersyon sa https://knowgod.com/</string>
     <string name="share_story_subject">Story sa GodTools</string>
+    <string name="menu_heading_about">Tungkol dito</string>
+    <string name="menu_terms_of_use">Mga Tuntunin ng Paggamit</string>
+    <string name="menu_privacy_policy">Patakaran sa Pagkapribado</string>
+    <string name="menu_copyright">Copyright</string>
     <!-- Lessons -->
     <string name="nav_lessons">Mga Lesson</string>
     <string name="dashboard_lessons_header_title">Mga lesson na ginawa para sa iyo</string>

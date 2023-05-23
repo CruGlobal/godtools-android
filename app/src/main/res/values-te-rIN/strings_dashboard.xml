@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">ఖాతా</string>
-    <string name="menu_heading_share">పంచుకోండి</string>
-    <string name="menu_heading_about">గురించి</string>
     <string name="menu_tutorial">ట్యుటోరియల్</string>
+    <string name="menu_heading_account">ఖాతా</string>
     <string name="menu_login">లాగిన్</string>
     <string name="menu_signup">ఖాతాను సృష్టించు</string>
     <string name="menu_logout">లాగ్‌ఔట్</string>
-    <string name="menu_share_godtools">GodTools యాప్ పంచుకోండి</string>
+    <string name="menu_heading_share">పంచుకోండి</string>
     <string name="menu_share_story">మాతో ఒక కథను పంచుకోండి</string>
-    <string name="menu_terms_of_use">ఉపయోగ నిబంధనలు</string>
-    <string name="menu_privacy_policy">గోప్యత విధానం</string>
-    <string name="menu_copyright">కాపీరైట్</string>
+    <string name="menu_share_godtools">GodTools యాప్ పంచుకోండి</string>
     <string name="share_app_message">GodTools ఆప్‌ను డౌన్లోడ్ చేసుకోండి: http://godtoolsapp.com \n\n
 
 ఆన్‌లైన్ వర్షన్  https://knowgod.com/ వద్ద కనుగొనవచ్చు</string>
     <string name="share_story_subject">GodTools కధ</string>
+    <string name="menu_heading_about">గురించి</string>
+    <string name="menu_terms_of_use">ఉపయోగ నిబంధనలు</string>
+    <string name="menu_privacy_policy">గోప్యత విధానం</string>
+    <string name="menu_copyright">కాపీరైట్</string>
     <!-- Lessons -->
     <string name="nav_lessons">పాఠాలు</string>
     <string name="dashboard_lessons_header_title">మీ కోసం పాఠాలు రూపొందించబడ్డాయి</string>
