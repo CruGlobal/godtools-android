@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_share">አጋራ</string>
-    <string name="menu_heading_about">ስለ</string>
     <string name="menu_login">ግባ</string>
     <string name="menu_signup">ይመዝገቡ</string>
     <string name="menu_logout">ዉጣ</string>
-    <string name="menu_share_godtools">GodTools መተግበሪያን አጋራ</string>
+    <string name="menu_heading_share">አጋራ</string>
     <string name="menu_share_story">ታሪክዎን ከእኛ ጋር ይጋሩ</string>
+    <string name="menu_share_godtools">GodTools መተግበሪያን አጋራ</string>
+    <string name="share_story_subject">እግዚአብሔር  እንዴት እየሰራ እንደሆነ ያዳምጡ!</string>
+    <string name="menu_heading_about">ስለ</string>
     <string name="menu_terms_of_use">የአጠቃቀም መመሪያ</string>
     <string name="menu_privacy_policy">የግላዊነት ደምቦች</string>
     <string name="menu_copyright">የቅጂ መብት</string>
-    <string name="share_story_subject">እግዚአብሔር  እንዴት እየሰራ እንደሆነ ያዳምጡ!</string>
     <!-- Lessons -->
     <!-- Home -->
     <!-- All Tools -->

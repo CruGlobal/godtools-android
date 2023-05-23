@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">帳號</string>
-    <string name="menu_heading_share">分享</string>
-    <string name="menu_heading_about">關於</string>
     <string name="menu_tutorial">教學</string>
+    <string name="menu_heading_account">帳號</string>
     <string name="menu_login">登入</string>
     <string name="menu_signup">建立帳號</string>
     <string name="menu_logout">登出</string>
-    <string name="menu_share_godtools">分享 GodTools 應用程式</string>
+    <string name="menu_heading_share">分享</string>
     <string name="menu_share_story">與我們分享故事</string>
-    <string name="menu_terms_of_use">使用條款</string>
-    <string name="menu_privacy_policy">隱私政策</string>
-    <string name="menu_copyright">著作權</string>
+    <string name="menu_share_godtools">分享 GodTools 應用程式</string>
     <string name="share_app_message">下載GodTools應用程式：https://godtoolsapp.com \n\n
 
 您可在此找到網路版：https://knowgod.com/</string>
     <string name="share_story_subject">GodTools 故事</string>
+    <string name="menu_heading_about">關於</string>
+    <string name="menu_terms_of_use">使用條款</string>
+    <string name="menu_privacy_policy">隱私政策</string>
+    <string name="menu_copyright">著作權</string>
     <!-- Lessons -->
     <string name="nav_lessons">課程</string>
     <string name="dashboard_lessons_header_title">為您打造的課程</string>

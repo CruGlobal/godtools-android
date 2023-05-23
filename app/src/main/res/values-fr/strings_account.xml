@@ -2,6 +2,7 @@
 <resources>
     <string name="menu_profile">Activité mondiale</string>
     <string name="account_joined">Rejoint %1$s</string>
+    <!-- Login -->
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>

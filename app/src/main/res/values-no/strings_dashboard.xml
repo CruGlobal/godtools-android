@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Konto</string>
-    <string name="menu_heading_share">Del</string>
-    <string name="menu_heading_about">Om</string>
     <string name="menu_tutorial">Veiledning</string>
+    <string name="menu_heading_account">Konto</string>
     <string name="menu_login">Logg inn</string>
     <string name="menu_signup">Opprett konto</string>
     <string name="menu_logout">Logg ut</string>
-    <string name="menu_share_godtools">Del GodTools-appen</string>
+    <string name="menu_heading_share">Del</string>
     <string name="menu_share_story">Del en historie med oss</string>
-    <string name="menu_terms_of_use">Betingelser for bruk</string>
-    <string name="menu_privacy_policy">Personvern</string>
-    <string name="menu_copyright">Copyright</string>
+    <string name="menu_share_godtools">Del GodTools-appen</string>
     <string name="share_app_message">Last ned GodTools-appen: https://godtoolsapp.com \n\n
 
 Du finner en nettversjon på https://knowgod.com/</string>
     <string name="share_story_subject">GodTools-historie</string>
+    <string name="menu_heading_about">Om</string>
+    <string name="menu_terms_of_use">Betingelser for bruk</string>
+    <string name="menu_privacy_policy">Personvern</string>
+    <string name="menu_copyright">Copyright</string>
     <!-- Lessons -->
     <string name="nav_lessons">Leksjoner</string>
     <string name="dashboard_lessons_header_title">Leksjoner lagd for deg</string>

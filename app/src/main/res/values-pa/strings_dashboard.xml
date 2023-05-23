@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">ਖਾਤਾ</string>
-    <string name="menu_heading_share">ਦੱਸੋ</string>
-    <string name="menu_heading_about">ਇਸਦੇ ਬਾਰੇ</string>
     <string name="menu_tutorial">ਟਿਊਟੋਰਿਅਲ</string>
+    <string name="menu_heading_account">ਖਾਤਾ</string>
     <string name="menu_login">ਲਾਗਿਨ</string>
     <string name="menu_signup">ਖਾਤਾ ਬਣਾਉ</string>
     <string name="menu_logout">ਲਾੱਗ ਆਊਟ</string>
-    <string name="menu_share_godtools">ਗੌਡਟੂਲਜ਼ ਐਪ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
+    <string name="menu_heading_share">ਦੱਸੋ</string>
     <string name="menu_share_story">ਸਾਨੂੰ ਆਪਣੀ ਕਹਾਣੀ ਦੱਸੋ</string>
+    <string name="menu_share_godtools">ਗੌਡਟੂਲਜ਼ ਐਪ ਨੂੰ ਸਾਂਝਾ ਕਰੋ</string>
+    <string name="share_app_message">ਗੋਡਟੂਲ ਐਪ ਨੂੰ ਡਾਉਨਲੋਡ ਕਰੋ: https://godtoolsapp.com</string>
+    <string name="share_story_subject">ਗੌਡਟੂਲਜ਼ ਸਟੋਰੀ</string>
+    <string name="menu_heading_about">ਇਸਦੇ ਬਾਰੇ</string>
     <string name="menu_terms_of_use">ਵਰਤੋ ਦੀਆਂ ਸ਼ਰਤਾਂ</string>
     <string name="menu_privacy_policy">ਗੋਪਨੀਯ ਨੀਤੀ</string>
     <string name="menu_copyright">ਕਾਪੀਰਾਈਟ</string>
-    <string name="share_app_message">ਗੋਡਟੂਲ ਐਪ ਨੂੰ ਡਾਉਨਲੋਡ ਕਰੋ: https://godtoolsapp.com</string>
-    <string name="share_story_subject">ਗੌਡਟੂਲਜ਼ ਸਟੋਰੀ</string>
     <!-- Lessons -->
     <string name="nav_lessons">ਸਬਕ</string>
     <string name="dashboard_lessons_header_title">ਤੁਹਾਡੇ ਲਈ ਬਣਾਏ ਗਏ ਸਬਕ</string>

@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Cuenta</string>
-    <string name="menu_heading_share">Compartir</string>
-    <string name="menu_heading_about">Acerca de</string>
+    <string name="menu_heading_get_started">Comenzar</string>
     <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_heading_account">Cuenta</string>
     <string name="menu_login">Iniciar</string>
     <string name="menu_signup">Crear cuenta</string>
     <string name="menu_logout">Cerrar sesión</string>
-    <string name="menu_share_godtools">Comparte la aplicación GodTools</string>
+    <string name="menu_heading_support">Soporte</string>
+    <string name="menu_feedback">Enviar comentarios</string>
+    <string name="menu_report_bug">Informar de un error</string>
+    <string name="menu_question">Haz una pregunta</string>
+    <string name="menu_heading_share">Compartir</string>
+    <string name="menu_review">Deja una opinión</string>
     <string name="menu_share_story">Comparte una historia con nosotros</string>
-    <string name="menu_terms_of_use">Términos de uso</string>
-    <string name="menu_privacy_policy">Política de privacidad</string>
-    <string name="menu_copyright">Derechos de autor</string>
+    <string name="menu_share_godtools">Comparte GodTools</string>
     <string name="share_app_message">Descarga la aplicación GodTools: https://godtoolsapp.com \n\n
 
 Puedes acceer a una versión online en https://knowgod.com/</string>
     <string name="share_story_subject">Historia de GodTools</string>
+    <string name="menu_heading_about">Acerca de</string>
+    <string name="menu_terms_of_use">Términos de uso</string>
+    <string name="menu_privacy_policy">Política de privacidad</string>
+    <string name="menu_copyright">Derechos de autor</string>
+    <string name="menu_version">Versión: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lecciones</string>
     <string name="dashboard_lessons_header_title">Lecciones hechas para ti</string>

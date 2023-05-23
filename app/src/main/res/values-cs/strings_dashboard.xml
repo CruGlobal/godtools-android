@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Účet</string>
-    <string name="menu_heading_share">Sdílet</string>
-    <string name="menu_heading_about">O nás</string>
     <string name="menu_tutorial">Návod</string>
+    <string name="menu_heading_account">Účet</string>
     <string name="menu_login">Přihlášení</string>
     <string name="menu_signup">Vytvořit účet</string>
     <string name="menu_logout">Odhlášení</string>
-    <string name="menu_share_godtools">Sdílet GodTools</string>
+    <string name="menu_heading_share">Sdílet</string>
     <string name="menu_share_story">Napište nám příběh</string>
-    <string name="menu_terms_of_use">Pravidla užívání</string>
-    <string name="menu_privacy_policy">Ochrana soukromí</string>
-    <string name="menu_copyright">Autorská práva</string>
+    <string name="menu_share_godtools">Sdílet GodTools</string>
     <string name="share_app_message">Stáhněte si aplikaci GodTools: https://godtoolsapp.com \n\n
 
 On-line verzi naleznete na https://knowgod.com/</string>
     <string name="share_story_subject">Příběh GodTools</string>
+    <string name="menu_heading_about">O nás</string>
+    <string name="menu_terms_of_use">Pravidla užívání</string>
+    <string name="menu_privacy_policy">Ochrana soukromí</string>
+    <string name="menu_copyright">Autorská práva</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lekce</string>
     <string name="dashboard_lessons_header_title">Lekce na míru</string>

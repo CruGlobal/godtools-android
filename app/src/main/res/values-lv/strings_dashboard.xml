@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Konts</string>
-    <string name="menu_heading_share">Dalies</string>
-    <string name="menu_heading_about">Par lietotni</string>
+    <string name="menu_heading_get_started">Sākt</string>
     <string name="menu_tutorial">Pamācība</string>
+    <string name="menu_heading_account">Konts</string>
     <string name="menu_login">Pierakstīties</string>
     <string name="menu_signup">Reģistrēt kontu</string>
     <string name="menu_logout">Izrakstīties</string>
-    <string name="menu_share_godtools">Kopīgo \'GodTools\' lietotni</string>
+    <string name="menu_heading_support">Atbalsts</string>
+    <string name="menu_feedback">Nosūtīt atsauksmes</string>
+    <string name="menu_report_bug">Ziņot par kļūdu</string>
+    <string name="menu_question">Uzdod jautājumu</string>
+    <string name="menu_heading_share">Dalies</string>
+    <string name="menu_review">Atstāt atsauksmi</string>
     <string name="menu_share_story">Pastāsti savu liecību</string>
+    <string name="menu_share_godtools">Kopīgo \'GodTools\' lietotni</string>
+    <string name="share_app_message">Lejupielādē \'GodTools\' lietotni savā tālrunī: https://ej.uz/GodTools \n\n
+
+Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
+    <string name="share_story_subject">\'GodTools\' liecība</string>
+    <string name="menu_heading_about">Par lietotni</string>
     <string name="menu_terms_of_use">Lietošanas noteikumi</string>
     <string name="menu_privacy_policy">Privātuma politika</string>
     <string name="menu_copyright">Informācija par autortiesībām</string>
-    <string name="share_story_subject">\'GodTools\' liecība</string>
+    <string name="menu_version">Versija: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Nodarbības</string>
     <string name="dashboard_lessons_header_title">Nodarbības, kas pielāgotas tev</string>

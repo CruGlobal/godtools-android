@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">खाता</string>
-    <string name="menu_heading_share">साझा करें</string>
-    <string name="menu_heading_about">परिचय</string>
     <string name="menu_tutorial">ट्यूटोरियल</string>
+    <string name="menu_heading_account">खाता</string>
     <string name="menu_login">लॉग-इन</string>
     <string name="menu_signup">खाता बनाएंँ</string>
     <string name="menu_logout">लॉग-आउट</string>
-    <string name="menu_share_godtools">GodTools ऐप को साझा करें</string>
+    <string name="menu_heading_share">साझा करें</string>
     <string name="menu_share_story">हमसे कोई कहानी शेयर करें</string>
-    <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
-    <string name="menu_privacy_policy">निजता नीति</string>
-    <string name="menu_copyright">कॉपीराइट</string>
+    <string name="menu_share_godtools">GodTools ऐप को साझा करें</string>
     <string name="share_app_message">यहां आप GodTools ऐप डाउनलोड कर सकते हैं: https://godtoolsapp.com \n\n
 
 ऑनलाइन संस्करण यहां देखा जा सकता है: https://knowgod.com</string>
     <string name="share_story_subject">GodTools कहानी</string>
+    <string name="menu_heading_about">परिचय</string>
+    <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
+    <string name="menu_privacy_policy">निजता नीति</string>
+    <string name="menu_copyright">कॉपीराइट</string>
     <!-- Lessons -->
     <string name="nav_lessons">अध्याय</string>
     <string name="dashboard_lessons_header_title">आपके लिए बनाए गए अध्याय</string>

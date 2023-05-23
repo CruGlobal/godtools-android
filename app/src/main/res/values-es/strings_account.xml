@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_profile">Actividad global</string>
+    <string name="menu_profile">Actividad</string>
     <string name="account_joined">Unirse %1$s</string>
+    <!-- Login -->
+    <string name="account_login_heading">Iniciar sesión</string>
+    <string name="account_login_description">Crea una cuenta para tener a tu alcance historias reales, ánimos y consejos prácticos.</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
     <string name="account_activity_header">Tu actividad</string>

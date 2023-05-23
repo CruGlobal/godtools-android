@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">Aktividat Global</string>
-    <!-- Global Activity -->
+    <!-- Login -->
+    <!-- Activity -->
     <string name="profile_tab_activity">Aktividat</string>
+    <!-- Badges -->
+    <!-- Global Activity -->
     <string name="profile_global_activity_heading">%1$s Aktividat Global</string>
     <string name="profile_activity_unique_users">Usuarionan Úniko</string>
     <string name="profile_activity_gospel_presentations">Presentashonnan di e Evangelio</string>

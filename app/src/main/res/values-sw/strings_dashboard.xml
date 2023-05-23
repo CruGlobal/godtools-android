@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Akaunti</string>
-    <string name="menu_heading_share">Shirikisha</string>
-    <string name="menu_heading_about">Kuhusu</string>
     <string name="menu_tutorial">Mafunzo</string>
+    <string name="menu_heading_account">Akaunti</string>
     <string name="menu_login">Ingia</string>
     <string name="menu_signup">Unda Akaunti</string>
     <string name="menu_logout">Toka</string>
-    <string name="menu_share_godtools">Shirikisha wenzako na Programu ya Zana za Mungu</string>
+    <string name="menu_heading_share">Shirikisha</string>
     <string name="menu_share_story">Tushirikishe Kwenye Hadithi Yako</string>
-    <string name="menu_terms_of_use">Masharti ya Matumizi</string>
-    <string name="menu_privacy_policy">Sera ya Faragha</string>
-    <string name="menu_copyright">Hati miliki</string>
+    <string name="menu_share_godtools">Shirikisha wenzako na Programu ya Zana za Mungu</string>
     <string name="share_app_message">Pakua programu ya GodTools: https://godtoolsapp.com \n\n
 
 Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="share_story_subject">Hadithi ya GodTools</string>
+    <string name="menu_heading_about">Kuhusu</string>
+    <string name="menu_terms_of_use">Masharti ya Matumizi</string>
+    <string name="menu_privacy_policy">Sera ya Faragha</string>
+    <string name="menu_copyright">Hati miliki</string>
     <!-- Lessons -->
     <string name="nav_lessons">Masomo</string>
     <string name="dashboard_lessons_header_title">Mafunzo kwa ajili yako</string>

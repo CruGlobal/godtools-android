@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">계정</string>
-    <string name="menu_heading_share">공유</string>
-    <string name="menu_heading_about">정보</string>
     <string name="menu_tutorial">튜토리얼</string>
+    <string name="menu_heading_account">계정</string>
     <string name="menu_login">로그인</string>
     <string name="menu_signup">계정 생성</string>
     <string name="menu_logout">로그아웃</string>
-    <string name="menu_share_godtools">GodTools 앱 공유</string>
+    <string name="menu_heading_share">공유</string>
     <string name="menu_share_story">이야기를 공유하세요</string>
-    <string name="menu_terms_of_use">이용 약관</string>
-    <string name="menu_privacy_policy">개인정보 보호정책</string>
-    <string name="menu_copyright">저작권</string>
+    <string name="menu_share_godtools">GodTools 앱 공유</string>
     <string name="share_app_message">GodTools 앱 다운로드: https://godtoolsapp.com \n\n
 
 온라인 버전은 https://knowgod.com/에서 찾을 수 있습니다</string>
     <string name="share_story_subject">GodTools 스토리</string>
+    <string name="menu_heading_about">정보</string>
+    <string name="menu_terms_of_use">이용 약관</string>
+    <string name="menu_privacy_policy">개인정보 보호정책</string>
+    <string name="menu_copyright">저작권</string>
     <!-- Lessons -->
     <string name="nav_lessons">수업</string>
     <string name="dashboard_lessons_header_title">맞춤 수업</string>

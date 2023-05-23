@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Tili</string>
-    <string name="menu_heading_share">Jakaminen</string>
-    <string name="menu_heading_about">Info</string>
     <string name="menu_tutorial">Opastus</string>
+    <string name="menu_heading_account">Tili</string>
     <string name="menu_login">Kirjaudu sisään</string>
     <string name="menu_signup">Luo tili</string>
     <string name="menu_logout">Kirjaudu ulos</string>
-    <string name="menu_share_godtools">Jaa GodTools -sovellus</string>
+    <string name="menu_heading_share">Jakaminen</string>
     <string name="menu_share_story">Jaa meille tarina</string>
+    <string name="menu_share_godtools">Jaa GodTools -sovellus</string>
+    <string name="share_story_subject">GodTools-tarina</string>
+    <string name="menu_heading_about">Info</string>
     <string name="menu_terms_of_use">Käyttöehdot</string>
     <string name="menu_privacy_policy">Tietosuojakäytäntö</string>
     <string name="menu_copyright">Tekijänoikeudet</string>
-    <string name="share_story_subject">GodTools-tarina</string>
     <!-- Lessons -->
     <string name="nav_lessons">Oppitunnit</string>
     <string name="dashboard_lessons_header_title">Sinulle tehdyt oppitunnit</string>

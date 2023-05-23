@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">အကောင့်</string>
-    <string name="menu_heading_share">ဝေငှပါ</string>
-    <string name="menu_heading_about">အ ကြောင်း</string>
     <string name="menu_tutorial">ဗီဒီယိုသင်ခန်းစာ</string>
+    <string name="menu_heading_account">အကောင့်</string>
     <string name="menu_login">"  အ ကောင့် ဝင်ရန်"</string>
     <string name="menu_signup">" အကောင့်အသစ်ဖွင့်ပါ"</string>
     <string name="menu_logout">" အ ကောင့်မှထွက်သည်"</string>
-    <string name="menu_share_godtools">GodTools App ကို ဝေငှပါ</string>
+    <string name="menu_heading_share">ဝေငှပါ</string>
     <string name="menu_share_story">အတွေ့အကြုံကို မျှဝေ ပေးပါ</string>
+    <string name="menu_share_godtools">GodTools App ကို ဝေငှပါ</string>
+    <string name="share_story_subject">GodTools ဇာတ်လမ်း</string>
+    <string name="menu_heading_about">အ ကြောင်း</string>
     <string name="menu_terms_of_use">လိုက်နာရမည့် စည်းကမ်းများ</string>
     <string name="menu_privacy_policy">ကိုယ်ရေးကိုယ်တာ ဆိုင်ရာမူဝါဒ</string>
     <string name="menu_copyright">မူပိုင်ခွင့်</string>
-    <string name="share_story_subject">GodTools ဇာတ်လမ်း</string>
     <!-- Lessons -->
     <string name="nav_lessons">သင်ခန်းစာများ</string>
     <string name="dashboard_lessons_header_title">သင့်အတွက် ပြုလုပ်ထားသော သင်ခန်းစာများ</string>

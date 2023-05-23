@@ -2,14 +2,14 @@
 <resources>
     <!-- Navigation Menu -->
     <string name="menu_heading_share">Поделиться</string>
-    <string name="menu_heading_about">О приложении</string>
-    <string name="menu_share_godtools">Поделиться GodTools</string>
     <string name="menu_share_story">Поделитесь с нами историей</string>
+    <string name="menu_share_godtools">Поделиться GodTools</string>
+    <string name="share_app_message">Вы можете загрузить приложение GodTools здесь: http://godtoolsapp.com</string>
+    <string name="share_story_subject">Услышьте поступь божью!</string>
+    <string name="menu_heading_about">О приложении</string>
     <string name="menu_terms_of_use">Условия использования</string>
     <string name="menu_privacy_policy">Политика конфиденциальности</string>
     <string name="menu_copyright">Авторское право</string>
-    <string name="share_app_message">Вы можете загрузить приложение GodTools здесь: http://godtoolsapp.com</string>
-    <string name="share_story_subject">Услышьте поступь божью!</string>
     <!-- Lessons -->
     <!-- Home -->
     <!-- All Tools -->
