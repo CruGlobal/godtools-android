@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">ప్రపంచ కార్యాచరణ</string>
+    <!-- Login -->
     <!-- Activity -->
     <string name="profile_tab_activity">కార్యాచరణ</string>
     <!-- Badges -->

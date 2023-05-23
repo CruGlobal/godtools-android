@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Налог</string>
-    <string name="menu_heading_share">Подели</string>
-    <string name="menu_heading_about">О</string>
     <string name="menu_tutorial">Приручник</string>
+    <string name="menu_heading_account">Налог</string>
     <string name="menu_login">Пријава</string>
     <string name="menu_signup">Креирајте налог</string>
     <string name="menu_logout">Одјава</string>
-    <string name="menu_share_godtools">Поделите апликацију GodTools</string>
+    <string name="menu_heading_share">Подели</string>
     <string name="menu_share_story">Поделите причу са нама</string>
+    <string name="menu_share_godtools">Поделите апликацију GodTools</string>
+    <string name="share_app_message">Преузмите апликацију GodTools: https://godtoolsapp.com</string>
+    <string name="share_story_subject">GodTools Прича</string>
+    <string name="menu_heading_about">О</string>
     <string name="menu_terms_of_use">Услови коришћења</string>
     <string name="menu_privacy_policy">Политика приватности</string>
     <string name="menu_copyright">Ауторско право</string>
-    <string name="share_app_message">Преузмите апликацију GodTools: https://godtoolsapp.com</string>
-    <string name="share_story_subject">GodTools Прича</string>
     <!-- Lessons -->
     <string name="nav_lessons">Лекције</string>
     <string name="dashboard_lessons_header_title">Лекције направљене за вас</string>

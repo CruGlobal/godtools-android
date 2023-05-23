@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Akaun</string>
-    <string name="menu_heading_share">Kongsi</string>
-    <string name="menu_heading_about">Perihal</string>
     <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_heading_account">Akaun</string>
     <string name="menu_login">Log Masuk</string>
     <string name="menu_signup">Cipta Akaun</string>
     <string name="menu_logout">Log Keluar</string>
-    <string name="menu_share_godtools">Kongsi Aplikasi GodTools</string>
+    <string name="menu_heading_share">Kongsi</string>
     <string name="menu_share_story">Kongsikan sebuah Kisah Bersama Kami</string>
-    <string name="menu_terms_of_use">Terma Penggunaan</string>
-    <string name="menu_privacy_policy">Dasar Privasi</string>
-    <string name="menu_copyright">Hak Cipta</string>
+    <string name="menu_share_godtools">Kongsi Aplikasi GodTools</string>
     <string name="share_app_message">Muat turun aplikasi GodTools: https://godtoolsapp.com \n\n
 
 Versi dalam talian boleh ditemui di https://knowgod.com/</string>
     <string name="share_story_subject">Kisah GodTools</string>
+    <string name="menu_heading_about">Perihal</string>
+    <string name="menu_terms_of_use">Terma Penggunaan</string>
+    <string name="menu_privacy_policy">Dasar Privasi</string>
+    <string name="menu_copyright">Hak Cipta</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pengajaran</string>
     <string name="dashboard_lessons_header_title">Pengajaran disediakan khusus untuk anda</string>

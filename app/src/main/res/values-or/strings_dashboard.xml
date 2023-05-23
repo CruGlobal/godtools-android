@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">"ଖାତା "</string>
-    <string name="menu_heading_share">"ଅଂଶୀଦାର କରନ୍ତୁ "</string>
-    <string name="menu_heading_about">ବିଷୟରେ</string>
     <string name="menu_tutorial">ଟ୍ୟୁଟୋରିଆଲ୍</string>
+    <string name="menu_heading_account">"ଖାତା "</string>
     <string name="menu_login">ଲଗଇନ୍ କରନ୍ତୁ</string>
     <string name="menu_signup">ଖାତା ଖୋଲନ୍ତୁ</string>
     <string name="menu_logout">"ଲଗଆଉଟ୍ କରନ୍ତୁ "</string>
-    <string name="menu_share_godtools">GodTools ଆପ୍ ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="menu_heading_share">"ଅଂଶୀଦାର କରନ୍ତୁ "</string>
     <string name="menu_share_story">ଆମ ସହିତ ଏକ କାହାଣୀ ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="menu_share_godtools">GodTools ଆପ୍ ଅଂଶୀଦାର କରନ୍ତୁ</string>
+    <string name="share_story_subject">GodTools କାହାଣୀ |</string>
+    <string name="menu_heading_about">ବିଷୟରେ</string>
     <string name="menu_terms_of_use">ବ୍ୟବହାର ସର୍ତ୍ତାବଳୀ</string>
     <string name="menu_privacy_policy">ଗୋପନୀୟତା ନୀତି</string>
     <string name="menu_copyright">କପିରାଇଟ୍</string>
-    <string name="share_story_subject">GodTools କାହାଣୀ |</string>
     <!-- Lessons -->
     <!-- Home -->
     <string name="nav_favorite_tools">ପସନ୍ଦଗୁଡ଼ିକ</string>

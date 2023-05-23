@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">حساب کاربری</string>
-    <string name="menu_heading_share">اشتراک‌گذاری</string>
-    <string name="menu_heading_about">درباره</string>
     <string name="menu_tutorial">آموزش</string>
+    <string name="menu_heading_account">حساب کاربری</string>
     <string name="menu_login">ورود</string>
     <string name="menu_signup">ایجاد حساب کاربری</string>
     <string name="menu_logout">خروج</string>
-    <string name="menu_share_godtools">"اشتراگ‌گذاری برنامه GodTools "</string>
+    <string name="menu_heading_share">اشتراک‌گذاری</string>
     <string name="menu_share_story">یک داستان با ما به اشتراک بگذارید</string>
-    <string name="menu_terms_of_use">شرایط استفاده</string>
-    <string name="menu_privacy_policy">خط‌مشی حریم خصوصی</string>
-    <string name="menu_copyright">حق نسخه‌برداری</string>
+    <string name="menu_share_godtools">"اشتراگ‌گذاری برنامه GodTools "</string>
     <string name="share_app_message">برنامه GodTools را از اینجا دانلود کنید:
 https://godtoolsapp.com \n\n
 
 می‌توانید نسخه آنلاین را در https://knowgod.com/ بیابید</string>
     <string name="share_story_subject">داستان God tools</string>
+    <string name="menu_heading_about">درباره</string>
+    <string name="menu_terms_of_use">شرایط استفاده</string>
+    <string name="menu_privacy_policy">خط‌مشی حریم خصوصی</string>
+    <string name="menu_copyright">حق نسخه‌برداری</string>
     <!-- Lessons -->
     <string name="nav_lessons">درس‌ها</string>
     <string name="dashboard_lessons_header_title">درس‌های مناسب شما</string>

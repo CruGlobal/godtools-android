@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">ບັນຊີ</string>
-    <string name="menu_heading_share">ແບ່ງປັນ</string>
-    <string name="menu_heading_about">ກ່ຽວກັບ</string>
     <string name="menu_tutorial">ການສອນເພື່ອການສຶກສາ</string>
+    <string name="menu_heading_account">ບັນຊີ</string>
     <string name="menu_login">ເຂົ້າສູ່ລະບົບ</string>
     <string name="menu_signup">ສ້າງບັນຊີ</string>
     <string name="menu_logout">ອອກຈາກລະບົບ</string>
-    <string name="menu_share_godtools">ແບ່ງປັນ GodTools</string>
+    <string name="menu_heading_share">ແບ່ງປັນ</string>
     <string name="menu_share_story">ແບ່ງປັນເລື່ອງລາວກັບພວກເຮົາ</string>
-    <string name="menu_terms_of_use">ເງື່ອນໄຂການໃຊ້ງານ</string>
-    <string name="menu_privacy_policy">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</string>
-    <string name="menu_copyright">ລິຂະສິດ</string>
+    <string name="menu_share_godtools">ແບ່ງປັນ GodTools</string>
     <string name="share_app_message">ດາວໂຫຼດແອັບ GodTools: http://godtoolsapp.com \n\n
 
 ສາມາດຊອກຫາເວີຊັນອອນໄລນ໌ໄດ້ທີ່ https://knowgod.com/</string>
     <string name="share_story_subject">ເລື່ອງຂອງ GodTools</string>
+    <string name="menu_heading_about">ກ່ຽວກັບ</string>
+    <string name="menu_terms_of_use">ເງື່ອນໄຂການໃຊ້ງານ</string>
+    <string name="menu_privacy_policy">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</string>
+    <string name="menu_copyright">ລິຂະສິດ</string>
     <!-- Lessons -->
     <string name="nav_lessons">ບົດຮຽນ</string>
     <string name="dashboard_lessons_header_title">ບົດຮຽນທີ່ສ້າງຂຶ້ນສຳລັບທ່ານ</string>

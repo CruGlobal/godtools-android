@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Λογαριασμός</string>
-    <string name="menu_heading_share">Κοινοποίηση</string>
-    <string name="menu_heading_about">Σχετικά</string>
     <string name="menu_tutorial">Εκπαιδευτικό υλικό</string>
+    <string name="menu_heading_account">Λογαριασμός</string>
     <string name="menu_login">Σύνδεση</string>
     <string name="menu_signup">Δημιουργία Λογαριασμού</string>
     <string name="menu_logout">Αποσύνδεση</string>
-    <string name="menu_share_godtools">Κοινοποίηση Εφαρμογής Θεϊκών Εργαλείων</string>
+    <string name="menu_heading_share">Κοινοποίηση</string>
     <string name="menu_share_story">Μοιραστείτε μια ιστορία μαζί μας</string>
-    <string name="menu_terms_of_use">Όροι χρήσης</string>
-    <string name="menu_privacy_policy">Πολιτική Απορρήτου</string>
-    <string name="menu_copyright">Πνευματικά δικαιώματα</string>
+    <string name="menu_share_godtools">Κοινοποίηση Εφαρμογής Θεϊκών Εργαλείων</string>
     <string name="share_app_message">Kατεβάστε την εφαρμογή Θεϊκών Εργαλείων: https://godtoolsapp.com \n\n
 
 Βρείτε την online έκδοση στο https://knowgod.com/</string>
     <string name="share_story_subject">Ιστορία GodTools</string>
+    <string name="menu_heading_about">Σχετικά</string>
+    <string name="menu_terms_of_use">Όροι χρήσης</string>
+    <string name="menu_privacy_policy">Πολιτική Απορρήτου</string>
+    <string name="menu_copyright">Πνευματικά δικαιώματα</string>
     <!-- Lessons -->
     <string name="nav_lessons">Μαθήματα</string>
     <string name="dashboard_lessons_header_title">Κατηγορίες</string>

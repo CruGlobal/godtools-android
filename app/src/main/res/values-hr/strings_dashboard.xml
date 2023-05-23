@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Račun</string>
-    <string name="menu_heading_share">Podijeli</string>
-    <string name="menu_heading_about">O nama</string>
     <string name="menu_tutorial">Priručnik</string>
+    <string name="menu_heading_account">Račun</string>
     <string name="menu_login">Prijava</string>
     <string name="menu_signup">Stvori račun</string>
     <string name="menu_logout">Odjava</string>
-    <string name="menu_share_godtools">Podijelite aplikaciju GodTools</string>
+    <string name="menu_heading_share">Podijeli</string>
     <string name="menu_share_story">Podijelite priču s nama</string>
-    <string name="menu_terms_of_use">Uvjeti upotrebe</string>
-    <string name="menu_privacy_policy">Pravila privatnosti</string>
-    <string name="menu_copyright">Autorska prava</string>
+    <string name="menu_share_godtools">Podijelite aplikaciju GodTools</string>
     <string name="share_app_message">Preuzmite aplikaciju GodTools na adresi: https://godtoolsapp.com \n\n
 
 Online verziju možete pronaći na adresi: https://knowgod.com/</string>
     <string name="share_story_subject">GodTools priča</string>
+    <string name="menu_heading_about">O nama</string>
+    <string name="menu_terms_of_use">Uvjeti upotrebe</string>
+    <string name="menu_privacy_policy">Pravila privatnosti</string>
+    <string name="menu_copyright">Autorska prava</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lekcije</string>
     <string name="dashboard_lessons_header_title">Lekcije osmišljene baš za vas</string>

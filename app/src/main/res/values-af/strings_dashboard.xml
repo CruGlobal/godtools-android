@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Rekening</string>
-    <string name="menu_heading_share">Deel</string>
-    <string name="menu_heading_about">Aangaande</string>
     <string name="menu_tutorial">Studieklas</string>
+    <string name="menu_heading_account">Rekening</string>
     <string name="menu_login">Meld aan</string>
     <string name="menu_signup">Skep rekening</string>
     <string name="menu_logout">Teken uit</string>
-    <string name="menu_share_godtools">Deel die GodTools-toep</string>
+    <string name="menu_heading_share">Deel</string>
     <string name="menu_share_story">Deel \'n storie met ons</string>
-    <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
-    <string name="menu_privacy_policy">Privaatheidsbeleid</string>
-    <string name="menu_copyright">Kopiereg</string>
+    <string name="menu_share_godtools">Deel die GodTools-toep</string>
     <string name="share_app_message">Laai die GodTools-toep af: http://godtoolsapp.com \n\n
 
 \'n Aanlynweergawe kan gevind word by https://knowgod.com/</string>
     <string name="share_story_subject">GodTools-verhaal</string>
+    <string name="menu_heading_about">Aangaande</string>
+    <string name="menu_terms_of_use">Gebruiksvoorwaardes</string>
+    <string name="menu_privacy_policy">Privaatheidsbeleid</string>
+    <string name="menu_copyright">Kopiereg</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lesse</string>
     <string name="dashboard_lessons_header_title">Lesse vir jou gemaak</string>

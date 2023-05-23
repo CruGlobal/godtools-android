@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">บัญชี</string>
-    <string name="menu_heading_share">แชร์</string>
-    <string name="menu_heading_about">เกี่ยวกับ</string>
     <string name="menu_tutorial">คู่มือ</string>
+    <string name="menu_heading_account">บัญชี</string>
     <string name="menu_login">เข้าสู่ระบบ</string>
     <string name="menu_signup">สร้างบัญชี</string>
     <string name="menu_logout">ออกจากระบบ</string>
-    <string name="menu_share_godtools">แชร์แอป GodTools</string>
+    <string name="menu_heading_share">แชร์</string>
     <string name="menu_share_story">แชร์เรื่องราวกับเรา</string>
-    <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
-    <string name="menu_privacy_policy">นโยบายความเป็นส่วนตัว</string>
-    <string name="menu_copyright">ลิขสิทธิ์</string>
+    <string name="menu_share_godtools">แชร์แอป GodTools</string>
     <string name="share_app_message">ดาวน์โหลดแอป GodTools ได้จาก https://godtoolsapp.com \n\n
 
 สามารถดูเวอร์ชั่นออนไลน์ได้ที่ https://knowgod.com/</string>
     <string name="share_story_subject">เรื่องราวของ GodTools</string>
+    <string name="menu_heading_about">เกี่ยวกับ</string>
+    <string name="menu_terms_of_use">เงื่อนไขการใช้งาน</string>
+    <string name="menu_privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="menu_copyright">ลิขสิทธิ์</string>
     <!-- Lessons -->
     <string name="nav_lessons">บทเรียน</string>
     <string name="dashboard_lessons_header_title">บทเรียนที่สร้างมาเพื่อคุณ</string>

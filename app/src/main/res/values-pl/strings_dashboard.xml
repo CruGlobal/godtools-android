@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">Konto</string>
-    <string name="menu_heading_share">Udostępnij</string>
-    <string name="menu_heading_about">O aplikacji</string>
     <string name="menu_tutorial">Samouczek</string>
+    <string name="menu_heading_account">Konto</string>
     <string name="menu_login">Zaloguj</string>
     <string name="menu_signup">Utwórz konto</string>
     <string name="menu_logout">Wyloguj</string>
-    <string name="menu_share_godtools">Podziel się aplikacją GodTools</string>
+    <string name="menu_heading_share">Udostępnij</string>
     <string name="menu_share_story">Podziel się z nami swoją historią</string>
-    <string name="menu_terms_of_use">Warunki użytkowania</string>
-    <string name="menu_privacy_policy">Polityka prywatności</string>
-    <string name="menu_copyright">Prawa autorskie</string>
+    <string name="menu_share_godtools">Podziel się aplikacją GodTools</string>
     <string name="share_app_message">Pobierz aplikację GodTools: https://godtoolsapp.com \n\n
 
 Wersję online można znaleźć na https://knowgod.com/</string>
     <string name="share_story_subject">Historia GodTools</string>
+    <string name="menu_heading_about">O aplikacji</string>
+    <string name="menu_terms_of_use">Warunki użytkowania</string>
+    <string name="menu_privacy_policy">Polityka prywatności</string>
+    <string name="menu_copyright">Prawa autorskie</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lekcje</string>
     <string name="dashboard_lessons_header_title">Lekcje idealne dla Ciebie</string>

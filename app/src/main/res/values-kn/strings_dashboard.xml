@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_account">ಖಾತೆ</string>
-    <string name="menu_heading_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
-    <string name="menu_heading_about">ಕುರಿತು</string>
     <string name="menu_tutorial">ಶಿಕ್ಷಣ</string>
+    <string name="menu_heading_account">ಖಾತೆ</string>
     <string name="menu_login">ಲಾಗಿನ್ ಮಾಡಿ</string>
     <string name="menu_signup">ಖಾತೆ ತೆರೆಯಿರಿ</string>
     <string name="menu_logout">ಸಂಪರ್ಕ ತೊರೆ</string>
-    <string name="menu_share_godtools">ಗಾಡ್‌ಟೂಲ್ಸ್ ಅಪ್ಲಿಕೇಶನ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_heading_share">ಹಂಚಿಕೊಳ್ಳಿ</string>
     <string name="menu_share_story">ಒಂದು ಕಥೆಯನ್ನು ನಮ್ಮೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="menu_share_godtools">ಗಾಡ್‌ಟೂಲ್ಸ್ ಅಪ್ಲಿಕೇಶನ್ ಹಂಚಿಕೊಳ್ಳಿ</string>
+    <string name="share_story_subject">ಗಾಡ್‌ಟೂಲ್ಸ್ ಕಥೆ</string>
+    <string name="menu_heading_about">ಕುರಿತು</string>
     <string name="menu_terms_of_use">ಬಳಕೆಯ ನಿಯಮಗಳು</string>
     <string name="menu_privacy_policy">ಗೌಪ್ಯತಾ ನೀತಿ</string>
     <string name="menu_copyright">ಕೃತಿಸ್ವಾಮ್ಯ</string>
-    <string name="share_story_subject">ಗಾಡ್‌ಟೂಲ್ಸ್ ಕಥೆ</string>
     <!-- Lessons -->
     <!-- Home -->
     <string name="nav_favorite_tools">ಮೆಚ್ಚಿನ</string>

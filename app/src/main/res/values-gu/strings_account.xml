@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">વૈશ્વિક પ્રવૃત્તિ</string>
+    <!-- Login -->
     <!-- Activity -->
     <string name="profile_tab_activity">પ્રવૃત્તિ</string>
     <!-- Badges -->
