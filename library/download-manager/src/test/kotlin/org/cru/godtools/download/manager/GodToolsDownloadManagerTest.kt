@@ -67,7 +67,6 @@ import retrofit2.Response
 private const val TOOL = "tool"
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@Suppress("BlockingMethodInNonBlockingContext")
 class GodToolsDownloadManagerTest {
     private val resourcesDir = File.createTempFile("resources", "").also {
         it.delete()
