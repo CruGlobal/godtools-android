@@ -1,4 +1,5 @@
 import com.android.build.gradle.TestedExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
@@ -38,4 +39,13 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
 
     // Kotlin Kover
     project.apply(plugin = "org.jetbrains.kotlinx.kover")
+    project.extensions.configure<KoverReportExtension> {
+        arrayOf("debug", "productionDebug").forEach {
+            androidReports(it) {
+                xml {
+                    setReportFile(project.layout.buildDirectory.file("reports/kover/$it/report.xml"))
+                }
+            }
+        }
+    }
 }
