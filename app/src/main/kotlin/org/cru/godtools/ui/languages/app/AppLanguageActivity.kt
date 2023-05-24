@@ -1,17 +1,10 @@
 package org.cru.godtools.ui.languages.app
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-
-fun Context.startAppLanguageActivity() = startActivity(
-    Intent(this, AppLanguageActivity::class.java)
-        .putExtras(BaseActivity.buildExtras(this))
-)
 
 @AndroidEntryPoint
 class AppLanguageActivity : BaseActivity() {

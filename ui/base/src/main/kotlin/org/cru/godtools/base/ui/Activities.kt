@@ -25,6 +25,16 @@ fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACT
     .putExtra(EXTRA_PAGE, page)
 // endregion DashboardActivity
 
+// region AppLanguageActivity
+private const val ACTIVITY_CLASS_APP_LANGUAGE = "org.cru.godtools.ui.languages.app.AppLanguageActivity"
+
+fun Context.startAppLanguageActivity() = startActivity(
+    Intent()
+        .setClassName(this, ACTIVITY_CLASS_APP_LANGUAGE)
+        .putExtras(BaseActivity.buildExtras(this))
+)
+// endregion AppLanguageActivity
+
 // region ArticlesActivity
 private const val ACTIVITY_CLASS_ARTICLES = "org.cru.godtools.article.ui.ArticlesActivity"
 
