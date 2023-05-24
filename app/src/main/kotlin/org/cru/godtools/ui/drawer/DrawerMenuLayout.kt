@@ -24,7 +24,6 @@ import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -67,7 +66,6 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun DrawerMenuLayout(content: @Composable () -> Unit) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -86,7 +84,6 @@ fun DrawerMenuLayout(content: @Composable () -> Unit) {
 
 @Composable
 @Preview
-@OptIn(ExperimentalMaterial3Api::class)
 fun DrawerContentLayout(
     scope: CoroutineScope = rememberCoroutineScope(),
     viewModel: DrawerViewModel = viewModel(),

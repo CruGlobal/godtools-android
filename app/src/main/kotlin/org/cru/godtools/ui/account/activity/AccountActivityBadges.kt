@@ -15,14 +15,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
@@ -65,7 +63,6 @@ internal fun AccountActivityBadges(
 }
 
 @Composable
-@OptIn(ExperimentalTextApi::class)
 private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) {
     val textStyle = MaterialTheme.typography.labelSmall.merge(ParagraphStyle(lineBreak = LineBreak.Heading))
     val contentHeight = 8.dp + BADGE_SIZE + 8.dp + computeHeightForDefaultText(textStyle, 2) + 8.dp
@@ -143,7 +140,6 @@ private val Badge.icon
         }
     }
 
-@OptIn(ExperimentalComposeUiApi::class)
 private val Badge.label
     @Composable
     get() = when (type) {

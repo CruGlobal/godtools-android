@@ -7,7 +7,6 @@ import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -18,7 +17,6 @@ import org.cru.godtools.model.User
 
 private const val USER_ID = "user_id"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class UserManagerTest {
     private val accountInfoFlow = MutableStateFlow<AccountInfo?>(null)
     private val userIdFlow = MutableStateFlow<String?>(null)

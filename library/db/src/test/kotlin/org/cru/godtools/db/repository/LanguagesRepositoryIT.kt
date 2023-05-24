@@ -2,7 +2,6 @@ package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
 import java.util.Locale
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
@@ -16,7 +15,6 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 abstract class LanguagesRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: LanguagesRepository

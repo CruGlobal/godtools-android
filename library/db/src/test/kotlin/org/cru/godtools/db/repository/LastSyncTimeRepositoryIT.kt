@@ -2,7 +2,6 @@ package org.cru.godtools.db.repository
 
 import java.lang.Thread.sleep
 import java.util.UUID
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 import org.hamcrest.MatcherAssert.assertThat
@@ -20,7 +19,6 @@ import org.junit.Test
 private const val KEY = "key"
 private val COMPOUND_KEY = arrayOf(KEY, 1, true)
 
-@OptIn(ExperimentalCoroutinesApi::class)
 abstract class LastSyncTimeRepositoryIT {
     internal abstract val repository: LastSyncTimeRepository
 

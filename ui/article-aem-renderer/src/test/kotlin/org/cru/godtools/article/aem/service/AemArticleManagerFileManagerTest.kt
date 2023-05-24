@@ -15,7 +15,6 @@ import java.io.File
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import kotlin.io.path.createTempDirectory
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.article.aem.db.ResourceDao
@@ -30,7 +29,6 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerFileManagerTest {
     private val testDir = createTempDirectory().toFile()
 

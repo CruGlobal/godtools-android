@@ -254,7 +254,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
         // endregion Stale AemImports Refresh
 
         // region Cleanup
-        @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+        @OptIn(ObsoleteCoroutinesApi::class)
         private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
             withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
             while (!channel.isClosedForReceive) {

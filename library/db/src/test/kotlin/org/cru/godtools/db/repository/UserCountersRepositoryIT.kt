@@ -1,6 +1,5 @@
 package org.cru.godtools.db.repository
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.UserCounter
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,7 +13,6 @@ import org.junit.Test
 private const val COUNTER = "counter"
 private const val COUNTER2 = "counter2"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 abstract class UserCountersRepositoryIT {
     internal abstract val repository: UserCountersRepository
 

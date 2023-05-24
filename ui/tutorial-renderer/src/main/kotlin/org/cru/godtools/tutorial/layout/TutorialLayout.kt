@@ -23,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
@@ -40,7 +39,6 @@ import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 internal fun TutorialLayout(
     pageSet: PageSet,
     onTutorialAction: (Action) -> Unit = {},

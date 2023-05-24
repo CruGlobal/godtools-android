@@ -3,7 +3,6 @@ package org.cru.godtools.ui.dashboard
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -40,7 +39,6 @@ import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun DashboardLayout(
     viewModel: DashboardViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
