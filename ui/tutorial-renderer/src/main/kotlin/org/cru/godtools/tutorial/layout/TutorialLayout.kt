@@ -116,7 +116,7 @@ private inline fun TutorialAppBar(
             }
         }
     },
-    colors = TopAppBarDefaults.smallTopAppBarColors(
+    colors = TopAppBarDefaults.topAppBarColors(
         navigationIconContentColor = MaterialTheme.colorScheme.primary,
         actionIconContentColor = MaterialTheme.colorScheme.primary
     ),

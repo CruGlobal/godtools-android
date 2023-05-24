@@ -57,7 +57,7 @@ fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
                     }
                 },
                 title = {},
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = GodToolsTheme.GT_BLUE,
                     navigationIconContentColor = Color.White
                 ),
