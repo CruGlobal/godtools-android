@@ -7,7 +7,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,7 +39,7 @@ internal fun Banner(
     modifier: Modifier = Modifier,
 ) = Surface(modifier = modifier.fillMaxWidth()) {
     Column {
-        CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+        CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
             val iconNode = "icon"
             val textNode = "text"
             val primaryActionNode = "primaryAction"
