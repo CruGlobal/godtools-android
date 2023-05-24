@@ -1,36 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- region AppsFlyer Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<!--    <uses-permission android:name="android.permission.INTERNET" />-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- XXX: we only target newer versions of Android for this permission to provide seamless upgrades for old devices -->
-    <uses-permission-sdk-23 android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- endregion AppsFlyer Permissions -->
-
     <!-- Permissions required for Facebook Analytics -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Permissions required for Firebase Analytics -->
+    <!-- region Firebase Analytics Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- endregion Firebase Analytics Permissions -->
 
     <application>
-        <!-- region AppsFlyer -->
-        <receiver
-            android:name="com.appsflyer.SingleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name="com.appsflyer.FirebaseMessagingServiceListener"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <!-- endregion AppsFlyer -->
-
         <meta-data
             android:name="google_analytics_automatic_screen_reporting_enabled"
             android:value="false" />
