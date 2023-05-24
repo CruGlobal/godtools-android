@@ -39,7 +39,6 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.hilt)
     implementation(libs.lottie.compose)
