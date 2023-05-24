@@ -10,10 +10,6 @@ android {
 
     configureCompose(project)
     createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
-
-    defaultConfig {
-        buildConfigField("String", "APPSFLYER_DEV_KEY", "\"QdbVaVHi9bHRchUTWtoaij\"")
-    }
 }
 
 dependencies {
@@ -31,7 +27,6 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
 
-    implementation(libs.appsflyer)
     implementation(libs.dagger)
     implementation(libs.eventbus)
     implementation(libs.facebook)
