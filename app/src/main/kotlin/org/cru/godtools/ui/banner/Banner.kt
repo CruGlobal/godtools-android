@@ -31,12 +31,12 @@ import androidx.compose.ui.unit.offset
 internal fun Banner(
     text: String,
     primaryButton: String,
+    modifier: Modifier = Modifier,
     primaryAction: () -> Unit = {},
     secondaryButton: String? = null,
     secondaryAction: () -> Unit = {},
     icon: Painter? = null,
     iconTint: Color = if (icon != null) LocalContentColor.current else Color.Unspecified,
-    modifier: Modifier = Modifier,
 ) = Surface(modifier = modifier.fillMaxWidth()) {
     Column {
         CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
