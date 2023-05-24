@@ -115,7 +115,7 @@ private fun AccountLayoutHeader(
                         Icon(Icons.Filled.ArrowBack, null)
                     }
                 },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     navigationIconContentColor = MaterialTheme.colorScheme.primary
                 )
             )
