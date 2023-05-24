@@ -8,7 +8,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import java.util.Locale
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.cru.godtools.api.FollowupApi
@@ -22,7 +21,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import retrofit2.Response
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class FollowupSyncTasksTest {
 
     private val api: FollowupApi = mockk()

@@ -9,7 +9,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.spyk
 import kotlin.random.Random
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.GodToolsAccountManager
@@ -24,7 +23,6 @@ import retrofit2.Response
 
 private const val USER_ID = "user_id"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class UserSyncTasksTest {
     private val accountManager: GodToolsAccountManager = mockk {
         coEvery { isAuthenticated() } returns true

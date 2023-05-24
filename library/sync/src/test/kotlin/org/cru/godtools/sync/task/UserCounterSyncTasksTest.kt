@@ -7,7 +7,6 @@ import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
@@ -24,7 +23,6 @@ import retrofit2.Response
 private const val USER_ID = "user_id"
 private const val USER_ID_OTHER = "user_id_other"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class UserCounterSyncTasksTest {
     private val accountManager: GodToolsAccountManager = mockk {
         coEvery { isAuthenticated() } returns true

@@ -27,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -67,7 +66,7 @@ private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class)
 fun ToolDetailsLayout(
     viewModel: ToolDetailsViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },

@@ -2,7 +2,6 @@ package org.cru.godtools.article.aem.db
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
@@ -15,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class AemImportRepositoryIT {
     private val testScope = TestScope()
 

@@ -432,7 +432,6 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @Singleton
-    @OptIn(ExperimentalCoroutinesApi::class)
     internal class Dispatcher @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
         private val downloadManager: GodToolsDownloadManager,

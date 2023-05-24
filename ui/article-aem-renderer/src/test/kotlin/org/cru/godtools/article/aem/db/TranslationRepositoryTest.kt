@@ -8,7 +8,6 @@ import io.mockk.coVerifySequence
 import io.mockk.just
 import io.mockk.verify
 import java.util.Locale
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
@@ -21,7 +20,6 @@ private const val TOOL = "kgp"
 private val LOCALE = Locale.ENGLISH
 private const val VERSION = 1
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : TranslationRepository(db) {}
     private val translation = Translation().apply {

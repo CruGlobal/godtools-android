@@ -12,7 +12,6 @@ import io.mockk.just
 import io.mockk.mockk
 import java.io.ByteArrayInputStream
 import java.util.Locale
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
@@ -25,7 +24,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TasksTest {
     private val context = mockk<Context> {
         every { assets } returns mockk {

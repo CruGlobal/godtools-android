@@ -9,7 +9,6 @@ import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -27,7 +26,6 @@ import org.junit.runner.RunWith
 import retrofit2.Response
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class AemArticleManagerTest {
     private val resourceDao = mockk<ResourceDao> {
         coEvery { find(any()) } returns null

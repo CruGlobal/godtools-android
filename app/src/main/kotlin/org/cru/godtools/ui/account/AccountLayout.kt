@@ -56,7 +56,7 @@ import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
 internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class, ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val viewModel = viewModel<AccountViewModel>()
     val user by viewModel.user.collectAsState()

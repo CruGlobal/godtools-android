@@ -6,12 +6,10 @@ import io.mockk.coVerifyAll
 import io.mockk.just
 import io.mockk.mockk
 import java.util.UUID
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.model.Article
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ArticleRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : ArticleRepository(db) {}
 

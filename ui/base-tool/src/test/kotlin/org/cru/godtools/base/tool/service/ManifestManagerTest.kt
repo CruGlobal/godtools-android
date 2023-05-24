@@ -5,7 +5,6 @@ import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.confirmVerified
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
@@ -18,7 +17,6 @@ import org.junit.Test
 
 private const val MANIFEST_NAME = "manifest.xml"
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ManifestManagerTest {
     private val parser: ManifestParser = mockk()
     private val translationsRepository: TranslationsRepository = mockk(relaxUnitFun = true)

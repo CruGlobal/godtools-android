@@ -2,12 +2,10 @@ package org.cru.godtools.tutorial.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.style.LineBreak
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @Composable
-@OptIn(ExperimentalTextApi::class)
 internal fun GodToolsTutorialTheme(content: @Composable () -> Unit) = GodToolsTheme {
     val typography = MaterialTheme.typography
     MaterialTheme(
