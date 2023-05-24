@@ -31,9 +31,9 @@ abstract class LastSyncTimeRepositoryIT {
     }
 
     @Test
-    @Suppress("BlockingMethodInNonBlockingContext")
     fun `updateLastSyncTime() - Replace entry`() = runTest {
         repository.updateLastSyncTime(KEY)
+        @Suppress("BlockingMethodInNonBlockingContext")
         sleep(10)
         val before = System.currentTimeMillis()
         assertThat(repository.getLastSyncTime(KEY), allOf(not(equalTo(0)), lessThan(before)))
@@ -63,18 +63,18 @@ abstract class LastSyncTimeRepositoryIT {
 
     // region isLastSyncStale()
     @Test
-    @Suppress("BlockingMethodInNonBlockingContext")
     fun `isLastSyncStale()`() = runTest {
         repository.updateLastSyncTime(KEY)
+        @Suppress("BlockingMethodInNonBlockingContext")
         sleep(10)
         assertTrue(repository.isLastSyncStale(KEY, staleAfter = 0))
         assertFalse(repository.isLastSyncStale(KEY, staleAfter = DAY_IN_MS))
     }
 
     @Test
-    @Suppress("BlockingMethodInNonBlockingContext")
     fun `isLastSyncStale() - compound key`() = runTest {
         repository.updateLastSyncTime(*COMPOUND_KEY)
+        @Suppress("BlockingMethodInNonBlockingContext")
         sleep(10)
         assertTrue(repository.isLastSyncStale(*COMPOUND_KEY, staleAfter = 0))
         assertFalse(repository.isLastSyncStale(*COMPOUND_KEY, staleAfter = DAY_IN_MS))
@@ -88,9 +88,9 @@ abstract class LastSyncTimeRepositoryIT {
     // endregion isLastSyncStale()
 
     // region resetLastSyncTime()
-    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun createMultipleSyncTimes() {
         repository.updateLastSyncTime(KEY)
+        @Suppress("BlockingMethodInNonBlockingContext")
         sleep(5)
         repository.updateLastSyncTime(KEY, 1)
     }
