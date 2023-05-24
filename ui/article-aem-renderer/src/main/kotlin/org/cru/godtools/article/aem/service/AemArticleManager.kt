@@ -14,6 +14,7 @@ import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi
@@ -254,7 +255,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
         // endregion Stale AemImports Refresh
 
         // region Cleanup
-        @OptIn(ObsoleteCoroutinesApi::class)
+        @OptIn(DelicateCoroutinesApi::class, ObsoleteCoroutinesApi::class)
         private val cleanupActor = coroutineScope.actor<Unit>(capacity = Channel.CONFLATED) {
             withTimeoutOrNull(CLEANUP_DELAY_INITIAL) { channel.receiveCatching() }
             while (!channel.isClosedForReceive) {
