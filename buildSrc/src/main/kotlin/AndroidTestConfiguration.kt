@@ -1,5 +1,8 @@
 import com.android.build.gradle.TestedExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
@@ -31,6 +34,18 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
             // see: https://github.com/android/android-test/pull/1000
             val espressoCore = project.libs.findLibrary("androidx-test-espresso-core").get()
             force(espressoCore)
+        }
+    }
+
+    // Kotlin Kover
+    project.apply(plugin = "org.jetbrains.kotlinx.kover")
+    project.extensions.configure<KoverReportExtension> {
+        arrayOf("debug", "productionDebug").forEach {
+            androidReports(it) {
+                xml {
+                    setReportFile(project.layout.buildDirectory.file("reports/kover/$it/report.xml"))
+                }
+            }
         }
     }
 }
