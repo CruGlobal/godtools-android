@@ -72,14 +72,14 @@ private fun BaseExtension.configureSdk() {
 
 private fun BaseExtension.configureCompilerOptions(project: Project) {
     project.extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
-        jvmToolchain(11)
+        jvmToolchain(17)
     }
 
     compileOptions {
         // HACK: workaround a kotlin.jvmToolchain bug
         //       see: https://issuetracker.google.com/issues/260059413
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
         freeCompilerArgs += "-Xjvm-default=all"
