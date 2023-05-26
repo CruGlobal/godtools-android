@@ -27,6 +27,7 @@ android {
         proguardFile("proguard-rules.pro")
         proguardFile("proguard-rules-crashlytics.pro")
         proguardFile("proguard-rules-eventbus.pro")
+        proguardFile("proguard-rules-firebase-inappmessaging.pro")
         proguardFile("proguard-rules-guava.pro")
         proguardFile("proguard-searchview.pro")
 
@@ -104,6 +105,7 @@ android {
             versionNameSuffix = "-qa"
 
             isMinifyEnabled = true
+            proguardFile("proguard-rules-flipper.pro")
 
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
