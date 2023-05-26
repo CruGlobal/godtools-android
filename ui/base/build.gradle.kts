@@ -12,6 +12,7 @@ android {
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }
