@@ -8,6 +8,10 @@ repositories {
     gradlePluginPortal()
 }
 
+kotlin.jvmToolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
+}
+
 configurations.configureEach {
     resolutionStrategy {
         // HACK: workaround a javapoet transitive dependency conflict between the android and hilt gradle plugins

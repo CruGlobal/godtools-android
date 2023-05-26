@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version-file: ".java-version"
       - name: Build App
         uses: gradle/gradle-build-action@v2
         with:
@@ -28,6 +33,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version-file: ".java-version"
       - name: Run ktlint
         uses: gradle/gradle-build-action@v2
         with:
@@ -45,6 +55,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version-file: ".java-version"
       - name: Run Lint Checks
         uses: gradle/gradle-build-action@v2
         with:
@@ -71,6 +86,11 @@ jobs:
           key: ${{ runner.os }}-maven-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version-file: ".java-version"
       - name: Run Unit Tests
         uses: gradle/gradle-build-action@v2
         with:
@@ -104,6 +124,11 @@ jobs:
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
         run: echo $FIREBASE_API_KEY > firebase/firebase_api_key.json
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version-file: ".java-version"
       - name: Build QA Universal APK
         uses: gradle/gradle-build-action@v2
         with:

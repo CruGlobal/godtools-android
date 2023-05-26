@@ -6,6 +6,8 @@ plugins {
 android {
     namespace = "org.cru.godtools.analytics"
 
+    buildFeatures.buildConfig = true
+
     configureCompose(project)
     createEventBusIndex("org.cru.godtools.analytics.AnalyticsEventBusIndex")
 

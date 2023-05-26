@@ -7,6 +7,11 @@ android {
     namespace = "org.cru.godtools.downloadmanager"
 
     buildFeatures.dataBinding = true
+
+    testOptions.unitTests.all {
+        // enable spyk mocks for java.io.File
+        it.jvmArgs("--add-opens", "java.base/java.io=ALL-UNNAMED")
+    }
 }
 
 dependencies {

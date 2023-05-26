@@ -27,12 +27,14 @@ android {
         proguardFile("proguard-rules.pro")
         proguardFile("proguard-rules-crashlytics.pro")
         proguardFile("proguard-rules-eventbus.pro")
+        proguardFile("proguard-rules-firebase-inappmessaging.pro")
         proguardFile("proguard-rules-guava.pro")
         proguardFile("proguard-searchview.pro")
 
         vectorDrawables.useSupportLibrary = true
     }
     buildFeatures {
+        buildConfig = true
         dataBinding = true
         viewBinding = true
     }
@@ -103,6 +105,7 @@ android {
             versionNameSuffix = "-qa"
 
             isMinifyEnabled = true
+            proguardFile("proguard-rules-flipper.pro")
 
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
