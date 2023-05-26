@@ -14,7 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,6 +56,17 @@ internal fun TutorialOnboardingWelcomeLayout(
         .fillMaxSize()
         .verticalScroll(rememberScrollState()),
 ) {
+    FilledTonalButton(
+        onClick = { onTutorialAction(Action.ONBOARDING_CHANGE_LANGUAGE) },
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    ) {
+        Icon(Icons.Outlined.Translate, null, tint = MaterialTheme.colorScheme.primary)
+        Text(stringResource(R.string.tutorial_onboarding_change_language), modifier = Modifier.padding(start = 8.dp))
+    }
+
     Spacer(modifier = Modifier.weight(2f))
 
     Image(

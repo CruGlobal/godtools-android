@@ -111,6 +111,7 @@ gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-an
 gtoSupport-androidx-compose = { module = "org.ccci.gto.android:gto-support-androidx-compose", version.ref = "gtoSupport" }
 gtoSupport-androidx-compose-material3 = { module = "org.ccci.gto.android:gto-support-androidx-compose-material3", version.ref = "gtoSupport" }
 gtoSupport-androidx-constraintlayout = { module = "org.ccci.gto.android:gto-support-androidx-constraintlayout", version.ref = "gtoSupport" }
+gtoSupport-androidx-core = { module = "org.ccci.gto.android:gto-support-androidx-core", version.ref = "gtoSupport" }
 gtoSupport-androidx-databinding = { module = "org.ccci.gto.android:gto-support-androidx-databinding", version.ref = "gtoSupport" }
 gtoSupport-androidx-drawerlayout = { module = "org.ccci.gto.android:gto-support-androidx-drawerlayout", version.ref = "gtoSupport" }
 gtoSupport-androidx-fragment = { module = "org.ccci.gto.android:gto-support-androidx-fragment", version.ref = "gtoSupport" }

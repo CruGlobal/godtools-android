@@ -2,6 +2,7 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <eat-comment />
+    <string name="tutorial_onboarding_change_language">Choose language</string>
     <string name="tutorial_onboarding_welcome">Welcome</string>
     <string name="tutorial_onboarding_welcome_2">Ready for every conversation</string>
     <string name="tutorial_onboarding_welcome_action_video">Watch Video</string>

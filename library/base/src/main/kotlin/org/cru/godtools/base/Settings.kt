@@ -3,8 +3,10 @@ package org.cru.godtools.base
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.map
@@ -12,9 +14,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
@@ -29,7 +38,10 @@ private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
 @Singleton
-class Settings @Inject internal constructor(@ApplicationContext private val context: Context) {
+class Settings internal constructor(private val context: Context, coroutineScope: CoroutineScope) {
+    @Inject
+    internal constructor(@ApplicationContext context: Context) : this(context, CoroutineScope(Dispatchers.Default))
+
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object {
@@ -57,6 +69,22 @@ class Settings @Inject internal constructor(@ApplicationContext private val cont
     }
 
     // region Language Settings
+    var appLanguage: Locale
+        get() = AppCompatDelegate.getApplicationLocales()[0] ?: Locale.getDefault()
+        set(value) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(value))
+        }
+
+    val appLanguageFlow: Flow<Locale> = flow {
+        // TODO: is there a way to actively listen for changes?
+        while (true) {
+            delay(1_000 / 60)
+            emit(appLanguage)
+        }
+    }.shareIn(coroutineScope, SharingStarted.WhileSubscribed())
+        .onStart { emit(appLanguage) }
+        .distinctUntilChanged()
+
     var primaryLanguage: Locale
         get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale() ?: defaultLanguage
         set(value) {

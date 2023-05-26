@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.godtoolsShared.analytics)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout.compose)
 
