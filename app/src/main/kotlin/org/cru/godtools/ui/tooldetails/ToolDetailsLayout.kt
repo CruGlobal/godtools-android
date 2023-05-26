@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.tooldetails
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -41,9 +44,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
@@ -66,7 +66,7 @@ private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
 @Composable
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 fun ToolDetailsLayout(
     viewModel: ToolDetailsViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
@@ -149,7 +149,7 @@ fun ToolDetailsLayout(
         }
 
         HorizontalPager(
-            count = pages.size,
+            pageCount = pages.size,
             state = pagerState,
             verticalAlignment = Alignment.Top,
             key = { pages[it] }

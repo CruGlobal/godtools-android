@@ -18,7 +18,7 @@ firebase-crashlytics = "18.3.7"
 firebase-perf = "20.3.2"
 godtoolsShared = "0.9.1"
 google-auto-value = "1.10.1"
-gtoSupport = "4.0.1"
+gtoSupport = "4.0.2-SNAPSHOT"
 ktlint = "0.48.2"
 kotlin = "1.8.21"
 kotlinCoroutines = "1.7.1"
@@ -31,7 +31,6 @@ splitties = "3.0.0"
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
 advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
