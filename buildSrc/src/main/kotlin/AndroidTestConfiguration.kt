@@ -1,4 +1,5 @@
 import com.android.build.gradle.TestedExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -46,6 +47,16 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
                     setReportFile(project.layout.buildDirectory.file("reports/kover/$it/report.xml"))
                 }
             }
+        }
+    }
+
+    // Test Sharding
+    val shard = project.findProperty("testShard")?.toString()?.toIntOrNull()
+    val totalShards = project.findProperty("testTotalShards")?.toString()?.toIntOrNull()
+    if (shard != null && totalShards != null) {
+        if (project.name.hashCode() % totalShards != shard % totalShards) {
+            project.extensions.configure<KoverProjectExtension> { disable() }
+            project.androidComponents.beforeVariants { it.enableUnitTest = false }
         }
     }
 }
