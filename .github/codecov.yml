@@ -1,6 +1,7 @@
 codecov:
+  max_report_age: off
   notify:
-    after_n_builds: 2
+    after_n_builds: 4
 
 coverage:
   status:
@@ -11,7 +12,6 @@ coverage:
       default:
         target: 0%
         threshold: 1
-codecov:
-  max_report_age: off
+
 github_checks:
   annotations: false
