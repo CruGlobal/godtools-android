@@ -10,10 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.Settings
@@ -51,12 +50,12 @@ class ToolsViewModelTest {
 
     @Before
     fun setup() {
-        Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
+        Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
         viewModel = ToolsViewModel(
             eventBus = mockk(),
             settings = settings,
             toolsRepository = toolsRepository,
-            savedState = SavedStateHandle()
+            savedState = SavedStateHandle(),
         )
     }
 
@@ -122,7 +121,6 @@ class ToolsViewModelTest {
 
             toolsFlow.value = listOf(variant1, variant2)
             metaToolsFlow.value = listOf(meta)
-            runCurrent()
             assertThat(
                 expectMostRecentItem(),
                 allOf(
