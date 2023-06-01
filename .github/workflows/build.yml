@@ -75,6 +75,7 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         testShard: [1, 2]
     env:
