@@ -77,10 +77,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        testShard: [1, 2]
+        testShard: [1, 2, 3, 4]
     env:
       ORG_GRADLE_PROJECT_testShard: ${{ matrix.testShard }}
-      ORG_GRADLE_PROJECT_testTotalShards: 2
+      ORG_GRADLE_PROJECT_testTotalShards: 4
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

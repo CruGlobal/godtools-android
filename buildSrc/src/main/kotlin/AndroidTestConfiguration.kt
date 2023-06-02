@@ -15,7 +15,7 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
         all {
             // default is 512MB, robolectric consumes a lot of memory
             // by loading an AOSP image for each version being tested
-            it.maxHeapSize = "3g"
+            it.maxHeapSize = "3500m"
         }
     }
 
