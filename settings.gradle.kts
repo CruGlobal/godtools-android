@@ -43,7 +43,6 @@ dependencyResolutionManagement {
         jcenter {
             content {
                 includeModule("com.duolingo.open", "rtl-viewpager")
-                includeModule("com.sergivonavi", "materialbanner")
             }
         }
     }
