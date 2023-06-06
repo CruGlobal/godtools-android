@@ -54,7 +54,7 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
     val shard = project.findProperty("testShard")?.toString()?.toIntOrNull()
     val totalShards = project.findProperty("testTotalShards")?.toString()?.toIntOrNull()
     if (shard != null && totalShards != null) {
-        if (Math.floorMod(project.name.hashCode(), totalShards) != Math.floorMod(shard, totalShards)) {
+        if (Math.floorMod(project.path.hashCode(), totalShards) != Math.floorMod(shard, totalShards)) {
             project.extensions.configure<KoverProjectExtension> { disable() }
             project.androidComponents.beforeVariants { it.enableUnitTest = false }
         }
