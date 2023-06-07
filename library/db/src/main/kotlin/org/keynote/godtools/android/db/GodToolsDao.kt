@@ -7,24 +7,14 @@ import org.ccci.gto.android.common.db.AbstractDao
 import org.ccci.gto.android.common.db.CoroutinesAsyncDao
 import org.ccci.gto.android.common.db.CoroutinesFlowDao
 import org.ccci.gto.android.common.db.LiveDataDao
-import org.cru.godtools.model.Base
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
-import org.keynote.godtools.android.db.Contract.TranslationTable
 
 @Singleton
 class GodToolsDao @Inject internal constructor(
     database: GodToolsDatabase
 ) : AbstractDao(database), CoroutinesAsyncDao, CoroutinesFlowDao, LiveDataDao {
     init {
-        registerType(
-            Translation::class.java,
-            TranslationTable.TABLE_NAME,
-            TranslationTable.PROJECTION_ALL,
-            TranslationMapper,
-            TranslationTable.SQL_WHERE_PRIMARY_KEY
-        )
         registerType(
             TranslationFile::class.java,
             TranslationFileTable.TABLE_NAME,
@@ -36,7 +26,6 @@ class GodToolsDao @Inject internal constructor(
 
     public override fun getPrimaryKeyWhere(obj: Any) = when (obj) {
         is TranslationFile -> getPrimaryKeyWhere(TranslationFile::class.java, obj.translationId, obj.filename)
-        is Base -> getPrimaryKeyWhere(obj.javaClass, obj.id)
         else -> super.getPrimaryKeyWhere(obj)
     }
 

@@ -164,7 +164,7 @@ object Contract : BaseContract() {
         // endregion DB migrations
     }
 
-    object TranslationTable : BaseTable() {
+    internal object TranslationTable : BaseTable() {
         internal const val TABLE_NAME = "translations"
         internal val TABLE = Table.forClass<Translation>()
 
@@ -180,14 +180,6 @@ object Contract : BaseContract() {
         const val COLUMN_MANIFEST = "manifest"
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_DOWNLOADED = "downloaded"
-        private const val COLUMN_LAST_ACCESSED = "last_accessed"
-
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-        val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
-        val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
-        val FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST)
-        private val FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED)
-        private val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)
 
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
@@ -205,41 +197,10 @@ object Contract : BaseContract() {
             COLUMN_DOWNLOADED,
         )
 
-        private const val SQL_COLUMN_VERSION = "$COLUMN_VERSION INTEGER"
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private const val SQL_COLUMN_DESCRIPTION = "$COLUMN_DESCRIPTION TEXT"
-        private const val SQL_COLUMN_TAGLINE = "$COLUMN_TAGLINE TEXT"
         private const val SQL_COLUMN_DETAILS_OUTLINE = "$COLUMN_DETAILS_OUTLINE TEXT"
         private const val SQL_COLUMN_DETAILS_BIBLE_REFERENCES = "$COLUMN_DETAILS_BIBLE_REFERENCES TEXT"
         private const val SQL_COLUMN_DETAILS_CONVERSATION_STARTERS = "$COLUMN_DETAILS_CONVERSATION_STARTERS TEXT"
-        private const val SQL_COLUMN_MANIFEST = "$COLUMN_MANIFEST TEXT"
-        private const val SQL_COLUMN_PUBLISHED = "$COLUMN_PUBLISHED INTEGER"
-        private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
-        private const val SQL_COLUMN_LAST_ACCESSED = "$COLUMN_LAST_ACCESSED INTEGER"
 
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-        internal val SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()))
-        val SQL_WHERE_PUBLISHED = FIELD_PUBLISHED.eq(true)
-        val SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true)
-        const val SQL_ORDER_BY_VERSION_DESC = "$COLUMN_VERSION DESC"
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            ToolCode.SQL_COLUMN_TOOL,
-            LanguageCode.SQL_COLUMN_LANGUAGE,
-            SQL_COLUMN_VERSION,
-            SQL_COLUMN_NAME,
-            SQL_COLUMN_DESCRIPTION,
-            SQL_COLUMN_TAGLINE,
-            SQL_COLUMN_DETAILS_OUTLINE,
-            SQL_COLUMN_DETAILS_BIBLE_REFERENCES,
-            SQL_COLUMN_DETAILS_CONVERSATION_STARTERS,
-            SQL_COLUMN_MANIFEST,
-            SQL_COLUMN_PUBLISHED,
-            SQL_COLUMN_DOWNLOADED,
-            SQL_COLUMN_LAST_ACCESSED
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
