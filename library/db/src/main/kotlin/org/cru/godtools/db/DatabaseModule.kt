@@ -27,7 +27,6 @@ import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
 import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
-import org.keynote.godtools.android.db.repository.LegacyTranslationsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -107,7 +106,10 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun LegacyTranslationsRepository.translationsRepository(): TranslationsRepository = this
+    internal fun GodToolsRoomDatabase.translationsRepository(legacyDb: GodToolsDatabase): TranslationsRepository {
+        legacyDb.triggerDataMigration()
+        return translationsRepository
+    }
 
     private fun GodToolsDatabase.triggerDataMigration() {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,

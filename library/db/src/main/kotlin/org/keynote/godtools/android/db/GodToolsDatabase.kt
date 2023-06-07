@@ -2,6 +2,7 @@ package org.keynote.godtools.android.db
 
 import android.content.Context
 import android.database.SQLException
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,6 +13,7 @@ import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
 import org.ccci.gto.android.common.db.util.CursorUtils.getBool
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
+import org.ccci.gto.android.common.util.database.forEach
 import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLocale
@@ -25,6 +27,7 @@ import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
+import org.cru.godtools.db.room.entity.TranslationEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
 import org.keynote.godtools.android.db.Contract.DownloadedFileTable
@@ -40,7 +43,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 60
+private const val DATABASE_VERSION = 61
 
 /*
  * Version history
@@ -65,6 +68,7 @@ private const val DATABASE_VERSION = 60
  * 58: 2023-01-25
  * 59: 2023-05-15
  * 60: 2023-05-09
+ * 61: 2023-06-07
  */
 
 @Singleton
@@ -76,7 +80,6 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(TranslationTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
@@ -316,6 +319,28 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
+                    }
+                    61 -> {
+                        db.query(
+                            TranslationTable.TABLE_NAME,
+                            TranslationTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.forEach {
+                                val trans = TranslationMapper.toObject(it).takeIf { it.isValid } ?: return@forEach
+                                try {
+                                    roomDb.translationsDao.insertOrIgnoreTranslationBlocking(TranslationEntity(trans))
+                                } catch (_: SQLiteConstraintException) {
+                                    // ignore translations that fail FK constraints
+                                }
+                            }
+                        }
+
+                        db.execSQL(TranslationTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }

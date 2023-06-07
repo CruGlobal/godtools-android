@@ -41,6 +41,8 @@ internal interface TranslationsDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnoreTranslations(translations: Collection<TranslationEntity>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnoreTranslationBlocking(translation: TranslationEntity)
     @Upsert(entity = TranslationEntity::class)
     fun upsertBlocking(translation: SyncTranslation)
     @Query("UPDATE translations SET isDownloaded = :isDownloaded WHERE id = :id")
