@@ -2,9 +2,6 @@
 # see: https://issuetracker.google.com/issues/133167042
 -dontobfuscate
 
-
--optimizationpasses 10
-
 # Strip built-in logging
 -assumenosideeffects class android.util.Log {
     public static boolean isLoggable(java.lang.String, int);

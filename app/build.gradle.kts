@@ -29,6 +29,7 @@ android {
         proguardFile("proguard-rules-eventbus.pro")
         proguardFile("proguard-rules-firebase-inappmessaging.pro")
         proguardFile("proguard-rules-guava.pro")
+        proguardFile("proguard-rules-retrofit2.pro")
         proguardFile("proguard-searchview.pro")
 
         vectorDrawables.useSupportLibrary = true
