@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.db.room.entity.LanguageEntity
@@ -13,8 +14,8 @@ import org.cru.godtools.db.room.entity.LanguageEntity
 internal interface LanguagesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreLanguages(languages: Collection<LanguageEntity>)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOrReplaceLanguages(languages: Collection<LanguageEntity>)
+    @Upsert
+    fun upsertLanguagesBlocking(languages: Collection<LanguageEntity>)
 
     @Query("SELECT * FROM languages WHERE code = :locale")
     suspend fun findLanguage(locale: Locale): LanguageEntity?
