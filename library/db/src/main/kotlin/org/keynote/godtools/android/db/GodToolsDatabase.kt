@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
-import org.ccci.gto.android.common.db.util.CursorUtils
+import org.ccci.gto.android.common.db.util.CursorUtils.getBool
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
 import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
@@ -180,8 +180,7 @@ class GodToolsDatabase @Inject internal constructor(
                                             tipId = it.getString(TrainingTipTable.COLUMN_TIP_ID) ?: continue,
                                         )
                                     ).apply {
-                                        isCompleted =
-                                            CursorUtils.getBool(it, TrainingTipTable.COLUMN_IS_COMPLETED, false)
+                                        isCompleted = getBool(it, TrainingTipTable.COLUMN_IS_COMPLETED, false)
                                         isNew = true
                                     }
                                 )
