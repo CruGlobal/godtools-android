@@ -4,7 +4,6 @@ import org.ccci.gto.android.common.db.BaseContract
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
 import org.ccci.gto.android.common.db.Expression.Companion.bind
-import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Table
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
@@ -12,21 +11,18 @@ import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
 import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
-object Contract : BaseContract() {
+internal object Contract : BaseContract() {
     abstract class BaseTable : Base {
         internal companion object {
             internal const val COLUMN_ID = COLUMN_ROWID
-            internal const val SQL_COLUMN_ID = SQL_COLUMN_ROWID
         }
 
         internal object ToolCode {
             internal const val COLUMN_TOOL = "tool"
-            internal const val SQL_COLUMN_TOOL = "$COLUMN_TOOL TEXT NOT NULL"
         }
 
         internal object LanguageCode {
             internal const val COLUMN_LANGUAGE = "language"
-            internal const val SQL_COLUMN_LANGUAGE = "$COLUMN_LANGUAGE TEXT NOT NULL"
         }
     }
 
@@ -73,9 +69,6 @@ object Contract : BaseContract() {
         const val COLUMN_HIDDEN = "isHidden"
         const val COLUMN_SPOTLIGHT = "isSpotlight"
 
-        val FIELD_CODE = TABLE.field(COLUMN_CODE)
-        val FIELD_TYPE = TABLE.field(COLUMN_TYPE)
-
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
             COLUMN_CODE,
@@ -99,54 +92,13 @@ object Contract : BaseContract() {
             COLUMN_SPOTLIGHT
         )
 
-        private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT"
-        private const val SQL_COLUMN_TYPE = "$COLUMN_TYPE TEXT"
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private const val SQL_COLUMN_DESCRIPTION = "$COLUMN_DESCRIPTION TEXT"
-        private const val SQL_COLUMN_CATEGORY = "$COLUMN_CATEGORY TEXT"
-        private const val SQL_COLUMN_SHARES = "$COLUMN_SHARES INTEGER"
-        private const val SQL_COLUMN_PENDING_SHARES = "$COLUMN_PENDING_SHARES INTEGER"
-        private const val SQL_COLUMN_BANNER = "$COLUMN_BANNER INTEGER"
-        private const val SQL_COLUMN_DETAILS_BANNER = "$COLUMN_DETAILS_BANNER INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER_ANIMATION = "$COLUMN_DETAILS_BANNER_ANIMATION INTEGER"
-        private const val SQL_COLUMN_DETAILS_BANNER_YOUTUBE = "$COLUMN_DETAILS_BANNER_YOUTUBE TEXT"
         private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
-        private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
-        private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
         private const val SQL_COLUMN_META_TOOL = "$COLUMN_META_TOOL TEXT"
         private const val SQL_COLUMN_DEFAULT_VARIANT = "$COLUMN_DEFAULT_VARIANT TEXT"
-        private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
         private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
-        val SQL_WHERE_IS_TOOL_TYPE = FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_CODE,
-            SQL_COLUMN_TYPE,
-            SQL_COLUMN_NAME,
-            SQL_COLUMN_DESCRIPTION,
-            SQL_COLUMN_CATEGORY,
-            SQL_COLUMN_SHARES,
-            SQL_COLUMN_PENDING_SHARES,
-            SQL_COLUMN_BANNER,
-            SQL_COLUMN_DETAILS_BANNER,
-            SQL_COLUMN_DETAILS_BANNER_ANIMATION,
-            SQL_COLUMN_DETAILS_BANNER_YOUTUBE,
-            SQL_COLUMN_SCREEN_SHARE_DISABLED,
-            SQL_COLUMN_DEFAULT_ORDER,
-            SQL_COLUMN_ORDER,
-            SQL_COLUMN_META_TOOL,
-            SQL_COLUMN_DEFAULT_VARIANT,
-            SQL_COLUMN_ADDED,
-            SQL_COLUMN_HIDDEN,
-            SQL_COLUMN_SPOTLIGHT,
-            SQL_PRIMARY_KEY
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
