@@ -103,7 +103,7 @@ jobs:
         with:
           cache-read-only: false
 #          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
-          arguments: test koverXmlReportDebug koverXmlReportProductionDebug --scan
+          arguments: test koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
