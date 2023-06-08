@@ -8,10 +8,10 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.UUID
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
 import org.ccci.gto.android.common.util.database.getString
-import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -247,6 +247,25 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(1234, it.getIntOrNull(1))
             }
             db.query(translationsQuery)
+        }
+    }
+
+    @Test
+    fun testMigrate11To12() {
+        // create v11 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 11).use { db ->
+            db.execSQL("INSERT INTO languages (id, code) VALUES (1, ?)", arrayOf("en"))
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 12, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, code, isAdded FROM languages").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals("en", it.getStringOrNull(1))
+                assertEquals(0, it.getIntOrNull(2))
+            }
         }
     }
 }

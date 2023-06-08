@@ -7,6 +7,7 @@ import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.util.getDisplayName
 
@@ -32,7 +33,8 @@ class Language : Base() {
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
 
-    val isValid get() = code != null && code != INVALID_CODE
+    @JsonApiIgnore
+    var isAdded: Boolean = false
 
     fun getDisplayName(context: Context?) = getDisplayName(context, null)
     fun getDisplayName(context: Context?, inLocale: Locale?) =
@@ -40,6 +42,8 @@ class Language : Base() {
 
     // XXX: output the language id and code for debugging purposes
     override fun toString() = "Language{id=$id, code=$_code}"
+
+    val isValid get() = _code != null && code != INVALID_CODE
 }
 
 fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
