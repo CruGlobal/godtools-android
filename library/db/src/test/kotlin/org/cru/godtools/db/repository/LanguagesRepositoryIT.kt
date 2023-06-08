@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -89,6 +90,42 @@ abstract class LanguagesRepositoryIT {
             assertThat(awaitItem(), empty())
         }
     }
+
+    // region pinLanguage()
+    @Test
+    fun `pinLanguage()`() = testScope.runTest {
+        repository.storeInitialLanguages(
+            listOf(
+                Language(Locale.ENGLISH, isAdded = false),
+                Language(Locale.FRENCH, isAdded = false),
+            )
+        )
+        assertFalse(repository.findLanguage(Locale.ENGLISH)!!.isAdded)
+        assertFalse(repository.findLanguage(Locale.FRENCH)!!.isAdded)
+
+        repository.pinLanguage(Locale.ENGLISH)
+        assertTrue(repository.findLanguage(Locale.ENGLISH)!!.isAdded)
+        assertFalse(repository.findLanguage(Locale.FRENCH)!!.isAdded)
+    }
+    // endregion pinLanguage()
+
+    // region unpinLanguage()
+    @Test
+    fun `unpinLanguage()`() = testScope.runTest {
+        repository.storeInitialLanguages(
+            listOf(
+                Language(Locale.ENGLISH, isAdded = true),
+                Language(Locale.FRENCH, isAdded = true),
+            )
+        )
+        assertTrue(repository.findLanguage(Locale.ENGLISH)!!.isAdded)
+        assertTrue(repository.findLanguage(Locale.FRENCH)!!.isAdded)
+
+        repository.unpinLanguage(Locale.ENGLISH)
+        assertFalse(repository.findLanguage(Locale.ENGLISH)!!.isAdded)
+        assertTrue(repository.findLanguage(Locale.FRENCH)!!.isAdded)
+    }
+    // endregion unpinLanguage()
 
     // region storeInitialLanguages()
     @Test

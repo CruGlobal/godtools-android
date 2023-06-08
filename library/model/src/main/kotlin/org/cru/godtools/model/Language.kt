@@ -60,10 +60,12 @@ fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale:
 @RestrictTo(RestrictTo.Scope.TESTS)
 fun Language(
     code: Locale = Locale.ENGLISH,
+    isAdded: Boolean = false,
     config: Language.() -> Unit = {},
 ) = Language().apply {
     id = Random.nextLong()
     this.code = code
     name = UUID.randomUUID().toString()
+    this.isAdded = isAdded
     config()
 }

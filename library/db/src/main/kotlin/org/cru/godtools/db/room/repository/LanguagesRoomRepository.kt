@@ -20,6 +20,9 @@ internal abstract class LanguagesRoomRepository(private val db: GodToolsRoomData
     override fun getLanguagesFlowForLocales(locales: Collection<Locale>): Flow<Collection<Language>> =
         dao.getLanguagesFlow(locales).map { it.map { it.toModel() } }
 
+    override suspend fun pinLanguage(locale: Locale) = dao.markLanguageAdded(locale, true)
+    override suspend fun unpinLanguage(locale: Locale) = dao.markLanguageAdded(locale, false)
+
     override suspend fun storeInitialLanguages(languages: Collection<Language>) {
         dao.insertOrIgnoreLanguages(languages.map { LanguageEntity(it) })
     }

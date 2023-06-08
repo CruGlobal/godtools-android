@@ -7,8 +7,12 @@ import org.cru.godtools.model.Language
 interface LanguagesRepository {
     suspend fun findLanguage(locale: Locale): Language?
     fun findLanguageFlow(locale: Locale): Flow<Language?>
+
     suspend fun getLanguages(): List<Language>
     fun getLanguagesFlowForLocales(locales: Collection<Locale>): Flow<Collection<Language>>
+
+    suspend fun pinLanguage(locale: Locale)
+    suspend fun unpinLanguage(locale: Locale)
 
     // region Initial Content Methods
     suspend fun storeInitialLanguages(languages: Collection<Language>)
