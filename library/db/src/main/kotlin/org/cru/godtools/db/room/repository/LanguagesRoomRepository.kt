@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.map
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.LanguageEntity
+import org.cru.godtools.db.room.entity.partial.SyncLanguage
 import org.cru.godtools.model.Language
 
 @Dao
@@ -29,7 +30,7 @@ internal abstract class LanguagesRoomRepository(private val db: GodToolsRoomData
 
     // region Sync Methods
     override fun storeLanguagesFromSync(languages: Collection<Language>) {
-        dao.upsertLanguagesBlocking(languages.map { LanguageEntity(it) })
+        dao.upsertLanguagesBlocking(languages.map { SyncLanguage(it) })
     }
 
     @Transaction

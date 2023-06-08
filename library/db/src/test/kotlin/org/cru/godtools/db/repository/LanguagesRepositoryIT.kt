@@ -160,7 +160,7 @@ abstract class LanguagesRepositoryIT {
     }
 
     @Test
-    fun `storeLanguagesFromSync() - Overwrite existing languages`() = testScope.runTest {
+    fun `storeLanguagesFromSync() - Update existing languages`() = testScope.runTest {
         val language = Language(Locale.ENGLISH) { name = "Newer English" }
         repository.storeLanguageFromSync(language)
         assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language)))
@@ -170,6 +170,15 @@ abstract class LanguagesRepositoryIT {
             repository.getLanguages(),
             containsInAnyOrder(languageMatcher(language1), languageMatcher(language2))
         )
+    }
+
+    @Test
+    fun `storeLanguagesFromSync() - Preserve isAdded flag`() = testScope.runTest {
+        repository.storeInitialLanguages(listOf(Language(Locale.ENGLISH)))
+        repository.pinLanguage(Locale.ENGLISH)
+
+        repository.storeLanguageFromSync(Language(Locale.ENGLISH))
+        assertTrue(repository.findLanguage(Locale.ENGLISH)!!.isAdded)
     }
     // endregion storeLanguagesFromSync()
 
