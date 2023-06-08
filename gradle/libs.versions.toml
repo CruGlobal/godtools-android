@@ -13,7 +13,7 @@ androidx-work = "2.8.1"
 dagger = "2.46.1"
 eventbus = "3.3.1"
 facebook = "16.0.1"
-facebook-flipper = "0.193.0"
+facebook-flipper = "0.194.0"
 firebase-crashlytics = "18.3.7"
 firebase-perf = "20.3.2"
 godtoolsShared = "0.9.1"
@@ -218,5 +218,5 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
+ksp = { id = "com.google.devtools.ksp", version = "1.8.22-1.0.11" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.4.0" }
