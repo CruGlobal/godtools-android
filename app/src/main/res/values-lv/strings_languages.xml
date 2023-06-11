@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language_settings_app_language_title">Lietotnes valoda</string>
     <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">90+ valodas</string>
+    <string name="feature_discovery_title_language_settings">100+ valodas</string>
     <string name="menu_language_settings">Valodas iestatījumi</string>
     <string name="title_language_settings">Valodas iestatījumi</string>
     <string name="title_language_primary">Pirmā valoda</string>
