@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
+    <eat-comment />
     <string name="language_settings_app_language_title">App Language</string>
+    <string name="language_settings_app_language_dialog_message">You have selected %1$s as your app language. This will change the language of the whole GodTools app. Are you sure?</string>
+    <string name="language_settings_app_language_dialog_confirm">Change language</string>
+    <string name="language_settings_app_language_dialog_dismiss">Nevermind</string>
 
     <!-- Language Selection UI -->
     <eat-comment />
