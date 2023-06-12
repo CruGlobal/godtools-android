@@ -37,7 +37,6 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private val MARGIN_HORIZONTAL = 32.dp
 private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
-private val OKTA_BLUE = Color(red = 0x0D, green = 0x28, blue = 0x75)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
