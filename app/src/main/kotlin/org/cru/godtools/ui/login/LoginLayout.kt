@@ -41,7 +41,10 @@ private val OKTA_BLUE = Color(red = 0x0D, green = 0x28, blue = 0x75)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
+fun LoginLayout(
+    createAccount: Boolean = false,
+    onEvent: (event: LoginLayoutEvent) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -72,14 +75,16 @@ fun LoginLayout(onEvent: (event: LoginLayoutEvent) -> Unit) {
             Spacer(Modifier.weight(1f))
 
             Text(
-                stringResource(R.string.account_login_heading),
+                stringResource(if (createAccount) R.string.account_create_heading else R.string.account_login_heading),
                 style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier
                     .padding(horizontal = MARGIN_HORIZONTAL)
                     .align(Alignment.Start)
             )
             Text(
-                stringResource(R.string.account_login_description),
+                stringResource(
+                    if (createAccount) R.string.account_create_description else R.string.account_login_description
+                ),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
             )

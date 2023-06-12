@@ -144,7 +144,7 @@ fun DrawerContentLayout(
                         label = { Text(stringResource(R.string.menu_signup)) },
                         selected = false,
                         onClick = {
-                            context.startLoginActivity()
+                            context.startLoginActivity(createAccount = true)
                             dismissDrawer()
                         },
                     )

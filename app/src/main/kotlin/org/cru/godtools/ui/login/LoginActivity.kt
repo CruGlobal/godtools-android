@@ -16,9 +16,12 @@ import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
-fun Context.startLoginActivity() = startActivity(
+private const val EXTRA_CREATE = "createAccount"
+
+fun Context.startLoginActivity(createAccount: Boolean = false) = startActivity(
     Intent(this, LoginActivity::class.java)
         .putExtras(BaseActivity.buildExtras(this))
+        .putExtra(EXTRA_CREATE, createAccount)
 )
 
 @AndroidEntryPoint
@@ -26,6 +29,8 @@ class LoginActivity : BaseActivity() {
     @Inject
     internal lateinit var accountManager: GodToolsAccountManager
     private lateinit var loginState: GodToolsAccountManager.LoginState
+
+    private val createAccount get() = intent?.getBooleanExtra(EXTRA_CREATE, false) ?: false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,7 @@ class LoginActivity : BaseActivity() {
         setContent {
             GodToolsTheme {
                 LoginLayout(
+                    createAccount = createAccount,
                     onEvent = {
                         when (it) {
                             is LoginLayoutEvent.Login ->
