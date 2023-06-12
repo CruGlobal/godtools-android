@@ -56,12 +56,32 @@ internal fun TutorialOnboardingWelcomeLayout(
         .fillMaxSize()
         .verticalScroll(rememberScrollState()),
 ) {
+    // region Welcome animation (Transition model)
+    var welcomeState by rememberSaveable { mutableStateOf(WelcomeState.WELCOME) }
+    LaunchedEffect(Unit) {
+        delay(2000)
+        welcomeState = WelcomeState.READY
+    }
+
+    val welcomeTransition = updateTransition(targetState = welcomeState, label = "Welcome Transition")
+    val welcomeAlpha by welcomeTransition.animateFloat(
+        transitionSpec = { tween(1000) },
+        label = "Welcome Visibility",
+    ) { if (it == WelcomeState.WELCOME) 1f else 0f }
+    val readyAlpha by welcomeTransition.animateFloat(
+        transitionSpec = { tween(1000, 600) },
+        label = "Ready Visibility"
+    ) { if (it == WelcomeState.READY) 1f else 0f }
+    // endregion Welcome animation (Transition model)
+
     FilledTonalButton(
         onClick = { onTutorialAction(Action.ONBOARDING_CHANGE_LANGUAGE) },
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        ),
+        enabled = welcomeState == WelcomeState.READY,
+        modifier = Modifier.alpha(readyAlpha)
     ) {
         Icon(Icons.Outlined.Translate, null, tint = MaterialTheme.colorScheme.primary)
         Text(stringResource(R.string.tutorial_onboarding_change_language), modifier = Modifier.padding(start = 8.dp))
@@ -79,23 +99,6 @@ internal fun TutorialOnboardingWelcomeLayout(
         contentDescription = null,
         modifier = Modifier.wrapContentSize()
     )
-
-    // Welcome animation (Transition model)
-    var welcomeState by rememberSaveable { mutableStateOf(WelcomeState.WELCOME) }
-    LaunchedEffect(Unit) {
-        delay(2000)
-        welcomeState = WelcomeState.READY
-    }
-
-    val welcomeTransition = updateTransition(targetState = welcomeState, label = "Welcome Transition")
-    val welcomeAlpha by welcomeTransition.animateFloat(
-        transitionSpec = { tween(1000) },
-        label = "Welcome Visibility",
-    ) { if (it == WelcomeState.WELCOME) 1f else 0f }
-    val readyAlpha by welcomeTransition.animateFloat(
-        transitionSpec = { tween(1000, 600) },
-        label = "Ready Visibility"
-    ) { if (it == WelcomeState.READY) 1f else 0f }
 
     Box(modifier = Modifier.padding(top = 24.dp, horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)) {
         Text(
