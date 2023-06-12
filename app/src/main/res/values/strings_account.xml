@@ -3,10 +3,12 @@
     <string name="menu_profile">Activity</string>
     <string name="account_joined">Joined %1$s</string>
 
-    <!-- Login -->
+    <!-- Create / Login -->
     <eat-comment />
+    <string name="account_create_heading">Create account</string>
+    <string name="account_create_description">Create an account to have real stories, encouragement, and practical tips at your fingertips.</string>
     <string name="account_login_heading">Sign in</string>
-    <string name="account_login_description">Create an account to have real stories, encouragement, and practical tips at your fingertips.</string>
+    <string name="account_login_description">Log in to your account to have real stories, encouragement, and practical tips at your fingertips.</string>
 
     <!-- Activity -->
     <eat-comment />
