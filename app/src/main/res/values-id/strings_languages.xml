@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language_settings_app_language_title">Bahasa App</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ Bahasa</string>
     <string name="menu_language_settings">Pengaturan Bahasa</string>
