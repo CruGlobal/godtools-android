@@ -14,6 +14,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.LanguageMatchers.languageMatcher
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasSize
@@ -73,6 +74,19 @@ abstract class LanguagesRepositoryIT {
             repository.getLanguages().map { it.code },
             allOf(hasSize(2), containsInAnyOrder(language1.code, language2.code))
         )
+    }
+
+    @Test
+    fun `getLanguagesFlow()`() = testScope.runTest {
+        repository.getLanguagesFlow().test {
+            assertThat(awaitItem(), empty())
+
+            repository.storeLanguageFromSync(language1)
+            assertThat(awaitItem(), contains(languageMatcher(language1)))
+
+            repository.storeLanguageFromSync(language2)
+            assertThat(awaitItem(), containsInAnyOrder(languageMatcher(language1), languageMatcher(language2)))
+        }
     }
 
     @Test

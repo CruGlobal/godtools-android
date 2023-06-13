@@ -20,6 +20,8 @@ internal interface LanguagesDao {
 
     @Query("SELECT * FROM languages")
     suspend fun getLanguages(): List<LanguageEntity>
+    @Query("SELECT * FROM languages")
+    fun getLanguagesFlow(): Flow<List<LanguageEntity>>
     @Query("SELECT * FROM languages WHERE code IN(:locales)")
     fun getLanguagesFlow(locales: Collection<Locale>): Flow<List<LanguageEntity>>
 
