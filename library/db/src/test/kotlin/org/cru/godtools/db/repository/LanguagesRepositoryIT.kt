@@ -76,7 +76,7 @@ abstract class LanguagesRepositoryIT {
     }
 
     @Test
-    fun `getLanguagesForLocalesFlow()`() = testScope.runTest {
+    fun `getLanguagesFlowForLocales()`() = testScope.runTest {
         repository.getLanguagesFlowForLocales(listOf(Locale.ENGLISH, Locale.GERMAN)).test {
             assertThat(awaitItem(), empty())
 
