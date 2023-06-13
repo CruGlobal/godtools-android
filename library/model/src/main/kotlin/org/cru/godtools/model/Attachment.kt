@@ -19,6 +19,8 @@ class Attachment : Base() {
     @JsonApiIgnore
     var toolId: Long? = null
         get() = field?.takeUnless { it == INVALID_ID } ?: tool?.id ?: INVALID_ID
+    var toolCode: String? = null
+        get() = field ?: tool?.code
 
     @JsonApiAttribute(JSON_FILE_NAME)
     var filename: String? = null
@@ -44,9 +46,11 @@ fun Attachment(
     id: Long = Random.nextLong(),
     tool: Tool? = null,
     toolId: Long? = tool?.id,
+    toolCode: String? = tool?.code,
     block: Attachment.() -> Unit = {},
 ) = Attachment().apply {
     this.id = id
     this.toolId = toolId
+    this.toolCode = toolCode
     block()
 }

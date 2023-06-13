@@ -56,7 +56,7 @@ abstract class DownloadedFilesRepositoryIT {
     }
 
     @Test
-    fun `getDownloadedTranslationFiles() & insertOrIgnore() & delete()`() = testScope.runTest {
+    open fun `getDownloadedTranslationFiles() & insertOrIgnore() & delete()`() = testScope.runTest {
         assertThat(repository.getDownloadedTranslationFiles(), empty())
 
         repository.insertOrIgnore(translation1)

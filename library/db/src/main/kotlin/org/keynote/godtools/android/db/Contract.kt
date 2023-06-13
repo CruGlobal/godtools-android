@@ -3,33 +3,26 @@ package org.keynote.godtools.android.db
 import org.ccci.gto.android.common.db.BaseContract
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
-import org.ccci.gto.android.common.db.Expression
 import org.ccci.gto.android.common.db.Expression.Companion.bind
-import org.ccci.gto.android.common.db.Expression.Companion.constants
 import org.ccci.gto.android.common.db.Table
-import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.LocalFile
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationFile
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
 import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
-object Contract : BaseContract() {
+internal object Contract : BaseContract() {
     abstract class BaseTable : Base {
         internal companion object {
             internal const val COLUMN_ID = COLUMN_ROWID
-            internal const val SQL_COLUMN_ID = SQL_COLUMN_ROWID
         }
 
         internal object ToolCode {
             internal const val COLUMN_TOOL = "tool"
-            internal const val SQL_COLUMN_TOOL = "$COLUMN_TOOL TEXT NOT NULL"
         }
 
         internal object LanguageCode {
             internal const val COLUMN_LANGUAGE = "language"
-            internal const val SQL_COLUMN_LANGUAGE = "$COLUMN_LANGUAGE TEXT NOT NULL"
         }
     }
 
@@ -76,9 +69,6 @@ object Contract : BaseContract() {
         const val COLUMN_HIDDEN = "isHidden"
         const val COLUMN_SPOTLIGHT = "isSpotlight"
 
-        val FIELD_CODE = TABLE.field(COLUMN_CODE)
-        val FIELD_TYPE = TABLE.field(COLUMN_TYPE)
-
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
             COLUMN_CODE,
@@ -102,54 +92,13 @@ object Contract : BaseContract() {
             COLUMN_SPOTLIGHT
         )
 
-        private const val SQL_COLUMN_CODE = "$COLUMN_CODE TEXT"
-        private const val SQL_COLUMN_TYPE = "$COLUMN_TYPE TEXT"
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private const val SQL_COLUMN_DESCRIPTION = "$COLUMN_DESCRIPTION TEXT"
-        private const val SQL_COLUMN_CATEGORY = "$COLUMN_CATEGORY TEXT"
-        private const val SQL_COLUMN_SHARES = "$COLUMN_SHARES INTEGER"
-        private const val SQL_COLUMN_PENDING_SHARES = "$COLUMN_PENDING_SHARES INTEGER"
-        private const val SQL_COLUMN_BANNER = "$COLUMN_BANNER INTEGER"
-        private const val SQL_COLUMN_DETAILS_BANNER = "$COLUMN_DETAILS_BANNER INTEGER"
         private const val SQL_COLUMN_DETAILS_BANNER_ANIMATION = "$COLUMN_DETAILS_BANNER_ANIMATION INTEGER"
-        private const val SQL_COLUMN_DETAILS_BANNER_YOUTUBE = "$COLUMN_DETAILS_BANNER_YOUTUBE TEXT"
         private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
-        private const val SQL_COLUMN_DEFAULT_ORDER = "$COLUMN_DEFAULT_ORDER INTEGER"
-        private const val SQL_COLUMN_ORDER = "$COLUMN_ORDER INTEGER"
         private const val SQL_COLUMN_META_TOOL = "$COLUMN_META_TOOL TEXT"
         private const val SQL_COLUMN_DEFAULT_VARIANT = "$COLUMN_DEFAULT_VARIANT TEXT"
-        private const val SQL_COLUMN_ADDED = "$COLUMN_ADDED INTEGER"
         private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_CODE)
 
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_CODE.eq(bind())
-        val SQL_WHERE_IS_TOOL_TYPE = FIELD_TYPE.`in`(*constants(Tool.Type.TRACT, Tool.Type.ARTICLE, Tool.Type.CYOA))
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_CODE,
-            SQL_COLUMN_TYPE,
-            SQL_COLUMN_NAME,
-            SQL_COLUMN_DESCRIPTION,
-            SQL_COLUMN_CATEGORY,
-            SQL_COLUMN_SHARES,
-            SQL_COLUMN_PENDING_SHARES,
-            SQL_COLUMN_BANNER,
-            SQL_COLUMN_DETAILS_BANNER,
-            SQL_COLUMN_DETAILS_BANNER_ANIMATION,
-            SQL_COLUMN_DETAILS_BANNER_YOUTUBE,
-            SQL_COLUMN_SCREEN_SHARE_DISABLED,
-            SQL_COLUMN_DEFAULT_ORDER,
-            SQL_COLUMN_ORDER,
-            SQL_COLUMN_META_TOOL,
-            SQL_COLUMN_DEFAULT_VARIANT,
-            SQL_COLUMN_ADDED,
-            SQL_COLUMN_HIDDEN,
-            SQL_COLUMN_SPOTLIGHT,
-            SQL_PRIMARY_KEY
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
@@ -167,7 +116,7 @@ object Contract : BaseContract() {
         // endregion DB migrations
     }
 
-    object TranslationTable : BaseTable() {
+    internal object TranslationTable : BaseTable() {
         internal const val TABLE_NAME = "translations"
         internal val TABLE = Table.forClass<Translation>()
 
@@ -183,14 +132,6 @@ object Contract : BaseContract() {
         const val COLUMN_MANIFEST = "manifest"
         const val COLUMN_PUBLISHED = "published"
         const val COLUMN_DOWNLOADED = "downloaded"
-        private const val COLUMN_LAST_ACCESSED = "last_accessed"
-
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-        val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
-        val FIELD_LANGUAGE = TABLE.field(COLUMN_LANGUAGE)
-        val FIELD_MANIFEST = TABLE.field(COLUMN_MANIFEST)
-        private val FIELD_PUBLISHED = TABLE.field(COLUMN_PUBLISHED)
-        private val FIELD_DOWNLOADED = TABLE.field(COLUMN_DOWNLOADED)
 
         internal val PROJECTION_ALL = arrayOf(
             COLUMN_ID,
@@ -208,41 +149,10 @@ object Contract : BaseContract() {
             COLUMN_DOWNLOADED,
         )
 
-        private const val SQL_COLUMN_VERSION = "$COLUMN_VERSION INTEGER"
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private const val SQL_COLUMN_DESCRIPTION = "$COLUMN_DESCRIPTION TEXT"
-        private const val SQL_COLUMN_TAGLINE = "$COLUMN_TAGLINE TEXT"
         private const val SQL_COLUMN_DETAILS_OUTLINE = "$COLUMN_DETAILS_OUTLINE TEXT"
         private const val SQL_COLUMN_DETAILS_BIBLE_REFERENCES = "$COLUMN_DETAILS_BIBLE_REFERENCES TEXT"
         private const val SQL_COLUMN_DETAILS_CONVERSATION_STARTERS = "$COLUMN_DETAILS_CONVERSATION_STARTERS TEXT"
-        private const val SQL_COLUMN_MANIFEST = "$COLUMN_MANIFEST TEXT"
-        private const val SQL_COLUMN_PUBLISHED = "$COLUMN_PUBLISHED INTEGER"
-        private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
-        private const val SQL_COLUMN_LAST_ACCESSED = "$COLUMN_LAST_ACCESSED INTEGER"
 
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-        internal val SQL_WHERE_TOOL_LANGUAGE = FIELD_TOOL.eq(bind()).and(FIELD_LANGUAGE.eq(bind()))
-        val SQL_WHERE_PUBLISHED = FIELD_PUBLISHED.eq(true)
-        val SQL_WHERE_DOWNLOADED = FIELD_DOWNLOADED.eq(true)
-        const val SQL_ORDER_BY_VERSION_DESC = "$COLUMN_VERSION DESC"
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            ToolCode.SQL_COLUMN_TOOL,
-            LanguageCode.SQL_COLUMN_LANGUAGE,
-            SQL_COLUMN_VERSION,
-            SQL_COLUMN_NAME,
-            SQL_COLUMN_DESCRIPTION,
-            SQL_COLUMN_TAGLINE,
-            SQL_COLUMN_DETAILS_OUTLINE,
-            SQL_COLUMN_DETAILS_BIBLE_REFERENCES,
-            SQL_COLUMN_DETAILS_CONVERSATION_STARTERS,
-            SQL_COLUMN_MANIFEST,
-            SQL_COLUMN_PUBLISHED,
-            SQL_COLUMN_DOWNLOADED,
-            SQL_COLUMN_LAST_ACCESSED
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
@@ -257,7 +167,6 @@ object Contract : BaseContract() {
 
     internal object AttachmentTable : BaseTable() {
         internal const val TABLE_NAME = "attachments"
-        internal val TABLE = Table.forClass<Attachment>()
 
         const val COLUMN_TOOL = "tool"
         const val COLUMN_FILENAME = "filename"
@@ -265,48 +174,15 @@ object Contract : BaseContract() {
         internal const val COLUMN_LOCALFILENAME = "local_filename"
         const val COLUMN_DOWNLOADED = "downloaded"
 
-        private val FIELD_ID = TABLE.field(COLUMN_ID)
-        val FIELD_TOOL = TABLE.field(COLUMN_TOOL)
+        internal val PROJECTION_ALL = arrayOf(COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_DOWNLOADED)
 
-        internal val PROJECTION_ALL =
-            arrayOf(COLUMN_ID, COLUMN_TOOL, COLUMN_FILENAME, COLUMN_SHA256, COLUMN_LOCALFILENAME, COLUMN_DOWNLOADED)
-
-        private const val SQL_COLUMN_TOOL = "$COLUMN_TOOL INTEGER"
-        private const val SQL_COLUMN_FILENAME = "$COLUMN_FILENAME TEXT"
-        private const val SQL_COLUMN_SHA256 = "$COLUMN_SHA256 TEXT"
-        private const val SQL_COLUMN_LOCALFILENAME = "$COLUMN_LOCALFILENAME TEXT"
-        private const val SQL_COLUMN_DOWNLOADED = "$COLUMN_DOWNLOADED INTEGER"
-
-        internal val SQL_WHERE_PRIMARY_KEY = FIELD_ID.eq(bind())
-
-        internal val SQL_CREATE_TABLE = create(
-            TABLE_NAME,
-            SQL_COLUMN_ID,
-            SQL_COLUMN_TOOL,
-            SQL_COLUMN_FILENAME,
-            SQL_COLUMN_SHA256,
-            SQL_COLUMN_LOCALFILENAME,
-            SQL_COLUMN_DOWNLOADED
-        )
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
-    object LocalFileTable : Base {
+    internal object DownloadedFileTable : Base {
         internal const val TABLE_NAME = "files"
-        internal val TABLE = Table.forClass<LocalFile>()
-
         internal const val COLUMN_NAME = "name"
 
-        private val FIELD_NAME = TABLE.field(COLUMN_NAME)
-
-        internal val PROJECTION_ALL = arrayOf(COLUMN_NAME)
-
-        private const val SQL_COLUMN_NAME = "$COLUMN_NAME TEXT"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_NAME)
-
-        internal val SQL_WHERE_PRIMARY_KEY: Expression = FIELD_NAME.eq(bind())
-
-        internal val SQL_CREATE_TABLE = create(TABLE_NAME, SQL_COLUMN_NAME, SQL_PRIMARY_KEY)
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 

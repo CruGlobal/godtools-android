@@ -23,17 +23,13 @@ ksp {
 
 dependencies {
     api(project(":library:base"))
-    implementation(project(":library:model"))
+    api(project(":library:model"))
 
-    implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
 
     api(libs.gtoSupport.db)
-    api(libs.gtoSupport.db.coroutines)
-    api(libs.gtoSupport.db.livedata)
-    implementation(libs.gtoSupport.androidx.collection)
-    implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.db.coroutines)
     implementation(libs.gtoSupport.androidx.room)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.util)

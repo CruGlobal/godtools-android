@@ -26,7 +26,7 @@ internal abstract class LanguagesRoomRepository(private val db: GodToolsRoomData
 
     // region Sync Methods
     override fun storeLanguagesFromSync(languages: Collection<Language>) {
-        dao.insertOrReplaceLanguages(languages.map { LanguageEntity(it) })
+        dao.upsertLanguagesBlocking(languages.map { LanguageEntity(it) })
     }
 
     @Transaction

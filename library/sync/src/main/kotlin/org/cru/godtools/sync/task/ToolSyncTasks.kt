@@ -19,11 +19,11 @@ import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
+import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
-import org.keynote.godtools.android.db.GodToolsDao
 
 private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val SYNC_TIME_TOOL = "last_synced.tool."
@@ -37,11 +37,11 @@ private val API_GET_INCLUDES = arrayOf(
 
 @Singleton
 internal class ToolSyncTasks @Inject internal constructor(
-    private val dao: GodToolsDao,
     private val toolsApi: ToolsApi,
     private val viewsApi: ViewsApi,
     private val syncRepository: SyncRepository,
     private val toolsRepository: ToolsRepository,
+    private val lastSyncTimeRepository: LastSyncTimeRepository,
 ) : BaseSyncTasks() {
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
@@ -51,7 +51,7 @@ internal class ToolSyncTasks @Inject internal constructor(
     suspend fun syncTools(force: Boolean = false) = withContext(Dispatchers.IO) {
         toolsMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!force && System.currentTimeMillis() - dao.getLastSyncTime(SYNC_TIME_TOOLS) < STALE_DURATION_TOOLS) {
+            if (!force && !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOLS, staleAfter = STALE_DURATION_TOOLS)) {
                 return@withContext true
             }
 
@@ -60,38 +60,36 @@ internal class ToolSyncTasks @Inject internal constructor(
                 .takeIf { it.code() == HTTP_OK }?.body() ?: return@withContext false
 
             // store fetched tools
-            dao.transaction {
-                syncRepository.storeTools(
-                    json.data,
-                    existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
-                    includes = Includes(*API_GET_INCLUDES)
-                )
-            }
-
-            // update the sync time
-            dao.updateLastSyncTime(SYNC_TIME_TOOLS)
+            syncRepository.storeTools(
+                json.data,
+                existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
+                includes = Includes(*API_GET_INCLUDES)
+            )
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
             true
         }
     }
 
     internal suspend fun syncTool(toolCode: String, force: Boolean = false) = toolMutex.withLock(toolCode) {
         // short-circuit if we aren't forcing a sync and the data isn't stale
-        val lastSyncKey = "$SYNC_TIME_TOOL$toolCode"
-        if (!force && System.currentTimeMillis() - dao.getLastSyncTime(lastSyncKey) < STALE_DURATION_TOOLS) return true
+        if (!force &&
+            !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOL, toolCode, staleAfter = STALE_DURATION_TOOLS)
+        ) {
+            return true
+        }
 
         // fetch tools from the API, short-circuit if this response is invalid
         val json = toolsApi.getTool(toolCode, JsonApiParams().include(*API_GET_INCLUDES))
             .takeIf { it.code() == HTTP_OK }?.body() ?: return false
 
         // store fetched tools
-        dao.transaction {
-            syncRepository.storeTools(
-                json.data,
-                existingTools = mutableSetOf(toolCode),
-                includes = Includes(*API_GET_INCLUDES)
-            )
-            dao.updateLastSyncTime(lastSyncKey)
-        }
+        syncRepository.storeTools(
+            json.data,
+            existingTools = mutableSetOf(toolCode),
+            includes = Includes(*API_GET_INCLUDES)
+        )
+        lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOL, toolCode)
+
         true
     }
 

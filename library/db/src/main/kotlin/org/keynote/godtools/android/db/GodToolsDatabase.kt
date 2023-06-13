@@ -2,6 +2,7 @@ package org.keynote.godtools.android.db
 
 import android.content.Context
 import android.database.SQLException
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,6 +13,7 @@ import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
 import org.ccci.gto.android.common.db.util.CursorUtils.getBool
 import org.ccci.gto.android.common.util.content.isApplicationDebuggable
+import org.ccci.gto.android.common.util.database.forEach
 import org.ccci.gto.android.common.util.database.getDouble
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLocale
@@ -19,16 +21,20 @@ import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
 import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.AttachmentEntity
+import org.cru.godtools.db.room.entity.DownloadedFileEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
+import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.TrainingTipEntity
+import org.cru.godtools.db.room.entity.TranslationEntity
 import org.cru.godtools.db.room.entity.partial.MigrationGlobalActivity
 import org.keynote.godtools.android.db.Contract.AttachmentTable
+import org.keynote.godtools.android.db.Contract.DownloadedFileTable
 import org.keynote.godtools.android.db.Contract.FollowupTable
 import org.keynote.godtools.android.db.Contract.GlobalActivityAnalyticsTable
 import org.keynote.godtools.android.db.Contract.LanguageTable
 import org.keynote.godtools.android.db.Contract.LegacyTables
-import org.keynote.godtools.android.db.Contract.LocalFileTable
 import org.keynote.godtools.android.db.Contract.ToolTable
 import org.keynote.godtools.android.db.Contract.TrainingTipTable
 import org.keynote.godtools.android.db.Contract.TranslationFileTable
@@ -37,7 +43,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 57
+private const val DATABASE_VERSION = 61
 
 /*
  * Version history
@@ -59,6 +65,10 @@ private const val DATABASE_VERSION = 57
  * 56: 2022-12-06
  * 57: 2022-12-06
  * v6.1.0 - v6.2.0
+ * 58: 2023-01-25
+ * 59: 2023-05-15
+ * 60: 2023-05-09
+ * 61: 2023-06-07
  */
 
 @Singleton
@@ -70,11 +80,7 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(ToolTable.SQL_CREATE_TABLE)
-            db.execSQL(TranslationTable.SQL_CREATE_TABLE)
-            db.execSQL(LocalFileTable.SQL_CREATE_TABLE)
             db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
-            db.execSQL(AttachmentTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -253,6 +259,89 @@ class GodToolsDatabase @Inject internal constructor(
                         db.execSQL(TranslationTable.SQL_V57_ALTER_DETAILS_BIBLE_REFERENCES)
                         db.execSQL(TranslationTable.SQL_V57_ALTER_DETAILS_CONVERSATION_STARTERS)
                     }
+                    58 -> {
+                        db.query(
+                            DownloadedFileTable.TABLE_NAME,
+                            arrayOf(DownloadedFileTable.COLUMN_NAME),
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            while (it.moveToNext()) {
+                                roomDb.downloadedFilesDao.insertOrIgnore(
+                                    DownloadedFileEntity(
+                                        filename = it.getString(DownloadedFileTable.COLUMN_NAME) ?: continue
+                                    )
+                                )
+                            }
+                        }
+
+                        db.execSQL(DownloadedFileTable.SQL_DELETE_TABLE)
+                    }
+                    59 -> {
+                        db.query(
+                            ToolTable.TABLE_NAME,
+                            ToolTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.map { ToolMapper.toObject(it) }
+                                .filter { it.isValid }
+                                .map { ToolEntity(it) }
+                                .let { roomDb.toolsDao.insertOrIgnoreTools(it) }
+                        }
+
+                        db.execSQL(ToolTable.SQL_DELETE_TABLE)
+                    }
+                    60 -> {
+                        db.query(
+                            AttachmentTable.TABLE_NAME,
+                            AttachmentTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            while (it.moveToNext()) {
+                                val attachment = AttachmentMapper.toObject(it)
+                                attachment.toolId
+                                    ?.let { roomDb.toolsDao.findToolByIdBlocking(it) }?.code
+                                    ?.let { attachment.toolCode = it }
+
+                                roomDb.attachmentsDao.insertOrIgnore(AttachmentEntity(attachment))
+                            }
+                        }
+
+                        db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
+                    }
+                    61 -> {
+                        db.query(
+                            TranslationTable.TABLE_NAME,
+                            TranslationTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.forEach {
+                                val trans = TranslationMapper.toObject(it).takeIf { it.isValid } ?: return@forEach
+                                try {
+                                    roomDb.translationsDao.insertOrIgnoreTranslationBlocking(TranslationEntity(trans))
+                                } catch (_: SQLiteConstraintException) {
+                                    // ignore translations that fail FK constraints
+                                }
+                            }
+                        }
+
+                        db.execSQL(TranslationTable.SQL_DELETE_TABLE)
+                    }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
@@ -281,7 +370,7 @@ class GodToolsDatabase @Inject internal constructor(
             db.execSQL(ToolTable.SQL_DELETE_TABLE)
             db.execSQL(LanguageTable.SQL_DELETE_TABLE)
             db.execSQL(LastSyncTable.SQL_DELETE_TABLE)
-            db.execSQL(LocalFileTable.SQL_DELETE_TABLE)
+            db.execSQL(DownloadedFileTable.SQL_DELETE_TABLE)
             db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
             db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
             db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)

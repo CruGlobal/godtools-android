@@ -6,9 +6,9 @@ import org.cru.godtools.model.DownloadedTranslationFile
 
 interface DownloadedFilesRepository {
     suspend fun findDownloadedFile(filename: String): DownloadedFile?
-    suspend fun getDownloadedFiles(): Collection<DownloadedFile>
+    suspend fun getDownloadedFiles(): List<DownloadedFile>
     suspend fun getDownloadedTranslationFiles(): List<DownloadedTranslationFile>
-    fun getDownloadedFilesFlow(): Flow<Collection<DownloadedFile>>
+    fun getDownloadedFilesFlow(): Flow<List<DownloadedFile>>
 
     fun insertOrIgnore(file: DownloadedFile)
     fun insertOrIgnore(translationFile: DownloadedTranslationFile)

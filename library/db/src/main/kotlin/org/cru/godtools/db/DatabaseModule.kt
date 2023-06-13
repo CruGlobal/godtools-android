@@ -26,10 +26,7 @@ import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
-import org.keynote.godtools.android.db.repository.LegacyAttachmentsRepository
 import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
-import org.keynote.godtools.android.db.repository.LegacyToolsRepository
-import org.keynote.godtools.android.db.repository.LegacyTranslationsRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,11 +40,19 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun LegacyAttachmentsRepository.attachmentsRepository(): AttachmentsRepository = this
+    internal fun GodToolsRoomDatabase.attachmentsRepository(legacyDb: GodToolsDatabase): AttachmentsRepository {
+        legacyDb.triggerDataMigration()
+        return attachmentsRepository
+    }
 
     @Provides
     @Reusable
-    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(): DownloadedFilesRepository = this
+    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(
+        legacyDb: GodToolsDatabase,
+    ): DownloadedFilesRepository {
+        legacyDb.triggerDataMigration()
+        return this
+    }
 
     @Provides
     @Reusable
@@ -94,11 +99,17 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun LegacyToolsRepository.toolsRepository(): ToolsRepository = this
+    internal fun GodToolsRoomDatabase.toolsRepository(legacyDb: GodToolsDatabase): ToolsRepository {
+        legacyDb.triggerDataMigration()
+        return toolsRepository
+    }
 
     @Provides
     @Reusable
-    internal fun LegacyTranslationsRepository.translationsRepository(): TranslationsRepository = this
+    internal fun GodToolsRoomDatabase.translationsRepository(legacyDb: GodToolsDatabase): TranslationsRepository {
+        legacyDb.triggerDataMigration()
+        return translationsRepository
+    }
 
     private fun GodToolsDatabase.triggerDataMigration() {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,
