@@ -18,7 +18,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.model.sortedByDisplayName
+import org.cru.godtools.model.Language.Companion.sortedByDisplayName
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)

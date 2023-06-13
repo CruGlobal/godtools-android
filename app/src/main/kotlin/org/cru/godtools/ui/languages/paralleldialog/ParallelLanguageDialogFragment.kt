@@ -27,7 +27,7 @@ import org.cru.godtools.databinding.LanguagesParallelDialogBinding
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
-import org.cru.godtools.model.sortedByDisplayName
+import org.cru.godtools.model.Language.Companion.sortedByDisplayName
 
 @AndroidEntryPoint
 class ParallelLanguageDialogFragment :
