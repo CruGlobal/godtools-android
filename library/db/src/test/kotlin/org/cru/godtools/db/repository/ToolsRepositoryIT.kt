@@ -1,6 +1,7 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
+import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -16,9 +17,11 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -30,6 +33,8 @@ abstract class ToolsRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: ToolsRepository
     abstract val attachmentsRepository: AttachmentsRepository
+    abstract val languagesRepository: LanguagesRepository
+    abstract val translationsRepository: TranslationsRepository
 
     // region findTool()
     @Test
@@ -175,6 +180,29 @@ abstract class ToolsRepositoryIT {
         )
     }
     // endregion getToolsFlow()
+
+    // region getToolsFlowForLanguage()
+    @Test
+    fun `getToolsFlowForLanguage()`() = testScope.runTest {
+        val tool1 = Tool("tool1")
+        val tool2 = Tool("tool2")
+        repository.storeInitialResources(listOf(tool1, tool2))
+        languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
+
+        repository.getToolsFlowForLanguage(Locale.ENGLISH).test {
+            assertTrue(awaitItem().isEmpty())
+
+            translationsRepository.storeTranslationFromSync(Translation("tool1", Locale.ENGLISH))
+            assertThat(awaitItem(), contains(tool(tool1)))
+
+            translationsRepository.storeTranslationFromSync(Translation("tool2", Locale.FRENCH))
+            assertThat(awaitItem(), contains(tool(tool1)))
+
+            translationsRepository.storeTranslationFromSync(Translation("tool2", Locale.ENGLISH))
+            assertThat(awaitItem(), containsInAnyOrder(tool(tool1), tool(tool2)))
+        }
+    }
+    // endregion getToolsFlowForLanguage()
 
     // region getFavoriteToolsFlow()
     @Test

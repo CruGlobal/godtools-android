@@ -2,6 +2,7 @@ package org.cru.godtools.db.room.repository
 
 import androidx.room.Dao
 import androidx.room.Transaction
+import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.room.changeFlow
@@ -27,6 +28,8 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override fun getResourcesFlow() = dao.getResourcesFlow().map { it.map { it.toModel() } }
     override suspend fun getTools() = dao.getToolsByType(TOOL_TYPES).map { it.toModel() }
     override fun getToolsFlow() = dao.getToolsByTypeFlow(TOOL_TYPES).map { it.map { it.toModel() } }
+    override fun getToolsFlowForLanguage(locale: Locale) =
+        dao.getToolsFlowByTypeAndLanguage(TOOL_TYPES, locale).map { it.map { it.toModel() } }
     override fun getMetaToolsFlow() = dao.getToolsByTypeFlow(setOf(Tool.Type.META)).map { it.map { it.toModel() } }
     override fun getLessonsFlow() = dao.getToolsByTypeFlow(setOf(Tool.Type.LESSON)).map { it.map { it.toModel() } }
 

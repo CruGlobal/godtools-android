@@ -1,6 +1,7 @@
 package org.cru.godtools.db.repository
 
 import androidx.annotation.WorkerThread
+import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.model.Lesson
@@ -19,6 +20,7 @@ interface ToolsRepository {
     fun findToolFlow(code: String): Flow<Tool?>
     fun getResourcesFlow(): Flow<List<Resource>>
     fun getToolsFlow(): Flow<List<Tool>>
+    fun getToolsFlowForLanguage(locale: Locale): Flow<List<Tool>>
     fun getMetaToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>> =
         getToolsFlow().map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
