@@ -20,4 +20,12 @@
     <string name="text_language_warning">Not every tool is available in every language.</string>
     <string name="label_language_none">None</string>
     <string name="label_language_search">Filter Languages</string>
+
+    <!-- Downloadable Languages UI -->
+    <eat-comment />
+    <string name="language_settings_downloadable_languages_title">Downloadable Languages</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d Tool available</item>
+        <item quantity="other">%1$d Tools available</item>
+    </plurals>
 </resources>
