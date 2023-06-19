@@ -10,6 +10,7 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -17,6 +18,7 @@ import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 
 private const val KEY_FLOATED_LANGUAGES = "floatedLanguages"
+private const val KEY_SEARCH_QUERY = "searchQuery"
 
 @HiltViewModel
 class DownloadableLanguagesViewModel @Inject constructor(
@@ -24,6 +26,8 @@ class DownloadableLanguagesViewModel @Inject constructor(
     languagesRepository: LanguagesRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    val searchQuery = savedStateHandle.getStateFlow(KEY_SEARCH_QUERY, "")
+    fun updateSearchQuery(query: String) = savedStateHandle.set(KEY_SEARCH_QUERY, query)
 
     private var floatedLanguages: Set<Locale>?
         get() = savedStateHandle.get<List<Locale>>(KEY_FLOATED_LANGUAGES)?.toSet()
@@ -38,5 +42,12 @@ class DownloadableLanguagesViewModel @Inject constructor(
             )
         }
         .flowOn(Dispatchers.Default)
+        .combine(searchQuery.map { it.split(Regex("\\s+")).filter { it.isNotBlank() } }) { langs, terms ->
+            langs.filter {
+                val displayName by lazy { it.getDisplayName(context) }
+                val nativeName by lazy { it.getDisplayName(context, it.code) }
+                terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 }
