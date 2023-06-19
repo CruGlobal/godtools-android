@@ -161,7 +161,7 @@ hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 javapoet = "com.squareup:javapoet:1.13.0"
-json = "org.json:json:20230227"
+json = "org.json:json:20230618"
 jsoup = "org.jsoup:jsoup:1.16.1"
 junit = "junit:junit:4.13.2"
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
