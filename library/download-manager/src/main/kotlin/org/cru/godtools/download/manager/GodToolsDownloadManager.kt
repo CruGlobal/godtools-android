@@ -437,9 +437,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         private val downloadManager: GodToolsDownloadManager,
         downloadedFilesRepository: DownloadedFilesRepository,
         settings: Settings,
-        toolsRepository: ToolsRepository,
-        translationsRepository: TranslationsRepository,
-        coroutineScope: CoroutineScope,
+        private val toolsRepository: ToolsRepository,
+        private val translationsRepository: TranslationsRepository,
+        private val coroutineScope: CoroutineScope,
     ) {
         @Inject
         internal constructor(
@@ -461,27 +461,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         init {
             // Download Favorite tool translations in the primary, parallel, and default languages
-            toolsRepository.getFavoriteToolsFlow()
-                .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
-                .distinctUntilChanged()
-                .combineTransformLatest(
-                    settings.primaryLanguageFlow
-                        .combine(settings.parallelLanguageFlow) { prim, para ->
-                            setOfNotNull(prim, para, Settings.defaultLanguage)
-                        }
-                        .distinctUntilChanged()
-                ) { t, l -> emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l)) }
-                .map {
-                    it.filter { !it.isDownloaded }
-                        .map { TranslationKey(it) }
-                        .toSet()
+            settings.primaryLanguageFlow
+                .combine(settings.parallelLanguageFlow) { prim, para ->
+                    setOfNotNull(prim, para, Settings.defaultLanguage)
                 }
                 .distinctUntilChanged()
-                .conflate()
-                .onEach {
-                    coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
-                }
-                .launchIn(coroutineScope)
+                .downloadFavoriteTranslations()
 
             // Stale Downloaded Attachments
             attachmentsRepository.getAttachmentsFlow()
@@ -506,5 +491,23 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
                 .launchIn(coroutineScope)
         }
+
+        private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
+            .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+            .distinctUntilChanged()
+            .combineTransformLatest(this) { t, l ->
+                emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l))
+            }
+            .map {
+                it.filterNot { it.isDownloaded }
+                    .map { TranslationKey(it) }
+                    .toSet()
+            }
+            .distinctUntilChanged()
+            .conflate()
+            .onEach {
+                coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
+            }
+            .launchIn(coroutineScope)
     }
 }
