@@ -230,6 +230,7 @@ dependencies {
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
+    testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
