@@ -22,7 +22,7 @@ class DownloadableLanguagesActivity : BaseActivity() {
                 DownloadableLanguagesLayout(
                     onEvent = {
                         when (it) {
-                            DownloadableLanguagesEvent.NavigateBack -> finish()
+                            DownloadableLanguagesEvent.NavigateUp -> finish()
                         }
                     }
                 )

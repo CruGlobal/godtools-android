@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.languages.downloadable
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,8 +41,11 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
 
+internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
+internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
+
 sealed interface DownloadableLanguagesEvent {
-    object NavigateBack : DownloadableLanguagesEvent
+    object NavigateUp : DownloadableLanguagesEvent
 }
 
 @Composable
@@ -60,6 +66,8 @@ fun DownloadableLanguagesLayout(
         }
     }
 
+    BackHandler(enabled = searchQuery.isNotEmpty()) { updateSearchQuery("") }
+
     Scaffold(
         topBar = {
             SearchBar(
@@ -76,14 +84,20 @@ fun DownloadableLanguagesLayout(
                 },
                 leadingIcon = {
                     IconButton(
-                        onClick = {
-                            when {
-                                searchQuery.isNotEmpty() -> updateSearchQuery("")
-                                else -> onEvent(DownloadableLanguagesEvent.NavigateBack)
-                            }
-                        }
+                        onClick = { onEvent(DownloadableLanguagesEvent.NavigateUp) },
+                        modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
                     ) {
                         Icon(Icons.Filled.ArrowBack, null)
+                    }
+                },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(
+                            onClick = { updateSearchQuery("") },
+                            modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
+                        ) {
+                            Icon(Icons.Filled.Close, null)
+                        }
                     }
                 },
                 placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
