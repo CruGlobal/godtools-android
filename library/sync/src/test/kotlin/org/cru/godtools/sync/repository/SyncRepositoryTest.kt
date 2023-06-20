@@ -1,6 +1,7 @@
 package org.cru.godtools.sync.repository
 
 import io.mockk.Called
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -70,10 +71,10 @@ class SyncRepositoryTest {
             existingTools = mutableSetOf("tool1", "orphan"),
             includes = Includes()
         )
-        verifyAll {
+        coVerifyAll {
             toolsRepository.storeToolFromSync(tool1)
             toolsRepository.storeToolFromSync(tool2)
-            toolsRepository.deleteIfNotFavoriteBlocking("orphan")
+            toolsRepository.deleteIfNotFavorite("orphan")
         }
     }
     // endregion storeTools()

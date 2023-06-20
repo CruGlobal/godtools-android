@@ -27,7 +27,7 @@ internal class SyncRepository @Inject constructor(
         }
 
         // prune any existing tools that weren't synced and aren't already added to the device
-        existingTools?.forEach { toolsRepository.deleteIfNotFavoriteBlocking(it) }
+        existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
     }
 
     private fun storeTool(tool: Tool, existingTools: MutableSet<String>?, includes: Includes) {

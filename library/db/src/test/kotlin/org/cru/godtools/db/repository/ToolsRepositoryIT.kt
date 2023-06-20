@@ -411,18 +411,18 @@ abstract class ToolsRepositoryIT {
     }
     // endregion storeToolFromSync()
 
-    // region deleteIfNotFavoriteBlocking()
+    // region deleteIfNotFavorite()
     @Test
-    fun `deleteIfNotFavoriteBlocking()`() = testScope.runTest {
+    fun `deleteIfNotFavorite()`() = testScope.runTest {
         repository.storeToolFromSync(Tool("tool"))
         assertNotNull(repository.findTool("tool"))
 
-        repository.deleteIfNotFavoriteBlocking("tool")
+        repository.deleteIfNotFavorite("tool")
         assertNull(repository.findTool("tool"))
     }
 
     @Test
-    fun `deleteIfNotFavoriteBlocking() - Delete related Attachments`() = testScope.runTest {
+    fun `deleteIfNotFavorite() - Delete related Attachments`() = testScope.runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
         val tool3 = Tool("tool3") { isAdded = true }
@@ -435,25 +435,25 @@ abstract class ToolsRepositoryIT {
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
 
-        repository.deleteIfNotFavoriteBlocking("tool1")
+        repository.deleteIfNotFavorite("tool1")
         assertNull(attachmentsRepository.findAttachment(attachment1.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
 
         // tool 3 is favorited, so it shouldn't be deleted or any associated attachments
-        repository.deleteIfNotFavoriteBlocking("tool3")
+        repository.deleteIfNotFavorite("tool3")
         assertNull(attachmentsRepository.findAttachment(attachment1.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
     }
 
     @Test
-    fun `deleteIfNotFavoriteBlocking() - Don't delete favorited tools`() = testScope.runTest {
+    fun `deleteIfNotFavorite() - Don't delete favorited tools`() = testScope.runTest {
         repository.storeInitialResources(listOf(Tool("tool") { isAdded = true }))
         assertNotNull(repository.findTool("tool"))
 
-        repository.deleteIfNotFavoriteBlocking("tool")
+        repository.deleteIfNotFavorite("tool")
         assertNotNull(repository.findTool("tool"))
     }
-    // endregion deleteIfNotFavoriteBlocking()
+    // endregion deleteIfNotFavorite()
 }

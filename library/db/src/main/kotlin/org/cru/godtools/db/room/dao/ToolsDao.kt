@@ -46,5 +46,5 @@ internal interface ToolsDao {
     @Query("UPDATE tools SET pendingShares = pendingShares + :views WHERE code = :code")
     suspend fun updateToolViews(code: String, views: Int)
     @Delete
-    fun deleteBlocking(tool: ToolEntity)
+    suspend fun delete(tool: ToolEntity)
 }

@@ -39,7 +39,6 @@ interface ToolsRepository {
     // region Sync Methods
     fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
     fun storeToolFromSync(tool: Tool)
-    @WorkerThread
-    fun deleteIfNotFavoriteBlocking(code: String)
+    suspend fun deleteIfNotFavorite(code: String)
     // endregion Sync Methods
 }
