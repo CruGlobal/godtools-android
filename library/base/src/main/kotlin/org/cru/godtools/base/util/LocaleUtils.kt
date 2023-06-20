@@ -37,4 +37,4 @@ private fun Context.getLanguageNameStringRes(locale: Locale) =
     }
 
 private val Locale.languageNameStringRes
-    get() = "$STRING_RES_LANGUAGE_NAME_PREFIX${toString().lowercase(Locale.ENGLISH)}"
+    get() = "$STRING_RES_LANGUAGE_NAME_PREFIX${toString().lowercase(Locale.ROOT)}"
