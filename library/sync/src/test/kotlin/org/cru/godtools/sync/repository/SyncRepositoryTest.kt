@@ -6,6 +6,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
@@ -30,7 +31,7 @@ class SyncRepositoryTest {
 
     // region storeTools()
     @Test
-    fun `storeTools()`() {
+    fun `storeTools()`() = runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
 
@@ -46,7 +47,7 @@ class SyncRepositoryTest {
     }
 
     @Test
-    fun `storeTools() - Don't store invalid tools`() {
+    fun `storeTools() - Don't store invalid tools`() = runTest {
         val tool: Tool = mockk {
             every { isValid } returns false
         }
@@ -60,7 +61,7 @@ class SyncRepositoryTest {
     }
 
     @Test
-    fun `storeTools() - Delete orphaned existing tools`() {
+    fun `storeTools() - Delete orphaned existing tools`() = runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
 
@@ -104,7 +105,7 @@ class SyncRepositoryTest {
 
     // region storeTranslations()
     @Test
-    fun `storeTranslations()`() {
+    fun `storeTranslations()`() = runTest {
         val trans1 = Translation("tool", Locale.ENGLISH)
         val trans2 = Translation("tool", Locale.FRENCH)
         val trans3 = Translation("tool", Locale.GERMAN)

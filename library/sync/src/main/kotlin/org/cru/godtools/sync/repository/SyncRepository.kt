@@ -20,7 +20,7 @@ internal class SyncRepository @Inject constructor(
     private val translationsRepository: TranslationsRepository,
 ) {
     // region Tools
-    fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) {
+    suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) {
         tools.forEach {
             storeTool(it, existingTools, includes)
             existingTools?.remove(it.code)
