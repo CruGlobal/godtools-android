@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -460,6 +461,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         )
 
         init {
+            // Download Translations for the app language
+            settings.appLanguageFlow
+                .map { setOf(it) }
+                .distinctUntilChanged()
+                .downloadFavoriteTranslations()
+
             // Download Favorite tool translations in the primary, parallel, and default languages
             settings.primaryLanguageFlow
                 .combine(settings.parallelLanguageFlow) { prim, para ->
@@ -491,6 +498,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
                 .launchIn(coroutineScope)
         }
+
+        @VisibleForTesting
+        internal val downloadTranslationsForDefaultLanguageJob =
+            flowOf(setOf(Settings.defaultLanguage)).downloadFavoriteTranslations()
 
         private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
             .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
