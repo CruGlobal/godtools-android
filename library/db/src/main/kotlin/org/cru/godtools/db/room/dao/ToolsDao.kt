@@ -36,7 +36,7 @@ internal interface ToolsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreTools(tools: Collection<ToolEntity>)
     @Upsert(entity = ToolEntity::class)
-    fun upsert(tool: SyncTool)
+    suspend fun upsertSyncTools(tools: Collection<SyncTool>)
     @Query("UPDATE tools SET isAdded = :isAdded WHERE code = :code")
     suspend fun updateIsAdded(code: String, isAdded: Boolean)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")

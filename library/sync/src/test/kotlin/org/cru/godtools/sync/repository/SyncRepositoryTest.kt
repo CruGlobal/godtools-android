@@ -41,7 +41,7 @@ class SyncRepositoryTest {
             existingTools = null,
             includes = Includes()
         )
-        verifyAll {
+        coVerifyAll {
             toolsRepository.storeToolFromSync(tool1)
             toolsRepository.storeToolFromSync(tool2)
         }
@@ -114,7 +114,7 @@ class SyncRepositoryTest {
         every { translationsRepository.getTranslationsForToolBlocking("tool") } returns listOf(trans1, trans3)
 
         syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
-        verifyAll {
+        coVerifyAll {
             toolsRepository.storeToolFromSync(tool)
             translationsRepository.getTranslationsForToolBlocking("tool")
             translationsRepository.storeTranslationFromSync(trans1)

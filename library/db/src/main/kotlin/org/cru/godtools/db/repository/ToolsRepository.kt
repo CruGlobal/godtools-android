@@ -37,8 +37,8 @@ interface ToolsRepository {
     // endregion Initial Content Methods
 
     // region Sync Methods
-    fun storeToolsFromSync(tools: Collection<Tool>) = tools.forEach { storeToolFromSync(it) }
-    fun storeToolFromSync(tool: Tool)
+    suspend fun storeToolsFromSync(tools: Collection<Tool>)
+    suspend fun storeToolFromSync(tool: Tool) = storeToolsFromSync(setOf(tool))
     suspend fun deleteIfNotFavorite(code: String)
     // endregion Sync Methods
 }

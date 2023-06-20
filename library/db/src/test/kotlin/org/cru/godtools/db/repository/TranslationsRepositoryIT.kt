@@ -30,12 +30,15 @@ abstract class TranslationsRepositoryIT {
     abstract val languagesRepository: LanguagesRepository
 
     @Before
-    fun createToolAndLanguage() {
-        toolsRepository.storeToolFromSync(Tool(TOOL))
-        toolsRepository.storeToolFromSync(Tool(TOOL2))
-        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.ENGLISH })
-        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.FRENCH })
-        languagesRepository.storeLanguageFromSync(Language().apply { code = Locale.GERMAN })
+    fun createToolAndLanguage() = runTest {
+        toolsRepository.storeToolsFromSync(listOf(Tool(TOOL), Tool(TOOL2)))
+        languagesRepository.storeLanguagesFromSync(
+            listOf(
+                Language(Locale.ENGLISH),
+                Language(Locale.FRENCH),
+                Language(Locale.GERMAN)
+            )
+        )
     }
 
     // region findLatestTranslation()
