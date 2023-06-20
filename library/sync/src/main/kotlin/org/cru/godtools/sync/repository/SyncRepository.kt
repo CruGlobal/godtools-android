@@ -30,7 +30,7 @@ internal class SyncRepository @Inject constructor(
         existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
     }
 
-    private fun storeTool(tool: Tool, existingTools: MutableSet<String>?, includes: Includes) {
+    private suspend fun storeTool(tool: Tool, existingTools: MutableSet<String>?, includes: Includes) {
         // don't store the tool if it's not valid
         if (!tool.isValid) return
 
