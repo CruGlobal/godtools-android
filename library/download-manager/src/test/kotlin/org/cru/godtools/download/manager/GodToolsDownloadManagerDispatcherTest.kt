@@ -21,10 +21,12 @@ import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
@@ -34,8 +36,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
     private val appLanguageFlow = MutableSharedFlow<Locale>(replay = 1)
-    private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1)
-    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1)
+    private val pinnedLanguagesFlow = MutableSharedFlow<List<Language>>(replay = 1)
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
     private val favoriteToolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
@@ -51,10 +52,11 @@ class GodToolsDownloadManagerDispatcherTest {
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk {
         every { getDownloadedFilesFlow() } returns downloadedFilesFlow
     }
+    private val languagesRepository: LanguagesRepository = mockk {
+        every { getPinnedLanguagesFlow() } returns pinnedLanguagesFlow
+    }
     private val settings = mockk<Settings> {
         every { appLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.appLanguageFlow
-        every { primaryLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.primaryLanguageFlow
-        every { parallelLanguageFlow } returns this@GodToolsDownloadManagerDispatcherTest.parallelLanguageFlow
     }
     private val toolsRepository: ToolsRepository by lazy {
         mockk {
@@ -77,6 +79,7 @@ class GodToolsDownloadManagerDispatcherTest {
             attachmentsRepository,
             downloadManager,
             downloadedFilesRepository,
+            languagesRepository = languagesRepository,
             settings,
             toolsRepository,
             translationsRepository,
@@ -148,42 +151,35 @@ class GodToolsDownloadManagerDispatcherTest {
     }
 
     @Test
-    fun `Favorite Tools downloadLatestPublishedTranslation() - primary & parallel language`() = testScope.runTest {
+    fun `Favorite Tools downloadLatestPublishedTranslation() - pinned languages`() = testScope.runTest {
         dispatcher.downloadTranslationsForDefaultLanguageJob.cancel()
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
             translationsRepository.getTranslationsForToolsAndLocalesFlow(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
-                locales = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+                locales = match { it.toSet() == setOf(Locale.FRENCH, Locale.GERMAN) }
             )
         } returns translationsFlow
         verify { downloadManager wasNot Called }
 
         favoriteToolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
-        primaryLanguageFlow.emit(Locale.GERMAN)
-        parallelLanguageFlow.emit(Locale.FRENCH)
+        pinnedLanguagesFlow.emit(listOf(Language(Locale.FRENCH), Language(Locale.GERMAN)))
         runCurrent()
         verifyAll {
             translationsRepository.getTranslationsForToolsAndLocalesFlow(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
-                locales = match { it.toSet() == setOf(Settings.defaultLanguage, Locale.FRENCH, Locale.GERMAN) }
+                locales = match { it.toSet() == setOf(Locale.FRENCH, Locale.GERMAN) }
             )
         }
 
-        val translation1 = Translation().apply {
-            toolCode = "tool1"
-            languageCode = Locale.ENGLISH
-        }
-        val translation2 = Translation().apply {
-            toolCode = "tool2"
-            languageCode = Locale.FRENCH
-        }
+        val translation1 = Translation("tool1", Locale.FRENCH)
+        val translation2 = Translation("tool2", Locale.GERMAN)
         translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()
         coVerifyAll {
-            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
-            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.FRENCH))
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.FRENCH))
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.GERMAN))
         }
     }
 

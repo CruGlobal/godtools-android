@@ -52,6 +52,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
@@ -437,6 +438,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
         private val downloadManager: GodToolsDownloadManager,
         downloadedFilesRepository: DownloadedFilesRepository,
+        languagesRepository: LanguagesRepository,
         settings: Settings,
         private val toolsRepository: ToolsRepository,
         private val translationsRepository: TranslationsRepository,
@@ -447,6 +449,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             attachmentsRepository: AttachmentsRepository,
             downloadManager: GodToolsDownloadManager,
             downloadedFilesRepository: DownloadedFilesRepository,
+            languagesRepository: LanguagesRepository,
             settings: Settings,
             toolsRepository: ToolsRepository,
             translationsRepository: TranslationsRepository,
@@ -454,6 +457,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             attachmentsRepository,
             downloadManager,
             downloadedFilesRepository,
+            languagesRepository = languagesRepository,
             settings,
             toolsRepository,
             translationsRepository,
@@ -467,11 +471,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .distinctUntilChanged()
                 .downloadFavoriteTranslations()
 
-            // Download Favorite tool translations in the primary, parallel, and default languages
-            settings.primaryLanguageFlow
-                .combine(settings.parallelLanguageFlow) { prim, para ->
-                    setOfNotNull(prim, para, Settings.defaultLanguage)
-                }
+            // Download Translations for pinned languages
+            languagesRepository.getPinnedLanguagesFlow()
+                .map { it.mapTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
                 .downloadFavoriteTranslations()
 
