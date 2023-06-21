@@ -42,8 +42,7 @@ class SyncRepositoryTest {
             includes = Includes()
         )
         coVerifyAll {
-            toolsRepository.storeToolFromSync(tool1)
-            toolsRepository.storeToolFromSync(tool2)
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool1, tool2) })
         }
     }
 
@@ -72,8 +71,7 @@ class SyncRepositoryTest {
             includes = Includes()
         )
         coVerifyAll {
-            toolsRepository.storeToolFromSync(tool1)
-            toolsRepository.storeToolFromSync(tool2)
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool1, tool2) })
             toolsRepository.deleteIfNotFavorite("orphan")
         }
     }
@@ -115,7 +113,7 @@ class SyncRepositoryTest {
 
         syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
         coVerifyAll {
-            toolsRepository.storeToolFromSync(tool)
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool) })
             translationsRepository.getTranslationsForToolBlocking("tool")
             translationsRepository.storeTranslationFromSync(trans1)
             translationsRepository.storeTranslationFromSync(trans2)

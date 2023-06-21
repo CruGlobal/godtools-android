@@ -26,11 +26,16 @@ internal class SyncRepository @Inject constructor(
 ) {
     // region Tools
     suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) = coroutineScope {
-        val stored = tools
-            .map { async { storeTool(it, includes) } }
+        val validTools = tools.filter { it.isValid }
+        if (validTools.isNotEmpty()) toolsRepository.storeToolsFromSync(validTools)
+
+        val nestedTools = validTools
+            .map { async { processIncludes(it, includes) } }
             .awaitAll()
             .flatMapTo(mutableSetOf()) { it }
-        existingTools?.removeAll(stored)
+
+        existingTools?.removeAll(validTools.mapTo(mutableSetOf()) { it.code })
+        existingTools?.removeAll(nestedTools)
 
         // prune any existing tools that weren't synced and aren't already added to the device
         existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
@@ -39,11 +44,7 @@ internal class SyncRepository @Inject constructor(
     /**
      * @return the tool codes that were stored in the database
      */
-    private suspend fun storeTool(tool: Tool, includes: Includes): Set<String> = coroutineScope {
-        // don't store the tool if it's not valid
-        if (!tool.isValid) return@coroutineScope emptySet()
-        toolsRepository.storeToolFromSync(tool)
-
+    private suspend fun processIncludes(tool: Tool, includes: Includes): Set<String> = coroutineScope {
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
             tool.latestTranslations?.let { translations ->
@@ -76,7 +77,17 @@ internal class SyncRepository @Inject constructor(
             ?.let { async { storeTool(it, includes.descendant(Tool.JSON_DEFAULT_VARIANT)) } }
             ?: CompletableDeferred(emptySet())
 
-        setOfNotNull(tool.code) + metatool.await() + defaultVariant.await()
+        metatool.await() + defaultVariant.await()
+    }
+
+    /**
+     * @return the tool codes that were stored in the database
+     */
+    private suspend fun storeTool(tool: Tool, includes: Includes): Set<String> {
+        if (!tool.isValid) return emptySet()
+
+        toolsRepository.storeToolFromSync(tool)
+        return setOfNotNull(tool.code) + processIncludes(tool, includes)
     }
     // endregion Tools
 
