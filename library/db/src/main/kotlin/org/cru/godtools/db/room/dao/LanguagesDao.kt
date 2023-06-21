@@ -22,6 +22,8 @@ internal interface LanguagesDao {
     suspend fun getLanguages(): List<LanguageEntity>
     @Query("SELECT * FROM languages WHERE code IN(:locales)")
     fun getLanguagesFlow(locales: Collection<Locale>): Flow<List<LanguageEntity>>
+    @Query("SELECT * FROM languages WHERE isAdded = 1")
+    fun getPinnedLanguagesFlow(): Flow<List<LanguageEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreLanguages(languages: Collection<LanguageEntity>)
