@@ -3,6 +3,11 @@ package org.cru.godtools.sync.repository
 import androidx.annotation.VisibleForTesting
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -20,52 +25,62 @@ internal class SyncRepository @Inject constructor(
     private val translationsRepository: TranslationsRepository,
 ) {
     // region Tools
-    suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) {
-        tools.forEach {
-            storeTool(it, existingTools, includes)
-            existingTools?.remove(it.code)
-        }
+    suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) = coroutineScope {
+        val stored = tools
+            .map { async { storeTool(it, includes) } }
+            .awaitAll()
+            .flatMapTo(mutableSetOf()) { it }
+        existingTools?.removeAll(stored)
 
         // prune any existing tools that weren't synced and aren't already added to the device
         existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
     }
 
-    private suspend fun storeTool(tool: Tool, existingTools: MutableSet<String>?, includes: Includes) {
+    /**
+     * @return the tool codes that were stored in the database
+     */
+    private suspend fun storeTool(tool: Tool, includes: Includes): Set<String> = coroutineScope {
         // don't store the tool if it's not valid
-        if (!tool.isValid) return
-
+        if (!tool.isValid) return@coroutineScope emptySet()
         toolsRepository.storeToolFromSync(tool)
 
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
             tool.latestTranslations?.let { translations ->
-                storeTranslations(
-                    translations,
-                    includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
-                    existing = tool.code?.let { translationsRepository.getTranslationsForToolBlocking(it) }
-                        ?.map { it.id }
-                        ?.toMutableSet()
-                )
+                launch {
+                    storeTranslations(
+                        translations,
+                        includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
+                        existing = tool.code?.let { translationsRepository.getTranslationsForToolBlocking(it) }
+                            ?.map { it.id }
+                            ?.toMutableSet()
+                    )
+                }
             }
         }
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
             tool.attachments?.let { attachments ->
-                attachmentsRepository.storeAttachmentsFromSync(attachments)
-                attachmentsRepository.removeAttachmentsMissingFromSync(tool, attachments)
+                launch {
+                    attachmentsRepository.storeAttachmentsFromSync(attachments)
+                    attachmentsRepository.removeAttachmentsMissingFromSync(tool, attachments)
+                }
             }
         }
-        if (includes.include(Tool.JSON_METATOOL)) {
-            tool.metatool?.let {
-                storeTool(it, existingTools, includes.descendant(Tool.JSON_METATOOL))
-                existingTools?.remove(it.code)
+
+        val metatool = when {
+            includes.include(Tool.JSON_METATOOL) -> async {
+                tool.metatool?.let { storeTool(it, includes.descendant(Tool.JSON_METATOOL)) }
             }
+            else -> CompletableDeferred(emptySet())
         }
-        if (includes.include(Tool.JSON_DEFAULT_VARIANT)) {
-            tool.defaultVariant?.let {
-                storeTool(it, existingTools, includes.descendant(Tool.JSON_DEFAULT_VARIANT))
-                existingTools?.remove(it.code)
+        val defaultVariant = when {
+            includes.include(Tool.JSON_DEFAULT_VARIANT) -> async {
+                tool.defaultVariant?.let { storeTool(it, includes.descendant(Tool.JSON_DEFAULT_VARIANT)) }
             }
+            else -> CompletableDeferred(emptySet())
         }
+
+        setOfNotNull(tool.code) + metatool.await().orEmpty() + defaultVariant.await().orEmpty()
     }
     // endregion Tools
 
