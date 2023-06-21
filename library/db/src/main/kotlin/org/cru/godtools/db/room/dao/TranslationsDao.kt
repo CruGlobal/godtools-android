@@ -51,5 +51,5 @@ internal interface TranslationsDao {
 //    @Query("UPDATE translations SET lastAccessed = :accessTime WHERE id = :id")
 //    suspend fun updateTranslationLastAccessed(id: Long, accessTime: Instant)
     @Delete
-    fun deleteBlocking(translation: TranslationEntity)
+    suspend fun delete(translation: TranslationEntity)
 }

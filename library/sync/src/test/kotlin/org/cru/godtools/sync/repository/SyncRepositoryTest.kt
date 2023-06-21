@@ -118,7 +118,7 @@ class SyncRepositoryTest {
             translationsRepository.getTranslationsForTool("tool")
             translationsRepository.storeTranslationFromSync(trans1)
             translationsRepository.storeTranslationFromSync(trans2)
-            translationsRepository.deleteTranslationIfNotDownloadedBlocking(trans3.id)
+            translationsRepository.deleteTranslationIfNotDownloaded(trans3.id)
         }
     }
     // endregion storeTranslations()

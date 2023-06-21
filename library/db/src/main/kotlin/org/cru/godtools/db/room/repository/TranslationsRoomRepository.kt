@@ -79,9 +79,9 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
     // region Sync Methods
     override fun storeTranslationFromSync(translation: Translation) = dao.upsertBlocking(SyncTranslation(translation))
     @Transaction
-    override fun deleteTranslationIfNotDownloadedBlocking(id: Long) {
-        val translation = dao.findTranslationBlocking(id)?.takeUnless { it.isDownloaded } ?: return
-        dao.deleteBlocking(translation)
+    override suspend fun deleteTranslationIfNotDownloaded(id: Long) {
+        val translation = dao.findTranslation(id)?.takeUnless { it.isDownloaded } ?: return
+        dao.delete(translation)
     }
     // endregion Sync Methods
 }

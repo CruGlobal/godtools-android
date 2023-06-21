@@ -418,7 +418,7 @@ abstract class TranslationsRepositoryIT {
         repository.storeInitialTranslations(listOf(translation))
         assertNotNull(repository.findTranslation(translation.id))
 
-        repository.deleteTranslationIfNotDownloadedBlocking(translation.id)
+        repository.deleteTranslationIfNotDownloaded(translation.id)
         assertNull(repository.findTranslation(translation.id))
     }
 
@@ -428,7 +428,7 @@ abstract class TranslationsRepositoryIT {
         repository.storeInitialTranslations(listOf(translation))
         assertNotNull(repository.findTranslation(translation.id))
 
-        repository.deleteTranslationIfNotDownloadedBlocking(translation.id)
+        repository.deleteTranslationIfNotDownloaded(translation.id)
         assertNotNull(repository.findTranslation(translation.id))
     }
     // endregion deleteTranslationIfNotDownloadedBlocking()

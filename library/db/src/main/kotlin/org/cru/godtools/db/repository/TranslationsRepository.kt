@@ -46,6 +46,6 @@ interface TranslationsRepository {
 
     // region Sync Methods
     fun storeTranslationFromSync(translation: Translation)
-    fun deleteTranslationIfNotDownloadedBlocking(id: Long)
+    suspend fun deleteTranslationIfNotDownloaded(id: Long)
     // endregion Sync Methods
 }
