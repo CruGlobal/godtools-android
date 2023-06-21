@@ -1,6 +1,7 @@
 package org.cru.godtools.sync.repository
 
 import io.mockk.Called
+import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
@@ -109,12 +110,12 @@ class SyncRepositoryTest {
         val trans2 = Translation("tool", Locale.FRENCH)
         val trans3 = Translation("tool", Locale.GERMAN)
         val tool = Tool("tool", translations = listOf(trans1, trans2))
-        every { translationsRepository.getTranslationsForToolBlocking("tool") } returns listOf(trans1, trans3)
+        coEvery { translationsRepository.getTranslationsForTool("tool") } returns listOf(trans1, trans3)
 
         syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
         coVerifyAll {
             toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool) })
-            translationsRepository.getTranslationsForToolBlocking("tool")
+            translationsRepository.getTranslationsForTool("tool")
             translationsRepository.storeTranslationFromSync(trans1)
             translationsRepository.storeTranslationFromSync(trans2)
             translationsRepository.deleteTranslationIfNotDownloadedBlocking(trans3.id)

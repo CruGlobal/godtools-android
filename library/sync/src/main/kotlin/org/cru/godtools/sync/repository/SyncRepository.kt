@@ -52,7 +52,7 @@ internal class SyncRepository @Inject constructor(
                     storeTranslations(
                         translations,
                         includes = includes.descendant(Tool.JSON_LATEST_TRANSLATIONS),
-                        existing = tool.code?.let { translationsRepository.getTranslationsForToolBlocking(it) }
+                        existing = tool.code?.let { translationsRepository.getTranslationsForTool(it) }
                             ?.map { it.id }
                             ?.toMutableSet()
                     )

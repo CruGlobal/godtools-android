@@ -153,6 +153,17 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion getTranslations()
 
+    // region getTranslationsForTool()
+    @Test
+    fun `getTranslationsForTool()`() = testScope.runTest {
+        val tool1 = Translation(TOOL)
+        val tool2 = Translation(TOOL2)
+        repository.storeInitialTranslations(listOf(tool1, tool2))
+
+        assertEquals(setOf(tool1.id), repository.getTranslationsForTool(TOOL).map { it.id }.toSet())
+    }
+    // endregion getTranslationsForTool()
+
     // region getTranslationsForLanguages()
     @Test
     fun `getTranslationsForLanguages()`() = testScope.runTest {
@@ -167,20 +178,6 @@ abstract class TranslationsRepositoryIT {
         )
     }
     // endregion getTranslationsForLanguages()
-
-    // region getTranslationsForToolBlocking()
-    @Test
-    fun `getTranslationsForToolBlocking()`() = testScope.runTest {
-        val tool1 = Translation(TOOL)
-        val tool2 = Translation(TOOL2)
-        repository.storeInitialTranslations(listOf(tool1, tool2))
-
-        assertEquals(
-            setOf(tool1.id),
-            repository.getTranslationsForToolBlocking(TOOL).map { it.id }.toSet()
-        )
-    }
-    // endregion getTranslationsForToolBlocking()
 
     // region getTranslationsFlow()
     @Test
