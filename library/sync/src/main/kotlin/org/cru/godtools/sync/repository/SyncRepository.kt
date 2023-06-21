@@ -108,7 +108,7 @@ internal class SyncRepository @Inject constructor(
         existing?.forEach { translationsRepository.deleteTranslationIfNotDownloaded(it) }
     }
 
-    private fun storeTranslation(translation: Translation, includes: Includes): Boolean {
+    private suspend fun storeTranslation(translation: Translation, includes: Includes): Boolean {
         if (!translation.isValid) return false
         if (includes.include(Translation.JSON_LANGUAGE)) translation.language?.let { storeLanguage(it) }
         translationsRepository.storeTranslationFromSync(translation)

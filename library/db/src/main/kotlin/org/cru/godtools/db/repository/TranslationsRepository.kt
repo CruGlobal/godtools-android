@@ -45,7 +45,7 @@ interface TranslationsRepository {
     // endregion ManifestManager Methods
 
     // region Sync Methods
-    fun storeTranslationFromSync(translation: Translation)
+    suspend fun storeTranslationFromSync(translation: Translation)
     suspend fun deleteTranslationIfNotDownloaded(id: Long)
     // endregion Sync Methods
 }
