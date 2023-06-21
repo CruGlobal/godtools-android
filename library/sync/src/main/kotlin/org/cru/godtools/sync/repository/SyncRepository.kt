@@ -60,12 +60,7 @@ internal class SyncRepository @Inject constructor(
             }
         }
         if (includes.include(Tool.JSON_ATTACHMENTS)) {
-            tool.attachments?.let { attachments ->
-                launch {
-                    attachmentsRepository.storeAttachmentsFromSync(attachments)
-                    attachmentsRepository.removeAttachmentsMissingFromSync(tool, attachments)
-                }
-            }
+            tool.attachments?.let { launch { attachmentsRepository.storeAttachmentsFromSync(tool, it) } }
         }
 
         val metatool = tool.metatool

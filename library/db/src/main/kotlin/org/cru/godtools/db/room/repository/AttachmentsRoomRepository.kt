@@ -30,16 +30,14 @@ internal abstract class AttachmentsRoomRepository(private val db: GodToolsRoomDa
         dao.insertOrIgnoreAttachments(attachments.map { AttachmentEntity(it) })
 
     // region Sync Methods
-    override fun storeAttachmentsFromSync(attachments: Collection<Attachment>) =
-        dao.upsertSyncAttachments(attachments.map { SyncAttachment(it) })
-
     @Transaction
-    override fun removeAttachmentsMissingFromSync(tool: Tool, syncedAttachments: Collection<Attachment>) {
-        val toolCode = tool.code ?: return
-        val keep = syncedAttachments.mapTo(mutableSetOf()) { it.id }
-        dao.getAttachmentsForTool(toolCode)
+    override suspend fun storeAttachmentsFromSync(tool: Tool?, attachments: Collection<Attachment>) {
+        val keep by lazy { attachments.mapTo(mutableSetOf()) { it.id } }
+        val toRemove = tool?.code?.let { dao.getAttachmentsForTool(it) }.orEmpty()
             .filterNot { it.id in keep }
-            .forEach { dao.delete(it) }
+
+        dao.upsertSyncAttachments(attachments.map { SyncAttachment(it) })
+        if (toRemove.isNotEmpty()) dao.deleteAttachments(toRemove)
     }
 
     override fun deleteAttachmentsFor(tool: Tool) {

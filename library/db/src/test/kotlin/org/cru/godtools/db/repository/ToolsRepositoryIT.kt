@@ -430,7 +430,7 @@ abstract class ToolsRepositoryIT {
         val attachment2 = Attachment(tool = tool2)
         val attachment3 = Attachment(tool = tool3)
         repository.storeInitialResources(listOf(tool1, tool2, tool3))
-        attachmentsRepository.storeAttachmentsFromSync(listOf(attachment1, attachment2, attachment3))
+        attachmentsRepository.storeInitialAttachments(listOf(attachment1, attachment2, attachment3))
         assertNotNull(attachmentsRepository.findAttachment(attachment1.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment3.id))
