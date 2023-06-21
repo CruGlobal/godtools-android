@@ -67,20 +67,16 @@ internal class SyncRepository @Inject constructor(
             }
         }
 
-        val metatool = when {
-            includes.include(Tool.JSON_METATOOL) -> async {
-                tool.metatool?.let { storeTool(it, includes.descendant(Tool.JSON_METATOOL)) }
-            }
-            else -> CompletableDeferred(emptySet())
-        }
-        val defaultVariant = when {
-            includes.include(Tool.JSON_DEFAULT_VARIANT) -> async {
-                tool.defaultVariant?.let { storeTool(it, includes.descendant(Tool.JSON_DEFAULT_VARIANT)) }
-            }
-            else -> CompletableDeferred(emptySet())
-        }
+        val metatool = tool.metatool
+            ?.takeIf { includes.include(Tool.JSON_METATOOL) }
+            ?.let { async { storeTool(it, includes.descendant(Tool.JSON_METATOOL)) } }
+            ?: CompletableDeferred(emptySet())
+        val defaultVariant = tool.defaultVariant
+            ?.takeIf { includes.include(Tool.JSON_DEFAULT_VARIANT) }
+            ?.let { async { storeTool(it, includes.descendant(Tool.JSON_DEFAULT_VARIANT)) } }
+            ?: CompletableDeferred(emptySet())
 
-        setOfNotNull(tool.code) + metatool.await().orEmpty() + defaultVariant.await().orEmpty()
+        setOfNotNull(tool.code) + metatool.await() + defaultVariant.await()
     }
     // endregion Tools
 
