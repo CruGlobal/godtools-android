@@ -6,7 +6,6 @@ import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.mockk.verifyAll
 import java.util.Locale
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.util.Includes
@@ -80,7 +79,7 @@ class SyncRepositoryTest {
 
     // region storeLanguage()
     @Test
-    fun `storeLanguage()`() {
+    fun `storeLanguage()`() = runTest {
         val language = Language().apply {
             id = 1
             code = Locale("lt")
@@ -88,13 +87,13 @@ class SyncRepositoryTest {
 
         // run test
         syncRepository.storeLanguage(language)
-        verifyAll {
+        coVerifyAll {
             languagesRepository.storeLanguageFromSync(language)
         }
     }
 
     @Test
-    fun `storeLanguage() - Invalid Language`() {
+    fun `storeLanguage() - Invalid Language`() = runTest {
         val language = Language()
 
         assertFalse(language.isValid)

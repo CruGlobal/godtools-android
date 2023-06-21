@@ -88,7 +88,7 @@ internal class SyncRepository @Inject constructor(
 
     // region Languages
     @VisibleForTesting
-    fun storeLanguage(language: Language) {
+    suspend fun storeLanguage(language: Language) {
         if (!language.isValid) return
         languagesRepository.storeLanguageFromSync(language)
     }

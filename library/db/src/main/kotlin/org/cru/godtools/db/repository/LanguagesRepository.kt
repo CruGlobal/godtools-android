@@ -19,8 +19,8 @@ interface LanguagesRepository {
     // endregion Initial Content Methods
 
     // region Sync Methods
-    fun storeLanguageFromSync(language: Language) = storeLanguagesFromSync(listOf(language))
-    fun storeLanguagesFromSync(languages: Collection<Language>)
+    suspend fun storeLanguageFromSync(language: Language) = storeLanguagesFromSync(listOf(language))
+    suspend fun storeLanguagesFromSync(languages: Collection<Language>)
     suspend fun removeLanguagesMissingFromSync(syncedLanguages: Collection<Language>)
     // endregion Sync Methods
 }
