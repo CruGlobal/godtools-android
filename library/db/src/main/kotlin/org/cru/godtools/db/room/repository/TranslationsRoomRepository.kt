@@ -36,10 +36,10 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
     }
 
     override suspend fun getTranslations() = dao.getTranslations().map { it.toModel() }
+    override suspend fun getTranslationsForTool(tool: String) =
+        dao.getTranslationsForToolBlocking(tool).map { it.toModel() }
     override suspend fun getTranslationsForLanguages(languages: Collection<Locale>) =
         dao.getTranslationsForLanguages(languages).map { it.toModel() }
-    override fun getTranslationsForToolBlocking(tool: String) =
-        dao.getTranslationsForToolBlocking(tool).map { it.toModel() }
 
     override fun getTranslationsFlow() = dao.getTranslationsFlow().map { it.map { it.toModel() } }
     override fun getTranslationsForToolsFlow(tools: Collection<String>) =
@@ -77,11 +77,11 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
     // endregion ManifestManager Methods
 
     // region Sync Methods
-    override fun storeTranslationFromSync(translation: Translation) = dao.upsertBlocking(SyncTranslation(translation))
+    override suspend fun storeTranslationFromSync(translation: Translation) = dao.upsert(SyncTranslation(translation))
     @Transaction
-    override fun deleteTranslationIfNotDownloadedBlocking(id: Long) {
-        val translation = dao.findTranslationBlocking(id)?.takeUnless { it.isDownloaded } ?: return
-        dao.deleteBlocking(translation)
+    override suspend fun deleteTranslationIfNotDownloaded(id: Long) {
+        val translation = dao.findTranslation(id)?.takeUnless { it.isDownloaded } ?: return
+        dao.delete(translation)
     }
     // endregion Sync Methods
 }

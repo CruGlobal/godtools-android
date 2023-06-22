@@ -23,8 +23,7 @@ interface AttachmentsRepository {
     // endregion Initial Content Methods
 
     // region Sync Methods
-    fun storeAttachmentsFromSync(attachments: Collection<Attachment>)
-    fun removeAttachmentsMissingFromSync(tool: Tool, syncedAttachments: Collection<Attachment>)
+    suspend fun storeAttachmentsFromSync(tool: Tool? = null, attachments: Collection<Attachment>)
     fun deleteAttachmentsFor(tool: Tool)
     // endregion Sync Methods
 }

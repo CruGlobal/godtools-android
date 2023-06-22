@@ -44,12 +44,12 @@ internal interface TranslationsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreTranslationBlocking(translation: TranslationEntity)
     @Upsert(entity = TranslationEntity::class)
-    fun upsertBlocking(translation: SyncTranslation)
+    suspend fun upsert(translation: SyncTranslation)
     @Query("UPDATE translations SET isDownloaded = :isDownloaded WHERE id = :id")
     suspend fun updateTranslationDownloaded(id: Long, isDownloaded: Boolean)
 
 //    @Query("UPDATE translations SET lastAccessed = :accessTime WHERE id = :id")
 //    suspend fun updateTranslationLastAccessed(id: Long, accessTime: Instant)
     @Delete
-    fun deleteBlocking(translation: TranslationEntity)
+    suspend fun delete(translation: TranslationEntity)
 }

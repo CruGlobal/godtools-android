@@ -1,11 +1,13 @@
 package org.cru.godtools.sync.repository
 
 import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.mockk.verifyAll
 import java.util.Locale
+import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
@@ -30,7 +32,7 @@ class SyncRepositoryTest {
 
     // region storeTools()
     @Test
-    fun `storeTools()`() {
+    fun `storeTools()`() = runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
 
@@ -39,14 +41,13 @@ class SyncRepositoryTest {
             existingTools = null,
             includes = Includes()
         )
-        verifyAll {
-            toolsRepository.storeToolFromSync(tool1)
-            toolsRepository.storeToolFromSync(tool2)
+        coVerifyAll {
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool1, tool2) })
         }
     }
 
     @Test
-    fun `storeTools() - Don't store invalid tools`() {
+    fun `storeTools() - Don't store invalid tools`() = runTest {
         val tool: Tool = mockk {
             every { isValid } returns false
         }
@@ -60,7 +61,7 @@ class SyncRepositoryTest {
     }
 
     @Test
-    fun `storeTools() - Delete orphaned existing tools`() {
+    fun `storeTools() - Delete orphaned existing tools`() = runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
 
@@ -69,17 +70,16 @@ class SyncRepositoryTest {
             existingTools = mutableSetOf("tool1", "orphan"),
             includes = Includes()
         )
-        verifyAll {
-            toolsRepository.storeToolFromSync(tool1)
-            toolsRepository.storeToolFromSync(tool2)
-            toolsRepository.deleteIfNotFavoriteBlocking("orphan")
+        coVerifyAll {
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool1, tool2) })
+            toolsRepository.deleteIfNotFavorite("orphan")
         }
     }
     // endregion storeTools()
 
     // region storeLanguage()
     @Test
-    fun `storeLanguage()`() {
+    fun `storeLanguage()`() = runTest {
         val language = Language().apply {
             id = 1
             code = Locale("lt")
@@ -87,13 +87,13 @@ class SyncRepositoryTest {
 
         // run test
         syncRepository.storeLanguage(language)
-        verifyAll {
+        coVerifyAll {
             languagesRepository.storeLanguageFromSync(language)
         }
     }
 
     @Test
-    fun `storeLanguage() - Invalid Language`() {
+    fun `storeLanguage() - Invalid Language`() = runTest {
         val language = Language()
 
         assertFalse(language.isValid)
@@ -104,20 +104,20 @@ class SyncRepositoryTest {
 
     // region storeTranslations()
     @Test
-    fun `storeTranslations()`() {
+    fun `storeTranslations()`() = runTest {
         val trans1 = Translation("tool", Locale.ENGLISH)
         val trans2 = Translation("tool", Locale.FRENCH)
         val trans3 = Translation("tool", Locale.GERMAN)
         val tool = Tool("tool", translations = listOf(trans1, trans2))
-        every { translationsRepository.getTranslationsForToolBlocking("tool") } returns listOf(trans1, trans3)
+        coEvery { translationsRepository.getTranslationsForTool("tool") } returns listOf(trans1, trans3)
 
         syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
-        verifyAll {
-            toolsRepository.storeToolFromSync(tool)
-            translationsRepository.getTranslationsForToolBlocking("tool")
+        coVerifyAll {
+            toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool) })
+            translationsRepository.getTranslationsForTool("tool")
             translationsRepository.storeTranslationFromSync(trans1)
             translationsRepository.storeTranslationFromSync(trans2)
-            translationsRepository.deleteTranslationIfNotDownloadedBlocking(trans3.id)
+            translationsRepository.deleteTranslationIfNotDownloaded(trans3.id)
         }
     }
     // endregion storeTranslations()

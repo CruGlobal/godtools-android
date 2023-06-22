@@ -48,11 +48,11 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override suspend fun storeInitialResources(tools: Collection<Resource>) =
         dao.insertOrIgnoreTools(tools.map { ToolEntity(it) })
 
-    override fun storeToolFromSync(tool: Tool) = dao.upsert(SyncTool(tool))
+    override suspend fun storeToolsFromSync(tools: Collection<Tool>) = dao.upsertSyncTools(tools.map { SyncTool(it) })
 
     @Transaction
-    override fun deleteIfNotFavoriteBlocking(code: String) {
-        val tool = dao.findToolBlocking(code)?.takeUnless { it.isAdded } ?: return
-        dao.deleteBlocking(tool)
+    override suspend fun deleteIfNotFavorite(code: String) {
+        val tool = dao.findTool(code)?.takeUnless { it.isAdded } ?: return
+        dao.delete(tool)
     }
 }

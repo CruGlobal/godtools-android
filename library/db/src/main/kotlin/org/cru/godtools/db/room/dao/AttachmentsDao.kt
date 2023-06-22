@@ -34,7 +34,7 @@ internal interface AttachmentsDao {
     suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean)
 
     @Delete
-    fun delete(attachment: AttachmentEntity)
+    fun deleteAttachments(attachments: Collection<AttachmentEntity>)
     @Query("DELETE FROM attachments WHERE tool = :toolCode")
     fun deleteAttachmentsForTool(toolCode: String)
 }
