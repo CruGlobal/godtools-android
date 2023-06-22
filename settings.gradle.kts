@@ -40,11 +40,6 @@ dependencyResolutionManagement {
         }
         google()
         mavenCentral()
-        jcenter {
-            content {
-                includeModule("com.duolingo.open", "rtl-viewpager")
-            }
-        }
     }
 }
 
