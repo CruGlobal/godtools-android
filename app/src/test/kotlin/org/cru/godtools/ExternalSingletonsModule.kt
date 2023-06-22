@@ -11,8 +11,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.dagger.eager.EagerModule
-import org.ccci.gto.android.common.sync.SyncRegistry
-import org.ccci.gto.android.common.sync.SyncTask
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.dagger.EventBusModule
@@ -42,18 +40,9 @@ class ExternalSingletonsModule {
     @get:Provides
     val picasso by lazy { mockk<Picasso>() }
     @get:Provides
-    val syncService by lazy {
-        val completedSyncTask = object : SyncTask {
-            override fun sync(): Int {
-                val id = SyncRegistry.startSync()
-                SyncRegistry.finishSync(id)
-                return id
-            }
-        }
-
-        mockk<GodToolsSyncService> {
+    val syncService: GodToolsSyncService by lazy {
+        mockk {
             coEvery { syncTools(any()) } returns true
-            every { syncToolShares() } returns completedSyncTask
         }
     }
     @get:Provides

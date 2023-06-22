@@ -144,7 +144,9 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         }
     }
 
-    fun syncToolShares(): SyncTask = GtSyncTask(bundleOf(EXTRA_SYNCTYPE to SYNCTYPE_TOOL_SHARES))
+    fun syncToolSharesAsync() = coroutineScope.async { syncToolShares() }
+    private suspend fun syncToolShares() = executeSync<ToolSyncTasks> { syncShares() }
+        .also { if (!it) workManager.scheduleSyncToolSharesWork() }
 
     private inner class GtSyncTask(val args: Bundle) : SyncTask {
         override fun sync(): Int {
