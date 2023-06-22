@@ -398,7 +398,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
             settings.setFeatureDiscovered(FEATURE_TOOL_OPENED)
         }
 
-        lifecycleScope.launch { toolsRepository.updateToolViews(tool, 1) }
+        lifecycleScope.launch {
+            toolsRepository.updateToolViews(tool, 1)
+            @Suppress("DeferredResultUnused")
+            syncService.syncToolSharesAsync()
+        }
     }
 
     private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
