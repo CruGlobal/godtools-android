@@ -11,6 +11,7 @@ interface LanguagesRepository {
     suspend fun getLanguages(): List<Language>
     fun getLanguagesFlow(): Flow<List<Language>>
     fun getLanguagesFlowForLocales(locales: Collection<Locale>): Flow<Collection<Language>>
+    fun getPinnedLanguagesFlow(): Flow<List<Language>>
 
     suspend fun pinLanguage(locale: Locale)
     suspend fun unpinLanguage(locale: Locale)

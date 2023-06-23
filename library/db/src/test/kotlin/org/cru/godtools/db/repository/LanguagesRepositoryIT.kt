@@ -105,6 +105,24 @@ abstract class LanguagesRepositoryIT {
         }
     }
 
+    // region getPinnedLanguagesFlow()
+    @Test
+    fun `getPinnedLanguagesFlow()`() = testScope.runTest {
+        repository.getPinnedLanguagesFlow().test {
+            assertTrue(awaitItem().isEmpty())
+
+            repository.storeLanguageFromSync(Language(Locale.ENGLISH))
+            assertTrue(awaitItem().isEmpty())
+
+            repository.storeLanguageFromSync(Language(Locale.FRENCH))
+            assertTrue(awaitItem().isEmpty())
+
+            repository.pinLanguage(Locale.FRENCH)
+            assertThat(awaitItem().map { it.code }, containsInAnyOrder(Locale.FRENCH))
+        }
+    }
+    // endregion getPinnedLanguagesFlow()
+
     // region pinLanguage()
     @Test
     fun `pinLanguage()`() = testScope.runTest {

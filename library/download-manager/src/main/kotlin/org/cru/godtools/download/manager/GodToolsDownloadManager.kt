@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +52,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
@@ -436,16 +438,18 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         attachmentsRepository: AttachmentsRepository,
         private val downloadManager: GodToolsDownloadManager,
         downloadedFilesRepository: DownloadedFilesRepository,
+        languagesRepository: LanguagesRepository,
         settings: Settings,
-        toolsRepository: ToolsRepository,
-        translationsRepository: TranslationsRepository,
-        coroutineScope: CoroutineScope,
+        private val toolsRepository: ToolsRepository,
+        private val translationsRepository: TranslationsRepository,
+        private val coroutineScope: CoroutineScope,
     ) {
         @Inject
         internal constructor(
             attachmentsRepository: AttachmentsRepository,
             downloadManager: GodToolsDownloadManager,
             downloadedFilesRepository: DownloadedFilesRepository,
+            languagesRepository: LanguagesRepository,
             settings: Settings,
             toolsRepository: ToolsRepository,
             translationsRepository: TranslationsRepository,
@@ -453,6 +457,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             attachmentsRepository,
             downloadManager,
             downloadedFilesRepository,
+            languagesRepository = languagesRepository,
             settings,
             toolsRepository,
             translationsRepository,
@@ -460,28 +465,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         )
 
         init {
-            // Download Favorite tool translations in the primary, parallel, and default languages
-            toolsRepository.getFavoriteToolsFlow()
-                .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+            // Download Translations for the app language
+            settings.appLanguageFlow
+                .map { setOf(it) }
                 .distinctUntilChanged()
-                .combineTransformLatest(
-                    settings.primaryLanguageFlow
-                        .combine(settings.parallelLanguageFlow) { prim, para ->
-                            setOfNotNull(prim, para, Settings.defaultLanguage)
-                        }
-                        .distinctUntilChanged()
-                ) { t, l -> emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l)) }
-                .map {
-                    it.filter { !it.isDownloaded }
-                        .map { TranslationKey(it) }
-                        .toSet()
-                }
+                .downloadFavoriteTranslations()
+
+            // Download Translations for pinned languages
+            languagesRepository.getPinnedLanguagesFlow()
+                .map { it.mapTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
-                .conflate()
-                .onEach {
-                    coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
-                }
-                .launchIn(coroutineScope)
+                .downloadFavoriteTranslations()
 
             // Stale Downloaded Attachments
             attachmentsRepository.getAttachmentsFlow()
@@ -506,5 +500,27 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                 .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
                 .launchIn(coroutineScope)
         }
+
+        @VisibleForTesting
+        internal val downloadTranslationsForDefaultLanguageJob =
+            flowOf(setOf(Settings.defaultLanguage)).downloadFavoriteTranslations()
+
+        private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
+            .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+            .distinctUntilChanged()
+            .combineTransformLatest(this) { t, l ->
+                emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l))
+            }
+            .map {
+                it.filterNot { it.isDownloaded }
+                    .map { TranslationKey(it) }
+                    .toSet()
+            }
+            .distinctUntilChanged()
+            .conflate()
+            .onEach {
+                coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
+            }
+            .launchIn(coroutineScope)
     }
 }
