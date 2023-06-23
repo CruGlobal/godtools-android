@@ -25,6 +25,7 @@ import org.ccci.gto.android.common.sync.SyncTask
 import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.AnalyticsSyncTasks
 import org.cru.godtools.sync.task.BaseSyncTasks
+import org.cru.godtools.sync.task.BaseSyncTasks.Companion.isForced
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
@@ -69,7 +70,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
             try {
                 when (syncType) {
                     SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
-                        if (!syncLanguages(task.args)) workManager.scheduleSyncLanguagesWork()
+                        if (!syncLanguages(force = isForced(task.args))) workManager.scheduleSyncLanguagesWork()
                     }
                     SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
                         if (!syncShares()) workManager.scheduleSyncToolSharesWork()
