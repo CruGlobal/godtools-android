@@ -11,9 +11,12 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import org.cru.godtools.base.ui.compose.CompositionLocals
+import org.cru.godtools.base.ui.theme.GodToolsTheme.LocalLightColorSchemeActive
 import org.cru.godtools.ui.BuildConfig
 
 const val DisabledAlpha = 0.38f
@@ -75,19 +78,28 @@ object GodToolsTheme {
             )
         )
     }
+
+    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { false }
+
+    val isLightColorSchemeActive: Boolean
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalLightColorSchemeActive.current
 }
 
 @Composable
 fun GodToolsTheme(content: @Composable () -> Unit) {
+    val isDarkTheme = isSystemInDarkTheme() && BuildConfig.DEBUG
     MaterialTheme(
         colorScheme = when {
-            isSystemInDarkTheme() && BuildConfig.DEBUG -> GodToolsTheme.darkColorScheme
+            isDarkTheme -> GodToolsTheme.darkColorScheme
             else -> GodToolsTheme.lightColorScheme
         },
         typography = GodToolsTheme.typography
     ) {
         CompositionLocals {
             CompositionLocalProvider(
+                LocalLightColorSchemeActive provides !isDarkTheme,
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),
                 content = content
             )

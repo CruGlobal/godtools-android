@@ -2,6 +2,7 @@ package org.cru.godtools.model
 
 import android.content.Context
 import androidx.annotation.RestrictTo
+import androidx.annotation.VisibleForTesting
 import java.text.Collator
 import java.util.Locale
 import java.util.UUID
@@ -20,6 +21,22 @@ private const val JSON_NAME = "name"
 class Language : Base() {
     companion object {
         val INVALID_CODE = Locale("x", "inv")
+
+        fun COMPARATOR_DISPLAY_NAME(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
+            compareBy(displayLocale.primaryCollator) { it.getDisplayName(context, displayLocale) }
+
+        fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
+            associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.primaryCollator)
+
+        fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
+            toDisplayNameSortedMap(context, displayLocale).values.toList()
+
+        fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
+            toDisplayNameSortedMap(context, displayLocale).keys.toList()
+
+        @VisibleForTesting
+        internal val Locale?.primaryCollator: Collator
+            get() = Collator.getInstance(this ?: Locale.getDefault()).also { it.strength = Collator.PRIMARY }
     }
 
     @JsonApiAttribute(JSON_CODE)
@@ -45,16 +62,6 @@ class Language : Base() {
 
     val isValid get() = _code != null && code != INVALID_CODE
 }
-
-fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
-    associateBy { it.getDisplayName(context, displayLocale) }
-        .toSortedMap(Collator.getInstance(displayLocale).apply { strength = Collator.PRIMARY })
-
-fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
-    toDisplayNameSortedMap(context, displayLocale).values.toList()
-
-fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
-    toDisplayNameSortedMap(context, displayLocale).keys.toList()
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)

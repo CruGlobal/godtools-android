@@ -46,8 +46,8 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
+import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.getDescription
-import org.cru.godtools.model.getSortedDisplayNames
 import org.cru.godtools.ui.tools.ToolViewModels
 
 internal const val TEST_TAG_LANGUAGES_AVAILABLE = "languages_available"

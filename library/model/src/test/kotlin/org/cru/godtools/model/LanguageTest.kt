@@ -3,7 +3,9 @@ package org.cru.godtools.model
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
+import org.cru.godtools.model.Language.Companion.primaryCollator
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class LanguageTest {
@@ -39,4 +41,9 @@ class LanguageTest {
         assertEquals("Default Name", Language().apply { name = "Default Name" }.getDisplayName(null))
     }
     // endregion getDisplayName()
+
+    @Test
+    fun `primaryCollator - Doesn't crash on null Locale`() {
+        assertNotNull((null as Locale?).primaryCollator)
+    }
 }

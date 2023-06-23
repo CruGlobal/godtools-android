@@ -17,4 +17,6 @@ internal class ToolsRoomRepositoryIT : ToolsRepositoryIT() {
     )
     override val repository get() = dbRule.db.toolsRepository
     override val attachmentsRepository get() = dbRule.db.attachmentsRepository
+    override val languagesRepository get() = dbRule.db.languagesRepository
+    override val translationsRepository get() = dbRule.db.translationsRepository
 }

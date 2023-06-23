@@ -20,7 +20,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.toDisplayNameSortedMap
+import org.cru.godtools.model.Language.Companion.toDisplayNameSortedMap
 
 private const val KEY_QUERY = "query"
 private const val KEY_IS_SEARCH_VIEW_OPEN = "isSearchViewOpen"

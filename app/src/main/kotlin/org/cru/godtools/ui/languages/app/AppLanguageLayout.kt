@@ -2,7 +2,6 @@ package org.cru.godtools.ui.languages.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,14 +16,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +39,7 @@ import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringR
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsAppBarColors
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.ui.languages.LanguageName
 
 internal sealed interface AppLanguageEvent {
     object NavigateBack : AppLanguageEvent
@@ -78,16 +76,7 @@ internal fun AppLanguageLayout(
         ) {
             itemsIndexed(languages, { _, it -> it }) { i, lang ->
                 ListItem(
-                    headlineContent = {
-                        Row {
-                            Text(lang.getDisplayName(lang))
-
-                            val localizedColor = LocalContentColor.current.let { it.copy(alpha = it.alpha * 0.60f) }
-                            CompositionLocalProvider(LocalContentColor provides localizedColor) {
-                                Text(lang.displayName, modifier = Modifier.padding(start = 8.dp))
-                            }
-                        }
-                    },
+                    headlineContent = { LanguageName(lang) },
                     modifier = Modifier.clickable { confirmLanguage = lang }
                 )
                 if (i != languages.lastIndex) Divider(Modifier.padding(horizontal = 16.dp))
