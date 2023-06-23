@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
+import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -30,7 +31,10 @@ import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsSyncServiceTest {
-    private val toolsSyncTasks = mockk<ToolSyncTasks> { coEvery { syncTools(any()) } returns true }
+    private val toolsSyncTasks: ToolSyncTasks = mockk {
+        coEvery { syncTools(any()) } returns true
+        coEvery { syncShares() } returns true
+    }
     private val userCounterSyncTasks: UserCounterSyncTasks = mockk {
         coEvery { syncCounters(any()) } returns true
         coEvery { syncDirtyCounters() } returns true
@@ -129,6 +133,47 @@ class GodToolsSyncServiceTest {
         }
     }
     // endregion syncTools()
+
+    // region syncToolSharesAsync()
+    @Test
+    fun `syncToolSharesAsync()`() = testScope.runTest {
+        syncService.syncToolSharesAsync().await()
+        coVerifyAll {
+            toolsSyncTasks.syncShares()
+            timber wasNot Called
+            workManager wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncToolSharesAsync() - Cancelled`() = testScope.runTest {
+        coEvery { toolsSyncTasks.syncShares() } just Awaits
+        every { workManager.scheduleSyncToolSharesWork() } returns mockk()
+
+        val job = syncService.syncToolSharesAsync()
+        runCurrent()
+        job.cancelAndJoin()
+        assertTrue(job.isCancelled)
+        coVerifyAll {
+            toolsSyncTasks.syncShares()
+            timber wasNot Called
+            workManager.scheduleSyncToolSharesWork()
+        }
+    }
+
+    @Test
+    fun `syncToolSharesAsync() - Failure`() = testScope.runTest {
+        coEvery { toolsSyncTasks.syncShares() } returns false
+        every { workManager.scheduleSyncToolSharesWork() } returns mockk()
+
+        syncService.syncToolSharesAsync().await()
+        coVerifyAll {
+            toolsSyncTasks.syncShares()
+            timber wasNot Called
+            workManager.scheduleSyncToolSharesWork()
+        }
+    }
+    // endregion syncToolSharesAsync()
 
     // region syncUserCounters()
     @Test

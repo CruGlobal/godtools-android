@@ -51,6 +51,8 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             @Suppress("DeferredResultUnused")
             syncService.syncFollowupsAsync()
+            @Suppress("DeferredResultUnused")
+            syncService.syncToolSharesAsync()
             syncsRunning.value++
             syncService.syncTools(force)
             syncsRunning.value--
