@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">Глобална активност</string>
-    <!-- Login -->
+    <!-- Create / Login -->
     <!-- Activity -->
     <string name="profile_tab_activity">Активност</string>
     <!-- Badges -->

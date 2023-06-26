@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90多种语言</string>
     <string name="menu_language_settings">语言设置</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">有些工具不能涵盖所有语种。</string>
     <string name="label_language_none">无</string>
     <string name="label_language_search">筛选语言</string>
+    <!-- Downloadable Languages UI -->
 </resources>

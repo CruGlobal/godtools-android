@@ -23,6 +23,9 @@
         <item quantity="two">%1$,d لغتين</item>
         <item quantity="zero">%1$,d لغة</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">بدايات المحادثة</string>
+    <string name="tool_details_section_description_outline">الخطوط العريضة</string>
+    <string name="tool_details_section_description_bible_references">الشواهد الكتابية</string>
     <string name="tool_details_section_description_languages_available">اللغات المتاحة</string>
     <string name="tool_details_section_variants_label">الإصدارات</string>
     <string name="tool_details_section_variants_description">اختر إصدار مختلف من هذه الأداة أدناه. يتميز كل إصدار بأسلوب فريد ومحتوى فريد حتى تتمكن من العثور على الأفضل لمحادثتك. يمكنك تفضيل إصدارات متعددة من نفس الأداة.</string>

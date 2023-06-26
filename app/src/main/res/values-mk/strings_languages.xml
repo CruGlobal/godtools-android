@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="menu_language_settings">Јазични поставки</string>
     <string name="title_language_settings">Јазични поставки</string>
@@ -8,4 +9,5 @@
     <string name="action_language_parallel_select">Избери паралелен јазик</string>
     <string name="text_language_parallel_description">Сподели ја God Tools со некого на нивниот мајчин јазик</string>
     <string name="text_language_warning">Не се сите алатки достапни на сите јазици</string>
+    <!-- Downloadable Languages UI -->
 </resources>

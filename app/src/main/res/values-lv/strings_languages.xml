@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <string name="language_settings_app_language_title">Lietotnes valoda</string>
+    <string name="language_settings_app_language_dialog_message">Tu izvēlējies %1$s valodu – līdz ar to mainīsies lietotnes \'GodTools\' valoda kopumā. Vai esi drošs, ka to vēlies?</string>
+    <string name="language_settings_app_language_dialog_confirm">Mainīt valodu</string>
+    <string name="language_settings_app_language_dialog_dismiss">Atcelt</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">100+ valodas</string>
     <string name="menu_language_settings">Valodas iestatījumi</string>
@@ -12,4 +16,5 @@
     <string name="text_language_warning">Ne visi rīki ir pieejami visās valodās.</string>
     <string name="label_language_none">Nav</string>
     <string name="label_language_search">Atlasīt valodas</string>
+    <!-- Downloadable Languages UI -->
 </resources>

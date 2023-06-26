@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">لغة التطبيق</string>
+    <string name="language_settings_app_language_dialog_message">لقد حددت %1$s  كلغة تطبيقك. سيؤدي هذا إلى تغيير لغة تطبيق GodTools بالكامل. هل أنت متأكد؟</string>
+    <string name="language_settings_app_language_dialog_confirm">تغيير اللغة</string>
+    <string name="language_settings_app_language_dialog_dismiss">لا تهتم</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+90 لغة</string>
     <string name="menu_language_settings">إعدادات اللغة</string>
@@ -11,4 +16,14 @@
     <string name="text_language_warning">ليس كل أداة متوفرة في كل لغة.</string>
     <string name="label_language_none">لا شيء</string>
     <string name="label_language_search">فلترة اللغات</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">لغات البحث</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d  أداة  متوفرة</item>
+        <item quantity="other">%1$d أدوات متاحة</item>
+        <item quantity="few">بعض الادوات متاحة</item>
+        <item quantity="many">ادوات عديدة متاحة</item>
+        <item quantity="two">عدد 2 اداة متاحين</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
 </resources>

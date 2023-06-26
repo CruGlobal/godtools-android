@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">+90 زبان</string>
     <string name="menu_language_settings">تنظیمات زبان</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">تمام ابزار به تمام زبان‌ها در دسترس نیستند.</string>
     <string name="label_language_none">هیچکدام</string>
     <string name="label_language_search">فیلتر کردن زبان‌ها</string>
+    <!-- Downloadable Languages UI -->
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">বৈশ্বিক ক্রিয়া কলাপ</string>
-    <!-- Login -->
+    <!-- Create / Login -->
     <!-- Activity -->
     <string name="profile_tab_activity">ক্রিয়াকলাপ</string>
     <!-- Badges -->

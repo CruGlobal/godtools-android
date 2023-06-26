@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ kalbų</string>
     <string name="menu_language_settings">Kalbos nustatymai</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Ne kiekvienas įrankis pateikiamas kiekviena kalba</string>
     <string name="label_language_none">Joks</string>
     <string name="label_language_search">Filtruoti kalbas</string>
+    <!-- Downloadable Languages UI -->
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90개 이상의 언어</string>
     <string name="menu_language_settings">언어 설정</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">모든 언어로 모든 도구를 이용할 수 있지는 않습니다.</string>
     <string name="label_language_none">없음</string>
     <string name="label_language_search">언어 필터</string>
+    <!-- Downloadable Languages UI -->
 </resources>

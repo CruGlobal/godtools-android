@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90 ൽ പരം ഭാഷകൾ</string>
     <string name="menu_language_settings">ഭാഷയുടെ സെറ്റിംഗ്സ്</string>
@@ -10,4 +11,5 @@
     <string name="text_language_parallel_description">മറ്റുള്ളവരുമായി അവരുടെ മാതൃഭാഷയിൽ ഗോഡ് ടൂൾസ് പങ്കിടുക</string>
     <string name="text_language_warning">"ഇപ്പോൾ എല്ലാ ടൂളുകളും എല്ലാ ഭാഷകളിലും ലഭ്യമാണ്. "</string>
     <string name="label_language_none">ഒന്നും ഇല്ല</string>
+    <!-- Downloadable Languages UI -->
 </resources>

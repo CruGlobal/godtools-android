@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">أدوات</string>
+    <string name="tutorial_features_tools_subhead">تم تصميم كل أداة لمرحلة مختلفة من المحادثة - قبل أو أثناء أو بعد.</string>
+    <string name="tutorial_features_tips_headline">نصائح حول الأدوات</string>
+    <string name="tutorial_features_tips_subhead">ترشدك نصائح GodTools وأنت تساعد شخصًا ما على فهم الإنجيل والتعرف على يسوع.</string>
+    <string name="tutorial_features_live_share_headline">مشاركة الشاشة</string>
+    <string name="tutorial_features_live_share_subhead">يمكنك الآن مشاركة شاشتك عن بُعد حتى يتمكن الشخص الآخر من المتابعة أثناء استخدامك لأداة لمناقشة الإنجيل.</string>
+    <string name="tutorial_features_lessons_headline">الدروس</string>
+    <string name="tutorial_features_lessons_subhead">تتعلم في كل درس من دروس GodTools شيئًا ما لمساعدتك على إجراء محادثات حقيقية عن الله.</string>
+    <string name="tutorial_features_final_headline">ابحث عن هذا البرنامج التعليمي في القائمة متى احتجت إليه.</string>
+    <string name="tutorial_features_action_continue">استمر</string>
+    <string name="tutorial_features_action_close">إغلاق البرنامج التعليمي (الشرح التعليمي)</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">أرني شرح تعليمي</string>
+    <string name="tutorial_features_banner_action_open">افتح البرنامج التعليمي (الشرح التعليمي)</string>
+    <string name="tutorial_features_banner_action_dismiss">رفض</string>
+</resources>

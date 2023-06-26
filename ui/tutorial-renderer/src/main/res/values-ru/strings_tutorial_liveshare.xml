@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Live Share Tutorial -->
-    <string name="tutorial_live_share_description_headline">Покажите свой экран</string>
+    <string name="tutorial_live_share_description_headline">Поделиться экраном</string>
     <string name="tutorial_live_share_description_text">Данная опция позволит отправить ссылку на этот инструмент другу. При открытии ссылки запустится сеанс трансляции экрана.</string>
     <string name="tutorial_live_share_mirrored_headline">Зеркальный интерфейс</string>
     <string name="tutorial_live_share_mirrored_text">Когда вы будете пролистывать инструмент на своем телефоне, на экране вашего друга будет происходить то же самое. Это позволит вам изучать инструмент вместе на 2 устройствах одновременно.</string>

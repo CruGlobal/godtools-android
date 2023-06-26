@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Oltre 90 lingue</string>
     <string name="menu_language_settings">Impostazioni della lingua</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Gli strumenti disponibili variano a seconda della lingua.</string>
     <string name="label_language_none">Nessuno</string>
     <string name="label_language_search">Filtra le lingue</string>
+    <!-- Downloadable Languages UI -->
 </resources>

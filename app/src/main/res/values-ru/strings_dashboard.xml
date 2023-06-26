@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Начать</string>
     <string name="menu_tutorial">Руководство для использования</string>
     <string name="menu_heading_account">Учетная запись</string>
     <string name="menu_login">Войти</string>
     <string name="menu_signup">Создать учетную запись</string>
     <string name="menu_logout">Выйти</string>
+    <string name="menu_heading_support">Поддержка</string>
+    <string name="menu_feedback">Отправить отзыв</string>
+    <string name="menu_report_bug">Сообщить об ошибке</string>
+    <string name="menu_question">Задать вопрос</string>
     <string name="menu_heading_share">Поделиться</string>
+    <string name="menu_review">Оставить отзыв</string>
     <string name="menu_share_story">Поделитесь с нами историей</string>
     <string name="menu_share_godtools">Поделиться приложением GodTools</string>
     <string name="share_app_message">Загрузите приложение GodTools: https://godtoolsapp.com \n\n
@@ -24,7 +30,7 @@
     <!-- Home -->
     <string name="nav_favorite_tools">Избранное</string>
     <string name="dashboard_home_header_title">Добро пожаловать в GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Рекомендуемый урок</string>
+    <string name="dashboard_home_section_featured_lesson">Урок</string>
     <string name="dashboard_home_section_favorites_title">Ваши избранные инструменты</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Нет избранных инструментов</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Нажмите на значок сердца, чтобы добавить инструмент в избранное и сделать его доступным в режиме офлайн.</string>
@@ -33,7 +39,7 @@
     <string name="tools_list_favorites_banner_text">Нажав на значок сердца, вы добавите инструмент в избранное, что сделает его доступным, даже когда вы не в сети.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Скрыть</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">инструменты</string>
+    <string name="nav_all_tools">Инструменты</string>
     <string name="dashboard_tools_section_categories_label">Категории</string>
     <string name="dashboard_tools_section_categories_all">Все инструменты</string>
     <string name="dashboard_tools_section_spotlight_label">Обзор инструментов</string>

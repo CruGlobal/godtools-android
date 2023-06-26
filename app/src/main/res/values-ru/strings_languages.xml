@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Язык приложения</string>
+    <string name="language_settings_app_language_dialog_message">Вы выбрали %1$s в качестве языка приложения. Изменится язык всего приложения GodTools. Вы уверены?</string>
+    <string name="language_settings_app_language_dialog_confirm">Изменить язык</string>
+    <string name="language_settings_app_language_dialog_dismiss">Не важно</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Более 90 языков</string>
     <string name="menu_language_settings">Настройки языка</string>
@@ -7,8 +12,9 @@
     <string name="title_language_primary">Основной язык</string>
     <string name="title_language_parallel">Параллельный язык</string>
     <string name="action_language_parallel_select">Выбрать параллельный язык</string>
-    <string name="text_language_parallel_description">Поделитеьсь GodTools с кем-нибудь на его/ее родном языке.</string>
+    <string name="text_language_parallel_description">Поделитесь GodTools с кем-нибудь на их родном языке.</string>
     <string name="text_language_warning">Не все инструменты доступны на всех языках.</string>
     <string name="label_language_none">Нет</string>
     <string name="label_language_search">Фильтр языков</string>
+    <!-- Downloadable Languages UI -->
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">૮૦ થી વધારે ભાષાઓ</string>
     <string name="menu_language_settings">ભાષા સેટિંગ્સ</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">દરેક ભાષામાં દરેક ટુલ્સ ઉપલબ્ધ નથી.</string>
     <string name="label_language_none">કંઈ નહીં</string>
     <string name="label_language_search">ફિલ્ટર ભાષાઓ</string>
+    <!-- Downloadable Languages UI -->
 </resources>

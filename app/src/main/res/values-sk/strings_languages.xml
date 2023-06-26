@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Vyše 90 jazykov</string>
     <string name="menu_language_settings">Nastavenia jazyka</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Nie všetky nástroje sú dostupné vo všetkých jazykoch.</string>
     <string name="label_language_none">Žiadne</string>
     <string name="label_language_search">Filtrovať jazyky</string>
+    <!-- Downloadable Languages UI -->
 </resources>

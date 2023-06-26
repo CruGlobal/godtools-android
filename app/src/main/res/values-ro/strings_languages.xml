@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Peste 90 de limbi</string>
     <string name="menu_language_settings">Setări de limbă</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Nu toate instrumentele sunt disponibile în toate limbile.</string>
     <string name="label_language_none">Niciunul</string>
     <string name="label_language_search">Filtrează limbile</string>
+    <!-- Downloadable Languages UI -->
 </resources>

@@ -2,9 +2,10 @@
 <resources>
     <string name="menu_profile">Aktivitātes</string>
     <string name="account_joined">Pievienojās %1$s</string>
-    <!-- Login -->
+    <!-- Create / Login -->
+    <string name="account_create_heading">Reģistrēt kontu</string>
+    <string name="account_create_description">Izveido kontu, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_login_heading">Pierakstīties</string>
-    <string name="account_login_description">Izveido kontu, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>
