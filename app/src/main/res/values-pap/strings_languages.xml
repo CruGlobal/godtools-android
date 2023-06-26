@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ Idioma</string>
     <string name="menu_language_settings">Ahuste di Idioma</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">No ta tur hèrmènt ta dísponibel den tur idioma.</string>
     <string name="label_language_none">Ningun</string>
     <string name="label_language_search">Filtra Idiomanan</string>
+    <!-- Downloadable Languages UI -->
 </resources>

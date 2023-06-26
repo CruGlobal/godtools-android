@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Langue de l\'application</string>
+    <string name="language_settings_app_language_dialog_message">Vous avez choisi %1$s comme langue de l\'application. Ceci changera la langue de toute l\'application GodTools. Êtes-vous sûr ?</string>
+    <string name="language_settings_app_language_dialog_confirm">Changer de langue</string>
+    <string name="language_settings_app_language_dialog_dismiss">Peu importe</string>
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Plus de 90 langues</string>
     <string name="menu_language_settings">Paramètres de langue</string>
@@ -11,4 +16,5 @@
     <string name="text_language_warning">Tous les outils ne sont pas disponibles dans toutes les langues.</string>
     <string name="label_language_none">Aucun(e)</string>
     <string name="label_language_search">Rechercher les langues</string>
+    <!-- Downloadable Languages UI -->
 </resources>

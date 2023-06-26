@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">التالي</string>
+    <string name="tract_tips_tip_action_close">إغلاق</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">بسأل</string>
+    <string name="tract_tips_type_consider">فكر فيه</string>
+    <string name="tract_tips_type_prepare">حضر</string>
+    <string name="tract_tips_type_quote">إقتباس</string>
+    <string name="tract_tips_type_tip">فكرة عملية</string>
+</resources>

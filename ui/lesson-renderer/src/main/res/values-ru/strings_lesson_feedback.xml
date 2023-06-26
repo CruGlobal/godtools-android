@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Отзыв</string>
+    <string name="lesson_feedback_question_helpful">Был ли этот урок полезным?</string>
+    <string name="lesson_feedback_question_helpful_yes">Да</string>
+    <string name="lesson_feedback_question_helpful_no">Нет</string>
+    <string name="lesson_feedback_question_readiness">Насколько вы чувствуете себя готовыми начать разговор о вере?</string>
+    <string name="lesson_feedback_action_submit">Отправить отзыв</string>
+    <string name="lesson_feedback_action_cancel">Пропустить</string>
+</resources>

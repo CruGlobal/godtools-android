@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Узнайте, как поделиться инструментом с другими</string>
+    <string name="tutorial_tips_learn_text">Пробуйте пользоваться как можно большим количеством советов, чтобы увереннее делиться данным инструментом с другими.</string>
+    <string name="tutorial_tips_light_headline">Подсказки</string>
+    <string name="tutorial_tips_light_text1">В выбранных разделах, вы найдете разные иконки. Нажмите на иконку, чтобы показать подсказку, который поможет провести беседу из соответствующего раздела.</string>
+    <string name="tutorial_tips_light_text2">"Если в разделе отсутствует подсказка, мы рекомендуем прочитать раздел и обсудить его."</string>
+    <string name="tutorial_tips_start_headline">Цвет подсказки</string>
+    <string name="tutorial_tips_start_text">Вы закончили эту часть обучения, когда изменился цвет подсказки. Необязательно использовать все подсказки в каждой беседе.</string>
+    <string name="tutorial_tips_action_continue">Продолжить</string>
+    <string name="tutorial_tips_action_skip">Пропустить</string>
+    <string name="tutorial_tips_action_start">Начать обучение</string>
+</resources>

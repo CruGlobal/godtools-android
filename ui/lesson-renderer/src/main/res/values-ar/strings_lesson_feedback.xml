@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">مراجعة</string>
+    <string name="lesson_feedback_question_helpful">هل كان هذا الدرس مفيدًا لك؟</string>
+    <string name="lesson_feedback_question_helpful_yes">نعم</string>
+    <string name="lesson_feedback_question_helpful_no">لا</string>
+    <string name="lesson_feedback_question_readiness">ما مدى استعدادك لبدء محادثة روحية؟</string>
+    <string name="lesson_feedback_action_submit">ارسل رأيك</string>
+    <string name="lesson_feedback_action_cancel">تجاوز</string>
+</resources>

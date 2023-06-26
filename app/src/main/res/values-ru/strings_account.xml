@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">Активность по миру</string>
-    <!-- Login -->
+    <!-- Create / Login -->
+    <string name="account_create_heading">Создать аккаунт</string>
+    <string name="account_create_description">Создайте аккаунт, чтобы вам были доступны реальные истории, слова поддержки и практические советы.</string>
+    <string name="account_login_heading">Войти</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Активность</string>
+    <string name="account_activity_header">Ваша активность</string>
+    <string name="account_activity_tool_opens">Открыто инструментов</string>
+    <string name="account_activity_lesson_completions">Пройдено уроков</string>
+    <string name="account_activity_screen_shares">Экраны</string>
+    <string name="account_activity_links_shared">Отправленные ссылки</string>
+    <string name="account_activity_languages_used">Языки</string>
+    <string name="account_activity_sessions">Сессии</string>
     <!-- Badges -->
+    <string name="account_activity_badges_header">Ваши значки</string>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">Активность по миру</string>
     <string name="profile_global_activity_heading">%1$s  активность по миру</string>
     <string name="profile_activity_unique_users">Уникальные пользователи</string>
     <string name="profile_activity_gospel_presentations">Презентация Евангелия</string>

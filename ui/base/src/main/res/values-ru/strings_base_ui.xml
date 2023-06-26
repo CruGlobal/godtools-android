@@ -2,9 +2,9 @@
 <resources>
     <string name="toast_unable_to_launch_activity">Невозможно открыть %s</string>
     <!-- Tool Categories -->
-    <string name="tool_category_gospel">Приглашение на проповедь</string>
+    <string name="tool_category_gospel">Приглашение к проповеди Евангелия</string>
     <string name="tool_category_articles">Статьи</string>
-    <string name="tool_category_conversation_starter">Помощник в диалоге</string>
+    <string name="tool_category_conversation_starter">Как начать разговор</string>
     <string name="tool_category_growth">Духовный рост</string>
     <string name="tool_category_training">Обучение</string>
     <!-- Sharing -->

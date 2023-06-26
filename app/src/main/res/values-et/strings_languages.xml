@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ keelt</string>
     <string name="menu_language_settings">Keeleseaded</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Kõik tööriistad ei ole kõigis keeltes saadaval.</string>
     <string name="label_language_none">Mitte ühtki</string>
     <string name="label_language_search">Filtri keeled</string>
+    <!-- Downloadable Languages UI -->
 </resources>

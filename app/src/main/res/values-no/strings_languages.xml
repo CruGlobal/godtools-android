@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">Over 90 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
@@ -11,4 +12,5 @@
     <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
     <string name="label_language_none">Ingen</string>
     <string name="label_language_search">Filtrer språk</string>
+    <!-- Downloadable Languages UI -->
 </resources>

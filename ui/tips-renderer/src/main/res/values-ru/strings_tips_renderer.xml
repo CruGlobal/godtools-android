@@ -7,5 +7,6 @@
     <string name="tract_tips_type_ask">Задать вопрос</string>
     <string name="tract_tips_type_consider">Подумайте</string>
     <string name="tract_tips_type_prepare">Подготовьтесь</string>
+    <string name="tract_tips_type_quote">Цитата</string>
     <string name="tract_tips_type_tip">Подсказка</string>
 </resources>

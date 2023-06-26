@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Language UI -->
     <!-- Language Selection UI -->
     <string name="feature_discovery_title_language_settings">90+ भाषा</string>
     <string name="menu_language_settings">भाषेच्या मांडण्या</string>
@@ -13,4 +14,5 @@
     <string name="text_language_warning">प्रत्येक टूल प्रत्येक भाषेत उपलब्ध नसते</string>
     <string name="label_language_none">एकही नाही</string>
     <string name="label_language_search">भाषा फिल्टर करा</string>
+    <!-- Downloadable Languages UI -->
 </resources>

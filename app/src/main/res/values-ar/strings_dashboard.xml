@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">ابدأ</string>
     <string name="menu_tutorial">شرح</string>
     <string name="menu_heading_account">حساب</string>
     <string name="menu_login">تسجيل الدخول</string>
     <string name="menu_signup">إنشاء حساب</string>
     <string name="menu_logout">تسجيل الخروج</string>
+    <string name="menu_heading_support">دعم</string>
+    <string name="menu_feedback">ارسل رأيك</string>
+    <string name="menu_report_bug">الإبلاغ عن خطأ</string>
+    <string name="menu_question">طرح سؤال</string>
     <string name="menu_heading_share">شارك</string>
+    <string name="menu_review">ترك تعليق</string>
     <string name="menu_share_story">شارك قصة معنا</string>
     <string name="menu_share_godtools">شارك تطبيق GodTools</string>
     <string name="share_app_message">حمل تطبيق GodTools:
@@ -18,6 +24,7 @@ https://godtoolsapp.com \n\n
     <string name="menu_terms_of_use">شروط الاستخدام</string>
     <string name="menu_privacy_policy">سياسة الخصوصية</string>
     <string name="menu_copyright">حق النشر والتأليف</string>
+    <string name="menu_version">إصدار:  %1$s, %2$d,</string>
     <!-- Lessons -->
     <string name="nav_lessons">الدروس</string>
     <string name="dashboard_lessons_header_title">الدروس المُعدة لأجلك</string>
@@ -34,7 +41,7 @@ https://godtoolsapp.com \n\n
     <string name="tools_list_favorites_banner_text">اجعل الأداة متوفرة في وضع عدم الاتصال عبر النقر على أيقونة القلب الذي يضيفها إلى المفضلة.</string>
     <string name="tools_list_favorites_banner_action_dismiss">تجاهل</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">كل الأدوات</string>
+    <string name="nav_all_tools">الأدوات</string>
     <string name="dashboard_tools_section_categories_label">الفئات</string>
     <string name="dashboard_tools_section_categories_all">كل الأدوات</string>
     <string name="dashboard_tools_section_spotlight_label">تسليط الضوء على الأداة</string>

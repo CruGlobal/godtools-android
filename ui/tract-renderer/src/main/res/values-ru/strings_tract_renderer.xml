@@ -5,7 +5,7 @@
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Далее</string>
     <!-- Live Sharing -->
-    <string name="menu_live_share_publish">Покажите свой экран</string>
+    <string name="menu_live_share_publish">Поделиться экраном</string>
     <string name="menu_live_share_active">Функция «поделиться экраном» запущена</string>
     <string name="share_tool_message_tract_live_share">Привет, чтобы запустилась функция трансляции экрана, пройдите по ссылке: %1$s\n\nЕсли это сообщение придет слишком поздно, ссылка может уже не работать. Мы можем попробовать еще раз в другое время.</string>
     <string name="tract_live_share_starting">Запуск трансляции экрана…</string>
@@ -18,9 +18,9 @@
     <string name="tract_settings_title">Параметры инструмента</string>
     <string name="tract_settings_action_share">Поделитесь ссылкой</string>
     <string name="tract_settings_action_tips_disable">Скрыть подсказки</string>
-    <string name="tract_settings_languages_title">Дополнительный язык</string>
-    <string name="tract_settings_languages_description">Переключайтесь между двумя языками в этом инструменте.</string>
-    <string name="tract_settings_languages_parallel">Дополнительно</string>
+    <string name="tract_settings_languages_title">Параллельный язык</string>
+    <string name="tract_settings_languages_description">Переключайтесь между двумя разными языками в этом инструменте.</string>
+    <string name="tract_settings_languages_parallel">"Параллельный "</string>
     <string name="tract_settings_languages_none">Нет</string>
     <string name="tract_settings_shareables_title">Связанные изображения</string>
 </resources>

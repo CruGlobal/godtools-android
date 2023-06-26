@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">تعلم مشاركة هذه الأداة مع أي شخص</string>
+    <string name="tutorial_tips_learn_text">تدرب على استخدام العديد من النصائح التي تحتاجها لتشعر بالثقة عند مشاركة هذه الأداة مع الآخرين.</string>
+    <string name="tutorial_tips_light_headline">نصائح لترشد الطريق</string>
+    <string name="tutorial_tips_light_text1">في اختيارات الشاشات ، سترى مجموعة متنوعة من الرموز. اضغط على الأيقونة للكشف عن نصيحة ستساعدك على التحدث عن محتوى الشاشة.</string>
+    <string name="tutorial_tips_light_text2">"بالنسبة للشاشات التي لا تحتوي على نصائح ، نوصي بقراءة المحتوى ومناقشته حسب الحاجة. "</string>
+    <string name="tutorial_tips_start_headline">أضئ النصائح.</string>
+    <string name="tutorial_tips_start_text">عندما تضيء إحدى النصائح ، تكون قد أكملت هذا الجزء من التدريب. لا تحتاج إلى استخدام كل نصيحة في كل محادثة.</string>
+    <string name="tutorial_tips_action_continue">استمر</string>
+    <string name="tutorial_tips_action_skip">تجاوز</string>
+    <string name="tutorial_tips_action_start">ابدأ التدريب</string>
+</resources>

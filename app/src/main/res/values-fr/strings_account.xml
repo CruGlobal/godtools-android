@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_profile">Activité mondiale</string>
+    <string name="menu_profile">Activité</string>
     <string name="account_joined">Rejoint %1$s</string>
-    <!-- Login -->
+    <!-- Create / Login -->
+    <string name="account_create_heading">Créer un compte</string>
+    <string name="account_create_description">Créez un compte pour avoir des histoires vraies, des encouragements et des conseils pratiques à portée de main.</string>
+    <string name="account_login_heading">S\'inscrire</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>
@@ -13,6 +16,19 @@
     <string name="account_activity_languages_used">Langues utilisées</string>
     <string name="account_activity_sessions">Sessions</string>
     <!-- Badges -->
+    <string name="account_activity_badges_header">Vos badges</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Outil %1$,d ouvert</item>
+        <item quantity="other">Outils %1$,d ouverts</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Terminé %1$,d leçon</item>
+        <item quantity="other">Terminé %1$,d leçons</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Terminé %1$,d conseil de formation</item>
+        <item quantity="other">Terminé %1$,d conseils de formation</item>
+    </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Global Activity</string>
     <string name="profile_global_activity_heading">%1$s  Activité Mondiale</string>

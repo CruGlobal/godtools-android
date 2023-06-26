@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Commencer</string>
     <string name="menu_tutorial">Tutoriel</string>
     <string name="menu_heading_account">Compte</string>
     <string name="menu_login">Connexion</string>
     <string name="menu_signup">Créer un compte</string>
     <string name="menu_logout">Déconnexion</string>
+    <string name="menu_heading_support">Soutien</string>
+    <string name="menu_feedback">"Envoyer un commentaire
+"</string>
+    <string name="menu_report_bug">Signaler un bug</string>
+    <string name="menu_question">Poser une question</string>
     <string name="menu_heading_share">Partager</string>
+    <string name="menu_review">Laisser un commentaire</string>
     <string name="menu_share_story">Partager une histoire avec nous</string>
-    <string name="menu_share_godtools">Partager l\'application GodTools</string>
+    <string name="menu_share_godtools">Partager GodTools</string>
     <string name="share_app_message">Téléchargez l\'application GodTools : https://godtoolsapp.com \n\n
 
 Une version en ligne est disponible sur https://knowgod.com</string>
@@ -16,7 +23,7 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="menu_heading_about">À propos</string>
     <string name="menu_terms_of_use">Conditions d\'utilisation</string>
     <string name="menu_privacy_policy">Politique de confidentialité</string>
-    <string name="menu_copyright">Copyright</string>
+    <string name="menu_copyright">Information du Copyright</string>
     <!-- Lessons -->
     <string name="nav_lessons">Leçons</string>
     <string name="dashboard_lessons_header_title">Des leçons faites pour vous</string>
