@@ -7,12 +7,24 @@
     <string name="language_settings_app_language_dialog_confirm">Change language</string>
     <string name="language_settings_app_language_dialog_dismiss">Nevermind</string>
 
-    <!-- Language Selection UI -->
+    <!-- Language Settings UI -->
+    <eat-comment />
+    <string name="menu_language_settings">Language settings</string>
+    <string name="title_language_settings">Language Settings</string>
+    <string name="language_settings_section_app_language_heading">App interface language</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$d Language available</item>
+        <item quantity="other">%1$d Languages available</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Set the language you’d like the whole app to be displayed in.</string>
+    <string name="language_settings_section_offline_heading">Tool languages available offline</string>
+    <string name="language_settings_section_offline_description">Download all the tools in a language to make them available even if you’re out of WiFi or cell service. Set the tool language via the options button within a tool.</string>
+    <string name="language_settings_section_offline_action_edit">Edit downloaded languages</string>
+
+    <!-- TODO: remove these outdated phrases -->
     <eat-comment />
     <string name="feature_discovery_title_language_settings">90+ Languages</string>
     <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
-    <string name="menu_language_settings">Language settings</string>
-    <string name="title_language_settings">Language Settings</string>
     <string name="title_language_primary">Primary Language</string>
     <string name="title_language_parallel">Parallel Language</string>
     <string name="action_language_parallel_select">Select a Parallel Language</string>

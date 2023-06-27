@@ -7,6 +7,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.Placeholder
@@ -23,15 +24,15 @@ import org.cru.godtools.model.Language
 internal fun LanguageName(locale: Locale) = LanguageName(locale.displayName, locale.getDisplayName(locale))
 
 @Composable
-internal fun LanguageName(language: Language) {
+internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    LanguageName(language.getDisplayName(context), language.getDisplayName(context, language.code))
+    LanguageName(language.getDisplayName(context), language.getDisplayName(context, language.code), modifier)
 }
 
 private const val LANGUAGE_NAME_GAP = "[gap]"
 
 @Composable
-private fun LanguageName(displayName: String, nativeName: String) {
+private fun LanguageName(displayName: String, nativeName: String, modifier: Modifier = Modifier) {
     val color = LocalTextStyle.current.color.takeOrElse { LocalContentColor.current }
     val displayNameColor = color.let { it.copy(alpha = it.alpha * 0.60f) }
 
@@ -56,5 +57,6 @@ private fun LanguageName(displayName: String, nativeName: String) {
                 ) {}
             )
         },
+        modifier = modifier
     )
 }
