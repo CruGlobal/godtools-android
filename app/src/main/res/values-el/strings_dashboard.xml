@@ -46,8 +46,4 @@
     <string name="action_tools_about">Λεπτομέρειες</string>
     <string name="action_tools_open">Άνοιγμα</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Θα θέλατε να ορίσετε μία δευτερεύουσα γλώσσα;</string>
-    <string name="languages_parallel_dialog_select">Επιλέξτε μία γλώσσα</string>
-    <string name="languages_parallel_dialog_action_start">Αρχίστε</string>
-    <string name="languages_parallel_dialog_action_cancel">Όχι ευχαριστώ</string>
 </resources>

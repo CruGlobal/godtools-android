@@ -46,8 +46,4 @@ Makikita ang online na bersyon sa https://knowgod.com/</string>
     <string name="action_tools_about">Mga Detalye</string>
     <string name="action_tools_open">Buksan</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Gusto mo bang mag-set ng pangalawang wika?</string>
-    <string name="languages_parallel_dialog_select">Pumili ng wika</string>
-    <string name="languages_parallel_dialog_action_start">Magsimula</string>
-    <string name="languages_parallel_dialog_action_cancel">Hindi, Salamat</string>
 </resources>

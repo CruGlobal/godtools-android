@@ -44,8 +44,4 @@
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोल्नुहोस्</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">के तपाईले माध्यमिक भाषा सेट गर्न चाहन्नुहुन्छ?</string>
-    <string name="languages_parallel_dialog_select">भाषा छनौट गर्नुहोस्</string>
-    <string name="languages_parallel_dialog_action_start">सरू गर्नुहोस्</string>
-    <string name="languages_parallel_dialog_action_cancel">होइन धन्यवाद</string>
 </resources>

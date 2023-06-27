@@ -46,8 +46,4 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="action_tools_about">Maelezo</string>
     <string name="action_tools_open">Fungua</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Je, ungependa kuweka lugha ya sekondari?</string>
-    <string name="languages_parallel_dialog_select">Chagua lugha</string>
-    <string name="languages_parallel_dialog_action_start">Anza</string>
-    <string name="languages_parallel_dialog_action_cancel">Hapana Asante</string>
 </resources>

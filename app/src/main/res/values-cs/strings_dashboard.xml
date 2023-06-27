@@ -46,8 +46,4 @@ On-line verzi naleznete na https://knowgod.com/</string>
     <string name="action_tools_about">Podrobnosti</string>
     <string name="action_tools_open">Otevřít</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Chcete si nastavit druhý jazyk?</string>
-    <string name="languages_parallel_dialog_select">Vybrat jazyk</string>
-    <string name="languages_parallel_dialog_action_start">Začít</string>
-    <string name="languages_parallel_dialog_action_cancel">Ne, děkuji</string>
 </resources>

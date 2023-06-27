@@ -46,8 +46,4 @@ A https://knowgod.com/ címen egy online verzió található</string>
     <string name="action_tools_about">Részletek</string>
     <string name="action_tools_open">Megnyitás</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Másodlagos nyelvet szeretnél beállítani?</string>
-    <string name="languages_parallel_dialog_select">Válassz ki egy nyelvet</string>
-    <string name="languages_parallel_dialog_action_start">Első lépések</string>
-    <string name="languages_parallel_dialog_action_cancel">Köszönöm, nem</string>
 </resources>

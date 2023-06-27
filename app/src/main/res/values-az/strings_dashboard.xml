@@ -44,8 +44,4 @@
     <string name="action_tools_about">Təfsilatlar</string>
     <string name="action_tools_open">Aç</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">İkinci dil təyin etmək istərdiniz?</string>
-    <string name="languages_parallel_dialog_select">Dil seç</string>
-    <string name="languages_parallel_dialog_action_start">Başla</string>
-    <string name="languages_parallel_dialog_action_cancel">Xeyr, təşəkkürlər</string>
 </resources>

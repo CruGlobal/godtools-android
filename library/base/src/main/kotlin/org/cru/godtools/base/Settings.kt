@@ -52,7 +52,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
-        const val FEATURE_PARALLEL_LANGUAGE = "parallelLanguage"
         const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TOOL_FAVORITE = "toolFavorite"
@@ -109,7 +108,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
         set(locale) {
             if (primaryLanguage == locale) return
             prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
-            if (locale != null) setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
         }
     val parallelLanguageLiveData by lazy {
         prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
@@ -133,10 +131,8 @@ class Settings internal constructor(private val context: Context, coroutineScope
         if (!discovered) {
             var changed = false
             when (feature) {
-                FEATURE_PARALLEL_LANGUAGE -> if (parallelLanguage != null) {
-                    setFeatureDiscovered(FEATURE_PARALLEL_LANGUAGE)
-                    changed = true
-                }
+                // HACK: placeholder to keep this logic for now
+                FEATURE_LANGUAGE_SETTINGS -> Unit
             }
             if (changed) return isFeatureDiscoveredInt(feature)
         }

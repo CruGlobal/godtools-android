@@ -46,8 +46,4 @@ Een onlineversie is te vinden op https://knowgod.com/</string>
     <string name="action_tools_about">Info</string>
     <string name="action_tools_open">Openen</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Wil je een tweede taal instellen?</string>
-    <string name="languages_parallel_dialog_select">Selecteer een taal</string>
-    <string name="languages_parallel_dialog_action_start">Aan de slag</string>
-    <string name="languages_parallel_dialog_action_cancel">Nee, bedankt</string>
 </resources>

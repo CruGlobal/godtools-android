@@ -46,8 +46,4 @@
     <string name="action_tools_about">詳細</string>
     <string name="action_tools_open">開く</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">第二言語を設定しますか？</string>
-    <string name="languages_parallel_dialog_select">言語を選択</string>
-    <string name="languages_parallel_dialog_action_start">開始する</string>
-    <string name="languages_parallel_dialog_action_cancel">いいえ、結構です</string>
 </resources>

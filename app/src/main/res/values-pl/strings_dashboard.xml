@@ -46,8 +46,4 @@ Wersję online można znaleźć na https://knowgod.com/</string>
     <string name="action_tools_about">Szczegóły</string>
     <string name="action_tools_open">Otwórz</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Czy chcesz ustawić drugi język?</string>
-    <string name="languages_parallel_dialog_select">Wybierz język</string>
-    <string name="languages_parallel_dialog_action_start">Rozpocznij</string>
-    <string name="languages_parallel_dialog_action_cancel">Nie, dziękuję</string>
 </resources>

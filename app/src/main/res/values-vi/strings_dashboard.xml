@@ -46,8 +46,4 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="action_tools_about">Giới thiệu</string>
     <string name="action_tools_open">Mở</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Bạn có muốn thiết lập ngôn ngữ thứ hai không?</string>
-    <string name="languages_parallel_dialog_select">Chọn một ngôn ngữ</string>
-    <string name="languages_parallel_dialog_action_start">Bắt đầu</string>
-    <string name="languages_parallel_dialog_action_cancel">Không, cám ơn</string>
 </resources>

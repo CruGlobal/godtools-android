@@ -46,8 +46,4 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="action_tools_about">Detalii</string>
     <string name="action_tools_open">Deschide</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Vrei să setezi o limbă secundară?</string>
-    <string name="languages_parallel_dialog_select">Selectează o limbă</string>
-    <string name="languages_parallel_dialog_action_start">Să începem</string>
-    <string name="languages_parallel_dialog_action_cancel">Nu, mulțumesc</string>
 </resources>

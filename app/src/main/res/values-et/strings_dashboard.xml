@@ -46,8 +46,4 @@ Veebiversioon on saadaval lehel https://knowgod.com</string>
     <string name="action_tools_about">Teave</string>
     <string name="action_tools_open">Ava</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Kas soovid seadistada teise keele?</string>
-    <string name="languages_parallel_dialog_select">Vali keel</string>
-    <string name="languages_parallel_dialog_action_start">Alustamine</string>
-    <string name="languages_parallel_dialog_action_cancel">Ei, aitäh</string>
 </resources>

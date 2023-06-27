@@ -43,8 +43,4 @@
     <string name="action_tools_about">Detaljuppgifter</string>
     <string name="action_tools_open">Öppna</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Vill du ange ett sekundärt språk?</string>
-    <string name="languages_parallel_dialog_select">Välj ett språk</string>
-    <string name="languages_parallel_dialog_action_start">Kom igång</string>
-    <string name="languages_parallel_dialog_action_cancel">Nej tack</string>
 </resources>

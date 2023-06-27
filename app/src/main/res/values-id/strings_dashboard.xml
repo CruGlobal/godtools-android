@@ -46,8 +46,4 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="action_tools_about">Detail</string>
     <string name="action_tools_open">Buka</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Apakah Anda ingin memasang bahasa sekunder?</string>
-    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
-    <string name="languages_parallel_dialog_action_start">Mari mulai</string>
-    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih.</string>
 </resources>

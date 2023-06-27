@@ -43,8 +43,4 @@
     <string name="action_tools_about">Lisätietoja</string>
     <string name="action_tools_open">Avaa</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Haluatko määrittää toissijaisen kielen?</string>
-    <string name="languages_parallel_dialog_select">Valitse kieli</string>
-    <string name="languages_parallel_dialog_action_start">Aloittaminen</string>
-    <string name="languages_parallel_dialog_action_cancel">Ei kiitos</string>
 </resources>

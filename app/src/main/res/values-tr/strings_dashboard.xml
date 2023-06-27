@@ -46,8 +46,4 @@
     <string name="action_tools_about">Ayrıntılar</string>
     <string name="action_tools_open">Aç</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">İkinci bir dil ayarlamak ister misiniz?</string>
-    <string name="languages_parallel_dialog_select">Bir dil seçin</string>
-    <string name="languages_parallel_dialog_action_start">Başlayın</string>
-    <string name="languages_parallel_dialog_action_cancel">Hayır Teşekkürler</string>
 </resources>

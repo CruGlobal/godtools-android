@@ -46,8 +46,4 @@
     <string name="action_tools_about">Besonderhede</string>
     <string name="action_tools_open">Maak oop</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Sal jy graag ’n sekondêre taal wil instel?</string>
-    <string name="languages_parallel_dialog_select">Kies ’n taal</string>
-    <string name="languages_parallel_dialog_action_start">Kom ons begin</string>
-    <string name="languages_parallel_dialog_action_cancel">Nee dankie</string>
 </resources>

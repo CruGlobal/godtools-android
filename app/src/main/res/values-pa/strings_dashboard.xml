@@ -44,8 +44,4 @@
     <string name="action_tools_about">ਵੇਰਵੇ</string>
     <string name="action_tools_open">ਖੋਲੋ</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">ਕੀ ਤੁਸੀਂ ਇੱਕ ਸੈਕੰਡਰੀ ਭਾਸ਼ਾ ਸੈਟ ਕਰਨਾ ਚਾਹੋਗੇ?</string>
-    <string name="languages_parallel_dialog_select">ਇੱਕ ਭਾਸ਼ਾ ਚੁਣੋ</string>
-    <string name="languages_parallel_dialog_action_start">ਸ਼ੁਰੂ ਕਰੋ</string>
-    <string name="languages_parallel_dialog_action_cancel">ਨਹੀਂ ਧੰਨਵਾਦ</string>
 </resources>

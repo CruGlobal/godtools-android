@@ -44,8 +44,4 @@
     <string name="action_tools_about">বিস্তারিত</string>
     <string name="action_tools_open">খুলুন</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">আপনি কি একটি দ্বিতীয় ভাষা স্থাপন করতে চান?</string>
-    <string name="languages_parallel_dialog_select">একটি ভাষা বেছে নিন</string>
-    <string name="languages_parallel_dialog_action_start">শুরু করুন</string>
-    <string name="languages_parallel_dialog_action_cancel">না ধন্যবাদ</string>
 </resources>
