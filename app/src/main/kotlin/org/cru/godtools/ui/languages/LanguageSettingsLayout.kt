@@ -35,8 +35,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.cru.godtools.R
+import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
+import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.theme.GodToolsAppBarColors
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 
 internal sealed interface LanguageSettingsEvent {
     object NavigateUp : LanguageSettingsEvent
@@ -54,6 +57,8 @@ internal fun LanguageSettingsLayout(
     viewModel: LanguageSettingsViewModel = viewModel(),
     onEvent: (LanguageSettingsEvent) -> Unit = {},
 ) {
+    RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.SETTINGS_LANGUAGES))
+
     Scaffold(
         topBar = {
             TopAppBar(
