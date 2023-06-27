@@ -25,13 +25,7 @@
     <eat-comment />
     <string name="feature_discovery_title_language_settings">90+ Languages</string>
     <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
-    <string name="title_language_primary">Primary Language</string>
-    <string name="title_language_parallel">Parallel Language</string>
-    <string name="action_language_parallel_select">Select a Parallel Language</string>
     <string name="text_language_parallel_description">Share GodTools with someone in their native language.</string>
-    <string name="text_language_warning">Not every tool is available in every language.</string>
-    <string name="label_language_none">None</string>
-    <string name="label_language_search">Filter Languages</string>
 
     <!-- Downloadable Languages UI -->
     <eat-comment />

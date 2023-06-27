@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">Over 90 språk</string>
     <string name="menu_language_settings">Språkinnstillinger</string>
     <string name="title_language_settings">Språkinnstillinger</string>
-    <string name="title_language_primary">Hovedspråk</string>
-    <string name="title_language_parallel">Parallellspråk</string>
-    <string name="action_language_parallel_select">Velg parallellspråk</string>
     <string name="text_language_parallel_description">Del GodTools med noen på morsmålet deres.</string>
-    <string name="text_language_warning">Ikke alle verktøy er tilgjengelig på alle språk.</string>
-    <string name="label_language_none">Ingen</string>
-    <string name="label_language_search">Filtrer språk</string>
     <!-- Downloadable Languages UI -->
 </resources>

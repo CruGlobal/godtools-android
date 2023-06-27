@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">90+ Ngôn ngữ</string>
     <string name="menu_language_settings">Các thiết lập ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập ngôn ngữ</string>
-    <string name="title_language_primary">Ngôn ngữ chính</string>
-    <string name="title_language_parallel">Ngôn ngữ song song</string>
-    <string name="action_language_parallel_select">Chọn một ngôn ngữ song song</string>
     <string name="text_language_parallel_description">Chia sẻ GodTools với người khác bằng ngôn ngữ của họ.</string>
-    <string name="text_language_warning">Không phải mọi công cụ đều có sẵn trong mọi ngôn ngữ.</string>
-    <string name="label_language_none">Không gì cả</string>
-    <string name="label_language_search">Bộ lọc ngôn ngữ</string>
     <!-- Downloadable Languages UI -->
 </resources>
