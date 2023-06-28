@@ -46,8 +46,4 @@ Retrouvez également la version en ligne à l\'adresse : https://knowgod.com/</s
     <string name="action_tools_about">Détails</string>
     <string name="action_tools_open">Ouvrir</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Voudriez-vous définir une langue secondaire?</string>
-    <string name="languages_parallel_dialog_select">Sélectionner une langue</string>
-    <string name="languages_parallel_dialog_action_start">Commencer</string>
-    <string name="languages_parallel_dialog_action_cancel">Non merci</string>
 </resources>

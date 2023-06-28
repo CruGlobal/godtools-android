@@ -43,8 +43,4 @@
     <string name="action_tools_about">အသေးစိတ်</string>
     <string name="action_tools_open">ဖွင့်ရန်</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">အရန် ဘာသာစကား သတ်မှတ်ချင်ပါသလား။</string>
-    <string name="languages_parallel_dialog_select">ဘာသာစကား ရွေးချယ်ပါ</string>
-    <string name="languages_parallel_dialog_action_start">စတင်လိုက်ပါ</string>
-    <string name="languages_parallel_dialog_action_cancel">လက်မခံသေးပါ</string>
 </resources>

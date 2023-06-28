@@ -46,8 +46,4 @@ Du finner en nettversjon på https://knowgod.com/</string>
     <string name="action_tools_about">Detaljer</string>
     <string name="action_tools_open">Åpne</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Vil du velg et språk til?</string>
-    <string name="languages_parallel_dialog_select">Velg språk</string>
-    <string name="languages_parallel_dialog_action_start">Kom i gang</string>
-    <string name="languages_parallel_dialog_action_cancel">Nei takk</string>
 </resources>

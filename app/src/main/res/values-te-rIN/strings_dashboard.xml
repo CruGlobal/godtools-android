@@ -46,8 +46,4 @@
     <string name="action_tools_about">వివరాలు</string>
     <string name="action_tools_open">తెరవండి</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">మీరు సెకండరీ భాషను సెట్ చేయాలనుకుంటున్నారా?</string>
-    <string name="languages_parallel_dialog_select">ఒక భాషను ఎంచుకోండి</string>
-    <string name="languages_parallel_dialog_action_start">ప్రారంభించడానికి</string>
-    <string name="languages_parallel_dialog_action_cancel">వద్దు ధన్యవాదములు</string>
 </resources>

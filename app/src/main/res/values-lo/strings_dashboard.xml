@@ -46,8 +46,4 @@
     <string name="action_tools_about">ລາຍລະອຽດ</string>
     <string name="action_tools_open">ເປີດ</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">ທ່ານຕ້ອງການຕັ້ງຄ່າພາສາສຳຮອງ ຫຼື ບໍ່?</string>
-    <string name="languages_parallel_dialog_select">ເລືອກໜຶ່ງພາສາ</string>
-    <string name="languages_parallel_dialog_action_start">ເລີ່ມໄດ້ແລ້ວ</string>
-    <string name="languages_parallel_dialog_action_cancel">ບໍ່ ຂອບໃຈ</string>
 </resources>

@@ -43,8 +43,4 @@
     <string name="action_tools_about">Pamusoro</string>
     <string name="action_tools_open">Vhura</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Ungada here kutsveta mutauro wechipiri?</string>
-    <string name="languages_parallel_dialog_select">Sarudza mutauro</string>
-    <string name="languages_parallel_dialog_action_start">Ibva watanga</string>
-    <string name="languages_parallel_dialog_action_cancel">Kwete, ndatenda</string>
 </resources>

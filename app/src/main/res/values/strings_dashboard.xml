@@ -61,11 +61,4 @@ An online version can be found at https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Not available in %1$s</string>
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Open</string>
-
-    <!-- Parallel Language Dialog -->
-    <eat-comment />
-    <string name="languages_parallel_dialog_headline">Would you like to set a secondary language?</string>
-    <string name="languages_parallel_dialog_select">Select a language</string>
-    <string name="languages_parallel_dialog_action_start">Get started</string>
-    <string name="languages_parallel_dialog_action_cancel">No Thanks</string>
 </resources>

@@ -46,8 +46,4 @@
     <string name="action_tools_about">상세 정보</string>
     <string name="action_tools_open">열기</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">제2의 언어를 설정하시겠습니까?</string>
-    <string name="languages_parallel_dialog_select">언어 선택</string>
-    <string name="languages_parallel_dialog_action_start">시작하기</string>
-    <string name="languages_parallel_dialog_action_cancel">아니오</string>
 </resources>

@@ -46,8 +46,4 @@ Internetinę versiją galima rasti adresu https://knowgod.com/</string>
     <string name="action_tools_about">Duomenys</string>
     <string name="action_tools_open">Atidaryti</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Ar norėtumėte nustatyti papildomą kalbą?</string>
-    <string name="languages_parallel_dialog_select">Pasirinkite kalbą</string>
-    <string name="languages_parallel_dialog_action_start">Pradėkite</string>
-    <string name="languages_parallel_dialog_action_cancel">Ne, ačiū</string>
 </resources>

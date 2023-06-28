@@ -47,8 +47,4 @@ Versi dalam talian boleh ditemui di https://knowgod.com/</string>
     <string name="action_tools_about">Butiran</string>
     <string name="action_tools_open">Buka</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Adakah anda ingin menetapkan bahasa kedua?</string>
-    <string name="languages_parallel_dialog_select">Pilih bahasa</string>
-    <string name="languages_parallel_dialog_action_start">Mulakan</string>
-    <string name="languages_parallel_dialog_action_cancel">Tidak, terima kasih</string>
 </resources>

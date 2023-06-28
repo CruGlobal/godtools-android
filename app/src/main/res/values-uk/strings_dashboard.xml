@@ -46,8 +46,4 @@
     <string name="action_tools_about">Відомості</string>
     <string name="action_tools_open">Відкрити</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Хочете встановити додаткову мову?</string>
-    <string name="languages_parallel_dialog_select">Оберіть мову</string>
-    <string name="languages_parallel_dialog_action_start">Розпочати</string>
-    <string name="languages_parallel_dialog_action_cancel">Ні, дякую</string>
 </resources>

@@ -46,8 +46,4 @@
     <string name="action_tools_about">细节</string>
     <string name="action_tools_open">打开</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">您想设置第二语言吗？</string>
-    <string name="languages_parallel_dialog_select">选择语言</string>
-    <string name="languages_parallel_dialog_action_start">开始体验</string>
-    <string name="languages_parallel_dialog_action_cancel">不了，谢谢</string>
 </resources>

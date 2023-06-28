@@ -48,8 +48,4 @@ https://knowgod.com</string>
     <string name="action_tools_about">تفصیلات</string>
     <string name="action_tools_open">کھولیں</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">کیا آپ کوئی ثانوی زبان سیٹ کرنا چاہیں گے؟</string>
-    <string name="languages_parallel_dialog_select">کوئی زبان منتخب کریں</string>
-    <string name="languages_parallel_dialog_action_start">شروعات</string>
-    <string name="languages_parallel_dialog_action_cancel">نہیں، شکریہ</string>
 </resources>

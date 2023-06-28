@@ -53,8 +53,4 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="action_tools_about">Apraksts</string>
     <string name="action_tools_open">Atvērt</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Vai vēlies iestatīt paralēlo valodu?</string>
-    <string name="languages_parallel_dialog_select">Izvēlies valodu</string>
-    <string name="languages_parallel_dialog_action_start">Sākt</string>
-    <string name="languages_parallel_dialog_action_cancel">Nē, paldies</string>
 </resources>

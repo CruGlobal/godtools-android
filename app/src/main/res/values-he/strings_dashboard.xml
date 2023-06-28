@@ -46,8 +46,4 @@
     <string name="action_tools_about">פרטים</string>
     <string name="action_tools_open">פתח</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">" האם ברצונכם להגדיר שפה שניה?"</string>
-    <string name="languages_parallel_dialog_select">בחרו שפה</string>
-    <string name="languages_parallel_dialog_action_start">בואו נתחיל</string>
-    <string name="languages_parallel_dialog_action_cancel">לא תודה</string>
 </resources>

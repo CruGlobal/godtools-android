@@ -54,8 +54,4 @@ https://godtoolsapp.com \n\n
     <string name="action_tools_about">التفاصيل</string>
     <string name="action_tools_open">فتح</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">هل ترغب في تعيين لغة ثانوية؟</string>
-    <string name="languages_parallel_dialog_select">تحديد اللغة</string>
-    <string name="languages_parallel_dialog_action_start">ابدأ</string>
-    <string name="languages_parallel_dialog_action_cancel">لا شكراً</string>
 </resources>

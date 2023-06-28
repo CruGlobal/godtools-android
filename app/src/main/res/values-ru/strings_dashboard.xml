@@ -52,8 +52,4 @@
     <string name="action_tools_about">Сведения</string>
     <string name="action_tools_open">Открыть</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Хотите установить второй язык?</string>
-    <string name="languages_parallel_dialog_select">Выберите язык</string>
-    <string name="languages_parallel_dialog_action_start">Начать</string>
-    <string name="languages_parallel_dialog_action_cancel">Нет, спасибо</string>
 </resources>

@@ -46,8 +46,4 @@ Spletna različica je na voljo na https://knowgod.com/</string>
     <string name="action_tools_about">Podrobnosti</string>
     <string name="action_tools_open">Odpri</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">Ali želite nastaviti sekundarni jezik?</string>
-    <string name="languages_parallel_dialog_select">Izberi jezik</string>
-    <string name="languages_parallel_dialog_action_start">Začetek</string>
-    <string name="languages_parallel_dialog_action_cancel">Ne, hvala</string>
 </resources>

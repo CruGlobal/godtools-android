@@ -47,8 +47,4 @@
     <string name="action_tools_about">तपशीले</string>
     <string name="action_tools_open">उघडा</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">आपण अतिरिक्त भाषा सेट करू इच्छिता?</string>
-    <string name="languages_parallel_dialog_select">एक भाषा निवडा</string>
-    <string name="languages_parallel_dialog_action_start">सुरु करा</string>
-    <string name="languages_parallel_dialog_action_cancel">नाही धन्यवाद</string>
 </resources>

@@ -47,8 +47,4 @@ https://godtoolsapp.com \n\n
     <string name="action_tools_about">جزئیات</string>
     <string name="action_tools_open">باز کردن</string>
     <!-- Parallel Language Dialog -->
-    <string name="languages_parallel_dialog_headline">مایلید زبان دومی تنظیم کنید؟</string>
-    <string name="languages_parallel_dialog_select">انتخاب زبان</string>
-    <string name="languages_parallel_dialog_action_start">شروع کنید</string>
-    <string name="languages_parallel_dialog_action_cancel">خیر، متشکرم</string>
 </resources>
