@@ -166,6 +166,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.work)
 
+    api(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.androidx.core)

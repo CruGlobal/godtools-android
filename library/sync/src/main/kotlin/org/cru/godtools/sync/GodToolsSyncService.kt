@@ -1,9 +1,6 @@
 package org.cru.godtools.sync
 
-import android.content.ContentResolver
-import android.os.Bundle
 import androidx.annotation.VisibleForTesting
-import androidx.core.os.bundleOf
 import androidx.work.WorkManager
 import dagger.Lazy
 import java.io.IOException
@@ -20,12 +17,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.getValue
-import org.ccci.gto.android.common.sync.SyncRegistry
-import org.ccci.gto.android.common.sync.SyncTask
-import org.ccci.gto.android.common.sync.event.SyncFinishedEvent
 import org.cru.godtools.sync.task.AnalyticsSyncTasks
 import org.cru.godtools.sync.task.BaseSyncTasks
-import org.cru.godtools.sync.task.BaseSyncTasks.Companion.isForced
 import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
@@ -35,60 +28,26 @@ import org.cru.godtools.sync.work.scheduleSyncFollowupsWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
-import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
 private const val TAG = "GodToolsSyncService"
 private const val SYNC_PARALLELISM = 8
 
-private const val EXTRA_SYNCTYPE = "org.cru.godtools.sync.GodToolsSyncService.EXTRA_SYNCTYPE"
-private const val SYNCTYPE_NONE = 0
-private const val SYNCTYPE_LANGUAGES = 2
-private const val SYNCTYPE_TOOL_SHARES = 5
-
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
-    private val eventBus: EventBus,
     workManager: Lazy<WorkManager>,
     private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
     private val coroutineDispatcher: CoroutineDispatcher,
-    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob())
+    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob()),
 ) {
     @Inject
     @OptIn(ExperimentalCoroutinesApi::class)
     internal constructor(
-        eventBus: EventBus,
         workManager: Lazy<WorkManager>,
-        syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>
-    ) : this(eventBus, workManager, syncTasks, Dispatchers.IO.limitedParallelism(SYNC_PARALLELISM))
+        syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
+    ) : this(workManager, syncTasks, Dispatchers.IO.limitedParallelism(SYNC_PARALLELISM))
 
     private val workManager by workManager
-
-    private suspend fun executeSyncTask(task: GtSyncTask, syncId: Int? = null): Unit =
-        withContext(coroutineDispatcher) {
-            val syncType = task.args.getInt(EXTRA_SYNCTYPE, SYNCTYPE_NONE)
-            try {
-                when (syncType) {
-                    SYNCTYPE_LANGUAGES -> with<LanguagesSyncTasks> {
-                        if (!syncLanguages(force = isForced(task.args))) workManager.scheduleSyncLanguagesWork()
-                    }
-                    SYNCTYPE_TOOL_SHARES -> with<ToolSyncTasks> {
-                        if (!syncShares()) workManager.scheduleSyncToolSharesWork()
-                    }
-                }
-            } catch (e: IOException) {
-                // queue up work tasks here because of the IOException
-                when (syncType) {
-                    SYNCTYPE_LANGUAGES -> workManager.scheduleSyncLanguagesWork()
-                    SYNCTYPE_TOOL_SHARES -> workManager.scheduleSyncToolSharesWork()
-                }
-            } finally {
-                if (syncId != null) {
-                    SyncRegistry.finishSync(syncId)
-                    eventBus.post(SyncFinishedEvent(syncId))
-                }
-            }
-        }
 
     private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) = with<T, Unit>(block)
     private inline fun <reified T : BaseSyncTasks, R : Any?> with(block: T.() -> R) =
@@ -110,12 +69,13 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     }
 
     // region Sync Tasks
-    fun syncLanguages(force: Boolean): SyncTask = GtSyncTask(
-        bundleOf(
-            EXTRA_SYNCTYPE to SYNCTYPE_LANGUAGES,
-            ContentResolver.SYNC_EXTRAS_MANUAL to force
-        )
-    )
+    suspend fun syncLanguages(force: Boolean = false) = try {
+        executeSync<LanguagesSyncTasks> { syncLanguages(force) }
+            .also { if (!it) workManager.scheduleSyncLanguagesWork() }
+    } catch (e: CancellationException) {
+        workManager.scheduleSyncLanguagesWork()
+        throw e
+    }
 
     suspend fun syncTools(force: Boolean) = try {
         executeSync<ToolSyncTasks> { syncTools(force) }.also { if (!it) workManager.scheduleSyncToolsWork() }
@@ -151,14 +111,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     } catch (e: CancellationException) {
         workManager.scheduleSyncToolSharesWork()
         throw e
-    }
-
-    private inner class GtSyncTask(val args: Bundle) : SyncTask {
-        override fun sync(): Int {
-            val syncId = SyncRegistry.startSync()
-            coroutineScope.launch { executeSyncTask(this@GtSyncTask, syncId) }
-            return syncId
-        }
     }
     // endregion Sync Tasks
 }

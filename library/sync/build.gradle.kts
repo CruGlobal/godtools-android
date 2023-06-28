@@ -16,7 +16,6 @@ dependencies {
     api(libs.androidx.hilt.work)
     api(libs.androidx.work.ktx)
 
-    api(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
