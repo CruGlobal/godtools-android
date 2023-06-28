@@ -43,7 +43,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    createEventBusIndex("org.cru.godtools.AppEventBusIndex")
     kapt {
         javacOptions {
             option("-Adagger.fastInit=enabled")
@@ -166,7 +165,6 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.work)
 
-    api(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.androidx.core)
@@ -226,7 +224,6 @@ dependencies {
     debugImplementation(libs.leakcanary)
 
     kapt(libs.dagger.compiler)
-    kapt(libs.eventbus.annotationProcessor)
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)

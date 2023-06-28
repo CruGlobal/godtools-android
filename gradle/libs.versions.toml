@@ -149,7 +149,6 @@ gtoSupport-recyclerview-advrecyclerview = { module = "org.ccci.gto.android:gto-s
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
-gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.ref = "gtoSupport" }
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
