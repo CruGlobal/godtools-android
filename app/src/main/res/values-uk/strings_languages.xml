@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">Понад 90 мов</string>
     <string name="menu_language_settings">Налаштування мови</string>
     <string name="title_language_settings">Налаштування мови</string>
-    <string name="title_language_primary">Основна мова</string>
-    <string name="title_language_parallel">Додаткова мова</string>
-    <string name="action_language_parallel_select">Оберіть додаткову мову</string>
     <string name="text_language_parallel_description">Перешліть God Tools знайомим (програма на їх рідній мові)</string>
-    <string name="text_language_warning">Деякі інструменти недоступні на усіх мовах</string>
-    <string name="label_language_none">Нічого</string>
-    <string name="label_language_search">Фільтрувати мови</string>
     <!-- Downloadable Languages UI -->
 </resources>

@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">Vyše 90 jazykov</string>
     <string name="menu_language_settings">Nastavenia jazyka</string>
     <string name="title_language_settings">Nastavenia jazyka</string>
-    <string name="title_language_primary">Hlavný jazyk</string>
-    <string name="title_language_parallel">Vedľajší jazyk</string>
-    <string name="action_language_parallel_select">Vyberte si vedľajší jazyk</string>
     <string name="text_language_parallel_description">Podeľte sa o aplikáciu GodTools s niekým v jeho rodnom jazyku.</string>
-    <string name="text_language_warning">Nie všetky nástroje sú dostupné vo všetkých jazykoch.</string>
-    <string name="label_language_none">Žiadne</string>
-    <string name="label_language_search">Filtrovať jazyky</string>
     <!-- Downloadable Languages UI -->
 </resources>

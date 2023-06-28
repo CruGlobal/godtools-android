@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">90\'i Aşkın Dil</string>
     <string name="menu_language_settings">Dil Ayarları</string>
     <string name="title_language_settings">Dil Ayarları</string>
-    <string name="title_language_primary">Birincil Dil</string>
-    <string name="title_language_parallel">Paralel Dil</string>
-    <string name="action_language_parallel_select">Paralel bir Dil Seçin</string>
     <string name="text_language_parallel_description">God Tools\'u birisiyle kendi ana dilinde paylaşın.</string>
-    <string name="text_language_warning">Her araç her dilde kullanıma hazır değildir.</string>
-    <string name="label_language_none">Hiçbiri</string>
-    <string name="label_language_search">Dilleri Filtrele</string>
     <!-- Downloadable Languages UI -->
 </resources>

@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">90+ ਭਾਸ਼ਾਵਾਂ</string>
     <string name="menu_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
     <string name="title_language_settings">ਭਾਸ਼ਾ ਦੀ ਚੋਂਣ ਕਰੋ</string>
-    <string name="title_language_primary">ਮੂਲ ਭਾਸ਼ਾ</string>
-    <string name="title_language_parallel">ਸਮਾਨੰਤਰ ਭਾਸ਼ਾ</string>
-    <string name="action_language_parallel_select">ਸਮਾਨੰਤਰ ਭਾਸ਼ਾ ਦੀ ਚੋਣ ਕਰੋ</string>
     <string name="text_language_parallel_description">ਗੋਡਟੂਲ ਨੂੰ ਕਿਸੇ ਦੂਜੇ ਨਾਲ ਉਸ ਦੀ ਹੀ ਭਾਸ਼ਾ ਵਿੱਚ ਸਾਂਝਿਆਂ ਕਰੋ।</string>
-    <string name="text_language_warning">ਹਰੋਕ ਡੂਲ ਹਰੇਕ ਭਾਸ਼ਾ ਵਿੱਚ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ ।</string>
-    <string name="label_language_none">ਕੋਈ ਵੀ ਨਹੀਂ</string>
-    <string name="label_language_search">ਭਾਸ਼ਾਵਾਂ ਫਿਲਟਰ ਕਰੋ</string>
     <!-- Downloadable Languages UI -->
 </resources>

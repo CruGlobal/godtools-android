@@ -2,16 +2,17 @@ package org.cru.godtools.ui.languages
 
 import android.content.Context
 import android.content.Intent
-import androidx.annotation.MainThread
-import androidx.fragment.app.commit
+import android.os.Bundle
+import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
-import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
+import org.cru.godtools.base.ui.startAppLanguageActivity
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
-import org.cru.godtools.ui.R
+import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.languages.downloadable.startDownloadableLanguagesActivity
 
 fun Context.startLanguageSettingsActivity() {
     Intent(this, LanguageSettingsActivity::class.java)
@@ -21,11 +22,25 @@ fun Context.startLanguageSettingsActivity() {
 }
 
 @AndroidEntryPoint
-class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWithNavDrawerBinding>() {
+class LanguageSettingsActivity : BaseActivity() {
     // region Lifecycle
-    override fun onContentChanged() {
-        super.onContentChanged()
-        loadPrimaryFragmentIfNeeded()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            GodToolsTheme {
+                DrawerMenuLayout {
+                    LanguageSettingsLayout(
+                        onEvent = {
+                            when (it) {
+                                LanguageSettingsEvent.NavigateUp -> onNavigateUp()
+                                LanguageSettingsEvent.AppLanguage -> startAppLanguageActivity()
+                                LanguageSettingsEvent.DownloadableLanguages -> startDownloadableLanguagesActivity()
+                            }
+                        }
+                    )
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -34,19 +49,4 @@ class LanguageSettingsActivity : BasePlatformActivity<ActivityGenericFragmentWit
         eventBus.post(AnalyticsScreenEvent(AnalyticsScreenNames.SETTINGS_LANGUAGES))
     }
     // endregion Lifecycle
-
-    override fun inflateBinding() = ActivityGenericFragmentWithNavDrawerBinding.inflate(layoutInflater)
-
-    @MainThread
-    private fun loadPrimaryFragmentIfNeeded() {
-        with(supportFragmentManager) {
-            if (primaryNavigationFragment != null) return
-
-            commit {
-                val fragment = LanguageSettingsFragment()
-                replace(R.id.frame, fragment)
-                setPrimaryNavigationFragment(fragment)
-            }
-        }
-    }
 }

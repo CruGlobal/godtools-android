@@ -5,12 +5,6 @@
     <string name="feature_discovery_title_language_settings">90+ ଭାଷାଗୁଡ଼ିକ</string>
     <string name="menu_language_settings">"ଭାଷା ସେଟିଂସମୂହ "</string>
     <string name="title_language_settings">"ଭାଷା ସେଟିଂସମୂହ "</string>
-    <string name="title_language_primary">ପ୍ରାଥମିକ ଭାଷା</string>
-    <string name="title_language_parallel">ସମାନ୍ତରାଳ ଭାଷା</string>
-    <string name="action_language_parallel_select">ଏକ ସମାନ୍ତରାଳ ଭାଷା ଚୟନ କରନ୍ତୁ</string>
     <string name="text_language_parallel_description">GodTools କୁ ଅନ୍ୟଲୋକଙ୍କୁ ସେମାନଙ୍କର ନିଜ ମାତୃଭାଷାରେ ଅଂଶୀଦାର କରନ୍ତୁ |</string>
-    <string name="text_language_warning">ପ୍ରତ୍ୟେକ ଭାଷାରେ ପ୍ରତ୍ୟେକ ଉପକରଣ ଉପଲବ୍ଧ ନୁହେଁ |</string>
-    <string name="label_language_none">"କିଛି ନୁହେଁ "</string>
-    <string name="label_language_search">ଭାଷାଗୁଡ଼ିକୁ ଫିଲ୍ଟର୍ କରନ୍ତୁ</string>
     <!-- Downloadable Languages UI -->
 </resources>
