@@ -9,7 +9,6 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
@@ -21,15 +20,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.getStringLiveData
 import org.ccci.gto.android.common.kotlin.coroutines.getBooleanFlow
-import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
-import org.ccci.gto.android.common.util.toLocale
 
 private const val PREFS_SETTINGS = "GodTools"
 private const val PREF_ADDED_TO_CAMPAIGN = "added_to_campaign."
@@ -45,8 +40,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object {
-        const val PREF_PRIMARY_LANGUAGE = "languagePrimary"
-        const val PREF_PARALLEL_LANGUAGE = "languageParallel"
         const val PREF_FEATURE_DISCOVERED = "feature_discovered."
         const val PREF_FEATURE_DISCOVERED_COUNT = "feature_discovered_count."
 
@@ -83,39 +76,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
     }.shareIn(coroutineScope, SharingStarted.WhileSubscribed())
         .onStart { emit(appLanguage) }
         .distinctUntilChanged()
-
-    var primaryLanguage: Locale
-        get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null)?.toLocale() ?: defaultLanguage
-        set(value) {
-            prefs.edit {
-                putString(PREF_PRIMARY_LANGUAGE, value.toLanguageTag())
-                if (value == parallelLanguage) remove(PREF_PARALLEL_LANGUAGE)
-            }
-        }
-    val primaryLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PRIMARY_LANGUAGE, null)
-            .map { it?.toLocale() ?: defaultLanguage }
-            .distinctUntilChanged()
-    }
-    val primaryLanguageFlow
-        get() = prefs.getStringFlow(PREF_PRIMARY_LANGUAGE, null)
-            .map { it?.toLocale() ?: defaultLanguage }
-            .distinctUntilChanged()
-    val isPrimaryLanguageSet: Boolean get() = prefs.getString(PREF_PRIMARY_LANGUAGE, null) != null
-
-    var parallelLanguage
-        get() = prefs.getString(PREF_PARALLEL_LANGUAGE, null)?.toLocale()
-        set(locale) {
-            if (primaryLanguage == locale) return
-            prefs.edit { putString(PREF_PARALLEL_LANGUAGE, locale?.toLanguageTag()) }
-        }
-    val parallelLanguageLiveData by lazy {
-        prefs.getStringLiveData(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
-            .map { it?.toLocale() }
-    }
-    val parallelLanguageFlow
-        get() = prefs.getStringFlow(PREF_PARALLEL_LANGUAGE, null).distinctUntilChanged()
-            .map { it?.toLocale() }
     // endregion Language Settings
 
     // region Feature Discovery Tracking
