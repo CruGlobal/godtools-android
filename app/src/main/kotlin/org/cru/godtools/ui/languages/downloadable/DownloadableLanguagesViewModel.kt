@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.sync.GodToolsSyncService
 
 private const val KEY_FLOATED_LANGUAGES = "floatedLanguages"
 private const val KEY_SEARCH_QUERY = "searchQuery"
@@ -24,6 +26,7 @@ private const val KEY_SEARCH_QUERY = "searchQuery"
 class DownloadableLanguagesViewModel @Inject constructor(
     @ApplicationContext context: Context,
     languagesRepository: LanguagesRepository,
+    syncService: GodToolsSyncService,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     val searchQuery = savedStateHandle.getStateFlow(KEY_SEARCH_QUERY, "")
@@ -50,4 +53,10 @@ class DownloadableLanguagesViewModel @Inject constructor(
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    // region Sync logic
+    init {
+        viewModelScope.launch { syncService.syncLanguages() }
+    }
+    // endregion Sync logic
 }

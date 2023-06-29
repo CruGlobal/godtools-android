@@ -1,6 +1,5 @@
 package org.cru.godtools.sync.task
 
-import android.os.Bundle
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +23,10 @@ internal class LanguagesSyncTasks @Inject constructor(
 ) : BaseSyncTasks() {
     private val languagesMutex = Mutex()
 
-    suspend fun syncLanguages(args: Bundle = Bundle.EMPTY) = withContext(Dispatchers.IO) {
+    suspend fun syncLanguages(force: Boolean = false) = withContext(Dispatchers.IO) {
         languagesMutex.withLock {
             // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!isForced(args) &&
+            if (!force &&
                 !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_LANGUAGES, staleAfter = STALE_DURATION_LANGUAGES)
             ) {
                 return@withContext true

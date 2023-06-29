@@ -45,7 +45,6 @@ class GodToolsSyncServiceTest {
     private val testScope = TestScope()
 
     private val syncService = GodToolsSyncService(
-        eventBus = mockk(relaxUnitFun = true),
         workManager = { workManager },
         syncTasks = mapOf(
             ToolSyncTasks::class.java to Provider { toolsSyncTasks },

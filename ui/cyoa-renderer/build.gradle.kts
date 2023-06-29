@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.androidx.viewpager2)
+    implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 

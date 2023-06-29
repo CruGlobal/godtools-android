@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -14,13 +15,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LanguageMatchers.languageMatcher
+import org.cru.godtools.sync.GodToolsSyncService
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +42,9 @@ class DownloadableLanguagesViewModelTest {
         every { getLanguagesFlow() } returns languages
     }
     private val savedStateHandle = SavedStateHandle()
+    private val syncService: GodToolsSyncService = mockk {
+        coEvery { syncLanguages() } returns true
+    }
     private val testScope = TestScope()
 
     private lateinit var viewModel: DownloadableLanguagesViewModel
@@ -48,8 +55,14 @@ class DownloadableLanguagesViewModelTest {
         viewModel = DownloadableLanguagesViewModel(
             context = context,
             languagesRepository = languagesRepository,
+            syncService = syncService,
             savedStateHandle = savedStateHandle,
         )
+    }
+
+    @After
+    fun cleanup() {
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -59,6 +72,7 @@ class DownloadableLanguagesViewModelTest {
         val viewModel2 = DownloadableLanguagesViewModel(
             context = context,
             languagesRepository = languagesRepository,
+            syncService = syncService,
             savedStateHandle = savedStateHandle
         )
 
