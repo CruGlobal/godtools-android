@@ -13,9 +13,7 @@ import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
@@ -61,14 +59,6 @@ internal class Tasks @Inject constructor(
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
     }
-
-    suspend fun initPrimaryLanguage() {
-        if (settings.isPrimaryLanguageSet) return
-
-        sequenceOf(context.deviceLocale).filterNotNull().includeFallbacks().distinct()
-            // set the first available language as the primary language
-            .firstOrNull { languagesRepository.findLanguage(it) != null }?.let { settings.primaryLanguage = it }
-    }
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
@@ -92,7 +82,7 @@ internal class Tasks @Inject constructor(
             val preferred = async {
                 bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
-            val available = translationsRepository.getTranslationsForLanguages(listOf(settings.primaryLanguage))
+            val available = translationsRepository.getTranslationsForLanguages(listOf(settings.appLanguage))
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
 
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())

@@ -37,7 +37,7 @@ class TasksTest {
         coEvery { updateLastSyncTime(*anyVararg()) } just Runs
     }
     private val settings = mockk<Settings> {
-        every { primaryLanguage } returns Locale("x")
+        every { appLanguage } returns Locale("x")
     }
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true) {
         coEvery { getTools() } returns emptyList()
@@ -58,7 +58,7 @@ class TasksTest {
 
     // region initFavoriteTools()
     @Test
-    fun `initFavoriteTools - Already Ran - Last sync recorded`() = runTest {
+    fun `initFavoriteTools() - Already Ran - Last sync recorded`() = runTest {
         coEvery { lastSyncTimeRepository.getLastSyncTime(*anyVararg()) } returns 5
         tasks.initFavoriteTools()
         coVerify {
@@ -70,7 +70,7 @@ class TasksTest {
     }
 
     @Test
-    fun `initFavoriteTools - Already Ran - Has favorite tools`() = runTest {
+    fun `initFavoriteTools() - Already Ran - Has favorite tools`() = runTest {
         coEvery { toolsRepository.getTools() } returns listOf(Tool().apply { isAdded = true })
         tasks.initFavoriteTools()
         coVerify {
@@ -82,7 +82,7 @@ class TasksTest {
     }
 
     @Test
-    fun testInitFavoriteTools() = runTest {
+    fun `initFavoriteTools()`() = runTest {
         val tools = Array(5) { Tool("${it + 1}") }
         val translations = listOf("1", "5").map { Translation(it) }
         coEvery { toolsRepository.getTools() } returns tools.toList()
