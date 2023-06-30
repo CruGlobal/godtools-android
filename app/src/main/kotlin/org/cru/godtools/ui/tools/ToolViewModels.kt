@@ -44,6 +44,9 @@ class ToolViewModels @Inject constructor(
         toolViewModels.getOrPut(code) { ToolViewModel(code, tool) }
     }
 
+    private val appLanguage = settings.appLanguageFlow
+        .flatMapLatest { languagesRepository.findLanguageFlow(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
     private val primaryLanguage = settings.primaryLanguageFlow
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -74,6 +77,10 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+        val appTranslation = settings.appLanguageFlow
+            .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
+            .map { StateFlowValue(it) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         val primaryTranslation = settings.primaryLanguageFlow
             .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
             .map { StateFlowValue(it) }
@@ -82,7 +89,7 @@ class ToolViewModels @Inject constructor(
             .findLatestTranslationFlow(code, Settings.defaultLanguage)
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        val parallelTranslation = tool.flatMapLatest { t ->
+        private val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
                 else -> settings.parallelLanguageFlow.flatMapLatest {
@@ -91,10 +98,11 @@ class ToolViewModels @Inject constructor(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+        val appLanguage get() = this@ToolViewModels.appLanguage
         val primaryLanguage get() = this@ToolViewModels.primaryLanguage
         val parallelLanguage get() = this@ToolViewModels.parallelLanguage
 
-        val firstTranslation = primaryTranslation
+        val firstTranslation = appTranslation
             .combine(defaultTranslation) { p, d -> if (p.isInitial || p.value != null) p else d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         val secondTranslation = parallelTranslation

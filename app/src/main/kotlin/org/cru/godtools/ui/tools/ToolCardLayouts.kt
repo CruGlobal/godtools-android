@@ -118,17 +118,17 @@ fun LessonToolCard(
             ) {
                 ToolName(viewModel, minLines = 2, modifier = Modifier.fillMaxWidth())
 
-                val primaryTranslation by viewModel.primaryTranslation.collectAsState()
-                val primaryLanguage by viewModel.primaryLanguage.collectAsState()
+                val appLanguage by viewModel.appLanguage.collectAsState()
+                val appTranslation by viewModel.appTranslation.collectAsState()
 
                 ToolCardInfoContent {
                     AvailableInLanguage(
-                        language = primaryLanguage,
-                        translation = { primaryTranslation.value },
+                        language = appLanguage,
+                        translation = { appTranslation.value },
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
                             .align(Alignment.End)
-                            .invisibleIf { primaryTranslation.isInitial || primaryLanguage == null }
+                            .invisibleIf { appTranslation.isInitial || appLanguage == null }
                     )
                 }
             }
