@@ -3,12 +3,16 @@
 package org.cru.godtools.base.ui.util
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.DeprecatedSinceApi
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.BuildConfig
+import org.cru.godtools.ui.R
+import timber.log.Timber
 
 @JvmName("getTranslationName")
 fun Translation?.getName(tool: Tool?, context: Context?) =
@@ -33,10 +37,20 @@ fun Tool?.getCategory(context: Context, locale: Locale? = null) = getToolCategor
 fun getToolCategoryName(category: String?, context: Context, locale: Locale? = null) =
     category?.let { c -> context.localizeIfPossible(locale).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
-private const val STRING_RES_CATEGORY_NAME_PREFIX = "tool_category_"
 private fun Context.getToolCategoryStringRes(category: String) =
-    when (val id = resources.getIdentifier("$STRING_RES_CATEGORY_NAME_PREFIX$category", "string", packageName)) {
-        0 -> null
-        else -> resources.getString(id)
+    when (category.lowercase(Locale.ROOT)) {
+        "gospel" -> getString(R.string.tool_category_gospel)
+        "articles" -> getString(R.string.tool_category_articles)
+        "conversation_starter" -> getString(R.string.tool_category_conversation_starter)
+        "growth" -> getString(R.string.tool_category_growth)
+        "training" -> getString(R.string.tool_category_training)
+        else -> {
+            val e = Resources.NotFoundException("tool_category_$category was not found")
+            when {
+                BuildConfig.DEBUG -> throw e
+                else -> Timber.tag("ToolCategory").e(e, "Missing Tool Category string: $category")
+            }
+            null
+        }
     }
 // endregion Tool Category
