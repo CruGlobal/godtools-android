@@ -50,6 +50,7 @@ An online version can be found at https://knowgod.com/</string>
     <string name="nav_all_tools">Tools</string>
     <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Any category</string>
+    <string name="dashboard_tools_section_filter_language_any">Any language</string>
     <string name="dashboard_tools_section_categories_label">Categories</string>
     <string name="dashboard_tools_section_categories_all">All Tools</string>
     <string name="dashboard_tools_section_spotlight_label">Tool Spotlight</string>

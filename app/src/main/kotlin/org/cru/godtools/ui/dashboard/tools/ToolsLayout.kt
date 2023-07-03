@@ -40,7 +40,7 @@ internal fun ToolsLayout(
 ) {
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
-    val filteredTools by viewModel.filteredTools.collectAsState()
+    val tools by viewModel.tools.collectAsState()
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
@@ -82,7 +82,7 @@ internal fun ToolsLayout(
             )
         }
 
-        items(filteredTools, { "tool:${it.id}" }, { "tool" }) { tool ->
+        items(tools, { "tool:${it.id}" }, { "tool" }) { tool ->
             PreloadTool(tool)
             ToolCard(
                 tool.code.orEmpty(),
