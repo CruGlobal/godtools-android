@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,6 +30,8 @@ import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
 
+internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
+
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun ToolsLayout(
@@ -39,7 +40,6 @@ internal fun ToolsLayout(
 ) {
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
-    val categories by viewModel.categories.collectAsState()
     val filteredTools by viewModel.filteredTools.collectAsState()
 
     val columnState = rememberLazyListState()
@@ -64,29 +64,22 @@ internal fun ToolsLayout(
                         .animateItemPlacement()
                         .padding(top = 16.dp)
                 )
-            }
-        }
 
-        if (categories.isNotEmpty()) {
-            item("tool-filters", "tool-filters") {
-                ToolFilters(
-                    viewModel,
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(vertical = 16.dp)
-                )
-            }
-        }
-
-        if ((spotlightTools.isNotEmpty() || categories.isNotEmpty()) && filteredTools.isNotEmpty()) {
-            item("tool-divider", "tool-divider") {
                 Divider(
                     modifier = Modifier
                         .animateItemPlacement()
-                        .padding(horizontal = 16.dp, top = 8.dp, bottom = 24.dp)
-                        .alpha(0.12f)
+                        .padding(horizontal = MARGIN_TOOLS_LAYOUT_HORIZONTAL, top = 16.dp)
                 )
             }
+        }
+
+        item("tool-filters", "tool-filters") {
+            ToolFilters(
+                viewModel = viewModel,
+                modifier = Modifier
+                    .animateItemPlacement()
+                    .padding(vertical = 16.dp)
+            )
         }
 
         items(filteredTools, { "tool:${it.id}" }, { "tool" }) { tool ->
