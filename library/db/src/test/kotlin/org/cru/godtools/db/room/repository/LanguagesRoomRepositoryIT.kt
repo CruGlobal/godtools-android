@@ -16,4 +16,6 @@ internal class LanguagesRoomRepositoryIT : LanguagesRepositoryIT() {
         StandardTestDispatcher(testScope.testScheduler)
     )
     override val repository get() = dbRule.db.languagesRepository
+    override val toolsRepository get() = dbRule.db.toolsRepository
+    override val translationsRepository get() = dbRule.db.translationsRepository
 }

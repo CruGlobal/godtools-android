@@ -152,12 +152,14 @@ fun Tool(
     code: String,
     type: Tool.Type = Tool.Type.TRACT,
     translations: List<Translation>? = null,
+    category: String? = null,
     config: Tool.() -> Unit = {},
 ) = Tool().apply {
     id = Random.nextLong()
     this.code = code
     this.type = type
     latestTranslations = translations
+    this.category = category
     config()
 }
 
