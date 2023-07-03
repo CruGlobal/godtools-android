@@ -35,10 +35,11 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
     // Kotlin Kover
     project.apply(plugin = "org.jetbrains.kotlinx.kover")
     project.extensions.configure<KoverReportExtension> {
-        arrayOf("debug", "productionDebug").forEach {
-            androidReports(it) {
+        project.androidComponents.onVariants {
+            androidReports(it.name) {
                 xml {
-                    setReportFile(project.layout.buildDirectory.file("reports/kover/$it/report.xml"))
+                    // HACK: update the report file so that codecov picks it up automatically
+                    setReportFile(project.layout.buildDirectory.file("reports/kover/${it.name}/report.xml"))
                 }
             }
         }
