@@ -231,7 +231,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // generate the list of locales to use for this tool
         val locales = buildList {
             val translation = translationsRepository.findLatestTranslation(code, settings.primaryLanguage)
-                ?: translationsRepository.findLatestTranslation(code, Locale.ENGLISH)
+                ?: translationsRepository.findLatestTranslation(code, Settings.defaultLanguage)
                 ?: return@withContext null
             add(translation.languageCode)
             settings.parallelLanguage?.let { add(it) }
