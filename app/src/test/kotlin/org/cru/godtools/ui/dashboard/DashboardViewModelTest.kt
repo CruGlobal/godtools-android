@@ -69,7 +69,10 @@ class DashboardViewModelTest {
         verify { syncService wasNot Called }
 
         val semaphore = Semaphore(1, 1)
-        coEvery { syncService.syncTools(any()) } coAnswers { semaphore.acquire(); true }
+        coEvery { syncService.syncTools(any()) } coAnswers {
+            semaphore.acquire()
+            true
+        }
 
         viewModel.isSyncRunning.test {
             runCurrent()
