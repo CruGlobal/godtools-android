@@ -380,8 +380,8 @@ fun VariantToolCard(
                         .padding(16.dp)
                 ) {
                     val languages by viewModel.availableLanguages.collectAsState()
-                    val primaryTranslation by viewModel.primaryTranslation.collectAsState()
-                    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
+                    val appTranslation by viewModel.appTranslation.collectAsState()
+                    val appLanguage by viewModel.appLanguage.collectAsState()
 
                     val languageCount by remember { derivedStateOf { languages.size } }
                     Text(pluralStringResource(R.plurals.label_tools_languages, languageCount, languageCount))
@@ -395,7 +395,7 @@ fun VariantToolCard(
                     )
 
                     // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                    AvailableInLanguage(primaryLanguage, { primaryTranslation.value })
+                    AvailableInLanguage(appLanguage, { appTranslation.value })
                 }
             }
         }
