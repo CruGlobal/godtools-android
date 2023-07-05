@@ -7,8 +7,10 @@ import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
 import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
@@ -54,11 +56,27 @@ fun DynamicFeatureExtension.baseConfiguration(project: Project) {
 private fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions(project)
+    project.configureCommonDependencies()
     configureTestOptions(project)
 
     lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
+}
 
-    project.dependencies.addProvider("implementation", project.libs.findBundle("common").get())
+private fun Project.configureCommonDependencies() {
+    dependencies.addProvider("implementation", libs.findBundle("common").get())
+
+    // HACK: Google Guava compatibility
+    configurations.configureEach {
+        resolutionStrategy.capabilitiesResolution.withCapability("com.google.guava:listenablefuture") {
+            candidates.firstOrNull { it.id.let { it is ModuleComponentIdentifier && it.module == "guava" } }
+                ?.let { select(it) }
+
+            because("Google Guava provides listenablefuture, so we should prefer that over the standalong artifact")
+        }
+
+        // exclude guava transitive compileOnly dependencies
+        exclude(group = "com.google.j2objc", module = "j2objc-annotations")
+    }
 }
 
 private fun BaseExtension.configureSdk() {
