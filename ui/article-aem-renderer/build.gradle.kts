@@ -2,24 +2,22 @@ plugins {
     id("godtools.library-conventions")
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "org.cru.godtools.tool.article.aem"
 
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions.arguments += mapOf(
-                "room.schemaLocation" to file("room-schemas").toString(),
-                "room.incremental" to "true"
-            )
-        }
-    }
     buildFeatures.viewBinding = true
 
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }
     }
+}
+
+ksp {
+    arg("room.schemaLocation", file("room-schemas").toString())
+    arg("room.incremental", "true")
 }
 
 dependencies {
@@ -54,12 +52,13 @@ dependencies {
     implementation(libs.splitties.fragmentargs)
     implementation(libs.weakdelegate)
 
+    kapt(libs.dagger.compiler)
+    kapt(libs.hilt.compiler)
+
+    ksp(libs.androidx.room.compiler)
+
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(testFixtures(libs.gtoSupport.androidx.room))
-
-    kapt(libs.androidx.room.compiler)
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
 }
