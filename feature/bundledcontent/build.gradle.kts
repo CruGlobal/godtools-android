@@ -1,17 +1,9 @@
 plugins {
-    id("com.android.dynamic-feature")
-    kotlin("android")
+    id("godtools.dynamic-feature-conventions")
     kotlin("kapt")
-    id("org.jetbrains.kotlinx.kover")
 }
 
-android {
-    namespace = "org.cru.godtools.feature.bundledcontent"
-    baseConfiguration(project)
-}
-
-androidComponents.beforeVariants { it.enableUnitTest = false }
-kover { disable() }
+android.namespace = "org.cru.godtools.feature.bundledcontent"
 
 dependencies {
     implementation(project(":library:initial-content"))
