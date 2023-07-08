@@ -13,7 +13,6 @@ android {
     namespace = "org.cru.godtools"
 
     configureCompose(project)
-    configureQaBuildType(project)
     configureGodToolsCustomUri()
 
     defaultConfig {

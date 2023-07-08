@@ -4,5 +4,7 @@ plugins {
 }
 
 android {
-    baseConfiguration(project)
+    configureAndroidCommon(project)
+    configureQaBuildType(project)
+    configureFlavorDimensions(project)
 }
