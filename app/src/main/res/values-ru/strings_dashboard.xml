@@ -23,9 +23,10 @@
     <string name="menu_terms_of_use">Условия использования</string>
     <string name="menu_privacy_policy">Политика конфиденциальности</string>
     <string name="menu_copyright">Авторское право</string>
+    <string name="menu_version">Версия: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Уроки</string>
-    <string name="dashboard_lessons_header_title">Уроки, созданные для вас</string>
+    <string name="dashboard_lessons_header_title">Уроки для вас</string>
     <string name="dashboard_lessons_header_description">Практические идеи для построения отношений и начала содержательных бесед.</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Избранное</string>
@@ -51,5 +52,4 @@
     <string name="tool_card_label_language_unavailable">Не доступно на %1$s</string>
     <string name="action_tools_about">Сведения</string>
     <string name="action_tools_open">Открыть</string>
-    <!-- Parallel Language Dialog -->
 </resources>

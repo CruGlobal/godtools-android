@@ -45,5 +45,4 @@
     <string name="tool_card_label_language_unavailable">%1$s లో అందుబాటులో లేదు</string>
     <string name="action_tools_about">వివరాలు</string>
     <string name="action_tools_open">తెరవండి</string>
-    <!-- Parallel Language Dialog -->
 </resources>

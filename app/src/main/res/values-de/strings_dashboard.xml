@@ -45,5 +45,4 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Nicht auf %1$s verfügbar</string>
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Öffnen</string>
-    <!-- Parallel Language Dialog -->
 </resources>

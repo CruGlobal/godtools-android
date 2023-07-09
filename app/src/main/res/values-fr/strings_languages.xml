@@ -5,10 +5,11 @@
     <string name="language_settings_app_language_dialog_message">Vous avez choisi %1$s comme langue de l\'application. Ceci changera la langue de toute l\'application GodTools. Êtes-vous sûr ?</string>
     <string name="language_settings_app_language_dialog_confirm">Changer de langue</string>
     <string name="language_settings_app_language_dialog_dismiss">Peu importe</string>
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Plus de 90 langues</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Paramètres de langue</string>
     <string name="title_language_settings">Paramètres de langue</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">Plus de 90 langues</string>
     <string name="text_language_parallel_description">Partagez God Tools avec quelqu\'un dans sa langue maternelle.</string>
     <!-- Downloadable Languages UI -->
 </resources>

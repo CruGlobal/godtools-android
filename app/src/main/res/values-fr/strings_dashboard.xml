@@ -52,5 +52,4 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="tool_card_label_language_unavailable">Non disponible en %1$s</string>
     <string name="action_tools_about">Détails</string>
     <string name="action_tools_open">Ouvrir</string>
-    <!-- Parallel Language Dialog -->
 </resources>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Više od 90 jezika</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Postavke jezika</string>
     <string name="title_language_settings">Postavke jezika</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">Više od 90 jezika</string>
     <string name="text_language_parallel_description">Podijelite GodTools s korisnicima na njihovom materinjem jeziku.</string>
     <!-- Downloadable Languages UI -->
 </resources>

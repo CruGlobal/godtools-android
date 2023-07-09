@@ -5,10 +5,24 @@
     <string name="language_settings_app_language_dialog_message">لقد حددت %1$s  كلغة تطبيقك. سيؤدي هذا إلى تغيير لغة تطبيق GodTools بالكامل. هل أنت متأكد؟</string>
     <string name="language_settings_app_language_dialog_confirm">تغيير اللغة</string>
     <string name="language_settings_app_language_dialog_dismiss">لا تهتم</string>
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">+90 لغة</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">إعدادات اللغة</string>
-    <string name="title_language_settings">إعدادات اللغات</string>
+    <string name="title_language_settings">إعدادات اللغة</string>
+    <string name="language_settings_section_app_language_heading">لغة واجهة التطبيق</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">٪1$d لغة متوفرة</item>
+        <item quantity="other">٪1$d  لغات متوفرة</item>
+        <item quantity="few">٪1$d بعض اللغات متوفرة</item>
+        <item quantity="many">٪1$d كثير من  اللغات متوفرة</item>
+        <item quantity="two">٪1$d لغتان متوفرتان</item>
+        <item quantity="zero">٪1$d لا يوجد لغات متوفرة</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">عيّن اللغة التي تريد أن يظهر بها التطبيق بالكامل.</string>
+    <string name="language_settings_section_offline_heading">لغات الأداة متاحة في وضع عدم الاتصال</string>
+    <string name="language_settings_section_offline_description">قم بتنزيل جميع الأدوات بلغة ما لإتاحتها حتى إذا كنت خارج شبكة WiFi أو الخدمة الخلوية. اضبط لغة الأداة عبر زر الخيارات داخل الأداة.</string>
+    <string name="language_settings_section_offline_action_edit">ضبط اللغات التي تم تنزيلها</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">+90 لغة</string>
     <string name="text_language_parallel_description">شارك GodTools مع شخص بلغته الأم.</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">لغات البحث</string>

@@ -42,5 +42,4 @@
     <string name="tool_card_label_language_unavailable">Ei kielellä: %1$s</string>
     <string name="action_tools_about">Lisätietoja</string>
     <string name="action_tools_open">Avaa</string>
-    <!-- Parallel Language Dialog -->
 </resources>

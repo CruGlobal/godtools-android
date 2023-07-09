@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Fanovàna Fiteny</string>
     <string name="title_language_settings">Fanovàna Fiteny</string>
+    <!-- TODO: remove these outdated phrases -->
     <string name="text_language_parallel_description">"Zarao amin'ny hafa amin'ny tenindrazany ny GodTools. "</string>
     <!-- Downloadable Languages UI -->
 </resources>

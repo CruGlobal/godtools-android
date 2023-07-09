@@ -45,5 +45,4 @@
     <string name="tool_card_label_language_unavailable">לא זמין ב-%1$s</string>
     <string name="action_tools_about">פרטים</string>
     <string name="action_tools_open">פתח</string>
-    <!-- Parallel Language Dialog -->
 </resources>

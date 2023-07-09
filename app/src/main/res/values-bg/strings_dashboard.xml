@@ -45,5 +45,4 @@
     <string name="tool_card_label_language_unavailable">Няма версия на %1$s</string>
     <string name="action_tools_about">Подробности</string>
     <string name="action_tools_open">Отвори</string>
-    <!-- Parallel Language Dialog -->
 </resources>

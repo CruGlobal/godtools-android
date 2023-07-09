@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">90+ ພາສາ</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">ການຕັ້ງຄ່າພາສາ</string>
     <string name="title_language_settings">ການຕັ້ງຄ່າພາສາ</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">90+ ພາສາ</string>
     <string name="text_language_parallel_description">ແບ່ງປັນ GodTools ກັບຄົນອື່ນໃນພາສາທ້ອງຖິ່ນຂອງເຂົາ.</string>
     <!-- Downloadable Languages UI -->
 </resources>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">Активность по миру</string>
+    <string name="account_joined">Присоединилось %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">Создать аккаунт</string>
     <string name="account_create_description">Создайте аккаунт, чтобы вам были доступны реальные истории, слова поддержки и практические советы.</string>

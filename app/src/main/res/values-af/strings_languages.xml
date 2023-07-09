@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">90+Tale</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Taalinstellings</string>
     <string name="title_language_settings">Taalinstellings</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">90+Tale</string>
     <string name="text_language_parallel_description">Deel GodTools met iemand in hulle moedertaal.</string>
     <!-- Downloadable Languages UI -->
 </resources>

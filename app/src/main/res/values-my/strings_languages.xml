@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၉၀  ကျော်</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">"ဘာသာစကား၏ ဆက်တင်များ "</string>
     <string name="title_language_settings">ဘာသာစကားကို ဆက်တင်ချပါ</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">ဘာသာစကားပေါင်း ၉၀  ကျော်</string>
     <string name="text_language_parallel_description">ဘာသာစကားနားလည်နိုင်သူတ ယောက်ကို GodTools ဝေငှ ပါ။</string>
     <!-- Downloadable Languages UI -->
 </resources>
