@@ -45,5 +45,4 @@ Een onlineversie is te vinden op https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Niet beschikbaar in het %1$s</string>
     <string name="action_tools_about">Info</string>
     <string name="action_tools_open">Openen</string>
-    <!-- Parallel Language Dialog -->
 </resources>

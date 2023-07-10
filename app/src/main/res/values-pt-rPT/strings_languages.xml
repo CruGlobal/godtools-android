@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Mais de 90 idiomas</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Definições de idioma</string>
     <string name="title_language_settings">Definições de idioma</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">Mais de 90 idiomas</string>
     <string name="text_language_parallel_description">Partilha a aplicação GodTools com uma pessoa no seu idioma nativo.</string>
     <!-- Downloadable Languages UI -->
 </resources>

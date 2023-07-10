@@ -52,5 +52,4 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="tool_card_label_language_unavailable">Nav pieejams %1$s valodā</string>
     <string name="action_tools_about">Apraksts</string>
     <string name="action_tools_open">Atvērt</string>
-    <!-- Parallel Language Dialog -->
 </resources>

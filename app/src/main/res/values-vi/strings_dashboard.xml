@@ -45,5 +45,4 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="tool_card_label_language_unavailable">Không có sẵn trong %1$s</string>
     <string name="action_tools_about">Giới thiệu</string>
     <string name="action_tools_open">Mở</string>
-    <!-- Parallel Language Dialog -->
 </resources>

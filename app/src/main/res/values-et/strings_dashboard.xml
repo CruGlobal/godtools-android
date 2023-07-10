@@ -45,5 +45,4 @@ Veebiversioon on saadaval lehel https://knowgod.com</string>
     <string name="tool_card_label_language_unavailable">Ei ole saadaval: %1$s</string>
     <string name="action_tools_about">Teave</string>
     <string name="action_tools_open">Ava</string>
-    <!-- Parallel Language Dialog -->
 </resources>

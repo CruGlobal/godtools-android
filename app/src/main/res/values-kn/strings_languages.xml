@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">90+ ಭಾಷೆಗಳು</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">ಭಾಷಾ ಅಳವಡಿಕೆಗಳು</string>
     <string name="title_language_settings">ಭಾಷಾ ಅಳವಡಿಕೆಗಳು</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">90+ ಭಾಷೆಗಳು</string>
     <string name="text_language_parallel_description">ಗಾಡ್‌ಟೂಲ್ಸ್ ಅನ್ನು ಅವರ ಸ್ಥಳೀಯ ಭಾಷೆಯಲ್ಲಿ ಯಾರೊಂದಿಗಾದರೂ ಹಂಚಿಕೊಳ್ಳಿ.</string>
     <!-- Downloadable Languages UI -->
 </resources>

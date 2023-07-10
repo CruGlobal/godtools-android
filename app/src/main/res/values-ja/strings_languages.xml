@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">90種類以上の言語</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">言語設定</string>
     <string name="title_language_settings">言語設定</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">90種類以上の言語</string>
     <string name="text_language_parallel_description">同じ言語を母国語とする仲間にGodToolsをシェア</string>
     <!-- Downloadable Languages UI -->
 </resources>

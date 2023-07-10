@@ -5,10 +5,29 @@
     <string name="language_settings_app_language_dialog_message">Вы выбрали %1$s в качестве языка приложения. Изменится язык всего приложения GodTools. Вы уверены?</string>
     <string name="language_settings_app_language_dialog_confirm">Изменить язык</string>
     <string name="language_settings_app_language_dialog_dismiss">Не важно</string>
-    <!-- Language Selection UI -->
-    <string name="feature_discovery_title_language_settings">Более 90 языков</string>
+    <!-- Language Settings UI -->
     <string name="menu_language_settings">Настройки языка</string>
     <string name="title_language_settings">Настройки языка</string>
+    <string name="language_settings_section_app_language_heading">Язык интерфейса приложения</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$d доступный язык</item>
+        <item quantity="other">%1$d доступные языки</item>
+        <item quantity="few">%1$d доступных языков</item>
+        <item quantity="many">%1$d доступных языков</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Установите основной язык для всего приложения.</string>
+    <string name="language_settings_section_offline_heading">Языки инструментов доступны офлайн</string>
+    <string name="language_settings_section_offline_description">Загрузите все инструменты на выбранном языке, чтобы они были доступны, даже когда нет сигнала или WiFi. Установите язык инструмента, нажав на кнопку \"настройки\" внутри инструмента.</string>
+    <string name="language_settings_section_offline_action_edit">Править загруженные языки</string>
+    <!-- TODO: remove these outdated phrases -->
+    <string name="feature_discovery_title_language_settings">Более 90 языков</string>
     <string name="text_language_parallel_description">Поделитесь GodTools с кем-нибудь на их родном языке.</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Искать языки</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">Доступен %1$d инструмент</item>
+        <item quantity="other">Доступны %1$d инструментов</item>
+        <item quantity="few">Доступны %1$d инструментов</item>
+        <item quantity="many">Доступны %1$d инструментов</item>
+    </plurals>
 </resources>

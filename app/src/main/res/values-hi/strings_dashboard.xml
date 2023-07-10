@@ -45,5 +45,4 @@
     <string name="tool_card_label_language_unavailable">%1$s में उपलब्ध नहीं</string>
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोलें</string>
-    <!-- Parallel Language Dialog -->
 </resources>

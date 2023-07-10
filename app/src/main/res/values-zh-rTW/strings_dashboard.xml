@@ -45,5 +45,4 @@
     <string name="tool_card_label_language_unavailable">無法使用 %1$s</string>
     <string name="action_tools_about">詳細資料</string>
     <string name="action_tools_open">開啟</string>
-    <!-- Parallel Language Dialog -->
 </resources>

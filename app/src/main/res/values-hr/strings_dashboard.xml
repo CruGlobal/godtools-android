@@ -45,5 +45,4 @@ Online verziju možete pronaći na adresi: https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Nije dosutpno u %1$s</string>
     <string name="action_tools_about">Pojedinosti</string>
     <string name="action_tools_open">Otvori</string>
-    <!-- Parallel Language Dialog -->
 </resources>
