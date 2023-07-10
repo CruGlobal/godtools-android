@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    baseConfiguration(project)
+    configureAndroidCommon(project)
 }

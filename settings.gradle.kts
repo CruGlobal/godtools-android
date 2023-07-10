@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        google()
         gradlePluginPortal()
         mavenCentral()
     }
@@ -44,6 +45,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "godtools"
+
+includeBuild("build-logic")
 
 include("library:account")
 include("library:analytics")

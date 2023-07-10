@@ -25,35 +25,7 @@ private const val FLAVOR_ENV_PRODUCTION = "production"
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 //context(Project)
-fun BaseAppModuleExtension.baseConfiguration(project: Project) {
-    configureAndroidCommon(project)
-    configureFlavorDimensions(project)
-}
-
-// TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
-internal fun LibraryExtension.baseConfiguration(project: Project) {
-    configureAndroidCommon(project)
-}
-
-// TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
-fun DynamicFeatureExtension.baseConfiguration(project: Project) {
-    configureAndroidCommon(project)
-    configureQaBuildType(project)
-    configureFlavorDimensions(project)
-
-    project.dependencies {
-        add("implementation", project.project(":app"))
-    }
-}
-
-// TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
-private fun TestedExtension.configureAndroidCommon(project: Project) {
+internal fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions(project)
     project.configureCommonDependencies()

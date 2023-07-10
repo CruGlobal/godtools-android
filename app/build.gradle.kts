@@ -1,6 +1,5 @@
 plugins {
-    id("com.android.application")
-    kotlin("android")
+    id("godtools.application-conventions")
     kotlin("kapt")
     id("com.google.firebase.appdistribution")
     id("com.google.firebase.crashlytics")
@@ -13,9 +12,7 @@ plugins {
 android {
     namespace = "org.cru.godtools"
 
-    baseConfiguration(project)
     configureCompose(project)
-    configureQaBuildType(project)
     configureGodToolsCustomUri()
 
     defaultConfig {
