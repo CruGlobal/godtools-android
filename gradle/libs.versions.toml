@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.30.1"
 android-gradle-plugin = "8.0.2"
-androidx-compose-compiler = "1.4.8"
+androidx-compose-compiler = "1.5.0-dev-k1.9.0-6a60475e07f"
 androidx-compose-material = "1.4.3"
 androidx-compose-ui = "1.4.3"
 androidx-core = "1.10.1"
@@ -20,7 +20,7 @@ godtoolsShared = "0.9.1"
 google-auto-value = "1.10.2"
 gtoSupport = "4.0.2-SNAPSHOT"
 ktlint = "0.50.0"
-kotlin = "1.8.22"
+kotlin = "1.9.0"
 kotlinCoroutines = "1.7.2"
 kotlinKover = "0.7.2"
 lottie = "6.0.1"
@@ -217,5 +217,5 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ksp = { id = "com.google.devtools.ksp", version = "1.8.22-1.0.11" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.11" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.5.0" }
