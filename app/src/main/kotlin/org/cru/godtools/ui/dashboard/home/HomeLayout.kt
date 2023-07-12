@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Locale
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
@@ -47,7 +48,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
@@ -60,7 +60,7 @@ private val PADDING_HORIZONTAL = 16.dp
 @OptIn(ExperimentalFoundationApi::class)
 internal fun HomeContent(
     viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
     onViewAllFavorites: () -> Unit,
     onViewAllTools: () -> Unit
@@ -109,7 +109,7 @@ internal fun HomeContent(
                     it,
                     onClick = { tool, translation ->
                         viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, tool?.code, SOURCE_FEATURED)
-                        onOpenTool(tool, translation, null)
+                        onOpenTool(tool, translation?.languageCode, null)
                     },
                     modifier = Modifier
                         .animateItemPlacement()
@@ -136,9 +136,9 @@ internal fun HomeContent(
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
                         { favoriteTools.orEmpty().take(5) },
-                        onOpenTool = { tool, trans1, trans2 ->
+                        onOpenTool = { tool, lang1, lang2 ->
                             viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                            onOpenTool(tool, trans1, trans2)
+                            onOpenTool(tool, lang1, lang2)
                         },
                         onOpenToolDetails = {
                             viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
@@ -211,7 +211,7 @@ private fun FavoritesHeader(
 private fun HorizontalFavoriteTools(
     tools: () -> List<Tool>,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
 ) = LazyRow(
     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -271,7 +271,7 @@ private fun NoFavoriteTools(
 @OptIn(ExperimentalFoundationApi::class)
 internal fun AllFavoritesList(
     viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
     onOpenToolDetails: (String) -> Unit,
 ) {
     val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
@@ -314,9 +314,9 @@ internal fun AllFavoritesList(
                     toolCode = tool.code.orEmpty(),
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
-                    onOpenTool = { tool, trans1, trans2 ->
+                    onOpenTool = { tool, lang1, lang2 ->
                         viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                        onOpenTool(tool, trans1, trans2)
+                        onOpenTool(tool, lang1, lang2)
                     },
                     onOpenToolDetails = {
                         viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)

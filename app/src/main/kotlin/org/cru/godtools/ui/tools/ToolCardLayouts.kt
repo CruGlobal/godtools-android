@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
@@ -144,9 +145,9 @@ fun ToolCard(
     confirmRemovalFromFavorites: Boolean = false,
     showActions: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
-    onClick: (Tool?, Translation?, Translation?) -> Unit = onOpenTool
+    onClick: (Tool?, Locale?, Locale?) -> Unit = onOpenTool
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -159,7 +160,7 @@ fun ToolCard(
         ElevatedCard(
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = { onClick(tool, firstTranslation.value, secondTranslation) },
+            onClick = { onClick(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -236,9 +237,9 @@ fun SquareToolCard(
     showActions: Boolean = true,
     floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
-    onClick: (Tool?, Translation?, Translation?) -> Unit = onOpenTool
+    onClick: (Tool?, Locale?, Locale?) -> Unit = onOpenTool
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -249,7 +250,7 @@ fun SquareToolCard(
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, firstTranslation.value, secondTranslation) },
+            onClick = { onClick(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
             modifier = modifier.width(189.dp)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
