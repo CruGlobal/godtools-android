@@ -52,6 +52,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
@@ -142,6 +143,7 @@ fun LessonToolCard(
 fun ToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    additionalLanguage: Language? = null,
     confirmRemovalFromFavorites: Boolean = false,
     showActions: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -152,15 +154,13 @@ fun ToolCard(
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val secondTranslation by viewModel.secondTranslation.collectAsState()
-    val secondLanguage by viewModel.secondLanguage.collectAsState()
     val downloadProgress by viewModel.downloadProgress.collectAsState()
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = { onClick(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
+            onClick = { onClick(tool, firstTranslation.value?.languageCode, additionalLanguage?.code) },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -183,7 +183,6 @@ fun ToolCard(
                 )
             }
             Column(modifier = Modifier.padding(16.dp)) {
-                val hasSecondTranslation by remember { derivedStateOf { secondTranslation != null } }
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
@@ -191,13 +190,13 @@ fun ToolCard(
                     ToolName(
                         viewModel,
                         modifier = Modifier
-                            .run { if (hasSecondTranslation) widthIn(max = { it - 70.dp }) else this }
+                            .run { if (additionalLanguage != null) widthIn(max = { it - 70.dp }) else this }
                             .alignByBaseline()
                     )
-                    if (hasSecondTranslation) {
+                    if (additionalLanguage != null) {
                         ToolCardInfoContent {
                             AvailableInLanguage(
-                                secondLanguage,
+                                additionalLanguage,
                                 horizontalArrangement = Arrangement.End,
                                 modifier = Modifier
                                     .padding(start = 8.dp)

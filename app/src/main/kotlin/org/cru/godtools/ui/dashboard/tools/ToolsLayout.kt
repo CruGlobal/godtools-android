@@ -41,6 +41,7 @@ internal fun ToolsLayout(
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
     val tools by viewModel.tools.collectAsState()
+    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
@@ -86,6 +87,7 @@ internal fun ToolsLayout(
             PreloadTool(tool)
             ToolCard(
                 tool.code.orEmpty(),
+                additionalLanguage = selectedLanguage,
                 showActions = false,
                 onClick = { it, _, _ ->
                     viewModel.recordOpenToolDetailsInAnalytics(it?.code, SOURCE_ALL_TOOLS)
