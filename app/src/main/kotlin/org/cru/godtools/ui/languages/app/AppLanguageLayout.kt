@@ -37,7 +37,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringResource
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.GodToolsAppBarColors
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
 
@@ -64,7 +63,7 @@ internal fun AppLanguageLayout(
                     }
                 },
                 title = { Text(stringResource(R.string.language_settings_app_language_title)) },
-                colors = GodToolsAppBarColors,
+                colors = GodToolsTheme.topAppBarColors,
             )
         }
     ) { contentPadding ->
