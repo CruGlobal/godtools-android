@@ -22,7 +22,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Language.Companion.sortedByDisplayName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
@@ -80,7 +79,13 @@ class ToolsViewModel @Inject constructor(
                 else -> languagesRepository.getLanguagesFlow()
             }
         }
-        .map { it.sortedByDisplayName(context) }
+        .combine(settings.appLanguageFlow) { langs, appLang ->
+            langs.sortedWith(
+                compareByDescending<Language> { it.code == appLang }
+                    .then(compareByDescending { it.isAdded })
+                    .then(Language.COMPARATOR_DISPLAY_NAME(context))
+            )
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val tools = toolsForLocale
