@@ -26,12 +26,14 @@ internal interface LanguagesDao {
     fun getLanguagesFlow(locales: Collection<Locale>): Flow<List<LanguageEntity>>
     @Query(
         """
-        SELECT l.*
-        FROM
-            languages AS l
-            JOIN translations AS tr ON tr.locale = l.code
-            JOIN tools AS t ON t.code = tr.tool
-        WHERE t.category = :category
+        SELECT *
+        FROM languages
+        WHERE code IN (
+            SELECT tr.locale
+            FROM translations AS tr
+                JOIN tools AS t ON t.code = tr.tool
+            WHERE t.category = :category
+        )       
         """
     )
     fun getLanguagesFlowForToolCategory(category: String): Flow<List<LanguageEntity>>

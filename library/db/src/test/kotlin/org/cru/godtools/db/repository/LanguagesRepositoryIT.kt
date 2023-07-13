@@ -112,6 +112,7 @@ abstract class LanguagesRepositoryIT {
         }
     }
 
+    // region getLanguagesFlowForToolCategory()
     @Test
     fun `getLanguagesFlowForToolCategory()`() = testScope.runTest {
         val english = Language(Locale.ENGLISH)
@@ -138,6 +139,30 @@ abstract class LanguagesRepositoryIT {
             assertThat(expectMostRecentItem(), containsInAnyOrder(languageMatcher(english)))
         }
     }
+
+    @Test
+    fun `getLanguagesFlowForToolCategory() - No Duplicate Languages`() = testScope.runTest {
+        val english = Language(Locale.ENGLISH)
+        toolsRepository.storeInitialResources(
+            listOf(
+                Tool("tool1", category = "cat1"),
+                Tool("tool2", category = "cat1")
+            )
+        )
+        repository.storeInitialLanguages(listOf(english))
+        translationsRepository.storeInitialTranslations(
+            listOf(
+                Translation("tool1", Locale.ENGLISH),
+                Translation("tool2", Locale.ENGLISH)
+            )
+        )
+
+        repository.getLanguagesFlowForToolCategory("cat1").test {
+            runCurrent()
+            assertThat(expectMostRecentItem(), contains(languageMatcher(english)))
+        }
+    }
+    // region getLanguagesFlowForToolCategory()
 
     // region getPinnedLanguagesFlow()
     @Test
