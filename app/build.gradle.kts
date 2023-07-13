@@ -197,7 +197,6 @@ dependencies {
 
     api(libs.eventbus)
     implementation(libs.accompanist.flowlayout)
-    implementation(libs.accompanist.swiperefresh)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)

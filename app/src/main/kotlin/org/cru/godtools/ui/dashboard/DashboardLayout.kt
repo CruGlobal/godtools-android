@@ -2,7 +2,11 @@ package org.cru.godtools.ui.dashboard
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,14 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -39,6 +43,7 @@ import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 
 @Composable
+@OptIn(ExperimentalMaterialApi::class)
 internal fun DashboardLayout(
     viewModel: DashboardViewModel = viewModel(),
     onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
@@ -50,14 +55,17 @@ internal fun DashboardLayout(
     val hasBackStack by viewModel.hasBackStack.collectAsState()
     BackHandler(hasBackStack) { viewModel.popPageStack() }
 
+    val refreshing by viewModel.isSyncRunning.collectAsState()
+    val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
+
     Scaffold(
         bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) }
     ) {
         val saveableStateHolder = rememberSaveableStateHolder()
-        SwipeRefresh(
-            rememberSwipeRefreshState(viewModel.isSyncRunning.collectAsState().value),
-            onRefresh = { viewModel.triggerSync(true) },
-            modifier = Modifier.padding(it)
+        Box(
+            modifier = Modifier
+                .padding(it)
+                .pullRefresh(refreshState)
         ) {
             Crossfade(currentPage) { page ->
                 saveableStateHolder.SaveableStateProvider(page) {
@@ -84,6 +92,8 @@ internal fun DashboardLayout(
                     }
                 }
             }
+
+            PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
         }
     }
 }
