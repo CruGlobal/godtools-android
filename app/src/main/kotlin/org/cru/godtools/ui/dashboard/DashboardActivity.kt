@@ -11,6 +11,7 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.lifecycle.observe
@@ -26,7 +27,6 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
@@ -57,7 +57,7 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
         binding.compose.setContent {
             GodToolsTheme {
                 DashboardLayout(
-                    onOpenTool = { t, tr1, tr2 -> openTool(t, tr1, tr2) },
+                    onOpenTool = { t, lang1, lang2 -> openTool(t, *listOfNotNull(lang1, lang2).toTypedArray()) },
                     onOpenToolDetails = { startToolDetailsActivity(it) }
                 )
             }
@@ -127,13 +127,12 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
 
-    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+    private fun openTool(tool: Tool?, vararg languages: Locale) {
         val code = tool?.code ?: return
-        val languages = listOfNotNull(primary?.languageCode, parallel?.languageCode)
         if (languages.isEmpty()) return
 
         languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
-        openToolActivity(code, tool.type, *languages.toTypedArray())
+        openToolActivity(code, tool.type, *languages)
     }
     // endregion ToolsAdapterCallbacks
     // endregion UI

@@ -36,8 +36,7 @@ class ToolsViewModelTest {
     private val metaToolsFlow = MutableStateFlow(emptyList<Tool>())
 
     private val settings: Settings = mockk {
-        every { primaryLanguage } returns Locale.ENGLISH
-        every { primaryLanguageFlow } returns flowOf(Locale.ENGLISH)
+        every { appLanguageFlow } returns flowOf(Locale.ENGLISH)
         every { isFeatureDiscoveredFlow(any()) } returns flowOf(true)
     }
     private val testScope = TestScope()
@@ -52,8 +51,10 @@ class ToolsViewModelTest {
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
         viewModel = ToolsViewModel(
+            context = mockk(),
             eventBus = mockk(),
             settings = settings,
+            languagesRepository = mockk(),
             toolsRepository = toolsRepository,
             savedState = SavedStateHandle(),
         )
@@ -116,7 +117,7 @@ class ToolsViewModelTest {
         val variant1 = Tool("variant1") { metatoolCode = "meta" }
         val variant2 = Tool("variant2") { metatoolCode = "meta" }
 
-        viewModel.filteredTools.test {
+        viewModel.tools.test {
             assertThat(awaitItem(), empty())
 
             toolsFlow.value = listOf(variant1, variant2)
@@ -134,7 +135,7 @@ class ToolsViewModelTest {
 
     @Test
     fun `Property filteredTools - Don't show hidden tools`() = testScope.runTest {
-        viewModel.filteredTools.test {
+        viewModel.tools.test {
             assertThat(awaitItem(), empty())
 
             val hidden = Tool("hidden") {

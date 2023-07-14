@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
@@ -35,7 +36,6 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
 import org.cru.godtools.ui.dashboard.home.HomeContent
@@ -46,7 +46,7 @@ import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 @OptIn(ExperimentalMaterialApi::class)
 internal fun DashboardLayout(
     viewModel: DashboardViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit,
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
     onOpenToolDetails: (String) -> Unit
 ) {
     val currentPage by viewModel.currentPage.collectAsState()
@@ -71,7 +71,7 @@ internal fun DashboardLayout(
                 saveableStateHolder.SaveableStateProvider(page) {
                     when (page) {
                         Page.LESSONS -> LessonsLayout(
-                            onOpenLesson = { tool, translation -> onOpenTool(tool, translation, null) }
+                            onOpenLesson = { tool, translation -> onOpenTool(tool, translation?.languageCode, null) }
                         )
                         Page.HOME -> HomeContent(
                             onOpenTool = onOpenTool,

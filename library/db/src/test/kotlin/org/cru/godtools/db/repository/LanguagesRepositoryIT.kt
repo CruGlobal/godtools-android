@@ -8,10 +8,14 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.LanguageMatchers.languageMatcher
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -19,9 +23,12 @@ import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.hasSize
 
+@OptIn(ExperimentalCoroutinesApi::class)
 abstract class LanguagesRepositoryIT {
     protected val testScope = TestScope()
     abstract val repository: LanguagesRepository
+    abstract val toolsRepository: ToolsRepository
+    abstract val translationsRepository: TranslationsRepository
 
     private val language1 = Language(Locale.ENGLISH) { name = "English" }
     private val language2 = Language(Locale.FRENCH)
@@ -104,6 +111,58 @@ abstract class LanguagesRepositoryIT {
             assertThat(awaitItem(), empty())
         }
     }
+
+    // region getLanguagesFlowForToolCategory()
+    @Test
+    fun `getLanguagesFlowForToolCategory()`() = testScope.runTest {
+        val english = Language(Locale.ENGLISH)
+        val french = Language(Locale.FRENCH)
+        val german = Language(Locale.GERMAN)
+
+        repository.getLanguagesFlowForToolCategory("cat1").test {
+            assertThat(awaitItem(), empty())
+
+            toolsRepository.storeInitialResources(
+                listOf(
+                    Tool("tool1", category = "cat1"),
+                    Tool("tool2", category = "cat2")
+                )
+            )
+            repository.storeInitialLanguages(listOf(english, french, german))
+            translationsRepository.storeInitialTranslations(
+                listOf(
+                    Translation("tool1", Locale.ENGLISH),
+                    Translation("tool2", Locale.FRENCH)
+                )
+            )
+            runCurrent()
+            assertThat(expectMostRecentItem(), containsInAnyOrder(languageMatcher(english)))
+        }
+    }
+
+    @Test
+    fun `getLanguagesFlowForToolCategory() - No Duplicate Languages`() = testScope.runTest {
+        val english = Language(Locale.ENGLISH)
+        toolsRepository.storeInitialResources(
+            listOf(
+                Tool("tool1", category = "cat1"),
+                Tool("tool2", category = "cat1")
+            )
+        )
+        repository.storeInitialLanguages(listOf(english))
+        translationsRepository.storeInitialTranslations(
+            listOf(
+                Translation("tool1", Locale.ENGLISH),
+                Translation("tool2", Locale.ENGLISH)
+            )
+        )
+
+        repository.getLanguagesFlowForToolCategory("cat1").test {
+            runCurrent()
+            assertThat(expectMostRecentItem(), contains(languageMatcher(english)))
+        }
+    }
+    // region getLanguagesFlowForToolCategory()
 
     // region getPinnedLanguagesFlow()
     @Test

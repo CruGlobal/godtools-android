@@ -18,9 +18,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 import org.cru.godtools.R
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +29,7 @@ internal fun ToolCardActions(
     modifier: Modifier = Modifier,
     buttonModifier: Modifier = Modifier,
     buttonWeightFill: Boolean = true,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
+    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
     onOpenToolDetails: (String) -> Unit = {},
 ) = Row(modifier = modifier) {
     val tool by viewModel.tool.collectAsState()
@@ -55,7 +55,7 @@ internal fun ToolCardActions(
         }
         Spacer(Modifier.width(8.dp))
         Button(
-            onClick = { onOpenTool(tool, firstTranslation.value, secondTranslation) },
+            onClick = { onOpenTool(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()

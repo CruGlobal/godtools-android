@@ -4,6 +4,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBarColors
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.material3.contentColorFor
@@ -21,6 +23,7 @@ import org.cru.godtools.ui.BuildConfig
 
 const val DisabledAlpha = 0.38f
 
+@OptIn(ExperimentalMaterial3Api::class)
 object GodToolsTheme {
     val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
     val GT_RED = Color(red = 0xE5, green = 0x5B, blue = 0x36)
@@ -85,6 +88,15 @@ object GodToolsTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalLightColorSchemeActive.current
+
+    val searchBarColors: SearchBarColors
+        @Composable
+        get() = when {
+            isLightColorSchemeActive -> SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+            else -> SearchBarDefaults.colors()
+        }
 }
 
 @Composable

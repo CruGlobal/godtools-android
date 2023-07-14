@@ -1,153 +1,175 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
-import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
-import org.ccci.gto.android.common.util.content.getString
 import org.cru.godtools.R
-import org.cru.godtools.base.ui.theme.DisabledAlpha
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
+import org.cru.godtools.ui.languages.LanguageName
 
-private val filterCardLabelStyle: TextStyle
-    @Composable get() {
-        val baseStyle = MaterialTheme.typography.labelLarge
-        return remember(baseStyle) { baseStyle.merge(TextStyle(fontWeight = FontWeight.Bold)) }
-    }
+private val POPUP_MAX_HEIGHT = 600.dp
 
 @Composable
 internal fun ToolFilters(
-    viewModel: ToolsViewModel = viewModel(),
     modifier: Modifier = Modifier,
-) {
-    val categories by viewModel.categories.collectAsState()
-    val rows by remember { derivedStateOf { if (categories.size >= 2) 2 else 1 } }
-
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            stringResource(R.string.dashboard_tools_section_categories_label),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-
-        val filterCardHeight = computeHeightForDefaultText(filterCardLabelStyle, 2) + 32.dp
-        LazyHorizontalGrid(
-            rows = GridCells.Fixed(rows),
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .height((filterCardHeight * rows) + (8.dp * (rows - 1)))
-        ) {
-            item("all-tools") { AllToolsFilter(viewModel) }
-            items(categories, { "category:$it" }) { CategoryFilter(it, viewModel) }
-        }
-    }
-}
-
-@Composable
-private fun AllToolsFilter(viewModel: ToolsViewModel) {
-    val filterCategory by viewModel.filterCategory.collectAsState()
-    val isSelected by remember { derivedStateOf { filterCategory == null } }
-
-    val context = LocalContext.current
-    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
-    val label by remember {
-        derivedStateOf { context.getString(primaryLanguage, R.string.dashboard_tools_section_categories_all) }
-    }
-
-    FilterCard(
-        label,
-        isSelected = isSelected,
-        fadeText = !isSelected,
-        onClick = { viewModel.setFilterCategory(null) }
+    viewModel: ToolsViewModel = viewModel(),
+) = Column(modifier = modifier.fillMaxWidth()) {
+    Text(
+        stringResource(R.string.dashboard_tools_section_filter_label),
+        style = MaterialTheme.typography.titleLarge,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     )
-}
 
-@Composable
-private fun CategoryFilter(category: String, viewModel: ToolsViewModel) {
-    val filterCategory by viewModel.filterCategory.collectAsState()
-    val isSelected by remember { derivedStateOf { filterCategory == category } }
-
-    val context = LocalContext.current
-    val primaryLanguage by viewModel.primaryLanguage.collectAsState()
-    val label by remember { derivedStateOf { getToolCategoryName(category, context, primaryLanguage) } }
-
-    FilterCard(
-        label,
-        isSelected = isSelected,
-        fadeText = !isSelected && filterCategory != null,
-        onClick = {
-            viewModel.setFilterCategory(category.takeUnless { category == filterCategory })
-        }
-    )
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        CategoryFilter(viewModel, modifier = Modifier.weight(1f))
+        LanguageFilter(viewModel, modifier = Modifier.weight(1f))
+    }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun FilterCard(
-    label: String,
-    isSelected: Boolean,
-    fadeText: Boolean = false,
-    onClick: () -> Unit
-) {
-    val borderColor by animateColorAsState(
-        MaterialTheme.colorScheme.primary.let { if (isSelected) it else it.copy(alpha = 0f) }
-    )
-    // TODO: change to ElevatedCard(border = ) if border property is ever supported on ElevatedCard
-    Card(
-        onClick = onClick,
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.elevatedCardColors(),
-        border = BorderStroke(2.dp, borderColor),
-        modifier = Modifier
-            .width(with(LocalDensity.current) { 122.sp.toDp() })
-    ) {
-        val style = filterCardLabelStyle
-        val textAlpha by animateFloatAsState(if (fadeText) DisabledAlpha else 1f)
+private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
+    val categories by viewModel.categories.collectAsState()
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
+    ElevatedButton(
+        onClick = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        val category by viewModel.selectedCategory.collectAsState()
         Text(
-            label,
-            maxLines = 2,
-            style = style,
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .minLinesHeight(2, style)
-                .alpha(textAlpha)
+            category?.let { getToolCategoryName(it, LocalContext.current) }
+                ?: stringResource(R.string.dashboard_tools_section_filter_category_any),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
         )
+        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = POPUP_MAX_HEIGHT),
+        ) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
+                onClick = {
+                    viewModel.setSelectedCategory(null)
+                    expanded = false
+                }
+            )
+            categories.forEach {
+                DropdownMenuItem(
+                    text = { Text(getToolCategoryName(it, LocalContext.current)) },
+                    onClick = {
+                        viewModel.setSelectedCategory(it)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val rawLanguages by viewModel.languages.collectAsState()
+
+    ElevatedButton(
+        onClick = { expanded = !expanded },
+        modifier = modifier
+    ) {
+        val language by viewModel.selectedLanguage.collectAsState()
+        Text(
+            language?.getDisplayName(context) ?: stringResource(R.string.dashboard_tools_section_filter_language_any),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
+        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = POPUP_MAX_HEIGHT),
+        ) {
+            var filter by rememberSaveable { mutableStateOf("") }
+            val languages by remember {
+                derivedStateOf {
+                    val terms = filter.split(Regex("\\s+")).filter { it.isNotBlank() }
+                    rawLanguages.filter {
+                        val displayName by lazy { it.getDisplayName(context) }
+                        val nativeName by lazy { it.getDisplayName(context, it.code) }
+                        terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
+                    }
+                }
+            }
+
+            SearchBar(
+                filter,
+                onQueryChange = { filter = it },
+                onSearch = { filter = it },
+                active = false,
+                onActiveChange = {},
+                colors = GodToolsTheme.searchBarColors,
+                leadingIcon = { Icon(Icons.Filled.Search, null) },
+                placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
+                content = {},
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.dashboard_tools_section_filter_language_any)) },
+                onClick = {
+                    viewModel.setSelectedLanguage(null)
+                    expanded = false
+                }
+            )
+            languages.forEach {
+                DropdownMenuItem(
+                    text = { LanguageName(it) },
+                    onClick = {
+                        viewModel.setSelectedLanguage(it)
+                        expanded = false
+                    }
+                )
+            }
+        }
     }
 }
