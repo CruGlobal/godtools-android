@@ -39,6 +39,9 @@ abstract class DownloadApiResourcesTask : DefaultTask() {
                 overwrite(false)
                 retries(2)
                 tempAndMove(true)
+                // HACK: disable SSL certificate validation to workaround flaky SSLPeerUnverifiedException for s3
+                //       see: https://github.com/michel-kraemer/gradle-download-task/issues/317#issuecomment-1635088067
+                acceptAnyCertificate(true)
             }.execute(true)
         }.forEach { it.get() }
     }
