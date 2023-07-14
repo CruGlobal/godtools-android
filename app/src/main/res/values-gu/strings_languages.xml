@@ -5,7 +5,5 @@
     <string name="menu_language_settings">ભાષા સેટિંગ્સ</string>
     <string name="title_language_settings">ભાષા સેટિંગ્સ</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">૮૦ થી વધારે ભાષાઓ</string>
-    <string name="text_language_parallel_description">ગોડટૂલ્સને તેમની મૂળ ભાષામાં કોઈની સાથે વહેંચો.</string>
     <!-- Downloadable Languages UI -->
 </resources>

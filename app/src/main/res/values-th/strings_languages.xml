@@ -5,7 +5,5 @@
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_settings">การตั้งค่าภาษา</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">กว่า 90 ภาษา</string>
-    <string name="text_language_parallel_description">แชร์ God Tools เป็นภาษาของผู้รับ</string>
     <!-- Downloadable Languages UI -->
 </resources>

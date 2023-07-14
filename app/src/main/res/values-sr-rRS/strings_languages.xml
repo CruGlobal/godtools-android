@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Подешавање језика</string>
     <string name="title_language_settings">Подешавање језика</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">преко 90 језика</string>
-    <string name="text_language_parallel_description">Поделите апликацију GodTools са неким на њиховом матерњем језику.</string>
     <!-- Downloadable Languages UI -->
 </resources>

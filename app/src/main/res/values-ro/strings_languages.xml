@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Setări de limbă</string>
     <string name="title_language_settings">Setări de limbă</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">Peste 90 de limbi</string>
-    <string name="text_language_parallel_description">Distribuie God Tools unei persoane în limba nativă a acesteia.</string>
     <!-- Downloadable Languages UI -->
 </resources>

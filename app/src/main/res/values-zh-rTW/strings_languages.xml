@@ -5,7 +5,5 @@
     <string name="menu_language_settings">語言選項</string>
     <string name="title_language_settings">語言選項</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">超過 90 種語言</string>
-    <string name="text_language_parallel_description">以他人的母語與他人分享God Tools。</string>
     <!-- Downloadable Languages UI -->
 </resources>

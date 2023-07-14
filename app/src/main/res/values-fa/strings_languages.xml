@@ -5,7 +5,5 @@
     <string name="menu_language_settings">تنظیمات زبان</string>
     <string name="title_language_settings">تنظیمات زبان</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">+90 زبان</string>
-    <string name="text_language_parallel_description">GodTools را با دیگران به زبان اصلی آن‌ها به اشتراک بگذارید.</string>
     <!-- Downloadable Languages UI -->
 </resources>

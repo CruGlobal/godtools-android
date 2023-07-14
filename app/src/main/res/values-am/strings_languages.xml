@@ -5,7 +5,5 @@
     <string name="menu_language_settings">የቋንቋ ማስተካከያ</string>
     <string name="title_language_settings">የቋንቋ ማስተካከያ</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">ከ 90 በላይ ቋንቋዎች</string>
-    <string name="text_language_parallel_description">GodTools\'ን ለሰዎች በራሳቸዉ ቋንቋ አጋራ</string>
     <!-- Downloadable Languages UI -->
 </resources>

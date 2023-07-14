@@ -21,12 +21,6 @@
     <string name="language_settings_section_offline_description">Download all the tools in a language to make them available even if you’re out of WiFi or cell service. Set the tool language via the options button within a tool.</string>
     <string name="language_settings_section_offline_action_edit">Edit downloaded languages</string>
 
-    <!-- TODO: remove these outdated phrases -->
-    <eat-comment />
-    <string name="feature_discovery_title_language_settings">90+ Languages</string>
-    <string name="feature_discovery_desc_language_settings" translatable="false">@string/text_language_parallel_description</string>
-    <string name="text_language_parallel_description">Share GodTools with someone in their native language.</string>
-
     <!-- Downloadable Languages UI -->
     <eat-comment />
     <string name="language_settings_downloadable_languages_search">Search languages</string>

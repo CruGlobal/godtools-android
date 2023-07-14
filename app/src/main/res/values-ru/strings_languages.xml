@@ -20,8 +20,6 @@
     <string name="language_settings_section_offline_description">Загрузите все инструменты на выбранном языке, чтобы они были доступны, даже когда нет сигнала или WiFi. Установите язык инструмента, нажав на кнопку \"настройки\" внутри инструмента.</string>
     <string name="language_settings_section_offline_action_edit">Править загруженные языки</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">Более 90 языков</string>
-    <string name="text_language_parallel_description">Поделитесь GodTools с кем-нибудь на их родном языке.</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Искать языки</string>
     <plurals name="language_settings_downloadable_languages_available_tools">

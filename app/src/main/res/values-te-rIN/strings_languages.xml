@@ -5,7 +5,5 @@
     <string name="menu_language_settings">భాష సెట్టింగ్స్</string>
     <string name="title_language_settings">భాష సెట్టింగ్స్</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ భాషలు</string>
-    <string name="text_language_parallel_description">GodToolsను ఎవరితోనైనా వారి మాతృభాషలో పంచుకోండి.</string>
     <!-- Downloadable Languages UI -->
 </resources>
