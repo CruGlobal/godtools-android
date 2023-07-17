@@ -3,6 +3,7 @@ package org.cru.godtools.ui.drawer
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -69,6 +70,8 @@ import org.cru.godtools.ui.login.startLoginActivity
 fun DrawerMenuLayout(content: @Composable () -> Unit) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+
+    BackHandler(enabled = drawerState.isOpen, onBack = { scope.launch { drawerState.close() } })
 
     ModalNavigationDrawer(
         drawerState = drawerState,
