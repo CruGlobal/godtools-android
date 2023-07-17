@@ -17,7 +17,6 @@ import org.ccci.gto.android.common.base.Constants.INVALID_STRING_RES
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.drawer.DrawerContentLayout
 
@@ -67,7 +66,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
 
     override val toolbar get() = when (val it = binding) {
         is ActivityGenericFragmentBinding -> it.appbar
-        is ActivityGenericFragmentWithNavDrawerBinding -> it.genericActivity.appbar
         else -> super.toolbar
     }
 
