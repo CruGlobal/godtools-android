@@ -2,32 +2,28 @@ package org.cru.godtools.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.asLiveData
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
-import org.cru.godtools.activity.BasePlatformActivity
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.databinding.ActivityDashboardBinding
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.util.openToolActivity
 
-private const val TAG_PARALLEL_LANGUAGE_DIALOG = "parallelLanguageDialog"
-
 @AndroidEntryPoint
-class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
+class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
@@ -36,11 +32,7 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
-    }
-
-    override fun onBindingChanged() {
-        super.onBindingChanged()
-        binding.compose.setContent {
+        setContent {
             GodToolsTheme {
                 DashboardLayout(
                     onOpenTool = { t, lang1, lang2 -> openTool(t, *listOfNotNull(lang1, lang2).toTypedArray()) },
@@ -48,11 +40,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
                 )
             }
         }
-    }
-
-    override fun onSetupActionBar() {
-        super.onSetupActionBar()
-        title = ""
     }
 
     override fun onNewIntent(newIntent: Intent) {
@@ -90,17 +77,6 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
         startTutorialActivity(PageSet.ONBOARDING)
     }
 
-    // region UI
-    override val toolbar get() = binding.appbar
-    override val drawerLayout get() = binding.drawerLayout
-    override val drawerMenu get() = binding.drawerMenu
-
-    override val isShowNavigationDrawerIndicator by lazy {
-        viewModel.currentPage.map { it != Page.FAVORITE_TOOLS }.asLiveData()
-    }
-
-    override fun inflateBinding() = ActivityDashboardBinding.inflate(layoutInflater)
-
     // region ToolsAdapterCallbacks
     @Inject
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
@@ -115,12 +91,4 @@ class DashboardActivity : BasePlatformActivity<ActivityDashboardBinding>() {
     }
     // endregion ToolsAdapterCallbacks
     // endregion UI
-
-    override fun onSupportNavigateUp() = when {
-        onBackPressedDispatcher.hasEnabledCallbacks() -> {
-            onBackPressedDispatcher.onBackPressed()
-            true
-        }
-        else -> super.onSupportNavigateUp()
-    }
 }

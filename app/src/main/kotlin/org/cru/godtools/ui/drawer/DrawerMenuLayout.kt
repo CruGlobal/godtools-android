@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -67,9 +68,11 @@ import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
-fun DrawerMenuLayout(content: @Composable () -> Unit) {
+fun DrawerMenuLayout(
+    drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    content: @Composable () -> Unit,
+) {
     val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     BackHandler(enabled = drawerState.isOpen, onBack = { scope.launch { drawerState.close() } })
 
