@@ -5,16 +5,25 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
+import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
@@ -35,20 +46,25 @@ import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.dashboard.Page
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
 import org.cru.godtools.ui.dashboard.home.HomeContent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
+import org.cru.godtools.ui.drawer.DrawerMenuLayout
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 internal fun DashboardLayout(
     viewModel: DashboardViewModel = viewModel(),
     onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
     onOpenToolDetails: (String) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+
     val currentPage by viewModel.currentPage.collectAsState()
     DashboardLayoutAnalytics(currentPage)
 
@@ -58,42 +74,69 @@ internal fun DashboardLayout(
     val refreshing by viewModel.isSyncRunning.collectAsState()
     val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
 
-    Scaffold(
-        bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) }
-    ) {
-        val saveableStateHolder = rememberSaveableStateHolder()
-        Box(
-            modifier = Modifier
-                .padding(it)
-                .pullRefresh(refreshState)
+    DrawerMenuLayout(drawerState) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        when {
+                            hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
+                                Icon(Icons.Default.ArrowBack, null)
+                            }
+                            else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
+                                Icon(Icons.Default.Menu, null)
+                            }
+                        }
+                    },
+                    colors = GodToolsTheme.topAppBarColors,
+                )
+            },
+            bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) }
         ) {
-            Crossfade(currentPage) { page ->
-                saveableStateHolder.SaveableStateProvider(page) {
-                    when (page) {
-                        Page.LESSONS -> LessonsLayout(
-                            onOpenLesson = { tool, translation -> onOpenTool(tool, translation?.languageCode, null) }
-                        )
-                        Page.HOME -> HomeContent(
-                            onOpenTool = onOpenTool,
-                            onOpenToolDetails = onOpenToolDetails,
-                            onViewAllFavorites = {
-                                saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                            },
-                            onViewAllTools = { viewModel.updateCurrentPage(Page.ALL_TOOLS) }
-                        )
-                        Page.FAVORITE_TOOLS -> AllFavoritesList(
-                            onOpenTool = onOpenTool,
-                            onOpenToolDetails = onOpenToolDetails
-                        )
-                        Page.ALL_TOOLS -> ToolsLayout(
-                            onToolClicked = onOpenToolDetails
-                        )
+            val saveableStateHolder = rememberSaveableStateHolder()
+            Box(
+                modifier = Modifier
+                    .padding(it)
+                    .pullRefresh(refreshState)
+            ) {
+                Crossfade(currentPage) { page ->
+                    saveableStateHolder.SaveableStateProvider(page) {
+                        when (page) {
+                            Page.LESSONS -> LessonsLayout(
+                                onOpenLesson = { tool, translation ->
+                                    onOpenTool(
+                                        tool,
+                                        translation?.languageCode,
+                                        null
+                                    )
+                                }
+                            )
+
+                            Page.HOME -> HomeContent(
+                                onOpenTool = onOpenTool,
+                                onOpenToolDetails = onOpenToolDetails,
+                                onViewAllFavorites = {
+                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                },
+                                onViewAllTools = { viewModel.updateCurrentPage(Page.ALL_TOOLS) },
+                            )
+
+                            Page.FAVORITE_TOOLS -> AllFavoritesList(
+                                onOpenTool = onOpenTool,
+                                onOpenToolDetails = onOpenToolDetails
+                            )
+
+                            Page.ALL_TOOLS -> ToolsLayout(
+                                onToolClicked = onOpenToolDetails
+                            )
+                        }
                     }
                 }
-            }
 
-            PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+                PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+            }
         }
     }
 }

@@ -20,7 +20,6 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ActivityGenericFragmentWithNavDrawerBinding
 import org.cru.godtools.ui.databinding.ActivityGenericFragmentBinding
 import org.cru.godtools.ui.drawer.DrawerContentLayout
-import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 
 abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId) {
@@ -51,10 +50,6 @@ abstract class BasePlatformActivity<B : ViewBinding> protected constructor(@Layo
             } else {
                 super.onOptionsItemSelected(item)
             }
-        }
-        R.id.action_switch_language -> {
-            startLanguageSettingsActivity()
-            true
         }
         else -> super.onOptionsItemSelected(item)
     }

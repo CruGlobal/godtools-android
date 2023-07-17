@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Dil parametrləri</string>
     <string name="title_language_settings">Dil parametrləri</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ dil</string>
-    <string name="text_language_parallel_description">GodTools-u insanlarla öz dillərində paylaş</string>
     <!-- Downloadable Languages UI -->
 </resources>

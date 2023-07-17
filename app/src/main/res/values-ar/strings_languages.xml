@@ -22,8 +22,6 @@
     <string name="language_settings_section_offline_description">قم بتنزيل جميع الأدوات بلغة ما لإتاحتها حتى إذا كنت خارج شبكة WiFi أو الخدمة الخلوية. اضبط لغة الأداة عبر زر الخيارات داخل الأداة.</string>
     <string name="language_settings_section_offline_action_edit">ضبط اللغات التي تم تنزيلها</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">+90 لغة</string>
-    <string name="text_language_parallel_description">شارك GodTools مع شخص بلغته الأم.</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">لغات البحث</string>
     <plurals name="language_settings_downloadable_languages_available_tools">

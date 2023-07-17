@@ -5,7 +5,5 @@
     <string name="menu_language_settings">הגדרות שפה</string>
     <string name="title_language_settings">הגדרות שפה</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ שפות</string>
-    <string name="text_language_parallel_description">שתפו את GodTools עם מישהו בשפת האם שלהם.</string>
     <!-- Downloadable Languages UI -->
 </resources>

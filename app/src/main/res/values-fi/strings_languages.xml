@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Kieliasetukset</string>
     <string name="title_language_settings">Kieliasetukset</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ kieltä</string>
-    <string name="text_language_parallel_description">Jaa GodTools jollekulle hänen omalla kielellään.</string>
     <!-- Downloadable Languages UI -->
 </resources>

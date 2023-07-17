@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Nyelvbeállítások</string>
     <string name="title_language_settings">Nyelvbeállítások</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ nyelv</string>
-    <string name="text_language_parallel_description">Oszd meg a God Tools alkalmazást valakivel az illető anyanyelvén.</string>
     <!-- Downloadable Languages UI -->
 </resources>

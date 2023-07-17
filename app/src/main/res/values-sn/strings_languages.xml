@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Zvine chekuita nemutauro</string>
     <string name="title_language_settings">Zvine chekuita nemutauro</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">Mutauro inppfuura makumi mapfumbamwe</string>
-    <string name="text_language_parallel_description">Goverana GodTools nemumwe munhu uchishandisa rurimi rwake rwaamai.</string>
     <!-- Downloadable Languages UI -->
 </resources>

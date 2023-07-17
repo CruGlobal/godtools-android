@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Các thiết lập ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập ngôn ngữ</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ Ngôn ngữ</string>
-    <string name="text_language_parallel_description">Chia sẻ GodTools với người khác bằng ngôn ngữ của họ.</string>
     <!-- Downloadable Languages UI -->
 </resources>

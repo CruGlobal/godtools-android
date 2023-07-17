@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Spracheinstellungen</string>
     <string name="title_language_settings">Spracheinstellungen</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">Über 90 Sprachen</string>
-    <string name="text_language_parallel_description">Teilen Sie GodTools mit jemandem in seiner Muttersprache.</string>
     <!-- Downloadable Languages UI -->
 </resources>

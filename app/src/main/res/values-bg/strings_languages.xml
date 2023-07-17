@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Езикови настройки</string>
     <string name="title_language_settings">Езикови настройки</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ Езика</string>
-    <string name="text_language_parallel_description">Споделете God Tools с някой на неговия/нейния роден език.</string>
     <!-- Downloadable Languages UI -->
 </resources>

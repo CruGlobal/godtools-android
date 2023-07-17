@@ -97,6 +97,19 @@ object GodToolsTheme {
             )
             else -> SearchBarDefaults.colors()
         }
+
+    val topAppBarColors
+        @Composable
+        get() = when {
+            isLightColorSchemeActive -> TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                scrolledContainerColor = MaterialTheme.colorScheme.primary,
+                navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+            )
+            else -> TopAppBarDefaults.topAppBarColors()
+        }
 }
 
 @Composable
@@ -118,12 +131,3 @@ fun GodToolsTheme(content: @Composable () -> Unit) {
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-val GodToolsAppBarColors @Composable get() = TopAppBarDefaults.topAppBarColors(
-    containerColor = MaterialTheme.colorScheme.primary,
-    scrolledContainerColor = MaterialTheme.colorScheme.primary,
-    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-)

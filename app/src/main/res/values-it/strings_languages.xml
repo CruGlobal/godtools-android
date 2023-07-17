@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Impostazioni della lingua</string>
     <string name="title_language_settings">Impostazioni della lingua</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">Oltre 90 lingue</string>
-    <string name="text_language_parallel_description">Condividi God Tools con qualcuno nella loro lingua materna.</string>
     <!-- Downloadable Languages UI -->
 </resources>

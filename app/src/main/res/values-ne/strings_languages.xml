@@ -5,7 +5,5 @@
     <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>
     <string name="title_language_settings">बहसलाई चुन्नुहोस</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ भाषाहरु</string>
-    <string name="text_language_parallel_description">GodTools लाई अरु कसैको साथ आफ्नो  मूल भाषामा  साझा गर्नुहोस।</string>
     <!-- Downloadable Languages UI -->
 </resources>

@@ -37,7 +37,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
-import org.cru.godtools.base.ui.theme.GodToolsAppBarColors
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 
@@ -63,7 +62,7 @@ internal fun LanguageSettingsLayout(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.title_language_settings)) },
-                colors = GodToolsAppBarColors,
+                colors = GodToolsTheme.topAppBarColors,
                 navigationIcon = {
                     IconButton(onClick = { onEvent(LanguageSettingsEvent.NavigateUp) }) {
                         Icon(Icons.Filled.ArrowBack, null)

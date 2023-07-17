@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Taalinstellings</string>
     <string name="title_language_settings">Taalinstellings</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+Tale</string>
-    <string name="text_language_parallel_description">Deel GodTools met iemand in hulle moedertaal.</string>
     <!-- Downloadable Languages UI -->
 </resources>

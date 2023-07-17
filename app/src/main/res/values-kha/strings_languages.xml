@@ -5,7 +5,5 @@
     <string name="menu_language_settings">ভাষার সেটিংগুলি</string>
     <string name="title_language_settings">ভাষার সেটিংগুলি</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">৯০+ ভাষা</string>
-    <string name="text_language_parallel_description">কারোর সাথে তার নিজস্ব ভাষায় GodTools শেয়ার করুন</string>
     <!-- Downloadable Languages UI -->
 </resources>

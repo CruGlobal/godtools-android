@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Kushtet e gjuhës</string>
     <string name="title_language_settings">Kushtet e gjuhës</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ gjuhët</string>
-    <string name="text_language_parallel_description">Ndaj God Tools me dikë në gjuhën e tyre.</string>
     <!-- Downloadable Languages UI -->
 </resources>

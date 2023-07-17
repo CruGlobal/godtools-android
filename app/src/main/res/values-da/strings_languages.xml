@@ -5,7 +5,5 @@
     <string name="menu_language_settings">Sprogindstillinger</string>
     <string name="title_language_settings">Sprogindstillinger</string>
     <!-- TODO: remove these outdated phrases -->
-    <string name="feature_discovery_title_language_settings">90+ sprog</string>
-    <string name="text_language_parallel_description">Del God Tools med en på deres eget sprog.</string>
     <!-- Downloadable Languages UI -->
 </resources>
