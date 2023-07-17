@@ -100,12 +100,6 @@
         </activity>
 
         <activity
-            android:name=".ui.about.AboutActivity"
-            android:label="@string/title_about"
-            android:parentActivityName=".ui.dashboard.DashboardActivity"
-            android:screenOrientation="@integer/default_screen_orientation" />
-
-        <activity
             android:name=".ui.tooldetails.ToolDetailsActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity"
             android:screenOrientation="@integer/default_screen_orientation" />

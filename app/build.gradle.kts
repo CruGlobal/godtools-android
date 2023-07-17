@@ -121,7 +121,6 @@ android {
 
 onesky {
     sourceStringFiles = listOf(
-        "strings_about.xml",
         "strings_account.xml",
         "strings_dashboard.xml",
         "strings_features.xml",
