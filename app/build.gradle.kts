@@ -162,7 +162,6 @@ dependencies {
     implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.androidx.core)
-    implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.drawerlayout)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.androidx.work)
@@ -175,7 +174,6 @@ dependencies {
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.napier)
-    implementation(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
