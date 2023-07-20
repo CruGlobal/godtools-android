@@ -26,7 +26,6 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.databinding.ToolDetailsActivityBinding
 import org.cru.godtools.download.manager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
@@ -70,9 +69,13 @@ class ToolDetailsActivity : BasePlatformActivity<ToolDetailsActivityBinding>() {
             GodToolsTheme {
                 ToolDetailsLayout(
                     viewModel = viewModel,
-                    onOpenTool = { tool, trans1, trans2 -> openTool(tool, trans1, trans2) },
-                    onOpenToolTraining = { tool, translation ->
-                        launchTrainingTips(tool?.code, tool?.type, translation?.languageCode)
+                    onEvent = {
+                        when (it) {
+                            is ToolDetailsEvent.OpenTool -> openTool(it.tool, it.lang1, it.lang2)
+                            is ToolDetailsEvent.OpenToolTraining -> {
+                                launchTrainingTips(it.tool?.code, it.tool?.type, it.lang)
+                            }
+                        }
                     }
                 )
             }
@@ -98,19 +101,11 @@ class ToolDetailsActivity : BasePlatformActivity<ToolDetailsActivityBinding>() {
     override fun inflateBinding() = ToolDetailsActivityBinding.inflate(layoutInflater)
     // endregion UI
 
-    private fun openTool(tool: Tool?, primary: Translation?, parallel: Translation?) {
+    private fun openTool(tool: Tool?, lang1: Locale?, lang2: Locale?) {
         tool?.code?.let { code ->
             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
-
-            val primaryLanguage = primary?.languageCode ?: Locale.ENGLISH
-            val parallelLanguage = parallel?.languageCode
-
-            // start pre-loading the tool in the primary language
-            if (parallelLanguage != null) {
-                openToolActivity(code, tool.type, primaryLanguage, parallelLanguage)
-            } else {
-                openToolActivity(code, tool.type, primaryLanguage)
-            }
+            val languages = listOfNotNull(lang1 ?: Locale.ENGLISH, lang2)
+            openToolActivity(code, tool.type, *languages.toTypedArray())
         }
     }
 

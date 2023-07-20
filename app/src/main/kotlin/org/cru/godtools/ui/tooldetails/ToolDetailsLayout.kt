@@ -44,6 +44,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
@@ -53,7 +54,6 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
@@ -66,12 +66,16 @@ private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
+sealed interface ToolDetailsEvent {
+    class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : ToolDetailsEvent
+    class OpenToolTraining(val tool: Tool?, val lang: Locale?) : ToolDetailsEvent
+}
+
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun ToolDetailsLayout(
     viewModel: ToolDetailsViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
+    onEvent: (ToolDetailsEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val toolCode by viewModel.toolCode.collectAsState()
@@ -125,8 +129,7 @@ fun ToolDetailsLayout(
 
                 ToolDetailsActions(
                     toolViewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolTraining = onOpenToolTraining,
+                    onEvent = onEvent,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
@@ -214,22 +217,23 @@ private fun ToolDetailsBanner(
 internal fun ToolDetailsActions(
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
+    onEvent: (ToolDetailsEvent) -> Unit = {},
 ) = Column(modifier = modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
     val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     Button(
-        onClick = { onOpenTool(tool, translation.value, secondTranslation) },
+        onClick = {
+            onEvent(ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode))
+        },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
 
     val manifest by toolViewModel.firstManifest.collectAsState()
     if (manifest?.hasTips == true) {
         Button(
-            onClick = { onOpenToolTraining(tool, translation.value) },
+            onClick = { onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode)) },
             modifier = Modifier
                 .testTag(TEST_TAG_ACTION_TOOL_TRAINING)
                 .fillMaxWidth()
