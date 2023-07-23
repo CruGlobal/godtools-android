@@ -4,6 +4,5 @@
     <!-- Language Settings UI -->
     <string name="menu_language_settings">Dil Ayarları</string>
     <string name="title_language_settings">Dil Ayarları</string>
-    <!-- TODO: remove these outdated phrases -->
     <!-- Downloadable Languages UI -->
 </resources>

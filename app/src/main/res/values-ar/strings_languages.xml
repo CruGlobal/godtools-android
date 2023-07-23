@@ -21,7 +21,6 @@
     <string name="language_settings_section_offline_heading">لغات الأداة متاحة في وضع عدم الاتصال</string>
     <string name="language_settings_section_offline_description">قم بتنزيل جميع الأدوات بلغة ما لإتاحتها حتى إذا كنت خارج شبكة WiFi أو الخدمة الخلوية. اضبط لغة الأداة عبر زر الخيارات داخل الأداة.</string>
     <string name="language_settings_section_offline_action_edit">ضبط اللغات التي تم تنزيلها</string>
-    <!-- TODO: remove these outdated phrases -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">لغات البحث</string>
     <plurals name="language_settings_downloadable_languages_available_tools">

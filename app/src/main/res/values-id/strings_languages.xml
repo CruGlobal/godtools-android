@@ -2,9 +2,23 @@
 <resources>
     <!-- App Language UI -->
     <string name="language_settings_app_language_title">Bahasa App</string>
+    <string name="language_settings_app_language_dialog_message">Saudara telah memilih %1$s sebagai bahasa aplikasi Saudara. Ini akan mengubah bahasa seluruh aplikasi GodTools. Apa Saudara yakin?</string>
+    <string name="language_settings_app_language_dialog_confirm">Mengubah bahasa</string>
+    <string name="language_settings_app_language_dialog_dismiss">Tidak apa</string>
     <!-- Language Settings UI -->
-    <string name="menu_language_settings">Pengaturan Bahasa</string>
+    <string name="menu_language_settings">Pengaturan bahasa</string>
     <string name="title_language_settings">Pengaturan Bahasa</string>
-    <!-- TODO: remove these outdated phrases -->
+    <string name="language_settings_section_app_language_heading">Bahasa antar-muka aplikasi</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="other">%1$d Bahasa tersedia</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Tetapkan bahasa yang Saudara inginkan untuk menampilkan seluruh aplikasi.</string>
+    <string name="language_settings_section_offline_heading">Bahasa alat tersedia secara offline</string>
+    <string name="language_settings_section_offline_description">Unduh semua alat dalam satu bahasa agar dapat dibuka meskipun Saudara tidak terhubung WiFi atau layanan seluler. Atur bahasa alat melalui tombol opsi di dalam alat.</string>
+    <string name="language_settings_section_offline_action_edit">Edit bahasa yang telah diunduh</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Cari bahasa</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="other">%1$d Alat tersedia</item>
+    </plurals>
 </resources>

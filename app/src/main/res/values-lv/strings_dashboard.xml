@@ -41,6 +41,9 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="tools_list_favorites_banner_action_dismiss">Aizvērt</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Rīki</string>
+    <string name="dashboard_tools_section_filter_label">Filtrs</string>
+    <string name="dashboard_tools_section_filter_category_any">Jebkura kategorija</string>
+    <string name="dashboard_tools_section_filter_language_any">Jebkura valoda</string>
     <string name="dashboard_tools_section_categories_label">Kategorijas</string>
     <string name="dashboard_tools_section_categories_all">Visi rīki</string>
     <string name="dashboard_tools_section_spotlight_label">Izmēģini rīku</string>

@@ -18,7 +18,6 @@
     <string name="language_settings_section_offline_heading">Rīka valodas pieejamas bezsaistē.</string>
     <string name="language_settings_section_offline_description">Lejupielādē visus rīkus izvēlētā valodā, lai tie būtu pieejami bezsaistē.</string>
     <string name="language_settings_section_offline_action_edit">Labot lejupielādēto valodu pieejamību.</string>
-    <!-- TODO: remove these outdated phrases -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Meklēt valodu</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
