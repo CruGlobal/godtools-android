@@ -5,19 +5,25 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import org.ccci.gto.android.common.androidx.lifecycle.observe
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
-import org.cru.godtools.base.tool.BaseToolRendererModule
+import org.cru.godtools.base.ui.BaseUiModule
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.download.manager.GodToolsDownloadManager
@@ -68,7 +74,7 @@ class ToolDetailsActivity : BaseActivity() {
             }
         }
 
-        downloadLatestTranslation()
+        downloadLatestTranslationsAutomatically()
     }
     // endregion Lifecycle
 
@@ -86,18 +92,22 @@ class ToolDetailsActivity : BaseActivity() {
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
     @Inject
-    @Named(BaseToolRendererModule.IS_CONNECTED_LIVE_DATA)
-    internal lateinit var isConnected: LiveData<Boolean>
+    @Named(BaseUiModule.IS_CONNECTED_STATE_FLOW)
+    internal lateinit var isConnectedFlow: StateFlow<Boolean>
 
     private val selectedTool by viewModels<SelectedToolSavedState>()
     private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
         if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
     }
 
-    private fun downloadLatestTranslation() {
-        observe(viewModel.toolCode.asLiveData(), settings.primaryLanguageLiveData, isConnected) { t, l, _ ->
-            if (t != null) downloadManager.downloadLatestPublishedTranslationAsync(t, l)
-        }
+    private fun downloadLatestTranslationsAutomatically() {
+        combine(viewModel.toolCode, settings.appLanguageFlow) { t, l -> t?.let { Pair(t, l) } }
+            .combineTransform(isConnectedFlow) { it, isConnected -> if (isConnected) emit(it) }
+            .filterNotNull()
+            .flowWithLifecycle(lifecycle)
+            .conflate()
+            .onEach { (t, l) -> downloadManager.downloadLatestPublishedTranslationAsync(t, l).await() }
+            .launchIn(lifecycleScope)
     }
 
     private fun launchTrainingTips(
