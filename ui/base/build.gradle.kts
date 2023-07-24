@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
+    implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.util)
 
