@@ -4,6 +4,5 @@
     <!-- Language Settings UI -->
     <string name="menu_language_settings">การตั้งค่าภาษา</string>
     <string name="title_language_settings">การตั้งค่าภาษา</string>
-    <!-- TODO: remove these outdated phrases -->
     <!-- Downloadable Languages UI -->
 </resources>

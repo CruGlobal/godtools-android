@@ -41,6 +41,9 @@
     <string name="tools_list_favorites_banner_action_dismiss">Скрыть</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Инструменты</string>
+    <string name="dashboard_tools_section_filter_label">Фильтр</string>
+    <string name="dashboard_tools_section_filter_category_any">Любая категория</string>
+    <string name="dashboard_tools_section_filter_language_any">Любой язык</string>
     <string name="dashboard_tools_section_categories_label">Категории</string>
     <string name="dashboard_tools_section_categories_all">Все инструменты</string>
     <string name="dashboard_tools_section_spotlight_label">Обзор инструментов</string>

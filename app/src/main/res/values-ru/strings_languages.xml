@@ -19,7 +19,6 @@
     <string name="language_settings_section_offline_heading">Языки инструментов доступны офлайн</string>
     <string name="language_settings_section_offline_description">Загрузите все инструменты на выбранном языке, чтобы они были доступны, даже когда нет сигнала или WiFi. Установите язык инструмента, нажав на кнопку \"настройки\" внутри инструмента.</string>
     <string name="language_settings_section_offline_action_edit">Править загруженные языки</string>
-    <!-- TODO: remove these outdated phrases -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Искать языки</string>
     <plurals name="language_settings_downloadable_languages_available_tools">

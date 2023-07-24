@@ -17,6 +17,18 @@
     <string name="account_activity_sessions">Сессии</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Ваши значки</string>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Завершен %1$,d урок</item>
+        <item quantity="other">Завершены %1$,d уроки</item>
+        <item quantity="few">Завершенных уроков %1$,d</item>
+        <item quantity="many">Завершено %1$,d уроков</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Открыта %1$,d статья</item>
+        <item quantity="other">Открыто %1$,d  статей</item>
+        <item quantity="few">Открытых статей %1$,d</item>
+        <item quantity="many">Открыто %1$,d  статей</item>
+    </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Активность по миру</string>
     <string name="profile_global_activity_heading">%1$s  активность по миру</string>
