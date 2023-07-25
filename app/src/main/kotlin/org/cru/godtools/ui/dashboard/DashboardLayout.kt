@@ -109,7 +109,7 @@ internal fun DashboardLayout(
                     .padding(it)
                     .pullRefresh(refreshState)
             ) {
-                Crossfade(currentPage) { page ->
+                Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
                         when (page) {
                             Page.LESSONS -> LessonsLayout(
