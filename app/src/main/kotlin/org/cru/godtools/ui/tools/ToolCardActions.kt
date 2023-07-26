@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -37,7 +37,7 @@ internal fun ToolCardActions(
     val buttonContentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
     val buttonMinHeight = 30.dp
 
-    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
         OutlinedButton(
             onClick = { onEvent(ToolCardEvent.OpenToolDetails(tool)) },
             contentPadding = buttonContentPadding,
