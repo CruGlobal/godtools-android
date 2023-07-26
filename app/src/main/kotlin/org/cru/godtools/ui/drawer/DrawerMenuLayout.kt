@@ -182,7 +182,7 @@ fun DrawerContentLayout(
                 label = { Text(stringResource(R.string.menu_feedback)) },
                 selected = false,
                 onClick = {
-                    uriHandler.openUri("https://form.asana.com/?k=zjG5sVjCeB0MCIjKea1IWg&d=657768513276")
+                    uriHandler.openUri("https://godtoolsapp.com/send-feedback/")
                     dismissDrawer()
                 }
             )
@@ -191,7 +191,7 @@ fun DrawerContentLayout(
                 label = { Text(stringResource(R.string.menu_report_bug)) },
                 selected = false,
                 onClick = {
-                    uriHandler.openUri("https://form.asana.com/?k=2XgC7iGos5JKqEsgyr_WWA&d=657768513276")
+                    uriHandler.openUri("https://godtoolsapp.com/report-bug/")
                     dismissDrawer()
                 }
             )
@@ -200,7 +200,7 @@ fun DrawerContentLayout(
                 label = { Text(stringResource(R.string.menu_question)) },
                 selected = false,
                 onClick = {
-                    uriHandler.openUri("https://form.asana.com/?k=xwsmGveP8Os1JlqJ3Q4S_A&d=657768513276")
+                    uriHandler.openUri("https://godtoolsapp.com/ask-question/")
                     dismissDrawer()
                 }
             )
@@ -227,7 +227,7 @@ fun DrawerContentLayout(
                 label = { Text(stringResource(R.string.menu_share_story)) },
                 selected = false,
                 onClick = {
-                    uriHandler.openUri("https://form.asana.com/?k=L7M3jdnAh7S414z8fN_YsQ&d=657768513276")
+                    uriHandler.openUri("https://godtoolsapp.com/share-story/")
                     dismissDrawer()
                 }
             )
