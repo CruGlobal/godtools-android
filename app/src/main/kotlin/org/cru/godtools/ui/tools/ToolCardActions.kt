@@ -18,9 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import java.util.Locale
 import org.cru.godtools.R
-import org.cru.godtools.model.Tool
+import org.cru.godtools.ui.tools.ToolCardEvent.OpenTool as OpenToolEvent
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,8 +28,7 @@ internal fun ToolCardActions(
     modifier: Modifier = Modifier,
     buttonModifier: Modifier = Modifier,
     buttonWeightFill: Boolean = true,
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
-    onOpenToolDetails: (String) -> Unit = {},
+    onEvent: (ToolCardEvent) -> Unit = {},
 ) = Row(modifier = modifier) {
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
@@ -41,7 +39,7 @@ internal fun ToolCardActions(
 
     CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
         OutlinedButton(
-            onClick = { onOpenToolDetails(viewModel.code) },
+            onClick = { onEvent(ToolCardEvent.OpenToolDetails(tool)) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()
@@ -55,7 +53,9 @@ internal fun ToolCardActions(
         }
         Spacer(Modifier.width(8.dp))
         Button(
-            onClick = { onOpenTool(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
+            onClick = {
+                onEvent(OpenToolEvent(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode))
+            },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()

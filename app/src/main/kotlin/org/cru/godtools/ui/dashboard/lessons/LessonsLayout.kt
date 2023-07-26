@@ -16,10 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.LessonToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
@@ -31,12 +33,20 @@ fun LessonsLayout(
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item("header", "header") { LessonsHeader() }
 
-        items(lessons, { it }, { "lesson" }) {
+        items(lessons, { it }, { "lesson" }) { lesson ->
             LessonToolCard(
-                it,
-                onClick = { tool, translation ->
-                    viewModel.recordOpenLessonInAnalytics(tool?.code)
-                    onOpenLesson(tool, translation)
+                lesson,
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.Click -> {
+                            viewModel.recordOpenLessonInAnalytics(it.tool?.code)
+                            onOpenLesson(it.tool, it.translation1)
+                        }
+                        is ToolCardEvent.OpenTool -> TODO()
+                        is ToolCardEvent.OpenToolDetails -> {
+                            if (BuildConfig.DEBUG) error("$it is currently unsupported for Lessons")
+                        }
+                    }
                 },
                 modifier = Modifier
                     .animateItemPlacement()

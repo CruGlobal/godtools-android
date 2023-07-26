@@ -58,6 +58,7 @@ import org.cru.godtools.model.getName
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.PreloadTool
+import org.cru.godtools.ui.tools.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.VariantToolCard
 
@@ -277,7 +278,12 @@ private fun ToolDetailsVariants(
             VariantToolCard(
                 code,
                 isSelected = currentTool == code,
-                onClick = { onVariantSelected(code) }
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.OpenToolDetails, is ToolCardEvent.Click -> onVariantSelected(code)
+                        is ToolCardEvent.OpenTool -> error("OpenTool is not supported")
+                    }
+                },
             )
         }
     }

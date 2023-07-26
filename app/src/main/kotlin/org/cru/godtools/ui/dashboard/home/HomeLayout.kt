@@ -41,6 +41,7 @@ import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
@@ -53,6 +54,7 @@ import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 private val PADDING_HORIZONTAL = 16.dp
 
@@ -104,12 +106,19 @@ internal fun HomeContent(
                 )
             }
 
-            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
+            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) { lesson ->
                 LessonToolCard(
-                    it,
-                    onClick = { tool, translation ->
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, tool?.code, SOURCE_FEATURED)
-                        onOpenTool(tool, translation?.languageCode, null)
+                    lesson,
+                    onEvent = {
+                        when (it) {
+                            is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
+                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool?.code, SOURCE_FEATURED)
+                                onOpenTool(it.tool, it.lang1, null)
+                            }
+                            is ToolCardEvent.OpenToolDetails -> {
+                                if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
+                            }
+                        }
                     },
                     modifier = Modifier
                         .animateItemPlacement()
@@ -224,8 +233,12 @@ private fun HorizontalFavoriteTools(
         SquareToolCard(
             toolCode = it.code.orEmpty(),
             confirmRemovalFromFavorites = true,
-            onOpenTool = onOpenTool,
-            onOpenToolDetails = onOpenToolDetails,
+            onEvent = {
+                when (it) {
+                    is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> onOpenTool(it.tool, it.lang1, it.lang2)
+                    is ToolCardEvent.OpenToolDetails -> it.tool?.code?.let(onOpenToolDetails)
+                }
+            },
             modifier = Modifier.animateItemPlacement()
         )
     }
@@ -314,13 +327,19 @@ internal fun AllFavoritesList(
                     toolCode = tool.code.orEmpty(),
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
-                    onOpenTool = { tool, lang1, lang2 ->
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                        onOpenTool(tool, lang1, lang2)
-                    },
-                    onOpenToolDetails = {
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
-                        onOpenToolDetails(it)
+                    onEvent = {
+                        when (it) {
+                            is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
+                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, it.tool?.code, SOURCE_FAVORITE)
+                                onOpenTool(it.tool, it.lang1, it.lang2)
+                            }
+                            is ToolCardEvent.OpenToolDetails -> {
+                                it.tool?.code?.let {
+                                    viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
+                                    onOpenToolDetails(it)
+                                }
+                            }
+                        }
                     },
                     modifier = Modifier
                         .padding(top = 16.dp)

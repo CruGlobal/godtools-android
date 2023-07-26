@@ -29,6 +29,7 @@ import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
@@ -89,9 +90,13 @@ internal fun ToolsLayout(
                 tool.code.orEmpty(),
                 additionalLanguage = selectedLanguage,
                 showActions = false,
-                onClick = { it, _, _ ->
-                    viewModel.recordOpenToolDetailsInAnalytics(it?.code, SOURCE_ALL_TOOLS)
-                    it?.code?.let(onToolClicked)
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.Click, is ToolCardEvent.OpenTool, is ToolCardEvent.OpenToolDetails -> {
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
+                            it.tool?.code?.let(onToolClicked)
+                        }
+                    }
                 },
                 modifier = Modifier
                     .animateItemPlacement()
@@ -138,10 +143,14 @@ internal fun ToolSpotlight(
                 showActions = false,
                 floatParallelLanguageUp = false,
                 confirmRemovalFromFavorites = false,
-                onClick = { tool, _, _ ->
-                    viewModel.recordOpenToolDetailsInAnalytics(tool?.code, SOURCE_SPOTLIGHT)
-                    tool?.code?.let(onToolClicked)
-                }
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.Click, is ToolCardEvent.OpenTool, is ToolCardEvent.OpenToolDetails -> {
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_SPOTLIGHT)
+                            it.tool?.code?.let(onToolClicked)
+                        }
+                    }
+                },
             )
         }
     }

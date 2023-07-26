@@ -88,6 +88,17 @@ private val toolCardInfoLabelColor: Color @Composable get() {
 }
 internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
+sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) {
+    class Click(
+        tool: Tool?,
+        val translation1: Translation? = null,
+        lang1: Locale? = translation1?.languageCode,
+        lang2: Locale? = null,
+    ) : ToolCardEvent(tool, lang1, lang2)
+    class OpenTool(tool: Tool?, lang1: Locale? = null, lang2: Locale? = null) : ToolCardEvent(tool, lang1, lang2)
+    class OpenToolDetails(tool: Tool?) : ToolCardEvent(tool, null, null)
+}
+
 @Composable
 fun PreloadTool(tool: Tool) {
     val code = tool.code ?: return
@@ -99,7 +110,7 @@ fun PreloadTool(tool: Tool) {
 fun LessonToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
-    onClick: (Tool?, Translation?) -> Unit = { _, _ -> }
+    onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -108,7 +119,7 @@ fun LessonToolCard(
     ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, translation.value) },
+            onClick = { onEvent(ToolCardEvent.Click(tool, translation.value)) },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
@@ -147,9 +158,7 @@ fun ToolCard(
     confirmRemovalFromFavorites: Boolean = false,
     showActions: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
-    onOpenToolDetails: (String) -> Unit = {},
-    onClick: (Tool?, Locale?, Locale?) -> Unit = onOpenTool
+    onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -160,7 +169,15 @@ fun ToolCard(
         ElevatedCard(
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = { onClick(tool, firstTranslation.value?.languageCode, additionalLanguage?.code) },
+            onClick = {
+                onEvent(
+                    ToolCardEvent.Click(
+                        tool,
+                        lang1 = firstTranslation.value?.languageCode,
+                        lang2 = additionalLanguage?.code,
+                    )
+                )
+            },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -215,8 +232,7 @@ fun ToolCard(
                         viewModel,
                         buttonWeightFill = false,
                         buttonModifier = Modifier.widthIn(min = 92.dp),
-                        onOpenTool = onOpenTool,
-                        onOpenToolDetails = onOpenToolDetails,
+                        onEvent = onEvent,
                         modifier = Modifier
                             .padding(top = 4.dp)
                             .align(Alignment.End)
@@ -236,9 +252,7 @@ fun SquareToolCard(
     showActions: Boolean = true,
     floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit = { _, _, _ -> },
-    onOpenToolDetails: (String) -> Unit = {},
-    onClick: (Tool?, Locale?, Locale?) -> Unit = onOpenTool
+    onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -249,7 +263,15 @@ fun SquareToolCard(
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode) },
+            onClick = {
+                onEvent(
+                    ToolCardEvent.Click(
+                        tool,
+                        lang1 = firstTranslation.value?.languageCode,
+                        lang2 = secondTranslation?.languageCode,
+                    )
+                )
+            },
             modifier = modifier.width(189.dp)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -304,8 +326,7 @@ fun SquareToolCard(
                 if (showActions) {
                     ToolCardActions(
                         viewModel,
-                        onOpenTool = onOpenTool,
-                        onOpenToolDetails = onOpenToolDetails,
+                        onEvent = onEvent,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
@@ -320,7 +341,7 @@ fun VariantToolCard(
     toolCode: String,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
@@ -329,7 +350,7 @@ fun VariantToolCard(
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onClick() },
+            onClick = { onEvent(ToolCardEvent.Click(tool)) },
             modifier = modifier
         ) {
             ToolBanner(
