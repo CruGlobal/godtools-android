@@ -414,7 +414,7 @@ private fun ToolName(
     viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     minLines: Int = 1,
-    maxLines: Int = Int.MAX_VALUE
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
