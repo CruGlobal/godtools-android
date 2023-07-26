@@ -39,7 +39,7 @@ class ToolViewModels @Inject constructor(
     private val manifestManager: ManifestManager,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
-    private val translationsRepository: TranslationsRepository
+    private val translationsRepository: TranslationsRepository,
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }

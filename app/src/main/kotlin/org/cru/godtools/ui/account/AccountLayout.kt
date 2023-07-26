@@ -84,7 +84,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 pageCount = pages.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
-                key = { pages[it] }
+                key = { pages[it] },
             ) {
                 when (pages[it]) {
                     AccountPage.ACTIVITY -> AccountActivityLayout()

@@ -54,7 +54,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
 
     private suspend inline fun <reified T : BaseSyncTasks> executeSync(
-        crossinline block: suspend T.() -> Boolean
+        crossinline block: suspend T.() -> Boolean,
     ) = withContext(coroutineDispatcher) {
         try {
             with<T, Boolean> { block() }
