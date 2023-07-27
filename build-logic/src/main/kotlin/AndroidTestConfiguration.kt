@@ -1,8 +1,6 @@
 import com.android.build.gradle.TestedExtension
-import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
 // TODO: provide Project using the new multiple context receivers functionality.
@@ -40,8 +38,17 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
         }
     }
 
+    // Test Sharding
+    val shard = project.findProperty("testShard")?.toString()?.toIntOrNull()
+    val totalShards = project.findProperty("testTotalShards")?.toString()?.toIntOrNull()
+    if (shard != null && totalShards != null) {
+        if (Math.floorMod(project.path.hashCode(), totalShards) != Math.floorMod(shard, totalShards)) {
+            project.androidComponents.beforeVariants { it.enableUnitTest = false }
+        }
+    }
+
     // Kotlin Kover
-    project.apply(plugin = "org.jetbrains.kotlinx.kover")
+    project.plugins.apply("org.jetbrains.kotlinx.kover")
     project.extensions.configure<KoverReportExtension> {
         project.androidComponents.onVariants {
             androidReports(it.name) {
@@ -50,16 +57,6 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
                     setReportFile(project.layout.buildDirectory.file("reports/kover/${it.name}/report.xml"))
                 }
             }
-        }
-    }
-
-    // Test Sharding
-    val shard = project.findProperty("testShard")?.toString()?.toIntOrNull()
-    val totalShards = project.findProperty("testTotalShards")?.toString()?.toIntOrNull()
-    if (shard != null && totalShards != null) {
-        if (Math.floorMod(project.path.hashCode(), totalShards) != Math.floorMod(shard, totalShards)) {
-            project.extensions.configure<KoverProjectExtension> { disable() }
-            project.androidComponents.beforeVariants { it.enableUnitTest = false }
         }
     }
 }
