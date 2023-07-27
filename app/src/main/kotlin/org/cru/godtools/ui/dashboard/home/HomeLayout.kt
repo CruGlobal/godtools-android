@@ -58,14 +58,23 @@ import org.cru.godtools.ui.tools.ToolCardEvent
 
 private val PADDING_HORIZONTAL = 16.dp
 
+internal sealed interface DashboardHomeEvent {
+    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale? = null) : DashboardHomeEvent {
+        constructor(event: ToolCardEvent) : this(event.tool, event.lang1, event.lang2)
+    }
+    open class OpenToolDetails(val tool: Tool?) : DashboardHomeEvent {
+        constructor(event: ToolCardEvent.OpenToolDetails) : this(event.tool)
+    }
+    class OpenLesson(event: ToolCardEvent) : OpenTool(event.tool, event.lang1, null)
+    data object ViewAllFavorites : DashboardHomeEvent
+    data object ViewAllTools : DashboardHomeEvent
+}
+
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun HomeContent(
+    onEvent: (DashboardHomeEvent) -> Unit,
     viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit,
-    onViewAllFavorites: () -> Unit,
-    onViewAllTools: () -> Unit
 ) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
@@ -113,7 +122,7 @@ internal fun HomeContent(
                         when (it) {
                             is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
                                 viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool?.code, SOURCE_FEATURED)
-                                onOpenTool(it.tool, it.lang1, null)
+                                onEvent(DashboardHomeEvent.OpenLesson(it))
                             }
                             is ToolCardEvent.OpenToolDetails -> {
                                 if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
@@ -133,7 +142,7 @@ internal fun HomeContent(
             item("favorites-header") {
                 FavoritesHeader(
                     showViewAll = { hasFavoriteTools },
-                    onViewAllFavorites = onViewAllFavorites,
+                    onEvent = onEvent,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(horizontal = PADDING_HORIZONTAL)
@@ -145,13 +154,20 @@ internal fun HomeContent(
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
                         { favoriteTools.orEmpty().take(5) },
-                        onOpenTool = { tool, lang1, lang2 ->
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                            onOpenTool(tool, lang1, lang2)
-                        },
-                        onOpenToolDetails = {
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
-                            onOpenToolDetails(it)
+                        onEvent = {
+                            when {
+                                it is DashboardHomeEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
+                                    ACTION_OPEN_TOOL,
+                                    it.tool?.code,
+                                    SOURCE_FAVORITE
+                                )
+                                it is DashboardHomeEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
+                                    ACTION_OPEN_TOOL_DETAILS,
+                                    it.tool?.code,
+                                    SOURCE_FAVORITE
+                                )
+                            }
+                            onEvent(it)
                         },
                         modifier = Modifier
                             .animateItemPlacement()
@@ -161,7 +177,7 @@ internal fun HomeContent(
             } else {
                 item("favorites-empty", "favorites-empty") {
                     NoFavoriteTools(
-                        onViewAllTools = onViewAllTools,
+                        onEvent = onEvent,
                         modifier = Modifier
                             .animateItemPlacement()
                             .padding(horizontal = PADDING_HORIZONTAL)
@@ -189,8 +205,8 @@ private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
 @Composable
 private fun FavoritesHeader(
     showViewAll: () -> Boolean,
+    onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onViewAllFavorites: () -> Unit = {}
 ) = Row(modifier = modifier.fillMaxWidth()) {
     Text(
         stringResource(R.string.dashboard_home_section_favorites_title),
@@ -210,7 +226,7 @@ private fun FavoritesHeader(
             stringResource(R.string.dashboard_home_section_favorites_action_view_all),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable(onClick = onViewAllFavorites)
+            modifier = Modifier.clickable { onEvent(DashboardHomeEvent.ViewAllFavorites) }
         )
     }
 }
@@ -219,9 +235,8 @@ private fun FavoritesHeader(
 @OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
     tools: () -> List<Tool>,
+    onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit,
 ) = LazyRow(
     contentPadding = PaddingValues(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -235,8 +250,8 @@ private fun HorizontalFavoriteTools(
             confirmRemovalFromFavorites = true,
             onEvent = {
                 when (it) {
-                    is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> onOpenTool(it.tool, it.lang1, it.lang2)
-                    is ToolCardEvent.OpenToolDetails -> it.tool?.code?.let(onOpenToolDetails)
+                    is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> onEvent(DashboardHomeEvent.OpenTool(it))
+                    is ToolCardEvent.OpenToolDetails -> onEvent(DashboardHomeEvent.OpenToolDetails(it))
                 }
             },
             modifier = Modifier.animateItemPlacement()
@@ -248,7 +263,7 @@ private fun HorizontalFavoriteTools(
 @Composable
 private fun NoFavoriteTools(
     modifier: Modifier = Modifier,
-    onViewAllTools: () -> Unit = {}
+    onEvent: (DashboardHomeEvent) -> Unit = {},
 ) = Surface(
     color = MaterialTheme.colorScheme.surfaceVariant,
     shape = RectangleShape,
@@ -270,7 +285,7 @@ private fun NoFavoriteTools(
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            onViewAllTools,
+            onClick = { onEvent(DashboardHomeEvent.ViewAllTools) },
             modifier = Modifier
                 .padding(top = 8.dp)
                 .align(Alignment.CenterHorizontally)

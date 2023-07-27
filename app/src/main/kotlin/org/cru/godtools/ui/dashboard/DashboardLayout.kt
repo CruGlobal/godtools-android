@@ -50,6 +50,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
+import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
 import org.cru.godtools.ui.dashboard.home.HomeContent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
@@ -114,13 +115,18 @@ internal fun DashboardLayout(
                             )
 
                             Page.HOME -> HomeContent(
-                                onOpenTool = onOpenTool,
-                                onOpenToolDetails = onOpenToolDetails,
-                                onViewAllFavorites = {
-                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                },
-                                onViewAllTools = { viewModel.updateCurrentPage(Page.ALL_TOOLS) },
+                                onEvent = {
+                                    when (it) {
+                                        is DashboardHomeEvent.OpenTool -> onOpenTool(it.tool, it.lang1, it.lang2)
+                                        is DashboardHomeEvent.OpenToolDetails ->
+                                            it.tool?.code?.let { onOpenToolDetails(it) }
+                                        DashboardHomeEvent.ViewAllFavorites -> {
+                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                        }
+                                        DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
+                                    }
+                                }
                             )
 
                             Page.FAVORITE_TOOLS -> AllFavoritesList(
