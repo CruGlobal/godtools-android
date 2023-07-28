@@ -52,6 +52,7 @@ import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
 import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
 import org.cru.godtools.ui.dashboard.home.HomeContent
+import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
@@ -105,13 +106,11 @@ internal fun DashboardLayout(
                     saveableStateHolder.SaveableStateProvider(page) {
                         when (page) {
                             Page.LESSONS -> LessonsLayout(
-                                onOpenLesson = { tool, translation ->
-                                    onOpenTool(
-                                        tool,
-                                        translation?.languageCode,
-                                        null
-                                    )
-                                }
+                                onEvent = {
+                                    when (it) {
+                                        is DashboardLessonsEvent.OpenLesson -> onOpenTool(it.tool, it.lang, null)
+                                    }
+                                },
                             )
 
                             Page.HOME -> HomeContent(
