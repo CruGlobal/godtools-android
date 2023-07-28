@@ -56,6 +56,7 @@ import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
@@ -129,8 +130,13 @@ internal fun DashboardLayout(
                             )
 
                             Page.FAVORITE_TOOLS -> AllFavoritesList(
-                                onOpenTool = onOpenTool,
-                                onOpenToolDetails = onOpenToolDetails
+                                onEvent = {
+                                    when(it) {
+                                        is ToolCardEvent.OpenTool,
+                                        is ToolCardEvent.Click -> onOpenTool(it.tool, it.lang1, it.lang2)
+                                        is ToolCardEvent.OpenToolDetails -> it.tool?.code?.let(onOpenToolDetails)
+                                    }
+                                },
                             )
 
                             Page.ALL_TOOLS -> ToolsLayout(
