@@ -36,8 +36,8 @@ internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun ToolsLayout(
+    onEvent: (ToolCardEvent) -> Unit,
     viewModel: ToolsViewModel = viewModel(),
-    onToolClicked: (String) -> Unit = {}
 ) {
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
@@ -61,7 +61,7 @@ internal fun ToolsLayout(
             item("tool-spotlight", "tool-spotlight") {
                 ToolSpotlight(
                     viewModel,
-                    onToolClicked = onToolClicked,
+                    onEvent = onEvent,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(top = 16.dp)
@@ -92,11 +92,12 @@ internal fun ToolsLayout(
                 showActions = false,
                 onEvent = {
                     when (it) {
-                        is ToolCardEvent.Click, is ToolCardEvent.OpenTool, is ToolCardEvent.OpenToolDetails -> {
+                        is ToolCardEvent.Click,
+                        is ToolCardEvent.OpenTool,
+                        is ToolCardEvent.OpenToolDetails ->
                             viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
-                            it.tool?.code?.let(onToolClicked)
-                        }
                     }
+                    onEvent(it)
                 },
                 modifier = Modifier
                     .animateItemPlacement()
@@ -109,8 +110,8 @@ internal fun ToolsLayout(
 @Composable
 internal fun ToolSpotlight(
     viewModel: ToolsViewModel,
+    onEvent: (ToolCardEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onToolClicked: (String) -> Unit = {}
 ) = Column(modifier = modifier.fillMaxWidth()) {
     val spotlightTools by viewModel.spotlightTools.collectAsState()
 
@@ -145,11 +146,12 @@ internal fun ToolSpotlight(
                 confirmRemovalFromFavorites = false,
                 onEvent = {
                     when (it) {
-                        is ToolCardEvent.Click, is ToolCardEvent.OpenTool, is ToolCardEvent.OpenToolDetails -> {
+                        is ToolCardEvent.Click,
+                        is ToolCardEvent.OpenTool,
+                        is ToolCardEvent.OpenToolDetails ->
                             viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_SPOTLIGHT)
-                            it.tool?.code?.let(onToolClicked)
-                        }
                     }
+                    onEvent(it)
                 },
             )
         }

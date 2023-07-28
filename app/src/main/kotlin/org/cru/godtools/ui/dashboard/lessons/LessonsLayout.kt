@@ -20,7 +20,6 @@ import java.util.Locale
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
 
