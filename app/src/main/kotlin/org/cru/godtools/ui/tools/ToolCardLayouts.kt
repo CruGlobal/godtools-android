@@ -54,7 +54,6 @@ import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
 import org.cru.godtools.model.getTagline
 
@@ -91,8 +90,7 @@ internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography
 sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) {
     class Click(
         tool: Tool?,
-        val translation1: Translation? = null,
-        lang1: Locale? = translation1?.languageCode,
+        lang1: Locale? = null,
         lang2: Locale? = null,
     ) : ToolCardEvent(tool, lang1, lang2)
     class OpenTool(tool: Tool?, lang1: Locale? = null, lang2: Locale? = null) : ToolCardEvent(tool, lang1, lang2)
@@ -119,7 +117,7 @@ fun LessonToolCard(
     ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool, translation.value)) },
+            onClick = { onEvent(ToolCardEvent.Click(tool, translation.value?.languageCode)) },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
