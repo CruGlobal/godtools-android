@@ -6,7 +6,12 @@
     <string name="menu_login">Đăng nhập</string>
     <string name="menu_signup">Tạo tài khoản</string>
     <string name="menu_logout">Đăng xuất</string>
+    <string name="menu_heading_support">Hỗ trợ</string>
+    <string name="menu_feedback">Gửi ý kiến</string>
+    <string name="menu_report_bug">Báo cáo lỗi</string>
+    <string name="menu_question">Đặt câu hỏi</string>
     <string name="menu_heading_share">Chia sẻ</string>
+    <string name="menu_review">Để lại đánh giá</string>
     <string name="menu_share_story">Chia sẻ câu chuyện với chúng tôi</string>
     <string name="menu_share_godtools">Chia sẻ ứng dụng GodTools</string>
     <string name="share_app_message">Tải về ứng dụng GodTools. http://godtoolsapp.com \n\n
@@ -17,6 +22,7 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="menu_terms_of_use">Điều khoản sử dụng</string>
     <string name="menu_privacy_policy">Chính sách quyền riêng tư</string>
     <string name="menu_copyright">Bản quyền</string>
+    <string name="menu_version">Phiên bản: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Bài học</string>
     <string name="dashboard_lessons_header_title">Bài học dành cho bạn</string>
@@ -34,7 +40,10 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="tools_list_favorites_banner_action_dismiss">Bỏ qua</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Công cụ</string>
-    <string name="dashboard_tools_section_categories_label">Các mục</string>
+    <string name="dashboard_tools_section_filter_label">Bộ lọc</string>
+    <string name="dashboard_tools_section_filter_category_any">Bất kỳ loại nào</string>
+    <string name="dashboard_tools_section_filter_language_any">Bất kỳ ngôn ngữ nào</string>
+    <string name="dashboard_tools_section_categories_label">Các loại công cụ</string>
     <string name="dashboard_tools_section_categories_all">Tất cả công cụ</string>
     <string name="dashboard_tools_section_spotlight_label">Nổi bật công cụ</string>
     <string name="dashboard_tools_section_spotlight_description">Có lẽ bạn sẽ thích một số công cụ này</string>

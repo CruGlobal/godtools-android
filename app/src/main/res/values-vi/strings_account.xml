@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">Hoạt động toàn cầu</string>
+    <string name="account_joined">Tham gia %1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">Tạo tài khoản</string>
+    <string name="account_create_description">Tạo một tài khoản để có những câu chuyện, sự khích lệ và gợi ý thực hành trong tầm tay bạn.</string>
+    <string name="account_login_heading">Đăng nhập</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
+    <string name="account_activity_header">Hoạt động của bạn</string>
+    <string name="account_activity_tool_opens">Mở công cụ</string>
+    <string name="account_activity_lesson_completions">Hoàn thành bài học</string>
+    <string name="account_activity_screen_shares">Chia sẻ màn hình</string>
+    <string name="account_activity_links_shared">Chia sẻ liên kết</string>
+    <string name="account_activity_languages_used">Ngôn ngữ sử dụng</string>
+    <string name="account_activity_sessions">Lần</string>
     <!-- Badges -->
+    <string name="account_activity_badges_header">Huy hiệu</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">Đã mở %1$,d công cụ</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">Đã hoàn thành %1$,d bài học</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">Đã mở %1$,d bài viết</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">Đã chia sẻ %1$,d hình ảnh</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">Đã hoàn thành %1$,d gợi ý hướng dẫn</item>
+    </plurals>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">Hoạt động toàn cầu</string>
     <string name="profile_global_activity_heading">%1$s  Hoạt động toàn cầu</string>
     <string name="profile_activity_unique_users">Người dùng duy nhất</string>
     <string name="profile_activity_gospel_presentations">Trình bày Phúc Âm</string>
