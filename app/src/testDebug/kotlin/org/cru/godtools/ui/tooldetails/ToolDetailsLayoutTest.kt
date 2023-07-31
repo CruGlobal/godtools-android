@@ -34,6 +34,7 @@ class ToolDetailsLayoutTest {
     private val manifestFlow = MutableStateFlow<Manifest?>(null)
     private val availableLanguagesFlow = MutableStateFlow(emptyList<Language>())
 
+    private val viewModel: ToolDetailsViewModel = mockk()
     private val toolViewModel: ToolViewModels.ToolViewModel = mockk {
         every { tool } returns toolFlow
         every { firstTranslation } returns firstTranslationFlow
@@ -53,7 +54,7 @@ class ToolDetailsLayoutTest {
     // region ToolDetailsActions()
     @Test
     fun `ToolDetailsActions() - Tool Training Button - visible when manifest has tips`() {
-        composeTestRule.setContent { ToolDetailsActions(toolViewModel) }
+        composeTestRule.setContent { ToolDetailsActions(viewModel, toolViewModel) }
         manifestFlow.value = mockk { every { hasTips } returns true }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertExists()
@@ -61,7 +62,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `ToolDetailsActions() - Tool Training Button - gone when manifest does not have tips`() {
-        composeTestRule.setContent { ToolDetailsActions(toolViewModel) }
+        composeTestRule.setContent { ToolDetailsActions(viewModel, toolViewModel) }
         manifestFlow.value = mockk { every { hasTips } returns false }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
@@ -69,7 +70,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `ToolDetailsActions() - Tool Training Button - gone when manifest does not exist`() {
-        composeTestRule.setContent { ToolDetailsActions(toolViewModel) }
+        composeTestRule.setContent { ToolDetailsActions(viewModel, toolViewModel) }
         manifestFlow.value = null
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()

@@ -197,6 +197,7 @@ private fun ToolDetailsContent(
                 }
 
                 ToolDetailsActions(
+                    viewModel,
                     toolViewModel,
                     onEvent = onEvent,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
@@ -284,17 +285,19 @@ private fun ToolDetailsBanner(
 @Composable
 @VisibleForTesting
 internal fun ToolDetailsActions(
+    viewModel: ToolDetailsViewModel,
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     onEvent: (ToolDetailsEvent) -> Unit = {},
 ) = Column(modifier = modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
-    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     Button(
         onClick = {
-            onEvent(ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode))
+            onEvent(
+                ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, viewModel.additionalLocale.value)
+            )
         },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
