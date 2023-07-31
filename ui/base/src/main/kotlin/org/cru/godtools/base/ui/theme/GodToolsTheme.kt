@@ -26,6 +26,7 @@ const val DisabledAlpha = 0.38f
 @OptIn(ExperimentalMaterial3Api::class)
 object GodToolsTheme {
     val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)
+    val GT_DARK_GREEN = Color(red = 0x58, green = 0xAA, blue = 0x42)
     val GT_RED = Color(red = 0xE5, green = 0x5B, blue = 0x36)
     val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
 
