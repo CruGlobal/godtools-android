@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +19,8 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 
+internal const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
+
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolDetailsViewModel @Inject constructor(
@@ -29,6 +32,7 @@ class ToolDetailsViewModel @Inject constructor(
 ) : ViewModel() {
     val toolCode = savedStateHandle.getStateFlow<String?>(EXTRA_TOOL, null)
     fun setToolCode(code: String) = savedStateHandle.set(EXTRA_TOOL, code)
+    val additionalLocale = savedStateHandle.getStateFlow<Locale?>(EXTRA_ADDITIONAL_LANGUAGE, null)
 
     val tool = toolCode
         .flatMapLatest { it?.let { toolsRepository.findToolFlow(it) } ?: flowOf(null) }

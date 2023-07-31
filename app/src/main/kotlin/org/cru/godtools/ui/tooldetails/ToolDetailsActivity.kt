@@ -33,10 +33,11 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.util.openToolActivity
 
-fun Activity.startToolDetailsActivity(toolCode: String) = startActivity(
+fun Activity.startToolDetailsActivity(toolCode: String, additionalLanguage: Locale? = null) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
         .putExtras(BaseActivity.buildExtras(this))
         .putExtra(EXTRA_TOOL, toolCode)
+        .putExtra(EXTRA_ADDITIONAL_LANGUAGE, additionalLanguage)
 )
 
 @AndroidEntryPoint
