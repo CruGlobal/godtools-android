@@ -94,7 +94,7 @@ sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Local
         lang2: Locale? = null,
     ) : ToolCardEvent(tool, lang1, lang2)
     class OpenTool(tool: Tool?, lang1: Locale? = null, lang2: Locale? = null) : ToolCardEvent(tool, lang1, lang2)
-    class OpenToolDetails(tool: Tool?) : ToolCardEvent(tool, null, null)
+    class OpenToolDetails(tool: Tool?, val additionalLocale: Locale? = null) : ToolCardEvent(tool, null, null)
 }
 
 @Composable

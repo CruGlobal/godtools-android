@@ -51,7 +51,7 @@ class ToolsViewModel @Inject constructor(
     val selectedCategory = savedState.getStateFlow<String?>(KEY_SELECTED_CATEGORY, null)
     fun setSelectedCategory(category: String?) = savedState.set(KEY_SELECTED_CATEGORY, category)
 
-    private val selectedLocale = savedState.getStateFlow<Locale?>(KEY_SELECTED_LANGUAGE, null)
+    internal val selectedLocale = savedState.getStateFlow<Locale?>(KEY_SELECTED_LANGUAGE, null)
     val selectedLanguage = selectedLocale
         .flatMapLatest { it?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)

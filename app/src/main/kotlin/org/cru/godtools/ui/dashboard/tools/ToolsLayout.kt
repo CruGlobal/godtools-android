@@ -94,10 +94,11 @@ internal fun ToolsLayout(
                     when (it) {
                         is ToolCardEvent.Click,
                         is ToolCardEvent.OpenTool,
-                        is ToolCardEvent.OpenToolDetails ->
+                        is ToolCardEvent.OpenToolDetails -> {
                             viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
+                            onEvent(ToolCardEvent.OpenToolDetails(it.tool, viewModel.selectedLocale.value))
+                        }
                     }
-                    onEvent(it)
                 },
                 modifier = Modifier
                     .animateItemPlacement()

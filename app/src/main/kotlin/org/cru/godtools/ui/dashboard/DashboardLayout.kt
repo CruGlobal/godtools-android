@@ -62,7 +62,7 @@ import org.cru.godtools.ui.tools.ToolCardEvent
 internal sealed interface DashboardEvent {
     open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : DashboardEvent
     class OpenLesson(tool: Tool?, lang: Locale?) : OpenTool(tool, lang, null)
-    class OpenToolDetails(val tool: Tool?) : DashboardEvent
+    class OpenToolDetails(val tool: Tool?, val lang: Locale? = null) : DashboardEvent
 }
 
 @Composable
@@ -150,11 +150,11 @@ internal fun DashboardLayout(
                             )
 
                             Page.ALL_TOOLS -> ToolsLayout(
-                                onEvent = {
-                                    when (it) {
-                                        is ToolCardEvent.Click,
+                                onEvent = { e ->
+                                    when (e) {
+                                        is ToolCardEvent.Click -> onEvent(DashboardEvent.OpenToolDetails(e.tool))
                                         is ToolCardEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
+                                            onEvent(DashboardEvent.OpenToolDetails(e.tool, e.additionalLocale))
                                         is ToolCardEvent.OpenTool ->
                                             if (BuildConfig.DEBUG) error("opening a tool from All Tools is unsupported")
                                     }
