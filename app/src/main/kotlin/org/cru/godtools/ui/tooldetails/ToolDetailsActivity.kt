@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.combineTransform
@@ -102,12 +103,16 @@ class ToolDetailsActivity : BaseActivity() {
     }
 
     private fun downloadLatestTranslationsAutomatically() {
-        combine(viewModel.toolCode, settings.appLanguageFlow) { t, l -> t?.let { Pair(t, l) } }
+        combine(
+            viewModel.toolCode,
+            settings.appLanguageFlow,
+            viewModel.additionalLocale
+        ) { t, l1, l2 -> t?.let { Pair(t, listOfNotNull(l1, l2)) } }
             .combineTransform(isConnectedFlow) { it, isConnected -> if (isConnected) emit(it) }
             .filterNotNull()
             .flowWithLifecycle(lifecycle)
             .conflate()
-            .onEach { (t, l) -> downloadManager.downloadLatestPublishedTranslationAsync(t, l).await() }
+            .onEach { (t, l) -> l.map { downloadManager.downloadLatestPublishedTranslationAsync(t, it) }.awaitAll() }
             .launchIn(lifecycleScope)
     }
 
