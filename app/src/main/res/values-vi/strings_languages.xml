@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Ngôn ngữ ứng dụng</string>
+    <string name="language_settings_app_language_dialog_message">Bạn đã lựa chọn %1$s làm ngôn ngữ ứng dụng. Toàn bộ ứng dụng GodTools sẽ được thay đổi sang ngôn ngữ này. Bạn có chắc chắn?</string>
+    <string name="language_settings_app_language_dialog_confirm">Thay đổi ngôn ngữ</string>
+    <string name="language_settings_app_language_dialog_dismiss">Bỏ qua</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">Các thiết lập ngôn ngữ</string>
     <string name="title_language_settings">Các thiết lập ngôn ngữ</string>
+    <string name="language_settings_section_app_language_heading">Giao diện ngôn ngữ của ứng dụng</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="other">%1$d Ngôn ngữ sẵn có</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Cài đặt ngôn ngữ mà bạn muốn cho toàn bộ ứng dụng.</string>
+    <string name="language_settings_section_offline_heading">Công cụ ngôn ngữ sẵn có khi offline</string>
+    <string name="language_settings_section_offline_description">Tải tất cả công cụ có trong một ngôn ngữ để sẵn dùng ngay cả khi không có kết nối internet.</string>
+    <string name="language_settings_section_offline_action_edit">Tùy chỉnh các ngôn ngữ được tải về</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Tìm ngôn ngữ</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="other">%1$d công cụ sẵn có</item>
+    </plurals>
 </resources>

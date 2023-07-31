@@ -15,9 +15,9 @@
 Ứng dụng có thể được tải về từ https://godtoolsapp.com/vi/ \n\n
 
 Hãy trò chuyện thêm nhé!</string>
-    <string name="share_tool_message_article">Tôi muốn chia sẻ bài viết này với bạn và cũng muốn lắng nghe suy nghĩ của bạn sau khi đọc.\n%1$s</string>
+    <string name="share_tool_message_article">Tôi muốn chia sẻ bài viết này với bạn và cũng muốn lắng nghe suy nghĩ của bạn.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Chia sẻ một liên kết</string>
-    <string name="feature_discovery_desc_share_tool">Gửi công cụ này đến một người bạn bằng cách nhấp vào biểu tượng này</string>
+    <string name="feature_discovery_desc_share_tool">Bấm vào biểu tượng này để chia sẻ công cụ cho người khác.</string>
     <!-- Shareables -->
-    <string name="tool_shareable_action_share_image">Gửi hình ảnh</string>
+    <string name="tool_shareable_action_share_image">Chia sẻ hình ảnh</string>
 </resources>

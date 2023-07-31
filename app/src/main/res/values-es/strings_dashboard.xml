@@ -41,6 +41,9 @@ Puedes acceer a una versión online en https://knowgod.com/</string>
     <string name="tools_list_favorites_banner_action_dismiss">Descartar</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Herramientas</string>
+    <string name="dashboard_tools_section_filter_label">Filtro</string>
+    <string name="dashboard_tools_section_filter_category_any">Cualquier categoría</string>
+    <string name="dashboard_tools_section_filter_language_any">Cualquier Idioma</string>
     <string name="dashboard_tools_section_categories_label">Categorías</string>
     <string name="dashboard_tools_section_categories_all">Todas las herramientas</string>
     <string name="dashboard_tools_section_spotlight_label">Herramientas destacadas</string>
