@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
@@ -50,17 +51,25 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesList
+import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
 import org.cru.godtools.ui.dashboard.home.HomeContent
+import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tools.ToolCardEvent
+
+internal sealed interface DashboardEvent {
+    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : DashboardEvent
+    class OpenLesson(tool: Tool?, lang: Locale?) : OpenTool(tool, lang, null)
+    class OpenToolDetails(val tool: Tool?) : DashboardEvent
+}
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 internal fun DashboardLayout(
+    onEvent: (DashboardEvent) -> Unit,
     viewModel: DashboardViewModel = viewModel(),
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -104,32 +113,52 @@ internal fun DashboardLayout(
                     saveableStateHolder.SaveableStateProvider(page) {
                         when (page) {
                             Page.LESSONS -> LessonsLayout(
-                                onOpenLesson = { tool, translation ->
-                                    onOpenTool(
-                                        tool,
-                                        translation?.languageCode,
-                                        null
-                                    )
-                                }
+                                onEvent = {
+                                    when (it) {
+                                        is DashboardLessonsEvent.OpenLesson ->
+                                            onEvent(DashboardEvent.OpenLesson(it.tool, it.lang))
+                                    }
+                                },
                             )
 
                             Page.HOME -> HomeContent(
-                                onOpenTool = onOpenTool,
-                                onOpenToolDetails = onOpenToolDetails,
-                                onViewAllFavorites = {
-                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                },
-                                onViewAllTools = { viewModel.updateCurrentPage(Page.ALL_TOOLS) },
+                                onEvent = {
+                                    when (it) {
+                                        DashboardHomeEvent.ViewAllFavorites -> {
+                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                        }
+                                        DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
+                                        is DashboardHomeEvent.OpenTool ->
+                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                        is DashboardHomeEvent.OpenToolDetails ->
+                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
+                                    }
+                                }
                             )
 
                             Page.FAVORITE_TOOLS -> AllFavoritesList(
-                                onOpenTool = onOpenTool,
-                                onOpenToolDetails = onOpenToolDetails
+                                onEvent = {
+                                    when (it) {
+                                        is ToolCardEvent.Click,
+                                        is ToolCardEvent.OpenTool ->
+                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                        is ToolCardEvent.OpenToolDetails ->
+                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
+                                    }
+                                },
                             )
 
                             Page.ALL_TOOLS -> ToolsLayout(
-                                onToolClicked = onOpenToolDetails
+                                onEvent = {
+                                    when (it) {
+                                        is ToolCardEvent.Click,
+                                        is ToolCardEvent.OpenToolDetails ->
+                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
+                                        is ToolCardEvent.OpenTool ->
+                                            if (BuildConfig.DEBUG) error("opening a tool from All Tools is unsupported")
+                                    }
+                                }
                             )
                         }
                     }

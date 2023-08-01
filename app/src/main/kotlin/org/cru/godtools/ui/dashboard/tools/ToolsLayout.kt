@@ -29,14 +29,15 @@ import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun ToolsLayout(
+    onEvent: (ToolCardEvent) -> Unit,
     viewModel: ToolsViewModel = viewModel(),
-    onToolClicked: (String) -> Unit = {}
 ) {
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
@@ -60,7 +61,7 @@ internal fun ToolsLayout(
             item("tool-spotlight", "tool-spotlight") {
                 ToolSpotlight(
                     viewModel,
-                    onToolClicked = onToolClicked,
+                    onEvent = onEvent,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(top = 16.dp)
@@ -89,9 +90,14 @@ internal fun ToolsLayout(
                 tool.code.orEmpty(),
                 additionalLanguage = selectedLanguage,
                 showActions = false,
-                onClick = { it, _, _ ->
-                    viewModel.recordOpenToolDetailsInAnalytics(it?.code, SOURCE_ALL_TOOLS)
-                    it?.code?.let(onToolClicked)
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.Click,
+                        is ToolCardEvent.OpenTool,
+                        is ToolCardEvent.OpenToolDetails ->
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
+                    }
+                    onEvent(it)
                 },
                 modifier = Modifier
                     .animateItemPlacement()
@@ -104,8 +110,8 @@ internal fun ToolsLayout(
 @Composable
 internal fun ToolSpotlight(
     viewModel: ToolsViewModel,
+    onEvent: (ToolCardEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onToolClicked: (String) -> Unit = {}
 ) = Column(modifier = modifier.fillMaxWidth()) {
     val spotlightTools by viewModel.spotlightTools.collectAsState()
 
@@ -138,10 +144,15 @@ internal fun ToolSpotlight(
                 showActions = false,
                 floatParallelLanguageUp = false,
                 confirmRemovalFromFavorites = false,
-                onClick = { tool, _, _ ->
-                    viewModel.recordOpenToolDetailsInAnalytics(tool?.code, SOURCE_SPOTLIGHT)
-                    tool?.code?.let(onToolClicked)
-                }
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.Click,
+                        is ToolCardEvent.OpenTool,
+                        is ToolCardEvent.OpenToolDetails ->
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_SPOTLIGHT)
+                    }
+                    onEvent(it)
+                },
             )
         }
     }

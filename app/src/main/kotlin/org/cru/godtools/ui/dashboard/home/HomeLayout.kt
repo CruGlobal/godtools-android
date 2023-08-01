@@ -5,8 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.DragInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,10 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
-import org.burnoutcrew.reorderable.ReorderableItem
-import org.burnoutcrew.reorderable.detectReorderAfterLongPress
-import org.burnoutcrew.reorderable.rememberReorderableLazyListState
-import org.burnoutcrew.reorderable.reorderable
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
@@ -52,18 +47,27 @@ import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
-import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
 
 private val PADDING_HORIZONTAL = 16.dp
+
+internal sealed interface DashboardHomeEvent {
+    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale? = null) : DashboardHomeEvent {
+        constructor(event: ToolCardEvent) : this(event.tool, event.lang1, event.lang2)
+    }
+    open class OpenToolDetails(val tool: Tool?) : DashboardHomeEvent {
+        constructor(event: ToolCardEvent.OpenToolDetails) : this(event.tool)
+    }
+    class OpenLesson(event: ToolCardEvent) : OpenTool(event.tool, event.lang1, null)
+    data object ViewAllFavorites : DashboardHomeEvent
+    data object ViewAllTools : DashboardHomeEvent
+}
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun HomeContent(
+    onEvent: (DashboardHomeEvent) -> Unit,
     viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit,
-    onViewAllFavorites: () -> Unit,
-    onViewAllTools: () -> Unit
 ) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
@@ -104,12 +108,19 @@ internal fun HomeContent(
                 )
             }
 
-            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) {
+            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) { lesson ->
                 LessonToolCard(
-                    it,
-                    onClick = { tool, translation ->
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, tool?.code, SOURCE_FEATURED)
-                        onOpenTool(tool, translation?.languageCode, null)
+                    lesson,
+                    onEvent = {
+                        when (it) {
+                            is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
+                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool?.code, SOURCE_FEATURED)
+                                onEvent(DashboardHomeEvent.OpenLesson(it))
+                            }
+                            is ToolCardEvent.OpenToolDetails -> {
+                                if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
+                            }
+                        }
                     },
                     modifier = Modifier
                         .animateItemPlacement()
@@ -124,7 +135,7 @@ internal fun HomeContent(
             item("favorites-header") {
                 FavoritesHeader(
                     showViewAll = { hasFavoriteTools },
-                    onViewAllFavorites = onViewAllFavorites,
+                    onEvent = onEvent,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(horizontal = PADDING_HORIZONTAL)
@@ -136,13 +147,20 @@ internal fun HomeContent(
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
                         { favoriteTools.orEmpty().take(5) },
-                        onOpenTool = { tool, lang1, lang2 ->
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                            onOpenTool(tool, lang1, lang2)
-                        },
-                        onOpenToolDetails = {
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
-                            onOpenToolDetails(it)
+                        onEvent = {
+                            when {
+                                it is DashboardHomeEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
+                                    ACTION_OPEN_TOOL,
+                                    it.tool?.code,
+                                    SOURCE_FAVORITE
+                                )
+                                it is DashboardHomeEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
+                                    ACTION_OPEN_TOOL_DETAILS,
+                                    it.tool?.code,
+                                    SOURCE_FAVORITE
+                                )
+                            }
+                            onEvent(it)
                         },
                         modifier = Modifier
                             .animateItemPlacement()
@@ -152,7 +170,7 @@ internal fun HomeContent(
             } else {
                 item("favorites-empty", "favorites-empty") {
                     NoFavoriteTools(
-                        onViewAllTools = onViewAllTools,
+                        onEvent = onEvent,
                         modifier = Modifier
                             .animateItemPlacement()
                             .padding(horizontal = PADDING_HORIZONTAL)
@@ -180,8 +198,8 @@ private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
 @Composable
 private fun FavoritesHeader(
     showViewAll: () -> Boolean,
+    onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onViewAllFavorites: () -> Unit = {}
 ) = Row(modifier = modifier.fillMaxWidth()) {
     Text(
         stringResource(R.string.dashboard_home_section_favorites_title),
@@ -201,7 +219,7 @@ private fun FavoritesHeader(
             stringResource(R.string.dashboard_home_section_favorites_action_view_all),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable(onClick = onViewAllFavorites)
+            modifier = Modifier.clickable { onEvent(DashboardHomeEvent.ViewAllFavorites) }
         )
     }
 }
@@ -210,9 +228,8 @@ private fun FavoritesHeader(
 @OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
     tools: () -> List<Tool>,
+    onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit,
 ) = LazyRow(
     contentPadding = PaddingValues(horizontal = 16.dp),
     horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -224,8 +241,12 @@ private fun HorizontalFavoriteTools(
         SquareToolCard(
             toolCode = it.code.orEmpty(),
             confirmRemovalFromFavorites = true,
-            onOpenTool = onOpenTool,
-            onOpenToolDetails = onOpenToolDetails,
+            onEvent = {
+                when (it) {
+                    is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> onEvent(DashboardHomeEvent.OpenTool(it))
+                    is ToolCardEvent.OpenToolDetails -> onEvent(DashboardHomeEvent.OpenToolDetails(it))
+                }
+            },
             modifier = Modifier.animateItemPlacement()
         )
     }
@@ -235,7 +256,7 @@ private fun HorizontalFavoriteTools(
 @Composable
 private fun NoFavoriteTools(
     modifier: Modifier = Modifier,
-    onViewAllTools: () -> Unit = {}
+    onEvent: (DashboardHomeEvent) -> Unit = {},
 ) = Surface(
     color = MaterialTheme.colorScheme.surfaceVariant,
     shape = RectangleShape,
@@ -257,90 +278,12 @@ private fun NoFavoriteTools(
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            onViewAllTools,
+            onClick = { onEvent(DashboardHomeEvent.ViewAllTools) },
             modifier = Modifier
                 .padding(top = 8.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(R.string.dashboard_home_section_favorites_action_all_tools))
-        }
-    }
-}
-
-@Composable
-@OptIn(ExperimentalFoundationApi::class)
-internal fun AllFavoritesList(
-    viewModel: HomeViewModel = viewModel(),
-    onOpenTool: (Tool?, Locale?, Locale?) -> Unit,
-    onOpenToolDetails: (String) -> Unit,
-) {
-    val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
-
-    val reorderableState = rememberReorderableLazyListState(
-        // only support reordering tool items
-        canDragOver = { (_, k), _ -> (k as? String)?.startsWith("tool:") == true },
-        onMove = { from, to ->
-            val fromPos = favoriteTools.indexOfFirst { it.code == (from.key as? String)?.removePrefix("tool:") }
-            val toPos = favoriteTools.indexOfFirst { it.code == (to.key as? String)?.removePrefix("tool:") }
-            if (fromPos != -1 && toPos != -1) viewModel.moveFavoriteTool(fromPos, toPos)
-        },
-        onDragEnd = { _, _ -> viewModel.commitFavoriteToolOrder() }
-    )
-
-    LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        state = reorderableState.listState,
-        modifier = Modifier
-            .reorderable(reorderableState)
-            .detectReorderAfterLongPress(reorderableState)
-    ) {
-        item("header", "header") {
-            Text(
-                stringResource(R.string.dashboard_home_section_favorites_title),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateItemPlacement()
-            )
-        }
-
-        items(favoriteTools, key = { "tool:${it.code}" }) { tool ->
-            ReorderableItem(reorderableState, "tool:${tool.code}") { isDragging ->
-                val interactionSource = remember { MutableInteractionSource() }
-                interactionSource.reorderableDragInteractions(isDragging)
-
-                PreloadTool(tool)
-                ToolCard(
-                    toolCode = tool.code.orEmpty(),
-                    confirmRemovalFromFavorites = true,
-                    interactionSource = interactionSource,
-                    onOpenTool = { tool, lang1, lang2 ->
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool?.code, SOURCE_FAVORITE)
-                        onOpenTool(tool, lang1, lang2)
-                    },
-                    onOpenToolDetails = {
-                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, it, SOURCE_FAVORITE)
-                        onOpenToolDetails(it)
-                    },
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth()
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boolean) {
-    val dragState = remember { object { var start: DragInteraction.Start? = null } }
-    LaunchedEffect(isDragging) {
-        when (val start = dragState.start) {
-            null -> if (isDragging) dragState.start = DragInteraction.Start().also { emit(it) }
-            else -> if (!isDragging) {
-                dragState.start = null
-                emit(DragInteraction.Stop(start))
-            }
         }
     }
 }

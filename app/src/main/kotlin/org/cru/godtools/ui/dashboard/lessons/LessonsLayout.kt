@@ -16,27 +16,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Locale
+import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.tools.LessonToolCard
+import org.cru.godtools.ui.tools.ToolCardEvent
+
+internal sealed interface DashboardLessonsEvent {
+    class OpenLesson(val tool: Tool?, val lang: Locale?) : DashboardLessonsEvent
+}
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun LessonsLayout(
+internal fun LessonsLayout(
     viewModel: LessonsViewModel = viewModel(),
-    onOpenLesson: (Tool?, Translation?) -> Unit = { _, _ -> },
+    onEvent: (DashboardLessonsEvent) -> Unit = {},
 ) {
     val lessons by viewModel.lessons.collectAsState()
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item("header", "header") { LessonsHeader() }
 
-        items(lessons, { it }, { "lesson" }) {
+        items(lessons, { it }, { "lesson" }) { lesson ->
             LessonToolCard(
-                it,
-                onClick = { tool, translation ->
-                    viewModel.recordOpenLessonInAnalytics(tool?.code)
-                    onOpenLesson(tool, translation)
+                lesson,
+                onEvent = {
+                    when (it) {
+                        is ToolCardEvent.OpenTool, is ToolCardEvent.Click -> {
+                            viewModel.recordOpenLessonInAnalytics(it.tool?.code)
+                            onEvent(DashboardLessonsEvent.OpenLesson(it.tool, it.lang1))
+                        }
+                        is ToolCardEvent.OpenToolDetails -> {
+                            if (BuildConfig.DEBUG) error("$it is currently unsupported for Lessons")
+                        }
+                    }
                 },
                 modifier = Modifier
                     .animateItemPlacement()
