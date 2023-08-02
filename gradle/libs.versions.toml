@@ -200,7 +200,7 @@ timber = "com.jakewharton.timber:timber:5.0.1"
 tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 turbine = "app.cash.turbine:turbine:1.0.0"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
-youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.0.0"
+youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0"
 
 # HACK: dependencies used to trigger renovate upgrades
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
