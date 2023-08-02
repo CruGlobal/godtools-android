@@ -9,26 +9,38 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -44,6 +56,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
@@ -53,8 +66,9 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.getName
+import org.cru.godtools.shortcuts.PendingShortcut
+import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.PreloadTool
@@ -66,12 +80,58 @@ private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
+sealed interface ToolDetailsEvent {
+    object NavigateUp : ToolDetailsEvent
+    class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : ToolDetailsEvent
+    class OpenToolTraining(val tool: Tool?, val lang: Locale?) : ToolDetailsEvent
+    class PinShortcut(val shortcut: PendingShortcut) : ToolDetailsEvent
+}
+
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 fun ToolDetailsLayout(
     viewModel: ToolDetailsViewModel = viewModel(),
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
+    onEvent: (ToolDetailsEvent) -> Unit = {},
+) = DrawerMenuLayout {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = { onEvent(ToolDetailsEvent.NavigateUp) }) {
+                        Icon(Icons.Filled.ArrowBack, null)
+                    }
+                },
+                actions = {
+                    var showOverflow by remember { mutableStateOf(false) }
+                    val shortcut = viewModel.shortcut.collectAsState().value
+
+                    if (shortcut != null) {
+                        IconButton(onClick = { showOverflow = !showOverflow }) {
+                            Icon(Icons.Filled.MoreVert, null)
+                        }
+                        DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.menu_add_to_home)) },
+                                onClick = { onEvent(ToolDetailsEvent.PinShortcut(shortcut)) }
+                            )
+                        }
+                    }
+                },
+                colors = GodToolsTheme.topAppBarColors,
+            )
+        }
+    ) {
+        ToolDetailsContent(viewModel, onEvent = onEvent, modifier = Modifier.padding(it))
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun ToolDetailsContent(
+    viewModel: ToolDetailsViewModel,
+    modifier: Modifier = Modifier,
+    onEvent: (ToolDetailsEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val toolCode by viewModel.toolCode.collectAsState()
@@ -86,7 +146,7 @@ fun ToolDetailsLayout(
     toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .verticalScroll(scrollState)
     ) {
@@ -125,8 +185,7 @@ fun ToolDetailsLayout(
 
                 ToolDetailsActions(
                     toolViewModel,
-                    onOpenTool = onOpenTool,
-                    onOpenToolTraining = onOpenToolTraining,
+                    onEvent = onEvent,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
@@ -214,22 +273,23 @@ private fun ToolDetailsBanner(
 internal fun ToolDetailsActions(
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
-    onOpenTool: (Tool?, Translation?, Translation?) -> Unit = { _, _, _ -> },
-    onOpenToolTraining: (Tool?, Translation?) -> Unit = { _, _ -> },
+    onEvent: (ToolDetailsEvent) -> Unit = {},
 ) = Column(modifier = modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
     val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     Button(
-        onClick = { onOpenTool(tool, translation.value, secondTranslation) },
+        onClick = {
+            onEvent(ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode))
+        },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
 
     val manifest by toolViewModel.firstManifest.collectAsState()
     if (manifest?.hasTips == true) {
         Button(
-            onClick = { onOpenToolTraining(tool, translation.value) },
+            onClick = { onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode)) },
             modifier = Modifier
                 .testTag(TEST_TAG_ACTION_TOOL_TRAINING)
                 .fillMaxWidth()

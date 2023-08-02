@@ -2,7 +2,6 @@ package org.cru.godtools.ui.tooldetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -43,7 +42,7 @@ class ToolDetailsViewModel @Inject constructor(
     val shortcut = tool.map {
         it?.takeIf { shortcutManager.canPinToolShortcut(it) }
             ?.let { shortcutManager.getPendingToolShortcut(it.code) }
-    }.asLiveData()
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val variants = tool.map { it?.metatoolCode }
         .distinctUntilChanged()

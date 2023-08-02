@@ -9,7 +9,9 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.AnalyticsModule
@@ -35,6 +37,8 @@ class ExternalSingletonsModule {
             every { prepareForLogin(any()) } returns mockk()
         }
     }
+    @get:Provides
+    val coroutineScope: CoroutineScope by lazy { TestScope() }
     @get:Provides
     val eventbus by lazy { mockk<EventBus>(relaxUnitFun = true) }
     @get:Provides
