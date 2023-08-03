@@ -271,7 +271,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             ?: IconCompat.createWithResource(context, org.cru.godtools.ui.R.mipmap.ic_launcher)
 
         // build the shortcut
-        ShortcutInfoCompat.Builder(context, tool.shortcutId)
+        ShortcutInfoCompat.Builder(context, code.toolShortcutId)
             .setAlwaysBadged()
             .setIntent(intent)
             .setShortLabel(label)
@@ -340,5 +340,5 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 }
 
-private val Tool.shortcutId get() = code.toolShortcutId
-private val String?.toolShortcutId get() = "$TYPE_TOOL$this"
+private val Tool.shortcutId get() = code?.toolShortcutId
+private val String.toolShortcutId get() = "$TYPE_TOOL$this"
