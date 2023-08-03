@@ -13,6 +13,7 @@ import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -35,7 +36,7 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
     // various flows
-    private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1, extraBufferCapacity = 20)
+    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
     private val attachmentsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val toolsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
@@ -43,7 +44,6 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Before
     fun setupFlows() {
-        assertTrue(primaryLanguageFlow.tryEmit(Settings.defaultLanguage))
         assertTrue(parallelLanguageFlow.tryEmit(null))
     }
 
@@ -51,7 +51,7 @@ class GodToolsShortcutManagerDispatcherTest {
         every { attachmentsChangeFlow() } returns attachmentsChangeFlow.onStart { emit(Unit) }
     }
     private val settings: Settings = mockk {
-        every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
+        every { appLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.appLanguageFlow
         every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true) {
@@ -126,7 +126,7 @@ class GodToolsShortcutManagerDispatcherTest {
         clearMocks(shortcutManager)
 
         // trigger a primary language update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        assertTrue(appLanguageFlow.tryEmit(Locale.FRENCH))
         verify { shortcutManager wasNot Called }
         advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
         coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
@@ -199,14 +199,14 @@ class GodToolsShortcutManagerDispatcherTest {
         dispatcher.updatePendingShortcutsJob.cancel()
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        assertTrue(appLanguageFlow.tryEmit(Locale.FRENCH))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(toolsChangeFlow.tryEmit(Unit))
         assertTrue(translationsChangeFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verify { shortcutManager wasNot Called }
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
+        assertTrue(appLanguageFlow.tryEmit(Locale.GERMAN))
         assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
