@@ -6,6 +6,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        // HACK: load gradle-download-task before the kotlin plugin.
+        //       This works around a classpath issue where the kotlin plugin includes an outdated version
+        //       of public-suffix-list.txt
+        //       see: https://github.com/michel-kraemer/gradle-download-task/issues/317#issuecomment-1635088067
+        classpath libs.gradleDownloadTask
+
         classpath libs.android.gradlePlugin
         classpath libs.firebase.appdistribution.gradlePlugin
         classpath libs.firebase.crashlytics.gradlePlugin
