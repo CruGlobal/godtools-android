@@ -25,7 +25,6 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -37,22 +36,15 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 class GodToolsShortcutManagerDispatcherTest {
     // various flows
     private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
-    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
     private val attachmentsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val toolsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val translationsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
-
-    @Before
-    fun setupFlows() {
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-    }
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { attachmentsChangeFlow() } returns attachmentsChangeFlow.onStart { emit(Unit) }
     }
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.appLanguageFlow
-        every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true) {
         every { isEnabled } returns true
@@ -135,21 +127,6 @@ class GodToolsShortcutManagerDispatcherTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Trigger on parallelLanguage Update`() = testScope.runTest {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        runCurrent()
-        clearMocks(shortcutManager)
-
-        // trigger a parallel language update
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-        verify { shortcutManager wasNot Called }
-        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
-        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-        confirmVerified(shortcutManager)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Trigger on attachments Update`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         runCurrent()
@@ -200,14 +177,12 @@ class GodToolsShortcutManagerDispatcherTest {
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
         assertTrue(appLanguageFlow.tryEmit(Locale.FRENCH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(toolsChangeFlow.tryEmit(Unit))
         assertTrue(translationsChangeFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verify { shortcutManager wasNot Called }
         assertTrue(appLanguageFlow.tryEmit(Locale.GERMAN))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(toolsChangeFlow.tryEmit(Unit))

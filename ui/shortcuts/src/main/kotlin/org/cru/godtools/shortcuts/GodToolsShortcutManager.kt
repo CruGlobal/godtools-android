@@ -230,7 +230,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
                 ?: translationsRepository.findLatestTranslation(code, Settings.defaultLanguage)
                 ?: return@withContext null
             add(translation.languageCode)
-            settings.parallelLanguage?.let { add(it) }
         }
 
         // generate the target intent for this shortcut
@@ -306,7 +305,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
             merge(
                 settings.appLanguageFlow,
-                settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
                 translationsRepository.translationsChangeFlow(),
@@ -323,7 +321,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
             merge(
                 settings.appLanguageFlow,
-                settings.parallelLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
                 translationsRepository.translationsChangeFlow(),
