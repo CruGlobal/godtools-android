@@ -47,9 +47,6 @@ class ToolViewModels @Inject constructor(
     private val appLanguage = settings.appLanguageFlow
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    private val primaryLanguage = settings.primaryLanguageFlow
-        .flatMapLatest { languagesRepository.findLanguageFlow(it) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     private val parallelLanguage = settings.parallelLanguageFlow
         .flatMapLatest { it?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -81,10 +78,6 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        val primaryTranslation = settings.primaryLanguageFlow
-            .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
-            .map { StateFlowValue(it) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         private val defaultTranslation = translationsRepository
             .findLatestTranslationFlow(code, Settings.defaultLanguage)
             .map { StateFlowValue(it) }
@@ -99,7 +92,6 @@ class ToolViewModels @Inject constructor(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         val appLanguage get() = this@ToolViewModels.appLanguage
-        val primaryLanguage get() = this@ToolViewModels.primaryLanguage
         val parallelLanguage get() = this@ToolViewModels.parallelLanguage
 
         val firstTranslation = appTranslation
