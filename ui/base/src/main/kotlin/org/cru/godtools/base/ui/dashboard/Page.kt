@@ -10,6 +10,8 @@ enum class Page(@IdRes val id: Int) {
     ALL_TOOLS(R.id.dashboard_page_all_tools);
 
     companion object {
+        val DEFAULT = HOME
+
         fun findPage(@IdRes id: Int) = values().firstOrNull { it.id == id }
     }
 }
