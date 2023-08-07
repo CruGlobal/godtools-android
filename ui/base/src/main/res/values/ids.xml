@@ -7,10 +7,4 @@
     <item name="youtubeplayer_listener" type="id" />
     <item name="youtubeplayer_recue_listener" type="id" />
     <item name="youtubeplayer_tracker" type="id" />
-
-    <!-- Dashboard Pages -->
-    <item name="dashboard_page_lessons" type="id" />
-    <item name="dashboard_page_home" type="id" />
-    <item name="dashboard_page_favorites" type="id" />
-    <item name="dashboard_page_all_tools" type="id" />
 </resources>
