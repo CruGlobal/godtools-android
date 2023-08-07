@@ -1,13 +1,7 @@
 package org.cru.godtools.base.ui.dashboard
 
-import androidx.annotation.IdRes
-import org.cru.godtools.ui.R
-
-enum class Page(@IdRes val id: Int) {
-    LESSONS(R.id.dashboard_page_lessons),
-    HOME(R.id.dashboard_page_home),
-    FAVORITE_TOOLS(R.id.dashboard_page_favorites),
-    ALL_TOOLS(R.id.dashboard_page_all_tools);
+enum class Page {
+    LESSONS, HOME, FAVORITE_TOOLS, ALL_TOOLS;
 
     companion object {
         val DEFAULT = HOME
