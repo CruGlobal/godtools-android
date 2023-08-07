@@ -6,7 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -23,6 +25,7 @@ import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
@@ -47,9 +50,9 @@ class ToolViewModels @Inject constructor(
     private val appLanguage = settings.appLanguageFlow
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-    private val parallelLanguage = settings.parallelLanguageFlow
-        .flatMapLatest { it?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    // TODO: determine if we need to repurpose this functionality for the Language Update
+    private val parallelLanguage: StateFlow<Language?> = MutableStateFlow(null)
 
     inner class ToolViewModel(val code: String, initialTool: Tool? = null) {
         val tool = toolsRepository.findToolFlow(code)
@@ -85,7 +88,8 @@ class ToolViewModels @Inject constructor(
         private val parallelTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
-                else -> settings.parallelLanguageFlow.flatMapLatest {
+                // TODO: determine if we need to repurpose this functionality for the Language Update
+                else -> flowOf(null).flatMapLatest {
                     translationsRepository.findLatestTranslationFlow(t.code, it)
                 }
             }
