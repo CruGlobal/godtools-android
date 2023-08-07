@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,6 +71,7 @@ import org.cru.godtools.model.getName
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
+import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.ToolCardEvent
@@ -176,14 +178,26 @@ private fun ToolDetailsContent(
                     modifier = Modifier.padding(top = 40.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
-                val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
-                Text(
-                    pluralStringResource(R.plurals.label_tools_shares, shares, shares),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 10.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
-                )
+                Row(modifier = Modifier.padding(top = 10.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)) {
+                    val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
+                    Text(
+                        pluralStringResource(R.plurals.label_tools_shares, shares, shares),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+
+                    val additionalLanguage by viewModel.additionalLanguage.collectAsState()
+                    if (additionalLanguage != null) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        AvailableInLanguage(
+                            language = additionalLanguage,
+                            color = GodToolsTheme.GT_DARK_GREEN,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
 
                 ToolDetailsActions(
+                    viewModel,
                     toolViewModel,
                     onEvent = onEvent,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
@@ -271,17 +285,19 @@ private fun ToolDetailsBanner(
 @Composable
 @VisibleForTesting
 internal fun ToolDetailsActions(
+    viewModel: ToolDetailsViewModel,
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     onEvent: (ToolDetailsEvent) -> Unit = {},
 ) = Column(modifier = modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
-    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     Button(
         onClick = {
-            onEvent(ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode))
+            onEvent(
+                ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, viewModel.additionalLocale.value)
+            )
         },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }

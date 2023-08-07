@@ -35,13 +35,12 @@ class DashboardActivity : BaseActivity() {
         setContent {
             GodToolsTheme {
                 DashboardLayout(
-                    onEvent = {
-                        when (it) {
+                    onEvent = { e ->
+                        when (e) {
                             is DashboardEvent.OpenTool ->
-                                openTool(it.tool, *listOfNotNull(it.lang1, it.lang2).toTypedArray())
-                            is DashboardEvent.OpenToolDetails -> {
-                                it.tool?.code?.let { startToolDetailsActivity(it) }
-                            }
+                                openTool(e.tool, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
+                            is DashboardEvent.OpenToolDetails ->
+                                e.tool?.code?.let { startToolDetailsActivity(it, e.lang) }
                         }
                     },
                 )

@@ -46,6 +46,7 @@ class ToolDetailsViewModelTest {
             shortcutManager = mockk(),
             toolFileSystem = mockk(),
             toolsRepository = toolsRepository,
+            languagesRepository = mockk(),
             savedStateHandle = SavedStateHandle()
         )
     }
