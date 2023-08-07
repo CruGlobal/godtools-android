@@ -13,6 +13,7 @@ import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -24,7 +25,6 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -35,24 +35,16 @@ import org.robolectric.annotation.Config.OLDEST_SDK
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerDispatcherTest {
     // various flows
-    private val primaryLanguageFlow = MutableSharedFlow<Locale>(replay = 1, extraBufferCapacity = 20)
-    private val parallelLanguageFlow = MutableSharedFlow<Locale?>(replay = 1, extraBufferCapacity = 20)
+    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val attachmentsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val toolsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
     private val translationsChangeFlow = MutableSharedFlow<Any?>(extraBufferCapacity = 20)
-
-    @Before
-    fun setupFlows() {
-        assertTrue(primaryLanguageFlow.tryEmit(Settings.defaultLanguage))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
-    }
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { attachmentsChangeFlow() } returns attachmentsChangeFlow.onStart { emit(Unit) }
     }
     private val settings: Settings = mockk {
-        every { primaryLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.primaryLanguageFlow
-        every { parallelLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.parallelLanguageFlow
+        every { appLanguageFlow } returns this@GodToolsShortcutManagerDispatcherTest.appLanguageFlow
     }
     private val shortcutManager: GodToolsShortcutManager = mockk(relaxUnitFun = true) {
         every { isEnabled } returns true
@@ -126,22 +118,7 @@ class GodToolsShortcutManagerDispatcherTest {
         clearMocks(shortcutManager)
 
         // trigger a primary language update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        verify { shortcutManager wasNot Called }
-        advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
-        coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
-        confirmVerified(shortcutManager)
-    }
-
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `updateShortcutsJob - Trigger on parallelLanguage Update`() = testScope.runTest {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        runCurrent()
-        clearMocks(shortcutManager)
-
-        // trigger a parallel language update
-        assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(appLanguageFlow.tryEmit(Locale.FRENCH))
         verify { shortcutManager wasNot Called }
         advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
         coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
@@ -199,15 +176,13 @@ class GodToolsShortcutManagerDispatcherTest {
         dispatcher.updatePendingShortcutsJob.cancel()
 
         // trigger multiple updates simultaneously, it should aggregate to a single update
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(appLanguageFlow.tryEmit(Locale.FRENCH))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(toolsChangeFlow.tryEmit(Unit))
         assertTrue(translationsChangeFlow.tryEmit(Unit))
         advanceTimeBy(DELAY_UPDATE_SHORTCUTS - 1)
         verify { shortcutManager wasNot Called }
-        assertTrue(primaryLanguageFlow.tryEmit(Locale.ENGLISH))
-        assertTrue(parallelLanguageFlow.tryEmit(null))
+        assertTrue(appLanguageFlow.tryEmit(Locale.GERMAN))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(attachmentsChangeFlow.tryEmit(Unit))
         assertTrue(toolsChangeFlow.tryEmit(Unit))

@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.lang.ref.WeakReference
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -27,11 +26,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -230,11 +226,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         // generate the list of locales to use for this tool
         val locales = buildList {
-            val translation = translationsRepository.findLatestTranslation(code, settings.primaryLanguage)
+            val translation = translationsRepository.findLatestTranslation(code, settings.appLanguage)
                 ?: translationsRepository.findLatestTranslation(code, Settings.defaultLanguage)
                 ?: return@withContext null
             add(translation.languageCode)
-            settings.parallelLanguage?.let { add(it) }
         }
 
         // generate the target intent for this shortcut
@@ -248,9 +243,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = sequenceOf(Locale.getDefault(), Locale.ENGLISH).includeFallbacks().distinct().asFlow()
-            .mapNotNull { translationsRepository.findLatestTranslation(code, it) }
-            .firstOrNull()
+        val label = sequenceOf(settings.appLanguage, Settings.defaultLanguage).includeFallbacks().distinct()
+            .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(code, it) }
             .getName(tool, context)
 
         // create the icon bitmap
@@ -271,7 +265,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             ?: IconCompat.createWithResource(context, org.cru.godtools.ui.R.mipmap.ic_launcher)
 
         // build the shortcut
-        ShortcutInfoCompat.Builder(context, tool.shortcutId)
+        ShortcutInfoCompat.Builder(context, code.toolShortcutId)
             .setAlwaysBadged()
             .setIntent(intent)
             .setShortLabel(label)
@@ -310,8 +304,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             if (!manager.isEnabled) return@launch
 
             merge(
-                settings.primaryLanguageFlow,
-                settings.parallelLanguageFlow,
+                settings.appLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
                 translationsRepository.translationsChangeFlow(),
@@ -327,8 +320,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
 
             merge(
-                settings.primaryLanguageFlow,
-                settings.parallelLanguageFlow,
+                settings.appLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
                 toolsRepository.toolsChangeFlow(),
                 translationsRepository.translationsChangeFlow(),
@@ -340,5 +332,5 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 }
 
-private val Tool.shortcutId get() = code.toolShortcutId
-private val String?.toolShortcutId get() = "$TYPE_TOOL$this"
+private val Tool.shortcutId get() = code?.toolShortcutId
+private val String.toolShortcutId get() = "$TYPE_TOOL$this"
