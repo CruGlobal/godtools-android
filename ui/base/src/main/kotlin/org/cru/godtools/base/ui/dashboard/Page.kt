@@ -11,7 +11,5 @@ enum class Page(@IdRes val id: Int) {
 
     companion object {
         val DEFAULT = HOME
-
-        fun findPage(@IdRes id: Int) = values().firstOrNull { it.id == id }
     }
 }
