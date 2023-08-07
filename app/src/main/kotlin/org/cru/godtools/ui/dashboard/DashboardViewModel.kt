@@ -14,7 +14,6 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.sync.GodToolsSyncService
 
 private const val KEY_PAGE_STACK = "pageStack"
-private val DEFAULT_PAGE = Page.HOME
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -23,16 +22,16 @@ class DashboardViewModel @Inject constructor(
 ) : ViewModel() {
     // region Page Stack
     private var pageStack: List<Page>
-        get() = savedState.get<List<Page>>(KEY_PAGE_STACK)?.toList() ?: listOf(DEFAULT_PAGE)
+        get() = savedState.get<List<Page>>(KEY_PAGE_STACK)?.toList() ?: listOf(Page.DEFAULT)
         set(value) { savedState[KEY_PAGE_STACK] = ArrayList(value) }
-    private val pageStackFlow = savedState.getStateFlow(KEY_PAGE_STACK, listOf(DEFAULT_PAGE))
+    private val pageStackFlow = savedState.getStateFlow(KEY_PAGE_STACK, listOf(Page.DEFAULT))
 
     val hasBackStack = pageStackFlow
         .map { it.size > 1 }
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
     val currentPage = pageStackFlow
-        .map { it.lastOrNull() ?: DEFAULT_PAGE }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, DEFAULT_PAGE)
+        .map { it.lastOrNull() ?: Page.DEFAULT }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, Page.DEFAULT)
 
     fun updateCurrentPage(page: Page, clearStack: Boolean = true) {
         pageStack = if (clearStack) listOf(page) else pageStack + page
