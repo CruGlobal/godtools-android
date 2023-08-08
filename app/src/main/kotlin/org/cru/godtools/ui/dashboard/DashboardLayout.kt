@@ -17,12 +17,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
@@ -83,6 +86,9 @@ internal fun DashboardLayout(
     val refreshing by viewModel.isSyncRunning.collectAsState()
     val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    AppUpdateSnackbar(snackbarHostState)
+
     DrawerMenuLayout(drawerState) {
         Scaffold(
             topBar = {
@@ -101,7 +107,8 @@ internal fun DashboardLayout(
                     colors = GodToolsTheme.topAppBarColors,
                 )
             },
-            bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) }
+            bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) {
             val saveableStateHolder = rememberSaveableStateHolder()
             Box(
