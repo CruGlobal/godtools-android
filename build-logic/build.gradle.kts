@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.ktlint)
 }
 
 kotlin.jvmToolchain {
@@ -13,4 +14,12 @@ dependencies {
     implementation(libs.kotlin.gradlePlugin)
     implementation(libs.kotlin.kover.gradlePlugin)
     implementation(libs.onesky.gradlePlugin)
+}
+
+ktlint {
+    version.set(libs.versions.ktlint)
+
+    filter {
+        exclude { it.file.path.startsWith("${buildDir.path}/") }
+    }
 }

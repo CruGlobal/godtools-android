@@ -19,10 +19,11 @@ firebase-perf = "20.4.0"
 godtoolsShared = "0.9.1"
 google-auto-value = "1.10.2"
 gtoSupport = "4.1.0-SNAPSHOT"
-ktlint = "0.50.0"
 kotlin = "1.9.0"
 kotlinCoroutines = "1.7.3"
 kotlinKover = "0.7.3"
+ktlint = "0.50.0"
+ktlintGradle = "11.5.1"
 lottie = "6.1.0"
 okhttp3 = "4.11.0"
 retrofit2 = "2.9.0"
@@ -169,6 +170,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle"}
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.12"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
@@ -217,4 +219,4 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.5.1" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }

@@ -42,12 +42,14 @@ abstract class ExtractTranslationTask : DefaultTask() {
         val translation = included.filter { it.jsonApiType == "translation" }
             .firstOrNull {
                 it.relationships?.optJSONObject("resource")?.optJSONObject("data")?.jsonApiId == toolId &&
-                it.relationships?.optJSONObject("language")?.optJSONObject("data")?.jsonApiId == languageId
+                    it.relationships?.optJSONObject("language")?.optJSONObject("data")?.jsonApiId == languageId
             }
 
         // write the translation resource to output
-        JSONObject(buildMap<String, String> {
-            translation?.jsonApiId?.let { put("translations/$it", "$it.zip") }
-        }).writeJson(output.asFile.get())
+        JSONObject(
+            buildMap<String, String> {
+                translation?.jsonApiId?.let { put("translations/$it", "$it.zip") }
+            }
+        ).writeJson(output.asFile.get())
     }
 }
