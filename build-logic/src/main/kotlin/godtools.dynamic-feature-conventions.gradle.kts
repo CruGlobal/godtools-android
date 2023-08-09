@@ -12,3 +12,5 @@ android {
 dependencies {
     implementation(project(":app"))
 }
+
+excludeAndroidSdkDependencies()

@@ -8,3 +8,5 @@ android {
     configureQaBuildType(project)
     configureFlavorDimensions(project)
 }
+
+excludeAndroidSdkDependencies()
