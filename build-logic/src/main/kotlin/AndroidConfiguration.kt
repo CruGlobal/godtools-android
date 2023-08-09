@@ -39,7 +39,7 @@ private fun Project.configureCommonDependencies() {
             candidates.firstOrNull { it.id.let { it is ModuleComponentIdentifier && it.module == "guava" } }
                 ?.let { select(it) }
 
-            because("Google Guava provides listenablefuture, so we should prefer that over the standalong artifact")
+            because("Google Guava provides listenablefuture, so we should prefer that over the standalone artifact")
         }
 
         // exclude guava transitive compileOnly dependencies
