@@ -51,6 +51,12 @@ private fun Project.configureCommonDependencies() {
     }
 }
 
+internal fun Project.excludeAndroidSdkDependencies() {
+    configurations.configureEach {
+        exclude(group = "org.json", module = "json")
+    }
+}
+
 private fun BaseExtension.configureSdk() {
     compileSdkVersion(33)
 
