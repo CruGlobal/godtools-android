@@ -1,15 +1,11 @@
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import com.android.build.gradle.internal.dsl.DynamicFeatureExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
@@ -24,7 +20,7 @@ internal const val FLAVOR_ENV_PRODUCTION = "production"
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
+// context(Project)
 internal fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions(project)
@@ -84,7 +80,7 @@ private fun BaseExtension.configureCompilerOptions(project: Project) {
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
+// context(Project)
 fun BaseExtension.configureFlavorDimensions(project: Project) {
     flavorDimensions(FLAVOR_DIMENSION_ENV)
     productFlavors {
@@ -104,7 +100,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
+// context(Project)
 fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion =
@@ -120,7 +116,7 @@ fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
+// context(Project)
 fun CommonExtension<*, *, *, *, *>.configureQaBuildType(project: Project) {
     buildTypes {
         register(BUILD_TYPE_QA) {

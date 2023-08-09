@@ -5,7 +5,7 @@ import org.gradle.kotlin.dsl.configure
 
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
-//context(Project)
+// context(Project)
 internal fun TestedExtension.configureTestOptions(project: Project) {
     testOptions.unitTests {
         isIncludeAndroidResources = true
