@@ -41,7 +41,7 @@ jobs:
       - name: Run ktlint
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ktlintCheck --scan
+          arguments: :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
         if: always()
         uses: actions/upload-artifact@v3
