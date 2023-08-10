@@ -9,6 +9,7 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -49,6 +50,8 @@ class ExternalSingletonsModule {
     val syncService: GodToolsSyncService by lazy {
         mockk {
             coEvery { syncTools(any()) } returns true
+            every { syncFollowupsAsync() } returns CompletableDeferred(true)
+            every { syncToolSharesAsync() } returns CompletableDeferred(true)
         }
     }
     @get:Provides
