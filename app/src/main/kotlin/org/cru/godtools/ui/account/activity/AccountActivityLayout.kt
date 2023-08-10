@@ -35,7 +35,7 @@ import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
 fun AccountActivityLayout(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) = Column(modifier = modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)) {
     val viewModel = viewModel<AccountActivityViewModel>()
     val activity by viewModel.userActivity.collectAsState()
@@ -117,7 +117,7 @@ private fun AccountActivityItem(
     icon: Painter,
     count: Int,
     colors: IconColors,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) = Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier
