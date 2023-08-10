@@ -9,12 +9,6 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
     <string name="account_activity_header">Tu actividad</string>
-    <string name="account_activity_tool_opens">Herramientas abiertas</string>
-    <string name="account_activity_lesson_completions">Lecciones completada</string>
-    <string name="account_activity_screen_shares">Pantalla Compartidas</string>
-    <string name="account_activity_links_shared">Enlace compartido</string>
-    <string name="account_activity_languages_used">Idioma utilizados</string>
-    <string name="account_activity_sessions">Sesiones</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Tus insignias</string>
     <plurals name="account_activity_badge_tools_opened">

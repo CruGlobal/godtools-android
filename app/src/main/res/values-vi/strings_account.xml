@@ -9,12 +9,6 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
     <string name="account_activity_header">Hoạt động của bạn</string>
-    <string name="account_activity_tool_opens">Mở công cụ</string>
-    <string name="account_activity_lesson_completions">Hoàn thành bài học</string>
-    <string name="account_activity_screen_shares">Chia sẻ màn hình</string>
-    <string name="account_activity_links_shared">Chia sẻ liên kết</string>
-    <string name="account_activity_languages_used">Ngôn ngữ sử dụng</string>
-    <string name="account_activity_sessions">Lần</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Huy hiệu</string>
     <plurals name="account_activity_badge_tools_opened">
