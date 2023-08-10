@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.ktx.AppUpdateResult
 import com.google.android.play.core.ktx.clientVersionStalenessDays
@@ -19,6 +21,8 @@ import com.google.android.play.core.ktx.requestUpdateFlow
 import kotlinx.coroutines.flow.catch
 import org.cru.godtools.R
 
+internal val LocalAppUpdateManager = staticCompositionLocalOf<AppUpdateManager?> { null }
+
 @Composable
 internal fun AppUpdateSnackbar(hostState: SnackbarHostState) {
     val updateLauncher = rememberLauncherForActivityResult(
@@ -27,8 +31,9 @@ internal fun AppUpdateSnackbar(hostState: SnackbarHostState) {
     )
 
     val context = LocalContext.current
-    val appUpdateResult = remember(context) {
-        AppUpdateManagerFactory.create(context).requestUpdateFlow()
+    val appUpdateManager = LocalAppUpdateManager.current ?: remember { AppUpdateManagerFactory.create(context) }
+    val appUpdateResult = remember(appUpdateManager) {
+        appUpdateManager.requestUpdateFlow()
             .catch { emit(AppUpdateResult.NotAvailable) }
     }.collectAsState(AppUpdateResult.NotAvailable).value
 
