@@ -16,6 +16,7 @@ import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.dagger.EventBusModule
+import org.cru.godtools.dagger.FlipperModule
 import org.cru.godtools.dagger.ServicesModule
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
@@ -26,6 +27,7 @@ import org.greenrobot.eventbus.EventBus
     replaces = [
         AnalyticsModule::class,
         EventBusModule::class,
+        FlipperModule::class,
         ServicesModule::class,
     ]
 )
