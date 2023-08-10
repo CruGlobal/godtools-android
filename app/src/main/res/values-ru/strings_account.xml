@@ -9,12 +9,6 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Активность</string>
     <string name="account_activity_header">Ваша активность</string>
-    <string name="account_activity_tool_opens">Открыто инструментов</string>
-    <string name="account_activity_lesson_completions">Пройдено уроков</string>
-    <string name="account_activity_screen_shares">Экраны</string>
-    <string name="account_activity_links_shared">Отправленные ссылки</string>
-    <string name="account_activity_languages_used">Языки</string>
-    <string name="account_activity_sessions">Сессии</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Ваши значки</string>
     <plurals name="account_activity_badge_lessons_completed">

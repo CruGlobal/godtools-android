@@ -9,12 +9,6 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>
-    <string name="account_activity_tool_opens">Atvērtie rīki</string>
-    <string name="account_activity_lesson_completions">Pabeigtās nodarbības</string>
-    <string name="account_activity_screen_shares">Kopīgotie ekrāni</string>
-    <string name="account_activity_links_shared">Kopīgotās saites</string>
-    <string name="account_activity_languages_used">Izmantotās valodas</string>
-    <string name="account_activity_sessions">Sesijas</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Tavi žetoni</string>
     <plurals name="account_activity_badge_tools_opened">

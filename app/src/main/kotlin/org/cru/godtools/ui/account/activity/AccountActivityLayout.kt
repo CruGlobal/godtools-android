@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,14 +56,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
             modifier = Modifier.padding(all = 16.dp)
         ) {
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_tool_opens),
+                label = pluralStringResource(R.plurals.account_activity_tool_opens, activity.toolOpens),
                 icon = painterResource(R.drawable.ic_all_tools),
                 count = activity.toolOpens,
                 colors = UserActivity.Colors.toolOpens,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_lesson_completions),
+                label = pluralStringResource(R.plurals.account_activity_lesson_completions, activity.lessonCompletions),
                 icon = painterResource(R.drawable.ic_lessons),
                 count = activity.lessonCompletions,
                 colors = UserActivity.Colors.lessonCompletions,
@@ -74,14 +75,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
             modifier = Modifier.padding(horizontal = 16.dp, bottom = 16.dp)
         ) {
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_screen_shares),
+                label = pluralStringResource(R.plurals.account_activity_screen_shares, activity.screenShares),
                 icon = painterResource(org.cru.godtools.tool.tract.R.drawable.ic_tract_live_share),
                 count = activity.screenShares,
                 colors = UserActivity.Colors.screenShares,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_links_shared),
+                label = pluralStringResource(R.plurals.account_activity_links_shared, activity.linksShared),
                 icon = painterResource(org.cru.godtools.tool.R.drawable.ic_share),
                 count = activity.linksShared,
                 colors = UserActivity.Colors.linksShared,
@@ -93,14 +94,14 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
             modifier = Modifier.padding(horizontal = 16.dp, bottom = 16.dp)
         ) {
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_languages_used),
+                label = pluralStringResource(R.plurals.account_activity_languages_used, activity.languagesUsed),
                 icon = painterResource(R.drawable.ic_language),
                 count = activity.languagesUsed,
                 colors = UserActivity.Colors.languagesUsed,
                 modifier = Modifier.weight(1f)
             )
             AccountActivityItem(
-                label = stringResource(R.string.account_activity_sessions),
+                label = pluralStringResource(R.plurals.account_activity_sessions, activity.sessions),
                 icon = painterResource(R.drawable.ic_activity_sessions),
                 count = activity.sessions,
                 colors = UserActivity.Colors.sessions,

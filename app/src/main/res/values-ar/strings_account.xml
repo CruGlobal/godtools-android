@@ -9,12 +9,6 @@
     <!-- Activity -->
     <string name="profile_tab_activity">الحركة</string>
     <string name="account_activity_header">نشاط حركتك</string>
-    <string name="account_activity_tool_opens">تفتح الأداة</string>
-    <string name="account_activity_lesson_completions">الدروس المتممة</string>
-    <string name="account_activity_screen_shares">مشاركة الشاشة</string>
-    <string name="account_activity_links_shared">الروابط المشتركة</string>
-    <string name="account_activity_languages_used">اللغات المستخدمة</string>
-    <string name="account_activity_sessions">الجلسات</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">شاراتك</string>
     <plurals name="account_activity_badge_tools_opened">
