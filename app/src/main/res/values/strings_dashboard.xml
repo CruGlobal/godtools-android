@@ -64,4 +64,11 @@ An online version can be found at https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Not available in %1$s</string>
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Open</string>
+
+    <!-- In App Update -->
+    <eat-comment />
+    <string name="play_update_available">Update available</string>
+    <string name="play_update_available_action">Download</string>
+    <string name="play_update_downloaded">Update downloaded</string>
+    <string name="play_update_downloaded_action">Reload</string>
 </resources>

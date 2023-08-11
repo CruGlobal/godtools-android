@@ -80,7 +80,11 @@ class ExternalSingletonsModule {
     @get:Provides
     val globalActivityRepository: GlobalActivityRepository by lazy { mockk() }
     @get:Provides
-    val languagesRepository: LanguagesRepository by lazy { mockk() }
+    val languagesRepository: LanguagesRepository by lazy {
+        mockk {
+            every { getLanguagesFlow() } returns flowOf(emptyList())
+        }
+    }
     @get:Provides
     val lastSyncTimeRepository: LastSyncTimeRepository by lazy { mockk() }
     @get:Provides

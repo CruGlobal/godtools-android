@@ -180,6 +180,7 @@ dependencies {
     implementation(libs.firebase.inappmessaging)
     implementation(libs.firebase.perf)
 
+    implementation(libs.play.app.update.ktx)
     implementation(libs.play.feature.delivery)
     implementation(libs.play.instantapps)
     implementation(libs.play.review)
