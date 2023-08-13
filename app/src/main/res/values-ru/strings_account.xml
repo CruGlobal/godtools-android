@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_profile">Активность по миру</string>
+    <string name="menu_profile">Активность</string>
     <string name="account_joined">Присоединилось %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">Создать аккаунт</string>
@@ -11,6 +11,12 @@
     <string name="account_activity_header">Ваша активность</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">Ваши значки</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Открыт %1$,d инструмент</item>
+        <item quantity="other">Открыты %1$,d инструменты</item>
+        <item quantity="few">Открытых инструментов %1$,d</item>
+        <item quantity="many">Открыто %1$,d инструментов</item>
+    </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="one">Завершен %1$,d урок</item>
         <item quantity="other">Завершены %1$,d уроки</item>
@@ -22,6 +28,18 @@
         <item quantity="other">Открыто %1$,d  статей</item>
         <item quantity="few">Открытых статей %1$,d</item>
         <item quantity="many">Открыто %1$,d  статей</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Отправлено %1$,d изображение</item>
+        <item quantity="other">Отправлено %1$m,d изображений</item>
+        <item quantity="few">Отправленных изображений %1$,d</item>
+        <item quantity="many">Отправлено %1$,d изображений</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Пройдена %1$,d подсказка по обучению</item>
+        <item quantity="other">Пройдено %1$,d подсказок по обучению</item>
+        <item quantity="few">Пройденных подсказок обучению %1$,d</item>
+        <item quantity="many">Пройдено %1$,d подсказок по обучению</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Активность по миру</string>

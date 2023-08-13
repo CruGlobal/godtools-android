@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">समीक्षा</string>
+    <string name="lesson_feedback_question_helpful">क्या यह पाठ आपके लिए उपयोगी था?</string>
+    <string name="lesson_feedback_question_helpful_yes">हाँ</string>
+    <string name="lesson_feedback_question_helpful_no">नहीं</string>
+    <string name="lesson_feedback_question_readiness">आपको क्या लगता है कि आप आध्यात्मिक वार्तालाप शुरू करने के कितने तैयार हैं?</string>
+    <string name="lesson_feedback_action_submit">प्रतिक्रिया भेजें</string>
+    <string name="lesson_feedback_action_cancel">छोड़ दें</string>
+</resources>

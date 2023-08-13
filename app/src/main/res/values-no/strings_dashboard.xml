@@ -45,4 +45,5 @@ Du finner en nettversjon på https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Ikke tilgjengelig på %1$s</string>
     <string name="action_tools_about">Detaljer</string>
     <string name="action_tools_open">Åpne</string>
+    <!-- In App Update -->
 </resources>

@@ -24,6 +24,7 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="menu_terms_of_use">Conditions d\'utilisation</string>
     <string name="menu_privacy_policy">Politique de confidentialité</string>
     <string name="menu_copyright">Information du Copyright</string>
+    <string name="menu_version">Version:  %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Leçons</string>
     <string name="dashboard_lessons_header_title">Des leçons faites pour vous</string>
@@ -41,6 +42,9 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ignorer</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Outils</string>
+    <string name="dashboard_tools_section_filter_label">Filtre</string>
+    <string name="dashboard_tools_section_filter_category_any">Toute catégorie</string>
+    <string name="dashboard_tools_section_filter_language_any">Toute langue</string>
     <string name="dashboard_tools_section_categories_label">Catégories</string>
     <string name="dashboard_tools_section_categories_all">Tous les outils</string>
     <string name="dashboard_tools_section_spotlight_label">Pleins feux sur les outils</string>
@@ -52,4 +56,5 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="tool_card_label_language_unavailable">Non disponible en %1$s</string>
     <string name="action_tools_about">Détails</string>
     <string name="action_tools_open">Ouvrir</string>
+    <!-- In App Update -->
 </resources>

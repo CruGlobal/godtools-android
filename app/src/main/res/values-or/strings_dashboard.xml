@@ -28,4 +28,5 @@
     <string name="tools_list_remove_favorite_dialog_dismiss">ବାତିଲ୍ କରନ୍ତୁ</string>
     <string name="action_tools_about">ବିଷୟ</string>
     <string name="action_tools_open">ଖୋଲନ୍ତୁ</string>
+    <!-- In App Update -->
 </resources>

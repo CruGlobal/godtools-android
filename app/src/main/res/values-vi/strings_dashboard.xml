@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Bắt đầu</string>
     <string name="menu_tutorial">Hướng dẫn</string>
     <string name="menu_heading_account">Tài khoản</string>
     <string name="menu_login">Đăng nhập</string>
@@ -54,4 +55,5 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="tool_card_label_language_unavailable">Không có sẵn trong %1$s</string>
     <string name="action_tools_about">Giới thiệu</string>
     <string name="action_tools_open">Mở</string>
+    <!-- In App Update -->
 </resources>

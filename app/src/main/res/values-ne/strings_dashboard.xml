@@ -43,4 +43,5 @@
     <string name="tool_card_label_language_unavailable">%1$s मा उपलब्ध छैन</string>
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोल्नुहोस्</string>
+    <!-- In App Update -->
 </resources>

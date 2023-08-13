@@ -8,5 +8,19 @@
     <!-- Language Settings UI -->
     <string name="menu_language_settings">Paramètres de langue</string>
     <string name="title_language_settings">Paramètres de langue</string>
+    <string name="language_settings_section_app_language_heading">Langue de l\'interface de l\'application</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$d Langue disponible</item>
+        <item quantity="other">%1$d Langues disponibles</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Définissez la langue dans laquelle vous souhaitez que l\'application s\'affiche.</string>
+    <string name="language_settings_section_offline_heading">Langues de l\'outil disponibles hors ligne</string>
+    <string name="language_settings_section_offline_description">Téléchargez tous les outils dans une langue donnée pour qu\'ils soient disponibles même si vous n\'avez pas de connexion WiFi ou de réseau cellulaire. Définissez la langue de l\'outil à l\'aide du bouton d\'options de l\'outil.</string>
+    <string name="language_settings_section_offline_action_edit">Modifier les langues téléchargées</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Recherche de langues</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d Outil disponible</item>
+        <item quantity="other">%1$d Outils disponibles</item>
+    </plurals>
 </resources>

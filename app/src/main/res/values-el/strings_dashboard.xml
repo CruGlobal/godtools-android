@@ -45,4 +45,5 @@
     <string name="tool_card_label_language_unavailable">Δεν είναι διαθέσιμο σε %1$s</string>
     <string name="action_tools_about">Λεπτομέρειες</string>
     <string name="action_tools_open">Άνοιγμα</string>
+    <!-- In App Update -->
 </resources>

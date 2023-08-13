@@ -43,4 +43,5 @@ tiltækt án netsambands.</string>
     <string name="tool_card_label_language_unavailable">Ekki tiltækt í %1$s</string>
     <string name="action_tools_about">Ítaratriði</string>
     <string name="action_tools_open">Opna</string>
+    <!-- In App Update -->
 </resources>

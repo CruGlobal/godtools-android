@@ -6,8 +6,11 @@
     <string name="menu_login">Iniciar sessão</string>
     <string name="menu_signup">Criar conta</string>
     <string name="menu_logout">Sair</string>
+    <string name="menu_feedback">Enviar feedback</string>
+    <string name="menu_report_bug">Relatar um erro</string>
+    <string name="menu_question">Faça uma pergunta</string>
     <string name="menu_heading_share">Partilhar</string>
-    <string name="menu_share_story">Partilhar uma história connosco</string>
+    <string name="menu_share_story">Compartilhe uma história conosco</string>
     <string name="menu_share_godtools">Partilhar o aplicativo GodTools</string>
     <string name="share_app_message">Baixe o aplicativo GodTools: https://godtoolsapp.com \n\n
 
@@ -45,4 +48,5 @@ Pode encontrar uma versão online em https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Não disponível em %1$s</string>
     <string name="action_tools_about">Detalhes</string>
     <string name="action_tools_open">Abrir</string>
+    <!-- In App Update -->
 </resources>

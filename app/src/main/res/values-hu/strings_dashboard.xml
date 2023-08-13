@@ -45,4 +45,5 @@ A https://knowgod.com/ címen egy online verzió található</string>
     <string name="tool_card_label_language_unavailable">Nem elérhető itt: %1$s</string>
     <string name="action_tools_about">Részletek</string>
     <string name="action_tools_open">Megnyitás</string>
+    <!-- In App Update -->
 </resources>
