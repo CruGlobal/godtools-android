@@ -332,11 +332,10 @@ fun SquareToolCard(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun VariantToolCard(
-    toolCode: String,
+internal fun VariantToolCard(
+    viewModel: ToolViewModels.ToolViewModel,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
-    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val tool by viewModel.tool.collectAsState()
