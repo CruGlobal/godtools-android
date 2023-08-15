@@ -82,7 +82,7 @@ private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
 sealed interface ToolDetailsEvent {
-    object NavigateUp : ToolDetailsEvent
+    data object NavigateUp : ToolDetailsEvent
     class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : ToolDetailsEvent
     class OpenToolTraining(val tool: Tool?, val lang: Locale?) : ToolDetailsEvent
     class PinShortcut(val shortcut: PendingShortcut) : ToolDetailsEvent
