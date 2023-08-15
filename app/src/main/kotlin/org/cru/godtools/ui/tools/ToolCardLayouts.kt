@@ -99,7 +99,7 @@ sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Local
 @Composable
 fun PreloadTool(tool: Tool) {
     val code = tool.code ?: return
-    toolViewModels.initializeToolViewModel(code, tool)
+    toolViewModels[code, tool]
 }
 
 @Composable
