@@ -147,9 +147,8 @@ fun LessonToolCard(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ToolCard(
-    toolCode: String,
+    viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
-    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     additionalLanguage: Language? = null,
     confirmRemovalFromFavorites: Boolean = false,
     showActions: Boolean = true,
