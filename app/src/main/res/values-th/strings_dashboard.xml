@@ -45,4 +45,5 @@
     <string name="tool_card_label_language_unavailable">ไม่พร้อมใช้งานได้ใน %1$s</string>
     <string name="action_tools_about">รายละเอียด</string>
     <string name="action_tools_open">เปิด</string>
+    <!-- In App Update -->
 </resources>

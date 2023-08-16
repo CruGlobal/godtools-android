@@ -2,9 +2,9 @@
 <resources>
     <string name="tool_not_found">L\'outil demandé est introuvable</string>
     <string name="tool_loading">L\'outil demandé est en cours de chargement…</string>
-    <string name="tool_offline">Une connexion Internet est nécessaire pour ouvrir la ressource que vous avez demandé</string>
-    <string name="tract_content_input_error_required">%1$s doit être renseigné</string>
-    <string name="tract_content_input_error_invalid_email">Veuillez saisir une adresse e-mail valable</string>
+    <string name="tool_offline">Une connexion Internet est nécessaire pour ouvrir l\'outil que vous avez demandé</string>
+    <string name="tract_content_input_error_required">%1$s est obligatoire</string>
+    <string name="tract_content_input_error_invalid_email">Veuillez saisir une adresse e-mail valide</string>
     <!-- Menu Items -->
     <string name="menu_training_tips">Conseils de formation</string>
     <!-- Share Tool Functionality -->
@@ -12,9 +12,9 @@
     <string name="tool_share_sheet_more_apps">Plus</string>
     <string name="share_tool_message">Ce lien vous redirigera vers une version web de ce dont nous avons parlé aujourd\'hui : %1$s \n\n
 
-L\'application est téléchargeable depuis https://godtoolsapp.com \n\n
+L\'application peut être téléchargée à partir de https://godtoolsapp.com \n\n
 
-Continuons à en parler !</string>
+Parlons-en davantage !</string>
     <string name="share_tool_message_article">Je voudrais partager cet article avec vous, et je voudrais savoir ce que vous en pensez. \n%1$s</string>
     <string name="feature_discovery_title_share_tool">Partagez un lien</string>
     <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>

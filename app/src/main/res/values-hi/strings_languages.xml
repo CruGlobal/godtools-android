@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
+    <string name="language_settings_app_language_title">ऐप की भाषा</string>
+    <string name="language_settings_app_language_dialog_message">आपने अपनी ऐप की भाषा के रूप में %1$s को चुना है। इससे संपूर्ण गॉडटूल्स ऐप की भाषा बदल जाएगी। क्या आप ऐसा करना चाहेंगे?</string>
+    <string name="language_settings_app_language_dialog_confirm">भाषा बदलें</string>
+    <string name="language_settings_app_language_dialog_dismiss">रहने दें</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">भाषा सेटिंग्स</string>
     <string name="title_language_settings">भाषा सेटिंग्स</string>
+    <string name="language_settings_section_app_language_heading">ऐप इंटरफ़ेस की भाषा</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$d भाषा उपलब्ध है</item>
+        <item quantity="other">%1$d भाषाएँ उपलब्ध हैं</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">वह भाषा सेट करें जिसमें आप पूरे ऐप को देखना चाहते हैं।</string>
+    <string name="language_settings_section_offline_heading">ऑफ़लाइन उपलब्ध टूल भाषाएँ</string>
+    <string name="language_settings_section_offline_description">भले ही आप वाईफाई या सेल सेवा क्षेत्र से बाहर हों, आप सभी टूल्स को उपलब्ध कराने के लिए उन सभी को एक भाषा में डाउनलोड करें। टूल के भीतर विकल्प बटन के माध्यम से टूल भाषा को सेट करें।</string>
+    <string name="language_settings_section_offline_action_edit">डाउनलोड की गई भाषाओं को एडिट करें</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">भाषाएँ खोजें</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d टूल उपलब्ध है</item>
+        <item quantity="other">%1$d टूल्स उपलब्ध है</item>
+    </plurals>
 </resources>

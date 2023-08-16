@@ -19,13 +19,21 @@
         <item quantity="one">Terminé %1$,d leçon</item>
         <item quantity="other">Terminé %1$,d leçons</item>
     </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d article ouvert</item>
+        <item quantity="other">%1$,d articles  ouvert</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d image partagé</item>
+        <item quantity="other">%1$,d images partagé</item>
+    </plurals>
     <plurals name="account_activity_badge_tips_completed">
         <item quantity="one">Terminé %1$,d conseil de formation</item>
         <item quantity="other">Terminé %1$,d conseils de formation</item>
     </plurals>
     <!-- Global Activity -->
-    <string name="account_tab_global_activity">Global Activity</string>
-    <string name="profile_global_activity_heading">%1$s  Activité Mondiale</string>
+    <string name="account_tab_global_activity">Activité globale</string>
+    <string name="profile_global_activity_heading">%1$s  Activité globale</string>
     <string name="profile_activity_unique_users">Utilisateurs Uniques</string>
     <string name="profile_activity_gospel_presentations">Présentations de l\'Evangile</string>
     <string name="profile_activity_sessions">Sessions</string>

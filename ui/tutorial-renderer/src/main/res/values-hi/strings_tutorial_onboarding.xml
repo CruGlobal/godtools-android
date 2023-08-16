@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_change_language">भाषा चुनें</string>
     <string name="tutorial_onboarding_welcome">स्वागतम</string>
     <string name="tutorial_onboarding_welcome_2">हर वार्तालाप के लिए तैयार</string>
     <string name="tutorial_onboarding_welcome_action_video">वीडियो देखें</string>

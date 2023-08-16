@@ -1,11 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_profile">वैश्विक गतिविधि</string>
+    <string name="account_joined">जॉइंड %1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">खाता खोलें</string>
+    <string name="account_create_description">अपनी उंगलियों पर वास्तविक कहानियाँ, प्रोत्साहन और व्यावहारिक सुझावों को प्राप्त करने के लिए खाता खोलें।</string>
+    <string name="account_login_heading">साइन इन करें</string>
     <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
+    <string name="account_activity_header">आपकी गतिविधियाँ</string>
     <!-- Badges -->
+    <string name="account_activity_badges_header">आपके बैज</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d टूल खोला</item>
+        <item quantity="other">%1$,d टूल्स खोले</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">%1$,d पाठ पूरा किया</item>
+        <item quantity="other">%1$,d पाठ पूरे किए</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d लेख खोला</item>
+        <item quantity="other">%1$,d लेख खोले</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d चित्र शेयर किया</item>
+        <item quantity="other">%1$,d चित्र शेयर किए</item>
+    </plurals>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">वैश्विक गतिविधि</string>
     <string name="profile_global_activity_heading">%1$s  वैश्विक गतिविधि</string>
     <string name="profile_activity_unique_users">खास उपयोगकर्ता</string>
     <string name="profile_activity_gospel_presentations">सुसमाचार प्रस्तुतिकरण</string>

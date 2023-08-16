@@ -45,4 +45,5 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Haipatikani kwenye %1$s</string>
     <string name="action_tools_about">Maelezo</string>
     <string name="action_tools_open">Fungua</string>
+    <!-- In App Update -->
 </resources>

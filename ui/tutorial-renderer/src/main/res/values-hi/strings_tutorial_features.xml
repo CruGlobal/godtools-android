@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="tutorial_features_tools_headline">टूल्स</string>
+    <string name="tutorial_features_tools_subhead">प्रत्येक टूल को बातचीत के अलग-अलग चरणों के लिए तैयार किया गया है - बातचीत के पहले, दौरान या बाद में।</string>
+    <string name="tutorial_features_tips_headline">टूल संबंधी सुझाव</string>
+    <string name="tutorial_features_tips_subhead">जब आप किसी को सुसमाचार समझने और यीशु को जानने में मदद करते हैं तो गॉडटूल्स के सुझाव आपका मार्गदर्शन करते हैं।</string>
+    <string name="tutorial_features_live_share_headline">स्क्रीन शेयरिंग</string>
+    <string name="tutorial_features_live_share_subhead">अब आप अपनी स्क्रीन को दूर से शेयर कर सकते हैं ताकि जब आप सुसमाचार पर चर्चा करने के लिए किसी टूल का उपयोग करें तो दूसरा व्यक्ति भी इसे आपके साथ देख सके।</string>
+    <string name="tutorial_features_lessons_headline">पाठ</string>
+    <string name="tutorial_features_lessons_subhead">प्रत्येक गॉडटूल्स पाठ में आप कुछ न कुछ सीखते हैं जिससे आपको परमेश्वर के साथ वास्तविक वार्तालाप करने में मदद मिलती है।</string>
     <string name="tutorial_features_final_headline">दुबारा देखने के लिए यह ट्यूटोरियल मेन्यु में उपलब्ध है</string>
     <string name="tutorial_features_action_continue">जारी रखें</string>
     <string name="tutorial_features_action_close">GodTools का उपयोग शुरू करें</string>

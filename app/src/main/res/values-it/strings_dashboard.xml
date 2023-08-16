@@ -45,4 +45,5 @@ La versione online è disponibile all\'indirizzo https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Non disponibile in %1$s</string>
     <string name="action_tools_about">Dettagli</string>
     <string name="action_tools_open">Apri</string>
+    <!-- In App Update -->
 </resources>

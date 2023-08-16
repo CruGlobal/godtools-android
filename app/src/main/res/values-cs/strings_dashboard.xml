@@ -45,4 +45,5 @@ On-line verzi naleznete na https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Není dostupné v %1$s</string>
     <string name="action_tools_about">Podrobnosti</string>
     <string name="action_tools_open">Otevřít</string>
+    <!-- In App Update -->
 </resources>
