@@ -43,9 +43,7 @@ class ToolViewModels @Inject constructor(
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
-    fun initializeToolViewModel(code: String, tool: Tool) {
-        toolViewModels.getOrPut(code) { ToolViewModel(code, tool) }
-    }
+    operator fun get(code: String, tool: Tool?) = toolViewModels.getOrPut(code) { ToolViewModel(code, tool) }
 
     private val appLanguage = settings.appLanguageFlow
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }

@@ -57,8 +57,6 @@ import org.cru.godtools.model.getName
 import org.cru.godtools.model.getTagline
 
 private val toolViewModels: ToolViewModels @Composable get() = viewModel()
-@Composable
-private fun toolViewModel(tool: String) = toolViewModels[tool]
 
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
@@ -99,7 +97,7 @@ sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Local
 @Composable
 fun PreloadTool(tool: Tool) {
     val code = tool.code ?: return
-    toolViewModels.initializeToolViewModel(code, tool)
+    toolViewModels[code, tool]
 }
 
 @Composable
@@ -107,9 +105,9 @@ fun PreloadTool(tool: Tool) {
 fun LessonToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
 
@@ -149,7 +147,7 @@ fun LessonToolCard(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ToolCard(
-    toolCode: String,
+    viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     additionalLanguage: Language? = null,
     confirmRemovalFromFavorites: Boolean = false,
@@ -157,7 +155,6 @@ fun ToolCard(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
     val downloadProgress by viewModel.downloadProgress.collectAsState()
@@ -245,13 +242,13 @@ fun ToolCard(
 fun SquareToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     showCategory: Boolean = true,
     showActions: Boolean = true,
     floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
     val secondTranslation by viewModel.secondTranslation.collectAsState()
@@ -334,13 +331,12 @@ fun SquareToolCard(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun VariantToolCard(
-    toolCode: String,
+internal fun VariantToolCard(
+    viewModel: ToolViewModels.ToolViewModel,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val viewModel = toolViewModel(toolCode)
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
 

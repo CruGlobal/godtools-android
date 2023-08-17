@@ -73,7 +73,6 @@ import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
-import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.VariantToolCard
@@ -133,11 +132,12 @@ fun ToolDetailsLayout(
 private fun ToolDetailsContent(
     viewModel: ToolDetailsViewModel,
     modifier: Modifier = Modifier,
+    toolViewModels: ToolViewModels = viewModel(key = "ToolDetailsContent"),
     onEvent: (ToolDetailsEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
     val toolCode by viewModel.toolCode.collectAsState()
-    val toolViewModel = viewModel<ToolViewModels>()[toolCode.orEmpty()]
+    val toolViewModel = toolViewModels[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
 
@@ -232,6 +232,7 @@ private fun ToolDetailsContent(
                 ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(toolViewModel, modifier = Modifier.padding(32.dp))
                 ToolDetailsPage.VARIANTS -> ToolDetailsVariants(
                     viewModel,
+                    toolViewModels,
                     onVariantSelected = {
                         if (toolCode != it) coroutineScope.launch { scrollState.animateScrollTo(0) }
                         viewModel.setToolCode(it)
@@ -334,6 +335,7 @@ internal fun ToolDetailsActions(
 @Composable
 private fun ToolDetailsVariants(
     viewModel: ToolDetailsViewModel,
+    toolViewModels: ToolViewModels,
     onVariantSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -350,9 +352,8 @@ private fun ToolDetailsVariants(
         variants.forEach { tool ->
             val code = tool.code ?: return@forEach
 
-            PreloadTool(tool)
             VariantToolCard(
-                code,
+                viewModel = toolViewModels[code, tool],
                 isSelected = currentTool == code,
                 onEvent = {
                     when (it) {

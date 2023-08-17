@@ -30,6 +30,7 @@ import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolViewModels
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
@@ -38,6 +39,7 @@ internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 internal fun ToolsLayout(
     onEvent: (ToolCardEvent) -> Unit,
     viewModel: ToolsViewModel = viewModel(),
+    toolViewModels: ToolViewModels = viewModel(),
 ) {
     val banner by viewModel.banner.collectAsState()
     val spotlightTools by viewModel.spotlightTools.collectAsState()
@@ -85,9 +87,8 @@ internal fun ToolsLayout(
         }
 
         items(tools, { "tool:${it.id}" }, { "tool" }) { tool ->
-            PreloadTool(tool)
             ToolCard(
-                tool.code.orEmpty(),
+                toolViewModels[tool.code.orEmpty(), tool],
                 additionalLanguage = selectedLanguage,
                 showActions = false,
                 onEvent = {

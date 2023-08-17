@@ -27,15 +27,16 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
-import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolViewModels
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun AllFavoritesList(
     onEvent: (ToolCardEvent) -> Unit,
     viewModel: HomeViewModel = viewModel(),
+    toolViewModels: ToolViewModels = viewModel(),
 ) {
     val favoriteTools by viewModel.reorderableFavoriteTools.collectAsState()
 
@@ -72,9 +73,8 @@ internal fun AllFavoritesList(
                 val interactionSource = remember { MutableInteractionSource() }
                 interactionSource.reorderableDragInteractions(isDragging)
 
-                PreloadTool(tool)
                 ToolCard(
-                    toolCode = tool.code.orEmpty(),
+                    toolViewModels[tool.code.orEmpty(), tool],
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
                     onEvent = {
