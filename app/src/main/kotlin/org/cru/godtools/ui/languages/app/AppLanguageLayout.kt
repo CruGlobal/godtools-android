@@ -99,7 +99,7 @@ internal fun AppLanguageLayout(
 }
 
 private sealed interface AppLanguageDialogEvent {
-    object Dismiss : AppLanguageDialogEvent
+    data object Dismiss : AppLanguageDialogEvent
     class Confirm(val language: Locale) : AppLanguageDialogEvent
 }
 
