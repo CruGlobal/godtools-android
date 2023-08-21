@@ -66,6 +66,7 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
+import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 import org.cru.godtools.shortcuts.PendingShortcut
@@ -140,10 +141,14 @@ private fun ToolDetailsContent(
     val toolViewModel = toolViewModels[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
+    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     val scrollState = rememberScrollState()
     val pages by viewModel.pages.collectAsState()
     val pagerState = rememberPagerState { pages.size }
+
+    DownloadLatestTranslation(toolCode, translation.value?.languageCode)
+    DownloadLatestTranslation(toolCode, secondTranslation?.languageCode)
 
     toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
