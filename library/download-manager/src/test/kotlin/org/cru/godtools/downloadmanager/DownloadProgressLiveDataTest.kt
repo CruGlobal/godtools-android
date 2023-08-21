@@ -1,7 +1,7 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import org.cru.godtools.download.manager.DownloadProgress.Companion.INDETERMINATE_VAL
+import org.cru.godtools.downloadmanager.DownloadProgress.Companion.INDETERMINATE_VAL
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame

@@ -19,7 +19,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.junit.Test

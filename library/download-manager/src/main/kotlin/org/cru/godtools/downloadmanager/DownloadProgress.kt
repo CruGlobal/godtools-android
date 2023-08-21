@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 class DownloadProgress(progress: Long, max: Long) {
     internal companion object {

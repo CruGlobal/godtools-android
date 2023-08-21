@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager.work
+package org.cru.godtools.downloadmanager.work
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker
@@ -14,7 +14,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import org.ccci.gto.android.common.androidx.work.getLocale
 import org.ccci.gto.android.common.androidx.work.putLocale
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.TranslationKey
 
 private const val WORK_NAME = "DownloadTranslation"

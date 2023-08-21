@@ -18,8 +18,8 @@ import org.cru.godtools.api.TractShareService
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.FollowupService
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.download.manager.DownloadManagerModule
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.DownloadManagerModule
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.sync.SyncModule
 import org.cru.godtools.user.activity.UserActivityManager

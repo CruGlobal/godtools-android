@@ -6,7 +6,7 @@
     <data>
         <import type="androidx.lifecycle.LiveData" />
         <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState" />
-        <import type="org.cru.godtools.download.manager.DownloadProgress" />
+        <import type="org.cru.godtools.downloadmanager.DownloadProgress" />
 
         <variable name="progress" type="LiveData&lt;DownloadProgress&gt;" />
         <variable name="loadingState" type="LiveData&lt;LoadingState&gt;" />

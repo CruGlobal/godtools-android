@@ -15,7 +15,7 @@ import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.FollowupService
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.user.activity.UserActivityManager
 import org.greenrobot.eventbus.EventBus

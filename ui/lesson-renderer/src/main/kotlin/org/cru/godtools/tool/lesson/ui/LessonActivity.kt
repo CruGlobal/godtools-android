@@ -37,7 +37,7 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
 import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI

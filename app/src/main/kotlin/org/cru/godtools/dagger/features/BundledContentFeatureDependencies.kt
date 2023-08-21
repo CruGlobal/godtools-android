@@ -13,7 +13,7 @@ import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.download.manager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.greenrobot.eventbus.EventBus
 
 @EntryPoint
