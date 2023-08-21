@@ -19,8 +19,7 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
-
-internal const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
+import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
 
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)

@@ -32,6 +32,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
+import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
 import org.cru.godtools.util.openToolActivity
 
 fun Activity.startToolDetailsActivity(toolCode: String, additionalLanguage: Locale? = null) = startActivity(
