@@ -22,9 +22,9 @@ import kotlinx.coroutines.flow.onEach
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
+import org.cru.godtools.base.BaseModule
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
-import org.cru.godtools.base.ui.BaseUiModule
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
@@ -95,7 +95,7 @@ class ToolDetailsActivity : BaseActivity() {
     @Inject
     internal lateinit var downloadManager: GodToolsDownloadManager
     @Inject
-    @Named(BaseUiModule.IS_CONNECTED_STATE_FLOW)
+    @Named(BaseModule.IS_CONNECTED_STATE_FLOW)
     internal lateinit var isConnectedFlow: StateFlow<Boolean>
 
     private val selectedTool by viewModels<SelectedToolSavedState>()
