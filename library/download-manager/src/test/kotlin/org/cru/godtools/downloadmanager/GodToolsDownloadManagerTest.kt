@@ -1,10 +1,9 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import app.cash.turbine.test
-import app.cash.turbine.testIn
 import app.cash.turbine.turbineScope
 import io.mockk.Called
 import io.mockk.Runs

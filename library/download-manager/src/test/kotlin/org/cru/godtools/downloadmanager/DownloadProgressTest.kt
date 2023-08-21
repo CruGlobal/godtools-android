@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

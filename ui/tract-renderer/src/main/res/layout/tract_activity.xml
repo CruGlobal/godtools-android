@@ -8,7 +8,7 @@
         <import type="java.util.List" />
         <import type="java.util.Locale" />
         <import type="org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState" />
-        <import type="org.cru.godtools.download.manager.DownloadProgress" />
+        <import type="org.cru.godtools.downloadmanager.DownloadProgress" />
         <import type="org.cru.godtools.shared.tool.parser.model.Manifest" />
         <import type="org.cru.godtools.shared.tool.parser.model.ManifestKt" />
 

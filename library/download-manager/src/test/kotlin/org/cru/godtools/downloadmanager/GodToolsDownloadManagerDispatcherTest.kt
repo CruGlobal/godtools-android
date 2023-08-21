@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import io.mockk.Called
 import io.mockk.coEvery

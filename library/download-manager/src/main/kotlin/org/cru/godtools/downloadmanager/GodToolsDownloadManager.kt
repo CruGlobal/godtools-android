@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
@@ -55,7 +55,7 @@ import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.download.manager.work.scheduleDownloadTranslationWork
+import org.cru.godtools.downloadmanager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation

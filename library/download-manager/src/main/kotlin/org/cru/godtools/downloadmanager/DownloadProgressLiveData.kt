@@ -1,4 +1,4 @@
-package org.cru.godtools.download.manager
+package org.cru.godtools.downloadmanager
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.MutableLiveData

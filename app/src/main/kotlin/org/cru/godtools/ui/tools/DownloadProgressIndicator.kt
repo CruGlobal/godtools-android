@@ -8,7 +8,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import org.cru.godtools.download.manager.DownloadProgress
+import org.cru.godtools.downloadmanager.DownloadProgress
 
 // TODO: this can be moved elsewhere when we need to use it outside of tool cards
 @Composable
