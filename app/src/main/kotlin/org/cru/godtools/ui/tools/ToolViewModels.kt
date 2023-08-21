@@ -90,13 +90,10 @@ class ToolViewModels @Inject constructor(
             .findLatestTranslationFlow(code, Settings.defaultLanguage)
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        private val parallelTranslation = tool.flatMapLatest { t ->
+        private val additionalTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
-                // TODO: determine if we need to repurpose this functionality for the Language Update
-                else -> flowOf(null).flatMapLatest {
-                    translationsRepository.findLatestTranslationFlow(t.code, it)
-                }
+                else -> additionalLocale.flatMapLatest { translationsRepository.findLatestTranslationFlow(t.code, it) }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
@@ -106,7 +103,7 @@ class ToolViewModels @Inject constructor(
         val firstTranslation = appTranslation
             .combine(defaultTranslation) { p, d -> if (p.isInitial || p.value != null) p else d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        val secondTranslation = parallelTranslation
+        val secondTranslation = additionalTranslation
             .combine(firstTranslation) { p, f -> p?.takeUnless { p.languageCode == f.value?.languageCode } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
