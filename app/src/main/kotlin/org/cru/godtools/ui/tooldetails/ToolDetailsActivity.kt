@@ -5,29 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
-import javax.inject.Named
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineTransform
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
-import org.cru.godtools.base.BaseModule
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
@@ -76,8 +63,6 @@ class ToolDetailsActivity : BaseActivity() {
                 )
             }
         }
-
-        downloadLatestTranslationsAutomatically()
     }
     // endregion Lifecycle
 
@@ -92,29 +77,9 @@ class ToolDetailsActivity : BaseActivity() {
     }
 
     // region Training Tips
-    @Inject
-    internal lateinit var downloadManager: GodToolsDownloadManager
-    @Inject
-    @Named(BaseModule.IS_CONNECTED_STATE_FLOW)
-    internal lateinit var isConnectedFlow: StateFlow<Boolean>
-
     private val selectedTool by viewModels<SelectedToolSavedState>()
     private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
         if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
-    }
-
-    private fun downloadLatestTranslationsAutomatically() {
-        combine(
-            viewModel.toolCode,
-            settings.appLanguageFlow,
-            viewModel.additionalLocale
-        ) { t, l1, l2 -> t?.let { Pair(t, listOfNotNull(l1, l2)) } }
-            .combineTransform(isConnectedFlow) { it, isConnected -> if (isConnected) emit(it) }
-            .filterNotNull()
-            .flowWithLifecycle(lifecycle)
-            .conflate()
-            .onEach { (t, l) -> l.map { downloadManager.downloadLatestPublishedTranslationAsync(t, it) }.awaitAll() }
-            .launchIn(lifecycleScope)
     }
 
     private fun launchTrainingTips(
