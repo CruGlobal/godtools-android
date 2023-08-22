@@ -63,7 +63,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val pages by viewModel.pages.collectAsState()
     val refreshing by viewModel.isSyncRunning.collectAsState()
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { pages.size }
     val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
 
     RecordAccountPageAnalytics(pages.getOrNull(pagerState.currentPage))
@@ -81,7 +81,6 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 onEvent = onEvent,
             )
             HorizontalPager(
-                pageCount = pages.size,
                 state = pagerState,
                 verticalAlignment = Alignment.Top,
                 key = { pages[it] },
@@ -102,9 +101,9 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
 private fun AccountLayoutHeader(
     user: User? = null,
     pages: List<AccountPage> = emptyList(),
-    onEvent: (AccountLayoutEvent) -> Unit = {},
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    pagerState: PagerState = rememberPagerState(),
+    pagerState: PagerState = rememberPagerState { pages.size },
+    onEvent: (AccountLayoutEvent) -> Unit = {},
 ) {
     Surface(shadowElevation = 4.dp) {
         Column {

@@ -50,7 +50,7 @@ internal fun TutorialLayout(
     val locale = context.deviceLocale ?: Locale.getDefault()
     val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
 
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState { pages.size }
     val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }
 
     RecordAnalyticsScreen(TutorialAnalyticsScreenEvent(pageSet, currentPage, pagerState.currentPage, locale))
@@ -67,7 +67,7 @@ internal fun TutorialLayout(
             val indicatorVisible by remember { derivedStateOf { currentPage.showIndicator } }
             HorizontalPagerIndicator(
                 pagerState = pagerState,
-                pageCount = pages.size,
+                pageCount = pagerState.pageCount,
                 activeColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,7 +78,6 @@ internal fun TutorialLayout(
         }
     ) { insets ->
         HorizontalPager(
-            pages.size,
             key = { pages[it] },
             state = pagerState,
             modifier = Modifier

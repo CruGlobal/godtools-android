@@ -142,8 +142,8 @@ private fun ToolDetailsContent(
     val translation by toolViewModel.firstTranslation.collectAsState()
 
     val scrollState = rememberScrollState()
-    val pagerState = rememberPagerState()
     val pages by viewModel.pages.collectAsState()
+    val pagerState = rememberPagerState { pages.size }
 
     toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
@@ -223,7 +223,6 @@ private fun ToolDetailsContent(
         }
 
         HorizontalPager(
-            pageCount = pages.size,
             state = pagerState,
             verticalAlignment = Alignment.Top,
             key = { pages[it] }
