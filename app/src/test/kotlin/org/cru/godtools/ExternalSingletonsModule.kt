@@ -31,6 +31,8 @@ import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.UserRepository
+import org.cru.godtools.downloadmanager.DownloadManagerModule
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
 
@@ -40,6 +42,7 @@ import org.greenrobot.eventbus.EventBus
     replaces = [
         AnalyticsModule::class,
         DatabaseModule::class,
+        DownloadManagerModule::class,
         EventBusModule::class,
         FlipperModule::class,
         ServicesModule::class,
@@ -105,4 +108,9 @@ class ExternalSingletonsModule {
     @get:Provides
     val userCountersRepository: UserCountersRepository by lazy { mockk() }
     // endregion DatabaseModule
+
+    // region DownloadManagerModule
+    @get:Provides
+    val downloadManager: GodToolsDownloadManager by lazy { mockk() }
+    // endregion DownloadManagerModule
 }
