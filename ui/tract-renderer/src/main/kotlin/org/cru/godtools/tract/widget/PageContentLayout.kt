@@ -220,7 +220,9 @@ class PageContentLayout @JvmOverloads constructor(
     private val gestureDetector = GestureDetector(
         context,
         object : SimpleOnGestureListener() {
-            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float) = when {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float) = when {
+                // ignore flings that are "an incomplete event stream or error state"
+                e1 == null -> false
                 // ignore flings when the initial event is in the gutter
                 isEventInGutter(e1) -> false
                 else -> flingCard(velocityY)
