@@ -54,7 +54,7 @@ internal fun Project.excludeAndroidSdkDependencies() {
 }
 
 private fun BaseExtension.configureSdk() {
-    compileSdkVersion(33)
+    compileSdkVersion(34)
 
     defaultConfig {
         minSdk = 21
