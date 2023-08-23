@@ -23,7 +23,6 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
-
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
