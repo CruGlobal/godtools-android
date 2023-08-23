@@ -44,6 +44,5 @@ dependencies {
     testImplementation(project(":library:model"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.hilt.testing)
-
     kaptTest(libs.hilt.compiler)
 }
