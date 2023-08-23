@@ -66,6 +66,7 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
+import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 import org.cru.godtools.shortcuts.PendingShortcut
@@ -140,10 +141,14 @@ private fun ToolDetailsContent(
     val toolViewModel = toolViewModels[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
+    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     val scrollState = rememberScrollState()
     val pages by viewModel.pages.collectAsState()
     val pagerState = rememberPagerState { pages.size }
+
+    DownloadLatestTranslation(toolCode, translation.value?.languageCode)
+    DownloadLatestTranslation(toolCode, secondTranslation?.languageCode)
 
     toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
@@ -185,8 +190,10 @@ private fun ToolDetailsContent(
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
-                    val additionalLanguage by viewModel.additionalLanguage.collectAsState()
-                    if (additionalLanguage != null) {
+                    val additionalTranslation by toolViewModel.secondTranslation.collectAsState()
+                    if (additionalTranslation != null) {
+                        val additionalLanguage by toolViewModel.secondLanguage.collectAsState()
+
                         Spacer(modifier = Modifier.weight(1f))
                         AvailableInLanguage(
                             language = additionalLanguage,
@@ -292,11 +299,12 @@ internal fun ToolDetailsActions(
 ) = Column(modifier = modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
+    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
 
     Button(
         onClick = {
             onEvent(
-                ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, viewModel.additionalLocale.value)
+                ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode)
             )
         },
         modifier = Modifier.fillMaxWidth()

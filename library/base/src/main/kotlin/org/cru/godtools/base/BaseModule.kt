@@ -1,4 +1,4 @@
-package org.cru.godtools.base.ui
+package org.cru.godtools.base
 
 import android.content.Context
 import dagger.Module
@@ -15,7 +15,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.flow.net.isConnectedFlow
 
 @Module
 @InstallIn(SingletonComponent::class)
-object BaseUiModule {
+object BaseModule {
     const val IS_CONNECTED_STATE_FLOW = "STATE_FLOW_IS_CONNECTED"
 
     @Provides

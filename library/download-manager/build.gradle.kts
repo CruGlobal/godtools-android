@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.downloadmanager"
 
+    configureCompose(project)
     buildFeatures.dataBinding = true
 
     testOptions.unitTests.all {
@@ -46,6 +47,5 @@ dependencies {
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-
     kaptTest(libs.hilt.compiler)
 }

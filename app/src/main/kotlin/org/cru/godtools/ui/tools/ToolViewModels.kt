@@ -1,8 +1,10 @@
 package org.cru.godtools.ui.tools
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -29,6 +31,8 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 
+internal const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
+
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolViewModels @Inject constructor(
@@ -40,10 +44,13 @@ class ToolViewModels @Inject constructor(
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
+    savedState: SavedStateHandle,
 ) : ViewModel() {
     private val toolViewModels = mutableMapOf<String, ToolViewModel>()
     operator fun get(tool: String) = toolViewModels.getOrPut(tool) { ToolViewModel(tool) }
     operator fun get(code: String, tool: Tool?) = toolViewModels.getOrPut(code) { ToolViewModel(code, tool) }
+
+    private val additionalLocale = savedState.getStateFlow<Locale?>(EXTRA_ADDITIONAL_LANGUAGE, null)
 
     private val appLanguage = settings.appLanguageFlow
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }
@@ -83,13 +90,10 @@ class ToolViewModels @Inject constructor(
             .findLatestTranslationFlow(code, Settings.defaultLanguage)
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        private val parallelTranslation = tool.flatMapLatest { t ->
+        private val additionalTranslation = tool.flatMapLatest { t ->
             when {
                 t == null || !t.type.supportsParallelLanguage -> flowOf(null)
-                // TODO: determine if we need to repurpose this functionality for the Language Update
-                else -> flowOf(null).flatMapLatest {
-                    translationsRepository.findLatestTranslationFlow(t.code, it)
-                }
+                else -> additionalLocale.flatMapLatest { translationsRepository.findLatestTranslationFlow(t.code, it) }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
@@ -99,7 +103,7 @@ class ToolViewModels @Inject constructor(
         val firstTranslation = appTranslation
             .combine(defaultTranslation) { p, d -> if (p.isInitial || p.value != null) p else d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        val secondTranslation = parallelTranslation
+        val secondTranslation = additionalTranslation
             .combine(firstTranslation) { p, f -> p?.takeUnless { p.languageCode == f.value?.languageCode } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
