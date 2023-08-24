@@ -20,7 +20,7 @@ internal abstract class DownloadedFilesRoomRepository(private val db: GodToolsRo
     }
     override fun getDownloadedFilesFlow() = dao.getDownloadedFilesFlow().map { it.map { it.toModel() } }
 
-    override fun insertOrIgnore(file: DownloadedFile) = dao.insertOrIgnore(file.toEntity())
+    override suspend fun insertOrIgnore(file: DownloadedFile) = dao.insertOrIgnore(file.toEntity())
     override fun insertOrIgnore(translationFile: DownloadedTranslationFile) {
         TODO("Not yet implemented")
     }

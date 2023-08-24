@@ -10,7 +10,7 @@ interface DownloadedFilesRepository {
     suspend fun getDownloadedTranslationFiles(): List<DownloadedTranslationFile>
     fun getDownloadedFilesFlow(): Flow<List<DownloadedFile>>
 
-    fun insertOrIgnore(file: DownloadedFile)
+    suspend fun insertOrIgnore(file: DownloadedFile)
     fun insertOrIgnore(translationFile: DownloadedTranslationFile)
     fun delete(file: DownloadedFile)
     suspend fun delete(file: DownloadedTranslationFile)

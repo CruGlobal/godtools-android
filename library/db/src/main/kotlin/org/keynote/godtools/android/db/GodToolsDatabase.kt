@@ -270,7 +270,7 @@ class GodToolsDatabase @Inject internal constructor(
                             null
                         ).use {
                             while (it.moveToNext()) {
-                                roomDb.downloadedFilesDao.insertOrIgnore(
+                                roomDb.downloadedFilesDao.insertOrIgnoreBlocking(
                                     DownloadedFileEntity(
                                         filename = it.getString(DownloadedFileTable.COLUMN_NAME) ?: continue
                                     )

@@ -18,7 +18,9 @@ internal interface DownloadedFilesDao {
     fun getDownloadedFilesFlow(): Flow<List<DownloadedFileEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnore(file: DownloadedFileEntity)
+    suspend fun insertOrIgnore(file: DownloadedFileEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertOrIgnoreBlocking(file: DownloadedFileEntity)
 
     @Delete
     fun delete(file: DownloadedFileEntity)
