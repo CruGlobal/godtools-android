@@ -27,7 +27,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: ${{ secrets.AWS_IAM_ONESKY_ROLE_ARN }}
           aws-region: us-east-1
