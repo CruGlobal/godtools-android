@@ -212,7 +212,7 @@ class GodToolsDownloadManagerTest {
         downloadManager.downloadAttachment(attachment.id)
         assertFalse(file.exists())
         assertFalse(attachment.isDownloaded)
-        verify(inverse = true) { downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile()) }
+        coVerify(inverse = true) { downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile()) }
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, false)
