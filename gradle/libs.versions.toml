@@ -220,5 +220,5 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.13" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
