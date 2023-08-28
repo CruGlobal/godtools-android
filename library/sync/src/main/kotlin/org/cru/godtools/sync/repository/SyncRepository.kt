@@ -81,7 +81,7 @@ internal class SyncRepository @Inject constructor(
     private suspend fun storeTool(tool: Tool, includes: Includes): Set<String> {
         if (!tool.isValid) return emptySet()
 
-        toolsRepository.storeToolFromSync(tool)
+        toolsRepository.storeToolsFromSync(setOf(tool))
         return setOfNotNull(tool.code) + processIncludes(tool, includes)
     }
     // endregion Tools

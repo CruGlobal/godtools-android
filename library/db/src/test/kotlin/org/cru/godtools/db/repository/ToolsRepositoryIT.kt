@@ -40,7 +40,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `findTool()`() = testScope.runTest {
         val tool = Tool("tool")
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
 
         assertNull(repository.findTool("other"))
         assertThat(repository.findTool("tool"), tool(tool))
@@ -51,7 +51,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `findResourceBlocking()`() = testScope.runTest {
         val resource = Resource("tool", Tool.Type.TRACT)
-        repository.storeToolFromSync(resource)
+        repository.storeToolsFromSync(setOf(resource))
 
         assertNull(repository.findResourceBlocking("other"))
         assertThat(repository.findResourceBlocking("tool"), tool(resource))
@@ -337,7 +337,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `updateToolViews()`() = testScope.runTest {
         val code = "shares"
-        repository.storeToolFromSync(Tool(code))
+        repository.storeToolsFromSync(setOf(Tool(code)))
         assertNotNull(repository.findTool(code)) { assertEquals(0, it.pendingShares) }
 
         repository.updateToolViews(code, 10)
@@ -350,7 +350,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `updateToolViews() - Concurrent Updates`() = testScope.runTest {
         val code = "shares"
-        repository.storeToolFromSync(Tool(code))
+        repository.storeToolsFromSync(setOf(Tool(code)))
 
         withContext(Dispatchers.IO) {
             repeat(1000) { launch { repository.updateToolViews(code, 1) } }
@@ -359,13 +359,13 @@ abstract class ToolsRepositoryIT {
     }
     // endregion updateToolShares()
 
-    // region storeToolFromSync()
+    // region storeToolsFromSync()
     @Test
-    fun `storeToolFromSync() - New Tool`() = testScope.runTest {
+    fun `storeToolsFromSync() - New Tool`() = testScope.runTest {
         assertNull(repository.findTool("tool"))
         val tool = randomTool("tool", Tool.Type.LESSON)
 
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) {
             assertEquals(tool.id, it.id)
             assertEquals(tool.code, it.code)
@@ -388,12 +388,12 @@ abstract class ToolsRepositoryIT {
     }
 
     @Test
-    fun `storeToolFromSync() - Update Tool`() = testScope.runTest {
+    fun `storeToolsFromSync() - Update Tool`() = testScope.runTest {
         val initial = randomTool("tool", Tool.Type.TRACT)
-        repository.storeToolFromSync(initial)
+        repository.storeToolsFromSync(setOf(initial))
         val updated = randomTool("tool", Tool.Type.LESSON)
 
-        repository.storeToolFromSync(updated)
+        repository.storeToolsFromSync(setOf(updated))
         assertNotNull(repository.findTool("tool")) {
             assertEquals(updated.id, it.id)
             assertEquals(updated.code, it.code)
@@ -416,33 +416,33 @@ abstract class ToolsRepositoryIT {
     }
 
     @Test
-    fun `storeToolFromSync() - Don't pave over added flag`() = testScope.runTest {
+    fun `storeToolsFromSync() - Don't pave over added flag`() = testScope.runTest {
         val tool = Tool("tool") { isAdded = false }
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
         repository.pinTool("tool")
         assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
 
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) { assertTrue(it.isAdded) }
     }
 
     @Test
-    fun `storeToolFromSync() - Don't pave over pending tool views`() = testScope.runTest {
+    fun `storeToolsFromSync() - Don't pave over pending tool views`() = testScope.runTest {
         val tool = Tool("tool") { pendingShares = 0 }
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) { assertEquals(0, it.pendingShares) }
         repository.updateToolViews("tool", 5)
         assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
 
-        repository.storeToolFromSync(tool)
+        repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
     }
-    // endregion storeToolFromSync()
+    // endregion storeToolsFromSync()
 
     // region deleteIfNotFavorite()
     @Test
     fun `deleteIfNotFavorite()`() = testScope.runTest {
-        repository.storeToolFromSync(Tool("tool"))
+        repository.storeToolsFromSync(setOf(Tool("tool")))
         assertNotNull(repository.findTool("tool"))
 
         repository.deleteIfNotFavorite("tool")
