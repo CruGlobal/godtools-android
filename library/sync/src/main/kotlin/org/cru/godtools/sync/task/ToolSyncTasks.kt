@@ -5,12 +5,11 @@ import java.io.IOException
 import java.net.HttpURLConnection.HTTP_OK
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.TimeConstants
 import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
@@ -48,26 +47,24 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val sharesMutex = Mutex()
 
     @AnyThread
-    suspend fun syncTools(force: Boolean = false) = withContext(Dispatchers.IO) {
-        toolsMutex.withLock {
-            // short-circuit if we aren't forcing a sync and the data isn't stale
-            if (!force && !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOLS, staleAfter = STALE_DURATION_TOOLS)) {
-                return@withContext true
-            }
-
-            // fetch tools from the API, short-circuit if this response is invalid
-            val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
-                .takeIf { it.code() == HTTP_OK }?.body() ?: return@withContext false
-
-            // store fetched tools
-            syncRepository.storeTools(
-                json.data,
-                existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
-                includes = Includes(*API_GET_INCLUDES)
-            )
-            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
-            true
+    internal suspend fun syncTools(force: Boolean = false) = toolsMutex.withLock {
+        // short-circuit if we aren't forcing a sync and the data isn't stale
+        if (!force && !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOLS, staleAfter = STALE_DURATION_TOOLS)) {
+            return@withLock true
         }
+
+        // fetch tools from the API, short-circuit if this response is invalid
+        val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
+            .takeIf { it.code() == HTTP_OK }?.body() ?: return@withLock false
+
+        // store fetched tools
+        syncRepository.storeTools(
+            json.data,
+            existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
+            includes = Includes(*API_GET_INCLUDES)
+        )
+        lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
+        true
     }
 
     internal suspend fun syncTool(toolCode: String, force: Boolean = false) = toolMutex.withLock(toolCode) {
@@ -96,7 +93,7 @@ internal class ToolSyncTasks @Inject internal constructor(
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.
      */
-    suspend fun syncShares() = withContext(Dispatchers.IO) {
+    internal suspend fun syncShares() = coroutineScope {
         sharesMutex.withLock {
             toolsRepository.getResources()
                 .filter { it.pendingShares > 0 }
