@@ -50,7 +50,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - add to favorites`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel) }
-        toolFlow.value = Tool().apply { isAdded = false }
+        toolFlow.value = Tool().apply { isFavorite = false }
 
         composeTestRule.onRoot().performClick()
         verifyAll { toolViewModel.pinTool() }
@@ -59,7 +59,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = false) }
-        toolFlow.value = Tool().apply { isAdded = true }
+        toolFlow.value = Tool().apply { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -69,7 +69,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - confirm`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = Tool().apply { isAdded = true }
+        toolFlow.value = Tool().apply { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
@@ -83,7 +83,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - cancel`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = Tool().apply { isAdded = true }
+        toolFlow.value = Tool().apply { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()

@@ -320,20 +320,22 @@ internal fun ToolDetailsActions(
         ) { Text(stringResource(R.string.action_tools_open_training)) }
     }
 
-    val isAdded by remember { derivedStateOf { tool?.isAdded == true } }
+    val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     OutlinedButton(
-        onClick = { if (isAdded) toolViewModel.unpinTool() else toolViewModel.pinTool() },
+        onClick = { if (isFavorite) toolViewModel.unpinTool() else toolViewModel.pinTool() },
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = if (isAdded) GodToolsTheme.GT_RED else MaterialTheme.colorScheme.primary
+            contentColor = if (isFavorite) GodToolsTheme.GT_RED else MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
         Icon(
-            painterResource(if (isAdded) R.drawable.ic_favorite_border_24dp else R.drawable.ic_favorite_24dp),
+            painterResource(if (isFavorite) R.drawable.ic_favorite_border_24dp else R.drawable.ic_favorite_24dp),
             contentDescription = null
         )
         Text(
-            stringResource(if (isAdded) R.string.action_tools_remove_favorite else R.string.action_tools_add_favorite),
+            stringResource(
+                if (isFavorite) R.string.action_tools_remove_favorite else R.string.action_tools_add_favorite
+            ),
             modifier = Modifier.padding(start = 4.dp)
         )
     }

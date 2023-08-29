@@ -183,7 +183,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         val dynamicShortcuts = withContext(ioDispatcher) {
             toolsRepository.getTools()
-                .filter { it.isAdded }
+                .filter { it.isFavorite }
                 .sortedWith(Tool.COMPARATOR_FAVORITE_ORDER)
                 .asSequence()
                 .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }

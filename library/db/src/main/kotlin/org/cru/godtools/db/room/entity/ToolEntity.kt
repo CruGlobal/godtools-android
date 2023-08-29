@@ -50,7 +50,7 @@ internal class ToolEntity(
         order = tool.order,
         metatoolCode = tool.metatoolCode,
         defaultVariantCode = tool.defaultVariantCode,
-        isAdded = tool.isAdded,
+        isAdded = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
     )
@@ -73,7 +73,7 @@ internal class ToolEntity(
         it.order = order
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
-        it.isAdded = isAdded
+        it.isFavorite = isAdded
         it.isHidden = isHidden
         it.isSpotlight = isSpotlight
     }

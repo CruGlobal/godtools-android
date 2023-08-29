@@ -23,7 +23,7 @@ interface ToolsRepository {
     fun getToolsFlowForLanguage(locale: Locale): Flow<List<Tool>>
     fun getMetaToolsFlow(): Flow<List<Tool>>
     fun getFavoriteToolsFlow(): Flow<List<Tool>> =
-        getToolsFlow().map { it.filter { it.isAdded }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
+        getToolsFlow().map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
     fun getLessonsFlow(): Flow<List<Lesson>>
 
     fun toolsChangeFlow(): Flow<Any?>
