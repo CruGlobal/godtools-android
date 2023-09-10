@@ -21,6 +21,6 @@
     <string name="language_settings_downloadable_languages_search">भाषाएँ खोजें</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d टूल उपलब्ध है</item>
-        <item quantity="other">%1$d टूल्स उपलब्ध है</item>
+        <item quantity="other">%1$d टूल्स उपलब्ध हैं</item>
     </plurals>
 </resources>

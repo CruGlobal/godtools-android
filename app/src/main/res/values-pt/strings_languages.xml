@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Idioma do aplicativo</string>
+    <string name="language_settings_app_language_dialog_message">Você selecionou %1$s como o idioma do seu aplicativo. Isto altera o idioma de todo o aplicativo GodTools. Tem certeza de que quer fazer isto?</string>
+    <string name="language_settings_app_language_dialog_confirm">Alterar idioma</string>
+    <string name="language_settings_app_language_dialog_dismiss">Não se preocupe</string>
     <!-- Language Settings UI -->
-    <string name="menu_language_settings">Definições de idioma</string>
-    <string name="title_language_settings">Definições de idioma</string>
+    <string name="menu_language_settings">Configurações de idioma</string>
+    <string name="title_language_settings">Configurações de idioma</string>
+    <string name="language_settings_section_app_language_heading">Idioma da interface do aplicativo</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">Idioma %1$d disponível</item>
+        <item quantity="other">Idioma %1$d disponível</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Definir o idioma que gostaria de exibir em todo o aplicativo.</string>
+    <string name="language_settings_section_offline_heading">Idiomas da ferramenta disponíveis offline</string>
+    <string name="language_settings_section_offline_description">Baixar todas as ferramentas em um idioma para disponibilizá-las mesmo quando você estiver sem WiFi ou serviço de celular. Definir o idioma da ferramenta via botão de opções dentro da ferramenta.</string>
+    <string name="language_settings_section_offline_action_edit">Editar idiomas baixados</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Procurar idiomas</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">Ferramenta %1$d disponível</item>
+        <item quantity="other">Ferramenta %1$d disponível</item>
+    </plurals>
 </resources>

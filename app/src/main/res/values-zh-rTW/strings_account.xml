@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_profile">活動</string>
+    <string name="account_joined">已加入 %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">建立帳號</string>
+    <string name="account_create_description">在你的指尖建立一個能擁有真實故事、得到激勵並實際作法的帳號。</string>
+    <string name="account_login_heading">登入</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">活動</string>
+    <string name="account_activity_header">你的活動</string>
+    <plurals name="account_activity_tool_opens">
+        <item quantity="other">開啟的工具</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions">
+        <item quantity="other">完成的課程</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares">
+        <item quantity="other">分享螢幕次數</item>
+    </plurals>
+    <plurals name="account_activity_links_shared">
+        <item quantity="other">分享連結次數</item>
+    </plurals>
+    <plurals name="account_activity_languages_used">
+        <item quantity="other">使用過的語言</item>
+    </plurals>
+    <plurals name="account_activity_sessions">
+        <item quantity="other">會議次數</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">你的徽章</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">開啟五個工具 %1</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">完成一個課程%1$</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">開啟一篇文章%1$</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">分享一個圖片%1$</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">完成五個訓練技巧%1$</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">全球活動</string>
+    <string name="profile_global_activity_heading">%1$s全球活動</string>
+    <string name="profile_activity_unique_users">個別使用者</string>
+    <string name="profile_activity_gospel_presentations">福音分享次數</string>
+    <string name="profile_activity_sessions">會議</string>
+    <string name="profile_activity_countries">國家</string>
+</resources>

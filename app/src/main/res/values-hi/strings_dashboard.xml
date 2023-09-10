@@ -56,4 +56,8 @@
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोलें</string>
     <!-- In App Update -->
+    <string name="play_update_available">अपडेट उपलब्ध है</string>
+    <string name="play_update_available_action">डाउनलोड करें</string>
+    <string name="play_update_downloaded">अपडेट डाउनलोड हो गया</string>
+    <string name="play_update_downloaded_action">दोबारा लोड करें</string>
 </resources>
