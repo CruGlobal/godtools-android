@@ -3,23 +3,23 @@
     <string name="menu_install">Instalar</string>
     <string name="menu_share_tract">Enviar esta ferramenta</string>
     <string name="tract_card_previous">Anterior</string>
-    <string name="tract_card_next">Seguinte</string>
+    <string name="tract_card_next">Próximo</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Compartilhe a sua tela</string>
-    <string name="menu_live_share_active">Compartilhamento de tela ativado</string>
-    <string name="share_tool_message_tract_live_share">Oi. Me acompanhe no GodTools através do compartilhamento de tela. Aqui está a ligação: %1$s\n\nSe você receber esta mensagem demasiado tarde, a ligação poderá não estar a funcionar. Podemos tentar novamente noutra altura.</string>
-    <string name="tract_live_share_starting">A iniciar o compartilhamento de tela…</string>
-    <string name="tract_live_share_unable_to_connect">Não é possível estabelecer a ligação para o compartilhamento de tela</string>
-    <string name="tract_live_share_exit_dialog_message">Pretende sair da sessão de compartilhamento remoto agora?</string>
+    <string name="menu_live_share_active">Compartilhamento de Tela Ativo</string>
+    <string name="share_tool_message_tract_live_share">Oi. Acompanhe-me no GodTools através do compartilhamento de tela. Aqui está o link: %1$s\n\nSe você receber esta mensagem muito tarde, o link poderá não funcionar mais. Podemos tentar novamente outra hora.</string>
+    <string name="tract_live_share_starting">Iniciar Compartilhamento de Tela…</string>
+    <string name="tract_live_share_unable_to_connect">Não foi possível conectar-se ao Compartilhamento de Tela</string>
+    <string name="tract_live_share_exit_dialog_message">Sair da sessão de compartilhamento remoto agora?</string>
     <string name="tract_live_share_exit_dialog_confirm">Sair</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
     <!-- Settings -->
-    <string name="menu_settings">Definições</string>
-    <string name="tract_settings_title">Opções da ferramenta</string>
-    <string name="tract_settings_action_share">Compartilhar ligação</string>
+    <string name="menu_settings">Configurações</string>
+    <string name="tract_settings_title">Opções de ferramenta</string>
+    <string name="tract_settings_action_share">Compartilhar link</string>
     <string name="tract_settings_action_tips_disable">Ocultar dicas</string>
     <string name="tract_settings_languages_title">Idioma paralelo</string>
-    <string name="tract_settings_languages_description">Alterne entre dois idiomas diferentes nessa ferramenta.</string>
+    <string name="tract_settings_languages_description">Alterne entre dois idiomas diferentes nesta ferramenta.</string>
     <string name="tract_settings_languages_parallel">Paralelo</string>
     <string name="tract_settings_languages_none">Nenhum</string>
     <string name="tract_settings_shareables_title">Gráficos relacionados</string>

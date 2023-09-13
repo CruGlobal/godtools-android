@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">開始使用</string>
     <string name="menu_tutorial">教學</string>
     <string name="menu_heading_account">帳號</string>
     <string name="menu_login">登入</string>
     <string name="menu_signup">建立帳號</string>
     <string name="menu_logout">登出</string>
+    <string name="menu_heading_support">支援</string>
+    <string name="menu_feedback">傳送回饋</string>
+    <string name="menu_report_bug">回報問題</string>
+    <string name="menu_question">問個問題</string>
     <string name="menu_heading_share">分享</string>
+    <string name="menu_review">留言</string>
     <string name="menu_share_story">與我們分享故事</string>
     <string name="menu_share_godtools">分享 GodTools 應用程式</string>
     <string name="share_app_message">下載GodTools應用程式：https://godtoolsapp.com \n\n
@@ -16,17 +22,17 @@
     <string name="menu_heading_about">關於</string>
     <string name="menu_terms_of_use">使用條款</string>
     <string name="menu_privacy_policy">隱私政策</string>
-    <string name="menu_copyright">著作權</string>
+    <string name="menu_copyright">版權資訊</string>
     <!-- Lessons -->
     <string name="nav_lessons">課程</string>
     <string name="dashboard_lessons_header_title">為您打造的課程</string>
-    <string name="dashboard_lessons_header_description">建立關係和開始有意義對話的實用想法。</string>
+    <string name="dashboard_lessons_header_description">建立關係和開始有意義對話的實用想法</string>
     <!-- Home -->
     <string name="nav_favorite_tools">我的最愛</string>
     <string name="dashboard_home_header_title">歡迎使用 GodTools</string>
     <string name="dashboard_home_section_featured_lesson">精選課程</string>
     <string name="dashboard_home_section_favorites_title">您最愛的工具</string>
-    <string name="dashboard_home_section_favorites_no_tools_title">無可顯示的最愛工具</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">沒有可顯示的最愛工具</string>
     <string name="dashboard_home_section_favorites_no_tools_description">點擊心型圖示將工具設為您的最愛，並將它設定成可離線使用。</string>
     <string name="dashboard_home_section_favorites_action_view_all">檢視全部 &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">前往工具</string>
@@ -34,6 +40,9 @@
     <string name="tools_list_favorites_banner_action_dismiss">略過</string>
     <!-- All Tools -->
     <string name="nav_all_tools">工具</string>
+    <string name="dashboard_tools_section_filter_label">篩選</string>
+    <string name="dashboard_tools_section_filter_category_any">不限類別</string>
+    <string name="dashboard_tools_section_filter_language_any">不限語言</string>
     <string name="dashboard_tools_section_categories_label">類別</string>
     <string name="dashboard_tools_section_categories_all">所有工具</string>
     <string name="dashboard_tools_section_spotlight_label">工具精選</string>
@@ -42,8 +51,12 @@
     <string name="tools_list_remove_favorite_dialog_title">要將「%1$s」從我的最愛移除嗎？</string>
     <string name="tools_list_remove_favorite_dialog_confirm">移除</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
-    <string name="tool_card_label_language_unavailable">無法使用 %1$s</string>
+    <string name="tool_card_label_language_unavailable">無法提供 %1$s</string>
     <string name="action_tools_about">詳細資料</string>
     <string name="action_tools_open">開啟</string>
     <!-- In App Update -->
+    <string name="play_update_available">可用更新</string>
+    <string name="play_update_available_action">下載</string>
+    <string name="play_update_downloaded">更新已下載</string>
+    <string name="play_update_downloaded_action">重新加載</string>
 </resources>

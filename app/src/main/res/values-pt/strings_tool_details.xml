@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tool Details UI -->
-    <string name="menu_add_to_home">Adicionar ao ecrã principal</string>
-    <string name="action_tools_open_tool">Abrir ferramenta</string>
+    <string name="menu_add_to_home">Adicionar à tela Inicial</string>
+    <string name="action_tools_open_tool">Abrir Ferramenta</string>
     <string name="action_tools_add_favorite">Adicionar aos Favoritos</string>
     <string name="action_tools_remove_favorite">Remover dos Favoritos</string>
-    <string name="action_tools_open_training">Aprenda a compartilhar essa ferramenta</string>
+    <string name="action_tools_open_training">Aprenda a compartilhar esta ferramenta</string>
     <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d visualização</item>
-        <item quantity="other">%1$,d visualizações</item>
+        <item quantity="one">Visualização %1$,d</item>
+        <item quantity="other">Visualizações %1$,d</item>
     </plurals>
     <string name="label_tools_about">Sobre</string>
     <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d idioma</item>
-        <item quantity="other">%1$,d idiomas</item>
+        <item quantity="one">Idioma %1$,d</item>
+        <item quantity="other">Idiomas %1$,d</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">Iniciadores de conversa</string>
+    <string name="tool_details_section_description_outline">Esboço</string>
+    <string name="tool_details_section_description_bible_references">Referências bíblicas</string>
     <string name="tool_details_section_description_languages_available">Idiomas disponíveis</string>
     <string name="tool_details_section_variants_label">Versões</string>
-    <string name="tool_details_section_variants_description">Escolha uma versão diferente dessa ferramenta abaixo. Cada versão tem um estilo e conteúdos únicos para que você possa encontrar a versão que mais se adequa à sua conversa. Pode marcar várias versões da mesma ferramenta como favoritas.</string>
+    <string name="tool_details_section_variants_description">Escolha abaixo uma versão diferente desta ferramenta. Cada versão tem um estilo e conteúdos únicos para que você possa encontrar a versão que mais se adequa à sua conversa. Pode marcar várias versões da mesma ferramenta como favoritas.</string>
 </resources>

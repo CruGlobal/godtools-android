@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tool_not_found">Não é possível encontrar a ferramenta que solicitou</string>
+    <string name="tool_not_found">A ferramenta que você solicitou não foi encontrada</string>
     <string name="tool_loading">A ferramenta que solicitou está carregando…</string>
-    <string name="tool_offline">Tem de ter ligação à Internet para abrir a ferramenta que solicitou</string>
-    <string name="tract_content_input_error_required">%1$s é necessário</string>
-    <string name="tract_content_input_error_invalid_email">Introduza um endereço de e-mail válido</string>
+    <string name="tool_offline">A ferramenta que você solicitou requer uma conexão com a internet para poder abrir</string>
+    <string name="tract_content_input_error_required">Se requer %1$s</string>
+    <string name="tract_content_input_error_invalid_email">Por favor, digite um endereço de e-mail válido</string>
     <!-- Menu Items -->
-    <string name="menu_training_tips">Dicas de formação</string>
+    <string name="menu_training_tips">Dicas de treinamento</string>
     <!-- Share Tool Functionality -->
-    <string name="menu_share_tool">Partilhar</string>
+    <string name="menu_share_tool">Compartilhar</string>
     <string name="tool_share_sheet_more_apps">Mais</string>
-    <string name="share_tool_message">Esta ligação irá direcioná-lo para uma versão Web do que estávamos a falar hoje: %1$s \n\n
+    <string name="share_tool_message">Este link irá levá-lo a uma versão web do que estávamos a comentar hoje: %1$s \n\n
 
-Pode baixar o aplicativo em https://godtoolsapp.com \n\n
+O aplicativo pode ser baixado em https://godtoolsapp.com \n\n
 
-Vamos falar mais!</string>
-    <string name="share_tool_message_article">Quero compartilhar esse artigo consigo e gostaria de saber o que você pensa dele.\n%1$s</string>
-    <string name="feature_discovery_title_share_tool">Compartilhar uma ligação</string>
-    <string name="feature_discovery_desc_share_tool">Clique nesse ícone para enviar essa ferramenta a um amigo</string>
+Vamos conversar mais!</string>
+    <string name="share_tool_message_article">Quero compartilhar este texto com você e gostaria de saber o que você pensa dele.\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Compartilhar um link</string>
+    <string name="feature_discovery_desc_share_tool">Envie esta ferramenta a um amigo selecionando este ícone</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Compartilhar imagem</string>
 </resources>
