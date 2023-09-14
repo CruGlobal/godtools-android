@@ -40,12 +40,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
     }
 
-    kapt {
-        javacOptions {
-            option("-Adagger.fastInit=enabled")
-        }
-    }
-
     productFlavors {
         named("stage") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
@@ -117,6 +111,12 @@ android {
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
+}
+
+kapt {
+    javacOptions {
+        option("-Adagger.fastInit=enabled")
+    }
 }
 
 onesky {
