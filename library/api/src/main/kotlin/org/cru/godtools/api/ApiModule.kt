@@ -51,7 +51,7 @@ object ApiModule {
     @Provides
     @Singleton
     fun okhttp(
-        @InterceptorType(NETWORK_INTERCEPTOR) networkInterceptors: Set<@JvmSuppressWildcards Interceptor>
+        @InterceptorType(NETWORK_INTERCEPTOR) networkInterceptors: Set<@JvmSuppressWildcards Interceptor>,
     ) = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
@@ -87,7 +87,7 @@ object ApiModule {
     fun mobileContentApiRetrofit(
         @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
         jsonApiConverter: JsonApiConverter,
-        okhttp: OkHttpClient
+        okhttp: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(LocaleConverterFactory)
@@ -101,7 +101,7 @@ object ApiModule {
     fun mobileContentApiAuthenticatedRetrofit(
         @Named(MOBILE_CONTENT_API) retrofit: Retrofit,
         okhttp: OkHttpClient,
-        sessionInterceptor: MobileContentApiSessionInterceptor
+        sessionInterceptor: MobileContentApiSessionInterceptor,
     ): Retrofit = retrofit.newBuilder()
         .callFactory(
             okhttp.newBuilder()
@@ -163,7 +163,7 @@ object ApiModule {
         app: Application,
         jsonApi: JsonApiConverter,
         okhttp: OkHttpClient,
-        referenceLifecycle: ReferenceLifecycle
+        referenceLifecycle: ReferenceLifecycle,
     ) = Scarlet.Builder()
         .webSocketFactory(okhttp.newWebSocketFactory(ActionCableRequestFactory("${baseUrl}cable")))
         .addMessageAdapterFactory(
