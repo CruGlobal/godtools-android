@@ -1,6 +1,7 @@
 plugins {
     id("godtools.library-conventions")
     kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -39,13 +40,13 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
 
-    kapt(libs.androidx.hilt.compiler)
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-    kaptTest(libs.hilt.compiler)
+    kspTest(libs.hilt.compiler)
 }

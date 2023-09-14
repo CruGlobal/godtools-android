@@ -2,7 +2,7 @@ import org.cru.godtools.gradle.bundledcontent.configureBundledContent
 
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -46,5 +46,5 @@ dependencies {
 
     testImplementation(libs.kotlin.coroutines.test)
 
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 }
