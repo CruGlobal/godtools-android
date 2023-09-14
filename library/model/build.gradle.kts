@@ -1,6 +1,5 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
 }
 
 android {
