@@ -40,75 +40,79 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.attachmentsRepository(legacyDb: GodToolsDatabase): AttachmentsRepository {
+    internal fun attachmentsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): AttachmentsRepository {
         legacyDb.triggerDataMigration()
-        return attachmentsRepository
+        return db.attachmentsRepository
     }
 
     @Provides
     @Reusable
-    internal fun LegacyDownloadedFilesRepository.downloadedFilesRepository(
+    internal fun downloadedFilesRepository(
+        repository: LegacyDownloadedFilesRepository,
         legacyDb: GodToolsDatabase,
     ): DownloadedFilesRepository {
         legacyDb.triggerDataMigration()
-        return this
+        return repository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.languagesRepository(legacyDb: GodToolsDatabase): LanguagesRepository {
+    internal fun languagesRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): LanguagesRepository {
         legacyDb.triggerDataMigration()
-        return languagesRepository
+        return db.languagesRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.followupsRepository(legacyDb: GodToolsDatabase): FollowupsRepository {
+    internal fun followupsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): FollowupsRepository {
         legacyDb.triggerDataMigration()
-        return followupsRepository
+        return db.followupsRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.globalActivityRepository(legacyDb: GodToolsDatabase): GlobalActivityRepository {
+    internal fun globalActivityRepository(
+        db: GodToolsRoomDatabase,
+        legacyDb: GodToolsDatabase,
+    ): GlobalActivityRepository {
         legacyDb.triggerDataMigration()
-        return globalActivityRepository
+        return db.globalActivityRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.trainingTipsRepository(legacyDb: GodToolsDatabase): TrainingTipsRepository {
+    internal fun trainingTipsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): TrainingTipsRepository {
         legacyDb.triggerDataMigration()
-        return trainingTipsRepository
+        return db.trainingTipsRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.userRepository(): UserRepository = userRepository
+    internal fun userRepository(db: GodToolsRoomDatabase): UserRepository = db.userRepository
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.userCountersRepository(legacyDb: GodToolsDatabase): UserCountersRepository {
+    internal fun userCountersRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): UserCountersRepository {
         legacyDb.triggerDataMigration()
-        return userCountersRepository
+        return db.userCountersRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.lastSyncTimeRepository(): LastSyncTimeRepository = lastSyncTimeRepository
+    internal fun lastSyncTimeRepository(db: GodToolsRoomDatabase): LastSyncTimeRepository = db.lastSyncTimeRepository
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.toolsRepository(legacyDb: GodToolsDatabase): ToolsRepository {
+    internal fun toolsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): ToolsRepository {
         legacyDb.triggerDataMigration()
-        return toolsRepository
+        return db.toolsRepository
     }
 
     @Provides
     @Reusable
-    internal fun GodToolsRoomDatabase.translationsRepository(legacyDb: GodToolsDatabase): TranslationsRepository {
+    internal fun translationsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): TranslationsRepository {
         legacyDb.triggerDataMigration()
-        return translationsRepository
+        return db.translationsRepository
     }
 
     private fun GodToolsDatabase.triggerDataMigration() {
