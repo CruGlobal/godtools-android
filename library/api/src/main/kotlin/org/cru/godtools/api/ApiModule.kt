@@ -112,43 +112,45 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.analyticsApi() = create<AnalyticsApi>()
+    fun analyticsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AnalyticsApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.attachmentsApi() = create<AttachmentsApi>()
+    fun attachmentsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AttachmentsApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.authApi() = create<AuthApi>()
+    fun authApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AuthApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.followupApi() = create<FollowupApi>()
+    fun followupApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): FollowupApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.languagesApi() = create<LanguagesApi>()
+    fun languagesApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): LanguagesApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.toolsApi() = create<ToolsApi>()
+    fun toolsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ToolsApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.translationsApi() = create<TranslationsApi>()
+    fun translationsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): TranslationsApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API_AUTHENTICATED) Retrofit.userApi() = create<UserApi>()
+    fun userApi(@Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit): UserApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API_AUTHENTICATED) Retrofit.userCountersApi() = create<UserCountersApi>()
+    fun userCountersApi(
+        @Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit,
+    ): UserCountersApi = retrofit.create()
 
     @Provides
     @Reusable
-    fun @receiver:Named(MOBILE_CONTENT_API) Retrofit.viewsApi() = create<ViewsApi>()
+    fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
 
     @Provides
     @Singleton

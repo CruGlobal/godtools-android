@@ -14,7 +14,7 @@ abstract class AppsFlyerModule {
     @Binds
     @IntoSet
     @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
-    abstract fun AppsFlyerAnalyticsService.eagerSingleton(): Any
+    abstract fun eagerSingleton(service: AppsFlyerAnalyticsService): Any
 
     @Multibinds
     abstract fun deepLinkResolvers(): Set<AppsFlyerDeepLinkResolver>
