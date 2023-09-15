@@ -210,6 +210,8 @@ dependencies {
     debugImplementation(libs.gtoSupport.okhttp3)
     debugImplementation(libs.leakcanary)
 
+    // TODO: transition to KSP for dagger once referencing BuildConfig is supported
+    //       see: https://github.com/google/dagger/issues/4051
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 

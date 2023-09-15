@@ -37,6 +37,8 @@ dependencies {
     implementation(libs.scarlet.adapters.stream.coroutines)
     implementation(libs.scarlet.websockets.okhttp)
 
+    // TODO: transition to KSP for dagger once referencing BuildConfig is supported
+    //       see: https://github.com/google/dagger/issues/4051
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
