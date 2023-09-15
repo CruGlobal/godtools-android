@@ -1,11 +1,13 @@
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
-import org.jetbrains.kotlin.gradle.plugin.KaptExtension
 
 fun Project.createEventBusIndex(className: String) {
-    extensions.configure<KaptExtension> {
+    plugins.apply("org.jetbrains.kotlin.kapt")
+
+    kapt {
         arguments {
             arg("eventBusIndex", className)
         }
     }
+
+    dependencies.addProvider("kapt", libs.findLibrary("eventbus-annotationProcessor").get())
 }

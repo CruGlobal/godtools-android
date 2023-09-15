@@ -39,5 +39,4 @@ dependencies {
     kapt(libs.androidx.hilt.compiler)
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
-    kapt(libs.eventbus.annotationProcessor)
 }

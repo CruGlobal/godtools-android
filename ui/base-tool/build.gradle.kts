@@ -74,7 +74,6 @@ dependencies {
     implementation(libs.youtubePlayer)
 
     kapt(libs.dagger.compiler)
-    kapt(libs.eventbus.annotationProcessor)
     kapt(libs.google.auto.value)
     kapt(libs.hilt.compiler)
 

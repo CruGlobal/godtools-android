@@ -70,7 +70,6 @@ dependencies {
     implementation(libs.weakdelegate)
 
     kapt(libs.dagger.compiler)
-    kapt(libs.eventbus.annotationProcessor)
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)

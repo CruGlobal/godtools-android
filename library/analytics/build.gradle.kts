@@ -44,7 +44,6 @@ dependencies {
 
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
-    kapt(libs.eventbus.annotationProcessor)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.kotlin.coroutines.test)
