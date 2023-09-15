@@ -1,5 +1,5 @@
 ### Rules not in a release yet
-### copied from https://github.com/square/retrofit/blob/dcc890bc1e13895309c83bb7ca448cc885c41d6b/retrofit/src/main/resources/META-INF/proguard/retrofit2.pro
+### copied from https://github.com/square/retrofit/blob/ef8d867ffb34b419355a323e11ba89db1904f8c2/retrofit/src/main/resources/META-INF/proguard/retrofit2.pro
 
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
@@ -47,5 +47,5 @@
 -if interface * { @retrofit2.http.* public *** *(...); }
 -keep,allowoptimization,allowshrinking,allowobfuscation class <3>
 
-# R8 full mode strips generic signatures from return types if not kept.
+# With R8 full mode generic signatures are stripped for classes that are not kept.
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
