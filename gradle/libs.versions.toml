@@ -90,7 +90,6 @@ facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "fac
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
 facebook-soloader = "com.facebook.soloader:soloader:0.10.5"
-firebase-appdistribution-gradlePlugin = "com.google.firebase:firebase-appdistribution-gradle:4.0.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-gradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.9.9"
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
@@ -217,6 +216,7 @@ common = ["kotlin-stdlib", "timber"]
 test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "4.0.0" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
