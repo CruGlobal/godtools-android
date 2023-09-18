@@ -14,6 +14,7 @@ internal class ToolEntity(
     val name: String? = null,
     val category: String? = null,
     val description: String? = null,
+    @ColumnInfo(defaultValue = "0")
     val shares: Int = 0,
     @ColumnInfo(defaultValue = "0")
     val pendingShares: Int = 0,
@@ -21,7 +22,9 @@ internal class ToolEntity(
     val detailsBannerId: Long? = null,
     val detailsBannerAnimationId: Long? = null,
     val detailsBannerYoutubeVideoId: String? = null,
+    @ColumnInfo(defaultValue = "false")
     val isScreenShareDisabled: Boolean = false,
+    @ColumnInfo(defaultValue = "0")
     val defaultOrder: Int = 0,
     @ColumnInfo(defaultValue = "${Int.MAX_VALUE}")
     val order: Int = Int.MAX_VALUE,
@@ -29,7 +32,9 @@ internal class ToolEntity(
     val defaultVariantCode: String? = null,
     @ColumnInfo(defaultValue = "false")
     val isAdded: Boolean = false,
+    @ColumnInfo(defaultValue = "false")
     val isHidden: Boolean = false,
+    @ColumnInfo(defaultValue = "false")
     val isSpotlight: Boolean = false,
 ) {
     constructor(tool: Tool) : this(

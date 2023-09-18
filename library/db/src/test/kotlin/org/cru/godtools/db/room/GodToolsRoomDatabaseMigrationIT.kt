@@ -268,4 +268,13 @@ class GodToolsRoomDatabaseMigrationIT {
             }
         }
     }
+
+    @Test
+    fun testMigrate12To13() {
+        // create v12 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 12).use {}
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 13, true, *MIGRATIONS).use {}
+    }
 }
