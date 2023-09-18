@@ -14,7 +14,6 @@ buildscript {
 
         classpath libs.android.gradlePlugin
         classpath libs.firebase.crashlytics.gradlePlugin
-        classpath libs.firebase.perf.gradlePlugin
         classpath libs.kotlin.gradlePlugin
     }
 }
