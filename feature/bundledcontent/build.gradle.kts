@@ -1,6 +1,6 @@
 plugins {
     id("godtools.dynamic-feature-conventions")
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android.namespace = "org.cru.godtools.feature.bundledcontent"
@@ -12,5 +12,5 @@ dependencies {
 
     implementation(libs.dagger)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.dagger.compiler)
 }

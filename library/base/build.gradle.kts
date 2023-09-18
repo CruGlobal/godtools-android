@@ -1,6 +1,6 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android.namespace = "org.cru.godtools.base"
@@ -23,8 +23,9 @@ dependencies {
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
