@@ -1,9 +1,9 @@
 plugins {
     id("godtools.application-conventions")
     kotlin("kapt")
-    id("com.google.firebase.appdistribution")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
+    alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.google.services)
     alias(libs.plugins.grgit)
     alias(libs.plugins.hilt)
