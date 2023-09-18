@@ -31,7 +31,7 @@ internal class ToolEntity(
     val metatoolCode: String? = null,
     val defaultVariantCode: String? = null,
     @ColumnInfo(defaultValue = "false")
-    val isAdded: Boolean = false,
+    val isFavorite: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     val isHidden: Boolean = false,
     @ColumnInfo(defaultValue = "false")
@@ -55,7 +55,7 @@ internal class ToolEntity(
         order = tool.order,
         metatoolCode = tool.metatoolCode,
         defaultVariantCode = tool.defaultVariantCode,
-        isAdded = tool.isFavorite,
+        isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
     )
@@ -78,7 +78,7 @@ internal class ToolEntity(
         it.order = order
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
-        it.isFavorite = isAdded
+        it.isFavorite = isFavorite
         it.isHidden = isHidden
         it.isSpotlight = isSpotlight
     }

@@ -35,8 +35,8 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     override fun toolsChangeFlow(): Flow<Any?> = db.changeFlow("tools")
 
-    override suspend fun pinTool(code: String) = dao.updateIsAdded(code, true)
-    override suspend fun unpinTool(code: String) = dao.updateIsAdded(code, false)
+    override suspend fun pinTool(code: String) = dao.updateIsFavorite(code, true)
+    override suspend fun unpinTool(code: String) = dao.updateIsFavorite(code, false)
 
     @Transaction
     override suspend fun storeToolOrder(tools: List<String>) {
@@ -55,7 +55,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     @Transaction
     override suspend fun deleteIfNotFavorite(code: String) {
-        val tool = dao.findTool(code)?.takeUnless { it.isAdded } ?: return
+        val tool = dao.findTool(code)?.takeUnless { it.isFavorite } ?: return
         dao.delete(tool)
     }
 }
