@@ -21,10 +21,6 @@
             "package_name": "org.keynote.godtools.android",
             "certificate_hash": "ee40b2e6569e1e242f69bf9dd839f6fb135337d8"
           }
-        },
-        {
-          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -77,10 +73,6 @@
             "package_name": "org.keynote.godtools.android.debug",
             "certificate_hash": "5a863ad7021d70e6cac9d3f47d297c2261222424"
           }
-        },
-        {
-          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -125,10 +117,6 @@
             "package_name": "org.keynote.godtools.android.qa",
             "certificate_hash": "e759fc0eb96d7e32a0c627209ea35bb84fd28866"
           }
-        },
-        {
-          "client_id": "71275134527-roo71fe00mo561o79j6b9jveuocsq38i.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
