@@ -97,7 +97,6 @@ firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:21.1.0"
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.3.5"
 firebase-messaging = "com.google.firebase:firebase-messaging:23.2.1"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
-firebase-perf-gradlePlugin = "com.google.firebase:perf-plugin:1.4.2"
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsShared-analytics = { module = "org.cru.godtools.kotlin:analytics", version.ref = "godtoolsShared" }
 godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref = "godtoolsShared" }
@@ -217,6 +216,7 @@ test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "4.0.0" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
