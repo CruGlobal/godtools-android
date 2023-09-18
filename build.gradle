@@ -16,7 +16,6 @@ buildscript {
         classpath libs.firebase.appdistribution.gradlePlugin
         classpath libs.firebase.crashlytics.gradlePlugin
         classpath libs.firebase.perf.gradlePlugin
-        classpath libs.google.services.gradlePlugin
         classpath libs.kotlin.gradlePlugin
     }
 }

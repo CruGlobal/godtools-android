@@ -106,7 +106,6 @@ godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref
 godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
-google-services-gradlePlugin = "com.google.gms:google-services:4.4.0"
 gradleDownloadTask = "de.undercouch:gradle-download-task:5.5.0"
 gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-androidx-collection", version.ref = "gtoSupport" }
 gtoSupport-androidx-compose = { module = "org.ccci.gto.android:gto-support-androidx-compose", version.ref = "gtoSupport" }
@@ -218,6 +217,7 @@ common = ["kotlin-stdlib", "timber"]
 test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
+google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.0" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
