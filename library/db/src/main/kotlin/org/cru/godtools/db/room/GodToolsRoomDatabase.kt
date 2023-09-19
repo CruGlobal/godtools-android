@@ -6,6 +6,7 @@ import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
+import androidx.sqlite.db.SupportSQLiteDatabase
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
 import org.cru.godtools.db.room.dao.AttachmentsDao
@@ -43,7 +44,7 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 15,
+    version = 16,
     entities = [
         AttachmentEntity::class,
         LanguageEntity::class,
@@ -67,6 +68,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 12, to = 13),
         AutoMigration(from = 13, to = 14, spec = Migration14::class),
         AutoMigration(from = 14, to = 15),
+        AutoMigration(from = 15, to = 16, spec = ResetUserSyncMigration::class),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -121,9 +123,16 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 13: 2023-09-18
  * 14: 2023-09-18
  * 15: 2023-09-18
+ * 16: 2023-09-19
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
+
+internal class ResetUserSyncMigration : AutoMigrationSpec {
+    override fun onPostMigrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DELETE FROM last_sync_times WHERE id LIKE ?", arrayOf("last_synced.user%"))
+    }
+}
 
 @RenameColumn(tableName = "tools", fromColumnName = "isAdded", toColumnName = "isFavorite")
 internal class Migration14 : AutoMigrationSpec

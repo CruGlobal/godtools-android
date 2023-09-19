@@ -11,6 +11,7 @@ import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import org.ccci.gto.android.common.util.database.getString
 import org.junit.Rule
 import org.junit.Test
@@ -203,6 +204,38 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(1, it.getIntOrNull(0))
                 assertEquals("a", it.getStringOrNull(1))
                 assertEquals("", it.getStringOrNull(2))
+            }
+        }
+    }
+
+    @Test
+    fun testMigrate15To16() {
+        val name = UUID.randomUUID().toString()
+
+        // create v15 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 15).use { db ->
+            db.execSQL("INSERT INTO users (id, name) VALUES (1, ?)", arrayOf(name))
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("last_synced.user:1", "1234"))
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 16, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, name, givenName, familyName, email FROM users").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals(name, it.getStringOrNull(1))
+                assertNull(it.getStringOrNull(2))
+                assertNull(it.getStringOrNull(3))
+                assertNull(it.getStringOrNull(4))
+            }
+
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
             }
         }
     }

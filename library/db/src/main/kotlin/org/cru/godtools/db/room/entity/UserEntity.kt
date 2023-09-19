@@ -11,8 +11,28 @@ internal class UserEntity(
     val id: String,
     val ssoGuid: String?,
     val name: String?,
+    val givenName: String?,
+    val familyName: String?,
+    val email: String?,
     val createdAt: Instant?,
 ) {
-    constructor(user: User) : this(id = user.id, ssoGuid = user.ssoGuid, name = user.name, createdAt = user.createdAt)
-    fun toModel() = User(id = id, ssoGuid = ssoGuid, name = name, createdAt = createdAt)
+    constructor(user: User) : this(
+        id = user.id,
+        ssoGuid = user.ssoGuid,
+        name = user.name,
+        givenName = user.givenName,
+        familyName = user.familyName,
+        email = user.email,
+        createdAt = user.createdAt,
+    )
+
+    fun toModel() = User(
+        id = id,
+        ssoGuid = ssoGuid,
+        name = name,
+        givenName = givenName,
+        familyName = familyName,
+        email = email,
+        createdAt = createdAt,
+    )
 }
