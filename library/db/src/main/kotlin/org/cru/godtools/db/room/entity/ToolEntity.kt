@@ -36,6 +36,8 @@ internal class ToolEntity(
     val isHidden: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     val isSpotlight: Boolean = false,
+    @ColumnInfo(defaultValue = "")
+    val changedFields: String = "",
 ) {
     constructor(tool: Tool) : this(
         id = tool.id,
@@ -58,6 +60,7 @@ internal class ToolEntity(
         isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
+        changedFields = tool.changedFieldsStr,
     )
 
     fun toModel() = Tool().also {
@@ -81,5 +84,6 @@ internal class ToolEntity(
         it.isFavorite = isFavorite
         it.isHidden = isHidden
         it.isSpotlight = isSpotlight
+        it.changedFieldsStr = changedFields
     }
 }

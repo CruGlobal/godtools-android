@@ -32,7 +32,7 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(JSON_API_TYPE)
-class Tool : Base() {
+class Tool : Base(), ChangeTrackingModel {
     companion object {
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
@@ -144,6 +144,13 @@ class Tool : Base() {
     var isSpotlight = false
 
     val isValid get() = code != null && id != INVALID_ID
+
+    // region ChangeTrackingModel
+    @JsonApiIgnore
+    override var changedFieldsStr = ""
+    @JsonApiIgnore
+    override var isTrackingChanges = false
+    // endregion Change Tracking
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
