@@ -175,7 +175,7 @@ materialComponents = "com.google.android.material:material:1.9.0"
 mockk = "io.mockk:mockk:1.13.7"
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 onesky-gradlePlugin = "co.brainly:plugin:1.6.0"
-picasso = "com.squareup.picasso:picasso:2.8"
+picasso = "com.squareup.picasso:picasso:2.71828"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
 play-auth = "com.google.android.gms:play-services-auth:20.7.0"
