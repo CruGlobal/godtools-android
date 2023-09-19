@@ -92,10 +92,10 @@ class TasksTest {
         tasks.initFavoriteTools()
         coVerifyAll {
             toolsRepository.getTools()
-            toolsRepository.pinTool("1")
-            toolsRepository.pinTool("2")
-            toolsRepository.pinTool("3")
-            toolsRepository.pinTool("5")
+            toolsRepository.pinTool("1", trackChanges = false)
+            toolsRepository.pinTool("2", trackChanges = false)
+            toolsRepository.pinTool("3", trackChanges = false)
+            toolsRepository.pinTool("5", trackChanges = false)
         }
         confirmVerified(toolsRepository)
     }

@@ -88,7 +88,7 @@ internal class Tasks @Inject constructor(
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
                 .distinct()
                 .take(NUMBER_OF_FAVORITES)
-                .map { launch { toolsRepository.pinTool(it) } }
+                .map { launch { toolsRepository.pinTool(it, trackChanges = false) } }
                 .toList().joinAll()
         }
 
