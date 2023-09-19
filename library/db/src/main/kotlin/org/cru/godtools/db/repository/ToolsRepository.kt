@@ -28,7 +28,7 @@ interface ToolsRepository {
 
     fun toolsChangeFlow(): Flow<Any?>
 
-    suspend fun pinTool(code: String)
+    suspend fun pinTool(code: String, trackChanges: Boolean = true)
     suspend fun unpinTool(code: String)
 
     suspend fun storeToolOrder(tools: List<String>)

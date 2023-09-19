@@ -39,6 +39,8 @@ class Tool : Base(), ChangeTrackingModel {
         const val JSON_METATOOL = "metatool"
         const val JSON_DEFAULT_VARIANT = "default-variant"
 
+        const val ATTR_IS_FAVORITE = "isFavorite"
+
         val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
         val COMPARATOR_FAVORITE_ORDER = compareBy<Tool> { it.order }.then(COMPARATOR_DEFAULT_ORDER)
     }

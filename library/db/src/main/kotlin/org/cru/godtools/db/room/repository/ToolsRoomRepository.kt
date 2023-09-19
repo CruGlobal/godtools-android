@@ -35,7 +35,13 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     override fun toolsChangeFlow(): Flow<Any?> = db.changeFlow("tools")
 
-    override suspend fun pinTool(code: String) = dao.updateIsFavorite(code, true)
+    @Transaction
+    override suspend fun pinTool(code: String, trackChanges: Boolean) {
+        val tool = dao.findToolFavorite(code) ?: return
+        if (trackChanges) tool.isTrackingChanges = true
+        tool.isFavorite = true
+        dao.update(tool)
+    }
     override suspend fun unpinTool(code: String) = dao.updateIsFavorite(code, false)
 
     @Transaction
