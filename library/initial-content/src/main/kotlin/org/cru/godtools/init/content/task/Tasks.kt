@@ -76,7 +76,7 @@ internal class Tasks @Inject constructor(
     suspend fun initFavoriteTools() {
         // check to see if we have initialized the default tools before
         if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
-        if (toolsRepository.getTools().any { it.isAdded }) return
+        if (toolsRepository.getTools().any { it.isFavorite }) return
 
         coroutineScope {
             val preferred = async {

@@ -268,4 +268,32 @@ class GodToolsRoomDatabaseMigrationIT {
             }
         }
     }
+
+    @Test
+    fun testMigrate12To13() {
+        // create v12 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 12).use {}
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 13, true, *MIGRATIONS).use {}
+    }
+
+    @Test
+    fun testMigrate13To14() {
+        // create v13 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 13).use { db ->
+            db.execSQL("""INSERT INTO tools (id, code, type, isAdded) VALUES (1, "a", "TRACT", 1)""")
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 14, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, code, isFavorite FROM tools").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals("a", it.getStringOrNull(1))
+                assertEquals(1, it.getIntOrNull(2))
+            }
+        }
+    }
 }

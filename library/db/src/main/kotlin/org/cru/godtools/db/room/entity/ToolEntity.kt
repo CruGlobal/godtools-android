@@ -14,6 +14,7 @@ internal class ToolEntity(
     val name: String? = null,
     val category: String? = null,
     val description: String? = null,
+    @ColumnInfo(defaultValue = "0")
     val shares: Int = 0,
     @ColumnInfo(defaultValue = "0")
     val pendingShares: Int = 0,
@@ -21,15 +22,19 @@ internal class ToolEntity(
     val detailsBannerId: Long? = null,
     val detailsBannerAnimationId: Long? = null,
     val detailsBannerYoutubeVideoId: String? = null,
+    @ColumnInfo(defaultValue = "false")
     val isScreenShareDisabled: Boolean = false,
+    @ColumnInfo(defaultValue = "0")
     val defaultOrder: Int = 0,
     @ColumnInfo(defaultValue = "${Int.MAX_VALUE}")
     val order: Int = Int.MAX_VALUE,
     val metatoolCode: String? = null,
     val defaultVariantCode: String? = null,
     @ColumnInfo(defaultValue = "false")
-    val isAdded: Boolean = false,
+    val isFavorite: Boolean = false,
+    @ColumnInfo(defaultValue = "false")
     val isHidden: Boolean = false,
+    @ColumnInfo(defaultValue = "false")
     val isSpotlight: Boolean = false,
 ) {
     constructor(tool: Tool) : this(
@@ -50,7 +55,7 @@ internal class ToolEntity(
         order = tool.order,
         metatoolCode = tool.metatoolCode,
         defaultVariantCode = tool.defaultVariantCode,
-        isAdded = tool.isAdded,
+        isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
     )
@@ -73,7 +78,7 @@ internal class ToolEntity(
         it.order = order
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
-        it.isAdded = isAdded
+        it.isFavorite = isFavorite
         it.isHidden = isHidden
         it.isSpotlight = isSpotlight
     }

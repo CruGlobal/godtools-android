@@ -2,8 +2,10 @@ package org.cru.godtools.db.room
 
 import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
 import org.cru.godtools.db.room.dao.AttachmentsDao
@@ -41,7 +43,7 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 12,
+    version = 14,
     entities = [
         AttachmentEntity::class,
         LanguageEntity::class,
@@ -67,6 +69,8 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 9, to = 10),
         AutoMigration(from = 10, to = 11),
         AutoMigration(from = 11, to = 12),
+        AutoMigration(from = 12, to = 13),
+        AutoMigration(from = 13, to = 14, spec = Migration14::class),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -123,7 +127,12 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 10: 2023-05-08
  * 11: 2023-05-15
  * 12: 2023-06-08
+ * 13: 2023-09-18
+ * 14: 2023-09-18
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
+
+@RenameColumn(tableName = "tools", fromColumnName = "isAdded", toColumnName = "isFavorite")
+internal class Migration14 : AutoMigrationSpec
 // endregion Migrations

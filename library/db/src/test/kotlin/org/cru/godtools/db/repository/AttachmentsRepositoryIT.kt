@@ -122,7 +122,7 @@ abstract class AttachmentsRepositoryIT {
     @Test
     fun `storeInitialAttachments() - Don't replace already existing attachments`() = testScope.runTest {
         val tool = Tool("tool")
-        toolsRepository.storeToolFromSync(tool)
+        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) { filename = "sync.bin" }
         repository.storeAttachmentsFromSync(tool, listOf(attachment))
 
@@ -138,7 +138,7 @@ abstract class AttachmentsRepositoryIT {
     @Test
     fun `storeAttachmentsFromSync() - Update existing attachment`() = testScope.runTest {
         val tool = Tool("tool")
-        toolsRepository.storeToolFromSync(tool)
+        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "initial.ext"
             sha256 = "initial"
@@ -162,7 +162,7 @@ abstract class AttachmentsRepositoryIT {
     @Test
     fun `storeAttachmentsFromSync() - Don't overwrite downloaded flag`() = testScope.runTest {
         val tool = Tool("tool")
-        toolsRepository.storeToolFromSync(tool)
+        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "file.ext"
             sha256 = "file"

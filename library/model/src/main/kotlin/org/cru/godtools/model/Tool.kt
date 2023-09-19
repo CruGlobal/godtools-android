@@ -137,7 +137,7 @@ class Tool : Base() {
         internal set
 
     @JsonApiIgnore
-    var isAdded = false
+    var isFavorite = false
     @JsonApiAttribute(JSON_HIDDEN)
     var isHidden = false
     @JsonApiAttribute(JSON_SPOTLIGHT)
@@ -187,7 +187,7 @@ fun randomTool(
     order = Random.nextInt()
     metatoolCode = UUID.randomUUID().toString()
     defaultVariantCode = UUID.randomUUID().toString()
-    isAdded = Random.nextBoolean()
+    isFavorite = Random.nextBoolean()
     isHidden = Random.nextBoolean()
     isSpotlight = Random.nextBoolean()
     config()

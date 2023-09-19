@@ -31,13 +31,13 @@ internal fun FavoriteAction(
     confirmRemoval: Boolean = true
 ) {
     val tool by viewModel.tool.collectAsState()
-    val isAdded by remember { derivedStateOf { tool?.isAdded == true } }
+    val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     var showRemovalConfirmation by rememberSaveable { mutableStateOf(false) }
 
     Surface(
         onClick = {
             when {
-                !isAdded -> viewModel.pinTool()
+                !isFavorite -> viewModel.pinTool()
                 confirmRemoval -> showRemovalConfirmation = true
                 else -> viewModel.unpinTool()
             }
@@ -47,7 +47,9 @@ internal fun FavoriteAction(
         modifier = modifier
     ) {
         Icon(
-            painter = painterResource(if (isAdded) R.drawable.ic_favorite_24dp else R.drawable.ic_favorite_border_24dp),
+            painter = painterResource(
+                if (isFavorite) R.drawable.ic_favorite_24dp else R.drawable.ic_favorite_border_24dp
+            ),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
