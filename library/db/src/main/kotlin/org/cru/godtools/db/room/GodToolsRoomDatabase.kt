@@ -58,7 +58,6 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         LastSyncTimeEntity::class,
     ],
     autoMigrations = [
-        AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7),
         AutoMigration(from = 7, to = 8),
         AutoMigration(from = 8, to = 9),
@@ -109,7 +108,6 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * Version history
  *
  * v6.0.1
- * 5: 2022-11-22
  * 6: 2022-12-05
  * v6.1.0-v6.1.1
  * 7: 2023-03-27
