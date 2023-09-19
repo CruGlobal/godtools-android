@@ -26,27 +26,6 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate3To4() {
-        // create v3 database
-        with(helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 3)) {
-            execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
-            close()
-        }
-
-        // run migration
-        with(helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 4, true, *MIGRATIONS)) {
-            with(query("SELECT id, time FROM last_sync_times")) {
-                assertEquals(1, count)
-                moveToFirst()
-                assertEquals("sync_time", getStringOrNull(0))
-                assertEquals(1234, getIntOrNull(1))
-                close()
-            }
-            close()
-        }
-    }
-
-    @Test
     fun testMigrate4To5() {
         val followupsQuery = "SELECT * FROM followups"
 
