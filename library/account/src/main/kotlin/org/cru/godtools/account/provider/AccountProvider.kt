@@ -4,7 +4,6 @@ import androidx.activity.ComponentActivity
 import kotlinx.coroutines.flow.Flow
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.account.AccountType
-import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.api.model.AuthToken
 
 internal interface AccountProvider : Ordered {
@@ -14,7 +13,6 @@ internal interface AccountProvider : Ordered {
     suspend fun userId(): String?
     fun isAuthenticatedFlow(): Flow<Boolean>
     fun userIdFlow(): Flow<String?>
-    fun accountInfoFlow(): Flow<AccountInfo?>
 
     // region Login/Logout
     open class LoginState internal constructor(val activity: ComponentActivity)
