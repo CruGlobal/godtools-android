@@ -48,8 +48,6 @@ internal interface ToolsDao {
     suspend fun upsertSyncTools(tools: Collection<SyncTool>)
     @Update(entity = ToolEntity::class)
     suspend fun update(tool: ToolFavorite)
-    @Query("UPDATE tools SET isFavorite = :isFavorite WHERE code = :code")
-    suspend fun updateIsFavorite(code: String, isFavorite: Boolean)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")
     fun resetToolOrder()
     @Query("UPDATE tools SET `order` = :order WHERE code = :code")

@@ -10,3 +10,12 @@ interface ChangeTrackingModel {
         if (isTrackingChanges) changedFieldsStr = "$changedFieldsStr,$field"
     }
 }
+
+inline fun <T : ChangeTrackingModel> T.trackChanges(block: (T) -> Unit) {
+    isTrackingChanges = true
+    try {
+        block(this)
+    } finally {
+        isTrackingChanges = false
+    }
+}

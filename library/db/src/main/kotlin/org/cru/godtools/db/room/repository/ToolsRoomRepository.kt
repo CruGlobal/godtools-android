@@ -12,6 +12,7 @@ import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.partial.SyncTool
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.trackChanges
 
 private val TOOL_TYPES = setOf(Tool.Type.TRACT, Tool.Type.CYOA, Tool.Type.ARTICLE)
 
@@ -42,7 +43,12 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
         tool.isFavorite = true
         dao.update(tool)
     }
-    override suspend fun unpinTool(code: String) = dao.updateIsFavorite(code, false)
+    @Transaction
+    override suspend fun unpinTool(code: String) {
+        val tool = dao.findToolFavorite(code) ?: return
+        tool.trackChanges { it.isFavorite = false }
+        dao.update(tool)
+    }
 
     @Transaction
     override suspend fun storeToolOrder(tools: List<String>) {
