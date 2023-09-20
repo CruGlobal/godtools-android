@@ -8,8 +8,6 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 
-private const val JSON_API_TYPE = "resource"
-
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
 private const val JSON_TYPE_ARTICLE = "article"
@@ -31,15 +29,39 @@ private const val JSON_DEFAULT_ORDER = "attr-default-order"
 private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
-@JsonApiType(JSON_API_TYPE)
+@JsonApiType(Tool.JSONAPI_TYPE)
 class Tool : Base(), ChangeTrackingModel {
     companion object {
+        const val JSONAPI_TYPE = "resource"
+
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
         const val JSON_METATOOL = "metatool"
         const val JSON_DEFAULT_VARIANT = "default-variant"
 
         const val ATTR_IS_FAVORITE = "isFavorite"
+
+        val JSONAPI_FIELDS = arrayOf(
+            JSON_TYPE,
+            JSON_ABBREVIATION,
+            JSON_NAME,
+            JSON_DESCRIPTION,
+            JSON_CATEGORY,
+            JSON_TOTAL_VIEWS,
+            JSON_BANNER,
+            JSON_DETAILS_BANNER,
+            JSON_DETAILS_BANNER_ANIMATION,
+            JSON_DETAILS_BANNER_YOUTUBE,
+            JSON_INITIAL_FAVORITES_PRIORITY,
+            JSON_SCREEN_SHARE_DISABLED,
+            JSON_DEFAULT_ORDER,
+            JSON_METATOOL,
+            JSON_DEFAULT_VARIANT,
+            JSON_ATTACHMENTS,
+            JSON_LATEST_TRANSLATIONS,
+            JSON_HIDDEN,
+            JSON_SPOTLIGHT
+        )
 
         val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
         val COMPARATOR_FAVORITE_ORDER = compareBy<Tool> { it.order }.then(COMPARATOR_DEFAULT_ORDER)

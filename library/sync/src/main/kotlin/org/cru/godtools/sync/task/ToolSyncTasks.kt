@@ -46,6 +46,7 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         private fun buildApiParams() = JsonApiParams()
             .includes(INCLUDES_GET_TOOL)
+            .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
     }
 
