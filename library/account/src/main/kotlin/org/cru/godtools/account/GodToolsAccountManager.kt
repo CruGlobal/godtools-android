@@ -52,10 +52,6 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         .flatMapLatest { it?.userIdFlow() ?: flowOf(null) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
-    fun accountInfoFlow() = activeProviderFlow
-        .flatMapLatest { it?.accountInfoFlow() ?: flowOf(null) }
-        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
-        .distinctUntilChanged()
 
     // region Login/Logout
     class LoginState internal constructor(internal val providerState: Map<AccountType, AccountProvider.LoginState?>)

@@ -14,13 +14,11 @@ import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.isAuthenticatedFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.cru.godtools.account.AccountType
-import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
@@ -54,8 +52,6 @@ internal class FacebookAccountProvider @Inject constructor(
     override fun userIdFlow() = accessTokenManager.currentAccessTokenFlow()
         .flatMapLatest { it?.let { prefs.getStringFlow(PREF_USER_ID(it), null) } ?: flowOf(null) }
     override fun isAuthenticatedFlow() = accessTokenManager.isAuthenticatedFlow()
-
-    override fun accountInfoFlow() = userIdFlow().map { AccountInfo(userId = it) }
 
     // region Login/Logout
     inner class FacebookLoginState(activity: ComponentActivity) : AccountProvider.LoginState(activity) {

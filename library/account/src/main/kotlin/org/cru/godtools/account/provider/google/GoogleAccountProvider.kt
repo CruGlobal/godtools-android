@@ -47,9 +47,6 @@ internal class GoogleAccountProvider @Inject constructor(
     override fun userIdFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context)
         .flatMapLatest { it?.let { prefs.getStringFlow(PREF_USER_ID(it), null) } ?: flowOf(null) }
 
-    // TODO: we need to implement this unless GT-1871 is implemented
-    override fun accountInfoFlow() = flowOf(null)
-
     // region Login/Logout
     override suspend fun login(state: AccountProvider.LoginState) {
         state.activity.startActivity(googleSignInClient.signInIntent)

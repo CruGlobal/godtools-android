@@ -8,38 +8,37 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.cru.godtools.account.GodToolsAccountManager
-import org.cru.godtools.account.model.AccountInfo
 import org.cru.godtools.api.BuildConfig.CAMPAIGN_FORMS_ID
 import org.cru.godtools.api.CampaignFormsApi
 import org.cru.godtools.base.Settings
+import org.cru.godtools.model.User
+import org.cru.godtools.user.data.UserManager
 import timber.log.Timber
 
 @Singleton
 class AccountListRegistrationService @Inject internal constructor(
     private val settings: Settings,
-    accountManager: GodToolsAccountManager,
+    userManager: UserManager,
     private val campaignFormsApi: Lazy<CampaignFormsApi>
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     init {
-        accountManager.accountInfoFlow()
+        userManager.userFlow
             .onEach { it?.let { registerUser(it) } }
             .launchIn(coroutineScope)
     }
 
-    private suspend fun registerUser(userInfo: AccountInfo) {
-        val oktaId = userInfo.oktaUserId
-        val guid = userInfo.ssoGuid
-        val email = userInfo.email ?: return
-        if (settings.isAddedToCampaign(oktaId = oktaId, guid = guid)) return
+    private suspend fun registerUser(user: User) {
+        val guid = user.ssoGuid
+        val email = user.email ?: return
+        if (settings.isAddedToCampaign(guid = guid)) return
 
         // trigger the signup
         try {
             val response = campaignFormsApi.get()
-                .signup(CAMPAIGN_FORMS_ID, email, userInfo.givenName, userInfo.familyName)
-            if (response.isSuccessful) settings.recordAddedToCampaign(oktaId = oktaId, guid = guid)
+                .signup(CAMPAIGN_FORMS_ID, email, user.givenName, user.familyName)
+            if (response.isSuccessful) settings.recordAddedToCampaign(guid = guid)
         } catch (e: IOException) {
             Timber.tag("AccountListRegService").d(e, "error registering user in account list")
         }
