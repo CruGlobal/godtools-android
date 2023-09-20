@@ -5,11 +5,13 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.partial.SyncTool
+import org.cru.godtools.db.room.entity.partial.ToolFavorite
 import org.cru.godtools.model.Tool
 
 @Dao
@@ -22,6 +24,8 @@ internal interface ToolsDao {
     fun findToolFlow(code: String): Flow<ToolEntity?>
     @Query("SELECT * FROM tools WHERE id = :id")
     fun findToolByIdBlocking(id: Long): ToolEntity?
+    @Query("SELECT * FROM tools WHERE code = :code")
+    fun findToolFavorite(code: String): ToolFavorite?
 
     @Query("SELECT * FROM tools")
     suspend fun getResources(): List<ToolEntity>
@@ -42,8 +46,8 @@ internal interface ToolsDao {
     fun insertOrIgnoreTools(tools: Collection<ToolEntity>)
     @Upsert(entity = ToolEntity::class)
     suspend fun upsertSyncTools(tools: Collection<SyncTool>)
-    @Query("UPDATE tools SET isFavorite = :isFavorite WHERE code = :code")
-    suspend fun updateIsFavorite(code: String, isFavorite: Boolean)
+    @Update(entity = ToolEntity::class)
+    suspend fun update(tool: ToolFavorite)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")
     fun resetToolOrder()
     @Query("UPDATE tools SET `order` = :order WHERE code = :code")
