@@ -14,7 +14,6 @@ private const val JSON_GIVEN_NAME = "given-name"
 private const val JSON_FAMILY_NAME = "family-name"
 private const val JSON_EMAIL = "email"
 private const val JSON_CREATED_AT = "created-at"
-private const val JSON_FAVORITE_TOOLS = "favorite-tools"
 
 @JsonApiType(JSON_API_TYPE)
 data class User @JvmOverloads constructor(
@@ -35,6 +34,10 @@ data class User @JvmOverloads constructor(
     @JsonApiAttribute(JSON_EMAIL)
     val email: String? = null,
 ) {
+    companion object {
+        const val JSON_FAVORITE_TOOLS = "favorite-tools"
+    }
+
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
-    val apiFavoriteTools: List<Tool> = emptyList()
+    val apiFavoriteTools = emptyList<Tool>()
 }

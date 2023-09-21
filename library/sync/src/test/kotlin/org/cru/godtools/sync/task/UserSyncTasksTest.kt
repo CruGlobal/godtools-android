@@ -14,8 +14,8 @@ import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserApi
 import org.cru.godtools.db.repository.InMemoryLastSyncTimeRepository
-import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.User
+import org.cru.godtools.sync.repository.SyncRepository
 import org.cru.godtools.sync.task.UserSyncTasks.Companion.SYNC_TIME_USER
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -32,9 +32,14 @@ class UserSyncTasksTest {
     private val lastSyncTimeRepository = spyk(InMemoryLastSyncTimeRepository()) {
         excludeRecords { setLastSyncTime(key = anyVararg(), time = any()) }
     }
-    private val userRepository: UserRepository = mockk()
+    private val syncRepository: SyncRepository = mockk()
 
-    private val tasks = UserSyncTasks(accountManager, lastSyncTimeRepository, userApi, userRepository)
+    private val tasks = UserSyncTasks(
+        accountManager,
+        lastSyncTimeRepository,
+        syncRepository = syncRepository,
+        userApi = userApi,
+    )
 
     // region syncCounters()
     @Test
@@ -69,14 +74,14 @@ class UserSyncTasksTest {
         val startTime = System.currentTimeMillis()
         val user = User(id = USER_ID)
         coEvery { userApi.getUser() } returns Response.success(JsonApiObject.of(user))
-        coEvery { userRepository.storeUserFromSync(user) } just Runs
+        coEvery { syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER) } just Runs
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
             accountManager.isAuthenticated()
             accountManager.userId()
             userApi.getUser()
-            userRepository.storeUserFromSync(user)
+            syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)
         }
         assertTrue(lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_USER, USER_ID) >= startTime)
@@ -88,14 +93,14 @@ class UserSyncTasksTest {
         val user = User(id = USER_ID)
         coEvery { lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_USER, USER_ID, staleAfter = any()) } returns true
         coEvery { userApi.getUser() } returns Response.success(JsonApiObject.of(user))
-        coEvery { userRepository.storeUserFromSync(user) } just Runs
+        coEvery { syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER) } just Runs
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
             accountManager.isAuthenticated()
             accountManager.userId()
             userApi.getUser()
-            userRepository.storeUserFromSync(user)
+            syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)
         }
         assertTrue(lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_USER, USER_ID) >= startTime)

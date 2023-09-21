@@ -28,6 +28,7 @@ class SyncRepositoryTest {
         languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
+        userRepository = mockk(),
     )
 
     // region storeTools()

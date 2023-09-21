@@ -13,9 +13,11 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.User
 
 @Singleton
 internal class SyncRepository @Inject constructor(
@@ -23,9 +25,14 @@ internal class SyncRepository @Inject constructor(
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
+    private val userRepository: UserRepository,
 ) {
     // region Tools
-    suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>?, includes: Includes) = coroutineScope {
+    suspend fun storeTools(
+        tools: List<Tool>,
+        existingTools: MutableSet<String>? = null,
+        includes: Includes,
+    ) = coroutineScope {
         val validTools = tools.filter { it.isValid }
         if (validTools.isNotEmpty()) toolsRepository.storeToolsFromSync(validTools)
 
@@ -115,4 +122,14 @@ internal class SyncRepository @Inject constructor(
         return true
     }
     // endregion Translations
+
+    // region User
+    suspend fun storeUser(user: User, includes: Includes) {
+        userRepository.storeUserFromSync(user)
+
+        if (includes.include(User.JSON_FAVORITE_TOOLS)) {
+            storeTools(user.apiFavoriteTools, includes = includes.descendant(User.JSON_FAVORITE_TOOLS))
+        }
+    }
+    // endregion User
 }
