@@ -91,7 +91,7 @@ object ApiModule {
     ): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(LocaleConverterFactory)
-        .addConverterFactory(JsonApiConverterFactory.create(jsonApiConverter))
+        .addConverterFactory(JsonApiConverterFactory(jsonApiConverter))
         .callFactory(okhttp)
         .build()
 
