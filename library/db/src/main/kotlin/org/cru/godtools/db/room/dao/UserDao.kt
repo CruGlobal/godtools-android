@@ -10,6 +10,8 @@ import org.cru.godtools.db.room.entity.UserEntity
 @Dao
 internal interface UserDao {
     @Query("SELECT * FROM users WHERE id = :userId")
+    suspend fun findUser(userId: String): UserEntity?
+    @Query("SELECT * FROM users WHERE id = :userId")
     fun findUserFlow(userId: String): Flow<UserEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

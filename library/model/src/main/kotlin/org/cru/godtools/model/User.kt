@@ -1,7 +1,10 @@
 package org.cru.godtools.model
 
+import androidx.annotation.RestrictTo
 import androidx.annotation.VisibleForTesting
 import java.time.Instant
+import java.util.UUID
+import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -48,3 +51,15 @@ data class User @JvmOverloads constructor(
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
     var apiFavoriteTools = emptyList<Tool>()
 }
+
+// TODO: move this to testFixtures once they support Kotlin source files
+@RestrictTo(RestrictTo.Scope.TESTS)
+fun randomUser() = User(
+    id = UUID.randomUUID().toString(),
+    ssoGuid = UUID.randomUUID().toString(),
+    createdAt = Instant.ofEpochMilli(Random.nextLong()),
+    name = UUID.randomUUID().toString(),
+    givenName = UUID.randomUUID().toString(),
+    familyName = UUID.randomUUID().toString(),
+    email = UUID.randomUUID().toString(),
+)
