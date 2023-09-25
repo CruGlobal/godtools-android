@@ -36,7 +36,7 @@ private const val SYNC_PARALLELISM = 8
 @Singleton
 class GodToolsSyncService @VisibleForTesting internal constructor(
     workManager: Lazy<WorkManager>,
-    private val syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
+    private val syncTasks: Map<Class<out BaseSyncTasks>, Provider<BaseSyncTasks>>,
     private val coroutineDispatcher: CoroutineDispatcher,
     private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob()),
 ) {
