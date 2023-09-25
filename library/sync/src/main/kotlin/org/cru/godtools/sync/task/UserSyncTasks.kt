@@ -6,6 +6,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
+import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserApi
@@ -41,7 +42,9 @@ internal class UserSyncTasks @Inject constructor(
             return true
         }
 
-        val user = userApi.getUser().takeIf { it.isSuccessful }
+        val params = JsonApiParams()
+            .includes(INCLUDES_GET_USER)
+        val user = userApi.getUser(params).takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }
             ?.dataSingle ?: return false
 

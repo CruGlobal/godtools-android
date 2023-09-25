@@ -73,14 +73,14 @@ class UserSyncTasksTest {
     fun `syncUser(force = true)`() = runTest {
         val startTime = System.currentTimeMillis()
         val user = User(id = USER_ID)
-        coEvery { userApi.getUser() } returns Response.success(JsonApiObject.of(user))
+        coEvery { userApi.getUser(any()) } returns Response.success(JsonApiObject.of(user))
         coEvery { syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER) } just Runs
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
             accountManager.isAuthenticated()
             accountManager.userId()
-            userApi.getUser()
+            userApi.getUser(any())
             syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)
         }
@@ -92,14 +92,14 @@ class UserSyncTasksTest {
         val startTime = System.currentTimeMillis()
         val user = User(id = USER_ID)
         coEvery { lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_USER, USER_ID, staleAfter = any()) } returns true
-        coEvery { userApi.getUser() } returns Response.success(JsonApiObject.of(user))
+        coEvery { userApi.getUser(any()) } returns Response.success(JsonApiObject.of(user))
         coEvery { syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER) } just Runs
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
             accountManager.isAuthenticated()
             accountManager.userId()
-            userApi.getUser()
+            userApi.getUser(any())
             syncRepository.storeUser(user, UserSyncTasks.INCLUDES_GET_USER)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)
         }
