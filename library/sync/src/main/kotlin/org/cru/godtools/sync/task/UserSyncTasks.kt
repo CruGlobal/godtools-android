@@ -11,6 +11,8 @@ import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserApi
 import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.model.Tool
+import org.cru.godtools.model.User
 import org.cru.godtools.sync.repository.SyncRepository
 
 @Singleton
@@ -26,7 +28,7 @@ internal class UserSyncTasks @Inject constructor(
         private const val STALE_DURATION_USER = WEEK_IN_MS
 
         @VisibleForTesting
-        internal val INCLUDES_GET_USER = Includes()
+        internal val INCLUDES_GET_USER = Includes(User.JSON_FAVORITE_TOOLS)
     }
 
     private val userMutex = Mutex()
@@ -44,6 +46,7 @@ internal class UserSyncTasks @Inject constructor(
 
         val params = JsonApiParams()
             .includes(INCLUDES_GET_USER)
+            .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
         val user = userApi.getUser(params).takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }
             ?.dataSingle ?: return false

@@ -12,9 +12,11 @@ import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.User
 import org.junit.Assert.assertFalse
 import org.junit.Test
 
@@ -22,13 +24,14 @@ class SyncRepositoryTest {
     private val languagesRepository: LanguagesRepository = mockk(relaxUnitFun = true)
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true)
     private val translationsRepository: TranslationsRepository = mockk(relaxUnitFun = true)
+    private val userRepository: UserRepository = mockk(relaxUnitFun = true)
 
     private val syncRepository = SyncRepository(
         attachmentsRepository = mockk(),
         languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
-        userRepository = mockk(),
+        userRepository = userRepository,
     )
 
     // region storeTools()
@@ -122,4 +125,45 @@ class SyncRepositoryTest {
         }
     }
     // endregion storeTranslations()
+
+    // region storeUser()
+    private val user = User().apply {
+        apiFavoriteTools = listOf(
+            Tool("a"),
+            Tool("b"),
+        )
+    }
+
+    @Test
+    fun `storeUser()`() = runTest {
+        syncRepository.storeUser(user, Includes())
+        coVerifyAll {
+            userRepository.storeUserFromSync(user)
+            toolsRepository wasNot Called
+        }
+    }
+
+    @Test
+    fun `storeUser() - Store favorite tools`() = runTest {
+        user.isInitialFavoriteToolsSynced = true
+
+        syncRepository.storeUser(user, Includes(User.JSON_FAVORITE_TOOLS))
+        coVerifyAll {
+            userRepository.storeUserFromSync(user)
+            toolsRepository.storeToolsFromSync(user.apiFavoriteTools)
+            toolsRepository.storeFavoriteToolsFromSync(user.apiFavoriteTools)
+        }
+    }
+
+    @Test
+    fun `storeUser() - Don't store favorite tools if they haven't been synced yet`() = runTest {
+        user.isInitialFavoriteToolsSynced = false
+
+        syncRepository.storeUser(user, Includes(User.JSON_FAVORITE_TOOLS))
+        coVerifyAll {
+            userRepository.storeUserFromSync(user)
+            toolsRepository wasNot Called
+        }
+    }
+    // endregion storeUser()
 }

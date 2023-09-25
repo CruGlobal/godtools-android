@@ -91,6 +91,11 @@ internal class SyncRepository @Inject constructor(
         toolsRepository.storeToolsFromSync(setOf(tool))
         return setOfNotNull(tool.code) + processIncludes(tool, includes)
     }
+
+    private suspend fun storeFavoriteTools(tools: List<Tool>, includes: Includes) {
+        storeTools(tools, includes = includes)
+        toolsRepository.storeFavoriteToolsFromSync(tools)
+    }
     // endregion Tools
 
     // region Languages
@@ -127,8 +132,8 @@ internal class SyncRepository @Inject constructor(
     suspend fun storeUser(user: User, includes: Includes) {
         userRepository.storeUserFromSync(user)
 
-        if (includes.include(User.JSON_FAVORITE_TOOLS)) {
-            storeTools(user.apiFavoriteTools, includes = includes.descendant(User.JSON_FAVORITE_TOOLS))
+        if (user.isInitialFavoriteToolsSynced && includes.include(User.JSON_FAVORITE_TOOLS)) {
+            storeFavoriteTools(user.apiFavoriteTools, includes = includes.descendant(User.JSON_FAVORITE_TOOLS))
         }
     }
     // endregion User

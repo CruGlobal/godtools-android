@@ -1,5 +1,6 @@
 package org.cru.godtools.model
 
+import androidx.annotation.VisibleForTesting
 import java.time.Instant
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
@@ -14,6 +15,7 @@ private const val JSON_GIVEN_NAME = "given-name"
 private const val JSON_FAMILY_NAME = "family-name"
 private const val JSON_EMAIL = "email"
 private const val JSON_CREATED_AT = "created-at"
+private const val JSON_INITIAL_FAVORITE_TOOLS_SYNCED = "attr-initial-favorite-tools-synced"
 
 @JsonApiType(JSON_API_TYPE)
 data class User @JvmOverloads constructor(
@@ -38,6 +40,11 @@ data class User @JvmOverloads constructor(
         const val JSON_FAVORITE_TOOLS = "favorite-tools"
     }
 
+    @set:VisibleForTesting
+    @JsonApiAttribute(JSON_INITIAL_FAVORITE_TOOLS_SYNCED)
+    var isInitialFavoriteToolsSynced = false
+
+    @set:VisibleForTesting
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
-    val apiFavoriteTools = emptyList<Tool>()
+    var apiFavoriteTools = emptyList<Tool>()
 }
