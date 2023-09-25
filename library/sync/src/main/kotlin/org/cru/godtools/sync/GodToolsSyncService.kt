@@ -49,7 +49,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     private val workManager by workManager
 
-    private inline fun <reified T : BaseSyncTasks> with(block: T.() -> Unit) = with<T, Unit>(block)
     private inline fun <reified T : BaseSyncTasks, R : Any?> with(block: T.() -> R) =
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
 
