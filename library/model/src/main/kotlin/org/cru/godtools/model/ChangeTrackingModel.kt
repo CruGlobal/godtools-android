@@ -5,9 +5,14 @@ interface ChangeTrackingModel {
 
     var isTrackingChanges: Boolean
     var changedFieldsStr: String
+    fun isFieldChanged(field: String) = field in changedFields
 
     fun markChanged(field: String) {
         if (isTrackingChanges) changedFieldsStr = "$changedFieldsStr,$field"
+    }
+
+    fun clearChanged(field: String) {
+        changedFieldsStr = changedFields.filterNot { it == field }.joinToString(",")
     }
 }
 
