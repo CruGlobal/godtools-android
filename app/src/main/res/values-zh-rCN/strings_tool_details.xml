@@ -13,6 +13,9 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d 种语言</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">开场白</string>
+    <string name="tool_details_section_description_outline">概述</string>
+    <string name="tool_details_section_description_bible_references">圣经参考文献</string>
     <string name="tool_details_section_description_languages_available">可用语言</string>
     <string name="tool_details_section_variants_label">版本</string>
     <string name="tool_details_section_variants_description">请在下面选择此工具的不同版本。每个版本都有独特的风格和内容，所以你可以找到一个最适合你的对话。您可以喜欢同一工具的多个版本。</string>

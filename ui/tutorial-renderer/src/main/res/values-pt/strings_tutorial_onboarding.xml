@@ -15,11 +15,11 @@
     <string name="tutorial_onboarding_links_articles_subhead">Quero explorar o Cristianismo</string>
     <string name="tutorial_onboarding_links_articles_action">Leia nossos textos</string>
     <string name="tutorial_onboarding_links_lessons_subhead">Quero aprender sobre como ter conversas acerca do evangelho</string>
-    <string name="tutorial_onboarding_links_lessons_action">Experimente as nossas sessões</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Quero partilhar o evangelho com uma pessoa</string>
+    <string name="tutorial_onboarding_links_lessons_action">Experimente nossas Lições</string>
+    <string name="tutorial_onboarding_links_tools_subhead">Quero compartilhar o evangelho com uma pessoa</string>
     <string name="tutorial_onboarding_links_tools_action">Escolha uma das nossas ferramentas</string>
-    <string name="tutorial_onboarding_action_begin">Começar</string>
-    <string name="tutorial_onboarding_action_next">Seguinte</string>
-    <string name="tutorial_onboarding_action_skip">Ignorar</string>
-    <string name="tutorial_onboarding_action_start">Começar</string>
+    <string name="tutorial_onboarding_action_begin">Comece</string>
+    <string name="tutorial_onboarding_action_next">Próximo</string>
+    <string name="tutorial_onboarding_action_skip">Pular</string>
+    <string name="tutorial_onboarding_action_start">Comece</string>
 </resources>
