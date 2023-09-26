@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">評論</string>
+    <string name="lesson_feedback_question_helpful">本課程是否對您有幫助？</string>
+    <string name="lesson_feedback_question_helpful_yes">是</string>
+    <string name="lesson_feedback_question_helpful_no">否</string>
+    <string name="lesson_feedback_question_readiness">您對進行靈性對話有多少準備程度？</string>
+    <string name="lesson_feedback_action_submit">傳送回饋</string>
+    <string name="lesson_feedback_action_cancel">跳過</string>
+</resources>

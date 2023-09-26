@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="menu_profile">全球活动</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">活动</string>
+    <string name="account_joined">已加入%1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">创建账户</string>
+    <string name="account_create_description">创建账户，让真实故事、励志金句和实用技巧触手可及。</string>
+    <string name="account_login_heading">登录</string>
     <!-- Activity -->
     <string name="profile_tab_activity">活动</string>
+    <string name="account_activity_header">您的活动</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="other">打开工具</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">完成课节</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="other">屏幕共享</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="other">分享链接</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="other">使用语言</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">会话</item>
+    </plurals>
     <!-- Badges -->
+    <string name="account_activity_badges_header">您的徽章</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">打开了%1$,d个工具</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">完成了%1$,d节课</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">打开了%1$,d篇文章</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">分享了%1$,d张图片</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">完成了%1$,d个培训提示</item>
+    </plurals>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">全球活动</string>
     <string name="profile_global_activity_heading">%1$s  全球活动</string>
     <string name="profile_activity_unique_users">独特的用户</string>
     <string name="profile_activity_gospel_presentations">讲述福音</string>

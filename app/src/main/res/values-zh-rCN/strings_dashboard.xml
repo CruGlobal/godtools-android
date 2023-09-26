@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">开始体验</string>
     <string name="menu_tutorial">教程</string>
     <string name="menu_heading_account">账户</string>
     <string name="menu_login">登录</string>
-    <string name="menu_signup">建立帳戶</string>
+    <string name="menu_signup">创建账户</string>
     <string name="menu_logout">退出</string>
+    <string name="menu_heading_support">支持</string>
+    <string name="menu_feedback">发送反馈</string>
+    <string name="menu_report_bug">报告错误</string>
+    <string name="menu_question">提问</string>
     <string name="menu_heading_share">分享</string>
+    <string name="menu_review">发表评论</string>
     <string name="menu_share_story">与我们分享故事</string>
-    <string name="menu_share_godtools">分享GodTools应用</string>
+    <string name="menu_share_godtools">分享GodTools</string>
     <string name="share_app_message">下载GodTools应用：https://godtoolsapp.com \n\n
 
 网页版地址：https://knowgod.com/</string>
@@ -16,7 +22,8 @@
     <string name="menu_heading_about">关于</string>
     <string name="menu_terms_of_use">使用条款</string>
     <string name="menu_privacy_policy">隐私政策</string>
-    <string name="menu_copyright">版权</string>
+    <string name="menu_copyright">版权信息</string>
+    <string name="menu_version">版本：%1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">"课程 "</string>
     <string name="dashboard_lessons_header_title">为你制定的课程</string>
@@ -34,6 +41,9 @@
     <string name="tools_list_favorites_banner_action_dismiss">取消</string>
     <!-- All Tools -->
     <string name="nav_all_tools">工具</string>
+    <string name="dashboard_tools_section_filter_label">筛选</string>
+    <string name="dashboard_tools_section_filter_category_any">任何类别</string>
+    <string name="dashboard_tools_section_filter_language_any">任何语言</string>
     <string name="dashboard_tools_section_categories_label">分类</string>
     <string name="dashboard_tools_section_categories_all">所有工具</string>
     <string name="dashboard_tools_section_spotlight_label">热门工具</string>
@@ -46,4 +56,8 @@
     <string name="action_tools_about">细节</string>
     <string name="action_tools_open">打开</string>
     <!-- In App Update -->
+    <string name="play_update_available">有可用更新</string>
+    <string name="play_update_available_action">下载</string>
+    <string name="play_update_downloaded">更新已下载</string>
+    <string name="play_update_downloaded_action">重新加载</string>
 </resources>

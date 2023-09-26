@@ -1,12 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="menu_profile">Atividade global</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Atividade</string>
+    <string name="account_joined">Entrou %1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">Criar conta</string>
+    <string name="account_create_description">Criar conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
+    <string name="account_login_heading">Entrar</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
+    <string name="account_activity_header">Sua atividade</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Ferramenta aberta</item>
+        <item quantity="other">Ferramenta abre</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Conclusão de lição</item>
+        <item quantity="other">Conclusões de lições</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Compartilhar tela</item>
+        <item quantity="other">Compartilhamentos de tela</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Link compartilhado</item>
+        <item quantity="other">Links compartilhados</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Idioma usado</item>
+        <item quantity="other">Idiomas usados</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Sessão</item>
+        <item quantity="other">Sessões</item>
+    </plurals>
     <!-- Badges -->
+    <string name="account_activity_badges_header">Seus distintivos</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Abriu %1$,d ferramenta</item>
+        <item quantity="other">Abriu %1$,d ferramentas</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Concluiu %1$,d lição</item>
+        <item quantity="other">Concluiu %1$,d lições</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Abriu %1$,d texto</item>
+        <item quantity="other">Abriu %1$,d textos</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Compartilhou %1$,d imagem</item>
+        <item quantity="other">Compartilhou %1$,d imagens</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Concluiu %1$,d dicas de treinamento</item>
+        <item quantity="other">Concluiu %1$,d dicas de treinamento</item>
+    </plurals>
     <!-- Global Activity -->
-    <string name="profile_activity_unique_users">Utilizadores únicos</string>
+    <string name="account_tab_global_activity">Atividade Global</string>
+    <string name="profile_global_activity_heading">%1$s Atividade Global</string>
+    <string name="profile_activity_unique_users">Usuários singulares</string>
     <string name="profile_activity_gospel_presentations">Apresentações do evangelho</string>
     <string name="profile_activity_sessions">Sessões</string>
     <string name="profile_activity_countries">Países</string>

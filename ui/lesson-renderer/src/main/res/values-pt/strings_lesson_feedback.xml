@@ -2,7 +2,9 @@
 <resources>
     <string name="lesson_feedback_title">Revisão</string>
     <string name="lesson_feedback_question_helpful">Esta lição lhe serviu?</string>
+    <string name="lesson_feedback_question_helpful_yes">Sim</string>
     <string name="lesson_feedback_question_helpful_no">Não</string>
     <string name="lesson_feedback_question_readiness">Até que ponto você se sente preparado para iniciar uma conversa espiritual?</string>
     <string name="lesson_feedback_action_submit">Enviar feedback</string>
+    <string name="lesson_feedback_action_cancel">Pular</string>
 </resources>

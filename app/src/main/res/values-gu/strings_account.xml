@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="menu_profile">વૈશ્વિક પ્રવૃત્તિ</string>
     <!-- Create / Login -->
     <!-- Activity -->

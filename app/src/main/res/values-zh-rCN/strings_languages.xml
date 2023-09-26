@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
+    <string name="language_settings_app_language_title">应用语言</string>
+    <string name="language_settings_app_language_dialog_message">您已选择%1$s作为您的应用语言。此操作将更改整个GodTools应用的语言。您确定吗？</string>
+    <string name="language_settings_app_language_dialog_confirm">更改语言</string>
+    <string name="language_settings_app_language_dialog_dismiss">没关系</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">语言设置</string>
     <string name="title_language_settings">语言设置</string>
+    <string name="language_settings_section_app_language_heading">应用界面语言</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="other">%1$d种可用语言</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">设置您希望整个应用显示的语言。</string>
+    <string name="language_settings_section_offline_heading">离线可用的工具语言</string>
+    <string name="language_settings_section_offline_description">将某种语言的所有工具下载下来，这样，即使您没有WiFi或移动网络，也可以使用这些工具。请通过工具中的选项按钮设置工具语言。</string>
+    <string name="language_settings_section_offline_action_edit">编辑下载的语言</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">搜索语言</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="other">%1$d个工具可用</item>
+    </plurals>
 </resources>
