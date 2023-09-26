@@ -127,15 +127,15 @@ class SyncRepositoryTest {
     // endregion storeTranslations()
 
     // region storeUser()
-    private val user = User().apply {
-        apiFavoriteTools = listOf(
-            Tool("a"),
-            Tool("b"),
-        )
-    }
-
     @Test
     fun `storeUser()`() = runTest {
+        val user = User().apply {
+            apiFavoriteTools = listOf(
+                Tool("a"),
+                Tool("b"),
+            )
+        }
+
         syncRepository.storeUser(user, Includes())
         coVerifyAll {
             userRepository.storeUserFromSync(user)
@@ -145,7 +145,12 @@ class SyncRepositoryTest {
 
     @Test
     fun `storeUser() - Store favorite tools`() = runTest {
-        user.isInitialFavoriteToolsSynced = true
+        val user = User(isInitialFavoriteToolsSynced = true).apply {
+            apiFavoriteTools = listOf(
+                Tool("a"),
+                Tool("b"),
+            )
+        }
 
         syncRepository.storeUser(user, Includes(User.JSON_FAVORITE_TOOLS))
         coVerifyAll {
@@ -157,7 +162,12 @@ class SyncRepositoryTest {
 
     @Test
     fun `storeUser() - Don't store favorite tools if they haven't been synced yet`() = runTest {
-        user.isInitialFavoriteToolsSynced = false
+        val user = User(isInitialFavoriteToolsSynced = false).apply {
+            apiFavoriteTools = listOf(
+                Tool("a"),
+                Tool("b"),
+            )
+        }
 
         syncRepository.storeUser(user, Includes(User.JSON_FAVORITE_TOOLS))
         coVerifyAll {

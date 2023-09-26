@@ -239,4 +239,22 @@ class GodToolsRoomDatabaseMigrationIT {
             }
         }
     }
+
+    @Test
+    fun testMigrate16To17() {
+        // create v16 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 16).use { db ->
+            db.execSQL("""INSERT INTO users (id) VALUES (1)""")
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 17, true, *MIGRATIONS).use { db ->
+            db.query("SELECT id, isInitialFavoriteToolsSynced FROM users").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals(0, it.getIntOrNull(1))
+            }
+        }
+    }
 }

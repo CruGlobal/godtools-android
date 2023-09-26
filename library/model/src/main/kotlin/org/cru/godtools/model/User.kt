@@ -38,14 +38,12 @@ data class User @JvmOverloads constructor(
     val familyName: String? = null,
     @JsonApiAttribute(JSON_EMAIL)
     val email: String? = null,
+    @JsonApiAttribute(JSON_INITIAL_FAVORITE_TOOLS_SYNCED)
+    val isInitialFavoriteToolsSynced: Boolean = false,
 ) {
     companion object {
         const val JSON_FAVORITE_TOOLS = "favorite-tools"
     }
-
-    @set:VisibleForTesting
-    @JsonApiAttribute(JSON_INITIAL_FAVORITE_TOOLS_SYNCED)
-    var isInitialFavoriteToolsSynced = false
 
     @set:VisibleForTesting
     @JsonApiAttribute(JSON_FAVORITE_TOOLS)
@@ -62,4 +60,5 @@ fun randomUser() = User(
     givenName = UUID.randomUUID().toString(),
     familyName = UUID.randomUUID().toString(),
     email = UUID.randomUUID().toString(),
+    isInitialFavoriteToolsSynced = Random.nextBoolean(),
 )
