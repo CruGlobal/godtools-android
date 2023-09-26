@@ -20,6 +20,7 @@ import org.cru.godtools.api.ViewsApi
 import org.cru.godtools.api.model.ToolViews
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
@@ -45,6 +46,7 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         private fun buildApiParams() = JsonApiParams()
             .includes(INCLUDES_GET_TOOL)
+            .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
     }
 
     private val toolsMutex = Mutex()
