@@ -28,12 +28,6 @@ private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val SYNC_TIME_TOOL = "last_synced.tool."
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
 
-private val API_GET_INCLUDES = arrayOf(
-    Tool.JSON_ATTACHMENTS,
-    "${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}",
-    "${Tool.JSON_LATEST_TRANSLATIONS}.${Translation.JSON_LANGUAGE}",
-)
-
 @Singleton
 internal class ToolSyncTasks @Inject internal constructor(
     private val toolsApi: ToolsApi,
@@ -42,6 +36,17 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val toolsRepository: ToolsRepository,
     private val lastSyncTimeRepository: LastSyncTimeRepository,
 ) : BaseSyncTasks() {
+    private companion object {
+        private val INCLUDES_GET_TOOL = Includes(
+            Tool.JSON_ATTACHMENTS,
+            "${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}",
+            "${Tool.JSON_LATEST_TRANSLATIONS}.${Translation.JSON_LANGUAGE}",
+        )
+
+        private fun buildApiParams() = JsonApiParams()
+            .includes(INCLUDES_GET_TOOL)
+    }
+
     private val toolsMutex = Mutex()
     private val toolMutex = MutexMap()
     private val sharesMutex = Mutex()
@@ -54,14 +59,13 @@ internal class ToolSyncTasks @Inject internal constructor(
         }
 
         // fetch tools from the API, short-circuit if this response is invalid
-        val json = toolsApi.list(JsonApiParams().include(*API_GET_INCLUDES))
-            .takeIf { it.code() == HTTP_OK }?.body() ?: return@withLock false
+        val json = toolsApi.list(buildApiParams()).takeIf { it.code() == HTTP_OK }?.body() ?: return@withLock false
 
         // store fetched tools
         syncRepository.storeTools(
             json.data,
             existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
-            includes = Includes(*API_GET_INCLUDES)
+            includes = INCLUDES_GET_TOOL
         )
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
         true
@@ -76,14 +80,13 @@ internal class ToolSyncTasks @Inject internal constructor(
         }
 
         // fetch tools from the API, short-circuit if this response is invalid
-        val json = toolsApi.getTool(toolCode, JsonApiParams().include(*API_GET_INCLUDES))
-            .takeIf { it.code() == HTTP_OK }?.body() ?: return false
+        val json = toolsApi.getTool(toolCode, buildApiParams()).takeIf { it.code() == HTTP_OK }?.body() ?: return false
 
         // store fetched tools
         syncRepository.storeTools(
             json.data,
             existingTools = mutableSetOf(toolCode),
-            includes = Includes(*API_GET_INCLUDES)
+            includes = INCLUDES_GET_TOOL
         )
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOL, toolCode)
 
