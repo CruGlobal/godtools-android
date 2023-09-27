@@ -30,6 +30,22 @@ android {
         proguardFile("proguard-searchview.pro")
 
         vectorDrawables.useSupportLibrary = true
+
+        resourceConfigurations += listOf(
+            "ar",
+            "en",
+            "es",
+            "fr",
+            "hi",
+            "id",
+            "in",
+            "lv",
+            "pt",
+            "ru",
+            "vi",
+            "zh-rCN",
+            "zh-rTW",
+        )
     }
     buildFeatures {
         buildConfig = true
