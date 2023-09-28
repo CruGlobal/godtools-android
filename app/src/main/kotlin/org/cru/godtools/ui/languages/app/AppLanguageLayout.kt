@@ -2,6 +2,7 @@ package org.cru.godtools.ui.languages.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,12 +23,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -36,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringResource
+import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
@@ -110,16 +115,18 @@ private fun ConfirmAppLanguageDialog(language: Locale?, onEvent: (AppLanguageDia
             iconContentColor = MaterialTheme.colorScheme.primary,
             icon = { Icon(Icons.Outlined.Translate, null) },
             text = {
-                Text(
-                    annotatedStringResource(
-                        R.string.language_settings_app_language_dialog_message,
-                        buildAnnotatedString {
-                            withStyle(SpanStyle(color = GodToolsTheme.GT_BLUE)) {
-                                append(language.displayName)
-                            }
-                        }
-                    )
-                )
+                Column {
+                    ConfirmAppLanguageMessage(language.displayName)
+
+                    val context = LocalContext.current
+                    val localizedContext = remember(context, language) { context.localize(language) }
+                    CompositionLocalProvider(LocalContext provides localizedContext) {
+                        ConfirmAppLanguageMessage(
+                            language.getDisplayName(language),
+                            modifier = Modifier.padding(top = 16.dp),
+                        )
+                    }
+                }
             },
             confirmButton = {
                 TextButton(
@@ -135,3 +142,16 @@ private fun ConfirmAppLanguageDialog(language: Locale?, onEvent: (AppLanguageDia
         )
     }
 }
+
+@Composable
+private fun ConfirmAppLanguageMessage(displayName: String, modifier: Modifier = Modifier) = Text(
+    annotatedStringResource(
+        R.string.language_settings_app_language_dialog_message,
+        buildAnnotatedString {
+            withStyle(SpanStyle(color = GodToolsTheme.GT_BLUE)) {
+                append(displayName)
+            }
+        }
+    ),
+    modifier = modifier,
+)
