@@ -4,10 +4,12 @@ import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coExcludeRecords
+import io.mockk.coVerifyAll
 import io.mockk.coVerifySequence
 import io.mockk.just
 import io.mockk.mockk
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -16,12 +18,14 @@ import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserApi
 import org.cru.godtools.api.UserFavoriteToolsApi
+import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.User
 import org.cru.godtools.model.trackChanges
 import org.cru.godtools.sync.repository.SyncRepository
+import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks.Companion.SYNC_TIME_FAVORITE_TOOLS
 import retrofit2.Response
 
 class UserFavoriteToolsSyncTasksTest {
@@ -34,6 +38,9 @@ class UserFavoriteToolsSyncTasksTest {
     private val favoritesApi: UserFavoriteToolsApi = mockk {
         coEvery { addFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of())
         coEvery { removeFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of())
+    }
+    private val lastSyncTimeRepository: LastSyncTimeRepository = mockk(relaxUnitFun = true) {
+        coEvery { isLastSyncStale(key = anyVararg<String>(), staleAfter = any()) } returns true
     }
     private val syncRepository: SyncRepository = mockk {
         coEvery { storeUser(any(), any()) } just Runs
@@ -54,11 +61,59 @@ class UserFavoriteToolsSyncTasksTest {
     private val tasks = UserFavoriteToolsSyncTasks(
         accountManager = accountManager,
         favoritesApi = favoritesApi,
+        lastSyncTimeRepository = lastSyncTimeRepository,
         syncRepository = syncRepository,
         toolsRepository = toolsRepository,
         userApi = userApi,
         userRepository = userRepository,
     )
+
+    // region syncFavoriteTools()
+    @Test
+    fun `syncFavoriteTools() - not authenticated`() = runTest {
+        coEvery { accountManager.isAuthenticated() } returns false
+
+        assertTrue(tasks.syncFavoriteTools(Random.nextBoolean()))
+        coVerifyAll {
+            accountManager.isAuthenticated()
+            lastSyncTimeRepository wasNot Called
+            userApi wasNot Called
+            syncRepository wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncFavoriteTools(force = false) - already synced`() = runTest {
+        coEvery {
+            lastSyncTimeRepository.isLastSyncStale(key = anyVararg<String>(), staleAfter = any())
+        } returns false
+
+        assertTrue(tasks.syncFavoriteTools(force = false))
+        coVerifyAll {
+            accountManager.isAuthenticated()
+            accountManager.userId()
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FAVORITE_TOOLS, userId, staleAfter = any())
+            userApi wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncFavoriteTools(force = true)`() = runTest {
+        val user = User(id = userId)
+        coEvery { userApi.getUser(any()) } returns Response.success(JsonApiObject.of(user))
+        coEvery { syncRepository.storeUser(user, any()) } just Runs
+
+        assertTrue(tasks.syncFavoriteTools(force = true))
+        coVerifySequence {
+            accountManager.isAuthenticated()
+            accountManager.userId()
+            userApi.getUser(any())
+            syncRepository.storeUser(user, any())
+            lastSyncTimeRepository.resetLastSyncTime(SYNC_TIME_FAVORITE_TOOLS, isPrefix = true)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_FAVORITE_TOOLS, userId)
+        }
+    }
+    // endregion syncFavoriteTools()
 
     // region syncDirtyFavoriteTools()
     @Test

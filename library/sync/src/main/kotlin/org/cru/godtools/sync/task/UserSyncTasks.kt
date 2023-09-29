@@ -6,12 +6,10 @@ import javax.inject.Singleton
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
-import org.ccci.gto.android.common.jsonapi.retrofit2.JsonApiParams
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserApi
 import org.cru.godtools.db.repository.LastSyncTimeRepository
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.User
 import org.cru.godtools.sync.repository.SyncRepository
 
@@ -44,14 +42,11 @@ internal class UserSyncTasks @Inject constructor(
             return true
         }
 
-        val params = JsonApiParams()
-            .includes(INCLUDES_GET_USER)
-            .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
-        val user = userApi.getUser(params).takeIf { it.isSuccessful }
+        val user = userApi.getUser().takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors() }
             ?.dataSingle ?: return false
 
-        syncRepository.storeUser(user, INCLUDES_GET_USER)
+        syncRepository.storeUser(user)
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, user.id)
 
         true
