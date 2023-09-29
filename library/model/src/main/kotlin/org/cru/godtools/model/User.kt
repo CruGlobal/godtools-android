@@ -10,17 +10,14 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 
-private const val JSON_API_TYPE = "user"
-
 private const val JSON_SSO_GUID = "sso-guid"
 private const val JSON_NAME = "name"
 private const val JSON_GIVEN_NAME = "given-name"
 private const val JSON_FAMILY_NAME = "family-name"
 private const val JSON_EMAIL = "email"
 private const val JSON_CREATED_AT = "created-at"
-private const val JSON_INITIAL_FAVORITE_TOOLS_SYNCED = "attr-initial-favorite-tools-synced"
 
-@JsonApiType(JSON_API_TYPE)
+@JsonApiType(User.JSONAPI_TYPE)
 data class User @JvmOverloads constructor(
     @JsonApiId
     val id: String = "",
@@ -42,6 +39,9 @@ data class User @JvmOverloads constructor(
     val isInitialFavoriteToolsSynced: Boolean = false,
 ) {
     companion object {
+        const val JSONAPI_TYPE = "user"
+
+        const val JSON_INITIAL_FAVORITE_TOOLS_SYNCED = "attr-initial-favorite-tools-synced"
         const val JSON_FAVORITE_TOOLS = "favorite-tools"
     }
 

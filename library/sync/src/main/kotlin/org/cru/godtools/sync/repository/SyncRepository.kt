@@ -92,7 +92,7 @@ internal class SyncRepository @Inject constructor(
         return setOfNotNull(tool.code) + processIncludes(tool, includes)
     }
 
-    private suspend fun storeFavoriteTools(tools: List<Tool>, includes: Includes) {
+    suspend fun storeFavoriteTools(tools: List<Tool>, includes: Includes = Includes()) {
         storeTools(tools, includes = includes)
         toolsRepository.storeFavoriteToolsFromSync(tools)
     }
@@ -129,7 +129,7 @@ internal class SyncRepository @Inject constructor(
     // endregion Translations
 
     // region User
-    suspend fun storeUser(user: User, includes: Includes) {
+    suspend fun storeUser(user: User, includes: Includes = Includes()) {
         userRepository.storeUserFromSync(user)
 
         if (user.isInitialFavoriteToolsSynced && includes.include(User.JSON_FAVORITE_TOOLS)) {
