@@ -40,7 +40,6 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
-    testImplementation(kotlin("test"))
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)

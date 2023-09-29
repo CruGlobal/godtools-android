@@ -167,6 +167,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.12"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
@@ -211,7 +212,7 @@ androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx
 androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
 androidx-compose-testing = ["androidx-compose-ui-test"]
 common = ["kotlin-stdlib", "timber"]
-test-framework = ["junit", "androidx-test-junit", "mockk", "robolectric"]
+test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "4.0.0" }
