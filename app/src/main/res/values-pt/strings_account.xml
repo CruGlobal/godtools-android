@@ -4,7 +4,7 @@
     <string name="account_joined">Entrou %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">Criar conta</string>
-    <string name="account_create_description">Criar conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
+    <string name="account_create_description">Crie uma conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
     <string name="account_login_heading">Entrar</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>

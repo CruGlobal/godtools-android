@@ -7,15 +7,15 @@
     <string name="action_tools_remove_favorite">Izņemt no izlases</string>
     <string name="action_tools_open_training">Iemācīties koplietot šo rīku</string>
     <plurals name="label_tools_shares">
-        <item quantity="one">%1$,d skatījums</item>
-        <item quantity="other">%1$,d skatījumi</item>
-        <item quantity="zero">%1$,d skatījumu</item>
+        <item quantity="one">Skatījumu skaits: %1$,d</item>
+        <item quantity="other">Skatījumu skaits: %1$,d</item>
+        <item quantity="zero">Skatījumu skaits: %1$,d</item>
     </plurals>
     <string name="label_tools_about">Par rīku</string>
     <plurals name="label_tools_languages">
-        <item quantity="one">%1$,d valoda</item>
-        <item quantity="other">%1$,d valodas</item>
-        <item quantity="zero">%1$,d valodu</item>
+        <item quantity="one">Valodu skaits: %1$d</item>
+        <item quantity="other">Valodu skaits: %1$d</item>
+        <item quantity="zero">Valodu skaits: %1$d</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">Sarunas uzsākšanai</string>
     <string name="tool_details_section_description_outline">Galvenie punkti</string>

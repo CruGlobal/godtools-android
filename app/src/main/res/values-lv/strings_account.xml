@@ -9,6 +9,36 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Atvērtie rīki</item>
+        <item quantity="other">Atvērtie rīki</item>
+        <item quantity="zero">Atvērtie rīki</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Pabeigtās nodarbības</item>
+        <item quantity="other">Pabeigtās nodarbības</item>
+        <item quantity="zero">Pabeigtās nodarbības</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kopīgotie ekrāni</item>
+        <item quantity="other">Kopīgotie ekrāni</item>
+        <item quantity="zero">Kopīgotie ekrāni</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kopīgotās saites</item>
+        <item quantity="other">Kopīgotās saites</item>
+        <item quantity="zero">Kopīgotās saites</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Izmantotās valodas</item>
+        <item quantity="other">Izmantotās valodas</item>
+        <item quantity="zero">Izmantotās valodas</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Sesijas</item>
+        <item quantity="other">Sesijas</item>
+        <item quantity="zero">Sesijas</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Tavi žetoni</string>
     <plurals name="account_activity_badge_tools_opened">
@@ -38,7 +68,7 @@
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Globālā aktivitāte</string>
-    <string name="profile_global_activity_heading">%1$s no globālās aktivitātes</string>
+    <string name="profile_global_activity_heading">%1$s globālajā aktivitātē</string>
     <string name="profile_activity_unique_users">Unikālie
 lietotāji</string>
     <string name="profile_activity_gospel_presentations">Labās vēsts
