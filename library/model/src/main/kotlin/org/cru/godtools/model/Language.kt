@@ -12,14 +12,16 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.util.getDisplayName
 
-private const val JSON_API_TYPE_LANGUAGE = "language"
-
 private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
 
-@JsonApiType(JSON_API_TYPE_LANGUAGE)
+@JsonApiType(Language.JSONAPI_TYPE)
 class Language : Base() {
     companion object {
+        const val JSONAPI_TYPE = "language"
+
+        val JSONAPI_FIELDS = arrayOf(JSON_CODE, JSON_NAME)
+
         val INVALID_CODE = Locale("x", "inv")
 
         fun COMPARATOR_DISPLAY_NAME(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
