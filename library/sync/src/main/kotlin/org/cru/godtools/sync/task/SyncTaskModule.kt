@@ -45,4 +45,9 @@ internal abstract class SyncTaskModule {
     @IntoMap
     @SyncTaskKey(UserCounterSyncTasks::class)
     internal abstract fun userCounterSyncTasks(tasks: UserCounterSyncTasks): BaseSyncTasks
+
+    @Binds
+    @IntoMap
+    @SyncTaskKey(UserFavoriteToolsSyncTasks::class)
+    internal abstract fun userFavoriteToolsSyncTasks(tasks: UserFavoriteToolsSyncTasks): BaseSyncTasks
 }
