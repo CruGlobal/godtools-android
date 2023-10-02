@@ -25,6 +25,7 @@ import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
 import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks
 import org.cru.godtools.sync.task.UserSyncTasks
+import org.cru.godtools.sync.work.scheduleSyncDirtyFavoriteToolsWork
 import org.cru.godtools.sync.work.scheduleSyncFollowupsWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
@@ -112,8 +113,9 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     }
     suspend fun syncDirtyFavoriteTools() = try {
         executeSync<UserFavoriteToolsSyncTasks> { syncDirtyFavoriteTools() }
+            .also { if (!it) workManager.scheduleSyncDirtyFavoriteToolsWork() }
     } catch (e: CancellationException) {
-        // TODO: work manager job
+        workManager.scheduleSyncDirtyFavoriteToolsWork()
         throw e
     }
 
