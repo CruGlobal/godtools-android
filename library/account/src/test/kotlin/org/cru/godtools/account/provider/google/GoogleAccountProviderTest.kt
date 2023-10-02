@@ -7,6 +7,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.tasks.Tasks
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerifyAll
+import io.mockk.coVerifySequence
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -23,15 +29,27 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
+import org.cru.godtools.api.AuthApi
+import org.cru.godtools.api.model.AuthToken
 import org.junit.runner.RunWith
+import retrofit2.Response
+
+private const val ID_TOKEN_INVALID = "invalid"
+private const val ID_TOKEN_VALID = "valid"
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class GoogleAccountProviderTest {
     private val lastSignedInAccount = MutableStateFlow<GoogleSignInAccount?>(null)
+    private val userId = UUID.randomUUID().toString()
 
+    private val authApi: AuthApi = mockk()
     private val context: Context get() = ApplicationProvider.getApplicationContext()
+    private val googleSignInClient: GoogleSignInClient = mockk()
+
     private lateinit var provider: GoogleAccountProvider
 
     @BeforeTest
@@ -40,7 +58,11 @@ class GoogleAccountProviderTest {
         every { GoogleSignInKtx.getLastSignedInAccountFlow(any()) } returns lastSignedInAccount
         mockkStatic(GoogleSignIn::class)
         every { GoogleSignIn.getLastSignedInAccount(any()) } answers { lastSignedInAccount.value }
-        provider = GoogleAccountProvider(mockk(), context, mockk())
+        provider = GoogleAccountProvider(
+            authApi = authApi,
+            context = context,
+            googleSignInClient = googleSignInClient,
+        )
     }
 
     @AfterTest
@@ -53,7 +75,6 @@ class GoogleAccountProviderTest {
     @Test
     fun `userIdFlow()`() = runTest {
         val account = GoogleSignInAccount.createDefault()
-        val userId = UUID.randomUUID().toString()
         provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId) }
 
         provider.userIdFlow().test {
@@ -81,10 +102,9 @@ class GoogleAccountProviderTest {
             lastSignedInAccount.value = account
             runCurrent()
 
-            val userId1 = UUID.randomUUID().toString()
-            provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId1) }
+            provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId) }
             runCurrent()
-            assertEquals(userId1, expectMostRecentItem())
+            assertEquals(userId, expectMostRecentItem())
 
             val userId2 = UUID.randomUUID().toString()
             provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId2) }
@@ -93,4 +113,72 @@ class GoogleAccountProviderTest {
         }
     }
     // endregion userIdFlow()
+
+    // region authenticateWithMobileContentApi()
+    private val authToken = AuthToken(userId, "token")
+    private val validAccount: GoogleSignInAccount = mockk {
+        every { id } returns UUID.randomUUID().toString()
+        every { idToken } returns ID_TOKEN_VALID
+    }
+
+    @BeforeTest
+    fun `Setup authenticateWithMobileContentApi()`() {
+        every { googleSignInClient.silentSignIn() } returns Tasks.forResult(validAccount)
+
+        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID)) }
+            .returns(Response.success(JsonApiObject.single(authToken)))
+        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID)) }
+            .returns(Response.error(401, "".toResponseBody()))
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi()`() = runTest {
+        lastSignedInAccount.value = validAccount
+
+        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        coVerifySequence {
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+
+            googleSignInClient wasNot Called
+        }
+        assertEquals(
+            userId,
+            provider.prefs.getString(GoogleAccountProvider.PREF_USER_ID(lastSignedInAccount.value!!), "")
+        )
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - Not authenticated`() = runTest {
+        lastSignedInAccount.value = null
+
+        assertNull(provider.authenticateWithMobileContentApi())
+        coVerifyAll {
+            authApi wasNot Called
+            googleSignInClient wasNot Called
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - No id_token`() = runTest {
+        lastSignedInAccount.value = mockk { every { idToken } returns null }
+
+        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        coVerifySequence {
+            googleSignInClient.silentSignIn()
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - invalid id_token`() = runTest {
+        lastSignedInAccount.value = mockk { every { idToken } returns ID_TOKEN_INVALID }
+
+        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        coVerifySequence {
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID))
+            googleSignInClient.silentSignIn()
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+        }
+    }
+    // endregion authenticateWithMobileContentApi()
 }
