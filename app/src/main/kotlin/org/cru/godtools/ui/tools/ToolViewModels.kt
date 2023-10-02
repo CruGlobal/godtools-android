@@ -30,6 +30,7 @@ import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.sync.GodToolsSyncService
 
 internal const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
 
@@ -42,6 +43,7 @@ class ToolViewModels @Inject constructor(
     private val languagesRepository: LanguagesRepository,
     private val manifestManager: ManifestManager,
     private val settings: Settings,
+    private val syncService: GodToolsSyncService,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
     savedState: SavedStateHandle,
@@ -123,10 +125,16 @@ class ToolViewModels @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
         fun pinTool() {
-            viewModelScope.launch { toolsRepository.pinTool(code) }
+            viewModelScope.launch {
+                toolsRepository.pinTool(code)
+                syncService.syncDirtyFavoriteTools()
+            }
             settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
         }
-        fun unpinTool() = viewModelScope.launch { toolsRepository.unpinTool(code) }
+        fun unpinTool() = viewModelScope.launch {
+            toolsRepository.unpinTool(code)
+            syncService.syncDirtyFavoriteTools()
+        }
     }
 
     private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
