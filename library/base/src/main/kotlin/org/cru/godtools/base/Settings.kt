@@ -62,7 +62,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
     // region Language Settings
     var appLanguage: Locale
-        get() = AppCompatDelegate.getApplicationLocales()[0] ?: Locale.getDefault()
+        get() = Locale.forLanguageTag(context.getString(R.string.normalized_app_language))
         set(value) {
             AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(value))
         }
