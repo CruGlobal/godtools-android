@@ -36,8 +36,8 @@ internal class TipPageAdapter @AssistedInject internal constructor(
     override fun getItemCount() = tip?.pages?.size ?: 0
 
     // region Lifecycle
-    override fun onChanged(t: Tip?) {
-        tip = t
+    override fun onChanged(value: Tip?) {
+        tip = value
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
