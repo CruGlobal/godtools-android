@@ -204,7 +204,6 @@ dependencies {
     implementation(libs.godtoolsShared.common)
 
     api(libs.eventbus)
-    implementation(libs.accompanist.flowlayout)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)

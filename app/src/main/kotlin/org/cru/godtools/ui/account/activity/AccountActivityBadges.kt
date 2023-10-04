@@ -2,7 +2,10 @@ package org.cru.godtools.ui.account.activity
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,8 +28,6 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
@@ -40,6 +41,7 @@ import org.cru.godtools.shared.user.activity.model.UserActivity
 private val BADGE_SIZE = 48.dp
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 internal fun AccountActivityBadges(
     activity: UserActivity,
     modifier: Modifier = Modifier
@@ -50,9 +52,8 @@ internal fun AccountActivityBadges(
     )
 
     FlowRow(
-        mainAxisSize = SizeMode.Wrap,
-        mainAxisSpacing = 16.dp,
-        crossAxisSpacing = 16.dp,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .padding(top = 16.dp)
             .fillMaxWidth()
