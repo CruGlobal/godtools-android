@@ -38,7 +38,7 @@ internal class UserSyncTasks @Inject constructor(
         }
 
         val user = userApi.getUser().takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors() }
+            ?.body()?.takeUnless { it.hasErrors }
             ?.dataSingle ?: return false
 
         userRepository.storeUserFromSync(user)

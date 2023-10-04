@@ -80,7 +80,7 @@ internal class FacebookAccountProvider @Inject constructor(
             resp = authenticateWithMobileContentApi(accessToken)
         }
 
-        val token = resp?.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors() }?.dataSingle
+        val token = resp?.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle
         if (accessToken != null && token != null) prefs.edit { putString(PREF_USER_ID(accessToken), token.userId) }
         return token
     }

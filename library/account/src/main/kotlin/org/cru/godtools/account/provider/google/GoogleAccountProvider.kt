@@ -61,7 +61,7 @@ internal class GoogleAccountProvider @Inject constructor(
         val account = GoogleSignIn.getLastSignedInAccount(context)
         val request = account?.idToken?.let { AuthToken.Request(googleIdToken = it) } ?: return null
         val token = authApi.authenticate(request).takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors() }
+            ?.body()?.takeUnless { it.hasErrors }
             ?.dataSingle
         if (token != null) prefs.edit { putString(PREF_USER_ID(account), token.userId) }
         return token
