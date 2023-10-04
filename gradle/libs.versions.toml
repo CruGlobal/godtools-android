@@ -32,7 +32,6 @@ scarlet = "0.1.12"
 splitties = "3.0.0"
 
 [libraries]
-accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.3"
