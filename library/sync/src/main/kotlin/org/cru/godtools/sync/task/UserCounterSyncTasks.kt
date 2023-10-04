@@ -41,7 +41,7 @@ internal class UserCounterSyncTasks @Inject internal constructor(
         }
 
         val counters = countersApi.getCounters().takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors() }
+            ?.body()?.takeUnless { it.hasErrors }
             ?.data ?: return false
 
         userCountersRepository.transaction {
@@ -66,7 +66,7 @@ internal class UserCounterSyncTasks @Inject internal constructor(
                 .map { counter ->
                     async {
                         val updated = countersApi.updateCounter(counter.id, counter).takeIf { it.isSuccessful }
-                            ?.body()?.takeUnless { it.hasErrors() }
+                            ?.body()?.takeUnless { it.hasErrors }
                             ?.dataSingle ?: return@async false
 
                         userCountersRepository.transaction {
