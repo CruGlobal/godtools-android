@@ -43,4 +43,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     testImplementation(libs.json)
+    testImplementation(libs.jsonUnit.assertj)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.okhttp3.mockwebserver)
 }

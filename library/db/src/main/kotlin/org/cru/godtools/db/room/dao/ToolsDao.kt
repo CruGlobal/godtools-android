@@ -41,6 +41,8 @@ internal interface ToolsDao {
         "SELECT * FROM tools WHERE type in (:types) AND code IN (SELECT tool FROM translations WHERE locale = :locale)"
     )
     fun getToolsFlowByTypeAndLanguage(types: Collection<Tool.Type>, locale: Locale): Flow<List<ToolEntity>>
+    @Query("SELECT * FROM tools")
+    suspend fun getToolFavorites(): List<ToolFavorite>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnoreTools(tools: Collection<ToolEntity>)
@@ -48,6 +50,8 @@ internal interface ToolsDao {
     suspend fun upsertSyncTools(tools: Collection<SyncTool>)
     @Update(entity = ToolEntity::class)
     suspend fun update(tool: ToolFavorite)
+    @Update(entity = ToolEntity::class)
+    suspend fun updateToolFavorites(tools: Collection<ToolFavorite>)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")
     fun resetToolOrder()
     @Query("UPDATE tools SET `order` = :order WHERE code = :code")

@@ -8,7 +8,12 @@
     },
     "relationships": {
       "favorite-tools": {
-        "data": []
+        "data": [
+          {
+            "id": "2",
+            "type": "resource"
+          }
+        ]
       }
     }
   }

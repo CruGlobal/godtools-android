@@ -150,6 +150,12 @@ object ApiModule {
 
     @Provides
     @Reusable
+    fun userFavoriteToolsApi(
+        @Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit,
+    ): UserFavoriteToolsApi = retrofit.create()
+
+    @Provides
+    @Reusable
     fun viewsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): ViewsApi = retrofit.create()
 
     @Provides

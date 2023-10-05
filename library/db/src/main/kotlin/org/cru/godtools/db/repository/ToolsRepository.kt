@@ -40,6 +40,7 @@ interface ToolsRepository {
 
     // region Sync Methods
     suspend fun storeToolsFromSync(tools: Collection<Tool>)
+    suspend fun storeFavoriteToolsFromSync(tools: Collection<Tool>)
     suspend fun deleteIfNotFavorite(code: String)
     // endregion Sync Methods
 }

@@ -11,6 +11,7 @@ class UserTest {
     private val jsonApiConverter by lazy {
         JsonApiConverter.Builder()
             .addClasses(User::class.java)
+            .addClasses(Tool::class.java)
             .addConverters(InstantConverter())
             .build()
     }
@@ -20,6 +21,8 @@ class UserTest {
         val user = parseJson("user.json").dataSingle!!
         assertEquals("11", user.id)
         assertEquals(Instant.parse("2022-01-28T14:47:48Z"), user.createdAt)
+        assertEquals(1, user.apiFavoriteTools.size)
+        assertEquals(2, user.apiFavoriteTools[0].id)
     }
 
     private fun parseJson(file: String) = this::class.java.getResourceAsStream(file)!!.reader()

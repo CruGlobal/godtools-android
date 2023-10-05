@@ -1,5 +1,6 @@
 package org.cru.godtools.db.room.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
@@ -15,6 +16,8 @@ internal class UserEntity(
     val familyName: String?,
     val email: String?,
     val createdAt: Instant?,
+    @ColumnInfo(defaultValue = "false")
+    val isInitialFavoriteToolsSynced: Boolean = false,
 ) {
     constructor(user: User) : this(
         id = user.id,
@@ -24,6 +27,7 @@ internal class UserEntity(
         familyName = user.familyName,
         email = user.email,
         createdAt = user.createdAt,
+        isInitialFavoriteToolsSynced = user.isInitialFavoriteToolsSynced,
     )
 
     fun toModel() = User(
@@ -34,5 +38,6 @@ internal class UserEntity(
         familyName = familyName,
         email = email,
         createdAt = createdAt,
+        isInitialFavoriteToolsSynced = isInitialFavoriteToolsSynced,
     )
 }

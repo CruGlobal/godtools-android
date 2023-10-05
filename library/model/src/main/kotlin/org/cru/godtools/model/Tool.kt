@@ -162,6 +162,10 @@ class Tool : Base(), ChangeTrackingModel {
 
     @JsonApiIgnore
     var isFavorite = false
+        set(value) {
+            if (value != field) markChanged(ATTR_IS_FAVORITE)
+            field = value
+        }
     @JsonApiAttribute(JSON_HIDDEN)
     var isHidden = false
     @JsonApiAttribute(JSON_SPOTLIGHT)

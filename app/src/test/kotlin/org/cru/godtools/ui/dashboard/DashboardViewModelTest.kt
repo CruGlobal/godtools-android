@@ -33,6 +33,7 @@ class DashboardViewModelTest {
         every { syncFollowupsAsync() } returns CompletableDeferred()
         every { syncToolSharesAsync() } returns CompletableDeferred()
         coEvery { syncTools(any()) } returns true
+        coEvery { syncFavoriteTools(any()) } returns true
     }
     private val testScope = TestScope()
 
@@ -59,6 +60,7 @@ class DashboardViewModelTest {
             syncService.syncFollowupsAsync()
             syncService.syncToolSharesAsync()
             syncService.syncTools(false)
+            syncService.syncFavoriteTools(false)
         }
     }
 
@@ -90,7 +92,8 @@ class DashboardViewModelTest {
         coVerifyAll {
             syncService.syncFollowupsAsync()
             syncService.syncToolSharesAsync()
-            syncService.syncTools(any())
+            syncService.syncTools(false)
+            syncService.syncFavoriteTools(false)
         }
     }
 }

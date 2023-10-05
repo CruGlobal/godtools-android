@@ -23,7 +23,9 @@ import org.cru.godtools.sync.task.FollowupSyncTasks
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
+import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks
 import org.cru.godtools.sync.task.UserSyncTasks
+import org.cru.godtools.sync.work.scheduleSyncDirtyFavoriteToolsWork
 import org.cru.godtools.sync.work.scheduleSyncFollowupsWork
 import org.cru.godtools.sync.work.scheduleSyncLanguagesWork
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
@@ -102,6 +104,19 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
         } finally {
             coroutineScope.launch { syncDirtyUserCounters() }
         }
+    }
+
+    suspend fun syncFavoriteTools(force: Boolean) = try {
+        executeSync<UserFavoriteToolsSyncTasks> { syncFavoriteTools(force) }
+    } finally {
+        coroutineScope.launch { syncDirtyFavoriteTools() }
+    }
+    suspend fun syncDirtyFavoriteTools() = try {
+        executeSync<UserFavoriteToolsSyncTasks> { syncDirtyFavoriteTools() }
+            .also { if (!it) workManager.scheduleSyncDirtyFavoriteToolsWork() }
+    } catch (e: CancellationException) {
+        workManager.scheduleSyncDirtyFavoriteToolsWork()
+        throw e
     }
 
     fun syncToolSharesAsync() = coroutineScope.async { syncToolShares() }

@@ -23,6 +23,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.model.trackChanges
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -511,6 +512,52 @@ abstract class ToolsRepositoryIT {
         assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
     }
     // endregion storeToolsFromSync()
+
+    // region storeFavoriteToolsFromSync()
+    @Test
+    fun `storeFavoriteToolsFromSync()`() = testScope.runTest {
+        repository.storeInitialResources(
+            listOf(
+                Tool("tool1") { isFavorite = true },
+                Tool("tool2") { isFavorite = false },
+                Tool("tool3") { isFavorite = true },
+            )
+        )
+
+        repository.storeFavoriteToolsFromSync(listOf(Tool("tool2"), Tool("tool3")))
+        assertFalse(repository.findTool("tool1")!!.isFavorite)
+        assertTrue(repository.findTool("tool2")!!.isFavorite)
+        assertTrue(repository.findTool("tool3")!!.isFavorite)
+    }
+
+    @Test
+    fun `storeFavoriteToolsFromSync() - Handle dirty tools`() = testScope.runTest {
+        repository.storeInitialResources(
+            listOf(
+                Tool("tool1") { trackChanges { isFavorite = true } },
+                Tool("tool2") {
+                    isFavorite = true
+                    trackChanges { isFavorite = false }
+                },
+                Tool("tool3") { trackChanges { isFavorite = true } },
+            )
+        )
+
+        repository.storeFavoriteToolsFromSync(listOf(Tool("tool2"), Tool("tool3")))
+        assertNotNull(repository.findTool("tool1")) {
+            assertTrue(it.isFavorite)
+            assertTrue(it.isFieldChanged(Tool.ATTR_IS_FAVORITE))
+        }
+        assertNotNull(repository.findTool("tool2")) {
+            assertFalse(it.isFavorite)
+            assertTrue(it.isFieldChanged(Tool.ATTR_IS_FAVORITE))
+        }
+        assertNotNull(repository.findTool("tool3")) {
+            assertTrue(it.isFavorite)
+            assertFalse(it.isFieldChanged(Tool.ATTR_IS_FAVORITE))
+        }
+    }
+    // endregion storeFavoriteToolsFromSync()
 
     // region deleteIfNotFavorite()
     @Test
