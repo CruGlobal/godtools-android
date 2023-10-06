@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,6 +21,9 @@ import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
+import timber.log.Timber
+
+private const val TAG = "GoogleAccountProvider"
 
 private const val PREFS_GOOGLE_ACCOUNT_PROVIDER = "org.godtools.account.google"
 private const val PREF_USER_ID_PREFIX = "user_id_"
@@ -52,18 +56,32 @@ internal class GoogleAccountProvider @Inject constructor(
         state.activity.startActivity(googleSignInClient.signInIntent)
     }
 
+    private suspend fun refreshSignIn() = try {
+        googleSignInClient.silentSignIn().await()
+    } catch (e: ApiException) {
+        Timber.tag(TAG).d(e, "Error refreshing google account authentication")
+        null
+    }
+
     override suspend fun logout() {
         googleSignInClient.signOut().await()
     }
     // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        val account = GoogleSignIn.getLastSignedInAccount(context)
-        val request = account?.idToken?.let { AuthToken.Request(googleIdToken = it) } ?: return null
-        val token = authApi.authenticate(request).takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors }
-            ?.dataSingle
-        if (token != null) prefs.edit { putString(PREF_USER_ID(account), token.userId) }
+        var account = GoogleSignIn.getLastSignedInAccount(context) ?: return null
+        var resp = account.authenticateWithMobileContentApi()
+
+        if (account.idToken == null || resp?.isSuccessful != true) {
+            account = refreshSignIn() ?: return null
+            resp = account.authenticateWithMobileContentApi() ?: return null
+        }
+
+        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle ?: return null
+        prefs.edit { putString(PREF_USER_ID(account), token.userId) }
         return token
     }
+
+    private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi() =
+        idToken?.let { authApi.authenticate(AuthToken.Request(googleIdToken = it)) }
 }
