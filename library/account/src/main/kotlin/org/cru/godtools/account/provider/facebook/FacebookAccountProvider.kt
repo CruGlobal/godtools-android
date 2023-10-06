@@ -67,24 +67,24 @@ internal class FacebookAccountProvider @Inject constructor(
     // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        var accessToken = accessTokenManager.currentAccessToken
-        var resp = authenticateWithMobileContentApi(accessToken)
+        var accessToken = accessTokenManager.currentAccessToken ?: return null
+        var resp = accessToken.authenticateWithMobileContentApi()
 
         // try refreshing the access token if the API rejected it
-        if (resp?.code() == 400) {
+        if (!resp.isSuccessful) {
             accessToken = try {
                 accessTokenManager.refreshCurrentAccessToken()
             } catch (e: FacebookException) {
                 null
-            }
-            resp = authenticateWithMobileContentApi(accessToken)
+            } ?: return null
+            resp = accessToken.authenticateWithMobileContentApi()
         }
 
-        val token = resp?.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle
-        if (accessToken != null && token != null) prefs.edit { putString(PREF_USER_ID(accessToken), token.userId) }
-        return token
+        return resp.takeIf { it.isSuccessful }
+            ?.body()?.takeUnless { it.hasErrors }?.dataSingle
+            ?.also { prefs.edit { putString(PREF_USER_ID(accessToken), it.userId) } }
     }
 
-    private suspend fun authenticateWithMobileContentApi(accessToken: AccessToken?) =
-        accessToken?.token?.let { authApi.authenticate(AuthToken.Request(fbAccessToken = it)) }
+    private suspend fun AccessToken.authenticateWithMobileContentApi() =
+        authApi.authenticate(AuthToken.Request(fbAccessToken = token))
 }
