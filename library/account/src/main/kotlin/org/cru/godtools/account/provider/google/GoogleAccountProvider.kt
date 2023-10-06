@@ -1,6 +1,8 @@
 package org.cru.godtools.account.provider.google
 
 import android.content.Context
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -52,8 +54,14 @@ internal class GoogleAccountProvider @Inject constructor(
         .flatMapLatest { it?.let { prefs.getStringFlow(it.PREF_USER_ID, null) } ?: flowOf(null) }
 
     // region Login/Logout
+    inner class GoogleLoginState(activity: ComponentActivity) : AccountProvider.LoginState() {
+        val launcher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+    }
+
+    override fun prepareForLogin(activity: ComponentActivity) = GoogleLoginState(activity)
     override suspend fun login(state: AccountProvider.LoginState) {
-        state.activity.startActivity(googleSignInClient.signInIntent)
+        if (state !is GoogleLoginState) return
+        state.launcher.launch(googleSignInClient.signInIntent)
     }
 
     private suspend fun refreshSignIn() = try {

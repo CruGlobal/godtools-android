@@ -53,7 +53,7 @@ internal class FacebookAccountProvider @Inject constructor(
     override fun isAuthenticatedFlow() = accessTokenManager.isAuthenticatedFlow()
 
     // region Login/Logout
-    inner class FacebookLoginState(activity: ComponentActivity) : AccountProvider.LoginState(activity) {
+    inner class FacebookLoginState(activity: ComponentActivity) : AccountProvider.LoginState() {
         val launcher = activity.registerForActivityResult(loginManager.createLogInActivityResultContract()) {}
     }
 

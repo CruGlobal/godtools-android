@@ -15,9 +15,9 @@ internal interface AccountProvider : Ordered {
     fun userIdFlow(): Flow<String?>
 
     // region Login/Logout
-    open class LoginState internal constructor(val activity: ComponentActivity)
+    abstract class LoginState
 
-    fun prepareForLogin(activity: ComponentActivity) = LoginState(activity)
+    fun prepareForLogin(activity: ComponentActivity): LoginState
     suspend fun login(state: LoginState)
     suspend fun logout()
     // endregion Login/Logout
