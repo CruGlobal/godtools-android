@@ -140,13 +140,13 @@ class FacebookAccountProviderTest {
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh successful`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - Refresh successful`() = runTest {
         val accessToken = accessToken()
         val accessToken2 = accessToken()
         val token = AuthToken(userId = UUID.randomUUID().toString())
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token)) }
-            .returns(Response.error(400, "".toResponseBody()))
+            .returns(Response.error(401, "".toResponseBody()))
         coEvery { accessTokenManager.refreshCurrentAccessToken() } returns accessToken2
         coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token)) }
             .returns(Response.success(JsonApiObject.of(token)))
@@ -161,10 +161,10 @@ class FacebookAccountProviderTest {
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh doesn't return access_token`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - Refresh doesn't return access_token`() = runTest {
         val accessToken = accessToken()
         currentAccessTokenFlow.value = accessToken
-        coEvery { api.authenticate(any()) } returns Response.error(400, "".toResponseBody())
+        coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } returns null
 
         assertNull(provider.authenticateWithMobileContentApi())
@@ -175,10 +175,10 @@ class FacebookAccountProviderTest {
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - HTTP 400 - Refresh throws exception`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - Refresh throws exception`() = runTest {
         val accessToken = accessToken()
         currentAccessTokenFlow.value = accessToken
-        coEvery { api.authenticate(any()) } returns Response.error(400, "".toResponseBody())
+        coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } throws FacebookException()
 
         assertNull(provider.authenticateWithMobileContentApi())
