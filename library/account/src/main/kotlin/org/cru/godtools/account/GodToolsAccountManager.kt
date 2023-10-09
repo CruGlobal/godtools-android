@@ -1,7 +1,10 @@
 package org.cru.godtools.account
 
-import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.core.app.ActivityOptionsCompat
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -58,14 +61,22 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         .distinctUntilChanged()
 
     // region Login/Logout
-    class LoginState internal constructor(internal val providerState: Map<AccountType, AccountProvider.LoginState?>)
+    @Composable
+    fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType> {
+        val launchers = providers.associate { it.type to it.rememberLauncherForLogin() }
 
-    fun prepareForLogin(activity: ComponentActivity) =
-        LoginState(providers.associate { it.type to it.prepareForLogin(activity) })
-    suspend fun login(type: AccountType, state: LoginState) {
-        val providerState = state.providerState[type] ?: return
-        providers.first { it.type == type }.login(providerState)
+        return remember(launchers) {
+            object : ActivityResultLauncher<AccountType>() {
+                override fun launch(input: AccountType, options: ActivityOptionsCompat?) {
+                    launchers[input]?.launch(input, options)
+                }
+
+                override fun unregister() = TODO("Unsupported")
+                override fun getContract() = TODO("Unsupported")
+            }
+        }
     }
+
     suspend fun logout() = coroutineScope {
         // trigger a logout for any provider we happen to be logged into
         providers.forEach { launch { it.logout() } }

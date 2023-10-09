@@ -1,9 +1,10 @@
 package org.cru.godtools.account.provider.google
 
 import android.content.Context
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
 import androidx.core.content.edit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
+import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
 import org.cru.godtools.account.AccountType
@@ -54,15 +56,12 @@ internal class GoogleAccountProvider @Inject constructor(
         .flatMapLatest { it?.let { prefs.getStringFlow(it.PREF_USER_ID, null) } ?: flowOf(null) }
 
     // region Login/Logout
-    inner class GoogleLoginState(activity: ComponentActivity) : AccountProvider.LoginState() {
-        val launcher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
-    }
-
-    override fun prepareForLogin(activity: ComponentActivity) = GoogleLoginState(activity)
-    override suspend fun login(state: AccountProvider.LoginState) {
-        if (state !is GoogleLoginState) return
-        state.launcher.launch(googleSignInClient.signInIntent)
-    }
+    @Composable
+    override fun rememberLauncherForLogin() = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+            .transformInput { _: AccountType -> googleSignInClient.signInIntent },
+        onResult = {},
+    )
 
     private suspend fun refreshSignIn() = try {
         googleSignInClient.silentSignIn().await()

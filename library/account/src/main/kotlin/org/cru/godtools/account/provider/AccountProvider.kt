@@ -1,6 +1,7 @@
 package org.cru.godtools.account.provider
 
-import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.Flow
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.account.AccountType
@@ -15,10 +16,9 @@ internal interface AccountProvider : Ordered {
     fun userIdFlow(): Flow<String?>
 
     // region Login/Logout
-    abstract class LoginState
+    @Composable
+    fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType>
 
-    fun prepareForLogin(activity: ComponentActivity): LoginState
-    suspend fun login(state: LoginState)
     suspend fun logout()
     // endregion Login/Logout
 

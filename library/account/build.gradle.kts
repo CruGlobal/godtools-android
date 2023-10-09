@@ -3,11 +3,18 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android.namespace = "org.cru.godtools.account"
+android {
+    namespace = "org.cru.godtools.account"
+
+    configureCompose(project)
+}
 
 dependencies {
     implementation(project(":library:api"))
 
+    implementation(libs.androidx.activity.compose)
+
+    implementation(libs.gtoSupport.androidx.activity)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.facebook)
     implementation(libs.gtoSupport.kotlin.coroutines)

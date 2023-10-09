@@ -1,8 +1,9 @@
 package org.cru.godtools.account.provider.facebook
 
 import android.content.Context
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
 import androidx.core.content.edit
 import com.facebook.AccessToken
 import com.facebook.AccessTokenManager
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.isAuthenticatedFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
@@ -53,15 +55,12 @@ internal class FacebookAccountProvider @Inject constructor(
     override fun isAuthenticatedFlow() = accessTokenManager.isAuthenticatedFlow()
 
     // region Login/Logout
-    inner class FacebookLoginState(activity: ComponentActivity) : AccountProvider.LoginState() {
-        val launcher = activity.registerForActivityResult(loginManager.createLogInActivityResultContract()) {}
-    }
+    @Composable
+    override fun rememberLauncherForLogin() = rememberLauncherForActivityResult(
+        contract = loginManager.createLogInActivityResultContract().transformInput { _: AccountType -> FACEBOOK_SCOPE },
+        onResult = {},
+    )
 
-    override fun prepareForLogin(activity: ComponentActivity) = FacebookLoginState(activity)
-    override suspend fun login(state: AccountProvider.LoginState) {
-        if (state !is FacebookLoginState) return
-        state.launcher.launch(FACEBOOK_SCOPE)
-    }
     override suspend fun logout() = loginManager.logOut()
     // endregion Login/Logout
 
