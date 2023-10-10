@@ -46,6 +46,7 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
+    testImplementation(project(":library:account"))
     testImplementation(project(":library:model"))
     testImplementation(libs.hilt.testing)
     kaptTest(libs.hilt.compiler)

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
+import org.cru.godtools.account.compose.rememberLoginLauncher
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private val MARGIN_HORIZONTAL = 32.dp
@@ -40,7 +41,9 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit = {}) {
+fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit) {
+    val loginLauncher = rememberLoginLauncher()
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -86,7 +89,7 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
             )
 
             Button(
-                onClick = { onEvent(LoginLayoutEvent.Login(AccountType.GOOGLE)) },
+                onClick = { loginLauncher.launch(AccountType.GOOGLE) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black.copy(alpha = 0.54f)
@@ -104,7 +107,7 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
                 Text(stringResource(com.google.android.gms.base.R.string.common_signin_button_text_long))
             }
             Button(
-                onClick = { onEvent(LoginLayoutEvent.Login(AccountType.FACEBOOK)) },
+                onClick = { loginLauncher.launch(AccountType.FACEBOOK) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FACEBOOK_BLUE,
                     contentColor = Color.White

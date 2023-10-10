@@ -35,14 +35,11 @@ class LoginActivity : BaseActivity() {
         finishWhenAuthenticated()
 
         setContent {
-            val loginLauncher = accountManager.rememberLauncherForLogin()
-
             GodToolsTheme {
                 LoginLayout(
                     createAccount = createAccount,
                     onEvent = {
                         when (it) {
-                            is LoginLayoutEvent.Login -> loginLauncher.launch(it.type)
                             LoginLayoutEvent.Close -> finish()
                         }
                     }

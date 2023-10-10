@@ -62,7 +62,7 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
 
     // region Login/Logout
     @Composable
-    fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType> {
+    internal fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType> {
         val launchers = providers.associate { it.type to it.rememberLauncherForLogin() }
 
         return remember(launchers) {
