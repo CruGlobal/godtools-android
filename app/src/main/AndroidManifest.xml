@@ -173,7 +173,7 @@
         </service>
 
         <meta-data
-            android:name="org.ccci.gto.support.compat.LocaleConfig"
+            android:name="org.ccci.gto.android.common.androidx.core.LocaleConfig"
             android:resource="@xml/locales_config" />
         <!-- endregion LocaleConfig -->
 
