@@ -106,7 +106,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @VisibleForTesting
     internal val translations =
         locales.asLiveData().switchFold(ImmutableLiveData(emptyList<Pair<Locale, Translation?>>())) { acc, locale ->
-            distinctToolCode.switchMap { translationCache.get(it, locale).withInitialValue(null) }
+            distinctToolCode.switchMap { translationCache[it, locale]!!.withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, translations -> translations + Pair(locale, it) }
         }.map { it.toMap() }
@@ -114,7 +114,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     @VisibleForTesting
     internal val manifests =
         locales.asLiveData().switchFold(ImmutableLiveData(emptyList<Pair<Locale, Manifest?>>())) { acc, locale ->
-            distinctToolCode.switchMap { manifestCache.get(it, locale).asLiveData().withInitialValue(null) }
+            distinctToolCode.switchMap { manifestCache[it, locale]!!.asLiveData().withInitialValue(null) }
                 .distinctUntilChanged()
                 .combineWith(acc.distinctUntilChanged()) { it, manifests -> manifests + Pair(locale, it) }
         }.map { it.toMap() }
@@ -147,8 +147,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         combine(
-            manifestCache.get(tool, l).asLiveData(),
-            translationCache.get(tool, l),
+            manifestCache[tool, l]!!.asLiveData(),
+            translationCache[tool, l]!!,
             supportedType.asLiveData(),
             isConnected,
             isInitialSyncFinished.asLiveData()
@@ -224,4 +224,5 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     }
 }
 
-private fun <T> LruCache<TranslationKey, T>.get(tool: String?, locale: Locale?) = get(TranslationKey(tool, locale))!!
+private operator fun <T : Any> LruCache<TranslationKey, T>.get(tool: String?, locale: Locale?) =
+    get(TranslationKey(tool, locale))
