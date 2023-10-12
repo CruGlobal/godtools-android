@@ -36,8 +36,6 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
         @VisibleForTesting
         internal const val SYNC_TIME_FAVORITE_TOOLS = "last_synced.favorite_tools"
         private const val STALE_DURATION_FAVORITE_TOOLS = TimeConstants.DAY_IN_MS
-
-        private val INCLUDES_GET_FAVORITE_TOOLS = Includes(User.JSON_FAVORITE_TOOLS)
     }
 
     private val favoriteToolsMutex = Mutex()
@@ -58,14 +56,15 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
             return true
         }
 
+        val includes = Includes("${User.JSON_FAVORITE_TOOLS}.${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}")
         val params = JsonApiParams()
-            .includes(INCLUDES_GET_FAVORITE_TOOLS)
+            .includes(includes)
             .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
         val user = userApi.getUser(params).takeIf { it.isSuccessful }
             ?.body()?.takeUnless { it.hasErrors }
             ?.dataSingle ?: return false
 
-        syncRepository.storeUser(user, INCLUDES_GET_FAVORITE_TOOLS)
+        syncRepository.storeUser(user, includes)
         lastSyncTimeRepository.resetLastSyncTime(SYNC_TIME_FAVORITE_TOOLS, isPrefix = true)
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_FAVORITE_TOOLS, user.id)
 
@@ -88,11 +87,14 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
                     (it.isFieldChanged(Tool.ATTR_IS_FAVORITE) || !user.isInitialFavoriteToolsSynced) && it.isFavorite
                 }
 
-            val params = JsonApiParams().fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
+            val includes = Includes("${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}")
+            val params = JsonApiParams()
+                .includes(includes)
+                .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             if (favoritesToAdd.isNotEmpty()) {
                 favoritesApi.addFavoriteTools(params, favoritesToAdd).takeIf { it.isSuccessful }
                     ?.body()?.data
-                    ?.also { syncRepository.storeFavoriteTools(it) }
+                    ?.also { syncRepository.storeFavoriteTools(it, includes) }
                     ?: return@coroutineScope false
 
                 if (!user.isInitialFavoriteToolsSynced) {
@@ -118,7 +120,7 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
             if (favoritesToRemove.isNotEmpty()) {
                 favoritesApi.removeFavoriteTools(params, favoritesToRemove).takeIf { it.isSuccessful }
                     ?.body()?.data
-                    ?.also { syncRepository.storeFavoriteTools(it) }
+                    ?.also { syncRepository.storeFavoriteTools(it, includes) }
                     ?: return@coroutineScope false
             }
 
