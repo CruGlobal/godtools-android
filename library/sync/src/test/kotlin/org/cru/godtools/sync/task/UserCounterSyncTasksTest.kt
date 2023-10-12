@@ -25,8 +25,8 @@ private const val USER_ID_OTHER = "user_id_other"
 
 class UserCounterSyncTasksTest {
     private val accountManager: GodToolsAccountManager = mockk {
-        coEvery { isAuthenticated() } returns true
-        coEvery { userId() } returns USER_ID
+        coEvery { isAuthenticated } returns true
+        coEvery { userId } returns USER_ID
     }
     private val countersApi: UserCountersApi = mockk {
         coEvery { getCounters() } returns Response.success(JsonApiObject.of())
@@ -44,11 +44,11 @@ class UserCounterSyncTasksTest {
     // region syncCounters()
     @Test
     fun `syncCounters() - not authenticated`() = runTest {
-        coEvery { accountManager.isAuthenticated() } returns false
+        coEvery { accountManager.isAuthenticated } returns false
 
         assertTrue(tasks.syncCounters(false))
         coVerifyAll {
-            accountManager.isAuthenticated()
+            accountManager.isAuthenticated
             countersApi wasNot Called
             lastSyncTimeRepository wasNot Called
         }
@@ -62,8 +62,8 @@ class UserCounterSyncTasksTest {
 
         assertTrue(tasks.syncCounters(force = false))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_COUNTERS, USER_ID, staleAfter = any())
             countersApi wasNot Called
         }
@@ -73,8 +73,8 @@ class UserCounterSyncTasksTest {
     fun `syncCounters(force = true)`() = runTest {
         assertTrue(tasks.syncCounters(force = true))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             countersApi.getCounters()
             lastSyncTimeRepository.resetLastSyncTime(any(), isPrefix = true)
             lastSyncTimeRepository.updateLastSyncTime(any(), any())

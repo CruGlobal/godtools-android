@@ -108,7 +108,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
             }
             .launchIn(coroutineScope)
 
-        accountManager.isAuthenticatedFlow()
+        accountManager.isAuthenticatedFlow
             .onEach { firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "$it") }
             .launchIn(coroutineScope)
 

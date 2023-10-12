@@ -46,9 +46,8 @@ internal class FacebookAccountProvider @Inject constructor(
     @VisibleForTesting
     internal val prefs by lazy { context.getSharedPreferences(PREFS_FACEBOOK_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
 
-    override suspend fun userId() =
-        accessTokenManager.currentAccessToken?.let { prefs.getString(PREF_USER_ID(it), null) }
-    override suspend fun isAuthenticated() = accessTokenManager.currentAccessToken?.isExpired == false
+    override val userId get() = accessTokenManager.currentAccessToken?.let { prefs.getString(PREF_USER_ID(it), null) }
+    override val isAuthenticated get() = accessTokenManager.currentAccessToken?.isExpired == false
     override fun userIdFlow() = accessTokenManager.currentAccessTokenFlow()
         .flatMapLatest { it?.let { prefs.getStringFlow(PREF_USER_ID(it), null) } ?: flowOf(null) }
     override fun isAuthenticatedFlow() = accessTokenManager.isAuthenticatedFlow()

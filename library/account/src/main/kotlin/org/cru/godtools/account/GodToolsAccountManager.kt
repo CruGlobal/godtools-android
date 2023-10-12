@@ -25,7 +25,7 @@ import org.cru.godtools.account.provider.AccountProvider
 class GodToolsAccountManager @VisibleForTesting internal constructor(
     @get:VisibleForTesting
     internal val providers: List<AccountProvider>,
-    private val coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
+    coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
     @Inject
     internal constructor(providers: Set<@JvmSuppressWildcards AccountProvider>) :
@@ -33,7 +33,7 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
 
     // region Active Provider
     @VisibleForTesting
-    internal suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
+    internal val activeProvider get() = providers.firstOrNull { it.isAuthenticated }
 
     @VisibleForTesting
     internal val activeProviderFlow =
@@ -42,13 +42,13 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
     // endregion Active Provider
 
-    suspend fun isAuthenticated() = activeProvider()?.isAuthenticated() ?: false
-    suspend fun userId() = activeProvider()?.userId()
-    fun isAuthenticatedFlow() = activeProviderFlow
+    val isAuthenticated get() = activeProvider?.isAuthenticated ?: false
+    val userId get() = activeProvider?.userId
+    val isAuthenticatedFlow = activeProviderFlow
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
-    fun userIdFlow() = activeProviderFlow
+    val userIdFlow = activeProviderFlow
         .flatMapLatest { it?.userIdFlow() ?: flowOf(null) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
@@ -68,5 +68,5 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     }
     // endregion Login/Logout
 
-    internal suspend fun authenticateWithMobileContentApi() = activeProvider()?.authenticateWithMobileContentApi()
+    internal suspend fun authenticateWithMobileContentApi() = activeProvider?.authenticateWithMobileContentApi()
 }

@@ -27,7 +27,7 @@ class FirebaseAnalyticsServiceTest {
     private val userFlow = MutableSharedFlow<User?>()
 
     private val accountManager: GodToolsAccountManager = mockk {
-        every { isAuthenticatedFlow() } returns flowOf(false)
+        every { isAuthenticatedFlow } returns flowOf(false)
     }
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val firebase: FirebaseAnalytics = mockk(relaxUnitFun = true)

@@ -13,7 +13,7 @@ import org.cru.godtools.api.model.AuthToken
 private const val HTTP_HEADER_AUTHORIZATION = "Authorization"
 
 abstract class MobileContentApiSessionInterceptor(context: Context) : SessionInterceptor<UserIdSession>(context) {
-    override fun loadSession(prefs: SharedPreferences) = runBlocking { userId()?.let { UserIdSession(prefs, it) } }
+    override fun loadSession(prefs: SharedPreferences) = userId()?.let { UserIdSession(prefs, it) }
 
     override fun attachSession(request: Request, session: UserIdSession): Request {
         if (!session.isValid) return request
@@ -31,6 +31,6 @@ abstract class MobileContentApiSessionInterceptor(context: Context) : SessionInt
 
     override fun isSessionInvalid(response: Response) = response.code == HttpURLConnection.HTTP_UNAUTHORIZED
 
-    protected abstract suspend fun userId(): String?
+    protected abstract fun userId(): String?
     protected abstract suspend fun authenticate(): AuthToken?
 }

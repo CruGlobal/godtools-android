@@ -25,12 +25,12 @@ class GodToolsAccountManagerTest {
 
     private val provider1 = mockk<AccountProvider>(relaxed = true) {
         every { order } returns 1
-        coEvery { isAuthenticated() } answers { provider1Authenticated.value }
+        coEvery { isAuthenticated } answers { provider1Authenticated.value }
         every { isAuthenticatedFlow() } returns provider1Authenticated
     }
     private val provider2 = mockk<AccountProvider>(relaxed = true) {
         every { order } returns 2
-        coEvery { isAuthenticated() } answers { provider2Authenticated.value }
+        coEvery { isAuthenticated } answers { provider2Authenticated.value }
         every { isAuthenticatedFlow() } returns provider2Authenticated
     }
     private val testScope = TestScope()
@@ -49,13 +49,13 @@ class GodToolsAccountManagerTest {
     @Test
     fun verifyActiveProvider() = testScope.runTest {
         provider1Authenticated.value = true
-        assertSame(provider1, manager.activeProvider())
+        assertSame(provider1, manager.activeProvider)
         provider2Authenticated.value = true
-        assertSame(provider1, manager.activeProvider())
+        assertSame(provider1, manager.activeProvider)
         provider1Authenticated.value = false
-        assertSame(provider2, manager.activeProvider())
+        assertSame(provider2, manager.activeProvider)
         provider2Authenticated.value = false
-        assertNull(manager.activeProvider())
+        assertNull(manager.activeProvider)
     }
 
     @Test
@@ -88,15 +88,15 @@ class GodToolsAccountManagerTest {
     @Test
     fun verifyIsAuthenticated() = testScope.runTest {
         provider1Authenticated.value = false
-        assertFalse(manager.isAuthenticated())
+        assertFalse(manager.isAuthenticated)
         provider1Authenticated.value = true
-        assertTrue(manager.isAuthenticated())
+        assertTrue(manager.isAuthenticated)
     }
 
     @Test
     fun verifyIsAuthenticatedFlow() = testScope.runTest {
         provider1Authenticated.value = false
-        manager.isAuthenticatedFlow().test {
+        manager.isAuthenticatedFlow.test {
             assertFalse(awaitItem())
 
             provider1Authenticated.value = true

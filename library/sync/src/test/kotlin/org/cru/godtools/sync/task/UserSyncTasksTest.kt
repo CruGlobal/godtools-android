@@ -25,8 +25,8 @@ private const val USER_ID = "user_id"
 
 class UserSyncTasksTest {
     private val accountManager: GodToolsAccountManager = mockk {
-        coEvery { isAuthenticated() } returns true
-        coEvery { userId() } returns USER_ID
+        coEvery { isAuthenticated } returns true
+        coEvery { userId } returns USER_ID
     }
     private val userApi: UserApi = mockk()
     private val lastSyncTimeRepository = spyk(InMemoryLastSyncTimeRepository()) {
@@ -44,11 +44,11 @@ class UserSyncTasksTest {
     // region syncCounters()
     @Test
     fun `syncUser() - not authenticated`() = runTest {
-        coEvery { accountManager.isAuthenticated() } returns false
+        coEvery { accountManager.isAuthenticated } returns false
 
         assertTrue(tasks.syncUser(Random.nextBoolean()))
         coVerifyAll {
-            accountManager.isAuthenticated()
+            accountManager.isAuthenticated
             userApi wasNot Called
             lastSyncTimeRepository wasNot Called
         }
@@ -62,8 +62,8 @@ class UserSyncTasksTest {
 
         assertTrue(tasks.syncUser(force = false))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_USER, USER_ID, staleAfter = any())
             userApi wasNot Called
         }
@@ -78,8 +78,8 @@ class UserSyncTasksTest {
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             userApi.getUser(any())
             syncRepository.storeUser(user, any())
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)
@@ -97,8 +97,8 @@ class UserSyncTasksTest {
 
         assertTrue(tasks.syncUser(force = true))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             userApi.getUser(any())
             syncRepository.storeUser(user, any())
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_USER, USER_ID)

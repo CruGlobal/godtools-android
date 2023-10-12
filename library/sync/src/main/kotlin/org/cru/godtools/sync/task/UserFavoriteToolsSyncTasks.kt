@@ -42,8 +42,8 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
     private val favoritesUpdateMutex = Mutex()
 
     suspend fun syncFavoriteTools(force: Boolean) = favoriteToolsMutex.withLock {
-        if (!accountManager.isAuthenticated()) return true
-        val userId = accountManager.userId().orEmpty()
+        if (!accountManager.isAuthenticated) return true
+        val userId = accountManager.userId.orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!force &&
@@ -73,8 +73,8 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
 
     suspend fun syncDirtyFavoriteTools(): Boolean = favoritesUpdateMutex.withLock {
         coroutineScope {
-            if (!accountManager.isAuthenticated()) return@coroutineScope true
-            val userId = accountManager.userId().orEmpty()
+            if (!accountManager.isAuthenticated) return@coroutineScope true
+            val userId = accountManager.userId.orEmpty()
 
             val user = userRepository.findUser(userId)?.takeIf { it.isInitialFavoriteToolsSynced }
                 ?: userApi.getUser().takeIf { it.isSuccessful }

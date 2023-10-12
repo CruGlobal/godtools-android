@@ -30,8 +30,8 @@ internal class UserCounterSyncTasks @Inject internal constructor(
     private val countersUpdateMutex = Mutex()
 
     suspend fun syncCounters(force: Boolean): Boolean = countersMutex.withLock {
-        if (!accountManager.isAuthenticated()) return true
-        val userId = accountManager.userId().orEmpty()
+        if (!accountManager.isAuthenticated) return true
+        val userId = accountManager.userId.orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!force &&
@@ -57,7 +57,7 @@ internal class UserCounterSyncTasks @Inject internal constructor(
     }
 
     suspend fun syncDirtyCounters(): Boolean = countersUpdateMutex.withLock {
-        if (!accountManager.isAuthenticated()) return true
+        if (!accountManager.isAuthenticated) return true
 
         coroutineScope {
             // process any counters that need to be updated

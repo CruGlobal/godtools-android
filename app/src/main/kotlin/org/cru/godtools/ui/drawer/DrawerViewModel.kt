@@ -15,7 +15,7 @@ import org.cru.godtools.account.GodToolsAccountManager
 class DrawerViewModel @Inject constructor(
     private val accountManager: GodToolsAccountManager,
 ) : ViewModel() {
-    val isAuthenticatedFlow = accountManager.isAuthenticatedFlow()
+    val isAuthenticatedFlow = accountManager.isAuthenticatedFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     // region Actions

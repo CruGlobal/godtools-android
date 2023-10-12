@@ -54,7 +54,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun finishWhenAuthenticated() {
-        accountManager.isAuthenticatedFlow()
+        accountManager.isAuthenticatedFlow
             .flowWithLifecycle(lifecycle, Lifecycle.State.RESUMED)
             .onEach { if (it) finish() }
             .launchIn(lifecycleScope)

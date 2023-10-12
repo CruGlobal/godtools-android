@@ -32,8 +32,8 @@ class UserFavoriteToolsSyncTasksTest {
     private val userId = UUID.randomUUID().toString()
 
     private val accountManager: GodToolsAccountManager = mockk {
-        coEvery { isAuthenticated() } returns true
-        coEvery { userId() } returns userId
+        coEvery { isAuthenticated } returns true
+        coEvery { userId } returns this@UserFavoriteToolsSyncTasksTest.userId
     }
     private val favoritesApi: UserFavoriteToolsApi = mockk {
         coEvery { addFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of())
@@ -71,11 +71,11 @@ class UserFavoriteToolsSyncTasksTest {
     // region syncFavoriteTools()
     @Test
     fun `syncFavoriteTools() - not authenticated`() = runTest {
-        coEvery { accountManager.isAuthenticated() } returns false
+        coEvery { accountManager.isAuthenticated } returns false
 
         assertTrue(tasks.syncFavoriteTools(Random.nextBoolean()))
         coVerifyAll {
-            accountManager.isAuthenticated()
+            accountManager.isAuthenticated
             lastSyncTimeRepository wasNot Called
             userApi wasNot Called
             syncRepository wasNot Called
@@ -90,8 +90,8 @@ class UserFavoriteToolsSyncTasksTest {
 
         assertTrue(tasks.syncFavoriteTools(force = false))
         coVerifyAll {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FAVORITE_TOOLS, userId, staleAfter = any())
             userApi wasNot Called
         }
@@ -105,8 +105,8 @@ class UserFavoriteToolsSyncTasksTest {
 
         assertTrue(tasks.syncFavoriteTools(force = true))
         coVerifySequence {
-            accountManager.isAuthenticated()
-            accountManager.userId()
+            accountManager.isAuthenticated
+            accountManager.userId
             userApi.getUser(any())
             syncRepository.storeUser(user, any())
             lastSyncTimeRepository.resetLastSyncTime(SYNC_TIME_FAVORITE_TOOLS, isPrefix = true)
@@ -216,11 +216,11 @@ class UserFavoriteToolsSyncTasksTest {
 
     @Test
     fun `syncDirtyFavoriteTools() - not authenticated`() = runTest {
-        coEvery { accountManager.isAuthenticated() } returns false
+        coEvery { accountManager.isAuthenticated } returns false
 
         assertTrue(tasks.syncDirtyFavoriteTools())
         coVerifySequence {
-            accountManager.isAuthenticated()
+            accountManager.isAuthenticated
 
             userRepository wasNot Called
             userApi wasNot Called

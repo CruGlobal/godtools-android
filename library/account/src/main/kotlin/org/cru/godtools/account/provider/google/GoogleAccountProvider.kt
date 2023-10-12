@@ -44,8 +44,8 @@ internal class GoogleAccountProvider @Inject constructor(
     internal val prefs by lazy { context.getSharedPreferences(PREFS_GOOGLE_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
     override val type = AccountType.GOOGLE
 
-    override suspend fun isAuthenticated() = GoogleSignIn.getLastSignedInAccount(context) != null
-    override suspend fun userId() = GoogleSignIn.getLastSignedInAccount(context)
+    override val isAuthenticated get() = GoogleSignIn.getLastSignedInAccount(context) != null
+    override val userId get() = GoogleSignIn.getLastSignedInAccount(context)
         ?.let { prefs.getString(PREF_USER_ID(it), null) }
     override fun isAuthenticatedFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context).map { it != null }
     override fun userIdFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context)
