@@ -48,6 +48,10 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
         .distinctUntilChanged()
+    val authenticatedAccountTypeFlow = activeProviderFlow
+        .map { it?.type }
+        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
+        .distinctUntilChanged()
     val userIdFlow = activeProviderFlow
         .flatMapLatest { it?.userIdFlow() ?: flowOf(null) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
