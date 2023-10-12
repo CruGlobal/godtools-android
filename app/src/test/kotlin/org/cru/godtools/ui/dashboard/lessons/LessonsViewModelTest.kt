@@ -13,7 +13,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Tool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -23,7 +22,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsViewModelTest {
-    private val lessonsFlow = MutableStateFlow(emptyList<Lesson>())
+    private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
 
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
@@ -45,15 +44,8 @@ class LessonsViewModelTest {
 
     @Test
     fun `Property lessons - Filter hidden lessons`() = testScope.runTest {
-        val visible = Lesson().apply {
-            type = Tool.Type.LESSON
-            code = "visible"
-        }
-        val hidden = Lesson().apply {
-            type = Tool.Type.LESSON
-            code = "hidden"
-            isHidden = true
-        }
+        val visible = Tool("visible", Tool.Type.LESSON)
+        val hidden = Tool("hidden", Tool.Type.LESSON) { isHidden = true }
 
         viewModel.lessons.test {
             lessonsFlow.value = listOf(visible, hidden)

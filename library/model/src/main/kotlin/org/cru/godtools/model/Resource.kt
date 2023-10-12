@@ -5,8 +5,6 @@ import kotlin.random.Random
 
 typealias Resource = Tool
 
-typealias Lesson = Resource
-
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
 fun Resource(
