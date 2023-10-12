@@ -58,6 +58,7 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
@@ -465,17 +466,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         )
 
         init {
-            // Download Translations for the app language
+            // Download Translations for Favorite Tools in the app language
             settings.appLanguageFlow
                 .map { setOf(it) }
                 .distinctUntilChanged()
                 .downloadFavoriteTranslations()
 
-            // Download Translations for pinned languages
+            // Download Translations for All Tools in the pinned languages
             languagesRepository.getPinnedLanguagesFlow()
                 .map { it.mapTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
-                .downloadFavoriteTranslations()
+                .downloadAllToolTranslations()
 
             // Stale Downloaded Attachments
             attachmentsRepository.getAttachmentsFlow()
@@ -506,9 +507,15 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             flowOf(setOf(Settings.defaultLanguage)).downloadFavoriteTranslations()
 
         private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
+            .downloadTranslations(this)
+
+        private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getToolsFlow()
+            .downloadTranslations(this)
+
+        private fun Flow<Collection<Tool>>.downloadTranslations(languages: Flow<Collection<Locale>>) = this
             .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
             .distinctUntilChanged()
-            .combineTransformLatest(this) { t, l ->
+            .combineTransformLatest(languages) { t, l ->
                 emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l))
             }
             .map {
@@ -519,7 +526,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             .distinctUntilChanged()
             .conflate()
             .onEach {
-                coroutineScope { it.forEach { launch { downloadManager.downloadLatestPublishedTranslation(it) } } }
+                it.forEach { coroutineScope.launch { downloadManager.downloadLatestPublishedTranslation(it) } }
             }
             .launchIn(coroutineScope)
     }

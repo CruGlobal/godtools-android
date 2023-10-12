@@ -41,6 +41,7 @@ class GodToolsDownloadManagerDispatcherTest {
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
     private val favoriteToolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
     private val resourcesFlow = MutableSharedFlow<List<Tool>>(replay = 1)
+    private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { getAttachmentsFlow() } returns attachmentsFlow
@@ -62,6 +63,7 @@ class GodToolsDownloadManagerDispatcherTest {
         mockk {
             every { getResourcesFlow() } returns resourcesFlow
             every { getFavoriteToolsFlow() } returns favoriteToolsFlow
+            every { getToolsFlow() } returns toolsFlow
         }
     }
     private val translationsRepository: TranslationsRepository by lazy {
@@ -151,7 +153,7 @@ class GodToolsDownloadManagerDispatcherTest {
     }
 
     @Test
-    fun `Favorite Tools downloadLatestPublishedTranslation() - pinned languages`() = testScope.runTest {
+    fun `downloadLatestPublishedTranslation() - pinned languages - All Tools`() = testScope.runTest {
         dispatcher.downloadTranslationsForDefaultLanguageJob.cancel()
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
@@ -163,7 +165,7 @@ class GodToolsDownloadManagerDispatcherTest {
         } returns translationsFlow
         verify { downloadManager wasNot Called }
 
-        favoriteToolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
+        toolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
         pinnedLanguagesFlow.emit(listOf(Language(Locale.FRENCH), Language(Locale.GERMAN)))
         runCurrent()
         verifyAll {
