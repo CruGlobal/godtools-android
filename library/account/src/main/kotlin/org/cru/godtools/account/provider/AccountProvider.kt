@@ -9,8 +9,8 @@ import org.cru.godtools.api.model.AuthToken
 internal interface AccountProvider : Ordered {
     val type: AccountType
 
-    fun isAuthenticated(): Boolean
-    fun userId(): String?
+    val isAuthenticated: Boolean
+    val userId: String?
     fun isAuthenticatedFlow(): Flow<Boolean>
     fun userIdFlow(): Flow<String?>
 

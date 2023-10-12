@@ -32,8 +32,8 @@ internal class UserSyncTasks @Inject constructor(
     private val userMutex = Mutex()
 
     suspend fun syncUser(force: Boolean) = userMutex.withLock {
-        if (!accountManager.isAuthenticated()) return true
-        val userId = accountManager.userId().orEmpty()
+        if (!accountManager.isAuthenticated) return true
+        val userId = accountManager.userId.orEmpty()
 
         // short-circuit if we aren't forcing a sync and the data isn't stale
         if (!force &&

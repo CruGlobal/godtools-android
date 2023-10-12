@@ -69,13 +69,13 @@ class FacebookAccountProviderTest {
 
     @Test
     fun `userId()`() = runTest {
-        assertNull(provider.userId())
+        assertNull(provider.userId)
 
         val user = UUID.randomUUID().toString()
         val token = accessToken()
         currentAccessTokenFlow.value = token
         provider.prefs.edit { putString(FacebookAccountProvider.PREF_USER_ID(token), user) }
-        assertEquals(user, provider.userId())
+        assertEquals(user, provider.userId)
     }
 
     // region userIdFlow()
@@ -124,7 +124,7 @@ class FacebookAccountProviderTest {
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
         assertEquals(token, provider.authenticateWithMobileContentApi())
-        assertEquals(token.userId, provider.userId())
+        assertEquals(token.userId, provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
@@ -152,7 +152,7 @@ class FacebookAccountProviderTest {
             .returns(Response.success(JsonApiObject.of(token)))
 
         assertEquals(token, provider.authenticateWithMobileContentApi())
-        assertEquals(token.userId, provider.userId())
+        assertEquals(token.userId, provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
             accessTokenManager.refreshCurrentAccessToken()
@@ -220,7 +220,7 @@ class FacebookAccountProviderTest {
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
         assertEquals(token, provider.authenticateWithMobileContentApi())
-        assertNull(provider.userId())
+        assertNull(provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }

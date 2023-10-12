@@ -21,7 +21,7 @@ class UserManagerTest {
     private val userFlow = MutableStateFlow<User?>(null)
 
     private val accountManager: GodToolsAccountManager = mockk {
-        coEvery { userIdFlow() } returns userIdFlow
+        coEvery { userIdFlow } returns this@UserManagerTest.userIdFlow
     }
     private val userRepository: UserRepository = mockk {
         every { findUserFlow(USER_ID) } returns userFlow
