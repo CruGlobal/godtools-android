@@ -28,7 +28,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.combineTransform
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -480,26 +479,26 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // Stale Downloaded Attachments
             attachmentsRepository.getAttachmentsFlow()
-                .combineTransform(downloadedFilesRepository.getDownloadedFilesFlow()) { attachments, files ->
+                .combine(downloadedFilesRepository.getDownloadedFilesFlow()) { attachments, files ->
                     val filenames = files.mapTo(mutableSetOf()) { it.filename }
-                    emit(attachments.filter { it.isDownloaded && it.localFilename !in filenames }.map { it.id }.toSet())
+                    attachments
+                        .filter { it.isDownloaded && it.localFilename !in filenames }
+                        .mapTo(mutableSetOf()) { it.id }
                 }
-                .distinctUntilChanged()
-                .conflate()
-                .onEach { coroutineScope { it.forEach { launch { downloadManager.downloadAttachment(it) } } } }
-                .launchIn(coroutineScope)
+                .downloadAttachments()
 
             // Tool Banner Attachments
             attachmentsRepository.getAttachmentsFlow()
                 .combine(toolsRepository.getResourcesFlow()) { attachments, tools ->
-                    val banners =
-                        tools.flatMap { listOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId) }
-                    attachments.filter { !it.isDownloaded && it.id in banners }.map { it.id }.toSet()
+                    val banners = tools.flatMapTo(mutableSetOf()) {
+                        setOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId)
+                    }
+
+                    attachments
+                        .filter { it.id in banners && !it.isDownloaded }
+                        .mapTo(mutableSetOf()) { it.id }
                 }
-                .distinctUntilChanged()
-                .conflate()
-                .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
-                .launchIn(coroutineScope)
+                .downloadAttachments()
         }
 
         @VisibleForTesting
@@ -511,6 +510,12 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getToolsFlow()
             .downloadTranslations(this)
+
+        private fun Flow<Set<Long>>.downloadAttachments() = this
+            .distinctUntilChanged()
+            .conflate()
+            .onEach { it.forEach { coroutineScope.launch { downloadManager.downloadAttachment(it) } } }
+            .launchIn(coroutineScope)
 
         private fun Flow<Collection<Tool>>.downloadTranslations(languages: Flow<Collection<Locale>>) = this
             .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
