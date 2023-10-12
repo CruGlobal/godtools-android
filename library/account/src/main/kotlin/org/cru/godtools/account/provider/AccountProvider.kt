@@ -9,8 +9,8 @@ import org.cru.godtools.api.model.AuthToken
 internal interface AccountProvider : Ordered {
     val type: AccountType
 
-    suspend fun isAuthenticated(): Boolean
-    suspend fun userId(): String?
+    fun isAuthenticated(): Boolean
+    fun userId(): String?
     fun isAuthenticatedFlow(): Flow<Boolean>
     fun userIdFlow(): Flow<String?>
 

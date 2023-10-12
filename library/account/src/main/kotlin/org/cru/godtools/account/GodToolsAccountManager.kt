@@ -33,7 +33,7 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
 
     // region Active Provider
     @VisibleForTesting
-    internal suspend fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
+    internal fun activeProvider() = providers.firstOrNull { it.isAuthenticated() }
 
     @VisibleForTesting
     internal val activeProviderFlow =
@@ -42,8 +42,8 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         }.stateIn(coroutineScope, SharingStarted.Eagerly, null)
     // endregion Active Provider
 
-    suspend fun isAuthenticated() = activeProvider()?.isAuthenticated() ?: false
-    suspend fun userId() = activeProvider()?.userId()
+    fun isAuthenticated() = activeProvider()?.isAuthenticated() ?: false
+    fun userId() = activeProvider()?.userId()
     fun isAuthenticatedFlow() = activeProviderFlow
         .flatMapLatest { it?.isAuthenticatedFlow() ?: flowOf(false) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), replay = 1)
