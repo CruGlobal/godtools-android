@@ -49,9 +49,9 @@ internal interface ToolsDao {
     @Update(entity = ToolEntity::class)
     suspend fun updateToolFavorites(tools: Collection<ToolFavorite>)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")
-    fun resetToolOrder()
+    suspend fun resetToolOrder()
     @Query("UPDATE tools SET `order` = :order WHERE code = :code")
-    fun updateToolOrder(code: String, order: Int)
+    suspend fun updateToolOrder(code: String, order: Int)
     @Query("UPDATE tools SET pendingShares = pendingShares + :views WHERE code = :code")
     suspend fun updateToolViews(code: String, views: Int)
     @Delete
