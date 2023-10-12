@@ -10,7 +10,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.partial.SyncTool
-import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.trackChanges
 
@@ -55,7 +54,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateToolViews(code, delta)
 
-    override suspend fun storeInitialResources(tools: Collection<Resource>) =
+    override suspend fun storeInitialResources(tools: Collection<Tool>) =
         dao.insertOrIgnoreTools(tools.map { ToolEntity(it) })
 
     // region Sync Methods

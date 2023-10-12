@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.cru.godtools.model.Translation
@@ -51,7 +50,7 @@ abstract class ToolsRepositoryIT {
     // region getResources()
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
@@ -91,7 +90,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getNormalTools() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Resource("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
+        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
         val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
         val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
         repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
@@ -106,7 +105,7 @@ abstract class ToolsRepositoryIT {
     // region getResourcesFlow()
     @Test
     fun `getResourcesFlow() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
