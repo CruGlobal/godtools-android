@@ -48,17 +48,6 @@ abstract class ToolsRepositoryIT {
     }
     // endregion findTool()
 
-    // region findResourceBlocking()
-    @Test
-    fun `findResourceBlocking()`() = testScope.runTest {
-        val resource = Resource("tool", Tool.Type.TRACT)
-        repository.storeToolsFromSync(setOf(resource))
-
-        assertNull(repository.findResourceBlocking("other"))
-        assertThat(repository.findResourceBlocking("tool"), tool(resource))
-    }
-    // endregion findResourceBlocking()
-
     // region getResources()
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {

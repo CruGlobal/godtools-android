@@ -1,6 +1,5 @@
 package org.cru.godtools.db.repository
 
-import androidx.annotation.WorkerThread
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -10,8 +9,6 @@ import org.cru.godtools.model.Tool
 
 interface ToolsRepository {
     suspend fun findTool(code: String): Tool?
-    @WorkerThread
-    fun findResourceBlocking(code: String): Tool?
     suspend fun getResources(): List<Resource>
     suspend fun getTools(): List<Tool>
 

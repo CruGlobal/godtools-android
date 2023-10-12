@@ -21,7 +21,6 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     private val dao get() = db.toolsDao
 
     override suspend fun findTool(code: String) = dao.findTool(code)?.toModel()
-    override fun findResourceBlocking(code: String) = dao.findToolBlocking(code)?.toModel()
     override fun findToolFlow(code: String) = dao.findToolFlow(code).map { it?.toModel() }
 
     override suspend fun getResources() = dao.getResources().map { it.toModel() }
