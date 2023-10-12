@@ -80,6 +80,8 @@ class Tool : Base(), ChangeTrackingModel {
         companion object {
             val DEFAULT = UNKNOWN
 
+            val NORMAL_TYPES = setOf(TRACT, CYOA, ARTICLE)
+
             fun fromJson(json: String?) = when (json) {
                 null -> null
                 else -> values().firstOrNull { json == it.json } ?: DEFAULT

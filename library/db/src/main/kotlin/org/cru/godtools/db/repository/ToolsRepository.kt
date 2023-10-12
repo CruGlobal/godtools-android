@@ -3,23 +3,25 @@ package org.cru.godtools.db.repository
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.cru.godtools.model.Lesson
 import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 
 interface ToolsRepository {
     suspend fun findTool(code: String): Tool?
-    suspend fun getResources(): List<Resource>
-    suspend fun getTools(): List<Tool>
-
     fun findToolFlow(code: String): Flow<Tool?>
+
+    suspend fun getResources(): List<Resource>
+    suspend fun getTools() = getToolsByType(Tool.Type.NORMAL_TYPES)
+    suspend fun getToolsByType(types: Collection<Tool.Type>): List<Tool>
     fun getResourcesFlow(): Flow<List<Resource>>
-    fun getToolsFlow(): Flow<List<Tool>>
+    fun getToolsFlow() = getToolsFlowByType(Tool.Type.NORMAL_TYPES)
+    fun getToolsFlowByType(vararg types: Tool.Type) = getToolsFlowByType(types.toSet())
+    fun getToolsFlowByType(types: Collection<Tool.Type>): Flow<List<Tool>>
     fun getToolsFlowForLanguage(locale: Locale): Flow<List<Tool>>
-    fun getMetaToolsFlow(): Flow<List<Tool>>
-    fun getFavoriteToolsFlow(): Flow<List<Tool>> =
-        getToolsFlow().map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
-    fun getLessonsFlow(): Flow<List<Lesson>>
+    fun getMetaToolsFlow() = getToolsFlowByType(Tool.Type.META)
+    fun getLessonsFlow() = getToolsFlowByType(Tool.Type.LESSON)
+    fun getFavoriteToolsFlow() = getToolsFlow()
+        .map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
 
     fun toolsChangeFlow(): Flow<Any?>
 
