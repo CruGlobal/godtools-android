@@ -43,7 +43,7 @@ class ToolsViewModel @Inject constructor(
         .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    val spotlightTools = toolsRepository.getToolsFlow()
+    val spotlightTools = toolsRepository.getNormalToolsFlow()
         .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
@@ -59,7 +59,7 @@ class ToolsViewModel @Inject constructor(
 
     private val toolsForLocale = selectedLocale
         .flatMapLatest {
-            if (it != null) toolsRepository.getToolsFlowForLanguage(it) else toolsRepository.getToolsFlow()
+            if (it != null) toolsRepository.getToolsFlowForLanguage(it) else toolsRepository.getNormalToolsFlow()
         }
         .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
         .combine(

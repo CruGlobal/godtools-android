@@ -508,7 +508,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
             .downloadTranslations(this)
 
-        private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getToolsFlow()
+        private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getNormalToolsFlow()
             .downloadTranslations(this)
 
         private fun Flow<Set<Long>>.downloadAttachments() = this

@@ -47,7 +47,7 @@ class AemArticleManagerDispatcherTest {
     private val fileManager = mockk<AemArticleManager.FileManager>(relaxUnitFun = true)
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
-        every { getToolsFlow() } returns flowOf(emptyList())
+        every { getNormalToolsFlow() } returns flowOf(emptyList())
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsForToolsFlow(any()) } returns translationsFlow

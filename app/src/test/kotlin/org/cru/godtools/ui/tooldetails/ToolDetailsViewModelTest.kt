@@ -32,7 +32,7 @@ class ToolDetailsViewModelTest {
 
     private val toolsRepository: ToolsRepository = mockk {
         every { findToolFlow(any()) } returns toolFlow
-        every { getToolsFlow() } returns toolsFlow
+        every { getNormalToolsFlow() } returns toolsFlow
     }
     private val testScope = TestScope()
 

@@ -49,7 +49,7 @@ class ToolDetailsViewModel @Inject constructor(
         .flatMapLatest { metatool ->
             when (metatool) {
                 null -> flowOf(emptyList())
-                else -> toolsRepository.getToolsFlow().map { it.filter { it.metatoolCode == metatool } }
+                else -> toolsRepository.getNormalToolsFlow().map { it.filter { it.metatoolCode == metatool } }
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())

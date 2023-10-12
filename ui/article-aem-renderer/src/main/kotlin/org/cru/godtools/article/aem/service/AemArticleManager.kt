@@ -228,7 +228,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
         // region Translations
         init {
-            toolsRepository.getToolsFlow()
+            toolsRepository.getNormalToolsFlow()
                 .map { tools ->
                     tools
                         .filter { it.type == Tool.Type.ARTICLE }

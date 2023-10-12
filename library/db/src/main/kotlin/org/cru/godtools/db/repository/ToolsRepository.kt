@@ -11,16 +11,17 @@ interface ToolsRepository {
     fun findToolFlow(code: String): Flow<Tool?>
 
     suspend fun getResources(): List<Resource>
-    suspend fun getTools() = getToolsByType(Tool.Type.NORMAL_TYPES)
     suspend fun getToolsByType(types: Collection<Tool.Type>): List<Tool>
+    suspend fun getNormalTools() = getToolsByType(Tool.Type.NORMAL_TYPES)
+
     fun getResourcesFlow(): Flow<List<Resource>>
-    fun getToolsFlow() = getToolsFlowByType(Tool.Type.NORMAL_TYPES)
     fun getToolsFlowByType(vararg types: Tool.Type) = getToolsFlowByType(types.toSet())
     fun getToolsFlowByType(types: Collection<Tool.Type>): Flow<List<Tool>>
     fun getToolsFlowForLanguage(locale: Locale): Flow<List<Tool>>
     fun getMetaToolsFlow() = getToolsFlowByType(Tool.Type.META)
     fun getLessonsFlow() = getToolsFlowByType(Tool.Type.LESSON)
-    fun getFavoriteToolsFlow() = getToolsFlow()
+    fun getNormalToolsFlow() = getToolsFlowByType(Tool.Type.NORMAL_TYPES)
+    fun getFavoriteToolsFlow() = getNormalToolsFlow()
         .map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
 
     fun toolsChangeFlow(): Flow<Any?>

@@ -96,7 +96,7 @@ class ExternalSingletonsModule {
         mockk {
             every { getFavoriteToolsFlow() } returns flowOf(emptyList())
             every { getLessonsFlow() } returns flowOf(emptyList())
-            every { getToolsFlow() } returns flowOf(emptyList())
+            every { getNormalToolsFlow() } returns flowOf(emptyList())
             every { getMetaToolsFlow() } returns flowOf(emptyList())
         }
     }

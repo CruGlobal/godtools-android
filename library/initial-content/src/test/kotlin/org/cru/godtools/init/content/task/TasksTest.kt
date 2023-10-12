@@ -40,7 +40,7 @@ class TasksTest {
         every { appLanguage } returns Locale("x")
     }
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true) {
-        coEvery { getTools() } returns emptyList()
+        coEvery { getNormalTools() } returns emptyList()
     }
     private val translationsRepository: TranslationsRepository = mockk()
 
@@ -71,11 +71,11 @@ class TasksTest {
 
     @Test
     fun `initFavoriteTools() - Already Ran - Has favorite tools`() = runTest {
-        coEvery { toolsRepository.getTools() } returns listOf(Tool().apply { isFavorite = true })
+        coEvery { toolsRepository.getNormalTools() } returns listOf(Tool().apply { isFavorite = true })
         tasks.initFavoriteTools()
         coVerify {
             lastSyncTimeRepository.getLastSyncTime(*anyVararg())
-            toolsRepository.getTools()
+            toolsRepository.getNormalTools()
             downloadManager wasNot Called
         }
         confirmVerified(lastSyncTimeRepository, toolsRepository)
@@ -85,13 +85,13 @@ class TasksTest {
     fun `initFavoriteTools()`() = runTest {
         val tools = Array(5) { Tool("${it + 1}") }
         val translations = listOf("1", "5").map { Translation(toolCode = it) }
-        coEvery { toolsRepository.getTools() } returns tools.toList()
+        coEvery { toolsRepository.getNormalTools() } returns tools.toList()
         coEvery { translationsRepository.getTranslationsForLanguages(any()) } returns translations
         every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
 
         tasks.initFavoriteTools()
         coVerifyAll {
-            toolsRepository.getTools()
+            toolsRepository.getNormalTools()
             toolsRepository.pinTool("1", trackChanges = false)
             toolsRepository.pinTool("2", trackChanges = false)
             toolsRepository.pinTool("3", trackChanges = false)

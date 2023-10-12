@@ -147,7 +147,7 @@ class GodToolsShortcutManagerTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = testScope.runTest {
-        coEvery { toolsRepository.getTools() } throws CancellationException()
+        coEvery { toolsRepository.getNormalTools() } throws CancellationException()
 
         ExceptionRaisingTree.plant().use {
             launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.apply {
@@ -156,7 +156,7 @@ class GodToolsShortcutManagerTest {
             }
         }
         coVerifyAll {
-            toolsRepository.getTools()
+            toolsRepository.getNormalTools()
             shortcutManagerService wasNot Called
         }
     }

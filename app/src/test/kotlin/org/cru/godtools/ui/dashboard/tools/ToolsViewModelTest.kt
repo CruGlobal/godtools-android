@@ -41,7 +41,7 @@ class ToolsViewModelTest {
     }
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
-        every { getToolsFlow() } returns toolsFlow
+        every { getNormalToolsFlow() } returns toolsFlow
         every { getMetaToolsFlow() } returns metaToolsFlow
     }
 
