@@ -72,19 +72,6 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getResources()
 
-    // region getResourcesBlocking()
-    @Test
-    fun `getResourcesBlocking() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(resources)
-
-        assertThat(
-            repository.getResourcesBlocking(),
-            containsInAnyOrder(resources.map { tool(it) })
-        )
-    }
-    // endregion getResourcesBlocking()
-
     // region getTools()
     @Test
     fun `getTools() - Supported Tool Types Only`() = testScope.runTest {

@@ -30,8 +30,6 @@ internal interface ToolsDao {
     @Query("SELECT * FROM tools")
     suspend fun getResources(): List<ToolEntity>
     @Query("SELECT * FROM tools")
-    fun getResourcesBlocking(): List<ToolEntity>
-    @Query("SELECT * FROM tools")
     fun getResourcesFlow(): Flow<List<ToolEntity>>
     @Query("SELECT * FROM tools WHERE type in (:types)")
     suspend fun getToolsByType(types: Collection<Tool.Type>): List<ToolEntity>

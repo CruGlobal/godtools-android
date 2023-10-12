@@ -67,7 +67,7 @@ internal class ToolSyncTasks @Inject internal constructor(
         // store fetched tools
         syncRepository.storeTools(
             json.data,
-            existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
+            existingTools = toolsRepository.getResources().mapNotNull { it.code }.toMutableSet(),
             includes = INCLUDES_GET_TOOL
         )
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
