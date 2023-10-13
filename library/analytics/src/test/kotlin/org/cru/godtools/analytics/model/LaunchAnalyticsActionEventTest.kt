@@ -1,11 +1,11 @@
 package org.cru.godtools.analytics.model
 
 import kotlin.random.Random
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import org.cru.godtools.shared.user.activity.UserCounterNames
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
 
 class LaunchAnalyticsActionEventTest {
     @Test
