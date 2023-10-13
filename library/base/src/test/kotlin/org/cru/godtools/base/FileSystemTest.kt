@@ -4,10 +4,10 @@ import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
 import java.io.File
+import kotlin.test.BeforeTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 
 class FileSystemTest {
@@ -16,7 +16,7 @@ class FileSystemTest {
 
     private lateinit var fileSystem: FileSystem
 
-    @Before
+    @BeforeTest
     fun setup() {
         fileSystem = FileSystem(context, "resources")
     }

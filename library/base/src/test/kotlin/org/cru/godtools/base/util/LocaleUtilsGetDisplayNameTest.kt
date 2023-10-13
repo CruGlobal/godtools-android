@@ -10,9 +10,9 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
 import kotlin.random.Random
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -23,7 +23,7 @@ private const val PACKAGE_NAME = "packageName"
 class LocaleUtilsGetDisplayNameTest {
     lateinit var context: Context
 
-    @Before
+    @BeforeTest
     fun setup() {
         context = mockk {
             every { packageName } returns PACKAGE_NAME
