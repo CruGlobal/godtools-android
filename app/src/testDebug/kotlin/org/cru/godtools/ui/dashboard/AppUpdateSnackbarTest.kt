@@ -17,11 +17,11 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.excludeRecords
 import io.mockk.mockk
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
-import org.junit.Assert.assertTrue
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -102,7 +102,7 @@ class AppUpdateSnackbarTest {
                 )
             }
             confirmVerified(snackbarHostState)
-            assertTrue("Default to Flexible Update", appUpdateManager.isConfirmationDialogVisible)
+            assertTrue(appUpdateManager.isConfirmationDialogVisible, "Default to Flexible Update")
         }
     }
 
