@@ -489,7 +489,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // Tool Banner Attachments
             attachmentsRepository.getAttachmentsFlow()
-                .combine(toolsRepository.getResourcesFlow()) { attachments, tools ->
+                .combine(toolsRepository.getAllToolsFlow()) { attachments, tools ->
                     val banners = tools.flatMapTo(mutableSetOf()) {
                         setOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId)
                     }
@@ -508,7 +508,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         private fun Flow<Collection<Locale>>.downloadFavoriteTranslations() = toolsRepository.getFavoriteToolsFlow()
             .downloadTranslations(this)
 
-        private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getToolsFlow()
+        private fun Flow<Collection<Locale>>.downloadAllToolTranslations() = toolsRepository.getNormalToolsFlow()
             .downloadTranslations(this)
 
         private fun Flow<Set<Long>>.downloadAttachments() = this

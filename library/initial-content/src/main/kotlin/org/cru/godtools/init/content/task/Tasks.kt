@@ -64,10 +64,10 @@ internal class Tasks @Inject constructor(
     // region Tool Initial Content Tasks
     suspend fun loadBundledResources() = withContext(Dispatchers.IO) {
         // short-circuit if we already have any resources loaded
-        if (toolsRepository.getResources().isNotEmpty()) return@withContext
+        if (toolsRepository.getAllTools().isNotEmpty()) return@withContext
 
         bundledTools.let { resources ->
-            toolsRepository.storeInitialResources(resources)
+            toolsRepository.storeInitialTools(resources)
             translationsRepository.storeInitialTranslations(resources.flatMap { it.latestTranslations.orEmpty() })
             attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
         }
@@ -76,7 +76,7 @@ internal class Tasks @Inject constructor(
     suspend fun initFavoriteTools() {
         // check to see if we have initialized the default tools before
         if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
-        if (toolsRepository.getTools().any { it.isFavorite }) return
+        if (toolsRepository.getNormalTools().any { it.isFavorite }) return
 
         coroutineScope {
             val preferred = async {

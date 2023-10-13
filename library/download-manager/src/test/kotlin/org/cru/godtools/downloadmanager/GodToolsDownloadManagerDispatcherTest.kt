@@ -61,9 +61,9 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val toolsRepository: ToolsRepository by lazy {
         mockk {
-            every { getResourcesFlow() } returns resourcesFlow
+            every { getAllToolsFlow() } returns resourcesFlow
             every { getFavoriteToolsFlow() } returns favoriteToolsFlow
-            every { getToolsFlow() } returns toolsFlow
+            every { getNormalToolsFlow() } returns toolsFlow
         }
     }
     private val translationsRepository: TranslationsRepository by lazy {

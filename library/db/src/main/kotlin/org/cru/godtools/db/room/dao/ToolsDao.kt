@@ -19,20 +19,16 @@ internal interface ToolsDao {
     @Query("SELECT * FROM tools WHERE code = :code")
     suspend fun findTool(code: String): ToolEntity?
     @Query("SELECT * FROM tools WHERE code = :code")
-    fun findToolBlocking(code: String): ToolEntity?
-    @Query("SELECT * FROM tools WHERE code = :code")
-    fun findToolFlow(code: String): Flow<ToolEntity?>
+    suspend fun findToolFavorite(code: String): ToolFavorite?
     @Query("SELECT * FROM tools WHERE id = :id")
     fun findToolByIdBlocking(id: Long): ToolEntity?
     @Query("SELECT * FROM tools WHERE code = :code")
-    fun findToolFavorite(code: String): ToolFavorite?
+    fun findToolFlow(code: String): Flow<ToolEntity?>
 
     @Query("SELECT * FROM tools")
-    suspend fun getResources(): List<ToolEntity>
+    suspend fun getTools(): List<ToolEntity>
     @Query("SELECT * FROM tools")
-    fun getResourcesBlocking(): List<ToolEntity>
-    @Query("SELECT * FROM tools")
-    fun getResourcesFlow(): Flow<List<ToolEntity>>
+    fun getToolsFlow(): Flow<List<ToolEntity>>
     @Query("SELECT * FROM tools WHERE type in (:types)")
     suspend fun getToolsByType(types: Collection<Tool.Type>): List<ToolEntity>
     @Query("SELECT * FROM tools WHERE type in (:types)")
@@ -53,9 +49,9 @@ internal interface ToolsDao {
     @Update(entity = ToolEntity::class)
     suspend fun updateToolFavorites(tools: Collection<ToolFavorite>)
     @Query("UPDATE tools SET `order` = ${Int.MAX_VALUE}")
-    fun resetToolOrder()
+    suspend fun resetToolOrder()
     @Query("UPDATE tools SET `order` = :order WHERE code = :code")
-    fun updateToolOrder(code: String, order: Int)
+    suspend fun updateToolOrder(code: String, order: Int)
     @Query("UPDATE tools SET pendingShares = pendingShares + :views WHERE code = :code")
     suspend fun updateToolViews(code: String, views: Int)
     @Delete

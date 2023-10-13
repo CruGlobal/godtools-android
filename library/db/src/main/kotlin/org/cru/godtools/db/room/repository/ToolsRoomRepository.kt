@@ -10,29 +10,23 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.partial.SyncTool
-import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.trackChanges
-
-private val TOOL_TYPES = setOf(Tool.Type.TRACT, Tool.Type.CYOA, Tool.Type.ARTICLE)
 
 @Dao
 internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase) : ToolsRepository {
     private val dao get() = db.toolsDao
 
     override suspend fun findTool(code: String) = dao.findTool(code)?.toModel()
-    override fun findResourceBlocking(code: String) = dao.findToolBlocking(code)?.toModel()
     override fun findToolFlow(code: String) = dao.findToolFlow(code).map { it?.toModel() }
 
-    override suspend fun getResources() = dao.getResources().map { it.toModel() }
-    override fun getResourcesBlocking() = dao.getResourcesBlocking().map { it.toModel() }
-    override fun getResourcesFlow() = dao.getResourcesFlow().map { it.map { it.toModel() } }
-    override suspend fun getTools() = dao.getToolsByType(TOOL_TYPES).map { it.toModel() }
-    override fun getToolsFlow() = dao.getToolsByTypeFlow(TOOL_TYPES).map { it.map { it.toModel() } }
+    override suspend fun getAllTools() = dao.getTools().map { it.toModel() }
+    override suspend fun getToolsByType(types: Collection<Tool.Type>) = dao.getToolsByType(types).map { it.toModel() }
+    override fun getAllToolsFlow() = dao.getToolsFlow().map { it.map { it.toModel() } }
+    override fun getToolsFlowByType(types: Collection<Tool.Type>) =
+        dao.getToolsByTypeFlow(types).map { it.map { it.toModel() } }
     override fun getToolsFlowForLanguage(locale: Locale) =
-        dao.getToolsFlowByTypeAndLanguage(TOOL_TYPES, locale).map { it.map { it.toModel() } }
-    override fun getMetaToolsFlow() = dao.getToolsByTypeFlow(setOf(Tool.Type.META)).map { it.map { it.toModel() } }
-    override fun getLessonsFlow() = dao.getToolsByTypeFlow(setOf(Tool.Type.LESSON)).map { it.map { it.toModel() } }
+        dao.getToolsFlowByTypeAndLanguage(Tool.Type.NORMAL_TYPES, locale).map { it.map { it.toModel() } }
 
     override fun toolsChangeFlow(): Flow<Any?> = db.changeFlow("tools")
 
@@ -60,7 +54,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateToolViews(code, delta)
 
-    override suspend fun storeInitialResources(tools: Collection<Resource>) =
+    override suspend fun storeInitialTools(tools: Collection<Tool>) =
         dao.insertOrIgnoreTools(tools.map { ToolEntity(it) })
 
     // region Sync Methods

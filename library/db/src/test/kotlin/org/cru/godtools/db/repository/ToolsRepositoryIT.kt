@@ -18,7 +18,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Resource
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
 import org.cru.godtools.model.Translation
@@ -48,51 +47,27 @@ abstract class ToolsRepositoryIT {
     }
     // endregion findTool()
 
-    // region findResourceBlocking()
-    @Test
-    fun `findResourceBlocking()`() = testScope.runTest {
-        val resource = Resource("tool", Tool.Type.TRACT)
-        repository.storeToolsFromSync(setOf(resource))
-
-        assertNull(repository.findResourceBlocking("other"))
-        assertThat(repository.findResourceBlocking("tool"), tool(resource))
-    }
-    // endregion findResourceBlocking()
-
     // region getResources()
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
+        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
-            repository.getResources(),
+            repository.getAllTools(),
             containsInAnyOrder(resources.map { tool(it) })
         )
     }
     // endregion getResources()
 
-    // region getResourcesBlocking()
+    // region getNormalTools()
     @Test
-    fun `getResourcesBlocking() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(resources)
-
-        assertThat(
-            repository.getResourcesBlocking(),
-            containsInAnyOrder(resources.map { tool(it) })
-        )
-    }
-    // endregion getResourcesBlocking()
-
-    // region getTools()
-    @Test
-    fun `getTools() - Supported Tool Types Only`() = testScope.runTest {
+    fun `getNormalTools() - Supported Tool Types Only`() = testScope.runTest {
         val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(tools)
 
         assertThat(
-            repository.getTools(),
+            repository.getNormalTools(),
             containsInAnyOrder(
                 tools
                     .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
@@ -102,92 +77,92 @@ abstract class ToolsRepositoryIT {
     }
 
     @Test
-    fun `getTools() - Don't filter hidden tools`() = testScope.runTest {
+    fun `getNormalTools() - Don't filter hidden tools`() = testScope.runTest {
         val hidden = Tool("hidden") { isHidden = true }
         val visible = Tool("visible") { isHidden = false }
         repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
-            repository.getTools(),
+            repository.getNormalTools(),
             containsInAnyOrder(tool(hidden), tool(visible))
         )
     }
 
     @Test
-    fun `getTools() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Resource("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
-        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
-        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
-        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
-
-        assertThat(
-            repository.getTools(),
-            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
-        )
-    }
-    // endregion getTools()
-
-    // region getResourcesFlow()
-    @Test
-    fun `getResourcesFlow() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Resource(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(resources)
-
-        assertThat(
-            repository.getResourcesFlow().first(),
-            containsInAnyOrder(resources.map { tool(it) })
-        )
-    }
-    // endregion getResourcesFlow()
-
-    // region getToolsFlow()
-    @Test
-    fun `getToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
-        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(tools)
-
-        assertThat(
-            repository.getToolsFlow().first(),
-            containsInAnyOrder(
-                tools
-                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
-                    .map { tool(it) }
-            )
-        )
-    }
-
-    @Test
-    fun `getToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
-        val hidden = Tool("hidden") { isHidden = true }
-        val visible = Tool("visible") { isHidden = false }
-        repository.storeToolsFromSync(listOf(hidden, visible))
-
-        assertThat(
-            repository.getToolsFlow().first(),
-            containsInAnyOrder(tool(hidden), tool(visible))
-        )
-    }
-
-    @Test
-    fun `getToolsFlow() - Don't filter metatool variants`() = testScope.runTest {
+    fun `getNormalTools() - Don't filter metatool variants`() = testScope.runTest {
         val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
         val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
         val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
         repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
 
         assertThat(
-            repository.getToolsFlow().first(),
+            repository.getNormalTools(),
             containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
         )
     }
-    // endregion getToolsFlow()
+    // endregion getNormalTools()
+
+    // region getAllToolsFlow()
+    @Test
+    fun `getAllToolsFlow() - Returns All Resource Types`() = testScope.runTest {
+        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        repository.storeToolsFromSync(resources)
+
+        assertThat(
+            repository.getAllToolsFlow().first(),
+            containsInAnyOrder(resources.map { tool(it) })
+        )
+    }
+    // endregion getAllToolsFlow()
+
+    // region getNormalToolsFlow()
+    @Test
+    fun `getNormalToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
+        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        repository.storeToolsFromSync(tools)
+
+        assertThat(
+            repository.getNormalToolsFlow().first(),
+            containsInAnyOrder(
+                tools
+                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
+                    .map { tool(it) }
+            )
+        )
+    }
+
+    @Test
+    fun `getNormalToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
+        val hidden = Tool("hidden") { isHidden = true }
+        val visible = Tool("visible") { isHidden = false }
+        repository.storeToolsFromSync(listOf(hidden, visible))
+
+        assertThat(
+            repository.getNormalToolsFlow().first(),
+            containsInAnyOrder(tool(hidden), tool(visible))
+        )
+    }
+
+    @Test
+    fun `getNormalToolsFlow() - Don't filter metatool variants`() = testScope.runTest {
+        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
+        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
+        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
+        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
+
+        assertThat(
+            repository.getNormalToolsFlow().first(),
+            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
+        )
+    }
+    // endregion getNormalToolsFlow()
 
     // region getToolsFlowForLanguage()
     @Test
     fun `getToolsFlowForLanguage()`() = testScope.runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
-        repository.storeInitialResources(listOf(tool1, tool2))
+        repository.storeInitialTools(listOf(tool1, tool2))
         languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
 
         repository.getToolsFlowForLanguage(Locale.ENGLISH).test {
@@ -212,7 +187,7 @@ abstract class ToolsRepositoryIT {
         val tool2 = Tool("tool2") { isFavorite = false }
         val fav1 = Tool("fav1") { isFavorite = true }
         val fav2 = Tool("fav2") { isFavorite = true }
-        repository.storeInitialResources(listOf(tool1, tool2, fav1, fav2))
+        repository.storeInitialTools(listOf(tool1, tool2, fav1, fav2))
 
         assertThat(
             repository.getFavoriteToolsFlow().first(),
@@ -277,7 +252,7 @@ abstract class ToolsRepositoryIT {
                 id = 1
                 code = "tool"
             }
-            repository.storeInitialResources(listOf(tool))
+            repository.storeInitialTools(listOf(tool))
             runCurrent()
             expectMostRecentItem()
 
@@ -292,7 +267,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `pinTool()`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialResources(listOf(Tool(code)))
+        repository.storeInitialTools(listOf(Tool(code)))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -311,7 +286,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `pinTool(trackChanges = false)`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialResources(listOf(Tool(code)))
+        repository.storeInitialTools(listOf(Tool(code)))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -330,7 +305,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `pinTool() - No Change`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialResources(listOf(Tool(code) { isFavorite = true }))
+        repository.storeInitialTools(listOf(Tool(code) { isFavorite = true }))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -351,7 +326,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `unpinTool()`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialResources(listOf(Tool(code) { isFavorite = true }))
+        repository.storeInitialTools(listOf(Tool(code) { isFavorite = true }))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -370,7 +345,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `unpinTool() - No Change`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialResources(listOf(Tool(code) { isFavorite = false }))
+        repository.storeInitialTools(listOf(Tool(code) { isFavorite = false }))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -393,16 +368,16 @@ abstract class ToolsRepositoryIT {
         val tool1 = Tool("tool1") { order = 7 }
         val tool2 = Tool("tool2") { order = 6 }
         val tool3 = Tool("tool3") { order = 5 }
-        repository.storeInitialResources(listOf(tool1, tool2, tool3))
+        repository.storeInitialTools(listOf(tool1, tool2, tool3))
         assertEquals(
             listOf("tool3", "tool2", "tool1"),
-            repository.getTools().sortedBy { it.order }.map { it.code }
+            repository.getNormalTools().sortedBy { it.order }.map { it.code }
         )
 
         repository.storeToolOrder(listOf("tool1", "tool3"))
         assertEquals(
             listOf("tool1", "tool3", "tool2"),
-            repository.getTools().sortedBy { it.order }.map { it.code }
+            repository.getNormalTools().sortedBy { it.order }.map { it.code }
         )
     }
     // endregion storeToolOrder()
@@ -516,7 +491,7 @@ abstract class ToolsRepositoryIT {
     // region storeFavoriteToolsFromSync()
     @Test
     fun `storeFavoriteToolsFromSync()`() = testScope.runTest {
-        repository.storeInitialResources(
+        repository.storeInitialTools(
             listOf(
                 Tool("tool1") { isFavorite = true },
                 Tool("tool2") { isFavorite = false },
@@ -532,7 +507,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `storeFavoriteToolsFromSync() - Handle dirty tools`() = testScope.runTest {
-        repository.storeInitialResources(
+        repository.storeInitialTools(
             listOf(
                 Tool("tool1") { trackChanges { isFavorite = true } },
                 Tool("tool2") {
@@ -577,7 +552,7 @@ abstract class ToolsRepositoryIT {
         val attachment1 = Attachment(tool = tool1)
         val attachment2 = Attachment(tool = tool2)
         val attachment3 = Attachment(tool = tool3)
-        repository.storeInitialResources(listOf(tool1, tool2, tool3))
+        repository.storeInitialTools(listOf(tool1, tool2, tool3))
         attachmentsRepository.storeInitialAttachments(listOf(attachment1, attachment2, attachment3))
         assertNotNull(attachmentsRepository.findAttachment(attachment1.id))
         assertNotNull(attachmentsRepository.findAttachment(attachment2.id))
@@ -597,7 +572,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `deleteIfNotFavorite() - Don't delete favorited tools`() = testScope.runTest {
-        repository.storeInitialResources(listOf(Tool("tool") { isFavorite = true }))
+        repository.storeInitialTools(listOf(Tool("tool") { isFavorite = true }))
         assertNotNull(repository.findTool("tool"))
 
         repository.deleteIfNotFavorite("tool")

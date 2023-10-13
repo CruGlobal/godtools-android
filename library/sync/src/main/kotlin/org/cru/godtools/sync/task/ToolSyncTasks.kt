@@ -66,8 +66,8 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         // store fetched tools
         syncRepository.storeTools(
-            json.data,
-            existingTools = toolsRepository.getResourcesBlocking().mapNotNull { it.code }.toMutableSet(),
+            tools = json.data,
+            existingTools = toolsRepository.getAllTools().mapNotNullTo(mutableSetOf()) { it.code },
             includes = INCLUDES_GET_TOOL
         )
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOLS)
@@ -101,7 +101,7 @@ internal class ToolSyncTasks @Inject internal constructor(
      */
     internal suspend fun syncShares() = coroutineScope {
         sharesMutex.withLock {
-            toolsRepository.getResources()
+            toolsRepository.getAllTools()
                 .filter { it.pendingShares > 0 }
                 .map { tool ->
                     async {
