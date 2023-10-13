@@ -25,6 +25,15 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.random.Random
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertContains
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -49,19 +58,6 @@ import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
 import org.cru.godtools.shared.tool.parser.ParserResult
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.hasItems
-import org.hamcrest.Matchers.not
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -145,7 +141,7 @@ class GodToolsDownloadManagerTest {
     private val file = getTmpFile()
     private val testData = Random.nextBytes(16 * 1024)
 
-    @Before
+    @BeforeTest
     fun setupAttachmentMocks() {
         coEvery { attachmentsRepository.findAttachment(attachment.id) } returns attachment
         coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) }
@@ -166,7 +162,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
-        assertArrayEquals(testData, file.readBytes())
+        assertContentEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
@@ -193,7 +189,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachment.getFile(fs) } returns file
 
         downloadManager.downloadAttachment(attachment.id)
-        assertArrayEquals(testData, file.readBytes())
+        assertContentEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
@@ -237,7 +233,7 @@ class GodToolsDownloadManagerTest {
         coEvery { attachment.getFile(fs) } returns file
 
         testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
-        assertArrayEquals(testData, file.readBytes())
+        assertContentEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
@@ -318,9 +314,9 @@ class GodToolsDownloadManagerTest {
 
             assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
             assertEquals(setOf("manifest.xml", "a.txt", "b.txt"), files.keys)
-            assertArrayEquals("manifest".toByteArray(), files["manifest.xml"]!!.readBytes())
-            assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
-            assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+            assertContentEquals("manifest".toByteArray(), files["manifest.xml"]!!.readBytes())
+            assertContentEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+            assertContentEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
             assertEquals(config.captured.withParseRelated(false), config.captured)
             coVerifyAll {
                 translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
@@ -363,9 +359,9 @@ class GodToolsDownloadManagerTest {
             assertNull(progressFlow.awaitItem())
 
             assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-            assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
-            assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
-            assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
+            assertContentEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+            assertContentEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+            assertContentEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
 
             coVerifyAll {
                 translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
@@ -423,9 +419,9 @@ class GodToolsDownloadManagerTest {
             assertNull(progressFlow.awaitItem())
 
             downloadManager.importTranslation(translation, getInputStreamForResource("abc.zip"), -1)
-            assertArrayEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
-            assertArrayEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
-            assertArrayEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
+            assertContentEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+            assertContentEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
+            assertContentEquals("c".repeat(1024).toByteArray(), files["c.txt"]!!.readBytes())
             coVerifyAll {
                 translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode, true)
                 downloadedFilesRepository.findDownloadedFile("a.txt")
@@ -553,9 +549,9 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsRepository.getAttachments() } returns emptyList()
         coEvery { downloadedFilesRepository.getDownloadedFiles() } returns listOf(DownloadedFile(fileName))
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(file))
+        assertContains(resourcesDir.listFiles()!!, file)
         downloadManager.deleteUnusedDownloadedFiles()
-        assertThat(resourcesDir.listFiles()!!.toSet(), not(hasItems(file)))
+        assertFalse(file in resourcesDir.listFiles()!!)
         verifyOrder {
             downloadedFilesRepository.delete(DownloadedFile(fileName))
             file.delete()
@@ -586,9 +582,11 @@ class GodToolsDownloadManagerTest {
 
         coEvery { fs.file(removeName) } returns remove
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, remove))
+        assertContains(resourcesDir.listFiles()!!, keep)
+        assertContains(resourcesDir.listFiles()!!, remove)
         downloadManager.deleteUnusedDownloadedFiles()
-        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(remove))))
+        assertContains(resourcesDir.listFiles()!!, keep)
+        assertFalse(remove in resourcesDir.listFiles()!!)
         verifyOrder {
             downloadedFilesRepository.delete(DownloadedFile(removeName))
             remove.delete()
@@ -604,9 +602,11 @@ class GodToolsDownloadManagerTest {
         val orphan = getTmpFile(create = true)
         coEvery { downloadedFilesRepository.findDownloadedFile(keep.name) } returns DownloadedFile(keep.name)
 
-        assertThat(resourcesDir.listFiles()!!.toSet(), hasItems(keep, orphan))
+        assertContains(resourcesDir.listFiles()!!, keep)
+        assertContains(resourcesDir.listFiles()!!, orphan)
         downloadManager.deleteOrphanedFiles()
-        assertThat(resourcesDir.listFiles()!!.toSet(), allOf(hasItem(keep), not(hasItem(orphan))))
+        assertContains(resourcesDir.listFiles()!!, keep)
+        assertFalse(orphan in resourcesDir.listFiles()!!)
     }
     // endregion deleteOrphanedFiles()
     // endregion Cleanup

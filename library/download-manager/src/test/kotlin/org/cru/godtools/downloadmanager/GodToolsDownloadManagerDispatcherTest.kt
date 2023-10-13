@@ -12,6 +12,8 @@ import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlin.random.Random
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
@@ -30,8 +32,6 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
-import org.junit.Before
-import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
@@ -75,7 +75,7 @@ class GodToolsDownloadManagerDispatcherTest {
 
     private lateinit var dispatcher: GodToolsDownloadManager.Dispatcher
 
-    @Before
+    @BeforeTest
     fun startDispatcher() {
         dispatcher = GodToolsDownloadManager.Dispatcher(
             attachmentsRepository,
