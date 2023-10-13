@@ -20,9 +20,9 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override suspend fun findTool(code: String) = dao.findTool(code)?.toModel()
     override fun findToolFlow(code: String) = dao.findToolFlow(code).map { it?.toModel() }
 
-    override suspend fun getResources() = dao.getResources().map { it.toModel() }
+    override suspend fun getAllTools() = dao.getTools().map { it.toModel() }
     override suspend fun getToolsByType(types: Collection<Tool.Type>) = dao.getToolsByType(types).map { it.toModel() }
-    override fun getResourcesFlow() = dao.getResourcesFlow().map { it.map { it.toModel() } }
+    override fun getAllToolsFlow() = dao.getToolsFlow().map { it.map { it.toModel() } }
     override fun getToolsFlowByType(types: Collection<Tool.Type>) =
         dao.getToolsByTypeFlow(types).map { it.map { it.toModel() } }
     override fun getToolsFlowForLanguage(locale: Locale) =

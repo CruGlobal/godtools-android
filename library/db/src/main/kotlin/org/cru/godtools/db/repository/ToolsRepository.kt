@@ -9,11 +9,11 @@ interface ToolsRepository {
     suspend fun findTool(code: String): Tool?
     fun findToolFlow(code: String): Flow<Tool?>
 
-    suspend fun getResources(): List<Tool>
+    suspend fun getAllTools(): List<Tool>
     suspend fun getToolsByType(types: Collection<Tool.Type>): List<Tool>
     suspend fun getNormalTools() = getToolsByType(Tool.Type.NORMAL_TYPES)
 
-    fun getResourcesFlow(): Flow<List<Tool>>
+    fun getAllToolsFlow(): Flow<List<Tool>>
     fun getToolsFlowByType(vararg types: Tool.Type) = getToolsFlowByType(types.toSet())
     fun getToolsFlowByType(types: Collection<Tool.Type>): Flow<List<Tool>>
     fun getToolsFlowForLanguage(locale: Locale): Flow<List<Tool>>

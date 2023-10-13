@@ -47,7 +47,7 @@ class UserFavoriteToolsSyncTasksTest {
         coEvery { storeFavoriteTools(any(), any()) } just Runs
     }
     private val toolsRepository: ToolsRepository = mockk {
-        coEvery { getResources() } returns emptyList()
+        coEvery { getAllTools() } returns emptyList()
     }
     private val userApi: UserApi = mockk {
         coEvery { getUser(any()) }
@@ -134,7 +134,7 @@ class UserFavoriteToolsSyncTasksTest {
         )
         val responseTool = Tool("resp")
 
-        coEvery { toolsRepository.getResources() } returns tools
+        coEvery { toolsRepository.getAllTools() } returns tools
         coEvery { favoritesApi.addFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of(responseTool))
 
         assertTrue(tasks.syncDirtyFavoriteTools())
@@ -167,7 +167,7 @@ class UserFavoriteToolsSyncTasksTest {
 
         coEvery { userRepository.findUser(userId) } returns null
         coEvery { userApi.getUser(any()) } returns Response.success(JsonApiObject.single(user))
-        coEvery { toolsRepository.getResources() } returns tools
+        coEvery { toolsRepository.getAllTools() } returns tools
         coEvery { favoritesApi.addFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of(responseTool))
         coExcludeRecords {
             userApi.getUser(any())
@@ -201,7 +201,7 @@ class UserFavoriteToolsSyncTasksTest {
         )
         val responseTool = Tool("resp")
 
-        coEvery { toolsRepository.getResources() } returns tools
+        coEvery { toolsRepository.getAllTools() } returns tools
         coEvery { favoritesApi.removeFavoriteTools(any(), any()) }
             .returns(Response.success(JsonApiObject.of(responseTool)))
 

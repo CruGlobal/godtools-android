@@ -64,7 +64,7 @@ internal class Tasks @Inject constructor(
     // region Tool Initial Content Tasks
     suspend fun loadBundledResources() = withContext(Dispatchers.IO) {
         // short-circuit if we already have any resources loaded
-        if (toolsRepository.getResources().isNotEmpty()) return@withContext
+        if (toolsRepository.getAllTools().isNotEmpty()) return@withContext
 
         bundledTools.let { resources ->
             toolsRepository.storeInitialTools(resources)

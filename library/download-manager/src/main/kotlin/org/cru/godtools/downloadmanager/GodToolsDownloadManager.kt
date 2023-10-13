@@ -489,7 +489,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
             // Tool Banner Attachments
             attachmentsRepository.getAttachmentsFlow()
-                .combine(toolsRepository.getResourcesFlow()) { attachments, tools ->
+                .combine(toolsRepository.getAllToolsFlow()) { attachments, tools ->
                     val banners = tools.flatMapTo(mutableSetOf()) {
                         setOfNotNull(it.bannerId, it.detailsBannerId, it.detailsBannerAnimationId)
                     }

@@ -54,7 +54,7 @@ abstract class ToolsRepositoryIT {
         repository.storeToolsFromSync(resources)
 
         assertThat(
-            repository.getResources(),
+            repository.getAllTools(),
             containsInAnyOrder(resources.map { tool(it) })
         )
     }
@@ -102,18 +102,18 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getNormalTools()
 
-    // region getResourcesFlow()
+    // region getAllToolsFlow()
     @Test
-    fun `getResourcesFlow() - Returns All Resource Types`() = testScope.runTest {
+    fun `getAllToolsFlow() - Returns All Resource Types`() = testScope.runTest {
         val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
-            repository.getResourcesFlow().first(),
+            repository.getAllToolsFlow().first(),
             containsInAnyOrder(resources.map { tool(it) })
         )
     }
-    // endregion getResourcesFlow()
+    // endregion getAllToolsFlow()
 
     // region getNormalToolsFlow()
     @Test

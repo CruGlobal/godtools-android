@@ -26,9 +26,9 @@ internal interface ToolsDao {
     fun findToolFlow(code: String): Flow<ToolEntity?>
 
     @Query("SELECT * FROM tools")
-    suspend fun getResources(): List<ToolEntity>
+    suspend fun getTools(): List<ToolEntity>
     @Query("SELECT * FROM tools")
-    fun getResourcesFlow(): Flow<List<ToolEntity>>
+    fun getToolsFlow(): Flow<List<ToolEntity>>
     @Query("SELECT * FROM tools WHERE type in (:types)")
     suspend fun getToolsByType(types: Collection<Tool.Type>): List<ToolEntity>
     @Query("SELECT * FROM tools WHERE type in (:types)")

@@ -30,7 +30,7 @@ class ToolSyncTasksTest {
         coEvery { storeTools(tools = any(), existingTools = any(), includes = any()) } just Runs
     }
     private val toolsRepository: ToolsRepository = mockk {
-        coEvery { getResources() } returns existingTools
+        coEvery { getAllTools() } returns existingTools
     }
     private val lastSyncTimeRepository: LastSyncTimeRepository = mockk {
         coEvery { isLastSyncStale(*anyVararg(), staleAfter = any()) } returns true
@@ -53,7 +53,7 @@ class ToolSyncTasksTest {
             lastSyncTimeRepository.isLastSyncStale(*anyVararg(), staleAfter = any())
 
             toolsApi.list(any())
-            toolsRepository.getResources()
+            toolsRepository.getAllTools()
 
             syncRepository.storeTools(
                 tools = listOf(tool),
@@ -86,7 +86,7 @@ class ToolSyncTasksTest {
         tasks.syncTools(force = true)
         coVerifySequence {
             toolsApi.list(any())
-            toolsRepository.getResources()
+            toolsRepository.getAllTools()
 
             syncRepository.storeTools(
                 tools = listOf(tool),

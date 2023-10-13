@@ -82,7 +82,7 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
                     ?.also { syncRepository.storeUser(it) }
                 ?: return@coroutineScope false
 
-            val favoritesToAdd = toolsRepository.getResources()
+            val favoritesToAdd = toolsRepository.getAllTools()
                 .filter {
                     (it.isFieldChanged(Tool.ATTR_IS_FAVORITE) || !user.isInitialFavoriteToolsSynced) && it.isFavorite
                 }
@@ -114,7 +114,7 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
                 }
             }
 
-            val favoritesToRemove = toolsRepository.getResources()
+            val favoritesToRemove = toolsRepository.getAllTools()
                 .filter { it.isFieldChanged(Tool.ATTR_IS_FAVORITE) && !it.isFavorite }
 
             if (favoritesToRemove.isNotEmpty()) {
