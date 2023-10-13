@@ -54,7 +54,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateToolViews(code, delta)
 
-    override suspend fun storeInitialResources(tools: Collection<Tool>) =
+    override suspend fun storeInitialTools(tools: Collection<Tool>) =
         dao.insertOrIgnoreTools(tools.map { ToolEntity(it) })
 
     // region Sync Methods

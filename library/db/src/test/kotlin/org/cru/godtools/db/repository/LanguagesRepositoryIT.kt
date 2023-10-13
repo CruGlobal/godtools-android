@@ -122,7 +122,7 @@ abstract class LanguagesRepositoryIT {
         repository.getLanguagesFlowForToolCategory("cat1").test {
             assertThat(awaitItem(), empty())
 
-            toolsRepository.storeInitialResources(
+            toolsRepository.storeInitialTools(
                 listOf(
                     Tool("tool1", category = "cat1"),
                     Tool("tool2", category = "cat2")
@@ -143,7 +143,7 @@ abstract class LanguagesRepositoryIT {
     @Test
     fun `getLanguagesFlowForToolCategory() - No Duplicate Languages`() = testScope.runTest {
         val english = Language(Locale.ENGLISH)
-        toolsRepository.storeInitialResources(
+        toolsRepository.storeInitialTools(
             listOf(
                 Tool("tool1", category = "cat1"),
                 Tool("tool2", category = "cat1")

@@ -32,7 +32,7 @@ interface ToolsRepository {
     suspend fun updateToolViews(code: String, delta: Int)
 
     // region Initial Content Methods
-    suspend fun storeInitialResources(tools: Collection<Tool>)
+    suspend fun storeInitialTools(tools: Collection<Tool>)
     // endregion Initial Content Methods
 
     // region Sync Methods
