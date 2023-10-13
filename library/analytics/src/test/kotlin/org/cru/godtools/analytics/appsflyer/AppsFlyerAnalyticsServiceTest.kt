@@ -8,8 +8,8 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Before
-import org.junit.Test
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -19,7 +19,7 @@ class AppsFlyerAnalyticsServiceTest {
 
     private lateinit var analyticsService: AppsFlyerAnalyticsService
 
-    @Before
+    @BeforeTest
     fun setupMocks() {
         deepLinkResolver = mockk {
             every { resolve(any(), any(), any()) } returns null

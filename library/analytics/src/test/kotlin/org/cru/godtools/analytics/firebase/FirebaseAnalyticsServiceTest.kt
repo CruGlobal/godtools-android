@@ -9,6 +9,8 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
 import io.mockk.verifyOrder
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
@@ -19,8 +21,6 @@ import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.model.User
 import org.cru.godtools.user.data.UserManager
 import org.greenrobot.eventbus.EventBus
-import org.junit.Before
-import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FirebaseAnalyticsServiceTest {
@@ -38,7 +38,7 @@ class FirebaseAnalyticsServiceTest {
 
     private lateinit var analyticsService: FirebaseAnalyticsService
 
-    @Before
+    @BeforeTest
     fun setupMocks() {
         mockkStatic("com.google.android.gms.common.wrappers.InstantApps") {
             every { InstantApps.isInstantApp(any()) } returns false
