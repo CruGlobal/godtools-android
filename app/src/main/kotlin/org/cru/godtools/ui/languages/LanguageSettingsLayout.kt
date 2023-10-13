@@ -34,6 +34,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -65,7 +66,7 @@ internal fun LanguageSettingsLayout(
                 colors = GodToolsTheme.topAppBarColors,
                 navigationIcon = {
                     IconButton(onClick = { onEvent(LanguageSettingsEvent.NavigateUp) }) {
-                        Icon(Icons.Filled.ArrowBack, null)
+                        Icon(Icons.Filled.ArrowBack, null, Modifier.autoMirror())
                     }
                 },
             )

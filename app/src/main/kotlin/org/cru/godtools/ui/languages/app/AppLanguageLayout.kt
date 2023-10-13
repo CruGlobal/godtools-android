@@ -39,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
+import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringResource
 import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.R
@@ -64,7 +65,7 @@ internal fun AppLanguageLayout(
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = { onEvent(AppLanguageEvent.NavigateBack) }) {
-                        Icon(Icons.Filled.ArrowBack, null)
+                        Icon(Icons.Filled.ArrowBack, null, Modifier.autoMirror())
                     }
                 },
                 title = { Text(stringResource(R.string.language_settings_app_language_title)) },
