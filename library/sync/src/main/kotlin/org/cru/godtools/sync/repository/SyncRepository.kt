@@ -32,7 +32,7 @@ internal class SyncRepository @Inject constructor(
         tools: List<Tool>,
         existingTools: MutableSet<String>? = null,
         includes: Includes,
-    ) = coroutineScope {
+    ): Unit = coroutineScope {
         val validTools = tools.filter { it.isValid }
         if (validTools.isNotEmpty()) toolsRepository.storeToolsFromSync(validTools)
 
