@@ -1,8 +1,8 @@
 package org.cru.godtools.api.model
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
 class AuthTokenTest {
     // region jsonapi parsing
