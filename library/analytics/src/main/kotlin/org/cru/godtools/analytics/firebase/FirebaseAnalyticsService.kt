@@ -13,12 +13,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.BuildConfig
 import org.cru.godtools.analytics.model.AnalyticsActionEvent
 import org.cru.godtools.analytics.model.AnalyticsBaseEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.analytics.model.AnalyticsSystem
+import org.cru.godtools.shared.analytics.AnalyticsUserProperties
 import org.cru.godtools.user.data.UserManager
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -33,7 +35,6 @@ private const val VALUE_APP_TYPE_INSTANT = "instant"
 private const val VALUE_APP_TYPE_INSTALLED = "installed"
 
 private const val USER_PROP_DEBUG = "debug"
-private const val USER_PROP_LOGGED_IN_STATUS = "cru_loggedinstatus"
 private const val USER_PROP_SSO_GUID = "cru_ssoguid"
 private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
 
@@ -49,7 +50,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     eventBus: EventBus,
     userManager: UserManager,
     private val firebase: FirebaseAnalytics,
-    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
 ) {
     @Inject
     @MainThread
@@ -108,8 +109,18 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
             }
             .launchIn(coroutineScope)
 
-        accountManager.isAuthenticatedFlow
-            .onEach { firebase.setUserProperty(USER_PROP_LOGGED_IN_STATUS, "$it") }
+        accountManager.authenticatedAccountTypeFlow
+            .onEach {
+                firebase.setUserProperty(AnalyticsUserProperties.LOGGED_IN_STATUS, "${it != null}")
+                firebase.setUserProperty(
+                    AnalyticsUserProperties.LOGIN_PROVIDER,
+                    when (it) {
+                        AccountType.FACEBOOK -> AnalyticsUserProperties.LOGIN_PROVIDER_FACEBOOK
+                        AccountType.GOOGLE -> AnalyticsUserProperties.LOGIN_PROVIDER_GOOGLE
+                        null -> null
+                    }
+                )
+            }
             .launchIn(coroutineScope)
 
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
