@@ -42,6 +42,7 @@ class Attachment : Base() {
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
+@Suppress("ktlint:standard:function-naming")
 fun Attachment(
     id: Long = Random.nextLong(),
     tool: Tool? = null,

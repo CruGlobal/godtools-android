@@ -39,10 +39,7 @@ import org.cru.godtools.ui.languages.LanguageName
 private val POPUP_MAX_HEIGHT = 600.dp
 
 @Composable
-internal fun ToolFilters(
-    modifier: Modifier = Modifier,
-    viewModel: ToolsViewModel = viewModel(),
-) = Column(modifier = modifier.fillMaxWidth()) {
+internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) = Column(modifier.fillMaxWidth()) {
     Text(
         stringResource(R.string.dashboard_tools_section_filter_label),
         style = MaterialTheme.typography.titleLarge,

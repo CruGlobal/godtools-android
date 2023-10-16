@@ -29,6 +29,7 @@ import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 
 @Composable
 @Preview(showBackground = true)
+@Suppress("ktlint:standard:function-signature")
 internal fun TutorialOnboardingLinksLayout(
     modifier: Modifier = Modifier,
     onTutorialAction: (Action) -> Unit = {},
@@ -91,12 +92,7 @@ internal fun TutorialOnboardingLinksLayout(
 }
 
 @Composable
-private fun LinkBox(
-    description: String,
-    action: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = Surface(
+private fun LinkBox(description: String, action: String, onClick: () -> Unit, modifier: Modifier = Modifier) = Surface(
     onClick = onClick,
     color = MaterialTheme.colorScheme.surfaceVariant,
     shape = RectangleShape,

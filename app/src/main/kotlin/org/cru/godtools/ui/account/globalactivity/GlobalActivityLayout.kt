@@ -70,11 +70,9 @@ fun AccountGlobalActivityLayout() = Column(modifier = Modifier.padding(horizonta
 }
 
 @Composable
-private fun GlobalActivityCard(
-    label: String,
-    count: Int,
-    modifier: Modifier = Modifier
-) = ElevatedCard(modifier = modifier.heightIn(min = 128.dp)) {
+private fun GlobalActivityCard(label: String, count: Int, modifier: Modifier = Modifier) = ElevatedCard(
+    modifier = modifier.heightIn(min = 128.dp)
+) {
     val labelStyle = MaterialTheme.typography.bodyMedium
 
     Spacer(Modifier.weight(1f))

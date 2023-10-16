@@ -32,6 +32,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
+import org.cru.godtools.account.provider.google.GoogleAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import org.junit.runner.RunWith
@@ -75,7 +76,7 @@ class GoogleAccountProviderTest {
     @Test
     fun `userIdFlow()`() = runTest {
         val account = GoogleSignInAccount.createDefault()
-        provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId) }
+        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
 
         provider.userIdFlow().test {
             runCurrent()
@@ -102,12 +103,12 @@ class GoogleAccountProviderTest {
             lastSignedInAccount.value = account
             runCurrent()
 
-            provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId) }
+            provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
             runCurrent()
             assertEquals(userId, expectMostRecentItem())
 
             val userId2 = UUID.randomUUID().toString()
-            provider.prefs.edit { putString(GoogleAccountProvider.PREF_USER_ID(account), userId2) }
+            provider.prefs.edit { putString(account.PREF_USER_ID, userId2) }
             runCurrent()
             assertEquals(userId2, expectMostRecentItem())
         }
@@ -143,7 +144,7 @@ class GoogleAccountProviderTest {
         }
         assertEquals(
             userId,
-            provider.prefs.getString(GoogleAccountProvider.PREF_USER_ID(lastSignedInAccount.value!!), "")
+            provider.prefs.getString(lastSignedInAccount.value!!.PREF_USER_ID, "")
         )
     }
 

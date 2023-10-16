@@ -104,7 +104,11 @@ internal fun AllFavoritesList(
 
 @Composable
 private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boolean) {
-    val dragState = remember { object { var start: DragInteraction.Start? = null } }
+    val dragState = remember {
+        object {
+            var start: DragInteraction.Start? = null
+        }
+    }
     LaunchedEffect(isDragging) {
         when (val start = dragState.start) {
             null -> if (isDragging) dragState.start = DragInteraction.Start().also { emit(it) }

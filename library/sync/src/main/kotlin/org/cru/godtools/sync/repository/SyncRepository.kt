@@ -28,25 +28,22 @@ internal class SyncRepository @Inject constructor(
     private val userRepository: UserRepository,
 ) {
     // region Tools
-    suspend fun storeTools(
-        tools: List<Tool>,
-        existingTools: MutableSet<String>? = null,
-        includes: Includes,
-    ): Unit = coroutineScope {
-        val validTools = tools.filter { it.isValid }
-        if (validTools.isNotEmpty()) toolsRepository.storeToolsFromSync(validTools)
+    suspend fun storeTools(tools: List<Tool>, existingTools: MutableSet<String>? = null, includes: Includes): Unit =
+        coroutineScope {
+            val validTools = tools.filter { it.isValid }
+            if (validTools.isNotEmpty()) toolsRepository.storeToolsFromSync(validTools)
 
-        val nestedTools = validTools
-            .map { async { processIncludes(it, includes) } }
-            .awaitAll()
-            .flatMapTo(mutableSetOf()) { it }
+            val nestedTools = validTools
+                .map { async { processIncludes(it, includes) } }
+                .awaitAll()
+                .flatMapTo(mutableSetOf()) { it }
 
-        existingTools?.removeAll(validTools.mapTo(mutableSetOf()) { it.code })
-        existingTools?.removeAll(nestedTools)
+            existingTools?.removeAll(validTools.mapTo(mutableSetOf()) { it.code })
+            existingTools?.removeAll(nestedTools)
 
-        // prune any existing tools that weren't synced and aren't already added to the device
-        existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
-    }
+            // prune any existing tools that weren't synced and aren't already added to the device
+            existingTools?.forEach { toolsRepository.deleteIfNotFavorite(it) }
+        }
 
     /**
      * @return the tool codes that were stored in the database

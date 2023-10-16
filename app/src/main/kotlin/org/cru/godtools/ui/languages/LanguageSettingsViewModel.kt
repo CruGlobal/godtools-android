@@ -34,7 +34,7 @@ internal class LanguageSettingsViewModel @Inject constructor(
 
     val pinnedLanguages = languagesRepository.getPinnedLanguagesFlow()
         .combine(settings.appLanguageFlow) { pinned, app ->
-            pinned.sortedWith(Language.COMPARATOR_DISPLAY_NAME(context, app))
+            pinned.sortedWith(Language.displayNameComparator(context, app))
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 }

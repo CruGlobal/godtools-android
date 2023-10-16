@@ -235,7 +235,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     // region Tool state
     enum class LoadingState {
-        LOADING, LOADED, NOT_FOUND, INVALID_TYPE, OFFLINE;
+        LOADING,
+        LOADED,
+        NOT_FOUND,
+        INVALID_TYPE,
+        OFFLINE;
 
         companion object {
             fun determineToolState(

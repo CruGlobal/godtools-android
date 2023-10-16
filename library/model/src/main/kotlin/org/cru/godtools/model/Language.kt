@@ -24,10 +24,10 @@ class Language : Base() {
 
         val INVALID_CODE = Locale("x", "inv")
 
-        fun COMPARATOR_DISPLAY_NAME(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
+        fun displayNameComparator(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
             compareBy(displayLocale.primaryCollator) { it.getDisplayName(context, displayLocale) }
 
-        fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
+        private fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
             associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.primaryCollator)
 
         fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
@@ -67,14 +67,12 @@ class Language : Base() {
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
-fun Language(
-    code: Locale = Locale.ENGLISH,
-    isAdded: Boolean = false,
-    config: Language.() -> Unit = {},
-) = Language().apply {
-    id = Random.nextLong()
-    this.code = code
-    name = UUID.randomUUID().toString()
-    this.isAdded = isAdded
-    config()
-}
+@Suppress("ktlint:standard:function-naming")
+fun Language(code: Locale = Locale.ENGLISH, isAdded: Boolean = false, config: Language.() -> Unit = {}) =
+    Language().apply {
+        id = Random.nextLong()
+        this.code = code
+        name = UUID.randomUUID().toString()
+        this.isAdded = isAdded
+        config()
+    }

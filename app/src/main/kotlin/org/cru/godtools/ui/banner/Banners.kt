@@ -13,15 +13,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
-internal fun Banners(
-    banner: () -> BannerType?,
-    modifier: Modifier = Modifier
-) = Box(modifier = modifier.heightIn(min = 1.dp)) {
+internal fun Banners(banner: () -> BannerType?, modifier: Modifier = Modifier) = Box(modifier.heightIn(min = 1.dp)) {
     AnimatedContent(
         targetState = banner(),
         transitionSpec = {
             slideInVertically(initialOffsetY = { -it }) with slideOutVertically(targetOffsetY = { -it })
-        }
+        },
+        label = "Banner Visibility",
     ) {
         when (it) {
             BannerType.TOOL_LIST_FAVORITES -> FavoriteToolsBanner()

@@ -41,10 +41,7 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun TutorialLayout(
-    pageSet: PageSet,
-    onTutorialAction: (Action) -> Unit = {},
-) {
+internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val locale = context.deviceLocale ?: Locale.getDefault()

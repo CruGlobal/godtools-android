@@ -87,6 +87,7 @@ fun Translation?.getTagline(tool: Tool?) = this?.tagline ?: getDescription(tool)
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
+@Suppress("ktlint:standard:function-naming")
 fun Translation(
     toolCode: String = UUID.randomUUID().toString(),
     languageCode: Locale = Locale.ENGLISH,

@@ -91,10 +91,7 @@ sealed interface ToolDetailsEvent {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun ToolDetailsLayout(
-    viewModel: ToolDetailsViewModel = viewModel(),
-    onEvent: (ToolDetailsEvent) -> Unit = {},
-) = DrawerMenuLayout {
+fun ToolDetailsLayout(viewModel: ToolDetailsViewModel, onEvent: (ToolDetailsEvent) -> Unit = {}) = DrawerMenuLayout {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -251,10 +248,7 @@ private fun ToolDetailsContent(
 }
 
 @Composable
-private fun ToolDetailsBanner(
-    toolViewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier
-) {
+private fun ToolDetailsBanner(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
     val tool by toolViewModel.tool.collectAsState()
     val banner = toolViewModel.detailsBanner.collectAsState().value
     val bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value

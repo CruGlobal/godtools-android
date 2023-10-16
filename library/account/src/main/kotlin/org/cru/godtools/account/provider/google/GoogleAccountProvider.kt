@@ -35,9 +35,9 @@ internal class GoogleAccountProvider @Inject constructor(
     @ApplicationContext private val context: Context,
     private val googleSignInClient: GoogleSignInClient,
 ) : AccountProvider {
-    @VisibleForTesting
-    internal companion object {
-        fun PREF_USER_ID(account: GoogleSignInAccount) = "${PREF_USER_ID_PREFIX}${account.id}"
+    companion object {
+        @VisibleForTesting
+        internal val GoogleSignInAccount.PREF_USER_ID get() = "$PREF_USER_ID_PREFIX$id"
     }
 
     @VisibleForTesting
@@ -46,10 +46,10 @@ internal class GoogleAccountProvider @Inject constructor(
 
     override val isAuthenticated get() = GoogleSignIn.getLastSignedInAccount(context) != null
     override val userId get() = GoogleSignIn.getLastSignedInAccount(context)
-        ?.let { prefs.getString(PREF_USER_ID(it), null) }
+        ?.let { prefs.getString(it.PREF_USER_ID, null) }
     override fun isAuthenticatedFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context).map { it != null }
     override fun userIdFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context)
-        .flatMapLatest { it?.let { prefs.getStringFlow(PREF_USER_ID(it), null) } ?: flowOf(null) }
+        .flatMapLatest { it?.let { prefs.getStringFlow(it.PREF_USER_ID, null) } ?: flowOf(null) }
 
     // region Login/Logout
     override suspend fun login(state: AccountProvider.LoginState) {
@@ -78,7 +78,7 @@ internal class GoogleAccountProvider @Inject constructor(
         }
 
         val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle ?: return null
-        prefs.edit { putString(PREF_USER_ID(account), token.userId) }
+        prefs.edit { putString(account.PREF_USER_ID, token.userId) }
         return token
     }
 

@@ -44,10 +44,8 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
     override fun getTranslationsFlow() = dao.getTranslationsFlow().map { it.map { it.toModel() } }
     override fun getTranslationsForToolsFlow(tools: Collection<String>) =
         dao.getTranslationsForToolsFlow(tools).map { it.map { it.toModel() } }
-    override fun getTranslationsForToolsAndLocalesFlow(
-        tools: Collection<String>,
-        locales: Collection<Locale>,
-    ) = dao.getTranslationsForToolsAndLocalesFlow(tools, locales).map { it.map { it.toModel() } }
+    override fun getTranslationsForToolsAndLocalesFlow(tools: Collection<String>, locales: Collection<Locale>) =
+        dao.getTranslationsForToolsAndLocalesFlow(tools, locales).map { it.map { it.toModel() } }
 
     override fun translationsChangeFlow(): Flow<Any?> = db.changeFlow("translations")
 

@@ -185,6 +185,7 @@ class Tool : Base(), ChangeTrackingModel {
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
+@Suppress("ktlint:standard:function-naming")
 fun Tool(
     code: String,
     type: Tool.Type = Tool.Type.TRACT,

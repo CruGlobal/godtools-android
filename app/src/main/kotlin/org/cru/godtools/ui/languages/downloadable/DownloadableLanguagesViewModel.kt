@@ -41,7 +41,7 @@ class DownloadableLanguagesViewModel @Inject constructor(
                 ?: it.filter { it.isAdded }.map { it.code }.toSet().also { floatedLanguages = it }
             it.sortedWith(
                 compareByDescending<Language> { it.code in floated }
-                    .then(Language.COMPARATOR_DISPLAY_NAME(context))
+                    .then(Language.displayNameComparator(context))
             )
         }
         .flowOn(Dispatchers.Default)
