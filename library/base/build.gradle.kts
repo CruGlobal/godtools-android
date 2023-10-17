@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
+    implementation(libs.gtoSupport.androidx.core)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.util)
