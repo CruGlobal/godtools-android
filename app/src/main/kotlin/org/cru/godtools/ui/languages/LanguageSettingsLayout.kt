@@ -41,9 +41,9 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 
 internal sealed interface LanguageSettingsEvent {
-    object NavigateUp : LanguageSettingsEvent
-    object AppLanguage : LanguageSettingsEvent
-    object DownloadableLanguages : LanguageSettingsEvent
+    data object NavigateUp : LanguageSettingsEvent
+    data object AppLanguage : LanguageSettingsEvent
+    data object DownloadableLanguages : LanguageSettingsEvent
 }
 
 private const val SECTION_APP_LANGUAGE = "app_language"
