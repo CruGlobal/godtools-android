@@ -40,10 +40,7 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(
-    createAccount: Boolean = false,
-    onEvent: (event: LoginLayoutEvent) -> Unit
-) {
+fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

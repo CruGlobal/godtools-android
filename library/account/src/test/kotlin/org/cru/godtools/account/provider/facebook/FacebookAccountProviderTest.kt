@@ -30,6 +30,7 @@ import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
+import org.cru.godtools.account.provider.facebook.FacebookAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import org.junit.runner.RunWith
@@ -74,7 +75,7 @@ class FacebookAccountProviderTest {
         val user = UUID.randomUUID().toString()
         val token = accessToken()
         currentAccessTokenFlow.value = token
-        provider.prefs.edit { putString(FacebookAccountProvider.PREF_USER_ID(token), user) }
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
         assertEquals(user, provider.userId)
     }
 
@@ -83,7 +84,7 @@ class FacebookAccountProviderTest {
     fun `userIdFlow()`() = runTest {
         val user = UUID.randomUUID().toString()
         val token = accessToken()
-        provider.prefs.edit { putString(FacebookAccountProvider.PREF_USER_ID(token), user) }
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
 
         provider.userIdFlow().test {
             assertNull(expectMostRecentItem())
@@ -108,7 +109,7 @@ class FacebookAccountProviderTest {
             runCurrent()
             assertNull(expectMostRecentItem())
 
-            provider.prefs.edit { putString(FacebookAccountProvider.PREF_USER_ID(token), user) }
+            provider.prefs.edit { putString(token.PREF_USER_ID, user) }
             runCurrent()
             assertEquals(user, expectMostRecentItem())
         }

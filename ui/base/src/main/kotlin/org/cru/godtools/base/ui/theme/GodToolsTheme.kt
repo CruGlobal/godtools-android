@@ -21,8 +21,6 @@ import org.cru.godtools.base.ui.compose.CompositionLocals
 import org.cru.godtools.base.ui.theme.GodToolsTheme.LocalLightColorSchemeActive
 import org.cru.godtools.ui.BuildConfig
 
-const val DisabledAlpha = 0.38f
-
 @OptIn(ExperimentalMaterial3Api::class)
 object GodToolsTheme {
     val GT_BLUE = Color(red = 0x3B, green = 0xA4, blue = 0xDB)

@@ -37,20 +37,19 @@ fun Tool?.getCategory(context: Context, locale: Locale? = null) = getToolCategor
 fun getToolCategoryName(category: String?, context: Context, locale: Locale? = null) =
     category?.let { c -> context.localizeIfPossible(locale).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
-private fun Context.getToolCategoryStringRes(category: String) =
-    when (category.lowercase(Locale.ROOT)) {
-        "gospel" -> getString(R.string.tool_category_gospel)
-        "articles" -> getString(R.string.tool_category_articles)
-        "conversation_starter" -> getString(R.string.tool_category_conversation_starter)
-        "growth" -> getString(R.string.tool_category_growth)
-        "training" -> getString(R.string.tool_category_training)
-        else -> {
-            val e = Resources.NotFoundException("tool_category_$category was not found")
-            when {
-                BuildConfig.DEBUG -> throw e
-                else -> Timber.tag("ToolCategory").e(e, "Missing Tool Category string: $category")
-            }
-            null
+private fun Context.getToolCategoryStringRes(category: String) = when (category.lowercase(Locale.ROOT)) {
+    "gospel" -> getString(R.string.tool_category_gospel)
+    "articles" -> getString(R.string.tool_category_articles)
+    "conversation_starter" -> getString(R.string.tool_category_conversation_starter)
+    "growth" -> getString(R.string.tool_category_growth)
+    "training" -> getString(R.string.tool_category_training)
+    else -> {
+        val e = Resources.NotFoundException("tool_category_$category was not found")
+        when {
+            BuildConfig.DEBUG -> throw e
+            else -> Timber.tag("ToolCategory").e(e, "Missing Tool Category string: $category")
         }
+        null
     }
+}
 // endregion Tool Category

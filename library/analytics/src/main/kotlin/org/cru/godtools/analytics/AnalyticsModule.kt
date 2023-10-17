@@ -25,10 +25,8 @@ object AnalyticsModule {
     @Provides
     @ElementsIntoSet
     @EagerSingleton(threadMode = ThreadMode.MAIN)
-    internal fun mainEagerSingletons(
-        firebase: FirebaseAnalyticsService,
-        user: UserAnalyticsService,
-    ) = setOf(firebase, user)
+    internal fun mainEagerSingletons(firebase: FirebaseAnalyticsService, user: UserAnalyticsService) =
+        setOf(firebase, user)
 
     @Provides
     @ElementsIntoSet

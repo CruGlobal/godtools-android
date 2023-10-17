@@ -70,10 +70,7 @@ internal sealed interface DashboardEvent {
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(
-    onEvent: (DashboardEvent) -> Unit,
-    viewModel: DashboardViewModel = viewModel(),
-) {
+internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 

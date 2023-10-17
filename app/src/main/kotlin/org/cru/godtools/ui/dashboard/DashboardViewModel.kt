@@ -24,7 +24,7 @@ class DashboardViewModel @Inject constructor(
     // region Page Stack
     private var pageStack: List<Page>
         get() = savedState.get<List<Page>>(KEY_PAGE_STACK)?.toList() ?: listOf(Page.DEFAULT)
-        set(value) { savedState[KEY_PAGE_STACK] = ArrayList(value) }
+        set(value) = savedState.set(KEY_PAGE_STACK, ArrayList(value))
     private val pageStackFlow = savedState.getStateFlow(KEY_PAGE_STACK, listOf(Page.DEFAULT))
 
     val hasBackStack = pageStackFlow

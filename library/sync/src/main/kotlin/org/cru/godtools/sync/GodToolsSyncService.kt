@@ -54,20 +54,19 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     private inline fun <reified T : BaseSyncTasks, R : Any?> with(block: T.() -> R) =
         requireNotNull(syncTasks[T::class.java]?.get() as? T) { "${T::class.simpleName} not injected" }.block()
 
-    private suspend inline fun <reified T : BaseSyncTasks> executeSync(
-        crossinline block: suspend T.() -> Boolean,
-    ) = withContext(coroutineDispatcher) {
-        try {
-            with<T, Boolean> { block() }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: IOException) {
-            false
-        } catch (e: Exception) {
-            Timber.tag(TAG).e(e, "Unhandled sync exception")
-            false
+    private suspend inline fun <reified T : BaseSyncTasks> executeSync(crossinline block: suspend T.() -> Boolean) =
+        withContext(coroutineDispatcher) {
+            try {
+                with<T, Boolean> { block() }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: IOException) {
+                false
+            } catch (e: Exception) {
+                Timber.tag(TAG).e(e, "Unhandled sync exception")
+                false
+            }
         }
-    }
 
     // region Sync Tasks
     suspend fun syncLanguages(force: Boolean = false) = try {

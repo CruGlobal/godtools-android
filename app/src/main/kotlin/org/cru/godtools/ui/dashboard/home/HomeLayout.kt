@@ -65,10 +65,7 @@ internal sealed interface DashboardHomeEvent {
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun HomeContent(
-    onEvent: (DashboardHomeEvent) -> Unit,
-    viewModel: HomeViewModel = viewModel(),
-) {
+internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeViewModel = viewModel()) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
     val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
@@ -254,10 +251,7 @@ private fun HorizontalFavoriteTools(
 
 @Preview
 @Composable
-private fun NoFavoriteTools(
-    modifier: Modifier = Modifier,
-    onEvent: (DashboardHomeEvent) -> Unit = {},
-) = Surface(
+private fun NoFavoriteTools(modifier: Modifier = Modifier, onEvent: (DashboardHomeEvent) -> Unit = {}) = Surface(
     color = MaterialTheme.colorScheme.surfaceVariant,
     shape = RectangleShape,
     modifier = modifier

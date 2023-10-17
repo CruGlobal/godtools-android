@@ -24,13 +24,12 @@ internal abstract class GoogleModule {
     companion object {
         @Provides
         @Reusable
-        fun googleSignInOptions(
-            config: GoogleBuildConfig
-        ) = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(config.serverClientId)
-            .requestEmail()
-            .requestProfile()
-            .build()
+        fun googleSignInOptions(config: GoogleBuildConfig) =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(config.serverClientId)
+                .requestEmail()
+                .requestProfile()
+                .build()
 
         @Provides
         @Singleton

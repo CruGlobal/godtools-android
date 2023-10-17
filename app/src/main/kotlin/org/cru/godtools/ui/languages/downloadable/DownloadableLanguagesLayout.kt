@@ -117,10 +117,7 @@ fun DownloadableLanguagesLayout(
 }
 
 @Composable
-private fun LanguageListItem(
-    viewModel: LanguageViewModels.LanguageViewModel,
-    modifier: Modifier = Modifier,
-) {
+private fun LanguageListItem(viewModel: LanguageViewModels.LanguageViewModel, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
     val language by viewModel.language.collectAsState()
     val toolsAvailable by viewModel.numberOfTools.collectAsState()

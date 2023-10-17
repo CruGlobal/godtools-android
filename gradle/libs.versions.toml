@@ -22,7 +22,7 @@ gtoSupport = "4.2.0-SNAPSHOT"
 kotlin = "1.9.10"
 kotlinCoroutines = "1.7.3"
 kotlinKover = "0.7.4"
-ktlint = "0.50.0"
+ktlint = "1.0.1"
 ktlintGradle = "11.6.1"
 lottie = "6.1.0"
 okhttp3 = "4.11.0"
@@ -206,7 +206,7 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0"
 
 # HACK: dependencies used to trigger renovate upgrades
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
-ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
+ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]

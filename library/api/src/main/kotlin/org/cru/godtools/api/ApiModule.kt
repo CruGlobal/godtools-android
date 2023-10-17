@@ -51,7 +51,8 @@ object ApiModule {
     @Provides
     @Singleton
     fun okhttp(
-        @InterceptorType(NETWORK_INTERCEPTOR) networkInterceptors: Set<@JvmSuppressWildcards Interceptor>,
+        @InterceptorType(NETWORK_INTERCEPTOR)
+        networkInterceptors: Set<@JvmSuppressWildcards Interceptor>,
     ) = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
@@ -144,15 +145,13 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun userCountersApi(
-        @Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit,
-    ): UserCountersApi = retrofit.create()
+    fun userCountersApi(@Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit): UserCountersApi =
+        retrofit.create()
 
     @Provides
     @Reusable
-    fun userFavoriteToolsApi(
-        @Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit,
-    ): UserFavoriteToolsApi = retrofit.create()
+    fun userFavoriteToolsApi(@Named(MOBILE_CONTENT_API_AUTHENTICATED) retrofit: Retrofit): UserFavoriteToolsApi =
+        retrofit.create()
 
     @Provides
     @Reusable
@@ -189,10 +188,9 @@ object ApiModule {
     // region Adobe APIs
     @Provides
     @Reusable
-    fun campaignFormsApi(okhttp: OkHttpClient) =
-        Retrofit.Builder().baseUrl(BuildConfig.CAMPAIGN_FORMS_API)
-            .addConverterFactory(JSONObjectConverterFactory)
-            .callFactory(okhttp)
-            .build().create<CampaignFormsApi>()
+    fun campaignFormsApi(okhttp: OkHttpClient) = Retrofit.Builder().baseUrl(BuildConfig.CAMPAIGN_FORMS_API)
+        .addConverterFactory(JSONObjectConverterFactory)
+        .callFactory(okhttp)
+        .build().create<CampaignFormsApi>()
     // endregion Adobe APIs
 }

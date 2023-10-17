@@ -6,16 +6,8 @@ import org.cru.godtools.model.Translation
 
 interface TranslationsRepository {
     suspend fun findTranslation(id: Long): Translation?
-    suspend fun findLatestTranslation(
-        code: String?,
-        locale: Locale?,
-        downloadedOnly: Boolean = false
-    ): Translation?
-    fun findLatestTranslationFlow(
-        code: String?,
-        locale: Locale?,
-        downloadedOnly: Boolean = false,
-    ): Flow<Translation?>
+    suspend fun findLatestTranslation(code: String?, locale: Locale?, downloadedOnly: Boolean = false): Translation?
+    fun findLatestTranslationFlow(code: String?, locale: Locale?, downloadedOnly: Boolean = false): Flow<Translation?>
 
     suspend fun getTranslations(): List<Translation>
     suspend fun getTranslationsForTool(tool: String): List<Translation>

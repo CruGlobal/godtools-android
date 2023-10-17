@@ -29,10 +29,7 @@ internal sealed interface DashboardLessonsEvent {
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun LessonsLayout(
-    viewModel: LessonsViewModel = viewModel(),
-    onEvent: (DashboardLessonsEvent) -> Unit = {},
-) {
+internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (DashboardLessonsEvent) -> Unit = {}) {
     val lessons by viewModel.lessons.collectAsState()
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
         item("header", "header") { LessonsHeader() }

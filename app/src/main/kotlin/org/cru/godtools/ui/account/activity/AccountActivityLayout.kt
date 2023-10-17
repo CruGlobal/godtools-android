@@ -34,9 +34,9 @@ import org.cru.godtools.shared.user.activity.model.UserActivity
 import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
-fun AccountActivityLayout(
-    modifier: Modifier = Modifier,
-) = Column(modifier = modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)) {
+fun AccountActivityLayout(modifier: Modifier = Modifier) = Column(
+    modifier = modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
+) {
     val viewModel = viewModel<AccountActivityViewModel>()
     val activity by viewModel.userActivity.collectAsState()
 
