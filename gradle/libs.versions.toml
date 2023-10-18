@@ -93,7 +93,7 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", ve
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:21.1.0"
 firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:20.3.5"
-firebase-messaging = "com.google.firebase:firebase-messaging:23.2.1"
+firebase-messaging = "com.google.firebase:firebase-messaging:23.3.0"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsShared-analytics = { module = "org.cru.godtools.kotlin:analytics", version.ref = "godtoolsShared" }
