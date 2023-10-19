@@ -10,6 +10,10 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,14 +24,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.LanguageMatchers.languageMatcher
 import org.cru.godtools.sync.GodToolsSyncService
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.contains
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -49,7 +46,7 @@ class DownloadableLanguagesViewModelTest {
 
     private lateinit var viewModel: DownloadableLanguagesViewModel
 
-    @Before
+    @BeforeTest
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
         viewModel = DownloadableLanguagesViewModel(
@@ -60,7 +57,7 @@ class DownloadableLanguagesViewModelTest {
         )
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         Dispatchers.resetMain()
     }
@@ -89,7 +86,7 @@ class DownloadableLanguagesViewModelTest {
             awaitItem()
 
             languages.emit(listOf(french, english))
-            assertThat(awaitItem(), contains(languageMatcher(english), languageMatcher(french)))
+            assertEquals(listOf(english, french), awaitItem())
         }
     }
 
@@ -103,13 +100,10 @@ class DownloadableLanguagesViewModelTest {
             awaitItem()
 
             languages.emit(listOf(english, french))
-            assertThat(awaitItem(), contains(languageMatcher(french), languageMatcher(english)))
+            assertEquals(listOf(french, english), awaitItem())
 
             languages.emit(listOf(english, french, german))
-            assertThat(
-                awaitItem(),
-                contains(languageMatcher(french), languageMatcher(english), languageMatcher(german))
-            )
+            assertEquals(listOf(french, english, german), awaitItem())
         }
     }
 
@@ -122,16 +116,16 @@ class DownloadableLanguagesViewModelTest {
             awaitItem()
 
             languages.emit(listOf(french, english))
-            assertThat(awaitItem(), contains(languageMatcher(english), languageMatcher(french)))
+            assertEquals(listOf(english, french), awaitItem())
 
             viewModel.updateSearchQuery("eng")
-            assertThat(awaitItem(), contains(languageMatcher(english)))
+            assertEquals(listOf(english), awaitItem())
 
             viewModel.updateSearchQuery("fra")
-            assertThat(awaitItem(), contains(languageMatcher(french)))
+            assertEquals(listOf(french), awaitItem())
 
             viewModel.updateSearchQuery("eng ish")
-            assertThat(awaitItem(), contains(languageMatcher(english)))
+            assertEquals(listOf(english), awaitItem())
         }
     }
     // endregion Property: languages
