@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
+import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
 
@@ -58,8 +59,9 @@ internal fun AvailableInLanguage(
         horizontalArrangement = horizontalArrangement,
         modifier = modifier.widthIn(min = 50.dp)
     ) {
+        val appLanguage = LocalAppLanguage.current
         val context = LocalContext.current
-        val name = remember(language, context) { language?.getDisplayName(context).orEmpty() }
+        val name = remember(language, context, appLanguage) { language?.getDisplayName(context, appLanguage).orEmpty() }
 
         Text(
             if (available) name else stringResource(R.string.tool_card_label_language_unavailable, name),
