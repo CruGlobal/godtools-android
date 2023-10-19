@@ -32,8 +32,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.cru.godtools.R
+import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
+import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.ui.languages.LanguageName
 
 private val POPUP_MAX_HEIGHT = 600.dp
@@ -127,16 +129,10 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
             onDismissRequest = { expanded = false },
             modifier = Modifier.heightIn(max = POPUP_MAX_HEIGHT),
         ) {
+            val appLanguage = LocalAppLanguage.current
             var filter by rememberSaveable { mutableStateOf("") }
             val languages by remember {
-                derivedStateOf {
-                    val terms = filter.split(Regex("\\s+")).filter { it.isNotBlank() }
-                    rawLanguages.filter {
-                        val displayName by lazy { it.getDisplayName(context) }
-                        val nativeName by lazy { it.getDisplayName(context, it.code) }
-                        terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
-                    }
-                }
+                derivedStateOf { rawLanguages.filterByDisplayAndNativeName(filter, context, appLanguage) }
             }
 
             SearchBar(
