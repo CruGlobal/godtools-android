@@ -3,7 +3,11 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android.namespace = "org.cru.godtools.base"
+android {
+    namespace = "org.cru.godtools.base"
+
+    configureCompose(project)
+}
 
 onesky {
     sourceStringFiles = listOf(
