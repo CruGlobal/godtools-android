@@ -36,6 +36,19 @@ class Language : Base() {
         fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
             toDisplayNameSortedMap(context, displayLocale).keys.toList()
 
+        fun Collection<Language>.filterByDisplayAndNativeName(
+            query: String,
+            context: Context,
+            appLanguage: Locale,
+        ): List<Language> {
+            val terms = query.split(Regex("\\s+")).filter { it.isNotBlank() }
+            return filter {
+                val displayName by lazy { it.getDisplayName(context, appLanguage) }
+                val nativeName by lazy { it.getDisplayName(context, it.code) }
+                terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
+            }
+        }
+
         @VisibleForTesting
         internal val Locale?.primaryCollator: Collator
             get() = Collator.getInstance(this ?: Locale.getDefault()).also { it.strength = Collator.PRIMARY }
