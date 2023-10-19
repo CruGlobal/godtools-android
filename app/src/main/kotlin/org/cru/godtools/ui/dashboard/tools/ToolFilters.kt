@@ -117,7 +117,8 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
     ) {
         val language by viewModel.selectedLanguage.collectAsState()
         Text(
-            language?.getDisplayName(context) ?: stringResource(R.string.dashboard_tools_section_filter_language_any),
+            text = language?.getDisplayName(context, LocalAppLanguage.current)
+                ?: stringResource(R.string.dashboard_tools_section_filter_language_any),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
