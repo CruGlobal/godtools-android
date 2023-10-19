@@ -18,15 +18,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import java.util.Locale
+import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.model.Language
 
 @Composable
-internal fun LanguageName(locale: Locale) = LanguageName(locale.displayName, locale.getDisplayName(locale))
+internal fun LanguageName(locale: Locale) =
+    LanguageName(locale.getDisplayName(LocalAppLanguage.current), locale.getDisplayName(locale))
 
 @Composable
 internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    LanguageName(language.getDisplayName(context), language.getDisplayName(context, language.code), modifier)
+    LanguageName(
+        language.getDisplayName(context, LocalAppLanguage.current),
+        language.getDisplayName(context, language.code),
+        modifier
+    )
 }
 
 private const val LANGUAGE_NAME_GAP = "[gap]"
