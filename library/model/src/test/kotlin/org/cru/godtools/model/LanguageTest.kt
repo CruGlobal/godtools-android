@@ -10,9 +10,7 @@ import kotlin.test.Test
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.cru.godtools.base.util.getDisplayName
-import org.cru.godtools.model.Language.Companion.primaryCollator
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 
 class LanguageTest {
     // region jsonapi parsing
@@ -51,9 +49,4 @@ class LanguageTest {
         }
     }
     // endregion getDisplayName()
-
-    @Test
-    fun `primaryCollator - Doesn't crash on null Locale`() {
-        assertNotNull((null as Locale?).primaryCollator)
-    }
 }

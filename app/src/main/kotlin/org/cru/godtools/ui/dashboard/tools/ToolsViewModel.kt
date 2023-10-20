@@ -83,7 +83,7 @@ class ToolsViewModel @Inject constructor(
             langs.sortedWith(
                 compareByDescending<Language> { it.code == appLang }
                     .then(compareByDescending { it.isAdded })
-                    .then(Language.displayNameComparator(context))
+                    .then(Language.displayNameComparator(context, appLang))
             )
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())

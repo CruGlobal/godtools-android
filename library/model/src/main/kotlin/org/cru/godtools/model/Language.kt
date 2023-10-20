@@ -2,7 +2,6 @@ package org.cru.godtools.model
 
 import android.content.Context
 import androidx.annotation.RestrictTo
-import androidx.annotation.VisibleForTesting
 import java.text.Collator
 import java.util.Locale
 import java.util.UUID
@@ -25,16 +24,16 @@ class Language : Base() {
 
         val INVALID_CODE = Locale("x", "inv")
 
-        fun displayNameComparator(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
+        fun displayNameComparator(context: Context, displayLocale: Locale = context.appLanguage): Comparator<Language> =
             compareBy(displayLocale.primaryCollator) { it.getDisplayName(context, displayLocale) }
 
-        private fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
+        private fun Collection<Language>.toDisplayNameSortedMap(context: Context, displayLocale: Locale) =
             associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.primaryCollator)
 
-        fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
+        fun Collection<Language>.sortedByDisplayName(context: Context, displayLocale: Locale = context.appLanguage) =
             toDisplayNameSortedMap(context, displayLocale).values.toList()
 
-        fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
+        fun Collection<Language>.getSortedDisplayNames(context: Context, displayLocale: Locale = context.appLanguage) =
             toDisplayNameSortedMap(context, displayLocale).keys.toList()
 
         fun Collection<Language>.filterByDisplayAndNativeName(
@@ -50,9 +49,8 @@ class Language : Base() {
             }
         }
 
-        @VisibleForTesting
-        internal val Locale?.primaryCollator: Collator
-            get() = Collator.getInstance(this ?: Locale.getDefault()).also { it.strength = Collator.PRIMARY }
+        private val Locale.primaryCollator: Collator
+            get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
     @JsonApiAttribute(JSON_CODE)
