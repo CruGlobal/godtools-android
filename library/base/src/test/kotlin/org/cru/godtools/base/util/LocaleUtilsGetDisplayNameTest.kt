@@ -4,52 +4,45 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.MockKStubScope
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
-import kotlin.random.Random
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import org.junit.Assert.assertEquals
+import kotlin.test.assertEquals
+import org.cru.godtools.base.R
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-
-private const val PACKAGE_NAME = "packageName"
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class LocaleUtilsGetDisplayNameTest {
-    lateinit var context: Context
+    private lateinit var context: Context
 
     @BeforeTest
     fun setup() {
         context = mockk {
-            every { packageName } returns PACKAGE_NAME
             every { resources } returns mockk {
                 every { configuration } returns Configuration()
-                every { getIdentifier(any(), "string", PACKAGE_NAME) } returns 0
             }
             every { createConfigurationContext(any()) } returns this
+            every { getString(R.string.language_name_fa) } returns "Language Name fa"
+            every { getString(R.string.language_name_fil) } returns "Language Name fil"
         }
     }
 
     @Test
     fun preferLanguageNameString() {
-        everyGetLanguageNameStringRes(Locale.ENGLISH) returns "Language Name String"
-
-        assertEquals("Language Name String", Locale.ENGLISH.getDisplayName(context, defaultName = "invalid"))
-        verify(inverse = true) { context.createConfigurationContext(any()) }
+        assertEquals("Language Name fa", Locale.forLanguageTag("fa").getDisplayName(context, defaultName = "invalid"))
+        assertEquals("Language Name fil", Locale.forLanguageTag("fil").getDisplayName(context, defaultName = "invalid"))
     }
 
     @Test
     fun preferLanguageNameStringInDifferentLocale() {
-        everyGetLanguageNameStringRes(Locale.ENGLISH) returns "Language Name String"
-
         assertEquals(
-            "Language Name String",
-            Locale.ENGLISH.getDisplayName(context, defaultName = "invalid", inLocale = Locale.FRENCH)
+            "Language Name fa",
+            Locale.forLanguageTag("fa").getDisplayName(context, defaultName = "invalid", inLocale = Locale.FRENCH)
         )
         verify(exactly = 1) { context.createConfigurationContext(match { it.locale == Locale.FRENCH }) }
     }
@@ -67,18 +60,5 @@ class LocaleUtilsGetDisplayNameTest {
     @Test
     fun fallbackToLanguageCode() {
         assertEquals("x", Locale("x").getDisplayName(context = context))
-    }
-
-    private fun everyGetLanguageNameStringRes(locale: Locale): MockKStubScope<String, String> {
-        val id = Random.nextInt(1, Int.MAX_VALUE)
-        val resources = context.resources
-        every {
-            resources.getIdentifier(
-                "$STRING_RES_LANGUAGE_NAME_PREFIX${locale.toString().lowercase(Locale.ENGLISH)}",
-                "string",
-                PACKAGE_NAME
-            )
-        } returns id
-        return every { resources.getString(id) }
     }
 }
