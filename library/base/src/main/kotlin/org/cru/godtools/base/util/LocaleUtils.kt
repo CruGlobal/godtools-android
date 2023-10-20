@@ -3,15 +3,12 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.core.os.ConfigurationCompat
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.ccci.gto.android.common.util.getOptionalDisplayName
+import org.cru.godtools.base.R
 import timber.log.Timber
-
-@VisibleForTesting
-internal const val STRING_RES_LANGUAGE_NAME_PREFIX = "language_name_"
 
 val Context.deviceLocale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
 
@@ -30,11 +27,8 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
         }
 }
 
-private fun Context.getLanguageNameStringRes(locale: Locale) =
-    when (val stringId = resources.getIdentifier(locale.languageNameStringRes, "string", packageName)) {
-        0 -> null
-        else -> resources.getString(stringId)
-    }
-
-private val Locale.languageNameStringRes
-    get() = "$STRING_RES_LANGUAGE_NAME_PREFIX${toString().lowercase(Locale.ROOT)}"
+private fun Context.getLanguageNameStringRes(locale: Locale) = when (locale.toLanguageTag()) {
+    "fa" -> getString(R.string.language_name_fa)
+    "fil" -> getString(R.string.language_name_fil)
+    else -> null
+}
