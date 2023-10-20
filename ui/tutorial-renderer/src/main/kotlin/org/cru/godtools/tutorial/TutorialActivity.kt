@@ -11,10 +11,10 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.ui.startAppLanguageActivity
 import org.cru.godtools.base.ui.startArticlesActivity
 import org.cru.godtools.base.ui.startDashboardActivity
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.cru.godtools.tutorial.layout.TutorialLayout
@@ -84,7 +84,7 @@ class TutorialActivity : AppCompatActivity() {
             Action.ONBOARDING_WATCH_VIDEO -> startYoutubePlayerActivity("RvhZ_wuxAgE")
             Action.ONBOARDING_LAUNCH_ARTICLES -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
-                val locale = sequenceOf(deviceLocale, Locale.ENGLISH).filterNotNull().includeFallbacks()
+                val locale = sequenceOf(appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
                     .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                 startArticlesActivity("es", locale)
                 finish()
