@@ -17,8 +17,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -85,7 +84,7 @@ class DownloadableLanguagesViewModelTest {
         val french = Language(Locale.FRENCH)
 
         viewModel.languages.test {
-            languages.subscriptionCount.takeWhile { it < 1 }.collect()
+            languages.subscriptionCount.first { it >= 1 }
             awaitItem()
 
             languages.emit(listOf(french, english))
@@ -100,7 +99,7 @@ class DownloadableLanguagesViewModelTest {
         val german = Language(Locale.GERMAN, isAdded = true)
 
         viewModel.languages.test {
-            languages.subscriptionCount.takeWhile { it < 1 }.collect()
+            languages.subscriptionCount.first { it >= 1 }
             awaitItem()
 
             languages.emit(listOf(english, french))
@@ -117,7 +116,7 @@ class DownloadableLanguagesViewModelTest {
         val french = Language(Locale.FRENCH)
 
         viewModel.languages.test {
-            languages.subscriptionCount.takeWhile { it < 1 }.collect()
+            languages.subscriptionCount.first { it >= 1 }
             awaitItem()
 
             languages.emit(listOf(french, english))
