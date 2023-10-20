@@ -18,7 +18,6 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.tract.R
@@ -71,7 +70,6 @@ class SettingsBottomSheetDialogFragment :
                 activityDataModel.toolCode.filterNotNull().collect(dataModel.toolCode)
             }
         }
-        context?.deviceLocale?.let { dataModel.deviceLocale.value = it }
     }
     // endregion Data Model
 
