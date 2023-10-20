@@ -1,12 +1,18 @@
 package org.cru.godtools.model
 
+import android.content.Context
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.verifyAll
 import java.util.Locale
+import kotlin.test.Test
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
+import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language.Companion.primaryCollator
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Test
 
 class LanguageTest {
     // region jsonapi parsing
@@ -32,13 +38,17 @@ class LanguageTest {
 
     // region getDisplayName()
     @Test
-    fun `getDisplayName() - Missing Locale and Default Name`() {
-        assertEquals("", Language().getDisplayName(null))
-    }
+    fun `getDisplayName()`() {
+        mockkStatic("org.cru.godtools.base.util.LocaleUtils") {
+            every { any<Locale>().getDisplayName(any(), any(), any()) } returns "DisplayName"
 
-    @Test
-    fun `getDisplayName() - Missing Locale`() {
-        assertEquals("Default Name", Language().apply { name = "Default Name" }.getDisplayName(null))
+            val context: Context = mockk()
+            val inLocale: Locale = Locale.CANADA_FRENCH
+            assertEquals("DisplayName", Language(Locale.ENGLISH) { name = "name" }.getDisplayName(context, inLocale))
+            verifyAll {
+                Locale.ENGLISH.getDisplayName(context, "name", inLocale)
+            }
+        }
     }
     // endregion getDisplayName()
 

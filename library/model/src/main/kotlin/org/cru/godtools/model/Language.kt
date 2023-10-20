@@ -10,6 +10,7 @@ import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.util.getDisplayName
 
 private const val JSON_CODE = "code"
@@ -68,8 +69,8 @@ class Language : Base() {
     @JsonApiIgnore
     var isAdded: Boolean = false
 
-    fun getDisplayName(context: Context?) = getDisplayName(context, null)
-    fun getDisplayName(context: Context?, inLocale: Locale?) =
+    @JvmOverloads
+    fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
         _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes
