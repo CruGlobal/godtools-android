@@ -3,14 +3,11 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
-import androidx.core.os.ConfigurationCompat
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.ccci.gto.android.common.util.getOptionalDisplayName
 import org.cru.godtools.base.R
 import timber.log.Timber
-
-val Context.deviceLocale get() = ConfigurationCompat.getLocales(resources.configuration)[0]
 
 @JvmOverloads
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
