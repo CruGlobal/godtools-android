@@ -24,15 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
-import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
-import org.cru.godtools.base.util.deviceLocale
+import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
@@ -42,9 +40,8 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
-    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val locale = context.deviceLocale ?: Locale.getDefault()
+    val locale = LocalAppLanguage.current
     val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
 
     val pagerState = rememberPagerState { pages.size }

@@ -128,7 +128,7 @@ internal fun LanguageSettingsLayout(
                             .padding(end = 6.dp)
                             .size(12.dp)
                     )
-                    Text(appLanguage.displayName)
+                    Text(appLanguage.getDisplayName(appLanguage))
                     Icon(Icons.Default.ArrowDropDown, null, modifier = Modifier.size(24.dp))
                 }
             }

@@ -2,7 +2,6 @@ package org.cru.godtools.model
 
 import android.content.Context
 import androidx.annotation.RestrictTo
-import androidx.annotation.VisibleForTesting
 import java.text.Collator
 import java.util.Locale
 import java.util.UUID
@@ -10,6 +9,7 @@ import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.util.getDisplayName
 
 private const val JSON_CODE = "code"
@@ -24,21 +24,33 @@ class Language : Base() {
 
         val INVALID_CODE = Locale("x", "inv")
 
-        fun displayNameComparator(context: Context? = null, displayLocale: Locale? = null): Comparator<Language> =
+        fun displayNameComparator(context: Context, displayLocale: Locale = context.appLanguage): Comparator<Language> =
             compareBy(displayLocale.primaryCollator) { it.getDisplayName(context, displayLocale) }
 
-        private fun Collection<Language>.toDisplayNameSortedMap(context: Context?, displayLocale: Locale? = null) =
+        private fun Collection<Language>.toDisplayNameSortedMap(context: Context, displayLocale: Locale) =
             associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.primaryCollator)
 
-        fun Collection<Language>.sortedByDisplayName(context: Context?, displayLocale: Locale? = null): List<Language> =
+        fun Collection<Language>.sortedByDisplayName(context: Context, displayLocale: Locale = context.appLanguage) =
             toDisplayNameSortedMap(context, displayLocale).values.toList()
 
-        fun Collection<Language>.getSortedDisplayNames(context: Context?, displayLocale: Locale? = null) =
+        fun Collection<Language>.getSortedDisplayNames(context: Context, displayLocale: Locale = context.appLanguage) =
             toDisplayNameSortedMap(context, displayLocale).keys.toList()
 
-        @VisibleForTesting
-        internal val Locale?.primaryCollator: Collator
-            get() = Collator.getInstance(this ?: Locale.getDefault()).also { it.strength = Collator.PRIMARY }
+        fun Collection<Language>.filterByDisplayAndNativeName(
+            query: String,
+            context: Context,
+            appLanguage: Locale,
+        ): List<Language> {
+            val terms = query.split(Regex("\\s+")).filter { it.isNotBlank() }
+            return filter {
+                val displayName by lazy { it.getDisplayName(context, appLanguage) }
+                val nativeName by lazy { it.getDisplayName(context, it.code) }
+                terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
+            }
+        }
+
+        private val Locale.primaryCollator: Collator
+            get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
     @JsonApiAttribute(JSON_CODE)
@@ -55,8 +67,8 @@ class Language : Base() {
     @JsonApiIgnore
     var isAdded: Boolean = false
 
-    fun getDisplayName(context: Context?) = getDisplayName(context, null)
-    fun getDisplayName(context: Context?, inLocale: Locale?) =
+    @JvmOverloads
+    fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
         _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes

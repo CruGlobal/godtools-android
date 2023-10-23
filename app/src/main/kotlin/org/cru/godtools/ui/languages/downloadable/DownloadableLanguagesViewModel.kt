@@ -12,11 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.sync.GodToolsSyncService
 
 private const val KEY_FLOATED_LANGUAGES = "floatedLanguages"
@@ -26,6 +27,7 @@ private const val KEY_SEARCH_QUERY = "searchQuery"
 class DownloadableLanguagesViewModel @Inject constructor(
     @ApplicationContext context: Context,
     languagesRepository: LanguagesRepository,
+    settings: Settings,
     syncService: GodToolsSyncService,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -35,24 +37,21 @@ class DownloadableLanguagesViewModel @Inject constructor(
     private var floatedLanguages: Set<Locale>?
         get() = savedStateHandle.get<List<Locale>>(KEY_FLOATED_LANGUAGES)?.toSet()
         set(value) = savedStateHandle.set(KEY_FLOATED_LANGUAGES, value?.let { ArrayList(it) })
-    val languages = languagesRepository.getLanguagesFlow()
-        .map {
+    private val sortedLanguages = languagesRepository.getLanguagesFlow()
+        .combine(settings.appLanguageFlow) { langs, appLanguage ->
             val floated = floatedLanguages
-                ?: it.filter { it.isAdded }.map { it.code }.toSet().also { floatedLanguages = it }
-            it.sortedWith(
+                ?: langs.filter { it.isAdded }.mapTo(mutableSetOf()) { it.code }.also { floatedLanguages = it }
+            langs.sortedWith(
                 compareByDescending<Language> { it.code in floated }
-                    .then(Language.displayNameComparator(context))
+                    .then(Language.displayNameComparator(context, appLanguage))
             )
         }
         .flowOn(Dispatchers.Default)
-        .combine(searchQuery.map { it.split(Regex("\\s+")).filter { it.isNotBlank() } }) { langs, terms ->
-            langs.filter {
-                val displayName by lazy { it.getDisplayName(context) }
-                val nativeName by lazy { it.getDisplayName(context, it.code) }
-                terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
-            }
-        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    val languages = combine(sortedLanguages, settings.appLanguageFlow, searchQuery) { it, appLanguage, query ->
+        it.filterByDisplayAndNativeName(query, context, appLanguage)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     // region Sync logic
     init {

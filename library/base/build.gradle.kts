@@ -3,7 +3,11 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-android.namespace = "org.cru.godtools.base"
+android {
+    namespace = "org.cru.godtools.base"
+
+    configureCompose(project)
+}
 
 onesky {
     sourceStringFiles = listOf(
@@ -16,6 +20,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
+    implementation(libs.gtoSupport.androidx.core)
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.util)

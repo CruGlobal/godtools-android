@@ -57,8 +57,8 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawe
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.base.util.deviceLocale
 import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.tutorial.PageSet
@@ -240,7 +240,7 @@ fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     eventBus.post(
-                        AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, context.deviceLocale)
+                        AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, context.appLanguage)
                     )
                     context.shareGodTools()
                     dismissDrawer()
@@ -257,7 +257,7 @@ fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     eventBus.post(
-                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_TERMS_OF_USE, context.deviceLocale)
+                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_TERMS_OF_USE, context.appLanguage)
                     )
                     uriHandler.openUri("https://godtoolsapp.com/terms-of-use/")
                     dismissDrawer()
@@ -269,7 +269,7 @@ fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     eventBus.post(
-                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_PRIVACY_POLICY, context.deviceLocale)
+                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_PRIVACY_POLICY, context.appLanguage)
                     )
                     uriHandler.openUri("https://www.cru.org/about/privacy.html")
                     dismissDrawer()
@@ -281,7 +281,7 @@ fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     eventBus.post(
-                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_COPYRIGHT, context.deviceLocale)
+                        AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_COPYRIGHT, context.appLanguage)
                     )
                     uriHandler.openUri("https://godtoolsapp.com/copyright/")
                     dismissDrawer()
