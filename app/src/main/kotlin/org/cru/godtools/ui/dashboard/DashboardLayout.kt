@@ -39,6 +39,7 @@ import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
+import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
@@ -94,7 +95,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                     navigationIcon = {
                         when {
                             hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
-                                Icon(Icons.Default.ArrowBack, null)
+                                Icon(Icons.Default.ArrowBack, null, Modifier.autoMirror())
                             }
                             else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
                                 Icon(Icons.Default.Menu, null)
