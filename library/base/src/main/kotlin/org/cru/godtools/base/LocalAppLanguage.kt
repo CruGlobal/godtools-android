@@ -2,6 +2,7 @@ package org.cru.godtools.base
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
@@ -15,7 +16,9 @@ object LocalAppLanguage {
     val current: Locale
         @Composable
         get() = LocalComposition.current
-            ?: LocalContext.current.let { it.getAppLanguageFlow().collectAsState(it.appLanguage).value }
+            ?: LocalContext.current.let {
+                remember(it) { it.getAppLanguageFlow() }.collectAsState(it.appLanguage).value
+            }
 
     /**
      * Associates a [LocalAppLanguage] key to a value in a call to [CompositionLocalProvider].
