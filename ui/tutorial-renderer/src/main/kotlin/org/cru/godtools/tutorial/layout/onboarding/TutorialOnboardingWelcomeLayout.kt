@@ -80,8 +80,6 @@ internal fun TutorialOnboardingWelcomeLayout(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         ),
-        enabled = welcomeState == WelcomeState.READY,
-        modifier = Modifier.alpha(readyAlpha)
     ) {
         Icon(Icons.Outlined.Translate, null, tint = MaterialTheme.colorScheme.primary)
         Text(stringResource(R.string.tutorial_onboarding_change_language), modifier = Modifier.padding(start = 8.dp))
