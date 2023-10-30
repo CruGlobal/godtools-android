@@ -22,6 +22,7 @@ import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.provider.AccountProvider
+import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 
@@ -64,8 +65,9 @@ internal class FacebookAccountProvider @Inject constructor(
     override suspend fun logout() = loginManager.logOut()
     // endregion Login/Logout
 
-    override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        var accessToken = accessTokenManager.currentAccessToken ?: return null
+    override suspend fun authenticateWithMobileContentApi(): Result<AuthToken> {
+        var accessToken = accessTokenManager.currentAccessToken
+            ?: return Result.failure(AuthenticationException.MissingCredentials)
         var resp = accessToken.authenticateWithMobileContentApi()
 
         // try refreshing the access token if the API rejected it
@@ -74,13 +76,14 @@ internal class FacebookAccountProvider @Inject constructor(
                 accessTokenManager.refreshCurrentAccessToken()
             } catch (e: FacebookException) {
                 null
-            } ?: return null
+            } ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
             resp = accessToken.authenticateWithMobileContentApi()
         }
 
-        return resp.takeIf { it.isSuccessful }
-            ?.body()?.takeUnless { it.hasErrors }?.dataSingle
-            ?.also { prefs.edit { putString(accessToken.PREF_USER_ID, it.userId) } }
+        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle
+            ?: return Result.failure(AuthenticationException.UnknownError)
+        prefs.edit { putString(accessToken.PREF_USER_ID, token.userId) }
+        return Result.success(token)
     }
 
     private suspend fun AccessToken.authenticateWithMobileContentApi() =

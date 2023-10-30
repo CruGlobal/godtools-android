@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.account.provider.AccountProvider
+import org.cru.godtools.account.provider.AuthenticationException
 
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -84,4 +85,5 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     // endregion Login/Logout
 
     internal suspend fun authenticateWithMobileContentApi() = activeProvider?.authenticateWithMobileContentApi()
+        ?: Result.failure(AuthenticationException.NoActiveProvider)
 }

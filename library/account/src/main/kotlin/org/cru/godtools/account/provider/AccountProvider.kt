@@ -22,5 +22,5 @@ internal interface AccountProvider : Ordered {
     suspend fun logout()
     // endregion Login/Logout
 
-    suspend fun authenticateWithMobileContentApi(): AuthToken?
+    suspend fun authenticateWithMobileContentApi(): Result<AuthToken>
 }

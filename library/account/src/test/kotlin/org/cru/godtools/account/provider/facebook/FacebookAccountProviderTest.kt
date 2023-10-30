@@ -30,6 +30,7 @@ import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
+import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.account.provider.facebook.FacebookAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
@@ -124,7 +125,7 @@ class FacebookAccountProviderTest {
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi())
         assertEquals(token.userId, provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
@@ -133,7 +134,10 @@ class FacebookAccountProviderTest {
 
     @Test
     fun `authenticateWithMobileContentApi() - Error - No Valid AccessToken`() = runTest {
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.MissingCredentials),
+            provider.authenticateWithMobileContentApi()
+        )
 
         coVerifyAll {
             api wasNot Called
@@ -152,7 +156,7 @@ class FacebookAccountProviderTest {
         coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token)) }
             .returns(Response.success(JsonApiObject.of(token)))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi())
         assertEquals(token.userId, provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
@@ -168,7 +172,10 @@ class FacebookAccountProviderTest {
         coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } returns null
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi()
+        )
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
             accessTokenManager.refreshCurrentAccessToken()
@@ -182,7 +189,10 @@ class FacebookAccountProviderTest {
         coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } throws FacebookException()
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi()
+        )
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
             accessTokenManager.refreshCurrentAccessToken()
@@ -195,32 +205,38 @@ class FacebookAccountProviderTest {
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.error(JsonApiError()))
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnknownError),
+            provider.authenticateWithMobileContentApi()
+        )
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - missing token`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - missing response auth_token`() = runTest {
         val accessToken = accessToken()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of())
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnknownError),
+            provider.authenticateWithMobileContentApi()
+        )
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
         }
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - token without userId`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - auth_token without userId`() = runTest {
         val accessToken = accessToken()
         val token = AuthToken()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi())
         assertNull(provider.userId)
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))

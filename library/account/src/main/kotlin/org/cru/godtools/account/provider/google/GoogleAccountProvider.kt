@@ -23,6 +23,7 @@ import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.provider.AccountProvider
+import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import timber.log.Timber
@@ -75,18 +76,21 @@ internal class GoogleAccountProvider @Inject constructor(
     }
     // endregion Login/Logout
 
-    override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        var account = GoogleSignIn.getLastSignedInAccount(context) ?: return null
+    override suspend fun authenticateWithMobileContentApi(): Result<AuthToken> {
+        var account = GoogleSignIn.getLastSignedInAccount(context)
+            ?: return Result.failure(AuthenticationException.MissingCredentials)
         var resp = account.authenticateWithMobileContentApi()
 
         if (account.idToken == null || resp?.isSuccessful != true) {
-            account = refreshSignIn() ?: return null
-            resp = account.authenticateWithMobileContentApi() ?: return null
+            account = refreshSignIn() ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
+            resp = account.authenticateWithMobileContentApi()
+                ?: return Result.failure(AuthenticationException.MissingCredentials)
         }
 
-        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle ?: return null
+        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle
+            ?: return Result.failure(AuthenticationException.UnknownError)
         prefs.edit { putString(account.PREF_USER_ID, token.userId) }
-        return token
+        return Result.success(token)
     }
 
     private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi() =

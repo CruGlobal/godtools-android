@@ -32,6 +32,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
+import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.account.provider.google.GoogleAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
@@ -136,7 +137,7 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi()`() = runTest {
         lastSignedInAccount.value = validAccount
 
-        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
         coVerifySequence {
             authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
 
@@ -152,7 +153,10 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi() - Not authenticated`() = runTest {
         lastSignedInAccount.value = null
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.MissingCredentials),
+            provider.authenticateWithMobileContentApi()
+        )
         coVerifyAll {
             authApi wasNot Called
             googleSignInClient wasNot Called
@@ -163,7 +167,7 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi() - No id_token`() = runTest {
         lastSignedInAccount.value = mockk { every { idToken } returns null }
 
-        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
         coVerifySequence {
             googleSignInClient.silentSignIn()
             authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
@@ -174,7 +178,7 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi() - invalid id_token`() = runTest {
         lastSignedInAccount.value = mockk { every { idToken } returns ID_TOKEN_INVALID }
 
-        assertEquals(authToken, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
         coVerifySequence {
             authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID))
             googleSignInClient.silentSignIn()
