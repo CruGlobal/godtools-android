@@ -188,7 +188,7 @@ play-review = "com.google.android.play:review-ktx:2.0.1"
 play-tagmanager = "com.google.android.gms:play-services-tagmanager:18.0.4"
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 retrofit2-converters-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit2" }
-robolectric = "org.robolectric:robolectric:4.11"
+robolectric = "org.robolectric:robolectric:4.11.1"
 rtlViewpager = "com.github.duolingo:rtl-viewpager:2.0.0"
 scarlet = { module = "com.tinder.scarlet:scarlet", version.ref = "scarlet" }
 scarlet-adapters-stream-coroutines = { module = "com.tinder.scarlet:stream-adapter-coroutines", version.ref = "scarlet" }
