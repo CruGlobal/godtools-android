@@ -34,7 +34,7 @@ splitties = "3.0.0"
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 advrecyclerview = "com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:1.0.0"
-android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.3"
+android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 androidx-activity-compose = "androidx.activity:activity-compose:1.8.0"
 androidx-annotation = "androidx.annotation:annotation:1.7.0"
