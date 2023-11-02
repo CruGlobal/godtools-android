@@ -38,8 +38,8 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
 import org.cru.godtools.ui.languages.LanguageName
 
-private val POPUP_MAX_HEIGHT = 600.dp
-private val POPUP_MAX_WIDTH = 300.dp
+private val DROPDOWN_MAX_HEIGHT = 700.dp
+private val DROPDOWN_MAX_WIDTH = 400.dp
 
 @Composable
 internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) = Column(modifier.fillMaxWidth()) {
@@ -83,7 +83,7 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.heightIn(max = POPUP_MAX_HEIGHT),
+            modifier = Modifier.heightIn(max = DROPDOWN_MAX_HEIGHT),
         ) {
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
@@ -133,7 +133,7 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
         LazyDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.sizeIn(maxHeight = POPUP_MAX_HEIGHT, maxWidth = POPUP_MAX_WIDTH),
+            modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH),
         ) {
             item {
                 SearchBar(
