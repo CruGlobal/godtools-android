@@ -24,6 +24,7 @@ import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.account.provider.AuthenticationException
+import org.cru.godtools.account.provider.extractAuthToken
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import timber.log.Timber
@@ -87,10 +88,8 @@ internal class GoogleAccountProvider @Inject constructor(
                 ?: return Result.failure(AuthenticationException.MissingCredentials)
         }
 
-        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle
-            ?: return Result.failure(AuthenticationException.UnknownError)
-        prefs.edit { putString(account.PREF_USER_ID, token.userId) }
-        return Result.success(token)
+        return resp.extractAuthToken()
+            .onSuccess { prefs.edit { putString(account.PREF_USER_ID, it.userId) } }
     }
 
     private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi() =

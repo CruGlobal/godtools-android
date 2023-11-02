@@ -16,6 +16,11 @@ data class AuthToken(
     @JsonApiAttribute(ATTR_TOKEN)
     var token: String? = null
 ) {
+    companion object {
+        const val ERROR_USER_ALREADY_EXISTS = "user_already_exists"
+        const val ERROR_USER_NOT_FOUND = "user_not_found"
+    }
+
     @JsonApiType("auth-token-request")
     data class Request(
         @JsonApiAttribute(ATTR_FACEBOOK_ACCESS_TOKEN) val fbAccessToken: String? = null,

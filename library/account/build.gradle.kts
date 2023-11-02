@@ -35,6 +35,7 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
+    testImplementation(libs.json)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
 }
