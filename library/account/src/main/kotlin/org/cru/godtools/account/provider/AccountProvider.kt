@@ -26,7 +26,7 @@ internal interface AccountProvider : Ordered {
     suspend fun logout()
     // endregion Login/Logout
 
-    suspend fun authenticateWithMobileContentApi(): Result<AuthToken>
+    suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken>
 }
 
 internal fun Response<JsonApiObject<AuthToken>>.extractAuthToken() = when {

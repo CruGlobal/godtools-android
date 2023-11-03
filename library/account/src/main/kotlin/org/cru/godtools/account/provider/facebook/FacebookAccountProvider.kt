@@ -66,10 +66,10 @@ internal class FacebookAccountProvider @Inject constructor(
     override suspend fun logout() = loginManager.logOut()
     // endregion Login/Logout
 
-    override suspend fun authenticateWithMobileContentApi(): Result<AuthToken> {
+    override suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken> {
         var accessToken = accessTokenManager.currentAccessToken
             ?: return Result.failure(AuthenticationException.MissingCredentials)
-        var resp = accessToken.authenticateWithMobileContentApi()
+        var resp = accessToken.authenticateWithMobileContentApi(createUser)
 
         // try refreshing the access token if the API rejected it
         if (!resp.isSuccessful) {
@@ -78,13 +78,13 @@ internal class FacebookAccountProvider @Inject constructor(
             } catch (e: FacebookException) {
                 null
             } ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
-            resp = accessToken.authenticateWithMobileContentApi()
+            resp = accessToken.authenticateWithMobileContentApi(createUser)
         }
 
         return resp.extractAuthToken()
             .onSuccess { prefs.edit { putString(accessToken.PREF_USER_ID, it.userId) } }
     }
 
-    private suspend fun AccessToken.authenticateWithMobileContentApi() =
-        authApi.authenticate(AuthToken.Request(fbAccessToken = token))
+    private suspend fun AccessToken.authenticateWithMobileContentApi(createUser: Boolean) =
+        authApi.authenticate(AuthToken.Request(fbAccessToken = token, createUser = createUser))
 }

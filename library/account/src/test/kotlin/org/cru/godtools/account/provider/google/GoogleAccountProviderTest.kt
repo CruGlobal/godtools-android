@@ -20,6 +20,7 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -118,6 +119,7 @@ class GoogleAccountProviderTest {
 
     // region authenticateWithMobileContentApi()
     private val authToken = AuthToken(userId, "token")
+    private val createUser = Random.nextBoolean()
     private val validAccount: GoogleSignInAccount = mockk {
         every { id } returns UUID.randomUUID().toString()
         every { idToken } returns ID_TOKEN_VALID
@@ -127,9 +129,9 @@ class GoogleAccountProviderTest {
     fun `Setup authenticateWithMobileContentApi()`() {
         every { googleSignInClient.silentSignIn() } returns Tasks.forResult(validAccount)
 
-        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID)) }
+        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser)) }
             .returns(Response.success(JsonApiObject.single(authToken)))
-        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID)) }
+        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser)) }
             .returns(Response.error(401, "".toResponseBody()))
     }
 
@@ -137,9 +139,9 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi()`() = runTest {
         lastSignedInAccount.value = validAccount
 
-        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
         coVerifySequence {
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
 
             googleSignInClient wasNot Called
         }
@@ -155,7 +157,7 @@ class GoogleAccountProviderTest {
 
         assertEquals(
             Result.failure(AuthenticationException.MissingCredentials),
-            provider.authenticateWithMobileContentApi()
+            provider.authenticateWithMobileContentApi(createUser)
         )
         coVerifyAll {
             authApi wasNot Called
@@ -167,10 +169,10 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi() - No id_token`() = runTest {
         lastSignedInAccount.value = mockk { every { idToken } returns null }
 
-        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
         coVerifySequence {
             googleSignInClient.silentSignIn()
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
         }
     }
 
@@ -178,11 +180,11 @@ class GoogleAccountProviderTest {
     fun `authenticateWithMobileContentApi() - invalid id_token`() = runTest {
         lastSignedInAccount.value = mockk { every { idToken } returns ID_TOKEN_INVALID }
 
-        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
         coVerifySequence {
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID))
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser))
             googleSignInClient.silentSignIn()
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID))
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
         }
     }
     // endregion authenticateWithMobileContentApi()

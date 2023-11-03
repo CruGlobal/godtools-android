@@ -77,14 +77,14 @@ internal class GoogleAccountProvider @Inject constructor(
     }
     // endregion Login/Logout
 
-    override suspend fun authenticateWithMobileContentApi(): Result<AuthToken> {
+    override suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken> {
         var account = GoogleSignIn.getLastSignedInAccount(context)
             ?: return Result.failure(AuthenticationException.MissingCredentials)
-        var resp = account.authenticateWithMobileContentApi()
+        var resp = account.authenticateWithMobileContentApi(createUser)
 
         if (account.idToken == null || resp?.isSuccessful != true) {
             account = refreshSignIn() ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
-            resp = account.authenticateWithMobileContentApi()
+            resp = account.authenticateWithMobileContentApi(createUser)
                 ?: return Result.failure(AuthenticationException.MissingCredentials)
         }
 
@@ -92,6 +92,6 @@ internal class GoogleAccountProvider @Inject constructor(
             .onSuccess { prefs.edit { putString(account.PREF_USER_ID, it.userId) } }
     }
 
-    private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi() =
-        idToken?.let { authApi.authenticate(AuthToken.Request(googleIdToken = it)) }
+    private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi(createUser: Boolean) =
+        idToken?.let { authApi.authenticate(AuthToken.Request(googleIdToken = it, createUser = createUser)) }
 }

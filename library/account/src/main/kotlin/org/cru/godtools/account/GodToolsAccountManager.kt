@@ -84,6 +84,6 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     }
     // endregion Login/Logout
 
-    internal suspend fun authenticateWithMobileContentApi() = activeProvider?.authenticateWithMobileContentApi()
+    internal suspend fun authenticateWithMobileContentApi() = activeProvider?.authenticateWithMobileContentApi(false)
         ?: Result.failure(AuthenticationException.NoActiveProvider)
 }
