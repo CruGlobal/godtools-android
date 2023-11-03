@@ -74,6 +74,7 @@ internal class GoogleAccountProvider @Inject constructor(
 
     override suspend fun logout() {
         googleSignInClient.signOut().await()
+        prefs.edit { clear() }
     }
     // endregion Login/Logout
 

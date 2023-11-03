@@ -63,7 +63,10 @@ internal class FacebookAccountProvider @Inject constructor(
         onResult = {},
     )
 
-    override suspend fun logout() = loginManager.logOut()
+    override suspend fun logout() {
+        loginManager.logOut()
+        prefs.edit { clear() }
+    }
     // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken> {
