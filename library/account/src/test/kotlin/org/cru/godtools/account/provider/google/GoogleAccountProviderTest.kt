@@ -25,7 +25,9 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runCurrent
@@ -74,6 +76,47 @@ class GoogleAccountProviderTest {
         unmockkObject(GoogleSignInKtx)
     }
 
+    // region Property: isAuthenticated
+    @Test
+    fun `Property isAuthenticated`() = runTest {
+        assertFalse(provider.isAuthenticated, "No GoogleSignInAccount")
+
+        val account = GoogleSignInAccount.createDefault()
+        lastSignedInAccount.value = account
+        assertFalse(provider.isAuthenticated, "GoogleSignInAccount but no userId")
+
+        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
+        assertTrue(provider.isAuthenticated, "GoogleSignInAccount w/ userId")
+
+        lastSignedInAccount.value = null
+        assertFalse(provider.isAuthenticated, "No GoogleSignInAccount, still has userId")
+    }
+    // endregion Property: isAuthenticated
+
+    // region isAuthenticatedFlow()
+    @Test
+    fun `isAuthenticatedFlow()`() = runTest {
+        val account = GoogleSignInAccount.createDefault()
+        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
+
+        provider.isAuthenticatedFlow().test {
+            assertFalse(awaitItem())
+
+            lastSignedInAccount.value = account
+            assertTrue(awaitItem())
+
+            provider.prefs.edit { clear() }
+            assertFalse(awaitItem())
+
+            provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
+            assertTrue(awaitItem())
+
+            lastSignedInAccount.value = null
+            assertFalse(awaitItem())
+        }
+    }
+    // endregion isAuthenticatedFlow()
+
     // region userIdFlow()
     @Test
     fun `userIdFlow()`() = runTest {
@@ -81,16 +124,13 @@ class GoogleAccountProviderTest {
         provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
 
         provider.userIdFlow().test {
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
 
             lastSignedInAccount.value = account
-            runCurrent()
-            assertEquals(userId, expectMostRecentItem())
+            assertEquals(userId, awaitItem())
 
             lastSignedInAccount.value = null
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
         }
     }
 
