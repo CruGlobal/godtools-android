@@ -21,7 +21,10 @@ internal interface AccountProvider : Ordered {
 
     // region Login/Logout
     @Composable
-    fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType>
+    fun rememberLauncherForLogin(
+        createUser: Boolean,
+        onAuthResult: (Result<AuthToken>) -> Unit,
+    ): ActivityResultLauncher<AccountType>
 
     suspend fun logout()
     // endregion Login/Logout

@@ -23,6 +23,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
+import org.cru.godtools.account.LoginResponse
 import org.cru.godtools.account.compose.rememberLoginLauncher
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
@@ -42,7 +47,13 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit) {
-    val loginLauncher = rememberLoginLauncher()
+    var loginError: LoginResponse.Error? by rememberSaveable { mutableStateOf(null) }
+    val loginLauncher = rememberLoginLauncher(createAccount) {
+        when (it) {
+            LoginResponse.Success -> onEvent(LoginLayoutEvent.Close)
+            is LoginResponse.Error -> loginError = it
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

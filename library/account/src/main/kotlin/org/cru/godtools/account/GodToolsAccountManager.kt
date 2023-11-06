@@ -63,8 +63,24 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
 
     // region Login/Logout
     @Composable
-    internal fun rememberLauncherForLogin(): ActivityResultLauncher<AccountType> {
-        val launchers = providers.associate { it.type to it.rememberLauncherForLogin() }
+    internal fun rememberLauncherForLogin(
+        createAccount: Boolean,
+        onResponse: (LoginResponse) -> Unit,
+    ): ActivityResultLauncher<AccountType> {
+        val launchers = providers.associate {
+            it.type to it.rememberLauncherForLogin(createAccount) { result ->
+                onResponse(
+                    when {
+                        result.isSuccess -> LoginResponse.Success
+                        else -> when (result.exceptionOrNull()) {
+                            AuthenticationException.UserNotFound -> LoginResponse.Error.UserNotFound
+                            AuthenticationException.UserAlreadyExists -> LoginResponse.Error.UserAlreadyExists
+                            else -> LoginResponse.Error()
+                        }
+                    }
+                )
+            }
+        }
 
         return remember(launchers) {
             object : ActivityResultLauncher<AccountType>() {

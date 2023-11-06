@@ -2,9 +2,11 @@ package org.cru.godtools.account.provider.google
 
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.edit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -17,6 +19,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
@@ -59,11 +62,25 @@ internal class GoogleAccountProvider @Inject constructor(
 
     // region Login/Logout
     @Composable
-    override fun rememberLauncherForLogin() = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-            .transformInput { _: AccountType -> googleSignInClient.signInIntent },
-        onResult = {},
-    )
+    override fun rememberLauncherForLogin(
+        createUser: Boolean,
+        onAuthResult: (Result<AuthToken>) -> Unit
+    ): ActivityResultLauncher<AccountType> {
+        val coroutineScope = rememberCoroutineScope()
+
+        return rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+                .transformInput { _: AccountType -> googleSignInClient.signInIntent },
+            onResult = {
+                coroutineScope.launch {
+                    onAuthResult(
+                        authenticateWithMobileContentApi(createUser)
+                            .onFailure { logout() }
+                    )
+                }
+            },
+        )
+    }
 
     private suspend fun refreshSignIn() = try {
         googleSignInClient.silentSignIn().await()

@@ -2,8 +2,10 @@ package org.cru.godtools.account.provider.facebook
 
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.edit
 import com.facebook.AccessToken
 import com.facebook.AccessTokenManager
@@ -15,6 +17,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.isAuthenticatedFlow
@@ -58,10 +61,25 @@ internal class FacebookAccountProvider @Inject constructor(
 
     // region Login/Logout
     @Composable
-    override fun rememberLauncherForLogin() = rememberLauncherForActivityResult(
-        contract = loginManager.createLogInActivityResultContract().transformInput { _: AccountType -> FACEBOOK_SCOPE },
-        onResult = {},
-    )
+    override fun rememberLauncherForLogin(
+        createUser: Boolean,
+        onAuthResult: (Result<AuthToken>) -> Unit
+    ): ActivityResultLauncher<AccountType> {
+        val coroutineScope = rememberCoroutineScope()
+
+        return rememberLauncherForActivityResult(
+            contract = loginManager.createLogInActivityResultContract()
+                .transformInput { _: AccountType -> FACEBOOK_SCOPE },
+            onResult = {
+                coroutineScope.launch {
+                    onAuthResult(
+                        authenticateWithMobileContentApi(createUser)
+                            .onFailure { logout() }
+                    )
+                }
+            },
+        )
+    }
 
     override suspend fun logout() {
         loginManager.logOut()
