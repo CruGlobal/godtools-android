@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -54,6 +56,8 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
             is LoginResponse.Error -> loginError = it
         }
     }
+
+    LoginError(loginError, onDismiss = { loginError = null })
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -136,5 +140,30 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
             }
             Spacer(Modifier.height(32.dp))
         }
+    }
+}
+
+@Composable
+private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
+    if (error != null) {
+        AlertDialog(
+            text = {
+                Text(
+                    stringResource(
+                        when (error) {
+                            LoginResponse.Error.UserAlreadyExists -> R.string.account_error_user_already_exists
+                            LoginResponse.Error.UserNotFound -> R.string.account_error_user_not_found
+                            else -> R.string.account_error_unknown
+                        }
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(stringResource(R.string.account_error_dialog_dismiss))
+                }
+            },
+            onDismissRequest = { onDismiss() },
+        )
     }
 }

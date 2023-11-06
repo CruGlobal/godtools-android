@@ -9,6 +9,10 @@
     <string name="account_create_description">Create an account to have real stories, encouragement, and practical tips at your fingertips.</string>
     <string name="account_login_heading">Sign in</string>
     <string name="account_login_description">Log in to your account to have real stories, encouragement, and practical tips at your fingertips.</string>
+    <string name="account_error_user_already_exists">User account already exists.</string>
+    <string name="account_error_user_not_found">User account not found.</string>
+    <string name="account_error_unknown">Error logging in.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
 
     <!-- Activity -->
     <eat-comment />
