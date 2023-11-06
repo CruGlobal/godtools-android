@@ -15,16 +15,17 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import java.util.Date
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
@@ -41,7 +42,6 @@ import retrofit2.Response
 private const val CLASS_ACCESS_TOKEN_MANAGER_KTX = "org.ccci.gto.android.common.facebook.login.AccessTokenManagerKt"
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class FacebookAccountProviderTest {
     private val currentAccessTokenFlow = MutableStateFlow<AccessToken?>(null)
 
@@ -70,8 +70,39 @@ class FacebookAccountProviderTest {
         unmockkStatic(CLASS_ACCESS_TOKEN_MANAGER_KTX)
     }
 
+    // region Property: isAuthenticated
     @Test
-    fun `userId()`() = runTest {
+    fun `Property isAuthenticated`() {
+        assertFalse(provider.isAuthenticated)
+
+        val token = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
+        currentAccessTokenFlow.value = token
+        assertFalse(provider.isAuthenticated)
+
+        val user = UUID.randomUUID().toString()
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
+        assertTrue(provider.isAuthenticated)
+
+        currentAccessTokenFlow.value = null
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `Property isAuthenticated - token expired`() {
+        val token = accessToken(expirationTime = Date(System.currentTimeMillis() - 100_000))
+        val user = UUID.randomUUID().toString()
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
+        currentAccessTokenFlow.value = token
+        assertFalse(provider.isAuthenticated)
+
+        currentAccessTokenFlow.value = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
+        assertTrue(provider.isAuthenticated)
+    }
+    // endregion Property: isAuthenticated
+
+    // region Property userId
+    @Test
+    fun `Property userId`() = runTest {
         assertNull(provider.userId)
 
         val user = UUID.randomUUID().toString()
@@ -80,6 +111,7 @@ class FacebookAccountProviderTest {
         provider.prefs.edit { putString(token.PREF_USER_ID, user) }
         assertEquals(user, provider.userId)
     }
+    // endregion Property userId
 
     // region userIdFlow()
     @Test
@@ -89,15 +121,13 @@ class FacebookAccountProviderTest {
         provider.prefs.edit { putString(token.PREF_USER_ID, user) }
 
         provider.userIdFlow().test {
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
 
             currentAccessTokenFlow.value = token
-            runCurrent()
-            assertEquals(user, expectMostRecentItem())
+            assertEquals(user, awaitItem())
 
             currentAccessTokenFlow.value = null
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
         }
     }
 
@@ -105,15 +135,13 @@ class FacebookAccountProviderTest {
     fun `userIdFlow() - Emit new userId when it changes`() = runTest {
         val user = UUID.randomUUID().toString()
         val token = accessToken()
+        currentAccessTokenFlow.value = token
 
         provider.userIdFlow().test {
-            currentAccessTokenFlow.value = token
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
 
             provider.prefs.edit { putString(token.PREF_USER_ID, user) }
-            runCurrent()
-            assertEquals(user, expectMostRecentItem())
+            assertEquals(user, awaitItem())
         }
     }
     // endregion userIdFlow()
@@ -252,7 +280,7 @@ class FacebookAccountProviderTest {
     }
     // endregion authenticateWithMobileContentApi()
 
-    private fun accessToken(userId: String = "user") = AccessToken(
+    private fun accessToken(userId: String = "user", expirationTime: Date? = null) = AccessToken(
         accessToken = UUID.randomUUID().toString(),
         applicationId = "application",
         userId = userId,
@@ -260,7 +288,7 @@ class FacebookAccountProviderTest {
         declinedPermissions = null,
         expiredPermissions = null,
         accessTokenSource = null,
-        expirationTime = null,
+        expirationTime = expirationTime,
         lastRefreshTime = null,
         dataAccessExpirationTime = null,
     )
