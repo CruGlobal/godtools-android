@@ -1,7 +1,12 @@
 package org.cru.godtools.account.provider.google
 
 import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.edit
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -14,11 +19,15 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.provider.AccountProvider
+import org.cru.godtools.account.provider.AuthenticationException
+import org.cru.godtools.account.provider.extractAuthToken
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import timber.log.Timber
@@ -44,16 +53,33 @@ internal class GoogleAccountProvider @Inject constructor(
     internal val prefs by lazy { context.getSharedPreferences(PREFS_GOOGLE_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
     override val type = AccountType.GOOGLE
 
-    override val isAuthenticated get() = GoogleSignIn.getLastSignedInAccount(context) != null
+    override val isAuthenticated get() = userId != null
     override val userId get() = GoogleSignIn.getLastSignedInAccount(context)
         ?.let { prefs.getString(it.PREF_USER_ID, null) }
-    override fun isAuthenticatedFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context).map { it != null }
+    override fun isAuthenticatedFlow() = userIdFlow().map { it != null }
     override fun userIdFlow() = GoogleSignInKtx.getLastSignedInAccountFlow(context)
         .flatMapLatest { it?.let { prefs.getStringFlow(it.PREF_USER_ID, null) } ?: flowOf(null) }
 
     // region Login/Logout
-    override suspend fun login(state: AccountProvider.LoginState) {
-        state.activity.startActivity(googleSignInClient.signInIntent)
+    @Composable
+    override fun rememberLauncherForLogin(
+        createUser: Boolean,
+        onAuthResult: (Result<AuthToken>) -> Unit
+    ): ActivityResultLauncher<AccountType> {
+        val coroutineScope = rememberCoroutineScope()
+
+        return rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+                .transformInput { _: AccountType -> googleSignInClient.signInIntent },
+            onResult = {
+                coroutineScope.launch {
+                    onAuthResult(
+                        authenticateWithMobileContentApi(createUser)
+                            .onFailure { logout() }
+                    )
+                }
+            },
+        )
     }
 
     private suspend fun refreshSignIn() = try {
@@ -65,23 +91,25 @@ internal class GoogleAccountProvider @Inject constructor(
 
     override suspend fun logout() {
         googleSignInClient.signOut().await()
+        prefs.edit { clear() }
     }
     // endregion Login/Logout
 
-    override suspend fun authenticateWithMobileContentApi(): AuthToken? {
-        var account = GoogleSignIn.getLastSignedInAccount(context) ?: return null
-        var resp = account.authenticateWithMobileContentApi()
+    override suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken> {
+        var account = GoogleSignIn.getLastSignedInAccount(context)
+            ?: return Result.failure(AuthenticationException.MissingCredentials)
+        var resp = account.authenticateWithMobileContentApi(createUser)
 
         if (account.idToken == null || resp?.isSuccessful != true) {
-            account = refreshSignIn() ?: return null
-            resp = account.authenticateWithMobileContentApi() ?: return null
+            account = refreshSignIn() ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
+            resp = account.authenticateWithMobileContentApi(createUser)
+                ?: return Result.failure(AuthenticationException.MissingCredentials)
         }
 
-        val token = resp.takeIf { it.isSuccessful }?.body()?.takeUnless { it.hasErrors }?.dataSingle ?: return null
-        prefs.edit { putString(account.PREF_USER_ID, token.userId) }
-        return token
+        return resp.extractAuthToken()
+            .onSuccess { prefs.edit { putString(account.PREF_USER_ID, it.userId) } }
     }
 
-    private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi() =
-        idToken?.let { authApi.authenticate(AuthToken.Request(googleIdToken = it)) }
+    private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi(createUser: Boolean) =
+        idToken?.let { authApi.authenticate(AuthToken.Request(googleIdToken = it, createUser = createUser)) }
 }

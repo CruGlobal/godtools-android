@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,10 +20,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
+import org.cru.godtools.account.LoginResponse
+import org.cru.godtools.account.compose.rememberLoginLauncher
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private val MARGIN_HORIZONTAL = 32.dp
@@ -40,7 +48,17 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit = {}) {
+fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit) {
+    var loginError: LoginResponse.Error? by rememberSaveable { mutableStateOf(null) }
+    val loginLauncher = rememberLoginLauncher(createAccount) {
+        when (it) {
+            LoginResponse.Success -> onEvent(LoginLayoutEvent.Close)
+            is LoginResponse.Error -> loginError = it
+        }
+    }
+
+    LoginError(loginError, onDismiss = { loginError = null })
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -86,7 +104,7 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
             )
 
             Button(
-                onClick = { onEvent(LoginLayoutEvent.Login(AccountType.GOOGLE)) },
+                onClick = { loginLauncher.launch(AccountType.GOOGLE) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black.copy(alpha = 0.54f)
@@ -104,7 +122,7 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
                 Text(stringResource(com.google.android.gms.base.R.string.common_signin_button_text_long))
             }
             Button(
-                onClick = { onEvent(LoginLayoutEvent.Login(AccountType.FACEBOOK)) },
+                onClick = { loginLauncher.launch(AccountType.FACEBOOK) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FACEBOOK_BLUE,
                     contentColor = Color.White
@@ -122,5 +140,30 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
             }
             Spacer(Modifier.height(32.dp))
         }
+    }
+}
+
+@Composable
+private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
+    if (error != null) {
+        AlertDialog(
+            text = {
+                Text(
+                    stringResource(
+                        when (error) {
+                            LoginResponse.Error.UserAlreadyExists -> R.string.account_error_user_already_exists
+                            LoginResponse.Error.UserNotFound -> R.string.account_error_user_not_found
+                            else -> R.string.account_error_unknown
+                        }
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(stringResource(R.string.account_error_dialog_dismiss))
+                }
+            },
+            onDismissRequest = { onDismiss() },
+        )
     }
 }

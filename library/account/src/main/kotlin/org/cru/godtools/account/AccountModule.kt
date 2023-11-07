@@ -25,7 +25,7 @@ abstract class AccountModule {
             accountManager: GodToolsAccountManager
         ) = object : MobileContentApiSessionInterceptor(context) {
             override fun userId() = accountManager.userId
-            override suspend fun authenticate() = accountManager.authenticateWithMobileContentApi()
+            override suspend fun authenticate() = accountManager.authenticateWithMobileContentApi().getOrNull()
         }
     }
 }

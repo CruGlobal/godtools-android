@@ -15,21 +15,24 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import java.util.Date
 import java.util.UUID
+import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.jsonapi.model.JsonApiError
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
+import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.account.provider.facebook.FacebookAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
@@ -39,7 +42,6 @@ import retrofit2.Response
 private const val CLASS_ACCESS_TOKEN_MANAGER_KTX = "org.ccci.gto.android.common.facebook.login.AccessTokenManagerKt"
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class FacebookAccountProviderTest {
     private val currentAccessTokenFlow = MutableStateFlow<AccessToken?>(null)
 
@@ -68,8 +70,39 @@ class FacebookAccountProviderTest {
         unmockkStatic(CLASS_ACCESS_TOKEN_MANAGER_KTX)
     }
 
+    // region Property: isAuthenticated
     @Test
-    fun `userId()`() = runTest {
+    fun `Property isAuthenticated`() {
+        assertFalse(provider.isAuthenticated)
+
+        val token = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
+        currentAccessTokenFlow.value = token
+        assertFalse(provider.isAuthenticated)
+
+        val user = UUID.randomUUID().toString()
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
+        assertTrue(provider.isAuthenticated)
+
+        currentAccessTokenFlow.value = null
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `Property isAuthenticated - token expired`() {
+        val token = accessToken(expirationTime = Date(System.currentTimeMillis() - 100_000))
+        val user = UUID.randomUUID().toString()
+        provider.prefs.edit { putString(token.PREF_USER_ID, user) }
+        currentAccessTokenFlow.value = token
+        assertFalse(provider.isAuthenticated)
+
+        currentAccessTokenFlow.value = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
+        assertTrue(provider.isAuthenticated)
+    }
+    // endregion Property: isAuthenticated
+
+    // region Property userId
+    @Test
+    fun `Property userId`() = runTest {
         assertNull(provider.userId)
 
         val user = UUID.randomUUID().toString()
@@ -78,6 +111,7 @@ class FacebookAccountProviderTest {
         provider.prefs.edit { putString(token.PREF_USER_ID, user) }
         assertEquals(user, provider.userId)
     }
+    // endregion Property userId
 
     // region userIdFlow()
     @Test
@@ -87,15 +121,13 @@ class FacebookAccountProviderTest {
         provider.prefs.edit { putString(token.PREF_USER_ID, user) }
 
         provider.userIdFlow().test {
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
 
             currentAccessTokenFlow.value = token
-            runCurrent()
-            assertEquals(user, expectMostRecentItem())
+            assertEquals(user, awaitItem())
 
             currentAccessTokenFlow.value = null
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
         }
     }
 
@@ -103,15 +135,13 @@ class FacebookAccountProviderTest {
     fun `userIdFlow() - Emit new userId when it changes`() = runTest {
         val user = UUID.randomUUID().toString()
         val token = accessToken()
+        currentAccessTokenFlow.value = token
 
         provider.userIdFlow().test {
-            currentAccessTokenFlow.value = token
-            runCurrent()
-            assertNull(expectMostRecentItem())
+            assertNull(awaitItem())
 
             provider.prefs.edit { putString(token.PREF_USER_ID, user) }
-            runCurrent()
-            assertEquals(user, expectMostRecentItem())
+            assertEquals(user, awaitItem())
         }
     }
     // endregion userIdFlow()
@@ -120,20 +150,24 @@ class FacebookAccountProviderTest {
     @Test
     fun `authenticateWithMobileContentApi()`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         val token = AuthToken(userId = UUID.randomUUID().toString())
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi(createUser))
         assertEquals(token.userId, provider.userId)
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
         }
     }
 
     @Test
     fun `authenticateWithMobileContentApi() - Error - No Valid AccessToken`() = runTest {
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.MissingCredentials),
+            provider.authenticateWithMobileContentApi(true)
+        )
 
         coVerifyAll {
             api wasNot Called
@@ -144,33 +178,38 @@ class FacebookAccountProviderTest {
     fun `authenticateWithMobileContentApi() - Error - Refresh successful`() = runTest {
         val accessToken = accessToken()
         val accessToken2 = accessToken()
+        val createUser = Random.nextBoolean()
         val token = AuthToken(userId = UUID.randomUUID().toString())
         currentAccessTokenFlow.value = accessToken
-        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token)) }
+        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser)) }
             .returns(Response.error(401, "".toResponseBody()))
         coEvery { accessTokenManager.refreshCurrentAccessToken() } returns accessToken2
-        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token)) }
+        coEvery { api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token, createUser = createUser)) }
             .returns(Response.success(JsonApiObject.of(token)))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi(createUser))
         assertEquals(token.userId, provider.userId)
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
             accessTokenManager.refreshCurrentAccessToken()
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken2.token, createUser = createUser))
         }
     }
 
     @Test
     fun `authenticateWithMobileContentApi() - Error - Refresh doesn't return access_token`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } returns null
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
             accessTokenManager.refreshCurrentAccessToken()
         }
     }
@@ -178,13 +217,17 @@ class FacebookAccountProviderTest {
     @Test
     fun `authenticateWithMobileContentApi() - Error - Refresh throws exception`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.error(401, "".toResponseBody())
         coEvery { accessTokenManager.refreshCurrentAccessToken() } throws FacebookException()
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
             accessTokenManager.refreshCurrentAccessToken()
         }
     }
@@ -192,43 +235,52 @@ class FacebookAccountProviderTest {
     @Test
     fun `authenticateWithMobileContentApi() - Error - jsonapi errors`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.error(JsonApiError()))
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnknownError),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
         }
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - missing token`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - missing response auth_token`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of())
 
-        assertNull(provider.authenticateWithMobileContentApi())
+        assertEquals(
+            Result.failure(AuthenticationException.UnknownError),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
         }
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - Error - token without userId`() = runTest {
+    fun `authenticateWithMobileContentApi() - Error - auth_token without userId`() = runTest {
         val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
         val token = AuthToken()
         currentAccessTokenFlow.value = accessToken
         coEvery { api.authenticate(any()) } returns Response.success(JsonApiObject.of(token))
 
-        assertEquals(token, provider.authenticateWithMobileContentApi())
+        assertEquals(Result.success(token), provider.authenticateWithMobileContentApi(createUser))
         assertNull(provider.userId)
         coVerifyAll {
-            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token))
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
         }
     }
     // endregion authenticateWithMobileContentApi()
 
-    private fun accessToken(userId: String = "user") = AccessToken(
+    private fun accessToken(userId: String = "user", expirationTime: Date? = null) = AccessToken(
         accessToken = UUID.randomUUID().toString(),
         applicationId = "application",
         userId = userId,
@@ -236,7 +288,7 @@ class FacebookAccountProviderTest {
         declinedPermissions = null,
         expiredPermissions = null,
         accessTokenSource = null,
-        expirationTime = null,
+        expirationTime = expirationTime,
         lastRefreshTime = null,
         dataAccessExpirationTime = null,
     )

@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -28,13 +27,11 @@ fun Context.startLoginActivity(createAccount: Boolean = false) = startActivity(
 class LoginActivity : BaseActivity() {
     @Inject
     internal lateinit var accountManager: GodToolsAccountManager
-    private lateinit var loginState: GodToolsAccountManager.LoginState
 
     private val createAccount get() = intent?.getBooleanExtra(EXTRA_CREATE, false) ?: false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loginState = accountManager.prepareForLogin(this)
         finishWhenAuthenticated()
 
         setContent {
@@ -43,8 +40,6 @@ class LoginActivity : BaseActivity() {
                     createAccount = createAccount,
                     onEvent = {
                         when (it) {
-                            is LoginLayoutEvent.Login ->
-                                lifecycleScope.launch { accountManager.login(it.type, loginState) }
                             LoginLayoutEvent.Close -> finish()
                         }
                     }
