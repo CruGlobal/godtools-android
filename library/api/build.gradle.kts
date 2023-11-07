@@ -1,6 +1,6 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -15,6 +15,9 @@ android {
         buildConfigField("String", "MOBILE_CONTENT_SYSTEM", "\"GodTools\"")
     }
 }
+
+// TODO: remove these bug workarounds once they are no longer needed
+exportAgpGeneratedSourcesToKsp()
 
 dependencies {
     api(project(":library:model"))
@@ -37,10 +40,8 @@ dependencies {
     implementation(libs.scarlet.adapters.stream.coroutines)
     implementation(libs.scarlet.websockets.okhttp)
 
-    // TODO: transition to KSP for dagger once referencing BuildConfig is supported
-    //       see: https://github.com/google/dagger/issues/4051
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.json)
     testImplementation(libs.jsonUnit.assertj)

@@ -1,12 +1,12 @@
 plugins {
     id("godtools.application-conventions")
-    kotlin("kapt")
     alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.grgit)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -129,11 +129,12 @@ android {
     dynamicFeatures += ":feature:bundledcontent"
 }
 
-kapt {
-    javacOptions {
-        option("-Adagger.fastInit=enabled")
-    }
+ksp {
+    arg("dagger.fastInit", "enabled")
 }
+
+// TODO: remove these bug workarounds once they are no longer needed
+exportAgpGeneratedSourcesToKsp()
 
 onesky {
     sourceStringFiles = listOf(
@@ -225,10 +226,8 @@ dependencies {
     debugImplementation(libs.gtoSupport.okhttp3)
     debugImplementation(libs.leakcanary)
 
-    // TODO: transition to KSP for dagger once referencing BuildConfig is supported
-    //       see: https://github.com/google/dagger/issues/4051
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
@@ -238,7 +237,6 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(testFixtures(project(":library:model")))
-    kaptTest(libs.hilt.compiler)
 }
 
 // region Firebase App Distribution
