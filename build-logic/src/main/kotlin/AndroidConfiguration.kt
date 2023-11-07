@@ -2,6 +2,7 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.TestedExtension
+import com.android.build.gradle.tasks.GenerateBuildConfig
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
@@ -11,6 +12,7 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompileTool
 
 internal const val BUILD_TYPE_DEBUG = "debug"
 internal const val BUILD_TYPE_QA = "qa"
@@ -136,5 +138,25 @@ fun CommonExtension<*, *, *, *, *>.configureQaBuildType(project: Project) {
     project.configurations {
         named("${BUILD_TYPE_QA}Api") { extendsFrom(getByName("${BUILD_TYPE_DEBUG}Api")) }
         named("${BUILD_TYPE_QA}Implementation") { extendsFrom(getByName("${BUILD_TYPE_DEBUG}Implementation")) }
+    }
+}
+
+// TODO: Work around AGP generated BuildConfig not being exposed to KSP processors.
+//       see: https://github.com/google/dagger/issues/4051
+fun Project.exportAgpGeneratedSourcesToKsp() {
+    androidComponents {
+        onVariants { variant ->
+            val kspTaskName = "ksp" + variant.name.capitalize() + "Kotlin"
+            val buildConfigTaskName = "generate" + variant.name.capitalize() + "BuildConfig"
+
+            afterEvaluate {
+                tasks.named(kspTaskName) {
+                    val buildConfigSource = tasks.named(buildConfigTaskName, GenerateBuildConfig::class.java)
+                        .map { it.sourceOutputDir }
+
+                    (this as AbstractKotlinCompileTool<*>).setSource(buildConfigSource)
+                }
+            }
+        }
     }
 }
