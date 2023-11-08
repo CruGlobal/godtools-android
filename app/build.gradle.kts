@@ -1,5 +1,6 @@
 plugins {
     id("godtools.application-conventions")
+    id("kotlin-parcelize")
     alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
@@ -205,6 +206,8 @@ dependencies {
     implementation(libs.godtoolsShared.common)
 
     api(libs.eventbus)
+    implementation(libs.circuit.codegen.annotations)
+    implementation(libs.circuit.foundation)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)

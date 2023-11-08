@@ -10,6 +10,7 @@ androidx-lifecycle = "2.6.2"
 androidx-room = "2.6.0"
 androidx-viewpager2 = "1.0.0"
 androidx-work = "2.8.1"
+circuit = "0.16.0"
 dagger = "2.48.1"
 eventbus = "3.3.1"
 facebook = "16.2.0"
@@ -77,6 +78,9 @@ androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref =
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
 appsflyer = "com.appsflyer:af-android-sdk:6.12.4"
+circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
+circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
+circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circuit" }
 coil-compose = "io.coil-kt:coil-compose:2.5.0"
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
@@ -212,7 +216,7 @@ ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
 androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
-androidx-compose-testing = ["androidx-compose-ui-test"]
+androidx-compose-testing = ["androidx-compose-ui-test", "circuit-test"]
 common = ["kotlin-stdlib", "timber"]
 test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
 
