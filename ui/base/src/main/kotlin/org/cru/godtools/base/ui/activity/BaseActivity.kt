@@ -71,7 +71,7 @@ abstract class BaseActivity protected constructor() : AppCompatActivity() {
 
     protected open fun showNextFeatureDiscovery() = Unit
 
-    protected fun showFeatureDiscovery(feature: String, force: Boolean = false) {
+    private fun showFeatureDiscovery(feature: String, force: Boolean = false) {
         // short-circuit if this activity is not started
         if (!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
 
