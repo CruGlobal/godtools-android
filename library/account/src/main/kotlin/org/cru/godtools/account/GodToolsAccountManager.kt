@@ -5,6 +5,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.core.app.ActivityOptionsCompat
+import dagger.Lazy
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -23,17 +25,21 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.Ordered
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.account.provider.AuthenticationException
+import org.cru.godtools.api.UserApi
 
 @Singleton
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsAccountManager @VisibleForTesting internal constructor(
     @get:VisibleForTesting
     internal val providers: List<AccountProvider>,
+    private val userApi: Lazy<UserApi>,
     coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
     @Inject
-    internal constructor(providers: Set<@JvmSuppressWildcards AccountProvider>) :
-        this(providers.sortedWith(Ordered.COMPARATOR))
+    internal constructor(
+        providers: Set<@JvmSuppressWildcards AccountProvider>,
+        userApi: Lazy<UserApi>,
+    ) : this(providers.sortedWith(Ordered.COMPARATOR), userApi)
 
     // region Active Provider
     @VisibleForTesting
@@ -97,6 +103,14 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     suspend fun logout() = coroutineScope {
         // trigger a logout for any provider we happen to be logged into
         providers.forEach { launch { it.logout() } }
+    }
+
+    suspend fun deleteAccount() = try {
+        userApi.get().deleteUser()
+            .also { if (it.isSuccessful) logout() }
+            .isSuccessful
+    } catch (_: IOException) {
+        false
     }
     // endregion Login/Logout
 
