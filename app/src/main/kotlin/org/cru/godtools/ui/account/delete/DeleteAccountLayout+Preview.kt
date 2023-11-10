@@ -6,8 +6,12 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @Preview
 @Composable
-private fun DeleteAccountLayoutPreview() {
-    GodToolsTheme {
-        DeleteAccountLayout(DeleteAccountScreen.State { })
-    }
+private fun DeleteAccountLayoutDisplayPreview() {
+    GodToolsTheme { DeleteAccountLayout(DeleteAccountScreen.State.Display { }) }
+}
+
+@Preview
+@Composable
+private fun DeleteAccountLayoutErrorPreview() {
+    GodToolsTheme { DeleteAccountLayout(DeleteAccountScreen.State.Error { }) }
 }

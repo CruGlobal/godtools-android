@@ -7,12 +7,16 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data object DeleteAccountScreen : Screen {
-    data class State(
-        val eventSink: (Event) -> Unit,
-    ) : CircuitUiState
+    sealed class State : CircuitUiState {
+        data class Display(override val eventSink: (Event) -> Unit) : State()
+        data class Error(override val eventSink: (Event) -> Unit) : State()
+
+        abstract val eventSink: (Event) -> Unit
+    }
 
     sealed class Event : CircuitUiEvent {
         data object DeleteAccount : Event()
-        data object Cancel : Event()
+        data object ClearError : Event()
+        data object Close : Event()
     }
 }

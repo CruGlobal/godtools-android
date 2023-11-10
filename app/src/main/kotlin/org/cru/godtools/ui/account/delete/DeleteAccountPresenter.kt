@@ -3,6 +3,7 @@ package org.cru.godtools.ui.account.delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -15,6 +16,7 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.cru.godtools.account.GodToolsAccountManager
+import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
 
 class DeleteAccountPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
@@ -25,19 +27,27 @@ class DeleteAccountPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         var error by rememberRetained { mutableStateOf(false) }
 
-        return DeleteAccountScreen.State {
-            when (it) {
-                DeleteAccountScreen.Event.DeleteAccount -> {
-                    coroutineScope.launch {
-                        if (accountManager.deleteAccount()) {
-                            navigator.pop()
-                        } else {
-                            error = true
+        val eventSink: (Event) -> Unit = remember {
+            {
+                when (it) {
+                    Event.DeleteAccount -> {
+                        coroutineScope.launch {
+                            if (accountManager.deleteAccount()) {
+                                navigator.pop()
+                            } else {
+                                error = true
+                            }
                         }
                     }
+                    Event.ClearError -> error = false
+                    Event.Close -> navigator.pop()
                 }
-                DeleteAccountScreen.Event.Cancel -> navigator.pop()
             }
+        }
+
+        return when {
+            error -> DeleteAccountScreen.State.Error(eventSink)
+            else -> DeleteAccountScreen.State.Display(eventSink)
         }
     }
 

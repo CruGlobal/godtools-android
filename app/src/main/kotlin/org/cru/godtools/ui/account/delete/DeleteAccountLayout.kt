@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,17 +34,23 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
+import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
+import org.cru.godtools.ui.account.delete.DeleteAccountScreen.State
 
 private val MARGIN_HORIZONTAL = 32.dp
 
 internal const val TEST_TAG_ICON_CLOSE = "icon_close"
 internal const val TEST_TAG_BUTTON_DELETE = "button_delete"
 internal const val TEST_TAG_BUTTON_CANCEL = "button_cancel"
+internal const val TEST_TAG_ERROR_DIALOG = "error_dialog"
+internal const val TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM = "error_dialog_button_confirm"
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(DeleteAccountScreen::class, SingletonComponent::class)
-fun DeleteAccountLayout(state: DeleteAccountScreen.State, modifier: Modifier = Modifier) {
+fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
+    DeleteAccountError(state)
+
     Scaffold(modifier = modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,7 +63,7 @@ fun DeleteAccountLayout(state: DeleteAccountScreen.State, modifier: Modifier = M
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { state.eventSink(DeleteAccountScreen.Event.Cancel) },
+                        onClick = { state.eventSink(Event.Close) },
                         modifier = Modifier.testTag(TEST_TAG_ICON_CLOSE)
                     ) {
                         Icon(Icons.Default.Close, null)
@@ -85,8 +93,10 @@ fun DeleteAccountLayout(state: DeleteAccountScreen.State, modifier: Modifier = M
                 modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
             )
 
+            val actionsEnabled = state !is State.Error
             OutlinedButton(
-                onClick = { state.eventSink(DeleteAccountScreen.Event.DeleteAccount) },
+                enabled = actionsEnabled,
+                onClick = { state.eventSink(Event.DeleteAccount) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
@@ -95,7 +105,8 @@ fun DeleteAccountLayout(state: DeleteAccountScreen.State, modifier: Modifier = M
                 Text(stringResource(R.string.account_delete_action_delete))
             }
             Button(
-                onClick = { state.eventSink(DeleteAccountScreen.Event.Cancel) },
+                enabled = actionsEnabled,
+                onClick = { state.eventSink(Event.Close) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
@@ -105,5 +116,24 @@ fun DeleteAccountLayout(state: DeleteAccountScreen.State, modifier: Modifier = M
             }
             Spacer(Modifier.height(32.dp))
         }
+    }
+}
+
+@Composable
+private fun DeleteAccountError(state: State) {
+    if (state is State.Error) {
+        AlertDialog(
+            text = { Text(stringResource(R.string.account_delete_error)) },
+            confirmButton = {
+                TextButton(
+                    onClick = { state.eventSink(Event.ClearError) },
+                    modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM),
+                ) {
+                    Text(stringResource(R.string.account_delete_error_dismiss))
+                }
+            },
+            onDismissRequest = { state.eventSink(Event.ClearError) },
+            modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG),
+        )
     }
 }
