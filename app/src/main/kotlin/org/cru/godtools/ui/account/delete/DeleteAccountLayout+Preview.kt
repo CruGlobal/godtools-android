@@ -12,6 +12,12 @@ private fun DeleteAccountLayoutDisplayPreview() {
 
 @Preview
 @Composable
+private fun DeleteAccountLayoutDeletingPreview() {
+    GodToolsTheme { DeleteAccountLayout(DeleteAccountScreen.State.Deleting { }) }
+}
+
+@Preview
+@Composable
 private fun DeleteAccountLayoutErrorPreview() {
     GodToolsTheme { DeleteAccountLayout(DeleteAccountScreen.State.Error { }) }
 }

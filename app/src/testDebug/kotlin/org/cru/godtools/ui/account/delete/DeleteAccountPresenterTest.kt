@@ -42,6 +42,7 @@ class DeleteAccountPresenterTest {
             assertIs<State.Display>(awaitItem())
                 .eventSink(Event.DeleteAccount)
 
+            assertIs<State.Deleting>(awaitItem())
             deleteAccountResponse.send(true)
             coVerify { accountManager.deleteAccount() }
             navigator.awaitPop()
@@ -58,6 +59,7 @@ class DeleteAccountPresenterTest {
             assertIs<State.Display>(awaitItem())
                 .eventSink(Event.DeleteAccount)
 
+            assertIs<State.Deleting>(awaitItem())
             deleteAccountResponse.send(false)
             coVerify { accountManager.deleteAccount() }
 
@@ -79,6 +81,23 @@ class DeleteAccountPresenterTest {
                 .eventSink(Event.Close)
             navigator.awaitPop()
             coVerify { accountManager wasNot Called }
+        }
+
+        confirmVerified(accountManager)
+    }
+
+    @Test
+    fun `Cancel Delete Account - While Deleting`() = runTest {
+        presenter.test {
+            assertIs<State.Display>(awaitItem())
+                .eventSink(Event.DeleteAccount)
+
+            assertIs<State.Deleting>(awaitItem())
+                .eventSink(Event.Close)
+            coVerify { accountManager.deleteAccount() }
+            navigator.awaitPop()
+
+            cancelAndIgnoreRemainingEvents()
         }
 
         confirmVerified(accountManager)

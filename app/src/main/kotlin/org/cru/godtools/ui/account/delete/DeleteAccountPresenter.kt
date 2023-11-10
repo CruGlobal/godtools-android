@@ -25,17 +25,21 @@ class DeleteAccountPresenter @AssistedInject constructor(
     @Composable
     override fun present(): DeleteAccountScreen.State {
         val coroutineScope = rememberCoroutineScope()
+
+        var deleting by remember { mutableStateOf(false) }
         var error by rememberRetained { mutableStateOf(false) }
 
         val eventSink: (Event) -> Unit = remember {
             {
                 when (it) {
                     Event.DeleteAccount -> {
+                        deleting = true
                         coroutineScope.launch {
                             if (accountManager.deleteAccount()) {
                                 navigator.pop()
                             } else {
                                 error = true
+                                deleting = false
                             }
                         }
                     }
@@ -47,6 +51,7 @@ class DeleteAccountPresenter @AssistedInject constructor(
 
         return when {
             error -> DeleteAccountScreen.State.Error(eventSink)
+            deleting -> DeleteAccountScreen.State.Deleting(eventSink)
             else -> DeleteAccountScreen.State.Display(eventSink)
         }
     }

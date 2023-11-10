@@ -76,6 +76,31 @@ class DeleteAccountLayoutTest {
     }
     // endregion State Display
 
+    // region State Deleting
+    @Test
+    fun `State Deleting - Action - Close Icon`() {
+        composeTestRule.run {
+            setContent { DeleteAccountLayout(State.Deleting(events)) }
+            onNodeWithTag(TEST_TAG_ICON_CLOSE)
+                .assertIsEnabled()
+                .performClick()
+        }
+
+        events.assertEvent(Event.Close)
+    }
+
+    @Test
+    fun `State Deleting - Action - Disabled Delete & Cancel Buttons`() {
+        composeTestRule.run {
+            setContent { DeleteAccountLayout(State.Deleting(events)) }
+            onNodeWithTag(TEST_TAG_BUTTON_DELETE).assertIsNotEnabled()
+            onNodeWithTag(TEST_TAG_BUTTON_CANCEL).assertIsNotEnabled()
+        }
+
+        events.assertNoEvents()
+    }
+    // endregion State Deleting
+
     // region State Error
     @Test
     fun `State Error - Action - Close Icon`() {

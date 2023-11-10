@@ -93,7 +93,7 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
             )
 
-            val actionsEnabled = state !is State.Error
+            val actionsEnabled = state !is State.Deleting && state !is State.Error
             OutlinedButton(
                 enabled = actionsEnabled,
                 onClick = { state.eventSink(Event.DeleteAccount) },
