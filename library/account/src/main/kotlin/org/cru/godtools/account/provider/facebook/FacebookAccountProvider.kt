@@ -15,13 +15,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.activity.result.contract.transformInput
 import org.ccci.gto.android.common.facebook.login.currentAccessTokenFlow
-import org.ccci.gto.android.common.facebook.login.isExpiredFlow
 import org.ccci.gto.android.common.facebook.login.refreshCurrentAccessToken
 import org.ccci.gto.android.common.kotlin.coroutines.getStringFlow
 import org.cru.godtools.account.AccountType
@@ -54,23 +53,11 @@ internal class FacebookAccountProvider @Inject constructor(
     @VisibleForTesting
     internal val prefs by lazy { context.getSharedPreferences(PREFS_FACEBOOK_ACCOUNT_PROVIDER, Context.MODE_PRIVATE) }
 
-    override val userId get() = accessTokenManager.currentAccessToken?.apiUserId
-    override val isAuthenticated
-        get() = accessTokenManager.currentAccessToken?.let { !it.isExpired && it.apiUserId != null } == true
+    override val isAuthenticated get() = userId != null
+    override val userId get() = accessTokenManager.currentAccessToken?.let { prefs.getString(it.PREF_USER_ID, null) }
+    override fun isAuthenticatedFlow() = userIdFlow().map { it != null }
     override fun userIdFlow() = accessTokenManager.currentAccessTokenFlow()
-        .flatMapLatest { it?.apiUserIdFlow() ?: flowOf(null) }
-    override fun isAuthenticatedFlow() = accessTokenManager.currentAccessTokenFlow()
-        .flatMapLatest {
-            when {
-                it != null -> combine(it.isExpiredFlow(), it.apiUserIdFlow()) { isExpired, userId ->
-                    !isExpired && userId != null
-                }
-                else -> flowOf(false)
-            }
-        }
-
-    private val AccessToken.apiUserId get() = prefs.getString(PREF_USER_ID, null)
-    private fun AccessToken.apiUserIdFlow() = prefs.getStringFlow(PREF_USER_ID, null)
+        .flatMapLatest { it?.let { prefs.getStringFlow(it.PREF_USER_ID, null) } ?: flowOf(null) }
 
     // region Login/Logout
     @Composable

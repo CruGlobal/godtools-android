@@ -75,7 +75,7 @@ class FacebookAccountProviderTest {
     fun `Property isAuthenticated`() {
         assertFalse(provider.isAuthenticated)
 
-        val token = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
+        val token = accessToken()
         currentAccessTokenFlow.value = token
         assertFalse(provider.isAuthenticated)
 
@@ -89,14 +89,16 @@ class FacebookAccountProviderTest {
 
     @Test
     fun `Property isAuthenticated - token expired`() {
-        val token = accessToken(expirationTime = Date(System.currentTimeMillis() - 100_000))
+        val token = accessToken(expirationTime = Date(0))
+        currentAccessTokenFlow.value = token
         val user = UUID.randomUUID().toString()
         provider.prefs.edit { putString(token.PREF_USER_ID, user) }
-        currentAccessTokenFlow.value = token
-        assertFalse(provider.isAuthenticated)
 
-        currentAccessTokenFlow.value = accessToken(expirationTime = Date(System.currentTimeMillis() + 100_000))
-        assertTrue(provider.isAuthenticated)
+        assertTrue(token.isExpired)
+        assertTrue(
+            provider.isAuthenticated,
+            "We should still considered expired tokens as authenticated because refreshing the token might work"
+        )
     }
     // endregion Property: isAuthenticated
 
