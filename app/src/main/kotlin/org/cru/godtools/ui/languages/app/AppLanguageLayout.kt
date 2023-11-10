@@ -47,7 +47,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
 
 internal sealed interface AppLanguageEvent {
-    object NavigateBack : AppLanguageEvent
+    data object NavigateBack : AppLanguageEvent
     class LanguageSelected(val language: Locale) : AppLanguageEvent
 }
 
