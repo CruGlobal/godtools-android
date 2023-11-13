@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Login
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAdd
+import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material.icons.outlined.School
@@ -63,6 +64,7 @@ import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
+import org.cru.godtools.ui.account.delete.startDeleteAccountActivity
 import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.login.startLoginActivity
@@ -172,6 +174,15 @@ fun DrawerContentLayout(
                             viewModel.logout()
                             dismissDrawer()
                         }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Outlined.PersonRemove, null) },
+                        label = { Text(stringResource(R.string.menu_account_delete)) },
+                        selected = false,
+                        onClick = {
+                            context.startDeleteAccountActivity()
+                            dismissDrawer()
+                        },
                     )
                 }
                 Divider(modifier = Modifier.padding(horizontal = 16.dp))

@@ -1,10 +1,14 @@
 package org.cru.godtools.account
 
 import app.cash.turbine.test
+import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifySequence
 import io.mockk.every
+import io.mockk.excludeRecords
 import io.mockk.mockk
+import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -16,7 +20,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.provider.AccountProvider
+import org.cru.godtools.api.UserApi
+import org.cru.godtools.model.User
+import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsAccountManagerTest {
@@ -27,22 +36,28 @@ class GodToolsAccountManagerTest {
         every { order } returns 1
         coEvery { isAuthenticated } answers { provider1Authenticated.value }
         every { isAuthenticatedFlow() } returns provider1Authenticated
+
+        excludeRecords { isAuthenticatedFlow() }
     }
     private val provider2 = mockk<AccountProvider>(relaxed = true) {
         every { order } returns 2
         coEvery { isAuthenticated } answers { provider2Authenticated.value }
         every { isAuthenticatedFlow() } returns provider2Authenticated
+
+        excludeRecords { isAuthenticatedFlow() }
     }
     private val testScope = TestScope()
+    private val userApi: UserApi = mockk()
 
     private val manager = GodToolsAccountManager(
         providers = listOf(provider1, provider2),
-        coroutineScope = testScope.backgroundScope
+        userApi = { userApi },
+        coroutineScope = testScope.backgroundScope,
     )
 
     @Test
     fun verifyInjectedProvidersSorted() {
-        val manager = GodToolsAccountManager(setOf(provider2, provider1))
+        val manager = GodToolsAccountManager(providers = setOf(provider2, provider1), userApi = { userApi })
         assertEquals(listOf(provider1, provider2), manager.providers)
     }
 
@@ -115,4 +130,46 @@ class GodToolsAccountManagerTest {
             provider2.logout()
         }
     }
+
+    // region deleteAccount()
+    @Test
+    fun `deleteAccount()`() = testScope.runTest {
+        coEvery { userApi.deleteUser() } returns Response.success<JsonApiObject<User>>(204, null)
+
+        assertTrue(manager.deleteAccount())
+        coVerifySequence {
+            userApi.deleteUser()
+            provider1.logout()
+            provider2.logout()
+        }
+    }
+
+    @Test
+    fun `deleteAccount() - not authenticated`() = testScope.runTest {
+        coEvery { userApi.deleteUser() } returns Response.error(401, "".toResponseBody())
+
+        assertFalse(manager.deleteAccount())
+        coVerifySequence {
+            userApi.deleteUser()
+
+            // deleting the user failed, so don't log the user out
+            provider1 wasNot Called
+            provider2 wasNot Called
+        }
+    }
+
+    @Test
+    fun `deleteAccount() - IOException`() = testScope.runTest {
+        coEvery { userApi.deleteUser() } throws IOException()
+
+        assertFalse(manager.deleteAccount())
+        coVerifySequence {
+            userApi.deleteUser()
+
+            // deleting the user failed, so don't log the user out
+            provider1 wasNot Called
+            provider2 wasNot Called
+        }
+    }
+    // endregion deleteAccount()
 }
