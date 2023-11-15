@@ -2,6 +2,7 @@ package org.cru.godtools.ui.languages.downloadable
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -18,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -129,11 +129,18 @@ private fun LanguageListItem(viewModel: LanguageViewModels.LanguageViewModel, mo
             Text(pluralStringResource(R.plurals.language_settings_downloadable_languages_available_tools, tools, tools))
         },
         trailingContent = {
-            Switch(language.isAdded, onCheckedChange = {
-                scope.launch(NonCancellable) {
-                    if (it) viewModel.pin() else viewModel.unpin()
+            val toolsDownloaded by viewModel.toolsDownloaded.collectAsState()
+
+            LanguageDownloadProgressIndicator(
+                language.isAdded,
+                downloaded = toolsDownloaded,
+                total = toolsAvailable,
+                modifier = Modifier.clickable {
+                    scope.launch(NonCancellable) {
+                        if (language.isAdded) viewModel.unpin() else viewModel.pin()
+                    }
                 }
-            })
+            )
         },
         modifier = modifier
     )
