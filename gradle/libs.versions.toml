@@ -217,6 +217,7 @@ ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
 androidx-compose-debug = ["androidx-compose-ui-test-manifest", "androidx-compose-ui-tooling"]
 androidx-compose-testing = ["androidx-compose-ui-test", "circuit-test"]
+circuit = ["circuit-foundation", "circuit-codegen-annotations"]
 common = ["kotlin-stdlib", "timber"]
 test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
 
