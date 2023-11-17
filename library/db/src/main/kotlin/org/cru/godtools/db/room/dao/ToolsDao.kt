@@ -37,6 +37,15 @@ internal interface ToolsDao {
         "SELECT * FROM tools WHERE type in (:types) AND code IN (SELECT tool FROM translations WHERE locale = :locale)"
     )
     fun getToolsFlowByTypeAndLanguage(types: Collection<Tool.Type>, locale: Locale): Flow<List<ToolEntity>>
+    @Query(
+        """
+            SELECT * FROM tools
+            WHERE
+                type in (:types) AND
+                code IN (SELECT tool FROM translations WHERE locale = :locale AND isDownloaded = 1)
+        """
+    )
+    fun getDownloadedToolsFlowByTypeAndLanguage(types: Collection<Tool.Type>, locale: Locale): Flow<List<ToolEntity>>
     @Query("SELECT * FROM tools")
     suspend fun getToolFavorites(): List<ToolFavorite>
 

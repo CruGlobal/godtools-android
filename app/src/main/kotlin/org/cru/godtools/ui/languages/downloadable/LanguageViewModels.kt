@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 
 @HiltViewModel
 class LanguageViewModels @Inject constructor(
@@ -29,6 +30,10 @@ class LanguageViewModels @Inject constructor(
         val language = MutableStateFlow(language)
 
         val numberOfTools = toolsRepository.getToolsFlowForLanguage(code)
+            .map { it.size }
+            .flowOn(Dispatchers.Default)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+        val toolsDownloaded = toolsRepository.getDownloadedToolsFlowByTypesAndLanguage(Tool.Type.NORMAL_TYPES, code)
             .map { it.size }
             .flowOn(Dispatchers.Default)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
