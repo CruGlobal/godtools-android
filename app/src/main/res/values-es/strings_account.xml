@@ -6,9 +6,18 @@
     <string name="account_create_heading">Crear cuenta</string>
     <string name="account_create_description">Crea una cuenta para tener a tu alcance historias reales, ánimos y consejos prácticos.</string>
     <string name="account_login_heading">Iniciar sesión</string>
+    <string name="account_error_user_already_exists">La cuenta del usuario ya existe.</string>
+    <string name="account_error_user_not_found">No se encontró la cuenta del usuario.</string>
+    <string name="account_error_unknown">Error al iniciar sesión.</string>
+    <string name="account_error_dialog_dismiss">Aceptar</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
     <string name="account_activity_header">Tu actividad</string>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Sesion</item>
+        <item quantity="other">Sesiones</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Tus insignias</string>
     <plurals name="account_activity_badge_tools_opened">

@@ -1,11 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">Aktifitas Global</string>
+    <string name="menu_profile">Aktifitas</string>
+    <string name="account_joined">Bergabung pada %1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">Buat Akun</string>
+    <string name="account_create_description">Buat akun untuk mendapatkan kisah-kisah nyata, dorongan, dan tip praktis dengan ujung jari Saudara.</string>
+    <string name="account_login_heading">Masuk</string>
+    <string name="account_error_user_not_found">Pengguna tidak ditemukan</string>
+    <string name="account_error_dialog_dismiss">OK</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitas</string>
+    <string name="account_activity_header">Aktifitas Saudara</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Alat dibuka</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Pelajaran diselesaikan</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Layar dibagikan</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Tautan telah dibagikan</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Bahasa-bahasa yang digunakan</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Sesi-Sesi</item>
+    </plurals>
     <!-- Badges -->
+    <string name="account_activity_badges_header">Lencana Saudara</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">" %1$,d alat telah dibuka"</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">%1$,d pelajaran diselesaikan</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">%1$,d alat telah article</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">%1$,d gambar telah dibagikan</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">%1$,d tip latihan telah diselesaikan</item>
+    </plurals>
     <!-- Global Activity -->
+    <string name="account_tab_global_activity">Aktifitas Global</string>
     <string name="profile_global_activity_heading">%1$s  Aktivitas Global</string>
     <string name="profile_activity_unique_users">Pengguna unik</string>
     <string name="profile_activity_gospel_presentations">Presentasi Injil</string>

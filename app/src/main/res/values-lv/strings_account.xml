@@ -6,6 +6,18 @@
     <string name="account_create_heading">Reģistrēt kontu</string>
     <string name="account_create_description">Izveido kontu, lai tev būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_login_heading">Pierakstīties</string>
+    <string name="account_error_user_already_exists">Lietotāja konts jau pastāv.</string>
+    <string name="account_error_user_not_found">Lietotāja konts nav atrasts.</string>
+    <string name="account_error_unknown">Kļūda, pierakstoties sistēmā.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Dzēst kontu</string>
+    <string name="account_delete_heading">Neej tik drīz</string>
+    <string name="account_delete_description">Tu nevarēsi piekļūt savai rīku izlasei vai aktivitātei, ja tavs konts tiks izdzēsts.</string>
+    <string name="account_delete_action_delete">Izdzēst manu kontu</string>
+    <string name="account_delete_action_cancel">Paturēt manu kontu</string>
+    <string name="account_delete_error">Dzēšot tavu kontu, radās kļūda. Pārliecinies, vai esi tiešsaistē, vai mēģini vēlāk…</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>

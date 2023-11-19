@@ -6,6 +6,11 @@
     <string name="account_create_heading">Créer un compte</string>
     <string name="account_create_description">Créez un compte pour avoir des histoires vraies, des encouragements et des conseils pratiques à portée de main.</string>
     <string name="account_login_heading">S\'inscrire</string>
+    <string name="account_error_user_already_exists">Le compte utilisateur existe déjà.</string>
+    <string name="account_error_user_not_found">Compte d\'utilisateur non trouvé.</string>
+    <string name="account_error_unknown">Erreur de connexion.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>

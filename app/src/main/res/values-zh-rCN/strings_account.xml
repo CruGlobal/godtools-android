@@ -6,6 +6,7 @@
     <string name="account_create_heading">创建账户</string>
     <string name="account_create_description">创建账户，让真实故事、励志金句和实用技巧触手可及。</string>
     <string name="account_login_heading">登录</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">活动</string>
     <string name="account_activity_header">您的活动</string>

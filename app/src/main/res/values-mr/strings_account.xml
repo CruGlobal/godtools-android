@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="menu_profile">जागतिक क्रियाकलाप</string>
     <!-- Create / Login -->
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">क्रियाकलाप</string>
     <!-- Badges -->

@@ -6,6 +6,7 @@
     <string name="account_create_heading">खाता खोलें</string>
     <string name="account_create_description">अपनी उंगलियों पर वास्तविक कहानियाँ, प्रोत्साहन और व्यावहारिक सुझावों को प्राप्त करने के लिए खाता खोलें।</string>
     <string name="account_login_heading">साइन इन करें</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
     <string name="account_activity_header">आपकी गतिविधियाँ</string>

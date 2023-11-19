@@ -6,6 +6,7 @@
     <string name="account_create_heading">Tạo tài khoản</string>
     <string name="account_create_description">Tạo một tài khoản để có những câu chuyện, sự khích lệ và gợi ý thực hành trong tầm tay bạn.</string>
     <string name="account_login_heading">Đăng nhập</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
     <string name="account_activity_header">Hoạt động của bạn</string>
