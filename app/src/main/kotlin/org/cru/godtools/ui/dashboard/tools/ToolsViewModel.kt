@@ -87,11 +87,7 @@ class ToolsViewModel @Inject constructor(
             }
         }
         .combine(settings.appLanguageFlow) { langs, appLang ->
-            langs.sortedWith(
-                compareByDescending<Language> { it.code == appLang }
-                    .then(compareByDescending { it.isAdded })
-                    .then(Language.displayNameComparator(context, appLang))
-            ) to appLang
+            langs.sortedWith(Language.displayNameComparator(context, appLang)) to appLang
         }
         .combine(languageQuery) { (langs, appLang), q -> langs.filterByDisplayAndNativeName(q, context, appLang) }
         .flowOn(Dispatchers.Default)
