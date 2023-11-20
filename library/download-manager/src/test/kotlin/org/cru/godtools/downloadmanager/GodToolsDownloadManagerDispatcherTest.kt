@@ -40,7 +40,6 @@ class GodToolsDownloadManagerDispatcherTest {
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)
     private val favoriteToolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
-    private val resourcesFlow = MutableSharedFlow<List<Tool>>(replay = 1)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
@@ -61,9 +60,8 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val toolsRepository: ToolsRepository by lazy {
         mockk {
-            every { getAllToolsFlow() } returns resourcesFlow
+            every { getAllToolsFlow() } returns toolsFlow
             every { getFavoriteToolsFlow() } returns favoriteToolsFlow
-            every { getNormalToolsFlow() } returns toolsFlow
         }
     }
     private val translationsRepository: TranslationsRepository by lazy {
@@ -234,7 +232,7 @@ class GodToolsDownloadManagerDispatcherTest {
         }
 
         attachmentsFlow.emit(attachments)
-        resourcesFlow.emit(listOf(tool1, tool2))
+        toolsFlow.emit(listOf(tool1, tool2))
         runCurrent()
         coVerify(exactly = 1) {
             downloadManager.downloadAttachment(attachments[3].id)
