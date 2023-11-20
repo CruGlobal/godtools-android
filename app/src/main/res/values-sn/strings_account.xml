@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="menu_profile">Zviri kuitika pasi rose</string>
     <!-- Create / Login -->
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Zviri kuitika</string>
     <!-- Badges -->

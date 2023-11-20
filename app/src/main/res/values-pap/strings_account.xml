@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="menu_profile">Aktividat Global</string>
     <!-- Create / Login -->
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Aktividat</string>
     <!-- Badges -->

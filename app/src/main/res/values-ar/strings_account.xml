@@ -6,6 +6,7 @@
     <string name="account_create_heading">التسجيل (إنشاء حساب)</string>
     <string name="account_create_description">قم بإنشاء حساب للحصول على قصص حقيقية وتشجيع ونصائح عملية في متناول يدك.</string>
     <string name="account_login_heading">تسجيل دخول</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">الحركة</string>
     <string name="account_activity_header">نشاط حركتك</string>

@@ -8,19 +8,19 @@
     <!-- Language Settings UI -->
     <string name="menu_language_settings">Ajustes de idioma</string>
     <string name="title_language_settings">Ajustes de idioma</string>
-    <string name="language_settings_section_app_language_heading">App interface language</string>
+    <string name="language_settings_section_app_language_heading">Idioma de la interfaz de la aplicación</string>
     <plurals name="language_settings_section_app_language_available">
         <item quantity="one">%1$d Idioma disponible</item>
         <item quantity="other">%1$d Idiomas disponibles</item>
     </plurals>
-    <string name="language_settings_section_app_language_description">Set the language you’d like the whole app to be displayed in.</string>
-    <string name="language_settings_section_offline_heading">Tool languages available offline</string>
-    <string name="language_settings_section_offline_description">Download all the tools in a language to make them available even if you’re out of WiFi or cell service. Set the tool language via the options button within a tool.</string>
-    <string name="language_settings_section_offline_action_edit">Edit downloaded languages</string>
+    <string name="language_settings_section_app_language_description">Establece el idioma en el que deseas que se muestre toda la aplicación.</string>
+    <string name="language_settings_section_offline_heading">Idiomas de herramientas disponibles sin conexión</string>
+    <string name="language_settings_section_offline_description">Descarga todas las herramientas en un idioma para que estén disponibles incluso si no tienes WiFi o servicio móvil. Establece el idioma de la herramienta mediante el botón de opciones dentro de una herramienta.</string>
+    <string name="language_settings_section_offline_action_edit">Editar idiomas descargados</string>
     <!-- Downloadable Languages UI -->
-    <string name="language_settings_downloadable_languages_search">Search languages</string>
+    <string name="language_settings_downloadable_languages_search">Buscar idiomas</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
-        <item quantity="one">%1$d Tool available</item>
-        <item quantity="other">%1$d Tools available</item>
+        <item quantity="one">%1$d herramienta disponible</item>
+        <item quantity="other">%1$d herramientas disponibles</item>
     </plurals>
 </resources>

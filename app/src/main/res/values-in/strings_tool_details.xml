@@ -13,6 +13,8 @@
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Bahasa</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">Memulai percakapan</string>
+    <string name="tool_details_section_description_outline">Garis besar</string>
     <string name="tool_details_section_description_languages_available">Bahasa yang tersedia</string>
     <string name="tool_details_section_variants_label">Versi</string>
     <string name="tool_details_section_variants_description">Pilih versi lain dari sarana ini di bawah. Setiap versi menampilkan gaya dan konten yang unik sehingga Anda dapat menemukan yang terbaik untuk percakapan Anda. Anda dapat memfavoritkan beberapa versi dari sarana yang sama.</string>

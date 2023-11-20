@@ -6,6 +6,7 @@
     <string name="account_create_heading">Создать аккаунт</string>
     <string name="account_create_description">Создайте аккаунт, чтобы вам были доступны реальные истории, слова поддержки и практические советы.</string>
     <string name="account_login_heading">Войти</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Активность</string>
     <string name="account_activity_header">Ваша активность</string>

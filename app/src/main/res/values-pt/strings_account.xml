@@ -6,6 +6,7 @@
     <string name="account_create_heading">Criar conta</string>
     <string name="account_create_description">Crie uma conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
     <string name="account_login_heading">Entrar</string>
+    <!-- Delete Account -->
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
     <string name="account_activity_header">Sua atividade</string>

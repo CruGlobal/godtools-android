@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Memulai</string>
     <string name="menu_tutorial">Tutorial</string>
     <string name="menu_heading_account">Akun</string>
     <string name="menu_login">Masuk</string>
     <string name="menu_signup">Buat Akun</string>
     <string name="menu_logout">Keluar</string>
+    <string name="menu_heading_support">Dukungan</string>
+    <string name="menu_feedback">Kirim tanggapan</string>
+    <string name="menu_report_bug">Laporkan bug</string>
+    <string name="menu_question">Ajukan pertanyaan</string>
     <string name="menu_heading_share">Berbagi</string>
+    <string name="menu_review">Berikan ulasan</string>
     <string name="menu_share_story">Berbagi Cerita Dengan Kami</string>
     <string name="menu_share_godtools">Bergbagi App GodTools</string>
     <string name="share_app_message">Unduh apliaksi GodTools: https://godtoolsapp.com/id/ \n\n
@@ -16,7 +22,8 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="menu_heading_about">Tentang</string>
     <string name="menu_terms_of_use">Syarat Penggunaan</string>
     <string name="menu_privacy_policy">Kebijakan Privasi</string>
-    <string name="menu_copyright">Hak cipta</string>
+    <string name="menu_copyright">Info Hak cipta</string>
+    <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pelajaran</string>
     <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Anda</string>
@@ -34,6 +41,9 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="tools_list_favorites_banner_action_dismiss">Selesai</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Semua Sarana</string>
+    <string name="dashboard_tools_section_filter_label">Filter</string>
+    <string name="dashboard_tools_section_filter_category_any">Kategori apa pun</string>
+    <string name="dashboard_tools_section_filter_language_any">Bahasa apapun</string>
     <string name="dashboard_tools_section_categories_label">Kategori</string>
     <string name="dashboard_tools_section_categories_all">Semua Sarana</string>
     <string name="dashboard_tools_section_spotlight_label">Spotlight Sarana</string>
@@ -46,4 +56,5 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="action_tools_about">Detail</string>
     <string name="action_tools_open">Buka</string>
     <!-- In App Update -->
+    <string name="play_update_available_action">Unduh</string>
 </resources>
