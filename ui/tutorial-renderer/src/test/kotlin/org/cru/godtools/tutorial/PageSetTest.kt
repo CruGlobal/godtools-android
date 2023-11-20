@@ -24,22 +24,4 @@ class PageSetTest {
         assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh")))
         assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-Hant")))
     }
-
-    @Test
-    fun testOnboardingPages() {
-        assertThat(
-            PageSet.ONBOARDING.pagesFor(Locale.ENGLISH),
-            allOf(
-                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS),
-                not(hasItem(Page.ONBOARDING_SHARE_FINAL))
-            )
-        )
-        assertThat(
-            PageSet.ONBOARDING.pagesFor(Locale.GERMAN),
-            allOf(
-                not(hasItems(Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS)),
-                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE_FINAL)
-            )
-        )
-    }
 }

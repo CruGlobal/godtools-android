@@ -8,7 +8,6 @@ import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.layout.features.TutorialFeaturesLayout
 import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
-import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLinksLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
 import org.cru.godtools.tutorial.layout.tips.TutorialTipsLayout
 
@@ -46,14 +45,9 @@ internal fun TutorialPageLayout(
     )
     Page.ONBOARDING_CONVERSATIONS,
     Page.ONBOARDING_PREPARE,
-    Page.ONBOARDING_SHARE,
-    Page.ONBOARDING_SHARE_FINAL -> TutorialOnboardingLayout(
+    Page.ONBOARDING_SHARE -> TutorialOnboardingLayout(
         page,
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
-        modifier = modifier,
-    )
-    Page.ONBOARDING_LINKS -> TutorialOnboardingLinksLayout(
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )

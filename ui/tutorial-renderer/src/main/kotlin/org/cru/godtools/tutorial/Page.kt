@@ -6,8 +6,6 @@ import androidx.annotation.StringRes
 import java.util.Locale
 import org.ccci.gto.android.common.util.includeFallbacks
 
-private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH, Locale.FRENCH, Locale("es"), Locale("lv"), Locale("vi"))
-
 internal enum class Page(
     @StringRes val title: Int? = null,
     @StringRes val content: Int? = null,
@@ -39,20 +37,8 @@ internal enum class Page(
     ONBOARDING_SHARE(
         title = R.string.tutorial_onboarding_share_headline,
         content = R.string.tutorial_onboarding_share_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_distance,
-        supportedLocales = ONBOARDING_EXTENDED_LOCALES
-    ),
-    ONBOARDING_SHARE_FINAL(
-        title = R.string.tutorial_onboarding_share_headline,
-        content = R.string.tutorial_onboarding_share_subhead,
         action = R.string.tutorial_onboarding_action_start,
         animation = R.raw.anim_tutorial_onboarding_distance,
-        disabledLocales = ONBOARDING_EXTENDED_LOCALES,
-        showMenu = false
-    ),
-    ONBOARDING_LINKS(
-        supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
     FEATURES_TOOLS(

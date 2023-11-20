@@ -15,19 +15,7 @@ import org.cru.godtools.tutorial.layout.TutorialPageLayout
     device = Devices.PIXEL_3A,
     widthDp = 4 * 393
 )
-private fun OnboardingTutorialShort() = Row {
-    PageSet.ONBOARDING.pagesFor(Locale("tlh")).forEach {
-        TutorialPageLayout(it, modifier = Modifier.weight(1f))
-    }
-}
-
-@Composable
-@Preview(
-    showBackground = true,
-    device = Devices.PIXEL_3A,
-    widthDp = 5 * 393
-)
-private fun OnboardingTutorialFull() = Row {
+private fun OnboardingTutorial() = Row {
     PageSet.ONBOARDING.pagesFor(Locale.ENGLISH).forEach {
         TutorialPageLayout(it, modifier = Modifier.weight(1f))
     }

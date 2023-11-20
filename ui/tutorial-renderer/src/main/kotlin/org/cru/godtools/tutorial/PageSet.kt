@@ -22,9 +22,7 @@ enum class PageSet(
             Page.ONBOARDING_WELCOME,
             Page.ONBOARDING_CONVERSATIONS,
             Page.ONBOARDING_PREPARE,
-            Page.ONBOARDING_SHARE_FINAL,
             Page.ONBOARDING_SHARE,
-            Page.ONBOARDING_LINKS
         )
     ),
     FEATURES(
