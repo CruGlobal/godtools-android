@@ -15,9 +15,9 @@ data object DeleteAccountScreen : Screen {
         abstract val eventSink: (Event) -> Unit
     }
 
-    sealed class Event : CircuitUiEvent {
-        data object DeleteAccount : Event()
-        data object ClearError : Event()
-        data object Close : Event()
+    sealed interface Event : CircuitUiEvent {
+        data object DeleteAccount : Event
+        data object ClearError : Event
+        data object Close : Event
     }
 }
