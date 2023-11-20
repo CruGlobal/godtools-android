@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Ismerd meg, hogyan teheted a hitről szóló beszélgetéseket életed természetes részévé.</string>
     <string name="tutorial_onboarding_share_headline">Segíts valakinek felfedezni Jézust</string>
     <string name="tutorial_onboarding_share_subhead">A GodTools az útmutatód ahhoz, hogy érthető és releváns módon kommunikáld az evangéliumot.</string>
-    <string name="tutorial_onboarding_links_headline">Gyorsindítási hivatkozások</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Szeretném felfedezni a kereszténységet</string>
-    <string name="tutorial_onboarding_links_articles_action">Olvasd el a cikkeinket</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Szeretném megtudni, hogyan folytassak beszélgetéseket az evangéliumról.</string>
-    <string name="tutorial_onboarding_links_lessons_action">Próbáld ki a Leckéinket</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Szeretném megosztani valakivel az evangéliumot</string>
-    <string name="tutorial_onboarding_links_tools_action">Próbáld ki valamelyik eszközünket</string>
     <string name="tutorial_onboarding_action_begin">Kezdés</string>
     <string name="tutorial_onboarding_action_next">Következő</string>
     <string name="tutorial_onboarding_action_skip">Kihagyás</string>

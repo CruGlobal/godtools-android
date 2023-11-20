@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Dzidza kuti ungaita sei nhaurirano pamusoro perutendo rwako chikamu sechakareruka chehupenyu hwako</string>
     <string name="tutorial_onboarding_share_headline">Batsira mumwe munhu kuti awane Jesu</string>
     <string name="tutorial_onboarding_share_subhead">GodTools inokubatsira kugovera vhangeri nenzira dzakajeka uye dzinobatika.</string>
-    <string name="tutorial_onboarding_links_headline">Zvibetsero zvekutanga nazvo</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Ndinoda kunzwisisa chiKristu</string>
-    <string name="tutorial_onboarding_links_articles_action">Verenga zvinyorwa zvedu</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Ndinoda kudzidza pamusoro pekuita nhaurirano dzevangeri</string>
-    <string name="tutorial_onboarding_links_lessons_action">Edza zvidzidzo zvedu</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Ndinoda kugoverana vhangeri nemumwe munhu</string>
-    <string name="tutorial_onboarding_links_tools_action">Sarudza chimwe chezvombo zvedu</string>
     <string name="tutorial_onboarding_action_begin">Tanga</string>
     <string name="tutorial_onboarding_action_next">Zvinotevera</string>
     <string name="tutorial_onboarding_action_skip">Darika</string>

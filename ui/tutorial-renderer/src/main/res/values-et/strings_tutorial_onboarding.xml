@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Õpi, kuidas vestlused usust oma elu loomulikuks osaks muuta.</string>
     <string name="tutorial_onboarding_share_headline">Aita inimestel Jeesust leida</string>
     <string name="tutorial_onboarding_share_subhead">GodTools aitab sul Jeesuse sõnumit selgel ja kohasel viisil jagada.</string>
-    <string name="tutorial_onboarding_links_headline">Otseteed</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Soovin kristlust tundma õppida</string>
-    <string name="tutorial_onboarding_links_articles_action">Loe meie artikleid</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Soovin õppida Jeesuse sõnumit jagama</string>
-    <string name="tutorial_onboarding_links_lessons_action">Proovi meie koolitust</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Soovin Jeesuse sõnumit jagada</string>
-    <string name="tutorial_onboarding_links_tools_action">Vali üks meie tööriistadest</string>
     <string name="tutorial_onboarding_action_begin">Alusta</string>
     <string name="tutorial_onboarding_action_next">Edasi</string>
     <string name="tutorial_onboarding_action_skip">Jäta vahele</string>

@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Дізнайтесь, як зробити розмови про віру невід’ємною частиною вашого життя.</string>
     <string name="tutorial_onboarding_share_headline">Допоможіть іншим прийти до Ісуса</string>
     <string name="tutorial_onboarding_share_subhead">GodTools навчить вас передавати Благу Вістку зрозумілими й простими словами.</string>
-    <string name="tutorial_onboarding_links_headline">Стартові посилання</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Я хочу дізнатися про християнство</string>
-    <string name="tutorial_onboarding_links_articles_action">Прочитайте наші статті</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Я хочу навчитися вести євангельські розмови</string>
-    <string name="tutorial_onboarding_links_lessons_action">Спробуйте наші уроки</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Я хочу поділитися Благою Вісткою з іншими</string>
-    <string name="tutorial_onboarding_links_tools_action">Виберіть один із наших інструментів</string>
     <string name="tutorial_onboarding_action_begin">Почати</string>
     <string name="tutorial_onboarding_action_next">Далі</string>
     <string name="tutorial_onboarding_action_skip">Пропустити</string>

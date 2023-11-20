@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Dowiedz się, w jaki sposób rozmowy o wierze uczynić częścią życia.</string>
     <string name="tutorial_onboarding_share_headline">Pomóż innym odnaleźć Jezusa</string>
     <string name="tutorial_onboarding_share_subhead">GodTools jest twoim przewodnikiem przy przekazywaniu ewangelii w zrozumiały i adekwatny do sytuacji sposób.</string>
-    <string name="tutorial_onboarding_links_headline">Linki do szybkiego rozpoczęcia</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Chcę dowiedzieć się więcej o Chrześcijaństwie</string>
-    <string name="tutorial_onboarding_links_articles_action">Przeczytaj nasze artykuły</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Chcę dowiedzieć się więcej o przeprowadzaniu rozmów o ewangelii</string>
-    <string name="tutorial_onboarding_links_lessons_action">Spróbuj naszych lekcji</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Chcę podzielić się z kimś ewangelią</string>
-    <string name="tutorial_onboarding_links_tools_action">Wybierz jedno z naszych narzędzi</string>
     <string name="tutorial_onboarding_action_begin">Zacznij</string>
     <string name="tutorial_onboarding_action_next">Următorul</string>
     <string name="tutorial_onboarding_action_skip">Pomiń</string>

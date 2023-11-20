@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">İnanç hakkında sohbetleri nasıl hayatının doğal bir parçası hâline getireceğini öğren.</string>
     <string name="tutorial_onboarding_share_headline">Birilerinin İsa\'yı bulmasına yardımcı ol</string>
     <string name="tutorial_onboarding_share_subhead">GodTools hakikati açık ve amacına uygun biçimde anlatma konusunda rehberindir.</string>
-    <string name="tutorial_onboarding_links_headline">Hızlı başlangıç bağlantıları</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Hristiyanlığı keşfetmek istiyorum</string>
-    <string name="tutorial_onboarding_links_articles_action">Makalelerimizi oku</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">İncil sohbetleri gerçekleştirme konusunda bilgi edinmek istiyorum</string>
-    <string name="tutorial_onboarding_links_lessons_action">Derslerimizi dene</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Hakikati birisiyle paylaşmak istiyorum</string>
-    <string name="tutorial_onboarding_links_tools_action">Araçlarımızdan birini seç</string>
     <string name="tutorial_onboarding_action_begin">Başla</string>
     <string name="tutorial_onboarding_action_next">Sonraki</string>
     <string name="tutorial_onboarding_action_skip">Atla</string>

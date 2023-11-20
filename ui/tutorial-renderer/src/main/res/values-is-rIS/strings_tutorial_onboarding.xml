@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Lærðu hvernig þú gerir samræður um trú að náttúrulegum hluta lífs þíns.</string>
     <string name="tutorial_onboarding_share_headline">Hjálpaðu einhverjum að uppgötva Jesú</string>
     <string name="tutorial_onboarding_share_subhead">GodTools er leiðbeinandi þinn í að ræða fagnaðarerindið á skýran og viðeigandi hátt.</string>
-    <string name="tutorial_onboarding_links_headline">Flýtitenglar</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Ég vil skoða kristinfræði</string>
-    <string name="tutorial_onboarding_links_articles_action">Lestu greinar okkar</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Ég vil læra um að eiga samtöl um fagnaðarerindið</string>
-    <string name="tutorial_onboarding_links_lessons_action">Prófaðu námsefni okkar</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Ég vil deila fagnaðarerindinu með einhverjum</string>
-    <string name="tutorial_onboarding_links_tools_action">Veldu eitt af tólum okkar</string>
     <string name="tutorial_onboarding_action_begin">Byrja</string>
     <string name="tutorial_onboarding_action_next">Næsta</string>
     <string name="tutorial_onboarding_action_skip">Sleppa</string>

@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">विश्वासाविषयी संभाषणाला आपल्या आयुष्याचा एक नैसर्गिक भाग कसे बनवावे ते शिका.</string>
     <string name="tutorial_onboarding_share_headline">कुणाला तरी येशूजवळ येण्यास मदत करा</string>
     <string name="tutorial_onboarding_share_subhead">गॉस्पेल विषयी सुस्पष्ट व सुबोध रीत्या संवाद स्थापनेमध्ये GodTools आपले दिशादर्शक आहे.</string>
-    <string name="tutorial_onboarding_links_headline">झटपट सुरुवात लिंक्स</string>
-    <string name="tutorial_onboarding_links_articles_subhead">मला ख्रिश्चनिटी विषयी जाणून घ्यायचे आहे</string>
-    <string name="tutorial_onboarding_links_articles_action">आमचे लेख वाचा</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">मला गॉस्पेल-विषयक संभाषणे करण्याबद्दल जाणून घ्यायचे आहे</string>
-    <string name="tutorial_onboarding_links_lessons_action">आमचे धडे घेऊन पहा</string>
-    <string name="tutorial_onboarding_links_tools_subhead">मला गॉस्पेल कुणाशी तरी शेअर करायचे आहे</string>
-    <string name="tutorial_onboarding_links_tools_action">आमच्या टूल्सपैकी एक निवडा</string>
     <string name="tutorial_onboarding_action_begin">सुरू करा</string>
     <string name="tutorial_onboarding_action_next">पुढे</string>
     <string name="tutorial_onboarding_action_skip">"

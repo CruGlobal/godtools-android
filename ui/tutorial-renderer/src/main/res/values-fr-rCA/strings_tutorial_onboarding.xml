@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Découvrez comment faire des conversations sur la foi un aspect naturel de votre vie.</string>
     <string name="tutorial_onboarding_share_headline">Aidez quelqu’un à découvrir Jésus</string>
     <string name="tutorial_onboarding_share_subhead">GodTools est votre guide pour communiquer l’évangile de façons claires et pertinentes.</string>
-    <string name="tutorial_onboarding_links_headline">Liens de démarrage rapide</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Je veux explorer le christianisme</string>
-    <string name="tutorial_onboarding_links_articles_action">Lire nos articles</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Je veux apprendre comment avoir des conversations sur l’évangile</string>
-    <string name="tutorial_onboarding_links_lessons_action">Essayer nos cours</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Je veux partager l’évangile avec quelqu’un</string>
-    <string name="tutorial_onboarding_links_tools_action">Choisissez un de nos outils</string>
     <string name="tutorial_onboarding_action_begin">Commencer</string>
     <string name="tutorial_onboarding_action_next">Suivant</string>
     <string name="tutorial_onboarding_action_skip">Ignorer</string>

@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Lär dig hur man gör så att samtal om tro blir en naturlig del av livet.</string>
     <string name="tutorial_onboarding_share_headline">Hjälp någon att upptäcka Jesus</string>
     <string name="tutorial_onboarding_share_subhead">GodTools är din guide till hur man förmedlar evangeliet på tydliga och relevanta sätt.</string>
-    <string name="tutorial_onboarding_links_headline">Snabbstartslänkar</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Jag vill utforska kristendomen</string>
-    <string name="tutorial_onboarding_links_articles_action">Läs våra artiklar</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Jag vill lära mig om hur man för evangeliesamtal</string>
-    <string name="tutorial_onboarding_links_lessons_action">Prova våra lektioner</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Jag vill dela evangeliet med någon</string>
-    <string name="tutorial_onboarding_links_tools_action">Välj ett av våra verktyg</string>
     <string name="tutorial_onboarding_action_begin">Börja</string>
     <string name="tutorial_onboarding_action_next">Nästa</string>
     <string name="tutorial_onboarding_action_skip">Hoppa över</string>

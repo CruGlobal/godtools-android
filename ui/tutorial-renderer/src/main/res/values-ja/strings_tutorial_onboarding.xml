@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">信仰についての会話をあなたの自然な生活の一部にする方法を学びましょう。</string>
     <string name="tutorial_onboarding_share_headline">イエスとの出会い助けましょう</string>
     <string name="tutorial_onboarding_share_subhead">GodToolsはキリストの教えを分かりやすく身近な方法で伝えるためのガイドです。</string>
-    <string name="tutorial_onboarding_links_headline">クイックスタートリンク</string>
-    <string name="tutorial_onboarding_links_articles_subhead">キリスト教について知りたい</string>
-    <string name="tutorial_onboarding_links_articles_action">記事をお読みください</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">キリストの教えについて会話をする方法を知りたい</string>
-    <string name="tutorial_onboarding_links_lessons_action">レッスンをお試しください</string>
-    <string name="tutorial_onboarding_links_tools_subhead">キリストの教えを誰かと共有したい</string>
-    <string name="tutorial_onboarding_links_tools_action">ツールを一つお選びください</string>
     <string name="tutorial_onboarding_action_begin">始める</string>
     <string name="tutorial_onboarding_action_next">次へ</string>
     <string name="tutorial_onboarding_action_skip">スキップ</string>
