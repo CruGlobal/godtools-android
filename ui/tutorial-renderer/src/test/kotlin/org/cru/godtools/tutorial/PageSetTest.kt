@@ -1,10 +1,6 @@
 package org.cru.godtools.tutorial
 
 import java.util.Locale
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.hasItems
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

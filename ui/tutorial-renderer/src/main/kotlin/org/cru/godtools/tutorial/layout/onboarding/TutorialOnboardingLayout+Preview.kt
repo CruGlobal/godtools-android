@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import java.util.Locale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.layout.TutorialPageLayout
 
@@ -16,7 +15,7 @@ import org.cru.godtools.tutorial.layout.TutorialPageLayout
     widthDp = 4 * 393
 )
 private fun OnboardingTutorial() = Row {
-    PageSet.ONBOARDING.pagesFor(Locale.ENGLISH).forEach {
+    PageSet.ONBOARDING.pages.forEach {
         TutorialPageLayout(it, modifier = Modifier.weight(1f))
     }
 }

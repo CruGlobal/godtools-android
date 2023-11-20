@@ -42,7 +42,7 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
-    val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
+    val pages = pageSet.pages
 
     val pagerState = rememberPagerState { pages.size }
     val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }

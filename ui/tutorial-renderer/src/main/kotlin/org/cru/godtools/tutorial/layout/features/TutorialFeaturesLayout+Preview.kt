@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import java.util.Locale
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.layout.TutorialPageLayout
 
@@ -16,7 +15,7 @@ import org.cru.godtools.tutorial.layout.TutorialPageLayout
     widthDp = 5 * 393
 )
 private fun FeaturesTutorialPreview() = Row {
-    PageSet.FEATURES.pagesFor(Locale.ENGLISH).forEach {
+    PageSet.FEATURES.pages.forEach {
         TutorialPageLayout(it, modifier = Modifier.weight(1f))
     }
 }
