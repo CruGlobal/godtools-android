@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">بیاموزید چگونه صحبت کردن در مورد باورها را به بخشی از زندگی‌تان تبدیل کنید.</string>
     <string name="tutorial_onboarding_share_headline">به دیگری کمک کنید عیسی مسیح را بشناسد</string>
     <string name="tutorial_onboarding_share_subhead">GodTools راهنمای شما در انتقال واضح و متناسب آموزه‌های انجیل است.</string>
-    <string name="tutorial_onboarding_links_headline">لینک‌های شروع سریع</string>
-    <string name="tutorial_onboarding_links_articles_subhead">می‌خواهم با مسیحیت آشنا شوم</string>
-    <string name="tutorial_onboarding_links_articles_action">خواندن مقاله‌های ما</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">می‌خواهم در مورد گفت‌وگوهای مربوط به انجیل بیشتر بدانم</string>
-    <string name="tutorial_onboarding_links_lessons_action">درس‌های ما را امتحان کنید</string>
-    <string name="tutorial_onboarding_links_tools_subhead">می‌خواهم انجیل را با دیگری به اشتراک بگذارم</string>
-    <string name="tutorial_onboarding_links_tools_action">یکی از ابزارهای ما را انتخاب کنید</string>
     <string name="tutorial_onboarding_action_begin">شروع</string>
     <string name="tutorial_onboarding_action_next">بعدی</string>
     <string name="tutorial_onboarding_action_skip">ردکردن</string>

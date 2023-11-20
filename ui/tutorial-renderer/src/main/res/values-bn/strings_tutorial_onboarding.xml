@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">বিশ্বাস সম্পর্কে কথোপকথন করতে শিখুন যা আপনার জীবনের স্বাভাবিকএকটি  অংশ</string>
     <string name="tutorial_onboarding_share_headline">"আপনার টুলস পছন্দ করুন I "</string>
     <string name="tutorial_onboarding_share_subhead">GodTools স্পষ্ট এবং প্রাসঙ্গিক উপায়ে সুসমাচার প্রচারের জন্য আপনার গাইড।</string>
-    <string name="tutorial_onboarding_links_headline">দ্রুত শুরু করার লিংক</string>
-    <string name="tutorial_onboarding_links_articles_subhead">আমি খ্রীস্টীয়ানিটি সম্পর্কে আরো অনুসন্ধান করতে চাই</string>
-    <string name="tutorial_onboarding_links_articles_action">আমাদের প্রবন্ধটি  পড়ুন</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">আমি সুসমাচার বিষয়ক কথোপকথন সম্পর্কে জানতে চাই</string>
-    <string name="tutorial_onboarding_links_lessons_action">আমাদের পাঠগুলো একবার দেখুন</string>
-    <string name="tutorial_onboarding_links_tools_subhead">অন্য কারো সাথে সুসমাচার শেয়ার করতে চাই</string>
-    <string name="tutorial_onboarding_links_tools_action">আমাদের যেকোন একটি টুল বেছে নিন</string>
     <string name="tutorial_onboarding_action_begin">শুরু করুন</string>
     <string name="tutorial_onboarding_action_next">পরবর্তী</string>
     <string name="tutorial_onboarding_action_skip">এড়িয়ে যান</string>

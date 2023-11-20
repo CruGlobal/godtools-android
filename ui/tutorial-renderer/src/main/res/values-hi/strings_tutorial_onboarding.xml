@@ -11,13 +11,6 @@
     <string name="tutorial_onboarding_prepare_subhead">सीखें कि विश्वास-संबंधी बातचीत को अपने जीवन का एक अभिन्न अंग कैसे बनाएँ।</string>
     <string name="tutorial_onboarding_share_headline">किसी को जीसस के पास आने में मदद करें</string>
     <string name="tutorial_onboarding_share_subhead">इंजील के बारे में स्पष्ट और प्रासंगिक तरीके से संवाद स्थापित करने में GodTools आपका दिशादर्शक है।</string>
-    <string name="tutorial_onboarding_links_headline">तुरंत शुरुआत के लिंक</string>
-    <string name="tutorial_onboarding_links_articles_subhead">मुझे ईसाईयत के बारे में अधिक जानना है</string>
-    <string name="tutorial_onboarding_links_articles_action">हमारे लेख पढ़ें</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">मुझे इंजील वार्तालापों के बारे में जानना है</string>
-    <string name="tutorial_onboarding_links_lessons_action">हमारे अध्याय आज़माएँ</string>
-    <string name="tutorial_onboarding_links_tools_subhead">मुझे इंजील किसी के साथ साझा करना है</string>
-    <string name="tutorial_onboarding_links_tools_action">हमारा कोई टूल चुनें</string>
     <string name="tutorial_onboarding_action_begin">शुरू करें</string>
     <string name="tutorial_onboarding_action_next">आगे</string>
     <string name="tutorial_onboarding_action_skip">छोड़ें</string>

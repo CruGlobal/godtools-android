@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">ຮຽນຮູ້ວິທີສົນທະນາກ່ຽວກັບຄວາມເຊື່ອເຊິ່ງເປັນສ່ວນໜຶ່ງຂອງຊີວິດທ່ານໂດຍທໍາມະຊາດ.</string>
     <string name="tutorial_onboarding_share_headline">ຊ່ວຍຄົນອື່ນຄົ້ນພົບພຣະເຢຊູ</string>
     <string name="tutorial_onboarding_share_subhead">GodTools ແມ່ນຄູ່ມືຂອງທ່ານໃນການເຜີຍແຜ່ຂ່າວປະເສີດໃນລັກສະນະທີ່ຊັດເຈນ ແລະ ກ່ຽວຂ້ອງ.</string>
-    <string name="tutorial_onboarding_links_headline">ລິ້ງສໍາລັບການເລີ່ມດ່ວນ</string>
-    <string name="tutorial_onboarding_links_articles_subhead">ຂ້ອຍຕ້ອງການສໍາຫຼວດສາສະໜາຄຣິສ</string>
-    <string name="tutorial_onboarding_links_articles_action">ອ່ານບົດຄວາມຂອງພວກເຮົາ</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">ຂ້ອຍຕ້ອງການຮຽນຮູ້ກ່ຽວກັບການສົນທະນາຂ່າວປະເສີດ</string>
-    <string name="tutorial_onboarding_links_lessons_action">ລອງເບິ່ງບົດຮຽນຂອງພວກເຮົາ</string>
-    <string name="tutorial_onboarding_links_tools_subhead">ຂ້ອຍຕ້ອງການແບ່ງປັນຂ່າວປະເສີດກັບຄົນອື່ນ</string>
-    <string name="tutorial_onboarding_links_tools_action">ເລືອກເຄື່ອງມືໃດໜຶ່ງຂອງພວກເຮົາ</string>
     <string name="tutorial_onboarding_action_begin">ເລີ່ມ</string>
     <string name="tutorial_onboarding_action_next">ຕໍ່ໄປ</string>
     <string name="tutorial_onboarding_action_skip">ຂ້າມ</string>

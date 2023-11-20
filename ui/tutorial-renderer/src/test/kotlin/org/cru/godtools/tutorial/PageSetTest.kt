@@ -1,10 +1,6 @@
 package org.cru.godtools.tutorial
 
 import java.util.Locale
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.hasItems
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -23,23 +19,5 @@ class PageSetTest {
         assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-TW")))
         assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh")))
         assertFalse(PageSet.FEATURES.supportsLocale(Locale.forLanguageTag("zh-Hant")))
-    }
-
-    @Test
-    fun testOnboardingPages() {
-        assertThat(
-            PageSet.ONBOARDING.pagesFor(Locale.ENGLISH),
-            allOf(
-                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS),
-                not(hasItem(Page.ONBOARDING_SHARE_FINAL))
-            )
-        )
-        assertThat(
-            PageSet.ONBOARDING.pagesFor(Locale.GERMAN),
-            allOf(
-                not(hasItems(Page.ONBOARDING_SHARE, Page.ONBOARDING_LINKS)),
-                hasItems(Page.ONBOARDING_WELCOME, Page.ONBOARDING_SHARE_FINAL)
-            )
-        )
     }
 }

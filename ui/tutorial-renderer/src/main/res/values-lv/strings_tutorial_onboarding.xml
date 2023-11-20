@@ -11,13 +11,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Uzzini, kā sarunas par ticību integrēt savā ikdienā.</string>
     <string name="tutorial_onboarding_share_headline">Palīdzi kādam atklāt Jēzu</string>
     <string name="tutorial_onboarding_share_subhead">\'GodTools\' ir tavs ceļvedis, kas palīdz pastāstīt Labo vēsti skaidrā un atbilstošā veidā.</string>
-    <string name="tutorial_onboarding_links_headline">Ātrās sākšanas saites</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Vēlos iepazīt kristietību</string>
-    <string name="tutorial_onboarding_links_articles_action">Lasi mūsu rakstus</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Vēlos uzzināt, kā veidot sarunas par Labo vēsti</string>
-    <string name="tutorial_onboarding_links_lessons_action">Izmēģini mūsu nodarbības</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Vēlos kādam pastāstīt Labo vēsti</string>
-    <string name="tutorial_onboarding_links_tools_action">Izvēlies kādu no mūsu rīkiem</string>
     <string name="tutorial_onboarding_action_begin">Sākt</string>
     <string name="tutorial_onboarding_action_next">Tālāk</string>
     <string name="tutorial_onboarding_action_skip">Izlaist</string>

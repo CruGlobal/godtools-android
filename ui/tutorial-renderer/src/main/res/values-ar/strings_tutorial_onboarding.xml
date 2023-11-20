@@ -11,13 +11,6 @@
     <string name="tutorial_onboarding_prepare_subhead">تعلّم كيفية إجراء محادثات عن الإيمان كجزء طبيعي من حياتك.</string>
     <string name="tutorial_onboarding_share_headline">ساعد شخصًا على اكتشاف يسوع</string>
     <string name="tutorial_onboarding_share_subhead">GodTools هو دليلك على التواصل عبر الكتاب المقدس بطرق واضحة وذات صلة.</string>
-    <string name="tutorial_onboarding_links_headline">روابط بداية سريعة</string>
-    <string name="tutorial_onboarding_links_articles_subhead">أريد استكشاف المسيحية</string>
-    <string name="tutorial_onboarding_links_articles_action">اقرأ مقالاتنا</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">أريد أن أتعلم كيفية إجراء حوارًا باستخدام الكتاب المقدس</string>
-    <string name="tutorial_onboarding_links_lessons_action">جرّب دروسنا</string>
-    <string name="tutorial_onboarding_links_tools_subhead">أريد أن أشارك الكتاب المقدس مع أحد الأشخاص</string>
-    <string name="tutorial_onboarding_links_tools_action">اختر أحد أدواتنا</string>
     <string name="tutorial_onboarding_action_begin">ابدأ</string>
     <string name="tutorial_onboarding_action_next">التالي</string>
     <string name="tutorial_onboarding_action_skip">تخطي</string>

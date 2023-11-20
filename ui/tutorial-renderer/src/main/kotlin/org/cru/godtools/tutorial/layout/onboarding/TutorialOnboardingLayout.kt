@@ -76,7 +76,7 @@ internal fun TutorialOnboardingLayout(
     Button(
         onClick = {
             when (page) {
-                Page.ONBOARDING_SHARE_FINAL -> onTutorialAction(Action.ONBOARDING_FINISH)
+                Page.ONBOARDING_SHARE -> onTutorialAction(Action.ONBOARDING_FINISH)
                 else -> nextPage()
             }
         },

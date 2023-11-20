@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">למדו כיצד להפוך שיחות על אמונה לחלק טבעי מחייכם.</string>
     <string name="tutorial_onboarding_share_headline">תעזרו למישהו לגלות את ישוע</string>
     <string name="tutorial_onboarding_share_subhead">GodTools הוא המדריך שלכם להעביר את הבשורה בדרכים ברורות ורלוונטיות.</string>
-    <string name="tutorial_onboarding_links_headline">קישורי התחלה מהירה</string>
-    <string name="tutorial_onboarding_links_articles_subhead">אני רוצה לחקור את הנצרות</string>
-    <string name="tutorial_onboarding_links_articles_action">קראו את המאמרים שלנו</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">אני רוצה ללמוד על ניהול שיחות בשורה</string>
-    <string name="tutorial_onboarding_links_lessons_action">נסה את השיעורים שלנו</string>
-    <string name="tutorial_onboarding_links_tools_subhead">אני רוצה לחלוק את הבשורה עם מישהו</string>
-    <string name="tutorial_onboarding_links_tools_action">בחרו את אחד מהכלים שלנו</string>
     <string name="tutorial_onboarding_action_begin">התחלה</string>
     <string name="tutorial_onboarding_action_next">הבא</string>
     <string name="tutorial_onboarding_action_skip">דלג</string>

@@ -3,10 +3,6 @@ package org.cru.godtools.tutorial
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
-import java.util.Locale
-import org.ccci.gto.android.common.util.includeFallbacks
-
-private val ONBOARDING_EXTENDED_LOCALES = setOf(Locale.ENGLISH, Locale.FRENCH, Locale("es"), Locale("lv"), Locale("vi"))
 
 internal enum class Page(
     @StringRes val title: Int? = null,
@@ -15,8 +11,6 @@ internal enum class Page(
     @StringRes val action: Int? = null,
     @RawRes val animation: Int? = null,
     @DrawableRes val image: Int? = null,
-    private val supportedLocales: Set<Locale> = emptySet(),
-    private val disabledLocales: Set<Locale> = emptySet(),
     val showIndicator: Boolean = true,
     val showMenu: Boolean = true
 ) {
@@ -39,20 +33,8 @@ internal enum class Page(
     ONBOARDING_SHARE(
         title = R.string.tutorial_onboarding_share_headline,
         content = R.string.tutorial_onboarding_share_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_distance,
-        supportedLocales = ONBOARDING_EXTENDED_LOCALES
-    ),
-    ONBOARDING_SHARE_FINAL(
-        title = R.string.tutorial_onboarding_share_headline,
-        content = R.string.tutorial_onboarding_share_subhead,
         action = R.string.tutorial_onboarding_action_start,
         animation = R.raw.anim_tutorial_onboarding_distance,
-        disabledLocales = ONBOARDING_EXTENDED_LOCALES,
-        showMenu = false
-    ),
-    ONBOARDING_LINKS(
-        supportedLocales = ONBOARDING_EXTENDED_LOCALES,
         showMenu = false
     ),
     FEATURES_TOOLS(
@@ -119,9 +101,5 @@ internal enum class Page(
         content = R.string.tutorial_tips_start_text,
         animation = R.raw.anim_tutorial_tips_light,
         showMenu = false
-    );
-
-    fun supportsLocale(locale: Locale) =
-        (supportedLocales.isEmpty() || sequenceOf(locale).includeFallbacks().any { it in supportedLocales }) &&
-            (disabledLocales.isEmpty() || sequenceOf(locale).includeFallbacks().none { it in disabledLocales })
+    )
 }

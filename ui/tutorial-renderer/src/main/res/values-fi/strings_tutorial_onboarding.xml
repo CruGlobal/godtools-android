@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Opettele tekemään uskoa koskevista keskusteluista luontainen osa elämääsi.</string>
     <string name="tutorial_onboarding_share_headline">Auta muita löytämään Jeesus</string>
     <string name="tutorial_onboarding_share_subhead">GodTools on oppaasi, joka auttaa sinua kertomaan ilosanomaa selkeästi ja merkityksellisesti.</string>
-    <string name="tutorial_onboarding_links_headline">Pika-aloituslinkit</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Tahdon tutustua kristinuskoon</string>
-    <string name="tutorial_onboarding_links_articles_action">Lue artikkelimme</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Tahdon saada lisätietoja ilosanomasta keskustelemisesta</string>
-    <string name="tutorial_onboarding_links_lessons_action">Tutustu oppitunteihimme</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Tahdon jakaa ilosanoman toisen henkilön kanssa</string>
-    <string name="tutorial_onboarding_links_tools_action">Valitse jokin työkaluistamme</string>
     <string name="tutorial_onboarding_action_begin">Aloita</string>
     <string name="tutorial_onboarding_action_next">Seuraava</string>
     <string name="tutorial_onboarding_action_skip">Ohita</string>

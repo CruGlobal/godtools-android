@@ -11,13 +11,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Узнайте, как сделать беседы о вере естественной частью жизни.</string>
     <string name="tutorial_onboarding_share_headline">Помогите другим открыть для себя Иисуса</string>
     <string name="tutorial_onboarding_share_subhead">GodTools – это ваше руководство по ясному и актуальному донесению Евангелия.</string>
-    <string name="tutorial_onboarding_links_headline">Ссылки для быстрого начала</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Я хочу узнать больше о христианстве</string>
-    <string name="tutorial_onboarding_links_articles_action">Прочитайте наши статьи</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Я хочу научиться вести беседы о Евангелии</string>
-    <string name="tutorial_onboarding_links_lessons_action">Попробуйте наши уроки</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Я хочу поделиться Евангелием с другими</string>
-    <string name="tutorial_onboarding_links_tools_action">Выберите один из наших инструментов</string>
     <string name="tutorial_onboarding_action_begin">Начать</string>
     <string name="tutorial_onboarding_action_next">Дальше</string>
     <string name="tutorial_onboarding_action_skip">Пропустить</string>

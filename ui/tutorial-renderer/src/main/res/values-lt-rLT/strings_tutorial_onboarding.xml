@@ -10,13 +10,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Sužinokite, kaip pokalbius apie tikėjimą paversti natūralia jūsų gyvenimo dalimi.</string>
     <string name="tutorial_onboarding_share_headline">Padėkite kam nors atrasti Jėzų</string>
     <string name="tutorial_onboarding_share_subhead">„GodTools“ – tai jūsų vadovas, kaip skelbti evangeliją aiškiais ir aktualiais būdais.</string>
-    <string name="tutorial_onboarding_links_headline">Greitos pradžios nuorodos</string>
-    <string name="tutorial_onboarding_links_articles_subhead">Noriu susipažinti su Krikščionybe</string>
-    <string name="tutorial_onboarding_links_articles_action">Skaitykite mūsų straipsnius</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">Noriu sužinoti, kaip rengti pokalbius apie evangeliją</string>
-    <string name="tutorial_onboarding_links_lessons_action">Išbandykite mūsų pamokas</string>
-    <string name="tutorial_onboarding_links_tools_subhead">Noriu su kuo nors pasidalyti evangelija</string>
-    <string name="tutorial_onboarding_links_tools_action">Pasirinkite vieną iš mūsų įrankių</string>
     <string name="tutorial_onboarding_action_begin">Pradėti</string>
     <string name="tutorial_onboarding_action_next">Kitas</string>
     <string name="tutorial_onboarding_action_skip">Praleisti</string>

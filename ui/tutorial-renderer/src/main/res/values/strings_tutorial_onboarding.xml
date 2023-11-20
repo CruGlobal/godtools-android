@@ -12,13 +12,6 @@
     <string name="tutorial_onboarding_prepare_subhead">Learn how to make conversations about faith a natural part of your life.</string>
     <string name="tutorial_onboarding_share_headline">Help someone discover Jesus</string>
     <string name="tutorial_onboarding_share_subhead">GodTools is your guide to communicating the gospel in clear and relevant ways.</string>
-    <string name="tutorial_onboarding_links_headline">Quick start links</string>
-    <string name="tutorial_onboarding_links_articles_subhead">I want to explore Christianity</string>
-    <string name="tutorial_onboarding_links_articles_action">Read our articles</string>
-    <string name="tutorial_onboarding_links_lessons_subhead">I want to learn about having gospel conversations</string>
-    <string name="tutorial_onboarding_links_lessons_action">Try our Lessons</string>
-    <string name="tutorial_onboarding_links_tools_subhead">I want to share the gospel with someone</string>
-    <string name="tutorial_onboarding_links_tools_action">Choose one of our tools</string>
     <string name="tutorial_onboarding_action_begin">Begin</string>
     <string name="tutorial_onboarding_action_next">Next</string>
     <string name="tutorial_onboarding_action_skip">Skip</string>
