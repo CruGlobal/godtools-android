@@ -22,8 +22,7 @@ internal class LanguageEntity(
         isAdded = language.isAdded
     )
 
-    fun toModel() = Language(code = code, name = name).also {
+    fun toModel() = Language(code = code, name = name, isAdded = isAdded).also {
         it.id = id
-        it.isAdded = isAdded
     }
 }

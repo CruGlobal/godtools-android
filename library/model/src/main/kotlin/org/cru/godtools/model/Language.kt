@@ -1,11 +1,8 @@
 package org.cru.godtools.model
 
 import android.content.Context
-import androidx.annotation.RestrictTo
 import java.text.Collator
 import java.util.Locale
-import java.util.UUID
-import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -23,6 +20,8 @@ class Language(
     val code: Locale,
     @JsonApiAttribute(JSON_NAME)
     val name: String? = null,
+    @JsonApiIgnore
+    val isAdded: Boolean = false,
 ) {
     internal constructor() : this(INVALID_CODE)
 
@@ -70,9 +69,6 @@ class Language(
             _id = id
         }
 
-    @JsonApiIgnore
-    var isAdded: Boolean = false
-
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
         code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
@@ -82,13 +78,3 @@ class Language(
 
     val isValid get() = code != null && code != INVALID_CODE
 }
-
-// TODO: move this to testFixtures once they support Kotlin source files
-@RestrictTo(RestrictTo.Scope.TESTS)
-@Suppress("ktlint:standard:function-naming")
-fun Language(code: Locale = Locale.ENGLISH, isAdded: Boolean = false, config: Language.() -> Unit = {}) =
-    Language(code = code, name = UUID.randomUUID().toString()).apply {
-        id = Random.nextLong()
-        this.isAdded = isAdded
-        config()
-    }
