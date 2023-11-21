@@ -22,10 +22,6 @@ fun Translation?.getName(tool: Tool?, context: Context?) =
 fun Translation?.getDescription(tool: Tool?, context: Context?) =
     this?.let { description?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
 
-@JvmName("getTranslationTagline")
-fun Translation?.getTagline(tool: Tool?, context: Context?) =
-    this?.let { (tagline ?: description)?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
-
 @DeprecatedSinceApi(Build.VERSION_CODES.M)
 fun Translation.getFontFamilyOrNull() = languageCode.getFontFamilyOrNull()
 
