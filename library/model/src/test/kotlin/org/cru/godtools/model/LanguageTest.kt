@@ -57,7 +57,7 @@ class LanguageTest {
 
             val context: Context = mockk()
             val inLocale: Locale = Locale.CANADA_FRENCH
-            assertEquals("DisplayName", Language(Locale.ENGLISH) { name = "name" }.getDisplayName(context, inLocale))
+            assertEquals("DisplayName", Language(Locale.ENGLISH, name = "name").getDisplayName(context, inLocale))
             verifyAll {
                 Locale.ENGLISH.getDisplayName(context, "name", inLocale)
             }

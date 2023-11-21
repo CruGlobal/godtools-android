@@ -21,6 +21,8 @@ private const val JSON_NAME = "name"
 class Language(
     @JsonApiAttribute(JSON_CODE)
     val code: Locale,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
 ) {
     internal constructor() : this(INVALID_CODE)
 
@@ -68,9 +70,6 @@ class Language(
             _id = id
         }
 
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-
     @JsonApiIgnore
     var isAdded: Boolean = false
 
@@ -88,9 +87,8 @@ class Language(
 @RestrictTo(RestrictTo.Scope.TESTS)
 @Suppress("ktlint:standard:function-naming")
 fun Language(code: Locale = Locale.ENGLISH, isAdded: Boolean = false, config: Language.() -> Unit = {}) =
-    Language(code = code).apply {
+    Language(code = code, name = UUID.randomUUID().toString()).apply {
         id = Random.nextLong()
-        name = UUID.randomUUID().toString()
         this.isAdded = isAdded
         config()
     }

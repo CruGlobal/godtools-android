@@ -30,7 +30,7 @@ abstract class LanguagesRepositoryIT {
     abstract val toolsRepository: ToolsRepository
     abstract val translationsRepository: TranslationsRepository
 
-    private val language1 = Language(Locale.ENGLISH) { name = "English" }
+    private val language1 = Language(Locale.ENGLISH, name = "English")
     private val language2 = Language(Locale.FRENCH)
 
     @Test
@@ -59,7 +59,7 @@ abstract class LanguagesRepositoryIT {
                 assertEquals(language1.name, it.name)
             }
 
-            val languageUpdate = Language(Locale.ENGLISH) { name = "English 2" }
+            val languageUpdate = Language(Locale.ENGLISH, name = "English 2")
             repository.storeLanguageFromSync(languageUpdate)
             assertNotNull(awaitItem()) {
                 assertEquals(languageUpdate.id, it.id)
@@ -229,7 +229,7 @@ abstract class LanguagesRepositoryIT {
 
     @Test
     fun `storeInitialLanguages() - Don't overwrite existing languages`() = testScope.runTest {
-        val language = Language(Locale.ENGLISH) { name = "Newer English" }
+        val language = Language(Locale.ENGLISH, name = "Newer English")
         repository.storeLanguageFromSync(language)
         assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language)))
 
@@ -252,7 +252,7 @@ abstract class LanguagesRepositoryIT {
 
     @Test
     fun `storeLanguagesFromSync() - Update existing languages`() = testScope.runTest {
-        val language = Language(Locale.ENGLISH) { name = "Newer English" }
+        val language = Language(Locale.ENGLISH, name = "Newer English")
         repository.storeLanguageFromSync(language)
         assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language)))
 
