@@ -84,9 +84,8 @@ class SyncRepositoryTest {
     // region storeLanguage()
     @Test
     fun `storeLanguage()`() = runTest {
-        val language = Language().apply {
+        val language = Language(Locale("lt")).apply {
             id = 1
-            code = Locale("lt")
         }
 
         // run test
@@ -98,7 +97,7 @@ class SyncRepositoryTest {
 
     @Test
     fun `storeLanguage() - Invalid Language`() = runTest {
-        val language = Language()
+        val language = Language(code = Language.INVALID_CODE)
 
         assertFalse(language.isValid)
         syncRepository.storeLanguage(language)

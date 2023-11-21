@@ -18,7 +18,12 @@ private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
 
 @JsonApiType(Language.JSONAPI_TYPE)
-class Language {
+class Language(
+    @JsonApiAttribute(JSON_CODE)
+    val code: Locale,
+) {
+    internal constructor() : this(INVALID_CODE)
+
     companion object {
         const val JSONAPI_TYPE = "language"
 
@@ -63,14 +68,6 @@ class Language {
             _id = id
         }
 
-    @JsonApiAttribute(JSON_CODE)
-    private var _code: Locale? = null
-    var code: Locale
-        get() = _code ?: INVALID_CODE
-        set(code) {
-            _code = code
-        }
-
     @JsonApiAttribute(JSON_NAME)
     var name: String? = null
 
@@ -79,21 +76,20 @@ class Language {
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
-        _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
+        code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes
-    override fun toString() = "Language{id=$id, code=$_code}"
+    override fun toString() = "Language{id=$id, code=$code}"
 
-    val isValid get() = _code != null && code != INVALID_CODE
+    val isValid get() = code != null && code != INVALID_CODE
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
 @Suppress("ktlint:standard:function-naming")
 fun Language(code: Locale = Locale.ENGLISH, isAdded: Boolean = false, config: Language.() -> Unit = {}) =
-    Language().apply {
+    Language(code = code).apply {
         id = Random.nextLong()
-        this.code = code
         name = UUID.randomUUID().toString()
         this.isAdded = isAdded
         config()

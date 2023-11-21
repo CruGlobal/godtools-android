@@ -47,8 +47,7 @@ class FollowupSyncTasksTest {
     fun `syncFollowups()`() = runTest {
         val followups = listOf(Followup(email = "test@example.com", destination = 1, languageCode = Locale.ENGLISH))
         coEvery { followupsRepository.getFollowups() } returns followups
-        coEvery { languagesRepository.findLanguage(Locale.ENGLISH) } returns Language().apply {
-            code = Locale.ENGLISH
+        coEvery { languagesRepository.findLanguage(Locale.ENGLISH) } returns Language(Locale.ENGLISH).apply {
             id = 2
         }
         val followup = slot<Followup>()
@@ -68,8 +67,7 @@ class FollowupSyncTasksTest {
     fun `syncFollowups() - api failed`() = runTest {
         val followup = Followup(email = "test@example.com", destination = 1, languageCode = Locale.ENGLISH)
         coEvery { followupsRepository.getFollowups() } returns listOf(followup)
-        coEvery { languagesRepository.findLanguage(Locale.ENGLISH) } returns Language().apply {
-            code = Locale.ENGLISH
+        coEvery { languagesRepository.findLanguage(Locale.ENGLISH) } returns Language(Locale.ENGLISH).apply {
             id = 2
         }
         val submittedFollowup = slot<Followup>()
