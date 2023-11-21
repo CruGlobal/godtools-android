@@ -54,7 +54,7 @@ internal class Tasks @Inject constructor(
                     .let { jsonApiConverter.fromJson(it, Language::class.java) }
             }
 
-            languagesRepository.storeInitialLanguages(languages.data)
+            languagesRepository.storeInitialLanguages(languages.data.filter { it.isValid })
         } catch (e: Exception) {
             Timber.tag(TAG).e(e, "Error loading bundled languages")
         }
