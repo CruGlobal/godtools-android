@@ -35,7 +35,7 @@ class Followup(
         private set
 
     fun setLanguage(language: Language?) {
-        languageId = language?.id
+        languageId = language?.apiId
     }
 
     val isValid get() = email.isNotEmpty()

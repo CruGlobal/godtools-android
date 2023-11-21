@@ -22,6 +22,8 @@ class Language(
     val name: String? = null,
     @JsonApiIgnore
     val isAdded: Boolean = false,
+    @JsonApiId
+    internal val apiId: Long? = null,
 ) {
     internal constructor() : this(INVALID_CODE)
 
@@ -61,20 +63,14 @@ class Language(
             get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
-    @JsonApiId
-    private var _id: Long? = INVALID_ID
-    var id: Long
-        get() = _id ?: INVALID_ID
-        set(id) {
-            _id = id
-        }
+    val id get() = apiId ?: INVALID_ID
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
         code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
 
     // XXX: output the language id and code for debugging purposes
-    override fun toString() = "Language{id=$id, code=$code}"
+    override fun toString() = "Language{id=$apiId, code=$code}"
 
     val isValid get() = code != null && code != INVALID_CODE
 }

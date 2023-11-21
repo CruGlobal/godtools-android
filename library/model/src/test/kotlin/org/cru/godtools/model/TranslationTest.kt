@@ -20,7 +20,7 @@ class TranslationTest {
 
         assertEquals(1138, translation.id)
         assertEquals("rend", translation.toolCode)
-        assertEquals(4, translation.language!!.id)
+        assertEquals(4, translation.language!!.apiId!!)
         assertEquals(155, translation.version)
         assertEquals("Renderer Testing", translation.name)
         assertEquals("Renderer Testing Description", translation.description)

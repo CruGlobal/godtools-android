@@ -28,7 +28,7 @@ class LanguageTest {
         val language = parseJson("language.json")
 
         assertTrue(language.isValid)
-        assertEquals(1, language.id)
+        assertEquals(1, language.apiId)
         assertEquals(Locale.ENGLISH, language.code)
         assertEquals("English", language.name)
     }
