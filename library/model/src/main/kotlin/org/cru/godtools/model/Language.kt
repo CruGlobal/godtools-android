@@ -7,16 +7,18 @@ import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.util.getDisplayName
+import org.cru.godtools.model.Base.Companion.INVALID_ID
 
 private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
 
 @JsonApiType(Language.JSONAPI_TYPE)
-class Language : Base() {
+class Language {
     companion object {
         const val JSONAPI_TYPE = "language"
 
@@ -52,6 +54,14 @@ class Language : Base() {
         private val Locale.primaryCollator: Collator
             get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
+
+    @JsonApiId
+    private var _id: Long? = INVALID_ID
+    var id: Long
+        get() = _id ?: INVALID_ID
+        set(id) {
+            _id = id
+        }
 
     @JsonApiAttribute(JSON_CODE)
     private var _code: Locale? = null
