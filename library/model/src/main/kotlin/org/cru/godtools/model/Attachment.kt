@@ -37,7 +37,6 @@ class Attachment : Base() {
         }
 
     suspend fun getFile(fs: FileSystem) = localFilename?.let { fs.file(it) }
-    fun getFileBlocking(fs: FileSystem) = localFilename?.let { fs.getFileBlocking(it) }
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
