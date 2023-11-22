@@ -5,7 +5,6 @@ import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,7 +12,6 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.LanguageMatchers.languageMatcher
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.hamcrest.CoreMatchers.allOf
@@ -38,10 +36,7 @@ abstract class LanguagesRepositoryIT {
         assertNull(repository.findLanguage(Locale.ENGLISH))
 
         repository.storeLanguageFromSync(language1)
-        assertNotNull(repository.findLanguage(Locale.ENGLISH)) {
-            assertEquals(language1.id, it.id)
-            assertEquals(language1.name, it.name)
-        }
+        assertEquals(language1, repository.findLanguage(Locale.ENGLISH))
 
         repository.removeLanguagesMissingFromSync(syncedLanguages = emptyList())
         assertNull(repository.findLanguage(Locale.ENGLISH))
@@ -53,19 +48,11 @@ abstract class LanguagesRepositoryIT {
             assertNull(awaitItem())
 
             repository.storeLanguageFromSync(language1)
-            assertNotNull(awaitItem()) {
-                assertEquals(language1.id, it.id)
-                assertEquals(language1.code, it.code)
-                assertEquals(language1.name, it.name)
-            }
+            assertEquals(language1, awaitItem())
 
             val languageUpdate = Language(Locale.ENGLISH, name = "English 2")
             repository.storeLanguageFromSync(languageUpdate)
-            assertNotNull(awaitItem()) {
-                assertEquals(languageUpdate.id, it.id)
-                assertEquals(languageUpdate.code, it.code)
-                assertEquals(languageUpdate.name, it.name)
-            }
+            assertEquals(languageUpdate, awaitItem())
 
             repository.removeLanguagesMissingFromSync(emptyList())
             assertNull(awaitItem())
@@ -89,10 +76,10 @@ abstract class LanguagesRepositoryIT {
             assertThat(awaitItem(), empty())
 
             repository.storeLanguageFromSync(language1)
-            assertThat(awaitItem(), contains(languageMatcher(language1)))
+            assertThat(awaitItem(), contains(language1))
 
             repository.storeLanguageFromSync(language2)
-            assertThat(awaitItem(), containsInAnyOrder(languageMatcher(language1), languageMatcher(language2)))
+            assertThat(awaitItem(), containsInAnyOrder(language1, language2))
         }
     }
 
@@ -136,7 +123,7 @@ abstract class LanguagesRepositoryIT {
                 )
             )
             runCurrent()
-            assertThat(expectMostRecentItem(), containsInAnyOrder(languageMatcher(english)))
+            assertThat(expectMostRecentItem(), containsInAnyOrder(english))
         }
     }
 
@@ -159,7 +146,7 @@ abstract class LanguagesRepositoryIT {
 
         repository.getLanguagesFlowForToolCategory("cat1").test {
             runCurrent()
-            assertThat(expectMostRecentItem(), contains(languageMatcher(english)))
+            assertThat(expectMostRecentItem(), contains(english))
         }
     }
     // region getLanguagesFlowForToolCategory()
@@ -231,10 +218,10 @@ abstract class LanguagesRepositoryIT {
     fun `storeInitialLanguages() - Don't overwrite existing languages`() = testScope.runTest {
         val language = Language(Locale.ENGLISH, name = "Newer English")
         repository.storeLanguageFromSync(language)
-        assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language)))
+        assertThat(repository.getLanguages(), containsInAnyOrder(language))
 
         repository.storeInitialLanguages(listOf(language1, language2))
-        assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language), languageMatcher(language2)))
+        assertThat(repository.getLanguages(), containsInAnyOrder(language, language2))
     }
     // endregion storeInitialLanguages()
 
@@ -244,23 +231,17 @@ abstract class LanguagesRepositoryIT {
         assertThat(repository.getLanguages(), empty())
 
         repository.storeLanguagesFromSync(listOf(language1, language2))
-        assertThat(
-            repository.getLanguages(),
-            containsInAnyOrder(languageMatcher(language1), languageMatcher(language2))
-        )
+        assertThat(repository.getLanguages(), containsInAnyOrder(language1, language2))
     }
 
     @Test
     fun `storeLanguagesFromSync() - Update existing languages`() = testScope.runTest {
         val language = Language(Locale.ENGLISH, name = "Newer English")
         repository.storeLanguageFromSync(language)
-        assertThat(repository.getLanguages(), containsInAnyOrder(languageMatcher(language)))
+        assertThat(repository.getLanguages(), containsInAnyOrder(language))
 
         repository.storeLanguagesFromSync(listOf(language1, language2))
-        assertThat(
-            repository.getLanguages(),
-            containsInAnyOrder(languageMatcher(language1), languageMatcher(language2))
-        )
+        assertThat(repository.getLanguages(), containsInAnyOrder(language1, language2))
     }
 
     @Test
@@ -276,16 +257,10 @@ abstract class LanguagesRepositoryIT {
     @Test
     fun `removeLanguagesMissingFromSync()`() = testScope.runTest {
         repository.storeLanguagesFromSync(listOf(language1, language2))
-        assertThat(
-            repository.getLanguages(),
-            containsInAnyOrder(languageMatcher(language1), languageMatcher(language2))
-        )
+        assertThat(repository.getLanguages(), containsInAnyOrder(language1, language2))
 
         val syncedLanguages = listOf(language1)
         repository.removeLanguagesMissingFromSync(syncedLanguages = syncedLanguages)
-        assertThat(
-            repository.getLanguages(),
-            containsInAnyOrder(*syncedLanguages.map { languageMatcher(it) }.toTypedArray())
-        )
+        assertThat(repository.getLanguages(), containsInAnyOrder(*syncedLanguages.toTypedArray()))
     }
 }

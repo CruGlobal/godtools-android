@@ -9,13 +9,12 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.util.getDisplayName
-import org.cru.godtools.model.Base.Companion.INVALID_ID
 
 private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
 
 @JsonApiType(Language.JSONAPI_TYPE)
-class Language(
+data class Language(
     @JsonApiAttribute(JSON_CODE)
     val code: Locale,
     @JsonApiAttribute(JSON_NAME)
@@ -63,14 +62,10 @@ class Language(
             get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
-    val id get() = apiId ?: INVALID_ID
+    @Suppress("SENSELESS_COMPARISON")
+    val isValid get() = code != INVALID_CODE && code != null
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
         code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
-
-    // XXX: output the language id and code for debugging purposes
-    override fun toString() = "Language{id=$apiId, code=$code}"
-
-    val isValid get() = code != null && code != INVALID_CODE
 }
