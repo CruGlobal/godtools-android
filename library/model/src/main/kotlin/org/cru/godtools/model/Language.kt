@@ -23,7 +23,7 @@ class Language(
     @JsonApiIgnore
     val isAdded: Boolean = false,
     @JsonApiId
-    internal val apiId: Long? = null,
+    val apiId: Long? = null,
 ) {
     internal constructor() : this(INVALID_CODE)
 

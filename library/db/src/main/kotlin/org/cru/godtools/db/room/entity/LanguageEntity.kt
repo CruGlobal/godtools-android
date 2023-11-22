@@ -4,29 +4,28 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Locale
-import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 
 @Entity(tableName = "languages")
 internal class LanguageEntity(
     @PrimaryKey
     val code: Locale,
-    val id: Long,
     val name: String?,
     @ColumnInfo(defaultValue = "false")
     val isAdded: Boolean = false,
+    val apiId: Long? = null,
 ) {
     constructor(language: Language) : this(
-        id = language.id,
         code = language.code,
         name = language.name,
-        isAdded = language.isAdded
+        isAdded = language.isAdded,
+        apiId = language.apiId,
     )
 
     fun toModel() = Language(
         code = code,
         name = name,
         isAdded = isAdded,
-        apiId = id.takeUnless { it == Base.INVALID_ID },
+        apiId = apiId,
     )
 }

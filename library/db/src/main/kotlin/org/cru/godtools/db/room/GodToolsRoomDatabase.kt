@@ -44,7 +44,7 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 17,
+    version = 18,
     entities = [
         AttachmentEntity::class,
         LanguageEntity::class,
@@ -70,6 +70,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 14, to = 15),
         AutoMigration(from = 15, to = 16, spec = ResetUserSyncMigration::class),
         AutoMigration(from = 16, to = 17),
+        AutoMigration(from = 17, to = 18, spec = Migration18::class),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -126,6 +127,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 15: 2023-09-18
  * 16: 2023-09-19
  * 17: 2023-09-25
+ * 18: 2023-11-21
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
@@ -138,4 +140,7 @@ internal class ResetUserSyncMigration : AutoMigrationSpec {
 
 @RenameColumn(tableName = "tools", fromColumnName = "isAdded", toColumnName = "isFavorite")
 internal class Migration14 : AutoMigrationSpec
+
+@RenameColumn(tableName = "languages", fromColumnName = "id", toColumnName = "apiId")
+internal class Migration18 : AutoMigrationSpec
 // endregion Migrations

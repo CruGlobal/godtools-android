@@ -245,8 +245,8 @@ class GodToolsDatabase @Inject internal constructor(
                                 it.map {
                                     LanguageEntity(
                                         code = it.getLocale(LanguageTable.COLUMN_CODE) ?: return@map null,
-                                        id = it.getLong(LanguageTable.COLUMN_ID) ?: return@map null,
-                                        name = it.getString(LanguageTable.COLUMN_NAME)
+                                        name = it.getString(LanguageTable.COLUMN_NAME),
+                                        apiId = it.getLong(LanguageTable.COLUMN_ID),
                                     )
                                 }.filterNotNull()
                             )

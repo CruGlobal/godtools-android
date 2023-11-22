@@ -257,4 +257,22 @@ class GodToolsRoomDatabaseMigrationIT {
             }
         }
     }
+
+    @Test
+    fun testMigrate17To18() {
+        // create v17 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 17).use { db ->
+            db.execSQL("""INSERT INTO languages (id, code) VALUES (1, "en")""")
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 18, true, *MIGRATIONS).use { db ->
+            db.query("SELECT apiId, code FROM languages").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals("en", it.getStringOrNull(1))
+            }
+        }
+    }
 }
