@@ -11,6 +11,13 @@
     <string name="account_error_unknown">Error al iniciar sesión.</string>
     <string name="account_error_dialog_dismiss">Aceptar</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Eliminar Cuenta</string>
+    <string name="account_delete_heading">Don\'t go so soon</string>
+    <string name="account_delete_description">If you delete your account you won\'t be able to access your favorited tools or account activity.</string>
+    <string name="account_delete_action_delete">Eliminar mi cuenta</string>
+    <string name="account_delete_action_cancel">Keep my account</string>
+    <string name="account_delete_error">There was an error deleting your account. Make sure you are online or try again later.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
     <string name="account_activity_header">Tu actividad</string>
