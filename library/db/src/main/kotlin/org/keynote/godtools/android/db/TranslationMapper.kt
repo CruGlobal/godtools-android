@@ -51,9 +51,9 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
         version = c.getInt(COLUMN_VERSION, Translation.DEFAULT_VERSION),
         name = c.getString(COLUMN_NAME),
         description = c.getString(COLUMN_DESCRIPTION),
+        tagline = c.getString(COLUMN_TAGLINE),
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        tagline = c.getString(COLUMN_TAGLINE)
         toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE)
         toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES)
         toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)

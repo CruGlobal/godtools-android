@@ -74,8 +74,8 @@ internal class TranslationEntity(
         version = version,
         name = name,
         description = description,
+        tagline = tagline,
     ).also {
-        it.tagline = tagline
         it.toolDetailsConversationStarters = toolDetailsConversationStarters
         it.toolDetailsOutline = toolDetailsOutline
         it.toolDetailsBibleReferences = toolDetailsBibleReferences
