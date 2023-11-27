@@ -47,9 +47,9 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
     override fun newObject(c: Cursor) = Translation(
         id = c.getLong(COLUMN_ID, Base.INVALID_ID),
         toolCode = c.getString(COLUMN_TOOL),
+        languageCode = c.getLocale(COLUMN_LANGUAGE, Language.INVALID_CODE),
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        languageCode = c.getLocale(COLUMN_LANGUAGE, Language.INVALID_CODE)
         version = c.getInt(COLUMN_VERSION, Translation.DEFAULT_VERSION)
         name = c.getString(COLUMN_NAME)
         description = c.getString(COLUMN_DESCRIPTION)

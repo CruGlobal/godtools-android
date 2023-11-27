@@ -27,6 +27,7 @@ class Translation(
     @JsonApiId
     val id: Long,
     toolCode: String? = null,
+    languageCode: Locale = Language.INVALID_CODE,
 ) {
     internal constructor() : this(INVALID_ID)
 
@@ -47,15 +48,10 @@ class Translation(
         get() = field ?: tool?.code
 
     @JsonApiAttribute(JSON_LANGUAGE)
-    var language: Language? = null
-        private set
+    val language: Language? = null
     @JsonApiIgnore
-    private var _languageCode: Locale? = null
-    var languageCode: Locale
-        get() = _languageCode?.takeUnless { it == Language.INVALID_CODE } ?: language?.code ?: Language.INVALID_CODE
-        set(code) {
-            _languageCode = code
-        }
+    val languageCode: Locale = languageCode
+        get() = field.takeUnless { it == Language.INVALID_CODE } ?: language?.code ?: field
 
     @JsonApiAttribute(JSON_VERSION)
     var version = DEFAULT_VERSION
@@ -136,8 +132,7 @@ fun Translation(
     manifestFileName: String? = UUID.randomUUID().toString(),
     isDownloaded: Boolean = false,
     block: Translation.() -> Unit = {},
-) = Translation(id = Random.nextLong(), toolCode = toolCode).apply {
-    this.languageCode = languageCode
+) = Translation(id = Random.nextLong(), toolCode = toolCode, languageCode = languageCode).apply {
     this.version = version
     this.manifestFileName = manifestFileName
     this.isDownloaded = isDownloaded
@@ -151,8 +146,7 @@ fun randomTranslation(
     languageCode: Locale = Locale.ENGLISH,
     id: Long = Random.nextLong(),
     config: Translation.() -> Unit = {},
-) = Translation(id = id, toolCode = toolCode).apply {
-    this.languageCode = languageCode
+) = Translation(id = id, toolCode = toolCode, languageCode = languageCode).apply {
     version = Random.nextInt(1..Int.MAX_VALUE)
     name = UUID.randomUUID().toString()
     description = UUID.randomUUID().toString()

@@ -70,8 +70,8 @@ internal class TranslationEntity(
     fun toModel() = Translation(
         id = id,
         toolCode = tool,
+        languageCode = locale,
     ).also {
-        it.languageCode = locale
         it.version = version
         it.name = name
         it.description = description
