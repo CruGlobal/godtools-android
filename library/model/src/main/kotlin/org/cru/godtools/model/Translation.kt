@@ -83,6 +83,43 @@ class Translation(
     var isDownloaded = false
 
     val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        other !is Translation -> false
+        id != other.id -> false
+        toolCode != other.toolCode -> false
+        languageCode != other.languageCode -> false
+        version != other.version -> false
+        manifestFileName != other.manifestFileName -> false
+        name != other.name -> false
+        description != other.description -> false
+        tagline != other.tagline -> false
+        toolDetailsConversationStarters != other.toolDetailsConversationStarters -> false
+        toolDetailsOutline != other.toolDetailsOutline -> false
+        toolDetailsBibleReferences != other.toolDetailsBibleReferences -> false
+        isPublished != other.isPublished -> false
+        isDownloaded != other.isDownloaded -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + (toolCode?.hashCode() ?: 0)
+        result = 31 * result + languageCode.hashCode()
+        result = 31 * result + version
+        result = 31 * result + isPublished.hashCode()
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (tagline?.hashCode() ?: 0)
+        result = 31 * result + (toolDetailsConversationStarters?.hashCode() ?: 0)
+        result = 31 * result + (toolDetailsOutline?.hashCode() ?: 0)
+        result = 31 * result + (toolDetailsBibleReferences?.hashCode() ?: 0)
+        result = 31 * result + (manifestFileName?.hashCode() ?: 0)
+        result = 31 * result + isDownloaded.hashCode()
+        return result
+    }
 }
 
 fun Translation?.getName(tool: Tool?) = this?.name ?: tool?.name
