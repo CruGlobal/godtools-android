@@ -25,7 +25,8 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val translation = randomTranslation(
         toolCode = TOOL,
         languageCode = LOCALE,
-    ) { version = VERSION }
+        version = VERSION,
+    )
     private val key = translation.toTranslationRefKey()!!
     private val translationRef = TranslationRef(key)
 
@@ -72,7 +73,8 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
         val translation2 = randomTranslation(
             toolCode = "invalid",
             languageCode = LOCALE,
-        ) { version = VERSION }
+            version = VERSION
+        )
         val translationRef2 = TranslationRef(translation2.toTranslationRefKey()!!)
         coEvery { translationDao.getAll() } returns listOf(translationRef, translationRef2)
         coEvery { aemImportRepository.removeOrphanedAemImports() } just Runs

@@ -71,8 +71,8 @@ internal class TranslationEntity(
         id = id,
         toolCode = tool,
         languageCode = locale,
+        version = version,
     ).also {
-        it.version = version
         it.name = name
         it.description = description
         it.tagline = tagline

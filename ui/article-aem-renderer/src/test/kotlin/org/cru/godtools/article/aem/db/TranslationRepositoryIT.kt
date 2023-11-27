@@ -31,7 +31,8 @@ class TranslationRepositoryIT {
         val translation = randomTranslation(
             toolCode = "kgp",
             languageCode = Locale.ENGLISH,
-        ) { version = 1 }
+            version = 1,
+        )
         db.translationDao().insertOrIgnore(TranslationRef(translation.toTranslationRefKey()!!))
 
         // perform test
