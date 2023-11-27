@@ -76,10 +76,10 @@ internal class TranslationEntity(
         name = name,
         description = description,
         tagline = tagline,
+        toolDetailsConversationStarters = toolDetailsConversationStarters,
+        toolDetailsOutline = toolDetailsOutline,
+        toolDetailsBibleReferences = toolDetailsBibleReferences,
     ).also {
-        it.toolDetailsConversationStarters = toolDetailsConversationStarters
-        it.toolDetailsOutline = toolDetailsOutline
-        it.toolDetailsBibleReferences = toolDetailsBibleReferences
         it.isDownloaded = isDownloaded
     }
 }

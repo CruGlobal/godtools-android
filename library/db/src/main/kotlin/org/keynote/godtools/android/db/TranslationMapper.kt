@@ -53,11 +53,11 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
         name = c.getString(COLUMN_NAME),
         description = c.getString(COLUMN_DESCRIPTION),
         tagline = c.getString(COLUMN_TAGLINE),
+        toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS),
+        toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE),
+        toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES),
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
-        toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE)
-        toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES)
-        toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
     }
 }

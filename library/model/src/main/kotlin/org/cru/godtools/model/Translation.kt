@@ -38,6 +38,12 @@ class Translation(
     val description: String? = null,
     @JsonApiAttribute(JSON_TAGLINE)
     val tagline: String? = null,
+    @JsonApiAttribute(JSON_TOOL_DETAILS_CONVERSATION_STARTERS)
+    val toolDetailsConversationStarters: String? = null,
+    @JsonApiAttribute(JSON_TOOL_DETAILS_OUTLINE)
+    val toolDetailsOutline: String? = null,
+    @JsonApiAttribute(JSON_TOOL_DETAILS_BIBLE_REFERENCES)
+    val toolDetailsBibleReferences: String? = null,
 ) {
     internal constructor() : this(INVALID_ID)
 
@@ -66,13 +72,6 @@ class Translation(
     @JsonApiAttribute(JSON_IS_PUBLISHED)
     internal var isPublished = DEFAULT_PUBLISHED
         private set
-
-    @JsonApiAttribute(JSON_TOOL_DETAILS_CONVERSATION_STARTERS)
-    var toolDetailsConversationStarters: String? = null
-    @JsonApiAttribute(JSON_TOOL_DETAILS_OUTLINE)
-    var toolDetailsOutline: String? = null
-    @JsonApiAttribute(JSON_TOOL_DETAILS_BIBLE_REFERENCES)
-    var toolDetailsBibleReferences: String? = null
 
     @JsonApiIgnore
     var isDownloaded = false
@@ -162,10 +161,10 @@ fun randomTranslation(
     name = name,
     description = description,
     tagline = UUID.randomUUID().toString(),
+    toolDetailsConversationStarters = UUID.randomUUID().toString(),
+    toolDetailsOutline = UUID.randomUUID().toString(),
+    toolDetailsBibleReferences = UUID.randomUUID().toString(),
 ).apply {
-    toolDetailsConversationStarters = UUID.randomUUID().toString()
-    toolDetailsOutline = UUID.randomUUID().toString()
-    toolDetailsBibleReferences = UUID.randomUUID().toString()
     isDownloaded = Random.nextBoolean()
     config()
 }
