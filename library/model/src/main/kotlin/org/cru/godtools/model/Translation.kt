@@ -7,8 +7,10 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 import kotlin.random.nextLong
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.model.Base.Companion.INVALID_ID
 
 private const val JSON_API_TYPE_TRANSLATION = "translation"
 
@@ -21,7 +23,7 @@ private const val JSON_DESCRIPTION = "translated-description"
 private const val JSON_TAGLINE = "translated-tagline"
 
 @JsonApiType(JSON_API_TYPE_TRANSLATION)
-class Translation : Base() {
+class Translation {
     companion object {
         const val JSON_LANGUAGE = "language"
         private const val JSON_TOOL_DETAILS_CONVERSATION_STARTERS = "attr-tool-details-conversation-starters"
@@ -31,6 +33,14 @@ class Translation : Base() {
         const val DEFAULT_PUBLISHED = true
         const val DEFAULT_VERSION = 0
     }
+
+    @JsonApiId
+    private var _id: Long? = INVALID_ID
+    var id: Long
+        get() = _id ?: INVALID_ID
+        set(id) {
+            _id = id
+        }
 
     @JsonApiAttribute(JSON_RESOURCE)
     private var tool: Tool? = null
