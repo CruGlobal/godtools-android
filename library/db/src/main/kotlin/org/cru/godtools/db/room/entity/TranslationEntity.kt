@@ -72,9 +72,9 @@ internal class TranslationEntity(
         toolCode = tool,
         languageCode = locale,
         version = version,
+        name = name,
+        description = description,
     ).also {
-        it.name = name
-        it.description = description
         it.tagline = tagline
         it.toolDetailsConversationStarters = toolDetailsConversationStarters
         it.toolDetailsOutline = toolDetailsOutline

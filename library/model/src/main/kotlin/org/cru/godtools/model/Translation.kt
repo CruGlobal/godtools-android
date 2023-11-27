@@ -30,6 +30,10 @@ class Translation(
     languageCode: Locale = Language.INVALID_CODE,
     @JsonApiAttribute(JSON_VERSION)
     val version: Int = DEFAULT_VERSION,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
+    @JsonApiAttribute(JSON_DESCRIPTION)
+    val description: String? = null,
 ) {
     internal constructor() : this(INVALID_ID)
 
@@ -59,10 +63,6 @@ class Translation(
     internal var isPublished = DEFAULT_PUBLISHED
         private set
 
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-    @JsonApiAttribute(JSON_DESCRIPTION)
-    var description: String? = null
     @JsonApiAttribute(JSON_TAGLINE)
     var tagline: String? = null
     @JsonApiAttribute(JSON_TOOL_DETAILS_CONVERSATION_STARTERS)
@@ -150,15 +150,17 @@ fun randomTranslation(
     languageCode: Locale = Locale.ENGLISH,
     version: Int = Random.nextInt(1..Int.MAX_VALUE),
     id: Long = Random.nextLong(),
+    name: String? = UUID.randomUUID().toString(),
+    description: String? = UUID.randomUUID().toString(),
     config: Translation.() -> Unit = {},
 ) = Translation(
     id = id,
     toolCode = toolCode,
     languageCode = languageCode,
     version = version,
+    name = name,
+    description = description,
 ).apply {
-    name = UUID.randomUUID().toString()
-    description = UUID.randomUUID().toString()
     tagline = UUID.randomUUID().toString()
     toolDetailsConversationStarters = UUID.randomUUID().toString()
     toolDetailsOutline = UUID.randomUUID().toString()
