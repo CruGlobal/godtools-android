@@ -1,9 +1,11 @@
 package org.cru.godtools.model
 
+import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
+import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 
 class TranslationTest {
     // region jsonapi parsing
@@ -11,6 +13,7 @@ class TranslationTest {
         JsonApiConverter.Builder()
             .addClasses(Translation::class.java)
             .addClasses(Tool::class.java, Language::class.java)
+            .addConverters(LocaleTypeConverter)
             .build()
     }
 
@@ -20,7 +23,7 @@ class TranslationTest {
 
         assertEquals(1138, translation.id)
         assertEquals("rend", translation.toolCode)
-        assertEquals(4, translation.language!!.apiId!!)
+        assertEquals(Locale.ENGLISH, translation.languageCode)
         assertEquals(155, translation.version)
         assertEquals("Renderer Testing", translation.name)
         assertEquals("Renderer Testing Description", translation.description)
