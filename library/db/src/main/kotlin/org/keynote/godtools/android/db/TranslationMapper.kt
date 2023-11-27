@@ -2,11 +2,15 @@ package org.keynote.godtools.android.db
 
 import android.content.ContentValues
 import android.database.Cursor
+import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLocale
+import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
+import org.cru.godtools.model.Base
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Translation
+import org.keynote.godtools.android.db.Contract.BaseTable.Companion.COLUMN_ID
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DESCRIPTION
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_BIBLE_REFERENCES
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_DETAILS_CONVERSATION_STARTERS
@@ -20,9 +24,10 @@ import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TAGLINE
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_TOOL
 import org.keynote.godtools.android.db.Contract.TranslationTable.COLUMN_VERSION
 
-internal object TranslationMapper : BaseMapper<Translation>() {
+internal object TranslationMapper : AbstractMapper<Translation>() {
     override fun mapField(values: ContentValues, field: String, obj: Translation) {
         when (field) {
+            COLUMN_ID -> values.put(field, obj.id)
             COLUMN_TOOL -> values.put(field, obj.toolCode)
             COLUMN_LANGUAGE -> values.put(field, serialize(obj.languageCode))
             COLUMN_VERSION -> values.put(field, obj.version)
@@ -41,6 +46,7 @@ internal object TranslationMapper : BaseMapper<Translation>() {
 
     override fun newObject(c: Cursor) = Translation()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
+        id = c.getLong(COLUMN_ID, Base.INVALID_ID)
         toolCode = c.getString(COLUMN_TOOL)
         languageCode = c.getLocale(COLUMN_LANGUAGE, Language.INVALID_CODE)
         version = c.getInt(COLUMN_VERSION, Translation.DEFAULT_VERSION)
