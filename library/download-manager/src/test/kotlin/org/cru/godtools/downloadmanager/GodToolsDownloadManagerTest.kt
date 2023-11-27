@@ -55,6 +55,7 @@ import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
 import org.cru.godtools.shared.tool.parser.ParserResult
@@ -282,9 +283,11 @@ class GodToolsDownloadManagerTest {
     // endregion Attachments
 
     // region Translations
-    private val translation = Translation(id = Random.nextLong()).apply {
-        toolCode = TOOL
-        languageCode = Locale.FRENCH
+    private val translation = randomTranslation(
+        toolCode = TOOL,
+        languageCode = Locale.FRENCH,
+    ) {
+        manifestFileName = null
         isDownloaded = false
     }
 

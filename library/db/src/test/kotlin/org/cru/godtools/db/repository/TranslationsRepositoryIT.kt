@@ -398,15 +398,14 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `storeTranslationsFromSync() - Don't update isDownloaded`() = testScope.runTest {
-        val initial = Translation(TOOL)
+        val initial = randomTranslation(TOOL) { isDownloaded = false }
         repository.storeTranslationFromSync(initial)
         assertFalse(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
 
         repository.markTranslationDownloaded(initial.id, true)
         assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
 
-        val updated = Translation(TOOL, id = initial.id, isDownloaded = false)
-        repository.storeTranslationFromSync(updated)
+        repository.storeTranslationFromSync(initial)
         assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
     }
     // endregion storeTranslationsFromSync()

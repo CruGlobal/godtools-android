@@ -26,6 +26,7 @@ private const val JSON_TAGLINE = "translated-tagline"
 class Translation(
     @JsonApiId
     val id: Long,
+    toolCode: String? = null,
 ) {
     internal constructor() : this(INVALID_ID)
 
@@ -40,14 +41,10 @@ class Translation(
     }
 
     @JsonApiAttribute(JSON_RESOURCE)
-    private var tool: Tool? = null
+    private val tool: Tool? = null
     @JsonApiIgnore
-    private var _toolCode: String? = null
-    var toolCode: String?
-        get() = _toolCode ?: tool?.code
-        set(code) {
-            _toolCode = code
-        }
+    val toolCode: String? = toolCode
+        get() = field ?: tool?.code
 
     @JsonApiAttribute(JSON_LANGUAGE)
     var language: Language? = null
@@ -99,12 +96,10 @@ fun Translation(
     toolCode: String = UUID.randomUUID().toString(),
     languageCode: Locale = Locale.ENGLISH,
     version: Int = Translation.DEFAULT_VERSION,
-    id: Long = Random.nextLong(),
     manifestFileName: String? = UUID.randomUUID().toString(),
     isDownloaded: Boolean = false,
     block: Translation.() -> Unit = {},
-) = Translation(id).apply {
-    this.toolCode = toolCode
+) = Translation(id = Random.nextLong(), toolCode = toolCode).apply {
     this.languageCode = languageCode
     this.version = version
     this.manifestFileName = manifestFileName
@@ -115,11 +110,12 @@ fun Translation(
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
 fun randomTranslation(
-    toolCode: String = UUID.randomUUID().toString(),
+    toolCode: String? = UUID.randomUUID().toString(),
     languageCode: Locale = Locale.ENGLISH,
     id: Long = Random.nextLong(),
     config: Translation.() -> Unit = {},
-) = Translation(toolCode, languageCode, id = id) {
+) = Translation(id = id, toolCode = toolCode).apply {
+    this.languageCode = languageCode
     version = Random.nextInt(1..Int.MAX_VALUE)
     name = UUID.randomUUID().toString()
     description = UUID.randomUUID().toString()

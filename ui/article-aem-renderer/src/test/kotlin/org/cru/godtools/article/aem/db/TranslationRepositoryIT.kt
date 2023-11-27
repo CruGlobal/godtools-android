@@ -7,7 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -28,11 +28,10 @@ class TranslationRepositoryIT {
     @Test
     fun verifyAddAemImportsTranslationAlreadyPresent() = runBlocking {
         // setup test
-        val translation = Translation().apply {
-            toolCode = "kgp"
-            languageCode = Locale.ENGLISH
-            version = 1
-        }
+        val translation = randomTranslation(
+            toolCode = "kgp",
+            languageCode = Locale.ENGLISH,
+        ) { version = 1 }
         db.translationDao().insertOrIgnore(TranslationRef(translation.toTranslationRefKey()!!))
 
         // perform test

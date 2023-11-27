@@ -11,7 +11,7 @@ import java.util.Locale
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -22,11 +22,10 @@ private const val VERSION = 1
 
 class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     private val repo = object : TranslationRepository(db) {}
-    private val translation = Translation().apply {
-        toolCode = TOOL
-        languageCode = LOCALE
-        version = VERSION
-    }
+    private val translation = randomTranslation(
+        toolCode = TOOL,
+        languageCode = LOCALE,
+    ) { version = VERSION }
     private val key = translation.toTranslationRefKey()!!
     private val translationRef = TranslationRef(key)
 
@@ -41,7 +40,7 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
 
     @Test
     fun `isProcessed() - Invalid Translation`() = runTest {
-        translation.toolCode = null
+        val translation = randomTranslation(toolCode = null)
 
         assertFalse(repo.isProcessed(translation))
         verify { translationDao wasNot Called }
@@ -70,11 +69,10 @@ class TranslationRepositoryTest : AbstractArticleRoomDatabaseTest() {
     // region removeMissingTranslations()
     @Test
     fun `removeMissingTranslations()`() = runTest {
-        val translation2 = Translation().apply {
-            toolCode = "invalid"
-            languageCode = LOCALE
-            version = VERSION
-        }
+        val translation2 = randomTranslation(
+            toolCode = "invalid",
+            languageCode = LOCALE,
+        ) { version = VERSION }
         val translationRef2 = TranslationRef(translation2.toTranslationRefKey()!!)
         coEvery { translationDao.getAll() } returns listOf(translationRef, translationRef2)
         coEvery { aemImportRepository.removeOrphanedAemImports() } just Runs
