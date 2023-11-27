@@ -56,8 +56,6 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
         toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS),
         toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE),
         toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES),
+        isDownloaded = getBool(c, COLUMN_DOWNLOADED, false),
     )
-    override fun toObject(c: Cursor) = super.toObject(c).apply {
-        isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
-    }
 }

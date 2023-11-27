@@ -398,22 +398,22 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `storeTranslationsFromSync() - Don't update isDownloaded`() = testScope.runTest {
-        val initial = randomTranslation(TOOL) { isDownloaded = false }
-        repository.storeTranslationFromSync(initial)
-        assertFalse(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+        val translation = randomTranslation(TOOL, isDownloaded = false)
+        repository.storeTranslationFromSync(translation)
+        assertFalse(assertNotNull(repository.findTranslation(translation.id)).isDownloaded)
 
-        repository.markTranslationDownloaded(initial.id, true)
-        assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+        repository.markTranslationDownloaded(translation.id, true)
+        assertTrue(assertNotNull(repository.findTranslation(translation.id)).isDownloaded)
 
-        repository.storeTranslationFromSync(initial)
-        assertTrue(assertNotNull(repository.findTranslation(initial.id)).isDownloaded)
+        repository.storeTranslationFromSync(translation)
+        assertTrue(assertNotNull(repository.findTranslation(translation.id)).isDownloaded)
     }
     // endregion storeTranslationsFromSync()
 
     // region deleteTranslationIfNotDownloadedBlocking()
     @Test
     fun `deleteTranslationIfNotDownloadedBlocking()`() = testScope.runTest {
-        val translation = Translation("tool", Locale.ENGLISH, 1) { isDownloaded = false }
+        val translation = randomTranslation("tool", Locale.ENGLISH, 1, isDownloaded = false)
         repository.storeInitialTranslations(listOf(translation))
         assertNotNull(repository.findTranslation(translation.id))
 
@@ -423,7 +423,7 @@ abstract class TranslationsRepositoryIT {
 
     @Test
     fun `deleteTranslationIfNotDownloadedBlocking() - Translation Downloaded`() = testScope.runTest {
-        val translation = Translation("tool", Locale.ENGLISH, 1) { isDownloaded = true }
+        val translation = randomTranslation("tool", Locale.ENGLISH, 1, isDownloaded = true)
         repository.storeInitialTranslations(listOf(translation))
         assertNotNull(repository.findTranslation(translation.id))
 

@@ -44,6 +44,8 @@ class Translation(
     val toolDetailsOutline: String? = null,
     @JsonApiAttribute(JSON_TOOL_DETAILS_BIBLE_REFERENCES)
     val toolDetailsBibleReferences: String? = null,
+    @JsonApiIgnore
+    val isDownloaded: Boolean = false,
 ) {
     internal constructor() : this(INVALID_ID)
 
@@ -72,9 +74,6 @@ class Translation(
     @JsonApiAttribute(JSON_IS_PUBLISHED)
     internal var isPublished = DEFAULT_PUBLISHED
         private set
-
-    @JsonApiIgnore
-    var isDownloaded = false
 
     val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
 
@@ -136,10 +135,8 @@ fun Translation(
     languageCode = languageCode,
     version = version,
     manifestFileName = manifestFileName,
-).apply {
-    this.isDownloaded = isDownloaded
-    block()
-}
+    isDownloaded = isDownloaded,
+).apply(block)
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
@@ -151,6 +148,7 @@ fun randomTranslation(
     manifestFileName: String? = UUID.randomUUID().toString(),
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
+    isDownloaded: Boolean = Random.nextBoolean(),
     config: Translation.() -> Unit = {},
 ) = Translation(
     id = id,
@@ -164,7 +162,5 @@ fun randomTranslation(
     toolDetailsConversationStarters = UUID.randomUUID().toString(),
     toolDetailsOutline = UUID.randomUUID().toString(),
     toolDetailsBibleReferences = UUID.randomUUID().toString(),
-).apply {
-    isDownloaded = Random.nextBoolean()
-    config()
-}
+    isDownloaded = isDownloaded,
+).apply(config)

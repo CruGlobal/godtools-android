@@ -53,7 +53,6 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.ManifestParser
@@ -287,15 +286,14 @@ class GodToolsDownloadManagerTest {
         toolCode = TOOL,
         languageCode = Locale.FRENCH,
         manifestFileName = null,
-    ) {
-        isDownloaded = false
-    }
+        isDownloaded = false,
+    )
 
     // region downloadLatestPublishedTranslation()
     @Test
     fun `downloadLatestPublishedTranslation() - Files`() = testScope.runTest {
         downloadManager.cleanupActor.close()
-        val translation = randomTranslation(manifestFileName = "manifest.xml") { isDownloaded = false }
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
         coEvery {
             translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
@@ -533,9 +531,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
-        val translation = Translation(id = 1).apply {
-            isDownloaded = false
-        }
+        val translation = randomTranslation(isDownloaded = false)
         val file = DownloadedTranslationFile(translation, "file")
         coEvery { translationsRepository.getTranslations() } returns listOf(translation)
         coEvery { downloadedFilesRepository.getDownloadedTranslationFiles() } returns listOf(file)

@@ -79,7 +79,6 @@ internal class TranslationEntity(
         toolDetailsConversationStarters = toolDetailsConversationStarters,
         toolDetailsOutline = toolDetailsOutline,
         toolDetailsBibleReferences = toolDetailsBibleReferences,
-    ).also {
-        it.isDownloaded = isDownloaded
-    }
+        isDownloaded = isDownloaded,
+    )
 }

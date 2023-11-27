@@ -25,6 +25,7 @@ import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -67,7 +68,7 @@ class AemArticleManagerDispatcherTest {
 
     @Test
     fun verifyArticleTranslationsJob() = testScope.runTest {
-        val translations = listOf(Translation().apply { isDownloaded = true })
+        val translations = listOf(randomTranslation(isDownloaded = true))
 
         translationsFlow.value = translations
         runCurrent()
