@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.util.Includes
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -17,6 +18,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.User
+import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertFalse
 import org.junit.Test
 
@@ -119,6 +121,22 @@ class SyncRepositoryTest {
             translationsRepository.storeTranslationFromSync(trans1)
             translationsRepository.storeTranslationFromSync(trans2)
             translationsRepository.deleteTranslationIfNotDownloaded(trans3.id)
+        }
+    }
+
+    @Test
+    fun `storeTranslations() - Skip invalid translations`() = runTest {
+        val transValid = randomTranslation("tool", Locale.ENGLISH)
+        val transInvalid = randomTranslation("tool", Language.INVALID_CODE)
+        val tool = Tool("tool", translations = listOf(transValid, transInvalid))
+        coEvery { translationsRepository.getTranslationsForTool("tool") } returns emptyList()
+
+        assertTrue(transValid.isValid)
+        assertFalse(transInvalid.isValid)
+        syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
+        coVerifyAll {
+            translationsRepository.getTranslationsForTool("tool")
+            translationsRepository.storeTranslationFromSync(transValid)
         }
     }
     // endregion storeTranslations()
