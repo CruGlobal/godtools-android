@@ -30,6 +30,8 @@ class Translation(
     languageCode: Locale = Language.INVALID_CODE,
     @JsonApiAttribute(JSON_VERSION)
     val version: Int = DEFAULT_VERSION,
+    @JsonApiAttribute(JSON_MANIFEST)
+    val manifestFileName: String? = null,
     @JsonApiAttribute(JSON_NAME)
     val name: String? = null,
     @JsonApiAttribute(JSON_DESCRIPTION)
@@ -71,9 +73,6 @@ class Translation(
     var toolDetailsOutline: String? = null
     @JsonApiAttribute(JSON_TOOL_DETAILS_BIBLE_REFERENCES)
     var toolDetailsBibleReferences: String? = null
-
-    @JsonApiAttribute(JSON_MANIFEST)
-    var manifestFileName: String? = null
 
     @JsonApiIgnore
     var isDownloaded = false
@@ -137,8 +136,8 @@ fun Translation(
     toolCode = toolCode,
     languageCode = languageCode,
     version = version,
+    manifestFileName = manifestFileName,
 ).apply {
-    this.manifestFileName = manifestFileName
     this.isDownloaded = isDownloaded
     block()
 }
@@ -150,6 +149,7 @@ fun randomTranslation(
     languageCode: Locale = Locale.ENGLISH,
     version: Int = Random.nextInt(1..Int.MAX_VALUE),
     id: Long = Random.nextLong(),
+    manifestFileName: String? = UUID.randomUUID().toString(),
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
     config: Translation.() -> Unit = {},
@@ -158,6 +158,7 @@ fun randomTranslation(
     toolCode = toolCode,
     languageCode = languageCode,
     version = version,
+    manifestFileName = manifestFileName,
     name = name,
     description = description,
     tagline = UUID.randomUUID().toString(),
@@ -165,7 +166,6 @@ fun randomTranslation(
     toolDetailsConversationStarters = UUID.randomUUID().toString()
     toolDetailsOutline = UUID.randomUUID().toString()
     toolDetailsBibleReferences = UUID.randomUUID().toString()
-    manifestFileName = UUID.randomUUID().toString()
     isDownloaded = Random.nextBoolean()
     config()
 }

@@ -72,6 +72,7 @@ internal class TranslationEntity(
         toolCode = tool,
         languageCode = locale,
         version = version,
+        manifestFileName = manifestFileName,
         name = name,
         description = description,
         tagline = tagline,
@@ -79,7 +80,6 @@ internal class TranslationEntity(
         it.toolDetailsConversationStarters = toolDetailsConversationStarters
         it.toolDetailsOutline = toolDetailsOutline
         it.toolDetailsBibleReferences = toolDetailsBibleReferences
-        it.manifestFileName = manifestFileName
         it.isDownloaded = isDownloaded
     }
 }

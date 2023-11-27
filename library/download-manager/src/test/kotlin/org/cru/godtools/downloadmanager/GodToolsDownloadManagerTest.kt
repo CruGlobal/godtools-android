@@ -286,8 +286,8 @@ class GodToolsDownloadManagerTest {
     private val translation = randomTranslation(
         toolCode = TOOL,
         languageCode = Locale.FRENCH,
+        manifestFileName = null,
     ) {
-        manifestFileName = null
         isDownloaded = false
     }
 
@@ -295,15 +295,15 @@ class GodToolsDownloadManagerTest {
     @Test
     fun `downloadLatestPublishedTranslation() - Files`() = testScope.runTest {
         downloadManager.cleanupActor.close()
-        translation.manifestFileName = "manifest.xml"
+        val translation = randomTranslation(manifestFileName = "manifest.xml") { isDownloaded = false }
         coEvery {
             translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
         } returns translation
         coEvery { translationsRepository.markTranslationDownloaded(any(), any()) } just Runs
         val config = slot<ParserConfig>()
-        coEvery { manifestParser.parseManifest("manifest.xml", capture(config)) } returns
+        coEvery { manifestParser.parseManifest(translation.manifestFileName!!, capture(config)) } returns
             ParserResult.Data(mockk { every { relatedFiles } returns setOf("a.txt", "b.txt") })
-        coEvery { translationsApi.downloadFile("manifest.xml") } returns
+        coEvery { translationsApi.downloadFile(translation.manifestFileName!!) } returns
             Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("manifest")))
         coEvery { translationsApi.downloadFile("a.txt") } returns
             Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("a".repeat(1024))))
@@ -311,31 +311,34 @@ class GodToolsDownloadManagerTest {
             Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("b".repeat(1024))))
 
         turbineScope {
-            val progressFlow = downloadManager.getDownloadProgressFlow(TOOL, Locale.FRENCH).testIn(this)
+            val progressFlow = downloadManager.getDownloadProgressFlow(translation.toolCode!!, translation.languageCode)
+                .testIn(this)
             assertNull(progressFlow.awaitItem())
 
             assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
-            assertEquals(setOf("manifest.xml", "a.txt", "b.txt"), files.keys)
-            assertContentEquals("manifest".toByteArray(), files["manifest.xml"]!!.readBytes())
+            assertEquals(setOf(translation.manifestFileName, "a.txt", "b.txt"), files.keys)
+            assertContentEquals("manifest".toByteArray(), files[translation.manifestFileName]!!.readBytes())
             assertContentEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
             assertContentEquals("b".repeat(1024).toByteArray(), files["b.txt"]!!.readBytes())
             assertEquals(config.captured.withParseRelated(false), config.captured)
             coVerifyAll {
-                translationsRepository.findLatestTranslation(TOOL, Locale.FRENCH)
-                downloadedFilesRepository.findDownloadedFile("manifest.xml")
-                translationsApi.downloadFile("manifest.xml")
-                downloadedFilesRepository.insertOrIgnore(DownloadedFile("manifest.xml"))
-                manifestParser.parseManifest("manifest.xml", any())
+                translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
+                downloadedFilesRepository.findDownloadedFile(translation.manifestFileName!!)
+                translationsApi.downloadFile(translation.manifestFileName!!)
+                downloadedFilesRepository.insertOrIgnore(DownloadedFile(translation.manifestFileName!!))
+                manifestParser.parseManifest(translation.manifestFileName!!, any())
 
                 downloadedFilesRepository.findDownloadedFile("a.txt")
                 downloadedFilesRepository.findDownloadedFile("b.txt")
                 translationsApi.downloadFile("a.txt")
                 translationsApi.downloadFile("b.txt")
-                downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
-                downloadedFilesRepository.insertOrIgnore(DownloadedFile("b.txt"))
-                downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "manifest.xml"))
-                downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
-                downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+                with(downloadedFilesRepository) {
+                    insertOrIgnore(DownloadedFile("a.txt"))
+                    insertOrIgnore(DownloadedFile("b.txt"))
+                    insertOrIgnore(DownloadedTranslationFile(translation, translation.manifestFileName!!))
+                    insertOrIgnore(DownloadedTranslationFile(translation, "a.txt"))
+                    insertOrIgnore(DownloadedTranslationFile(translation, "b.txt"))
+                }
                 translationsRepository.markTranslationDownloaded(translation.id, true)
                 translationsRepository.markStaleTranslationsAsNotDownloaded()
                 workManager wasNot Called

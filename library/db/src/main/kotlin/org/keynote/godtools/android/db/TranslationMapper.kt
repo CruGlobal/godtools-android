@@ -49,6 +49,7 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
         toolCode = c.getString(COLUMN_TOOL),
         languageCode = c.getLocale(COLUMN_LANGUAGE, Language.INVALID_CODE),
         version = c.getInt(COLUMN_VERSION, Translation.DEFAULT_VERSION),
+        manifestFileName = c.getString(COLUMN_MANIFEST),
         name = c.getString(COLUMN_NAME),
         description = c.getString(COLUMN_DESCRIPTION),
         tagline = c.getString(COLUMN_TAGLINE),
@@ -57,7 +58,6 @@ internal object TranslationMapper : AbstractMapper<Translation>() {
         toolDetailsOutline = c.getString(COLUMN_DETAILS_OUTLINE)
         toolDetailsBibleReferences = c.getString(COLUMN_DETAILS_BIBLE_REFERENCES)
         toolDetailsConversationStarters = c.getString(COLUMN_DETAILS_CONVERSATION_STARTERS)
-        manifestFileName = c.getString(COLUMN_MANIFEST)
         isDownloaded = getBool(c, COLUMN_DOWNLOADED, false)
     }
 }
