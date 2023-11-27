@@ -282,8 +282,7 @@ class GodToolsDownloadManagerTest {
     // endregion Attachments
 
     // region Translations
-    private val translation = Translation().apply {
-        id = Random.nextLong()
+    private val translation = Translation(id = Random.nextLong()).apply {
         toolCode = TOOL
         languageCode = Locale.FRENCH
         isDownloaded = false
@@ -528,8 +527,7 @@ class GodToolsDownloadManagerTest {
 
     @Test
     fun `deleteOrphanedTranslationFiles()`() = testScope.runTest {
-        val translation = Translation().apply {
-            id = 1
+        val translation = Translation(id = 1).apply {
             isDownloaded = false
         }
         val file = DownloadedTranslationFile(translation, "file")

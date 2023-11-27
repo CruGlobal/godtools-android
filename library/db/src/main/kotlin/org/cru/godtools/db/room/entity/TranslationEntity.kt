@@ -67,8 +67,7 @@ internal class TranslationEntity(
         isDownloaded = translation.isDownloaded,
     )
 
-    fun toModel() = Translation().also {
-        it.id = id
+    fun toModel() = Translation(id = id).also {
         it.toolCode = tool
         it.languageCode = locale
         it.version = version

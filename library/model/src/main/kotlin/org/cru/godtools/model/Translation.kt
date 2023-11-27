@@ -23,7 +23,12 @@ private const val JSON_DESCRIPTION = "translated-description"
 private const val JSON_TAGLINE = "translated-tagline"
 
 @JsonApiType(JSON_API_TYPE_TRANSLATION)
-class Translation {
+class Translation(
+    @JsonApiId
+    val id: Long,
+) {
+    internal constructor() : this(INVALID_ID)
+
     companion object {
         const val JSON_LANGUAGE = "language"
         private const val JSON_TOOL_DETAILS_CONVERSATION_STARTERS = "attr-tool-details-conversation-starters"
@@ -33,14 +38,6 @@ class Translation {
         const val DEFAULT_PUBLISHED = true
         const val DEFAULT_VERSION = 0
     }
-
-    @JsonApiId
-    private var _id: Long? = INVALID_ID
-    var id: Long
-        get() = _id ?: INVALID_ID
-        set(id) {
-            _id = id
-        }
 
     @JsonApiAttribute(JSON_RESOURCE)
     private var tool: Tool? = null
@@ -106,8 +103,7 @@ fun Translation(
     manifestFileName: String? = UUID.randomUUID().toString(),
     isDownloaded: Boolean = false,
     block: Translation.() -> Unit = {},
-) = Translation().apply {
-    this.id = id
+) = Translation(id).apply {
     this.toolCode = toolCode
     this.languageCode = languageCode
     this.version = version
