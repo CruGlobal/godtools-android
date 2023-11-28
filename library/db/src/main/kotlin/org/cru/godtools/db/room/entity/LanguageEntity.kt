@@ -10,22 +10,22 @@ import org.cru.godtools.model.Language
 internal class LanguageEntity(
     @PrimaryKey
     val code: Locale,
-    val id: Long,
     val name: String?,
     @ColumnInfo(defaultValue = "false")
     val isAdded: Boolean = false,
+    val apiId: Long? = null,
 ) {
     constructor(language: Language) : this(
-        id = language.id,
         code = language.code,
         name = language.name,
-        isAdded = language.isAdded
+        isAdded = language.isAdded,
+        apiId = language.apiId,
     )
 
-    fun toModel() = Language().also {
-        it.id = id
-        it.code = code
-        it.name = name
-        it.isAdded = isAdded
-    }
+    fun toModel() = Language(
+        code = code,
+        name = name,
+        isAdded = isAdded,
+        apiId = apiId,
+    )
 }

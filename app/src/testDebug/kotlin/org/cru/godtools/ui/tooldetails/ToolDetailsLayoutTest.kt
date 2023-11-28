@@ -91,8 +91,8 @@ class ToolDetailsLayoutTest {
     fun `ToolDetailsLanguages() - Sorted Languages`() {
         composeTestRule.setContent { ToolDetailsLanguages(toolViewModel, true, {}) }
         availableLanguagesFlow.value = listOf(
-            Language().apply { name = "Language 2" },
-            Language().apply { name = "Language 1" },
+            Language(Language.INVALID_CODE, name = "Language 2"),
+            Language(Language.INVALID_CODE, name = "Language 1"),
         )
 
         composeTestRule.onNodeWithTag(TEST_TAG_LANGUAGES_AVAILABLE).assertTextEquals("Language 1, Language 2")

@@ -84,11 +84,7 @@ class SettingsBottomSheetDialogFragment :
             setOnItemClickListener { _, _, pos, _ -> adapter.getItem(pos)?.code?.let { updatePrimaryLanguage(it) } }
         }
         binding.languageParallelDropdown.apply {
-            val none = Language().apply {
-                id = -2
-                code = Locale("x", "none")
-                name = getString(R.string.tract_settings_languages_none)
-            }
+            val none = Language(code = Locale("x", "none"), name = getString(R.string.tract_settings_languages_none))
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
                 .combineWith(primaryLanguage) { l, prim -> listOf(none) + l.filterNot { it.code == prim?.code } }

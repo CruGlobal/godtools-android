@@ -1,12 +1,10 @@
 package org.cru.godtools.model
 
 import android.content.Context
-import androidx.annotation.RestrictTo
 import java.text.Collator
 import java.util.Locale
-import java.util.UUID
-import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.appLanguage
@@ -16,7 +14,18 @@ private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
 
 @JsonApiType(Language.JSONAPI_TYPE)
-class Language : Base() {
+data class Language(
+    @JsonApiAttribute(JSON_CODE)
+    val code: Locale,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
+    @JsonApiIgnore
+    val isAdded: Boolean = false,
+    @JsonApiId
+    val apiId: Long? = null,
+) {
+    internal constructor() : this(INVALID_CODE)
+
     companion object {
         const val JSONAPI_TYPE = "language"
 
@@ -53,38 +62,10 @@ class Language : Base() {
             get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
-    @JsonApiAttribute(JSON_CODE)
-    private var _code: Locale? = null
-    var code: Locale
-        get() = _code ?: INVALID_CODE
-        set(code) {
-            _code = code
-        }
-
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-
-    @JsonApiIgnore
-    var isAdded: Boolean = false
+    @Suppress("SENSELESS_COMPARISON")
+    val isValid get() = code != INVALID_CODE && code != null
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
-        _code?.getDisplayName(context, name, inLocale) ?: name ?: ""
-
-    // XXX: output the language id and code for debugging purposes
-    override fun toString() = "Language{id=$id, code=$_code}"
-
-    val isValid get() = _code != null && code != INVALID_CODE
+        code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
 }
-
-// TODO: move this to testFixtures once they support Kotlin source files
-@RestrictTo(RestrictTo.Scope.TESTS)
-@Suppress("ktlint:standard:function-naming")
-fun Language(code: Locale = Locale.ENGLISH, isAdded: Boolean = false, config: Language.() -> Unit = {}) =
-    Language().apply {
-        id = Random.nextLong()
-        this.code = code
-        name = UUID.randomUUID().toString()
-        this.isAdded = isAdded
-        config()
-    }
