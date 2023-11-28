@@ -21,7 +21,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Test
 
 class TasksTest {
@@ -84,7 +84,7 @@ class TasksTest {
     @Test
     fun `initFavoriteTools()`() = runTest {
         val tools = Array(5) { Tool("${it + 1}") }
-        val translations = listOf("1", "5").map { Translation(toolCode = it) }
+        val translations = listOf("1", "5").map { randomTranslation(toolCode = it) }
         coEvery { toolsRepository.getNormalTools() } returns tools.toList()
         coEvery { translationsRepository.getTranslationsForLanguages(any()) } returns translations
         every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)

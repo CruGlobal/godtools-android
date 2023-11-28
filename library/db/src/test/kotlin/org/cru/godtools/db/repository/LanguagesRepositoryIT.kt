@@ -13,7 +13,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -118,8 +118,8 @@ abstract class LanguagesRepositoryIT {
             repository.storeInitialLanguages(listOf(english, french, german))
             translationsRepository.storeInitialTranslations(
                 listOf(
-                    Translation("tool1", Locale.ENGLISH),
-                    Translation("tool2", Locale.FRENCH)
+                    randomTranslation("tool1", Locale.ENGLISH),
+                    randomTranslation("tool2", Locale.FRENCH)
                 )
             )
             runCurrent()
@@ -139,8 +139,8 @@ abstract class LanguagesRepositoryIT {
         repository.storeInitialLanguages(listOf(english))
         translationsRepository.storeInitialTranslations(
             listOf(
-                Translation("tool1", Locale.ENGLISH),
-                Translation("tool2", Locale.ENGLISH)
+                randomTranslation("tool1", Locale.ENGLISH),
+                randomTranslation("tool2", Locale.ENGLISH)
             )
         )
 

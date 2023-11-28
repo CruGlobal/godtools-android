@@ -17,7 +17,7 @@ import org.cru.godtools.article.aem.db.ArticleRoomDatabase
 import org.cru.godtools.article.aem.db.ResourceDao
 import org.cru.godtools.article.aem.model.Resource
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -56,7 +56,7 @@ class AemArticleManagerTest {
     // region Translations
     @Test
     fun `processDownloadedTranslations()`() = testScope.runTest {
-        val translation = Translation()
+        val translation = randomTranslation()
         val translations = listOf(translation)
         val imports = listOf<Uri>(mockk())
         val manifest = mockk<Manifest> { every { aemImports } returns imports }
@@ -78,7 +78,7 @@ class AemArticleManagerTest {
 
     @Test
     fun `processDownloadedTranslations() - Don't process already processed translations`() = testScope.runTest {
-        val translation = Translation()
+        val translation = randomTranslation()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository()
         coEvery { repository.isProcessed(translation) } returns true
@@ -94,7 +94,7 @@ class AemArticleManagerTest {
 
     @Test
     fun `processDownloadedTranslations() - Don't process without a downloaded manifest`() = testScope.runTest {
-        val translation = Translation()
+        val translation = randomTranslation()
         val translations = listOf(translation)
         val repository = aemDb.translationRepository()
         coEvery { repository.isProcessed(translation) } returns false

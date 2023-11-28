@@ -7,7 +7,7 @@ import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.LOADED
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.LOADING
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.NOT_FOUND
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState.OFFLINE
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -28,7 +28,7 @@ class LoadingStateTest {
         assertEquals(NOT_FOUND, LoadingState.determineToolState(null, null, isSyncFinished = true, isConnected = true))
         assertEquals(NOT_FOUND, LoadingState.determineToolState(null, null, isSyncFinished = true, isConnected = false))
         assertEquals(LOADING, LoadingState.determineToolState(null, null, isSyncFinished = false))
-        assertEquals(LOADING, LoadingState.determineToolState(null, Translation(), isSyncFinished = true))
+        assertEquals(LOADING, LoadingState.determineToolState(null, randomTranslation(), isSyncFinished = true))
         assertEquals(OFFLINE, LoadingState.determineToolState(null, null, isSyncFinished = false, isConnected = false))
     }
 }

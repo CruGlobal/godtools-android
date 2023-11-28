@@ -25,7 +25,7 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
-import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
@@ -258,7 +258,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisible() {
-        everyGetTranslation() returns flowOf(Translation())
+        everyGetTranslation() returns flowOf(randomTranslation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         scenario {
@@ -275,7 +275,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuVisibleForDeepLink() {
-        everyGetTranslation() returns flowOf(Translation())
+        everyGetTranslation() returns flowOf(randomTranslation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en")) {
@@ -292,7 +292,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenNoManifest() {
-        everyGetTranslation() returns flowOf(Translation())
+        everyGetTranslation() returns flowOf(randomTranslation())
         everyGetManifest() returns ImmutableLiveData(null)
 
         scenario {
@@ -309,7 +309,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenShowingTips() {
-        everyGetTranslation() returns flowOf(Translation())
+        everyGetTranslation() returns flowOf(randomTranslation())
         everyGetManifest()
             .returns(ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH, tips = { listOf(Tip()) })))
 
@@ -327,7 +327,7 @@ class TractActivityTest {
     @Test
     @Ignore("The Share menu item was moved to the Settings Dialog")
     fun verifyShareMenuHiddenWhenLiveShareSubscriber() {
-        everyGetTranslation() returns flowOf(Translation())
+        everyGetTranslation() returns flowOf(randomTranslation())
         everyGetManifest() returns ImmutableLiveData(Manifest(code = "test", locale = Locale.ENGLISH))
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/kgp?primaryLanguage=en&$PARAM_LIVE_SHARE_STREAM=asdf")) {

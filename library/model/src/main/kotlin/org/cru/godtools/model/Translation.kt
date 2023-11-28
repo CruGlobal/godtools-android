@@ -5,7 +5,6 @@ import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.random.nextInt
-import kotlin.random.nextLong
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -121,25 +120,6 @@ fun Translation?.getTagline(tool: Tool?) = this?.tagline ?: getDescription(tool)
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
-@Suppress("ktlint:standard:function-naming")
-fun Translation(
-    toolCode: String = UUID.randomUUID().toString(),
-    languageCode: Locale = Locale.ENGLISH,
-    version: Int = Translation.DEFAULT_VERSION,
-    manifestFileName: String? = UUID.randomUUID().toString(),
-    isDownloaded: Boolean = false,
-    block: Translation.() -> Unit = {},
-) = Translation(
-    id = Random.nextLong(),
-    toolCode = toolCode,
-    languageCode = languageCode,
-    version = version,
-    manifestFileName = manifestFileName,
-    isDownloaded = isDownloaded,
-).apply(block)
-
-// TODO: move this to testFixtures once they support Kotlin source files
-@RestrictTo(RestrictTo.Scope.TESTS)
 fun randomTranslation(
     toolCode: String? = UUID.randomUUID().toString(),
     languageCode: Locale = Locale.ENGLISH,
@@ -149,7 +129,6 @@ fun randomTranslation(
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
     isDownloaded: Boolean = Random.nextBoolean(),
-    config: Translation.() -> Unit = {},
 ) = Translation(
     id = id,
     toolCode = toolCode,
@@ -163,4 +142,4 @@ fun randomTranslation(
     toolDetailsOutline = UUID.randomUUID().toString(),
     toolDetailsBibleReferences = UUID.randomUUID().toString(),
     isDownloaded = isDownloaded,
-).apply(config)
+)

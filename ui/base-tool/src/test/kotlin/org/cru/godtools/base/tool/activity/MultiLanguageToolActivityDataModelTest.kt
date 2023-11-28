@@ -28,6 +28,7 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.aMapWithSize
@@ -95,7 +96,7 @@ class MultiLanguageToolActivityDataModelTest {
     // region Property: translations
     @Test
     fun `Property translations`() {
-        val translation = Translation()
+        val translation = randomTranslation()
         everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(null)
         everyGetTranslation(TOOL, Locale.FRENCH) returns emptyFlow()
         everyGetTranslation(TOOL, Locale.CHINESE) returns flowOf(translation)
@@ -148,7 +149,7 @@ class MultiLanguageToolActivityDataModelTest {
         dataModel.primaryLocales.value = listOf(Locale.ENGLISH, Locale.FRENCH)
 
         dataModel.translations.observeForever(observer)
-        french.value = Translation()
+        french.value = randomTranslation()
         verify {
             translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
             translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH)
@@ -297,7 +298,7 @@ class MultiLanguageToolActivityDataModelTest {
             dataModel.loadingState.value,
             allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.NOT_FOUND))
         )
-        translation.value = Translation()
+        translation.value = randomTranslation()
         assertThat(dataModel.loadingState.value, allOf(aMapWithSize(1), hasEntry(Locale.ENGLISH, LoadingState.LOADING)))
         verifyAll { repeat(2) { observer.onChanged(any()) } }
         assertThat(
@@ -321,8 +322,8 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property activeLocale - Updates when activeLoadingState is INVALID_TYPE`() = testScope.runTest {
         val englishManifest = MutableSharedFlow<Manifest?>()
-        everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(Translation())
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(randomTranslation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.ENGLISH) returns englishManifest
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
@@ -339,7 +340,7 @@ class MultiLanguageToolActivityDataModelTest {
     fun `Property activeLocale - Updates when activeLoadingState is NOT_FOUND`() = testScope.runTest {
         val englishTranslation = MutableSharedFlow<Translation?>()
         everyGetTranslation(TOOL, Locale.ENGLISH) returns englishTranslation
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
@@ -354,8 +355,8 @@ class MultiLanguageToolActivityDataModelTest {
 
     @Test
     fun `Property activeLocale - Updates when activeLoadingState is OFFLINE`() {
-        everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(Translation())
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.ENGLISH) returns flowOf(randomTranslation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.ENGLISH) returns flowOf(null)
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest(type = Manifest.Type.TRACT))
         dataModel.toolCode.value = TOOL
@@ -392,7 +393,7 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Downloaded`() {
         // setup test
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
         everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf()
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest())
         everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
@@ -413,8 +414,8 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Loading, Active Second Primary Downloaded`() {
         // setup test
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
-        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf()
         everyGetManifest(TOOL, Locale.GERMAN) returns flowOf(Manifest())
         dataModel.toolCode.value = TOOL
@@ -440,7 +441,7 @@ class MultiLanguageToolActivityDataModelTest {
     fun `Property visibleLocales - First Primary Missing, Second Primary Loading, Neither Active`() {
         // setup test
         everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(null)
-        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(null)
         everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
         dataModel.toolCode.value = TOOL
@@ -466,8 +467,8 @@ class MultiLanguageToolActivityDataModelTest {
     @Test
     fun `Property visibleLocales - First Primary Loaded, Second Primary Loading And Active`() {
         // setup test
-        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(Translation())
-        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(Translation())
+        everyGetTranslation(TOOL, Locale.FRENCH) returns flowOf(randomTranslation())
+        everyGetTranslation(TOOL, Locale.GERMAN) returns flowOf(randomTranslation())
         everyGetManifest(TOOL, Locale.FRENCH) returns flowOf(Manifest())
         everyGetManifest(TOOL, Locale.GERMAN) returns flowOf()
         dataModel.toolCode.value = TOOL

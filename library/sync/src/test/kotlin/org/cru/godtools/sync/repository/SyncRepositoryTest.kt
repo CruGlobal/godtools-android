@@ -16,7 +16,6 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.User
 import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertFalse
@@ -108,9 +107,9 @@ class SyncRepositoryTest {
     // region storeTranslations()
     @Test
     fun `storeTranslations()`() = runTest {
-        val trans1 = Translation("tool", Locale.ENGLISH)
-        val trans2 = Translation("tool", Locale.FRENCH)
-        val trans3 = Translation("tool", Locale.GERMAN)
+        val trans1 = randomTranslation("tool", Locale.ENGLISH)
+        val trans2 = randomTranslation("tool", Locale.FRENCH)
+        val trans3 = randomTranslation("tool", Locale.GERMAN)
         val tool = Tool("tool", translations = listOf(trans1, trans2))
         coEvery { translationsRepository.getTranslationsForTool("tool") } returns listOf(trans1, trans3)
 
