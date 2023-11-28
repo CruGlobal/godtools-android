@@ -3,12 +3,13 @@ package org.cru.godtools.model
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 
 class TranslationTest {
-    // region jsonapi parsing
+    // region jsonapi Parsing
     private val jsonApiConverter by lazy {
         JsonApiConverter.Builder()
             .addClasses(Translation::class.java)
@@ -18,9 +19,10 @@ class TranslationTest {
     }
 
     @Test
-    fun testJsonApiParsing() {
+    fun `jsonapi Parsing`() {
         val translation = parseJson("translation.json")
 
+        assertTrue(translation.isValid)
         assertEquals(1138, translation.id)
         assertEquals("rend", translation.toolCode)
         assertEquals(Locale.ENGLISH, translation.languageCode)
@@ -35,7 +37,13 @@ class TranslationTest {
             "d13997976f4f9cd9ff6852d7d47afbada4f0f81e315e3061f996dd269391c2dd.xml",
             translation.manifestFileName
         )
-        assertTrue(translation.isPublished)
+    }
+
+    @Test
+    fun `jsonapi Parsing - Not Published`() {
+        val translation = parseJson("translation_invalid_not_published.json")
+
+        assertFalse(translation.isValid)
     }
 
     private fun parseJson(file: String) = this::class.java.getResourceAsStream(file)!!.reader()

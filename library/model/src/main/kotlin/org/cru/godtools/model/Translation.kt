@@ -54,8 +54,8 @@ class Translation(
         private const val JSON_TOOL_DETAILS_BIBLE_REFERENCES = "attr-tool-details-bible-references"
         private const val JSON_TOOL_DETAILS_OUTLINE = "attr-tool-details-outline"
 
-        const val DEFAULT_PUBLISHED = true
         const val DEFAULT_VERSION = 0
+        private const val DEFAULT_PUBLISHED = true
     }
 
     @JsonApiAttribute(JSON_RESOURCE)
@@ -71,8 +71,7 @@ class Translation(
         get() = field.takeUnless { it == Language.INVALID_CODE } ?: language?.code ?: field
 
     @JsonApiAttribute(JSON_IS_PUBLISHED)
-    internal var isPublished = DEFAULT_PUBLISHED
-        private set
+    private val isPublished = DEFAULT_PUBLISHED
 
     val isValid get() = toolCode != null && languageCode != Language.INVALID_CODE && isPublished
 
@@ -91,7 +90,6 @@ class Translation(
         toolDetailsConversationStarters != other.toolDetailsConversationStarters -> false
         toolDetailsOutline != other.toolDetailsOutline -> false
         toolDetailsBibleReferences != other.toolDetailsBibleReferences -> false
-        isPublished != other.isPublished -> false
         isDownloaded != other.isDownloaded -> false
         else -> true
     }
@@ -101,7 +99,6 @@ class Translation(
         result = 31 * result + (toolCode?.hashCode() ?: 0)
         result = 31 * result + languageCode.hashCode()
         result = 31 * result + version
-        result = 31 * result + isPublished.hashCode()
         result = 31 * result + (name?.hashCode() ?: 0)
         result = 31 * result + (description?.hashCode() ?: 0)
         result = 31 * result + (tagline?.hashCode() ?: 0)

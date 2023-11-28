@@ -1,0 +1,47 @@
+{
+  "data": {
+    "id": "1138",
+    "type": "translation",
+    "attributes": {
+      "is-published": false,
+      "version": 155,
+      "manifest-name": "d13997976f4f9cd9ff6852d7d47afbada4f0f81e315e3061f996dd269391c2dd.xml",
+      "translated-name": "Renderer Testing",
+      "translated-description": "Renderer Testing Description",
+      "translated-tagline": "Renderer Testing Tagline",
+      "attr-tool-details-conversation-starters": "Renderer Test Conversation Starters",
+      "attr-tool-details-bible-references": "Renderer Test Bible References",
+      "attr-tool-details-outline": "Renderer Test Outline"
+    },
+    "relationships": {
+      "resource": {
+        "data": {
+          "id": "3",
+          "type": "resource"
+        }
+      },
+      "language": {
+        "data": {
+          "id": "4",
+          "type": "language"
+        }
+      }
+    }
+  },
+  "included": [
+    {
+      "type": "resource",
+      "id": "3",
+      "attributes": {
+        "abbreviation": "rend"
+      }
+    },
+    {
+      "type": "language",
+      "id": "4",
+      "attributes": {
+        "code": "en"
+      }
+    }
+  ]
+}
