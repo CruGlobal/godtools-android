@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.32.0"
 android-gradle-plugin = "8.1.4"
-androidx-compose-compiler = "1.5.4"
+androidx-compose-compiler = "1.5.5-dev-k1.9.21-163bb051fe5"
 androidx-compose-material = "1.5.4"
 androidx-compose-ui = "1.5.4"
 androidx-core = "1.12.0"
@@ -20,7 +20,7 @@ firebase-perf = "20.5.1"
 godtoolsShared = "0.9.2"
 google-auto-value = "1.10.4"
 gtoSupport = "4.2.0-SNAPSHOT"
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 kotlinCoroutines = "1.7.3"
 kotlinKover = "0.7.5"
 ktlint = "1.0.1"
@@ -227,5 +227,5 @@ firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.0" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.1" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.15" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
