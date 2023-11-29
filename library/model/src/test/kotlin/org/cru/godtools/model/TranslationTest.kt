@@ -1,9 +1,9 @@
 package org.cru.godtools.model
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
 
 class TranslationTest {
     // region jsonapi parsing
