@@ -6,10 +6,6 @@ plugins {
 android {
     namespace = "org.cru.godtools.db"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }
     }

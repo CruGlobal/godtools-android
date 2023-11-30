@@ -53,9 +53,6 @@ android {
         dataBinding = true
         viewBinding = true
     }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 
     productFlavors {
         named("stage") {
@@ -148,8 +145,6 @@ onesky {
 }
 
 dependencies {
-    coreLibraryDesugaring(libs.android.desugaring)
-
     api(project(":library:api"))
     api(project(":library:db"))
     api(project(":library:download-manager"))
