@@ -60,6 +60,8 @@ open class GodToolsApplication : Application(), Configuration.Provider {
 
     @Inject
     internal lateinit var workerFactory: Lazy<HiltWorkerFactory>
-    override fun getWorkManagerConfiguration() = Configuration.Builder().setWorkerFactory(workerFactory.get()).build()
+    override val workManagerConfiguration by lazy {
+        Configuration.Builder().setWorkerFactory(workerFactory.get()).build()
+    }
     // endregion WorkManager Configuration.Provider
 }
