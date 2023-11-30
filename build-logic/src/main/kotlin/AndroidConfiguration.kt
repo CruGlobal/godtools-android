@@ -26,6 +26,7 @@ internal const val FLAVOR_ENV_PRODUCTION = "production"
 internal fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     configureCompilerOptions(project)
+    enableCoreLibraryDesugaring(project)
     project.configureCommonDependencies()
     configureTestOptions(project)
 
@@ -78,6 +79,11 @@ private fun BaseExtension.configureCompilerOptions(project: Project) {
     (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
         freeCompilerArgs += "-Xjvm-default=all"
     }
+}
+
+private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {
+    compileOptions.isCoreLibraryDesugaringEnabled = true
+    project.dependencies.addProvider("coreLibraryDesugaring", project.libs.findLibrary("android-desugaring").get())
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.

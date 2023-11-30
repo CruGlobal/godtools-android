@@ -5,9 +5,6 @@ plugins {
 android {
     namespace = "org.cru.godtools.model"
 
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
     testFixtures.enable = true
 }
 
