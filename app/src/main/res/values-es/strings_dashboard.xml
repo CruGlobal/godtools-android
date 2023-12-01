@@ -56,4 +56,8 @@ Puedes acceer a una versión online en https://knowgod.com/</string>
     <string name="action_tools_about">Detalles</string>
     <string name="action_tools_open">Abrir</string>
     <!-- In App Update -->
+    <string name="play_update_available">Actualización disponible</string>
+    <string name="play_update_available_action">Descargar</string>
+    <string name="play_update_downloaded">Descarga actualizada</string>
+    <string name="play_update_downloaded_action">Recargar</string>
 </resources>
