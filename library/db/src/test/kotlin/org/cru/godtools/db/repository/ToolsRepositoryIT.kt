@@ -20,8 +20,8 @@ import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.model.trackChanges
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -168,13 +168,13 @@ abstract class ToolsRepositoryIT {
         repository.getToolsFlowForLanguage(Locale.ENGLISH).test {
             assertTrue(awaitItem().isEmpty())
 
-            translationsRepository.storeTranslationFromSync(Translation("tool1", Locale.ENGLISH))
+            translationsRepository.storeTranslationFromSync(randomTranslation("tool1", Locale.ENGLISH))
             assertThat(awaitItem(), contains(tool(tool1)))
 
-            translationsRepository.storeTranslationFromSync(Translation("tool2", Locale.FRENCH))
+            translationsRepository.storeTranslationFromSync(randomTranslation("tool2", Locale.FRENCH))
             assertThat(awaitItem(), contains(tool(tool1)))
 
-            translationsRepository.storeTranslationFromSync(Translation("tool2", Locale.ENGLISH))
+            translationsRepository.storeTranslationFromSync(randomTranslation("tool2", Locale.ENGLISH))
             assertThat(awaitItem(), containsInAnyOrder(tool(tool1), tool(tool2)))
         }
     }
@@ -193,9 +193,9 @@ abstract class ToolsRepositoryIT {
 
             translationsRepository.storeInitialTranslations(
                 listOf(
-                    Translation("tool1", Locale.ENGLISH, isDownloaded = true),
-                    Translation("tool2", Locale.ENGLISH, isDownloaded = false),
-                    Translation("tool2", Locale.FRENCH, isDownloaded = true),
+                    randomTranslation("tool1", Locale.ENGLISH, isDownloaded = true),
+                    randomTranslation("tool2", Locale.ENGLISH, isDownloaded = false),
+                    randomTranslation("tool2", Locale.FRENCH, isDownloaded = true),
                 )
             )
             assertThat(awaitItem(), contains(tool(tool1)))

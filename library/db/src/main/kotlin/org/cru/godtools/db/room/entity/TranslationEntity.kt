@@ -67,18 +67,18 @@ internal class TranslationEntity(
         isDownloaded = translation.isDownloaded,
     )
 
-    fun toModel() = Translation().also {
-        it.id = id
-        it.toolCode = tool
-        it.languageCode = locale
-        it.version = version
-        it.name = name
-        it.description = description
-        it.tagline = tagline
-        it.toolDetailsConversationStarters = toolDetailsConversationStarters
-        it.toolDetailsOutline = toolDetailsOutline
-        it.toolDetailsBibleReferences = toolDetailsBibleReferences
-        it.manifestFileName = manifestFileName
-        it.isDownloaded = isDownloaded
-    }
+    fun toModel() = Translation(
+        id = id,
+        toolCode = tool,
+        languageCode = locale,
+        version = version,
+        manifestFileName = manifestFileName,
+        name = name,
+        description = description,
+        tagline = tagline,
+        toolDetailsConversationStarters = toolDetailsConversationStarters,
+        toolDetailsOutline = toolDetailsOutline,
+        toolDetailsBibleReferences = toolDetailsBibleReferences,
+        isDownloaded = isDownloaded,
+    )
 }

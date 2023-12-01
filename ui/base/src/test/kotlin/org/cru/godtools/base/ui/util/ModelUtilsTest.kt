@@ -2,6 +2,7 @@ package org.cru.godtools.base.ui.util
 
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -10,10 +11,10 @@ class ModelUtilsTest {
         name = "tool"
         description = "tool description"
     }
-    private val translation = Translation().apply {
-        name = "translation"
-        description = "translation description"
-    }
+    private val translation = randomTranslation(
+        name = "translation",
+        description = "translation description",
+    )
     private val translationNull: Translation? = null
 
     @Test

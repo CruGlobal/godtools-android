@@ -32,6 +32,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
+import org.cru.godtools.model.randomTranslation
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
@@ -110,8 +111,8 @@ class GodToolsDownloadManagerDispatcherTest {
             )
         }
 
-        val translation1 = Translation("tool1", Locale.FRENCH)
-        val translation2 = Translation("tool2", Locale.FRENCH)
+        val translation1 = randomTranslation("tool1", Locale.FRENCH, isDownloaded = false)
+        val translation2 = randomTranslation("tool2", Locale.FRENCH, isDownloaded = false)
         translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()
         coVerifyAll {
@@ -140,8 +141,8 @@ class GodToolsDownloadManagerDispatcherTest {
             )
         }
 
-        val translation1 = Translation("tool1", Settings.defaultLanguage)
-        val translation2 = Translation("tool2", Settings.defaultLanguage)
+        val translation1 = randomTranslation("tool1", Settings.defaultLanguage, isDownloaded = false)
+        val translation2 = randomTranslation("tool2", Settings.defaultLanguage, isDownloaded = false)
         translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()
         coVerifyAll {
@@ -173,8 +174,8 @@ class GodToolsDownloadManagerDispatcherTest {
             )
         }
 
-        val translation1 = Translation("tool1", Locale.FRENCH)
-        val translation2 = Translation("tool2", Locale.GERMAN)
+        val translation1 = randomTranslation("tool1", Locale.FRENCH, isDownloaded = false)
+        val translation2 = randomTranslation("tool2", Locale.GERMAN, isDownloaded = false)
         translationsFlow.emit(listOf(translation1, translation2))
         runCurrent()
         coVerifyAll {

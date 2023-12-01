@@ -68,7 +68,9 @@ internal class Tasks @Inject constructor(
 
         bundledTools.let { resources ->
             toolsRepository.storeInitialTools(resources)
-            translationsRepository.storeInitialTranslations(resources.flatMap { it.latestTranslations.orEmpty() })
+            translationsRepository.storeInitialTranslations(
+                resources.flatMap { it.latestTranslations.orEmpty().filter { it.isValid } }
+            )
             attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
         }
     }
