@@ -240,8 +240,6 @@ dependencies {
 // region Firebase App Distribution
 if (project.hasProperty("firebaseAppDistributionBuild")) {
     firebaseAppDistribution {
-        // HACK: workaround https://github.com/google/play-services-plugins/issues/276
-        appId = "1:71275134527:android:e6af54d704ba9adac5028a"
         artifactPath = layout.buildDirectory
             .file("outputs/apk_from_bundle/productionQa/app-production-qa-universal.apk")
             .get().asFile.path
