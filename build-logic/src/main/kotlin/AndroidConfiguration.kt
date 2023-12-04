@@ -21,7 +21,7 @@ const val FLAVOR_ENV_STAGE = "stage"
 internal const val FLAVOR_ENV_PRODUCTION = "production"
 
 // TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
 internal fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
@@ -87,7 +87,7 @@ private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
 fun BaseExtension.configureFlavorDimensions(project: Project) {
     flavorDimensions(FLAVOR_DIMENSION_ENV)
@@ -107,7 +107,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
 fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
     buildFeatures.compose = true
@@ -123,7 +123,7 @@ fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
-//       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
+//       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
 fun CommonExtension<*, *, *, *, *>.configureQaBuildType(project: Project) {
     buildTypes {
