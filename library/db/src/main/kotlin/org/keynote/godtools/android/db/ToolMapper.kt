@@ -2,10 +2,13 @@ package org.keynote.godtools.android.db
 
 import android.content.ContentValues
 import android.database.Cursor
+import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
+import org.cru.godtools.model.Base
 import org.cru.godtools.model.Tool
+import org.keynote.godtools.android.db.Contract.BaseTable.Companion.COLUMN_ID
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_BANNER
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_CATEGORY
@@ -26,9 +29,10 @@ import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SHARES
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_SPOTLIGHT
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_TYPE
 
-internal object ToolMapper : BaseMapper<Tool>() {
+internal object ToolMapper : AbstractMapper<Tool>() {
     override fun mapField(values: ContentValues, field: String, obj: Tool) {
         when (field) {
+            COLUMN_ID -> values.put(field, obj.id)
             COLUMN_CODE -> values.put(field, obj.code)
             COLUMN_TYPE -> values.put(field, serialize(obj.type))
             COLUMN_NAME -> values.put(field, obj.name)
@@ -54,6 +58,7 @@ internal object ToolMapper : BaseMapper<Tool>() {
 
     override fun newObject(c: Cursor) = Tool()
     override fun toObject(c: Cursor) = super.toObject(c).apply {
+        id = c.getLong(COLUMN_ID, Base.INVALID_ID)
         code = c.getString(COLUMN_CODE)
         type = getEnum(c, COLUMN_TYPE, Tool.Type::class.java, Tool.Type.DEFAULT)!!
         name = c.getString(COLUMN_NAME)
