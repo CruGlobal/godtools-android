@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTool
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,7 +51,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - add to favorites`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel) }
-        toolFlow.value = Tool().apply { isFavorite = false }
+        toolFlow.value = randomTool { isFavorite = false }
 
         composeTestRule.onRoot().performClick()
         verifyAll { toolViewModel.pinTool() }
@@ -59,7 +60,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = false) }
-        toolFlow.value = Tool().apply { isFavorite = true }
+        toolFlow.value = randomTool { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -69,7 +70,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - confirm`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = Tool().apply { isFavorite = true }
+        toolFlow.value = randomTool { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
@@ -83,7 +84,7 @@ class FavoriteActionTest {
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - cancel`() {
         composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = Tool().apply { isFavorite = true }
+        toolFlow.value = randomTool { isFavorite = true }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()

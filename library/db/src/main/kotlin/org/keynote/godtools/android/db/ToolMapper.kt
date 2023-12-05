@@ -56,10 +56,11 @@ internal object ToolMapper : AbstractMapper<Tool>() {
         }
     }
 
-    override fun newObject(c: Cursor) = Tool()
+    override fun newObject(c: Cursor) = Tool(
+        code = c.getString(COLUMN_CODE)
+    )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
         id = c.getLong(COLUMN_ID, Base.INVALID_ID)
-        code = c.getString(COLUMN_CODE)
         type = getEnum(c, COLUMN_TYPE, Tool.Type::class.java, Tool.Type.DEFAULT)!!
         name = c.getString(COLUMN_NAME)
         description = c.getString(COLUMN_DESCRIPTION)

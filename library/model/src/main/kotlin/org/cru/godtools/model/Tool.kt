@@ -32,7 +32,12 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(Tool.JSONAPI_TYPE)
-class Tool : ChangeTrackingModel {
+class Tool(
+    @JsonApiAttribute(JSON_ABBREVIATION)
+    val code: String?
+) : ChangeTrackingModel {
+    internal constructor() : this("")
+
     companion object {
         const val JSONAPI_TYPE = "resource"
 
@@ -98,9 +103,6 @@ class Tool : ChangeTrackingModel {
         set(id) {
             _id = id
         }
-
-    @JsonApiAttribute(JSON_ABBREVIATION)
-    var code: String? = null
 
     @JsonApiAttribute(JSON_TYPE)
     private var _type: Type? = null
@@ -202,9 +204,8 @@ fun Tool(
     translations: List<Translation>? = null,
     category: String? = null,
     config: Tool.() -> Unit = {},
-) = Tool().apply {
+) = Tool(code as String?).apply {
     id = Random.nextLong()
-    this.code = code
     this.type = type
     latestTranslations = translations
     this.category = category
@@ -219,8 +220,6 @@ fun randomTool(
     config: Tool.() -> Unit = {},
 ) = Tool(code, type) {
     id = Random.nextLong()
-    this.code = code
-    this.type = type
     name = UUID.randomUUID().toString()
     category = UUID.randomUUID().toString()
     description = UUID.randomUUID().toString()

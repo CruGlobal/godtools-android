@@ -1,13 +1,13 @@
 package org.cru.godtools.base.ui.util
 
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ModelUtilsTest {
-    private val tool = Tool().apply {
+    private val tool = randomTool {
         name = "tool"
         description = "tool description"
     }

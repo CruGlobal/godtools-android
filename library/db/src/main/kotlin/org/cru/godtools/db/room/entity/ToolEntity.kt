@@ -63,9 +63,8 @@ internal class ToolEntity(
         changedFields = tool.changedFieldsStr,
     )
 
-    fun toModel() = Tool().also {
+    fun toModel() = Tool(code = code).also {
         it.id = id
-        it.code = code
         it.type = type
         it.name = name
         it.category = category

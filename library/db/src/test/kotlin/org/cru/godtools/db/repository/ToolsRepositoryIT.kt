@@ -271,9 +271,8 @@ abstract class ToolsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val tool = Tool().apply {
+            val tool = Tool("tool").apply {
                 id = 1
-                code = "tool"
             }
             repository.storeInitialTools(listOf(tool))
             runCurrent()
