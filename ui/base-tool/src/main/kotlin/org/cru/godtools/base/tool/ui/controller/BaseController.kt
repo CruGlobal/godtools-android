@@ -58,8 +58,8 @@ abstract class BaseController<T : Base> protected constructor(
         }
 
     // region Lifecycle
-    override fun onChanged(t: T?) {
-        model = t
+    override fun onChanged(value: T?) {
+        model = value
     }
 
     @CallSuper
