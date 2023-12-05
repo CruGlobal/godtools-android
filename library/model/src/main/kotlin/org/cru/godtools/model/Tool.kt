@@ -5,8 +5,10 @@ import androidx.annotation.VisibleForTesting
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.model.Base.Companion.INVALID_ID
 
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
@@ -30,7 +32,7 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(Tool.JSONAPI_TYPE)
-class Tool : Base(), ChangeTrackingModel {
+class Tool : ChangeTrackingModel {
     companion object {
         const val JSONAPI_TYPE = "resource"
 
@@ -88,6 +90,14 @@ class Tool : Base(), ChangeTrackingModel {
             }
         }
     }
+
+    @JsonApiId
+    private var _id: Long? = INVALID_ID
+    var id: Long
+        get() = _id ?: INVALID_ID
+        set(id) {
+            _id = id
+        }
 
     @JsonApiAttribute(JSON_ABBREVIATION)
     var code: String? = null
