@@ -55,6 +55,12 @@ class Tool(
     val defaultOrder: Int = 0,
     @JsonApiIgnore
     val order: Int = Int.MAX_VALUE,
+    @JsonApiAttribute(JSON_HIDDEN)
+    val isHidden: Boolean = false,
+    @JsonApiAttribute(JSON_SPOTLIGHT)
+    val isSpotlight: Boolean = false,
+    @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
+    val isScreenShareDisabled: Boolean = false,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -133,9 +139,6 @@ class Tool(
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
     var initialFavoritesPriority: Int? = Int.MAX_VALUE
 
-    @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
-    var isScreenShareDisabled = false
-
     @JsonApiAttribute(JSON_METATOOL)
     var metatool: Tool? = null
         private set
@@ -170,10 +173,6 @@ class Tool(
             if (value != field) markChanged(ATTR_IS_FAVORITE)
             field = value
         }
-    @JsonApiAttribute(JSON_HIDDEN)
-    var isHidden = false
-    @JsonApiAttribute(JSON_SPOTLIGHT)
-    var isSpotlight = false
 
     @Suppress("SENSELESS_COMPARISON")
     val isValid get() = !code.isNullOrEmpty() && type != null && type != Type.UNKNOWN && id != INVALID_ID
@@ -211,6 +210,8 @@ fun randomTool(
     type: Tool.Type = Tool.Type.entries.random(),
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
+    isHidden: Boolean = Random.nextBoolean(),
+    isSpotlight: Boolean = Random.nextBoolean(),
     config: Tool.() -> Unit = {},
 ) = Tool(
     code = code,
@@ -224,15 +225,15 @@ fun randomTool(
     detailsBannerYoutubeVideoId = UUID.randomUUID().toString(),
     defaultOrder = Random.nextInt(),
     order = Random.nextInt(),
+    isHidden = isHidden,
+    isSpotlight = isSpotlight,
+    isScreenShareDisabled = Random.nextBoolean(),
 ).apply {
     id = Random.nextLong()
     shares = Random.nextInt()
     pendingShares = Random.nextInt()
-    isScreenShareDisabled = Random.nextBoolean()
     metatoolCode = UUID.randomUUID().toString()
     defaultVariantCode = UUID.randomUUID().toString()
     isFavorite = Random.nextBoolean()
-    isHidden = Random.nextBoolean()
-    isSpotlight = Random.nextBoolean()
     config()
 }

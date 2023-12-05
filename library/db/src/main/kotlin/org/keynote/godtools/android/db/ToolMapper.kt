@@ -68,6 +68,9 @@ internal object ToolMapper : AbstractMapper<Tool>() {
         detailsBannerYoutubeVideoId = c.getString(COLUMN_DETAILS_BANNER_YOUTUBE),
         defaultOrder = c.getInt(COLUMN_DEFAULT_ORDER, 0),
         order = c.getInt(COLUMN_ORDER, Int.MAX_VALUE),
+        isHidden = getBool(c, COLUMN_HIDDEN, false),
+        isSpotlight = getBool(c, COLUMN_SPOTLIGHT, false),
+        isScreenShareDisabled = getBool(c, COLUMN_SCREEN_SHARE_DISABLED, false),
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
         id = c.getLong(COLUMN_ID, Base.INVALID_ID)
@@ -76,8 +79,5 @@ internal object ToolMapper : AbstractMapper<Tool>() {
         metatoolCode = c.getString(COLUMN_META_TOOL)
         defaultVariantCode = c.getString(COLUMN_DEFAULT_VARIANT)
         isFavorite = getBool(c, COLUMN_ADDED, false)
-        isHidden = getBool(c, COLUMN_HIDDEN, false)
-        isSpotlight = getBool(c, COLUMN_SPOTLIGHT, false)
-        isScreenShareDisabled = getBool(c, COLUMN_SCREEN_SHARE_DISABLED, false)
     }
 }

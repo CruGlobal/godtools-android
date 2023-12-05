@@ -71,8 +71,8 @@ class ToolsViewModelTest {
         viewModel.spotlightTools.test {
             assertThat(awaitItem(), empty())
 
-            val normal = Tool("normal")
-            val spotlight = Tool("spotlight") { isSpotlight = true }
+            val normal = randomTool("normal", isHidden = false, isSpotlight = false)
+            val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
             toolsFlow.value = listOf(normal, spotlight)
             assertThat(awaitItem(), containsInAnyOrder(tool(spotlight)))
         }
@@ -83,14 +83,8 @@ class ToolsViewModelTest {
         viewModel.spotlightTools.test {
             assertThat(awaitItem(), empty())
 
-            val hidden = randomTool("normal") {
-                isHidden = true
-                isSpotlight = true
-            }
-            val spotlight = randomTool("spotlight") {
-                isHidden = false
-                isSpotlight = true
-            }
+            val hidden = randomTool("normal", isHidden = true, isSpotlight = true)
+            val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
             toolsFlow.value = listOf(hidden, spotlight)
             assertThat(awaitItem(), containsInAnyOrder(tool(spotlight)))
         }
@@ -101,12 +95,7 @@ class ToolsViewModelTest {
         viewModel.spotlightTools.test {
             assertThat(awaitItem(), empty())
 
-            val tools = List(10) {
-                randomTool("tool$it", Tool.Type.TRACT) {
-                    isHidden = false
-                    isSpotlight = true
-                }
-            }
+            val tools = List(10) { randomTool("tool$it", Tool.Type.TRACT, isHidden = false, isSpotlight = true) }
             toolsFlow.value = tools
             assertThat(awaitItem(), contains(tools.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER).map { tool(it) }))
         }
@@ -141,10 +130,8 @@ class ToolsViewModelTest {
         viewModel.tools.test {
             assertThat(awaitItem(), empty())
 
-            val hidden = Tool("hidden") {
-                isHidden = true
-            }
-            val visible = Tool("visible")
+            val hidden = randomTool("hidden", isHidden = true) { metatoolCode = null }
+            val visible = randomTool("visible", isHidden = false) { metatoolCode = null }
             toolsFlow.value = listOf(hidden, visible)
             assertThat(awaitItem(), containsInAnyOrder(tool(visible)))
         }

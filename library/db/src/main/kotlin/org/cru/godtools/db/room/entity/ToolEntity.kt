@@ -75,16 +75,16 @@ internal class ToolEntity(
         detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId,
         defaultOrder = defaultOrder,
         order = order,
+        isHidden = isHidden,
+        isSpotlight = isSpotlight,
+        isScreenShareDisabled = isScreenShareDisabled,
     ).also {
         it.id = id
         it.shares = shares
         it.pendingShares = pendingShares
-        it.isScreenShareDisabled = isScreenShareDisabled
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
         it.isFavorite = isFavorite
-        it.isHidden = isHidden
-        it.isSpotlight = isSpotlight
         it.changedFieldsStr = changedFields
     }
 }

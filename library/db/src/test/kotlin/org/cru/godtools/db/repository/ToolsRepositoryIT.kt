@@ -78,8 +78,8 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getNormalTools() - Don't filter hidden tools`() = testScope.runTest {
-        val hidden = Tool("hidden") { isHidden = true }
-        val visible = Tool("visible") { isHidden = false }
+        val hidden = randomTool("hidden", Tool.Type.TRACT, isHidden = true)
+        val visible = randomTool("visible", Tool.Type.TRACT, isHidden = false)
         repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
@@ -133,8 +133,8 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getNormalToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
-        val hidden = Tool("hidden") { isHidden = true }
-        val visible = Tool("visible") { isHidden = false }
+        val hidden = randomTool("hidden", Tool.Type.TRACT, isHidden = true)
+        val visible = randomTool("visible", Tool.Type.TRACT, isHidden = false)
         repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
@@ -253,8 +253,8 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getLessonsFlow() - Don't filter hidden lessons`() = testScope.runTest {
-        val hidden = Tool("hidden", type = Tool.Type.LESSON) { isHidden = true }
-        val visible = Tool("visible", type = Tool.Type.LESSON) { isHidden = false }
+        val hidden = randomTool("hidden", Tool.Type.LESSON, isHidden = true)
+        val visible = randomTool("visible", Tool.Type.LESSON, isHidden = false)
         repository.storeToolsFromSync(listOf(hidden, visible))
 
         assertThat(
