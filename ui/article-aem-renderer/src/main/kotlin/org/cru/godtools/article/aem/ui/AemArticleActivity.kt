@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
+import org.ccci.gto.android.common.compat.os.getParcelableCompat
 import org.cru.godtools.article.aem.EXTRA_ARTICLE
 import org.cru.godtools.article.aem.PARAM_URI
 import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
@@ -95,7 +96,8 @@ class AemArticleActivity :
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        articleUri = processDeepLink() ?: intent?.extras?.getParcelable(EXTRA_ARTICLE) ?: return false
+        articleUri =
+            processDeepLink() ?: intent?.extras?.getParcelableCompat(EXTRA_ARTICLE, Uri::class.java) ?: return false
         return true
     }
 
