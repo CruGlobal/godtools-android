@@ -51,6 +51,10 @@ class Tool(
     val detailsBannerAnimationId: Long? = null,
     @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
     val detailsBannerYoutubeVideoId: String? = null,
+    @JsonApiAttribute(JSON_DEFAULT_ORDER)
+    val defaultOrder: Int = 0,
+    @JsonApiIgnore
+    val order: Int = Int.MAX_VALUE,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -131,11 +135,6 @@ class Tool(
 
     @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
     var isScreenShareDisabled = false
-
-    @JsonApiAttribute(JSON_DEFAULT_ORDER)
-    var defaultOrder = 0
-    @JsonApiIgnore
-    var order = Int.MAX_VALUE
 
     @JsonApiAttribute(JSON_METATOOL)
     var metatool: Tool? = null
@@ -223,13 +222,13 @@ fun randomTool(
     detailsBannerId = Random.nextLong(),
     detailsBannerAnimationId = Random.nextLong(),
     detailsBannerYoutubeVideoId = UUID.randomUUID().toString(),
+    defaultOrder = Random.nextInt(),
+    order = Random.nextInt(),
 ).apply {
     id = Random.nextLong()
     shares = Random.nextInt()
     pendingShares = Random.nextInt()
     isScreenShareDisabled = Random.nextBoolean()
-    defaultOrder = Random.nextInt()
-    order = Random.nextInt()
     metatoolCode = UUID.randomUUID().toString()
     defaultVariantCode = UUID.randomUUID().toString()
     isFavorite = Random.nextBoolean()

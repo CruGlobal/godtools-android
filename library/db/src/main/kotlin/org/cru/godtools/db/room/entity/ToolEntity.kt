@@ -73,13 +73,13 @@ internal class ToolEntity(
         detailsBannerId = detailsBannerId,
         detailsBannerAnimationId = detailsBannerAnimationId,
         detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId,
+        defaultOrder = defaultOrder,
+        order = order,
     ).also {
         it.id = id
         it.shares = shares
         it.pendingShares = pendingShares
         it.isScreenShareDisabled = isScreenShareDisabled
-        it.defaultOrder = defaultOrder
-        it.order = order
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
         it.isFavorite = isFavorite

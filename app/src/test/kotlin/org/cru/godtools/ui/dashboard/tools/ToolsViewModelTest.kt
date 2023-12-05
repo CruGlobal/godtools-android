@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
-import kotlin.random.Random
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +18,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.ToolMatchers.tool
+import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.contains
@@ -83,11 +83,14 @@ class ToolsViewModelTest {
         viewModel.spotlightTools.test {
             assertThat(awaitItem(), empty())
 
-            val hidden = Tool("normal") {
+            val hidden = randomTool("normal") {
                 isHidden = true
                 isSpotlight = true
             }
-            val spotlight = Tool("spotlight") { isSpotlight = true }
+            val spotlight = randomTool("spotlight") {
+                isHidden = false
+                isSpotlight = true
+            }
             toolsFlow.value = listOf(hidden, spotlight)
             assertThat(awaitItem(), containsInAnyOrder(tool(spotlight)))
         }
@@ -99,8 +102,8 @@ class ToolsViewModelTest {
             assertThat(awaitItem(), empty())
 
             val tools = List(10) {
-                Tool("tool$it") {
-                    defaultOrder = Random.nextInt()
+                randomTool("tool$it", Tool.Type.TRACT) {
+                    isHidden = false
                     isSpotlight = true
                 }
             }

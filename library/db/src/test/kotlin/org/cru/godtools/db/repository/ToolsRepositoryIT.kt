@@ -387,9 +387,9 @@ abstract class ToolsRepositoryIT {
     // region storeToolOrder()
     @Test
     fun `storeToolOrder()`() = testScope.runTest {
-        val tool1 = Tool("tool1") { order = 7 }
-        val tool2 = Tool("tool2") { order = 6 }
-        val tool3 = Tool("tool3") { order = 5 }
+        val tool1 = Tool("tool1", Tool.Type.TRACT, order = 7)
+        val tool2 = Tool("tool2", Tool.Type.TRACT, order = 6)
+        val tool3 = Tool("tool3", Tool.Type.TRACT, order = 5)
         repository.storeInitialTools(listOf(tool1, tool2, tool3))
         assertEquals(
             listOf("tool3", "tool2", "tool1"),
