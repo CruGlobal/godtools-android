@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.lifecycle)
     implementation(libs.gtoSupport.androidx.room)
     implementation(libs.gtoSupport.base)
+    implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
