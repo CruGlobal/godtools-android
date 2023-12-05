@@ -37,6 +37,12 @@ class Tool(
     val code: String?,
     @JsonApiAttribute(JSON_TYPE)
     val type: Type = Type.UNKNOWN,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
+    @JsonApiAttribute(JSON_CATEGORY)
+    val category: String? = null,
+    @JsonApiAttribute(JSON_DESCRIPTION)
+    val description: String? = null,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -105,13 +111,6 @@ class Tool(
         set(id) {
             _id = id
         }
-
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-    @JsonApiAttribute(JSON_CATEGORY)
-    var category: String? = null
-    @JsonApiAttribute(JSON_DESCRIPTION)
-    var description: String? = null
 
     @JsonApiAttribute(JSON_TOTAL_VIEWS)
     var shares = 0
@@ -197,15 +196,14 @@ fun Tool(
     code: String,
     type: Tool.Type = Tool.Type.TRACT,
     translations: List<Translation>? = null,
-    category: String? = null,
     config: Tool.() -> Unit = {},
 ) = Tool(
-    code = code as String?,
+    code = code,
     type = type,
+    category = null,
 ).apply {
     id = Random.nextLong()
     latestTranslations = translations
-    this.category = category
     config()
 }
 
@@ -214,12 +212,17 @@ fun Tool(
 fun randomTool(
     code: String = UUID.randomUUID().toString(),
     type: Tool.Type = Tool.Type.entries.random(),
+    name: String? = UUID.randomUUID().toString(),
+    description: String? = UUID.randomUUID().toString(),
     config: Tool.() -> Unit = {},
-) = Tool(code, type) {
+) = Tool(
+    code = code,
+    type = type,
+    name = name,
+    category = UUID.randomUUID().toString(),
+    description = description,
+).apply {
     id = Random.nextLong()
-    name = UUID.randomUUID().toString()
-    category = UUID.randomUUID().toString()
-    description = UUID.randomUUID().toString()
     shares = Random.nextInt()
     pendingShares = Random.nextInt()
     bannerId = Random.nextLong()

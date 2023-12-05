@@ -66,11 +66,11 @@ internal class ToolEntity(
     fun toModel() = Tool(
         code = code,
         type = type,
+        name = name,
+        category = category,
+        description = description,
     ).also {
         it.id = id
-        it.name = name
-        it.category = category
-        it.description = description
         it.shares = shares
         it.pendingShares = pendingShares
         it.bannerId = bannerId

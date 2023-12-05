@@ -7,10 +7,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ModelUtilsTest {
-    private val tool = randomTool {
-        name = "tool"
-        description = "tool description"
-    }
+    private val tool = randomTool(
+        name = "tool",
+        description = "tool description",
+    )
     private val translation = randomTranslation(
         name = "translation",
         description = "translation description",
