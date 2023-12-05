@@ -3,8 +3,7 @@
     "id": 1,
     "type": "resource",
     "attributes": {
-      "abbreviation": "",
-      "resource-type": "tract"
+      "abbreviation": "tool"
     }
   }
 }

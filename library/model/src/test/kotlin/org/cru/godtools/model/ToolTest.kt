@@ -27,6 +27,7 @@ class ToolTest {
         assertEquals(1, tool.id)
         assertFalse(tool.isHidden)
         assertEquals("kgp-us", tool.code)
+        assertEquals(Tool.Type.TRACT, tool.type)
         assertEquals("Know God Personally", tool.name)
         assertEquals("conversation_starter", tool.category)
         assertEquals("Gospel presentation", tool.description)
@@ -43,18 +44,42 @@ class ToolTest {
     fun `jsonapi Parsing - code - missing`() {
         val tool = parseJson("tool_code_missing.json")
         assertFalse(tool.isValid)
+        assertEquals(Tool.Type.TRACT, tool.type)
     }
 
     @Test
     fun `jsonapi Parsing - code - null`() {
         val tool = parseJson("tool_code_null.json")
         assertFalse(tool.isValid)
+        assertEquals(Tool.Type.TRACT, tool.type)
     }
 
     @Test
     fun `jsonapi Parsing - code - empty`() {
         val tool = parseJson("tool_code_empty.json")
         assertFalse(tool.isValid)
+        assertEquals(Tool.Type.TRACT, tool.type)
+    }
+
+    @Test
+    fun `jsonapi Parsing - type - missing`() {
+        val tool = parseJson("tool_type_missing.json")
+        assertFalse(tool.isValid)
+        assertEquals("tool", tool.code)
+    }
+
+    @Test
+    fun `jsonapi Parsing - type - null`() {
+        val tool = parseJson("tool_type_null.json")
+        assertFalse(tool.isValid)
+        assertEquals("tool", tool.code)
+    }
+
+    @Test
+    fun `jsonapi Parsing - type - empty`() {
+        val tool = parseJson("tool_type_invalid.json")
+        assertFalse(tool.isValid)
+        assertEquals("tool", tool.code)
     }
 
     @Test

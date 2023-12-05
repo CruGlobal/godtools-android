@@ -185,7 +185,8 @@ class Tool(
     @JsonApiAttribute(JSON_SPOTLIGHT)
     var isSpotlight = false
 
-    val isValid get() = !code.isNullOrEmpty() && id != INVALID_ID
+    @Suppress("SENSELESS_COMPARISON")
+    val isValid get() = !code.isNullOrEmpty() && type != null && type != Type.UNKNOWN && id != INVALID_ID
 
     // region ChangeTrackingModel
     @JsonApiIgnore
