@@ -33,19 +33,19 @@ fun LibraryVariant.configureBundledContent(
 
 // configure download bundled language json tasks
 private fun LibraryVariant.registerDownloadBundledLanguageJsonTask(project: Project, apiUrl: String) {
-    val intermediateLanguagesJson = project.buildDir.resolve("intermediates/mobile_content_api/$name/languages.json")
+    val intermediateJson = project.layout.buildDirectory.file("intermediates/mobile_content_api/$name/languages.json")
     val downloadTask = project.tasks.register<Download>("download${name.capitalize()}LanguagesJson") {
         mustRunAfter("clean")
 
         src("${apiUrl}languages")
-        dest(intermediateLanguagesJson)
+        dest(intermediateJson)
         retries(2)
         quiet(false)
         tempAndMove(true)
     }
     val pruneTask = project.tasks.register<PruneJsonApiResponseTask>("prune${name.capitalize()}LanguagesJson") {
         dependsOn(downloadTask)
-        input.set(intermediateLanguagesJson)
+        input.set(intermediateJson)
         outputFilename = FILE_LANGUAGES
         removeAllRelationshipsFor = listOf("language")
         removeAttributesFor["language"] = listOf("direction")
@@ -58,18 +58,18 @@ private fun LibraryVariant.registerDownloadBundledToolsJsonTask(
     project: Project,
     apiUrl: String,
 ): Provider<RegularFile> {
-    val intermediateToolsJson = project.buildDir.resolve("intermediates/mobile_content_api/$name/tools.json")
+    val intermediateJson = project.layout.buildDirectory.file("intermediates/mobile_content_api/$name/tools.json")
     val downloadToolsJsonTask = project.tasks.register<Download>("download${name.capitalize()}BundledToolsJson") {
         mustRunAfter("clean")
 
         src("${apiUrl}resources?filter[system]=GodTools&include=attachments,latest-translations.language")
-        dest(intermediateToolsJson)
+        dest(intermediateJson)
         retries(2)
         tempAndMove(true)
     }
     val pruneTask = project.tasks.register<PruneJsonApiResponseTask>("prune${name.capitalize()}BundledToolsJson") {
         dependsOn(downloadToolsJsonTask)
-        input.set(intermediateToolsJson)
+        input.set(intermediateJson)
         outputFilename = FILE_TOOLS
         removeAllRelationshipsFor = listOf("language")
         removeAttributesFor["resource"] = listOf(
@@ -93,7 +93,7 @@ private fun LibraryVariant.registerDownloadBundledAttachmentsTask(
     bundledTools: List<String>,
     bundledAttachments: List<String>,
 ) {
-    val intermediatesDir = project.buildDir.resolve("intermediates/mobile_content_api/$name/")
+    val intermediatesDir = project.layout.buildDirectory.dir("intermediates/mobile_content_api/$name/")
 
     bundledTools.forEach { tool ->
         val variant = "${name.capitalize()}${tool.capitalize()}"
@@ -101,7 +101,7 @@ private fun LibraryVariant.registerDownloadBundledAttachmentsTask(
             this.toolsJson.set(toolsJson)
             this.tool = tool
             attachments = bundledAttachments
-            output.set(intermediatesDir.resolve("tool/$tool/attachments.json"))
+            output.set(intermediatesDir.map { it.file("tool/$tool/attachments.json") })
         }
         val downloadTask = project.tasks.register<DownloadApiResourcesTask>("download${variant}BundledAttachments") {
             resources.set(extractTask.flatMap { it.output })
@@ -119,7 +119,7 @@ private fun LibraryVariant.registerDownloadBundledTranslationsTask(
     bundledTools: List<String>,
     bundledLanguages: List<String>,
 ) {
-    val intermediatesDir = project.buildDir.resolve("intermediates/mobile_content_api/$name/")
+    val intermediatesDir = project.layout.buildDirectory.dir("intermediates/mobile_content_api/$name/")
     bundledTools.forEach { tool ->
         bundledLanguages.forEach { lang ->
             val variant = "${name.capitalize()}${tool.capitalize()}${lang.capitalize()}"
@@ -127,7 +127,7 @@ private fun LibraryVariant.registerDownloadBundledTranslationsTask(
                 this.toolsJson.set(toolsJson)
                 this.tool = tool
                 language = lang
-                output.set(intermediatesDir.resolve("tool/$tool/$lang.translation.json"))
+                output.set(intermediatesDir.map { it.file("tool/$tool/$lang.translation.json") })
             }
 
             val downloadTask =
