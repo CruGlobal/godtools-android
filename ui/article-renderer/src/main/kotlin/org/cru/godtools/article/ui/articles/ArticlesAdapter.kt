@@ -37,8 +37,8 @@ class ArticlesAdapter(
     override fun getItemId(position: Int) = getItem(position)?.uri?.let { Ids.generate(it) } ?: NO_ID
 
     // region Lifecycle
-    override fun onChanged(articles: List<Article>?) {
-        this.articles = articles
+    override fun onChanged(value: List<Article>?) {
+        this.articles = value
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =

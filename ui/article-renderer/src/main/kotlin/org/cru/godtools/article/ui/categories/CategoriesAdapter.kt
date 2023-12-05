@@ -29,8 +29,8 @@ internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
     override fun getItemId(position: Int) = getItem(position)?.id?.let { Ids.generate(it) } ?: NO_ID
 
     // region Lifecycle
-    override fun onChanged(t: List<Category>?) {
-        categories = t
+    override fun onChanged(value: List<Category>?) {
+        categories = value
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =

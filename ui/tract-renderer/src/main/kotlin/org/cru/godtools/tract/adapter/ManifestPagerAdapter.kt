@@ -76,8 +76,8 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     private val primaryItemPage get() = primaryItemController?.model
 
     // region Lifecycle
-    override fun onChanged(t: Manifest?) {
-        manifest = t
+    override fun onChanged(value: Manifest?) {
+        manifest = value
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup) =
