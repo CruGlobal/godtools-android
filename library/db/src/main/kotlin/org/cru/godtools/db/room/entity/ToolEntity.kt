@@ -69,14 +69,14 @@ internal class ToolEntity(
         name = name,
         category = category,
         description = description,
+        bannerId = bannerId,
+        detailsBannerId = detailsBannerId,
+        detailsBannerAnimationId = detailsBannerAnimationId,
+        detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId,
     ).also {
         it.id = id
         it.shares = shares
         it.pendingShares = pendingShares
-        it.bannerId = bannerId
-        it.detailsBannerId = detailsBannerId
-        it.detailsBannerAnimationId = detailsBannerAnimationId
-        it.detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId
         it.isScreenShareDisabled = isScreenShareDisabled
         it.defaultOrder = defaultOrder
         it.order = order

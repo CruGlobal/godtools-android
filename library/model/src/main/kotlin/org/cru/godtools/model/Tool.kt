@@ -43,6 +43,14 @@ class Tool(
     val category: String? = null,
     @JsonApiAttribute(JSON_DESCRIPTION)
     val description: String? = null,
+    @JsonApiAttribute(JSON_BANNER)
+    val bannerId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER)
+    val detailsBannerId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER_ANIMATION)
+    val detailsBannerAnimationId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
+    val detailsBannerYoutubeVideoId: String? = null,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -117,16 +125,6 @@ class Tool(
     @JsonApiIgnore
     var pendingShares = 0
     val totalShares get() = pendingShares + shares
-
-    @JsonApiAttribute(JSON_BANNER)
-    var bannerId: Long? = null
-
-    @JsonApiAttribute(JSON_DETAILS_BANNER)
-    var detailsBannerId: Long? = null
-    @JsonApiAttribute(JSON_DETAILS_BANNER_ANIMATION)
-    var detailsBannerAnimationId: Long? = null
-    @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
-    var detailsBannerYoutubeVideoId: String? = null
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
     var initialFavoritesPriority: Int? = Int.MAX_VALUE
@@ -221,14 +219,14 @@ fun randomTool(
     name = name,
     category = UUID.randomUUID().toString(),
     description = description,
+    bannerId = Random.nextLong(),
+    detailsBannerId = Random.nextLong(),
+    detailsBannerAnimationId = Random.nextLong(),
+    detailsBannerYoutubeVideoId = UUID.randomUUID().toString(),
 ).apply {
     id = Random.nextLong()
     shares = Random.nextInt()
     pendingShares = Random.nextInt()
-    bannerId = Random.nextLong()
-    detailsBannerId = Random.nextLong()
-    detailsBannerAnimationId = Random.nextLong()
-    detailsBannerYoutubeVideoId = UUID.randomUUID().toString()
     isScreenShareDisabled = Random.nextBoolean()
     defaultOrder = Random.nextInt()
     order = Random.nextInt()
