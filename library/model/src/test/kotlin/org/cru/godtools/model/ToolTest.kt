@@ -23,6 +23,7 @@ class ToolTest {
     fun testJsonApiParsing() {
         val tool = parseJson("tool.json")
 
+        assertTrue(tool.isValid)
         assertEquals(1, tool.id)
         assertFalse(tool.isHidden)
         assertEquals("kgp-us", tool.code)
@@ -36,6 +37,12 @@ class ToolTest {
         assertEquals(10, tool.defaultOrder)
         assertThat(tool.attachments, hasSize(3))
         assertThat(tool.latestTranslations, hasSize(2))
+    }
+
+    @Test
+    fun `jsonapi Parsing - code - null`() {
+        val tool = parseJson("tool_code_null.json")
+        assertFalse(tool.isValid)
     }
 
     @Test
