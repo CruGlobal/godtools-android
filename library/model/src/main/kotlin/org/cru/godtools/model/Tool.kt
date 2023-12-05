@@ -34,7 +34,9 @@ private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 @JsonApiType(Tool.JSONAPI_TYPE)
 class Tool(
     @JsonApiAttribute(JSON_ABBREVIATION)
-    val code: String?
+    val code: String?,
+    @JsonApiAttribute(JSON_TYPE)
+    val type: Type = Type.UNKNOWN,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -102,14 +104,6 @@ class Tool(
         get() = _id ?: INVALID_ID
         set(id) {
             _id = id
-        }
-
-    @JsonApiAttribute(JSON_TYPE)
-    private var _type: Type? = null
-    var type: Type
-        get() = _type ?: Type.DEFAULT
-        set(type) {
-            _type = type
         }
 
     @JsonApiAttribute(JSON_NAME)
@@ -205,9 +199,11 @@ fun Tool(
     translations: List<Translation>? = null,
     category: String? = null,
     config: Tool.() -> Unit = {},
-) = Tool(code as String?).apply {
+) = Tool(
+    code = code as String?,
+    type = type,
+).apply {
     id = Random.nextLong()
-    this.type = type
     latestTranslations = translations
     this.category = category
     config()
