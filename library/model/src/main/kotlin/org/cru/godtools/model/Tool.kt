@@ -84,7 +84,7 @@ class Tool : Base(), ChangeTrackingModel {
 
             fun fromJson(json: String?) = when (json) {
                 null -> null
-                else -> values().firstOrNull { json == it.json } ?: DEFAULT
+                else -> entries.firstOrNull { json == it.json } ?: DEFAULT
             }
         }
     }
@@ -205,7 +205,7 @@ fun Tool(
 @RestrictTo(RestrictTo.Scope.TESTS)
 fun randomTool(
     code: String = UUID.randomUUID().toString(),
-    type: Tool.Type = Tool.Type.values().random(),
+    type: Tool.Type = Tool.Type.entries.random(),
     config: Tool.() -> Unit = {},
 ) = Tool(code, type) {
     id = Random.nextLong()

@@ -50,7 +50,7 @@ abstract class ToolsRepositoryIT {
     // region getResources()
     @Test
     fun `getResources() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        val resources = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
@@ -63,7 +63,7 @@ abstract class ToolsRepositoryIT {
     // region getNormalTools()
     @Test
     fun `getNormalTools() - Supported Tool Types Only`() = testScope.runTest {
-        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        val tools = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(tools)
 
         assertThat(
@@ -105,7 +105,7 @@ abstract class ToolsRepositoryIT {
     // region getAllToolsFlow()
     @Test
     fun `getAllToolsFlow() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        val resources = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(resources)
 
         assertThat(
@@ -118,7 +118,7 @@ abstract class ToolsRepositoryIT {
     // region getNormalToolsFlow()
     @Test
     fun `getNormalToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
-        val tools = Tool.Type.values().map { Tool(it.name.lowercase(), it) }
+        val tools = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
         repository.storeToolsFromSync(tools)
 
         assertThat(
