@@ -183,7 +183,7 @@ class Tool : ChangeTrackingModel {
     @JsonApiAttribute(JSON_SPOTLIGHT)
     var isSpotlight = false
 
-    val isValid get() = code != null && id != INVALID_ID
+    val isValid get() = !code.isNullOrEmpty() && id != INVALID_ID
 
     // region ChangeTrackingModel
     @JsonApiIgnore

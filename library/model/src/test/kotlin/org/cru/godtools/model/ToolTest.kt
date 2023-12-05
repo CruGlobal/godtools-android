@@ -40,8 +40,20 @@ class ToolTest {
     }
 
     @Test
+    fun `jsonapi Parsing - code - missing`() {
+        val tool = parseJson("tool_code_missing.json")
+        assertFalse(tool.isValid)
+    }
+
+    @Test
     fun `jsonapi Parsing - code - null`() {
         val tool = parseJson("tool_code_null.json")
+        assertFalse(tool.isValid)
+    }
+
+    @Test
+    fun `jsonapi Parsing - code - empty`() {
+        val tool = parseJson("tool_code_empty.json")
         assertFalse(tool.isValid)
     }
 
