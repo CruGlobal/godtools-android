@@ -1,6 +1,5 @@
 package org.cru.godtools.gradle.bundledcontent
 
-import com.android.build.api.variant.BuildConfigField
 import com.android.build.api.variant.LibraryVariant
 import de.undercouch.gradle.tasks.download.Download
 import org.gradle.api.Project
@@ -24,33 +23,12 @@ fun LibraryVariant.configureBundledContent(
     bundledAttachments: List<String>,
     downloadTranslations: Boolean,
 ) {
-    bundledContentBuildConfigFields(bundledTools, bundledLanguages)
     registerDownloadBundledLanguageJsonTask(project, apiUrl)
     val toolsJsonOutput = registerDownloadBundledToolsJsonTask(project, apiUrl)
     registerDownloadBundledAttachmentsTask(project, apiUrl, toolsJsonOutput, bundledTools, bundledAttachments)
     if (downloadTranslations) {
         registerDownloadBundledTranslationsTask(project, apiUrl, toolsJsonOutput, bundledTools, bundledLanguages)
     }
-}
-
-private fun LibraryVariant.bundledContentBuildConfigFields(bundledTools: List<String>, bundledLanguages: List<String>) {
-    // include the list of bundled tools and languages as BuildConfig constants
-    buildConfigFields.put(
-        "BUNDLED_TOOLS",
-        BuildConfigField(
-            "java.util.List<String>",
-            "java.util.Arrays.asList(" + bundledTools.joinToString(",") { "\"$it\"" } + ")",
-            null
-        )
-    )
-    buildConfigFields.put(
-        "BUNDLED_LANGUAGES",
-        BuildConfigField(
-            "java.util.List<String>",
-            "java.util.Arrays.asList(" + bundledLanguages.joinToString(",") { "\"$it\"" } + ")",
-            null
-        )
-    )
 }
 
 // configure download bundled language json tasks
