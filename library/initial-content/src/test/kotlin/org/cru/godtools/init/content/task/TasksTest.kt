@@ -71,7 +71,7 @@ class TasksTest {
 
     @Test
     fun `initFavoriteTools() - Already Ran - Has favorite tools`() = runTest {
-        coEvery { toolsRepository.getNormalTools() } returns listOf(Tool("tool").apply { isFavorite = true })
+        coEvery { toolsRepository.getNormalTools() } returns listOf(Tool("tool", isFavorite = true))
         tasks.initFavoriteTools()
         coVerify {
             lastSyncTimeRepository.getLastSyncTime(*anyVararg())

@@ -206,10 +206,10 @@ abstract class ToolsRepositoryIT {
     // region getFavoriteToolsFlow()
     @Test
     fun `getFavoriteToolsFlow()`() = testScope.runTest {
-        val tool1 = Tool("tool1") { isFavorite = false }
-        val tool2 = Tool("tool2") { isFavorite = false }
-        val fav1 = Tool("fav1") { isFavorite = true }
-        val fav2 = Tool("fav2") { isFavorite = true }
+        val tool1 = Tool("tool1", Tool.Type.TRACT, isFavorite = false)
+        val tool2 = Tool("tool2", Tool.Type.TRACT, isFavorite = false)
+        val fav1 = Tool("fav1", Tool.Type.TRACT, isFavorite = true)
+        val fav2 = Tool("fav2", Tool.Type.TRACT, isFavorite = true)
         repository.storeInitialTools(listOf(tool1, tool2, fav1, fav2))
 
         assertThat(
@@ -327,7 +327,7 @@ abstract class ToolsRepositoryIT {
     @Test
     fun `pinTool() - No Change`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialTools(listOf(Tool(code) { isFavorite = true }))
+        repository.storeInitialTools(listOf(Tool(code, isFavorite = true)))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -347,8 +347,8 @@ abstract class ToolsRepositoryIT {
     // region unpinTool()
     @Test
     fun `unpinTool()`() = testScope.runTest {
-        val code = "pinTool"
-        repository.storeInitialTools(listOf(Tool(code) { isFavorite = true }))
+        val code = "unpinTool"
+        repository.storeInitialTools(listOf(Tool(code, isFavorite = true)))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -366,8 +366,8 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `unpinTool() - No Change`() = testScope.runTest {
-        val code = "pinTool"
-        repository.storeInitialTools(listOf(Tool(code) { isFavorite = false }))
+        val code = "unpinTool"
+        repository.storeInitialTools(listOf(Tool(code, isFavorite = false)))
 
         repository.findToolFlow(code).test {
             assertNotNull(awaitItem()) {
@@ -488,7 +488,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `storeToolsFromSync() - Don't pave over added flag`() = testScope.runTest {
-        val tool = Tool("tool") { isFavorite = false }
+        val tool = Tool("tool", isFavorite = false)
         repository.storeToolsFromSync(setOf(tool))
         repository.pinTool("tool")
         assertNotNull(repository.findTool("tool")) { assertTrue(it.isFavorite) }
@@ -515,9 +515,9 @@ abstract class ToolsRepositoryIT {
     fun `storeFavoriteToolsFromSync()`() = testScope.runTest {
         repository.storeInitialTools(
             listOf(
-                Tool("tool1") { isFavorite = true },
-                Tool("tool2") { isFavorite = false },
-                Tool("tool3") { isFavorite = true },
+                Tool("tool1", isFavorite = true),
+                Tool("tool2", isFavorite = false),
+                Tool("tool3", isFavorite = true),
             )
         )
 
@@ -531,12 +531,9 @@ abstract class ToolsRepositoryIT {
     fun `storeFavoriteToolsFromSync() - Handle dirty tools`() = testScope.runTest {
         repository.storeInitialTools(
             listOf(
-                Tool("tool1") { trackChanges { isFavorite = true } },
-                Tool("tool2") {
-                    isFavorite = true
-                    trackChanges { isFavorite = false }
-                },
-                Tool("tool3") { trackChanges { isFavorite = true } },
+                Tool("tool1", isFavorite = true).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+                Tool("tool2", isFavorite = false).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+                Tool("tool3", isFavorite = true).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
             )
         )
 
@@ -570,7 +567,7 @@ abstract class ToolsRepositoryIT {
     fun `deleteIfNotFavorite() - Delete related Attachments`() = testScope.runTest {
         val tool1 = Tool("tool1")
         val tool2 = Tool("tool2")
-        val tool3 = Tool("tool3") { isFavorite = true }
+        val tool3 = Tool("tool3", isFavorite = true)
         val attachment1 = Attachment(tool = tool1)
         val attachment2 = Attachment(tool = tool2)
         val attachment3 = Attachment(tool = tool3)
@@ -594,7 +591,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `deleteIfNotFavorite() - Don't delete favorited tools`() = testScope.runTest {
-        repository.storeInitialTools(listOf(Tool("tool") { isFavorite = true }))
+        repository.storeInitialTools(listOf(Tool("tool", isFavorite = true)))
         assertNotNull(repository.findTool("tool"))
 
         repository.deleteIfNotFavorite("tool")

@@ -55,6 +55,8 @@ class Tool(
     val defaultOrder: Int = 0,
     @JsonApiIgnore
     val order: Int = Int.MAX_VALUE,
+    @JsonApiIgnore
+    val isFavorite: Boolean = false,
     @JsonApiAttribute(JSON_HIDDEN)
     val isHidden: Boolean = false,
     @JsonApiAttribute(JSON_SPOTLIGHT)
@@ -167,13 +169,6 @@ class Tool(
         @VisibleForTesting
         internal set
 
-    @JsonApiIgnore
-    var isFavorite = false
-        set(value) {
-            if (value != field) markChanged(ATTR_IS_FAVORITE)
-            field = value
-        }
-
     @Suppress("SENSELESS_COMPARISON")
     val isValid get() = !code.isNullOrEmpty() && type != null && type != Type.UNKNOWN && id != INVALID_ID
 
@@ -210,6 +205,7 @@ fun randomTool(
     type: Tool.Type = Tool.Type.entries.random(),
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
+    isFavorite: Boolean = Random.nextBoolean(),
     isHidden: Boolean = Random.nextBoolean(),
     isSpotlight: Boolean = Random.nextBoolean(),
     config: Tool.() -> Unit = {},
@@ -225,6 +221,7 @@ fun randomTool(
     detailsBannerYoutubeVideoId = UUID.randomUUID().toString(),
     defaultOrder = Random.nextInt(),
     order = Random.nextInt(),
+    isFavorite = isFavorite,
     isHidden = isHidden,
     isSpotlight = isSpotlight,
     isScreenShareDisabled = Random.nextBoolean(),
@@ -234,6 +231,5 @@ fun randomTool(
     id = Random.nextLong()
     metatoolCode = UUID.randomUUID().toString()
     defaultVariantCode = UUID.randomUUID().toString()
-    isFavorite = Random.nextBoolean()
     config()
 }
