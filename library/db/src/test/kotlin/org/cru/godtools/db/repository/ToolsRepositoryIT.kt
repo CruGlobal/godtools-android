@@ -499,7 +499,7 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `storeToolsFromSync() - Don't pave over pending tool views`() = testScope.runTest {
-        val tool = Tool("tool") { pendingShares = 0 }
+        val tool = Tool("tool", pendingShares = 0)
         repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) { assertEquals(0, it.pendingShares) }
         repository.updateToolViews("tool", 5)

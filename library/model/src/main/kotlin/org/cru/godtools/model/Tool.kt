@@ -61,6 +61,10 @@ class Tool(
     val isSpotlight: Boolean = false,
     @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
     val isScreenShareDisabled: Boolean = false,
+    @JsonApiAttribute(JSON_TOTAL_VIEWS)
+    val shares: Int = 0,
+    @JsonApiIgnore
+    val pendingShares: Int = 0,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -130,10 +134,6 @@ class Tool(
             _id = id
         }
 
-    @JsonApiAttribute(JSON_TOTAL_VIEWS)
-    var shares = 0
-    @JsonApiIgnore
-    var pendingShares = 0
     val totalShares get() = pendingShares + shares
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
@@ -228,10 +228,10 @@ fun randomTool(
     isHidden = isHidden,
     isSpotlight = isSpotlight,
     isScreenShareDisabled = Random.nextBoolean(),
+    shares = Random.nextInt(),
+    pendingShares = Random.nextInt(),
 ).apply {
     id = Random.nextLong()
-    shares = Random.nextInt()
-    pendingShares = Random.nextInt()
     metatoolCode = UUID.randomUUID().toString()
     defaultVariantCode = UUID.randomUUID().toString()
     isFavorite = Random.nextBoolean()

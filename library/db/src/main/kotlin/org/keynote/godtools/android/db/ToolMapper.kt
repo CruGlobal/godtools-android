@@ -71,11 +71,11 @@ internal object ToolMapper : AbstractMapper<Tool>() {
         isHidden = getBool(c, COLUMN_HIDDEN, false),
         isSpotlight = getBool(c, COLUMN_SPOTLIGHT, false),
         isScreenShareDisabled = getBool(c, COLUMN_SCREEN_SHARE_DISABLED, false),
+        shares = c.getInt(COLUMN_SHARES, 0),
+        pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0),
     )
     override fun toObject(c: Cursor) = super.toObject(c).apply {
         id = c.getLong(COLUMN_ID, Base.INVALID_ID)
-        shares = c.getInt(COLUMN_SHARES, 0)
-        pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0)
         metatoolCode = c.getString(COLUMN_META_TOOL)
         defaultVariantCode = c.getString(COLUMN_DEFAULT_VARIANT)
         isFavorite = getBool(c, COLUMN_ADDED, false)

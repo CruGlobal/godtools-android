@@ -100,10 +100,7 @@ class ToolTest {
 
     @Test
     fun testTotalShares() {
-        val tool = Tool().apply {
-            shares = 1
-            pendingShares = 2
-        }
+        val tool = Tool("tool", shares = 1, pendingShares = 2)
 
         assertEquals(3, tool.totalShares)
     }

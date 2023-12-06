@@ -78,10 +78,10 @@ internal class ToolEntity(
         isHidden = isHidden,
         isSpotlight = isSpotlight,
         isScreenShareDisabled = isScreenShareDisabled,
+        shares = shares,
+        pendingShares = pendingShares,
     ).also {
         it.id = id
-        it.shares = shares
-        it.pendingShares = pendingShares
         it.metatoolCode = metatoolCode
         it.defaultVariantCode = defaultVariantCode
         it.isFavorite = isFavorite
