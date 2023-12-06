@@ -67,6 +67,8 @@ class Tool(
     val shares: Int = 0,
     @JsonApiIgnore
     val pendingShares: Int = 0,
+    metatoolCode: String? = null,
+    defaultVariantCode: String? = null,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -142,25 +144,15 @@ class Tool(
     var initialFavoritesPriority: Int? = Int.MAX_VALUE
 
     @JsonApiAttribute(JSON_METATOOL)
-    var metatool: Tool? = null
-        private set
+    val metatool: Tool? = null
     @JsonApiIgnore
-    var metatoolCode: String? = null
+    val metatoolCode = metatoolCode
         get() = field ?: metatool?.code
-        set(value) {
-            field = value
-            metatool = null
-        }
     @JsonApiAttribute(JSON_DEFAULT_VARIANT)
-    var defaultVariant: Tool? = null
-        private set
+    val defaultVariant: Tool? = null
     @JsonApiIgnore
-    var defaultVariantCode: String? = null
+    val defaultVariantCode = defaultVariantCode
         get() = field ?: defaultVariant?.code
-        set(value) {
-            field = value
-            defaultVariant = null
-        }
     @JsonApiAttribute(JSON_ATTACHMENTS)
     var attachments: List<Attachment>? = null
         private set
@@ -208,6 +200,7 @@ fun randomTool(
     isFavorite: Boolean = Random.nextBoolean(),
     isHidden: Boolean = Random.nextBoolean(),
     isSpotlight: Boolean = Random.nextBoolean(),
+    metatoolCode: String? = UUID.randomUUID().toString(),
     config: Tool.() -> Unit = {},
 ) = Tool(
     code = code,
@@ -227,9 +220,9 @@ fun randomTool(
     isScreenShareDisabled = Random.nextBoolean(),
     shares = Random.nextInt(),
     pendingShares = Random.nextInt(),
+    metatoolCode = metatoolCode,
+    defaultVariantCode = UUID.randomUUID().toString(),
 ).apply {
     id = Random.nextLong()
-    metatoolCode = UUID.randomUUID().toString()
-    defaultVariantCode = UUID.randomUUID().toString()
     config()
 }

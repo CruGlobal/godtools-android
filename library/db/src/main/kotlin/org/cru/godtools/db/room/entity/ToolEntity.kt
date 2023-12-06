@@ -81,10 +81,10 @@ internal class ToolEntity(
         isScreenShareDisabled = isScreenShareDisabled,
         shares = shares,
         pendingShares = pendingShares,
+        metatoolCode = metatoolCode,
+        defaultVariantCode = defaultVariantCode,
     ).also {
         it.id = id
-        it.metatoolCode = metatoolCode
-        it.defaultVariantCode = defaultVariantCode
         it.changedFieldsStr = changedFields
     }
 }

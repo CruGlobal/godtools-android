@@ -90,9 +90,9 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getNormalTools() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
-        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
-        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
+        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
+        val defaultVariant = Tool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        val otherVariant = Tool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
         repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
 
         assertThat(
@@ -145,9 +145,9 @@ abstract class ToolsRepositoryIT {
 
     @Test
     fun `getNormalToolsFlow() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "defaultVariant" }
-        val defaultVariant = Tool("defaultVariant") { metatoolCode = "meta" }
-        val otherVariant = Tool("otherVariant") { metatoolCode = "meta" }
+        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
+        val defaultVariant = Tool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        val otherVariant = Tool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
         repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
 
         assertThat(

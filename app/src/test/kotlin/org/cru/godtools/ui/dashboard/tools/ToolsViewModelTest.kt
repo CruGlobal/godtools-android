@@ -105,9 +105,9 @@ class ToolsViewModelTest {
     // region Property filteredTools
     @Test
     fun `Property filteredTools - return only default variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META) { defaultVariantCode = "variant2" }
-        val variant1 = Tool("variant1") { metatoolCode = "meta" }
-        val variant2 = Tool("variant2") { metatoolCode = "meta" }
+        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "variant2")
+        val variant1 = Tool("variant1", metatoolCode = "meta")
+        val variant2 = Tool("variant2", metatoolCode = "meta")
 
         viewModel.tools.test {
             assertThat(awaitItem(), empty())
@@ -130,8 +130,8 @@ class ToolsViewModelTest {
         viewModel.tools.test {
             assertThat(awaitItem(), empty())
 
-            val hidden = randomTool("hidden", isHidden = true) { metatoolCode = null }
-            val visible = randomTool("visible", isHidden = false) { metatoolCode = null }
+            val hidden = randomTool("hidden", isHidden = true, metatoolCode = null)
+            val visible = randomTool("visible", isHidden = false, metatoolCode = null)
             toolsFlow.value = listOf(hidden, visible)
             assertThat(awaitItem(), containsInAnyOrder(tool(visible)))
         }
