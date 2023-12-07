@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +16,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.ToolMatchers.tool
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.junit.After
 import org.junit.Before
@@ -68,7 +67,7 @@ class ToolDetailsViewModelTest {
 
             toolFlow.value = tool
             advanceUntilIdle()
-            assertThat(awaitItem(), containsInAnyOrder(tool(tool), tool(variant1)))
+            assertEquals(setOf(tool, variant1), awaitItem().toSet())
 
             toolFlow.value = variant1
             advanceUntilIdle()

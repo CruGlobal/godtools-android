@@ -234,7 +234,6 @@ dependencies {
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-    testImplementation(testFixtures(project(":library:model")))
 }
 
 // region Firebase App Distribution

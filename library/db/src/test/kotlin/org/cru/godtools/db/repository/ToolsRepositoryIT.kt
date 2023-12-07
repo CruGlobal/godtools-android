@@ -19,13 +19,10 @@ import kotlinx.coroutines.withContext
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.ToolMatchers.tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.model.trackChanges
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.contains
-import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,40 +36,33 @@ abstract class ToolsRepositoryIT {
     // region findTool()
     @Test
     fun `findTool()`() = testScope.runTest {
-        val tool = Tool("tool")
-        repository.storeToolsFromSync(setOf(tool))
+        val tool = randomTool("tool")
+        repository.storeInitialTools(setOf(tool))
 
         assertNull(repository.findTool("other"))
-        assertThat(repository.findTool("tool"), tool(tool))
+        assertEquals(tool, repository.findTool("tool"))
     }
     // endregion findTool()
 
-    // region getResources()
+    // region getAllTools()
     @Test
-    fun `getResources() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(resources)
+    fun `getAllTools() - Returns All Tool Types`() = testScope.runTest {
+        val tools = Tool.Type.entries.map { randomTool(code = it.name.lowercase(), type = it) }
+        repository.storeInitialTools(tools)
 
-        assertThat(
-            repository.getAllTools(),
-            containsInAnyOrder(resources.map { tool(it) })
-        )
+        assertEquals(tools.toSet(), repository.getAllTools().toSet())
     }
-    // endregion getResources()
+    // endregion getAllTools()
 
     // region getNormalTools()
     @Test
     fun `getNormalTools() - Supported Tool Types Only`() = testScope.runTest {
-        val tools = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(tools)
+        val tools = Tool.Type.entries.map { randomTool(code = it.name.lowercase(), type = it) }
+        repository.storeInitialTools(tools)
 
-        assertThat(
-            repository.getNormalTools(),
-            containsInAnyOrder(
-                tools
-                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
-                    .map { tool(it) }
-            )
+        assertEquals(
+            tools.filterTo(mutableSetOf()) { it.type in Tool.Type.NORMAL_TYPES },
+            repository.getNormalTools().toSet()
         )
     }
 
@@ -80,54 +70,41 @@ abstract class ToolsRepositoryIT {
     fun `getNormalTools() - Don't filter hidden tools`() = testScope.runTest {
         val hidden = randomTool("hidden", Tool.Type.TRACT, isHidden = true)
         val visible = randomTool("visible", Tool.Type.TRACT, isHidden = false)
-        repository.storeToolsFromSync(listOf(hidden, visible))
+        repository.storeInitialTools(listOf(hidden, visible))
 
-        assertThat(
-            repository.getNormalTools(),
-            containsInAnyOrder(tool(hidden), tool(visible))
-        )
+        assertEquals(setOf(hidden, visible), repository.getNormalTools().toSet())
     }
 
     @Test
     fun `getNormalTools() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
-        val defaultVariant = Tool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
-        val otherVariant = Tool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
-        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
+        val meta = randomTool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
+        val defaultVariant = randomTool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        val otherVariant = randomTool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        repository.storeInitialTools(listOf(meta, defaultVariant, otherVariant))
 
-        assertThat(
-            repository.getNormalTools(),
-            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
-        )
+        assertEquals(setOf(defaultVariant, otherVariant), repository.getNormalTools().toSet())
     }
     // endregion getNormalTools()
 
     // region getAllToolsFlow()
     @Test
     fun `getAllToolsFlow() - Returns All Resource Types`() = testScope.runTest {
-        val resources = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(resources)
+        val tools = Tool.Type.entries.map { randomTool(it.name.lowercase(), it) }
+        repository.storeInitialTools(tools)
 
-        assertThat(
-            repository.getAllToolsFlow().first(),
-            containsInAnyOrder(resources.map { tool(it) })
-        )
+        assertEquals(tools.toSet(), repository.getAllToolsFlow().first().toSet())
     }
     // endregion getAllToolsFlow()
 
     // region getNormalToolsFlow()
     @Test
     fun `getNormalToolsFlow() - Supported Tool Types Only`() = testScope.runTest {
-        val tools = Tool.Type.entries.map { Tool(it.name.lowercase(), it) }
-        repository.storeToolsFromSync(tools)
+        val tools = Tool.Type.entries.map { randomTool(it.name.lowercase(), it) }
+        repository.storeInitialTools(tools)
 
-        assertThat(
-            repository.getNormalToolsFlow().first(),
-            containsInAnyOrder(
-                tools
-                    .filter { it.type == Tool.Type.ARTICLE || it.type == Tool.Type.CYOA || it.type == Tool.Type.TRACT }
-                    .map { tool(it) }
-            )
+        assertEquals(
+            tools.filterTo(mutableSetOf()) { it.type in Tool.Type.NORMAL_TYPES },
+            repository.getNormalToolsFlow().first().toSet()
         )
     }
 
@@ -135,33 +112,27 @@ abstract class ToolsRepositoryIT {
     fun `getNormalToolsFlow() - Don't filter hidden tools`() = testScope.runTest {
         val hidden = randomTool("hidden", Tool.Type.TRACT, isHidden = true)
         val visible = randomTool("visible", Tool.Type.TRACT, isHidden = false)
-        repository.storeToolsFromSync(listOf(hidden, visible))
+        repository.storeInitialTools(listOf(hidden, visible))
 
-        assertThat(
-            repository.getNormalToolsFlow().first(),
-            containsInAnyOrder(tool(hidden), tool(visible))
-        )
+        assertEquals(setOf(hidden, visible), repository.getNormalToolsFlow().first().toSet())
     }
 
     @Test
     fun `getNormalToolsFlow() - Don't filter metatool variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
-        val defaultVariant = Tool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
-        val otherVariant = Tool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
-        repository.storeToolsFromSync(listOf(meta, defaultVariant, otherVariant))
+        val meta = randomTool("meta", Tool.Type.META, defaultVariantCode = "defaultVariant")
+        val defaultVariant = randomTool("defaultVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        val otherVariant = randomTool("otherVariant", Tool.Type.TRACT, metatoolCode = "meta")
+        repository.storeInitialTools(listOf(meta, defaultVariant, otherVariant))
 
-        assertThat(
-            repository.getNormalToolsFlow().first(),
-            containsInAnyOrder(tool(defaultVariant), tool(otherVariant))
-        )
+        assertEquals(setOf(defaultVariant, otherVariant), repository.getNormalToolsFlow().first().toSet())
     }
     // endregion getNormalToolsFlow()
 
     // region getToolsFlowForLanguage()
     @Test
     fun `getToolsFlowForLanguage()`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
         repository.storeInitialTools(listOf(tool1, tool2))
         languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
 
@@ -169,13 +140,13 @@ abstract class ToolsRepositoryIT {
             assertTrue(awaitItem().isEmpty())
 
             translationsRepository.storeTranslationFromSync(randomTranslation("tool1", Locale.ENGLISH))
-            assertThat(awaitItem(), contains(tool(tool1)))
+            assertEquals(listOf(tool1), awaitItem())
 
             translationsRepository.storeTranslationFromSync(randomTranslation("tool2", Locale.FRENCH))
-            assertThat(awaitItem(), contains(tool(tool1)))
+            assertEquals(listOf(tool1), awaitItem())
 
             translationsRepository.storeTranslationFromSync(randomTranslation("tool2", Locale.ENGLISH))
-            assertThat(awaitItem(), containsInAnyOrder(tool(tool1), tool(tool2)))
+            assertEquals(setOf(tool1, tool2), awaitItem().toSet())
         }
     }
     // endregion getToolsFlowForLanguage()
@@ -183,8 +154,8 @@ abstract class ToolsRepositoryIT {
     // region getDownloadedToolsFlowByTypesAndLanguage()
     @Test
     fun `getDownloadedToolsFlowByTypesAndLanguage()`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
         repository.storeInitialTools(listOf(tool1, tool2))
         languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
 
@@ -198,7 +169,7 @@ abstract class ToolsRepositoryIT {
                     randomTranslation("tool2", Locale.FRENCH, isDownloaded = true),
                 )
             )
-            assertThat(awaitItem(), contains(tool(tool1)))
+            assertEquals(listOf(tool1), awaitItem())
         }
     }
     // endregion getDownloadedToolsFlowByTypesAndLanguage()
@@ -206,32 +177,29 @@ abstract class ToolsRepositoryIT {
     // region getFavoriteToolsFlow()
     @Test
     fun `getFavoriteToolsFlow()`() = testScope.runTest {
-        val tool1 = Tool("tool1", Tool.Type.TRACT, isFavorite = false)
-        val tool2 = Tool("tool2", Tool.Type.TRACT, isFavorite = false)
-        val fav1 = Tool("fav1", Tool.Type.TRACT, isFavorite = true)
-        val fav2 = Tool("fav2", Tool.Type.TRACT, isFavorite = true)
+        val tool1 = randomTool("tool1", Tool.Type.TRACT, isFavorite = false)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT, isFavorite = false)
+        val fav1 = randomTool("fav1", Tool.Type.TRACT, isFavorite = true)
+        val fav2 = randomTool("fav2", Tool.Type.TRACT, isFavorite = true)
         repository.storeInitialTools(listOf(tool1, tool2, fav1, fav2))
 
-        assertThat(
-            repository.getFavoriteToolsFlow().first(),
-            containsInAnyOrder(tool(fav1), tool(fav2))
-        )
+        assertEquals(setOf(fav1, fav2), repository.getFavoriteToolsFlow().first().toSet())
     }
     // endregion getFavoriteToolsFlow()
 
     // region getMetaToolsFlow()
     @Test
     fun `getMetaToolsFlow()`() = testScope.runTest {
-        val meta1 = Tool("meta1", Tool.Type.META)
-        val meta2 = Tool("meta2", Tool.Type.META)
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val meta1 = randomTool("meta1", Tool.Type.META)
+        val meta2 = randomTool("meta2", Tool.Type.META)
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.CYOA)
         repository.getMetaToolsFlow().test {
             assertThat(awaitItem(), empty())
 
-            repository.storeToolsFromSync(listOf(meta1, meta2, tool1, tool2))
+            repository.storeInitialTools(listOf(meta1, meta2, tool1, tool2))
             runCurrent()
-            assertThat(expectMostRecentItem(), containsInAnyOrder(tool(meta1), tool(meta2)))
+            assertEquals(setOf(meta1, meta2), expectMostRecentItem().toSet())
         }
     }
     // endregion getMetaToolsFlow()
@@ -239,15 +207,15 @@ abstract class ToolsRepositoryIT {
     // region getLessonsFlow()
     @Test
     fun `getLessonsFlow()`() = testScope.runTest {
-        val tool = Tool("tool", type = Tool.Type.TRACT)
-        val lesson = Tool("lesson", type = Tool.Type.LESSON)
+        val tool = randomTool("tool", type = Tool.Type.TRACT)
+        val lesson = randomTool("lesson", type = Tool.Type.LESSON)
 
         repository.getLessonsFlow().test {
             assertThat(awaitItem(), empty())
 
-            repository.storeToolsFromSync(listOf(tool, lesson))
+            repository.storeInitialTools(listOf(tool, lesson))
             runCurrent()
-            assertThat(expectMostRecentItem(), contains(tool(lesson)))
+            assertEquals(listOf(lesson), expectMostRecentItem())
         }
     }
 
@@ -255,12 +223,9 @@ abstract class ToolsRepositoryIT {
     fun `getLessonsFlow() - Don't filter hidden lessons`() = testScope.runTest {
         val hidden = randomTool("hidden", Tool.Type.LESSON, isHidden = true)
         val visible = randomTool("visible", Tool.Type.LESSON, isHidden = false)
-        repository.storeToolsFromSync(listOf(hidden, visible))
+        repository.storeInitialTools(listOf(hidden, visible))
 
-        assertThat(
-            repository.getLessonsFlow().first(),
-            containsInAnyOrder(tool(hidden), tool(visible))
-        )
+        assertEquals(setOf(hidden, visible), repository.getLessonsFlow().first().toSet())
     }
     // endregion getLessonsFlow()
 

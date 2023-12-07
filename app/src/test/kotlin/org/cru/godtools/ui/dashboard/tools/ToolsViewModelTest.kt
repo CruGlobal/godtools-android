@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
+import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,15 +18,9 @@ import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.ToolMatchers.tool
 import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.contains
-import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.hasItem
-import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -74,7 +69,7 @@ class ToolsViewModelTest {
             val normal = randomTool("normal", isHidden = false, isSpotlight = false)
             val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
             toolsFlow.value = listOf(normal, spotlight)
-            assertThat(awaitItem(), containsInAnyOrder(tool(spotlight)))
+            assertEquals(listOf(spotlight), awaitItem())
         }
     }
 
@@ -86,7 +81,7 @@ class ToolsViewModelTest {
             val hidden = randomTool("normal", isHidden = true, isSpotlight = true)
             val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
             toolsFlow.value = listOf(hidden, spotlight)
-            assertThat(awaitItem(), containsInAnyOrder(tool(spotlight)))
+            assertEquals(listOf(spotlight), awaitItem())
         }
     }
 
@@ -97,7 +92,7 @@ class ToolsViewModelTest {
 
             val tools = List(10) { randomTool("tool$it", Tool.Type.TRACT, isHidden = false, isSpotlight = true) }
             toolsFlow.value = tools
-            assertThat(awaitItem(), contains(tools.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER).map { tool(it) }))
+            assertEquals(tools.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER), awaitItem())
         }
     }
     // endregion Property spotlightTools
@@ -114,14 +109,7 @@ class ToolsViewModelTest {
 
             toolsFlow.value = listOf(variant1, variant2)
             metaToolsFlow.value = listOf(meta)
-            assertThat(
-                expectMostRecentItem(),
-                allOf(
-                    contains(tool(variant2)),
-                    not(hasItem(tool(meta))),
-                    not(hasItem(tool(variant1)))
-                )
-            )
+            assertEquals(listOf(variant2), expectMostRecentItem())
         }
     }
 
@@ -133,7 +121,7 @@ class ToolsViewModelTest {
             val hidden = randomTool("hidden", isHidden = true, metatoolCode = null)
             val visible = randomTool("visible", isHidden = false, metatoolCode = null)
             toolsFlow.value = listOf(hidden, visible)
-            assertThat(awaitItem(), containsInAnyOrder(tool(visible)))
+            assertEquals(listOf(visible), awaitItem())
         }
     }
     // endregion Property filteredTools

@@ -243,6 +243,7 @@ fun randomTool(
     isHidden: Boolean = Random.nextBoolean(),
     isSpotlight: Boolean = Random.nextBoolean(),
     metatoolCode: String? = UUID.randomUUID().toString(),
+    defaultVariantCode: String? = UUID.randomUUID().toString(),
     config: Tool.() -> Unit = {},
 ) = Tool(
     code = code,
@@ -263,6 +264,6 @@ fun randomTool(
     shares = Random.nextInt(),
     pendingShares = Random.nextInt(),
     metatoolCode = metatoolCode,
-    defaultVariantCode = UUID.randomUUID().toString(),
+    defaultVariantCode = defaultVariantCode,
     apiId = Random.nextLong(),
 ).apply(config)
