@@ -18,7 +18,7 @@ class Attachment : Base() {
     private val tool: Tool? = null
     @JsonApiIgnore
     var toolId: Long? = null
-        get() = field?.takeUnless { it == INVALID_ID } ?: tool?.id ?: INVALID_ID
+        get() = field?.takeUnless { it == INVALID_ID } ?: tool?.apiId ?: INVALID_ID
     var toolCode: String? = null
         get() = field ?: tool?.code
 
@@ -45,7 +45,7 @@ class Attachment : Base() {
 fun Attachment(
     id: Long = Random.nextLong(),
     tool: Tool? = null,
-    toolId: Long? = tool?.id,
+    toolId: Long? = tool?.apiId,
     toolCode: String? = tool?.code,
     block: Attachment.() -> Unit = {},
 ) = Attachment().apply {

@@ -24,7 +24,6 @@ class ToolTest {
         val tool = parseJson("tool.json")
 
         assertTrue(tool.isValid)
-        assertEquals(1, tool.id)
         assertFalse(tool.isHidden)
         assertEquals("kgp-us", tool.code)
         assertEquals(Tool.Type.TRACT, tool.type)
@@ -36,6 +35,7 @@ class ToolTest {
         assertEquals(1L, tool.bannerId)
         assertEquals(2L, tool.detailsBannerId)
         assertEquals(10, tool.defaultOrder)
+        assertEquals(1L, tool.apiId)
         assertThat(tool.attachments, hasSize(3))
         assertThat(tool.latestTranslations, hasSize(2))
     }

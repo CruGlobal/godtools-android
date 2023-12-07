@@ -69,6 +69,8 @@ class Tool(
     val pendingShares: Int = 0,
     metatoolCode: String? = null,
     defaultVariantCode: String? = null,
+    @JsonApiId
+    val apiId: Long? = null,
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -130,13 +132,8 @@ class Tool(
         }
     }
 
-    @JsonApiId
-    private var _id: Long? = INVALID_ID
-    var id: Long
-        get() = _id ?: INVALID_ID
-        set(id) {
-            _id = id
-        }
+    @Deprecated("Use apiId instead", ReplaceWith("apiId"))
+    val id get() = apiId ?: INVALID_ID
 
     val totalShares get() = pendingShares + shares
 
@@ -162,7 +159,10 @@ class Tool(
         internal set
 
     @Suppress("SENSELESS_COMPARISON")
-    val isValid get() = !code.isNullOrEmpty() && type != null && type != Type.UNKNOWN && id != INVALID_ID
+    val isValid
+        get() = !code.isNullOrEmpty() &&
+            type != null && type != Type.UNKNOWN &&
+            apiId != null && apiId != INVALID_ID
 
     // region ChangeTrackingModel
     @JsonApiIgnore
@@ -184,8 +184,8 @@ fun Tool(
     code = code,
     type = type,
     category = null,
+    apiId = Random.nextLong(),
 ).apply {
-    id = Random.nextLong()
     latestTranslations = translations
     config()
 }
@@ -222,7 +222,5 @@ fun randomTool(
     pendingShares = Random.nextInt(),
     metatoolCode = metatoolCode,
     defaultVariantCode = UUID.randomUUID().toString(),
-).apply {
-    id = Random.nextLong()
-    config()
-}
+    apiId = Random.nextLong(),
+).apply(config)

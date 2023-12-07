@@ -271,9 +271,7 @@ abstract class ToolsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val tool = Tool("tool").apply {
-                id = 1
-            }
+            val tool = Tool("tool", apiId = 1)
             repository.storeInitialTools(listOf(tool))
             runCurrent()
             expectMostRecentItem()
@@ -438,7 +436,6 @@ abstract class ToolsRepositoryIT {
 
         repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) {
-            assertEquals(tool.id, it.id)
             assertEquals(tool.code, it.code)
             assertEquals(tool.type, it.type)
             assertEquals(tool.name, it.name)
@@ -455,6 +452,7 @@ abstract class ToolsRepositoryIT {
             assertEquals(tool.defaultVariantCode, it.defaultVariantCode)
             assertEquals(tool.isHidden, it.isHidden)
             assertEquals(tool.isSpotlight, it.isSpotlight)
+            assertEquals(tool.apiId, it.apiId)
         }
     }
 
@@ -466,7 +464,6 @@ abstract class ToolsRepositoryIT {
 
         repository.storeToolsFromSync(setOf(updated))
         assertNotNull(repository.findTool("tool")) {
-            assertEquals(updated.id, it.id)
             assertEquals(updated.code, it.code)
             assertEquals(updated.type, it.type)
             assertEquals(updated.name, it.name)
@@ -483,6 +480,7 @@ abstract class ToolsRepositoryIT {
             assertEquals(updated.defaultVariantCode, it.defaultVariantCode)
             assertEquals(updated.isHidden, it.isHidden)
             assertEquals(updated.isSpotlight, it.isSpotlight)
+            assertEquals(updated.apiId, it.apiId)
         }
     }
 

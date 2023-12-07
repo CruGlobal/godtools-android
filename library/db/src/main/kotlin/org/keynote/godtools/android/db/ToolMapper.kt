@@ -6,7 +6,6 @@ import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
-import org.cru.godtools.model.Base
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.BaseTable.Companion.COLUMN_ID
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
@@ -76,8 +75,6 @@ internal object ToolMapper : AbstractMapper<Tool>() {
         pendingShares = c.getInt(COLUMN_PENDING_SHARES, 0),
         metatoolCode = c.getString(COLUMN_META_TOOL),
         defaultVariantCode = c.getString(COLUMN_DEFAULT_VARIANT),
+        apiId = c.getLong(COLUMN_ID),
     )
-    override fun toObject(c: Cursor) = super.toObject(c).apply {
-        id = c.getLong(COLUMN_ID, Base.INVALID_ID)
-    }
 }

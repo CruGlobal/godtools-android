@@ -29,8 +29,9 @@ class UserFavoriteToolsApiTest {
     fun `removeFavoriteTools()`() = runTest {
         server.enqueue(MockResponse().setBody(JSON_RESPONSE_FAVORITES))
 
-        val resp = api.removeFavoriteTools(tools = listOf(Tool("en") { id = 1 })).body()!!.data.single()
-        assertNotNull(resp) { assertEquals(5, it.id) }
+        val tool = Tool("en", Tool.Type.TRACT, apiId = 1)
+        val resp = api.removeFavoriteTools(tools = listOf(tool)).body()!!.data.single()
+        assertNotNull(resp) { assertEquals(5, it.apiId) }
 
         val request = server.takeRequest()
         assertEquals("DELETE", request.method)

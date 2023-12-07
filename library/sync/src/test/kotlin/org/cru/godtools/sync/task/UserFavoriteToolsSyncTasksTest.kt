@@ -119,12 +119,9 @@ class UserFavoriteToolsSyncTasksTest {
     @Test
     fun `syncDirtyFavoriteTools() - add new favorites`() = runTest {
         val tools = listOf(
-            Tool("1", isFavorite = true).apply { id = 1 },
-            Tool("2", isFavorite = true).apply {
-                id = 2
-                trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) }
-            },
-            Tool("3", isFavorite = false).apply { id = 3 },
+            Tool("1", isFavorite = true, apiId = 1),
+            Tool("2", isFavorite = true, apiId = 2).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+            Tool("3", isFavorite = false, apiId = 3),
         )
         val responseTool = Tool("resp")
 
@@ -144,12 +141,9 @@ class UserFavoriteToolsSyncTasksTest {
     fun `syncDirtyFavoriteTools() - initial favorites`() = runTest {
         val user = User(userId, isInitialFavoriteToolsSynced = false)
         val tools = listOf(
-            Tool("1", isFavorite = true).apply { id = 1 },
-            Tool("2", isFavorite = true).apply {
-                id = 2
-                trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) }
-            },
-            Tool("3", isFavorite = false).apply { id = 3 },
+            Tool("1", isFavorite = true, apiId = 1),
+            Tool("2", isFavorite = true, apiId = 2).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+            Tool("3", isFavorite = false, apiId = 3),
         )
         val responseTool = Tool("resp")
 
@@ -173,12 +167,9 @@ class UserFavoriteToolsSyncTasksTest {
     @Test
     fun `syncDirtyFavoriteTools() - remove old favorites`() = runTest {
         val tools = listOf(
-            Tool("1", isFavorite = true).apply { id = 1 },
-            Tool("2", isFavorite = false).apply { id = 2 },
-            Tool("3", isFavorite = false).apply {
-                id = 3
-                trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) }
-            },
+            Tool("1", isFavorite = true, apiId = 1),
+            Tool("2", isFavorite = false, apiId = 2),
+            Tool("3", isFavorite = false, apiId = 3).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
         )
         val responseTool = Tool("resp")
 
