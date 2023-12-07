@@ -311,7 +311,7 @@ class GodToolsDatabase @Inject internal constructor(
                             while (it.moveToNext()) {
                                 val attachment = AttachmentMapper.toObject(it)
                                 attachment.toolId
-                                    ?.let { roomDb.toolsDao.findToolByIdBlocking(it) }?.code
+                                    ?.let { roomDb.toolsDao.findToolByApiIdBlocking(it) }?.code
                                     ?.let { attachment.toolCode = it }
 
                                 roomDb.attachmentsDao.insertOrIgnore(AttachmentEntity(attachment))

@@ -3,7 +3,7 @@ package org.cru.godtools.db.room.entity.partial
 import org.cru.godtools.model.Tool
 
 class SyncTool(tool: Tool) {
-    val id = tool.id
+    val apiId = tool.apiId
     val code = tool.code.orEmpty()
     val type = tool.type
     val name = tool.name

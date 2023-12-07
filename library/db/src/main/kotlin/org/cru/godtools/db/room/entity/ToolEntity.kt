@@ -7,7 +7,6 @@ import org.cru.godtools.model.Tool
 
 @Entity(tableName = "tools")
 internal class ToolEntity(
-    val id: Long,
     @PrimaryKey
     val code: String,
     val type: Tool.Type,
@@ -38,9 +37,9 @@ internal class ToolEntity(
     val isSpotlight: Boolean = false,
     @ColumnInfo(defaultValue = "")
     val changedFields: String = "",
+    val apiId: Long? = null,
 ) {
     constructor(tool: Tool) : this(
-        id = tool.id,
         code = tool.code.orEmpty(),
         type = tool.type,
         name = tool.name,
@@ -60,6 +59,7 @@ internal class ToolEntity(
         isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
+        apiId = tool.apiId,
         changedFields = tool.changedFieldsStr,
     )
 
@@ -83,7 +83,7 @@ internal class ToolEntity(
         pendingShares = pendingShares,
         metatoolCode = metatoolCode,
         defaultVariantCode = defaultVariantCode,
-        apiId = id
+        apiId = apiId
     ).also {
         it.changedFieldsStr = changedFields
     }
