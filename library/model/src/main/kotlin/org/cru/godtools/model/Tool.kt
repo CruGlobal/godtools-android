@@ -159,9 +159,61 @@ class Tool(
     // region ChangeTrackingModel
     @JsonApiIgnore
     override var changedFieldsStr = ""
+    @Transient
     @JsonApiIgnore
     override var isTrackingChanges = false
     // endregion Change Tracking
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        other !is Tool -> false
+        code != other.code -> false
+        type != other.type -> false
+        name != other.name -> false
+        category != other.category -> false
+        description != other.description -> false
+        bannerId != other.bannerId -> false
+        detailsBannerId != other.detailsBannerId -> false
+        detailsBannerAnimationId != other.detailsBannerAnimationId -> false
+        detailsBannerYoutubeVideoId != other.detailsBannerYoutubeVideoId -> false
+        defaultOrder != other.defaultOrder -> false
+        order != other.order -> false
+        isFavorite != other.isFavorite -> false
+        isHidden != other.isHidden -> false
+        isSpotlight != other.isSpotlight -> false
+        isScreenShareDisabled != other.isScreenShareDisabled -> false
+        shares != other.shares -> false
+        pendingShares != other.pendingShares -> false
+        apiId != other.apiId -> false
+        metatoolCode != other.metatoolCode -> false
+        defaultVariantCode != other.defaultVariantCode -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + type.hashCode()
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (bannerId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerAnimationId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerYoutubeVideoId?.hashCode() ?: 0)
+        result = 31 * result + defaultOrder
+        result = 31 * result + order
+        result = 31 * result + isFavorite.hashCode()
+        result = 31 * result + isHidden.hashCode()
+        result = 31 * result + isSpotlight.hashCode()
+        result = 31 * result + isScreenShareDisabled.hashCode()
+        result = 31 * result + shares
+        result = 31 * result + pendingShares
+        result = 31 * result + (apiId?.hashCode() ?: 0)
+        result = 31 * result + (metatoolCode?.hashCode() ?: 0)
+        result = 31 * result + (defaultVariantCode?.hashCode() ?: 0)
+        return result
+    }
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
