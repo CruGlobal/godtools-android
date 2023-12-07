@@ -1,7 +1,6 @@
 package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
-import androidx.annotation.VisibleForTesting
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
@@ -71,6 +70,8 @@ class Tool(
     defaultVariantCode: String? = null,
     @JsonApiId
     val apiId: Long? = null,
+    @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
+    val translations: List<Translation>? = null
 ) : ChangeTrackingModel {
     internal constructor() : this("")
 
@@ -132,11 +133,6 @@ class Tool(
         }
     }
 
-    val totalShares get() = pendingShares + shares
-
-    @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
-    var initialFavoritesPriority: Int? = Int.MAX_VALUE
-
     @JsonApiAttribute(JSON_METATOOL)
     val metatool: Tool? = null
     @JsonApiIgnore
@@ -147,19 +143,18 @@ class Tool(
     @JsonApiIgnore
     val defaultVariantCode = defaultVariantCode
         get() = field ?: defaultVariant?.code
+
+    @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
+    val initialFavoritesPriority: Int? = null
     @JsonApiAttribute(JSON_ATTACHMENTS)
-    var attachments: List<Attachment>? = null
-        private set
-    @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
-    var latestTranslations: List<Translation>? = null
-        @VisibleForTesting
-        internal set
+    val attachments: List<Attachment>? = null
 
     @Suppress("SENSELESS_COMPARISON")
     val isValid
         get() = !code.isNullOrEmpty() &&
             type != null && type != Type.UNKNOWN &&
             apiId != null && apiId != INVALID_ID
+    val totalShares get() = pendingShares + shares
 
     // region ChangeTrackingModel
     @JsonApiIgnore
@@ -182,10 +177,8 @@ fun Tool(
     type = type,
     category = null,
     apiId = Random.nextLong(),
-).apply {
-    latestTranslations = translations
-    config()
-}
+    translations = translations,
+).apply(config)
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)

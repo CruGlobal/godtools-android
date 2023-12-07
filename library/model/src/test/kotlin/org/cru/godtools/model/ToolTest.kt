@@ -37,7 +37,7 @@ class ToolTest {
         assertEquals(10, tool.defaultOrder)
         assertEquals(1L, tool.apiId)
         assertThat(tool.attachments, hasSize(3))
-        assertThat(tool.latestTranslations, hasSize(2))
+        assertThat(tool.translations, hasSize(2))
     }
 
     @Test
