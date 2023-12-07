@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
 public class ToolMatchers {
     public static Matcher<Tool> tool(Tool tool) {
         return allOf(
-                hasProperty("id", equalTo(tool.getId())),
+                hasProperty("apiId", equalTo(tool.getApiId())),
                 hasProperty("code", equalTo(tool.getCode()))
         );
     }

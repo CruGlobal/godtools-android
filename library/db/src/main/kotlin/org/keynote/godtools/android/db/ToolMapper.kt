@@ -6,6 +6,7 @@ import org.ccci.gto.android.common.db.AbstractMapper
 import org.ccci.gto.android.common.util.database.getInt
 import org.ccci.gto.android.common.util.database.getLong
 import org.ccci.gto.android.common.util.database.getString
+import org.cru.godtools.model.Base
 import org.cru.godtools.model.Tool
 import org.keynote.godtools.android.db.Contract.BaseTable.Companion.COLUMN_ID
 import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_ADDED
@@ -31,7 +32,7 @@ import org.keynote.godtools.android.db.Contract.ToolTable.COLUMN_TYPE
 internal object ToolMapper : AbstractMapper<Tool>() {
     override fun mapField(values: ContentValues, field: String, obj: Tool) {
         when (field) {
-            COLUMN_ID -> values.put(field, obj.id)
+            COLUMN_ID -> values.put(field, obj.apiId ?: Base.INVALID_ID)
             COLUMN_CODE -> values.put(field, obj.code)
             COLUMN_TYPE -> values.put(field, serialize(obj.type))
             COLUMN_NAME -> values.put(field, obj.name)

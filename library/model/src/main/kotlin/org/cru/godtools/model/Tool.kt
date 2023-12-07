@@ -132,9 +132,6 @@ class Tool(
         }
     }
 
-    @Deprecated("Use apiId instead", ReplaceWith("apiId"))
-    val id get() = apiId ?: INVALID_ID
-
     val totalShares get() = pendingShares + shares
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
