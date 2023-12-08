@@ -23,7 +23,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.User
-import org.cru.godtools.model.trackChanges
 import org.cru.godtools.sync.repository.SyncRepository
 import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks.Companion.SYNC_TIME_FAVORITE_TOOLS
 import retrofit2.Response
@@ -120,7 +119,7 @@ class UserFavoriteToolsSyncTasksTest {
     fun `syncDirtyFavoriteTools() - add new favorites`() = runTest {
         val tools = listOf(
             Tool("1", isFavorite = true, apiId = 1),
-            Tool("2", isFavorite = true, apiId = 2).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+            Tool("2", isFavorite = true, apiId = 2, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
             Tool("3", isFavorite = false, apiId = 3),
         )
         val responseTool = Tool("resp")
@@ -142,7 +141,7 @@ class UserFavoriteToolsSyncTasksTest {
         val user = User(userId, isInitialFavoriteToolsSynced = false)
         val tools = listOf(
             Tool("1", isFavorite = true, apiId = 1),
-            Tool("2", isFavorite = true, apiId = 2).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+            Tool("2", isFavorite = true, apiId = 2, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
             Tool("3", isFavorite = false, apiId = 3),
         )
         val responseTool = Tool("resp")
@@ -169,7 +168,7 @@ class UserFavoriteToolsSyncTasksTest {
         val tools = listOf(
             Tool("1", isFavorite = true, apiId = 1),
             Tool("2", isFavorite = false, apiId = 2),
-            Tool("3", isFavorite = false, apiId = 3).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+            Tool("3", isFavorite = false, apiId = 3, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
         )
         val responseTool = Tool("resp")
 

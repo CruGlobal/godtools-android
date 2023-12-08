@@ -83,8 +83,7 @@ internal class ToolEntity(
         pendingShares = pendingShares,
         metatoolCode = metatoolCode,
         defaultVariantCode = defaultVariantCode,
-        apiId = apiId
-    ).also {
-        it.changedFieldsStr = changedFields
-    }
+        apiId = apiId,
+        changedFieldsStr = changedFields,
+    )
 }

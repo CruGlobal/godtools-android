@@ -1,11 +1,8 @@
 package org.cru.godtools.model
 
-interface ChangeTrackingModel {
-    val changedFields get() = changedFieldsStr.splitToSequence(",").filter { it.isNotEmpty() }.distinct()
-
+interface ChangeTrackingModel : ReadOnlyChangeTrackingModel {
     var isTrackingChanges: Boolean
-    var changedFieldsStr: String
-    fun isFieldChanged(field: String) = field in changedFields
+    override var changedFieldsStr: String
 
     fun markChanged(field: String) {
         if (isTrackingChanges) changedFieldsStr = "$changedFieldsStr,$field"
@@ -14,6 +11,13 @@ interface ChangeTrackingModel {
     fun clearChanged(field: String) {
         changedFieldsStr = changedFields.filterNot { it == field }.joinToString(",")
     }
+}
+
+interface ReadOnlyChangeTrackingModel {
+    val changedFields get() = changedFieldsStr.splitToSequence(",").filter { it.isNotEmpty() }.distinct()
+
+    val changedFieldsStr: String
+    fun isFieldChanged(field: String) = field in changedFields
 }
 
 inline fun <T : ChangeTrackingModel> T.trackChanges(block: (T) -> Unit) {

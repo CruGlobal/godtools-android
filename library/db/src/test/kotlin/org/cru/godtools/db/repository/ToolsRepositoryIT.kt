@@ -21,7 +21,6 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.model.trackChanges
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 
@@ -494,9 +493,9 @@ abstract class ToolsRepositoryIT {
     fun `storeFavoriteToolsFromSync() - Handle dirty tools`() = testScope.runTest {
         repository.storeInitialTools(
             listOf(
-                Tool("tool1", isFavorite = true).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
-                Tool("tool2", isFavorite = false).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
-                Tool("tool3", isFavorite = true).apply { trackChanges { markChanged(Tool.ATTR_IS_FAVORITE) } },
+                Tool("tool1", isFavorite = true, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
+                Tool("tool2", isFavorite = false, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
+                Tool("tool3", isFavorite = true, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
             )
         )
 

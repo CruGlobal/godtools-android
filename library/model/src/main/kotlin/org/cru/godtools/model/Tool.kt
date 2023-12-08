@@ -71,8 +71,10 @@ class Tool(
     @JsonApiId
     val apiId: Long? = null,
     @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
-    val translations: List<Translation>? = null
-) : ChangeTrackingModel {
+    val translations: List<Translation>? = null,
+    @JsonApiIgnore
+    override val changedFieldsStr: String = "",
+) : ReadOnlyChangeTrackingModel {
     internal constructor() : this("")
 
     companion object {
@@ -155,14 +157,6 @@ class Tool(
             type != null && type != Type.UNKNOWN &&
             apiId != null && apiId != INVALID_ID
     val totalShares get() = pendingShares + shares
-
-    // region ChangeTrackingModel
-    @JsonApiIgnore
-    override var changedFieldsStr = ""
-    @Transient
-    @JsonApiIgnore
-    override var isTrackingChanges = false
-    // endregion Change Tracking
 
     override fun equals(other: Any?) = when {
         this === other -> true
