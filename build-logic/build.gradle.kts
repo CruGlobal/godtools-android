@@ -13,6 +13,7 @@ dependencies {
     implementation(libs.json)
     implementation(libs.kotlin.gradlePlugin)
     implementation(libs.kotlin.kover.gradlePlugin)
+    implementation(libs.ksp.gradlePlugin)
     implementation(libs.onesky.gradlePlugin)
 }
 

@@ -122,11 +122,13 @@ fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project, enableCirc
     }
 
     if (enableCircuit) {
-        project.plugins.apply("kotlin-parcelize")
+        project.pluginManager.apply("com.google.devtools.ksp")
+        project.pluginManager.apply("kotlin-parcelize")
 
-        project.dependencies.apply {
-            addProvider("implementation", project.libs.findBundle("circuit").get())
-        }
+        project.dependencies.addProvider("implementation", project.libs.findBundle("circuit").get())
+        project.dependencies.addProvider("ksp", project.libs.findLibrary("circuit-codegen").get())
+
+        project.ksp.arg("circuit.codegen.mode", "hilt")
     }
 }
 
