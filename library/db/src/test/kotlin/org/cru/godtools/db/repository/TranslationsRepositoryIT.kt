@@ -14,7 +14,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
+import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.junit.Before
 
@@ -30,7 +30,7 @@ abstract class TranslationsRepositoryIT {
 
     @Before
     fun createToolAndLanguage() = runTest {
-        toolsRepository.storeToolsFromSync(listOf(Tool(TOOL), Tool(TOOL2)))
+        toolsRepository.storeToolsFromSync(listOf(randomTool(TOOL), randomTool(TOOL2)))
         languagesRepository.storeLanguagesFromSync(
             listOf(
                 Language(Locale.ENGLISH),

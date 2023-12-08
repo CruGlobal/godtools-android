@@ -235,7 +235,7 @@ abstract class ToolsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val tool = Tool("tool", apiId = 1)
+            val tool = randomTool("tool", isFavorite = false)
             repository.storeInitialTools(listOf(tool))
             runCurrent()
             expectMostRecentItem()

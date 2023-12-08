@@ -179,7 +179,7 @@ class GodToolsShortcutManagerTest {
         // Instant Apps don't have access to the system ShortcutManager
         every { app.getSystemService<ShortcutManager>() } returns null
 
-        assertFalse(shortcutManager.canPinToolShortcut(Tool("kgp", type = Tool.Type.TRACT)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool("kgp", type = Tool.Type.TRACT)))
     }
 
     @Test

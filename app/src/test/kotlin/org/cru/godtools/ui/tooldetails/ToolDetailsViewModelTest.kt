@@ -16,6 +16,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
 import org.junit.After
@@ -56,9 +57,9 @@ class ToolDetailsViewModelTest {
 
     @Test
     fun `Property variants`() = testScope.runTest {
-        val tool = Tool(TOOL, metatoolCode = "meta")
-        val variant1 = Tool("variant1", metatoolCode = "meta")
-        val tool2 = Tool("tool2")
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant1 = randomTool("variant1", Tool.Type.TRACT, metatoolCode = "meta")
+        val tool2 = randomTool("tool2", Tool.Type.TRACT, metatoolCode = null)
         viewModel.setToolCode(TOOL)
         toolsFlow.value = listOf(tool, tool2, variant1)
 

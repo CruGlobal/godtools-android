@@ -12,7 +12,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Attachment
-import org.cru.godtools.model.Tool
+import org.cru.godtools.model.randomTool
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class AttachmentsRepositoryIT {
@@ -121,7 +121,7 @@ abstract class AttachmentsRepositoryIT {
     // region storeInitialAttachments()
     @Test
     fun `storeInitialAttachments() - Don't replace already existing attachments`() = testScope.runTest {
-        val tool = Tool("tool")
+        val tool = randomTool("tool")
         toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) { filename = "sync.bin" }
         repository.storeAttachmentsFromSync(tool, listOf(attachment))
@@ -137,7 +137,7 @@ abstract class AttachmentsRepositoryIT {
     // region storeAttachmentsFromSync()
     @Test
     fun `storeAttachmentsFromSync() - Update existing attachment`() = testScope.runTest {
-        val tool = Tool("tool")
+        val tool = randomTool("tool")
         toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "initial.ext"
@@ -161,7 +161,7 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `storeAttachmentsFromSync() - Don't overwrite downloaded flag`() = testScope.runTest {
-        val tool = Tool("tool")
+        val tool = randomTool("tool")
         toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "file.ext"
@@ -178,8 +178,8 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `storeAttachmentsFromSync() - remove stale attachments`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1")
+        val tool2 = randomTool("tool2")
         val attachment = Attachment(tool = tool1)
         val attachmentStale = Attachment(tool = tool1)
         val attachmentNew = Attachment(tool = tool1)
@@ -198,8 +198,8 @@ abstract class AttachmentsRepositoryIT {
     // region deleteAttachmentsFor()
     @Test
     fun `deleteAttachmentsFor()`() = testScope.runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1")
+        val tool2 = randomTool("tool2")
         toolsRepository.storeToolsFromSync(setOf(tool1, tool2))
         val attachments = listOf(
             Attachment(tool = tool1),
