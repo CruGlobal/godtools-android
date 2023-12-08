@@ -3,7 +3,6 @@ package org.cru.godtools.sync.repository
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
@@ -17,6 +16,7 @@ import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.User
+import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.junit.Assert.assertFalse
 import org.junit.Test
@@ -38,14 +38,16 @@ class SyncRepositoryTest {
     // region storeTools()
     @Test
     fun `storeTools()`() = runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1", Tool.Type.TRACT, apiId = 1)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT, apiId = 2)
 
         syncRepository.storeTools(
             tools = listOf(tool1, tool2),
             existingTools = null,
             includes = Includes()
         )
+        assertTrue(tool1.isValid)
+        assertTrue(tool2.isValid)
         coVerifyAll {
             toolsRepository.storeToolsFromSync(match { it.toSet() == setOf(tool1, tool2) })
         }
@@ -53,22 +55,21 @@ class SyncRepositoryTest {
 
     @Test
     fun `storeTools() - Don't store invalid tools`() = runTest {
-        val tool: Tool = mockk {
-            every { isValid } returns false
-        }
+        val tool = randomTool("", Tool.Type.UNKNOWN, apiId = null)
 
         syncRepository.storeTools(
             tools = listOf(tool),
             existingTools = null,
             includes = Includes()
         )
+        assertFalse(tool.isValid)
         verify { toolsRepository wasNot Called }
     }
 
     @Test
     fun `storeTools() - Delete orphaned existing tools`() = runTest {
-        val tool1 = Tool("tool1")
-        val tool2 = Tool("tool2")
+        val tool1 = randomTool("tool1", Tool.Type.TRACT, apiId = 1)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT, apiId = 2)
 
         syncRepository.storeTools(
             tools = listOf(tool1, tool2),
@@ -110,7 +111,7 @@ class SyncRepositoryTest {
         val trans1 = randomTranslation("tool", Locale.ENGLISH)
         val trans2 = randomTranslation("tool", Locale.FRENCH)
         val trans3 = randomTranslation("tool", Locale.GERMAN)
-        val tool = Tool("tool", translations = listOf(trans1, trans2))
+        val tool = Tool("tool", Tool.Type.TRACT, apiId = 1, translations = listOf(trans1, trans2))
         coEvery { translationsRepository.getTranslationsForTool("tool") } returns listOf(trans1, trans3)
 
         syncRepository.storeTools(listOf(tool), null, Includes(Tool.JSON_LATEST_TRANSLATIONS))
@@ -127,7 +128,7 @@ class SyncRepositoryTest {
     fun `storeTranslations() - Skip invalid translations`() = runTest {
         val transValid = randomTranslation("tool", Locale.ENGLISH)
         val transInvalid = randomTranslation("tool", Language.INVALID_CODE)
-        val tool = Tool("tool", translations = listOf(transValid, transInvalid))
+        val tool = Tool("tool", Tool.Type.TRACT, apiId = 1, translations = listOf(transValid, transInvalid))
         coEvery { translationsRepository.getTranslationsForTool("tool") } returns emptyList()
 
         assertTrue(transValid.isValid)
@@ -161,8 +162,8 @@ class SyncRepositoryTest {
     fun `storeUser() - Store favorite tools`() = runTest {
         val user = User(isInitialFavoriteToolsSynced = true).apply {
             apiFavoriteTools = listOf(
-                Tool("a"),
-                Tool("b"),
+                randomTool("a", Tool.Type.TRACT, apiId = 1),
+                randomTool("b", Tool.Type.TRACT, apiId = 2),
             )
         }
 
@@ -178,8 +179,8 @@ class SyncRepositoryTest {
     fun `storeUser() - Don't store favorite tools if they haven't been synced yet`() = runTest {
         val user = User(isInitialFavoriteToolsSynced = false).apply {
             apiFavoriteTools = listOf(
-                Tool("a"),
-                Tool("b"),
+                randomTool("a", Tool.Type.TRACT, apiId = 1),
+                randomTool("b", Tool.Type.TRACT, apiId = 2),
             )
         }
 

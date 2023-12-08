@@ -8,6 +8,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.model.Base.Companion.INVALID_ID
+import org.cru.godtools.model.Tool.Companion.ATTR_IS_FAVORITE
 
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
@@ -212,43 +213,28 @@ class Tool(
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
-@Suppress("ktlint:standard:function-naming")
-fun Tool(
-    code: String,
-    type: Tool.Type = Tool.Type.TRACT,
-    translations: List<Translation>? = null,
-    config: Tool.() -> Unit = {},
-) = Tool(
-    code = code,
-    type = type,
-    category = null,
-    apiId = Random.nextLong(),
-    translations = translations,
-).apply(config)
-
-// TODO: move this to testFixtures once they support Kotlin source files
-@RestrictTo(RestrictTo.Scope.TESTS)
 fun randomTool(
     code: String = UUID.randomUUID().toString(),
     type: Tool.Type = Tool.Type.entries.random(),
-    name: String? = UUID.randomUUID().toString(),
-    description: String? = UUID.randomUUID().toString(),
+    name: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    description: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     isFavorite: Boolean = Random.nextBoolean(),
     isHidden: Boolean = Random.nextBoolean(),
     isSpotlight: Boolean = Random.nextBoolean(),
-    metatoolCode: String? = UUID.randomUUID().toString(),
-    defaultVariantCode: String? = UUID.randomUUID().toString(),
-    config: Tool.() -> Unit = {},
+    metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
+    changedFieldsStr: String = setOf(ATTR_IS_FAVORITE).filter { Random.nextBoolean() }.joinToString(","),
 ) = Tool(
     code = code,
     type = type,
     name = name,
-    category = UUID.randomUUID().toString(),
+    category = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     description = description,
-    bannerId = Random.nextLong(),
-    detailsBannerId = Random.nextLong(),
-    detailsBannerAnimationId = Random.nextLong(),
-    detailsBannerYoutubeVideoId = UUID.randomUUID().toString(),
+    bannerId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerAnimationId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerYoutubeVideoId = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     defaultOrder = Random.nextInt(),
     order = Random.nextInt(),
     isFavorite = isFavorite,
@@ -259,5 +245,6 @@ fun randomTool(
     pendingShares = Random.nextInt(),
     metatoolCode = metatoolCode,
     defaultVariantCode = defaultVariantCode,
-    apiId = Random.nextLong(),
-).apply(config)
+    apiId = apiId,
+    changedFieldsStr = changedFieldsStr,
+)
