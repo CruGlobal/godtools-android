@@ -25,7 +25,8 @@ internal fun DownloadProgressIndicator(downloadProgress: () -> DownloadProgress?
                     ?.takeIf { it.max > 0 }
                     ?.let { it.progress.toFloat() / it.max }
                     ?.coerceIn(0f, 1f) ?: 0f,
-                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+                animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
+                label = "Download Progress",
             )
             LinearProgressIndicator(progress, modifier = modifier)
         }
