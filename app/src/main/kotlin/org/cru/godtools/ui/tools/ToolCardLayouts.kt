@@ -463,16 +463,30 @@ private fun ToolName(
 
 @Composable
 private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
-    val locale by remember { derivedStateOf { translation.value?.languageCode } }
+
+    ToolCategory(
+        ToolCard.State(
+            tool = viewModel.tool.collectAsState().value,
+            translation = translation.value,
+        ),
+        modifier = modifier.invisibleIf { translation.isInitial },
+    )
+}
+
+@Composable
+private fun ToolCategory(state: ToolCard.State, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val tool by rememberUpdatedState(state.tool)
+    val translation by rememberUpdatedState(state.translation)
+    val locale by remember { derivedStateOf { translation?.languageCode } }
+    val category by remember(context) { derivedStateOf { tool.getCategory(context, locale) } }
 
     Text(
-        tool.getCategory(context, locale),
+        category,
         style = toolCategoryStyle,
         maxLines = 1,
-        modifier = modifier.invisibleIf { translation.isInitial }
+        modifier = modifier
     )
 }
 
