@@ -43,7 +43,7 @@ internal fun FavoriteAction(
     }
 
     FavoriteAction(
-        state = ToolCard.State(tool, translation.value, eventSink),
+        state = ToolCard.State(tool, translation = translation.value, eventSink = eventSink),
         modifier = modifier,
         confirmRemoval = confirmRemoval,
     )

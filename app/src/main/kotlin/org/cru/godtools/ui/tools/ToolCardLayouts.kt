@@ -398,8 +398,12 @@ internal fun VariantToolCard(
 }
 
 @Composable
-private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) = AsyncImage(
-    model = viewModel.bannerFile.collectAsState().value,
+private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) =
+    ToolBanner(state = ToolCard.State(banner = viewModel.bannerFile.collectAsState().value), modifier = modifier)
+
+@Composable
+private fun ToolBanner(state: ToolCard.State, modifier: Modifier = Modifier) = AsyncImage(
+    model = state.banner,
     contentDescription = null,
     contentScale = ContentScale.Crop,
     modifier = modifier.background(GodToolsTheme.GRAY_E6)
