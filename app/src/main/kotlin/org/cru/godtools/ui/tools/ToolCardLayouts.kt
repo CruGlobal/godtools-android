@@ -29,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,6 +61,21 @@ import org.cru.godtools.model.getTagline
 private val toolViewModels: ToolViewModels @Composable get() = viewModel()
 
 private val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
+
+private val ToolCard.State.toolNameStyle: TextStyle
+    @Composable
+    get() {
+        val baseStyle = MaterialTheme.typography.titleMedium
+        val translation by rememberUpdatedState(translation)
+
+        return remember(baseStyle) {
+            derivedStateOf {
+                baseStyle
+                    .withCompatFontFamilyFor(translation)
+                    .merge(TextStyle(fontWeight = FontWeight.Bold))
+            }
+        }.value
+    }
 
 @Composable
 private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextStyle> {
@@ -414,18 +430,34 @@ private fun ToolName(
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
 ) {
-    val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
-    val style by toolNameStyle(viewModel)
+
+    ToolName(
+        state = ToolCard.State(
+            tool = viewModel.tool.collectAsState().value,
+            translation = translation.value
+        ),
+        modifier = modifier.invisibleIf { translation.isInitial },
+        minLines = minLines,
+        maxLines = maxLines,
+    )
+}
+
+@Composable
+private fun ToolName(
+    state: ToolCard.State,
+    modifier: Modifier = Modifier,
+    minLines: Int = 1,
+    maxLines: Int = Int.MAX_VALUE,
+) {
+    val style = state.toolNameStyle
 
     Text(
-        translation.value.getName(tool).orEmpty(),
+        state.translation.getName(state.tool).orEmpty(),
         style = style,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier
-            .invisibleIf { translation.isInitial }
-            .minLinesHeight(minLines = minLines, textStyle = style)
+        modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
     )
 }
 
