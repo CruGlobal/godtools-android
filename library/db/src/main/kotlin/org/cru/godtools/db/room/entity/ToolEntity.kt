@@ -7,7 +7,6 @@ import org.cru.godtools.model.Tool
 
 @Entity(tableName = "tools")
 internal class ToolEntity(
-    val id: Long,
     @PrimaryKey
     val code: String,
     val type: Tool.Type,
@@ -38,9 +37,9 @@ internal class ToolEntity(
     val isSpotlight: Boolean = false,
     @ColumnInfo(defaultValue = "")
     val changedFields: String = "",
+    val apiId: Long? = null,
 ) {
     constructor(tool: Tool) : this(
-        id = tool.id,
         code = tool.code.orEmpty(),
         type = tool.type,
         name = tool.name,
@@ -60,30 +59,31 @@ internal class ToolEntity(
         isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
+        apiId = tool.apiId,
         changedFields = tool.changedFieldsStr,
     )
 
-    fun toModel() = Tool().also {
-        it.id = id
-        it.code = code
-        it.type = type
-        it.name = name
-        it.category = category
-        it.description = description
-        it.shares = shares
-        it.pendingShares = pendingShares
-        it.bannerId = bannerId
-        it.detailsBannerId = detailsBannerId
-        it.detailsBannerAnimationId = detailsBannerAnimationId
-        it.detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId
-        it.isScreenShareDisabled = isScreenShareDisabled
-        it.defaultOrder = defaultOrder
-        it.order = order
-        it.metatoolCode = metatoolCode
-        it.defaultVariantCode = defaultVariantCode
-        it.isFavorite = isFavorite
-        it.isHidden = isHidden
-        it.isSpotlight = isSpotlight
-        it.changedFieldsStr = changedFields
-    }
+    fun toModel() = Tool(
+        code = code,
+        type = type,
+        name = name,
+        category = category,
+        description = description,
+        bannerId = bannerId,
+        detailsBannerId = detailsBannerId,
+        detailsBannerAnimationId = detailsBannerAnimationId,
+        detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId,
+        defaultOrder = defaultOrder,
+        order = order,
+        isFavorite = isFavorite,
+        isHidden = isHidden,
+        isSpotlight = isSpotlight,
+        isScreenShareDisabled = isScreenShareDisabled,
+        shares = shares,
+        pendingShares = pendingShares,
+        metatoolCode = metatoolCode,
+        defaultVariantCode = defaultVariantCode,
+        apiId = apiId,
+        changedFieldsStr = changedFields,
+    )
 }

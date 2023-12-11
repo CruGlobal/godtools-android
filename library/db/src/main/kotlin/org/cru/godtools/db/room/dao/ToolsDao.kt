@@ -20,8 +20,8 @@ internal interface ToolsDao {
     suspend fun findTool(code: String): ToolEntity?
     @Query("SELECT * FROM tools WHERE code = :code")
     suspend fun findToolFavorite(code: String): ToolFavorite?
-    @Query("SELECT * FROM tools WHERE id = :id")
-    fun findToolByIdBlocking(id: Long): ToolEntity?
+    @Query("SELECT * FROM tools WHERE apiId = :apiId")
+    fun findToolByApiIdBlocking(apiId: Long): ToolEntity?
     @Query("SELECT * FROM tools WHERE code = :code")
     fun findToolFlow(code: String): Flow<ToolEntity?>
 

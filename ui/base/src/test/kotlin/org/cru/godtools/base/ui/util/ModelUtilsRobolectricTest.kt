@@ -17,19 +17,17 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ModelUtilsRobolectricTest {
     private val context: Context get() = ApplicationProvider.getApplicationContext()
-    private val tool = Tool("tool") {
-        category = "gospel"
-    }
-    private val toolNull: Tool? = null
 
     @Test
     fun `getCategory() - Null Tool`() {
-        assertEquals("", toolNull.getCategory(context, null))
-        assertEquals("", toolNull.getCategory(context, Locale.FRENCH))
+        val tool: Tool? = null
+        assertEquals("", tool.getCategory(context, null))
+        assertEquals("", tool.getCategory(context, Locale.FRENCH))
     }
 
     @Test
     fun `getCategory() - Valid Category`() {
+        val tool = Tool("tool", category = "gospel")
         assertEquals("Gospel Invitation", tool.getCategory(context, null))
         assertEquals("Invitation à Évangile", tool.getCategory(context, Locale.FRENCH))
     }
@@ -37,14 +35,13 @@ class ModelUtilsRobolectricTest {
     @Test(expected = Resources.NotFoundException::class)
     fun `getCategory(unknown) - Debug`() {
         assumeTrue(BuildConfig.DEBUG)
-        tool.category = "unknown"
-        tool.getCategory(context)
+        Tool("tool", category = "unknown").getCategory(context)
     }
 
     @Test
     fun `getCategory(unknown) - Release`() {
         assumeFalse(BuildConfig.DEBUG)
-        tool.category = "unknown"
+        val tool = Tool("tool", category = "unknown")
         assertEquals("unknown", tool.getCategory(context, null))
         assertEquals("unknown", tool.getCategory(context, Locale.FRENCH))
     }

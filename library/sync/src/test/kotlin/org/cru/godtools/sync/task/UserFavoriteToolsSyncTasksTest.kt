@@ -23,7 +23,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.User
-import org.cru.godtools.model.trackChanges
+import org.cru.godtools.model.randomTool
 import org.cru.godtools.sync.repository.SyncRepository
 import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks.Companion.SYNC_TIME_FAVORITE_TOOLS
 import retrofit2.Response
@@ -119,20 +119,11 @@ class UserFavoriteToolsSyncTasksTest {
     @Test
     fun `syncDirtyFavoriteTools() - add new favorites`() = runTest {
         val tools = listOf(
-            Tool("1") {
-                id = 1
-                isFavorite = true
-            },
-            Tool("2") {
-                id = 2
-                trackChanges { isFavorite = true }
-            },
-            Tool("3") {
-                id = 3
-                isFavorite = false
-            },
+            randomTool("1", isFavorite = true, apiId = 1, changedFieldsStr = ""),
+            randomTool("2", isFavorite = true, apiId = 2, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
+            randomTool("3", isFavorite = false, apiId = 3, changedFieldsStr = ""),
         )
-        val responseTool = Tool("resp")
+        val responseTool = randomTool("resp")
 
         coEvery { toolsRepository.getAllTools() } returns tools
         coEvery { favoritesApi.addFavoriteTools(any(), any()) } returns Response.success(JsonApiObject.of(responseTool))
@@ -150,20 +141,11 @@ class UserFavoriteToolsSyncTasksTest {
     fun `syncDirtyFavoriteTools() - initial favorites`() = runTest {
         val user = User(userId, isInitialFavoriteToolsSynced = false)
         val tools = listOf(
-            Tool("1") {
-                id = 1
-                isFavorite = true
-            },
-            Tool("2") {
-                id = 2
-                trackChanges { isFavorite = true }
-            },
-            Tool("3") {
-                id = 3
-                isFavorite = false
-            },
+            randomTool("1", isFavorite = true, apiId = 1, changedFieldsStr = ""),
+            randomTool("2", isFavorite = true, apiId = 2, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
+            randomTool("3", isFavorite = false, apiId = 3, changedFieldsStr = ""),
         )
-        val responseTool = Tool("resp")
+        val responseTool = randomTool("resp")
 
         coEvery { userRepository.findUser(userId) } returns null
         coEvery { userApi.getUser(any()) } returns Response.success(JsonApiObject.single(user))
@@ -185,21 +167,11 @@ class UserFavoriteToolsSyncTasksTest {
     @Test
     fun `syncDirtyFavoriteTools() - remove old favorites`() = runTest {
         val tools = listOf(
-            Tool("1") {
-                id = 1
-                isFavorite = true
-            },
-            Tool("2") {
-                id = 2
-                isFavorite = false
-            },
-            Tool("3") {
-                id = 3
-                isFavorite = true
-                trackChanges { isFavorite = false }
-            },
+            randomTool("1", isFavorite = true, apiId = 1, changedFieldsStr = ""),
+            randomTool("2", isFavorite = false, apiId = 2, changedFieldsStr = ""),
+            randomTool("3", isFavorite = false, apiId = 3, changedFieldsStr = Tool.ATTR_IS_FAVORITE),
         )
-        val responseTool = Tool("resp")
+        val responseTool = randomTool("resp")
 
         coEvery { toolsRepository.getAllTools() } returns tools
         coEvery { favoritesApi.removeFavoriteTools(any(), any()) }

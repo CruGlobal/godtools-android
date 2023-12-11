@@ -51,7 +51,7 @@ internal class SyncRepository @Inject constructor(
     private suspend fun processIncludes(tool: Tool, includes: Includes): Set<String> = coroutineScope {
         // persist related included objects
         if (includes.include(Tool.JSON_LATEST_TRANSLATIONS)) {
-            tool.latestTranslations?.let { translations ->
+            tool.translations?.let { translations ->
                 launch {
                     storeTranslations(
                         translations,

@@ -86,7 +86,7 @@ internal fun ToolsLayout(
             )
         }
 
-        items(tools, { "tool:${it.id}" }, { "tool" }) { tool ->
+        items(tools, { "tool:${it.code.orEmpty()}" }, { "tool" }) { tool ->
             ToolCard(
                 toolViewModels[tool.code.orEmpty(), tool],
                 additionalLanguage = selectedLanguage,

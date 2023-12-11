@@ -29,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.randomTool
 import org.greenrobot.eventbus.EventBus
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -108,7 +109,7 @@ class GodToolsShortcutManagerTest {
     fun verifyCanPinToolShortcut() {
         val supportedTypes = EnumSet.of(Tool.Type.ARTICLE, Tool.Type.CYOA, Tool.Type.TRACT)
         Tool.Type.values().forEach {
-            assertEquals(supportedTypes.contains(it), shortcutManager.canPinToolShortcut(Tool().apply { type = it }))
+            assertEquals(supportedTypes.contains(it), shortcutManager.canPinToolShortcut(randomTool(type = it)))
         }
     }
 
@@ -178,7 +179,7 @@ class GodToolsShortcutManagerTest {
         // Instant Apps don't have access to the system ShortcutManager
         every { app.getSystemService<ShortcutManager>() } returns null
 
-        assertFalse(shortcutManager.canPinToolShortcut(Tool("kgp", type = Tool.Type.TRACT)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool("kgp", type = Tool.Type.TRACT)))
     }
 
     @Test

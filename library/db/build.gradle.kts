@@ -39,6 +39,5 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-    testImplementation(testFixtures(project(":library:model")))
     testImplementation(testFixtures(libs.gtoSupport.androidx.room))
 }

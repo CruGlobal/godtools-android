@@ -221,16 +221,18 @@ class GodToolsDownloadManagerDispatcherTest {
                 isDownloaded = i < 3
             }
         }
-        val tool1 = Tool().apply {
-            bannerId = attachments[0].id
-            detailsBannerId = attachments[1].id
-            detailsBannerAnimationId = attachments[2].id
-        }
-        val tool2 = Tool().apply {
-            bannerId = attachments[3].id
-            detailsBannerId = attachments[4].id
-            detailsBannerAnimationId = attachments[5].id
-        }
+        val tool1 = Tool(
+            code = "tool1",
+            bannerId = attachments[0].id,
+            detailsBannerId = attachments[1].id,
+            detailsBannerAnimationId = attachments[2].id,
+        )
+        val tool2 = Tool(
+            code = "tool2",
+            bannerId = attachments[3].id,
+            detailsBannerId = attachments[4].id,
+            detailsBannerAnimationId = attachments[5].id,
+        )
 
         attachmentsFlow.emit(attachments)
         toolsFlow.emit(listOf(tool1, tool2))

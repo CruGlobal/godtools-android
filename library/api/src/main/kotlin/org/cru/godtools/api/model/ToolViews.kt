@@ -11,7 +11,7 @@ private const val JSON_QUANTITY = "quantity"
 @JsonApiType(JSON_API_TYPE_TOOL_VIEWS)
 class ToolViews(tool: Tool) {
     @JsonApiAttribute(JSON_TOOL_ID)
-    private var toolId: Long? = tool.id
+    private var toolId: Long? = tool.apiId
     @JsonApiAttribute(JSON_QUANTITY)
     var quantity = tool.pendingShares
 }

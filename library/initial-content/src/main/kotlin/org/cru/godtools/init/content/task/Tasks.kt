@@ -69,7 +69,7 @@ internal class Tasks @Inject constructor(
         bundledTools.let { resources ->
             toolsRepository.storeInitialTools(resources)
             translationsRepository.storeInitialTranslations(
-                resources.flatMap { it.latestTranslations.orEmpty().filter { it.isValid } }
+                resources.flatMap { it.translations.orEmpty().filter { it.isValid } }
             )
             attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
         }
@@ -102,6 +102,7 @@ internal class Tasks @Inject constructor(
             context.assets.open("tools.json").reader().use { it.readText() }
                 .let { jsonApiConverter.fromJson(it, Tool::class.java) }
                 .data
+                .filter { it.isValid }
         } catch (e: Exception) {
             // log exception, but it shouldn't be fatal (for now)
             Timber.tag(TAG).e(e, "Error parsing bundled tools")

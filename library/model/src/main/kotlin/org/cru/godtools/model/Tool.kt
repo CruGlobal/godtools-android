@@ -1,12 +1,14 @@
 package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
-import androidx.annotation.VisibleForTesting
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
+import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
+import org.cru.godtools.model.Base.Companion.INVALID_ID
+import org.cru.godtools.model.Tool.Companion.ATTR_IS_FAVORITE
 
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
@@ -30,7 +32,52 @@ private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-prio
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(Tool.JSONAPI_TYPE)
-class Tool : Base(), ChangeTrackingModel {
+class Tool(
+    @JsonApiAttribute(JSON_ABBREVIATION)
+    val code: String?,
+    @JsonApiAttribute(JSON_TYPE)
+    val type: Type = Type.UNKNOWN,
+    @JsonApiAttribute(JSON_NAME)
+    val name: String? = null,
+    @JsonApiAttribute(JSON_CATEGORY)
+    val category: String? = null,
+    @JsonApiAttribute(JSON_DESCRIPTION)
+    val description: String? = null,
+    @JsonApiAttribute(JSON_BANNER)
+    val bannerId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER)
+    val detailsBannerId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER_ANIMATION)
+    val detailsBannerAnimationId: Long? = null,
+    @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
+    val detailsBannerYoutubeVideoId: String? = null,
+    @JsonApiAttribute(JSON_DEFAULT_ORDER)
+    val defaultOrder: Int = 0,
+    @JsonApiIgnore
+    val order: Int = Int.MAX_VALUE,
+    @JsonApiIgnore
+    val isFavorite: Boolean = false,
+    @JsonApiAttribute(JSON_HIDDEN)
+    val isHidden: Boolean = false,
+    @JsonApiAttribute(JSON_SPOTLIGHT)
+    val isSpotlight: Boolean = false,
+    @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
+    val isScreenShareDisabled: Boolean = false,
+    @JsonApiAttribute(JSON_TOTAL_VIEWS)
+    val shares: Int = 0,
+    @JsonApiIgnore
+    val pendingShares: Int = 0,
+    metatoolCode: String? = null,
+    defaultVariantCode: String? = null,
+    @JsonApiId
+    val apiId: Long? = null,
+    @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
+    val translations: List<Translation>? = null,
+    @JsonApiIgnore
+    override val changedFieldsStr: String = "",
+) : ReadOnlyChangeTrackingModel {
+    internal constructor() : this("")
+
     companion object {
         const val JSONAPI_TYPE = "resource"
 
@@ -89,116 +136,79 @@ class Tool : Base(), ChangeTrackingModel {
         }
     }
 
-    @JsonApiAttribute(JSON_ABBREVIATION)
-    var code: String? = null
-
-    @JsonApiAttribute(JSON_TYPE)
-    private var _type: Type? = null
-    var type: Type
-        get() = _type ?: Type.DEFAULT
-        set(type) {
-            _type = type
-        }
-
-    @JsonApiAttribute(JSON_NAME)
-    var name: String? = null
-    @JsonApiAttribute(JSON_CATEGORY)
-    var category: String? = null
-    @JsonApiAttribute(JSON_DESCRIPTION)
-    var description: String? = null
-
-    @JsonApiAttribute(JSON_TOTAL_VIEWS)
-    var shares = 0
+    @JsonApiAttribute(JSON_METATOOL)
+    val metatool: Tool? = null
     @JsonApiIgnore
-    var pendingShares = 0
-    val totalShares get() = pendingShares + shares
-
-    @JsonApiAttribute(JSON_BANNER)
-    var bannerId: Long? = null
-
-    @JsonApiAttribute(JSON_DETAILS_BANNER)
-    var detailsBannerId: Long? = null
-    @JsonApiAttribute(JSON_DETAILS_BANNER_ANIMATION)
-    var detailsBannerAnimationId: Long? = null
-    @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
-    var detailsBannerYoutubeVideoId: String? = null
+    val metatoolCode = metatoolCode
+        get() = field ?: metatool?.code
+    @JsonApiAttribute(JSON_DEFAULT_VARIANT)
+    val defaultVariant: Tool? = null
+    @JsonApiIgnore
+    val defaultVariantCode = defaultVariantCode
+        get() = field ?: defaultVariant?.code
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
-    var initialFavoritesPriority: Int? = Int.MAX_VALUE
-
-    @JsonApiAttribute(JSON_SCREEN_SHARE_DISABLED)
-    var isScreenShareDisabled = false
-
-    @JsonApiAttribute(JSON_DEFAULT_ORDER)
-    var defaultOrder = 0
-    @JsonApiIgnore
-    var order = Int.MAX_VALUE
-
-    @JsonApiAttribute(JSON_METATOOL)
-    var metatool: Tool? = null
-        private set
-    @JsonApiIgnore
-    var metatoolCode: String? = null
-        get() = field ?: metatool?.code
-        set(value) {
-            field = value
-            metatool = null
-        }
-    @JsonApiAttribute(JSON_DEFAULT_VARIANT)
-    var defaultVariant: Tool? = null
-        private set
-    @JsonApiIgnore
-    var defaultVariantCode: String? = null
-        get() = field ?: defaultVariant?.code
-        set(value) {
-            field = value
-            defaultVariant = null
-        }
+    val initialFavoritesPriority: Int? = null
     @JsonApiAttribute(JSON_ATTACHMENTS)
-    var attachments: List<Attachment>? = null
-        private set
-    @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
-    var latestTranslations: List<Translation>? = null
-        @VisibleForTesting
-        internal set
+    val attachments: List<Attachment>? = null
 
-    @JsonApiIgnore
-    var isFavorite = false
-        set(value) {
-            if (value != field) markChanged(ATTR_IS_FAVORITE)
-            field = value
-        }
-    @JsonApiAttribute(JSON_HIDDEN)
-    var isHidden = false
-    @JsonApiAttribute(JSON_SPOTLIGHT)
-    var isSpotlight = false
+    @Suppress("SENSELESS_COMPARISON")
+    val isValid
+        get() = !code.isNullOrEmpty() &&
+            type != null && type != Type.UNKNOWN &&
+            apiId != null && apiId != INVALID_ID
+    val totalShares get() = pendingShares + shares
 
-    val isValid get() = code != null && id != INVALID_ID
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        other !is Tool -> false
+        code != other.code -> false
+        type != other.type -> false
+        name != other.name -> false
+        category != other.category -> false
+        description != other.description -> false
+        bannerId != other.bannerId -> false
+        detailsBannerId != other.detailsBannerId -> false
+        detailsBannerAnimationId != other.detailsBannerAnimationId -> false
+        detailsBannerYoutubeVideoId != other.detailsBannerYoutubeVideoId -> false
+        defaultOrder != other.defaultOrder -> false
+        order != other.order -> false
+        isFavorite != other.isFavorite -> false
+        isHidden != other.isHidden -> false
+        isSpotlight != other.isSpotlight -> false
+        isScreenShareDisabled != other.isScreenShareDisabled -> false
+        shares != other.shares -> false
+        pendingShares != other.pendingShares -> false
+        apiId != other.apiId -> false
+        metatoolCode != other.metatoolCode -> false
+        defaultVariantCode != other.defaultVariantCode -> false
+        else -> true
+    }
 
-    // region ChangeTrackingModel
-    @JsonApiIgnore
-    override var changedFieldsStr = ""
-    @JsonApiIgnore
-    override var isTrackingChanges = false
-    // endregion Change Tracking
-}
-
-// TODO: move this to testFixtures once they support Kotlin source files
-@RestrictTo(RestrictTo.Scope.TESTS)
-@Suppress("ktlint:standard:function-naming")
-fun Tool(
-    code: String,
-    type: Tool.Type = Tool.Type.TRACT,
-    translations: List<Translation>? = null,
-    category: String? = null,
-    config: Tool.() -> Unit = {},
-) = Tool().apply {
-    id = Random.nextLong()
-    this.code = code
-    this.type = type
-    latestTranslations = translations
-    this.category = category
-    config()
+    override fun hashCode(): Int {
+        var result = code?.hashCode() ?: 0
+        result = 31 * result + type.hashCode()
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (description?.hashCode() ?: 0)
+        result = 31 * result + (bannerId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerAnimationId?.hashCode() ?: 0)
+        result = 31 * result + (detailsBannerYoutubeVideoId?.hashCode() ?: 0)
+        result = 31 * result + defaultOrder
+        result = 31 * result + order
+        result = 31 * result + isFavorite.hashCode()
+        result = 31 * result + isHidden.hashCode()
+        result = 31 * result + isSpotlight.hashCode()
+        result = 31 * result + isScreenShareDisabled.hashCode()
+        result = 31 * result + shares
+        result = 31 * result + pendingShares
+        result = 31 * result + (apiId?.hashCode() ?: 0)
+        result = 31 * result + (metatoolCode?.hashCode() ?: 0)
+        result = 31 * result + (defaultVariantCode?.hashCode() ?: 0)
+        return result
+    }
 }
 
 // TODO: move this to testFixtures once they support Kotlin source files
@@ -206,27 +216,35 @@ fun Tool(
 fun randomTool(
     code: String = UUID.randomUUID().toString(),
     type: Tool.Type = Tool.Type.entries.random(),
-    config: Tool.() -> Unit = {},
-) = Tool(code, type) {
-    id = Random.nextLong()
-    this.code = code
-    this.type = type
-    name = UUID.randomUUID().toString()
-    category = UUID.randomUUID().toString()
-    description = UUID.randomUUID().toString()
-    shares = Random.nextInt()
-    pendingShares = Random.nextInt()
-    bannerId = Random.nextLong()
-    detailsBannerId = Random.nextLong()
-    detailsBannerAnimationId = Random.nextLong()
-    detailsBannerYoutubeVideoId = UUID.randomUUID().toString()
-    isScreenShareDisabled = Random.nextBoolean()
-    defaultOrder = Random.nextInt()
-    order = Random.nextInt()
-    metatoolCode = UUID.randomUUID().toString()
-    defaultVariantCode = UUID.randomUUID().toString()
-    isFavorite = Random.nextBoolean()
-    isHidden = Random.nextBoolean()
-    isSpotlight = Random.nextBoolean()
-    config()
-}
+    name: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    description: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    isFavorite: Boolean = Random.nextBoolean(),
+    isHidden: Boolean = Random.nextBoolean(),
+    isSpotlight: Boolean = Random.nextBoolean(),
+    metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
+    changedFieldsStr: String = setOf(ATTR_IS_FAVORITE).filter { Random.nextBoolean() }.joinToString(","),
+) = Tool(
+    code = code,
+    type = type,
+    name = name,
+    category = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    description = description,
+    bannerId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerAnimationId = Random.nextLong().takeIf { Random.nextBoolean() },
+    detailsBannerYoutubeVideoId = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    defaultOrder = Random.nextInt(),
+    order = Random.nextInt(),
+    isFavorite = isFavorite,
+    isHidden = isHidden,
+    isSpotlight = isSpotlight,
+    isScreenShareDisabled = Random.nextBoolean(),
+    shares = Random.nextInt(),
+    pendingShares = Random.nextInt(),
+    metatoolCode = metatoolCode,
+    defaultVariantCode = defaultVariantCode,
+    apiId = apiId,
+    changedFieldsStr = changedFieldsStr,
+)

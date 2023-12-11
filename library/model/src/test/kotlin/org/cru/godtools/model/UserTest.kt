@@ -22,7 +22,7 @@ class UserTest {
         assertEquals("11", user.id)
         assertEquals(Instant.parse("2022-01-28T14:47:48Z"), user.createdAt)
         assertEquals(1, user.apiFavoriteTools.size)
-        assertEquals(2, user.apiFavoriteTools[0].id)
+        assertEquals(2L, user.apiFavoriteTools[0].apiId)
     }
 
     private fun parseJson(file: String) = this::class.java.getResourceAsStream(file)!!.reader()
