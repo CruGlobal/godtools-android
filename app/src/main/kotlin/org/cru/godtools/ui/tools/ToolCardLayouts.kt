@@ -502,18 +502,25 @@ private fun SquareToolCardParallelLanguage(viewModel: ToolViewModels.ToolViewMod
     val parallelLanguage by viewModel.parallelLanguage.collectAsState()
 
     if (parallelLanguage != null) {
-        val secondTranslation by viewModel.secondTranslation.collectAsState()
-        val secondLanguage by viewModel.secondLanguage.collectAsState()
-        val available by remember { derivedStateOf { secondTranslation != null } }
-
-        ToolCardInfoContent {
-            AvailableInLanguage(
-                secondLanguage,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
-                    .padding(top = 2.dp)
-                    .invisibleIf { !available }
+        SquareToolCardSecondLanguage(
+            state = ToolCard.State(
+                secondLanguage = viewModel.secondLanguage.collectAsState().value,
+                secondTranslation = viewModel.secondTranslation.collectAsState().value,
             )
-        }
+        )
     }
+}
+
+@Composable
+private fun SquareToolCardSecondLanguage(state: ToolCard.State) = ToolCardInfoContent {
+    val secondTranslation by rememberUpdatedState(state.secondTranslation)
+    val available by remember { derivedStateOf { secondTranslation != null } }
+
+    AvailableInLanguage(
+        state.secondLanguage,
+        horizontalArrangement = Arrangement.Start,
+        modifier = Modifier
+            .padding(top = 2.dp)
+            .invisibleIf { !available }
+    )
 }
