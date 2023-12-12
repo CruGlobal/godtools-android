@@ -109,7 +109,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
+fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project, enableCircuit: Boolean = false) {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion =
         project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
@@ -119,6 +119,16 @@ fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project) {
         addProvider("implementation", project.libs.findBundle("androidx-compose").get())
         addProvider("debugImplementation", project.libs.findBundle("androidx-compose-debug").get())
         addProvider("testDebugImplementation", project.libs.findBundle("androidx-compose-testing").get())
+    }
+
+    if (enableCircuit) {
+        project.pluginManager.apply("com.google.devtools.ksp")
+        project.pluginManager.apply("kotlin-parcelize")
+
+        project.dependencies.addProvider("implementation", project.libs.findBundle("circuit").get())
+        project.dependencies.addProvider("ksp", project.libs.findLibrary("circuit-codegen").get())
+
+        project.ksp.arg("circuit.codegen.mode", "hilt")
     }
 }
 
