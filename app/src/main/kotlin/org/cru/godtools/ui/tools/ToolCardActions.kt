@@ -43,6 +43,7 @@ internal fun ToolCardActions(
                         OpenToolEvent(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
                     )
                     ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool))
+                    ToolCard.Event.Click -> TODO()
                     ToolCard.Event.PinTool -> TODO()
                     ToolCard.Event.UnpinTool -> TODO()
                 }

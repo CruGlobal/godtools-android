@@ -24,7 +24,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -77,26 +76,13 @@ private val ToolCard.State.toolNameStyle: TextStyle
         }.value
     }
 
-@Composable
-private fun toolNameStyle(viewModel: ToolViewModels.ToolViewModel): State<TextStyle> {
-    val translation by viewModel.firstTranslation.collectAsState()
-
-    val baseStyle = MaterialTheme.typography.titleMedium
-    return remember(baseStyle) {
-        derivedStateOf {
-            baseStyle
-                .withCompatFontFamilyFor(translation.value)
-                .merge(TextStyle(fontWeight = FontWeight.Bold))
-        }
-    }
-}
 private val toolDescriptionStyle @Composable get() = MaterialTheme.typography.bodyMedium
 private val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
 private val toolCardInfoLabelColor: Color @Composable get() {
     val baseColor = LocalContentColor.current
     return remember(baseColor) { with(baseColor) { copy(alpha = alpha * 0.6f) } }
 }
-internal val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
+private val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) {
     class Click(
@@ -252,12 +238,12 @@ fun ToolCard(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SquareToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
     viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     showCategory: Boolean = true,
+    showSecondLanguage: Boolean = false,
     showActions: Boolean = true,
     floatParallelLanguageUp: Boolean = true,
     confirmRemovalFromFavorites: Boolean = false,
@@ -266,33 +252,74 @@ fun SquareToolCard(
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
     val secondTranslation by viewModel.secondTranslation.collectAsState()
-    val downloadProgress by viewModel.downloadProgress.collectAsState()
 
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
+    val eventSink: (ToolCard.Event) -> Unit = remember(viewModel) {
+        {
+            when (it) {
+                ToolCard.Event.Click -> onEvent(
+                    ToolCardEvent.Click(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
+                )
+                ToolCard.Event.OpenTool -> onEvent(
+                    ToolCardEvent.OpenTool(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
+                )
+                ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool))
+                ToolCard.Event.PinTool -> viewModel.pinTool()
+                ToolCard.Event.UnpinTool -> viewModel.unpinTool()
+            }
+        }
+    }
+    val state = ToolCard.State(
+        tool = tool,
+        banner = viewModel.bannerFile.collectAsState().value,
+        translation = firstTranslation.value,
+        secondLanguage = viewModel.secondLanguage.collectAsState().value,
+        secondTranslation = secondTranslation,
+        downloadProgress = viewModel.downloadProgress.collectAsState().value,
+        eventSink = eventSink,
+    )
+
+    SquareToolCard(
+        state = state,
+        modifier = modifier,
+        showCategory = showCategory,
+        showSecondLanguage = showSecondLanguage,
+        showActions = showActions,
+        floatParallelLanguageUp = floatParallelLanguageUp,
+        confirmRemovalFromFavorites = confirmRemovalFromFavorites,
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun SquareToolCard(
+    state: ToolCard.State,
+    modifier: Modifier = Modifier,
+    showCategory: Boolean = true,
+    showSecondLanguage: Boolean = false,
+    showActions: Boolean = true,
+    floatParallelLanguageUp: Boolean = true,
+    confirmRemovalFromFavorites: Boolean = false,
+) {
+    val downloadProgress by rememberUpdatedState(state.downloadProgress)
+    val eventSink by rememberUpdatedState(state.eventSink)
+
+    ProvideLayoutDirectionFromLocale(locale = { state.translation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = {
-                onEvent(
-                    ToolCardEvent.Click(
-                        tool,
-                        lang1 = firstTranslation.value?.languageCode,
-                        lang2 = secondTranslation?.languageCode,
-                    )
-                )
-            },
+            onClick = { eventSink(ToolCard.Event.Click) },
             modifier = modifier.width(189.dp)
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 ToolBanner(
-                    viewModel,
+                    state = state,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(189f / 128f)
                 )
                 FavoriteAction(
-                    viewModel,
-                    confirmRemoval = confirmRemovalFromFavorites,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    state = state,
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    confirmRemoval = confirmRemovalFromFavorites
                 )
                 DownloadProgressIndicator(
                     { downloadProgress },
@@ -304,21 +331,21 @@ fun SquareToolCard(
             Column(modifier = Modifier.padding(16.dp)) {
                 Box {
                     Column {
-                        ToolName(viewModel, minLines = 1, maxLines = 2, modifier = Modifier.fillMaxWidth())
+                        ToolName(state, minLines = 1, maxLines = 2, modifier = Modifier.fillMaxWidth())
                         if (showCategory) {
                             ToolCategory(
-                                viewModel,
+                                state,
                                 modifier = Modifier
                                     .padding(top = 2.dp)
                                     .fillMaxWidth()
                             )
                         }
-                        if (floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
+                        if (showSecondLanguage && floatParallelLanguageUp) SquareToolCardSecondLanguage(state)
                     }
 
                     // Reserve the maximum height consistently across all cards
                     Column(modifier = Modifier.invisibleIf(true)) {
-                        Spacer(modifier = Modifier.minLinesHeight(2, toolNameStyle(viewModel).value))
+                        Spacer(modifier = Modifier.minLinesHeight(2, state.toolNameStyle))
                         if (showCategory) {
                             Spacer(
                                 modifier = Modifier
@@ -326,16 +353,15 @@ fun SquareToolCard(
                                     .minLinesHeight(1, toolCategoryStyle)
                             )
                         }
-                        if (floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
+                        if (showSecondLanguage && floatParallelLanguageUp) SquareToolCardSecondLanguage(state)
                     }
                 }
-                if (!floatParallelLanguageUp) SquareToolCardParallelLanguage(viewModel)
+                if (showSecondLanguage && !floatParallelLanguageUp) SquareToolCardSecondLanguage(state)
 
                 if (showActions) {
                     ToolCardActions(
-                        viewModel,
-                        onEvent = onEvent,
-                        modifier = Modifier.padding(top = 8.dp)
+                        state,
+                        modifier = Modifier.padding(top = 8.dp),
                     )
                 }
             }
@@ -496,20 +522,6 @@ private fun ToolCardInfoContent(content: @Composable () -> Unit) = CompositionLo
     LocalTextStyle provides toolCardInfoLabelStyle,
     content = content
 )
-
-@Composable
-private fun SquareToolCardParallelLanguage(viewModel: ToolViewModels.ToolViewModel) {
-    val parallelLanguage by viewModel.parallelLanguage.collectAsState()
-
-    if (parallelLanguage != null) {
-        SquareToolCardSecondLanguage(
-            state = ToolCard.State(
-                secondLanguage = viewModel.secondLanguage.collectAsState().value,
-                secondTranslation = viewModel.secondTranslation.collectAsState().value,
-            )
-        )
-    }
-}
 
 @Composable
 private fun SquareToolCardSecondLanguage(state: ToolCard.State) = ToolCardInfoContent {
