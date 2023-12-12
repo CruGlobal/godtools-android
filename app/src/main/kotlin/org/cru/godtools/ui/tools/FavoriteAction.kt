@@ -38,6 +38,8 @@ internal fun FavoriteAction(
             when (it) {
                 ToolCard.Event.PinTool -> viewModel.pinTool()
                 ToolCard.Event.UnpinTool -> viewModel.unpinTool()
+                ToolCard.Event.OpenTool -> TODO()
+                ToolCard.Event.OpenToolDetails -> TODO()
             }
         }
     }

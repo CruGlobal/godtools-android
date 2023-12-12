@@ -15,6 +15,8 @@ object ToolCard {
     ) : CircuitUiState
 
     sealed interface Event : CircuitUiEvent {
+        data object OpenTool : Event
+        data object OpenToolDetails : Event
         data object PinTool : Event
         data object UnpinTool : Event
     }
