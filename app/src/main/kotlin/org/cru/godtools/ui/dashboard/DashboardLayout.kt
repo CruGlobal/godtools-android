@@ -64,9 +64,14 @@ import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal sealed interface DashboardEvent {
-    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : DashboardEvent
-    class OpenLesson(tool: Tool?, lang: Locale?) : OpenTool(tool, lang, null)
-    class OpenToolDetails(val tool: Tool?, val lang: Locale? = null) : DashboardEvent
+    open class OpenTool(
+        val tool: String?,
+        val type: Tool.Type?,
+        val lang1: Locale?,
+        val lang2: Locale? = null,
+    ) : DashboardEvent
+    class OpenLesson(lesson: String?, lang: Locale?) : OpenTool(lesson, Tool.Type.LESSON, lang)
+    class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }
 
 @Composable
@@ -121,7 +126,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 onEvent = {
                                     when (it) {
                                         is DashboardLessonsEvent.OpenLesson ->
-                                            onEvent(DashboardEvent.OpenLesson(it.tool, it.lang))
+                                            onEvent(DashboardEvent.OpenLesson(it.lesson, it.lang))
                                     }
                                 },
                             )
@@ -135,7 +140,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                         }
                                         DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                         is DashboardHomeEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                            onEvent(DashboardEvent.OpenTool(it.tool, it.type, it.lang1, it.lang2))
                                         is DashboardHomeEvent.OpenToolDetails ->
                                             onEvent(DashboardEvent.OpenToolDetails(it.tool))
                                     }
@@ -146,8 +151,14 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 onEvent = {
                                     when (it) {
                                         is ToolCardEvent.Click,
-                                        is ToolCardEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                        is ToolCardEvent.OpenTool, -> onEvent(
+                                            DashboardEvent.OpenTool(
+                                                tool = it.tool,
+                                                type = it.toolType,
+                                                lang1 = it.lang1,
+                                                lang2 = it.lang2,
+                                            )
+                                        )
                                         is ToolCardEvent.OpenToolDetails ->
                                             onEvent(DashboardEvent.OpenToolDetails(it.tool))
                                     }

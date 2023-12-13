@@ -84,14 +84,17 @@ private val toolCardInfoLabelColor: Color @Composable get() {
 }
 private val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
-sealed class ToolCardEvent(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) {
-    class Click(
-        tool: Tool?,
-        lang1: Locale? = null,
-        lang2: Locale? = null,
-    ) : ToolCardEvent(tool, lang1, lang2)
-    class OpenTool(tool: Tool?, lang1: Locale? = null, lang2: Locale? = null) : ToolCardEvent(tool, lang1, lang2)
-    class OpenToolDetails(tool: Tool?, val additionalLocale: Locale? = null) : ToolCardEvent(tool, null, null)
+sealed class ToolCardEvent(
+    val tool: String?,
+    val toolType: Tool.Type?,
+    val lang1: Locale? = null,
+    val lang2: Locale? = null
+) {
+    class Click(tool: String?, type: Tool.Type?, lang1: Locale? = null, lang2: Locale? = null) :
+        ToolCardEvent(tool, type, lang1, lang2)
+    class OpenTool(tool: String?, type: Tool.Type?, lang1: Locale?, lang2: Locale? = null) :
+        ToolCardEvent(tool, type, lang1, lang2)
+    class OpenToolDetails(tool: String?, val additionalLocale: Locale? = null) : ToolCardEvent(tool, null)
 }
 
 @Composable
@@ -114,7 +117,7 @@ fun LessonToolCard(
     ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool, translation.value?.languageCode)) },
+            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type, translation.value?.languageCode)) },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
@@ -166,7 +169,8 @@ fun ToolCard(
             onClick = {
                 onEvent(
                     ToolCardEvent.Click(
-                        tool,
+                        tool = tool?.code,
+                        type = tool?.type,
                         lang1 = firstTranslation.value?.languageCode,
                         lang2 = additionalLanguage?.code,
                     )
@@ -257,12 +261,22 @@ fun SquareToolCard(
         {
             when (it) {
                 ToolCard.Event.Click -> onEvent(
-                    ToolCardEvent.Click(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
+                    ToolCardEvent.Click(
+                        tool = tool?.code,
+                        type = tool?.type,
+                        lang1 = firstTranslation.value?.languageCode,
+                        lang2 = secondTranslation?.languageCode
+                    )
                 )
                 ToolCard.Event.OpenTool -> onEvent(
-                    ToolCardEvent.OpenTool(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
+                    ToolCardEvent.OpenTool(
+                        tool = tool?.code,
+                        type = tool?.type,
+                        lang1 = firstTranslation.value?.languageCode,
+                        lang2 = secondTranslation?.languageCode
+                    )
                 )
-                ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool))
+                ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(toolCode))
                 ToolCard.Event.PinTool -> viewModel.pinTool()
                 ToolCard.Event.UnpinTool -> viewModel.unpinTool()
             }
@@ -383,7 +397,7 @@ internal fun VariantToolCard(
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool)) },
+            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type)) },
             modifier = modifier
         ) {
             ToolBanner(

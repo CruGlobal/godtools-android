@@ -96,8 +96,13 @@ internal fun ToolsLayout(
                         is ToolCardEvent.Click,
                         is ToolCardEvent.OpenTool,
                         is ToolCardEvent.OpenToolDetails -> {
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
-                            onEvent(ToolCardEvent.OpenToolDetails(it.tool, viewModel.selectedLocale.value))
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool, SOURCE_ALL_TOOLS)
+                            onEvent(
+                                ToolCardEvent.OpenToolDetails(
+                                    tool = it.tool,
+                                    additionalLocale = viewModel.selectedLocale.value,
+                                )
+                            )
                         }
                     }
                 },
@@ -151,7 +156,7 @@ internal fun ToolSpotlight(
                         is ToolCardEvent.Click,
                         is ToolCardEvent.OpenTool,
                         is ToolCardEvent.OpenToolDetails ->
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_SPOTLIGHT)
+                            viewModel.recordOpenToolDetailsInAnalytics(it.tool, SOURCE_SPOTLIGHT)
                     }
                     onEvent(it)
                 },

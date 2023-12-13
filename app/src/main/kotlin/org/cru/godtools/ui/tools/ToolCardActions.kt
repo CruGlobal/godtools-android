@@ -40,9 +40,14 @@ internal fun ToolCardActions(
             eventSink = {
                 when (it) {
                     ToolCard.Event.OpenTool -> onEvent(
-                        OpenToolEvent(tool, firstTranslation.value?.languageCode, secondTranslation?.languageCode)
+                        OpenToolEvent(
+                            tool = tool?.code,
+                            type = tool?.type,
+                            lang1 = firstTranslation.value?.languageCode,
+                            lang2 = secondTranslation?.languageCode
+                        )
                     )
-                    ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool))
+                    ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool?.code))
                     ToolCard.Event.Click -> TODO()
                     ToolCard.Event.PinTool -> TODO()
                     ToolCard.Event.UnpinTool -> TODO()

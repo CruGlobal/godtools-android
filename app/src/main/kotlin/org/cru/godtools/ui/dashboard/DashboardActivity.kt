@@ -38,9 +38,8 @@ class DashboardActivity : BaseActivity() {
                     onEvent = { e ->
                         when (e) {
                             is DashboardEvent.OpenTool ->
-                                openTool(e.tool, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                            is DashboardEvent.OpenToolDetails ->
-                                e.tool?.code?.let { startToolDetailsActivity(it, e.lang) }
+                                openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
+                            is DashboardEvent.OpenToolDetails -> e.tool?.let { startToolDetailsActivity(it, e.lang) }
                         }
                     },
                 )
@@ -88,12 +87,12 @@ class DashboardActivity : BaseActivity() {
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
 
-    private fun openTool(tool: Tool?, vararg languages: Locale) {
-        val code = tool?.code ?: return
+    private fun openTool(tool: String?, type: Tool.Type?, vararg languages: Locale) {
+        if (tool == null || type == null) return
         if (languages.isEmpty()) return
 
-        languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
-        openToolActivity(code, tool.type, *languages)
+        languages.forEach { manifestManager.preloadLatestPublishedManifest(tool, it) }
+        openToolActivity(tool, type, *languages)
     }
     // endregion ToolsAdapterCallbacks
     // endregion UI
