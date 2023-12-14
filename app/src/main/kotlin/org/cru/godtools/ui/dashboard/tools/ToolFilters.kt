@@ -67,18 +67,43 @@ internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifie
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
-    val categories by viewModel.categories.collectAsState()
+    val filters = ToolsScreen.State.Filters(
+        categories = viewModel.categories.collectAsState().value,
+        selectedCategory = viewModel.selectedCategory.collectAsState().value
+    )
+    val eventSink: (ToolsScreen.Event) -> Unit = remember {
+        {
+            when (it) {
+                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
+                is ToolsScreen.Event.UpdateLanguageQuery -> TODO()
+                is ToolsScreen.Event.UpdateSelectedLanguage -> TODO()
+            }
+        }
+    }
+
+    CategoryFilter(filters = filters, eventSink = eventSink, modifier = modifier)
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun CategoryFilter(
+    filters: ToolsScreen.State.Filters,
+    modifier: Modifier = Modifier,
+    eventSink: (ToolsScreen.Event) -> Unit = {},
+) {
+    val categories by rememberUpdatedState(filters.categories)
+    val selectedCategory by rememberUpdatedState(filters.selectedCategory)
+    val eventSink by rememberUpdatedState(eventSink)
+
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ElevatedButton(
         onClick = { expanded = !expanded },
         modifier = modifier
     ) {
-        val category by viewModel.selectedCategory.collectAsState()
         Text(
-            category?.let { getToolCategoryName(it, LocalContext.current) }
+            selectedCategory?.let { getToolCategoryName(it, LocalContext.current) }
                 ?: stringResource(R.string.dashboard_tools_section_filter_category_any),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -94,7 +119,7 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
                 onClick = {
-                    viewModel.setSelectedCategory(null)
+                    eventSink(ToolsScreen.Event.UpdateSelectedCategory(null))
                     expanded = false
                 }
             )
@@ -102,7 +127,7 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
                 DropdownMenuItem(
                     text = { Text(getToolCategoryName(it, LocalContext.current)) },
                     onClick = {
-                        viewModel.setSelectedCategory(it)
+                        eventSink(ToolsScreen.Event.UpdateSelectedCategory(it))
                         expanded = false
                     }
                 )
@@ -123,6 +148,7 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
             when (it) {
                 is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
                 is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
+                is ToolsScreen.Event.UpdateSelectedCategory -> TODO()
             }
         }
     }

@@ -14,6 +14,8 @@ data object ToolsScreen : Screen {
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         data class Filters(
+            val categories: List<String> = emptyList(),
+            val selectedCategory: String? = null,
             val languages: List<Language> = emptyList(),
             val languageQuery: String = "",
             val selectedLanguage: Language? = null,
@@ -21,6 +23,7 @@ data object ToolsScreen : Screen {
     }
 
     sealed interface Event : CircuitUiEvent {
+        data class UpdateSelectedCategory(val category: String?) : Event
         data class UpdateLanguageQuery(val query: String) : Event
         data class UpdateSelectedLanguage(val locale: Locale?) : Event
     }
