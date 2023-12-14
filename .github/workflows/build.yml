@@ -44,7 +44,7 @@ jobs:
           arguments: :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ktlint-results
           path: "**/build/reports/ktlint/"
@@ -66,7 +66,7 @@ jobs:
           arguments: lint --scan
       - name: Archive lint results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: lint-results
           path: "**/build/reports/lint-results*.*"
@@ -112,7 +112,7 @@ jobs:
           verbose: true
       - name: Archive Unit Test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: unit-test-results-${{ matrix.testShard }}
           path: "**/build/reports/tests/"
