@@ -48,7 +48,33 @@ private val DROPDOWN_MAX_WIDTH = 400.dp
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
 @Composable
-internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) = Column(modifier.fillMaxWidth()) {
+internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
+    val filters = ToolsScreen.State.Filters(
+        categories = viewModel.categories.collectAsState().value,
+        selectedCategory = viewModel.selectedCategory.collectAsState().value,
+        languages = viewModel.languages.collectAsState().value,
+        languageQuery = viewModel.languageQuery.collectAsState().value,
+        selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
+    )
+    val eventSink: (ToolsScreen.Event) -> Unit = remember {
+        {
+            when (it) {
+                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
+                is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
+                is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
+            }
+        }
+    }
+
+    ToolFilters(filters, modifier = modifier, eventSink = eventSink)
+}
+
+@Composable
+internal fun ToolFilters(
+    filters: ToolsScreen.State.Filters,
+    modifier: Modifier = Modifier,
+    eventSink: (ToolsScreen.Event) -> Unit = {},
+) = Column(modifier.fillMaxWidth()) {
     Text(
         stringResource(R.string.dashboard_tools_section_filter_label),
         style = MaterialTheme.typography.titleLarge,
@@ -61,28 +87,9 @@ internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifie
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        CategoryFilter(viewModel, modifier = Modifier.weight(1f))
-        LanguageFilter(viewModel, modifier = Modifier.weight(1f))
+        CategoryFilter(filters, modifier = Modifier.weight(1f), eventSink = eventSink)
+        LanguageFilter(filters, modifier = Modifier.weight(1f), eventSink = eventSink)
     }
-}
-
-@Composable
-private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
-    val filters = ToolsScreen.State.Filters(
-        categories = viewModel.categories.collectAsState().value,
-        selectedCategory = viewModel.selectedCategory.collectAsState().value
-    )
-    val eventSink: (ToolsScreen.Event) -> Unit = remember {
-        {
-            when (it) {
-                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
-                is ToolsScreen.Event.UpdateLanguageQuery -> TODO()
-                is ToolsScreen.Event.UpdateSelectedLanguage -> TODO()
-            }
-        }
-    }
-
-    CategoryFilter(filters = filters, eventSink = eventSink, modifier = modifier)
 }
 
 @Composable
@@ -134,26 +141,6 @@ private fun CategoryFilter(
             }
         }
     }
-}
-
-@Composable
-private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
-    val filters = ToolsScreen.State.Filters(
-        languages = viewModel.languages.collectAsState().value,
-        languageQuery = viewModel.languageQuery.collectAsState().value,
-        selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
-    )
-    val eventSink: (ToolsScreen.Event) -> Unit = remember {
-        {
-            when (it) {
-                is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
-                is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
-                is ToolsScreen.Event.UpdateSelectedCategory -> TODO()
-            }
-        }
-    }
-
-    LanguageFilter(filters = filters, eventSink = eventSink, modifier = modifier)
 }
 
 @Composable
