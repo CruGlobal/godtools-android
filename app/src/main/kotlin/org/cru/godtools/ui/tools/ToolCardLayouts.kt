@@ -111,6 +111,7 @@ fun LessonToolCard(
     viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
+    val state = viewModel.toState()
     val tool by viewModel.tool.collectAsState()
     val translation by viewModel.firstTranslation.collectAsState()
 
@@ -120,14 +121,14 @@ fun LessonToolCard(
             onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type, translation.value?.languageCode)) },
             modifier = modifier.fillMaxWidth()
         ) {
-            ToolBanner(viewModel, modifier = Modifier.aspectRatio(335f / 80f))
+            ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                ToolName(viewModel, minLines = 2, modifier = Modifier.fillMaxWidth())
+                ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
 
                 val appLanguage by viewModel.appLanguage.collectAsState()
                 val appTranslation by viewModel.appTranslation.collectAsState()
@@ -158,9 +159,10 @@ fun ToolCard(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
+    val state = viewModel.toState()
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val downloadProgress by viewModel.downloadProgress.collectAsState()
+    val downloadProgress by rememberUpdatedState(state.downloadProgress)
 
     ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
         ElevatedCard(
@@ -180,7 +182,7 @@ fun ToolCard(
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
                 ToolBanner(
-                    viewModel,
+                    state,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(335f / 87f)
@@ -203,7 +205,7 @@ fun ToolCard(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     ToolName(
-                        viewModel,
+                        state,
                         modifier = Modifier
                             .run { if (additionalLanguage != null) widthIn(max = { it - 70.dp }) else this }
                             .alignByBaseline()
@@ -220,10 +222,7 @@ fun ToolCard(
                         }
                     }
                 }
-                ToolCategory(
-                    viewModel,
-                    modifier = Modifier.fillMaxWidth()
-                )
+                ToolCategory(state, modifier = Modifier.fillMaxWidth())
 
                 if (showActions) {
                     ToolCardActions(
@@ -282,18 +281,9 @@ fun SquareToolCard(
             }
         }
     }
-    val state = ToolCard.State(
-        tool = tool,
-        banner = viewModel.bannerFile.collectAsState().value,
-        translation = firstTranslation.value,
-        secondLanguage = viewModel.secondLanguage.collectAsState().value,
-        secondTranslation = secondTranslation,
-        downloadProgress = viewModel.downloadProgress.collectAsState().value,
-        eventSink = eventSink,
-    )
 
     SquareToolCard(
-        state = state,
+        state = viewModel.toState(eventSink),
         modifier = modifier,
         showCategory = showCategory,
         showSecondLanguage = showSecondLanguage,
@@ -391,6 +381,7 @@ internal fun VariantToolCard(
     modifier: Modifier = Modifier,
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
+    val state = viewModel.toState()
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
 
@@ -401,7 +392,7 @@ internal fun VariantToolCard(
             modifier = modifier
         ) {
             ToolBanner(
-                viewModel,
+                state,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(335f / 87f)
@@ -410,7 +401,7 @@ internal fun VariantToolCard(
                 RadioButton(selected = isSelected, onClick = null)
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
-                    ToolName(viewModel)
+                    ToolName(state)
                     Text(
                         firstTranslation.value.getTagline(tool).orEmpty(),
                         fontFamily = firstTranslation.value?.getFontFamilyOrNull(),
@@ -452,36 +443,12 @@ internal fun VariantToolCard(
 }
 
 @Composable
-private fun ToolBanner(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) =
-    ToolBanner(state = ToolCard.State(banner = viewModel.bannerFile.collectAsState().value), modifier = modifier)
-
-@Composable
 private fun ToolBanner(state: ToolCard.State, modifier: Modifier = Modifier) = AsyncImage(
     model = state.banner,
     contentDescription = null,
     contentScale = ContentScale.Crop,
     modifier = modifier.background(GodToolsTheme.GRAY_E6)
 )
-
-@Composable
-private fun ToolName(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    minLines: Int = 1,
-    maxLines: Int = Int.MAX_VALUE,
-) {
-    val translation by viewModel.firstTranslation.collectAsState()
-
-    ToolName(
-        state = ToolCard.State(
-            tool = viewModel.tool.collectAsState().value,
-            translation = translation.value
-        ),
-        modifier = modifier.invisibleIf { translation.isInitial },
-        minLines = minLines,
-        maxLines = maxLines,
-    )
-}
 
 @Composable
 private fun ToolName(
@@ -498,19 +465,6 @@ private fun ToolName(
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
-    )
-}
-
-@Composable
-private fun ToolCategory(viewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val translation by viewModel.firstTranslation.collectAsState()
-
-    ToolCategory(
-        ToolCard.State(
-            tool = viewModel.tool.collectAsState().value,
-            translation = translation.value,
-        ),
-        modifier = modifier.invisibleIf { translation.isInitial },
     )
 }
 

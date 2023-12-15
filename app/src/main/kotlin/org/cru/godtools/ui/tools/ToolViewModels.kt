@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.tools
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -135,6 +137,17 @@ class ToolViewModels @Inject constructor(
             toolsRepository.unpinTool(code)
             syncService.syncDirtyFavoriteTools()
         }
+
+        @Composable
+        fun toState(eventSink: (ToolCard.Event) -> Unit = {}) = ToolCard.State(
+            tool = tool.collectAsState().value,
+            banner = bannerFile.collectAsState().value,
+            translation = firstTranslation.collectAsState().value.value,
+            secondLanguage = secondLanguage.collectAsState().value,
+            secondTranslation = secondTranslation.collectAsState().value,
+            downloadProgress = downloadProgress.collectAsState().value,
+            eventSink = eventSink,
+        )
     }
 
     private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
