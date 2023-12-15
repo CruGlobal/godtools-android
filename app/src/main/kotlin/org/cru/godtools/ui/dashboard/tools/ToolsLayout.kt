@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,12 +38,10 @@ internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun ToolsLayout(
-    onEvent: (ToolCardEvent) -> Unit,
-    viewModel: ToolsViewModel = viewModel(),
-    toolViewModels: ToolViewModels = viewModel(),
-) {
-    val banner by viewModel.banner.collectAsState()
+internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
+    val viewModel: ToolsViewModel = viewModel()
+    val toolViewModels: ToolViewModels = viewModel()
+
     val spotlightTools by viewModel.spotlightTools.collectAsState()
     val tools by viewModel.tools.collectAsState()
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
@@ -63,6 +62,14 @@ internal fun ToolsLayout(
             }
         }
     }
+
+    val state = ToolsScreen.State(
+        banner = viewModel.banner.collectAsState().value,
+        filters = filters,
+        eventSink = eventSink,
+    )
+
+    val banner by rememberUpdatedState(state.banner)
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
