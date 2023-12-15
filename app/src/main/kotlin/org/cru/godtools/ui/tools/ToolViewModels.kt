@@ -139,11 +139,14 @@ class ToolViewModels @Inject constructor(
         }
 
         @Composable
-        fun toState(eventSink: (ToolCard.Event) -> Unit = {}) = ToolCard.State(
+        fun toState(
+            secondLanguage: Language? = this.secondLanguage.collectAsState().value,
+            eventSink: (ToolCard.Event) -> Unit = {}
+        ) = ToolCard.State(
             tool = tool.collectAsState().value,
             banner = bannerFile.collectAsState().value,
             translation = firstTranslation.collectAsState().value.value,
-            secondLanguage = secondLanguage.collectAsState().value,
+            secondLanguage = secondLanguage,
             secondTranslation = secondTranslation.collectAsState().value,
             downloadProgress = downloadProgress.collectAsState().value,
             eventSink = eventSink,

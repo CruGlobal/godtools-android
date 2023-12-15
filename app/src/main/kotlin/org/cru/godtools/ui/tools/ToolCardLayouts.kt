@@ -149,7 +149,6 @@ fun LessonToolCard(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun ToolCard(
     viewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
@@ -159,25 +158,61 @@ fun ToolCard(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val state = viewModel.toState()
     val tool by viewModel.tool.collectAsState()
     val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val downloadProgress by rememberUpdatedState(state.downloadProgress)
 
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
+    val state = viewModel.toState(secondLanguage = additionalLanguage) {
+        when (it) {
+            ToolCard.Event.Click -> onEvent(
+                ToolCardEvent.Click(
+                    tool = tool?.code,
+                    type = tool?.type,
+                    lang1 = firstTranslation.value?.languageCode,
+                    lang2 = additionalLanguage?.code,
+                )
+            )
+            ToolCard.Event.OpenTool -> onEvent(
+                ToolCardEvent.OpenTool(
+                    tool = tool?.code,
+                    type = tool?.type,
+                    lang1 = firstTranslation.value?.languageCode,
+                    lang2 = additionalLanguage?.code,
+                )
+            )
+            ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool?.code))
+            ToolCard.Event.PinTool -> viewModel.pinTool()
+            ToolCard.Event.UnpinTool -> viewModel.unpinTool()
+        }
+    }
+
+    ToolCard(
+        state = state,
+        modifier = modifier,
+        confirmRemovalFromFavorites = confirmRemovalFromFavorites,
+        showActions = showActions,
+        interactionSource = interactionSource,
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun ToolCard(
+    state: ToolCard.State,
+    modifier: Modifier = Modifier,
+    confirmRemovalFromFavorites: Boolean = false,
+    showActions: Boolean = true,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    val translation by rememberUpdatedState(state.translation)
+    val secondLanguage by rememberUpdatedState(state.secondLanguage)
+    val downloadProgress by rememberUpdatedState(state.downloadProgress)
+    val eventSink by rememberUpdatedState(state.eventSink)
+
+    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = {
-                onEvent(
-                    ToolCardEvent.Click(
-                        tool = tool?.code,
-                        type = tool?.type,
-                        lang1 = firstTranslation.value?.languageCode,
-                        lang2 = additionalLanguage?.code,
-                    )
-                )
-            },
+            onClick = { eventSink(ToolCard.Event.Click) },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -188,7 +223,7 @@ fun ToolCard(
                         .aspectRatio(335f / 87f)
                 )
                 FavoriteAction(
-                    viewModel,
+                    state,
                     confirmRemoval = confirmRemovalFromFavorites,
                     modifier = Modifier.align(Alignment.TopEnd)
                 )
@@ -207,13 +242,13 @@ fun ToolCard(
                     ToolName(
                         state,
                         modifier = Modifier
-                            .run { if (additionalLanguage != null) widthIn(max = { it - 70.dp }) else this }
+                            .run { if (secondLanguage != null) widthIn(max = { it - 70.dp }) else this }
                             .alignByBaseline()
                     )
-                    if (additionalLanguage != null) {
+                    if (secondLanguage != null) {
                         ToolCardInfoContent {
                             AvailableInLanguage(
-                                additionalLanguage,
+                                secondLanguage,
                                 horizontalArrangement = Arrangement.End,
                                 modifier = Modifier
                                     .padding(start = 8.dp)
@@ -226,10 +261,9 @@ fun ToolCard(
 
                 if (showActions) {
                     ToolCardActions(
-                        viewModel,
+                        state,
                         buttonWeightFill = false,
                         buttonModifier = Modifier.widthIn(min = 92.dp),
-                        onEvent = onEvent,
                         modifier = Modifier
                             .padding(top = 4.dp)
                             .align(Alignment.End)
@@ -283,7 +317,7 @@ fun SquareToolCard(
     }
 
     SquareToolCard(
-        state = viewModel.toState(eventSink),
+        state = viewModel.toState(eventSink = eventSink),
         modifier = modifier,
         showCategory = showCategory,
         showSecondLanguage = showSecondLanguage,

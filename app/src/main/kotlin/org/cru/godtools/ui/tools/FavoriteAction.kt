@@ -9,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,33 +23,6 @@ import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.model.getName
-
-@Composable
-internal fun FavoriteAction(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    confirmRemoval: Boolean = true,
-) {
-    val tool by viewModel.tool.collectAsState()
-    val translation by viewModel.firstTranslation.collectAsState()
-    val eventSink: (ToolCard.Event) -> Unit = remember(viewModel) {
-        {
-            when (it) {
-                ToolCard.Event.PinTool -> viewModel.pinTool()
-                ToolCard.Event.UnpinTool -> viewModel.unpinTool()
-                ToolCard.Event.Click -> TODO()
-                ToolCard.Event.OpenTool -> TODO()
-                ToolCard.Event.OpenToolDetails -> TODO()
-            }
-        }
-    }
-
-    FavoriteAction(
-        state = ToolCard.State(tool, translation = translation.value, eventSink = eventSink),
-        modifier = modifier,
-        confirmRemoval = confirmRemoval,
-    )
-}
 
 @Composable
 internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {

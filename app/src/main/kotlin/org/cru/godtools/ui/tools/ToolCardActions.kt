@@ -13,56 +13,12 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
-import org.cru.godtools.ui.tools.ToolCardEvent.OpenTool as OpenToolEvent
-
-@Composable
-internal fun ToolCardActions(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    buttonModifier: Modifier = Modifier,
-    buttonWeightFill: Boolean = true,
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val secondTranslation by viewModel.secondTranslation.collectAsState()
-    val onEvent by rememberUpdatedState(onEvent)
-    val state = remember(viewModel) {
-        ToolCard.State(
-            eventSink = {
-                when (it) {
-                    ToolCard.Event.OpenTool -> onEvent(
-                        OpenToolEvent(
-                            tool = tool?.code,
-                            type = tool?.type,
-                            lang1 = firstTranslation.value?.languageCode,
-                            lang2 = secondTranslation?.languageCode
-                        )
-                    )
-                    ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool?.code))
-                    ToolCard.Event.Click -> TODO()
-                    ToolCard.Event.PinTool -> TODO()
-                    ToolCard.Event.UnpinTool -> TODO()
-                }
-            }
-        )
-    }
-
-    ToolCardActions(
-        state = state,
-        modifier = modifier,
-        buttonModifier = buttonModifier,
-        buttonWeightFill = buttonWeightFill,
-    )
-}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
