@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,23 @@ internal fun ToolsLayout(
     val spotlightTools by viewModel.spotlightTools.collectAsState()
     val tools by viewModel.tools.collectAsState()
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
+
+    val filters = ToolsScreen.State.Filters(
+        categories = viewModel.categories.collectAsState().value,
+        selectedCategory = viewModel.selectedCategory.collectAsState().value,
+        languages = viewModel.languages.collectAsState().value,
+        languageQuery = viewModel.languageQuery.collectAsState().value,
+        selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
+    )
+    val eventSink: (ToolsScreen.Event) -> Unit = remember(onEvent) {
+        {
+            when (it) {
+                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
+                is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
+                is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
+            }
+        }
+    }
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
@@ -79,7 +97,8 @@ internal fun ToolsLayout(
 
         item("tool-filters", "tool-filters") {
             ToolFilters(
-                viewModel = viewModel,
+                filters = filters,
+                eventSink = eventSink,
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(vertical = 16.dp)

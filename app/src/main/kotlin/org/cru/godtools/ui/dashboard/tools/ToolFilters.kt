@@ -21,10 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -46,28 +44,6 @@ private val DROPDOWN_MAX_HEIGHT = 700.dp
 private val DROPDOWN_MAX_WIDTH = 400.dp
 
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
-
-@Composable
-internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
-    val filters = ToolsScreen.State.Filters(
-        categories = viewModel.categories.collectAsState().value,
-        selectedCategory = viewModel.selectedCategory.collectAsState().value,
-        languages = viewModel.languages.collectAsState().value,
-        languageQuery = viewModel.languageQuery.collectAsState().value,
-        selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
-    )
-    val eventSink: (ToolsScreen.Event) -> Unit = remember {
-        {
-            when (it) {
-                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
-                is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
-                is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
-            }
-        }
-    }
-
-    ToolFilters(filters, modifier = modifier, eventSink = eventSink)
-}
 
 @Composable
 internal fun ToolFilters(
