@@ -28,7 +28,6 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.ui.banner.Banners
-import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
@@ -42,7 +41,6 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
     val viewModel: ToolsViewModel = viewModel()
     val toolViewModels: ToolViewModels = viewModel()
 
-    val spotlightTools by viewModel.spotlightTools.collectAsState()
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
 
     val filters = ToolsScreen.State.Filters(
@@ -68,12 +66,14 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
 
     val state = ToolsScreen.State(
         banner = viewModel.banner.collectAsState().value,
+        spotlightTools = viewModel.spotlightTools.collectAsState().value,
         filters = filters,
         tools = viewModel.tools.collectAsState().value,
         eventSink = eventSink,
     )
 
     val banner by rememberUpdatedState(state.banner)
+    val spotlightTools by rememberUpdatedState(state.spotlightTools)
     val tools by rememberUpdatedState(state.tools)
 
     val columnState = rememberLazyListState()
@@ -92,8 +92,8 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
         if (spotlightTools.isNotEmpty()) {
             item("tool-spotlight", "tool-spotlight") {
                 ToolSpotlight(
-                    viewModel,
-                    onEvent = onEvent,
+                    state,
+                    toolViewModels,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(top = 16.dp)
@@ -140,52 +140,50 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
 }
 
 @Composable
-internal fun ToolSpotlight(
-    viewModel: ToolsViewModel,
-    onEvent: (ToolCardEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) = Column(modifier = modifier.fillMaxWidth()) {
-    val spotlightTools by viewModel.spotlightTools.collectAsState()
+private fun ToolSpotlight(state: ToolsScreen.State, toolViewModels: ToolViewModels, modifier: Modifier = Modifier) {
+    val spotlightTools by rememberUpdatedState(state.spotlightTools)
+    val selectedLanguage by rememberUpdatedState(state.filters.selectedLanguage)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
-    Text(
-        stringResource(R.string.dashboard_tools_section_spotlight_label),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    )
-    Text(
-        stringResource(R.string.dashboard_tools_section_spotlight_description),
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier
-            .padding(top = 4.dp, horizontal = 16.dp)
-            .fillMaxWidth()
-    )
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-    ) {
-        items(spotlightTools, key = { it.code.orEmpty() }) {
-            PreloadTool(it)
-
-            SquareToolCard(
-                toolCode = it.code.orEmpty(),
-                showCategory = false,
-                showActions = false,
-                floatParallelLanguageUp = false,
-                confirmRemovalFromFavorites = false,
-                onEvent = {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            stringResource(R.string.dashboard_tools_section_spotlight_label),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+        Text(
+            stringResource(R.string.dashboard_tools_section_spotlight_description),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .padding(top = 4.dp, horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            items(spotlightTools, key = { it.code.orEmpty() }) { tool ->
+                val toolViewModel = toolViewModels[tool.code.orEmpty()]
+                val toolState = toolViewModel.toState(secondLanguage = selectedLanguage) {
                     when (it) {
-                        is ToolCardEvent.Click,
-                        is ToolCardEvent.OpenTool,
-                        is ToolCardEvent.OpenToolDetails ->
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool, SOURCE_SPOTLIGHT)
+                        ToolCard.Event.Click, ToolCard.Event.OpenTool, ToolCard.Event.OpenToolDetails ->
+                            tool.code?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
+                        ToolCard.Event.PinTool -> toolViewModel.pinTool()
+                        ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
                     }
-                    onEvent(it)
-                },
-            )
+                }
+
+                SquareToolCard(
+                    state = toolState,
+                    showCategory = false,
+                    showActions = false,
+                    floatParallelLanguageUp = false,
+                    confirmRemovalFromFavorites = false,
+                )
+            }
         }
     }
 }

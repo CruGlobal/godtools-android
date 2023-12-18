@@ -13,6 +13,7 @@ import org.cru.godtools.ui.banner.BannerType
 data object ToolsScreen : Screen {
     data class State(
         val banner: BannerType? = null,
+        val spotlightTools: List<Tool> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<Tool> = emptyList(),
         val eventSink: (Event) -> Unit,
