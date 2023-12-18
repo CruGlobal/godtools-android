@@ -36,50 +36,55 @@ import org.cru.godtools.ui.tools.ToolViewModels
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
     val viewModel: ToolsViewModel = viewModel()
-    val toolViewModels: ToolViewModels = viewModel()
-
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
-
-    val filters = ToolsScreen.State.Filters(
-        categories = viewModel.categories.collectAsState().value,
-        selectedCategory = viewModel.selectedCategory.collectAsState().value,
-        languages = viewModel.languages.collectAsState().value,
-        languageQuery = viewModel.languageQuery.collectAsState().value,
-        selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
-    )
-    val eventSink: (ToolsScreen.Event) -> Unit = remember(onEvent) {
-        {
-            when (it) {
-                is ToolsScreen.Event.OpenToolDetails -> {
-                    if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
-                    onEvent(ToolCardEvent.OpenToolDetails(it.tool, additionalLocale = selectedLanguage?.code))
-                }
-                is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
-                is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
-                is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
-            }
-        }
-    }
 
     val state = ToolsScreen.State(
         banner = viewModel.banner.collectAsState().value,
         spotlightTools = viewModel.spotlightTools.collectAsState().value,
-        filters = filters,
+        filters = ToolsScreen.State.Filters(
+            categories = viewModel.categories.collectAsState().value,
+            selectedCategory = viewModel.selectedCategory.collectAsState().value,
+            languages = viewModel.languages.collectAsState().value,
+            languageQuery = viewModel.languageQuery.collectAsState().value,
+            selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
+        ),
         tools = viewModel.tools.collectAsState().value,
-        eventSink = eventSink,
+        eventSink = remember(onEvent) {
+            {
+                when (it) {
+                    is ToolsScreen.Event.OpenToolDetails -> {
+                        if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
+                        onEvent(ToolCardEvent.OpenToolDetails(it.tool, additionalLocale = selectedLanguage?.code))
+                    }
+                    is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
+                    is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
+                    is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
+                }
+            }
+        },
     )
+
+    ToolsLayout(state)
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
+    val toolViewModels: ToolViewModels = viewModel()
 
     val banner by rememberUpdatedState(state.banner)
     val spotlightTools by rememberUpdatedState(state.spotlightTools)
+    val filters by rememberUpdatedState(state.filters)
     val tools by rememberUpdatedState(state.tools)
+    val selectedLanguage by rememberUpdatedState(state.filters.selectedLanguage)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState) {
+    LazyColumn(state = columnState, modifier = modifier) {
         item("banners", "banners") {
             Banners(
                 { banner },
