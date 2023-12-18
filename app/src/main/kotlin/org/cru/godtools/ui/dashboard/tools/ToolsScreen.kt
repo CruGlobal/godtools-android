@@ -6,6 +6,7 @@ import com.slack.circuit.runtime.screen.Screen
 import java.util.Locale
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 
 @Parcelize
@@ -13,6 +14,7 @@ data object ToolsScreen : Screen {
     data class State(
         val banner: BannerType? = null,
         val filters: Filters = Filters(),
+        val tools: List<Tool> = emptyList(),
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         data class Filters(
@@ -25,6 +27,7 @@ data object ToolsScreen : Screen {
     }
 
     sealed interface Event : CircuitUiEvent {
+        data class OpenToolDetails(val tool: String, val source: String? = null) : Event
         data class UpdateSelectedCategory(val category: String?) : Event
         data class UpdateLanguageQuery(val query: String) : Event
         data class UpdateSelectedLanguage(val locale: Locale?) : Event

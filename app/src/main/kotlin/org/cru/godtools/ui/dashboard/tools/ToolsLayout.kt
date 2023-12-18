@@ -43,7 +43,6 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
     val toolViewModels: ToolViewModels = viewModel()
 
     val spotlightTools by viewModel.spotlightTools.collectAsState()
-    val tools by viewModel.tools.collectAsState()
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
 
     val filters = ToolsScreen.State.Filters(
@@ -56,6 +55,10 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
     val eventSink: (ToolsScreen.Event) -> Unit = remember(onEvent) {
         {
             when (it) {
+                is ToolsScreen.Event.OpenToolDetails -> {
+                    if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
+                    onEvent(ToolCardEvent.OpenToolDetails(it.tool, additionalLocale = selectedLanguage?.code))
+                }
                 is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
                 is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
                 is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
@@ -66,10 +69,12 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
     val state = ToolsScreen.State(
         banner = viewModel.banner.collectAsState().value,
         filters = filters,
+        tools = viewModel.tools.collectAsState().value,
         eventSink = eventSink,
     )
 
     val banner by rememberUpdatedState(state.banner)
+    val tools by rememberUpdatedState(state.tools)
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
@@ -113,25 +118,19 @@ internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
         }
 
         items(tools, { "tool:${it.code.orEmpty()}" }, { "tool" }) { tool ->
+            val toolViewModel = toolViewModels[tool.code.orEmpty(), tool]
+            val toolState = toolViewModel.toState(secondLanguage = selectedLanguage) {
+                when (it) {
+                    ToolCard.Event.Click, ToolCard.Event.OpenTool, ToolCard.Event.OpenToolDetails ->
+                        tool.code?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+                    ToolCard.Event.PinTool -> toolViewModel.pinTool()
+                    ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
+                }
+            }
+
             ToolCard(
-                toolViewModels[tool.code.orEmpty(), tool],
-                additionalLanguage = selectedLanguage,
+                state = toolState,
                 showActions = false,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.Click,
-                        is ToolCardEvent.OpenTool,
-                        is ToolCardEvent.OpenToolDetails -> {
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool, SOURCE_ALL_TOOLS)
-                            onEvent(
-                                ToolCardEvent.OpenToolDetails(
-                                    tool = it.tool,
-                                    additionalLocale = viewModel.selectedLocale.value,
-                                )
-                            )
-                        }
-                    }
-                },
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(bottom = 16.dp, horizontal = 16.dp)
