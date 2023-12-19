@@ -15,14 +15,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
@@ -30,47 +30,13 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
-internal fun ToolsLayout(onEvent: (ToolCardEvent) -> Unit) {
-    val viewModel: ToolsViewModel = viewModel()
-    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
-
-    val state = ToolsScreen.State(
-        banner = viewModel.banner.collectAsState().value,
-        spotlightTools = viewModel.spotlightTools.collectAsState().value,
-        filters = ToolsScreen.State.Filters(
-            categories = viewModel.categories.collectAsState().value,
-            selectedCategory = viewModel.selectedCategory.collectAsState().value,
-            languages = viewModel.languages.collectAsState().value,
-            languageQuery = viewModel.languageQuery.collectAsState().value,
-            selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
-        ),
-        tools = viewModel.tools.collectAsState().value,
-        eventSink = remember(onEvent) {
-            {
-                when (it) {
-                    is ToolsScreen.Event.OpenToolDetails -> {
-                        if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
-                        onEvent(ToolCardEvent.OpenToolDetails(it.tool, additionalLocale = selectedLanguage?.code))
-                    }
-                    is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
-                    is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
-                    is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
-                }
-            }
-        },
-    )
-
-    ToolsLayout(state)
-}
-
-@Composable
 @OptIn(ExperimentalFoundationApi::class)
+@CircuitInject(ToolsScreen::class, SingletonComponent::class)
 internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
     val toolViewModels: ToolViewModels = viewModel()
 

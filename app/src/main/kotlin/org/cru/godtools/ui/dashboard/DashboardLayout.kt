@@ -35,13 +35,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.screen.Screen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
@@ -59,8 +61,9 @@ import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
 import org.cru.godtools.ui.dashboard.home.HomeContent
 import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
-import org.cru.godtools.ui.dashboard.tools.ToolsLayout
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal sealed interface DashboardEvent {
@@ -165,17 +168,29 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 },
                             )
 
-                            Page.ALL_TOOLS -> ToolsLayout(
-                                onEvent = { e ->
-                                    when (e) {
-                                        is ToolCardEvent.Click -> onEvent(DashboardEvent.OpenToolDetails(e.tool))
-                                        is ToolCardEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(e.tool, e.additionalLocale))
-                                        is ToolCardEvent.OpenTool ->
-                                            if (BuildConfig.DEBUG) error("opening a tool from All Tools is unsupported")
+                            Page.ALL_TOOLS -> {
+                                val navigator = remember(onEvent) {
+                                    object : Navigator {
+                                        override fun goTo(screen: Screen) {
+                                            when (screen) {
+                                                is ToolDetailsScreen -> onEvent(
+                                                    DashboardEvent.OpenToolDetails(
+                                                        screen.initialTool,
+                                                        screen.secondLanguage,
+                                                    )
+                                                )
+                                            }
+                                        }
+
+                                        override fun pop() = TODO("Not yet implemented")
+                                        override fun resetRoot(newRoot: Screen) = TODO("Not yet implemented")
                                     }
                                 }
-                            )
+                                CircuitContent(
+                                    screen = ToolsScreen,
+                                    navigator = navigator,
+                                )
+                            }
                         }
                     }
                 }

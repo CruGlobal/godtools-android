@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.slack.circuit.foundation.Circuit
+import com.slack.circuit.foundation.CircuitCompositionLocals
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -27,22 +29,28 @@ class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
+    @Inject
+    lateinit var circuit: Circuit
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
         setContent {
-            GodToolsTheme {
-                DashboardLayout(
-                    onEvent = { e ->
-                        when (e) {
-                            is DashboardEvent.OpenTool ->
-                                openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                            is DashboardEvent.OpenToolDetails -> e.tool?.let { startToolDetailsActivity(it, e.lang) }
-                        }
-                    },
-                )
+            CircuitCompositionLocals(circuit) {
+                GodToolsTheme {
+                    DashboardLayout(
+                        onEvent = { e ->
+                            when (e) {
+                                is DashboardEvent.OpenTool ->
+                                    openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
+                                is DashboardEvent.OpenToolDetails ->
+                                    e.tool?.let { startToolDetailsActivity(it, e.lang) }
+                            }
+                        },
+                    )
+                }
             }
         }
     }
