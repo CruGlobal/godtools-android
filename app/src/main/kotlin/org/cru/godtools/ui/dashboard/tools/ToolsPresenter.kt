@@ -13,27 +13,32 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import java.util.Locale
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 
 class ToolsPresenter @AssistedInject constructor(
     private val settings: Settings,
+    private val languagesRepository: LanguagesRepository,
     @Assisted private val navigator: Navigator,
 ) : Presenter<ToolsScreen.State> {
     @Composable
     override fun present(): ToolsScreen.State {
         val viewModel: ToolsViewModel = viewModel()
 
-        val selectedLanguage by viewModel.selectedLanguage.collectAsState()
+        val selectedLocale by viewModel.selectedLocale.collectAsState()
+        val selectedLanguage = rememberLanguage(selectedLocale)
 
         val eventSink: (ToolsScreen.Event) -> Unit = remember {
             {
                 when (it) {
                     is ToolsScreen.Event.OpenToolDetails -> {
                         if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
-                        navigator.goTo(ToolDetailsScreen(it.tool, selectedLanguage?.code))
+                        navigator.goTo(ToolDetailsScreen(it.tool, selectedLocale))
                     }
                     is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
                     is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
@@ -50,7 +55,7 @@ class ToolsPresenter @AssistedInject constructor(
                 selectedCategory = viewModel.selectedCategory.collectAsState().value,
                 languages = viewModel.languages.collectAsState().value,
                 languageQuery = viewModel.languageQuery.collectAsState().value,
-                selectedLanguage = viewModel.selectedLanguage.collectAsState().value,
+                selectedLanguage = selectedLanguage,
             ),
             tools = viewModel.tools.collectAsState().value,
             eventSink = eventSink,
@@ -62,6 +67,12 @@ class ToolsPresenter @AssistedInject constructor(
     internal fun rememberBanner() = remember {
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
             .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
+    }.collectAsState(null).value
+
+    @Composable
+    @VisibleForTesting
+    internal fun rememberLanguage(locale: Locale?) = remember(locale) {
+        locale?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null)
     }.collectAsState(null).value
 
     @AssistedFactory
