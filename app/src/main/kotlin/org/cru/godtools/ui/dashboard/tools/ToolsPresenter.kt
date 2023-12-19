@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,9 +13,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.map
+import org.cru.godtools.base.Settings
+import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 
 class ToolsPresenter @AssistedInject constructor(
+    private val settings: Settings,
     @Assisted private val navigator: Navigator,
 ) : Presenter<ToolsScreen.State> {
     @Composable
@@ -38,7 +43,7 @@ class ToolsPresenter @AssistedInject constructor(
         }
 
         return ToolsScreen.State(
-            banner = viewModel.banner.collectAsState().value,
+            banner = rememberBanner(),
             spotlightTools = viewModel.spotlightTools.collectAsState().value,
             filters = ToolsScreen.State.Filters(
                 categories = viewModel.categories.collectAsState().value,
@@ -51,6 +56,13 @@ class ToolsPresenter @AssistedInject constructor(
             eventSink = eventSink,
         )
     }
+
+    @Composable
+    @VisibleForTesting
+    internal fun rememberBanner() = remember {
+        settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
+            .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
+    }.collectAsState(null).value
 
     @AssistedFactory
     @CircuitInject(ToolsScreen::class, SingletonComponent::class)

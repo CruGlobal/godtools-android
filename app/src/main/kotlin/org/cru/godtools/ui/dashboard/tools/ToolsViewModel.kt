@@ -26,7 +26,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.banner.BannerType
 import org.greenrobot.eventbus.EventBus
 
 private const val KEY_SELECTED_CATEGORY = "selectedCategory"
@@ -43,10 +42,6 @@ class ToolsViewModel @Inject constructor(
     languagesRepository: LanguagesRepository,
     private val savedState: SavedStateHandle,
 ) : ViewModel() {
-    val banner = settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
-        .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-
     val spotlightTools = toolsRepository.getNormalToolsFlow()
         .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
