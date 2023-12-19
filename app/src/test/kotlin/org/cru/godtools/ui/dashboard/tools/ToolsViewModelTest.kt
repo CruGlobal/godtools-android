@@ -47,7 +47,6 @@ class ToolsViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
         viewModel = ToolsViewModel(
             context = mockk(),
-            eventBus = mockk(),
             settings = settings,
             languagesRepository = mockk(),
             toolsRepository = toolsRepository,

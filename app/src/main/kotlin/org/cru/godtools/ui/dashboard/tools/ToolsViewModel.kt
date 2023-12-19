@@ -17,15 +17,12 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
-import org.greenrobot.eventbus.EventBus
 
 private const val KEY_SELECTED_CATEGORY = "selectedCategory"
 private const val KEY_SELECTED_LANGUAGE = "selectedLanguage"
@@ -35,7 +32,6 @@ private const val KEY_LANGUAGE_QUERY = "languageQuery"
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsViewModel @Inject constructor(
     @ApplicationContext context: Context,
-    private val eventBus: EventBus,
     settings: Settings,
     toolsRepository: ToolsRepository,
     languagesRepository: LanguagesRepository,
@@ -88,10 +84,4 @@ class ToolsViewModel @Inject constructor(
         .combine(selectedCategory) { tools, category -> tools.filter { category == null || it.category == category } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
     // endregion Tools
-
-    // region Analytics
-    fun recordOpenToolDetailsInAnalytics(tool: String?, source: String) {
-        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool, source))
-    }
-    // endregion Analytics
 }

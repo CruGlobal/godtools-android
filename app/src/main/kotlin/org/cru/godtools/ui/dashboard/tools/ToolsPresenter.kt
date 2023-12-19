@@ -16,12 +16,16 @@ import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
+import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject constructor(
+    private val eventBus: EventBus,
     private val settings: Settings,
     private val languagesRepository: LanguagesRepository,
     @Assisted private val navigator: Navigator,
@@ -37,7 +41,9 @@ class ToolsPresenter @AssistedInject constructor(
             {
                 when (it) {
                     is ToolsScreen.Event.OpenToolDetails -> {
-                        if (it.source != null) viewModel.recordOpenToolDetailsInAnalytics(it.tool, it.source)
+                        if (it.source != null) {
+                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, it.tool, it.source))
+                        }
                         navigator.goTo(ToolDetailsScreen(it.tool, selectedLocale))
                     }
                     is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)

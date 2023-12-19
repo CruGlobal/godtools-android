@@ -38,6 +38,7 @@ class ToolsPresenterTest {
     }
 
     private val presenter = ToolsPresenter(
+        eventBus = mockk(),
         settings = settings,
         languagesRepository = languagesRepository,
         navigator = navigator,
