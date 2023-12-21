@@ -22,7 +22,6 @@ import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
-import org.cru.godtools.model.Tool
 
 private const val KEY_SELECTED_CATEGORY = "selectedCategory"
 private const val KEY_SELECTED_LANGUAGE = "selectedLanguage"
@@ -37,10 +36,6 @@ class ToolsViewModel @Inject constructor(
     languagesRepository: LanguagesRepository,
     private val savedState: SavedStateHandle,
 ) : ViewModel() {
-    val spotlightTools = toolsRepository.getNormalToolsFlow()
-        .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
     // region Tools
     val selectedCategory = savedState.getStateFlow<String?>(KEY_SELECTED_CATEGORY, null)
     fun setSelectedCategory(category: String?) = savedState.set(KEY_SELECTED_CATEGORY, category)

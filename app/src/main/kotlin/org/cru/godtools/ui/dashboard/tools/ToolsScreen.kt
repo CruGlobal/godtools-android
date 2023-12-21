@@ -8,12 +8,13 @@ import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
 data object ToolsScreen : Screen {
     data class State(
         val banner: BannerType? = null,
-        val spotlightTools: List<Tool> = emptyList(),
+        val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<Tool> = emptyList(),
         val eventSink: (Event) -> Unit,

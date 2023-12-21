@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -18,22 +19,31 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
+import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
+import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject constructor(
     private val eventBus: EventBus,
     private val settings: Settings,
+    private val toolCardPresenter: ToolCardPresenter,
     private val languagesRepository: LanguagesRepository,
+    private val toolsRepository: ToolsRepository,
     @Assisted private val navigator: Navigator,
 ) : Presenter<ToolsScreen.State> {
     @Composable
     override fun present(): ToolsScreen.State {
         val viewModel: ToolsViewModel = viewModel()
 
+        // selected language
         val selectedLocale by viewModel.selectedLocale.collectAsState()
         val selectedLanguage = rememberLanguage(selectedLocale)
 
@@ -55,7 +65,7 @@ class ToolsPresenter @AssistedInject constructor(
 
         return ToolsScreen.State(
             banner = rememberBanner(),
-            spotlightTools = viewModel.spotlightTools.collectAsState().value,
+            spotlightTools = rememberSpotlightTools(secondLanguage = selectedLanguage, eventSink = eventSink),
             filters = ToolsScreen.State.Filters(
                 categories = viewModel.categories.collectAsState().value,
                 selectedCategory = viewModel.selectedCategory.collectAsState().value,
@@ -80,6 +90,41 @@ class ToolsPresenter @AssistedInject constructor(
     internal fun rememberLanguage(locale: Locale?) = remember(locale) {
         locale?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null)
     }.collectAsState(null).value
+
+    @Composable
+    @VisibleForTesting
+    internal fun rememberSpotlightTools(
+        secondLanguage: Language?,
+        eventSink: (ToolsScreen.Event) -> Unit,
+    ): List<ToolCard.State> {
+        val tools by remember {
+            toolsRepository.getNormalToolsFlow()
+                .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
+        }.collectAsState(emptyList())
+        val eventSink by rememberUpdatedState(eventSink)
+
+        return tools.map { tool ->
+            val toolCode by rememberUpdatedState(tool.code)
+            val toolEventSink: (ToolCard.Event) -> Unit = remember {
+                {
+                    when (it) {
+                        ToolCard.Event.Click,
+                        ToolCard.Event.OpenTool,
+                        ToolCard.Event.OpenToolDetails ->
+                            toolCode?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
+                        ToolCard.Event.PinTool,
+                        ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
+                    }
+                }
+            }
+
+            toolCardPresenter.present(
+                tool = tool,
+                secondLanguage = secondLanguage,
+                eventSink = toolEventSink,
+            )
+        }
+    }
 
     @AssistedFactory
     @CircuitInject(ToolsScreen::class, SingletonComponent::class)

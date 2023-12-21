@@ -26,7 +26,6 @@ import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
@@ -63,8 +62,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
         if (spotlightTools.isNotEmpty()) {
             item("tool-spotlight", "tool-spotlight") {
                 ToolSpotlight(
-                    state,
-                    toolViewModels,
+                    spotlightTools,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(top = 16.dp)
@@ -111,11 +109,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
 }
 
 @Composable
-private fun ToolSpotlight(state: ToolsScreen.State, toolViewModels: ToolViewModels, modifier: Modifier = Modifier) {
-    val spotlightTools by rememberUpdatedState(state.spotlightTools)
-    val selectedLanguage by rememberUpdatedState(state.filters.selectedLanguage)
-    val eventSink by rememberUpdatedState(state.eventSink)
-
+private fun ToolSpotlight(tools: List<ToolCard.State>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             stringResource(R.string.dashboard_tools_section_spotlight_label),
@@ -136,20 +130,11 @@ private fun ToolSpotlight(state: ToolsScreen.State, toolViewModels: ToolViewMode
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(vertical = 8.dp)
         ) {
-            items(spotlightTools, key = { it.code.orEmpty() }) { tool ->
-                val toolViewModel = toolViewModels[tool.code.orEmpty()]
-                val toolState = toolViewModel.toState(secondLanguage = selectedLanguage) {
-                    when (it) {
-                        ToolCard.Event.Click, ToolCard.Event.OpenTool, ToolCard.Event.OpenToolDetails ->
-                            tool.code?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
-                        ToolCard.Event.PinTool -> toolViewModel.pinTool()
-                        ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
-                    }
-                }
-
+            items(tools, key = { it.tool?.code.orEmpty() }) { tool ->
                 SquareToolCard(
-                    state = toolState,
+                    state = tool,
                     showCategory = false,
+                    showSecondLanguage = true,
                     showActions = false,
                     floatParallelLanguageUp = false,
                     confirmRemovalFromFavorites = false,

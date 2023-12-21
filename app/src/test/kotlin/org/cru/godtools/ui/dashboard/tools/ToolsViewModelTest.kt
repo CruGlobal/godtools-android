@@ -59,43 +59,6 @@ class ToolsViewModelTest {
         Dispatchers.resetMain()
     }
 
-    // region Property spotlightTools
-    @Test
-    fun `Property spotlightTools`() = testScope.runTest {
-        viewModel.spotlightTools.test {
-            assertThat(awaitItem(), empty())
-
-            val normal = randomTool("normal", isHidden = false, isSpotlight = false)
-            val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
-            toolsFlow.value = listOf(normal, spotlight)
-            assertEquals(listOf(spotlight), awaitItem())
-        }
-    }
-
-    @Test
-    fun `Property spotlightTools - Don't show hidden tools`() = testScope.runTest {
-        viewModel.spotlightTools.test {
-            assertThat(awaitItem(), empty())
-
-            val hidden = randomTool("normal", isHidden = true, isSpotlight = true)
-            val spotlight = randomTool("spotlight", isHidden = false, isSpotlight = true)
-            toolsFlow.value = listOf(hidden, spotlight)
-            assertEquals(listOf(spotlight), awaitItem())
-        }
-    }
-
-    @Test
-    fun `Property spotlightTools - Sorted by default order`() = testScope.runTest {
-        viewModel.spotlightTools.test {
-            assertThat(awaitItem(), empty())
-
-            val tools = List(10) { randomTool("tool$it", Tool.Type.TRACT, isHidden = false, isSpotlight = true) }
-            toolsFlow.value = tools
-            assertEquals(tools.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER), awaitItem())
-        }
-    }
-    // endregion Property spotlightTools
-
     // region Property filteredTools
     @Test
     fun `Property filteredTools - return only default variants`() = testScope.runTest {
