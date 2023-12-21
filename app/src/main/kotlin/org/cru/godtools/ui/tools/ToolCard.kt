@@ -11,6 +11,7 @@ import org.cru.godtools.model.Translation
 object ToolCard {
     data class State(
         val tool: Tool? = null,
+        val isLoaded: Boolean = true,
         val banner: File? = null,
         val translation: Translation? = null,
         val secondLanguage: Language? = null,
