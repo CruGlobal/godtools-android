@@ -3,9 +3,11 @@ package org.cru.godtools.ui.tools
 import android.app.Application
 import androidx.compose.runtime.collectAsState
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.slack.circuit.test.TestEventSink
 import com.slack.circuit.test.presenterTestOf
 import io.mockk.Called
 import io.mockk.coEvery
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyAll
@@ -24,6 +26,7 @@ import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
@@ -54,16 +57,19 @@ class ToolCardPresenterTest {
         every { appLanguageFlow } returns this@ToolCardPresenterTest.appLanguageFlow
         every { appLanguage } returns this@ToolCardPresenterTest.appLanguageFlow.value
     }
+    private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true)
     private val translationsRepository: TranslationsRepository = mockk {
         every { findLatestTranslationFlow(TOOL, any()) } returns flowOf(null)
         every { findLatestTranslationFlow(TOOL, Locale.ENGLISH) } returns enTranslationFlow
         every { findLatestTranslationFlow(TOOL, Locale.FRENCH) } returns frTranslationFlow
     }
+    private val events = TestEventSink<ToolCard.Event>()
 
     private val presenter = ToolCardPresenter(
         fileSystem = fileSystem,
         settings = settings,
         attachmentsRepository = attachmentsRepository,
+        toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
     )
 
@@ -256,4 +262,71 @@ class ToolCardPresenterTest {
         }
     }
     // endregion ToolCard.State.secondTranslation
+
+    // region ToolCard.Event.Click
+    @Test
+    fun `ToolCardEvent - Click`() = runTest {
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
+        ) {
+            expectMostRecentItem().eventSink(ToolCard.Event.Click)
+        }
+
+        events.assertEvent(ToolCard.Event.Click)
+    }
+    // endregion ToolCard.Event.Click
+
+    // region ToolCard.Event.OpenTool
+    @Test
+    fun `ToolCardEvent - OpenTool`() = runTest {
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
+        ) {
+            expectMostRecentItem().eventSink(ToolCard.Event.OpenTool)
+        }
+
+        events.assertEvent(ToolCard.Event.OpenTool)
+    }
+    // endregion ToolCard.Event.OpenTool
+
+    // region ToolCard.Event.OpenToolDetails
+    @Test
+    fun `ToolCardEvent - OpenToolDetails`() = runTest {
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
+        ) {
+            expectMostRecentItem().eventSink(ToolCard.Event.OpenToolDetails)
+        }
+
+        events.assertEvent(ToolCard.Event.OpenToolDetails)
+    }
+    // endregion ToolCard.Event.OpenToolDetails
+
+    // region ToolCard.Event.PinTool
+    @Test
+    fun `ToolCardEvent - PinTool`() = runTest {
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
+        ) {
+            expectMostRecentItem().eventSink(ToolCard.Event.PinTool)
+        }
+
+        coVerifyAll { toolsRepository.pinTool(TOOL) }
+        events.assertNoEvents()
+    }
+    // endregion ToolCard.Event.PinTool
+
+    // region ToolCard.Event.UnpinTool
+    @Test
+    fun `ToolCardEvent - UnpinTool`() = runTest {
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
+        ) {
+            expectMostRecentItem().eventSink(ToolCard.Event.UnpinTool)
+        }
+
+        coVerifyAll { toolsRepository.unpinTool(TOOL) }
+        events.assertNoEvents()
+    }
+    // endregion ToolCard.Event.UnpinTool
 }

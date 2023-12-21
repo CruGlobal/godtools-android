@@ -4,16 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -23,6 +27,7 @@ class ToolCardPresenter @Inject constructor(
     private val fileSystem: ToolFileSystem,
     private val settings: Settings,
     private val attachmentsRepository: AttachmentsRepository,
+    private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
 ) {
     @Composable
@@ -32,6 +37,7 @@ class ToolCardPresenter @Inject constructor(
         eventSink: (ToolCard.Event) -> Unit = {},
     ): ToolCard.State {
         val toolCode = tool.code
+        val coroutineScope = rememberCoroutineScope()
 
         // Tool Card Banner
         val bannerId = tool.bannerId
@@ -61,6 +67,19 @@ class ToolCardPresenter @Inject constructor(
             translationsRepository.findLatestTranslationFlow(toolCode, secondLocale)
         }.collectAsState(null)
 
+        // eventSink
+        val interceptingEventSink: (ToolCard.Event) -> Unit = remember(eventSink) {
+            {
+                when (it) {
+                    ToolCard.Event.PinTool ->
+                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.pinTool(toolCode) } }
+                    ToolCard.Event.UnpinTool ->
+                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(toolCode) } }
+                    else -> eventSink(it)
+                }
+            }
+        }
+
         return ToolCard.State(
             tool = tool,
             isLoaded = !translation.isInitial,
@@ -71,7 +90,7 @@ class ToolCardPresenter @Inject constructor(
                 translation.value?.languageCode -> null
                 else -> secondTranslation
             },
-            eventSink = eventSink,
+            eventSink = interceptingEventSink,
         )
     }
 }
