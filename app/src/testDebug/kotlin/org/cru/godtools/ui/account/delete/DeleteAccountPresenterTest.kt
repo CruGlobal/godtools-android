@@ -9,10 +9,12 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
 import org.cru.godtools.ui.account.delete.DeleteAccountScreen.State
@@ -30,6 +32,9 @@ class DeleteAccountPresenterTest {
     private val navigator = FakeNavigator()
 
     private val presenter = DeleteAccountPresenter(navigator, accountManager)
+
+    @AfterTest
+    fun cleanup() = clearAndroidUiDispatcher()
 
     @Test
     fun `Delete Account - succeeds`() = runTest {
