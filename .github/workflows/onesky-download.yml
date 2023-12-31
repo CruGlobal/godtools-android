@@ -32,7 +32,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_IAM_ONESKY_ROLE_ARN }}
           aws-region: us-east-1
       - name: Import OneSky Keys
-        uses: dkershner6/aws-ssm-getparameters-action@v1
+        uses: dkershner6/aws-ssm-getparameters-action@v2
         with:
           parameterPairs: |
             /shared/onesky/PUBLIC_KEY = ORG_GRADLE_PROJECT_ONESKY_API_KEY,
