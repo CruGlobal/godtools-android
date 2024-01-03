@@ -58,7 +58,7 @@ internal fun AppLanguageLayout(
     onEvent: (AppLanguageEvent) -> Unit = {},
 ) {
     val languages by viewModel.languages.collectAsState(emptyList())
-    var confirmLanguage by rememberSaveable { mutableStateOf<Locale?>(null) }
+    var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
 
     Scaffold(
         topBar = {
