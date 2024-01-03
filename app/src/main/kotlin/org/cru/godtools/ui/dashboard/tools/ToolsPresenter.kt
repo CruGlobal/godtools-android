@@ -1,8 +1,10 @@
 package org.cru.godtools.ui.dashboard.tools
 
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -13,9 +15,13 @@ import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -24,6 +30,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -32,6 +39,8 @@ import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject constructor(
+    @ApplicationContext
+    private val context: Context,
     private val eventBus: EventBus,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
@@ -43,9 +52,13 @@ class ToolsPresenter @AssistedInject constructor(
     override fun present(): ToolsScreen.State {
         val viewModel: ToolsViewModel = viewModel()
 
+        // selected category
+        val selectedCategory by viewModel.selectedCategory.collectAsState()
+
         // selected language
         val selectedLocale by viewModel.selectedLocale.collectAsState()
         val selectedLanguage = rememberLanguage(selectedLocale)
+        val languageQuery by viewModel.languageQuery.collectAsState()
 
         val eventSink: (ToolsScreen.Event) -> Unit = remember {
             {
@@ -68,9 +81,9 @@ class ToolsPresenter @AssistedInject constructor(
             spotlightTools = rememberSpotlightTools(secondLanguage = selectedLanguage, eventSink = eventSink),
             filters = ToolsScreen.State.Filters(
                 categories = viewModel.categories.collectAsState().value,
-                selectedCategory = viewModel.selectedCategory.collectAsState().value,
-                languages = viewModel.languages.collectAsState().value,
-                languageQuery = viewModel.languageQuery.collectAsState().value,
+                selectedCategory = selectedCategory,
+                languages = rememberFilterLanguages(selectedCategory, languageQuery),
+                languageQuery = languageQuery,
                 selectedLanguage = selectedLanguage,
             ),
             tools = viewModel.tools.collectAsState().value,
@@ -84,6 +97,27 @@ class ToolsPresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
             .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
     }.collectAsState(null).value
+
+    @Composable
+    @VisibleForTesting
+    internal fun rememberFilterLanguages(selectedCategory: String?, query: String): List<Language> {
+        val appLanguage by settings.appLanguageFlow.collectAsState(settings.appLanguage)
+
+        val rawLanguages by remember(context, selectedCategory) {
+            combine(
+                when (selectedCategory) {
+                    null -> languagesRepository.getLanguagesFlow()
+                    else -> languagesRepository.getLanguagesFlowForToolCategory(selectedCategory)
+                },
+                settings.appLanguageFlow,
+            ) { langs, appLang -> langs.sortedWith(Language.displayNameComparator(context, appLang)) }
+                .flowOn(Dispatchers.Default)
+        }.collectAsState(emptyList())
+
+        return remember(context, query) {
+            derivedStateOf { rawLanguages.filterByDisplayAndNativeName(query, context, appLanguage) }
+        }.value
+    }
 
     @Composable
     @VisibleForTesting

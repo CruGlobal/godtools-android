@@ -1,27 +1,19 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
-import org.cru.godtools.base.Settings
-import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.model.Language
-import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 
 private const val KEY_SELECTED_CATEGORY = "selectedCategory"
 private const val KEY_SELECTED_LANGUAGE = "selectedLanguage"
@@ -30,10 +22,7 @@ private const val KEY_LANGUAGE_QUERY = "languageQuery"
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsViewModel @Inject constructor(
-    @ApplicationContext context: Context,
-    settings: Settings,
     toolsRepository: ToolsRepository,
-    languagesRepository: LanguagesRepository,
     private val savedState: SavedStateHandle,
 ) : ViewModel() {
     // region Tools
@@ -59,20 +48,6 @@ class ToolsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val categories = toolsForLocale.mapLatest { it.mapNotNull { it.category }.distinct() }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    val languages = selectedCategory
-        .flatMapLatest {
-            when {
-                it != null -> languagesRepository.getLanguagesFlowForToolCategory(it)
-                else -> languagesRepository.getLanguagesFlow()
-            }
-        }
-        .combine(settings.appLanguageFlow) { langs, appLang ->
-            langs.sortedWith(Language.displayNameComparator(context, appLang)) to appLang
-        }
-        .combine(languageQuery) { (langs, appLang), q -> langs.filterByDisplayAndNativeName(q, context, appLang) }
-        .flowOn(Dispatchers.Default)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val tools = toolsForLocale

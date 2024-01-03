@@ -4,18 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
-import java.util.Locale
 import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
@@ -30,10 +27,6 @@ class ToolsViewModelTest {
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
     private val metaToolsFlow = MutableStateFlow(emptyList<Tool>())
 
-    private val settings: Settings = mockk {
-        every { appLanguageFlow } returns flowOf(Locale.ENGLISH)
-        every { isFeatureDiscoveredFlow(any()) } returns flowOf(true)
-    }
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
@@ -46,9 +39,6 @@ class ToolsViewModelTest {
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
         viewModel = ToolsViewModel(
-            context = mockk(),
-            settings = settings,
-            languagesRepository = mockk(),
             toolsRepository = toolsRepository,
             savedState = SavedStateHandle(),
         )

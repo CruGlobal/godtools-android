@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.presenterTestOf
@@ -10,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -32,14 +34,20 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class ToolsPresenterTest {
+    private val appLanguage = MutableStateFlow(Locale.ENGLISH)
     private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
+    private val languagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
 
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
+        every { getLanguagesFlow() } returns languagesFlow
+        every { getLanguagesFlowForToolCategory(any()) } returns languagesFlow
     }
     private val navigator = FakeNavigator()
     private val settings: Settings = mockk {
+        every { appLanguage } returns this@ToolsPresenterTest.appLanguage.value
+        every { appLanguageFlow } returns this@ToolsPresenterTest.appLanguage
         every { isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE) } returns isFavoritesFeatureDiscovered
     }
     private val toolsRepository: ToolsRepository = mockk {
@@ -55,14 +63,20 @@ class ToolsPresenterTest {
         translationsRepository = mockk(relaxed = true),
     )
 
-    private val presenter = ToolsPresenter(
-        eventBus = mockk(),
-        settings = settings,
-        toolCardPresenter = toolCardPresenter,
-        languagesRepository = languagesRepository,
-        toolsRepository = toolsRepository,
-        navigator = navigator,
-    )
+    private lateinit var presenter: ToolsPresenter
+
+    @BeforeTest
+    fun setup() {
+        presenter = ToolsPresenter(
+            context = ApplicationProvider.getApplicationContext(),
+            eventBus = mockk(),
+            settings = settings,
+            toolCardPresenter = toolCardPresenter,
+            languagesRepository = languagesRepository,
+            toolsRepository = toolsRepository,
+            navigator = navigator,
+        )
+    }
 
     @AfterTest
     fun cleanup() = clearAndroidUiDispatcher()
@@ -143,6 +157,58 @@ class ToolsPresenterTest {
         }
     }
     // endregion State.spotlightTools
+
+    // region State.filters.languages
+    @Test
+    fun `State - filters - languages - no category`() = runTest {
+        val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        languages = presenter.rememberFilterLanguages(null, ""),
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            awaitItem()
+
+            languagesFlow.emit(languages)
+            assertEquals(languages, awaitItem().filters.languages)
+        }
+
+        verifyAll {
+            languagesRepository.getLanguagesFlow()
+        }
+    }
+
+    @Test
+    fun `State - filters - languages - for category`() = runTest {
+        val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        languages = presenter.rememberFilterLanguages("gospel", ""),
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            awaitItem()
+
+            languagesFlow.emit(languages)
+            assertEquals(languages, awaitItem().filters.languages)
+        }
+
+        verifyAll {
+            languagesRepository.getLanguagesFlowForToolCategory("gospel")
+        }
+    }
+    // endregion State.filters.languages
 
     // region State.filters.selectedLanguage
     @Test
