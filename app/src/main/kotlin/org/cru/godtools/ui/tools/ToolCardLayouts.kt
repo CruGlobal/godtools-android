@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -56,6 +57,8 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 import org.cru.godtools.model.getTagline
+
+internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
 
 private val toolViewModels: ToolViewModels @Composable get() = viewModel()
 
@@ -514,7 +517,7 @@ private fun ToolCategory(state: ToolCard.State, modifier: Modifier = Modifier) {
         category,
         style = toolCategoryStyle,
         maxLines = 1,
-        modifier = modifier
+        modifier = modifier.testTag(TEST_TAG_TOOL_CATEGORY)
     )
 }
 

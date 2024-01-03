@@ -17,12 +17,15 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.model.getName
+
+internal const val TEST_TAG_FAVORITE_ACTION = "favorite_action"
 
 @Composable
 internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {
@@ -42,7 +45,7 @@ internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier
         },
         shape = CircleShape,
         shadowElevation = 6.dp,
-        modifier = modifier
+        modifier = modifier.testTag(TEST_TAG_FAVORITE_ACTION)
     ) {
         Icon(
             painter = painterResource(
