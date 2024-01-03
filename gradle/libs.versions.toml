@@ -94,7 +94,7 @@ facebook-login = { module = "com.facebook.android:facebook-login", version.ref =
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
-facebook-soloader = "com.facebook.soloader:soloader:0.10.5"
+facebook-soloader = "com.facebook.soloader:soloader:0.11.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:21.2.0"
