@@ -25,7 +25,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override fun getAllToolsFlow() = dao.getToolsFlow().map { it.map { it.toModel() } }
     override fun getToolsFlowByType(types: Collection<Tool.Type>) =
         dao.getToolsByTypeFlow(types).map { it.map { it.toModel() } }
-    override fun getToolsFlowForLanguage(locale: Locale) =
+    override fun getNormalToolsFlowByLanguage(locale: Locale) =
         dao.getToolsFlowByTypeAndLanguage(Tool.Type.NORMAL_TYPES, locale).map { it.map { it.toModel() } }
     override fun getDownloadedToolsFlowByTypesAndLanguage(types: Collection<Tool.Type>, locale: Locale) =
         dao.getDownloadedToolsFlowByTypeAndLanguage(types, locale).map { it.map { it.toModel() } }

@@ -29,7 +29,7 @@ class LanguageViewModels @Inject constructor(
         val code = language.code
         val language = MutableStateFlow(language)
 
-        val numberOfTools = toolsRepository.getToolsFlowForLanguage(code)
+        val numberOfTools = toolsRepository.getNormalToolsFlowByLanguage(code)
             .map { it.size }
             .flowOn(Dispatchers.Default)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
