@@ -9,6 +9,11 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.model.Base.Companion.INVALID_ID
 import org.cru.godtools.model.Tool.Companion.ATTR_IS_FAVORITE
+import org.cru.godtools.model.Tool.Companion.CATEGORY_ARTICLES
+import org.cru.godtools.model.Tool.Companion.CATEGORY_CONVERSATION_STARTERS
+import org.cru.godtools.model.Tool.Companion.CATEGORY_GOSPEL
+import org.cru.godtools.model.Tool.Companion.CATEGORY_GROWTH
+import org.cru.godtools.model.Tool.Companion.CATEGORY_TRAINING
 
 private const val JSON_TYPE = "resource-type"
 private const val JSON_TYPE_TRACT = "tract"
@@ -109,6 +114,12 @@ class Tool(
             JSON_HIDDEN,
             JSON_SPOTLIGHT
         )
+
+        const val CATEGORY_GOSPEL = "gospel"
+        const val CATEGORY_ARTICLES = "articles"
+        const val CATEGORY_CONVERSATION_STARTERS = "conversation_starter"
+        const val CATEGORY_GROWTH = "growth"
+        const val CATEGORY_TRAINING = "training"
 
         val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
         val COMPARATOR_FAVORITE_ORDER = compareBy<Tool> { it.order }.then(COMPARATOR_DEFAULT_ORDER)
@@ -217,6 +228,14 @@ fun randomTool(
     code: String = UUID.randomUUID().toString(),
     type: Tool.Type = Tool.Type.entries.random(),
     name: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    category: String? = setOf(
+        null,
+        CATEGORY_GOSPEL,
+        CATEGORY_ARTICLES,
+        CATEGORY_CONVERSATION_STARTERS,
+        CATEGORY_GROWTH,
+        CATEGORY_TRAINING,
+    ).random(),
     description: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     isFavorite: Boolean = Random.nextBoolean(),
     isHidden: Boolean = Random.nextBoolean(),
@@ -229,7 +248,7 @@ fun randomTool(
     code = code,
     type = type,
     name = name,
-    category = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    category = category,
     description = description,
     bannerId = Random.nextLong().takeIf { Random.nextBoolean() },
     detailsBannerId = Random.nextLong().takeIf { Random.nextBoolean() },
