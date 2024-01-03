@@ -34,11 +34,11 @@ fun getToolCategoryName(category: String?, context: Context, locale: Locale? = n
     category?.let { c -> context.localizeIfPossible(locale).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
 private fun Context.getToolCategoryStringRes(category: String) = when (category.lowercase(Locale.ROOT)) {
-    "gospel" -> getString(R.string.tool_category_gospel)
-    "articles" -> getString(R.string.tool_category_articles)
-    "conversation_starter" -> getString(R.string.tool_category_conversation_starter)
-    "growth" -> getString(R.string.tool_category_growth)
-    "training" -> getString(R.string.tool_category_training)
+    Tool.CATEGORY_GOSPEL -> getString(R.string.tool_category_gospel)
+    Tool.CATEGORY_ARTICLES -> getString(R.string.tool_category_articles)
+    Tool.CATEGORY_CONVERSATION_STARTERS -> getString(R.string.tool_category_conversation_starter)
+    Tool.CATEGORY_GROWTH -> getString(R.string.tool_category_growth)
+    Tool.CATEGORY_TRAINING -> getString(R.string.tool_category_training)
     else -> {
         val e = Resources.NotFoundException("tool_category_$category was not found")
         when {
