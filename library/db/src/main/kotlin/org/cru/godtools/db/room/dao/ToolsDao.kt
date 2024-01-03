@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
 import androidx.room.Update
 import androidx.room.Upsert
 import java.util.Locale
@@ -19,6 +20,7 @@ internal interface ToolsDao {
     @Query("SELECT * FROM tools WHERE code = :code")
     suspend fun findTool(code: String): ToolEntity?
     @Query("SELECT * FROM tools WHERE code = :code")
+    @RewriteQueriesToDropUnusedColumns
     suspend fun findToolFavorite(code: String): ToolFavorite?
     @Query("SELECT * FROM tools WHERE apiId = :apiId")
     fun findToolByApiIdBlocking(apiId: Long): ToolEntity?
@@ -47,6 +49,7 @@ internal interface ToolsDao {
     )
     fun getDownloadedToolsFlowByTypeAndLanguage(types: Collection<Tool.Type>, locale: Locale): Flow<List<ToolEntity>>
     @Query("SELECT * FROM tools")
+    @RewriteQueriesToDropUnusedColumns
     suspend fun getToolFavorites(): List<ToolFavorite>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
