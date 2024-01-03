@@ -127,15 +127,15 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getNormalToolsFlow()
 
-    // region getToolsFlowForLanguage()
+    // region getNormalToolsFlowByLanguage()
     @Test
-    fun `getToolsFlowForLanguage()`() = testScope.runTest {
+    fun `getNormalToolsFlowByLanguage()`() = testScope.runTest {
         val tool1 = randomTool("tool1", Tool.Type.TRACT)
         val tool2 = randomTool("tool2", Tool.Type.TRACT)
         repository.storeInitialTools(listOf(tool1, tool2))
         languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
 
-        repository.getToolsFlowForLanguage(Locale.ENGLISH).test {
+        repository.getNormalToolsFlowByLanguage(Locale.ENGLISH).test {
             assertTrue(awaitItem().isEmpty())
 
             translationsRepository.storeTranslationFromSync(randomTranslation("tool1", Locale.ENGLISH))
@@ -148,7 +148,7 @@ abstract class ToolsRepositoryIT {
             assertEquals(setOf(tool1, tool2), awaitItem().toSet())
         }
     }
-    // endregion getToolsFlowForLanguage()
+    // endregion getNormalToolsFlowByLanguage()
 
     // region getDownloadedToolsFlowByTypesAndLanguage()
     @Test

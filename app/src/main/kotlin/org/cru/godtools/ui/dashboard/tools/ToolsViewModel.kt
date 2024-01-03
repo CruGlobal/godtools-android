@@ -66,7 +66,7 @@ class ToolsViewModel @Inject constructor(
 
     private val toolsForLocale = selectedLocale
         .flatMapLatest {
-            if (it != null) toolsRepository.getToolsFlowForLanguage(it) else toolsRepository.getNormalToolsFlow()
+            if (it != null) toolsRepository.getNormalToolsFlowByLanguage(it) else toolsRepository.getNormalToolsFlow()
         }
         .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
         .combine(
