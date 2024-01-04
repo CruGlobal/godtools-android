@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.app.Application
+import androidx.compose.runtime.collectAsState
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.FakeNavigator
@@ -398,4 +399,49 @@ class ToolsPresenterTest {
         verifyAll { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
     }
     // endregion State.filters.selectedLanguage
+
+    // region State.tools
+    @Test
+    fun `State - tools - return only default variants`() = runTest {
+        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "variant2")
+        val variant1 = Tool("variant1", metatoolCode = "meta")
+        val variant2 = Tool("variant2", metatoolCode = "meta")
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    tools = presenter.rememberFilteredToolsFlow().collectAsState(emptyList()).value,
+                    eventSink = {},
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().tools)
+
+            metatoolsFlow.emit(listOf(meta))
+            toolsFlow.emit(listOf(variant1, variant2))
+            assertEquals(listOf(variant2), awaitItem().tools)
+        }
+    }
+
+    @Test
+    fun `State - tools - Don't return hidden tools`() = runTest {
+        val hidden = randomTool("hidden", isHidden = true, metatoolCode = null)
+        val visible = randomTool("visible", isHidden = false, metatoolCode = null)
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    tools = presenter.rememberFilteredToolsFlow().collectAsState(emptyList()).value,
+                    eventSink = {},
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().tools)
+
+            metatoolsFlow.emit(emptyList())
+            toolsFlow.emit(listOf(hidden, visible))
+            assertEquals(listOf(visible), awaitItem().tools)
+        }
+    }
+    // endregion State.tools
 }

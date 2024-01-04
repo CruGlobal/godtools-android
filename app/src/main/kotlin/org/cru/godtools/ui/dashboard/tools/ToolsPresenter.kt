@@ -77,17 +77,20 @@ class ToolsPresenter @AssistedInject constructor(
             }
         }
 
+        val filters = ToolsScreen.State.Filters(
+            categories = rememberFilterCategories(selectedLocale),
+            selectedCategory = selectedCategory,
+            languages = rememberFilterLanguages(selectedCategory, languageQuery),
+            languageQuery = languageQuery,
+            selectedLanguage = selectedLanguage,
+        )
+
         return ToolsScreen.State(
             banner = rememberBanner(),
             spotlightTools = rememberSpotlightTools(secondLanguage = selectedLanguage, eventSink = eventSink),
-            filters = ToolsScreen.State.Filters(
-                categories = rememberFilterCategories(selectedLocale),
-                selectedCategory = selectedCategory,
-                languages = rememberFilterLanguages(selectedCategory, languageQuery),
-                languageQuery = languageQuery,
-                selectedLanguage = selectedLanguage,
-            ),
-            tools = viewModel.tools.collectAsState().value,
+            filters = filters,
+            tools = rememberFilteredToolsFlow(filters.selectedCategory, filters.selectedLanguage?.code)
+                .collectAsState(emptyList()).value,
             eventSink = eventSink,
         )
     }
@@ -172,19 +175,21 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberFilteredToolsFlow(language: Locale? = null): Flow<List<Tool>> {
+    @VisibleForTesting
+    internal fun rememberFilteredToolsFlow(category: String? = null, language: Locale? = null): Flow<List<Tool>> {
         val defaultVariantsFlow = remember {
             toolsRepository.getMetaToolsFlow()
                 .map { it.associateBy({ it.code }, { it.defaultVariantCode }) }
         }
 
-        return remember(language) {
+        return remember(category, language) {
             when (language) {
                 null -> toolsRepository.getNormalToolsFlow()
                 else -> toolsRepository.getNormalToolsFlowByLanguage(language)
             }.combine(defaultVariantsFlow) { tools, defaultVariants ->
                 tools
                     .filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
+                    .filter { category == null || it.category == category }
                     .filterNot { it.isHidden }
                     .sortedBy { it.defaultOrder }
             }
