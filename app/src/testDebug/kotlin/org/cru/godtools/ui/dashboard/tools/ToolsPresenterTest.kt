@@ -36,6 +36,7 @@ import org.robolectric.annotation.Config
 class ToolsPresenterTest {
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
     private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
+    private val metatoolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
     private val languagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
 
@@ -52,6 +53,7 @@ class ToolsPresenterTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
+        every { getMetaToolsFlow() } returns metatoolsFlow
     }
 
     // TODO: figure out how to mock ToolCardPresenter
@@ -157,6 +159,134 @@ class ToolsPresenterTest {
         }
     }
     // endregion State.spotlightTools
+
+    // region State.filters.categories
+    @Test
+    fun `State - filters - categories - no language`() = runTest {
+        val tools = listOf(
+            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false, defaultOrder = 0),
+            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = false, defaultOrder = 1),
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        categories = presenter.rememberFilterCategories(null)
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().filters.categories)
+
+            metatoolsFlow.emit(emptyList())
+            toolsFlow.emit(tools)
+            assertEquals(listOf(Tool.CATEGORY_GOSPEL, Tool.CATEGORY_ARTICLES), awaitItem().filters.categories)
+        }
+    }
+
+    @Test
+    fun `State - filters - categories - distinct categories`() = runTest {
+        val tools = listOf(
+            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
+            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        categories = presenter.rememberFilterCategories(null)
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().filters.categories)
+
+            metatoolsFlow.emit(emptyList())
+            toolsFlow.emit(tools)
+            assertEquals(listOf(Tool.CATEGORY_GOSPEL), awaitItem().filters.categories)
+        }
+    }
+
+    @Test
+    fun `State - filters - categories - ordered by tool default order`() = runTest {
+        val tools = listOf(
+            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false, defaultOrder = 1),
+            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = false, defaultOrder = 0),
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        categories = presenter.rememberFilterCategories(null)
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().filters.categories)
+
+            metatoolsFlow.emit(emptyList())
+            toolsFlow.emit(tools)
+            assertEquals(listOf(Tool.CATEGORY_ARTICLES, Tool.CATEGORY_GOSPEL), awaitItem().filters.categories)
+        }
+    }
+
+    @Test
+    fun `State - filters - categories - exclude non-default variants`() = runTest {
+        val meta = randomTool("meta", defaultVariantCode = "tool")
+        val tools = listOf(
+            randomTool("tool", category = Tool.CATEGORY_GOSPEL, metatoolCode = "meta", isHidden = false),
+            randomTool("other", category = Tool.CATEGORY_ARTICLES, metatoolCode = "meta", isHidden = false),
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        categories = presenter.rememberFilterCategories(null)
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().filters.categories)
+
+            metatoolsFlow.emit(listOf(meta))
+            toolsFlow.emit(tools)
+            assertEquals(listOf(Tool.CATEGORY_GOSPEL), awaitItem().filters.categories)
+        }
+    }
+
+    @Test
+    fun `State - filters - categories - exclude hidden tools`() = runTest {
+        val tools = listOf(
+            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
+            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = true),
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                ToolsScreen.State(
+                    filters = ToolsScreen.State.Filters(
+                        categories = presenter.rememberFilterCategories(null)
+                    ),
+                    eventSink = {}
+                )
+            }
+        ) {
+            assertEquals(emptyList(), awaitItem().filters.categories)
+
+            metatoolsFlow.emit(emptyList())
+            toolsFlow.emit(tools)
+            assertEquals(listOf(Tool.CATEGORY_GOSPEL), awaitItem().filters.categories)
+        }
+    }
+    // endregion State.filters.categories
 
     // region State.filters.languages
     @Test

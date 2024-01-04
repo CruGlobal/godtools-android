@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import org.cru.godtools.db.repository.ToolsRepository
 
@@ -45,9 +44,6 @@ class ToolsViewModel @Inject constructor(
         ) { tools, defaultVariants ->
             tools.filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
-
-    val categories = toolsForLocale.mapLatest { it.mapNotNull { it.category }.distinct() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     val tools = toolsForLocale

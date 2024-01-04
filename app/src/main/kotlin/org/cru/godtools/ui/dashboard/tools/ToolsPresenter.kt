@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -80,7 +81,7 @@ class ToolsPresenter @AssistedInject constructor(
             banner = rememberBanner(),
             spotlightTools = rememberSpotlightTools(secondLanguage = selectedLanguage, eventSink = eventSink),
             filters = ToolsScreen.State.Filters(
-                categories = viewModel.categories.collectAsState().value,
+                categories = rememberFilterCategories(selectedLocale),
                 selectedCategory = selectedCategory,
                 languages = rememberFilterLanguages(selectedCategory, languageQuery),
                 languageQuery = languageQuery,
@@ -97,6 +98,16 @@ class ToolsPresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
             .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
     }.collectAsState(null).value
+
+    @Composable
+    @VisibleForTesting
+    internal fun rememberFilterCategories(selectedLanguage: Locale?): List<String> {
+        val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
+
+        return remember(filteredToolsFlow) {
+            filteredToolsFlow.map { it.mapNotNull { it.category }.distinct() }
+        }.collectAsState(emptyList()).value
+    }
 
     @Composable
     @VisibleForTesting
@@ -157,6 +168,26 @@ class ToolsPresenter @AssistedInject constructor(
                 secondLanguage = secondLanguage,
                 eventSink = toolEventSink,
             )
+        }
+    }
+
+    @Composable
+    private fun rememberFilteredToolsFlow(language: Locale? = null): Flow<List<Tool>> {
+        val defaultVariantsFlow = remember {
+            toolsRepository.getMetaToolsFlow()
+                .map { it.associateBy({ it.code }, { it.defaultVariantCode }) }
+        }
+
+        return remember(language) {
+            when (language) {
+                null -> toolsRepository.getNormalToolsFlow()
+                else -> toolsRepository.getNormalToolsFlowByLanguage(language)
+            }.combine(defaultVariantsFlow) { tools, defaultVariants ->
+                tools
+                    .filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
+                    .filterNot { it.isHidden }
+                    .sortedBy { it.defaultOrder }
+            }
         }
     }
 
