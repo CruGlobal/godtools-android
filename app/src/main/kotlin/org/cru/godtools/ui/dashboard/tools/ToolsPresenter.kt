@@ -6,9 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -18,14 +19,12 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -54,15 +53,13 @@ class ToolsPresenter @AssistedInject constructor(
 ) : Presenter<ToolsScreen.State> {
     @Composable
     override fun present(): ToolsScreen.State {
-        val viewModel: ToolsViewModel = viewModel()
-
         // selected category
-        val selectedCategory by viewModel.selectedCategory.collectAsState()
+        var selectedCategory: String? by remember { mutableStateOf(null) }
 
         // selected language
-        val selectedLocale by viewModel.selectedLocale.collectAsState()
+        var selectedLocale: Locale? by remember { mutableStateOf(null) }
         val selectedLanguage = rememberLanguage(selectedLocale)
-        val languageQuery by viewModel.languageQuery.collectAsState()
+        var languageQuery by remember { mutableStateOf("") }
 
         val eventSink: (ToolsScreen.Event) -> Unit = remember {
             {
@@ -73,9 +70,9 @@ class ToolsPresenter @AssistedInject constructor(
                         }
                         navigator.goTo(ToolDetailsScreen(it.tool, selectedLocale))
                     }
-                    is ToolsScreen.Event.UpdateSelectedCategory -> viewModel.setSelectedCategory(it.category)
-                    is ToolsScreen.Event.UpdateLanguageQuery -> viewModel.setLanguageQuery(it.query)
-                    is ToolsScreen.Event.UpdateSelectedLanguage -> viewModel.setSelectedLocale(it.locale)
+                    is ToolsScreen.Event.UpdateSelectedCategory -> selectedCategory = it.category
+                    is ToolsScreen.Event.UpdateLanguageQuery -> languageQuery = it.query
+                    is ToolsScreen.Event.UpdateSelectedLanguage -> selectedLocale = it.locale
                 }
             }
         }
@@ -99,15 +96,13 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    @VisibleForTesting
-    internal fun rememberBanner() = remember {
+    private fun rememberBanner() = remember {
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
             .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
     }.collectAsState(null).value
 
     @Composable
-    @VisibleForTesting
-    internal fun rememberFilterCategories(selectedLanguage: Locale?): List<String> {
+    private fun rememberFilterCategories(selectedLanguage: Locale?): List<String> {
         val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
 
         return remember(filteredToolsFlow) {
@@ -116,8 +111,7 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    @VisibleForTesting
-    internal fun rememberFilterLanguages(selectedCategory: String?, query: String): List<Language> {
+    private fun rememberFilterLanguages(selectedCategory: String?, query: String): List<Language> {
         val appLanguage by settings.appLanguageFlow.collectAsState(settings.appLanguage)
 
         val rawLanguages by remember(context, selectedCategory) {
@@ -128,7 +122,6 @@ class ToolsPresenter @AssistedInject constructor(
                 },
                 settings.appLanguageFlow,
             ) { langs, appLang -> langs.sortedWith(Language.displayNameComparator(context, appLang)) }
-                .flowOn(Dispatchers.Default)
         }.collectAsState(emptyList())
 
         return remember(context, query) {
@@ -143,8 +136,7 @@ class ToolsPresenter @AssistedInject constructor(
     }.collectAsState(null).value
 
     @Composable
-    @VisibleForTesting
-    internal fun rememberSpotlightTools(
+    private fun rememberSpotlightTools(
         secondLanguage: Language?,
         eventSink: (ToolsScreen.Event) -> Unit,
     ): List<ToolCard.State> {
@@ -178,9 +170,8 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    @VisibleForTesting
     @OptIn(ExperimentalCoroutinesApi::class)
-    internal fun rememberFilteredToolsFlow(category: String? = null, language: Locale? = null): Flow<List<Tool>> {
+    private fun rememberFilteredToolsFlow(category: String? = null, language: Locale? = null): Flow<List<Tool>> {
         val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
         val languageFlow = remember { MutableStateFlow(language) }.apply { value = language }
 
