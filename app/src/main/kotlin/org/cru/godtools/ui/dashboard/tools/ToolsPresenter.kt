@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -111,22 +110,27 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberFilterLanguages(selectedCategory: String?, query: String): List<Language> {
-        val appLanguage by settings.appLanguageFlow.collectAsState(settings.appLanguage)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun rememberFilterLanguages(category: String?, query: String): List<Language> {
+        val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
+        val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
 
-        val rawLanguages by remember(context, selectedCategory) {
-            combine(
-                when (selectedCategory) {
-                    null -> languagesRepository.getLanguagesFlow()
-                    else -> languagesRepository.getLanguagesFlowForToolCategory(selectedCategory)
-                },
-                settings.appLanguageFlow,
-            ) { langs, appLang -> langs.sortedWith(Language.displayNameComparator(context, appLang)) }
-        }.collectAsState(emptyList())
+        return remember {
+            val languagesFlow = categoryFlow
+                .flatMapLatest {
+                    when (it) {
+                        null -> languagesRepository.getLanguagesFlow()
+                        else -> languagesRepository.getLanguagesFlowForToolCategory(it)
+                    }
+                }
+                .combine(settings.appLanguageFlow) { languages, appLang ->
+                    languages.sortedWith(Language.displayNameComparator(context, appLang))
+                }
 
-        return remember(context, query) {
-            derivedStateOf { rawLanguages.filterByDisplayAndNativeName(query, context, appLanguage) }
-        }.value
+            combine(languagesFlow, settings.appLanguageFlow, queryFlow) { languages, appLang, query ->
+                languages.filterByDisplayAndNativeName(query, context, appLang)
+            }
+        }.collectAsState(emptyList()).value
     }
 
     @Composable
