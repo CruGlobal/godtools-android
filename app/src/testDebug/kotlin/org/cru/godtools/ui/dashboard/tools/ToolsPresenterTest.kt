@@ -252,7 +252,7 @@ class ToolsPresenterTest {
         presenterTestOf(
             presentFunction = {
                 ToolsScreen.State(
-                    filters = ToolsScreen.State.Filters(
+                    filters = ToolsScreen.Filters(
                         selectedLanguage = presenter.rememberLanguage(null)
                     ),
                     eventSink = {}
@@ -270,7 +270,7 @@ class ToolsPresenterTest {
         presenterTestOf(
             presentFunction = {
                 ToolsScreen.State(
-                    filters = ToolsScreen.State.Filters(
+                    filters = ToolsScreen.Filters(
                         selectedLanguage = presenter.rememberLanguage(Locale.ENGLISH)
                     ),
                     eventSink = {}
@@ -291,7 +291,7 @@ class ToolsPresenterTest {
         presenterTestOf(
             presentFunction = {
                 ToolsScreen.State(
-                    filters = ToolsScreen.State.Filters(
+                    filters = ToolsScreen.Filters(
                         selectedLanguage = presenter.rememberLanguage(Locale.ENGLISH)
                     ),
                     eventSink = {}

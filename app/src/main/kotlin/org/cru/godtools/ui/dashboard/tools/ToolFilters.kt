@@ -47,7 +47,7 @@ internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
 @Composable
 internal fun ToolFilters(
-    filters: ToolsScreen.State.Filters,
+    filters: ToolsScreen.Filters,
     modifier: Modifier = Modifier,
     eventSink: (ToolsScreen.Event) -> Unit = {},
 ) = Column(modifier.fillMaxWidth()) {
@@ -71,7 +71,7 @@ internal fun ToolFilters(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun CategoryFilter(
-    filters: ToolsScreen.State.Filters,
+    filters: ToolsScreen.Filters,
     modifier: Modifier = Modifier,
     eventSink: (ToolsScreen.Event) -> Unit = {},
 ) {
@@ -123,7 +123,7 @@ private fun CategoryFilter(
 @VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 internal fun LanguageFilter(
-    filters: ToolsScreen.State.Filters,
+    filters: ToolsScreen.Filters,
     modifier: Modifier = Modifier,
     eventSink: (ToolsScreen.Event) -> Unit = {},
 ) {

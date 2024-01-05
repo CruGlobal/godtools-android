@@ -76,7 +76,7 @@ class ToolsPresenter @AssistedInject constructor(
             }
         }
 
-        val filters = ToolsScreen.State.Filters(
+        val filters = ToolsScreen.Filters(
             categories = rememberFilterCategories(selectedLocale),
             selectedCategory = selectedCategory,
             languages = rememberFilterLanguages(selectedCategory, languageQuery),

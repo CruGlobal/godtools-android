@@ -28,7 +28,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Shows selectedLanguage`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(
+                filters = ToolsScreen.Filters(
                     selectedLanguage = Language(Locale.ENGLISH)
                 ),
                 eventSink = events,
@@ -43,7 +43,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Shows Any Language when no language is specified`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(selectedLanguage = null),
+                filters = ToolsScreen.Filters(selectedLanguage = null),
                 eventSink = events,
             )
         }
@@ -56,7 +56,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Dropdown Menu - Show when button is clicked`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(),
+                filters = ToolsScreen.Filters(),
                 eventSink = events,
             )
         }
@@ -74,7 +74,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Dropdown Menu - Show languages`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(
+                filters = ToolsScreen.Filters(
                     languages = listOf(
                         Language(Locale.FRENCH),
                         Language(Locale.GERMAN)
@@ -95,7 +95,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Dropdown Menu - Select "Any language" option`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(
+                filters = ToolsScreen.Filters(
                     selectedLanguage = Language(Locale.FRENCH),
                     languages = listOf(
                         Language(Locale.FRENCH),
@@ -119,7 +119,7 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Dropdown Menu - Select a language`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.State.Filters(
+                filters = ToolsScreen.Filters(
                     languages = listOf(
                         Language(Locale.FRENCH),
                         Language(Locale.GERMAN)
