@@ -69,9 +69,16 @@ class ToolsPresenter @AssistedInject constructor(
                         }
                         navigator.goTo(ToolDetailsScreen(it.tool, selectedLocale))
                     }
-                    is ToolsScreen.Event.UpdateSelectedCategory -> selectedCategory = it.category
-                    is ToolsScreen.Event.UpdateLanguageQuery -> languageQuery = it.query
-                    is ToolsScreen.Event.UpdateSelectedLanguage -> selectedLocale = it.locale
+                }
+            }
+        }
+
+        val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
+            {
+                when (it) {
+                    is ToolsScreen.FiltersEvent.SelectCategory -> selectedCategory = it.category
+                    is ToolsScreen.FiltersEvent.SelectLanguage -> selectedLocale = it.locale
+                    is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
                 }
             }
         }
@@ -82,6 +89,7 @@ class ToolsPresenter @AssistedInject constructor(
             languages = rememberFilterLanguages(selectedCategory, languageQuery),
             languageQuery = languageQuery,
             selectedLanguage = selectedLanguage,
+            eventSink = filtersEventSink,
         )
 
         return ToolsScreen.State(

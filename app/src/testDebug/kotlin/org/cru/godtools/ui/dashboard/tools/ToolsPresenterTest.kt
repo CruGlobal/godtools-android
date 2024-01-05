@@ -238,7 +238,7 @@ class ToolsPresenterTest {
         val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
 
         presenter.test {
-            awaitItem().eventSink(ToolsScreen.Event.UpdateSelectedCategory(Tool.CATEGORY_GOSPEL))
+            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
 
             gospelLanguagesFlow.emit(languages)
             assertEquals(languages, expectMostRecentItem().filters.languages)

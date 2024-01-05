@@ -63,21 +63,17 @@ internal fun ToolFilters(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        CategoryFilter(filters, modifier = Modifier.weight(1f), eventSink = eventSink)
-        LanguageFilter(filters, modifier = Modifier.weight(1f), eventSink = eventSink)
+        CategoryFilter(filters, modifier = Modifier.weight(1f))
+        LanguageFilter(filters, modifier = Modifier.weight(1f))
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun CategoryFilter(
-    filters: ToolsScreen.Filters,
-    modifier: Modifier = Modifier,
-    eventSink: (ToolsScreen.Event) -> Unit = {},
-) {
+private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
     val categories by rememberUpdatedState(filters.categories)
     val selectedCategory by rememberUpdatedState(filters.selectedCategory)
-    val eventSink by rememberUpdatedState(eventSink)
+    val eventSink by rememberUpdatedState(filters.eventSink)
 
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -102,7 +98,7 @@ private fun CategoryFilter(
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
                 onClick = {
-                    eventSink(ToolsScreen.Event.UpdateSelectedCategory(null))
+                    eventSink(ToolsScreen.FiltersEvent.SelectCategory(null))
                     expanded = false
                 }
             )
@@ -110,7 +106,7 @@ private fun CategoryFilter(
                 DropdownMenuItem(
                     text = { Text(getToolCategoryName(it, LocalContext.current)) },
                     onClick = {
-                        eventSink(ToolsScreen.Event.UpdateSelectedCategory(it))
+                        eventSink(ToolsScreen.FiltersEvent.SelectCategory(it))
                         expanded = false
                     }
                 )
@@ -122,22 +118,18 @@ private fun CategoryFilter(
 @Composable
 @VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-internal fun LanguageFilter(
-    filters: ToolsScreen.Filters,
-    modifier: Modifier = Modifier,
-    eventSink: (ToolsScreen.Event) -> Unit = {},
-) {
+internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val languages by rememberUpdatedState(filters.languages)
     val query by rememberUpdatedState(filters.languageQuery)
     val selectedLanguage by rememberUpdatedState(filters.selectedLanguage)
-    val eventSink by rememberUpdatedState(eventSink)
+    val eventSink by rememberUpdatedState(filters.eventSink)
 
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ElevatedButton(
         onClick = {
-            if (!expanded) eventSink(ToolsScreen.Event.UpdateLanguageQuery(""))
+            if (!expanded) eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
             expanded = !expanded
         },
         modifier = modifier
@@ -161,8 +153,8 @@ internal fun LanguageFilter(
             item {
                 SearchBar(
                     query,
-                    onQueryChange = { eventSink(ToolsScreen.Event.UpdateLanguageQuery(it)) },
-                    onSearch = { eventSink(ToolsScreen.Event.UpdateLanguageQuery(it)) },
+                    onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                    onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
                     active = false,
                     onActiveChange = {},
                     colors = GodToolsTheme.searchBarColors,
@@ -174,7 +166,7 @@ internal fun LanguageFilter(
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.dashboard_tools_section_filter_language_any)) },
                     onClick = {
-                        eventSink(ToolsScreen.Event.UpdateSelectedLanguage(null))
+                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null))
                         expanded = false
                     }
                 )
@@ -184,7 +176,7 @@ internal fun LanguageFilter(
                 DropdownMenuItem(
                     text = { LanguageName(it) },
                     onClick = {
-                        eventSink(ToolsScreen.Event.UpdateSelectedLanguage(it.code))
+                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code))
                         expanded = false
                     },
                     modifier = Modifier.animateItemPlacement()

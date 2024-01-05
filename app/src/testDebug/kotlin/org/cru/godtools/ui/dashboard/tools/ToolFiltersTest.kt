@@ -21,17 +21,17 @@ class ToolFiltersTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<ToolsScreen.Event>()
+    private val events = TestEventSink<ToolsScreen.FiltersEvent>()
 
     // region: LanguagesFilter
     @Test
     fun `LanguagesFilter() - Shows selectedLanguage`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.Filters(
-                    selectedLanguage = Language(Locale.ENGLISH)
+                ToolsScreen.Filters(
+                    selectedLanguage = Language(Locale.ENGLISH),
+                    eventSink = events,
                 ),
-                eventSink = events,
             )
         }
 
@@ -43,8 +43,10 @@ class ToolFiltersTest {
     fun `LanguagesFilter() - Shows Any Language when no language is specified`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.Filters(selectedLanguage = null),
-                eventSink = events,
+                ToolsScreen.Filters(
+                    selectedLanguage = null,
+                    eventSink = events,
+                ),
             )
         }
 
@@ -55,10 +57,7 @@ class ToolFiltersTest {
     @Test
     fun `LanguagesFilter() - Dropdown Menu - Show when button is clicked`() {
         composeTestRule.setContent {
-            LanguageFilter(
-                filters = ToolsScreen.Filters(),
-                eventSink = events,
-            )
+            LanguageFilter(ToolsScreen.Filters(eventSink = events))
         }
 
         // dropdown menu not shown
@@ -67,7 +66,7 @@ class ToolFiltersTest {
         // click button to show dropdown
         composeTestRule.onNode(hasClickAction()).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertExists()
-        events.assertEvent(ToolsScreen.Event.UpdateLanguageQuery(""))
+        events.assertEvent(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
     }
 
     @Test
@@ -77,10 +76,10 @@ class ToolFiltersTest {
                 filters = ToolsScreen.Filters(
                     languages = listOf(
                         Language(Locale.FRENCH),
-                        Language(Locale.GERMAN)
-                    )
+                        Language(Locale.GERMAN),
+                    ),
+                    eventSink = events,
                 ),
-                eventSink = events,
             )
         }
         composeTestRule.onNode(hasClickAction()).performClick()
@@ -88,7 +87,7 @@ class ToolFiltersTest {
         composeTestRule.onNodeWithText("English", substring = true, ignoreCase = true).assertDoesNotExist()
         composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).assertExists()
         composeTestRule.onNodeWithText("German", substring = true, ignoreCase = true).assertExists()
-        events.assertEvent(ToolsScreen.Event.UpdateLanguageQuery(""))
+        events.assertEvent(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
     }
 
     @Test
@@ -100,9 +99,9 @@ class ToolFiltersTest {
                     languages = listOf(
                         Language(Locale.FRENCH),
                         Language(Locale.GERMAN)
-                    )
+                    ),
+                    eventSink = events,
                 ),
-                eventSink = events,
             )
         }
         composeTestRule.onNode(hasClickAction()).performClick()
@@ -110,8 +109,8 @@ class ToolFiltersTest {
         composeTestRule.onNodeWithText("Any language", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertDoesNotExist()
         events.assertEvents(
-            ToolsScreen.Event.UpdateLanguageQuery(""),
-            ToolsScreen.Event.UpdateSelectedLanguage(null)
+            ToolsScreen.FiltersEvent.UpdateLanguageQuery(""),
+            ToolsScreen.FiltersEvent.SelectLanguage(null)
         )
     }
 
@@ -123,9 +122,9 @@ class ToolFiltersTest {
                     languages = listOf(
                         Language(Locale.FRENCH),
                         Language(Locale.GERMAN)
-                    )
+                    ),
+                    eventSink = events,
                 ),
-                eventSink = events,
             )
         }
         composeTestRule.onNode(hasClickAction()).performClick()
@@ -133,8 +132,8 @@ class ToolFiltersTest {
         composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertDoesNotExist()
         events.assertEvents(
-            ToolsScreen.Event.UpdateLanguageQuery(""),
-            ToolsScreen.Event.UpdateSelectedLanguage(Locale.FRENCH)
+            ToolsScreen.FiltersEvent.UpdateLanguageQuery(""),
+            ToolsScreen.FiltersEvent.SelectLanguage(Locale.FRENCH)
         )
     }
     // endregion: LanguagesFilter

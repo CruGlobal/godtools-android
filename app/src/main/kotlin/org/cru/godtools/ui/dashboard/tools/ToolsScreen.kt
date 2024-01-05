@@ -26,12 +26,16 @@ data object ToolsScreen : Screen {
         val languages: List<Language> = emptyList(),
         val languageQuery: String = "",
         val selectedLanguage: Language? = null,
+        val eventSink: (FiltersEvent) -> Unit = {},
     ) : CircuitUiState
 
     sealed interface Event : CircuitUiEvent {
         data class OpenToolDetails(val tool: String, val source: String? = null) : Event
-        data class UpdateSelectedCategory(val category: String?) : Event
-        data class UpdateLanguageQuery(val query: String) : Event
-        data class UpdateSelectedLanguage(val locale: Locale?) : Event
+    }
+
+    sealed interface FiltersEvent : CircuitUiEvent {
+        data class UpdateLanguageQuery(val query: String) : FiltersEvent
+        data class SelectCategory(val category: String?) : FiltersEvent
+        data class SelectLanguage(val locale: Locale?) : FiltersEvent
     }
 }
