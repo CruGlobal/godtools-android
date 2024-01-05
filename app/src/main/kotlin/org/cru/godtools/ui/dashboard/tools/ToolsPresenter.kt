@@ -34,6 +34,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -114,11 +115,14 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberFilterCategories(selectedLanguage: Locale?): List<String> {
+    private fun rememberFilterCategories(selectedLanguage: Locale?): List<Filter<String>> {
         val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
 
         return remember(filteredToolsFlow) {
-            filteredToolsFlow.map { it.mapNotNull { it.category }.distinct() }
+            filteredToolsFlow.map {
+                it.groupBy { it.category }
+                    .mapNotNull { (category, tools) -> category?.let { Filter(category, tools.size) } }
+            }
         }.collectAsState(emptyList()).value
     }
 

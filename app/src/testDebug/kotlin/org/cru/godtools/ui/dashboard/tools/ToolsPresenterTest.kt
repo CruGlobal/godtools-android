@@ -26,6 +26,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -148,7 +149,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             assertEquals(
-                listOf(Tool.CATEGORY_GOSPEL, Tool.CATEGORY_ARTICLES),
+                listOf(Filter(Tool.CATEGORY_GOSPEL, 1), Filter(Tool.CATEGORY_ARTICLES, 1)),
                 expectMostRecentItem().filters.categories
             )
         }
@@ -162,7 +163,7 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
+            assertEquals(listOf(Filter(Tool.CATEGORY_GOSPEL, 2)), expectMostRecentItem().filters.categories)
         }
     }
 
@@ -175,7 +176,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             assertEquals(
-                listOf(Tool.CATEGORY_ARTICLES, Tool.CATEGORY_GOSPEL),
+                listOf(Filter(Tool.CATEGORY_ARTICLES, 1), Filter(Tool.CATEGORY_GOSPEL, 1)),
                 expectMostRecentItem().filters.categories
             )
         }
@@ -191,7 +192,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             metatoolsFlow.value = listOf(meta)
-            assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
+            assertEquals(listOf(Filter(Tool.CATEGORY_GOSPEL, 1)), expectMostRecentItem().filters.categories)
         }
     }
 
@@ -203,7 +204,7 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
+            assertEquals(listOf(Filter(Tool.CATEGORY_GOSPEL, 1)), expectMostRecentItem().filters.categories)
         }
     }
     // endregion State.filters.categories

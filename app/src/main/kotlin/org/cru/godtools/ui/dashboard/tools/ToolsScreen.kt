@@ -21,13 +21,15 @@ data object ToolsScreen : Screen {
     ) : CircuitUiState
 
     data class Filters(
-        val categories: List<String> = emptyList(),
+        val categories: List<Filter<String>> = emptyList(),
         val selectedCategory: String? = null,
         val languages: List<Language> = emptyList(),
         val languageQuery: String = "",
         val selectedLanguage: Language? = null,
         val eventSink: (FiltersEvent) -> Unit = {},
-    ) : CircuitUiState
+    ) : CircuitUiState {
+        data class Filter<T>(val item: T, val count: Int)
+    }
 
     sealed interface Event : CircuitUiEvent {
         data class OpenToolDetails(val tool: String, val source: String? = null) : Event

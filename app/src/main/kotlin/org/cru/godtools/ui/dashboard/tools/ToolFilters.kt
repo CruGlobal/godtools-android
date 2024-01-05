@@ -102,11 +102,11 @@ private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Mo
                     expanded = false
                 }
             )
-            categories.forEach {
+            categories.forEach { (category) ->
                 DropdownMenuItem(
-                    text = { Text(getToolCategoryName(it, LocalContext.current)) },
+                    text = { Text(getToolCategoryName(category, LocalContext.current)) },
                     onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectCategory(it))
+                        eventSink(ToolsScreen.FiltersEvent.SelectCategory(category))
                         expanded = false
                     }
                 )
