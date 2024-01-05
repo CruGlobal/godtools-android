@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -95,16 +98,22 @@ private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Mo
             onDismissRequest = { expanded = false },
             modifier = Modifier.heightIn(max = DROPDOWN_MAX_HEIGHT),
         ) {
-            DropdownMenuItem(
-                text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
+            FilterMenuItem(
+                label = stringResource(R.string.dashboard_tools_section_filter_category_any),
+                supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
                 onClick = {
                     eventSink(ToolsScreen.FiltersEvent.SelectCategory(null))
                     expanded = false
                 }
             )
-            categories.forEach { (category) ->
-                DropdownMenuItem(
-                    text = { Text(getToolCategoryName(category, LocalContext.current)) },
+            categories.forEach { (category, count) ->
+                FilterMenuItem(
+                    label = getToolCategoryName(category, LocalContext.current),
+                    supportingText = pluralStringResource(
+                        R.plurals.dashboard_tools_section_filter_available_tools,
+                        count,
+                        count,
+                    ),
                     onClick = {
                         eventSink(ToolsScreen.FiltersEvent.SelectCategory(category))
                         expanded = false
@@ -185,3 +194,15 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
         }
     }
 }
+
+@Composable
+private fun FilterMenuItem(
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    supportingText: String? = null,
+) = ListItem(
+    headlineContent = { Text(label) },
+    supportingContent = supportingText?.let { { Text(it) } },
+    modifier = modifier.clickable(onClick = onClick)
+)
