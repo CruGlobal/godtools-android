@@ -52,13 +52,8 @@ class ToolsPresenter @AssistedInject constructor(
 ) : Presenter<ToolsScreen.State> {
     @Composable
     override fun present(): ToolsScreen.State {
-        // selected category
-        var selectedCategory: String? by remember { mutableStateOf(null) }
-
-        // selected language
-        var selectedLocale: Locale? by remember { mutableStateOf(null) }
-        val selectedLanguage = rememberLanguage(selectedLocale)
-        var languageQuery by remember { mutableStateOf("") }
+        val filters = rememberFilters()
+        val selectedLocale by rememberUpdatedState(filters.selectedLanguage?.code)
 
         val eventSink: (ToolsScreen.Event) -> Unit = remember {
             {
@@ -73,28 +68,9 @@ class ToolsPresenter @AssistedInject constructor(
             }
         }
 
-        val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
-            {
-                when (it) {
-                    is ToolsScreen.FiltersEvent.SelectCategory -> selectedCategory = it.category
-                    is ToolsScreen.FiltersEvent.SelectLanguage -> selectedLocale = it.locale
-                    is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
-                }
-            }
-        }
-
-        val filters = ToolsScreen.Filters(
-            categories = rememberFilterCategories(selectedLocale),
-            selectedCategory = selectedCategory,
-            languages = rememberFilterLanguages(selectedCategory, languageQuery),
-            languageQuery = languageQuery,
-            selectedLanguage = selectedLanguage,
-            eventSink = filtersEventSink,
-        )
-
         return ToolsScreen.State(
             banner = rememberBanner(),
-            spotlightTools = rememberSpotlightTools(secondLanguage = selectedLanguage, eventSink = eventSink),
+            spotlightTools = rememberSpotlightTools(secondLanguage = filters.selectedLanguage, eventSink = eventSink),
             filters = filters,
             tools = rememberFilteredToolsFlow(filters.selectedCategory, filters.selectedLanguage?.code)
                 .collectAsState(emptyList()).value,
@@ -107,6 +83,36 @@ class ToolsPresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
             .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
     }.collectAsState(null).value
+
+    @Composable
+    private fun rememberFilters(): ToolsScreen.Filters {
+        // selected category
+        var selectedCategory: String? by remember { mutableStateOf(null) }
+
+        // selected language
+        var selectedLocale: Locale? by remember { mutableStateOf(null) }
+        val selectedLanguage = rememberLanguage(selectedLocale)
+        var languageQuery by remember { mutableStateOf("") }
+
+        val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
+            {
+                when (it) {
+                    is ToolsScreen.FiltersEvent.SelectCategory -> selectedCategory = it.category
+                    is ToolsScreen.FiltersEvent.SelectLanguage -> selectedLocale = it.locale
+                    is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
+                }
+            }
+        }
+
+        return ToolsScreen.Filters(
+            categories = rememberFilterCategories(selectedLocale),
+            selectedCategory = selectedCategory,
+            languages = rememberFilterLanguages(selectedCategory, languageQuery),
+            languageQuery = languageQuery,
+            selectedLanguage = selectedLanguage,
+            eventSink = filtersEventSink,
+        )
+    }
 
     @Composable
     private fun rememberFilterCategories(selectedLanguage: Locale?): List<String> {
