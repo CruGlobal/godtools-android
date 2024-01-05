@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.content.Context
-import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -148,8 +147,7 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    @VisibleForTesting
-    internal fun rememberLanguage(locale: Locale?) = remember(locale) {
+    private fun rememberLanguage(locale: Locale?) = remember(locale) {
         locale?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null)
     }.collectAsState(null).value
 

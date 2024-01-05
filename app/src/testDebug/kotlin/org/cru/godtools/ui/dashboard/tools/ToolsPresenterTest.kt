@@ -4,11 +4,10 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.FakeNavigator
-import com.slack.circuit.test.presenterTestOf
 import com.slack.circuit.test.test
-import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyAll
 import java.util.Locale
 import kotlin.test.AfterTest
@@ -55,6 +54,7 @@ class ToolsPresenterTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
+        every { getNormalToolsFlowByLanguage(any()) } returns flowOf(emptyList())
         every { getMetaToolsFlow() } returns metatoolsFlow
     }
 
@@ -249,38 +249,22 @@ class ToolsPresenterTest {
     // region State.filters.selectedLanguage
     @Test
     fun `State - filters - selectedLanguage - no language selected`() = runTest {
-        presenterTestOf(
-            presentFunction = {
-                ToolsScreen.State(
-                    filters = ToolsScreen.Filters(
-                        selectedLanguage = presenter.rememberLanguage(null)
-                    ),
-                    eventSink = {}
-                )
-            }
-        ) {
+        presenter.test {
             assertNull(expectMostRecentItem().filters.selectedLanguage)
         }
 
-        verifyAll { languagesRepository wasNot Called }
+        verify(inverse = true) { languagesRepository.findLanguageFlow(any()) }
     }
 
     @Test
     fun `State - filters - selectedLanguage - language not found`() = runTest {
-        presenterTestOf(
-            presentFunction = {
-                ToolsScreen.State(
-                    filters = ToolsScreen.Filters(
-                        selectedLanguage = presenter.rememberLanguage(Locale.ENGLISH)
-                    ),
-                    eventSink = {}
-                )
-            }
-        ) {
+        presenter.test {
+            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectLanguage(Locale.ENGLISH))
+
             assertNull(expectMostRecentItem().filters.selectedLanguage)
         }
 
-        verifyAll { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+        verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
     }
 
     @Test
@@ -288,20 +272,13 @@ class ToolsPresenterTest {
         val language = Language(Locale.ENGLISH)
         every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
 
-        presenterTestOf(
-            presentFunction = {
-                ToolsScreen.State(
-                    filters = ToolsScreen.Filters(
-                        selectedLanguage = presenter.rememberLanguage(Locale.ENGLISH)
-                    ),
-                    eventSink = {}
-                )
-            }
-        ) {
+        presenter.test {
+            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectLanguage(Locale.ENGLISH))
+
             assertEquals(language, expectMostRecentItem().filters.selectedLanguage)
         }
 
-        verifyAll { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+        verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
     }
     // endregion State.filters.selectedLanguage
 
