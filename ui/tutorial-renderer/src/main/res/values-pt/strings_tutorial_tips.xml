@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tips Tutorial -->
-    <string name="tutorial_tips_learn_headline">Aprenda a compartilha esta ferramenta com qualquer pessoa</string>
-    <string name="tutorial_tips_learn_text">Se habitue a usar quantas dicas precisar para se sentir confiante ao compartilhar esta ferramenta com outros.</string>
+    <string name="tutorial_tips_learn_headline">Aprenda a compartilhar esta ferramenta com todas as pessoas</string>
+    <string name="tutorial_tips_learn_text">Habitue-se a usar quantas dicas precisar para se sentir confiante ao compartilhar esta ferramenta com os outros.</string>
     <string name="tutorial_tips_light_headline">Dicas para clarear o caminho</string>
     <string name="tutorial_tips_light_text1">Em telas específicas, você verá uma variedade de ícones, Pressione o ícone para revelar uma dica que lhe ajudará a falar sobre o conteúdo da tela.</string>
     <string name="tutorial_tips_light_text2">"Nas telas sem dicas, recomendamos ler o conteúdo e comentar quando necessário."</string>

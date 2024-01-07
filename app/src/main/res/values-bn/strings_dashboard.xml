@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">আরম্ভ করুন</string>
     <string name="menu_tutorial">"টিউটোরিয়াল "</string>
     <string name="menu_heading_account">একাউন্ট</string>
     <string name="menu_login">লগইন করুন</string>
     <string name="menu_signup">একাউন্ট খুলুন</string>
     <string name="menu_logout">লগ আউট করুন</string>
+    <string name="menu_heading_support">সহায়তা</string>
+    <string name="menu_feedback">মতামত পাঠান</string>
+    <string name="menu_report_bug">ত্রুটির কথা রিপোর্ট করুন</string>
+    <string name="menu_question">প্রশ্ন জিজ্ঞাসা করুন</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
+    <string name="menu_review">সমালোচনা করুন</string>
     <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
     <string name="menu_share_godtools">GodTools App শেয়ার করুন</string>
     <string name="share_app_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন: http://godtoolsapp.com</string>
@@ -32,6 +38,9 @@
     <string name="tools_list_favorites_banner_action_dismiss">বাতিল করুন</string>
     <!-- All Tools -->
     <string name="nav_all_tools">সমস্ত টুলগুলো</string>
+    <string name="dashboard_tools_section_filter_label">বিশোধন</string>
+    <string name="dashboard_tools_section_filter_category_any">যে কোনো বিভাগ</string>
+    <string name="dashboard_tools_section_filter_language_any">যে কোনো ভাষা</string>
     <string name="dashboard_tools_section_categories_label">শ্রেণী বিভাগ</string>
     <string name="dashboard_tools_section_categories_all">সমস্ত টুলগুলো</string>
     <string name="dashboard_tools_section_spotlight_label">টুল স্পটলাইট</string>
@@ -44,4 +53,6 @@
     <string name="action_tools_about">বিস্তারিত</string>
     <string name="action_tools_open">খুলুন</string>
     <!-- In App Update -->
+    <string name="play_update_available">আধুনিক রূপ পাওয়া যাবে</string>
+    <string name="play_update_downloaded_action">পুনরায় চালান</string>
 </resources>

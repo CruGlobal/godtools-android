@@ -6,7 +6,18 @@
     <string name="account_create_heading">Criar conta</string>
     <string name="account_create_description">Crie uma conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
     <string name="account_login_heading">Entrar</string>
+    <string name="account_error_user_already_exists">Conta de usuário já existe.</string>
+    <string name="account_error_user_not_found">Conta de usuário não encontrada.</string>
+    <string name="account_error_unknown">Erro ao acessar.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Deletar Conta</string>
+    <string name="account_delete_heading">Não saia ainda</string>
+    <string name="account_delete_description">Se você deletar sua conta, você não poderá acessar suas ferramentas favoritas ou as atividades de sua conta.</string>
+    <string name="account_delete_action_delete">Deletar minha conta</string>
+    <string name="account_delete_action_cancel">Guardar minha conta</string>
+    <string name="account_delete_error">Houve um erro ao deletar sua conta. Tenha a certeza de estar conectado ou tente novamente mais tarde.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
     <string name="account_activity_header">Sua atividade</string>
@@ -60,7 +71,7 @@
     <string name="account_tab_global_activity">Atividade Global</string>
     <string name="profile_global_activity_heading">%1$s Atividade Global</string>
     <string name="profile_activity_unique_users">Usuários singulares</string>
-    <string name="profile_activity_gospel_presentations">Apresentações do evangelho</string>
+    <string name="profile_activity_gospel_presentations">Apresentações do Evangelho</string>
     <string name="profile_activity_sessions">Sessões</string>
     <string name="profile_activity_countries">Países</string>
 </resources>

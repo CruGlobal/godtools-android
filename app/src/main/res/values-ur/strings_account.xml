@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">سرگرمی</string>
+    <string name="account_joined">فیصد میں شامل ہُوئے %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">اکاؤنٹ بنائیں</string>
+    <string name="account_create_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے ایک اکاؤنٹ بنائیں۔</string>
+    <string name="account_login_heading">سائن اِن</string>
+    <string name="account_login_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے اپنے اکاؤنٹ میں لاگ ان کریں۔</string>
+    <!-- Delete Account -->
+    <!-- Activity -->
+    <string name="profile_tab_activity">سرگرمی</string>
+    <string name="account_activity_header">آپ کی سرگرمی</string>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">آپ کےنشانات</string>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">عالمگیر سرگرمی</string>
+    <string name="profile_global_activity_heading">عالمگیر سرگرمی%1$s</string>
+    <string name="profile_activity_unique_users">منفرد صارفین</string>
+    <string name="profile_activity_gospel_presentations">انجیل کی پیشکشیں</string>
+    <string name="profile_activity_sessions">سیشنز</string>
+    <string name="profile_activity_countries">ممالک</string>
+</resources>

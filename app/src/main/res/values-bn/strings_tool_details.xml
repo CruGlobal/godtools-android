@@ -15,6 +15,9 @@
         <item quantity="one">%1$,d ভাষাগুলি</item>
         <item quantity="other">%1$,d ভাষাগুলি</item>
     </plurals>
+    <string name="tool_details_section_description_conversation_starters">কথোপকথন আরম্ভকারী</string>
+    <string name="tool_details_section_description_outline">রূপরেখা</string>
+    <string name="tool_details_section_description_bible_references">বাইবেল উল্লেখ</string>
     <string name="tool_details_section_description_languages_available">যে ভাষা গুলো পাওয়া যায়</string>
     <string name="tool_details_section_variants_label">সংস্করণগুলি</string>
     <string name="tool_details_section_variants_description">নীচের এই টুলের একটি ভিন্ন সংস্করণ বেছে নিন। প্রতিটি সংস্করণের অনন্য শৈলী এবং বিষয়বস্তু আছে যাতে আপনি আপনার কথোপকথনের জন্য সবচেয়ে ভালোটি খুঁজে পেতে পারেন। আপনি এই একই টুলের একাধিক সংস্করণ পছন্দ করতে পারেন।</string>
