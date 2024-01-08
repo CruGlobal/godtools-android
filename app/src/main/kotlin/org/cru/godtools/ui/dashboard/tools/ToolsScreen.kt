@@ -17,7 +17,7 @@ data object ToolsScreen : Screen {
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<Tool> = emptyList(),
-        val eventSink: (Event) -> Unit,
+        val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 
     data class Filters(
