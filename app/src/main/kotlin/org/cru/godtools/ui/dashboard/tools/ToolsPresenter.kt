@@ -128,7 +128,7 @@ class ToolsPresenter @AssistedInject constructor(
 
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun rememberFilterLanguages(category: String?, query: String): List<Language> {
+    private fun rememberFilterLanguages(category: String?, query: String): List<Filter<Language>> {
         val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
         val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
 
@@ -146,6 +146,7 @@ class ToolsPresenter @AssistedInject constructor(
 
             combine(languagesFlow, settings.appLanguageFlow, queryFlow) { languages, appLang, query ->
                 languages.filterByDisplayAndNativeName(query, context, appLang)
+                    .map { Filter(it, 0) }
             }
         }.collectAsState(emptyList()).value
     }

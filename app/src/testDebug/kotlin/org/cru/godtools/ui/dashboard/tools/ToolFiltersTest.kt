@@ -10,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,8 +76,8 @@ class ToolFiltersTest {
             LanguageFilter(
                 filters = ToolsScreen.Filters(
                     languages = listOf(
-                        Language(Locale.FRENCH),
-                        Language(Locale.GERMAN),
+                        Filter(Language(Locale.FRENCH), 1),
+                        Filter(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
                 ),
@@ -97,8 +98,8 @@ class ToolFiltersTest {
                 filters = ToolsScreen.Filters(
                     selectedLanguage = Language(Locale.FRENCH),
                     languages = listOf(
-                        Language(Locale.FRENCH),
-                        Language(Locale.GERMAN)
+                        Filter(Language(Locale.FRENCH), 1),
+                        Filter(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
                 ),
@@ -120,8 +121,8 @@ class ToolFiltersTest {
             LanguageFilter(
                 filters = ToolsScreen.Filters(
                     languages = listOf(
-                        Language(Locale.FRENCH),
-                        Language(Locale.GERMAN)
+                        Filter(Language(Locale.FRENCH), 1),
+                        Filter(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
                 ),

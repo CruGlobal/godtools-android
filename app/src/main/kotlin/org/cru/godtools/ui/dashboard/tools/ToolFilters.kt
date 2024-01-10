@@ -181,7 +181,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                 )
             }
 
-            items(languages, key = { it.code }) {
+            items(languages, key = { (it) -> it.code }) { (it) ->
                 DropdownMenuItem(
                     text = { LanguageName(it) },
                     onClick = {

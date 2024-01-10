@@ -23,7 +23,7 @@ data object ToolsScreen : Screen {
     data class Filters(
         val categories: List<Filter<String>> = emptyList(),
         val selectedCategory: String? = null,
-        val languages: List<Language> = emptyList(),
+        val languages: List<Filter<Language>> = emptyList(),
         val languageQuery: String = "",
         val selectedLanguage: Language? = null,
         val eventSink: (FiltersEvent) -> Unit = {},

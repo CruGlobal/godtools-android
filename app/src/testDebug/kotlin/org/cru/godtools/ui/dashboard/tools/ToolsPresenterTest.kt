@@ -216,7 +216,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             languagesFlow.value = languages
-            assertEquals(languages, expectMostRecentItem().filters.languages)
+            assertEquals(languages.map { Filter(it, 0) }, expectMostRecentItem().filters.languages)
         }
 
         verifyAll {
@@ -232,7 +232,7 @@ class ToolsPresenterTest {
             awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
 
             gospelLanguagesFlow.value = languages
-            assertEquals(languages, expectMostRecentItem().filters.languages)
+            assertEquals(languages.map { Filter(it, 0) }, expectMostRecentItem().filters.languages)
         }
     }
     // endregion State.filters.languages
