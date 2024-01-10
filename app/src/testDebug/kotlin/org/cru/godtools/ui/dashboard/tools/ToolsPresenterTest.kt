@@ -36,7 +36,7 @@ import org.robolectric.annotation.Config
 class ToolsPresenterTest {
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
     private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
-    private val metatoolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
+    private val metatoolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
     private val languagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
     private val gospelLanguagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
@@ -148,7 +148,6 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            metatoolsFlow.emit(emptyList())
             toolsFlow.emit(tools)
             assertEquals(
                 listOf(Tool.CATEGORY_GOSPEL, Tool.CATEGORY_ARTICLES),
@@ -165,7 +164,6 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            metatoolsFlow.emit(emptyList())
             toolsFlow.emit(tools)
             assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
         }
@@ -179,7 +177,6 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            metatoolsFlow.emit(emptyList())
             toolsFlow.emit(tools)
             assertEquals(
                 listOf(Tool.CATEGORY_ARTICLES, Tool.CATEGORY_GOSPEL),
@@ -197,7 +194,7 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            metatoolsFlow.emit(listOf(meta))
+            metatoolsFlow.value = listOf(meta)
             toolsFlow.emit(tools)
             assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
         }
@@ -211,7 +208,6 @@ class ToolsPresenterTest {
         )
 
         presenter.test {
-            metatoolsFlow.emit(emptyList())
             toolsFlow.emit(tools)
             assertEquals(listOf(Tool.CATEGORY_GOSPEL), expectMostRecentItem().filters.categories)
         }
@@ -292,7 +288,7 @@ class ToolsPresenterTest {
         presenter.test {
             assertEquals(emptyList(), awaitItem().tools)
 
-            metatoolsFlow.emit(listOf(meta))
+            metatoolsFlow.value = listOf(meta)
             toolsFlow.emit(listOf(variant1, variant2))
             assertEquals(listOf(variant2), expectMostRecentItem().tools)
         }
@@ -306,7 +302,6 @@ class ToolsPresenterTest {
         presenter.test {
             assertEquals(emptyList(), awaitItem().tools)
 
-            metatoolsFlow.emit(emptyList())
             toolsFlow.emit(listOf(hidden, visible))
             assertEquals(listOf(visible), expectMostRecentItem().tools)
         }
