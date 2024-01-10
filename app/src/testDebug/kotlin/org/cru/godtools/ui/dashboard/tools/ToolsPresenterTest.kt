@@ -39,7 +39,7 @@ class ToolsPresenterTest {
     private val metatoolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolsFlow = MutableSharedFlow<List<Tool>>(extraBufferCapacity = 1)
     private val languagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
-    private val gospelLanguagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
+    private val gospelLanguagesFlow = MutableStateFlow(emptyList<Language>())
 
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
@@ -236,7 +236,7 @@ class ToolsPresenterTest {
         presenter.test {
             awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
 
-            gospelLanguagesFlow.emit(languages)
+            gospelLanguagesFlow.value = languages
             assertEquals(languages, expectMostRecentItem().filters.languages)
         }
     }
