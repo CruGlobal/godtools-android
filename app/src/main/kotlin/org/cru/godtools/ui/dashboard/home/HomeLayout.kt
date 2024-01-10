@@ -52,13 +52,18 @@ import org.cru.godtools.ui.tools.ToolCardEvent
 private val PADDING_HORIZONTAL = 16.dp
 
 internal sealed interface DashboardHomeEvent {
-    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale? = null) : DashboardHomeEvent {
-        constructor(event: ToolCardEvent) : this(event.tool, event.lang1, event.lang2)
+    open class OpenTool(
+        val tool: String?,
+        val type: Tool.Type?,
+        val lang1: Locale?,
+        val lang2: Locale? = null,
+    ) : DashboardHomeEvent {
+        constructor(event: ToolCardEvent) : this(event.tool, event.toolType, event.lang1, event.lang2)
     }
-    open class OpenToolDetails(val tool: Tool?) : DashboardHomeEvent {
+    open class OpenToolDetails(val tool: String?) : DashboardHomeEvent {
         constructor(event: ToolCardEvent.OpenToolDetails) : this(event.tool)
     }
-    class OpenLesson(event: ToolCardEvent) : OpenTool(event.tool, event.lang1, null)
+    class OpenLesson(event: ToolCardEvent) : OpenTool(event.tool, Tool.Type.LESSON, event.lang1)
     data object ViewAllFavorites : DashboardHomeEvent
     data object ViewAllTools : DashboardHomeEvent
 }
@@ -111,7 +116,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                     onEvent = {
                         when (it) {
                             is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
-                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool?.code, SOURCE_FEATURED)
+                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool, SOURCE_FEATURED)
                                 onEvent(DashboardHomeEvent.OpenLesson(it))
                             }
                             is ToolCardEvent.OpenToolDetails -> {
@@ -148,12 +153,12 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                             when {
                                 it is DashboardHomeEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
                                     ACTION_OPEN_TOOL,
-                                    it.tool?.code,
+                                    it.tool,
                                     SOURCE_FAVORITE
                                 )
                                 it is DashboardHomeEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
                                     ACTION_OPEN_TOOL_DETAILS,
-                                    it.tool?.code,
+                                    it.tool,
                                     SOURCE_FAVORITE
                                 )
                             }

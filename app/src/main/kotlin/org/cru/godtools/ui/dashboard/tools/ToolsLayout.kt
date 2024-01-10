@@ -15,41 +15,41 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.ui.banner.Banners
-import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-internal fun ToolsLayout(
-    onEvent: (ToolCardEvent) -> Unit,
-    viewModel: ToolsViewModel = viewModel(),
-    toolViewModels: ToolViewModels = viewModel(),
-) {
-    val banner by viewModel.banner.collectAsState()
-    val spotlightTools by viewModel.spotlightTools.collectAsState()
-    val tools by viewModel.tools.collectAsState()
-    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
+@CircuitInject(ToolsScreen::class, SingletonComponent::class)
+internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
+    val toolViewModels: ToolViewModels = viewModel()
+
+    val banner by rememberUpdatedState(state.banner)
+    val spotlightTools by rememberUpdatedState(state.spotlightTools)
+    val filters by rememberUpdatedState(state.filters)
+    val tools by rememberUpdatedState(state.tools)
+    val selectedLanguage by rememberUpdatedState(state.filters.selectedLanguage)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState) {
+    LazyColumn(state = columnState, modifier = modifier) {
         item("banners", "banners") {
             Banners(
                 { banner },
@@ -62,8 +62,7 @@ internal fun ToolsLayout(
         if (spotlightTools.isNotEmpty()) {
             item("tool-spotlight", "tool-spotlight") {
                 ToolSpotlight(
-                    viewModel,
-                    onEvent = onEvent,
+                    spotlightTools,
                     modifier = Modifier
                         .animateItemPlacement()
                         .padding(top = 16.dp)
@@ -79,7 +78,8 @@ internal fun ToolsLayout(
 
         item("tool-filters", "tool-filters") {
             ToolFilters(
-                viewModel = viewModel,
+                filters = filters,
+                eventSink = eventSink,
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(vertical = 16.dp)
@@ -87,20 +87,19 @@ internal fun ToolsLayout(
         }
 
         items(tools, { "tool:${it.code.orEmpty()}" }, { "tool" }) { tool ->
+            val toolViewModel = toolViewModels[tool.code.orEmpty(), tool]
+            val toolState = toolViewModel.toState(secondLanguage = selectedLanguage) {
+                when (it) {
+                    ToolCard.Event.Click, ToolCard.Event.OpenTool, ToolCard.Event.OpenToolDetails ->
+                        tool.code?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+                    ToolCard.Event.PinTool -> toolViewModel.pinTool()
+                    ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
+                }
+            }
+
             ToolCard(
-                toolViewModels[tool.code.orEmpty(), tool],
-                additionalLanguage = selectedLanguage,
+                state = toolState,
                 showActions = false,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.Click,
-                        is ToolCardEvent.OpenTool,
-                        is ToolCardEvent.OpenToolDetails -> {
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_ALL_TOOLS)
-                            onEvent(ToolCardEvent.OpenToolDetails(it.tool, viewModel.selectedLocale.value))
-                        }
-                    }
-                },
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(bottom = 16.dp, horizontal = 16.dp)
@@ -110,52 +109,37 @@ internal fun ToolsLayout(
 }
 
 @Composable
-internal fun ToolSpotlight(
-    viewModel: ToolsViewModel,
-    onEvent: (ToolCardEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) = Column(modifier = modifier.fillMaxWidth()) {
-    val spotlightTools by viewModel.spotlightTools.collectAsState()
-
-    Text(
-        stringResource(R.string.dashboard_tools_section_spotlight_label),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    )
-    Text(
-        stringResource(R.string.dashboard_tools_section_spotlight_description),
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier
-            .padding(top = 4.dp, horizontal = 16.dp)
-            .fillMaxWidth()
-    )
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-    ) {
-        items(spotlightTools, key = { it.code.orEmpty() }) {
-            PreloadTool(it)
-
-            SquareToolCard(
-                toolCode = it.code.orEmpty(),
-                showCategory = false,
-                showActions = false,
-                floatParallelLanguageUp = false,
-                confirmRemovalFromFavorites = false,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.Click,
-                        is ToolCardEvent.OpenTool,
-                        is ToolCardEvent.OpenToolDetails ->
-                            viewModel.recordOpenToolDetailsInAnalytics(it.tool?.code, SOURCE_SPOTLIGHT)
-                    }
-                    onEvent(it)
-                },
-            )
+private fun ToolSpotlight(tools: List<ToolCard.State>, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            stringResource(R.string.dashboard_tools_section_spotlight_label),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+        Text(
+            stringResource(R.string.dashboard_tools_section_spotlight_description),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .padding(top = 4.dp, horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            items(tools, key = { it.tool?.code.orEmpty() }) { tool ->
+                SquareToolCard(
+                    state = tool,
+                    showCategory = false,
+                    showSecondLanguage = true,
+                    showActions = false,
+                    floatParallelLanguageUp = false,
+                    confirmRemovalFromFavorites = false,
+                )
+            }
         }
     }
 }

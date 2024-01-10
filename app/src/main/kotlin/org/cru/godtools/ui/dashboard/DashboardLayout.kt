@@ -35,13 +35,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.screen.Screen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
@@ -59,14 +61,20 @@ import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
 import org.cru.godtools.ui.dashboard.home.HomeContent
 import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
-import org.cru.godtools.ui.dashboard.tools.ToolsLayout
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal sealed interface DashboardEvent {
-    open class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : DashboardEvent
-    class OpenLesson(tool: Tool?, lang: Locale?) : OpenTool(tool, lang, null)
-    class OpenToolDetails(val tool: Tool?, val lang: Locale? = null) : DashboardEvent
+    open class OpenTool(
+        val tool: String?,
+        val type: Tool.Type?,
+        val lang1: Locale?,
+        val lang2: Locale? = null,
+    ) : DashboardEvent
+    class OpenLesson(lesson: String?, lang: Locale?) : OpenTool(lesson, Tool.Type.LESSON, lang)
+    class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }
 
 @Composable
@@ -121,7 +129,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 onEvent = {
                                     when (it) {
                                         is DashboardLessonsEvent.OpenLesson ->
-                                            onEvent(DashboardEvent.OpenLesson(it.tool, it.lang))
+                                            onEvent(DashboardEvent.OpenLesson(it.lesson, it.lang))
                                     }
                                 },
                             )
@@ -135,7 +143,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                         }
                                         DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                         is DashboardHomeEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                            onEvent(DashboardEvent.OpenTool(it.tool, it.type, it.lang1, it.lang2))
                                         is DashboardHomeEvent.OpenToolDetails ->
                                             onEvent(DashboardEvent.OpenToolDetails(it.tool))
                                     }
@@ -146,25 +154,43 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 onEvent = {
                                     when (it) {
                                         is ToolCardEvent.Click,
-                                        is ToolCardEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.lang1, it.lang2))
+                                        is ToolCardEvent.OpenTool, -> onEvent(
+                                            DashboardEvent.OpenTool(
+                                                tool = it.tool,
+                                                type = it.toolType,
+                                                lang1 = it.lang1,
+                                                lang2 = it.lang2,
+                                            )
+                                        )
                                         is ToolCardEvent.OpenToolDetails ->
                                             onEvent(DashboardEvent.OpenToolDetails(it.tool))
                                     }
                                 },
                             )
 
-                            Page.ALL_TOOLS -> ToolsLayout(
-                                onEvent = { e ->
-                                    when (e) {
-                                        is ToolCardEvent.Click -> onEvent(DashboardEvent.OpenToolDetails(e.tool))
-                                        is ToolCardEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(e.tool, e.additionalLocale))
-                                        is ToolCardEvent.OpenTool ->
-                                            if (BuildConfig.DEBUG) error("opening a tool from All Tools is unsupported")
+                            Page.ALL_TOOLS -> {
+                                val navigator = remember(onEvent) {
+                                    object : Navigator {
+                                        override fun goTo(screen: Screen) {
+                                            when (screen) {
+                                                is ToolDetailsScreen -> onEvent(
+                                                    DashboardEvent.OpenToolDetails(
+                                                        screen.initialTool,
+                                                        screen.secondLanguage,
+                                                    )
+                                                )
+                                            }
+                                        }
+
+                                        override fun pop() = TODO("Not yet implemented")
+                                        override fun resetRoot(newRoot: Screen) = TODO("Not yet implemented")
                                     }
                                 }
-                            )
+                                CircuitContent(
+                                    screen = ToolsScreen,
+                                    navigator = navigator,
+                                )
+                            }
                         }
                     }
                 }

@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.slack.circuit.foundation.Circuit
+import com.slack.circuit.foundation.CircuitCompositionLocals
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -27,23 +29,28 @@ class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
+    @Inject
+    lateinit var circuit: Circuit
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
         setContent {
-            GodToolsTheme {
-                DashboardLayout(
-                    onEvent = { e ->
-                        when (e) {
-                            is DashboardEvent.OpenTool ->
-                                openTool(e.tool, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                            is DashboardEvent.OpenToolDetails ->
-                                e.tool?.code?.let { startToolDetailsActivity(it, e.lang) }
-                        }
-                    },
-                )
+            CircuitCompositionLocals(circuit) {
+                GodToolsTheme {
+                    DashboardLayout(
+                        onEvent = { e ->
+                            when (e) {
+                                is DashboardEvent.OpenTool ->
+                                    openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
+                                is DashboardEvent.OpenToolDetails ->
+                                    e.tool?.let { startToolDetailsActivity(it, e.lang) }
+                            }
+                        },
+                    )
+                }
             }
         }
     }
@@ -88,12 +95,12 @@ class DashboardActivity : BaseActivity() {
     internal lateinit var lazyManifestManager: Lazy<ManifestManager>
     private val manifestManager get() = lazyManifestManager.get()
 
-    private fun openTool(tool: Tool?, vararg languages: Locale) {
-        val code = tool?.code ?: return
+    private fun openTool(tool: String?, type: Tool.Type?, vararg languages: Locale) {
+        if (tool == null || type == null) return
         if (languages.isEmpty()) return
 
-        languages.forEach { manifestManager.preloadLatestPublishedManifest(code, it) }
-        openToolActivity(code, tool.type, *languages)
+        languages.forEach { manifestManager.preloadLatestPublishedManifest(tool, it) }
+        openToolActivity(tool, type, *languages)
     }
     // endregion ToolsAdapterCallbacks
     // endregion UI

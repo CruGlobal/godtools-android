@@ -10,16 +10,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.Called
-import io.mockk.every
-import io.mockk.excludeRecords
-import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyAll
-import kotlinx.coroutines.flow.MutableStateFlow
-import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
-import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
+import com.slack.circuit.test.TestEventSink
 import org.cru.godtools.model.randomTool
 import org.junit.Rule
 import org.junit.Test
@@ -32,67 +23,66 @@ class FavoriteActionTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val toolFlow = MutableStateFlow<Tool?>(null)
-    private val firstTranslationFlow = MutableStateFlow(StateFlowValue.Initial<Translation?>(null))
-
-    private val toolViewModel: ToolViewModels.ToolViewModel = mockk {
-        every { tool } returns toolFlow
-        every { firstTranslation } returns firstTranslationFlow
-        every { pinTool() } returns mockk()
-        every { unpinTool() } returns mockk()
-
-        excludeRecords {
-            tool
-            firstTranslation
-        }
-    }
+    private val events = TestEventSink<ToolCard.Event>()
 
     // region FavoriteAction()
     @Test
     fun `FavoriteAction() - add to favorites`() {
-        composeTestRule.setContent { FavoriteAction(toolViewModel) }
-        toolFlow.value = randomTool(isFavorite = false)
+        val state = ToolCard.State(
+            tool = randomTool(isFavorite = false),
+            eventSink = events,
+        )
+        composeTestRule.setContent { FavoriteAction(state) }
 
         composeTestRule.onRoot().performClick()
-        verifyAll { toolViewModel.pinTool() }
+        events.assertEvent(ToolCard.Event.PinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites`() {
-        composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = false) }
-        toolFlow.value = randomTool(isFavorite = true)
+        val state = ToolCard.State(
+            tool = randomTool(isFavorite = true),
+            eventSink = events,
+        )
+        composeTestRule.setContent { FavoriteAction(state, confirmRemoval = false) }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verifyAll { toolViewModel.unpinTool() }
+        events.assertEvent(ToolCard.Event.UnpinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - confirm`() {
-        composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = randomTool(isFavorite = true)
+        val state = ToolCard.State(
+            tool = randomTool(isFavorite = true),
+            eventSink = events,
+        )
+        composeTestRule.setContent { FavoriteAction(state, confirmRemoval = true) }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
-        verify { toolViewModel wasNot Called }
+        events.assertNoEvents()
 
         composeTestRule.onNode(hasAnyAncestor(isDialog()) and hasClickAction() and hasText("Remove")).performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verifyAll { toolViewModel.unpinTool() }
+        events.assertEvent(ToolCard.Event.UnpinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - cancel`() {
-        composeTestRule.setContent { FavoriteAction(toolViewModel, confirmRemoval = true) }
-        toolFlow.value = randomTool(isFavorite = true)
+        val state = ToolCard.State(
+            tool = randomTool(isFavorite = true),
+            eventSink = events,
+        )
+        composeTestRule.setContent { FavoriteAction(state, confirmRemoval = true) }
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
-        verify { toolViewModel wasNot Called }
+        events.assertNoEvents()
 
         composeTestRule.onNode(hasAnyAncestor(isDialog()) and hasClickAction() and hasText("Cancel")).performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verify { toolViewModel wasNot Called }
+        events.assertNoEvents()
     }
     // endregion FavoriteAction()
 }

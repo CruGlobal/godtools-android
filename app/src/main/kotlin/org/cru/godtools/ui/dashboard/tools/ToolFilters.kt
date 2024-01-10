@@ -21,13 +21,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,12 +38,19 @@ import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
 import org.cru.godtools.ui.languages.LanguageName
+import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp
 private val DROPDOWN_MAX_WIDTH = 400.dp
 
+internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
+
 @Composable
-internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifier) = Column(modifier.fillMaxWidth()) {
+internal fun ToolFilters(
+    filters: ToolsScreen.Filters,
+    modifier: Modifier = Modifier,
+    eventSink: (ToolsScreen.Event) -> Unit = {},
+) = Column(modifier.fillMaxWidth()) {
     Text(
         stringResource(R.string.dashboard_tools_section_filter_label),
         style = MaterialTheme.typography.titleLarge,
@@ -55,24 +63,26 @@ internal fun ToolFilters(viewModel: ToolsViewModel, modifier: Modifier = Modifie
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        CategoryFilter(viewModel, modifier = Modifier.weight(1f))
-        LanguageFilter(viewModel, modifier = Modifier.weight(1f))
+        CategoryFilter(filters, modifier = Modifier.weight(1f))
+        LanguageFilter(filters, modifier = Modifier.weight(1f))
     }
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
-    val categories by viewModel.categories.collectAsState()
+private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
+    val categories by rememberUpdatedState(filters.categories)
+    val selectedCategory by rememberUpdatedState(filters.selectedCategory)
+    val eventSink by rememberUpdatedState(filters.eventSink)
+
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ElevatedButton(
         onClick = { expanded = !expanded },
         modifier = modifier
     ) {
-        val category by viewModel.selectedCategory.collectAsState()
         Text(
-            category?.let { getToolCategoryName(it, LocalContext.current) }
+            selectedCategory?.let { getToolCategoryName(it, LocalContext.current) }
                 ?: stringResource(R.string.dashboard_tools_section_filter_category_any),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -88,7 +98,7 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
             DropdownMenuItem(
                 text = { Text(stringResource(R.string.dashboard_tools_section_filter_category_any)) },
                 onClick = {
-                    viewModel.setSelectedCategory(null)
+                    eventSink(ToolsScreen.FiltersEvent.SelectCategory(null))
                     expanded = false
                 }
             )
@@ -96,7 +106,7 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
                 DropdownMenuItem(
                     text = { Text(getToolCategoryName(it, LocalContext.current)) },
                     onClick = {
-                        viewModel.setSelectedCategory(it)
+                        eventSink(ToolsScreen.FiltersEvent.SelectCategory(it))
                         expanded = false
                     }
                 )
@@ -106,21 +116,26 @@ private fun CategoryFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
 }
 
 @Composable
+@VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modifier) {
+internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    val languages by rememberUpdatedState(filters.languages)
+    val query by rememberUpdatedState(filters.languageQuery)
+    val selectedLanguage by rememberUpdatedState(filters.selectedLanguage)
+    val eventSink by rememberUpdatedState(filters.eventSink)
+
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     ElevatedButton(
         onClick = {
-            if (!expanded) viewModel.setLanguageQuery("")
+            if (!expanded) eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
             expanded = !expanded
         },
         modifier = modifier
     ) {
-        val language by viewModel.selectedLanguage.collectAsState()
         Text(
-            text = language?.getDisplayName(context, LocalAppLanguage.current)
+            text = selectedLanguage?.getDisplayName(context, LocalAppLanguage.current)
                 ?: stringResource(R.string.dashboard_tools_section_filter_language_any),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -128,18 +143,18 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
         )
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
 
-        val query by viewModel.languageQuery.collectAsState()
-        val languages by viewModel.languages.collectAsState()
         LazyDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH),
+            modifier = Modifier
+                .sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
+                .testTag(TEST_TAG_FILTER_DROPDOWN)
         ) {
             item {
                 SearchBar(
                     query,
-                    onQueryChange = { viewModel.setLanguageQuery(it) },
-                    onSearch = { viewModel.setLanguageQuery(it) },
+                    onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                    onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
                     active = false,
                     onActiveChange = {},
                     colors = GodToolsTheme.searchBarColors,
@@ -151,7 +166,7 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.dashboard_tools_section_filter_language_any)) },
                     onClick = {
-                        viewModel.setSelectedLanguage(null)
+                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null))
                         expanded = false
                     }
                 )
@@ -161,7 +176,7 @@ private fun LanguageFilter(viewModel: ToolsViewModel, modifier: Modifier = Modif
                 DropdownMenuItem(
                     text = { LanguageName(it) },
                     onClick = {
-                        viewModel.setSelectedLanguage(it)
+                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code))
                         expanded = false
                     },
                     modifier = Modifier.animateItemPlacement()

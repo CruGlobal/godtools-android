@@ -82,12 +82,12 @@ internal fun AllFavoritesList(
                             is ToolCardEvent.Click,
                             is ToolCardEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
                                 ACTION_OPEN_TOOL,
-                                it.tool?.code,
+                                it.tool,
                                 SOURCE_FAVORITE
                             )
                             is ToolCardEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
                                 ACTION_OPEN_TOOL_DETAILS,
-                                it.tool?.code,
+                                it.tool,
                                 SOURCE_FAVORITE
                             )
                         }
