@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
+    <string name="language_settings_app_language_title">اَیپ کی زبان</string>
+    <string name="language_settings_app_language_dialog_message">کو ا؛پنی اَیپ زبان%1$s آپ نے
+کے طور پر منتخب کِیا ۔ یہ گاڈ ٹولزکی ساری زبان کو بدل دے گی ۔ کیا آپ چاہتے ہیں ؟</string>
+    <string name="language_settings_app_language_dialog_confirm">زبان تبدیل کریں</string>
+    <string name="language_settings_app_language_dialog_dismiss">کوئی بات نہیں</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">زبان سیٹِنگز</string>
     <string name="title_language_settings">زبان سیٹِنگز</string>
+    <string name="language_settings_section_app_language_heading">"
+اَیپ انٹر فیس کی زبان
+"</string>
+    <string name="language_settings_section_app_language_description">زبان منتخب کریں جس میں آپ پوری اَیپ کو ڈسپلے کرنا چاہتے ہیں۔</string>
+    <string name="language_settings_section_offline_heading">ٹول کی زبانیں جو آف لائن دستیاب ہیں</string>
+    <string name="language_settings_section_offline_description">تمام ٹول کو ڈاؤن لوڈ کریں تاکہ وہ تب بھی دستیاب ہوں جب آپ وائی فائی سیل سروس سے دور ہوں ۔ ٹول کے اندر آپشن بٹن کے ذریعے ٹول کی زبان سیٹ کریں۔</string>
+    <string name="language_settings_section_offline_action_edit">ڈاؤن لوڈ کی ہُوئی زبان کو ایڈٹ کریں</string>
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">زبانیں تلاش کریں</string>
 </resources>

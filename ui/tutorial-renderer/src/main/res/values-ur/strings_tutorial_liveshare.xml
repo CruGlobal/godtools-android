@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Live Share Tutorial -->
-    <string name="tutorial_live_share_description_headline">اپنی اسکرین کا اشتراک کریں</string>
-    <string name="tutorial_live_share_description_text">یہ اختیار اس ٹول کا ربط ایک دوست کو ارسال کرے گا۔ جب ربط کو کھولا گیا تو یہ ایک سکرین شیئرنگ سیشن شروع کرے گا۔</string>
-    <string name="tutorial_live_share_mirrored_headline">عکسی تجربہ</string>
-    <string name="tutorial_live_share_mirrored_text">جب آپ اپنے فون پر ٹول کو سکرول کرتے ہیں تو آپ کے دوست کی سکرین بھی اسی طرح ردعمل ظاہر کرے گی۔ یہ آپ کو ایک ہی وقت میں 2 آلات پر ایک ٹول میں سے اکٹھے گزرنے کی سہولت دیتا ہے۔</string>
-    <string name="tutorial_live_share_start_headline">شروع کریں</string>
-    <string name="tutorial_live_share_start_text">"ابھی مشترک سکرین اجلاس شروع کرنے کے لیے ایک یا زیادہ لوگوں کو لنک بھیجیں۔
-
+    <string name="tutorial_live_share_description_headline">اپنی سکرین شئیر کریں</string>
+    <string name="tutorial_live_share_description_text">"یہ آپشن اِس ٹول کا لنک کسی دوست کو بھیجے گا ۔  جب لنک کھلے گا تو یہ سکرین شئیرنگ سیشن کو شروع کرے گا ۔
 "</string>
-    <string name="tutorial_live_share_action_continue">جاری</string>
-    <string name="tutorial_live_share_action_skip">چھوڑیں</string>
-    <string name="tutorial_live_share_action_start">ایک لنک شیئر کریں</string>
+    <string name="tutorial_live_share_mirrored_headline">آئینہ دار تجربہ</string>
+    <string name="tutorial_live_share_mirrored_text">"جب آپ اپنےفون پر ٹول کو سکرول کریں گے تو آپ کے دوست کی سکرین بھی اُسی طرح کھل جائے گی۔ یہ آپ کو ایک ہی وقت میں 2 ٹولز پر ایک ساتھ کام کرنے کی اجازت دیتا ہے ۔
+"</string>
+    <string name="tutorial_live_share_start_headline">شروع کریں</string>
+    <string name="tutorial_live_share_start_text">اب سکرین شئیرنگ سیشن شروع کرنے کے لئے ایک یا زیادہ لوگوں کو لنک بھیجیں۔</string>
+    <string name="tutorial_live_share_action_continue">جاری رکھیں</string>
+    <string name="tutorial_live_share_action_skip">چھوڑ دیں</string>
+    <string name="tutorial_live_share_action_start">لنک شئیر کریں</string>
 </resources>

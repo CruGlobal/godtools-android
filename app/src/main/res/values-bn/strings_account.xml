@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">বৈশ্বিক ক্রিয়া কলাপ</string>
+    <string name="menu_profile">বৈশ্বিক ক্রিয়া কলাপ / কার্যকলাপ</string>
+    <string name="account_joined">যোগ দিয়েছেন %1$s</string>
     <!-- Create / Login -->
+    <string name="account_create_heading">অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="account_create_description">অ্যাকাউন্ট তৈরি করুন যাতে সত্য গল্প, অনুপ্রেরণা এবং ব্যবহারিক উপদেশ আপনার নাগালের মধ্যে থাকে।</string>
+    <string name="account_login_heading">সাইন ইন</string>
+    <string name="account_login_description">"নিজের অ্যাকাউন্টে লগ ইন করুন যাতে সত্য গল্প, অনুপ্রেরণা এবং ব্যবহারিক উপদেশ আপনার নাগালের মধ্যে থাকে। "</string>
     <!-- Delete Account -->
     <!-- Activity -->
-    <string name="profile_tab_activity">ক্রিয়াকলাপ</string>
+    <string name="profile_tab_activity">ক্রিয়াকলাপ / কার্যকলাপ</string>
+    <string name="account_activity_header">আপনার কার্যকলাপ</string>
     <!-- Badges -->
+    <string name="account_activity_badges_header">আপনার ব্যাজগুলি</string>
     <!-- Global Activity -->
-    <string name="profile_global_activity_heading">%1$s বৈশ্বিক ক্রিয়াকলাপ</string>
-    <string name="profile_activity_unique_users">অনন্য ব্যবহারকারী</string>
-    <string name="profile_activity_gospel_presentations">সুসমাচার উপস্থাপন</string>
-    <string name="profile_activity_sessions">সেশনস</string>
-    <string name="profile_activity_countries">দেশ সমূহ</string>
+    <string name="account_tab_global_activity">বিশ্বজনীন কার্যকলাপ</string>
+    <string name="profile_global_activity_heading">%1$s বৈশ্বিক ক্রিয়াকলাপ / %$s বিশ্বজনীন কার্যকলাপ</string>
+    <string name="profile_activity_unique_users">অনন্য ব্যবহারকারী / অনন্য ব্যবহারকারীগণ</string>
+    <string name="profile_activity_gospel_presentations">সুসমাচার উপস্থাপন / সুসমাচার উপস্থাপনা</string>
+    <string name="profile_activity_sessions">সেশনস / অধিবেশনসমূহ</string>
+    <string name="profile_activity_countries">দেশ সমূহ / দেশ</string>
 </resources>

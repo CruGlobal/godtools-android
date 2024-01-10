@@ -18,7 +18,7 @@
     <string name="tract_settings_title">Opções de ferramenta</string>
     <string name="tract_settings_action_share">Compartilhar link</string>
     <string name="tract_settings_action_tips_disable">Ocultar dicas</string>
-    <string name="tract_settings_languages_title">Idioma paralelo</string>
+    <string name="tract_settings_languages_title">Idioma Paralelo</string>
     <string name="tract_settings_languages_description">Alterne entre dois idiomas diferentes nesta ferramenta.</string>
     <string name="tract_settings_languages_parallel">Paralelo</string>
     <string name="tract_settings_languages_none">Nenhum</string>

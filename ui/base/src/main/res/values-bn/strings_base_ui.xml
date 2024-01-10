@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="toast_unable_to_launch_activity">খুলতে অক্ষম %s</string>
     <!-- Tool Categories -->
-    <string name="tool_category_gospel">সুসমাচারের আমন্ত্রণ</string>
-    <string name="tool_category_articles">প্রবন্ধ সমূহ</string>
-    <string name="tool_category_conversation_starter">কথোপকথন শুরু করা</string>
-    <string name="tool_category_growth">খ্রিষ্টীয় বিকাশ</string>
-    <string name="tool_category_training">প্রশিক্ষণ</string>
+    <string name="tool_category_gospel">সুসমাচারের আমন্ত্রণ / সুসমাচার আমন্ত্রণ</string>
+    <string name="tool_category_articles">প্রবন্ধ সমূহ / প্রবন্ধসমূহ</string>
+    <string name="tool_category_conversation_starter">কথোপকথন শুরু করা / কথোপকথন সূচনাকারী</string>
+    <string name="tool_category_growth">খ্রিষ্টীয় বিকাশ / খ্রীষ্টান বৃদ্ধি</string>
+    <string name="tool_category_training">প্রশিক্ষণ / প্রশিক্ষণ</string>
     <!-- Sharing -->
 </resources>
