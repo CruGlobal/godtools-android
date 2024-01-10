@@ -15,7 +15,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -38,7 +37,7 @@ class ToolsPresenterTest {
     private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
     private val metatoolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
-    private val languagesFlow = MutableSharedFlow<List<Language>>(extraBufferCapacity = 1)
+    private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val gospelLanguagesFlow = MutableStateFlow(emptyList<Language>())
 
     private val languagesRepository: LanguagesRepository = mockk {
@@ -215,7 +214,7 @@ class ToolsPresenterTest {
         val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
 
         presenter.test {
-            languagesFlow.emit(languages)
+            languagesFlow.value = languages
             assertEquals(languages, expectMostRecentItem().filters.languages)
         }
 
