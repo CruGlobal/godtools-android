@@ -102,7 +102,11 @@ class ExternalSingletonsModule {
     @get:Provides
     val trainingTipsRepository: TrainingTipsRepository by lazy { mockk() }
     @get:Provides
-    val translationsRepository: TranslationsRepository by lazy { mockk() }
+    val translationsRepository: TranslationsRepository by lazy {
+        mockk {
+            every { getTranslationsFlowForTools(any()) } returns flowOf(emptyList())
+        }
+    }
     @get:Provides
     val userRepository: UserRepository by lazy { mockk() }
     @get:Provides

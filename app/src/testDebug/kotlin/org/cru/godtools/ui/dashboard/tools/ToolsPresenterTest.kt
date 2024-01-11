@@ -22,9 +22,12 @@ import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -57,6 +60,9 @@ class ToolsPresenterTest {
         every { getNormalToolsFlowByLanguage(any()) } returns flowOf(emptyList())
         every { getMetaToolsFlow() } returns metatoolsFlow
     }
+    private val translationsRepository: TranslationsRepository = mockk {
+        every { getTranslationsFlowForTools(any()) } returns flowOf(emptyList())
+    }
 
     // TODO: figure out how to mock ToolCardPresenter
     private val toolCardPresenter = ToolCardPresenter(
@@ -78,6 +84,7 @@ class ToolsPresenterTest {
             toolCardPresenter = toolCardPresenter,
             languagesRepository = languagesRepository,
             toolsRepository = toolsRepository,
+            translationsRepository = translationsRepository,
             navigator = navigator,
         )
     }
@@ -233,6 +240,31 @@ class ToolsPresenterTest {
 
             gospelLanguagesFlow.value = languages
             assertEquals(languages.map { Filter(it, 0) }, expectMostRecentItem().filters.languages)
+        }
+    }
+
+    @Test
+    fun `State - filters - languages - include tool count`() = runTest {
+        val translationsFlow = MutableStateFlow(emptyList<Translation>())
+        every { translationsRepository.getTranslationsFlowForTools(setOf("tool1", "tool2")) } returns translationsFlow
+
+        presenter.test {
+            toolsFlow.value = listOf(
+                randomTool("tool1", metatoolCode = null, isHidden = false),
+                randomTool("tool2", metatoolCode = null, isHidden = false),
+            )
+            translationsFlow.value = listOf(
+                randomTranslation("tool1", Locale.ENGLISH),
+                randomTranslation("tool1", Locale.FRENCH),
+                randomTranslation("tool2", Locale.ENGLISH, version = 1),
+                randomTranslation("tool2", Locale.ENGLISH, version = 2),
+            )
+            languagesFlow.value = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
+
+            assertEquals(
+                listOf(Filter(Language(Locale.ENGLISH), 2), Filter(Language(Locale.FRENCH), 1)),
+                expectMostRecentItem().filters.languages
+            )
         }
     }
     // endregion State.filters.languages
