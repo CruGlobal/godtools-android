@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -172,8 +171,9 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                     content = {},
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.dashboard_tools_section_filter_language_any)) },
+                FilterMenuItem(
+                    label = stringResource(R.string.dashboard_tools_section_filter_language_any),
+                    supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
                     onClick = {
                         eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null))
                         expanded = false
@@ -181,9 +181,14 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                 )
             }
 
-            items(languages, key = { (it) -> it.code }) { (it) ->
-                DropdownMenuItem(
-                    text = { LanguageName(it) },
+            items(languages, key = { (it) -> it.code }) { (it, count) ->
+                FilterMenuItem(
+                    label = { LanguageName(it) },
+                    supportingText = pluralStringResource(
+                        R.plurals.dashboard_tools_section_filter_available_tools,
+                        count,
+                        count,
+                    ),
                     onClick = {
                         eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code))
                         expanded = false
@@ -201,8 +206,21 @@ private fun FilterMenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
+) = FilterMenuItem(
+    label = { Text(label) },
+    onClick = onClick,
+    modifier = modifier,
+    supportingText = supportingText,
+)
+
+@Composable
+private fun FilterMenuItem(
+    label: @Composable () -> Unit,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    supportingText: String? = null,
 ) = ListItem(
-    headlineContent = { Text(label) },
+    headlineContent = label,
     supportingContent = supportingText?.let { { Text(it) } },
     modifier = modifier.clickable(onClick = onClick)
 )
