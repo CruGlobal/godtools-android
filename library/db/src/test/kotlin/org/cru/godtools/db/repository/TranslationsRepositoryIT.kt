@@ -201,7 +201,7 @@ abstract class TranslationsRepositoryIT {
     }
     // endregion getTranslationsFlow()
 
-    // region getTranslationsForToolFlow()
+    // region getTranslationsFlowForTool()
     @Test
     fun `getTranslationsForToolFlow()`() = testScope.runTest {
         val trans1 = randomTranslation(TOOL, Locale.ENGLISH)
@@ -229,16 +229,16 @@ abstract class TranslationsRepositoryIT {
             }
         }
     }
-    // endregion getTranslationsForToolFlow()
+    // endregion getTranslationsFlowForTool()
 
-    // region getTranslationsForToolsAndLocalesFlow()
+    // region getTranslationsFlowForToolsAndLocales()
     @Test
     fun `getTranslationsForToolsAndLocalesFlow()`() = testScope.runTest {
         val trans1 = randomTranslation(TOOL, Locale.ENGLISH)
         val trans2 = randomTranslation(TOOL, Locale.FRENCH)
         val trans3 = randomTranslation(TOOL, Locale.GERMAN)
 
-        repository.getTranslationsForToolsAndLocalesFlow(setOf(TOOL), setOf(Locale.ENGLISH, Locale.GERMAN)).test {
+        repository.getTranslationsFlowForToolsAndLocales(setOf(TOOL), setOf(Locale.ENGLISH, Locale.GERMAN)).test {
             repository.storeInitialTranslations(listOf(randomTranslation(TOOL2)))
             runCurrent()
             assertTrue(expectMostRecentItem().isEmpty())
@@ -268,7 +268,7 @@ abstract class TranslationsRepositoryIT {
             }
         }
     }
-    // endregion getTranslationsForToolsAndLocalesFlow()
+    // endregion getTranslationsFlowForToolsAndLocales()
 
     // region translationsChangeFlow()
     @Test

@@ -27,9 +27,9 @@ internal interface TranslationsDao {
     @Query("SELECT * FROM translations")
     fun getTranslationsFlow(): Flow<List<TranslationEntity>>
     @Query("SELECT * FROM translations WHERE tool IN (:tools)")
-    fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<TranslationEntity>>
+    fun getTranslationsFlowForTools(tools: Collection<String>): Flow<List<TranslationEntity>>
     @Query("SELECT * FROM translations WHERE tool IN (:tools) AND locale IN (:locales)")
-    fun getTranslationsForToolsAndLocalesFlow(
+    fun getTranslationsFlowForToolsAndLocales(
         tools: Collection<String>,
         locales: Collection<Locale>,
     ): Flow<List<TranslationEntity>>

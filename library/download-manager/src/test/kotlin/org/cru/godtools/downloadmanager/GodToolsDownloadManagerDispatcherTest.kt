@@ -67,7 +67,7 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val translationsRepository: TranslationsRepository by lazy {
         mockk {
-            every { getTranslationsForToolsAndLocalesFlow(any(), any()) } returns flowOf(emptyList())
+            every { getTranslationsFlowForToolsAndLocales(any(), any()) } returns flowOf(emptyList())
         }
     }
     private val testScope = TestScope()
@@ -94,7 +94,7 @@ class GodToolsDownloadManagerDispatcherTest {
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Locale.FRENCH) }
             )
@@ -105,7 +105,7 @@ class GodToolsDownloadManagerDispatcherTest {
         appLanguageFlow.emit(Locale.FRENCH)
         runCurrent()
         verifyAll {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Locale.FRENCH) }
             )
@@ -125,7 +125,7 @@ class GodToolsDownloadManagerDispatcherTest {
     fun `Favorite Tools downloadLatestPublishedTranslation() - default language`() = testScope.runTest {
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Settings.defaultLanguage) }
             )
@@ -135,7 +135,7 @@ class GodToolsDownloadManagerDispatcherTest {
         favoriteToolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
         runCurrent()
         verifyAll {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Settings.defaultLanguage) }
             )
@@ -157,7 +157,7 @@ class GodToolsDownloadManagerDispatcherTest {
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Locale.FRENCH, Locale.GERMAN) }
             )
@@ -168,7 +168,7 @@ class GodToolsDownloadManagerDispatcherTest {
         pinnedLanguagesFlow.emit(listOf(Language(Locale.FRENCH), Language(Locale.GERMAN)))
         runCurrent()
         verifyAll {
-            translationsRepository.getTranslationsForToolsAndLocalesFlow(
+            translationsRepository.getTranslationsFlowForToolsAndLocales(
                 tools = match { it.toSet() == setOf("tool1", "tool2") },
                 locales = match { it.toSet() == setOf(Locale.FRENCH, Locale.GERMAN) }
             )
