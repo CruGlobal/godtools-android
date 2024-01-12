@@ -24,21 +24,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Locale
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringResource
 import org.ccci.gto.android.common.util.content.localize
@@ -46,32 +44,30 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
 
-internal sealed interface AppLanguageEvent {
-    data object NavigateBack : AppLanguageEvent
-    class LanguageSelected(val language: Locale) : AppLanguageEvent
-}
+internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun AppLanguageLayout(
-    viewModel: AppLanguageViewModel = viewModel(),
-    onEvent: (AppLanguageEvent) -> Unit = {},
-) {
-    val languages by viewModel.languages.collectAsState(emptyList())
-    var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
+@CircuitInject(AppLanguageScreen::class, SingletonComponent::class)
+internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifier = Modifier) {
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(AppLanguageEvent.NavigateBack) }) {
+                    IconButton(
+                        onClick = { eventSink(AppLanguageScreen.Event.NavigateBack) },
+                        modifier = Modifier.testTag(TEST_TAG_ACTION_BACK)
+                    ) {
                         Icon(Icons.Filled.ArrowBack, null, Modifier.autoMirror())
                     }
                 },
                 title = { Text(stringResource(R.string.language_settings_app_language_title)) },
                 colors = GodToolsTheme.topAppBarColors,
             )
-        }
+        },
+        modifier = modifier,
     ) { contentPadding ->
         LazyColumn(
             modifier = Modifier
@@ -79,38 +75,25 @@ internal fun AppLanguageLayout(
                 .fillMaxSize()
                 .background(ListItemDefaults.containerColor)
         ) {
-            itemsIndexed(languages, { _, it -> it }) { i, lang ->
+            itemsIndexed(state.languages, { _, it -> it }) { i, lang ->
+                if (i > 0) Divider(Modifier.padding(horizontal = 16.dp))
+
                 ListItem(
                     headlineContent = { LanguageName(lang) },
-                    modifier = Modifier.clickable { confirmLanguage = lang }
+                    modifier = Modifier.clickable { eventSink(AppLanguageScreen.Event.SelectLanguage(lang)) }
                 )
-                if (i != languages.lastIndex) Divider(Modifier.padding(horizontal = 16.dp))
             }
         }
     }
 
-    ConfirmAppLanguageDialog(
-        language = confirmLanguage,
-        onEvent = {
-            @Suppress("LiftReturnOrAssignment")
-            when (it) {
-                is AppLanguageDialogEvent.Confirm -> {
-                    onEvent(AppLanguageEvent.LanguageSelected(it.language))
-                    confirmLanguage = null
-                }
-                AppLanguageDialogEvent.Dismiss -> confirmLanguage = null
-            }
-        }
-    )
-}
-
-private sealed interface AppLanguageDialogEvent {
-    data object Dismiss : AppLanguageDialogEvent
-    class Confirm(val language: Locale) : AppLanguageDialogEvent
+    ConfirmAppLanguageDialog(state)
 }
 
 @Composable
-private fun ConfirmAppLanguageDialog(language: Locale?, onEvent: (AppLanguageDialogEvent) -> Unit) {
+private fun ConfirmAppLanguageDialog(state: AppLanguageScreen.State) {
+    val language = state.selectedLanguage
+    val eventSink by rememberUpdatedState(state.eventSink)
+
     if (language != null) {
         AlertDialog(
             iconContentColor = MaterialTheme.colorScheme.primary,
@@ -131,15 +114,15 @@ private fun ConfirmAppLanguageDialog(language: Locale?, onEvent: (AppLanguageDia
             },
             confirmButton = {
                 TextButton(
-                    onClick = { onEvent(AppLanguageDialogEvent.Confirm(language)) }
+                    onClick = { eventSink(AppLanguageScreen.Event.ConfirmLanguage(language)) }
                 ) { Text(stringResource(R.string.language_settings_app_language_dialog_confirm)) }
             },
             dismissButton = {
-                TextButton(onClick = { onEvent(AppLanguageDialogEvent.Dismiss) }) {
+                TextButton(onClick = { eventSink(AppLanguageScreen.Event.DismissConfirmDialog) }) {
                     Text(stringResource(R.string.language_settings_app_language_dialog_dismiss))
                 }
             },
-            onDismissRequest = { onEvent(AppLanguageDialogEvent.Dismiss) },
+            onDismissRequest = { eventSink(AppLanguageScreen.Event.DismissConfirmDialog) },
         )
     }
 }
