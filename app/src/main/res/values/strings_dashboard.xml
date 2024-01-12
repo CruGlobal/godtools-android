@@ -51,6 +51,11 @@ An online version can be found at https://knowgod.com/</string>
     <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Any category</string>
     <string name="dashboard_tools_section_filter_language_any">Any language</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d Tool available</item>
+        <item quantity="other">%1$d Tools available</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">All Tools available</string>
     <string name="dashboard_tools_section_categories_label">Categories</string>
     <string name="dashboard_tools_section_categories_all">All Tools</string>
     <string name="dashboard_tools_section_spotlight_label">Tool Spotlight</string>

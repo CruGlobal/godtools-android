@@ -14,9 +14,9 @@ interface TranslationsRepository {
     suspend fun getTranslationsForLanguages(languages: Collection<Locale>): List<Translation>
 
     fun getTranslationsFlow(): Flow<List<Translation>>
-    fun getTranslationsFlowForTool(tool: String) = getTranslationsForToolsFlow(listOf(tool))
-    fun getTranslationsForToolsFlow(tools: Collection<String>): Flow<List<Translation>>
-    fun getTranslationsForToolsAndLocalesFlow(
+    fun getTranslationsFlowForTool(tool: String) = getTranslationsFlowForTools(listOf(tool))
+    fun getTranslationsFlowForTools(tools: Collection<String>): Flow<List<Translation>>
+    fun getTranslationsFlowForToolsAndLocales(
         tools: Collection<String>,
         locales: Collection<Locale>,
     ): Flow<List<Translation>>

@@ -51,7 +51,7 @@ class AemArticleManagerDispatcherTest {
         every { getNormalToolsFlow() } returns flowOf(emptyList())
     }
     private val translationsRepository: TranslationsRepository = mockk {
-        every { getTranslationsForToolsFlow(any()) } returns translationsFlow
+        every { getTranslationsFlowForTools(any()) } returns translationsFlow
     }
 
     @Before

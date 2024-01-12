@@ -521,7 +521,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
             .distinctUntilChanged()
             .combineTransformLatest(languages) { t, l ->
-                emitAll(translationsRepository.getTranslationsForToolsAndLocalesFlow(t, l))
+                emitAll(translationsRepository.getTranslationsFlowForToolsAndLocales(t, l))
             }
             .map {
                 it.filterNot { it.isDownloaded }
