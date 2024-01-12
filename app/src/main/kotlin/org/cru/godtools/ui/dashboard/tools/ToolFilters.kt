@@ -71,8 +71,9 @@ internal fun ToolFilters(
 }
 
 @Composable
+@VisibleForTesting
 @OptIn(ExperimentalMaterial3Api::class)
-private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
+internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
     val categories by rememberUpdatedState(filters.categories)
     val selectedCategory by rememberUpdatedState(filters.selectedCategory)
     val eventSink by rememberUpdatedState(filters.eventSink)
@@ -95,7 +96,9 @@ private fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Mo
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.heightIn(max = DROPDOWN_MAX_HEIGHT),
+            modifier = Modifier
+                .heightIn(max = DROPDOWN_MAX_HEIGHT)
+                .testTag(TEST_TAG_FILTER_DROPDOWN)
         ) {
             FilterMenuItem(
                 label = stringResource(R.string.dashboard_tools_section_filter_category_any),
