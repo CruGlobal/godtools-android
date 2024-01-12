@@ -33,6 +33,7 @@ android {
 
         resourceConfigurations += listOf(
             "ar",
+            "bn",
             "en",
             "es",
             "fr",
@@ -42,6 +43,7 @@ android {
             "lv",
             "pt",
             "ru",
+            "ur",
             "vi",
             "zh-rCN",
             "zh-rTW",
