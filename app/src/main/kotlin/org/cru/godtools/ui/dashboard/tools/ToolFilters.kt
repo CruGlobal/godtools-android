@@ -206,22 +206,22 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 @Composable
 private fun FilterMenuItem(
     label: String,
+    supportingText: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    supportingText: String? = null,
 ) = FilterMenuItem(
     label = { Text(label) },
+    supportingText = supportingText,
     onClick = onClick,
     modifier = modifier,
-    supportingText = supportingText,
 )
 
 @Composable
 private fun FilterMenuItem(
     label: @Composable () -> Unit,
+    supportingText: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    supportingText: String? = null,
 ) = ListItem(
     headlineContent = label,
     supportingContent = supportingText?.let { { Text(it) } },
