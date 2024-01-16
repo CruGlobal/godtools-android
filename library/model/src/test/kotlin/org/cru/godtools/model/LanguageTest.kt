@@ -52,7 +52,7 @@ class LanguageTest {
     // region getDisplayName()
     @Test
     fun `getDisplayName()`() {
-        mockkStatic("org.cru.godtools.base.util.LocaleUtils") {
+        mockkStatic("org.cru.godtools.base.util.LocaleKt") {
             every { any<Locale>().getDisplayName(any(), any(), any()) } returns "DisplayName"
 
             val context: Context = mockk()

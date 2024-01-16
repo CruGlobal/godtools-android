@@ -1,5 +1,3 @@
-@file:JvmName("LocaleUtils")
-
 package org.cru.godtools.base.util
 
 import android.content.Context
@@ -9,7 +7,6 @@ import org.ccci.gto.android.common.util.getOptionalDisplayName
 import org.cru.godtools.base.R
 import timber.log.Timber
 
-@JvmOverloads
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
     return context?.localizeIfPossible(inLocale)?.getLanguageNameStringRes(this)
         // use Locale.getDisplayName()
@@ -19,7 +16,8 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
         // just rely on Locale.getDisplayName() which will default to the language code at this point
         ?: run {
             val e = RuntimeException("Unable to find display name for $this")
-            Timber.tag("LocaleUtils").e(e, "LocaleUtils.getDisplayName(%s, %s)", this, inLocale)
+            Timber.tag("LocaleUtils")
+                .e(e, "Locale(%s).getDisplayName(defaultName = %s, inLocale = %s)", this, defaultName, inLocale)
             if (inLocale != null) getDisplayName(inLocale) else displayName
         }
 }
