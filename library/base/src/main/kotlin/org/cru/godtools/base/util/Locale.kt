@@ -1,11 +1,14 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
+import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.ccci.gto.android.common.util.getOptionalDisplayName
 import org.cru.godtools.base.R
 import timber.log.Timber
+
+fun Locale.getPrimaryCollator(): Collator = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
 
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
     return context?.localizeIfPossible(inLocale)?.getLanguageNameStringRes(this)

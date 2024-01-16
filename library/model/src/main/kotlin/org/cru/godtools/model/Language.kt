@@ -1,7 +1,6 @@
 package org.cru.godtools.model
 
 import android.content.Context
-import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
@@ -9,6 +8,7 @@ import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiType
 import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.util.getDisplayName
+import org.cru.godtools.base.util.getPrimaryCollator
 
 private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
@@ -34,10 +34,10 @@ data class Language(
         val INVALID_CODE = Locale("x", "inv")
 
         fun displayNameComparator(context: Context, displayLocale: Locale = context.appLanguage): Comparator<Language> =
-            compareBy(displayLocale.primaryCollator) { it.getDisplayName(context, displayLocale) }
+            compareBy(displayLocale.getPrimaryCollator()) { it.getDisplayName(context, displayLocale) }
 
         private fun Collection<Language>.toDisplayNameSortedMap(context: Context, displayLocale: Locale) =
-            associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.primaryCollator)
+            associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.getPrimaryCollator())
 
         fun Collection<Language>.sortedByDisplayName(context: Context, displayLocale: Locale = context.appLanguage) =
             toDisplayNameSortedMap(context, displayLocale).values.toList()
@@ -57,9 +57,6 @@ data class Language(
                 terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
             }
         }
-
-        private val Locale.primaryCollator: Collator
-            get() = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
     }
 
     @Suppress("SENSELESS_COMPARISON")
