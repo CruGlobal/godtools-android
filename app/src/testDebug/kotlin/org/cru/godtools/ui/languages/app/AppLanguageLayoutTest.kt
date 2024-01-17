@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.languages.app
 
 import android.app.Application
+import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -10,6 +11,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
+import kotlin.test.Ignore
 import kotlin.test.Test
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -24,11 +26,16 @@ class AppLanguageLayoutTest {
     private val events = TestEventSink<AppLanguageScreen.Event>()
 
     @Test
+    @Ignore(
+        "performClick() on an IconButton in a SearchBar doesn't appear to work currently in Robolectric. " +
+            "See: https://github.com/robolectric/robolectric/issues/8420"
+    )
     fun `Action - AppBar Navigate Back`() {
         composeTestRule.run {
             setContent { AppLanguageLayout(AppLanguageScreen.State(eventSink = events)) }
             onNodeWithTag(TEST_TAG_ACTION_BACK)
                 .assertIsEnabled()
+                .assertHasClickAction()
                 .performClick()
         }
 
@@ -53,6 +60,30 @@ class AppLanguageLayoutTest {
 
         events.assertEvent(AppLanguageScreen.Event.SelectLanguage(Locale.ENGLISH))
     }
+
+    // region Search
+    @Test
+    fun `Search - Cancel Button not visible when not searching`() {
+        composeTestRule.run {
+            setContent {
+                AppLanguageLayout(state = AppLanguageScreen.State(languageQuery = "", eventSink = events))
+            }
+
+            onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun `Search - Cancel Button visible when searching`() {
+        composeTestRule.run {
+            setContent {
+                AppLanguageLayout(state = AppLanguageScreen.State(languageQuery = "query", eventSink = events))
+            }
+
+            onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertExists()
+        }
+    }
+    // endregion Search
 
     // region Confirm Dialog
     @Test
