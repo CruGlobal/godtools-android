@@ -26,7 +26,6 @@ import org.cru.godtools.db.repository.UserRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.enableMigrations
 import org.keynote.godtools.android.db.GodToolsDatabase
-import org.keynote.godtools.android.db.repository.LegacyDownloadedFilesRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -48,11 +47,11 @@ object DatabaseModule {
     @Provides
     @Reusable
     internal fun downloadedFilesRepository(
-        repository: LegacyDownloadedFilesRepository,
+        db: GodToolsRoomDatabase,
         legacyDb: GodToolsDatabase,
     ): DownloadedFilesRepository {
         legacyDb.triggerDataMigration()
-        return repository
+        return db.downloadedFilesRepository
     }
 
     @Provides
