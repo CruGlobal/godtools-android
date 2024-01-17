@@ -36,54 +36,33 @@ object DatabaseModule {
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
+            .also { GodToolsDatabase(context, it).triggerDataMigration() }
 
     @Provides
     @Reusable
-    internal fun attachmentsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): AttachmentsRepository {
-        legacyDb.triggerDataMigration()
-        return db.attachmentsRepository
-    }
+    internal fun attachmentsRepository(db: GodToolsRoomDatabase): AttachmentsRepository = db.attachmentsRepository
 
     @Provides
     @Reusable
-    internal fun downloadedFilesRepository(
-        db: GodToolsRoomDatabase,
-        legacyDb: GodToolsDatabase,
-    ): DownloadedFilesRepository {
-        legacyDb.triggerDataMigration()
-        return db.downloadedFilesRepository
-    }
+    internal fun downloadedFilesRepository(db: GodToolsRoomDatabase): DownloadedFilesRepository =
+        db.downloadedFilesRepository
 
     @Provides
     @Reusable
-    internal fun languagesRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): LanguagesRepository {
-        legacyDb.triggerDataMigration()
-        return db.languagesRepository
-    }
+    internal fun languagesRepository(db: GodToolsRoomDatabase): LanguagesRepository = db.languagesRepository
 
     @Provides
     @Reusable
-    internal fun followupsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): FollowupsRepository {
-        legacyDb.triggerDataMigration()
-        return db.followupsRepository
-    }
+    internal fun followupsRepository(db: GodToolsRoomDatabase): FollowupsRepository = db.followupsRepository
 
     @Provides
     @Reusable
-    internal fun globalActivityRepository(
-        db: GodToolsRoomDatabase,
-        legacyDb: GodToolsDatabase,
-    ): GlobalActivityRepository {
-        legacyDb.triggerDataMigration()
-        return db.globalActivityRepository
-    }
+    internal fun globalActivityRepository(db: GodToolsRoomDatabase): GlobalActivityRepository =
+        db.globalActivityRepository
 
     @Provides
     @Reusable
-    internal fun trainingTipsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): TrainingTipsRepository {
-        legacyDb.triggerDataMigration()
-        return db.trainingTipsRepository
-    }
+    internal fun trainingTipsRepository(db: GodToolsRoomDatabase): TrainingTipsRepository = db.trainingTipsRepository
 
     @Provides
     @Reusable
@@ -91,10 +70,7 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun userCountersRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): UserCountersRepository {
-        legacyDb.triggerDataMigration()
-        return db.userCountersRepository
-    }
+    internal fun userCountersRepository(db: GodToolsRoomDatabase): UserCountersRepository = db.userCountersRepository
 
     @Provides
     @Reusable
@@ -102,17 +78,11 @@ object DatabaseModule {
 
     @Provides
     @Reusable
-    internal fun toolsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): ToolsRepository {
-        legacyDb.triggerDataMigration()
-        return db.toolsRepository
-    }
+    internal fun toolsRepository(db: GodToolsRoomDatabase): ToolsRepository = db.toolsRepository
 
     @Provides
     @Reusable
-    internal fun translationsRepository(db: GodToolsRoomDatabase, legacyDb: GodToolsDatabase): TranslationsRepository {
-        legacyDb.triggerDataMigration()
-        return db.translationsRepository
-    }
+    internal fun translationsRepository(db: GodToolsRoomDatabase): TranslationsRepository = db.translationsRepository
 
     private fun GodToolsDatabase.triggerDataMigration() {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,

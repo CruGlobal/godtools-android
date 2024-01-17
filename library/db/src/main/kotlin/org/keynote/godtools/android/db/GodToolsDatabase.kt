@@ -5,10 +5,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
-import javax.inject.Inject
-import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
 import org.ccci.gto.android.common.db.util.CursorUtils.getBool
@@ -74,9 +71,8 @@ private const val DATABASE_VERSION = 63
  * 63: 2024-01-17
  */
 
-@Singleton
-class GodToolsDatabase @Inject internal constructor(
-    @ApplicationContext private val context: Context,
+internal class GodToolsDatabase(
+    private val context: Context,
     private val roomDb: GodToolsRoomDatabase,
 ) : WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) = Unit
