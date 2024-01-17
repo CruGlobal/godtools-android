@@ -20,6 +20,8 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.util.filterByDisplayAndNativeName
+import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.base.util.getPrimaryCollator
 
 class AppLanguagePresenter @AssistedInject constructor(
@@ -31,6 +33,7 @@ class AppLanguagePresenter @AssistedInject constructor(
     @Composable
     override fun present(): AppLanguageScreen.State {
         val appLanguage by settings.appLanguageFlow.collectAsState(settings.appLanguage)
+        var languageQuery by remember { mutableStateOf("") }
         var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
 
         val eventSink: (AppLanguageScreen.Event) -> Unit = remember {
@@ -38,6 +41,7 @@ class AppLanguagePresenter @AssistedInject constructor(
                 when (it) {
                     AppLanguageScreen.Event.NavigateBack -> navigator.pop()
 
+                    is AppLanguageScreen.Event.UpdateLanguageQuery -> languageQuery = it.query
                     is AppLanguageScreen.Event.SelectLanguage -> {
                         if (it.language == appLanguage) {
                             navigator.pop()
@@ -57,18 +61,24 @@ class AppLanguagePresenter @AssistedInject constructor(
         }
 
         return AppLanguageScreen.State(
+            languages = rememberLanguages(appLanguage, languageQuery),
+            languageQuery = languageQuery,
             selectedLanguage = confirmLanguage,
-            languages = rememberLanguages(appLanguage),
             eventSink = eventSink,
         )
     }
 
     @Composable
-    private fun rememberLanguages(appLanguage: Locale): List<Locale> {
+    private fun rememberLanguages(appLanguage: Locale, query: String): List<Locale> {
         val languages = remember { LocaleConfigCompat.getSupportedLocales(context)?.asIterable() ?: emptyList() }
+        val sortedLanguages = remember(appLanguage) {
+            languages.sortedWith(
+                compareBy(appLanguage.getPrimaryCollator()) { it.getDisplayName(context, inLocale = appLanguage) }
+            )
+        }
 
-        return remember(appLanguage) {
-            languages.sortedWith(compareBy(appLanguage.getPrimaryCollator()) { it.getDisplayName(appLanguage) })
+        return remember(sortedLanguages, appLanguage, query) {
+            sortedLanguages.filterByDisplayAndNativeName(query, context, inLocale = appLanguage)
         }
     }
 
