@@ -17,8 +17,8 @@ internal class LegacyDownloadedFilesRepository @Inject constructor(
     override suspend fun getDownloadedTranslationFiles() =
         dao.getAsync(Query.select<DownloadedTranslationFile>()).await()
 
-    override fun insertOrIgnore(translationFile: DownloadedTranslationFile) {
-        dao.insert(translationFile, SQLiteDatabase.CONFLICT_IGNORE)
+    override suspend fun insertOrIgnore(translationFile: DownloadedTranslationFile) {
+        dao.insertAsync(translationFile, SQLiteDatabase.CONFLICT_IGNORE).join()
     }
 
     override suspend fun delete(file: DownloadedTranslationFile) = dao.deleteAsync(file).join()
