@@ -23,6 +23,7 @@ import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.AttachmentEntity
 import org.cru.godtools.db.room.entity.DownloadedFileEntity
+import org.cru.godtools.db.room.entity.DownloadedTranslationFileEntity.Companion.toEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
 import org.cru.godtools.db.room.entity.ToolEntity
@@ -43,7 +44,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 61
+private const val DATABASE_VERSION = 62
 
 /*
  * Version history
@@ -69,6 +70,7 @@ private const val DATABASE_VERSION = 61
  * 59: 2023-05-15
  * 60: 2023-05-09
  * 61: 2023-06-07
+ * 62: 2024-01-17
  */
 
 @Singleton
@@ -80,7 +82,6 @@ class GodToolsDatabase @Inject internal constructor(
         try {
             db.beginTransaction()
             db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
@@ -341,6 +342,28 @@ class GodToolsDatabase @Inject internal constructor(
                         }
 
                         db.execSQL(TranslationTable.SQL_DELETE_TABLE)
+                    }
+                    62 -> {
+                        db.query(
+                            TranslationFileTable.TABLE_NAME,
+                            TranslationFileTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.forEach {
+                                val file = TranslationFileMapper.toObject(it)
+                                try {
+                                    roomDb.downloadedFilesDao.insertOrIgnoreBlocking(file.toEntity())
+                                } catch (_: SQLiteConstraintException) {
+                                    // ignore files that fail FK constraints
+                                }
+                            }
+                        }
+
+                        db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
                     }
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
