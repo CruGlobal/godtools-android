@@ -44,7 +44,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 62
+private const val DATABASE_VERSION = 63
 
 /*
  * Version history
@@ -71,6 +71,7 @@ private const val DATABASE_VERSION = 62
  * 60: 2023-05-09
  * 61: 2023-06-07
  * 62: 2024-01-17
+ * 63: 2024-01-17
  */
 
 @Singleton
@@ -78,15 +79,7 @@ class GodToolsDatabase @Inject internal constructor(
     @ApplicationContext private val context: Context,
     private val roomDb: GodToolsRoomDatabase,
 ) : WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    override fun onCreate(db: SQLiteDatabase) {
-        try {
-            db.beginTransaction()
-            db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
-        }
-    }
+    override fun onCreate(db: SQLiteDatabase) = Unit
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         try {
@@ -365,6 +358,7 @@ class GodToolsDatabase @Inject internal constructor(
 
                         db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
                     }
+                    63 -> db.execSQL(LastSyncTable.SQL_DELETE_TABLE)
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
