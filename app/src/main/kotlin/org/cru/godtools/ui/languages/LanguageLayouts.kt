@@ -19,11 +19,20 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 import java.util.Locale
 import org.cru.godtools.base.LocalAppLanguage
+import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language
 
 @Composable
-internal fun LanguageName(locale: Locale) =
-    LanguageName(locale.getDisplayName(LocalAppLanguage.current), locale.getDisplayName(locale))
+internal fun LanguageName(locale: Locale, modifier: Modifier = Modifier) {
+    val appLanguage = LocalAppLanguage.current
+    val context = LocalContext.current
+
+    LanguageName(
+        displayName = remember(context, locale, appLanguage) { locale.getDisplayName(context, inLocale = appLanguage) },
+        nativeName = remember(context, locale) { locale.getDisplayName(context, inLocale = locale) },
+        modifier = modifier,
+    )
+}
 
 @Composable
 internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
