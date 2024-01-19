@@ -27,11 +27,13 @@ internal fun LanguageName(locale: Locale) =
 
 @Composable
 internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
+    val appLanguage = LocalAppLanguage.current
     val context = LocalContext.current
+
     LanguageName(
-        language.getDisplayName(context, LocalAppLanguage.current),
-        language.getDisplayName(context, language.code),
-        modifier
+        displayName = remember(context, language, appLanguage) { language.getDisplayName(context, appLanguage) },
+        nativeName = remember(context, language) { language.getDisplayName(context, language.code) },
+        modifier = modifier,
     )
 }
 
