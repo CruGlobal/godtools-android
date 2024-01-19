@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="leak_canary_display_activity_label" translatable="false">GodTools Leaks</string>
+
+    <bool name="leak_canary_allow_in_non_debuggable_build">true</bool>
 </resources>
