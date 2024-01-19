@@ -1,6 +1,7 @@
 package org.cru.godtools.base.util
 
 import android.content.Context
+import androidx.annotation.StringRes
 import java.text.Collator
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
@@ -11,7 +12,7 @@ import timber.log.Timber
 fun Locale.getPrimaryCollator(): Collator = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
 
 fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
-    return context?.localizeIfPossible(inLocale)?.getLanguageNameStringRes(this)
+    return getLanguageNameStringRes(context, inLocale)
         // use Locale.getDisplayName()
         ?: getOptionalDisplayName(inLocale)
         // use the default name if specified
@@ -25,8 +26,11 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
         }
 }
 
-private fun Context.getLanguageNameStringRes(locale: Locale) = when (locale.toLanguageTag()) {
-    "fa" -> getString(R.string.language_name_fa)
-    "fil" -> getString(R.string.language_name_fil)
+private fun Locale.getLanguageNameStringRes(context: Context?, inLocale: Locale?) = when (toLanguageTag()) {
+    "fa" -> context?.getLocalizedString(inLocale, R.string.language_name_fa)
+    "fil" -> context?.getLocalizedString(inLocale, R.string.language_name_fil)
     else -> null
 }
+
+private fun Context.getLocalizedString(inLocale: Locale?, @StringRes resId: Int) =
+    localizeIfPossible(inLocale).getString(resId)

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -36,6 +37,12 @@ class LocaleUtilsGetDisplayNameTest {
     fun preferLanguageNameString() {
         assertEquals("Language Name fa", Locale.forLanguageTag("fa").getDisplayName(context, defaultName = "invalid"))
         assertEquals("Language Name fil", Locale.forLanguageTag("fil").getDisplayName(context, defaultName = "invalid"))
+    }
+
+    @Test
+    fun `Language Name String - Performance - Don't localize context when not necessary`() {
+        assertEquals("anglais", Locale.ENGLISH.getDisplayName(context, inLocale = Locale.FRENCH))
+        verify { context wasNot Called }
     }
 
     @Test

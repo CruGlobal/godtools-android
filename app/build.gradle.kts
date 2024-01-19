@@ -213,6 +213,7 @@ dependencies {
     implementation(libs.weakdelegate)
     implementation(libs.youtubePlayer)
 
+    debugImplementation(libs.androidx.compose.runtime.tracing)
     debugImplementation(libs.facebook.flipper)
     debugImplementation(libs.facebook.flipper.plugins.leakcanary2)
     debugImplementation(libs.facebook.flipper.plugins.network)

@@ -17,7 +17,7 @@ object LocalAppLanguage {
         @Composable
         get() = LocalComposition.current
             ?: LocalContext.current.let {
-                remember(it) { it.getAppLanguageFlow() }.collectAsState(it.appLanguage).value
+                remember(it) { it.getAppLanguageFlow() }.collectAsState(remember { it.appLanguage }).value
             }
 
     /**
