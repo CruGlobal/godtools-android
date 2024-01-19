@@ -10,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.FollowupService
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -40,6 +41,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val manifestManager by lazy {
         mockk<ManifestManager> {
+            every { getLatestPublishedManifestFlow(any(), any()) } returns flowOf(null)
             every { getLatestPublishedManifestLiveData(any(), any()) } answers { MutableLiveData() }
         }
     }
@@ -55,6 +57,7 @@ class ExternalSingletonsModule {
     val syncService by lazy {
         mockk<GodToolsSyncService> {
             coEvery { syncTool(any(), any()) } returns true
+            coEvery { syncToolSharesAsync() } returns CompletableDeferred(true)
         }
     }
     @get:Provides
