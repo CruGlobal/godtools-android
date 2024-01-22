@@ -5,10 +5,7 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.Instant
-import javax.inject.Inject
-import javax.inject.Singleton
 import org.ccci.gto.android.common.db.CommonTables.LastSyncTable
 import org.ccci.gto.android.common.db.WalSQLiteOpenHelper
 import org.ccci.gto.android.common.db.util.CursorUtils.getBool
@@ -23,6 +20,7 @@ import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.AttachmentEntity
 import org.cru.godtools.db.room.entity.DownloadedFileEntity
+import org.cru.godtools.db.room.entity.DownloadedTranslationFileEntity.Companion.toEntity
 import org.cru.godtools.db.room.entity.FollowupEntity
 import org.cru.godtools.db.room.entity.LanguageEntity
 import org.cru.godtools.db.room.entity.ToolEntity
@@ -43,7 +41,7 @@ import org.keynote.godtools.android.db.Contract.UserCounterTable
 import timber.log.Timber
 
 private const val DATABASE_NAME = "resource.db"
-private const val DATABASE_VERSION = 61
+private const val DATABASE_VERSION = 63
 
 /*
  * Version history
@@ -69,23 +67,15 @@ private const val DATABASE_VERSION = 61
  * 59: 2023-05-15
  * 60: 2023-05-09
  * 61: 2023-06-07
+ * 62: 2024-01-17
+ * 63: 2024-01-17
  */
 
-@Singleton
-class GodToolsDatabase @Inject internal constructor(
-    @ApplicationContext private val context: Context,
+internal class GodToolsDatabase(
+    private val context: Context,
     private val roomDb: GodToolsRoomDatabase,
 ) : WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-    override fun onCreate(db: SQLiteDatabase) {
-        try {
-            db.beginTransaction()
-            db.execSQL(LastSyncTable.SQL_CREATE_TABLE)
-            db.execSQL(TranslationFileTable.SQL_CREATE_TABLE)
-            db.setTransactionSuccessful()
-        } finally {
-            db.endTransaction()
-        }
-    }
+    override fun onCreate(db: SQLiteDatabase) = Unit
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         try {
@@ -342,6 +332,29 @@ class GodToolsDatabase @Inject internal constructor(
 
                         db.execSQL(TranslationTable.SQL_DELETE_TABLE)
                     }
+                    62 -> {
+                        db.query(
+                            TranslationFileTable.TABLE_NAME,
+                            TranslationFileTable.PROJECTION_ALL,
+                            null,
+                            emptyArray(),
+                            null,
+                            null,
+                            null
+                        ).use {
+                            it.forEach {
+                                val file = TranslationFileMapper.toObject(it)
+                                try {
+                                    roomDb.downloadedFilesDao.insertOrIgnoreBlocking(file.toEntity())
+                                } catch (_: SQLiteConstraintException) {
+                                    // ignore files that fail FK constraints
+                                }
+                            }
+                        }
+
+                        db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
+                    }
+                    63 -> db.execSQL(LastSyncTable.SQL_DELETE_TABLE)
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 
