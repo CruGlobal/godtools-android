@@ -19,7 +19,7 @@ class LessonsViewModel @Inject constructor(
     toolsRepository: ToolsRepository,
 ) : ViewModel() {
     val lessons = toolsRepository.getLessonsFlow()
-        .map { it.filterNot { it.isHidden }.mapNotNull { it.code } }
+        .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder }.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     // region Analytics

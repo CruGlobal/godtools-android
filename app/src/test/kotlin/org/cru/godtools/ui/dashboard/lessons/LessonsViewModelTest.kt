@@ -3,6 +3,10 @@ package org.cru.godtools.ui.dashboard.lessons
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +21,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsViewModelTest {
@@ -32,13 +33,13 @@ class LessonsViewModelTest {
 
     private lateinit var viewModel: LessonsViewModel
 
-    @Before
+    @BeforeTest
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
         viewModel = LessonsViewModel(mockk(), toolsRepository)
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         Dispatchers.resetMain()
     }
@@ -52,6 +53,18 @@ class LessonsViewModelTest {
             lessonsFlow.value = listOf(visible, hidden)
             runCurrent()
             assertThat(expectMostRecentItem(), contains("visible"))
+        }
+    }
+
+    @Test
+    fun `Property lessons - Sorted by defaultOrder`() = testScope.runTest {
+        val first = randomTool("first", Tool.Type.LESSON, defaultOrder = 1, isHidden = false)
+        val second = randomTool("second", Tool.Type.LESSON, defaultOrder = 2, isHidden = false)
+
+        viewModel.lessons.test {
+            lessonsFlow.value = listOf(second, first)
+            runCurrent()
+            assertEquals(listOf("first", "second"), expectMostRecentItem())
         }
     }
 }
