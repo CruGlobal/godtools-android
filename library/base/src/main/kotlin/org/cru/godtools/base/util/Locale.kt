@@ -34,3 +34,16 @@ private fun Locale.getLanguageNameStringRes(context: Context?, inLocale: Locale?
 
 private fun Context.getLocalizedString(inLocale: Locale?, @StringRes resId: Int) =
     localizeIfPossible(inLocale).getString(resId)
+
+fun Collection<Locale>.filterByDisplayAndNativeName(
+    query: String,
+    context: Context? = null,
+    inLocale: Locale? = null,
+): List<Locale> {
+    val terms = query.split(Regex("\\s+")).filter { it.isNotBlank() }
+    return filter {
+        val displayName by lazy { it.getDisplayName(context, inLocale = inLocale) }
+        val nativeName by lazy { it.getDisplayName(context, inLocale = it) }
+        terms.all { displayName.contains(it, true) || nativeName.contains(it, true) }
+    }
+}
