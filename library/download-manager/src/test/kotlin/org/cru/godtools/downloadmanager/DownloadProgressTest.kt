@@ -1,9 +1,10 @@
 package org.cru.godtools.downloadmanager
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class DownloadProgressTest {
     @Test
@@ -35,9 +36,14 @@ class DownloadProgressTest {
 
     @Test
     fun testEquals() {
-        assertTrue(DownloadProgress.INITIAL == DownloadProgress(0, 0))
-        assertTrue(DownloadProgress(10, 20) == DownloadProgress(10, 20))
-        assertFalse(DownloadProgress(9, 20) == DownloadProgress(10, 20))
-        assertFalse(DownloadProgress(9, 19) == DownloadProgress(9, 20))
+        assertEquals(DownloadProgress.INITIAL, DownloadProgress(0, 0))
+        assertEquals(DownloadProgress(10, 20), DownloadProgress(10, 20))
+        assertNotEquals(DownloadProgress(9, 20), DownloadProgress(10, 20))
+        assertNotEquals(DownloadProgress(9, 19), DownloadProgress(9, 20))
+    }
+
+    @Test
+    fun testEqualsIndeterminate() {
+        assertEquals(DownloadProgress(20, 0), DownloadProgress(10, 0))
     }
 }
