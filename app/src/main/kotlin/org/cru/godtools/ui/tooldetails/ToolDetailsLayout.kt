@@ -201,7 +201,6 @@ private fun ToolDetailsContent(
                 }
 
                 ToolDetailsActions(
-                    viewModel,
                     toolViewModel,
                     onEvent = onEvent,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
@@ -286,7 +285,6 @@ private fun ToolDetailsBanner(toolViewModel: ToolViewModels.ToolViewModel, modif
 @Composable
 @VisibleForTesting
 internal fun ToolDetailsActions(
-    viewModel: ToolDetailsViewModel,
     toolViewModel: ToolViewModels.ToolViewModel,
     modifier: Modifier = Modifier,
     onEvent: (ToolDetailsEvent) -> Unit = {},
