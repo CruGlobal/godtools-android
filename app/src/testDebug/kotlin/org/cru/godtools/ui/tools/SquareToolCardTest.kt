@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.tools
 
 import android.app.Application
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -10,6 +12,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.UUID
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.randomTool
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -41,6 +45,7 @@ class SquareToolCardTest {
         events.assertEvent(ToolCard.Event.Click)
     }
 
+    // region SquareToolCard - Category
     @Test
     fun `SquareToolCard(showCategory=true)`() {
         composeTestRule.setContent {
@@ -64,4 +69,31 @@ class SquareToolCardTest {
 
         composeTestRule.onNodeWithTag(TEST_TAG_TOOL_CATEGORY).assertDoesNotExist()
     }
+    // endregion SquareToolCard - Category
+
+    // region SquareToolCard - Download Progress
+    @Test
+    fun `SquareToolCard() - Download Progress - Hidden when not downloading`() {
+        composeTestRule.setContent {
+            SquareToolCard(state = ToolCard.State(tool = randomTool(), downloadProgress = null))
+        }
+
+        composeTestRule
+            .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `SquareToolCard() - Download Progress - Visible when downloading`() {
+        composeTestRule.setContent {
+            SquareToolCard(state = ToolCard.State(tool = randomTool(), downloadProgress = DownloadProgress(1, 4)))
+        }
+
+        val progressRangeInfo = composeTestRule
+            .onNode(SemanticsMatcher.keyIsDefined(SemanticsProperties.ProgressBarRangeInfo))
+            .assertExists()
+            .fetchSemanticsNode().config[SemanticsProperties.ProgressBarRangeInfo]
+        assertEquals(0.25f, progressRangeInfo.current)
+    }
+    // endregion SquareToolCard - Download Progress
 }
