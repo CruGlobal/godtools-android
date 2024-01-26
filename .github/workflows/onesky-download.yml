@@ -26,6 +26,8 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,9 +44,7 @@ jobs:
           rm */src/main/res/values-*/strings*.xml
           rm */*/src/main/res/values-*/strings*.xml
       - name: Download Strings from OneSky
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: downloadTranslations --max-workers 1 --scan
+        run: ./gradlew downloadTranslations --max-workers 1 --scan
       - name: Create Translation Update Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
