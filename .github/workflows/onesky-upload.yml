@@ -24,6 +24,8 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -36,6 +38,4 @@ jobs:
             /shared/onesky/PUBLIC_KEY = ORG_GRADLE_PROJECT_ONESKY_API_KEY,
             /shared/onesky/SECRET_KEY = ORG_GRADLE_PROJECT_ONESKY_API_SECRET
       - name: Upload Strings to OneSky
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: uploadTranslations --scan
+        run: ./gradlew  uploadTranslations --scan
