@@ -8,13 +8,13 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.UUID
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import org.ccci.gto.android.common.util.database.getString
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -72,7 +72,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query(filesQuery)
+            db.query(filesQuery).close()
         }
     }
 
@@ -94,7 +94,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query(toolsQuery)
+            db.query(toolsQuery).close()
         }
     }
 
@@ -116,7 +116,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query(attachmentsQuery)
+            db.query(attachmentsQuery).close()
         }
     }
 
@@ -138,7 +138,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query(translationsQuery)
+            db.query(translationsQuery).close()
         }
     }
 
@@ -313,7 +313,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query(filesQuery)
+            db.query(filesQuery).close()
         }
     }
 }
