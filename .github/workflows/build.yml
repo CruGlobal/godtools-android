@@ -22,10 +22,10 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Build App
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: bundle --scan
+        run: ./gradlew bundle --scan
 
   ktlint:
     name: ktlint
@@ -38,10 +38,10 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Run ktlint
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: :build-logic:ktlintCheck ktlintCheck --scan
+        run: ./gradlew :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,10 +60,10 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Run Lint Checks
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: lint --scan
+        run: ./gradlew lint --scan
       - name: Archive lint results
         if: always()
         uses: actions/upload-artifact@v4
@@ -98,12 +98,10 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
       - name: Run Unit Tests
-        uses: gradle/gradle-build-action@v2
-        with:
-          cache-read-only: false
-#          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
-          arguments: test koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
+        run: ./gradlew test koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -136,16 +134,14 @@ jobs:
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
-      - name: Build QA Universal APK
-        uses: gradle/gradle-build-action@v2
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: true
-          arguments: :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
+      - name: Build QA Universal APK
+        run: ./gradlew :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
         env:
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
       - name: Upload QA Build to Firebase
-        uses: gradle/gradle-build-action@v2
-        with:
-          cache-read-only: true
-          arguments: appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
+        run: ./gradlew appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
