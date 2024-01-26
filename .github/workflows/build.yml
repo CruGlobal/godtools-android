@@ -23,7 +23,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Build App
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: bundle --scan
 
@@ -39,7 +39,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Run ktlint
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
@@ -61,7 +61,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Run Lint Checks
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: lint --scan
       - name: Archive lint results
@@ -99,7 +99,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Run Unit Tests
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           cache-read-only: false
 #          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/develop' && !startsWith(github.ref, 'refs/heads/feature/') }}
@@ -137,7 +137,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Build QA Universal APK
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           cache-read-only: true
           arguments: :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
@@ -145,7 +145,7 @@ jobs:
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
       - name: Upload QA Build to Firebase
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           cache-read-only: true
           arguments: appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
