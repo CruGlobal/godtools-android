@@ -14,6 +14,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import org.ccci.gto.android.common.util.database.getString
+import org.cru.godtools.model.Tool
 import org.junit.Rule
 import org.junit.runner.RunWith
 
@@ -314,6 +315,27 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(1234, it.getIntOrNull(1))
             }
             db.query(filesQuery).close()
+        }
+    }
+
+    @Test
+    fun testMigrate20To21() {
+        val defaultLocaleQuery = "SELECT code, defaultLocale FROM tools WHERE code = 'kgp'"
+
+        // create v20 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 20).use { db ->
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            assertFailsWith<SQLException> { db.query(defaultLocaleQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 21, true, *MIGRATIONS).use { db ->
+            db.query(defaultLocaleQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("kgp", it.getStringOrNull(0))
+                assertEquals("en", it.getStringOrNull(1))
+            }
         }
     }
 }

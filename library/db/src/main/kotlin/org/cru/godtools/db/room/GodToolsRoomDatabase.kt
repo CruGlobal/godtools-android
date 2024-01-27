@@ -45,7 +45,7 @@ import org.cru.godtools.db.room.repository.UserCountersRoomRepository
 import org.cru.godtools.db.room.repository.UserRoomRepository
 
 @Database(
-    version = 20,
+    version = 21,
     entities = [
         AttachmentEntity::class,
         LanguageEntity::class,
@@ -75,6 +75,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         AutoMigration(from = 17, to = 18, spec = Migration18::class),
         AutoMigration(from = 18, to = 19, spec = Migration19::class),
         AutoMigration(from = 19, to = 20),
+        AutoMigration(from = 20, to = 21),
     ],
 )
 @TypeConverters(Java8TimeConverters::class, LocaleConverter::class)
@@ -134,6 +135,7 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 18: 2023-11-21
  * 19: 2023-12-07
  * 20: 2024-01-17
+ * 21: 2024-01-26
  */
 
 internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()

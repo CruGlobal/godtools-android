@@ -2,7 +2,7 @@ package org.cru.godtools.db.room.entity.partial
 
 import org.cru.godtools.model.Tool
 
-class SyncTool(tool: Tool) {
+internal class SyncTool(tool: Tool) {
     val apiId = tool.apiId
     val code = tool.code.orEmpty()
     val type = tool.type
@@ -15,6 +15,7 @@ class SyncTool(tool: Tool) {
     val detailsBannerAnimationId = tool.detailsBannerAnimationId
     val detailsBannerYoutubeVideoId = tool.detailsBannerYoutubeVideoId
     val isScreenShareDisabled = tool.isScreenShareDisabled
+    val defaultLocale = tool.defaultLocale
     val defaultOrder = tool.defaultOrder
     val metatoolCode = tool.metatoolCode
     val defaultVariantCode = tool.defaultVariantCode
