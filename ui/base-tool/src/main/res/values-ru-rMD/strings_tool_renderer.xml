@@ -7,10 +7,5 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Поделиться</string>
-    <string name="share_tool_message">Вот ссылка на загрузку приложения, которое мы с вами смотрели сегодня: http://godtoolsapp.com \n\n
-
-  Вот ссылка на веб-версию приложения %1$s \n\n
-
-Давайте чаще общаться!</string>
     <!-- Shareables -->
 </resources>
