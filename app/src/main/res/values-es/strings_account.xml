@@ -6,6 +6,7 @@
     <string name="account_create_heading">Crear cuenta</string>
     <string name="account_create_description">Crea una cuenta para tener a tu alcance historias reales, ánimos y consejos prácticos.</string>
     <string name="account_login_heading">Iniciar sesión</string>
+    <string name="account_login_description">Accede a tu cuenta para tener a tu alcance historias reales, motivación y consejos prácticos.</string>
     <string name="account_error_user_already_exists">La cuenta del usuario ya existe.</string>
     <string name="account_error_user_not_found">No se encontró la cuenta del usuario.</string>
     <string name="account_error_unknown">Error al iniciar sesión.</string>

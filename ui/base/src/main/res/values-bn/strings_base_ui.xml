@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="toast_unable_to_launch_activity">খুলতে অক্ষম %s</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">সুসমাচারের আমন্ত্রণ / সুসমাচার আমন্ত্রণ</string>
     <string name="tool_category_articles">প্রবন্ধ সমূহ / প্রবন্ধসমূহ</string>

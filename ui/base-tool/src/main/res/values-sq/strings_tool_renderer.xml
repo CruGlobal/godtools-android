@@ -7,10 +7,5 @@
     <!-- Menu Items -->
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Ndaj</string>
-    <string name="share_tool_message">Këtu është linku për të shkarkuar aplikacionin që ishim duke kërkuar sot: http://godtoolsapp.com \ n \ n
-
-Ja një link me një version interneti të këtij aplikacioni %1$s \ n \n
-
-Le të flasim më shumë!</string>
     <!-- Shareables -->
 </resources>

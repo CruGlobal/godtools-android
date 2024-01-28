@@ -6,6 +6,7 @@
     <string name="account_create_heading">Reģistrēt kontu</string>
     <string name="account_create_description">Izveido kontu, lai tev būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_login_heading">Pierakstīties</string>
+    <string name="account_login_description">Leej savā kontā, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_error_user_already_exists">Lietotāja konts jau pastāv.</string>
     <string name="account_error_user_not_found">Lietotāja konts nav atrasts.</string>
     <string name="account_error_unknown">Kļūda, pierakstoties sistēmā.</string>
