@@ -227,7 +227,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         // generate the list of locales to use for this tool
         val locales = buildList {
             val translation = translationsRepository.findLatestTranslation(code, settings.appLanguage)
-                ?: translationsRepository.findLatestTranslation(code, Settings.defaultLanguage)
+                ?: translationsRepository.findLatestTranslation(code, tool.defaultLocale)
                 ?: return@withContext null
             add(translation.languageCode)
         }
@@ -243,7 +243,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = sequenceOf(settings.appLanguage, Settings.defaultLanguage).includeFallbacks().distinct()
+        val label = sequenceOf(settings.appLanguage, tool.defaultLocale).includeFallbacks().distinct()
             .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(code, it) }
             .getName(tool, context)
 
