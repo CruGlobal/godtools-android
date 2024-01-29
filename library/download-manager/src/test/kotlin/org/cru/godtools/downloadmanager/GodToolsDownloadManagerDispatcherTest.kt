@@ -32,6 +32,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
+import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -90,7 +91,7 @@ class GodToolsDownloadManagerDispatcherTest {
 
     @Test
     fun `Favorite Tools downloadLatestPublishedTranslation() - app language`() = testScope.runTest {
-        dispatcher.downloadTranslationsForDefaultLanguageJob.cancel()
+        dispatcher.downloadFavoriteToolsDefaultTranslations.cancel()
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
@@ -122,38 +123,23 @@ class GodToolsDownloadManagerDispatcherTest {
     }
 
     @Test
-    fun `Favorite Tools downloadLatestPublishedTranslation() - default language`() = testScope.runTest {
-        val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
-        every {
-            translationsRepository.getTranslationsFlowForToolsAndLocales(
-                tools = match { it.toSet() == setOf("tool1", "tool2") },
-                locales = match { it.toSet() == setOf(Settings.defaultLanguage) }
+    fun `Favorite Tools downloadLatestPublishedTranslation() - default tool language`() = testScope.runTest {
+        favoriteToolsFlow.emit(
+            listOf(
+                randomTool("tool1", defaultLocale = Locale.ENGLISH),
+                randomTool("tool2", defaultLocale = Locale.FRENCH),
             )
-        } returns translationsFlow
-        verify { downloadManager wasNot Called }
-
-        favoriteToolsFlow.emit(listOf(Tool("tool1"), Tool("tool2")))
-        runCurrent()
-        verifyAll {
-            translationsRepository.getTranslationsFlowForToolsAndLocales(
-                tools = match { it.toSet() == setOf("tool1", "tool2") },
-                locales = match { it.toSet() == setOf(Settings.defaultLanguage) }
-            )
-        }
-
-        val translation1 = randomTranslation("tool1", Settings.defaultLanguage, isDownloaded = false)
-        val translation2 = randomTranslation("tool2", Settings.defaultLanguage, isDownloaded = false)
-        translationsFlow.emit(listOf(translation1, translation2))
+        )
         runCurrent()
         coVerifyAll {
-            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Settings.defaultLanguage))
-            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Settings.defaultLanguage))
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool1", Locale.ENGLISH))
+            downloadManager.downloadLatestPublishedTranslation(TranslationKey("tool2", Locale.FRENCH))
         }
     }
 
     @Test
     fun `downloadLatestPublishedTranslation() - pinned languages - All Tools`() = testScope.runTest {
-        dispatcher.downloadTranslationsForDefaultLanguageJob.cancel()
+        dispatcher.downloadFavoriteToolsDefaultTranslations.cancel()
 
         val translationsFlow = MutableSharedFlow<List<Translation>>(replay = 1)
         every {
