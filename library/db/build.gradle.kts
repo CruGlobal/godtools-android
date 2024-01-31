@@ -6,6 +6,8 @@ plugins {
 android {
     namespace = "org.cru.godtools.db"
 
+    configureCompose(project)
+
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }
     }
