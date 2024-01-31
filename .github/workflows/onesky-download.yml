@@ -46,7 +46,7 @@ jobs:
       - name: Download Strings from OneSky
         run: ./gradlew downloadTranslations --max-workers 1 --scan
       - name: Create Translation Update Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           branch: "chore/oneskyTranslations"
           title: "Update Translations"
