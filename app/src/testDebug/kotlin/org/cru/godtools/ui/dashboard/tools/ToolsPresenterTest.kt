@@ -7,6 +7,7 @@ import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
@@ -51,6 +52,8 @@ class ToolsPresenterTest {
         every { findLanguageFlow(any()) } returns flowOf(null)
         every { getLanguagesFlow() } returns languagesFlow
         every { getLanguagesFlowForToolCategory(Tool.CATEGORY_GOSPEL) } returns gospelLanguagesFlow
+
+        excludeRecords { this@mockk.equals(any()) }
     }
     private val navigator = FakeNavigator(ToolsScreen)
     private val settings: Settings = mockk {

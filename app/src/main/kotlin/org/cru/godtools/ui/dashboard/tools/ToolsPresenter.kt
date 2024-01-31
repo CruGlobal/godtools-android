@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
@@ -34,6 +33,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
@@ -98,7 +98,6 @@ class ToolsPresenter @AssistedInject constructor(
 
         // selected language
         val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
-        val selectedLanguage = rememberLanguage(selectedLocale)
         var languageQuery by remember { mutableStateOf("") }
 
         val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
@@ -120,7 +119,7 @@ class ToolsPresenter @AssistedInject constructor(
             selectedCategory = selectedCategory,
             languages = rememberFilterLanguages(selectedCategory, languageQuery),
             languageQuery = languageQuery,
-            selectedLanguage = selectedLanguage,
+            selectedLanguage = languagesRepository.rememberLanguage(selectedLocale),
             eventSink = filtersEventSink,
         )
     }
@@ -178,11 +177,6 @@ class ToolsPresenter @AssistedInject constructor(
             }
         }.collectAsState(emptyList()).value
     }
-
-    @Composable
-    private fun rememberLanguage(locale: Locale?) = remember(locale) {
-        locale?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null)
-    }.collectAsState(null).value
 
     @Composable
     private fun rememberSpotlightTools(
