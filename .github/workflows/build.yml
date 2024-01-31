@@ -103,7 +103,7 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew test koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
       - name: Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
