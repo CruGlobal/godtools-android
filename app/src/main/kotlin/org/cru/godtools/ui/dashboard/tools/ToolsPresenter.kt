@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -25,7 +26,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
@@ -90,8 +91,10 @@ class ToolsPresenter @AssistedInject constructor(
 
     @Composable
     private fun rememberFilters(): ToolsScreen.Filters {
+        val scope = rememberCoroutineScope()
+
         // selected category
-        var selectedCategory: String? by remember { mutableStateOf(null) }
+        val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
 
         // selected language
         var selectedLocale: Locale? by remember { mutableStateOf(null) }
@@ -101,7 +104,9 @@ class ToolsPresenter @AssistedInject constructor(
         val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
             {
                 when (it) {
-                    is ToolsScreen.FiltersEvent.SelectCategory -> selectedCategory = it.category
+                    is ToolsScreen.FiltersEvent.SelectCategory -> scope.launch {
+                        settings.updateDashboardFilterCategory(it.category)
+                    }
                     is ToolsScreen.FiltersEvent.SelectLanguage -> selectedLocale = it.locale
                     is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
                 }

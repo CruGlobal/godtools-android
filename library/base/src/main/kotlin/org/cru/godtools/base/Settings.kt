@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.LocaleListCompat
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
@@ -30,11 +33,14 @@ private const val PREF_LAUNCHES = "launches"
 private const val PREF_VERSION_FIRST_LAUNCH = "version.firstLaunch"
 private const val PREF_VERSION_LAST_LAUNCH = "version.lastLaunch"
 
+private val Context.dataStorePreferences by preferencesDataStore("${PREFS_SETTINGS}Settings")
+
 @Singleton
 class Settings internal constructor(private val context: Context, coroutineScope: CoroutineScope) {
     @Inject
     internal constructor(@ApplicationContext context: Context) : this(context, CoroutineScope(Dispatchers.Default))
 
+    private val dataStorePreferences = context.dataStorePreferences
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE)
 
     companion object {
@@ -53,6 +59,9 @@ class Settings internal constructor(private val context: Context, coroutineScope
         const val FEATURE_TUTORIAL_FEATURES = "tutorialTraining"
         const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare."
         const val FEATURE_TUTORIAL_TIPS = "tutorialTips."
+
+        // Dashboard Settings
+        private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
     }
 
     // region Language Settings
@@ -113,6 +122,22 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
     private fun isFeatureDiscoveredInt(feature: String) = prefs.getBoolean("$PREF_FEATURE_DISCOVERED$feature", false)
     // endregion Feature Discovery Tracking
+
+    // region Dashboard Settings
+    fun getDashboardFilterCategoryFlow() = dataStorePreferences.data
+        .map { it[KEY_DASHBOARD_FILTER_CATEGORY] }
+        .distinctUntilChanged()
+    suspend fun updateDashboardFilterCategory(category: String?) {
+        dataStorePreferences.updateData {
+            it.toMutablePreferences().apply {
+                when (category) {
+                    null -> remove(KEY_DASHBOARD_FILTER_CATEGORY)
+                    else -> set(KEY_DASHBOARD_FILTER_CATEGORY, category)
+                }
+            }
+        }
+    }
+    // endregion Dashboard Settings
 
     // region Campaign Tracking
     fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {
