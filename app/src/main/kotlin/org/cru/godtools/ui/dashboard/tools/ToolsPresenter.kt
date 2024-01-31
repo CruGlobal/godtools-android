@@ -97,7 +97,7 @@ class ToolsPresenter @AssistedInject constructor(
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
 
         // selected language
-        var selectedLocale: Locale? by remember { mutableStateOf(null) }
+        val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
         val selectedLanguage = rememberLanguage(selectedLocale)
         var languageQuery by remember { mutableStateOf("") }
 
@@ -107,7 +107,9 @@ class ToolsPresenter @AssistedInject constructor(
                     is ToolsScreen.FiltersEvent.SelectCategory -> scope.launch {
                         settings.updateDashboardFilterCategory(it.category)
                     }
-                    is ToolsScreen.FiltersEvent.SelectLanguage -> selectedLocale = it.locale
+                    is ToolsScreen.FiltersEvent.SelectLanguage -> scope.launch {
+                        settings.updateDashboardFilterLocale(it.locale)
+                    }
                     is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
                 }
             }

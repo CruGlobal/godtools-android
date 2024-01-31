@@ -62,6 +62,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
         // Dashboard Settings
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
+        private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
     }
 
     // region Language Settings
@@ -133,6 +134,20 @@ class Settings internal constructor(private val context: Context, coroutineScope
                 when (category) {
                     null -> remove(KEY_DASHBOARD_FILTER_CATEGORY)
                     else -> set(KEY_DASHBOARD_FILTER_CATEGORY, category)
+                }
+            }
+        }
+    }
+
+    fun getDashboardFilterLocaleFlow() = dataStorePreferences.data
+        .map { it[KEY_DASHBOARD_FILTER_LOCALE]?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+    suspend fun updateDashboardFilterLocale(locale: Locale?) {
+        dataStorePreferences.updateData {
+            it.toMutablePreferences().apply {
+                when (locale) {
+                    null -> remove(KEY_DASHBOARD_FILTER_LOCALE)
+                    else -> set(KEY_DASHBOARD_FILTER_LOCALE, locale.toLanguageTag())
                 }
             }
         }

@@ -3,6 +3,7 @@ package org.cru.godtools.base
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
+import java.util.Locale
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNull
@@ -51,6 +52,19 @@ class SettingsTest {
             assertEquals("test", awaitItem())
 
             settings.updateDashboardFilterCategory(null)
+            assertNull(awaitItem())
+        }
+    }
+
+    @Test
+    fun testDashboardFilterLocale() = runTest {
+        settings.getDashboardFilterLocaleFlow().test {
+            assertNull(awaitItem())
+
+            settings.updateDashboardFilterLocale(Locale.ENGLISH)
+            assertEquals(Locale.ENGLISH, awaitItem())
+
+            settings.updateDashboardFilterLocale(null)
             assertNull(awaitItem())
         }
     }

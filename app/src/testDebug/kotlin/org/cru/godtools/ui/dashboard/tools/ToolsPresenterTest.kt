@@ -45,6 +45,7 @@ class ToolsPresenterTest {
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val gospelLanguagesFlow = MutableStateFlow(emptyList<Language>())
     private val selectedCategory = MutableStateFlow<String?>(null)
+    private val selectedLocale = MutableStateFlow<Locale?>(null)
 
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
@@ -57,7 +58,9 @@ class ToolsPresenterTest {
         every { appLanguageFlow } returns this@ToolsPresenterTest.appLanguage
         every { isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE) } returns isFavoritesFeatureDiscovered
         every { getDashboardFilterCategoryFlow() } returns selectedCategory
+        every { getDashboardFilterLocaleFlow() } returns selectedLocale
         coEvery { updateDashboardFilterCategory(any()) } answers { selectedCategory.value = firstArg() }
+        coEvery { updateDashboardFilterLocale(any()) } answers { selectedLocale.value = firstArg() }
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
