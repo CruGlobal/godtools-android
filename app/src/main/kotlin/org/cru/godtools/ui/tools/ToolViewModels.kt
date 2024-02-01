@@ -90,8 +90,10 @@ class ToolViewModels @Inject constructor(
             .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        private val defaultTranslation = translationsRepository
-            .findLatestTranslationFlow(code, Settings.defaultLanguage)
+        private val defaultTranslation = tool
+            .map { it?.code to it?.defaultLocale }
+            .distinctUntilChanged()
+            .flatMapLatest { (code, locale) -> translationsRepository.findLatestTranslationFlow(code, locale) }
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
         private val additionalTranslation = tool.flatMapLatest { t ->

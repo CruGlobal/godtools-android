@@ -1,6 +1,7 @@
 package org.cru.godtools.model
 
 import androidx.annotation.RestrictTo
+import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
@@ -32,6 +33,7 @@ private const val JSON_BANNER = "attr-banner"
 private const val JSON_DETAILS_BANNER = "attr-banner-about"
 private const val JSON_DETAILS_BANNER_ANIMATION = "attr-about-banner-animation"
 private const val JSON_DETAILS_BANNER_YOUTUBE = "attr-about-overview-video-youtube"
+private const val JSON_DEFAULT_LOCALE = "attr-default-locale"
 private const val JSON_DEFAULT_ORDER = "attr-default-order"
 private const val JSON_INITIAL_FAVORITES_PRIORITY = "attr-initial-favorites-priority"
 private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
@@ -56,6 +58,7 @@ class Tool(
     val detailsBannerAnimationId: Long? = null,
     @JsonApiAttribute(JSON_DETAILS_BANNER_YOUTUBE)
     val detailsBannerYoutubeVideoId: String? = null,
+    defaultLocale: Locale = DEFAULT_DEFAULT_LOCALE,
     @JsonApiAttribute(JSON_DEFAULT_ORDER)
     val defaultOrder: Int = 0,
     @JsonApiIgnore
@@ -106,6 +109,7 @@ class Tool(
             JSON_DETAILS_BANNER_YOUTUBE,
             JSON_INITIAL_FAVORITES_PRIORITY,
             JSON_SCREEN_SHARE_DISABLED,
+            JSON_DEFAULT_LOCALE,
             JSON_DEFAULT_ORDER,
             JSON_METATOOL,
             JSON_DEFAULT_VARIANT,
@@ -120,6 +124,8 @@ class Tool(
         const val CATEGORY_CONVERSATION_STARTERS = "conversation_starter"
         const val CATEGORY_GROWTH = "growth"
         const val CATEGORY_TRAINING = "training"
+
+        val DEFAULT_DEFAULT_LOCALE: Locale = Locale.ENGLISH
 
         val COMPARATOR_DEFAULT_ORDER = compareBy<Tool> { it.defaultOrder }
         val COMPARATOR_FAVORITE_ORDER = compareBy<Tool> { it.order }.then(COMPARATOR_DEFAULT_ORDER)
@@ -146,6 +152,11 @@ class Tool(
             }
         }
     }
+
+    @JsonApiAttribute(JSON_DEFAULT_LOCALE)
+    @Suppress("RedundantNullableReturnType")
+    private val _defaultLocale: Locale? = defaultLocale
+    val defaultLocale: Locale get() = _defaultLocale ?: DEFAULT_DEFAULT_LOCALE
 
     @JsonApiAttribute(JSON_METATOOL)
     val metatool: Tool? = null
@@ -183,6 +194,7 @@ class Tool(
         detailsBannerId != other.detailsBannerId -> false
         detailsBannerAnimationId != other.detailsBannerAnimationId -> false
         detailsBannerYoutubeVideoId != other.detailsBannerYoutubeVideoId -> false
+        defaultLocale != other.defaultLocale -> false
         defaultOrder != other.defaultOrder -> false
         order != other.order -> false
         isFavorite != other.isFavorite -> false
@@ -207,6 +219,7 @@ class Tool(
         result = 31 * result + (detailsBannerId?.hashCode() ?: 0)
         result = 31 * result + (detailsBannerAnimationId?.hashCode() ?: 0)
         result = 31 * result + (detailsBannerYoutubeVideoId?.hashCode() ?: 0)
+        result = 31 * result + defaultLocale.hashCode()
         result = 31 * result + defaultOrder
         result = 31 * result + order
         result = 31 * result + isFavorite.hashCode()
@@ -238,6 +251,7 @@ fun randomTool(
     ).random(),
     description: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     bannerId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
+    defaultLocale: Locale = Tool.DEFAULT_DEFAULT_LOCALE,
     defaultOrder: Int = Random.nextInt(),
     isFavorite: Boolean = Random.nextBoolean(),
     isHidden: Boolean = Random.nextBoolean(),
@@ -256,6 +270,7 @@ fun randomTool(
     detailsBannerId = Random.nextLong().takeIf { Random.nextBoolean() },
     detailsBannerAnimationId = Random.nextLong().takeIf { Random.nextBoolean() },
     detailsBannerYoutubeVideoId = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    defaultLocale = defaultLocale,
     defaultOrder = defaultOrder,
     order = Random.nextInt(),
     isFavorite = isFavorite,

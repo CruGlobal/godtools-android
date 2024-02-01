@@ -53,9 +53,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
         const val FEATURE_TUTORIAL_FEATURES = "tutorialTraining"
         const val FEATURE_TUTORIAL_LIVE_SHARE = "tutorialLiveShare."
         const val FEATURE_TUTORIAL_TIPS = "tutorialTips."
-
-        @JvmStatic
-        val defaultLanguage: Locale get() = Locale.ENGLISH
     }
 
     // region Language Settings

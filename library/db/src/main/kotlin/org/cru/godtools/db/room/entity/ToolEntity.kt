@@ -3,6 +3,7 @@ package org.cru.godtools.db.room.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Locale
 import org.cru.godtools.model.Tool
 
 @Entity(tableName = "tools")
@@ -23,6 +24,8 @@ internal class ToolEntity(
     val detailsBannerYoutubeVideoId: String? = null,
     @ColumnInfo(defaultValue = "false")
     val isScreenShareDisabled: Boolean = false,
+    @ColumnInfo(defaultValue = "en")
+    val defaultLocale: Locale = Tool.DEFAULT_DEFAULT_LOCALE,
     @ColumnInfo(defaultValue = "0")
     val defaultOrder: Int = 0,
     @ColumnInfo(defaultValue = "${Int.MAX_VALUE}")
@@ -52,6 +55,7 @@ internal class ToolEntity(
         detailsBannerAnimationId = tool.detailsBannerAnimationId,
         detailsBannerYoutubeVideoId = tool.detailsBannerYoutubeVideoId,
         isScreenShareDisabled = tool.isScreenShareDisabled,
+        defaultLocale = tool.defaultLocale,
         defaultOrder = tool.defaultOrder,
         order = tool.order,
         metatoolCode = tool.metatoolCode,
@@ -73,6 +77,7 @@ internal class ToolEntity(
         detailsBannerId = detailsBannerId,
         detailsBannerAnimationId = detailsBannerAnimationId,
         detailsBannerYoutubeVideoId = detailsBannerYoutubeVideoId,
+        defaultLocale = defaultLocale,
         defaultOrder = defaultOrder,
         order = order,
         isFavorite = isFavorite,

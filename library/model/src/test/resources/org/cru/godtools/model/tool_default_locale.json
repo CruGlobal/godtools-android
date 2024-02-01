@@ -1,0 +1,11 @@
+{
+  "data": {
+    "id": 1,
+    "type": "resource",
+    "attributes": {
+      "abbreviation": "kgp",
+      "resource-type": "tract",
+      "attr-default-locale": "fr"
+    }
+  }
+}

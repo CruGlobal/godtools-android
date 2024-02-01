@@ -37,6 +37,7 @@ class ToolCardPresenter @Inject constructor(
         eventSink: (ToolCard.Event) -> Unit = {},
     ): ToolCard.State {
         val toolCode = tool.code
+        val defaultLocale = tool.defaultLocale
         val coroutineScope = rememberCoroutineScope()
 
         // Tool Card Banner
@@ -54,8 +55,8 @@ class ToolCardPresenter @Inject constructor(
         val primaryTranslationFlow = remember(toolCode, appLanguage) {
             translationsRepository.findLatestTranslationFlow(toolCode, appLanguage)
         }
-        val defaultTranslationFlow = remember(toolCode) {
-            translationsRepository.findLatestTranslationFlow(toolCode, Settings.defaultLanguage).onStart { emit(null) }
+        val defaultTranslationFlow = remember(toolCode, defaultLocale) {
+            translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale).onStart { emit(null) }
         }
         val translation by remember(primaryTranslationFlow, defaultTranslationFlow) {
             combine(primaryTranslationFlow, defaultTranslationFlow) { t1, t2 -> StateFlowValue(t1 ?: t2) }

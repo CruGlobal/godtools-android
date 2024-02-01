@@ -1,6 +1,8 @@
 package org.cru.godtools.model
 
+import java.util.Locale
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
+import org.ccci.gto.android.common.jsonapi.converter.LocaleTypeConverter
 import org.cru.godtools.model.jsonapi.ToolTypeConverter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
@@ -15,7 +17,7 @@ class ToolTest {
         JsonApiConverter.Builder()
             .addClasses(Tool::class.java)
             .addClasses(Attachment::class.java, Translation::class.java)
-            .addConverters(ToolTypeConverter)
+            .addConverters(ToolTypeConverter, LocaleTypeConverter)
             .build()
     }
 
@@ -34,6 +36,7 @@ class ToolTest {
         assertEquals(Tool.Type.TRACT, tool.type)
         assertEquals(1L, tool.bannerId)
         assertEquals(2L, tool.detailsBannerId)
+        assertEquals(Tool.DEFAULT_DEFAULT_LOCALE, tool.defaultLocale)
         assertEquals(10, tool.defaultOrder)
         assertEquals(1L, tool.apiId)
         assertThat(tool.attachments, hasSize(3))
@@ -80,6 +83,24 @@ class ToolTest {
         val tool = parseJson("tool_type_invalid.json")
         assertFalse(tool.isValid)
         assertEquals("tool", tool.code)
+    }
+
+    @Test
+    fun `jsonapi Parsing - defaultLocale`() {
+        val tool = parseJson("tool_default_locale.json")
+        assertEquals(Locale.FRENCH, tool.defaultLocale)
+    }
+
+    @Test
+    fun `jsonapi Parsing - defaultLocale - missing`() {
+        val tool = parseJson("tool_default_locale_missing.json")
+        assertEquals(Tool.DEFAULT_DEFAULT_LOCALE, tool.defaultLocale)
+    }
+
+    @Test
+    fun `jsonapi Parsing - defaultLocale - null`() {
+        val tool = parseJson("tool_default_locale_null.json")
+        assertEquals(Tool.DEFAULT_DEFAULT_LOCALE, tool.defaultLocale)
     }
 
     @Test
