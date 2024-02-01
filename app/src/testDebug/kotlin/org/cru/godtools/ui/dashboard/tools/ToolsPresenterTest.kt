@@ -32,7 +32,7 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
-import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -75,13 +75,7 @@ class ToolsPresenterTest {
     }
 
     // TODO: figure out how to mock ToolCardPresenter
-    private val toolCardPresenter = ToolCardPresenter(
-        fileSystem = mockk(),
-        settings = mockk(relaxed = true),
-        attachmentsRepository = mockk(relaxed = true),
-        toolsRepository = mockk(),
-        translationsRepository = mockk(relaxed = true),
-    )
+    private val toolCardPresenter = FakeToolCardPresenter()
 
     private lateinit var presenter: ToolsPresenter
 

@@ -3,12 +3,15 @@ package org.cru.godtools.ui.tools
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
@@ -16,41 +19,51 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.db.repository.produceLatestTranslationState
 import org.cru.godtools.db.repository.rememberAttachmentFile
+import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 
 @Singleton
 class ToolCardPresenter @Inject constructor(
     private val fileSystem: ToolFileSystem,
     private val settings: Settings,
     private val attachmentsRepository: AttachmentsRepository,
+    private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
 ) {
     @Composable
     fun present(
         tool: Tool,
+        loadAppLanguage: Boolean = false,
         secondLanguage: Language? = null,
         eventSink: (ToolCard.Event) -> Unit = {},
     ): ToolCard.State {
-        val toolCode = tool.code
-        val defaultLocale = tool.defaultLocale
         val coroutineScope = rememberCoroutineScope()
+        val toolCode = tool.code
+
+        // App Translation
+        val appLocale by settings.produceAppLocaleState()
+        var appTranslation: Translation? by remember { mutableStateOf(null) }
+        val appTranslationFlow = remember(toolCode, appLocale) {
+            translationsRepository.findLatestTranslationFlow(toolCode, appLocale)
+                .onEach { appTranslation = it }
+        }
 
         // Translation
-        val appLocale by settings.produceAppLocaleState()
-        val primaryTranslationFlow = remember(toolCode, appLocale) {
-            translationsRepository.findLatestTranslationFlow(toolCode, appLocale)
-        }
+        val defaultLocale = tool.defaultLocale
         val defaultTranslationFlow = remember(toolCode, defaultLocale) {
-            translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale).onStart { emit(null) }
+            translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale)
+                .onStart { emit(null) }
         }
-        val translation by remember(primaryTranslationFlow, defaultTranslationFlow) {
-            combine(primaryTranslationFlow, defaultTranslationFlow) { t1, t2 -> StateFlowValue(t1 ?: t2) }
+        val translation by remember(appTranslationFlow, defaultTranslationFlow) {
+            combine(appTranslationFlow, defaultTranslationFlow) { t1, t2 -> StateFlowValue(t1 ?: t2) }
         }.collectAsState(StateFlowValue.Initial(null))
 
         // Second Translation
@@ -74,6 +87,8 @@ class ToolCardPresenter @Inject constructor(
             isLoaded = !translation.isInitial,
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
             translation = translation.value,
+            appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
+            appTranslation = appTranslation,
             secondLanguage = secondLanguage,
             secondTranslation = when (secondLanguage?.code) {
                 translation.value?.languageCode -> null

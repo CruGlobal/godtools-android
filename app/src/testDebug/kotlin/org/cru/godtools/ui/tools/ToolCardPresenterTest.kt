@@ -28,6 +28,7 @@ import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Attachment
@@ -46,18 +47,24 @@ private const val BANNER_ID = 1L
 class ToolCardPresenterTest {
     private val toolFlow = MutableStateFlow(randomTool(TOOL, bannerId = BANNER_ID))
     private val bannerFlow = MutableSharedFlow<Attachment?>(extraBufferCapacity = 1)
-    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
+    private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
+    private val frLanguageFlow = MutableSharedFlow<Language?>(extraBufferCapacity = 1)
     private val enTranslationFlow = MutableSharedFlow<Translation?>(extraBufferCapacity = 1)
     private val frTranslationFlow = MutableSharedFlow<Translation?>(extraBufferCapacity = 1)
+
+    private val fileSystem: ToolFileSystem = mockk()
+    private val settings: Settings = mockk {
+        every { appLanguageFlow } returns appLocaleFlow
+        every { appLanguage } returns appLocaleFlow.value
+    }
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { findAttachmentFlow(any()) } returns flowOf(null)
         every { findAttachmentFlow(BANNER_ID) } returns bannerFlow
     }
-    private val fileSystem: ToolFileSystem = mockk()
-    private val settings: Settings = mockk {
-        every { appLanguageFlow } returns this@ToolCardPresenterTest.appLanguageFlow
-        every { appLanguage } returns this@ToolCardPresenterTest.appLanguageFlow.value
+    private val languagesRepository: LanguagesRepository = mockk {
+        every { findLanguageFlow(any()) } returns flowOf(null)
+        every { findLanguageFlow(Locale.FRENCH) } returns frLanguageFlow
     }
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true)
     private val translationsRepository: TranslationsRepository = mockk {
@@ -71,6 +78,7 @@ class ToolCardPresenterTest {
         fileSystem = fileSystem,
         settings = settings,
         attachmentsRepository = attachmentsRepository,
+        languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
     )
@@ -166,7 +174,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLanguageFlow.value = Locale.FRENCH
+        appLocaleFlow.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.FRENCH)
 
         presenterTestOf(
@@ -183,7 +191,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation - fallback to default language`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLanguageFlow.value = Locale.FRENCH
+        appLocaleFlow.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
         presenterTestOf(
@@ -201,7 +209,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation - don't emit fallback if primary hasn't loaded yet`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLanguageFlow.value = Locale.FRENCH
+        appLocaleFlow.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
         presenterTestOf(
@@ -215,6 +223,54 @@ class ToolCardPresenterTest {
         }
     }
     // endregion ToolCard.State.translation
+
+    // region ToolCard.State.appLanguage
+    @Test
+    fun `ToolCardState - appLanguage`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        appLocaleFlow.value = Locale.FRENCH
+
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, loadAppLanguage = true) }
+        ) {
+            frLanguageFlow.emit(Language(Locale.FRENCH))
+            assertEquals(Language(Locale.FRENCH), expectMostRecentItem().appLanguage)
+        }
+    }
+
+    @Test
+    fun `ToolCardState - appLanguage - loadAppLanguage=false`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        appLocaleFlow.value = Locale.FRENCH
+
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, loadAppLanguage = false) }
+        ) {
+            frLanguageFlow.emit(Language(Locale.FRENCH))
+            assertNull(expectMostRecentItem().appLanguage)
+        }
+
+        verifyAll { languagesRepository wasNot Called }
+    }
+    // endregion ToolCard.State.appLanguage
+
+    // region ToolCard.State.appTranslation
+    @Test
+    fun `ToolCardState - appTranslation`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        appLocaleFlow.value = Locale.FRENCH
+        val translation = randomTranslation(TOOL, Locale.FRENCH)
+
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value) }
+        ) {
+            assertNull(expectMostRecentItem().appTranslation)
+            frTranslationFlow.emit(translation)
+
+            assertEquals(translation, expectMostRecentItem().appTranslation)
+        }
+    }
+    // endregion ToolCard.State.appTranslation
 
     // region ToolCard.State.secondLanguage
     @Test
