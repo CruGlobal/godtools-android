@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -273,20 +274,19 @@ fun ToolCard(
 }
 
 @Composable
-internal fun VariantToolCard(
-    viewModel: ToolViewModels.ToolViewModel,
-    isSelected: Boolean,
-    modifier: Modifier = Modifier,
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val state = viewModel.toState()
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
+internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifier, isSelected: Boolean = false) {
+    val tool by rememberUpdatedState(state.tool)
+    val translation by rememberUpdatedState(state.translation)
+    val appLanguage by rememberUpdatedState(state.appLanguage)
+    val appTranslation by rememberUpdatedState(state.appTranslation)
+    val languageCount by rememberUpdatedState(state.availableLanguages)
 
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
+    val eventSink by rememberUpdatedState(state.eventSink)
+
+    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type)) },
+            onClick = { eventSink(ToolCard.Event.Click) },
             modifier = modifier
         ) {
             ToolBanner(
@@ -296,13 +296,13 @@ internal fun VariantToolCard(
                     .aspectRatio(335f / 87f)
             )
             Row(modifier = Modifier.padding(16.dp)) {
-                RadioButton(selected = isSelected, onClick = null)
+                RadioButton(selected = isSelected, onClick = { eventSink(ToolCard.Event.Click) })
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     ToolName(state)
                     Text(
-                        firstTranslation.value.getTagline(tool).orEmpty(),
-                        fontFamily = firstTranslation.value?.getFontFamilyOrNull(),
+                        translation.getTagline(tool).orEmpty(),
+                        fontFamily = translation?.getFontFamilyOrNull(),
                         style = toolDescriptionStyle,
                         modifier = Modifier.padding(top = 4.dp)
                     )
@@ -317,14 +317,9 @@ internal fun VariantToolCard(
                         .align(Alignment.End)
                         .padding(16.dp)
                 ) {
-                    val languages by viewModel.availableLanguages.collectAsState()
-                    val appTranslation by viewModel.appTranslation.collectAsState()
-                    val appLanguage by viewModel.appLanguage.collectAsState()
-
-                    val languageCount by remember { derivedStateOf { languages.size } }
                     Text(pluralStringResource(R.plurals.label_tools_languages, languageCount, languageCount))
 
-                    Box(
+                    Spacer(
                         modifier = Modifier
                             .padding(horizontal = 4.dp)
                             .size(4.dp)
@@ -333,7 +328,7 @@ internal fun VariantToolCard(
                     )
 
                     // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                    AvailableInLanguage(appLanguage, { appTranslation.value })
+                    AvailableInLanguage(appLanguage, available = appTranslation != null)
                 }
             }
         }

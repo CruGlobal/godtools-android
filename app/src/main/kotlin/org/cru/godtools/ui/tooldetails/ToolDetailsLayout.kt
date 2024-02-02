@@ -74,7 +74,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
-import org.cru.godtools.ui.tools.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.VariantToolCard
 
@@ -358,14 +358,18 @@ private fun ToolDetailsVariants(
             val code = tool.code ?: return@forEach
 
             VariantToolCard(
-                viewModel = toolViewModels[code, tool],
-                isSelected = currentTool == code,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.OpenToolDetails, is ToolCardEvent.Click -> onVariantSelected(code)
-                        is ToolCardEvent.OpenTool -> error("OpenTool is not supported")
+                state = toolViewModels[code, tool].toState(
+                    eventSink = {
+                        when (it) {
+                            ToolCard.Event.Click -> onVariantSelected(code)
+                            ToolCard.Event.OpenTool,
+                            ToolCard.Event.OpenToolDetails,
+                            ToolCard.Event.PinTool,
+                            ToolCard.Event.UnpinTool -> TODO()
+                        }
                     }
-                },
+                ),
+                isSelected = currentTool == code,
             )
         }
     }

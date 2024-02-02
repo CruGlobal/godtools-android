@@ -125,6 +125,7 @@ fun randomTranslation(
     manifestFileName: String? = UUID.randomUUID().toString(),
     name: String? = UUID.randomUUID().toString(),
     description: String? = UUID.randomUUID().toString(),
+    tagline: String? = UUID.randomUUID().toString(),
     isDownloaded: Boolean = Random.nextBoolean(),
 ) = Translation(
     id = id,
@@ -134,7 +135,7 @@ fun randomTranslation(
     manifestFileName = manifestFileName,
     name = name,
     description = description,
-    tagline = UUID.randomUUID().toString(),
+    tagline = tagline,
     toolDetailsConversationStarters = UUID.randomUUID().toString(),
     toolDetailsOutline = UUID.randomUUID().toString(),
     toolDetailsBibleReferences = UUID.randomUUID().toString(),

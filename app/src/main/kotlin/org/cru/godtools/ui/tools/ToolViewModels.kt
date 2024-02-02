@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tools
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -144,15 +145,23 @@ class ToolViewModels @Inject constructor(
         fun toState(
             secondLanguage: Language? = this.secondLanguage.collectAsState().value,
             eventSink: (ToolCard.Event) -> Unit = {}
-        ) = ToolCard.State(
-            tool = tool.collectAsState().value,
-            banner = bannerFile.collectAsState().value,
-            translation = firstTranslation.collectAsState().value.value,
-            secondLanguage = secondLanguage,
-            secondTranslation = secondTranslation.collectAsState().value,
-            downloadProgress = downloadProgress.collectAsState().value,
-            eventSink = eventSink,
-        )
+        ): ToolCard.State {
+            val translation by firstTranslation.collectAsState()
+
+            return ToolCard.State(
+                tool = tool.collectAsState().value,
+                isLoaded = translation !is StateFlowValue.Initial,
+                banner = bannerFile.collectAsState().value,
+                translation = translation.value,
+                appLanguage = appLanguage.collectAsState().value,
+                appTranslation = appTranslation.collectAsState().value.value,
+                secondLanguage = secondLanguage,
+                secondTranslation = secondTranslation.collectAsState().value,
+                availableLanguages = availableLanguages.collectAsState().value.size,
+                downloadProgress = downloadProgress.collectAsState().value,
+                eventSink = eventSink,
+            )
+        }
     }
 
     private fun Flow<Tool?>.attachmentFileFlow(transform: (value: Tool?) -> Long?) = this
