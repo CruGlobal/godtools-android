@@ -11,6 +11,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -43,6 +45,7 @@ class ToolCardPresenter @Inject constructor(
         tool: Tool,
         loadAppLanguage: Boolean = false,
         secondLanguage: Language? = null,
+        loadAvailableLanguages: Boolean = false,
         eventSink: (ToolCard.Event) -> Unit = {},
     ): ToolCard.State {
         val coroutineScope = rememberCoroutineScope()
@@ -94,7 +97,19 @@ class ToolCardPresenter @Inject constructor(
                 translation.value?.languageCode -> null
                 else -> secondTranslation
             },
+            availableLanguages = when {
+                !loadAvailableLanguages -> 0
+                toolCode == null -> 0
+                else -> rememberAvailableLanguages(toolCode)
+            },
             eventSink = interceptingEventSink,
         )
     }
+
+    @Composable
+    private fun rememberAvailableLanguages(tool: String) = remember(tool) {
+        translationsRepository.getTranslationsFlowForTool(tool)
+            .map { it.distinctBy { it.languageCode }.count() }
+            .distinctUntilChanged()
+    }.collectAsState(0).value
 }

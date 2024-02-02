@@ -10,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyAll
 import java.io.File
 import java.util.Locale
@@ -323,6 +324,71 @@ class ToolCardPresenterTest {
         }
     }
     // endregion ToolCard.State.secondTranslation
+
+    // region ToolCard.State.availableLanguages
+    @Test
+    fun `ToolCardState - availableLanguages`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        val translations = listOf(
+            randomTranslation(languageCode = Locale.ENGLISH),
+            randomTranslation(languageCode = Locale.FRENCH),
+        )
+        every { translationsRepository.getTranslationsFlowForTool(TOOL) } returns flowOf(translations)
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(tool = toolFlow.collectAsState().value, loadAvailableLanguages = true)
+            }
+        ) {
+            assertEquals(2, expectMostRecentItem().availableLanguages)
+        }
+
+        verify { translationsRepository.getTranslationsFlowForTool(TOOL) }
+    }
+
+    @Test
+    fun `ToolCardState - availableLanguages - loadAvailableLanguages=false`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        val translations = listOf(
+            randomTranslation(languageCode = Locale.ENGLISH),
+            randomTranslation(languageCode = Locale.FRENCH),
+        )
+        every { translationsRepository.getTranslationsFlowForTool(TOOL) } returns flowOf(translations)
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(tool = toolFlow.collectAsState().value, loadAvailableLanguages = false)
+            }
+        ) {
+            assertEquals(0, expectMostRecentItem().availableLanguages)
+        }
+
+        verify(exactly = 0) { translationsRepository.getTranslationsFlowForTool(TOOL) }
+    }
+
+    @Test
+    fun `ToolCardState - availableLanguages - Only distinct languages are counted`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        every { translationsRepository.getTranslationsFlowForTool(TOOL) }.returns(
+            flowOf(
+                listOf(
+                    randomTranslation(languageCode = Locale.ENGLISH),
+                    randomTranslation(languageCode = Locale.ENGLISH)
+                )
+            )
+        )
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(tool = toolFlow.collectAsState().value, loadAvailableLanguages = true)
+            }
+        ) {
+            assertEquals(1, expectMostRecentItem().availableLanguages)
+        }
+
+        verify { translationsRepository.getTranslationsFlowForTool(TOOL) }
+    }
+    // endregion ToolCard.State.availableLanguages
 
     // region ToolCard.Event.Click
     @Test

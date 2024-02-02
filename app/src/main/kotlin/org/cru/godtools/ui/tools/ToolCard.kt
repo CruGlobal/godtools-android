@@ -18,6 +18,7 @@ object ToolCard {
         val appTranslation: Translation? = null,
         val secondLanguage: Language? = null,
         val secondTranslation: Translation? = null,
+        val availableLanguages: Int = 0,
         val downloadProgress: DownloadProgress? = null,
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
