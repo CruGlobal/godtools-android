@@ -48,25 +48,23 @@ private val DROPDOWN_MAX_WIDTH = 400.dp
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
 @Composable
-internal fun ToolFilters(
-    filters: ToolsScreen.Filters,
-    modifier: Modifier = Modifier,
-    eventSink: (ToolsScreen.Event) -> Unit = {},
-) = Column(modifier.fillMaxWidth()) {
-    Text(
-        stringResource(R.string.dashboard_tools_section_filter_label),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    )
+internal fun ToolFilters(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
+    Column(modifier.fillMaxWidth()) {
+        Text(
+            stringResource(R.string.dashboard_tools_section_filter_label),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
 
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        CategoryFilter(filters, modifier = Modifier.weight(1f))
-        LanguageFilter(filters, modifier = Modifier.weight(1f))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            CategoryFilter(filters, modifier = Modifier.weight(1f))
+            LanguageFilter(filters, modifier = Modifier.weight(1f))
+        }
     }
 }
 
