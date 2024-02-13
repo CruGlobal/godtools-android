@@ -29,7 +29,7 @@ class DeleteAccountPresenterTest {
     private val accountManager: GodToolsAccountManager = mockk {
         coEvery { deleteAccount() } coAnswers { deleteAccountResponse.awaitItem() }
     }
-    private val navigator = FakeNavigator()
+    private val navigator = FakeNavigator(DeleteAccountScreen)
 
     private val presenter = DeleteAccountPresenter(navigator, accountManager)
 

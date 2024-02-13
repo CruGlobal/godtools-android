@@ -32,7 +32,7 @@ import org.robolectric.annotation.Config
 class AppLanguagePresenterTest {
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
 
-    private val navigator = FakeNavigator()
+    private val navigator = FakeNavigator(AppLanguageScreen)
     private val settings: Settings = mockk {
         every { appLanguage } returns this@AppLanguagePresenterTest.appLanguage.value
         every { appLanguage = any() } answers { this@AppLanguagePresenterTest.appLanguage.value = firstArg() }

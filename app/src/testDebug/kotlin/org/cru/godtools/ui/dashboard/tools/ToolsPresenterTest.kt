@@ -52,7 +52,7 @@ class ToolsPresenterTest {
         every { getLanguagesFlow() } returns languagesFlow
         every { getLanguagesFlowForToolCategory(Tool.CATEGORY_GOSPEL) } returns gospelLanguagesFlow
     }
-    private val navigator = FakeNavigator()
+    private val navigator = FakeNavigator(ToolsScreen)
     private val settings: Settings = mockk {
         every { appLanguage } returns this@ToolsPresenterTest.appLanguage.value
         every { appLanguageFlow } returns this@ToolsPresenterTest.appLanguage
