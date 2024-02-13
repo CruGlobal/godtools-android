@@ -79,7 +79,6 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
         item("tool-filters", "tool-filters") {
             ToolFilters(
                 filters = filters,
-                eventSink = eventSink,
                 modifier = Modifier
                     .animateItemPlacement()
                     .padding(vertical = 16.dp)
