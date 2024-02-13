@@ -36,8 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
-import com.slack.circuit.runtime.Navigator
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.foundation.NavEvent
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
@@ -169,10 +168,11 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                             )
 
                             Page.ALL_TOOLS -> {
-                                val navigator = remember(onEvent) {
-                                    object : Navigator {
-                                        override fun goTo(screen: Screen) {
-                                            when (screen) {
+                                CircuitContent(
+                                    screen = ToolsScreen,
+                                    onNavEvent = {
+                                        when (it) {
+                                            is NavEvent.GoTo -> when (val screen = it.screen) {
                                                 is ToolDetailsScreen -> onEvent(
                                                     DashboardEvent.OpenToolDetails(
                                                         screen.initialTool,
@@ -180,15 +180,9 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                                     )
                                                 )
                                             }
+                                            else -> Unit
                                         }
-
-                                        override fun pop() = TODO("Not yet implemented")
-                                        override fun resetRoot(newRoot: Screen) = TODO("Not yet implemented")
-                                    }
-                                }
-                                CircuitContent(
-                                    screen = ToolsScreen,
-                                    navigator = navigator,
+                                    },
                                 )
                             }
                         }
