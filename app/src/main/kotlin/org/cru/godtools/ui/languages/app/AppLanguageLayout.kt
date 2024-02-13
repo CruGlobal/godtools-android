@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.AlertDialog
@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.ccci.gto.android.common.androidx.compose.ui.draw.autoMirror
 import org.ccci.gto.android.common.androidx.compose.ui.text.res.annotatedStringResource
 import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.R
@@ -74,7 +73,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                         onClick = { eventSink(Event.NavigateBack) },
                         modifier = Modifier.testTag(TEST_TAG_ACTION_BACK),
                     ) {
-                        Icon(Icons.Filled.ArrowBack, null, Modifier.autoMirror())
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
                     }
                 },
                 trailingIcon = {
