@@ -23,7 +23,7 @@ class AppLanguageActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack { push(AppLanguageScreen) }
+                    val backStack = rememberSaveableBackStack(AppLanguageScreen)
                     val navigator = rememberCircuitNavigator(backStack)
                     NavigableCircuitContent(navigator, backStack)
                 }

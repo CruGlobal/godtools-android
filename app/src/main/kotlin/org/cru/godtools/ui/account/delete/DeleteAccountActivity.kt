@@ -26,7 +26,7 @@ class DeleteAccountActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack { push(DeleteAccountScreen) }
+                    val backStack = rememberSaveableBackStack(DeleteAccountScreen)
                     val navigator = rememberCircuitNavigator(backStack)
                     NavigableCircuitContent(navigator, backStack)
                 }
