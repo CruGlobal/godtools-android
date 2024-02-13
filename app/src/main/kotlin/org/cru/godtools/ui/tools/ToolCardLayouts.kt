@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -107,7 +106,6 @@ fun PreloadTool(tool: Tool) {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun LessonToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
@@ -198,7 +196,6 @@ fun ToolCard(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun ToolCard(
     state: ToolCard.State,
     modifier: Modifier = Modifier,
@@ -331,7 +328,6 @@ fun SquareToolCard(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun SquareToolCard(
     state: ToolCard.State,
     modifier: Modifier = Modifier,
@@ -411,7 +407,6 @@ fun SquareToolCard(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun VariantToolCard(
     viewModel: ToolViewModels.ToolViewModel,
     isSelected: Boolean,
