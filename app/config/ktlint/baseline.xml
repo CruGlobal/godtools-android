@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<baseline version="1.0">
+    <file name="src/main/kotlin/org/cru/godtools/ui/account/AccountLayout.kt">
+        <error line="61" column="9" source="compose:vm-injection-check" />
+        <error line="103" column="12" source="compose:unstable-collections" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/account/globalactivity/GlobalActivityLayout.kt">
+        <error line="33" column="5" source="compose:modifier-missing-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/banner/FavoriteToolsBanner.kt">
+        <error line="17" column="9" source="compose:vm-injection-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/banner/TutorialFeaturesBanner.kt">
+        <error line="22" column="9" source="compose:vm-injection-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/AppUpdateSnackbar.kt">
+        <error line="24" column="14" source="compose:compositionlocal-allowlist" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/tools/ToolsLayout.kt">
+        <error line="40" column="9" source="compose:vm-injection-check" />
+        <error line="111" column="34" source="compose:unstable-collections" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/languages/downloadable/DownloadableLanguagesLayout.kt">
+        <error line="51" column="5" source="compose:modifier-missing-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/login/LoginLayout.kt">
+        <error line="51" column="5" source="compose:modifier-missing-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/tooldetails/ToolDetailsAbout.kt">
+        <error line="63" column="13" source="compose:vm-forwarding-check" />
+        <error line="84" column="21" source="compose:vm-forwarding-check" />
+        <error line="97" column="21" source="compose:vm-forwarding-check" />
+        <error line="112" column="21" source="compose:vm-forwarding-check" />
+        <error line="118" column="13" source="compose:vm-forwarding-check" />
+    </file>
+    <file name="src/main/kotlin/org/cru/godtools/ui/tooldetails/ToolDetailsLayout.kt">
+        <error line="94" column="5" source="compose:modifier-missing-check" />
+        <error line="235" column="45" source="compose:vm-forwarding-check" />
+    </file>
+</baseline>
