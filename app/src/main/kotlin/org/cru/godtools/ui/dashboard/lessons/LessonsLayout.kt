@@ -57,7 +57,7 @@ internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (
 
 @Composable
 @Preview(showBackground = true)
-fun LessonsHeader() = Column {
+private fun LessonsHeader() = Column {
     Text(
         stringResource(R.string.dashboard_lessons_header_title),
         style = MaterialTheme.typography.titleLarge

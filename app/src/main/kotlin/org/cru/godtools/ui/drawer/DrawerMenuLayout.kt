@@ -92,7 +92,7 @@ fun DrawerMenuLayout(
 
 @Composable
 @Preview
-fun DrawerContentLayout(
+private fun DrawerContentLayout(
     scope: CoroutineScope = rememberCoroutineScope(),
     viewModel: DrawerViewModel = viewModel(),
     dismissDrawer: () -> Unit = {},
