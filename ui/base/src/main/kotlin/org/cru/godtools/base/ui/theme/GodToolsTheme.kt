@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+
 package org.cru.godtools.base.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -81,7 +83,7 @@ object GodToolsTheme {
         )
     }
 
-    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { false }
+    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { true }
 
     val isLightColorSchemeActive: Boolean
         @Composable

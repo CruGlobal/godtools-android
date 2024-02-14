@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+
 package org.cru.godtools.base.ui.compose
 
 import android.net.Uri
