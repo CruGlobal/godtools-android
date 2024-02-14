@@ -6,3 +6,5 @@ plugins {
 android {
     configureAndroidCommon(project)
 }
+
+configureKtlint()

@@ -1,5 +1,3 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 buildscript {
     repositories {
         google()
@@ -20,19 +18,4 @@ buildscript {
 plugins {
     alias libs.plugins.hilt apply false
     alias libs.plugins.ksp apply false
-    alias libs.plugins.ktlint
-}
-
-// configure ktlint
-subprojects {
-    apply plugin: "org.jlleitschuh.gradle.ktlint"
-
-    ktlint {
-        android = true
-        version = libs.versions.ktlint.get()
-        reporters {
-            reporter(ReporterType.PLAIN_GROUP_BY_FILE)
-            reporter(ReporterType.CHECKSTYLE)
-        }
-    }
 }

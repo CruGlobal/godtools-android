@@ -10,3 +10,4 @@ android {
 }
 
 excludeAndroidSdkDependencies()
+configureKtlint()
