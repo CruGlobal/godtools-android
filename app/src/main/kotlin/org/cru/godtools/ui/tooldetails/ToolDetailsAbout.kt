@@ -15,7 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -75,7 +75,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                 derivedStateOf { translation.value?.toolDetailsConversationStarters.orEmpty() }
             }
             if (conversationStarters.isNotBlank()) {
-                Divider()
+                HorizontalDivider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_conversation_starters),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.CONVERSATION_STARTERS,
@@ -88,7 +88,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
             // Outline section
             val outline by remember { derivedStateOf { translation.value?.toolDetailsOutline.orEmpty() } }
             if (outline.isNotBlank()) {
-                Divider()
+                HorizontalDivider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_outline),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.OUTLINE,
@@ -103,7 +103,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                 derivedStateOf { translation.value?.toolDetailsBibleReferences.orEmpty() }
             }
             if (bibleReferences.isNotBlank()) {
-                Divider()
+                HorizontalDivider()
                 ToolDetailsAboutAccordionSection(
                     header = stringResource(R.string.tool_details_section_description_bible_references),
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.BIBLE_REFERENCES,
@@ -114,13 +114,13 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
             }
 
             // Languages section
-            Divider()
+            HorizontalDivider()
             ToolDetailsLanguages(
                 toolViewModel,
                 expanded = expandedSection == ToolDetailsAboutAccordionSection.LANGUAGES,
                 onToggleLanguages = { toggleSection(ToolDetailsAboutAccordionSection.LANGUAGES) },
             )
-            Divider()
+            HorizontalDivider()
         }
     }
 }

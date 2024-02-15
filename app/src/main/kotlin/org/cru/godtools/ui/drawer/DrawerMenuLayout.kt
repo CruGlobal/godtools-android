@@ -24,9 +24,9 @@ import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -132,7 +132,7 @@ private fun DrawerContentLayout(
                     dismissDrawer()
                 }
             )
-            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             // endregion Get Started
 
             // region Account
@@ -187,7 +187,7 @@ private fun DrawerContentLayout(
                         },
                     )
                 }
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             }
             // endregion Account
 
@@ -220,7 +220,7 @@ private fun DrawerContentLayout(
                     dismissDrawer()
                 }
             )
-            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             // endregion Support
 
             // region Share
@@ -259,7 +259,7 @@ private fun DrawerContentLayout(
                     dismissDrawer()
                 }
             )
-            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             // endregion Share
 
             // region About
@@ -300,7 +300,7 @@ private fun DrawerContentLayout(
                     dismissDrawer()
                 }
             )
-            Divider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
             // endregion About
 
             NavigationDrawerHeadline(label = {
