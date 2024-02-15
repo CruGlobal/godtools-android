@@ -92,7 +92,7 @@ private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun BadgeImage(badge: Badge, modifier: Modifier) {
+private fun BadgeImage(badge: Badge, modifier: Modifier = Modifier) {
     val themeType = when {
         MaterialTheme.colorScheme.isLight -> ThemeType.LIGHT
         else -> ThemeType.DARK
