@@ -71,6 +71,7 @@ import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
 fun DrawerMenuLayout(
+    modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     content: @Composable () -> Unit,
 ) {
@@ -86,7 +87,8 @@ fun DrawerMenuLayout(
                 dismissDrawer = { scope.launch { drawerState.close() } }
             )
         },
-        content = content
+        modifier = modifier,
+        content = content,
     )
 }
 

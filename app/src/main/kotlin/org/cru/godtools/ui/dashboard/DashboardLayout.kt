@@ -93,7 +93,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
 
-    DrawerMenuLayout(drawerState) {
+    DrawerMenuLayout(drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopAppBar(
