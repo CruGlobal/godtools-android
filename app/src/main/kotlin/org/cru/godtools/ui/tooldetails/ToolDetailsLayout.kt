@@ -213,7 +213,7 @@ private fun ToolDetailsContent(
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
                     indicator = { positions ->
-                        TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
+                        TabRowDefaults.SecondaryIndicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
                     },
                     divider = {},
                     modifier = Modifier.padding(horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
