@@ -91,7 +91,11 @@ sealed interface ToolDetailsEvent {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun ToolDetailsLayout(viewModel: ToolDetailsViewModel, onEvent: (ToolDetailsEvent) -> Unit = {}) = DrawerMenuLayout {
+fun ToolDetailsLayout(
+    viewModel: ToolDetailsViewModel,
+    modifier: Modifier = Modifier,
+    onEvent: (ToolDetailsEvent) -> Unit = {},
+) = DrawerMenuLayout(modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
