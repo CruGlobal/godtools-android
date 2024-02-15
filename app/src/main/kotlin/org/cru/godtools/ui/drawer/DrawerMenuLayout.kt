@@ -8,20 +8,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
+import androidx.compose.material.icons.automirrored.outlined.LiveHelp
+import androidx.compose.material.icons.automirrored.outlined.Login
+import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.outlined.BugReport
 import androidx.compose.material.icons.outlined.Copyright
 import androidx.compose.material.icons.outlined.Description
-import androidx.compose.material.icons.outlined.FormatListBulleted
-import androidx.compose.material.icons.outlined.LiveHelp
-import androidx.compose.material.icons.outlined.Login
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.Policy
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material.icons.outlined.School
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.DrawerState
@@ -141,7 +141,7 @@ private fun DrawerContentLayout(
                 val isAuthenticated by viewModel.isAuthenticatedFlow.collectAsState()
                 if (!isAuthenticated) {
                     NavigationDrawerItem(
-                        icon = { Icon(Icons.Outlined.Login, null) },
+                        icon = { Icon(Icons.AutoMirrored.Outlined.Login, null) },
                         label = { Text(stringResource(R.string.menu_login)) },
                         selected = false,
                         onClick = {
@@ -169,7 +169,7 @@ private fun DrawerContentLayout(
                         }
                     )
                     NavigationDrawerItem(
-                        icon = { Icon(Icons.Outlined.Logout, null) },
+                        icon = { Icon(Icons.AutoMirrored.Outlined.Logout, null) },
                         label = { Text(stringResource(R.string.menu_logout)) },
                         selected = false,
                         onClick = {
@@ -194,7 +194,7 @@ private fun DrawerContentLayout(
             // region Support
             NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_heading_support)) })
             NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.Send, null) },
+                icon = { Icon(Icons.AutoMirrored.Outlined.Send, null) },
                 label = { Text(stringResource(R.string.menu_feedback)) },
                 selected = false,
                 onClick = {
@@ -212,7 +212,7 @@ private fun DrawerContentLayout(
                 }
             )
             NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.LiveHelp, null) },
+                icon = { Icon(Icons.AutoMirrored.Outlined.LiveHelp, null) },
                 label = { Text(stringResource(R.string.menu_question)) },
                 selected = false,
                 onClick = {
@@ -265,7 +265,7 @@ private fun DrawerContentLayout(
             // region About
             NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_heading_about)) })
             NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.FormatListBulleted, null) },
+                icon = { Icon(Icons.AutoMirrored.Outlined.FormatListBulleted, null) },
                 label = { Text(stringResource(R.string.menu_terms_of_use)) },
                 selected = false,
                 onClick = {
