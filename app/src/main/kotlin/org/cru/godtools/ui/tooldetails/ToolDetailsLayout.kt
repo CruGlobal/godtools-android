@@ -45,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -58,19 +59,23 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import java.util.Locale
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
+import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
+import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
@@ -143,6 +148,19 @@ private fun ToolDetailsContent(
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
     val secondTranslation by toolViewModel.secondTranslation.collectAsState()
+
+    val context = LocalContext.current
+    val appLocale = LocalAppLanguage.current
+    val rawLanguages by toolViewModel.availableLanguages.collectAsState()
+    val languages by remember(context, appLocale) {
+        derivedStateOf { rawLanguages.getSortedDisplayNames(context, appLocale).toImmutableList() }
+    }
+
+    val state = State(
+        tool = tool,
+        translation = translation.value,
+        availableLanguages = languages
+    )
 
     val scrollState = rememberScrollState()
     val pages by viewModel.pages.collectAsState()
@@ -235,7 +253,7 @@ private fun ToolDetailsContent(
             key = { pages[it] }
         ) {
             when (pages[it]) {
-                ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(toolViewModel, modifier = Modifier.padding(32.dp))
+                ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(state, modifier = Modifier.padding(32.dp))
                 ToolDetailsPage.VARIANTS -> ToolDetailsVariants(
                     viewModel,
                     toolViewModels,

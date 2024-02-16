@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.model.Language
@@ -79,8 +80,8 @@ class ToolDetailsLayoutTest {
     // region ToolDetailsLanguages()
     @Test
     fun `ToolDetailsLanguages() - No Languages`() {
-        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel, true, {}) }
-        availableLanguagesFlow.value = emptyList()
+        val state = ToolDetailsScreen.State(availableLanguages = persistentListOf())
+        composeTestRule.setContent { ToolDetailsLanguages(state, true, {}) }
 
         // The entire ToolDetailsLanguages() composable should be gone if there are no languages
         composeTestRule.onRoot().onChildren().assertCountEquals(0)
@@ -88,11 +89,10 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `ToolDetailsLanguages() - Sorted Languages`() {
-        composeTestRule.setContent { ToolDetailsLanguages(toolViewModel, true, {}) }
-        availableLanguagesFlow.value = listOf(
-            Language(Language.INVALID_CODE, name = "Language 2"),
-            Language(Language.INVALID_CODE, name = "Language 1"),
+        val state = ToolDetailsScreen.State(
+            availableLanguages = persistentListOf("Language 1", "Language 2")
         )
+        composeTestRule.setContent { ToolDetailsLanguages(state, true, {}) }
 
         composeTestRule.onNodeWithTag(TEST_TAG_LANGUAGES_AVAILABLE).assertTextEquals("Language 1, Language 2")
     }
