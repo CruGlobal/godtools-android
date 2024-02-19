@@ -27,6 +27,6 @@
         <error line="51" column="5" source="compose:modifier-missing-check" />
     </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/tooldetails/ToolDetailsLayout.kt">
-        <error line="257" column="45" source="compose:vm-forwarding-check" />
+        <error line="259" column="45" source="compose:vm-forwarding-check" />
     </file>
 </baseline>

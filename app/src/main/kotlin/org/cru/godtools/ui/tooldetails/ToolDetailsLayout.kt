@@ -158,6 +158,8 @@ private fun ToolDetailsContent(
 
     val state = State(
         tool = tool,
+        banner = toolViewModel.detailsBanner.collectAsState().value,
+        bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value,
         translation = translation.value,
         availableLanguages = languages
     )
@@ -180,7 +182,7 @@ private fun ToolDetailsContent(
             Column {
                 Box(modifier = Modifier.fillMaxWidth()) {
                     ToolDetailsBanner(
-                        toolViewModel,
+                        state,
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(21f / 10f)
@@ -269,11 +271,8 @@ private fun ToolDetailsContent(
 }
 
 @Composable
-private fun ToolDetailsBanner(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val tool by toolViewModel.tool.collectAsState()
-    val banner = toolViewModel.detailsBanner.collectAsState().value
-    val bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value
-    val youtubeVideo = remember { derivedStateOf { tool?.detailsBannerYoutubeVideoId } }.value
+private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
+    val youtubeVideo = state.tool?.detailsBannerYoutubeVideoId
 
     when {
         youtubeVideo != null -> YouTubePlayer(
@@ -281,8 +280,8 @@ private fun ToolDetailsBanner(toolViewModel: ToolViewModels.ToolViewModel, modif
             recue = true,
             modifier = modifier
         )
-        bannerAnimation != null -> {
-            val composition by rememberLottieComposition(LottieCompositionSpec.File(bannerAnimation.path))
+        state.bannerAnimation != null -> {
+            val composition by rememberLottieComposition(LottieCompositionSpec.File(state.bannerAnimation.path))
             val progress by animateLottieCompositionAsState(
                 composition,
                 restartOnPlay = false,
@@ -294,8 +293,8 @@ private fun ToolDetailsBanner(toolViewModel: ToolViewModels.ToolViewModel, modif
                 modifier = modifier
             )
         }
-        banner != null -> AsyncImage(
-            model = banner,
+        state.banner != null -> AsyncImage(
+            model = state.banner,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier

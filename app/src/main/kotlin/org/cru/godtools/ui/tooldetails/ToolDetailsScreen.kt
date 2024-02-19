@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tooldetails
 
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
+import java.io.File
 import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -13,6 +14,8 @@ import org.cru.godtools.model.Translation
 class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
     data class State(
         val tool: Tool? = null,
+        val banner: File? = null,
+        val bannerAnimation: File? = null,
         val translation: Translation? = null,
         val availableLanguages: ImmutableList<String> = persistentListOf(),
     ) : CircuitUiState
