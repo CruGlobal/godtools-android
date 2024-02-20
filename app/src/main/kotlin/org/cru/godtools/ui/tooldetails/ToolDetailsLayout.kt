@@ -190,7 +190,10 @@ private fun ToolDetailsContent(
         tool = tool,
         banner = toolViewModel.detailsBanner.collectAsState().value,
         bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value,
+        downloadProgress = toolViewModel.downloadProgress.collectAsState().value,
         translation = translation.value,
+        secondTranslation = secondTranslation,
+        secondLanguage = toolViewModel.secondLanguage.collectAsState().value,
         manifest = toolViewModel.firstManifest.collectAsState().value,
         availableLanguages = languages,
         variants = viewModel.variants.collectAsState().value.mapNotNull {
@@ -207,6 +210,9 @@ private fun ToolDetailsContent(
         },
         eventSink = eventSink
     )
+
+    val secondLanguage by rememberUpdatedState(state.secondLanguage)
+    val downloadProgress by rememberUpdatedState(state.downloadProgress)
 
     val pages by viewModel.pages.collectAsState()
     val pagerState = rememberPagerState { pages.size }
@@ -231,7 +237,6 @@ private fun ToolDetailsContent(
                             .aspectRatio(21f / 10f)
                     )
 
-                    val downloadProgress by toolViewModel.downloadProgress.collectAsState()
                     DownloadProgressIndicator(
                         { downloadProgress },
                         modifier = Modifier
@@ -254,13 +259,10 @@ private fun ToolDetailsContent(
                         style = MaterialTheme.typography.bodyMedium,
                     )
 
-                    val additionalTranslation by toolViewModel.secondTranslation.collectAsState()
-                    if (additionalTranslation != null) {
-                        val additionalLanguage by toolViewModel.secondLanguage.collectAsState()
-
+                    if (secondTranslation != null) {
                         Spacer(modifier = Modifier.weight(1f))
                         AvailableInLanguage(
-                            language = additionalLanguage,
+                            language = secondLanguage,
                             color = GodToolsTheme.GT_DARK_GREEN,
                             modifier = Modifier.padding(start = 8.dp)
                         )

@@ -8,6 +8,8 @@ import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
+import org.cru.godtools.downloadmanager.DownloadProgress
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -20,7 +22,10 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val tool: Tool? = null,
         val banner: File? = null,
         val bannerAnimation: File? = null,
+        val downloadProgress: DownloadProgress? = null,
         val translation: Translation? = null,
+        val secondTranslation: Translation? = null,
+        val secondLanguage: Language? = null,
         val manifest: Manifest? = null,
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: List<ToolCard.State> = emptyList(),
