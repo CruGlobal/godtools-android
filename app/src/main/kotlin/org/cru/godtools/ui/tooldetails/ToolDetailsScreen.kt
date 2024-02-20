@@ -10,6 +10,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
@@ -20,12 +21,17 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val banner: File? = null,
         val bannerAnimation: File? = null,
         val translation: Translation? = null,
+        val manifest: Manifest? = null,
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: List<ToolCard.State> = emptyList(),
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 
     sealed interface Event : CircuitUiEvent {
+        data object OpenTool : Event
+        data object OpenToolTraining : Event
+        data object PinTool : Event
+        data object UnpinTool : Event
         data class SwitchVariant(val variant: String) : Event
     }
 }

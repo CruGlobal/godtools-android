@@ -153,6 +153,7 @@ private fun ToolDetailsContent(
     val tool by toolViewModel.tool.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
     val secondTranslation by toolViewModel.secondTranslation.collectAsState()
+    val onEvent by rememberUpdatedState(onEvent)
 
     val context = LocalContext.current
     val appLocale = LocalAppLanguage.current
@@ -164,10 +165,21 @@ private fun ToolDetailsContent(
     val eventSink: (Event) -> Unit = remember(viewModel) {
         {
             when (it) {
+                Event.OpenTool -> onEvent(
+                    ToolDetailsEvent.OpenTool(
+                        tool,
+                        translation.value?.languageCode,
+                        secondTranslation?.languageCode
+                    )
+                )
+                Event.OpenToolTraining ->
+                    onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode))
                 is Event.SwitchVariant -> {
                     coroutineScope.launch { scrollState.animateScrollTo(0) }
                     viewModel.setToolCode(it.variant)
                 }
+                Event.PinTool -> toolViewModel.pinTool()
+                Event.UnpinTool -> toolViewModel.unpinTool()
                 else -> TODO()
             }
         }
@@ -179,6 +191,7 @@ private fun ToolDetailsContent(
         banner = toolViewModel.detailsBanner.collectAsState().value,
         bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value,
         translation = translation.value,
+        manifest = toolViewModel.firstManifest.collectAsState().value,
         availableLanguages = languages,
         variants = viewModel.variants.collectAsState().value.mapNotNull {
             it.code?.let { code ->
@@ -255,8 +268,7 @@ private fun ToolDetailsContent(
                 }
 
                 ToolDetailsActions(
-                    toolViewModel,
-                    onEvent = onEvent,
+                    state,
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
@@ -327,28 +339,19 @@ private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
 
 @Composable
 @VisibleForTesting
-internal fun ToolDetailsActions(
-    toolViewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    onEvent: (ToolDetailsEvent) -> Unit = {},
-) = Column(modifier = modifier) {
-    val tool by toolViewModel.tool.collectAsState()
-    val translation by toolViewModel.firstTranslation.collectAsState()
-    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
+internal fun ToolDetailsActions(state: State, modifier: Modifier = Modifier) = Column(modifier = modifier) {
+    val tool by rememberUpdatedState(state.tool)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     Button(
-        onClick = {
-            onEvent(
-                ToolDetailsEvent.OpenTool(tool, translation.value?.languageCode, secondTranslation?.languageCode)
-            )
-        },
+        onClick = { eventSink(Event.OpenTool) },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
 
-    val manifest by toolViewModel.firstManifest.collectAsState()
+    val manifest by rememberUpdatedState(state.manifest)
     if (manifest?.hasTips == true) {
         Button(
-            onClick = { onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode)) },
+            onClick = { eventSink(Event.OpenToolTraining) },
             modifier = Modifier
                 .testTag(TEST_TAG_ACTION_TOOL_TRAINING)
                 .fillMaxWidth()
@@ -357,7 +360,7 @@ internal fun ToolDetailsActions(
 
     val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     OutlinedButton(
-        onClick = { if (isFavorite) toolViewModel.unpinTool() else toolViewModel.pinTool() },
+        onClick = { eventSink(if (isFavorite) Event.UnpinTool else Event.PinTool) },
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = if (isFavorite) GodToolsTheme.GT_RED else MaterialTheme.colorScheme.primary
         ),
