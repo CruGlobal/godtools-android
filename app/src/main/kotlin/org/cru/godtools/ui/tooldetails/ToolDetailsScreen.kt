@@ -17,7 +17,7 @@ import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
 class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
-    data class State(
+    internal data class State(
         val toolCode: String? = null,
         val tool: Tool? = null,
         val banner: File? = null,
@@ -27,6 +27,7 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val secondTranslation: Translation? = null,
         val secondLanguage: Language? = null,
         val manifest: Manifest? = null,
+        val pages: ImmutableList<ToolDetailsPage> = persistentListOf(ToolDetailsPage.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: List<ToolCard.State> = emptyList(),
         val eventSink: (Event) -> Unit = {},

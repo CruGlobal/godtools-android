@@ -195,6 +195,7 @@ private fun ToolDetailsContent(
         secondTranslation = secondTranslation,
         secondLanguage = toolViewModel.secondLanguage.collectAsState().value,
         manifest = toolViewModel.firstManifest.collectAsState().value,
+        pages = viewModel.pages.collectAsState().value.toImmutableList(),
         availableLanguages = languages,
         variants = viewModel.variants.collectAsState().value.mapNotNull {
             it.code?.let { code ->
@@ -214,7 +215,7 @@ private fun ToolDetailsContent(
     val secondLanguage by rememberUpdatedState(state.secondLanguage)
     val downloadProgress by rememberUpdatedState(state.downloadProgress)
 
-    val pages by viewModel.pages.collectAsState()
+    val pages by rememberUpdatedState(state.pages)
     val pagerState = rememberPagerState { pages.size }
 
     DownloadLatestTranslation(toolCode, translation.value?.languageCode)
