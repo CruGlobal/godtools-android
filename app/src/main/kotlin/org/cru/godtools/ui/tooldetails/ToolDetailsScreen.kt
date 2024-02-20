@@ -33,11 +33,13 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 
-    sealed interface Event : CircuitUiEvent {
+    internal sealed interface Event : CircuitUiEvent {
+        data object NavigateUp : Event
         data object OpenTool : Event
         data object OpenToolTraining : Event
         data object PinTool : Event
         data object UnpinTool : Event
         data class SwitchVariant(val variant: String) : Event
+        data object PinShortcut : Event
     }
 }

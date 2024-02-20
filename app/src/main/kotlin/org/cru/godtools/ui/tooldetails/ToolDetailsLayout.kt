@@ -60,6 +60,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.slack.circuitx.effects.LaunchedImpressionEffect
 import java.util.Locale
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
@@ -102,55 +103,13 @@ sealed interface ToolDetailsEvent {
 fun ToolDetailsLayout(
     viewModel: ToolDetailsViewModel,
     modifier: Modifier = Modifier,
-    onEvent: (ToolDetailsEvent) -> Unit = {},
-) = DrawerMenuLayout(modifier) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = { onEvent(ToolDetailsEvent.NavigateUp) }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
-                    }
-                },
-                actions = {
-                    var showOverflow by remember { mutableStateOf(false) }
-                    val shortcut = viewModel.shortcut.collectAsState().value
-
-                    if (shortcut != null) {
-                        IconButton(onClick = { showOverflow = !showOverflow }) {
-                            Icon(Icons.Filled.MoreVert, null)
-                        }
-                        DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.menu_add_to_home)) },
-                                onClick = { onEvent(ToolDetailsEvent.PinShortcut(shortcut)) }
-                            )
-                        }
-                    }
-                },
-                colors = GodToolsTheme.topAppBarColors,
-            )
-        }
-    ) {
-        ToolDetailsContent(viewModel, onEvent = onEvent, modifier = Modifier.padding(it))
-    }
-}
-
-@Composable
-@OptIn(ExperimentalFoundationApi::class)
-private fun ToolDetailsContent(
-    viewModel: ToolDetailsViewModel,
-    modifier: Modifier = Modifier,
     toolViewModels: ToolViewModels = viewModel(key = "ToolDetailsContent"),
     onEvent: (ToolDetailsEvent) -> Unit = {},
-) {
-    val coroutineScope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
-
+) = DrawerMenuLayout(modifier) {
     val toolCode by viewModel.toolCode.collectAsState()
     val toolViewModel = toolViewModels[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
+    val shortcut by viewModel.shortcut.collectAsState()
     val translation by toolViewModel.firstTranslation.collectAsState()
     val secondTranslation by toolViewModel.secondTranslation.collectAsState()
     val onEvent by rememberUpdatedState(onEvent)
@@ -165,6 +124,7 @@ private fun ToolDetailsContent(
     val eventSink: (Event) -> Unit = remember(viewModel) {
         {
             when (it) {
+                Event.NavigateUp -> onEvent(ToolDetailsEvent.NavigateUp)
                 Event.OpenTool -> onEvent(
                     ToolDetailsEvent.OpenTool(
                         tool,
@@ -174,13 +134,10 @@ private fun ToolDetailsContent(
                 )
                 Event.OpenToolTraining ->
                     onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode))
-                is Event.SwitchVariant -> {
-                    coroutineScope.launch { scrollState.animateScrollTo(0) }
-                    viewModel.setToolCode(it.variant)
-                }
+                is Event.SwitchVariant -> viewModel.setToolCode(it.variant)
                 Event.PinTool -> toolViewModel.pinTool()
                 Event.UnpinTool -> toolViewModel.unpinTool()
-                else -> TODO()
+                Event.PinShortcut -> shortcut?.let { onEvent(ToolDetailsEvent.PinShortcut(it)) }
             }
         }
     }
@@ -212,16 +169,59 @@ private fun ToolDetailsContent(
         eventSink = eventSink
     )
 
-    val secondLanguage by rememberUpdatedState(state.secondLanguage)
-    val downloadProgress by rememberUpdatedState(state.downloadProgress)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = { eventSink(Event.NavigateUp) }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                    }
+                },
+                actions = {
+                    var showOverflow by remember { mutableStateOf(false) }
 
+                    if (shortcut != null) {
+                        IconButton(onClick = { showOverflow = !showOverflow }) {
+                            Icon(Icons.Filled.MoreVert, null)
+                        }
+                        DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.menu_add_to_home)) },
+                                onClick = { eventSink(Event.PinShortcut) }
+                            )
+                        }
+                    }
+                },
+                colors = GodToolsTheme.topAppBarColors,
+            )
+        }
+    ) {
+        ToolDetailsContent(state, modifier = Modifier.padding(it))
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
+    val tool by rememberUpdatedState(state.tool)
+    val translation by rememberUpdatedState(state.translation)
+    val secondLanguage by rememberUpdatedState(state.secondLanguage)
+    val secondTranslation by rememberUpdatedState(state.secondTranslation)
+    val downloadProgress by rememberUpdatedState(state.downloadProgress)
+    val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
     val pages by rememberUpdatedState(state.pages)
+
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
+    LaunchedImpressionEffect(state.toolCode) { scrollState.animateScrollTo(0) }
+
     val pagerState = rememberPagerState { pages.size }
 
-    DownloadLatestTranslation(toolCode, translation.value?.languageCode)
-    DownloadLatestTranslation(toolCode, secondTranslation?.languageCode)
+    DownloadLatestTranslation(state.toolCode, translation?.languageCode)
+    DownloadLatestTranslation(state.toolCode, secondTranslation?.languageCode)
 
-    toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
+    state.toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 
     Column(
         modifier = modifier
@@ -247,14 +247,13 @@ private fun ToolDetailsContent(
                 }
 
                 Text(
-                    translation.value.getName(tool).orEmpty(),
-                    fontFamily = translation.value?.getFontFamilyOrNull(),
+                    translation.getName(tool).orEmpty(),
+                    fontFamily = translation?.getFontFamilyOrNull(),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(top = 40.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
                 Row(modifier = Modifier.padding(top = 10.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)) {
-                    val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
                     Text(
                         pluralStringResource(R.plurals.label_tools_shares, shares, shares),
                         style = MaterialTheme.typography.bodyMedium,
