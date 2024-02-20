@@ -33,7 +33,7 @@ class VariantToolCardTest {
         val tool = randomTool(name = UUID.randomUUID().toString())
         val translation = randomTranslation(tool.code, tagline = UUID.randomUUID().toString())
 
-        composeTestRule.setContent { VariantToolCard(ToolCard.State(tool, translation = translation)) }
+        composeTestRule.setContent { VariantToolCard(ToolCard.State(tool = tool, translation = translation)) }
 
         composeTestRule.onNodeWithText(translation.name!!).assertExists()
         composeTestRule.onNodeWithText(translation.tagline!!).assertExists()
@@ -52,7 +52,7 @@ class VariantToolCardTest {
     fun `VariantToolCard(isSelected=true)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(randomTool(), eventSink = events),
+                state = ToolCard.State(tool = randomTool(), eventSink = events),
                 isSelected = true,
             )
         }
@@ -68,7 +68,7 @@ class VariantToolCardTest {
     fun `VariantToolCard(isSelected=false)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(randomTool(), eventSink = events),
+                state = ToolCard.State(tool = randomTool(), eventSink = events),
                 isSelected = false,
             )
         }

@@ -35,12 +35,14 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReusableContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,6 +77,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
@@ -143,6 +146,8 @@ private fun ToolDetailsContent(
     onEvent: (ToolDetailsEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
+
     val toolCode by viewModel.toolCode.collectAsState()
     val toolViewModel = toolViewModels[toolCode.orEmpty()]
     val tool by toolViewModel.tool.collectAsState()
@@ -156,15 +161,40 @@ private fun ToolDetailsContent(
         derivedStateOf { rawLanguages.getSortedDisplayNames(context, appLocale).toImmutableList() }
     }
 
+    val eventSink: (Event) -> Unit = remember(viewModel) {
+        {
+            when (it) {
+                is Event.SwitchVariant -> {
+                    coroutineScope.launch { scrollState.animateScrollTo(0) }
+                    viewModel.setToolCode(it.variant)
+                }
+                else -> TODO()
+            }
+        }
+    }
+
     val state = State(
+        toolCode = toolCode,
         tool = tool,
         banner = toolViewModel.detailsBanner.collectAsState().value,
         bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value,
         translation = translation.value,
-        availableLanguages = languages
+        availableLanguages = languages,
+        variants = viewModel.variants.collectAsState().value.mapNotNull {
+            it.code?.let { code ->
+                toolViewModels[code, it].toState(
+                    eventSink = { e ->
+                        when (e) {
+                            ToolCard.Event.Click -> eventSink(Event.SwitchVariant(code))
+                            else -> Unit
+                        }
+                    }
+                )
+            }
+        },
+        eventSink = eventSink
     )
 
-    val scrollState = rememberScrollState()
     val pages by viewModel.pages.collectAsState()
     val pagerState = rememberPagerState { pages.size }
 
@@ -256,15 +286,7 @@ private fun ToolDetailsContent(
         ) {
             when (pages[it]) {
                 ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(state, modifier = Modifier.padding(32.dp))
-                ToolDetailsPage.VARIANTS -> ToolDetailsVariants(
-                    viewModel,
-                    toolViewModels,
-                    onVariantSelected = {
-                        if (toolCode != it) coroutineScope.launch { scrollState.animateScrollTo(0) }
-                        viewModel.setToolCode(it)
-                    },
-                    modifier = Modifier.padding(16.dp)
-                )
+                ToolDetailsPage.VARIANTS -> ToolDetailsVariants(state, modifier = Modifier.padding(16.dp))
             }
         }
     }
@@ -355,14 +377,9 @@ internal fun ToolDetailsActions(
 }
 
 @Composable
-private fun ToolDetailsVariants(
-    viewModel: ToolDetailsViewModel,
-    toolViewModels: ToolViewModels,
-    onVariantSelected: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val currentTool by viewModel.toolCode.collectAsState()
-    val variants by viewModel.variants.collectAsState()
+private fun ToolDetailsVariants(state: State, modifier: Modifier = Modifier) {
+    val currentTool by rememberUpdatedState(state.toolCode)
+    val variants by rememberUpdatedState(state.variants)
 
     Column(modifier = modifier, verticalArrangement = spacedBy(16.dp)) {
         Text(
@@ -371,23 +388,13 @@ private fun ToolDetailsVariants(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
 
-        variants.forEach { tool ->
-            val code = tool.code ?: return@forEach
-
-            VariantToolCard(
-                state = toolViewModels[code, tool].toState(
-                    eventSink = {
-                        when (it) {
-                            ToolCard.Event.Click -> onVariantSelected(code)
-                            ToolCard.Event.OpenTool,
-                            ToolCard.Event.OpenToolDetails,
-                            ToolCard.Event.PinTool,
-                            ToolCard.Event.UnpinTool -> TODO()
-                        }
-                    }
-                ),
-                isSelected = currentTool == code,
-            )
+        variants.forEach {
+            ReusableContent(it.toolCode) {
+                VariantToolCard(
+                    state = it,
+                    isSelected = currentTool == it.toolCode,
+                )
+            }
         }
     }
 }

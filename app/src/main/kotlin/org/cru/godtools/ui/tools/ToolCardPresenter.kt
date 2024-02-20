@@ -86,6 +86,7 @@ class ToolCardPresenter @Inject constructor(
         }
 
         return ToolCard.State(
+            toolCode = toolCode,
             tool = tool,
             isLoaded = !translation.isInitial,
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),

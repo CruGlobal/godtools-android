@@ -149,6 +149,7 @@ class ToolViewModels @Inject constructor(
             val translation by firstTranslation.collectAsState()
 
             return ToolCard.State(
+                toolCode = code,
                 tool = tool.collectAsState().value,
                 isLoaded = translation !is StateFlowValue.Initial,
                 banner = bannerFile.collectAsState().value,
