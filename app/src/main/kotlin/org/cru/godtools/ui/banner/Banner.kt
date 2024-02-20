@@ -3,8 +3,8 @@ package org.cru.godtools.ui.banner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
@@ -163,6 +163,6 @@ internal fun Banner(
                 }
             }
         }
-        Divider(modifier = Modifier.alpha(0.12f))
+        HorizontalDivider(modifier = Modifier.alpha(0.12f))
     }
 }
