@@ -17,12 +17,13 @@ import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
 class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
-    internal data class State(
+    data class State(
         val toolCode: String? = null,
         val tool: Tool? = null,
         val banner: File? = null,
         val bannerAnimation: File? = null,
         val downloadProgress: DownloadProgress? = null,
+        val hasShortcut: Boolean = false,
         val translation: Translation? = null,
         val secondTranslation: Translation? = null,
         val secondLanguage: Language? = null,
@@ -33,7 +34,7 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 
-    internal sealed interface Event : CircuitUiEvent {
+    sealed interface Event : CircuitUiEvent {
         data object NavigateUp : Event
         data object OpenTool : Event
         data object OpenToolTraining : Event

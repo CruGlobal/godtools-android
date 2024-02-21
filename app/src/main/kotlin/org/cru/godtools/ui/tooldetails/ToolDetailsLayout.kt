@@ -36,7 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReusableContent
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,127 +46,48 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
-import java.util.Locale
-import kotlinx.collections.immutable.toImmutableList
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
-import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
-import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
-import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
-import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolViewModels
 import org.cru.godtools.ui.tools.VariantToolCard
 
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
-sealed interface ToolDetailsEvent {
-    data object NavigateUp : ToolDetailsEvent
-    class OpenTool(val tool: Tool?, val lang1: Locale?, val lang2: Locale?) : ToolDetailsEvent
-    class OpenToolTraining(val tool: Tool?, val lang: Locale?) : ToolDetailsEvent
-    class PinShortcut(val shortcut: PendingShortcut) : ToolDetailsEvent
-}
-
 @Composable
+@CircuitInject(ToolDetailsScreen::class, SingletonComponent::class)
 @OptIn(ExperimentalMaterial3Api::class)
-fun ToolDetailsLayout(
-    viewModel: ToolDetailsViewModel,
-    modifier: Modifier = Modifier,
-    toolViewModels: ToolViewModels = viewModel(key = "ToolDetailsContent"),
-    onEvent: (ToolDetailsEvent) -> Unit = {},
-) = DrawerMenuLayout(modifier) {
-    val toolCode by viewModel.toolCode.collectAsState()
-    val toolViewModel = toolViewModels[toolCode.orEmpty()]
-    val tool by toolViewModel.tool.collectAsState()
-    val shortcut by viewModel.shortcut.collectAsState()
-    val translation by toolViewModel.firstTranslation.collectAsState()
-    val secondTranslation by toolViewModel.secondTranslation.collectAsState()
-    val onEvent by rememberUpdatedState(onEvent)
-
-    val context = LocalContext.current
-    val appLocale = LocalAppLanguage.current
-    val rawLanguages by toolViewModel.availableLanguages.collectAsState()
-    val languages by remember(context, appLocale) {
-        derivedStateOf { rawLanguages.getSortedDisplayNames(context, appLocale).toImmutableList() }
-    }
-
-    val eventSink: (Event) -> Unit = remember(viewModel) {
-        {
-            when (it) {
-                Event.NavigateUp -> onEvent(ToolDetailsEvent.NavigateUp)
-                Event.OpenTool -> onEvent(
-                    ToolDetailsEvent.OpenTool(
-                        tool,
-                        translation.value?.languageCode,
-                        secondTranslation?.languageCode
-                    )
-                )
-                Event.OpenToolTraining ->
-                    onEvent(ToolDetailsEvent.OpenToolTraining(tool, translation.value?.languageCode))
-                is Event.SwitchVariant -> viewModel.setToolCode(it.variant)
-                Event.PinTool -> toolViewModel.pinTool()
-                Event.UnpinTool -> toolViewModel.unpinTool()
-                Event.PinShortcut -> shortcut?.let { onEvent(ToolDetailsEvent.PinShortcut(it)) }
-            }
-        }
-    }
-
-    val state = State(
-        toolCode = toolCode,
-        tool = tool,
-        banner = toolViewModel.detailsBanner.collectAsState().value,
-        bannerAnimation = toolViewModel.detailsBannerAnimation.collectAsState().value,
-        downloadProgress = toolViewModel.downloadProgress.collectAsState().value,
-        translation = translation.value,
-        secondTranslation = secondTranslation,
-        secondLanguage = toolViewModel.secondLanguage.collectAsState().value,
-        manifest = toolViewModel.firstManifest.collectAsState().value,
-        pages = viewModel.pages.collectAsState().value.toImmutableList(),
-        availableLanguages = languages,
-        variants = viewModel.variants.collectAsState().value.mapNotNull {
-            it.code?.let { code ->
-                toolViewModels[code, it].toState(
-                    eventSink = { e ->
-                        when (e) {
-                            ToolCard.Event.Click -> eventSink(Event.SwitchVariant(code))
-                            else -> Unit
-                        }
-                    }
-                )
-            }
-        },
-        eventSink = eventSink
-    )
+fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuLayout(modifier) {
+    val hasShortcut by rememberUpdatedState(state.hasShortcut)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     Scaffold(
         topBar = {
@@ -179,9 +99,9 @@ fun ToolDetailsLayout(
                     }
                 },
                 actions = {
-                    var showOverflow by remember { mutableStateOf(false) }
+                    if (hasShortcut) {
+                        var showOverflow by remember { mutableStateOf(false) }
 
-                    if (shortcut != null) {
                         IconButton(onClick = { showOverflow = !showOverflow }) {
                             Icon(Icons.Filled.MoreVert, null)
                         }

@@ -86,6 +86,7 @@ circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = 
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
 circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circuit" }
+circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 circuitx-effects = { module = "com.slack.circuit:circuitx-effects", version.ref = "circuit" }
 coil-compose = "io.coil-kt:coil-compose:2.6.0"
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"

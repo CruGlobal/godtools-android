@@ -5,9 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import com.slack.circuit.backstack.rememberSaveableBackStack
+import com.slack.circuit.foundation.Circuit
+import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.rememberCircuitNavigator
+import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
@@ -34,6 +41,9 @@ class ToolDetailsActivity : BaseActivity() {
     private val viewModel: ToolDetailsViewModel by viewModels()
 
     @Inject
+    internal lateinit var circuit: Circuit
+
+    @Inject
     internal lateinit var shortcutManager: GodToolsShortcutManager
 
     // region Lifecycle
@@ -46,27 +56,26 @@ class ToolDetailsActivity : BaseActivity() {
             return
         }
 
+        val screen = ToolDetailsScreen(
+            initialTool = intent.getStringExtra(EXTRA_TOOL)!!,
+            secondLanguage = intent.getParcelableExtraCompat(EXTRA_ADDITIONAL_LANGUAGE, Locale::class.java)
+        )
         setContent {
-            GodToolsTheme {
-                ToolDetailsLayout(
-                    viewModel = viewModel,
-                    onEvent = {
-                        when (it) {
-                            is ToolDetailsEvent.NavigateUp -> onNavigateUp()
-                            is ToolDetailsEvent.OpenTool -> openTool(it.tool, it.lang1, it.lang2)
-                            is ToolDetailsEvent.OpenToolTraining -> {
-                                launchTrainingTips(it.tool?.code, it.tool?.type, it.lang)
-                            }
-                            is ToolDetailsEvent.PinShortcut -> shortcutManager.pinShortcut(it.shortcut)
-                        }
-                    }
-                )
+            CircuitCompositionLocals(circuit) {
+                GodToolsTheme {
+                    val backStack = rememberSaveableBackStack(screen)
+                    val navigator = rememberAndroidScreenAwareNavigator(
+                        rememberCircuitNavigator(backStack),
+                        this
+                    )
+                    CircuitContent(screen, navigator)
+                }
             }
         }
     }
     // endregion Lifecycle
 
-    private val isValidStartState get() = viewModel.toolCode.value != null
+    private val isValidStartState get() = intent != null && viewModel.toolCode.value != null
 
     private fun openTool(tool: Tool?, lang1: Locale?, lang2: Locale?) {
         tool?.code?.let { code ->
