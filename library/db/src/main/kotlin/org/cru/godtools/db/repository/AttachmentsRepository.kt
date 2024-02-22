@@ -1,6 +1,12 @@
 package org.cru.godtools.db.repository
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import org.cru.godtools.base.FileSystem
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 
@@ -27,3 +33,13 @@ interface AttachmentsRepository {
     fun deleteAttachmentsFor(tool: Tool)
     // endregion Sync Methods
 }
+
+@Composable
+fun AttachmentsRepository.rememberAttachmentFile(fileSystem: FileSystem, attachmentId: Long?) =
+    remember(fileSystem, attachmentId) {
+        when {
+            attachmentId != null -> findAttachmentFlow(attachmentId)
+                .map { it?.takeIf { it.isDownloaded }?.getFile(fileSystem) }
+            else -> flowOf(null)
+        }
+    }.collectAsState(null).value

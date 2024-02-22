@@ -9,8 +9,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
@@ -20,6 +18,7 @@ import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 
@@ -40,16 +39,6 @@ class ToolCardPresenter @Inject constructor(
         val toolCode = tool.code
         val defaultLocale = tool.defaultLocale
         val coroutineScope = rememberCoroutineScope()
-
-        // Tool Card Banner
-        val bannerId = tool.bannerId
-        val banner by remember(bannerId) {
-            when {
-                bannerId != null -> attachmentsRepository.findAttachmentFlow(bannerId)
-                    .map { it?.takeIf { it.isDownloaded }?.getFile(fileSystem) }
-                else -> flowOf(null)
-            }
-        }.collectAsState(null)
 
         // Translation
         val appLocale by settings.produceAppLocaleState()
@@ -85,7 +74,7 @@ class ToolCardPresenter @Inject constructor(
         return ToolCard.State(
             tool = tool,
             isLoaded = !translation.isInitial,
-            banner = banner,
+            banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
             translation = translation.value,
             secondLanguage = secondLanguage,
             secondTranslation = when (secondLocale) {
