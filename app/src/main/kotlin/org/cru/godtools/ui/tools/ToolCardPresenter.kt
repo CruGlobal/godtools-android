@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
+import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
@@ -51,9 +52,9 @@ class ToolCardPresenter @Inject constructor(
         }.collectAsState(null)
 
         // Translation
-        val appLanguage by remember { settings.appLanguageFlow }.collectAsState(settings.appLanguage)
-        val primaryTranslationFlow = remember(toolCode, appLanguage) {
-            translationsRepository.findLatestTranslationFlow(toolCode, appLanguage)
+        val appLocale by settings.produceAppLocaleState()
+        val primaryTranslationFlow = remember(toolCode, appLocale) {
+            translationsRepository.findLatestTranslationFlow(toolCode, appLocale)
         }
         val defaultTranslationFlow = remember(toolCode, defaultLocale) {
             translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale).onStart { emit(null) }

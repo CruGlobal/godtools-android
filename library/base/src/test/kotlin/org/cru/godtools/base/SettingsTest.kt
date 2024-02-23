@@ -2,11 +2,16 @@ package org.cru.godtools.base
 
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
+import io.mockk.every
+import io.mockk.mockk
 import java.util.Locale
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNull
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.junit.Assert.assertEquals
@@ -69,4 +74,24 @@ class SettingsTest {
         }
     }
     // endregion Dashboard Settings
+
+    // region produceAppLocaleState()
+    @Test
+    fun `produceAppLocaleState()`() = runTest {
+        val appLocaleFlow = MutableSharedFlow<Locale>()
+        val settings: Settings = mockk {
+            every { appLanguageFlow } returns appLocaleFlow
+            every { appLanguage } returns Locale.ENGLISH
+        }
+
+        moleculeFlow(RecompositionMode.Immediate) { settings.produceAppLocaleState().value }.test {
+            // check the initial appLocale
+            assertEquals(Locale.ENGLISH, awaitItem())
+
+            // emit an updated locale from the appLocaleFlow
+            appLocaleFlow.emit(Locale.FRENCH)
+            assertEquals(Locale.FRENCH, expectMostRecentItem())
+        }
+    }
+    // endregion produceAppLocaleState()
 }
