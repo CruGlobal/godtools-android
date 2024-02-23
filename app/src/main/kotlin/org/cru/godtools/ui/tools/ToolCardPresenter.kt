@@ -18,6 +18,7 @@ import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.produceLatestTranslationState
 import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -53,10 +54,7 @@ class ToolCardPresenter @Inject constructor(
         }.collectAsState(StateFlowValue.Initial(null))
 
         // Second Translation
-        val secondLocale = secondLanguage?.code
-        val secondTranslation by remember(toolCode, secondLocale) {
-            translationsRepository.findLatestTranslationFlow(toolCode, secondLocale)
-        }.collectAsState(null)
+        val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, secondLanguage?.code)
 
         // eventSink
         val interceptingEventSink: (ToolCard.Event) -> Unit = remember(eventSink) {
@@ -77,7 +75,7 @@ class ToolCardPresenter @Inject constructor(
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
             translation = translation.value,
             secondLanguage = secondLanguage,
-            secondTranslation = when (secondLocale) {
+            secondTranslation = when (secondLanguage?.code) {
                 translation.value?.languageCode -> null
                 else -> secondTranslation
             },

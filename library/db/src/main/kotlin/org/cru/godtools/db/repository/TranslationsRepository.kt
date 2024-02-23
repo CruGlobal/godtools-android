@@ -1,5 +1,8 @@
 package org.cru.godtools.db.repository
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.model.Translation
@@ -41,3 +44,11 @@ interface TranslationsRepository {
     suspend fun deleteTranslationIfNotDownloaded(id: Long)
     // endregion Sync Methods
 }
+
+@Composable
+fun TranslationsRepository.produceLatestTranslationState(
+    code: String?,
+    locale: Locale?,
+    downloadedOnly: Boolean = false,
+) = remember(code, locale, downloadedOnly) { findLatestTranslationFlow(code, locale, downloadedOnly) }
+    .collectAsState(null)
