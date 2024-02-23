@@ -2,7 +2,6 @@ package org.cru.godtools.ui.languages.app
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +19,7 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.base.util.filterByDisplayAndNativeName
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.base.util.getPrimaryCollator
@@ -32,7 +32,7 @@ class AppLanguagePresenter @AssistedInject constructor(
 ) : Presenter<AppLanguageScreen.State> {
     @Composable
     override fun present(): AppLanguageScreen.State {
-        val appLanguage by settings.appLanguageFlow.collectAsState(settings.appLanguage)
+        val appLocale by settings.produceAppLocaleState()
         var languageQuery by remember { mutableStateOf("") }
         var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
 
@@ -43,7 +43,7 @@ class AppLanguagePresenter @AssistedInject constructor(
 
                     is AppLanguageScreen.Event.UpdateLanguageQuery -> languageQuery = it.query
                     is AppLanguageScreen.Event.SelectLanguage -> {
-                        if (it.language == appLanguage) {
+                        if (it.language == appLocale) {
                             navigator.pop()
                         } else {
                             confirmLanguage = it.language
@@ -61,7 +61,7 @@ class AppLanguagePresenter @AssistedInject constructor(
         }
 
         return AppLanguageScreen.State(
-            languages = rememberLanguages(appLanguage, languageQuery),
+            languages = rememberLanguages(appLocale, languageQuery),
             languageQuery = languageQuery,
             selectedLanguage = confirmLanguage,
             eventSink = eventSink,

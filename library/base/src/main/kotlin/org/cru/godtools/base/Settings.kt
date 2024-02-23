@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.LocaleListCompat
@@ -198,3 +201,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
 private val Context.versionCode
     get() = PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(packageName, 0))
+
+@Composable
+fun Settings.produceAppLocaleState() = remember { appLanguageFlow }.collectAsState(remember { appLanguage })
