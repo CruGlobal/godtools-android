@@ -15,7 +15,7 @@
     <string name="tract_live_share_exit_dialog_cancel">Batal</string>
     <!-- Settings -->
     <string name="menu_settings">Pengaturan</string>
-    <string name="tract_settings_title">Pilihan Sarana</string>
+    <string name="tract_settings_title">Pilihan Alat</string>
     <string name="tract_settings_action_share">"Bagikan tautan "</string>
     <string name="tract_settings_action_tips_disable">Sembunyikan saran</string>
     <string name="tract_settings_languages_title">Bahasa Paralel</string>

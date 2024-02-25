@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tips Tutorial -->
-    <string name="tutorial_tips_learn_headline">Belajar bagaimana membagikan sarana ini dengan orang lain.</string>
-    <string name="tutorial_tips_learn_text">Berlatihlah menggunakan tips sebanyak yang Anda butuhkan untuk merasa percaya diri membagikan alat ini kepada orang lain.</string>
-    <string name="tutorial_tips_light_headline">Saran untuk membuka jalan</string>
-    <string name="tutorial_tips_light_text1">Pada layar tertentu, Anda akan melihat berbagai ikon. Tekan ikon untuk menampilkan tip yang akan membantu Anda berbicara tentang konten layar.</string>
+    <string name="tutorial_tips_learn_headline">Belajar bagaimana membagikan alat ini dengan orang lain.</string>
+    <string name="tutorial_tips_learn_text">Berlatihlah menggunakan tips sebanyak yang Saudara butuhkan untuk merasa percaya diri membagikan alat ini kepada orang lain.</string>
+    <string name="tutorial_tips_light_headline">Saran untuk menerangi jalan</string>
+    <string name="tutorial_tips_light_text1">Pada layar tertentu, Saudara akan melihat berbagai ikon. Tekan ikon untuk menampilkan tip yang akan membantu Saudara berbicara tentang konten layar.</string>
     <string name="tutorial_tips_light_text2">"Untuk layar tanpa tip, kami sarankan untuk membaca konten dan berdiskusi sesuai kebutuhan."</string>
-    <string name="tutorial_tips_start_headline">Buka tips</string>
-    <string name="tutorial_tips_start_text">Ketika tip terbuka, Anda telah menyelesaikan bagian latihan itu. Anda tidak perlu menggunakan tip untuk setiap percakapan.</string>
+    <string name="tutorial_tips_start_headline">Buka saran-saran</string>
+    <string name="tutorial_tips_start_text">Ketika sebuah saran terbuka, Saudara telah menyelesaikan bagian latihan itu. Saudara tidak perlu menggunakan setiap saran dalam setiap percakapan.</string>
     <string name="tutorial_tips_action_continue">Lanjutkan</string>
     <string name="tutorial_tips_action_skip">Lewati</string>
     <string name="tutorial_tips_action_start">Mulai Latihan</string>

@@ -17,7 +17,7 @@ Aplikasi ini dapat diunduh di https://godtoolsapp.com \n\n
 Mari bicara lebih banyak!</string>
     <string name="share_tool_message_article">Saya ingin membagikan artikel ini dengan Saudara dan ingin mendengar pendapat Saudara tentang artikel ini.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Bagikan tautan</string>
-    <string name="feature_discovery_desc_share_tool">Kirim sarana ini ke teman dengan mengklik ikon ini</string>
+    <string name="feature_discovery_desc_share_tool">Kirim alat ini ke teman dengan mengklik ikon ini</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Bagikan gambar</string>
 </resources>
