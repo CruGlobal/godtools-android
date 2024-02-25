@@ -14,8 +14,8 @@
     <string name="menu_heading_share">Berbagi</string>
     <string name="menu_review">Berikan ulasan</string>
     <string name="menu_share_story">Berbagi Cerita Dengan Kami</string>
-    <string name="menu_share_godtools">Bergbagi App GodTools</string>
-    <string name="share_app_message">Unduh apliaksi GodTools: https://godtoolsapp.com/id/ \n\n
+    <string name="menu_share_godtools">Berbagi App GodTools</string>
+    <string name="share_app_message">Unduh aplikasi GodTools: https://godtoolsapp.com/id/ \n\n
 
 Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="share_story_subject">Kisah GodTools</string>
@@ -26,28 +26,32 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pelajaran</string>
-    <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Anda</string>
+    <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Saudara</string>
     <string name="dashboard_lessons_header_description">Ide-ide praktis membangun hubungan dan memulai percakapan yang bermakna.</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorit</string>
     <string name="dashboard_home_header_title">Selamat datang di GodTools</string>
     <string name="dashboard_home_section_featured_lesson">Pelajaran-pelajaran</string>
-    <string name="dashboard_home_section_favorites_title">Sarana favorit Anda</string>
-    <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada sarana favorit untuk ditampilkan</string>
-    <string name="dashboard_home_section_favorites_no_tools_description">"Sentuh ikon untuk menjadikan sarana favorit dan menyediakannya offline. "</string>
+    <string name="dashboard_home_section_favorites_title">Alat favorit Saudara</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada alat favorit untuk ditampilkan</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">"Sentuh ikon untuk menjadikan alat favorit dan menyediakannya offline. "</string>
     <string name="dashboard_home_section_favorites_action_view_all">Lihat semua &gt;</string>
-    <string name="dashboard_home_section_favorites_action_all_tools">Ke Sarana-sarana</string>
-    <string name="tools_list_favorites_banner_text">Jadikan sarana tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Ke Alat-alat</string>
+    <string name="tools_list_favorites_banner_text">Jadikan alat tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Selesai</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Semua Sarana</string>
+    <string name="nav_all_tools">Alat-alat</string>
     <string name="dashboard_tools_section_filter_label">Filter</string>
-    <string name="dashboard_tools_section_filter_category_any">Kategori apa pun</string>
+    <string name="dashboard_tools_section_filter_category_any">Kategori apapun</string>
     <string name="dashboard_tools_section_filter_language_any">Bahasa apapun</string>
-    <string name="dashboard_tools_section_categories_label">Kategori</string>
-    <string name="dashboard_tools_section_categories_all">Semua Sarana</string>
-    <string name="dashboard_tools_section_spotlight_label">Spotlight Sarana</string>
-    <string name="dashboard_tools_section_spotlight_description">Ini beberapa sarama yang mungkin Anda suka</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="other">%1$d Alat-alat yang tersedia</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Semua Alat tersedia</string>
+    <string name="dashboard_tools_section_categories_label">Kategori-kategori</string>
+    <string name="dashboard_tools_section_categories_all">Semua Alat</string>
+    <string name="dashboard_tools_section_spotlight_label">Spotlight Alat</string>
+    <string name="dashboard_tools_section_spotlight_description">Ini beberapa alat yang mungkin Saudara suka</string>
     <!-- Tool Cards -->
     <string name="tools_list_remove_favorite_dialog_title">Hapus “%1$s” dari Favorit?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
@@ -56,5 +60,8 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="action_tools_about">Detail</string>
     <string name="action_tools_open">Buka</string>
     <!-- In App Update -->
+    <string name="play_update_available">Update tersedia</string>
     <string name="play_update_available_action">Unduh</string>
+    <string name="play_update_downloaded">Update diunduh</string>
+    <string name="play_update_downloaded_action">Muat Ulang</string>
 </resources>

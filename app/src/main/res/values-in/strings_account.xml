@@ -6,9 +6,19 @@
     <string name="account_create_heading">Buat Akun</string>
     <string name="account_create_description">Buat akun untuk mendapatkan kisah-kisah nyata, dorongan, dan tip praktis dengan ujung jari Saudara.</string>
     <string name="account_login_heading">Masuk</string>
+    <string name="account_login_description">Masuk ke akun Saudara untuk mendapatkan kisah nyata, dorongan, dan tip praktis di ujung jari Saudara.</string>
+    <string name="account_error_user_already_exists">Akun pengguna sudah dipakai.</string>
     <string name="account_error_user_not_found">Pengguna tidak ditemukan</string>
+    <string name="account_error_unknown">Kesalahan saat masuk.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Hapus Akun</string>
+    <string name="account_delete_heading">Jangan pergi begitu cepat</string>
+    <string name="account_delete_description">Jika Saudara menghapus akun, Saudara tidak akan dapat mengakses alat atau aktivitas akun favorit Saudara.</string>
+    <string name="account_delete_action_delete">Hapus akun saya</string>
+    <string name="account_delete_action_cancel">Pertahankan akun saya</string>
+    <string name="account_delete_error">Terjadi kesalahan saat menghapus akun Saudara. Pastikan Saudara online atau coba lagi nanti.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitas</string>
     <string name="account_activity_header">Aktifitas Saudara</string>
@@ -16,7 +26,7 @@
         <item quantity="other">Alat dibuka</item>
     </plurals>
     <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
-        <item quantity="other">Pelajaran diselesaikan</item>
+        <item quantity="other">Penyelesaian Pelajaran</item>
     </plurals>
     <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
         <item quantity="other">Layar dibagikan</item>
@@ -33,19 +43,19 @@
     <!-- Badges -->
     <string name="account_activity_badges_header">Lencana Saudara</string>
     <plurals name="account_activity_badge_tools_opened">
-        <item quantity="other">" %1$,d alat telah dibuka"</item>
+        <item quantity="other">" %1$,d Alat yang telah dibuka"</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
-        <item quantity="other">%1$,d pelajaran diselesaikan</item>
+        <item quantity="other">%1$,d Pelajaran yang diselesaikan</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
-        <item quantity="other">%1$,d alat telah article</item>
+        <item quantity="other">%1$,d Artikel-artikel yang sudah dibuka</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
-        <item quantity="other">%1$,d gambar telah dibagikan</item>
+        <item quantity="other">%1$,d Gambar yang telah dibagikan</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="other">%1$,d tip latihan telah diselesaikan</item>
+        <item quantity="other">%1$,d Saran-saran latihan yang telah diselesaikan</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Aktifitas Global</string>

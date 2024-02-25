@@ -2,20 +2,21 @@
 <resources>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">Tambahkan ke Beranda</string>
-    <string name="action_tools_open_tool">Buka Sarana</string>
+    <string name="action_tools_open_tool">Buka Alat</string>
     <string name="action_tools_add_favorite">Tambahkan ke Favorit</string>
     <string name="action_tools_remove_favorite">Hapus dari Favorit</string>
-    <string name="action_tools_open_training">Belajar membagikan sarana ini</string>
+    <string name="action_tools_open_training">Belajar membagikan alat ini</string>
     <plurals name="label_tools_shares">
-        <item quantity="other">%1$,d Melihat</item>
+        <item quantity="other">%1$,d Tampilan</item>
     </plurals>
-    <string name="label_tools_about">Apa</string>
+    <string name="label_tools_about">Tentang</string>
     <plurals name="label_tools_languages">
         <item quantity="other">%1$,d Bahasa</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">Memulai percakapan</string>
     <string name="tool_details_section_description_outline">Garis besar</string>
+    <string name="tool_details_section_description_bible_references">Referensi Alkitab</string>
     <string name="tool_details_section_description_languages_available">Bahasa yang tersedia</string>
     <string name="tool_details_section_variants_label">Versi</string>
-    <string name="tool_details_section_variants_description">Pilih versi lain dari sarana ini di bawah. Setiap versi menampilkan gaya dan konten yang unik sehingga Anda dapat menemukan yang terbaik untuk percakapan Anda. Anda dapat memfavoritkan beberapa versi dari sarana yang sama.</string>
+    <string name="tool_details_section_variants_description">Pilih versi lain dari alat ini di bawah. Setiap versi menampilkan gaya dan konten yang unik sehingga Saudara dapat menemukan yang terbaik untuk percakapan Saudara. Saudara dapat memfavoritkan beberapa versi dari alat yang sama.</string>
 </resources>
