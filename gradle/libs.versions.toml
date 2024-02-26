@@ -86,7 +86,7 @@ circuit-codegen = { module = "com.slack.circuit:circuit-codegen", version.ref = 
 circuit-codegen-annotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
 circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
 circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circuit" }
-coil-compose = "io.coil-kt:coil-compose:2.5.0"
+coil-compose = "io.coil-kt:coil-compose:2.6.0"
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
