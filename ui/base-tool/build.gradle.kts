@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.tool"
 
+    configureCompose(project)
     createEventBusIndex("org.cru.godtools.base.tool.BaseToolEventBusIndex")
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
