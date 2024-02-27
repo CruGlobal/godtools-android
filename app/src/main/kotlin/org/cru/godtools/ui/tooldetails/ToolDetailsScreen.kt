@@ -30,7 +30,7 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val manifest: Manifest? = null,
         val pages: ImmutableList<ToolDetailsPage> = persistentListOf(ToolDetailsPage.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
-        val variants: List<ToolCard.State> = emptyList(),
+        val variants: ImmutableList<ToolCard.State> = persistentListOf(),
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 
