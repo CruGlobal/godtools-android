@@ -1,7 +1,11 @@
 package org.cru.godtools.db.repository
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.model.Tool
 
@@ -42,3 +46,7 @@ interface ToolsRepository {
     suspend fun deleteIfNotFavorite(code: String)
     // endregion Sync Methods
 }
+
+@Composable
+fun ToolsRepository.produceToolState(toolCode: String?) =
+    remember(toolCode) { toolCode?.let { findToolFlow(it) } ?: flowOf(null) }.collectAsState(null)
