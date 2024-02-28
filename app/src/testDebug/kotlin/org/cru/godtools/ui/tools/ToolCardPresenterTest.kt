@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verifyAll
 import java.io.File
 import java.util.Locale
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -72,6 +74,9 @@ class ToolCardPresenterTest {
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
     )
+
+    @AfterTest
+    fun cleanup() = clearAndroidUiDispatcher()
 
     // region ToolCard.State.tool
     @Test
