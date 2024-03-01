@@ -14,8 +14,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -103,7 +103,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                 .background(ListItemDefaults.containerColor)
         ) {
             itemsIndexed(state.languages, { _, it -> it }) { i, lang ->
-                if (i > 0) Divider(Modifier.padding(horizontal = 16.dp))
+                if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp))
 
                 ListItem(
                     headlineContent = { LanguageName(lang) },

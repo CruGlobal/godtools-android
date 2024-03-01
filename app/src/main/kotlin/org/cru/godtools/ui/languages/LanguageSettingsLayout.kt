@@ -15,9 +15,9 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -148,7 +148,7 @@ internal fun LanguageSettingsLayout(
             }
 
             itemsIndexed(pinnedLanguages.orEmpty(), key = { _, it -> it.code }) { i, it ->
-                if (i == 0) Divider(modifier = Modifier.animateItemPlacement())
+                if (i == 0) HorizontalDivider(modifier = Modifier.animateItemPlacement())
                 LanguageName(
                     it,
                     modifier = Modifier
@@ -157,7 +157,7 @@ internal fun LanguageSettingsLayout(
                         .padding(vertical = 4.dp)
                         .wrapContentHeight(Alignment.CenterVertically)
                 )
-                Divider(modifier = Modifier.animateItemPlacement())
+                HorizontalDivider(modifier = Modifier.animateItemPlacement())
             }
             item(SECTION_OFFLINE_LANGUAGES_BOTTOM) {
                 if (pinnedLanguages != null) {
