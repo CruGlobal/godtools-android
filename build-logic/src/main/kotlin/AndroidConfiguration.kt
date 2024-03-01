@@ -109,7 +109,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project, enableCircuit: Boolean = false) {
+fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableCircuit: Boolean = false) {
     buildFeatures.compose = true
     composeOptions.kotlinCompilerExtensionVersion =
         project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
@@ -135,7 +135,7 @@ fun CommonExtension<*, *, *, *, *>.configureCompose(project: Project, enableCirc
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun CommonExtension<*, *, *, *, *>.configureQaBuildType(project: Project) {
+fun CommonExtension<*, *, *, *, *, *>.configureQaBuildType(project: Project) {
     buildTypes {
         register(BUILD_TYPE_QA) {
             initWith(getByName(BUILD_TYPE_DEBUG))
