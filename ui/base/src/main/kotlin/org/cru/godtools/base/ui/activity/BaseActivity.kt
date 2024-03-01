@@ -28,9 +28,9 @@ internal const val MSG_FEATURE_DISCOVERY = 1
 
 abstract class BaseActivity protected constructor() : AppCompatActivity() {
     @Inject
-    protected lateinit var eventBus: EventBus
+    lateinit var eventBus: EventBus
     @Inject
-    protected lateinit var settings: Settings
+    lateinit var settings: Settings
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

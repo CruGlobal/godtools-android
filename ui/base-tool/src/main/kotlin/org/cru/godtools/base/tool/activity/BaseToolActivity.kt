@@ -67,7 +67,7 @@ import org.greenrobot.eventbus.ThreadMode
 abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId) {
     @Inject
-    protected lateinit var downloadManager: GodToolsDownloadManager
+    lateinit var downloadManager: GodToolsDownloadManager
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>

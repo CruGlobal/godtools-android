@@ -26,7 +26,7 @@ import splitties.fragmentargs.arg
 abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
     BaseFragment<B>(layoutId), ShowTipCallback {
     @Inject
-    protected lateinit var eventBus: EventBus
+    internal lateinit var eventBus: EventBus
 
     protected val dataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
     internal val toolState by activityViewModels<ToolStateHolder>()
