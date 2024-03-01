@@ -52,6 +52,7 @@ import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tools.ToolCard
@@ -70,6 +71,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private val manifestManager: ManifestManager,
     private val settings: Settings,
     private val shortcutManager: GodToolsShortcutManager,
+    private val syncService: GodToolsSyncService,
     private val toolCardPresenter: ToolCardPresenter,
     @Assisted private val screen: ToolDetailsScreen,
     @Assisted private val navigator: Navigator,
@@ -111,17 +113,19 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         // TODO: record analytics event when launching a tool
                         if (intent != null) navigator.goTo(IntentScreen(intent))
                     }
+
+                    Event.PinTool -> coroutineScope.launch {
+                        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+                        toolsRepository.pinTool(toolCode)
+                        syncService.syncDirtyFavoriteTools()
+                    }
+
+                    Event.UnpinTool -> coroutineScope.launch {
+                        toolsRepository.unpinTool(toolCode)
+                        syncService.syncDirtyFavoriteTools()
+                    }
+
                     is Event.SwitchVariant -> toolCode = it.variant
-                    Event.PinTool -> {
-                        coroutineScope.launch { toolsRepository.pinTool(toolCode) }
-                        // TODO: trigger favorite tools sync
-                        // TODO: mark favorite tools feature discovered
-                    }
-                    Event.UnpinTool -> {
-                        coroutineScope.launch { toolsRepository.unpinTool(toolCode) }
-                        // TODO: trigger favorite tools sync
-                        // TODO: mark favorite tools feature discovered
-                    }
                     Event.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
                 }
             }

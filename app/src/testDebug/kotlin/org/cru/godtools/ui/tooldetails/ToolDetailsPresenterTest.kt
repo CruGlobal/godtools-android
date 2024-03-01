@@ -7,6 +7,7 @@ import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -40,6 +41,7 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.junit.runner.RunWith
@@ -85,6 +87,7 @@ class ToolDetailsPresenterTest {
     private val shortcutManager: GodToolsShortcutManager = mockk {
         every { canPinToolShortcut(any()) } returns false
     }
+    private val syncService: GodToolsSyncService = mockk()
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
         context = ApplicationProvider.getApplicationContext(),
@@ -97,6 +100,7 @@ class ToolDetailsPresenterTest {
         manifestManager = manifestManager,
         settings = settings,
         shortcutManager = shortcutManager,
+        syncService = syncService,
         toolCardPresenter = FakeToolCardPresenter(),
         screen = screen,
         navigator = navigator,
@@ -238,6 +242,43 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion Event.PinShortcut
+
+    // region Event.PinTool
+    @Test
+    fun `Event - PinTool`() = runTest {
+        coEvery { toolsRepository.pinTool(any(), any()) } just Runs
+        every { settings.setFeatureDiscovered(any()) } just Runs
+        coEvery { syncService.syncDirtyFavoriteTools() } returns true
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(Event.PinTool)
+        }
+
+        coVerify {
+            toolsRepository.pinTool(TOOL)
+            settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+            syncService.syncDirtyFavoriteTools()
+        }
+    }
+    // endregion Event.PinTool
+
+    // region Event.UnpinTool
+    @Test
+    fun `Event - UnpinTool`() = runTest {
+        coEvery { toolsRepository.unpinTool(any()) } just Runs
+        coEvery { syncService.syncDirtyFavoriteTools() } returns true
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(Event.UnpinTool)
+        }
+
+        coVerify {
+            toolsRepository.unpinTool(TOOL)
+            syncService.syncDirtyFavoriteTools()
+        }
+        coVerify(exactly = 0) { settings.setFeatureDiscovered(any()) }
+    }
+    // endregion Event.UnpinTool
 
     // region Event.SwitchVariant
     @Test
