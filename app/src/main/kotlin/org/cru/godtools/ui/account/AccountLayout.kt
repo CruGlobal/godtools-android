@@ -145,9 +145,7 @@ private fun AccountLayoutHeader(
 
             TabRow(
                 selectedTabIndex = pagerState.currentPage,
-                indicator = { positions ->
-                    TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
-                },
+                indicator = { TabRowDefaults.SecondaryIndicator(Modifier.pagerTabIndicatorOffset(pagerState, it)) },
                 divider = {},
                 modifier = Modifier.padding(top = 12.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
                 // TODO: set the correct padding

@@ -53,7 +53,7 @@ internal fun LanguageDownloadProgressIndicator(
 
             val iconPadding = iconSize / 12
             CircularProgressIndicator(
-                progress = progress,
+                progress = { progress },
                 color = MaterialTheme.colorScheme.primary,
                 strokeWidth = (iconSize / 2) - iconPadding,
                 modifier = contentModifier

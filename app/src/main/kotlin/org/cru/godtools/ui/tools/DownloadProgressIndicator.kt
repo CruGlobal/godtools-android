@@ -28,7 +28,7 @@ internal fun DownloadProgressIndicator(downloadProgress: () -> DownloadProgress?
                 animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
                 label = "Download Progress",
             )
-            LinearProgressIndicator(progress, modifier = modifier)
+            LinearProgressIndicator({ progress }, modifier = modifier)
         }
     }
 }
