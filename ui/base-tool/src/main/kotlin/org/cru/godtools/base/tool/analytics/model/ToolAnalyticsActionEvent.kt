@@ -8,7 +8,7 @@ open class ToolAnalyticsActionEvent(
     private val tool: String?,
     action: String,
     locale: Locale? = null,
-    systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
+    systems: Set<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) : AnalyticsActionEvent(action, locale = locale, systems = systems) {
     override val appSection get() = tool
 }
