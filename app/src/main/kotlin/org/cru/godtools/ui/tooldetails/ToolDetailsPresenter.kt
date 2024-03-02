@@ -31,6 +31,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.produceAppLocaleState
@@ -58,6 +61,7 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
+import org.greenrobot.eventbus.EventBus
 
 class ToolDetailsPresenter @AssistedInject constructor(
     @ApplicationContext
@@ -67,6 +71,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
     private val downloadManager: GodToolsDownloadManager,
+    private val eventBus: EventBus,
     private val fileSystem: ToolFileSystem,
     private val manifestManager: ManifestManager,
     private val settings: Settings,
@@ -92,14 +97,16 @@ class ToolDetailsPresenter @AssistedInject constructor(
             {
                 when (it) {
                     Event.NavigateUp -> navigator.pop()
-                    Event.OpenTool -> {
-                        val intent = tool?.createToolIntent(
+                    Event.OpenTool -> tool?.let { tool ->
+                        val intent = tool.createToolIntent(
                             context = context,
                             languages = listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
                         )
 
-                        // TODO: record analytics event when launching a tool
-                        if (intent != null) navigator.goTo(IntentScreen(intent))
+                        if (intent != null) {
+                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_TOOL_DETAILS))
+                            navigator.goTo(IntentScreen(intent))
+                        }
                     }
                     Event.OpenToolTraining -> {
                         // TODO: launch tips tutorial when necessary

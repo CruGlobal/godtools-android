@@ -1,10 +1,12 @@
 package org.cru.godtools.ui.tooldetails
 
 import android.app.Application
+import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
+import com.slack.circuitx.android.IntentScreen
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -12,6 +14,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
 import java.io.File
 import java.util.Locale
 import kotlin.random.Random
@@ -26,6 +29,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
@@ -44,6 +50,8 @@ import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
+import org.cru.godtools.util.createToolIntent
+import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -72,9 +80,11 @@ class ToolDetailsPresenterTest {
         every { getTranslationsFlowForTool(any()) } returns flowOf(emptyList())
     }
 
+    private val context: Context = ApplicationProvider.getApplicationContext()
     private val downloadManager: GodToolsDownloadManager = mockk {
         every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
     }
+    private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val fileSystem: ToolFileSystem = mockk()
     private val manifestManager: ManifestManager = mockk {
         coEvery { getManifest(any()) } returns null
@@ -90,12 +100,13 @@ class ToolDetailsPresenterTest {
     private val syncService: GodToolsSyncService = mockk()
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
-        context = ApplicationProvider.getApplicationContext(),
+        context = context,
         attachmentsRepository = attachmentsRepository,
         languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
         downloadManager = downloadManager,
+        eventBus = eventBus,
         fileSystem = fileSystem,
         manifestManager = manifestManager,
         settings = settings,
@@ -224,6 +235,32 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion State.hasShortcut
+
+    // region Event.OpenTool
+    @Test
+    fun `Event - OpenTool - Tract Tool`() = runTest {
+        toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
+        every {
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
+        } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(Event.OpenTool)
+        }
+
+        with(navigator.awaitNextScreen()) {
+            assertTrue(this is IntentScreen)
+            val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), false)!!
+            assertEquals(expected.component, intent.component)
+//            assertTrue(expected.extras equalsBundle intent.extras)
+        }
+
+        navigator.assertIsEmpty()
+        verifyAll {
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
+        }
+    }
+    // endregion Event.OpenTool
 
     // region Event.PinShortcut
     @Test

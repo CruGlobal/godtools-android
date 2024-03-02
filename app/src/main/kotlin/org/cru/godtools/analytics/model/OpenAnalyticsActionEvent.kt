@@ -28,4 +28,21 @@ internal class OpenAnalyticsActionEvent(
         putString(PARAM_SOURCE, source)
         if (tool != null) putString(PARAM_TOOL, tool)
     }
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        !super.equals(other) -> false
+        other !is OpenAnalyticsActionEvent -> false
+        tool != other.tool -> false
+        source != other.source -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + (tool?.hashCode() ?: 0)
+        result = 31 * result + source.hashCode()
+        return result
+    }
 }
