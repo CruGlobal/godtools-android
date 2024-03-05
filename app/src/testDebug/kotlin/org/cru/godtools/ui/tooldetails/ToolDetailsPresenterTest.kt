@@ -262,6 +262,29 @@ class ToolDetailsPresenterTest {
     }
     // endregion Event.OpenTool
 
+    // region Event.OpenToolTraining
+    @Test
+    fun `Event - OpenToolTraining - Tract Tool`() = runTest {
+        toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
+        every {
+            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
+        } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(Event.OpenToolTraining)
+        }
+
+        with(navigator.awaitNextScreen()) {
+            assertTrue(this is OpenToolTrainingScreen)
+            assertEquals(TOOL, tool)
+            assertEquals(Tool.Type.TRACT, type)
+            assertEquals(Locale.ENGLISH, locale)
+        }
+
+        navigator.assertIsEmpty()
+    }
+    // endregion Event.OpenToolTraining
+
     // region Event.PinShortcut
     @Test
     fun `Event - PinShortcut`() = runTest {

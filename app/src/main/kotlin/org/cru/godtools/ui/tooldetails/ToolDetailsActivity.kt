@@ -28,6 +28,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
 import org.cru.godtools.util.openToolActivity
+import org.cru.godtools.util.rememberInterceptingNavigator
 
 fun Activity.startToolDetailsActivity(toolCode: String, additionalLanguage: Locale? = null) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
@@ -65,7 +66,18 @@ class ToolDetailsActivity : BaseActivity() {
                 GodToolsTheme {
                     val backStack = rememberSaveableBackStack(screen)
                     val navigator = rememberAndroidScreenAwareNavigator(
-                        rememberCircuitNavigator(backStack),
+                        rememberInterceptingNavigator(
+                            rememberCircuitNavigator(backStack),
+                            goTo = { screen, delegate ->
+                                when (screen) {
+                                    // TODO: move this logic into the ToolDetailsPresenter once tutorials use Circuit
+                                    is OpenToolTrainingScreen ->
+                                        launchTrainingTips(screen.tool, screen.type, screen.locale)
+
+                                    else -> delegate.goTo(screen)
+                                }
+                            }
+                        ),
                         this
                     )
                     CircuitContent(screen, navigator)

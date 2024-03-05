@@ -108,17 +108,11 @@ class ToolDetailsPresenter @AssistedInject constructor(
                             navigator.goTo(IntentScreen(intent))
                         }
                     }
-                    Event.OpenToolTraining -> {
-                        // TODO: launch tips tutorial when necessary
 
-                        val intent = tool?.createToolIntent(
-                            context = context,
-                            languages = listOfNotNull(translation?.languageCode),
-                            showTips = true
-                        )
-
-                        // TODO: record analytics event when launching a tool
-                        if (intent != null) navigator.goTo(IntentScreen(intent))
+                    Event.OpenToolTraining -> tool?.let {
+                        // TODO: handle opening training tips and optionally showing the tutorial locally once the
+                        //       tutorial uses Circuit.
+                        navigator.goTo(OpenToolTrainingScreen(it.code, it.type, translation?.languageCode))
                     }
 
                     Event.PinTool -> coroutineScope.launch {
