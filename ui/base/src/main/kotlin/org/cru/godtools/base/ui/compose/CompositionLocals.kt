@@ -18,7 +18,8 @@ import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.base.ui.util.openUrl
 import org.greenrobot.eventbus.EventBus
 
-val LocalEventBus = staticCompositionLocalOf<EventBus> { error("No EventBus available") }
+@Deprecated("EventBus should be injected and used from Circuit Presenters only")
+val LocalEventBus = staticCompositionLocalOf { EventBus() }
 
 @Composable
 internal fun CompositionLocals(content: @Composable () -> Unit) {

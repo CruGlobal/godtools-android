@@ -80,6 +80,9 @@ import org.cru.godtools.ui.tools.VariantToolCard
 
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp
 
+internal const val TEST_TAG_ACTION_NAVIGATE_UP = "action_up"
+internal const val TEST_TAG_ACTION_OVERFLOW = "action_overflow"
+internal const val TEST_TAG_ACTION_PIN_SHORTCUT = "action_pin_shortcut"
 internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 
 @Composable
@@ -94,7 +97,10 @@ fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuL
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    IconButton(onClick = { eventSink(Event.NavigateUp) }) {
+                    IconButton(
+                        onClick = { eventSink(Event.NavigateUp) },
+                        modifier = Modifier.testTag(TEST_TAG_ACTION_NAVIGATE_UP),
+                    ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
                     }
                 },
@@ -102,13 +108,17 @@ fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuL
                     if (hasShortcut) {
                         var showOverflow by remember { mutableStateOf(false) }
 
-                        IconButton(onClick = { showOverflow = !showOverflow }) {
+                        IconButton(
+                            onClick = { showOverflow = !showOverflow },
+                            modifier = Modifier.testTag(TEST_TAG_ACTION_OVERFLOW),
+                        ) {
                             Icon(Icons.Filled.MoreVert, null)
                         }
                         DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.menu_add_to_home)) },
-                                onClick = { eventSink(Event.PinShortcut) }
+                                onClick = { eventSink(Event.PinShortcut) },
+                                modifier = Modifier.testTag(TEST_TAG_ACTION_PIN_SHORTCUT),
                             )
                         }
                     }
