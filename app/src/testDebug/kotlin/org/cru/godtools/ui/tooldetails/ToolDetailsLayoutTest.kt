@@ -81,31 +81,40 @@ class ToolDetailsLayoutTest {
     }
     // endregion Action - Pin Shortcut
 
-    // region ToolDetailsActions()
+    // region Action - Tool Training Button
     @Test
-    fun `ToolDetailsActions() - Tool Training Button - visible when manifest has tips`() {
-        val state = State(manifest = mockk { every { hasTips } returns true })
-        composeTestRule.setContent { ToolDetailsActions(state) }
+    fun `Action - Tool Training Button - visible when manifest has tips`() {
+        val state = State(
+            manifest = mockk { every { hasTips } returns true },
+            eventSink = events,
+        )
+        composeTestRule.setContent { ToolDetailsLayout(state) }
 
-        composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertExists()
+        composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertExists().performClick()
+        events.assertEvent(Event.OpenToolTraining)
     }
 
     @Test
-    fun `ToolDetailsActions() - Tool Training Button - gone when manifest does not have tips`() {
-        val state = State(manifest = mockk { every { hasTips } returns false })
-        composeTestRule.setContent { ToolDetailsActions(state) }
+    fun `Action - Tool Training Button - gone when manifest does not have tips`() {
+        val state = State(
+            manifest = mockk { every { hasTips } returns false },
+            eventSink = events,
+        )
+        composeTestRule.setContent { ToolDetailsLayout(state) }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
+        events.assertNoEvents()
     }
 
     @Test
-    fun `ToolDetailsActions() - Tool Training Button - gone when manifest does not exist`() {
-        val state = State(manifest = null)
-        composeTestRule.setContent { ToolDetailsActions(state) }
+    fun `Action - Tool Training Button - gone when manifest does not exist`() {
+        val state = State(manifest = null, eventSink = events)
+        composeTestRule.setContent { ToolDetailsLayout(state) }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
+        events.assertNoEvents()
     }
-    // endregion ToolDetailsActions()
+    // endregion Action - Tool Training Button
 
     // region ToolDetailsLanguages()
     @Test
