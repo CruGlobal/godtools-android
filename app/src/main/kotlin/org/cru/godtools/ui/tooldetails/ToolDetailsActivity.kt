@@ -15,15 +15,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
-import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
@@ -39,13 +35,10 @@ fun Activity.startToolDetailsActivity(toolCode: String, additionalLanguage: Loca
 
 @AndroidEntryPoint
 class ToolDetailsActivity : BaseActivity() {
-    private val viewModel: ToolDetailsViewModel by viewModels()
+    private val initialTool get() = intent?.getStringExtra(EXTRA_TOOL)
 
     @Inject
     internal lateinit var circuit: Circuit
-
-    @Inject
-    internal lateinit var shortcutManager: GodToolsShortcutManager
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +51,7 @@ class ToolDetailsActivity : BaseActivity() {
         }
 
         val screen = ToolDetailsScreen(
-            initialTool = intent.getStringExtra(EXTRA_TOOL)!!,
+            initialTool = initialTool!!,
             secondLanguage = intent.getParcelableExtraCompat(EXTRA_ADDITIONAL_LANGUAGE, Locale::class.java)
         )
         setContent {
@@ -87,15 +80,7 @@ class ToolDetailsActivity : BaseActivity() {
     }
     // endregion Lifecycle
 
-    private val isValidStartState get() = intent != null && viewModel.toolCode.value != null
-
-    private fun openTool(tool: Tool?, lang1: Locale?, lang2: Locale?) {
-        tool?.code?.let { code ->
-            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, code, SOURCE_TOOL_DETAILS))
-            val languages = listOfNotNull(lang1 ?: Locale.ENGLISH, lang2)
-            openToolActivity(code, tool.type, *languages.toTypedArray())
-        }
-    }
+    private val isValidStartState get() = initialTool != null
 
     // region Training Tips
     private val selectedTool by viewModels<SelectedToolSavedState>()
