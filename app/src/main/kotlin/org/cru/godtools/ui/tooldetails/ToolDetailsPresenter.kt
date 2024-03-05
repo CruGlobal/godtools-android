@@ -170,10 +170,12 @@ class ToolDetailsPresenter @AssistedInject constructor(
         secondLanguage: Language?,
         eventSink: (Event) -> Unit,
     ): ImmutableList<ToolCard.State> {
+        if (metaToolCode == null) return persistentListOf()
+
         val eventSink by rememberUpdatedState(eventSink)
 
         return remember { toolsRepository.getNormalToolsFlow() }.collectAsState(emptyList()).value
-            .filter { metaToolCode != null && it.metatoolCode == metaToolCode }
+            .filter { it.metatoolCode == metaToolCode }
             .map { tool ->
                 key(tool.code) {
                     toolCardPresenter.present(

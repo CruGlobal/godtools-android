@@ -50,6 +50,7 @@ import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -235,6 +236,30 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion State.hasShortcut
+
+    // region State.variants
+    @Test
+    fun `State - variants`() = runTest {
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant1 = randomTool("variant1", Tool.Type.TRACT, metatoolCode = "meta")
+        val tool2 = randomTool("tool2", Tool.Type.TRACT, metatoolCode = null)
+        toolFlow.value = tool
+        normalToolsFlow.value = listOf(tool, variant1, tool2)
+
+        createPresenter().test {
+            val state = expectMostRecentItem()
+            assertEquals(2, state.variants.size)
+
+            assertEquals(TOOL, state.variants[0].toolCode)
+            state.variants[0].eventSink(ToolCard.Event.Click)
+            expectNoEvents()
+
+            assertEquals("variant1", state.variants[1].toolCode)
+            state.variants[1].eventSink(ToolCard.Event.Click)
+            assertEquals("variant1", expectMostRecentItem().toolCode)
+        }
+    }
+    // endregion State.variants
 
     // region Event.OpenTool
     @Test
