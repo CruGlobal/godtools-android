@@ -51,7 +51,7 @@ internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
 
 sealed interface DownloadableLanguagesEvent {
-    object NavigateUp : DownloadableLanguagesEvent
+    data object NavigateUp : DownloadableLanguagesEvent
 }
 
 @Composable
