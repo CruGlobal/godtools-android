@@ -4,16 +4,22 @@ import android.app.Application
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
+import java.util.Locale
 import java.util.UUID
 import kotlin.test.Test
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.junit.Rule
@@ -80,4 +86,79 @@ class VariantToolCardTest {
         events.assertEvent(ToolCard.Event.Click)
     }
     // endregion VariantToolCard - isSelected
+
+    // region VariantToolCard - App Language
+    @Test
+    fun `VariantToolCard - App Language - Available`() {
+        composeTestRule.setContent {
+            VariantToolCard(
+                state = ToolCard.State(
+                    tool = randomTool(),
+                    appLanguage = Language(Locale.ENGLISH),
+                    appTranslation = randomTranslation(),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("English", useUnmergedTree = true)
+            .onSiblings()
+            .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
+            .assertContentDescriptionEquals("Available")
+    }
+
+    @Test
+    fun `VariantToolCard - App Language - Not Available`() {
+        composeTestRule.setContent {
+            VariantToolCard(
+                state = ToolCard.State(
+                    tool = randomTool(),
+                    appLanguage = Language(Locale.ENGLISH),
+                    appTranslation = null,
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Not available in English").assertExists()
+    }
+    // endregion VariantToolCard - App Language
+
+    // region VariantToolCard - Second Language
+    @Test
+    fun `VariantToolCard - Second Language - Available`() {
+        composeTestRule.setContent {
+            VariantToolCard(
+                state = ToolCard.State(
+                    tool = randomTool(),
+                    appLanguage = Language(Locale.ENGLISH),
+                    appTranslation = null,
+                    secondLanguage = Language(Locale.FRENCH),
+                    secondTranslation = randomTranslation(),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("French", useUnmergedTree = true)
+            .onSiblings()
+            .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
+            .assertContentDescriptionEquals("Available")
+            .printToString().let { println(it) }
+    }
+
+    @Test
+    fun `VariantToolCard - Second Language - Not Available`() {
+        composeTestRule.setContent {
+            VariantToolCard(
+                state = ToolCard.State(
+                    tool = randomTool(),
+                    appLanguage = Language(Locale.ENGLISH),
+                    appTranslation = randomTranslation(),
+                    secondLanguage = Language(Locale.FRENCH),
+                    secondTranslation = null,
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Not available in French").assertExists()
+    }
+    // endregion VariantToolCard - Second Language
 }

@@ -73,7 +73,10 @@ internal fun AvailableInLanguage(
         )
         Icon(
             painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
-            contentDescription = null,
+            contentDescription = when {
+                available -> stringResource(R.string.tool_card_accessibility_language_available)
+                else -> null
+            },
             modifier = Modifier
                 .padding(start = 4.dp)
                 .size(with(LocalDensity.current) { (LocalTextStyle.current.fontSize * 0.65).toDp() })
