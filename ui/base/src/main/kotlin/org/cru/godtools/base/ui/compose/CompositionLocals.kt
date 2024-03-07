@@ -22,11 +22,13 @@ import org.greenrobot.eventbus.EventBus
 val LocalEventBus = staticCompositionLocalOf { EventBus() }
 
 @Composable
-internal fun CompositionLocals(content: @Composable () -> Unit) {
+internal fun CompositionLocals(disableDagger: Boolean = false, content: @Composable () -> Unit) {
     val context = LocalContext.current
     val daggerComponents = when {
-        LocalInspectionMode.current -> object : ComposeEntryPoint {
-            override val eventBus = EventBus()
+        LocalInspectionMode.current || disableDagger -> remember {
+            object : ComposeEntryPoint {
+                override val eventBus = EventBus()
+            }
         }
         else -> remember { EntryPointAccessors.fromApplication<ComposeEntryPoint>(context) }
     }
