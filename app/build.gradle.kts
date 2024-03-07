@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.grgit)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.paparazzi)
 }
 
 android {
