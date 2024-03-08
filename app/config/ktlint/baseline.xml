@@ -21,7 +21,7 @@
         <error line="111" column="34" source="compose:unstable-collections" />
     </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/languages/downloadable/DownloadableLanguagesLayout.kt">
-        <error line="51" column="5" source="compose:modifier-missing-check" />
+        <error line="56" column="5" source="compose:modifier-missing-check" />
     </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/login/LoginLayout.kt">
         <error line="51" column="5" source="compose:modifier-missing-check" />
