@@ -131,10 +131,11 @@ private fun LanguageListItem(viewModel: LanguageViewModels.LanguageViewModel, mo
         trailingContent = {
             val toolsDownloaded by viewModel.toolsDownloaded.collectAsState()
 
-            LanguageDownloadProgressIndicator(
+            LanguageDownloadStatusIndicator(
                 language.isAdded,
-                downloaded = toolsDownloaded,
-                total = toolsAvailable,
+                downloadedTools = toolsDownloaded,
+                totalTools = toolsAvailable,
+                isConfirmRemoval = false,
                 modifier = Modifier.clickable {
                     scope.launch(NonCancellable) {
                         if (language.isAdded) viewModel.unpin() else viewModel.pin()

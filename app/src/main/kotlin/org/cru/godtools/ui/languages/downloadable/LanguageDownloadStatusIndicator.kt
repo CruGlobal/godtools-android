@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.DownloadForOffline
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,18 +20,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private val DEFAULT_ICON_SIZE = 24.dp
 
 @Composable
-internal fun LanguageDownloadProgressIndicator(
+internal fun LanguageDownloadStatusIndicator(
     isPinned: Boolean,
-    downloaded: Int,
-    total: Int,
+    downloadedTools: Int,
+    totalTools: Int,
+    isConfirmRemoval: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val total = total.coerceAtLeast(0)
-    val downloaded = downloaded.coerceIn(0, total)
+    val total = totalTools.coerceAtLeast(0)
+    val downloaded = downloadedTools.coerceIn(0, total)
+
     val contentModifier = modifier
         .size(DEFAULT_ICON_SIZE)
         .aspectRatio(1f)
@@ -41,6 +45,12 @@ internal fun LanguageDownloadProgressIndicator(
             null,
             modifier = contentModifier,
             tint = MaterialTheme.colorScheme.outline,
+        )
+        isConfirmRemoval -> Icon(
+            Icons.Outlined.Cancel,
+            null,
+            modifier = contentModifier,
+            tint = GodToolsTheme.GT_RED,
         )
         downloaded == total -> Icon(
             Icons.Outlined.CheckCircle,
