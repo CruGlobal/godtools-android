@@ -7,7 +7,7 @@
   "dependencyDashboard": true,
   "packageRules": [
     {
-      "groupName": "Kotlin and Compose",
+      "groupName": "Kotlin, KSP and Compose",
       "description": "Compose compiler is tightly coupled to Kotlin version.",
       "matchPackagePrefixes": [
         "androidx.compose.compiler",
