@@ -31,7 +31,7 @@ class SquareToolCardTest {
     fun `SquareToolCard()`() {
         val tool = randomTool(name = UUID.randomUUID().toString())
 
-        composeTestRule.setContent { SquareToolCard(ToolCard.State(tool)) }
+        composeTestRule.setContent { SquareToolCard(ToolCard.State(tool = tool)) }
 
         composeTestRule.onNodeWithText(tool.name!!).assertExists()
         composeTestRule.onNodeWithTag(TEST_TAG_FAVORITE_ACTION).assertExists()
@@ -50,7 +50,7 @@ class SquareToolCardTest {
     fun `SquareToolCard(showCategory=true)`() {
         composeTestRule.setContent {
             SquareToolCard(
-                state = ToolCard.State(randomTool(category = "gospel")),
+                state = ToolCard.State(tool = randomTool(category = "gospel")),
                 showCategory = true
             )
         }
@@ -62,7 +62,7 @@ class SquareToolCardTest {
     fun `SquareToolCard(showCategory=false)`() {
         composeTestRule.setContent {
             SquareToolCard(
-                state = ToolCard.State(randomTool(category = "gospel")),
+                state = ToolCard.State(tool = randomTool(category = "gospel")),
                 showCategory = false
             )
         }

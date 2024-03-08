@@ -16,4 +16,21 @@ open class AnalyticsActionEvent(
 
     open val firebaseEventName get() = action
     open val firebaseParams get() = Bundle()
+
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        !super.equals(other) -> false
+        other !is AnalyticsActionEvent -> false
+        action != other.action -> false
+        label != other.label -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + action.hashCode()
+        result = 31 * result + (label?.hashCode() ?: 0)
+        return result
+    }
 }

@@ -10,12 +10,16 @@ import org.cru.godtools.model.Translation
 
 object ToolCard {
     data class State(
+        val toolCode: String? = null,
         val tool: Tool? = null,
         val isLoaded: Boolean = true,
         val banner: File? = null,
         val translation: Translation? = null,
+        val appLanguage: Language? = null,
+        val appTranslation: Translation? = null,
         val secondLanguage: Language? = null,
         val secondTranslation: Translation? = null,
+        val availableLanguages: Int = 0,
         val downloadProgress: DownloadProgress? = null,
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState

@@ -1,5 +1,7 @@
 package org.cru.godtools.base.tool.service
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
 import androidx.lifecycle.asLiveData
 import dagger.Reusable
 import java.util.Locale
@@ -64,4 +66,9 @@ class ManifestManager @Inject constructor(
             parser.parseManifest(name).also { if (it is ParserResult.Data) cache.put(name, it) }
         }
     }
+}
+
+@Composable
+fun ManifestManager.produceManifestState(translation: Translation?) = produceState<Manifest?>(null, translation) {
+    value = translation?.let { getManifest(translation) }
 }

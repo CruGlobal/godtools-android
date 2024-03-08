@@ -23,15 +23,14 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -41,28 +40,25 @@ import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ClickableText
 import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addUriAnnotations
 import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
-import org.ccci.gto.android.common.compat.util.LocaleCompat
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
-import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.getDescription
-import org.cru.godtools.ui.tools.ToolViewModels
 
 internal const val TEST_TAG_LANGUAGES_AVAILABLE = "languages_available"
 
 @Composable
-internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modifier: Modifier = Modifier) {
-    val tool by toolViewModel.tool.collectAsState()
-    val translation by toolViewModel.firstTranslation.collectAsState()
+internal fun ToolDetailsAbout(state: ToolDetailsScreen.State, modifier: Modifier = Modifier) {
+    val tool by rememberUpdatedState(state.tool)
+    val translation by rememberUpdatedState(state.translation)
 
     ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
         Column(modifier = modifier) {
-            val description by remember { derivedStateOf { translation.value.getDescription(tool).orEmpty() } }
+            val description by remember { derivedStateOf { translation.getDescription(tool).orEmpty() } }
             ToolDetailsLinkifiedText(
                 text = description,
-                viewModel = toolViewModel,
+                state = state,
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
@@ -72,7 +68,7 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
 
             // Conversation Starters section
             val conversationStarters by remember {
-                derivedStateOf { translation.value?.toolDetailsConversationStarters.orEmpty() }
+                derivedStateOf { translation?.toolDetailsConversationStarters.orEmpty() }
             }
             if (conversationStarters.isNotBlank()) {
                 HorizontalDivider()
@@ -81,12 +77,12 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.CONVERSATION_STARTERS,
                     onToggleSection = { toggleSection(ToolDetailsAboutAccordionSection.CONVERSATION_STARTERS) },
                 ) {
-                    ToolDetailsLinkifiedText(conversationStarters, viewModel = toolViewModel)
+                    ToolDetailsLinkifiedText(conversationStarters, state = state)
                 }
             }
 
             // Outline section
-            val outline by remember { derivedStateOf { translation.value?.toolDetailsOutline.orEmpty() } }
+            val outline by remember { derivedStateOf { translation?.toolDetailsOutline.orEmpty() } }
             if (outline.isNotBlank()) {
                 HorizontalDivider()
                 ToolDetailsAboutAccordionSection(
@@ -94,14 +90,12 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.OUTLINE,
                     onToggleSection = { toggleSection(ToolDetailsAboutAccordionSection.OUTLINE) },
                 ) {
-                    ToolDetailsLinkifiedText(outline, viewModel = toolViewModel)
+                    ToolDetailsLinkifiedText(outline, state = state)
                 }
             }
 
             // Bible References section
-            val bibleReferences by remember {
-                derivedStateOf { translation.value?.toolDetailsBibleReferences.orEmpty() }
-            }
+            val bibleReferences by remember { derivedStateOf { translation?.toolDetailsBibleReferences.orEmpty() } }
             if (bibleReferences.isNotBlank()) {
                 HorizontalDivider()
                 ToolDetailsAboutAccordionSection(
@@ -109,14 +103,14 @@ internal fun ToolDetailsAbout(toolViewModel: ToolViewModels.ToolViewModel, modif
                     expanded = expandedSection == ToolDetailsAboutAccordionSection.BIBLE_REFERENCES,
                     onToggleSection = { toggleSection(ToolDetailsAboutAccordionSection.BIBLE_REFERENCES) },
                 ) {
-                    ToolDetailsLinkifiedText(bibleReferences, viewModel = toolViewModel)
+                    ToolDetailsLinkifiedText(bibleReferences, state = state)
                 }
             }
 
             // Languages section
             HorizontalDivider()
             ToolDetailsLanguages(
-                toolViewModel,
+                state,
                 expanded = expandedSection == ToolDetailsAboutAccordionSection.LANGUAGES,
                 onToggleLanguages = { toggleSection(ToolDetailsAboutAccordionSection.LANGUAGES) },
             )
@@ -130,19 +124,15 @@ private enum class ToolDetailsAboutAccordionSection { OUTLINE, BIBLE_REFERENCES,
 @Composable
 @VisibleForTesting
 internal fun ToolDetailsLanguages(
-    viewModel: ToolViewModels.ToolViewModel,
+    state: ToolDetailsScreen.State,
     expanded: Boolean,
     onToggleLanguages: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val languages by viewModel.availableLanguages.collectAsState()
+    val languages by rememberUpdatedState(state.availableLanguages)
     if (languages.isEmpty()) return
 
-    val context = LocalContext.current
-    val locale = LocaleCompat.getDefault(LocaleCompat.Category.DISPLAY)
-    val displayLanguages by remember(context, locale) {
-        derivedStateOf { languages.getSortedDisplayNames(context, locale).joinToString(", ") }
-    }
+    val displayLanguages by remember { derivedStateOf { languages.joinToString(", ") } }
 
     ToolDetailsAboutAccordionSection(
         header = stringResource(R.string.tool_details_section_description_languages_available),
@@ -199,25 +189,22 @@ private fun ToolDetailsAboutAccordionSection(
 }
 
 @Composable
-private fun ToolDetailsLinkifiedText(
-    text: String?,
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier
-) {
+private fun ToolDetailsLinkifiedText(text: String?, state: ToolDetailsScreen.State, modifier: Modifier = Modifier) {
     val eventBus = LocalEventBus.current
     val uriHandler = LocalUriHandler.current
-    val translation by viewModel.firstTranslation.collectAsState()
+    val tool by rememberUpdatedState(state.tool?.code)
+    val translation by rememberUpdatedState(state.translation)
 
     val linkified = text.orEmpty().addUriAnnotations(Linkify.WEB_URLS)
     ClickableText(
         linkified,
         onClick = {
             linkified.getUriAnnotations(it, it).firstOrNull()?.let { (url) ->
-                eventBus.post(ExitLinkActionEvent(viewModel.code, url, translation.value?.languageCode))
+                eventBus.post(ExitLinkActionEvent(tool, url, translation?.languageCode))
                 uriHandler.openUri(url)
             }
         },
-        fontFamily = translation.value?.getFontFamilyOrNull(),
+        fontFamily = translation?.getFontFamilyOrNull(),
         modifier = modifier
     )
 }

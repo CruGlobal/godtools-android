@@ -26,14 +26,4 @@
     <file name="src/main/kotlin/org/cru/godtools/ui/login/LoginLayout.kt">
         <error line="51" column="5" source="compose:modifier-missing-check" />
     </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/tooldetails/ToolDetailsAbout.kt">
-        <error line="63" column="13" source="compose:vm-forwarding-check" />
-        <error line="84" column="21" source="compose:vm-forwarding-check" />
-        <error line="97" column="21" source="compose:vm-forwarding-check" />
-        <error line="112" column="21" source="compose:vm-forwarding-check" />
-        <error line="118" column="13" source="compose:vm-forwarding-check" />
-    </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/tooldetails/ToolDetailsLayout.kt">
-        <error line="239" column="45" source="compose:vm-forwarding-check" />
-    </file>
 </baseline>

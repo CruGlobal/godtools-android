@@ -202,6 +202,8 @@ dependencies {
     implementation(libs.godtoolsShared.common)
 
     api(libs.eventbus)
+    implementation(libs.circuitx.android)
+    implementation(libs.circuitx.effects)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)

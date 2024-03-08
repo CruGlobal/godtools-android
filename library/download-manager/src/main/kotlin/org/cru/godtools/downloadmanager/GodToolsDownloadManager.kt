@@ -3,6 +3,9 @@ package org.cru.godtools.downloadmanager
 import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -32,6 +35,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -537,3 +541,11 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             .launchIn(coroutineScope)
     }
 }
+
+@Composable
+fun GodToolsDownloadManager.rememberDownloadProgress(code: String?, locale: Locale?) = remember(this, code, locale) {
+    when {
+        code == null || locale == null -> flowOf(null)
+        else -> getDownloadProgressFlow(code, locale)
+    }
+}.collectAsState(null).value

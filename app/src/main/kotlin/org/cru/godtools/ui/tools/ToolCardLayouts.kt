@@ -9,15 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -28,12 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,16 +39,13 @@ import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
-import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
-import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.util.withCompatFontFamilyFor
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
-import org.cru.godtools.model.getTagline
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
 
@@ -76,7 +68,6 @@ internal val ToolCard.State.toolNameStyle: TextStyle
         }.value
     }
 
-private val toolDescriptionStyle @Composable get() = MaterialTheme.typography.bodyMedium
 internal val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
 private val toolCardInfoLabelColor: Color @Composable get() {
     val baseColor = LocalContentColor.current
@@ -266,74 +257,6 @@ fun ToolCard(
                             .padding(top = 4.dp)
                             .align(Alignment.End)
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-internal fun VariantToolCard(
-    viewModel: ToolViewModels.ToolViewModel,
-    isSelected: Boolean,
-    modifier: Modifier = Modifier,
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val state = viewModel.toState()
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-
-    ProvideLayoutDirectionFromLocale(locale = { firstTranslation.value?.languageCode }) {
-        ElevatedCard(
-            elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type)) },
-            modifier = modifier
-        ) {
-            ToolBanner(
-                state,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(335f / 87f)
-            )
-            Row(modifier = Modifier.padding(16.dp)) {
-                RadioButton(selected = isSelected, onClick = null)
-
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    ToolName(state)
-                    Text(
-                        firstTranslation.value.getTagline(tool).orEmpty(),
-                        fontFamily = firstTranslation.value?.getFontFamilyOrNull(),
-                        style = toolDescriptionStyle,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-            }
-
-            ToolCardInfoContent {
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(16.dp)
-                ) {
-                    val languages by viewModel.availableLanguages.collectAsState()
-                    val appTranslation by viewModel.appTranslation.collectAsState()
-                    val appLanguage by viewModel.appLanguage.collectAsState()
-
-                    val languageCount by remember { derivedStateOf { languages.size } }
-                    Text(pluralStringResource(R.plurals.label_tools_languages, languageCount, languageCount))
-
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .size(4.dp)
-                            .clip(CircleShape)
-                            .background(LocalContentColor.current)
-                    )
-
-                    // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                    AvailableInLanguage(appLanguage, { appTranslation.value })
                 }
             }
         }

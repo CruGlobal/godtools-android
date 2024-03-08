@@ -52,3 +52,7 @@ fun TranslationsRepository.produceLatestTranslationState(
     downloadedOnly: Boolean = false,
 ) = remember(code, locale, downloadedOnly) { findLatestTranslationFlow(code, locale, downloadedOnly) }
     .collectAsState(null)
+
+@Composable
+fun TranslationsRepository.rememberLatestTranslation(code: String?, locale: Locale?, downloadedOnly: Boolean = false) =
+    produceLatestTranslationState(code, locale, downloadedOnly).value
