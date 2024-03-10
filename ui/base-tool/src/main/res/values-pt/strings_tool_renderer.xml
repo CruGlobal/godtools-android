@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tool_not_found">A ferramenta que você solicitou não foi encontrada</string>
-    <string name="tool_loading">A ferramenta que solicitou está carregando…</string>
+    <string name="tool_not_found">Não é possível encontrar a ferramenta que você solicitou</string>
+    <string name="tool_loading">A ferramenta que você solicitou está carregando…</string>
     <string name="tool_offline">A ferramenta que você solicitou requer uma conexão com a internet para poder abrir</string>
     <string name="tract_content_input_error_required">Se requer %1$s</string>
     <string name="tract_content_input_error_invalid_email">Por favor, digite um endereço de e-mail válido</string>

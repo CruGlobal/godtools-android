@@ -14,7 +14,7 @@
     <string name="menu_heading_share">Compartilhar</string>
     <string name="menu_review">Deixe a sua opinião</string>
     <string name="menu_share_story">Compartilhe uma história conosco</string>
-    <string name="menu_share_godtools">Compartilhar o GodTools</string>
+    <string name="menu_share_godtools">Compartilhe o GodTools</string>
     <string name="share_app_message">Baixe o aplicativo GodTools: https://godtoolsapp.com \n\n
 
 Há uma versão online aqui: https://knowgod.com/</string>
@@ -44,6 +44,11 @@ Há uma versão online aqui: https://knowgod.com/</string>
     <string name="dashboard_tools_section_filter_label">Filtro</string>
     <string name="dashboard_tools_section_filter_category_any">Qualquer categoria</string>
     <string name="dashboard_tools_section_filter_language_any">Qualquer idioma</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">Ferramenta %1$d disponível</item>
+        <item quantity="other">Ferramentas %1$d disponíveis</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Todas as Ferramentas disponíveis</string>
     <string name="dashboard_tools_section_categories_label">Categorias</string>
     <string name="dashboard_tools_section_categories_all">Todas as Ferramentas</string>
     <string name="dashboard_tools_section_spotlight_label">Ferramenta em Destaque</string>
