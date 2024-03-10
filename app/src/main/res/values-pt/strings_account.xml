@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="menu_profile">Atividade</string>
-    <string name="account_joined">Entrou %1$s</string>
+    <string name="account_joined">Entrou em %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">Criar conta</string>
     <string name="account_create_description">Crie uma conta para ter histórias reais, encorajamento, e dicas práticas ao seu alcance.</string>
     <string name="account_login_heading">Entrar</string>
+    <string name="account_login_description">Acesse sua conta para ter histórias da vida real, encorajamento, e dicas práticas ao seu alcance.</string>
     <string name="account_error_user_already_exists">Conta de usuário já existe.</string>
     <string name="account_error_user_not_found">Conta de usuário não encontrada.</string>
-    <string name="account_error_unknown">Erro ao acessar.</string>
+    <string name="account_error_unknown">Erro ao tentar acessar.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Deletar Conta</string>
@@ -16,7 +17,7 @@
     <string name="account_delete_description">Se você deletar sua conta, você não poderá acessar suas ferramentas favoritas ou as atividades de sua conta.</string>
     <string name="account_delete_action_delete">Deletar minha conta</string>
     <string name="account_delete_action_cancel">Guardar minha conta</string>
-    <string name="account_delete_error">Houve um erro ao deletar sua conta. Tenha a certeza de estar conectado ou tente novamente mais tarde.</string>
+    <string name="account_delete_error">Houve um erro ao deletar sua conta. Verifique se está conectado ou tente novamente mais tarde.</string>
     <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
@@ -30,7 +31,7 @@
         <item quantity="other">Conclusões de lições</item>
     </plurals>
     <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
-        <item quantity="one">Compartilhar tela</item>
+        <item quantity="one">Compartilhamento de tela</item>
         <item quantity="other">Compartilhamentos de tela</item>
     </plurals>
     <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
@@ -48,29 +49,29 @@
     <!-- Badges -->
     <string name="account_activity_badges_header">Seus distintivos</string>
     <plurals name="account_activity_badge_tools_opened">
-        <item quantity="one">Abriu %1$,d ferramenta</item>
-        <item quantity="other">Abriu %1$,d ferramentas</item>
+        <item quantity="one">Abriu ferramenta %1$,d</item>
+        <item quantity="other">Abriu ferramentas %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
-        <item quantity="one">Concluiu %1$,d lição</item>
-        <item quantity="other">Concluiu %1$,d lições</item>
+        <item quantity="one">Concluiu lição %1$,d</item>
+        <item quantity="other">Concluiu lições %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
-        <item quantity="one">Abriu %1$,d texto</item>
-        <item quantity="other">Abriu %1$,d textos</item>
+        <item quantity="one">Abriu texto %1$,d</item>
+        <item quantity="other">Abriu textos %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
-        <item quantity="one">Compartilhou %1$,d imagem</item>
-        <item quantity="other">Compartilhou %1$,d imagens</item>
+        <item quantity="one">Compartilhou imagem %1$,d</item>
+        <item quantity="other">Compartilhou imagens %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="one">Concluiu %1$,d dicas de treinamento</item>
-        <item quantity="other">Concluiu %1$,d dicas de treinamento</item>
+        <item quantity="one">Concluiu dicas de treinamento %1$,d</item>
+        <item quantity="other">Concluiu dicas de treinamento %1$,d</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Atividade Global</string>
-    <string name="profile_global_activity_heading">%1$s Atividade Global</string>
-    <string name="profile_activity_unique_users">Usuários singulares</string>
+    <string name="profile_global_activity_heading">Atividade Global %1$s</string>
+    <string name="profile_activity_unique_users">Usuários Singulares</string>
     <string name="profile_activity_gospel_presentations">Apresentações do Evangelho</string>
     <string name="profile_activity_sessions">Sessões</string>
     <string name="profile_activity_countries">Países</string>

@@ -3,12 +3,12 @@
     <string name="tutorial_features_tools_headline">Ferramentas</string>
     <string name="tutorial_features_tools_subhead">Cada ferramenta é feita para um estágio diferente da conversa - antes, durante ou depois.</string>
     <string name="tutorial_features_tips_headline">Dicas de Ferramenta</string>
-    <string name="tutorial_features_tips_subhead">As dicas do GodTools guiam você ao ajudar alguém a entender o evangelho e a encontrar Jesus.</string>
+    <string name="tutorial_features_tips_subhead">As dicas do GodTools guiam você para que possa ajudar alguém a entender o evangelho e a encontrar Jesus.</string>
     <string name="tutorial_features_live_share_headline">Compartilhamento de tela</string>
     <string name="tutorial_features_live_share_subhead">Agora você pode compartilhar sua tela remotamente para que outra pessoa possa acompanhar você enquanto você maneja uma ferramenta para falar do evangelho.</string>
     <string name="tutorial_features_lessons_headline">Lições</string>
     <string name="tutorial_features_lessons_subhead">Em cada lição do GodTools você aprende algo que lhe ajuda a ter conversas reais sobre Deus.</string>
-    <string name="tutorial_features_final_headline">Este tutorial está disponível no menu para vê-lo novamente</string>
+    <string name="tutorial_features_final_headline">Este tutorial estará disponível no menu quando precisar vê-lo novamente</string>
     <string name="tutorial_features_action_continue">Continuar</string>
     <string name="tutorial_features_action_close">Fechar o tutorial</string>
     <!-- Training Tutorial Banner -->
