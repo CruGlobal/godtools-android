@@ -89,8 +89,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
 
         val tool by toolsRepository.produceToolState(toolCode)
         val translation by rememberUpdatedState(rememberPrimaryTranslation(tool, toolCode))
-        val secondTranslation by translationsRepository
-            .produceLatestTranslationState(toolCode, screen.secondLanguage)
+        val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, screen.secondLanguage)
         val pendingShortcut by remember { derivedStateOf { shortcutManager.getPendingToolShortcut(toolCode) } }
 
         val eventSink: (Event) -> Unit = remember {
@@ -100,7 +99,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     Event.OpenTool -> tool?.let { tool ->
                         val intent = tool.createToolIntent(
                             context = context,
-                            languages = listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
+                            languages = listOfNotNull(translation?.languageCode, secondTranslation?.languageCode),
+                            activeLocale = if (secondTranslation != null) screen.secondLanguage else null
                         )
 
                         if (intent != null) {

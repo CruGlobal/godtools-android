@@ -23,9 +23,19 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
         Type.META, Type.UNKNOWN -> Unit
     }
 
-fun Tool.createToolIntent(context: Context, languages: List<Locale>, showTips: Boolean = false) = code?.let { code ->
+fun Tool.createToolIntent(
+    context: Context,
+    languages: List<Locale>,
+    activeLocale: Locale? = null,
+    showTips: Boolean = false,
+) = code?.let { code ->
     when (type) {
-        Type.TRACT -> context.createTractActivityIntent(code, *languages.toTypedArray(), showTips = showTips)
+        Type.TRACT -> context.createTractActivityIntent(
+            code,
+            *languages.toTypedArray(),
+            activeLocale = activeLocale,
+            showTips = showTips
+        )
         Type.ARTICLE -> context.createArticlesIntent(code, languages[0])
         Type.CYOA -> context.createCyoaActivityIntent(code, *languages.toTypedArray())
         Type.LESSON -> context.createLessonActivityIntent(code, languages[0])

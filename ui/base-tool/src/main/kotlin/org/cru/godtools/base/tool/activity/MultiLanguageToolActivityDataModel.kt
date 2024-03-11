@@ -36,6 +36,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.ccci.gto.android.common.androidx.lifecycle.switchFold
 import org.ccci.gto.android.common.androidx.lifecycle.withInitialValue
+import org.cru.godtools.base.EXTRA_ACTIVE_LOCALE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.activity.BaseToolActivity.LoadingState
@@ -143,7 +144,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
     // endregion Loading State
 
     // region Active Tool
-    val activeLocale by savedState.livedata<Locale?>(STATE_ACTIVE_LOCALE)
+    val activeLocale by savedState.livedata<Locale?>(EXTRA_ACTIVE_LOCALE)
 
     val activeLoadingState = distinctToolCode.switchCombineWith(activeLocale) { tool, l ->
         combine(
