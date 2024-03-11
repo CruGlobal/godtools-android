@@ -12,6 +12,7 @@ androidx-room = "2.6.1"
 androidx-viewpager2 = "1.0.0"
 androidx-work = "2.9.0"
 circuit = "0.19.1"
+coil = "2.6.0"
 dagger = "2.51"
 eventbus = "3.3.1"
 facebook = "16.3.0"
@@ -88,7 +89,8 @@ circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.
 circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circuit" }
 circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 circuitx-effects = { module = "com.slack.circuit:circuitx-effects", version.ref = "circuit" }
-coil-compose = "io.coil-kt:coil-compose:2.6.0"
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -240,3 +242,4 @@ grgit = { id = "org.ajoberstar.grgit", version = "5.2.2" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
+paparazzi = { id = "app.cash.paparazzi", version = "1.3.3" }

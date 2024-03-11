@@ -2,6 +2,9 @@ package org.cru.godtools.ui.languages.downloadable
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -14,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+
+private val DEFAULT_ICON_SIZE = 24.dp
 
 @Composable
 internal fun LanguageDownloadProgressIndicator(
@@ -23,11 +28,12 @@ internal fun LanguageDownloadProgressIndicator(
     downloaded: Int,
     total: Int,
     modifier: Modifier = Modifier,
-    iconSize: Dp = 24.dp,
 ) {
     val total = total.coerceAtLeast(0)
     val downloaded = downloaded.coerceIn(0, total)
-    val contentModifier = modifier.size(iconSize)
+    val contentModifier = modifier
+        .size(DEFAULT_ICON_SIZE)
+        .aspectRatio(1f)
 
     when {
         !isPinned -> Icon(
@@ -51,15 +57,19 @@ internal fun LanguageDownloadProgressIndicator(
                 },
             )
 
-            val iconPadding = iconSize / 12
-            CircularProgressIndicator(
-                progress = { progress },
-                color = MaterialTheme.colorScheme.primary,
-                strokeWidth = (iconSize / 2) - iconPadding,
-                modifier = contentModifier
-                    .padding(iconPadding)
-                    .border(iconSize / 12, MaterialTheme.colorScheme.primary, CircleShape)
-            )
+            BoxWithConstraints(contentModifier) {
+                val size = with(LocalDensity.current) { constraints.maxWidth.toDp() }
+                val iconPadding = size / 12
+                CircularProgressIndicator(
+                    progress = { progress },
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeWidth = (size / 2) - iconPadding,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(iconPadding)
+                        .border(size / 12, MaterialTheme.colorScheme.primary, CircleShape)
+                )
+            }
         }
     }
 }

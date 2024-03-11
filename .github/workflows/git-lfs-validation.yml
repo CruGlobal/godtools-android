@@ -1,0 +1,15 @@
+name: "Validate Git LFS"
+
+on:
+  push:
+    branches: [develop, master, feature/*]
+  pull_request:
+    branches: [develop, master, feature/*]
+
+jobs:
+  validate-lfs-pointers:
+    name: "Validate Git LFS pointers"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: git lfs fsck --pointers

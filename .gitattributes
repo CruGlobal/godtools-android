@@ -9,3 +9,5 @@
 *.properties text
 *.xml        text
 *.yml        text
+
+**/snapshots/**/*.png filter=lfs diff=lfs merge=lfs -text

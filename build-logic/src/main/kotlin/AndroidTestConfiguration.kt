@@ -59,4 +59,7 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
             }
         }
     }
+
+    // Paparazzi
+    project.fixGuavaDependencyForPaparazzi()
 }
