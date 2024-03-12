@@ -118,9 +118,32 @@
 
         <activity
             android:name=".ui.languages.LanguageSettingsActivity"
+            android:exported="true"
             android:label="@string/title_language_settings"
             android:parentActivityName=".ui.dashboard.DashboardActivity"
-            android:screenOrientation="@integer/default_screen_orientation" />
+            android:screenOrientation="@integer/default_screen_orientation">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="godtoolsapp.com" />
+                <data android:path="/deeplink/settings/language" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="godtools" />
+                <data android:host="${hostGodtoolsCustomUri}" />
+                <data android:path="/settings/language" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".article.ui.ArticlesActivity"
