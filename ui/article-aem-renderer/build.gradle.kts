@@ -63,6 +63,7 @@ dependencies {
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.json)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(testFixtures(libs.gtoSupport.androidx.room))
 }
