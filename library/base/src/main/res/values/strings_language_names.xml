@@ -2,4 +2,5 @@
 <resources>
     <string name="language_name_fa">Persian (Farsi)</string>
     <string name="language_name_fil">Filipino (Tagalog)</string>
+    <string name="language_name_sid">Sidama</string>
 </resources>

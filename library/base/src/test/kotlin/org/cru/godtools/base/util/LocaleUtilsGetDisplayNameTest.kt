@@ -30,6 +30,7 @@ class LocaleUtilsGetDisplayNameTest {
             every { createConfigurationContext(any()) } returns this
             every { getString(R.string.language_name_fa) } returns "Language Name fa"
             every { getString(R.string.language_name_fil) } returns "Language Name fil"
+            every { getString(R.string.language_name_sid) } returns "Language Name sid"
         }
     }
 
@@ -37,6 +38,8 @@ class LocaleUtilsGetDisplayNameTest {
     fun preferLanguageNameString() {
         assertEquals("Language Name fa", Locale.forLanguageTag("fa").getDisplayName(context, defaultName = "invalid"))
         assertEquals("Language Name fil", Locale.forLanguageTag("fil").getDisplayName(context, defaultName = "invalid"))
+        assertEquals("Language Name sid", Locale.forLanguageTag("sid").getDisplayName(context, defaultName = "invalid"))
+        assertEquals("Language Name sid", Locale.forLanguageTag("sId").getDisplayName(context, defaultName = "invalid"))
     }
 
     @Test
