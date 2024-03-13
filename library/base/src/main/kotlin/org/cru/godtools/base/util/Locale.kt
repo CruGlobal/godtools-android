@@ -29,6 +29,7 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
 private fun Locale.getLanguageNameStringRes(context: Context?, inLocale: Locale?) = when (toLanguageTag()) {
     "fa" -> context?.getLocalizedString(inLocale, R.string.language_name_fa)
     "fil" -> context?.getLocalizedString(inLocale, R.string.language_name_fil)
+    "fil-x-taglish" -> context?.getLocalizedString(inLocale, R.string.language_name_fil_x_taglish)
     "sid" -> context?.getLocalizedString(inLocale, R.string.language_name_sid)
     else -> null
 }
