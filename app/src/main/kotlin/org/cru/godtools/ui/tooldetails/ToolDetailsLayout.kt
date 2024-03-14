@@ -68,7 +68,6 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
-import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
@@ -147,9 +146,6 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
     LaunchedImpressionEffect(state.toolCode) { scrollState.animateScrollTo(0) }
 
     val pagerState = rememberPagerState { pages.size }
-
-    DownloadLatestTranslation(state.toolCode, translation?.languageCode)
-    DownloadLatestTranslation(state.toolCode, secondTranslation?.languageCode)
 
     state.toolCode?.let { RecordAnalyticsScreen(ToolDetailsScreenEvent(it)) }
 

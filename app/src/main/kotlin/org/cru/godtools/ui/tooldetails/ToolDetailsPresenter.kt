@@ -21,11 +21,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
+import org.cru.godtools.base.BaseModule.IS_CONNECTED_STATE_FLOW
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.produceAppLocaleState
@@ -48,6 +51,7 @@ import org.cru.godtools.db.repository.produceToolState
 import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.db.repository.rememberLatestTranslation
+import org.cru.godtools.downloadmanager.DownloadLatestTranslation
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.downloadmanager.rememberDownloadProgress
 import org.cru.godtools.model.Language
@@ -78,6 +82,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private val shortcutManager: GodToolsShortcutManager,
     private val syncService: GodToolsSyncService,
     private val toolCardPresenter: ToolCardPresenter,
+    @Named(IS_CONNECTED_STATE_FLOW)
+    private val isConnected: StateFlow<Boolean>,
     @Assisted private val screen: ToolDetailsScreen,
     @Assisted private val navigator: Navigator,
 ) : Presenter<State> {
@@ -91,6 +97,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
         val translation by rememberUpdatedState(rememberPrimaryTranslation(tool, toolCode))
         val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, screen.secondLanguage)
         val pendingShortcut by remember { derivedStateOf { shortcutManager.getPendingToolShortcut(toolCode) } }
+        val isConnected by isConnected.collectAsState()
 
         val eventSink: (Event) -> Unit = remember {
             {
@@ -134,6 +141,10 @@ class ToolDetailsPresenter @AssistedInject constructor(
 
         val secondLanguage = languagesRepository.rememberLanguage(screen.secondLanguage)
         val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage, eventSink = eventSink)
+
+        // Side Effects
+        downloadManager.DownloadLatestTranslation(toolCode, translation?.languageCode, isConnected)
+        downloadManager.DownloadLatestTranslation(toolCode, secondTranslation?.languageCode, isConnected)
 
         return State(
             toolCode = toolCode,

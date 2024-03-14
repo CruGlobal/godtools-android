@@ -4,6 +4,7 @@ import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.work.WorkManager
@@ -221,6 +222,9 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     fun downloadLatestPublishedTranslationAsync(code: String, locale: Locale) = coroutineScope.async {
         downloadLatestPublishedTranslation(TranslationKey(code, locale))
     }
+
+    suspend fun downloadLatestPublishedTranslation(code: String, locale: Locale) =
+        downloadLatestPublishedTranslation(TranslationKey(code, locale))
 
     internal suspend fun downloadLatestPublishedTranslation(key: TranslationKey): Boolean {
         require(fs.exists())
@@ -549,3 +553,12 @@ fun GodToolsDownloadManager.rememberDownloadProgress(code: String?, locale: Loca
         else -> getDownloadProgressFlow(code, locale)
     }
 }.collectAsState(null).value
+
+@Composable
+fun GodToolsDownloadManager.DownloadLatestTranslation(tool: String?, locale: Locale?, isConnected: Boolean) {
+    if (tool == null || locale == null) return
+
+    LaunchedEffect(this, tool, locale, isConnected) {
+        if (isConnected) downloadLatestPublishedTranslation(tool, locale)
+    }
+}
