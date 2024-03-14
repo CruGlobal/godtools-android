@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -156,8 +155,7 @@ fun SquareToolCard(
 
 @Composable
 private fun SquareToolCardSecondLanguage(state: ToolCard.State) = ToolCardInfoContent {
-    val secondTranslation by rememberUpdatedState(state.secondTranslation)
-    val available by remember { derivedStateOf { secondTranslation != null } }
+    val available by rememberUpdatedState(state.secondLanguageAvailable)
 
     AvailableInLanguage(
         state.secondLanguage,

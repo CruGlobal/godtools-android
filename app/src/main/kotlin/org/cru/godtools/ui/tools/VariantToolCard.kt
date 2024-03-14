@@ -28,7 +28,7 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
     val appLanguage by rememberUpdatedState(state.appLanguage)
     val appTranslation by rememberUpdatedState(state.appTranslation)
     val secondLanguage by rememberUpdatedState(state.secondLanguage)
-    val secondTranslation by rememberUpdatedState(state.secondTranslation)
+    val secondLanguageAvailable by rememberUpdatedState(state.secondLanguageAvailable)
     val languageCount by rememberUpdatedState(state.availableLanguages)
 
     val eventSink by rememberUpdatedState(state.eventSink)
@@ -73,7 +73,7 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
 
                     if (secondLanguage != null) {
                         // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                        AvailableInLanguage(secondLanguage, available = secondTranslation != null)
+                        AvailableInLanguage(secondLanguage, available = secondLanguageAvailable)
                     }
                 }
             }

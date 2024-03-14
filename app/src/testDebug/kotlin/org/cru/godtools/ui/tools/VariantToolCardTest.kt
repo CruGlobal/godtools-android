@@ -132,7 +132,7 @@ class VariantToolCardTest {
                     appLanguage = Language(Locale.ENGLISH),
                     appTranslation = null,
                     secondLanguage = Language(Locale.FRENCH),
-                    secondTranslation = randomTranslation(),
+                    secondLanguageAvailable = true,
                 ),
             )
         }
@@ -153,7 +153,7 @@ class VariantToolCardTest {
                     appLanguage = Language(Locale.ENGLISH),
                     appTranslation = randomTranslation(),
                     secondLanguage = Language(Locale.FRENCH),
-                    secondTranslation = null,
+                    secondLanguageAvailable = false,
                 ),
             )
         }
