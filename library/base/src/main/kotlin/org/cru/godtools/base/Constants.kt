@@ -7,6 +7,7 @@ const val EXTRA_TOOL = "tool"
 const val EXTRA_LANGUAGE = "language"
 const val EXTRA_LANGUAGES = "languages"
 const val EXTRA_PAGE = "page"
+const val EXTRA_ACTIVE_LOCALE = "activeLocale"
 
 const val SCHEME_GODTOOLS = "godtools"
 const val HOST_GODTOOLSAPP_COM = "godtoolsapp.com"

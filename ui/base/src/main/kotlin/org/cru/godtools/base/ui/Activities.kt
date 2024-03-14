@@ -7,6 +7,7 @@ import android.os.Bundle
 import java.util.Locale
 import org.ccci.gto.android.common.util.os.putLocale
 import org.ccci.gto.android.common.util.os.putLocaleArray
+import org.cru.godtools.base.EXTRA_ACTIVE_LOCALE
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_PAGE
@@ -68,11 +69,13 @@ fun Activity.startTractActivity(toolCode: String, vararg languages: Locale?, sho
 fun Context.createTractActivityIntent(
     toolCode: String,
     vararg languages: Locale?,
+    activeLocale: Locale? = null,
     page: Int = 0,
     showTips: Boolean = false
 ) = Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
     .putExtra(EXTRA_TOOL, toolCode)
     .putLanguagesExtra(*languages)
+    .putExtra(EXTRA_ACTIVE_LOCALE, activeLocale)
     .putExtra(EXTRA_PAGE, page)
     .putExtra(EXTRA_SHOW_TIPS, showTips)
 // endregion TractActivity

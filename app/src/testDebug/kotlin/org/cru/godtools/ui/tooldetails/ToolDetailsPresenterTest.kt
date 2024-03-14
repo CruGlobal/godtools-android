@@ -28,6 +28,7 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.util.os.equalsBundle
 import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
@@ -42,6 +43,7 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Attachment
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
@@ -265,9 +267,8 @@ class ToolDetailsPresenterTest {
     @Test
     fun `Event - OpenTool - Tract Tool`() = runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
-        every {
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
-        } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
         createPresenter().test {
             expectMostRecentItem().eventSink(Event.OpenTool)
@@ -275,9 +276,40 @@ class ToolDetailsPresenterTest {
 
         with(navigator.awaitNextScreen()) {
             assertTrue(this is IntentScreen)
-            val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), false)!!
+            val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), showTips = false)!!
             assertEquals(expected.component, intent.component)
-//            assertTrue(expected.extras equalsBundle intent.extras)
+            assertTrue(expected.extras equalsBundle intent.extras)
+        }
+
+        navigator.assertIsEmpty()
+        verifyAll {
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
+        }
+    }
+
+    @Test
+    fun `Event - OpenTool - Tract Tool - With Second Language`() = runTest {
+        toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
+        every { languagesRepository.findLanguageFlow(Locale.FRENCH) } returns flowOf(Language(Locale.FRENCH))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
+
+        createPresenter(ToolDetailsScreen(TOOL, secondLanguage = Locale.FRENCH)).test {
+            expectMostRecentItem().eventSink(Event.OpenTool)
+        }
+
+        with(navigator.awaitNextScreen()) {
+            assertTrue(this is IntentScreen)
+            val expected = toolFlow.value?.createToolIntent(
+                context,
+                listOf(Locale.ENGLISH, Locale.FRENCH),
+                activeLocale = Locale.FRENCH,
+                showTips = false
+            )!!
+            assertEquals(expected.component, intent.component)
+            assertTrue(expected.extras equalsBundle intent.extras)
         }
 
         navigator.assertIsEmpty()
