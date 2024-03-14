@@ -7,10 +7,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
+import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.every
+import io.mockk.excludeRecords
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
@@ -63,6 +66,7 @@ private const val TOOL = "tool"
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class ToolDetailsPresenterTest {
+    private val isConnected = MutableStateFlow(true)
     private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val toolFlow = MutableStateFlow<Tool?>(null)
     private val normalToolsFlow = MutableStateFlow(emptyList<Tool>())
@@ -71,6 +75,7 @@ class ToolDetailsPresenterTest {
         every { findAttachmentFlow(any()) } returns flowOf(null)
     }
     private val languagesRepository: LanguagesRepository = mockk {
+        every { findLanguageFlow(any()) } returns flowOf(null)
         every { getLanguagesFlowForLocales(any()) } returns flowOf(emptyList())
     }
     private val toolsRepository: ToolsRepository = mockk {
@@ -86,6 +91,9 @@ class ToolDetailsPresenterTest {
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val downloadManager: GodToolsDownloadManager = mockk {
         every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
+        coEvery { downloadLatestPublishedTranslation(any(), any()) } returns true
+
+        excludeRecords { this@mockk.equals(any()) }
     }
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val fileSystem: ToolFileSystem = mockk()
@@ -115,6 +123,7 @@ class ToolDetailsPresenterTest {
         settings = settings,
         shortcutManager = shortcutManager,
         syncService = syncService,
+        isConnected = isConnected,
         toolCardPresenter = FakeToolCardPresenter(),
         screen = screen,
         navigator = navigator,
@@ -411,4 +420,90 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion Event.SwitchVariant
+
+    // region SideEffect - DownloadLatestTranslation
+    @Test
+    fun `SideEffect - DownloadLatestTranslation`() = runTest {
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+
+        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
+
+        createPresenter().test {
+            expectMostRecentItem()
+            coVerifyAll { downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - DownloadLatestTranslation - Second Language`() = runTest {
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
+
+        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
+
+        createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
+            expectMostRecentItem()
+            coVerifyAll {
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            }
+        }
+    }
+
+    @Test
+    fun `SideEffect - DownloadLatestTranslation - isConnected`() = runTest {
+        isConnected.value = false
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
+
+        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
+
+        createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
+            expectMostRecentItem()
+            verify { downloadManager wasNot Called }
+
+            isConnected.value = true
+            coVerifyAll {
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `SideEffect - DownloadLatestTranslation - Trigger on variant change`() = runTest {
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
+        every { translationsRepository.findLatestTranslationFlow("variant", Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation("variant", Locale.ENGLISH)))
+        every { translationsRepository.findLatestTranslationFlow("variant", Locale.FRENCH) }
+            .returns(flowOf(randomTranslation("variant", Locale.FRENCH)))
+
+        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
+
+        createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
+            coVerifyAll {
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            }
+            expectMostRecentItem().eventSink(Event.SwitchVariant("variant"))
+
+            coVerifyAll {
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
+                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+                downloadManager.downloadLatestPublishedTranslation("variant", Locale.ENGLISH)
+                downloadManager.downloadLatestPublishedTranslation("variant", Locale.FRENCH)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+    // endregion SideEffect - DownloadLatestTranslation
 }
