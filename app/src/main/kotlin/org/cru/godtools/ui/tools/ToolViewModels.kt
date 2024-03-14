@@ -157,7 +157,7 @@ class ToolViewModels @Inject constructor(
                 appLanguage = appLanguage.collectAsState().value,
                 appTranslation = appTranslation.collectAsState().value.value,
                 secondLanguage = secondLanguage,
-                secondTranslation = secondTranslation.collectAsState().value,
+                secondLanguageAvailable = secondTranslation.collectAsState().value != null,
                 availableLanguages = availableLanguages.collectAsState().value.size,
                 downloadProgress = downloadProgress.collectAsState().value,
                 eventSink = eventSink,

@@ -24,7 +24,6 @@ import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.model.randomTranslation
 import org.junit.Rule
 
 class SquareToolCardPaparazziTest {
@@ -38,7 +37,7 @@ class SquareToolCardPaparazziTest {
         ),
         banner = mockk(),
         secondLanguage = Language(Locale.FRENCH),
-        secondTranslation = randomTranslation()
+        secondLanguageAvailable = true,
     )
 
     @BeforeTest

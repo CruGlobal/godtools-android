@@ -18,7 +18,7 @@ object ToolCard {
         val appLanguage: Language? = null,
         val appTranslation: Translation? = null,
         val secondLanguage: Language? = null,
-        val secondTranslation: Translation? = null,
+        val secondLanguageAvailable: Boolean = false,
         val availableLanguages: Int = 0,
         val downloadProgress: DownloadProgress? = null,
         val eventSink: (Event) -> Unit = {},
