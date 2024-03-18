@@ -134,13 +134,10 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
     val selectedLanguage by rememberUpdatedState(filters.selectedLanguage)
     val eventSink by rememberUpdatedState(filters.eventSink)
 
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    val expanded by rememberUpdatedState(filters.showLanguagesMenu)
 
     ElevatedButton(
-        onClick = {
-            if (!expanded) eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
-            expanded = !expanded
-        },
+        onClick = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
         modifier = modifier
     ) {
         Text(
@@ -154,10 +151,8 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
         LazyDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
-                .testTag(TEST_TAG_FILTER_DROPDOWN)
+            onDismissRequest = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+            modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
         ) {
             item {
                 SearchBar(
@@ -175,10 +170,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                 FilterMenuItem(
                     label = stringResource(R.string.dashboard_tools_section_filter_language_any),
                     supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
-                    onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null))
-                        expanded = false
-                    }
+                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null)) }
                 )
             }
 
@@ -190,10 +182,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                         count,
                         count,
                     ),
-                    onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code))
-                        expanded = false
-                    },
+                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code)) },
                     modifier = Modifier.animateItemPlacement()
                 )
             }

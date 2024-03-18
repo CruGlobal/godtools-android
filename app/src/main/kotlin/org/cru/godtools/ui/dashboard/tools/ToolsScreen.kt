@@ -23,6 +23,7 @@ data object ToolsScreen : Screen {
     data class Filters(
         val categories: List<Filter<String>> = emptyList(),
         val selectedCategory: String? = null,
+        val showLanguagesMenu: Boolean = false,
         val languages: List<Filter<Language>> = emptyList(),
         val languageQuery: String = "",
         val selectedLanguage: Language? = null,
@@ -36,6 +37,7 @@ data object ToolsScreen : Screen {
     }
 
     sealed interface FiltersEvent : CircuitUiEvent {
+        data object ToggleLanguagesMenu : FiltersEvent
         data class UpdateLanguageQuery(val query: String) : FiltersEvent
         data class SelectCategory(val category: String?) : FiltersEvent
         data class SelectLanguage(val locale: Locale?) : FiltersEvent
