@@ -69,7 +69,7 @@ class VariantToolCardPaparazziTest {
     @Test
     fun `VariantToolCard() - Default`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box(contentAlignment = Alignment.Center) {
                     VariantToolCard(state = toolState)
                 }
@@ -80,7 +80,7 @@ class VariantToolCardPaparazziTest {
     @Test
     fun `VariantToolCard() - Selected`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box(contentAlignment = Alignment.Center) {
                     VariantToolCard(state = toolState, isSelected = true)
                 }
@@ -91,7 +91,7 @@ class VariantToolCardPaparazziTest {
     @Test
     fun `VariantToolCard() - No second Language`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box(contentAlignment = Alignment.Center) {
                     VariantToolCard(state = toolState.copy(secondLanguage = null, secondLanguageAvailable = false))
                 }
@@ -102,7 +102,7 @@ class VariantToolCardPaparazziTest {
     @Test
     fun `VariantToolCard() - App Language Not Available`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box(contentAlignment = Alignment.Center) {
                     VariantToolCard(state = toolState.copy(appTranslation = null))
                 }
@@ -113,7 +113,7 @@ class VariantToolCardPaparazziTest {
     @Test
     fun `VariantToolCard() - Second Language Not Available`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box(contentAlignment = Alignment.Center) {
                     VariantToolCard(state = toolState.copy(secondLanguageAvailable = false))
                 }

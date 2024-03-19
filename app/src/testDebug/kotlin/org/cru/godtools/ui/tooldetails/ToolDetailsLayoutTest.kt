@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tooldetails
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -17,9 +18,11 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
+import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.ui.drawer.DrawerViewModel
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
+import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -45,11 +48,18 @@ class ToolDetailsLayoutTest {
         )
     }
 
+    private fun renderToolDetailsLayout(state: State = State(eventSink = events)) = composeTestRule.setContent {
+        CompositionLocalProvider(
+            LocalEventBus provides EventBus()
+        ) {
+            ToolDetailsLayout(state)
+        }
+    }
+
     // region Action - Navigate Up
     @Test
     fun `Action - Navigate Up`() {
-        val state = State(eventSink = events)
-        composeTestRule.setContent { ToolDetailsLayout(state) }
+        renderToolDetailsLayout()
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_NAVIGATE_UP).assertExists().performClick()
         events.assertEvent(Event.NavigateUp)
@@ -59,8 +69,7 @@ class ToolDetailsLayoutTest {
     // region Action - Pin Shortcut
     @Test
     fun `Action - Pin Shortcut`() {
-        val state = State(hasShortcut = true, eventSink = events)
-        composeTestRule.setContent { ToolDetailsLayout(state) }
+        renderToolDetailsLayout(State(hasShortcut = true, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_PIN_SHORTCUT).assertDoesNotExist()
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_OVERFLOW).assertExists().performClick()
@@ -72,8 +81,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `Action - Pin Shortcut - hasShortcut=false`() {
-        val state = State(hasShortcut = false, eventSink = events)
-        composeTestRule.setContent { ToolDetailsLayout(state) }
+        renderToolDetailsLayout(State(hasShortcut = false, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_PIN_SHORTCUT).assertDoesNotExist()
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_OVERFLOW).assertDoesNotExist()
@@ -84,11 +92,12 @@ class ToolDetailsLayoutTest {
     // region Action - Tool Training Button
     @Test
     fun `Action - Tool Training Button - visible when manifest has tips`() {
-        val state = State(
-            manifest = mockk { every { hasTips } returns true },
-            eventSink = events,
+        renderToolDetailsLayout(
+            State(
+                manifest = mockk { every { hasTips } returns true },
+                eventSink = events,
+            )
         )
-        composeTestRule.setContent { ToolDetailsLayout(state) }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertExists().performClick()
         events.assertEvent(Event.OpenToolTraining)
@@ -96,11 +105,12 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `Action - Tool Training Button - gone when manifest does not have tips`() {
-        val state = State(
-            manifest = mockk { every { hasTips } returns false },
-            eventSink = events,
+        renderToolDetailsLayout(
+            State(
+                manifest = mockk { every { hasTips } returns false },
+                eventSink = events,
+            )
         )
-        composeTestRule.setContent { ToolDetailsLayout(state) }
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
         events.assertNoEvents()
@@ -108,8 +118,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `Action - Tool Training Button - gone when manifest does not exist`() {
-        val state = State(manifest = null, eventSink = events)
-        composeTestRule.setContent { ToolDetailsLayout(state) }
+        renderToolDetailsLayout(State(manifest = null, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
         events.assertNoEvents()

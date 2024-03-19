@@ -114,7 +114,7 @@ object GodToolsTheme {
 }
 
 @Composable
-fun GodToolsTheme(disableDagger: Boolean = false, content: @Composable () -> Unit) {
+fun GodToolsTheme(content: @Composable () -> Unit) {
     val isDarkTheme = isSystemInDarkTheme() && BuildConfig.DEBUG
     MaterialTheme(
         colorScheme = when {
@@ -123,7 +123,7 @@ fun GodToolsTheme(disableDagger: Boolean = false, content: @Composable () -> Uni
         },
         typography = GodToolsTheme.typography
     ) {
-        CompositionLocals(disableDagger) {
+        CompositionLocals {
             CompositionLocalProvider(
                 LocalLightColorSchemeActive provides !isDarkTheme,
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),

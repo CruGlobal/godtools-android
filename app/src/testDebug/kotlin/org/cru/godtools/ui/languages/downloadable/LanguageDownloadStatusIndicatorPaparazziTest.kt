@@ -16,7 +16,7 @@ class LanguageDownloadStatusIndicatorPaparazziTest {
     @Test
     fun `LanguageDownloadStatusIndicator()`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box {
                     Row(Modifier.align(Alignment.Center)) {
                         LanguageDownloadStatusIndicator(

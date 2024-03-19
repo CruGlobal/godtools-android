@@ -68,7 +68,7 @@ class SquareToolCardPaparazziTest {
     @Test
     fun `SquareToolCard() - Default`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box {
                     SquareToolCard(
                         state = toolState,
@@ -82,7 +82,7 @@ class SquareToolCardPaparazziTest {
     @Test
     fun `SquareToolCard() - Downloading`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box {
                     SquareToolCard(
                         state = toolState.copy(
@@ -98,7 +98,7 @@ class SquareToolCardPaparazziTest {
     @Test
     fun `SquareToolCard() - Show Second Language`() {
         paparazzi.snapshot {
-            GodToolsTheme(disableDagger = true) {
+            GodToolsTheme {
                 Box {
                     SquareToolCard(
                         state = toolState,
