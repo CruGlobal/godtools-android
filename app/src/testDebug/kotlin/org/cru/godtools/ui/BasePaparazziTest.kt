@@ -46,6 +46,7 @@ abstract class BasePaparazziTest(
             }
             else -> renderingMode
         },
+        maxPercentDifference = 0.001,
         renderExtensions = buildSet {
             if (accessibilityMode == AccessibilityMode.ACCESSIBILITY) add(AccessibilityRenderExtension())
         },
