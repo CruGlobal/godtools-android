@@ -1,10 +1,17 @@
 package org.cru.godtools.ui.languages.downloadable
 
 import androidx.compose.foundation.layout.Row
+import com.android.resources.NightMode
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import kotlin.test.Test
 import org.cru.godtools.ui.BasePaparazziTest
+import org.junit.runner.RunWith
 
-class LanguageDownloadStatusIndicatorPaparazziTest : BasePaparazziTest() {
+@RunWith(TestParameterInjector::class)
+class LanguageDownloadStatusIndicatorPaparazziTest(
+    @TestParameter nightMode: NightMode
+) : BasePaparazziTest(nightMode = nightMode) {
     @Test
     fun `LanguageDownloadStatusIndicator()`() = centerInSnapshot {
         Row {

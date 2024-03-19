@@ -237,6 +237,7 @@ dependencies {
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.testparameterinjector)
     testImplementation(libs.turbine)
 }
 

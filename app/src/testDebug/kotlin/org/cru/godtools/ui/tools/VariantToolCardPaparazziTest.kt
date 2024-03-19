@@ -5,6 +5,9 @@ import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
 import coil.test.FakeImageLoaderEngine
+import com.android.resources.NightMode
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.mockk.mockk
 import java.util.Locale
 import kotlin.test.AfterTest
@@ -19,8 +22,13 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.BasePaparazziTest
+import org.junit.runner.RunWith
 
-class VariantToolCardPaparazziTest : BasePaparazziTest() {
+@RunWith(TestParameterInjector::class)
+class VariantToolCardPaparazziTest(
+    @TestParameter nightMode: NightMode,
+    @TestParameter accessibilityMode: AccessibilityMode,
+) : BasePaparazziTest(nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val toolState = ToolCard.State(
         tool = randomTool(
             name = "Tool Title",
