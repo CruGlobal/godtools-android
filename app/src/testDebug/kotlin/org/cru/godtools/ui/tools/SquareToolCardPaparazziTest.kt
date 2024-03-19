@@ -1,10 +1,6 @@
 package org.cru.godtools.ui.tools
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import app.cash.paparazzi.Paparazzi
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -19,17 +15,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.junit.Rule
+import org.cru.godtools.ui.BasePaparazziTest
 
-class SquareToolCardPaparazziTest {
-    @get:Rule
-    val paparazzi = Paparazzi()
-
+class SquareToolCardPaparazziTest : BasePaparazziTest() {
     private val toolState = ToolCard.State(
         tool = randomTool(
             name = "Tool Title",
@@ -66,47 +58,15 @@ class SquareToolCardPaparazziTest {
     }
 
     @Test
-    fun `SquareToolCard() - Default`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box {
-                    SquareToolCard(
-                        state = toolState,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
-            }
-        }
+    fun `SquareToolCard() - Default`() = centerInSnapshot { SquareToolCard(toolState) }
+
+    @Test
+    fun `SquareToolCard() - Downloading`() = centerInSnapshot {
+        SquareToolCard(toolState.copy(downloadProgress = DownloadProgress(2, 5)))
     }
 
     @Test
-    fun `SquareToolCard() - Downloading`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box {
-                    SquareToolCard(
-                        state = toolState.copy(
-                            downloadProgress = DownloadProgress(2, 5)
-                        ),
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `SquareToolCard() - Show Second Language`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box {
-                    SquareToolCard(
-                        state = toolState,
-                        showSecondLanguage = true,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
-            }
-        }
+    fun `SquareToolCard() - Show Second Language`() = centerInSnapshot {
+        SquareToolCard(toolState, showSecondLanguage = true)
     }
 }

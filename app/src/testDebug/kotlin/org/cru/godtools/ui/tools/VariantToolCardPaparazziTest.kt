@@ -1,9 +1,6 @@
 package org.cru.godtools.ui.tools
 
 import android.graphics.drawable.Drawable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.ui.Alignment
-import app.cash.paparazzi.Paparazzi
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -18,16 +15,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.junit.Rule
+import org.cru.godtools.ui.BasePaparazziTest
 
-class VariantToolCardPaparazziTest {
-    @get:Rule
-    val paparazzi = Paparazzi()
-
+class VariantToolCardPaparazziTest : BasePaparazziTest() {
     private val toolState = ToolCard.State(
         tool = randomTool(
             name = "Tool Title",
@@ -67,57 +60,23 @@ class VariantToolCardPaparazziTest {
     }
 
     @Test
-    fun `VariantToolCard() - Default`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box(contentAlignment = Alignment.Center) {
-                    VariantToolCard(state = toolState)
-                }
-            }
-        }
+    fun `VariantToolCard() - Default`() = centerInSnapshot { VariantToolCard(toolState) }
+
+    @Test
+    fun `VariantToolCard() - Selected`() = centerInSnapshot { VariantToolCard(toolState, isSelected = true) }
+
+    @Test
+    fun `VariantToolCard() - No second Language`() = centerInSnapshot {
+        VariantToolCard(toolState.copy(secondLanguage = null, secondLanguageAvailable = false))
     }
 
     @Test
-    fun `VariantToolCard() - Selected`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box(contentAlignment = Alignment.Center) {
-                    VariantToolCard(state = toolState, isSelected = true)
-                }
-            }
-        }
+    fun `VariantToolCard() - App Language Not Available`() = centerInSnapshot {
+        VariantToolCard(toolState.copy(appTranslation = null))
     }
 
     @Test
-    fun `VariantToolCard() - No second Language`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box(contentAlignment = Alignment.Center) {
-                    VariantToolCard(state = toolState.copy(secondLanguage = null, secondLanguageAvailable = false))
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `VariantToolCard() - App Language Not Available`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box(contentAlignment = Alignment.Center) {
-                    VariantToolCard(state = toolState.copy(appTranslation = null))
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `VariantToolCard() - Second Language Not Available`() {
-        paparazzi.snapshot {
-            GodToolsTheme {
-                Box(contentAlignment = Alignment.Center) {
-                    VariantToolCard(state = toolState.copy(secondLanguageAvailable = false))
-                }
-            }
-        }
+    fun `VariantToolCard() - Second Language Not Available`() = centerInSnapshot {
+        VariantToolCard(toolState.copy(secondLanguageAvailable = false))
     }
 }
