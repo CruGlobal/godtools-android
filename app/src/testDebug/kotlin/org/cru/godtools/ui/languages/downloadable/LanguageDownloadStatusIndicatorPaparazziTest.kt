@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.languages.downloadable
 
 import androidx.compose.foundation.layout.Row
+import com.android.ide.common.rendering.api.SessionParams.RenderingMode
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
@@ -11,7 +12,7 @@ import org.junit.runner.RunWith
 @RunWith(TestParameterInjector::class)
 class LanguageDownloadStatusIndicatorPaparazziTest(
     @TestParameter nightMode: NightMode
-) : BasePaparazziTest(nightMode = nightMode) {
+) : BasePaparazziTest(nightMode = nightMode, renderingMode = RenderingMode.SHRINK) {
     @Test
     fun `LanguageDownloadStatusIndicator()`() = centerInSnapshot {
         Row {
