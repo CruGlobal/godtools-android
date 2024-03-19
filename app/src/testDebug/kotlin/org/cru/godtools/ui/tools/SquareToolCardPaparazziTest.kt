@@ -75,6 +75,19 @@ class SquareToolCardPaparazziTest(
     }
 
     @Test
+    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot {
+        SquareToolCard(
+            toolState.copy(
+                tool = randomTool(
+                    name = "Tool Title",
+                    category = Tool.CATEGORY_GOSPEL,
+                    isFavorite = true
+                )
+            )
+        )
+    }
+
+    @Test
     fun `SquareToolCard() - Show Second Language`() = centerInSnapshot {
         SquareToolCard(toolState, showSecondLanguage = true)
     }
