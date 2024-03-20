@@ -216,26 +216,23 @@ private fun DashboardLayoutAnalytics(page: Page) {
 @Composable
 private fun DashboardBottomNavBar(currentPage: Page, onSelectPage: (Page) -> Unit) {
     NavigationBar(modifier = Modifier.shadow(8.dp, clip = false)) {
-        val lessonsText = stringResource(R.string.nav_lessons)
         NavigationBarItem(
-            icon = { Icon(painterResource(R.drawable.ic_lessons), lessonsText) },
-            label = { Text(lessonsText) },
+            icon = { Icon(painterResource(R.drawable.ic_lessons), stringResource(R.string.nav_lessons)) },
+            label = { Text(stringResource(R.string.nav_lessons)) },
             selected = currentPage == Page.LESSONS,
             onClick = { onSelectPage(Page.LESSONS) },
         )
 
-        val homeText = stringResource(R.string.nav_favorite_tools)
         NavigationBarItem(
-            icon = { Icon(painterResource(R.drawable.ic_favorite_24dp), homeText) },
-            label = { Text(homeText) },
+            icon = { Icon(painterResource(R.drawable.ic_favorite_24dp), stringResource(R.string.nav_favorite_tools)) },
+            label = { Text(stringResource(R.string.nav_favorite_tools)) },
             selected = currentPage == Page.HOME || currentPage == Page.FAVORITE_TOOLS,
             onClick = { onSelectPage(Page.HOME) },
         )
 
-        val toolsText = stringResource(R.string.nav_all_tools)
         NavigationBarItem(
-            icon = { Icon(painterResource(R.drawable.ic_all_tools), toolsText) },
-            label = { Text(toolsText) },
+            icon = { Icon(painterResource(R.drawable.ic_all_tools), stringResource(R.string.nav_all_tools)) },
+            label = { Text(stringResource(R.string.nav_all_tools)) },
             selected = currentPage == Page.ALL_TOOLS,
             onClick = { onSelectPage(Page.ALL_TOOLS) },
         )
