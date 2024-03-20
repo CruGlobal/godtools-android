@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,7 +45,7 @@ import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp
-private val DROPDOWN_MAX_WIDTH = 400.dp
+private val DROPDOWN_MAX_WIDTH = 350.dp
 
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
@@ -154,19 +156,28 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
             onDismissRequest = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
             modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
         ) {
+            stickyHeader {
+                Surface(color = MaterialTheme.colorScheme.surface) {
+                    SearchBar(
+                        query,
+                        onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                        onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                        active = false,
+                        onActiveChange = {},
+                        colors = GodToolsTheme.searchBarColors,
+                        leadingIcon = { Icon(Icons.Filled.Search, null) },
+                        placeholder = {
+                            Text(stringResource(R.string.language_settings_downloadable_languages_search))
+                        },
+                        content = {},
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .fillMaxWidth()
+                            .wrapContentWidth()
+                    )
+                }
+            }
             item {
-                SearchBar(
-                    query,
-                    onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
-                    onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
-                    active = false,
-                    onActiveChange = {},
-                    colors = GodToolsTheme.searchBarColors,
-                    leadingIcon = { Icon(Icons.Filled.Search, null) },
-                    placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
-                    content = {},
-                    modifier = Modifier.padding(horizontal = 12.dp)
-                )
                 FilterMenuItem(
                     label = stringResource(R.string.dashboard_tools_section_filter_language_any),
                     supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
