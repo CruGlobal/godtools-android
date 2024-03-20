@@ -34,6 +34,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.material3.ui.menu.LazyDropdownMenu
@@ -82,7 +85,7 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
     ElevatedButton(
         onClick = { expanded = !expanded },
-        modifier = modifier
+        modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
             selectedCategory?.let { getToolCategoryName(it, LocalContext.current) }
@@ -140,7 +143,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
     ElevatedButton(
         onClick = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
-        modifier = modifier
+        modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
             text = selectedLanguage?.getDisplayName(context, LocalAppLanguage.current)
