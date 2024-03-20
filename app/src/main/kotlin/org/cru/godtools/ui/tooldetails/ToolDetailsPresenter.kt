@@ -61,6 +61,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -209,8 +210,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
     @Composable
     private fun rememberPages(hasVariants: Boolean) = remember(hasVariants) {
         buildList {
-            add(ToolDetailsPage.DESCRIPTION)
-            if (hasVariants) add(ToolDetailsPage.VARIANTS)
+            add(Page.DESCRIPTION)
+            if (hasVariants) add(Page.VARIANTS)
         }.toImmutableList()
     }
 
