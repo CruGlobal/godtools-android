@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -98,7 +99,8 @@ class ToolsPresenter @AssistedInject constructor(
 
         // selected language
         val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
-        var languageQuery by remember { mutableStateOf("") }
+        var showLanguagesMenu by rememberSaveable { mutableStateOf(false) }
+        var languageQuery by rememberSaveable { mutableStateOf("") }
 
         val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
             {
@@ -108,8 +110,14 @@ class ToolsPresenter @AssistedInject constructor(
                     }
                     is ToolsScreen.FiltersEvent.SelectLanguage -> scope.launch {
                         settings.updateDashboardFilterLocale(it.locale)
+                        showLanguagesMenu = false
+                        languageQuery = ""
                     }
                     is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
+                    ToolsScreen.FiltersEvent.ToggleLanguagesMenu -> {
+                        showLanguagesMenu = !showLanguagesMenu
+                        languageQuery = ""
+                    }
                 }
             }
         }
@@ -117,6 +125,7 @@ class ToolsPresenter @AssistedInject constructor(
         return ToolsScreen.Filters(
             categories = rememberFilterCategories(selectedLocale),
             selectedCategory = selectedCategory,
+            showLanguagesMenu = showLanguagesMenu,
             languages = rememberFilterLanguages(selectedCategory, languageQuery),
             languageQuery = languageQuery,
             selectedLanguage = languagesRepository.rememberLanguage(selectedLocale),

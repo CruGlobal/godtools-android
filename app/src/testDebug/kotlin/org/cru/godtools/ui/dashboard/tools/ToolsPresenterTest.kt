@@ -16,7 +16,9 @@ import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -32,6 +34,7 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen.FiltersEvent
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -220,6 +223,25 @@ class ToolsPresenterTest {
     }
     // endregion State.filters.categories
 
+    // region State.filters.showLanguagesMenu
+    @Test
+    fun `State - filters - showLanguagesMenu`() = runTest {
+        presenter.test {
+            with(expectMostRecentItem()) {
+                assertFalse(filters.showLanguagesMenu)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            with(expectMostRecentItem()) {
+                assertTrue(filters.showLanguagesMenu)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            assertFalse(expectMostRecentItem().filters.showLanguagesMenu)
+        }
+    }
+    // endregion State.filters.showLanguagesMenu
+
     // region State.filters.languages
     @Test
     fun `State - filters - languages - no category`() = runTest {
@@ -240,7 +262,7 @@ class ToolsPresenterTest {
         val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
 
         presenter.test {
-            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
+            awaitItem().filters.eventSink(FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
 
             gospelLanguagesFlow.value = languages
             assertEquals(languages.map { Filter(it, 0) }, expectMostRecentItem().filters.languages)
@@ -271,6 +293,26 @@ class ToolsPresenterTest {
             )
         }
     }
+
+    @Test
+    fun `State - filters - languages - filtered by languageQuery`() = runTest {
+        val languages = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
+        languagesFlow.value = languages
+
+        presenter.test {
+            expectMostRecentItem().filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            with(expectMostRecentItem()) {
+                assertEquals(languages.map { Filter(it, 0) }, filters.languages)
+                filters.eventSink(FiltersEvent.UpdateLanguageQuery("french"))
+            }
+
+            assertEquals(listOf(Filter(Language(Locale.FRENCH), 0)), expectMostRecentItem().filters.languages)
+        }
+
+        verifyAll {
+            languagesRepository.getLanguagesFlow()
+        }
+    }
     // endregion State.filters.languages
 
     // region State.filters.selectedLanguage
@@ -286,7 +328,7 @@ class ToolsPresenterTest {
     @Test
     fun `State - filters - selectedLanguage - language not found`() = runTest {
         presenter.test {
-            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectLanguage(Locale.ENGLISH))
+            awaitItem().filters.eventSink(FiltersEvent.SelectLanguage(Locale.ENGLISH))
 
             assertNull(expectMostRecentItem().filters.selectedLanguage)
         }
@@ -300,7 +342,7 @@ class ToolsPresenterTest {
         every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
 
         presenter.test {
-            awaitItem().filters.eventSink(ToolsScreen.FiltersEvent.SelectLanguage(Locale.ENGLISH))
+            awaitItem().filters.eventSink(FiltersEvent.SelectLanguage(Locale.ENGLISH))
 
             assertEquals(language, expectMostRecentItem().filters.selectedLanguage)
         }
@@ -308,6 +350,55 @@ class ToolsPresenterTest {
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
     }
     // endregion State.filters.selectedLanguage
+
+    // region FiltersEvent.ToggleLanguagesMenu
+    @Test
+    fun `FiltersEvent - ToggleLanguagesMenu`() = runTest {
+        presenter.test {
+            with(expectMostRecentItem()) {
+                assertFalse(filters.showLanguagesMenu)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            with(expectMostRecentItem()) {
+                assertTrue(filters.showLanguagesMenu)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            assertFalse(expectMostRecentItem().filters.showLanguagesMenu)
+        }
+    }
+
+    @Test
+    fun `FiltersEvent - ToggleLanguagesMenu - resets languageQuery`() = runTest {
+        presenter.test {
+            expectMostRecentItem().filters.eventSink(FiltersEvent.UpdateLanguageQuery("test"))
+
+            with(expectMostRecentItem()) {
+                assertFalse(filters.showLanguagesMenu)
+                assertEquals("test", filters.languageQuery)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            with(expectMostRecentItem()) {
+                assertTrue(filters.showLanguagesMenu)
+                assertEquals("", filters.languageQuery)
+                filters.eventSink(FiltersEvent.UpdateLanguageQuery("test"))
+            }
+
+            with(expectMostRecentItem()) {
+                assertTrue(filters.showLanguagesMenu)
+                assertEquals("test", filters.languageQuery)
+                filters.eventSink(FiltersEvent.ToggleLanguagesMenu)
+            }
+
+            with(expectMostRecentItem()) {
+                assertFalse(filters.showLanguagesMenu)
+                assertEquals("", filters.languageQuery)
+            }
+        }
+    }
+    // endregion FiltersEvent.ToggleLanguagesMenu
 
     // region State.tools
     @Test

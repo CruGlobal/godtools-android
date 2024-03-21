@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +34,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.material3.ui.menu.LazyDropdownMenu
@@ -43,7 +48,7 @@ import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp
-private val DROPDOWN_MAX_WIDTH = 400.dp
+private val DROPDOWN_MAX_WIDTH = 350.dp
 
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
@@ -80,7 +85,7 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
     ElevatedButton(
         onClick = { expanded = !expanded },
-        modifier = modifier
+        modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
             selectedCategory?.let { getToolCategoryName(it, LocalContext.current) }
@@ -134,14 +139,11 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
     val selectedLanguage by rememberUpdatedState(filters.selectedLanguage)
     val eventSink by rememberUpdatedState(filters.eventSink)
 
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    val expanded by rememberUpdatedState(filters.showLanguagesMenu)
 
     ElevatedButton(
-        onClick = {
-            if (!expanded) eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(""))
-            expanded = !expanded
-        },
-        modifier = modifier
+        onClick = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+        modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
             text = selectedLanguage?.getDisplayName(context, LocalAppLanguage.current)
@@ -154,31 +156,35 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
         LazyDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = Modifier
-                .sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
-                .testTag(TEST_TAG_FILTER_DROPDOWN)
+            onDismissRequest = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+            modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
         ) {
+            stickyHeader {
+                Surface(color = MaterialTheme.colorScheme.surface) {
+                    SearchBar(
+                        query,
+                        onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                        onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                        active = false,
+                        onActiveChange = {},
+                        colors = GodToolsTheme.searchBarColors,
+                        leadingIcon = { Icon(Icons.Filled.Search, null) },
+                        placeholder = {
+                            Text(stringResource(R.string.language_settings_downloadable_languages_search))
+                        },
+                        content = {},
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .fillMaxWidth()
+                            .wrapContentWidth()
+                    )
+                }
+            }
             item {
-                SearchBar(
-                    query,
-                    onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
-                    onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
-                    active = false,
-                    onActiveChange = {},
-                    colors = GodToolsTheme.searchBarColors,
-                    leadingIcon = { Icon(Icons.Filled.Search, null) },
-                    placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
-                    content = {},
-                    modifier = Modifier.padding(horizontal = 12.dp)
-                )
                 FilterMenuItem(
                     label = stringResource(R.string.dashboard_tools_section_filter_language_any),
                     supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
-                    onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null))
-                        expanded = false
-                    }
+                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null)) }
                 )
             }
 
@@ -190,10 +196,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                         count,
                         count,
                     ),
-                    onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code))
-                        expanded = false
-                    },
+                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code)) },
                     modifier = Modifier.animateItemPlacement()
                 )
             }
