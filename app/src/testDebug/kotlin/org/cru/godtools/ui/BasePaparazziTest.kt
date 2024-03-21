@@ -17,6 +17,7 @@ import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.accessibility.AccessibilityRenderExtension
 import com.android.ide.common.rendering.api.SessionParams.RenderingMode
 import com.android.resources.NightMode
+import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider
 import kotlin.test.BeforeTest
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -25,12 +26,20 @@ import org.junit.Assume.assumeFalse
 import org.junit.Rule
 
 abstract class BasePaparazziTest(
+    private val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
     private val nightMode: NightMode = NightMode.NOTNIGHT,
     private val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,
     renderingMode: RenderingMode = RenderingMode.NORMAL,
     private val excludeRedundantTests: Boolean = true,
     private val eventBus: EventBus = EventBus(),
 ) {
+    protected class DeviceConfigProvider : TestParameterValuesProvider() {
+        override fun provideValues(context: Context?) = listOf(
+            value(DeviceConfig.NEXUS_5).withName("Nexus 5"),
+//            value(DeviceConfig.NEXUS_10.copy(orientation = ScreenOrientation.PORTRAIT)).withName("Nexus 10 Portrait"),
+            value(DeviceConfig.PIXEL_6_PRO).withName("Pixel 6 Pro"),
+        )
+    }
     enum class AccessibilityMode { ACCESSIBILITY, NO_ACCESSIBILITY }
 
     // HACK: workaround a "No OnBackPressedDispatcherOwner was provided via LocalOnBackPressedDispatcherOwner" error
@@ -41,7 +50,7 @@ abstract class BasePaparazziTest(
 
     @get:Rule
     val paparazzi = Paparazzi(
-        deviceConfig = DeviceConfig.NEXUS_5.copy(nightMode = nightMode),
+        deviceConfig = deviceConfig.copy(nightMode = nightMode),
         renderingMode = when (accessibilityMode) {
             AccessibilityMode.ACCESSIBILITY -> when (renderingMode) {
                 RenderingMode.SHRINK -> RenderingMode.NORMAL
@@ -60,23 +69,30 @@ abstract class BasePaparazziTest(
         if (excludeRedundantTests) {
             // don't run accessibility mode for night mode, we already test it for Not Night
             assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && nightMode == NightMode.NIGHT)
+
+            // don't run accessibility mode for devices other than the NEXUS_5
+            assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && deviceConfig != DeviceConfig.NEXUS_5)
         }
     }
 
-    protected fun centerInSnapshot(content: @Composable BoxScope.() -> Unit) {
+    protected fun snapshot(content: @Composable () -> Unit) {
         paparazzi.snapshot {
             CompositionLocalProvider(
                 LocalEventBus provides eventBus,
                 LocalOnBackPressedDispatcherOwner provides backPressDispatcher
             ) {
-                GodToolsTheme {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                        content = content,
-                    )
-                }
+                GodToolsTheme(content = content)
             }
+        }
+    }
+
+    protected fun centerInSnapshot(content: @Composable BoxScope.() -> Unit) {
+        snapshot {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                content = content,
+            )
         }
     }
 }
