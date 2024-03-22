@@ -90,7 +90,9 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
             Text(
                 stringResource(R.string.account_delete_description),
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
+                modifier = Modifier
+                    .padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
+                    .align(Alignment.Start)
             )
 
             val actionsEnabled = state !is State.Deleting && state !is State.Error
