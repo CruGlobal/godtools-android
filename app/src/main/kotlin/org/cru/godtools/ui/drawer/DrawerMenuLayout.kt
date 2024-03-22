@@ -40,18 +40,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.booleanResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.play.core.ktx.launchReview
 import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewManagerFactory
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.NavigationDrawerHeadline
@@ -66,6 +65,8 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
 import org.cru.godtools.ui.account.delete.startDeleteAccountActivity
 import org.cru.godtools.ui.account.startAccountActivity
+import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
+import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
 import org.cru.godtools.ui.languages.startLanguageSettingsActivity
 import org.cru.godtools.ui.login.startLoginActivity
 
@@ -73,32 +74,52 @@ import org.cru.godtools.ui.login.startLoginActivity
 fun DrawerMenuLayout(
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
+    viewModel: DrawerViewModel = viewModel(),
     content: @Composable () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+
+    DrawerMenuLayout(
+        state = State(
+            drawerState = drawerState,
+            isLoggedIn = viewModel.isAuthenticatedFlow.collectAsState().value,
+            eventSink = {
+                when (it) {
+                    Event.Logout -> {
+                        viewModel.logout()
+                        scope.launch { drawerState.close() }
+                    }
+
+                    Event.DismissDrawer -> scope.launch { drawerState.close() }
+                }
+            }
+        ),
+        modifier = modifier,
+        content = content
+    )
+}
+
+@Composable
+fun DrawerMenuLayout(state: State, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val scope = rememberCoroutineScope()
+    val drawerState by rememberUpdatedState(state.drawerState)
 
     BackHandler(enabled = drawerState.isOpen, onBack = { scope.launch { drawerState.close() } })
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        drawerContent = {
-            DrawerContentLayout(
-                scope = scope,
-                dismissDrawer = { scope.launch { drawerState.close() } }
-            )
-        },
+        drawerContent = { DrawerContentLayout(state) },
         modifier = modifier,
         content = content,
     )
 }
 
 @Composable
-@Preview
-private fun DrawerContentLayout(
-    scope: CoroutineScope = rememberCoroutineScope(),
-    viewModel: DrawerViewModel = viewModel(),
-    dismissDrawer: () -> Unit = {},
-) = ModalDrawerSheet {
+private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
+    val scope = rememberCoroutineScope()
+    val isLoggedIn by rememberUpdatedState(state.isLoggedIn)
+    val eventSink by rememberUpdatedState(state.eventSink)
+
     CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.labelLarge) {
         Column(
             modifier = Modifier
@@ -119,7 +140,7 @@ private fun DrawerContentLayout(
                     selected = false,
                     onClick = {
                         context.startTutorialActivity(PageSet.FEATURES)
-                        dismissDrawer()
+                        eventSink(Event.DismissDrawer)
                     }
                 )
             }
@@ -129,7 +150,7 @@ private fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     context.startLanguageSettingsActivity()
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -138,15 +159,14 @@ private fun DrawerContentLayout(
             // region Account
             if (booleanResource(R.bool.show_login_menu_items)) {
                 NavigationDrawerHeadline(label = { Text(stringResource(R.string.menu_heading_account)) })
-                val isAuthenticated by viewModel.isAuthenticatedFlow.collectAsState()
-                if (!isAuthenticated) {
+                if (!isLoggedIn) {
                     NavigationDrawerItem(
                         icon = { Icon(Icons.AutoMirrored.Outlined.Login, null) },
                         label = { Text(stringResource(R.string.menu_login)) },
                         selected = false,
                         onClick = {
                             context.startLoginActivity()
-                            dismissDrawer()
+                            eventSink(Event.DismissDrawer)
                         },
                     )
                     NavigationDrawerItem(
@@ -155,7 +175,7 @@ private fun DrawerContentLayout(
                         selected = false,
                         onClick = {
                             context.startLoginActivity(createAccount = true)
-                            dismissDrawer()
+                            eventSink(Event.DismissDrawer)
                         },
                     )
                 } else {
@@ -165,17 +185,14 @@ private fun DrawerContentLayout(
                         selected = false,
                         onClick = {
                             context.startAccountActivity()
-                            dismissDrawer()
+                            eventSink(Event.DismissDrawer)
                         }
                     )
                     NavigationDrawerItem(
                         icon = { Icon(Icons.AutoMirrored.Outlined.Logout, null) },
                         label = { Text(stringResource(R.string.menu_logout)) },
                         selected = false,
-                        onClick = {
-                            viewModel.logout()
-                            dismissDrawer()
-                        }
+                        onClick = { eventSink(Event.Logout) }
                     )
                     NavigationDrawerItem(
                         icon = { Icon(Icons.Outlined.PersonRemove, null) },
@@ -183,7 +200,7 @@ private fun DrawerContentLayout(
                         selected = false,
                         onClick = {
                             context.startDeleteAccountActivity()
-                            dismissDrawer()
+                            eventSink(Event.DismissDrawer)
                         },
                     )
                 }
@@ -199,7 +216,7 @@ private fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     uriHandler.openUri("https://godtoolsapp.com/send-feedback/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             NavigationDrawerItem(
@@ -208,7 +225,7 @@ private fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     uriHandler.openUri("https://godtoolsapp.com/report-bug/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             NavigationDrawerItem(
@@ -217,7 +234,7 @@ private fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     uriHandler.openUri("https://godtoolsapp.com/ask-question/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -234,7 +251,7 @@ private fun DrawerContentLayout(
                         val reviewManager = ReviewManagerFactory.create(context)
                         val reviewInfo = reviewManager.requestReview()
                         if (context is Activity) reviewManager.launchReview(context, reviewInfo)
-                        dismissDrawer()
+                        eventSink(Event.DismissDrawer)
                     }
                 }
             )
@@ -244,7 +261,7 @@ private fun DrawerContentLayout(
                 selected = false,
                 onClick = {
                     uriHandler.openUri("https://godtoolsapp.com/share-story/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             NavigationDrawerItem(
@@ -256,7 +273,7 @@ private fun DrawerContentLayout(
                         AnalyticsScreenEvent(AnalyticsActionNames.PLATFORM_SHARE_GODTOOLS, context.appLanguage)
                     )
                     context.shareGodTools()
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
@@ -273,7 +290,7 @@ private fun DrawerContentLayout(
                         AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_TERMS_OF_USE, context.appLanguage)
                     )
                     uriHandler.openUri("https://godtoolsapp.com/terms-of-use/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             NavigationDrawerItem(
@@ -285,7 +302,7 @@ private fun DrawerContentLayout(
                         AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_PRIVACY_POLICY, context.appLanguage)
                     )
                     uriHandler.openUri("https://www.cru.org/about/privacy.html")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             NavigationDrawerItem(
@@ -297,7 +314,7 @@ private fun DrawerContentLayout(
                         AnalyticsScreenEvent(AnalyticsScreenNames.PLATFORM_COPYRIGHT, context.appLanguage)
                     )
                     uriHandler.openUri("https://godtoolsapp.com/copyright/")
-                    dismissDrawer()
+                    eventSink(Event.DismissDrawer)
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
