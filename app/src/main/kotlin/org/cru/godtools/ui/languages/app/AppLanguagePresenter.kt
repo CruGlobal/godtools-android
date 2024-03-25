@@ -16,6 +16,8 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
@@ -69,7 +71,7 @@ class AppLanguagePresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLanguages(appLanguage: Locale, query: String): List<Locale> {
+    private fun rememberLanguages(appLanguage: Locale, query: String): ImmutableList<Locale> {
         val languages = remember { LocaleConfigCompat.getSupportedLocales(context)?.asIterable() ?: emptyList() }
         val sortedLanguages = remember(appLanguage) {
             languages.sortedWith(
@@ -78,7 +80,9 @@ class AppLanguagePresenter @AssistedInject constructor(
         }
 
         return remember(sortedLanguages, appLanguage, query) {
-            sortedLanguages.filterByDisplayAndNativeName(query, context, inLocale = appLanguage)
+            sortedLanguages
+                .filterByDisplayAndNativeName(query, context, inLocale = appLanguage)
+                .toImmutableList()
         }
     }
 
