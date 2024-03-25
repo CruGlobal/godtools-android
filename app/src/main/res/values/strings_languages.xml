@@ -13,8 +13,8 @@
     <string name="title_language_settings">Language Settings</string>
     <string name="language_settings_section_app_language_heading">App interface language</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%1$d Language available</item>
-        <item quantity="other">%1$d Languages available</item>
+        <item quantity="one">%1$,d Language available</item>
+        <item quantity="other">%1$,d Languages available</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Set the language you’d like the whole app to be displayed in.</string>
     <string name="language_settings_section_offline_heading">Tool languages available offline</string>
