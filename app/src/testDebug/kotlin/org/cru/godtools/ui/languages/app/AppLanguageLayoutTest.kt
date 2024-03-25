@@ -13,6 +13,7 @@ import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -48,7 +49,7 @@ class AppLanguageLayoutTest {
             setContent {
                 AppLanguageLayout(
                     AppLanguageScreen.State(
-                        languages = listOf(Locale.ENGLISH, Locale.FRENCH),
+                        languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH),
                         eventSink = events
                     )
                 )
