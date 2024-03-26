@@ -43,6 +43,7 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
+import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 
@@ -89,115 +90,117 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
     val eventSink by rememberUpdatedState(state.eventSink)
     val pinnedLanguages by rememberUpdatedState(state.downloadedLanguages)
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.title_language_settings)) },
-                colors = GodToolsTheme.topAppBarColors,
-                navigationIcon = {
-                    IconButton(
-                        onClick = { eventSink(Event.NavigateUp) },
-                        modifier = Modifier.testTag(TEST_TAG_ACTION_BACK)
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
-                    }
-                },
-            )
-        },
-        modifier = modifier,
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .padding(it)
-                .padding(horizontal = 32.dp)
-                .fillMaxHeight()
-        ) {
-            // App interface language
-            item(SECTION_APP_LANGUAGE) {
-                Text(
-                    stringResource(R.string.language_settings_section_app_language_heading),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(top = 32.dp),
-                )
-                Text(
-                    pluralStringResource(
-                        R.plurals.language_settings_section_app_language_available,
-                        appLanguages,
-                        appLanguages
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                Text(
-                    stringResource(R.string.language_settings_section_app_language_description),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                FilledTonalButton(
-                    onClick = { eventSink(Event.AppLanguage) },
-                    colors = when {
-                        GodToolsTheme.isLightColorSchemeActive -> ButtonDefaults.filledTonalButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-
-                        else -> ButtonDefaults.filledTonalButtonColors()
+    DrawerMenuLayout {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.title_language_settings)) },
+                    colors = GodToolsTheme.topAppBarColors,
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { eventSink(Event.NavigateUp) },
+                            modifier = Modifier.testTag(TEST_TAG_ACTION_BACK)
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                        }
                     },
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .fillMaxWidth()
-                ) {
-                    Icon(
-                        Icons.Outlined.Translate,
-                        null,
-                        tint = when {
-                            GodToolsTheme.isLightColorSchemeActive -> MaterialTheme.colorScheme.primary
-                            else -> LocalContentColor.current
+                )
+            },
+            modifier = modifier,
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(horizontal = 32.dp)
+                    .fillMaxHeight()
+            ) {
+                // App interface language
+                item(SECTION_APP_LANGUAGE) {
+                    Text(
+                        stringResource(R.string.language_settings_section_app_language_heading),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(top = 32.dp),
+                    )
+                    Text(
+                        pluralStringResource(
+                            R.plurals.language_settings_section_app_language_available,
+                            appLanguages,
+                            appLanguages
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                    Text(
+                        stringResource(R.string.language_settings_section_app_language_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                    FilledTonalButton(
+                        onClick = { eventSink(Event.AppLanguage) },
+                        colors = when {
+                            GodToolsTheme.isLightColorSchemeActive -> ButtonDefaults.filledTonalButtonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+
+                            else -> ButtonDefaults.filledTonalButtonColors()
                         },
                         modifier = Modifier
-                            .padding(end = 6.dp)
-                            .size(12.dp)
-                    )
-                    Text(remember { derivedStateOf { appLanguage.getDisplayName(appLanguage) } }.value)
-                    Icon(Icons.Default.ArrowDropDown, null, modifier = Modifier.size(24.dp))
+                            .padding(top = 12.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Icon(
+                            Icons.Outlined.Translate,
+                            null,
+                            tint = when {
+                                GodToolsTheme.isLightColorSchemeActive -> MaterialTheme.colorScheme.primary
+                                else -> LocalContentColor.current
+                            },
+                            modifier = Modifier
+                                .padding(end = 6.dp)
+                                .size(12.dp)
+                        )
+                        Text(remember { derivedStateOf { appLanguage.getDisplayName(appLanguage) } }.value)
+                        Icon(Icons.Default.ArrowDropDown, null, modifier = Modifier.size(24.dp))
+                    }
                 }
-            }
 
-            // Offline Languages
-            item(SECTION_OFFLINE_LANGUAGES_TOP) {
-                Text(
-                    stringResource(R.string.language_settings_section_offline_heading),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(top = 32.dp),
-                )
-                Text(
-                    stringResource(R.string.language_settings_section_offline_description),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
-                )
-            }
+                // Offline Languages
+                item(SECTION_OFFLINE_LANGUAGES_TOP) {
+                    Text(
+                        stringResource(R.string.language_settings_section_offline_heading),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(top = 32.dp),
+                    )
+                    Text(
+                        stringResource(R.string.language_settings_section_offline_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
+                    )
+                }
 
-            itemsIndexed(pinnedLanguages, key = { _, it -> it.code }) { i, it ->
-                if (i == 0) HorizontalDivider(modifier = Modifier.animateItemPlacement())
-                LanguageName(
-                    it,
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .heightIn(min = 56.dp)
-                        .padding(vertical = 4.dp)
-                        .wrapContentHeight(Alignment.CenterVertically)
-                )
-                HorizontalDivider(modifier = Modifier.animateItemPlacement())
-            }
-            item(SECTION_OFFLINE_LANGUAGES_BOTTOM) {
-                Button(
-                    onClick = { eventSink(Event.DownloadableLanguages) },
-                    modifier = Modifier
-                        .animateItemPlacement()
-                        .padding(top = 24.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(stringResource(R.string.language_settings_section_offline_action_edit))
+                itemsIndexed(pinnedLanguages, key = { _, it -> it.code }) { i, it ->
+                    if (i == 0) HorizontalDivider(modifier = Modifier.animateItemPlacement())
+                    LanguageName(
+                        it,
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .heightIn(min = 56.dp)
+                            .padding(vertical = 4.dp)
+                            .wrapContentHeight(Alignment.CenterVertically)
+                    )
+                    HorizontalDivider(modifier = Modifier.animateItemPlacement())
+                }
+                item(SECTION_OFFLINE_LANGUAGES_BOTTOM) {
+                    Button(
+                        onClick = { eventSink(Event.DownloadableLanguages) },
+                        modifier = Modifier
+                            .animateItemPlacement()
+                            .padding(top = 24.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.language_settings_section_offline_action_edit))
+                    }
                 }
             }
         }

@@ -9,7 +9,6 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.startAppLanguageActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.languages.downloadable.startDownloadableLanguagesActivity
 
 fun Context.startLanguageSettingsActivity() {
@@ -26,17 +25,15 @@ class LanguageSettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GodToolsTheme {
-                DrawerMenuLayout {
-                    LanguageSettingsLayout(
-                        onEvent = {
-                            when (it) {
-                                LanguageSettingsEvent.NavigateUp -> onNavigateUp()
-                                LanguageSettingsEvent.AppLanguage -> startAppLanguageActivity()
-                                LanguageSettingsEvent.DownloadableLanguages -> startDownloadableLanguagesActivity()
-                            }
+                LanguageSettingsLayout(
+                    onEvent = {
+                        when (it) {
+                            LanguageSettingsEvent.NavigateUp -> onNavigateUp()
+                            LanguageSettingsEvent.AppLanguage -> startAppLanguageActivity()
+                            LanguageSettingsEvent.DownloadableLanguages -> startDownloadableLanguagesActivity()
                         }
-                    )
-                }
+                    }
+                )
             }
         }
     }

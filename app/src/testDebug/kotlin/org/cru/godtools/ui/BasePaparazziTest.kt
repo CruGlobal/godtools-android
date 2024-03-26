@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import app.cash.paparazzi.DeviceConfig
 import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.accessibility.AccessibilityRenderExtension
@@ -21,6 +25,7 @@ import com.google.testing.junit.testparameterinjector.TestParameterValuesProvide
 import kotlin.test.BeforeTest
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.ui.drawer.putDrawerViewModel
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assume.assumeFalse
 import org.junit.Rule
@@ -46,6 +51,12 @@ abstract class BasePaparazziTest(
     private val backPressDispatcher: OnBackPressedDispatcherOwner = object : OnBackPressedDispatcherOwner {
         override val lifecycle: Lifecycle get() = TODO("Not yet implemented")
         override val onBackPressedDispatcher = OnBackPressedDispatcher { /* Swallow all back-presses. */ }
+    }
+
+    // HACK: workaround a "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner" error
+    protected val viewModelStore = ViewModelStore().apply {
+        // TODO: remove this once we migrate DrawerLayout to Circuit
+        putDrawerViewModel()
     }
 
     @get:Rule
@@ -79,7 +90,12 @@ abstract class BasePaparazziTest(
         paparazzi.snapshot {
             CompositionLocalProvider(
                 LocalEventBus provides eventBus,
-                LocalOnBackPressedDispatcherOwner provides backPressDispatcher
+                LocalOnBackPressedDispatcherOwner provides backPressDispatcher,
+                LocalViewModelStoreOwner provides remember {
+                    object : ViewModelStoreOwner {
+                        override val viewModelStore = this@BasePaparazziTest.viewModelStore
+                    }
+                }
             ) {
                 GodToolsTheme(content = content)
             }
