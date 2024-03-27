@@ -1,5 +1,6 @@
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.google.devtools.ksp.gradle.KspExtension
+import com.jeppeman.mockposable.gradle.MockposableSubPluginExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -12,6 +13,7 @@ internal fun Project.androidComponents(configure: Action<AndroidComponentsExtens
     extensions.configure("androidComponents", configure)
 internal fun Project.kapt(configure: KaptExtension.() -> Unit) = extensions.configure(configure)
 internal fun Project.ktlint(action: KtlintExtension.() -> Unit) = extensions.configure(action)
+internal fun Project.mockposable(configure: MockposableSubPluginExtension.() -> Unit) = extensions.configure(configure)
 
 internal val Project.libs get() = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
 internal val Project.androidComponents

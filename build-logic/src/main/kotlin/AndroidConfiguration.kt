@@ -121,6 +121,7 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
         addProvider("testDebugImplementation", project.libs.findBundle("androidx-compose-testing").get())
     }
 
+    // configure circuit
     if (enableCircuit) {
         project.pluginManager.apply("com.google.devtools.ksp")
         project.pluginManager.apply("kotlin-parcelize")
@@ -129,6 +130,13 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
         project.dependencies.addProvider("ksp", project.libs.findLibrary("circuit-codegen").get())
 
         project.ksp.arg("circuit.codegen.mode", "hilt")
+    }
+
+    // configure mockposable
+    project.pluginManager.apply("com.jeppeman.mockposable")
+    project.mockposable {
+        plugins = listOf("mockk")
+        composeCompilerPluginVersion = project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
     }
 }
 
