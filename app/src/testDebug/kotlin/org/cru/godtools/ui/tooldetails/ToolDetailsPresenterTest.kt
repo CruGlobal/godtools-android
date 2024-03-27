@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -54,8 +55,8 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
-import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -109,6 +110,17 @@ class ToolDetailsPresenterTest {
         every { canPinToolShortcut(any()) } returns false
     }
     private val syncService: GodToolsSyncService = mockk()
+    private val toolCardPresenter: ToolCardPresenter = mockk {
+        everyComposable {
+            present(
+                tool = any(),
+                loadAppLanguage = true,
+                secondLanguage = null,
+                loadAvailableLanguages = true,
+                eventSink = any()
+            )
+        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(4)) }
+    }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
         context = context,
@@ -124,7 +136,7 @@ class ToolDetailsPresenterTest {
         shortcutManager = shortcutManager,
         syncService = syncService,
         isConnected = isConnected,
-        toolCardPresenter = FakeToolCardPresenter(),
+        toolCardPresenter = toolCardPresenter,
         screen = screen,
         navigator = navigator,
     )
