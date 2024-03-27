@@ -38,6 +38,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -82,6 +84,7 @@ internal fun LanguageSettingsLayout(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@CircuitInject(LanguageSettingsScreen::class, SingletonComponent::class)
 internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier) {
     RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.SETTINGS_LANGUAGES))
 
