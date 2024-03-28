@@ -16,6 +16,8 @@ import org.cru.godtools.base.R
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
+private const val LANGUAGE_NAME_TAGLISH = "Language Name Taglish"
+
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class LocaleUtilsGetDisplayNameTest {
@@ -30,6 +32,8 @@ class LocaleUtilsGetDisplayNameTest {
             every { createConfigurationContext(any()) } returns this
             every { getString(R.string.language_name_fa) } returns "Language Name fa"
             every { getString(R.string.language_name_fil) } returns "Language Name fil"
+            every { getString(R.string.language_name_sid) } returns "Language Name sid"
+            every { getString(R.string.language_name_fil_x_taglish) } returns LANGUAGE_NAME_TAGLISH
         }
     }
 
@@ -37,6 +41,12 @@ class LocaleUtilsGetDisplayNameTest {
     fun preferLanguageNameString() {
         assertEquals("Language Name fa", Locale.forLanguageTag("fa").getDisplayName(context, defaultName = "invalid"))
         assertEquals("Language Name fil", Locale.forLanguageTag("fil").getDisplayName(context, defaultName = "invalid"))
+        assertEquals("Language Name sid", Locale.forLanguageTag("sid").getDisplayName(context, defaultName = "invalid"))
+        assertEquals("Language Name sid", Locale.forLanguageTag("sId").getDisplayName(context, defaultName = "invalid"))
+        assertEquals(
+            LANGUAGE_NAME_TAGLISH,
+            Locale.forLanguageTag("fil-x-taglish").getDisplayName(context, defaultName = "invalid")
+        )
     }
 
     @Test
