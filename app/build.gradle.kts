@@ -167,9 +167,9 @@ dependencies {
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.eventbus)
     implementation(libs.gtoSupport.firebase.crashlytics)
+    implementation(libs.gtoSupport.kermit)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
-    implementation(libs.gtoSupport.napier)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
