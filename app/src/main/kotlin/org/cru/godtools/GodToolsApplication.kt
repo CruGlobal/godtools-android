@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import co.touchlab.kermit.Logger
 import com.google.android.instantapps.InstantApps
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -15,6 +16,7 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.work.TimberLogger
 import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
+import org.ccci.gto.android.common.kermit.TimberLogWriter
 import org.ccci.gto.android.common.util.LocaleUtils
 import timber.log.Timber
 
@@ -26,6 +28,7 @@ open class GodToolsApplication : Application(), Configuration.Provider {
     override fun onCreate() {
         // Enable application monitoring
         initializeCrashlytics()
+        configureLogging()
 
         // configure components
         configureLanguageFallbacks()
@@ -42,6 +45,10 @@ open class GodToolsApplication : Application(), Configuration.Provider {
         // These fallbacks are used for JesusFilm
         LocaleUtils.addFallback("abs", "ms")
         LocaleUtils.addFallback("pmy", "ms")
+    }
+
+    private fun configureLogging() {
+        Logger.setLogWriters(TimberLogWriter)
     }
 
     private fun initializeCrashlytics() {
