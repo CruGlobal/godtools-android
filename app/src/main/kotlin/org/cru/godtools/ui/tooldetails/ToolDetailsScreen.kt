@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
+import androidx.annotation.StringRes
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -8,6 +9,7 @@ import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
+import org.cru.godtools.R
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -28,11 +30,16 @@ class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = n
         val secondTranslation: Translation? = null,
         val secondLanguage: Language? = null,
         val manifest: Manifest? = null,
-        val pages: ImmutableList<ToolDetailsPage> = persistentListOf(ToolDetailsPage.DESCRIPTION),
+        val pages: ImmutableList<Page> = persistentListOf(Page.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: ImmutableList<ToolCard.State> = persistentListOf(),
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
+
+    enum class Page(@StringRes val tabLabel: Int) {
+        DESCRIPTION(R.string.label_tools_about),
+        VARIANTS(R.string.tool_details_section_variants_label)
+    }
 
     sealed interface Event : CircuitUiEvent {
         data object NavigateUp : Event

@@ -71,6 +71,7 @@ import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
@@ -225,8 +226,8 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
             key = { pages[it] }
         ) {
             when (pages[it]) {
-                ToolDetailsPage.DESCRIPTION -> ToolDetailsAbout(state, modifier = Modifier.padding(32.dp))
-                ToolDetailsPage.VARIANTS -> ToolDetailsVariants(state, modifier = Modifier.padding(16.dp))
+                Page.DESCRIPTION -> ToolDetailsAbout(state, modifier = Modifier.padding(32.dp))
+                Page.VARIANTS -> ToolDetailsVariants(state, modifier = Modifier.padding(16.dp))
             }
         }
     }

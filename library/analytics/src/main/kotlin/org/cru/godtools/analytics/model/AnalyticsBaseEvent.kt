@@ -6,10 +6,10 @@ import javax.annotation.concurrent.Immutable
 @Immutable
 abstract class AnalyticsBaseEvent internal constructor(
     val locale: Locale? = null,
-    private val systems: Collection<AnalyticsSystem> = DEFAULT_SYSTEMS
+    private val systems: Set<AnalyticsSystem> = DEFAULT_SYSTEMS
 ) {
     protected companion object {
-        val DEFAULT_SYSTEMS = setOf(*AnalyticsSystem.values()) - AnalyticsSystem.USER
+        val DEFAULT_SYSTEMS = AnalyticsSystem.entries.toSet() - AnalyticsSystem.USER
     }
 
     /**
@@ -27,8 +27,13 @@ abstract class AnalyticsBaseEvent internal constructor(
         javaClass != other?.javaClass -> false
         other !is AnalyticsBaseEvent -> false
         locale != other.locale -> false
+        systems != other.systems -> false
         else -> true
     }
 
-    override fun hashCode() = locale?.hashCode() ?: 0
+    override fun hashCode(): Int {
+        var result = locale?.hashCode() ?: 0
+        result = 31 * result + systems.hashCode()
+        return result
+    }
 }
