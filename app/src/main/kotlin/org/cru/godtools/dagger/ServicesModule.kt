@@ -11,14 +11,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import io.github.aakira.napier.Napier
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
-import org.ccci.gto.android.common.napier.TimberAntilog
 import org.cru.godtools.service.AccountListRegistrationService
 
 @Module(
@@ -42,12 +40,6 @@ abstract class ServicesModule {
         @Provides
         @Singleton
         fun picasso() = Picasso.get()
-
-        @Provides
-        @IntoSet
-        @Singleton
-        @EagerSingleton(threadMode = EagerSingleton.ThreadMode.MAIN)
-        fun napierConfig(): Any = Napier.apply { base(TimberAntilog) }
 
         @Provides
         @Reusable
