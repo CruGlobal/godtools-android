@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -33,6 +35,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -55,6 +59,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:
@@ -87,6 +93,7 @@ jobs:
         with:
           fetch-depth: 0
           lfs: 'true'
+          submodules: 'true'
       - name: Cache Maven
         uses: actions/cache@v4
         with:
@@ -126,6 +133,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: 'true'
       - name: Import Firebase API Key
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}

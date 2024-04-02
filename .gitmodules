@@ -1,0 +1,3 @@
+[submodule "imported/onesky-gradle-plugin"]
+	path = imported/onesky-gradle-plugin
+	url = https://github.com/frett/onesky-gradle-plugin.git
