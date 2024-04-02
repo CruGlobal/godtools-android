@@ -13,6 +13,9 @@ onesky {
     sourceStringFiles = listOf(
         "strings_language_names.xml",
     )
+
+    // an empty list downloads all available languages
+    downloadLanguages = emptyList()
 }
 
 dependencies {
