@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- App Language UI -->
-    <!-- Language Settings UI -->
-    <string name="menu_language_settings">"भाषालाई चुनुहोस "</string>
-    <string name="title_language_settings">बहसलाई चुन्नुहोस</string>
-    <!-- Downloadable Languages UI -->
-</resources>

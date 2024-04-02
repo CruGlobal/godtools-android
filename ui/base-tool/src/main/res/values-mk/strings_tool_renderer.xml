@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Menu Items -->
-    <!-- Share Tool Functionality -->
-    <string name="share_tool_message">Овој линк ќе те однесе до веб верзијата на страницата што последно ја гледавме заедно денеска: %1$s \n\n
-
-Да зборуваме повеќе!</string>
-    <!-- Shareables -->
-</resources>
