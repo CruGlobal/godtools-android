@@ -45,6 +45,10 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="dashboard_tools_section_filter_label">Filtre</string>
     <string name="dashboard_tools_section_filter_category_any">Toute catégorie</string>
     <string name="dashboard_tools_section_filter_language_any">Toute langue</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d Outil disponible</item>
+        <item quantity="other">%1$d Outils disponibles</item>
+    </plurals>
     <string name="dashboard_tools_section_categories_label">Catégories</string>
     <string name="dashboard_tools_section_categories_all">Tous les outils</string>
     <string name="dashboard_tools_section_spotlight_label">Pleins feux sur les outils</string>

@@ -10,7 +10,7 @@
         <item quantity="one">Visualização %1$,d</item>
         <item quantity="other">Visualizações %1$,d</item>
     </plurals>
-    <string name="label_tools_about">Sobre</string>
+    <string name="label_tools_about">Sobre isso</string>
     <plurals name="label_tools_languages">
         <item quantity="one">Idioma %1$,d</item>
         <item quantity="other">Idiomas %1$,d</item>

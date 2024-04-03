@@ -57,6 +57,7 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Hapus</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Batal</string>
     <string name="tool_card_label_language_unavailable">Tidak tersedia dalam %1$s</string>
+    <string name="tool_card_accessibility_language_available">Tersedia</string>
     <string name="action_tools_about">Detail</string>
     <string name="action_tools_open">Buka</string>
     <!-- In App Update -->
