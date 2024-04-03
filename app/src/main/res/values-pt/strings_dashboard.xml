@@ -19,9 +19,9 @@
 
 Há uma versão online aqui: https://knowgod.com/</string>
     <string name="share_story_subject">História do GodTools</string>
-    <string name="menu_heading_about">Sobre</string>
+    <string name="menu_heading_about">Sobre isso</string>
     <string name="menu_terms_of_use">Termos de uso</string>
-    <string name="menu_privacy_policy">Política de Privacidade</string>
+    <string name="menu_privacy_policy">Política de privacidade</string>
     <string name="menu_copyright">Informações sobre Direitos Autorais</string>
     <string name="menu_version">Versão: %1$s (%2$d)</string>
     <!-- Lessons -->
@@ -51,13 +51,14 @@ Há uma versão online aqui: https://knowgod.com/</string>
     <string name="dashboard_tools_section_filter_available_tools_all">Todas as Ferramentas disponíveis</string>
     <string name="dashboard_tools_section_categories_label">Categorias</string>
     <string name="dashboard_tools_section_categories_all">Todas as Ferramentas</string>
-    <string name="dashboard_tools_section_spotlight_label">Ferramenta em Destaque</string>
+    <string name="dashboard_tools_section_spotlight_label">Ferramentas em Destaque</string>
     <string name="dashboard_tools_section_spotlight_description">Aqui estão umas ferramentas que achamos que você poderá apreciar</string>
     <!-- Tool Cards -->
     <string name="tools_list_remove_favorite_dialog_title">Quer remover \"%1$s\" dos Favoritos?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Remover</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Cancelar</string>
     <string name="tool_card_label_language_unavailable">Não disponível em %1$s</string>
+    <string name="tool_card_accessibility_language_available">Disponível</string>
     <string name="action_tools_about">Detalhes</string>
     <string name="action_tools_open">Abrir</string>
     <!-- In App Update -->
