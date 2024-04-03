@@ -23,6 +23,8 @@ onesky {
     sourceStringFiles = listOf(
         "strings_tract_renderer.xml"
     )
+
+    downloadLanguages = emptyList()
 }
 
 dependencies {

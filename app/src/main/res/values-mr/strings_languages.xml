@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- App Language UI -->
-    <!-- Language Settings UI -->
-    <string name="menu_language_settings">भाषेच्या मांडण्या</string>
-    <string name="title_language_settings">भाषेच्या मांडण्या</string>
-    <!-- Downloadable Languages UI -->
-</resources>

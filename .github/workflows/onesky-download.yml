@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - name: Setup Java JDK
         uses: actions/setup-java@v4
         with:

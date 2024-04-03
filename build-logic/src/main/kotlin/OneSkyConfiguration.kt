@@ -25,8 +25,21 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
         apiSecret = findProperty(PROP_API_SECRET)?.toString().orEmpty()
         projectId = 253275
 
-        // TODO: enable this after https://github.com/brainly/onesky-gradle-plugin/pull/6 is merged & released
-        // downloadBaseLanguage = true
+        downloadLanguages = listOf(
+            "ar",
+            "bn",
+            "es",
+            "fr",
+            "hi",
+            "id",
+            "lv",
+            "pt",
+            "ru",
+            "ur",
+            "vi",
+            "zh-CN",
+            "zh-TW",
+        )
 
         configuration()
 
