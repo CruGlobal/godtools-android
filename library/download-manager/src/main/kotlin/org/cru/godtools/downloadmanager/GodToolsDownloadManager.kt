@@ -4,7 +4,6 @@ import androidx.annotation.AnyThread
 import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.work.WorkManager
@@ -553,12 +552,3 @@ fun GodToolsDownloadManager.rememberDownloadProgress(code: String?, locale: Loca
         else -> getDownloadProgressFlow(code, locale)
     }
 }.collectAsState(null).value
-
-@Composable
-fun GodToolsDownloadManager.DownloadLatestTranslation(tool: String?, locale: Locale?, isConnected: Boolean) {
-    if (tool == null || locale == null) return
-
-    LaunchedEffect(this, tool, locale, isConnected) {
-        if (isConnected) downloadLatestPublishedTranslation(tool, locale)
-    }
-}
