@@ -53,7 +53,6 @@ import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.db.repository.rememberLatestTranslation
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
-import org.cru.godtools.downloadmanager.rememberDownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.Tool

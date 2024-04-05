@@ -8,11 +8,9 @@ import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
-import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.just
@@ -91,8 +89,8 @@ class ToolDetailsPresenterTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val downloadManager: GodToolsDownloadManager = mockk {
-        every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
         coEvery { downloadLatestPublishedTranslation(any(), any()) } returns true
+        everyComposable { rememberDownloadProgress(any(), any()) } returns null
 
         excludeRecords { this@mockk.equals(any()) }
     }
@@ -222,15 +220,12 @@ class ToolDetailsPresenterTest {
     fun `State - downloadProgress`() = runTest {
         toolFlow.value = randomTool(TOOL)
         val translationFlow = MutableStateFlow(randomTranslation(TOOL, Locale.ENGLISH))
-        val downloadProgressFlow = MutableStateFlow<DownloadProgress?>(null)
 
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) } returns translationFlow
-        every { downloadManager.getDownloadProgressFlow(TOOL, Locale.ENGLISH) } returns downloadProgressFlow
+        everyComposable { downloadManager.rememberDownloadProgress(TOOL, Locale.ENGLISH) }
+            .returns(DownloadProgress(0, 1))
 
         createPresenter().test {
-            assertNull(expectMostRecentItem().downloadProgress)
-
-            downloadProgressFlow.value = DownloadProgress(0, 1)
             assertEquals(DownloadProgress(0, 1), expectMostRecentItem().downloadProgress)
         }
     }
@@ -439,11 +434,9 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter().test {
             expectMostRecentItem()
-            coVerifyAll { downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH) }
+            coVerify { downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH) }
         }
     }
 
@@ -454,11 +447,9 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
             expectMostRecentItem()
-            coVerifyAll {
+            coVerify {
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
             }
@@ -473,14 +464,11 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
             expectMostRecentItem()
-            verify { downloadManager wasNot Called }
 
             isConnected.value = true
-            coVerifyAll {
+            coVerify {
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
             }
@@ -499,18 +487,14 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow("variant", Locale.FRENCH) }
             .returns(flowOf(randomTranslation("variant", Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
-            coVerifyAll {
+            coVerify {
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
                 downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
             }
             expectMostRecentItem().eventSink(Event.SwitchVariant("variant"))
 
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            coVerify {
                 downloadManager.downloadLatestPublishedTranslation("variant", Locale.ENGLISH)
                 downloadManager.downloadLatestPublishedTranslation("variant", Locale.FRENCH)
             }

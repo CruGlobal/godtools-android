@@ -5,7 +5,6 @@ import androidx.annotation.GuardedBy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
@@ -30,12 +29,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +45,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
+import org.ccci.gto.android.common.kotlin.coroutines.flow.EmptyStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
@@ -118,8 +118,17 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     }
 
     @AnyThread
-    fun getDownloadProgressFlow(tool: String, locale: Locale): Flow<DownloadProgress?> =
-        getDownloadProgressStateFlow(TranslationKey(tool, locale))
+    fun getDownloadProgressFlow(tool: String?, locale: Locale?) = when {
+        tool == null || locale == null -> EmptyStateFlow
+        else -> getDownloadProgressStateFlow(TranslationKey(tool, locale)).asStateFlow()
+    }
+
+    @Composable
+    fun produceDownloadProgressState(tool: String?, locale: Locale?) =
+        getDownloadProgressFlow(tool, locale).collectAsState()
+
+    @Composable
+    fun rememberDownloadProgress(tool: String?, locale: Locale?) = produceDownloadProgressState(tool, locale).value
 
     @AnyThread
     @VisibleForTesting
@@ -544,11 +553,3 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
             .launchIn(coroutineScope)
     }
 }
-
-@Composable
-fun GodToolsDownloadManager.rememberDownloadProgress(code: String?, locale: Locale?) = remember(this, code, locale) {
-    when {
-        code == null || locale == null -> flowOf(null)
-        else -> getDownloadProgressFlow(code, locale)
-    }
-}.collectAsState(null).value

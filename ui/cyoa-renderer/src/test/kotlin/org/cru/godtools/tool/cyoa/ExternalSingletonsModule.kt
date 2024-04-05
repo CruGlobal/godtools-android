@@ -9,8 +9,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.kotlin.coroutines.flow.EmptyStateFlow
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.FollowupService
@@ -29,7 +29,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val downloadManager by lazy {
         mockk<GodToolsDownloadManager> {
-            every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
+            every { getDownloadProgressFlow(any(), any()) } returns EmptyStateFlow
             every { downloadLatestPublishedTranslationAsync(any(), any()) } returns CompletableDeferred(true)
         }
     }
