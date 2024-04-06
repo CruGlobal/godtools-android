@@ -59,6 +59,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
@@ -81,6 +82,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private val settings: Settings,
     private val shortcutManager: GodToolsShortcutManager,
     private val syncService: GodToolsSyncService,
+    private val drawerMenuPresenter: DrawerMenuPresenter,
     private val toolCardPresenter: ToolCardPresenter,
     @Named(IS_CONNECTED_STATE_FLOW)
     private val isConnected: StateFlow<Boolean>,
@@ -163,6 +165,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
             pages = rememberPages(hasVariants = variants.isNotEmpty()),
             availableLanguages = rememberAvailableLanguages(toolCode),
             variants = variants,
+            drawerState = drawerMenuPresenter.present(),
             eventSink = eventSink
         )
     }

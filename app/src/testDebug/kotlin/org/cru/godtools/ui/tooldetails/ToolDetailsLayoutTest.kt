@@ -14,12 +14,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.ui.drawer.DrawerViewModel
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
 import org.greenrobot.eventbus.EventBus
@@ -34,19 +31,6 @@ class ToolDetailsLayoutTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private val events = TestEventSink<Event>()
-
-    @BeforeTest
-    fun setup() {
-        // TODO: remove this once we migrate DrawerLayout to Circuit
-        composeTestRule.activity.viewModelStore.put(
-            "androidx.lifecycle.ViewModelProvider.DefaultKey:${DrawerViewModel::class.java.canonicalName}",
-            DrawerViewModel(
-                accountManager = mockk {
-                    every { isAuthenticatedFlow } returns flowOf(false)
-                }
-            ),
-        )
-    }
 
     private fun renderToolDetailsLayout(state: State = State(eventSink = events)) = composeTestRule.setContent {
         CompositionLocalProvider(
