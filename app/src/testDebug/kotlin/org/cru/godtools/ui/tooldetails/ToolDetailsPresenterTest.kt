@@ -31,6 +31,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -355,7 +356,7 @@ class ToolDetailsPresenterTest {
         }
 
         with(navigator.awaitNextScreen()) {
-            assertTrue(this is IntentScreen)
+            assertIs<IntentScreen>(this)
             val expected = toolFlow.value?.createToolIntent(
                 context,
                 listOf(Locale.ENGLISH, Locale.FRENCH),
