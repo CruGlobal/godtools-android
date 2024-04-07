@@ -2,7 +2,7 @@
 <resources>
     <string name="tool_not_found">Pieprasīto rīku neizdevās atrast</string>
     <string name="tool_loading">Tavs pieprasītais rīks tiek ielādēts…</string>
-    <string name="tool_offline">Tava pieprasītā rīka atvēršanai ir nepieciešams interneta pieslēgums</string>
+    <string name="tool_offline">Tava pieprasītā rīka atvēršanai ir nepieciešams interneta pieslēgums.</string>
     <string name="tract_content_input_error_required">Lauks \"%1$s\" aizpildāms obligāti!</string>
     <string name="tract_content_input_error_invalid_email">Lūdzu, ievadi derīgu e-pasta adresi!</string>
     <!-- Menu Items -->

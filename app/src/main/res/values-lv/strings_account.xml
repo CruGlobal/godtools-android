@@ -9,7 +9,7 @@
     <string name="account_login_description">Ieej savā kontā, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_error_user_already_exists">Lietotāja konts jau pastāv.</string>
     <string name="account_error_user_not_found">Lietotāja konts nav atrasts.</string>
-    <string name="account_error_unknown">Kļūda, pierakstoties sistēmā.</string>
+    <string name="account_error_unknown">Kļūda, piesakoties sistēmā.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Dzēst kontu</string>
@@ -81,7 +81,7 @@
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Globālā aktivitāte</string>
-    <string name="profile_global_activity_heading">%1$s globālajā aktivitātē</string>
+    <string name="profile_global_activity_heading">Globālā aktivitāte %1$s</string>
     <string name="profile_activity_unique_users">Unikālie
 lietotāji</string>
     <string name="profile_activity_gospel_presentations">Labās vēsts
