@@ -88,7 +88,7 @@ internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 @Composable
 @CircuitInject(ToolDetailsScreen::class, SingletonComponent::class)
 @OptIn(ExperimentalMaterial3Api::class)
-fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuLayout(modifier) {
+fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuLayout(state.drawerState, modifier) {
     val hasShortcut by rememberUpdatedState(state.hasShortcut)
     val eventSink by rememberUpdatedState(state.eventSink)
 

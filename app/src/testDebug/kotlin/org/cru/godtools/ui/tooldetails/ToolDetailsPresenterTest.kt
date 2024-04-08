@@ -2,6 +2,8 @@ package org.cru.godtools.ui.tooldetails
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jeppeman.mockposable.mockk.everyComposable
@@ -57,6 +59,8 @@ import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.drawer.DrawerMenuPresenter
+import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -98,6 +102,9 @@ class ToolDetailsPresenterTest {
 
         excludeRecords { this@mockk.equals(any()) }
     }
+    private val drawerMenuPresenter: DrawerMenuPresenter = mockk {
+        everyComposable { present() } returns DrawerMenuScreen.State()
+    }
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val fileSystem: ToolFileSystem = mockk()
     private val manifestManager: ManifestManager = mockk {
@@ -138,6 +145,7 @@ class ToolDetailsPresenterTest {
         shortcutManager = shortcutManager,
         syncService = syncService,
         isConnected = isConnected,
+        drawerMenuPresenter = drawerMenuPresenter,
         toolCardPresenter = toolCardPresenter,
         screen = screen,
         navigator = navigator,
@@ -291,6 +299,21 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion State.variants
+
+    // region State.drawerState
+    @Test
+    fun `State - drawerState`() = runTest {
+        val drawerState = DrawerMenuScreen.State(
+            drawerState = DrawerState(DrawerValue.Open),
+            isLoggedIn = Random.nextBoolean()
+        )
+        everyComposable { drawerMenuPresenter.present() } returns drawerState
+
+        createPresenter().test {
+            assertEquals(drawerState, expectMostRecentItem().drawerState)
+        }
+    }
+    // endregion State.drawerState
 
     // region Event.OpenTool
     @Test
