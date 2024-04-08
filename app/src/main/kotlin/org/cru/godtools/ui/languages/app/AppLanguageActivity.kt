@@ -5,7 +5,7 @@ import androidx.activity.compose.setContent
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
-import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,9 +23,10 @@ class AppLanguageActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack(AppLanguageScreen)
-                    val navigator = rememberCircuitNavigator(backStack)
-                    NavigableCircuitContent(navigator, backStack)
+                    CircuitContent(
+                        AppLanguageScreen,
+                        rememberCircuitNavigator(rememberSaveableBackStack(AppLanguageScreen))
+                    )
                 }
             }
         }
