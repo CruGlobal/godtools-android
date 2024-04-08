@@ -12,7 +12,6 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import org.cru.godtools.base.Settings.Companion.FEATURE_LANGUAGE_SETTINGS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
@@ -28,7 +27,6 @@ class LanguageSettingsActivity : BaseActivity() {
     @Inject
     internal lateinit var circuit: Circuit
 
-    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -41,10 +39,4 @@ class LanguageSettingsActivity : BaseActivity() {
             }
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        settings.setFeatureDiscovered(FEATURE_LANGUAGE_SETTINGS)
-    }
-    // endregion Lifecycle
 }

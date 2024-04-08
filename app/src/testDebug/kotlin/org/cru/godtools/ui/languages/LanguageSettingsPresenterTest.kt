@@ -9,9 +9,12 @@ import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.verify
 import java.util.Locale
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -50,6 +53,7 @@ class LanguageSettingsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguage } returns this@LanguageSettingsPresenterTest.appLanguage.value
         every { appLanguageFlow } returns this@LanguageSettingsPresenterTest.appLanguage
+        every { setFeatureDiscovered(any()) } just Runs
     }
 
     private lateinit var presenter: LanguageSettingsPresenter
@@ -66,6 +70,14 @@ class LanguageSettingsPresenterTest {
             drawerMenuPresenter = drawerMenuPresenter,
             navigator = navigator
         )
+    }
+
+    @Test
+    fun `SideEffect - Feature Discovered - Language Settings`() = runTest {
+        presenter.test {
+            expectMostRecentItem()
+            verify { settings.setFeatureDiscovered(Settings.FEATURE_LANGUAGE_SETTINGS) }
+        }
     }
 
     @Test

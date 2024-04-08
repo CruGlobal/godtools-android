@@ -8,6 +8,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.android.IntentScreen
+import com.slack.circuitx.effects.ImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -37,20 +38,24 @@ class LanguageSettingsPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
 ) : Presenter<State> {
     @Composable
-    override fun present() = State(
-        appLanguage = settings.produceAppLocaleState().value,
-        appLanguages = rememberAppLanguages(),
-        downloadedLanguages = produceDownloadedLanguagesState().value,
-        drawerState = drawerMenuPresenter.present(),
-        eventSink = {
-            when (it) {
-                Event.NavigateUp -> navigator.pop()
-                Event.AppLanguage -> navigator.goTo(AppLanguageScreen)
-                Event.DownloadableLanguages ->
-                    navigator.goTo(IntentScreen(context.createDownloadableLanguagesIntent()))
+    override fun present(): State {
+        ImpressionEffect { settings.setFeatureDiscovered(Settings.FEATURE_LANGUAGE_SETTINGS) }
+
+        return State(
+            appLanguage = settings.produceAppLocaleState().value,
+            appLanguages = rememberAppLanguages(),
+            downloadedLanguages = produceDownloadedLanguagesState().value,
+            drawerState = drawerMenuPresenter.present(),
+            eventSink = {
+                when (it) {
+                    Event.NavigateUp -> navigator.pop()
+                    Event.AppLanguage -> navigator.goTo(AppLanguageScreen)
+                    Event.DownloadableLanguages ->
+                        navigator.goTo(IntentScreen(context.createDownloadableLanguagesIntent()))
+                }
             }
-        }
-    )
+        )
+    }
 
     @Composable
     private fun rememberAppLanguages() =
