@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.tools
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.coEvery
@@ -35,7 +36,8 @@ import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen.FiltersEvent
-import org.cru.godtools.ui.tools.FakeToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -77,8 +79,10 @@ class ToolsPresenterTest {
         every { getTranslationsFlowForTools(any()) } returns flowOf(emptyList())
     }
 
-    // TODO: figure out how to mock ToolCardPresenter
-    private val toolCardPresenter = FakeToolCardPresenter()
+    private val toolCardPresenter: ToolCardPresenter = mockk {
+        everyComposable { present(tool = any(), secondLanguage = any(), eventSink = any()) }
+            .answers { ToolCard.State(tool = firstArg()) }
+    }
 
     private lateinit var presenter: ToolsPresenter
 

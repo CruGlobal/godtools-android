@@ -47,6 +47,7 @@ dependencies {
     testImplementation(project(":library:model"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
+    testImplementation(libs.gtoSupport.kotlin.coroutines)
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.hilt.testing)
     kaptTest(libs.hilt.compiler)

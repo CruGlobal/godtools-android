@@ -51,9 +51,8 @@ import org.cru.godtools.db.repository.produceToolState
 import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.db.repository.rememberLatestTranslation
-import org.cru.godtools.downloadmanager.DownloadLatestTranslation
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
-import org.cru.godtools.downloadmanager.rememberDownloadProgress
+import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.getSortedDisplayNames
 import org.cru.godtools.model.Tool
@@ -144,8 +143,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
         val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage, eventSink = eventSink)
 
         // Side Effects
-        downloadManager.DownloadLatestTranslation(toolCode, translation?.languageCode, isConnected)
-        downloadManager.DownloadLatestTranslation(toolCode, secondTranslation?.languageCode, isConnected)
+        DownloadLatestTranslation(downloadManager, toolCode, translation?.languageCode, isConnected)
+        DownloadLatestTranslation(downloadManager, toolCode, secondTranslation?.languageCode, isConnected)
 
         return State(
             toolCode = toolCode,

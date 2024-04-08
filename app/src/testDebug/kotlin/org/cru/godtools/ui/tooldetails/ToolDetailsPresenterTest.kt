@@ -4,24 +4,27 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
+import com.jeppeman.mockposable.mockk.verifyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
-import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.mockk.verifyAll
 import java.io.File
 import java.util.Locale
 import kotlin.random.Random
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -45,6 +48,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
+import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
@@ -54,8 +58,8 @@ import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
-import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -90,8 +94,7 @@ class ToolDetailsPresenterTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val downloadManager: GodToolsDownloadManager = mockk {
-        every { getDownloadProgressFlow(any(), any()) } returns flowOf(null)
-        coEvery { downloadLatestPublishedTranslation(any(), any()) } returns true
+        everyComposable { rememberDownloadProgress(any(), any()) } returns null
 
         excludeRecords { this@mockk.equals(any()) }
     }
@@ -109,6 +112,17 @@ class ToolDetailsPresenterTest {
         every { canPinToolShortcut(any()) } returns false
     }
     private val syncService: GodToolsSyncService = mockk()
+    private val toolCardPresenter: ToolCardPresenter = mockk {
+        everyComposable {
+            present(
+                tool = any(),
+                loadAppLanguage = true,
+                secondLanguage = null,
+                loadAvailableLanguages = true,
+                eventSink = any()
+            )
+        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(4)) }
+    }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
         context = context,
@@ -124,13 +138,22 @@ class ToolDetailsPresenterTest {
         shortcutManager = shortcutManager,
         syncService = syncService,
         isConnected = isConnected,
-        toolCardPresenter = FakeToolCardPresenter(),
+        toolCardPresenter = toolCardPresenter,
         screen = screen,
         navigator = navigator,
     )
 
+    @BeforeTest
+    fun setup() {
+        mockkStatic("org.cru.godtools.downloadmanager.compose.DownloadLatestTranslationKt")
+        everyComposable { DownloadLatestTranslation(any(), any(), any(), any()) } just Runs
+    }
+
     @AfterTest
-    fun cleanup() = clearAndroidUiDispatcher()
+    fun cleanup() {
+        unmockkStatic("org.cru.godtools.downloadmanager.compose.DownloadLatestTranslationKt")
+        clearAndroidUiDispatcher()
+    }
 
     // region State.tool
     @Test
@@ -210,15 +233,12 @@ class ToolDetailsPresenterTest {
     fun `State - downloadProgress`() = runTest {
         toolFlow.value = randomTool(TOOL)
         val translationFlow = MutableStateFlow(randomTranslation(TOOL, Locale.ENGLISH))
-        val downloadProgressFlow = MutableStateFlow<DownloadProgress?>(null)
 
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) } returns translationFlow
-        every { downloadManager.getDownloadProgressFlow(TOOL, Locale.ENGLISH) } returns downloadProgressFlow
+        everyComposable { downloadManager.rememberDownloadProgress(TOOL, Locale.ENGLISH) }
+            .returns(DownloadProgress(0, 1))
 
         createPresenter().test {
-            assertNull(expectMostRecentItem().downloadProgress)
-
-            downloadProgressFlow.value = DownloadProgress(0, 1)
             assertEquals(DownloadProgress(0, 1), expectMostRecentItem().downloadProgress)
         }
     }
@@ -427,11 +447,11 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter().test {
             expectMostRecentItem()
-            coVerifyAll { downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH) }
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
+            }
         }
     }
 
@@ -442,13 +462,11 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
             expectMostRecentItem()
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
         }
     }
@@ -461,16 +479,16 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
-            expectMostRecentItem()
-            verify { downloadManager wasNot Called }
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, false)
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, false)
+            }
 
             isConnected.value = true
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
             cancelAndIgnoreRemainingEvents()
         }
@@ -487,20 +505,16 @@ class ToolDetailsPresenterTest {
         every { translationsRepository.findLatestTranslationFlow("variant", Locale.FRENCH) }
             .returns(flowOf(randomTranslation("variant", Locale.FRENCH)))
 
-        excludeRecords { downloadManager.getDownloadProgressFlow(any(), any()) }
-
         createPresenter(ToolDetailsScreen(TOOL, Locale.FRENCH)).test {
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
+                DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
             expectMostRecentItem().eventSink(Event.SwitchVariant("variant"))
 
-            coVerifyAll {
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation(TOOL, Locale.FRENCH)
-                downloadManager.downloadLatestPublishedTranslation("variant", Locale.ENGLISH)
-                downloadManager.downloadLatestPublishedTranslation("variant", Locale.FRENCH)
+            verifyComposable {
+                DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)
+                DownloadLatestTranslation(downloadManager, "variant", Locale.FRENCH, true)
             }
             cancelAndIgnoreRemainingEvents()
         }

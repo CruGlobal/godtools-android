@@ -1,4 +1,4 @@
-package org.cru.godtools.downloadmanager
+package org.cru.godtools.downloadmanager.compose
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -11,12 +11,13 @@ import io.mockk.mockk
 import io.mockk.verify
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class GodToolsDownloadManagerComposeTest {
+class DownloadLatestTranslationTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -29,7 +30,7 @@ class GodToolsDownloadManagerComposeTest {
     // region DownloadLatestTranslation()
     @Test
     fun `DownloadLatestTranslation()`() {
-        composeTestRule.setContent { downloadManager.DownloadLatestTranslation("kgp", Locale.ENGLISH, true) }
+        composeTestRule.setContent { DownloadLatestTranslation(downloadManager, "kgp", Locale.ENGLISH, true) }
 
         composeTestRule.runOnIdle {
             coVerifyAll {
@@ -40,7 +41,7 @@ class GodToolsDownloadManagerComposeTest {
 
     @Test
     fun `DownloadLatestTranslation() - null tool`() {
-        composeTestRule.setContent { downloadManager.DownloadLatestTranslation(null, Locale.ENGLISH, true) }
+        composeTestRule.setContent { DownloadLatestTranslation(downloadManager, null, Locale.ENGLISH, true) }
 
         composeTestRule.runOnIdle {
             verify { downloadManager wasNot Called }
@@ -49,7 +50,7 @@ class GodToolsDownloadManagerComposeTest {
 
     @Test
     fun `DownloadLatestTranslation() - null locale`() {
-        composeTestRule.setContent { downloadManager.DownloadLatestTranslation("kgp", null, true) }
+        composeTestRule.setContent { DownloadLatestTranslation(downloadManager, "kgp", null, true) }
 
         composeTestRule.runOnIdle {
             verify { downloadManager wasNot Called }
@@ -58,7 +59,7 @@ class GodToolsDownloadManagerComposeTest {
 
     @Test
     fun `DownloadLatestTranslation() - offline`() {
-        composeTestRule.setContent { downloadManager.DownloadLatestTranslation("kgp", Locale.ENGLISH, false) }
+        composeTestRule.setContent { DownloadLatestTranslation(downloadManager, "kgp", Locale.ENGLISH, false) }
 
         composeTestRule.runOnIdle {
             verify { downloadManager wasNot Called }
@@ -69,7 +70,7 @@ class GodToolsDownloadManagerComposeTest {
     fun `DownloadLatestTranslation() - Triggers when going online`() {
         val isConnected = MutableStateFlow(false)
         composeTestRule.setContent {
-            downloadManager.DownloadLatestTranslation("kgp", Locale.ENGLISH, isConnected.collectAsState().value)
+            DownloadLatestTranslation(downloadManager, "kgp", Locale.ENGLISH, isConnected.collectAsState().value)
         }
 
         composeTestRule.runOnIdle { verify { downloadManager wasNot Called } }
