@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.drawer.DrawerMenuScreen
 
 @Parcelize
 object LanguageSettingsScreen : Screen {
@@ -15,6 +16,7 @@ object LanguageSettingsScreen : Screen {
         val appLanguage: Locale,
         val appLanguages: Int = 0,
         val downloadedLanguages: ImmutableList<Language> = persistentListOf(),
+        val drawerState: DrawerMenuScreen.State = DrawerMenuScreen.State(),
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 

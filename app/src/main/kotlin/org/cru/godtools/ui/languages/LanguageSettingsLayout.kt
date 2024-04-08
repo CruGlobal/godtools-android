@@ -26,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,7 +36,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
@@ -49,38 +47,11 @@ import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 
-internal sealed interface LanguageSettingsEvent {
-    data object NavigateUp : LanguageSettingsEvent
-    data object AppLanguage : LanguageSettingsEvent
-    data object DownloadableLanguages : LanguageSettingsEvent
-}
-
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 
 private const val SECTION_APP_LANGUAGE = "app_language"
 private const val SECTION_OFFLINE_LANGUAGES_TOP = "offline_languages_top"
 private const val SECTION_OFFLINE_LANGUAGES_BOTTOM = "offline_languages_bottom"
-
-@Composable
-internal fun LanguageSettingsLayout(
-    viewModel: LanguageSettingsViewModel = viewModel(),
-    onEvent: (LanguageSettingsEvent) -> Unit = {},
-) {
-    val state = State(
-        appLanguage = viewModel.appLanguage.collectAsState().value,
-        appLanguages = viewModel.appLanguages.collectAsState().value,
-        downloadedLanguages = viewModel.pinnedLanguages.collectAsState().value,
-        eventSink = {
-            when (it) {
-                Event.NavigateUp -> onEvent(LanguageSettingsEvent.NavigateUp)
-                Event.AppLanguage -> onEvent(LanguageSettingsEvent.AppLanguage)
-                Event.DownloadableLanguages -> onEvent(LanguageSettingsEvent.DownloadableLanguages)
-            }
-        }
-    )
-
-    LanguageSettingsLayout(state)
-}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -93,7 +64,7 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
     val eventSink by rememberUpdatedState(state.eventSink)
     val pinnedLanguages by rememberUpdatedState(state.downloadedLanguages)
 
-    DrawerMenuLayout {
+    DrawerMenuLayout(state.drawerState) {
         Scaffold(
             topBar = {
                 TopAppBar(

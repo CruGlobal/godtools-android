@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.core.os.LocaleListCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -24,6 +25,8 @@ import org.ccci.gto.android.common.util.os.equalsBundle
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.drawer.DrawerMenuPresenter
+import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.app.AppLanguageScreen
 import org.cru.godtools.ui.languages.downloadable.createDownloadableLanguagesIntent
@@ -41,6 +44,9 @@ class LanguageSettingsPresenterTest {
     private val languagesRepository: LanguagesRepository = mockk {
         every { getPinnedLanguagesFlow() } returns pinnedLanguages
     }
+    private val drawerMenuPresenter: DrawerMenuPresenter = mockk {
+        everyComposable { present() } returns DrawerMenuScreen.State()
+    }
     private val settings: Settings = mockk {
         every { appLanguage } returns this@LanguageSettingsPresenterTest.appLanguage.value
         every { appLanguageFlow } returns this@LanguageSettingsPresenterTest.appLanguage
@@ -57,6 +63,7 @@ class LanguageSettingsPresenterTest {
             context = context,
             settings = settings,
             languagesRepository = languagesRepository,
+            drawerMenuPresenter = drawerMenuPresenter,
             navigator = navigator
         )
     }

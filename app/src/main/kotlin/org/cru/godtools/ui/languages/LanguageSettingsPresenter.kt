@@ -22,6 +22,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 import org.cru.godtools.ui.languages.app.AppLanguageScreen
@@ -32,6 +33,7 @@ class LanguageSettingsPresenter @AssistedInject constructor(
     private val context: Context,
     private val settings: Settings,
     private val languagesRepository: LanguagesRepository,
+    private val drawerMenuPresenter: DrawerMenuPresenter,
     @Assisted private val navigator: Navigator,
 ) : Presenter<State> {
     @Composable
@@ -39,6 +41,7 @@ class LanguageSettingsPresenter @AssistedInject constructor(
         appLanguage = settings.produceAppLocaleState().value,
         appLanguages = rememberAppLanguages(),
         downloadedLanguages = produceDownloadedLanguagesState().value,
+        drawerState = drawerMenuPresenter.present(),
         eventSink = {
             when (it) {
                 Event.NavigateUp -> navigator.pop()
