@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.os.LocaleListCompat
@@ -20,12 +19,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.getBooleanLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.getIntLiveData
 import org.ccci.gto.android.common.kotlin.coroutines.getBooleanFlow
@@ -73,10 +71,8 @@ class Settings internal constructor(private val context: Context, coroutineScope
         get() = context.appLanguage
         set(value) = AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(value))
 
-    val appLanguageFlow: Flow<Locale> = context.getAppLanguageFlow()
-        .shareIn(coroutineScope, SharingStarted.WhileSubscribed(5_000))
-        .onStart { emit(context.appLanguage) }
-        .distinctUntilChanged()
+    val appLanguageFlow = context.getAppLanguageFlow()
+        .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), context.appLanguage)
     // endregion Language Settings
 
     // region Feature Discovery Tracking
@@ -203,4 +199,4 @@ private val Context.versionCode
     get() = PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(packageName, 0))
 
 @Composable
-fun Settings.produceAppLocaleState() = remember { appLanguageFlow }.collectAsState(remember { appLanguage })
+fun Settings.produceAppLocaleState() = appLanguageFlow.collectAsState()

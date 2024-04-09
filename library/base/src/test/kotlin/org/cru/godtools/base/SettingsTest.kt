@@ -11,7 +11,7 @@ import java.util.Locale
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNull
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.junit.Assert.assertEquals
@@ -78,10 +78,9 @@ class SettingsTest {
     // region produceAppLocaleState()
     @Test
     fun `produceAppLocaleState()`() = runTest {
-        val appLocaleFlow = MutableSharedFlow<Locale>()
+        val appLocaleFlow = MutableStateFlow<Locale>(Locale.ENGLISH)
         val settings: Settings = mockk {
             every { appLanguageFlow } returns appLocaleFlow
-            every { appLanguage } returns Locale.ENGLISH
         }
 
         moleculeFlow(RecompositionMode.Immediate) { settings.produceAppLocaleState().value }.test {
