@@ -73,6 +73,9 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
     val appLanguageFlow = context.getAppLanguageFlow()
         .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), context.appLanguage)
+
+    @Composable
+    fun produceAppLocaleState() = appLanguageFlow.collectAsState()
     // endregion Language Settings
 
     // region Feature Discovery Tracking
@@ -197,6 +200,3 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
 private val Context.versionCode
     get() = PackageInfoCompat.getLongVersionCode(packageManager.getPackageInfo(packageName, 0))
-
-@Composable
-fun Settings.produceAppLocaleState() = appLanguageFlow.collectAsState()

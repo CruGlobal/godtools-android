@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jeppeman.mockposable.mockk.everyComposable
@@ -76,6 +77,7 @@ private const val TOOL = "tool"
 class ToolDetailsPresenterTest {
     private val isConnected = MutableStateFlow(true)
     private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
+    private val appLocaleState = mutableStateOf(Locale.ENGLISH)
     private val toolFlow = MutableStateFlow<Tool?>(null)
     private val normalToolsFlow = MutableStateFlow(emptyList<Tool>())
 
@@ -112,8 +114,8 @@ class ToolDetailsPresenterTest {
     }
     private val navigator = FakeNavigator(ToolDetailsScreen(TOOL))
     private val settings: Settings = mockk {
-        every { appLanguage } returns appLocaleFlow.value
         every { appLanguageFlow } returns appLocaleFlow
+        everyComposable { produceAppLocaleState() } returns appLocaleState
     }
     private val shortcutManager: GodToolsShortcutManager = mockk {
         every { canPinToolShortcut(any()) } returns false

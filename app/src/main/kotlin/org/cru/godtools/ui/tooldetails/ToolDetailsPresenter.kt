@@ -39,7 +39,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.base.BaseModule.IS_CONNECTED_STATE_FLOW
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
-import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.service.produceManifestState
 import org.cru.godtools.db.repository.AttachmentsRepository

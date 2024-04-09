@@ -2,7 +2,9 @@ package org.cru.godtools.ui.tools
 
 import android.app.Application
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.TestEventSink
 import com.slack.circuit.test.presenterTestOf
 import io.mockk.Called
@@ -46,17 +48,16 @@ private const val BANNER_ID = 1L
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class ToolCardPresenterTest {
+    private val appLocaleState = mutableStateOf(Locale.ENGLISH)
     private val toolFlow = MutableStateFlow(randomTool(TOOL, bannerId = BANNER_ID))
     private val bannerFlow = MutableSharedFlow<Attachment?>(extraBufferCapacity = 1)
-    private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val frLanguageFlow = MutableSharedFlow<Language?>(extraBufferCapacity = 1)
     private val enTranslationFlow = MutableSharedFlow<Translation?>(extraBufferCapacity = 1)
     private val frTranslationFlow = MutableSharedFlow<Translation?>(extraBufferCapacity = 1)
 
     private val fileSystem: ToolFileSystem = mockk()
     private val settings: Settings = mockk {
-        every { appLanguageFlow } returns appLocaleFlow
-        every { appLanguage } returns appLocaleFlow.value
+        everyComposable { produceAppLocaleState() } returns appLocaleState
     }
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
@@ -175,7 +176,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.FRENCH)
 
         presenterTestOf(
@@ -192,7 +193,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation - fallback to default language`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
         presenterTestOf(
@@ -210,7 +211,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - translation - don't emit fallback if primary hasn't loaded yet`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
         presenterTestOf(
@@ -229,7 +230,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - appLanguage`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
 
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, loadAppLanguage = true) }
@@ -242,7 +243,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - appLanguage - loadAppLanguage=false`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
 
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, loadAppLanguage = false) }
@@ -259,7 +260,7 @@ class ToolCardPresenterTest {
     @Test
     fun `ToolCardState - appTranslation`() = runTest {
         toolFlow.value = randomTool(TOOL)
-        appLocaleFlow.value = Locale.FRENCH
+        appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.FRENCH)
 
         presenterTestOf(

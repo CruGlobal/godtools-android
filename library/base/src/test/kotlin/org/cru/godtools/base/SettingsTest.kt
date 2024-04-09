@@ -1,13 +1,16 @@
 package org.cru.godtools.base
 
+import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import io.mockk.every
-import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import java.util.Locale
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertNull
@@ -23,11 +26,22 @@ private const val FEATURE_TEST = "testFeature"
 
 @RunWith(AndroidJUnit4::class)
 class SettingsTest {
+    private val contextAppLanguage = MutableStateFlow(Locale.ENGLISH)
+
     private lateinit var settings: Settings
 
     @BeforeTest
     fun setup() {
+        mockkStatic("org.cru.godtools.base.AppLanguageKt")
+        every { any<Context>().appLanguage } answers { contextAppLanguage.value }
+        every { any<Context>().getAppLanguageFlow() } returns contextAppLanguage
+
         settings = Settings(ApplicationProvider.getApplicationContext())
+    }
+
+    @AfterTest
+    fun cleanup() {
+        unmockkStatic("org.cru.godtools.base.AppLanguageKt")
     }
 
     @Test
@@ -78,18 +92,13 @@ class SettingsTest {
     // region produceAppLocaleState()
     @Test
     fun `produceAppLocaleState()`() = runTest {
-        val appLocaleFlow = MutableStateFlow<Locale>(Locale.ENGLISH)
-        val settings: Settings = mockk {
-            every { appLanguageFlow } returns appLocaleFlow
-        }
-
         moleculeFlow(RecompositionMode.Immediate) { settings.produceAppLocaleState().value }.test {
             // check the initial appLocale
             assertEquals(Locale.ENGLISH, awaitItem())
 
             // emit an updated locale from the appLocaleFlow
-            appLocaleFlow.emit(Locale.FRENCH)
-            assertEquals(Locale.FRENCH, expectMostRecentItem())
+            contextAppLanguage.emit(Locale.FRENCH)
+            assertEquals(Locale.FRENCH, awaitItem())
         }
     }
     // endregion produceAppLocaleState()

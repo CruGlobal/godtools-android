@@ -2,6 +2,7 @@ package org.cru.godtools.ui.languages
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.os.LocaleListCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -40,6 +41,7 @@ import org.robolectric.annotation.Config
 @Config(application = Application::class)
 class LanguageSettingsPresenterTest {
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
+    private val appLocaleState = mutableStateOf(Locale.ENGLISH)
     private val pinnedLanguages = MutableStateFlow(emptyList<Language>())
 
     private val context: Context get() = ApplicationProvider.getApplicationContext()
@@ -51,8 +53,8 @@ class LanguageSettingsPresenterTest {
         everyComposable { present() } returns DrawerMenuScreen.State()
     }
     private val settings: Settings = mockk {
-        every { appLanguage } returns this@LanguageSettingsPresenterTest.appLanguage.value
         every { appLanguageFlow } returns this@LanguageSettingsPresenterTest.appLanguage
+        everyComposable { produceAppLocaleState() } returns appLocaleState
         every { setFeatureDiscovered(any()) } just Runs
     }
 
@@ -85,7 +87,7 @@ class LanguageSettingsPresenterTest {
         presenter.test {
             assertEquals(Locale.ENGLISH, expectMostRecentItem().appLanguage)
 
-            appLanguage.value = Locale.FRENCH
+            appLocaleState.value = Locale.FRENCH
             assertEquals(Locale.FRENCH, expectMostRecentItem().appLanguage)
         }
     }
