@@ -8,10 +8,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
-fun Context.startDownloadableLanguagesActivity() = startActivity(
-    Intent(this, DownloadableLanguagesActivity::class.java)
-        .putExtras(BaseActivity.buildExtras(this))
-)
+fun Context.startDownloadableLanguagesActivity() = startActivity(createDownloadableLanguagesIntent())
+
+fun Context.createDownloadableLanguagesIntent() = Intent(this, DownloadableLanguagesActivity::class.java)
+    .putExtras(BaseActivity.buildExtras(this))
 
 @AndroidEntryPoint
 class DownloadableLanguagesActivity : BaseActivity() {
