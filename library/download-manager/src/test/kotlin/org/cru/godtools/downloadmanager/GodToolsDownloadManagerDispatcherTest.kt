@@ -16,6 +16,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -37,7 +38,7 @@ import org.cru.godtools.model.randomTranslation
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsDownloadManagerDispatcherTest {
-    private val appLanguageFlow = MutableSharedFlow<Locale>(replay = 1)
+    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val pinnedLanguagesFlow = MutableSharedFlow<List<Language>>(replay = 1)
     private val attachmentsFlow = MutableSharedFlow<List<Attachment>>(replay = 1)
     private val downloadedFilesFlow = MutableSharedFlow<List<DownloadedFile>>(replay = 1)

@@ -1,9 +1,11 @@
 package org.cru.godtools.ui.languages.app
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.os.LocaleListCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.every
@@ -19,7 +21,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
@@ -30,13 +31,12 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class AppLanguagePresenterTest {
-    private val appLanguage = MutableStateFlow(Locale.ENGLISH)
+    private val appLocaleState = mutableStateOf(Locale.ENGLISH)
 
     private val navigator = FakeNavigator(AppLanguageScreen)
     private val settings: Settings = mockk {
-        every { appLanguage } returns this@AppLanguagePresenterTest.appLanguage.value
-        every { appLanguage = any() } answers { this@AppLanguagePresenterTest.appLanguage.value = firstArg() }
-        every { appLanguageFlow } returns this@AppLanguagePresenterTest.appLanguage
+        every { appLanguage = any() } answers { appLocaleState.value = firstArg() }
+        everyComposable { produceAppLocaleState() } returns appLocaleState
     }
 
     private lateinit var presenter: AppLanguagePresenter
@@ -77,10 +77,10 @@ class AppLanguagePresenterTest {
             .returns(LocaleListCompat.create(Locale.FRENCH, Locale("es")))
 
         presenter.test {
-            appLanguage.value = Locale.ENGLISH
+            appLocaleState.value = Locale.ENGLISH
             assertEquals(listOf(Locale.FRENCH, Locale("es")), expectMostRecentItem().languages)
 
-            appLanguage.value = Locale("es")
+            appLocaleState.value = Locale("es")
             assertEquals(listOf(Locale("es"), Locale.FRENCH), expectMostRecentItem().languages)
         }
         navigator.assertIsEmpty()
@@ -88,9 +88,9 @@ class AppLanguagePresenterTest {
 
     @Test
     fun `State - languages - filtered by language query`() = runTest {
+        appLocaleState.value = Locale.ENGLISH
         every { LocaleConfigCompat.getSupportedLocales(any()) }
             .returns(LocaleListCompat.create(Locale.ENGLISH, Locale("es")))
-        appLanguage.value = Locale.ENGLISH
 
         presenter.test {
             val eventSink = expectMostRecentItem().eventSink
@@ -149,7 +149,7 @@ class AppLanguagePresenterTest {
 
             navigator.awaitPop()
             assertNull(expectMostRecentItem().selectedLanguage)
-            assertEquals(Locale.FRENCH, appLanguage.value)
+            assertEquals(Locale.FRENCH, appLocaleState.value)
         }
     }
     // endregion Event.ConfirmLanguage
@@ -168,7 +168,7 @@ class AppLanguagePresenterTest {
             assertNull(expectMostRecentItem().selectedLanguage)
         }
 
-        assertNotEquals(Locale.FRENCH, appLanguage.value)
+        assertNotEquals(Locale.FRENCH, appLocaleState.value)
         navigator.assertIsEmpty()
     }
     // endregion Event.DismissConfirmDialog

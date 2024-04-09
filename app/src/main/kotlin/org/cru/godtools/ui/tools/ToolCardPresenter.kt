@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
-import org.cru.godtools.base.produceAppLocaleState
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
