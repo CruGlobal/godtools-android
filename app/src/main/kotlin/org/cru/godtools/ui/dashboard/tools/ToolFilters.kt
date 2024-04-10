@@ -17,6 +17,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +40,8 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.ccci.gto.android.common.androidx.compose.material3.ui.list.ListItemEndPadding
+import org.ccci.gto.android.common.androidx.compose.material3.ui.list.ListItemStartPadding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.menu.LazyDropdownMenu
 import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
@@ -189,6 +192,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
             }
 
             items(languages, key = { (it) -> it.code }) { (it, count) ->
+                HorizontalDivider(Modifier.padding(start = ListItemStartPadding, end = ListItemEndPadding))
                 FilterMenuItem(
                     label = { LanguageName(it) },
                     supportingText = pluralStringResource(
