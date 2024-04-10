@@ -17,7 +17,7 @@ object LocalEventBus {
     private val LocalComposition = staticCompositionLocalOf<EventBus?> { null }
 
     /**
-     * Returns current App Language value
+     * Returns current EventBus value
      */
     val current: EventBus
         @Composable
