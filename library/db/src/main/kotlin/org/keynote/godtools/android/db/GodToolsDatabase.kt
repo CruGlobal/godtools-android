@@ -46,10 +46,6 @@ private const val DATABASE_VERSION = 63
 /*
  * Version history
  *
- * v5.3.1 - v5.6.1
- * 45: 2021-12-02
- * 46: 2022-01-07
- * 47: 2022-01-27
  * v5.7.0
  * 48: 2022-02-14
  * 49: 2022-04-08
@@ -83,12 +79,6 @@ internal class GodToolsDatabase(
             var upgradeTo = oldVersion + 1
             while (upgradeTo <= newVersion) {
                 when (upgradeTo) {
-                    45 -> {
-                        db.execSQL(ToolTable.SQL_V45_ALTER_HIDDEN)
-                        db.execSQL(ToolTable.SQL_V45_POPULATE_HIDDEN)
-                    }
-                    46 -> db.execSQL(UserCounterTable.SQL_V46_CREATE_USER_COUNTERS)
-                    47 -> db.execSQL(ToolTable.SQL_V47_ALTER_SCREEN_SHARE_DISABLED)
                     48 -> {
                         db.execSQL(ToolTable.SQL_V48_CREATE_SPOTLIGHT)
                         db.execSQL(ToolTable.SQL_V48_POPULATE_SPOTLIGHT)

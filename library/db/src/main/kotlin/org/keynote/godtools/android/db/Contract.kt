@@ -2,7 +2,6 @@ package org.keynote.godtools.android.db
 
 import org.ccci.gto.android.common.db.BaseContract
 import org.ccci.gto.android.common.db.BaseContract.Base.Companion.COLUMN_ROWID
-import org.ccci.gto.android.common.db.BaseContract.Base.Companion.SQL_COLUMN_ROWID
 import org.keynote.godtools.android.db.Contract.BaseTable.LanguageCode
 import org.keynote.godtools.android.db.Contract.BaseTable.ToolCode
 
@@ -87,19 +86,13 @@ internal object Contract : BaseContract() {
         )
 
         private const val SQL_COLUMN_DETAILS_BANNER_ANIMATION = "$COLUMN_DETAILS_BANNER_ANIMATION INTEGER"
-        private const val SQL_COLUMN_SCREEN_SHARE_DISABLED = "$COLUMN_SCREEN_SHARE_DISABLED INTEGER"
         private const val SQL_COLUMN_META_TOOL = "$COLUMN_META_TOOL TEXT"
         private const val SQL_COLUMN_DEFAULT_VARIANT = "$COLUMN_DEFAULT_VARIANT TEXT"
-        private const val SQL_COLUMN_HIDDEN = "$COLUMN_HIDDEN INTEGER"
         private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
 
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
 
         // region DB migrations
-        internal const val SQL_V45_ALTER_HIDDEN = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_HIDDEN"
-        internal const val SQL_V45_POPULATE_HIDDEN = "UPDATE $TABLE_NAME SET $COLUMN_HIDDEN = 0"
-        internal const val SQL_V47_ALTER_SCREEN_SHARE_DISABLED =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SCREEN_SHARE_DISABLED"
         internal const val SQL_V48_CREATE_SPOTLIGHT = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SPOTLIGHT"
         internal const val SQL_V48_POPULATE_SPOTLIGHT = "UPDATE $TABLE_NAME SET $COLUMN_SPOTLIGHT = 0"
         internal const val SQL_V49_ALTER_DETAILS_BANNER_ANIMATION =
@@ -231,24 +224,6 @@ internal object Contract : BaseContract() {
         const val COLUMN_DECAYED_COUNT = "decayed_count"
         internal const val COLUMN_DELTA = "delta"
 
-        private const val SQL_COLUMN_COUNTER_ID = "$COLUMN_COUNTER_ID TEXT"
-        private const val SQL_COLUMN_COUNT = "$COLUMN_COUNT INTEGER"
-        private const val SQL_COLUMN_DECAYED_COUNT = "$COLUMN_DECAYED_COUNT REAL"
-        private const val SQL_COLUMN_DELTA = "$COLUMN_DELTA INTEGER"
-        private val SQL_PRIMARY_KEY = uniqueIndex(COLUMN_COUNTER_ID)
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB Migrations
-        internal val SQL_V46_CREATE_USER_COUNTERS = create(
-            TABLE_NAME,
-            SQL_COLUMN_ROWID,
-            SQL_COLUMN_COUNTER_ID,
-            SQL_COLUMN_COUNT,
-            SQL_COLUMN_DECAYED_COUNT,
-            SQL_COLUMN_DELTA,
-            SQL_PRIMARY_KEY
-        )
-        // endregion DB Migrations
     }
 }
