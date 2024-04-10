@@ -29,7 +29,6 @@ dependencies {
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.jsonapi.scarlet)
     implementation(libs.gtoSupport.retrofit2)
-    implementation(libs.gtoSupport.util)
 
     api(libs.retrofit2)
     api(libs.scarlet)

@@ -19,16 +19,15 @@ ksp {
 }
 
 dependencies {
-    api(project(":library:base"))
+    implementation(project(":library:base"))
     api(project(":library:model"))
 
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)
 
-    api(libs.gtoSupport.db)
-    implementation(libs.gtoSupport.db.coroutines)
     implementation(libs.gtoSupport.androidx.room)
     implementation(libs.gtoSupport.base)
+    implementation(libs.gtoSupport.db)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.dagger)

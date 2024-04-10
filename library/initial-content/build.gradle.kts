@@ -35,8 +35,6 @@ dependencies {
 
     implementation(libs.kotlin.coroutines)
 
-    implementation(libs.gtoSupport.compat)
-    implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.jsonapi)
     implementation(libs.gtoSupport.util)

@@ -16,13 +16,13 @@ dependencies {
 
     implementation(libs.gtoSupport.androidx.activity)
     implementation(libs.gtoSupport.core)
-    implementation(libs.gtoSupport.facebook)
     implementation(libs.gtoSupport.kotlin.coroutines)
 
     implementation(libs.dagger)
     implementation(libs.hilt)
 
     // region Facebook
+    implementation(libs.gtoSupport.facebook)
     implementation(libs.facebook.login)
     // endregion Facebook
 
