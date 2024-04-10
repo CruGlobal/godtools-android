@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(project(":library:base"))
+    implementation(project(":library:base"))
     implementation(project(":library:account"))
     implementation(project(":library:user-data"))
     implementation(project(":ui:base"))

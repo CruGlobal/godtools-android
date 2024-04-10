@@ -25,17 +25,14 @@ dependencies {
     implementation(libs.godtoolsShared.parser)
 
     api(libs.androidx.hilt.work)
-    api(libs.androidx.lifecycle.livedata.ktx)
     api(libs.androidx.work.ktx)
 
     implementation(libs.gtoSupport.androidx.work)
-    implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
 
     implementation(libs.dagger)
-    implementation(libs.eventbus)
     implementation(libs.guava)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)

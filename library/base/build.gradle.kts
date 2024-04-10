@@ -20,9 +20,7 @@ onesky {
 
 dependencies {
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     implementation(libs.gtoSupport.androidx.core)
     implementation(libs.gtoSupport.androidx.lifecycle)
