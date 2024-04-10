@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -84,6 +85,8 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                         ) {
                             Icon(Icons.Filled.Close, null)
                         }
+                    } else {
+                        Icon(Icons.Filled.Search, null)
                     }
                 },
                 placeholder = { Text(stringResource(R.string.language_settings_app_language_title)) },
