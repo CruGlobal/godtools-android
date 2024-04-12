@@ -19,6 +19,14 @@ import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import java.util.EnumSet
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -31,14 +39,6 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.greenrobot.eventbus.EventBus
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
 import org.robolectric.annotation.Config
@@ -75,10 +75,9 @@ class GodToolsShortcutManagerTest {
         )
     }
 
-    @Before
+    @BeforeTest
     fun setup() {
         mockkStatic(InstantApps::class)
-        every { InstantApps.isInstantApp(any()) } returns false
 
         val rawApp = ApplicationProvider.getApplicationContext<Application>()
         Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
@@ -96,12 +95,44 @@ class GodToolsShortcutManagerTest {
                 every { getSystemService(ShortcutManager::class.java) } returns shortcutManagerService
             }
         }
+
+        mockInstantApp(false)
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         unmockkStatic(InstantApps::class)
     }
+
+    // region isEnabled
+    @Test
+    fun `isEnabled - default behavior`() {
+        assertTrue(shortcutManager.isEnabled)
+    }
+
+    @Test
+    fun `isEnabled - Instant App`() {
+        mockInstantApp(true)
+
+        assertFalse(shortcutManager.isEnabled)
+    }
+    // endregion isEnabled
+
+    // region Events - EventBus
+    @Test
+    fun `EventBus - register callback`() {
+        assertTrue(shortcutManager.isEnabled)
+        verify { eventBus.register(shortcutManager) }
+    }
+
+    @Test
+    fun `EventBus - Don't register when an Instant App`() {
+        mockInstantApp(true)
+
+        assertFalse(shortcutManager.isEnabled)
+        verify { eventBus wasNot Called }
+    }
+    // endregion Events - EventBus
 
     // region Pending Shortcuts
     // region canPinShortcut(tool)
@@ -137,10 +168,9 @@ class GodToolsShortcutManagerTest {
         coVerifyAll { toolsRepository.findTool("kgp") }
 
         // prevent garbage collection of the shortcut during the test
-        assertNotNull(
-            "Reference the shortcut here to prevent garbage collection from collecting it during the test.",
-            shortcut
-        )
+        assertNotNull(shortcut) {
+            "Reference the shortcut here to prevent garbage collection from collecting it during the test."
+        }
     }
     // endregion Pending Shortcuts
 
@@ -165,19 +195,9 @@ class GodToolsShortcutManagerTest {
 
     // region Instant App
     @Test
-    fun `Instant App - Don't register with EventBus`() {
-        every { InstantApps.isInstantApp(any()) } returns true
-
-        assertFalse(shortcutManager.isEnabled)
-        verify { eventBus wasNot Called }
-    }
-
-    @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `Instant App - canPinToolShortcut() - GT-1977`() {
-        every { InstantApps.isInstantApp(any()) } returns true
-        // Instant Apps don't have access to the system ShortcutManager
-        every { app.getSystemService<ShortcutManager>() } returns null
+        mockInstantApp(true)
 
         assertFalse(shortcutManager.canPinToolShortcut(randomTool("kgp", type = Tool.Type.TRACT)))
     }
@@ -185,13 +205,20 @@ class GodToolsShortcutManagerTest {
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `Instant App - updateDynamicShortcuts()`() = testScope.runTest {
-        every { InstantApps.isInstantApp(any()) } returns true
-        // Instant Apps don't have access to the system ShortcutManager
-        every { app.getSystemService<ShortcutManager>() } returns null
+        mockInstantApp(true)
 
         // This should be a no-op
         shortcutManager.updateDynamicShortcuts(emptyMap())
         verify { toolsRepository wasNot Called }
     }
     // endregion Instant App
+
+    private fun mockInstantApp(isInstantApp: Boolean) {
+        every { InstantApps.isInstantApp(any()) } returns isInstantApp
+
+        if (::shortcutManagerService.isInitialized) {
+            // Instant Apps don't have access to the system ShortcutManager
+            every { app.getSystemService<ShortcutManager>() } returns shortcutManagerService.takeUnless { isInstantApp }
+        }
+    }
 }
