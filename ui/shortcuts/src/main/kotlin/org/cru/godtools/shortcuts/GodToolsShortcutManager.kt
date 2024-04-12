@@ -107,7 +107,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
+            shortcutManager?.reportShortcutUsed(ShortcutId.Tool(event.toolCode).id)
         }
     }
     // endregion Events
@@ -129,12 +129,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @AnyThread
     fun getPendingToolShortcut(code: String?): PendingShortcut? {
         if (!isEnabled) return null
-        val id = code?.toolShortcutId ?: return null
+        if (code == null) return null
+        val id = ShortcutId.Tool(code)
 
         return synchronized(pendingShortcuts) {
-            pendingShortcuts[id]?.get()
-                ?: PendingShortcut(code).also {
-                    pendingShortcuts[id] = WeakReference(it)
+            pendingShortcuts[id.id]?.get()
+                ?: PendingShortcut(id.tool).also {
+                    pendingShortcuts[id.id] = WeakReference(it)
                     coroutineScope.launch { updatePendingShortcut(it) }
                 }
         }
