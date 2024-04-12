@@ -21,11 +21,9 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import java.util.EnumSet
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -160,20 +158,44 @@ class GodToolsShortcutManagerTest {
     // endregion Events
 
     // region Pending Shortcuts
-    // region canPinShortcut(tool)
+    // region canPinToolShortcut(tool)
     @Test
-    fun verifyCanPinToolShortcut() {
-        val supportedTypes = EnumSet.of(Tool.Type.ARTICLE, Tool.Type.CYOA, Tool.Type.TRACT)
-        Tool.Type.values().forEach {
-            assertEquals(supportedTypes.contains(it), shortcutManager.canPinToolShortcut(randomTool(type = it)))
-        }
+    fun `canPinToolShortcut() - Valid - Launcher Supports Pinning`() {
+        every { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) } returns true
+
+        assertTrue(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.ARTICLE)))
+        assertTrue(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.CYOA)))
+        assertTrue(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.TRACT)))
+        verify { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) }
     }
 
     @Test
-    fun verifyCanPinToolShortcutNull() {
-        assertFalse(shortcutManager.canPinToolShortcut(null))
+    fun `canPinToolShortcut() - Valid - Launcher Doesn't Support Pinning`() {
+        every { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) } returns false
+
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.ARTICLE)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.CYOA)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.TRACT)))
+        verify { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) }
     }
-    // endregion canPinShortcut(tool)
+
+    @Test
+    fun `canPinToolShortcut() - Invalid`() {
+        assertFalse(shortcutManager.canPinToolShortcut(null))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.LESSON)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.META)))
+        assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = Tool.Type.UNKNOWN)))
+        verify(exactly = 0) { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) }
+    }
+
+    @Test
+    fun `canPinToolShortcut() - Instant App - GT-1977`() {
+        mockInstantApp(true)
+        every { ShortcutManagerCompat.isRequestPinShortcutSupported(any()) } answers { callOriginal() }
+
+        Tool.Type.entries.forEach { assertFalse(shortcutManager.canPinToolShortcut(randomTool(type = it))) }
+    }
+    // endregion canPinToolShortcut(tool)
 
     @Test
     fun verifyGetPendingToolShortcutInvalidTool() = testScope.runTest {
@@ -219,14 +241,6 @@ class GodToolsShortcutManagerTest {
     // endregion Update Existing Shortcuts
 
     // region Instant App
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `Instant App - canPinToolShortcut() - GT-1977`() {
-        mockInstantApp(true)
-
-        assertFalse(shortcutManager.canPinToolShortcut(randomTool("kgp", type = Tool.Type.TRACT)))
-    }
-
     @Test
     @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `Instant App - updateDynamicShortcuts()`() = testScope.runTest {
