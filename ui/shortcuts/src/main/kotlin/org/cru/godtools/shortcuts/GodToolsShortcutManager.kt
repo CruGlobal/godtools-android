@@ -106,9 +106,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @AnyThread
     @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager?.reportShortcutUsed(ShortcutId.Tool(event.toolCode).id)
-        }
+        if (!isEnabled) return
+        ShortcutManagerCompat.reportShortcutUsed(context, ShortcutId.Tool(event.toolCode).id)
     }
     // endregion Events
 

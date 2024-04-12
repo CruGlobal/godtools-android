@@ -6,13 +6,16 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
+import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.gms.common.wrappers.InstantApps
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.spyk
@@ -37,6 +40,7 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.model.randomTool
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -77,7 +81,7 @@ class GodToolsShortcutManagerTest {
 
     @BeforeTest
     fun setup() {
-        mockkStatic(InstantApps::class)
+        mockkStatic(InstantApps::class, ShortcutManagerCompat::class)
 
         val rawApp = ApplicationProvider.getApplicationContext<Application>()
         Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
@@ -101,7 +105,7 @@ class GodToolsShortcutManagerTest {
 
     @AfterTest
     fun cleanup() {
-        unmockkStatic(InstantApps::class)
+        unmockkStatic(InstantApps::class, ShortcutManagerCompat::class)
     }
 
     // region isEnabled
@@ -118,7 +122,8 @@ class GodToolsShortcutManagerTest {
     }
     // endregion isEnabled
 
-    // region Events - EventBus
+    // region Events
+    // region EventBus
     @Test
     fun `EventBus - register callback`() {
         assertTrue(shortcutManager.isEnabled)
@@ -132,7 +137,27 @@ class GodToolsShortcutManagerTest {
         assertFalse(shortcutManager.isEnabled)
         verify { eventBus wasNot Called }
     }
-    // endregion Events - EventBus
+    // endregion EventBus
+
+    // region onToolUsed()
+    @Test
+    fun `onToolUsed()`() {
+        every { ShortcutManagerCompat.reportShortcutUsed(any(), any()) } just Runs
+
+        shortcutManager.onToolUsed(ToolUsedEvent("kgp"))
+        verify { ShortcutManagerCompat.reportShortcutUsed(any(), "tool|kgp") }
+    }
+
+    @Test
+    fun `onToolUsed() - Instant App`() {
+        mockInstantApp(true)
+        every { ShortcutManagerCompat.reportShortcutUsed(any(), any()) } answers { callOriginal() }
+
+        shortcutManager.onToolUsed(ToolUsedEvent("kgp"))
+        verify(exactly = 0) { ShortcutManagerCompat.reportShortcutUsed(any(), any()) }
+    }
+    // endregion onToolUsed()
+    // endregion Events
 
     // region Pending Shortcuts
     // region canPinShortcut(tool)
