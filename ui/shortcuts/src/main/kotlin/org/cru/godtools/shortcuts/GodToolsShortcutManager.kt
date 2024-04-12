@@ -221,31 +221,42 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             .associateBy { it.id }
     }
 
+    private suspend fun createToolShortcut(id: ShortcutId.Tool) = withContext(ioDispatcher) {
+        createToolShortcut(id, toolsRepository.findTool(id.tool))
+    }
+
+    private suspend fun createToolShortcut(tool: Tool): ShortcutInfoCompat? {
+        return createToolShortcut(
+            id = tool.code?.let { ShortcutId.Tool(it) } ?: return null,
+            tool = tool
+        )
+    }
+
     @AnyThread
-    private suspend fun createToolShortcut(tool: Tool) = withContext(ioDispatcher) {
-        val code = tool.code ?: return@withContext null
+    private suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
+        if (tool == null) return@withContext null
 
         // generate the list of locales to use for this tool
         val locales = buildList {
-            val translation = translationsRepository.findLatestTranslation(code, settings.appLanguage)
-                ?: translationsRepository.findLatestTranslation(code, tool.defaultLocale)
+            val translation = translationsRepository.findLatestTranslation(id.tool, settings.appLanguage)
+                ?: translationsRepository.findLatestTranslation(id.tool, tool.defaultLocale)
                 ?: return@withContext null
             add(translation.languageCode)
         }
 
         // generate the target intent for this shortcut
         val intent = when (tool.type) {
-            Tool.Type.ARTICLE -> context.createArticlesIntent(code, locales[0])
-            Tool.Type.CYOA -> context.createCyoaActivityIntent(code, *locales.toTypedArray())
-            Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
+            Tool.Type.ARTICLE -> context.createArticlesIntent(id.tool, locales[0])
+            Tool.Type.CYOA -> context.createCyoaActivityIntent(id.tool, *locales.toTypedArray())
+            Tool.Type.TRACT -> context.createTractActivityIntent(id.tool, *locales.toTypedArray())
             else -> return@withContext null
         }
         intent.action = Intent.ACTION_VIEW
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = sequenceOf(settings.appLanguage, tool.defaultLocale).includeFallbacks().distinct()
-            .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(code, it) }
+        val label = locales.asSequence().includeFallbacks().distinct()
+            .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(id.tool, it) }
             .getName(tool, context)
 
         // create the icon bitmap
@@ -266,7 +277,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             ?: IconCompat.createWithResource(context, org.cru.godtools.ui.R.mipmap.ic_launcher)
 
         // build the shortcut
-        ShortcutInfoCompat.Builder(context, code.toolShortcutId)
+        ShortcutInfoCompat.Builder(context, id.id)
             .setAlwaysBadged()
             .setIntent(intent)
             .setShortLabel(label)
