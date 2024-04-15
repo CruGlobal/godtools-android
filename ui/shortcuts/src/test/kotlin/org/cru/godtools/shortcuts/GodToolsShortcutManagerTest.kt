@@ -54,9 +54,25 @@ private const val INSTALL_SHORTCUT_PERMISSION = "com.android.launcher.permission
 @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N, Build.VERSION_CODES.N_MR1, NEWEST_SDK])
 @OptIn(ExperimentalCoroutinesApi::class)
 class GodToolsShortcutManagerTest {
-    private lateinit var app: Application
+    private val app = spyk(
+        ApplicationProvider.getApplicationContext<Application>()
+            .also { Shadows.shadowOf(it).grantPermissions(INSTALL_SHORTCUT_PERMISSION) }
+    ) {
+        val rawPm = packageManager
+        every { packageManager } returns spyk(rawPm) {
+            val shortcutReceiver = ResolveInfo().apply {
+                activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
+            }
+            every { queryBroadcastReceivers(match { it.action == ACTION_INSTALL_SHORTCUT }, 0) }
+                .returns(listOf(shortcutReceiver))
+        }
+    }
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
-    private lateinit var shortcutManagerService: ShortcutManager
+    private val shortcutManagerService = app.getSystemService<ShortcutManager>()?.let {
+        spyk(it) {
+            every { app.getSystemService(ShortcutManager::class.java) } returns this
+        }
+    }
     private val testScope = TestScope()
     private val toolsRepository: ToolsRepository = mockk {
         coEvery { findTool(any()) } returns null
@@ -80,24 +96,6 @@ class GodToolsShortcutManagerTest {
     @BeforeTest
     fun setup() {
         mockkStatic(InstantApps::class, ShortcutManagerCompat::class)
-
-        val rawApp = ApplicationProvider.getApplicationContext<Application>()
-        Shadows.shadowOf(rawApp).grantPermissions(INSTALL_SHORTCUT_PERMISSION)
-        app = spyk(rawApp) {
-            val pm = spyk(packageManager) {
-                val shortcutReceiver = ResolveInfo().apply {
-                    activityInfo = ActivityInfo().apply { permission = INSTALL_SHORTCUT_PERMISSION }
-                }
-                every { queryBroadcastReceivers(match { it.action == ACTION_INSTALL_SHORTCUT }, 0) }
-                    .returns(listOf(shortcutReceiver))
-            }
-            every { packageManager } returns pm
-            getSystemService<ShortcutManager>()?.let { sm ->
-                shortcutManagerService = spyk(sm)
-                every { getSystemService(ShortcutManager::class.java) } returns shortcutManagerService
-            }
-        }
-
         mockInstantApp(false)
     }
 
@@ -235,7 +233,7 @@ class GodToolsShortcutManagerTest {
         }
         coVerifyAll {
             toolsRepository.getNormalTools()
-            shortcutManagerService wasNot Called
+            shortcutManagerService!! wasNot Called
         }
     }
     // endregion Update Existing Shortcuts
@@ -255,7 +253,7 @@ class GodToolsShortcutManagerTest {
     private fun mockInstantApp(isInstantApp: Boolean) {
         every { InstantApps.isInstantApp(any()) } returns isInstantApp
 
-        if (::shortcutManagerService.isInitialized) {
+        if (shortcutManagerService != null) {
             // Instant Apps don't have access to the system ShortcutManager
             every { app.getSystemService<ShortcutManager>() } returns shortcutManagerService.takeUnless { isInstantApp }
         }
