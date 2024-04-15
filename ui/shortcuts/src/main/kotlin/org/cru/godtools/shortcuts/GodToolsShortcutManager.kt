@@ -26,9 +26,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -172,27 +176,26 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     internal suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
         val shortcuts = createAllShortcuts()
-        updateDynamicShortcuts(shortcuts)
+        updateDynamicShortcuts()
         updatePinnedShortcuts(shortcuts)
     }
 
     @VisibleForTesting
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    internal suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
-        val manager = shortcutManager ?: return
+    internal suspend fun updateDynamicShortcuts() {
+        if (!isEnabled) return
 
         val dynamicShortcuts = withContext(ioDispatcher) {
             toolsRepository.getNormalTools()
                 .filter { it.isFavorite }
                 .sortedWith(Tool.COMPARATOR_FAVORITE_ORDER)
-                .asSequence()
-                .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
-                .take(manager.maxShortcutCountPerActivity)
+                .asFlow()
+                .mapNotNull { createToolShortcut(it) }
+                .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
                 .toList()
         }
 
         try {
-            manager.dynamicShortcuts = dynamicShortcuts
+            ShortcutManagerCompat.setDynamicShortcuts(context, dynamicShortcuts)
         } catch (e: IllegalStateException) {
             Timber.tag("GodToolsShortcutManager").e(e, "Error updating dynamic shortcuts")
         }

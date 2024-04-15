@@ -219,36 +219,29 @@ class GodToolsShortcutManagerTest {
     }
     // endregion Pending Shortcuts
 
-    // region Update Existing Shortcuts
+    // region updateDynamicShortcuts()
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun testUpdateDynamicShortcutsDoesntInterceptChildCancelledException() = testScope.runTest {
+    fun `updateDynamicShortcuts() - Don't intercept CancelledException`() = testScope.runTest {
         coEvery { toolsRepository.getNormalTools() } throws CancellationException()
 
         ExceptionRaisingTree.plant().use {
-            launch { shortcutManager.updateDynamicShortcuts(emptyMap()) }.apply {
+            launch { shortcutManager.updateDynamicShortcuts() }.apply {
                 join()
                 assertTrue(isCancelled)
             }
         }
-        coVerifyAll {
-            toolsRepository.getNormalTools()
-            shortcutManagerService!! wasNot Called
-        }
+        coVerifyAll { toolsRepository.getNormalTools() }
     }
-    // endregion Update Existing Shortcuts
 
-    // region Instant App
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
-    fun `Instant App - updateDynamicShortcuts()`() = testScope.runTest {
+    fun `updateDynamicShortcuts() - Instant App`() = testScope.runTest {
         mockInstantApp(true)
 
         // This should be a no-op
-        shortcutManager.updateDynamicShortcuts(emptyMap())
+        shortcutManager.updateDynamicShortcuts()
         verify { toolsRepository wasNot Called }
     }
-    // endregion Instant App
+    // endregion updateDynamicShortcuts()
 
     private fun mockInstantApp(isInstantApp: Boolean) {
         every { InstantApps.isInstantApp(any()) } returns isInstantApp
