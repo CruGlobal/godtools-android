@@ -216,13 +216,44 @@ class GodToolsShortcutManagerTest {
     }
     // endregion canPinToolShortcut(tool)
 
+    // region getPendingToolShortcut()
     @Test
-    fun verifyGetPendingToolShortcutInvalidTool() = testScope.runTest {
+    fun `getPendingToolShortcut() - Invalid`() = testScope.runTest {
         val shortcut = shortcutManager.getPendingToolShortcut("invalid")!!
         runCurrent()
         coVerifyAll { toolsRepository.findTool("invalid") }
         assertNull(shortcut.shortcut)
     }
+
+    @Test
+    fun `getPendingToolShortcut() - Instant App`() = testScope.runTest {
+        mockInstantApp(true)
+
+        assertNull(shortcutManager.getPendingToolShortcut("tool"))
+        verify {
+            toolsRepository wasNot Called
+        }
+    }
+
+    @Test
+    fun `getPendingToolShortcut() - Valid`() = testScope.runTest {
+        val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
+        val translation = randomTranslation("tool", Locale.ENGLISH)
+        coEvery { toolsRepository.findTool("tool") } returns tool
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
+
+        val pending = shortcutManager.getPendingToolShortcut("tool")!!
+        assertEquals(ShortcutId.Tool("tool"), pending.id)
+        assertNull(pending.shortcut)
+        runCurrent()
+        assertNotNull(pending.shortcut) {
+            val expectedIntent = app.createTractActivityIntent("tool", Locale.ENGLISH)
+                .setAction(Intent.ACTION_VIEW)
+                .putExtra(SHORTCUT_LAUNCH, true)
+            assertTrue(expectedIntent equalsIntent it.intent)
+        }
+    }
+    // endregion getPendingToolShortcut()
 
     @Test
     fun verifyUpdatePendingToolShortcuts() = testScope.runTest {

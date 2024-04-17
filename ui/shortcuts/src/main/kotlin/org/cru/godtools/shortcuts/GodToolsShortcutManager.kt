@@ -133,7 +133,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         return synchronized(pendingShortcuts) {
             pendingShortcuts[id.id]?.get()
-                ?: PendingShortcut(id.tool).also {
+                ?: PendingShortcut(id).also {
                     pendingShortcuts[id.id] = WeakReference(it)
                     coroutineScope.launch { updatePendingShortcut(it) }
                 }
@@ -161,7 +161,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
-        toolsRepository.findTool(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
+        shortcut.shortcut = when (shortcut.id) {
+            is ShortcutId.Tool -> createToolShortcut(shortcut.id)
+        }
     }
     // endregion Pending Shortcuts
 
