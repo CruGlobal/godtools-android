@@ -94,8 +94,8 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
                     launchers[input]?.launch(input, options)
                 }
 
+                override val contract get() = TODO("Unsupported")
                 override fun unregister() = TODO("Unsupported")
-                override fun getContract() = TODO("Unsupported")
             }
         }
     }
