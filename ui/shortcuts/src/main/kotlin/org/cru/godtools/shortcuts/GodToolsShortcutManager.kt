@@ -38,7 +38,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.picasso.getBitmap
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
@@ -59,6 +58,8 @@ private const val TYPE_TOOL = "tool|"
 
 internal const val DELAY_UPDATE_SHORTCUTS = 5000L
 internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
+
+private val SUPPORTED_TOOL_TYPES = setOf(Tool.Type.ARTICLE, Tool.Type.CYOA, Tool.Type.TRACT)
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
@@ -234,32 +235,35 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         )
     }
 
-    @AnyThread
-    private suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
+    @VisibleForTesting
+    internal suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
         if (tool == null) return@withContext null
+        val type = tool.type
+        if (type !in SUPPORTED_TOOL_TYPES) return@withContext null
 
-        // generate the list of locales to use for this tool
-        val locales = buildList {
-            val translation = translationsRepository.findLatestTranslation(id.tool, settings.appLanguage)
-                ?: translationsRepository.findLatestTranslation(id.tool, tool.defaultLocale)
-                ?: return@withContext null
-            add(translation.languageCode)
+        // generate the list of translations to use for this tool
+        val translations = buildList {
+            if (id.isFavoriteToolShortcut) {
+                val favoriteTranslation = translationsRepository.findLatestTranslation(id.tool, settings.appLanguage)
+                    ?: translationsRepository.findLatestTranslation(id.tool, tool.defaultLocale)
+                if (favoriteTranslation != null) add(favoriteTranslation)
+            }
         }
+        if (translations.isEmpty()) return@withContext null
 
         // generate the target intent for this shortcut
-        val intent = when (tool.type) {
+        val locales = translations.map { it.languageCode }
+        val intent = when (type) {
             Tool.Type.ARTICLE -> context.createArticlesIntent(id.tool, locales[0])
             Tool.Type.CYOA -> context.createCyoaActivityIntent(id.tool, *locales.toTypedArray())
             Tool.Type.TRACT -> context.createTractActivityIntent(id.tool, *locales.toTypedArray())
-            else -> return@withContext null
+            else -> error("Unexpected Tool Type: $type")
         }
         intent.action = Intent.ACTION_VIEW
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = locales.asSequence().includeFallbacks().distinct()
-            .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(id.tool, it) }
-            .getName(tool, context)
+        val label = translations.first().getName(tool, context)
 
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId

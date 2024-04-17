@@ -15,6 +15,8 @@ internal sealed interface ShortcutId {
     data class Tool internal constructor(val tool: String) : ShortcutId {
         override val id = listOf(TYPE, tool).joinToString(SEPARATOR)
 
+        val isFavoriteToolShortcut get() = true
+
         companion object {
             const val TYPE = "tool"
 

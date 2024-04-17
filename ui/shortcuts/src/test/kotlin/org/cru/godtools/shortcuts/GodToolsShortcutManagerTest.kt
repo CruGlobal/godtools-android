@@ -1,6 +1,7 @@
 package org.cru.godtools.shortcuts
 
 import android.app.Application
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.ResolveInfo
 import android.content.pm.ShortcutManager
@@ -21,9 +22,11 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -36,10 +39,16 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.testing.timber.ExceptionRaisingTree
+import org.ccci.gto.android.common.util.content.equalsIntent
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
+import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.model.randomTranslation
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
 import org.robolectric.Shadows
@@ -68,6 +77,9 @@ class GodToolsShortcutManagerTest {
         }
     }
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
+    private val settings: Settings = mockk {
+        every { appLanguage } returns Locale.ENGLISH
+    }
     private val shortcutManagerService = app.getSystemService<ShortcutManager>()?.let {
         spyk(it) {
             every { app.getSystemService(ShortcutManager::class.java) } returns this
@@ -77,6 +89,9 @@ class GodToolsShortcutManagerTest {
     private val toolsRepository: ToolsRepository = mockk {
         coEvery { findTool(any()) } returns null
     }
+    private val translationsRepository: TranslationsRepository = mockk {
+        coEvery { findLatestTranslation(any(), any()) } returns null
+    }
 
     private val shortcutManager by lazy {
         GodToolsShortcutManager(
@@ -85,9 +100,9 @@ class GodToolsShortcutManagerTest {
             eventBus = eventBus,
             fs = mockk(),
             picasso = mockk(),
-            settings = mockk(),
+            settings = settings,
             toolsRepository = toolsRepository,
-            translationsRepository = mockk(),
+            translationsRepository = translationsRepository,
             coroutineScope = testScope.backgroundScope,
             ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler)
         )
@@ -242,6 +257,52 @@ class GodToolsShortcutManagerTest {
         verify { toolsRepository wasNot Called }
     }
     // endregion updateDynamicShortcuts()
+
+    // region createToolShortcut()
+    @Test
+    fun `createToolShortcut() - Valid - Favorite Tool Shortcut - Tract`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool")
+        val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
+        val translation = randomTranslation("tool", Locale.ENGLISH)
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
+
+        assertNotNull(shortcutManager.createToolShortcut(id, tool)) {
+            assertEquals(translation.name, it.shortLabel.toString())
+            assertEquals(translation.name, it.longLabel.toString())
+
+            val expectedIntent = app.createTractActivityIntent("tool", Locale.ENGLISH)
+                .setAction(Intent.ACTION_VIEW)
+                .putExtra(SHORTCUT_LAUNCH, true)
+            assertTrue(expectedIntent equalsIntent it.intent)
+        }
+    }
+
+    @Test
+    fun `createToolShortcut() - Invalid - Tool Not Found`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool")
+
+        assertNull(shortcutManager.createToolShortcut(id, null))
+        verify { translationsRepository wasNot Called }
+    }
+
+    @Test
+    fun `createToolShortcut() - Invalid - Unsupported Tool Type`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool")
+        val tool = randomTool("tool", type = Tool.Type.LESSON)
+        val translation = randomTranslation("tool", Locale.ENGLISH)
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
+
+        assertNull(shortcutManager.createToolShortcut(id, tool))
+    }
+
+    @Test
+    fun `createToolShortcut() - Invalid - No Translations - Favorite Tool Shortcut`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool")
+        val tool = randomTool("tool", type = Tool.Type.TRACT)
+
+        assertNull(shortcutManager.createToolShortcut(id, tool))
+    }
+    // endregion createToolShortcut()
 
     private fun mockInstantApp(isInstantApp: Boolean) {
         every { InstantApps.isInstantApp(any()) } returns isInstantApp
