@@ -29,6 +29,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.take
@@ -250,12 +251,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         if (type !in SUPPORTED_TOOL_TYPES) return@withContext null
 
         // generate the list of translations to use for this tool
-        val translations = buildList {
-            if (id.isFavoriteToolShortcut) {
-                val favoriteTranslation = translationsRepository.findLatestTranslation(id.tool, settings.appLanguage)
-                    ?: translationsRepository.findLatestTranslation(id.tool, tool.defaultLocale)
-                if (favoriteTranslation != null) add(favoriteTranslation)
-            }
+        val translations = if (id.isFavoriteToolShortcut) {
+            flowOf(settings.appLanguage, tool.defaultLocale)
+                .mapNotNull { translationsRepository.findLatestTranslation(id.tool, it) }
+                .take(1)
+                .toList()
+        } else {
+            id.locales.mapNotNull { translationsRepository.findLatestTranslation(id.tool, it) }
         }
         if (translations.isEmpty()) return@withContext null
 

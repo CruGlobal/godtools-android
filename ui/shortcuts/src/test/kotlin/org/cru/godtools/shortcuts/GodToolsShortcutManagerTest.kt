@@ -374,6 +374,27 @@ class GodToolsShortcutManagerTest {
     }
 
     @Test
+    fun `createToolShortcut() - Valid - With Locales - Tract`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool", Locale.FRENCH, Locale.GERMAN)
+        val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
+        val frTranslation = randomTranslation("tool", Locale.FRENCH)
+        val deTranslation = randomTranslation("tool", Locale.GERMAN)
+        coEvery { toolsRepository.findTool("tool") } returns tool
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.FRENCH) } returns frTranslation
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.GERMAN) } returns deTranslation
+
+        assertNotNull(shortcutManager.createToolShortcut(id)) {
+            assertEquals(frTranslation.name, it.shortLabel.toString())
+            assertEquals(frTranslation.name, it.longLabel.toString())
+
+            val expectedIntent = app.createTractActivityIntent("tool", Locale.FRENCH, Locale.GERMAN)
+                .setAction(Intent.ACTION_VIEW)
+                .putExtra(SHORTCUT_LAUNCH, true)
+            assertTrue(expectedIntent equalsIntent it.intent)
+        }
+    }
+
+    @Test
     fun `createToolShortcut() - Invalid - Tool Not Found`() = testScope.runTest {
         val id = ShortcutId.Tool("tool")
         coEvery { toolsRepository.findTool("tool") } returns null
