@@ -2,12 +2,9 @@ package org.cru.godtools.shortcuts
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
-import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
-import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_CACHED
@@ -57,8 +54,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
 
-private const val TYPE_TOOL = "tool|"
-
 internal const val DELAY_UPDATE_SHORTCUTS = 5000L
 internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
 
@@ -98,9 +93,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         translationsRepository,
         coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
-
-    @get:RequiresApi(Build.VERSION_CODES.N_MR1)
-    private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
 
     @VisibleForTesting
     internal val isEnabled = !InstantApps.isInstantApp(context)
@@ -365,6 +357,3 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
 }
-
-private val Tool.shortcutId get() = code?.toolShortcutId
-private val String.toolShortcutId get() = "$TYPE_TOOL$this"
