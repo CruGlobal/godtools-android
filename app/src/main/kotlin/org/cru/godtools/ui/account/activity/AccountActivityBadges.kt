@@ -28,7 +28,6 @@ import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.material3.DisabledAlpha
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
@@ -79,12 +78,12 @@ private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) {
         Text(
             badge.label,
             style = textStyle,
+            minLines = 2,
             maxLines = 2,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
-                .minLinesHeight(2, textStyle)
                 .alpha(if (badge.isEarned) 1f else DisabledAlpha)
         )
         Spacer(modifier = Modifier.weight(1f))
