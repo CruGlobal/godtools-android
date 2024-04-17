@@ -1,5 +1,7 @@
 package org.cru.godtools.shortcuts
 
+import java.util.Locale
+
 internal sealed interface ShortcutId {
     val id: String
 
@@ -12,10 +14,12 @@ internal sealed interface ShortcutId {
         }
     }
 
-    data class Tool internal constructor(val tool: String) : ShortcutId {
-        override val id = listOf(TYPE, tool).joinToString(SEPARATOR)
+    data class Tool internal constructor(val tool: String, val locales: List<Locale>) : ShortcutId {
+        internal constructor(tool: String, vararg locales: Locale?) : this(tool, locales.filterNotNull())
 
-        val isFavoriteToolShortcut get() = true
+        override val id = (listOf(TYPE, tool) + locales.map { it.toLanguageTag() }).joinToString(SEPARATOR)
+
+        val isFavoriteToolShortcut get() = locales.isEmpty()
 
         companion object {
             const val TYPE = "tool"
@@ -25,7 +29,10 @@ internal sealed interface ShortcutId {
                 return when {
                     components.size < 2 -> null
                     components[0] != TYPE -> null
-                    else -> Tool(components[1])
+                    else -> Tool(
+                        tool = components[1],
+                        locales = components.subList(2, components.size).map { Locale.forLanguageTag(it) }
+                    )
                 }
             }
         }
