@@ -352,7 +352,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @VisibleForTesting
         internal val updateShortcutsJob = coroutineScope.launch {
             if (!manager.isEnabled) return@launch
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
 
             merge(
                 settings.appLanguageFlow,
