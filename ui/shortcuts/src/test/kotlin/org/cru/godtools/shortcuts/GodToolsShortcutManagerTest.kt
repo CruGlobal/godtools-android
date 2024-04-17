@@ -7,6 +7,7 @@ import android.content.pm.ResolveInfo
 import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.core.content.getSystemService
+import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -22,6 +23,7 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import io.mockk.verifyAll
 import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -111,6 +113,10 @@ class GodToolsShortcutManagerTest {
     @BeforeTest
     fun setup() {
         mockkStatic(InstantApps::class, ShortcutManagerCompat::class)
+        every { ShortcutManagerCompat.enableShortcuts(any(), any()) } just Runs
+        every { ShortcutManagerCompat.updateShortcuts(any(), any()) } returns true
+        every { ShortcutManagerCompat.disableShortcuts(any(), any(), any()) } just Runs
+
         mockInstantApp(false)
     }
 
@@ -257,6 +263,64 @@ class GodToolsShortcutManagerTest {
         verify { toolsRepository wasNot Called }
     }
     // endregion updateDynamicShortcuts()
+
+    // region updatePinnedShortcuts()
+    @Test
+    fun `updatePinnedShortcuts() - No Pinned Shortcuts`() = testScope.runTest {
+        every { ShortcutManagerCompat.getShortcuts(any(), any()) } returns emptyList()
+
+        shortcutManager.updatePinnedShortcuts()
+        verifyAll {
+            ShortcutManagerCompat.getShortcuts(any(), any())
+        }
+    }
+
+    @Test
+    fun `updatePinnedShortcuts() - Update Existing`() = testScope.runTest {
+        val id = ShortcutId.Tool("tool")
+        val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
+        val translation = randomTranslation("tool", Locale.ENGLISH)
+        val shortcut = ShortcutInfoCompat.Builder(app, id.id)
+            .setShortLabel("label")
+            .setIntent(Intent())
+            .build()
+        coEvery { toolsRepository.findTool("tool") } returns tool
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
+        every { ShortcutManagerCompat.getShortcuts(any(), any()) } returns listOf(shortcut)
+
+        shortcutManager.updatePinnedShortcuts()
+        verifyAll {
+            ShortcutManagerCompat.getShortcuts(any(), any())
+            ShortcutManagerCompat.enableShortcuts(any(), match { it.map { it.id } == listOf(id.id) })
+            ShortcutManagerCompat.updateShortcuts(any(), match { it.map { it.id } == listOf(id.id) })
+        }
+    }
+
+    @Test
+    fun `updatePinnedShortcuts() - Disable Invalid`() = testScope.runTest {
+        val shortcut = ShortcutInfoCompat.Builder(app, "invalid")
+            .setShortLabel("label")
+            .setIntent(Intent())
+            .build()
+        every { ShortcutManagerCompat.getShortcuts(any(), any()) } returns listOf(shortcut)
+
+        shortcutManager.updatePinnedShortcuts()
+        verifyAll {
+            ShortcutManagerCompat.getShortcuts(any(), any())
+            ShortcutManagerCompat.disableShortcuts(any(), listOf("invalid"), any())
+        }
+    }
+
+    @Test
+    fun `updatePinnedShortcuts() - Instant App`() = testScope.runTest {
+        mockInstantApp(true)
+
+        shortcutManager.updatePinnedShortcuts()
+        verify(exactly = 0) {
+            ShortcutManagerCompat.getShortcuts(any(), any())
+        }
+    }
+    // endregion updatePinnedShortcuts()
 
     // region createToolShortcut()
     @Test

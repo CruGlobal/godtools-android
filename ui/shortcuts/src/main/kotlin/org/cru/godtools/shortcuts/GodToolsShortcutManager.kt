@@ -10,6 +10,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_CACHED
+import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_PINNED
 import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.common.wrappers.InstantApps
 import com.squareup.picasso.Picasso
@@ -19,6 +21,7 @@ import java.lang.ref.WeakReference
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -174,11 +177,13 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val updateShortcutsMutex = Mutex()
 
     @VisibleForTesting
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    internal suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
-        val shortcuts = createAllShortcuts()
-        updateDynamicShortcuts()
-        updatePinnedShortcuts(shortcuts)
+    internal suspend fun updateShortcuts() {
+        updateShortcutsMutex.withLock {
+            coroutineScope {
+                launch { updateDynamicShortcuts() }
+                launch { updatePinnedShortcuts() }
+            }
+        }
     }
 
     @VisibleForTesting
@@ -202,12 +207,31 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
-        shortcutManager?.apply {
-            disableShortcuts(pinnedShortcuts.map { it.id }.filterNot { shortcuts.containsKey(it) })
-            enableShortcuts(shortcuts.keys.toList())
-            ShortcutManagerCompat.updateShortcuts(context, shortcuts.values.toList())
+    @VisibleForTesting
+    internal suspend fun updatePinnedShortcuts() {
+        if (!isEnabled) return
+
+        withContext(ioDispatcher) {
+            val types = FLAG_MATCH_PINNED or FLAG_MATCH_CACHED
+            val (invalid, shortcuts) = ShortcutManagerCompat.getShortcuts(context, types)
+                .mapNotNull { it.id to ShortcutId.parseId(it.id) }
+                .map { (id, shortcutId) ->
+                    when (shortcutId) {
+                        null -> CompletableDeferred(id to null)
+                        is ShortcutId.Tool -> async { shortcutId.id to createToolShortcut(shortcutId) }
+                    }
+                }
+                .awaitAll()
+                .partition { it.second == null }
+                .let { it.first.map { it.first } to it.second.mapNotNull { it.second } }
+
+            if (invalid.isNotEmpty()) {
+                ShortcutManagerCompat.disableShortcuts(context, invalid, null)
+            }
+            if (shortcuts.isNotEmpty()) {
+                ShortcutManagerCompat.enableShortcuts(context, shortcuts)
+                ShortcutManagerCompat.updateShortcuts(context, shortcuts)
+            }
         }
     }
     // endregion Update Existing Shortcuts
@@ -215,13 +239,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     internal suspend fun refreshShortcutsNow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) updateShortcuts()
         updatePendingShortcuts()
-    }
-
-    private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
-        toolsRepository.getAllTools()
-            .map { async { createToolShortcut(it) } }.awaitAll()
-            .filterNotNull()
-            .associateBy { it.id }
     }
 
     private suspend fun createToolShortcut(id: ShortcutId.Tool) = withContext(ioDispatcher) {
