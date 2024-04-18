@@ -235,19 +235,16 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         updatePendingShortcuts()
     }
 
-    private suspend fun createToolShortcut(id: ShortcutId.Tool) = withContext(ioDispatcher) {
+    @VisibleForTesting
+    internal suspend fun createToolShortcut(id: ShortcutId.Tool) = withContext(ioDispatcher) {
         createToolShortcut(id, toolsRepository.findTool(id.tool))
     }
 
-    private suspend fun createToolShortcut(tool: Tool): ShortcutInfoCompat? {
-        return createToolShortcut(
-            id = tool.code?.let { ShortcutId.Tool(it) } ?: return null,
-            tool = tool
-        )
-    }
+    private suspend fun createToolShortcut(tool: Tool) = tool.code
+        ?.let { ShortcutId.Tool(it) }
+        ?.let { createToolShortcut(it, tool) }
 
-    @VisibleForTesting
-    internal suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
+    private suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
         if (tool == null) return@withContext null
         val type = tool.type
         if (type !in SUPPORTED_TOOL_TYPES) return@withContext null

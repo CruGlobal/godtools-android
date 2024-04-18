@@ -359,9 +359,10 @@ class GodToolsShortcutManagerTest {
         val id = ShortcutId.Tool("tool")
         val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
         val translation = randomTranslation("tool", Locale.ENGLISH)
+        coEvery { toolsRepository.findTool("tool") } returns tool
         coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
 
-        assertNotNull(shortcutManager.createToolShortcut(id, tool)) {
+        assertNotNull(shortcutManager.createToolShortcut(id)) {
             assertEquals(translation.name, it.shortLabel.toString())
             assertEquals(translation.name, it.longLabel.toString())
 
@@ -375,8 +376,9 @@ class GodToolsShortcutManagerTest {
     @Test
     fun `createToolShortcut() - Invalid - Tool Not Found`() = testScope.runTest {
         val id = ShortcutId.Tool("tool")
+        coEvery { toolsRepository.findTool("tool") } returns null
 
-        assertNull(shortcutManager.createToolShortcut(id, null))
+        assertNull(shortcutManager.createToolShortcut(id))
         verify { translationsRepository wasNot Called }
     }
 
@@ -385,17 +387,19 @@ class GodToolsShortcutManagerTest {
         val id = ShortcutId.Tool("tool")
         val tool = randomTool("tool", type = Tool.Type.LESSON)
         val translation = randomTranslation("tool", Locale.ENGLISH)
+        coEvery { toolsRepository.findTool("tool") } returns tool
         coEvery { translationsRepository.findLatestTranslation("tool", Locale.ENGLISH) } returns translation
 
-        assertNull(shortcutManager.createToolShortcut(id, tool))
+        assertNull(shortcutManager.createToolShortcut(id))
     }
 
     @Test
     fun `createToolShortcut() - Invalid - No Translations - Favorite Tool Shortcut`() = testScope.runTest {
         val id = ShortcutId.Tool("tool")
         val tool = randomTool("tool", type = Tool.Type.TRACT)
+        coEvery { toolsRepository.findTool("tool") } returns tool
 
-        assertNull(shortcutManager.createToolShortcut(id, tool))
+        assertNull(shortcutManager.createToolShortcut(id))
     }
     // endregion createToolShortcut()
 
