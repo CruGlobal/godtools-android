@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.lang.ref.WeakReference
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -127,10 +128,10 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @AnyThread
-    fun getPendingToolShortcut(code: String?): PendingShortcut? {
+    fun getPendingToolShortcut(code: String?, vararg locales: Locale?): PendingShortcut? {
         if (!isEnabled) return null
         if (code == null) return null
-        val id = ShortcutId.Tool(code)
+        val id = ShortcutId.Tool(code, *locales)
 
         return synchronized(pendingShortcuts) {
             pendingShortcuts[id.id]?.get()

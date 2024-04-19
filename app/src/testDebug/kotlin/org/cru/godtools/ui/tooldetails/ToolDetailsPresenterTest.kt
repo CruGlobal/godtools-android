@@ -402,7 +402,7 @@ class ToolDetailsPresenterTest {
     fun `Event - PinShortcut`() = runTest {
         val pendingShortcut: PendingShortcut = mockk()
         every { shortcutManager.canPinToolShortcut(any()) } returns true
-        every { shortcutManager.getPendingToolShortcut(TOOL) } returns pendingShortcut
+        every { shortcutManager.getPendingToolShortcut(any(), *anyVararg()) } returns pendingShortcut
         every { shortcutManager.pinShortcut(pendingShortcut) } just Runs
 
         createPresenter().test {

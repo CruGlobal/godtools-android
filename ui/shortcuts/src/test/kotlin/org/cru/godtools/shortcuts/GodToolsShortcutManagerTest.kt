@@ -253,6 +253,25 @@ class GodToolsShortcutManagerTest {
             assertTrue(expectedIntent equalsIntent it.intent)
         }
     }
+
+    @Test
+    fun `getPendingToolShortcut() - Valid - With Language`() = testScope.runTest {
+        val tool = randomTool("tool", type = Tool.Type.TRACT, detailsBannerId = null)
+        val translation = randomTranslation("tool", Locale.FRENCH)
+        coEvery { toolsRepository.findTool("tool") } returns tool
+        coEvery { translationsRepository.findLatestTranslation("tool", Locale.FRENCH) } returns translation
+
+        val pending = shortcutManager.getPendingToolShortcut("tool", Locale.FRENCH)!!
+        assertEquals(ShortcutId.Tool("tool", Locale.FRENCH), pending.id)
+        assertNull(pending.shortcut)
+        runCurrent()
+        assertNotNull(pending.shortcut) {
+            val expectedIntent = app.createTractActivityIntent("tool", Locale.FRENCH)
+                .setAction(Intent.ACTION_VIEW)
+                .putExtra(SHORTCUT_LAUNCH, true)
+            assertTrue(expectedIntent equalsIntent it.intent)
+        }
+    }
     // endregion getPendingToolShortcut()
 
     @Test
