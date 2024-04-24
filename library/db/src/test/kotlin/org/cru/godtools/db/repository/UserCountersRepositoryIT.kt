@@ -1,14 +1,14 @@
 package org.cru.godtools.db.repository
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.UserCounter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.empty
 import org.hamcrest.Matchers.`is`
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
 
 private const val COUNTER = "counter"
 private const val COUNTER2 = "counter2"

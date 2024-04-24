@@ -2,6 +2,10 @@ package org.cru.godtools.db.repository
 
 import java.lang.Thread.sleep
 import java.util.UUID
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.base.TimeConstants.DAY_IN_MS
 import org.hamcrest.MatcherAssert.assertThat
@@ -11,10 +15,6 @@ import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.hamcrest.Matchers.lessThan
 import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.hamcrest.Matchers.not
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
 
 private const val KEY = "key"
 private val COMPOUND_KEY = arrayOf(KEY, 1, true)

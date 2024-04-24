@@ -11,9 +11,9 @@ import io.mockk.just
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.cru.godtools.base.ui.startAppLanguageActivity
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
