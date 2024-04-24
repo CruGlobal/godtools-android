@@ -2,11 +2,11 @@ package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
 import kotlin.random.Random
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.GlobalActivityAnalytics
-import org.junit.Assert.assertEquals
-import org.junit.Test
 
 abstract class GlobalActivityRepositoryIT {
     internal abstract val repository: GlobalActivityRepository

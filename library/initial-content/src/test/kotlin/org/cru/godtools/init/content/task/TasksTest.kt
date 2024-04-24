@@ -12,6 +12,7 @@ import io.mockk.just
 import io.mockk.mockk
 import java.io.ByteArrayInputStream
 import java.util.Locale
+import kotlin.test.Test
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
@@ -23,21 +24,20 @@ import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.junit.Test
 
 class TasksTest {
-    private val context = mockk<Context> {
+    private val context: Context = mockk {
         every { assets } returns mockk {
             every { open(any()) } answers { ByteArrayInputStream(ByteArray(0)) }
         }
     }
-    private val downloadManager = mockk<GodToolsDownloadManager>()
-    private val jsonApiConverter = mockk<JsonApiConverter>()
+    private val downloadManager: GodToolsDownloadManager = mockk()
+    private val jsonApiConverter: JsonApiConverter = mockk()
     private val lastSyncTimeRepository: LastSyncTimeRepository = mockk {
         coEvery { getLastSyncTime(*anyVararg()) } returns 0
         coEvery { updateLastSyncTime(*anyVararg()) } just Runs
     }
-    private val settings = mockk<Settings> {
+    private val settings: Settings = mockk {
         every { appLanguage } returns Locale("x")
     }
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true) {

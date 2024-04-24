@@ -9,25 +9,25 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import io.mockk.verifyAll
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
-import org.junit.After
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Before
-import org.junit.Test
 
 class DashboardAppsFlyerDeepLinkResolverTest {
-    private val context = mockk<Context>()
-    private val intent = mockk<Intent>()
+    private val context: Context = mockk()
+    private val intent: Intent = mockk()
 
-    @Before
+    @BeforeTest
     fun setupMocks() {
         mockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
         every { context.createDashboardIntent(any()) } returns intent
     }
 
-    @After
+    @AfterTest
     fun cleanupMocks() {
         unmockkStatic("org.cru.godtools.base.ui.ActivitiesKt")
     }
@@ -35,7 +35,7 @@ class DashboardAppsFlyerDeepLinkResolverTest {
     @Test
     fun testInvalidDeepLinks() {
         listOf("tool|tract|kgp|en", "tool|cyoa|", "tool|cyoa|test", "tool|cyoa|test|en").forEach {
-            assertNull("$it should not resolve to an intent", DashboardAppsFlyerDeepLinkResolver.resolve(context, it))
+            assertNull(DashboardAppsFlyerDeepLinkResolver.resolve(context, it), "$it should not resolve to an intent")
             verify { context.createDashboardIntent(any()) wasNot Called }
         }
     }

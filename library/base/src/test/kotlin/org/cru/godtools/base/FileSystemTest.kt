@@ -4,22 +4,16 @@ import android.content.Context
 import io.mockk.every
 import io.mockk.mockk
 import java.io.File
-import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
 
 class FileSystemTest {
     private val rootDir = File.createTempFile("abc", null).parentFile!!
-    private val context = mockk<Context> { every { filesDir } returns rootDir }
+    private val context: Context = mockk { every { filesDir } returns rootDir }
 
-    private lateinit var fileSystem: FileSystem
-
-    @BeforeTest
-    fun setup() {
-        fileSystem = FileSystem(context, "resources")
-    }
+    private val fileSystem = FileSystem(context, "resources")
 
     @Test
     fun testExists() = runTest {

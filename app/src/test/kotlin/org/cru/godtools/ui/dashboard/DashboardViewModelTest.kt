@@ -9,6 +9,11 @@ import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,11 +25,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.sync.GodToolsSyncService
-import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
 
 @Suppress("DeferredResultUnused")
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,7 +39,7 @@ class DashboardViewModelTest {
 
     private lateinit var viewModel: DashboardViewModel
 
-    @Before
+    @BeforeTest
     fun createViewModel() {
         Dispatchers.setMain(UnconfinedTestDispatcher(testScope.testScheduler))
 
@@ -49,7 +49,7 @@ class DashboardViewModelTest {
         )
     }
 
-    @After
+    @AfterTest
     fun reset() {
         Dispatchers.resetMain()
     }

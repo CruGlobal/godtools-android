@@ -3,9 +3,9 @@ package org.cru.godtools.ui.dashboard
 import android.app.Application
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
