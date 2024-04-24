@@ -38,7 +38,7 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.util.os.equalsBundle
+import org.ccci.gto.android.common.util.content.equalsIntent
 import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
@@ -332,8 +332,7 @@ class ToolDetailsPresenterTest {
         with(navigator.awaitNextScreen()) {
             assertTrue(this is IntentScreen)
             val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), showTips = false)!!
-            assertEquals(expected.component, intent.component)
-            assertTrue(expected.extras equalsBundle intent.extras)
+            assertTrue(expected equalsIntent intent)
         }
 
         navigator.assertIsEmpty()
@@ -363,8 +362,7 @@ class ToolDetailsPresenterTest {
                 activeLocale = Locale.FRENCH,
                 showTips = false
             )!!
-            assertEquals(expected.component, intent.component)
-            assertTrue(expected.extras equalsBundle intent.extras)
+            assertTrue(expected equalsIntent intent)
         }
 
         navigator.assertIsEmpty()
