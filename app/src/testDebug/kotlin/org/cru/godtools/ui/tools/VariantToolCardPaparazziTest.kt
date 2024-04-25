@@ -8,8 +8,6 @@ import coil.test.FakeImageLoaderEngine
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.mockk.mockk
-import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -18,9 +16,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.cru.godtools.model.Language
-import org.cru.godtools.model.randomTool
-import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
@@ -29,30 +24,17 @@ class VariantToolCardPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(nightMode = nightMode, accessibilityMode = accessibilityMode) {
-    private val toolState = ToolCard.State(
-        tool = randomTool(
-            name = "Tool Title",
-            description = "Description of tool",
-        ),
-        banner = mockk(),
-        availableLanguages = 1234,
-        appLanguage = Language(Locale.ENGLISH),
-        appTranslation = randomTranslation(),
-        secondLanguage = Language(Locale.FRENCH),
-        secondLanguageAvailable = true,
-    )
-
     @BeforeTest
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        val banner = Drawable.createFromStream(javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
+        val file = Drawable.createFromStream(javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
         Coil.setImageLoader(
             ImageLoader.Builder(paparazzi.context)
                 .components {
                     add(
                         FakeImageLoaderEngine.Builder()
-                            .intercept(toolState.banner!!, banner)
+                            .intercept(ToolCardStateTestData.banner, file)
                             .build()
                     )
                 }
@@ -68,23 +50,25 @@ class VariantToolCardPaparazziTest(
     }
 
     @Test
-    fun `VariantToolCard() - Default`() = centerInSnapshot { VariantToolCard(toolState) }
+    fun `VariantToolCard() - Default`() = centerInSnapshot { VariantToolCard(ToolCardStateTestData.tool) }
 
     @Test
-    fun `VariantToolCard() - Selected`() = centerInSnapshot { VariantToolCard(toolState, isSelected = true) }
+    fun `VariantToolCard() - Selected`() = centerInSnapshot {
+        VariantToolCard(ToolCardStateTestData.tool, isSelected = true)
+    }
 
     @Test
     fun `VariantToolCard() - No second Language`() = centerInSnapshot {
-        VariantToolCard(toolState.copy(secondLanguage = null, secondLanguageAvailable = false))
+        VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguage = null, secondLanguageAvailable = false))
     }
 
     @Test
     fun `VariantToolCard() - App Language Not Available`() = centerInSnapshot {
-        VariantToolCard(toolState.copy(appTranslation = null))
+        VariantToolCard(ToolCardStateTestData.tool.copy(appTranslation = null))
     }
 
     @Test
     fun `VariantToolCard() - Second Language Not Available`() = centerInSnapshot {
-        VariantToolCard(toolState.copy(secondLanguageAvailable = false))
+        VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguageAvailable = false))
     }
 }
