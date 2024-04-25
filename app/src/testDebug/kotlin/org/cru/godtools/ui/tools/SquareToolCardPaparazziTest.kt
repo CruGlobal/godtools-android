@@ -8,8 +8,6 @@ import coil.test.FakeImageLoaderEngine
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import io.mockk.mockk
-import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -19,9 +17,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.downloadmanager.DownloadProgress
-import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
-import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
@@ -30,28 +25,20 @@ class SquareToolCardPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(nightMode = nightMode, accessibilityMode = accessibilityMode) {
-    private val toolState = ToolCard.State(
-        tool = randomTool(
-            name = "Tool Title",
-            category = Tool.CATEGORY_GOSPEL,
-            isFavorite = false,
-        ),
-        banner = mockk(),
-        secondLanguage = Language(Locale.FRENCH),
-        secondLanguageAvailable = true,
-    )
+    private val toolState = ToolCardStateTestData.tool.copy(translation = null)
+    private val toolStateFavorite = ToolCardStateTestData.toolFavorite.copy(translation = null)
 
     @BeforeTest
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        val banner = Drawable.createFromStream(javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
+        val file = Drawable.createFromStream(javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
         Coil.setImageLoader(
             ImageLoader.Builder(paparazzi.context)
                 .components {
                     add(
                         FakeImageLoaderEngine.Builder()
-                            .intercept(toolState.banner!!, banner)
+                            .intercept(ToolCardStateTestData.banner, file)
                             .build()
                     )
                 }
@@ -75,17 +62,7 @@ class SquareToolCardPaparazziTest(
     }
 
     @Test
-    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot {
-        SquareToolCard(
-            toolState.copy(
-                tool = randomTool(
-                    name = "Tool Title",
-                    category = Tool.CATEGORY_GOSPEL,
-                    isFavorite = true
-                )
-            )
-        )
-    }
+    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot { SquareToolCard(toolStateFavorite) }
 
     @Test
     fun `SquareToolCard() - Show Second Language`() = centerInSnapshot {
