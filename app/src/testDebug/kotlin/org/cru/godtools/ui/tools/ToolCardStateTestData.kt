@@ -20,8 +20,12 @@ object ToolCardStateTestData {
         banner = banner,
         translation = randomTranslation(
             "tool",
-            name = "Translation Title"
+            name = "Translated Tool Title",
+            tagline = "Translated Tool Tagline",
         ),
+        availableLanguages = 1234,
+        appLanguage = Language(Locale.ENGLISH),
+        appTranslation = randomTranslation(),
         secondLanguage = Language(Locale.FRENCH),
         secondLanguageAvailable = true
     )
