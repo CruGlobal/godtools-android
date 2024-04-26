@@ -39,9 +39,7 @@ https://knowgod.com/
     <string name="dashboard_home_section_favorites_action_view_all">سب کو دیکھیں اور حاصل کریں؛</string>
     <string name="dashboard_home_section_favorites_action_all_tools">ٹولز پر جائیں</string>
     <string name="tools_list_favorites_banner_text">آف لائن ٹول حاصل کرنے کے لئے دل کے آئیکن کو دبائیں جو اُسے آپ کے پسندیدہ میں شامل کرتا ہے۔</string>
-    <string name="tools_list_favorites_banner_action_dismiss">"برطرف کریں
-
-"</string>
+    <string name="tools_list_favorites_banner_action_dismiss">برطرف کریں</string>
     <!-- All Tools -->
     <string name="nav_all_tools">ٹولز</string>
     <string name="dashboard_tools_section_filter_label">فلٹر</string>
@@ -50,25 +48,17 @@ https://knowgod.com/
     <string name="dashboard_tools_section_categories_label">زمرے</string>
     <string name="dashboard_tools_section_categories_all">تمام ٹولز</string>
     <string name="dashboard_tools_section_spotlight_label">ٹول اسپاٹ لائٹ</string>
-    <string name="dashboard_tools_section_spotlight_description">"کچھ ٹولز جو ہمارا خیال ہے کہ آپ کو پسند آسکتے ہیں
-
-
-
-"</string>
+    <string name="dashboard_tools_section_spotlight_description">کچھ ٹولز جو ہمارا خیال ہے کہ آپ کو پسند آسکتے ہیں</string>
     <!-- Tool Cards -->
-    <string name="tools_list_remove_favorite_dialog_title">"کو اپنے ترجم%1$s براہ مہربانی متغیر 
-کے حصے کے طور پر شامل کریں
-"</string>
+    <string name="tools_list_remove_favorite_dialog_title">کو اپنے ترجم%1$s براہ مہربانی متغیر کے حصے کے طور پر شامل کریں</string>
     <string name="tools_list_remove_favorite_dialog_confirm">نکال دیں</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ</string>
-    <string name="tool_card_label_language_unavailable">"میں دستیاب نہیں%1$s
-"</string>
-    <string name="action_tools_about">"تفصیلات
-"</string>
+    <string name="tool_card_label_language_unavailable">میں دستیاب نہیں%1$s</string>
+    <string name="action_tools_about">تفصیلات</string>
     <string name="action_tools_open">کھولیں</string>
     <!-- In App Update -->
     <string name="play_update_available">اَپ ڈیٹ دستیاب</string>
-    <string name="play_update_available_action">"ڈاؤن لوڈ "</string>
-    <string name="play_update_downloaded">" اپ ڈیٹ ڈاؤن لوڈ"</string>
+    <string name="play_update_available_action">ڈاؤن لوڈ</string>
+    <string name="play_update_downloaded">اپ ڈیٹ ڈاؤن لوڈ</string>
     <string name="play_update_downloaded_action">ریلوڈ کریں</string>
 </resources>

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">"
-
-اِنسٹال کریں
-
-"</string>
+    <string name="menu_install">اِنسٹال کریں</string>
     <string name="menu_share_tract">یہ ٹول بھیجیں</string>
     <string name="tract_card_previous">گزشتہ</string>
     <string name="tract_card_next">اگلا</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">اپنی سکرین شئیر کریں</string>
-    <string name="menu_live_share_active">"
-سکرین شئیرنگ فعال
-
-
-"</string>
+    <string name="menu_live_share_active">سکرین شئیرنگ فعال</string>
     <string name="share_tool_message_tract_live_share">خوش آمدید، سکرین کے اشتراک کے ذریعے GodTools میں میرے ساتھ چلیں۔ لنک یہ ہے: %1$s\n\nاگر آپ کو کچھ دیر بعد تک یہ پیغام موصول نہیں ہوتا ہے، تو ہو سکتا ہے لنک اب بھی کام نہ کر رہی ہو۔ ہم کسی اور وقت دوبارہ کوشش کر سکتے ہیں۔</string>
     <string name="tract_live_share_starting">سکرین شئیرنگ شروع کریں</string>
     <string name="tract_live_share_unable_to_connect">سکرین شئیرنگ کے ساتھ منسلک ہونے سے قاصر</string>
@@ -30,6 +22,5 @@
     <string name="tract_settings_languages_description">اِس ٹول میں دو زبانوں کے درمیان مواصلات</string>
     <string name="tract_settings_languages_parallel">متوازی</string>
     <string name="tract_settings_languages_none">کوئی نہیں</string>
-    <string name="tract_settings_shareables_title">"متعلقہ تصاویر
-"</string>
+    <string name="tract_settings_shareables_title">متعلقہ تصاویر</string>
 </resources>

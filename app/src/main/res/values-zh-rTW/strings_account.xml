@@ -6,7 +6,19 @@
     <string name="account_create_heading">建立帳號</string>
     <string name="account_create_description">在你的指尖建立一個能擁有真實故事、得到激勵並實際作法的帳號。</string>
     <string name="account_login_heading">登入</string>
+    <string name="account_login_description">登入帳號，輕鬆獲取真實故事、實用技巧，感受正能量。</string>
+    <string name="account_error_user_already_exists">使用者帳號已存在。</string>
+    <string name="account_error_user_not_found">找不到使用者帳號。</string>
+    <string name="account_error_unknown">登入時發生錯誤。</string>
+    <string name="account_error_dialog_dismiss">好</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">刪除帳號</string>
+    <string name="account_delete_heading">我們捨不得您離開！</string>
+    <string name="account_delete_description">刪除帳號，以後就無法取用喜愛的工具或查看帳號活動。</string>
+    <string name="account_delete_action_delete">刪除帳號</string>
+    <string name="account_delete_action_cancel">保留帳號</string>
+    <string name="account_delete_error">刪除帳號時發生錯誤，請確認網路連線是否正常或重試。</string>
+    <string name="account_delete_error_dismiss">好</string>
     <!-- Activity -->
     <string name="profile_tab_activity">活動</string>
     <string name="account_activity_header">你的活動</string>

@@ -2,4 +2,6 @@
 <resources>
     <string name="language_name_fa">फारसी</string>
     <string name="language_name_fil">फिलिपीनी</string>
+    <string name="language_name_fil_x_taglish">Taglish</string>
+    <string name="language_name_sid">Sidama</string>
 </resources>

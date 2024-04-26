@@ -6,7 +6,19 @@
     <string name="account_create_heading">创建账户</string>
     <string name="account_create_description">创建账户，让真实故事、励志金句和实用技巧触手可及。</string>
     <string name="account_login_heading">登录</string>
+    <string name="account_login_description">登录账户，让真实故事、励志金句和实用技巧触手可及。</string>
+    <string name="account_error_user_already_exists">用户账户已存在。</string>
+    <string name="account_error_user_not_found">找不到用户账户。</string>
+    <string name="account_error_unknown">登录错误。</string>
+    <string name="account_error_dialog_dismiss">确定</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">删除账户</string>
+    <string name="account_delete_heading">别这么快离开</string>
+    <string name="account_delete_description">如果你删除了账户，就无法访问你收藏的工具或账户活动。</string>
+    <string name="account_delete_action_delete">删除我的账户</string>
+    <string name="account_delete_action_cancel">保留我的账户</string>
+    <string name="account_delete_error">删除账户时出错。确保你在线或稍后重试。</string>
+    <string name="account_delete_error_dismiss">确定</string>
     <!-- Activity -->
     <string name="profile_tab_activity">活动</string>
     <string name="account_activity_header">您的活动</string>

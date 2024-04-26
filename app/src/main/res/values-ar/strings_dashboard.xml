@@ -24,7 +24,7 @@ https://godtoolsapp.com \n\n
     <string name="menu_terms_of_use">شروط الاستخدام</string>
     <string name="menu_privacy_policy">سياسة الخصوصية</string>
     <string name="menu_copyright">حق النشر والتأليف</string>
-    <string name="menu_version">إصدار:  %1$s, %2$d,</string>
+    <string name="menu_version">الإصدار: %1$s(%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">الدروس</string>
     <string name="dashboard_lessons_header_title">الدروس المُعدة لأجلك</string>
@@ -45,6 +45,15 @@ https://godtoolsapp.com \n\n
     <string name="dashboard_tools_section_filter_label">فلتر</string>
     <string name="dashboard_tools_section_filter_category_any">أي فئة:</string>
     <string name="dashboard_tools_section_filter_language_any">أي لغة:</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">الأداة المتاحة %1$d</item>
+        <item quantity="other">الأدوات المتاحة %1$d</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">جميع الأدوات المتاحة</string>
     <string name="dashboard_tools_section_categories_label">الفئات</string>
     <string name="dashboard_tools_section_categories_all">كل الأدوات</string>
     <string name="dashboard_tools_section_spotlight_label">تسليط الضوء على الأداة</string>
@@ -54,7 +63,12 @@ https://godtoolsapp.com \n\n
     <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>
     <string name="tool_card_label_language_unavailable">غير متاحة في غضون %1$s</string>
+    <string name="tool_card_accessibility_language_available">متاح</string>
     <string name="action_tools_about">التفاصيل</string>
     <string name="action_tools_open">فتح</string>
     <!-- In App Update -->
+    <string name="play_update_available">التحديث متاح</string>
+    <string name="play_update_available_action">تحميل</string>
+    <string name="play_update_downloaded">تم تنزيل التحديث</string>
+    <string name="play_update_downloaded_action">إعادة تحميل</string>
 </resources>

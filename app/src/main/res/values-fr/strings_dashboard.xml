@@ -49,6 +49,7 @@ Une version en ligne est disponible sur https://knowgod.com</string>
         <item quantity="one">%1$d Outil disponible</item>
         <item quantity="other">%1$d Outils disponibles</item>
     </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Tous les outils disponibles</string>
     <string name="dashboard_tools_section_categories_label">Catégories</string>
     <string name="dashboard_tools_section_categories_all">Tous les outils</string>
     <string name="dashboard_tools_section_spotlight_label">Pleins feux sur les outils</string>
@@ -58,6 +59,7 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Supprimer</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
     <string name="tool_card_label_language_unavailable">Non disponible en %1$s</string>
+    <string name="tool_card_accessibility_language_available">Disponible</string>
     <string name="action_tools_about">Détails</string>
     <string name="action_tools_open">Ouvrir</string>
     <!-- In App Update -->

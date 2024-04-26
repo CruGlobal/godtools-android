@@ -44,6 +44,13 @@
     <string name="dashboard_tools_section_filter_label">Фильтр</string>
     <string name="dashboard_tools_section_filter_category_any">Любая категория</string>
     <string name="dashboard_tools_section_filter_language_any">Любой язык</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">Доступен %1$d инструмент</item>
+        <item quantity="other">Доступны %1$d инструментов</item>
+        <item quantity="few">Доступны %1$d инструментов</item>
+        <item quantity="many">Доступны %1$d инструментов</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Все доступные инструменты</string>
     <string name="dashboard_tools_section_categories_label">Категории</string>
     <string name="dashboard_tools_section_categories_all">Все инструменты</string>
     <string name="dashboard_tools_section_spotlight_label">Обзор инструментов</string>
@@ -53,7 +60,12 @@
     <string name="tools_list_remove_favorite_dialog_confirm">Удалить</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Отмена</string>
     <string name="tool_card_label_language_unavailable">Не доступно на %1$s</string>
+    <string name="tool_card_accessibility_language_available">Доступно</string>
     <string name="action_tools_about">Сведения</string>
     <string name="action_tools_open">Открыть</string>
     <!-- In App Update -->
+    <string name="play_update_available">Доступно обновление</string>
+    <string name="play_update_available_action">Загрузить</string>
+    <string name="play_update_downloaded">Обновление загружено</string>
+    <string name="play_update_downloaded_action">Перезагрузить</string>
 </resources>

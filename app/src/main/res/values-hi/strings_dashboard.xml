@@ -14,15 +14,15 @@
     <string name="menu_heading_share">साझा करें</string>
     <string name="menu_review">समीक्षा लिखें</string>
     <string name="menu_share_story">हमसे कोई कहानी शेयर करें</string>
-    <string name="menu_share_godtools">GodTools ऐप को साझा करें</string>
+    <string name="menu_share_godtools">GodTools साझा करें</string>
     <string name="share_app_message">यहां आप GodTools ऐप डाउनलोड कर सकते हैं: https://godtoolsapp.com \n\n
 
 ऑनलाइन संस्करण यहां देखा जा सकता है: https://knowgod.com</string>
     <string name="share_story_subject">GodTools कहानी</string>
     <string name="menu_heading_about">परिचय</string>
-    <string name="menu_terms_of_use">प्रयोग की शर्तें</string>
+    <string name="menu_terms_of_use">उपयोग की शर्तें</string>
     <string name="menu_privacy_policy">निजता नीति</string>
-    <string name="menu_copyright">कॉपीराइट</string>
+    <string name="menu_copyright">कॉपीराइट जानकारी</string>
     <string name="menu_version">संस्करण: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">अध्याय</string>
@@ -40,10 +40,15 @@
     <string name="tools_list_favorites_banner_text">टूल को पसंदीदा में जोड़ने वाले \'दिल\' चिन्ह को टैप करके आप उस टूल को ऑफलाइन उपलब्ध कर सकते हैं।</string>
     <string name="tools_list_favorites_banner_action_dismiss">खारिज करें</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">सभी टूल्स</string>
+    <string name="nav_all_tools">टूल्स</string>
     <string name="dashboard_tools_section_filter_label">फ़िल्टर</string>
     <string name="dashboard_tools_section_filter_category_any">कोई भी श्रेणी</string>
     <string name="dashboard_tools_section_filter_language_any">कोई भी भाषा</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d टूल उपलब्ध</item>
+        <item quantity="other">%1$d टूल्स उपलब्ध</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">सभी टूल्स उपलब्ध</string>
     <string name="dashboard_tools_section_categories_label">श्रेणियाँ</string>
     <string name="dashboard_tools_section_categories_all">सभी टूल्स</string>
     <string name="dashboard_tools_section_spotlight_label">टूल स्पॉटलाइट</string>
@@ -53,6 +58,7 @@
     <string name="tools_list_remove_favorite_dialog_confirm">निकालें</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">रद्द करें</string>
     <string name="tool_card_label_language_unavailable">%1$s में उपलब्ध नहीं</string>
+    <string name="tool_card_accessibility_language_available">उपलब्ध</string>
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोलें</string>
     <!-- In App Update -->

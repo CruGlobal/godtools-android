@@ -6,10 +6,70 @@
     <string name="account_create_heading">التسجيل (إنشاء حساب)</string>
     <string name="account_create_description">قم بإنشاء حساب للحصول على قصص حقيقية وتشجيع ونصائح عملية في متناول يدك.</string>
     <string name="account_login_heading">تسجيل دخول</string>
+    <string name="account_login_description">قم بتسجيل الدخول إلى حسابك لتحصل على قصص حقيقية وتشجيعات ونصائح عملية في متناول يدك</string>
+    <string name="account_error_user_already_exists">حساب المستخدم موجود بالفعل.</string>
+    <string name="account_error_user_not_found">لم يتم العثور على حساب المستخدم.</string>
+    <string name="account_error_unknown">خطأ في تسجيل الدخول.</string>
+    <string name="account_error_dialog_dismiss">موافق</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">حذف الحساب</string>
+    <string name="account_delete_heading">لا تغادرنا بهذه السرعة</string>
+    <string name="account_delete_description">إذا قمت بحذف حسابك، فلن تتمكن من الوصول إلى أدواتك المفضلة أو نشاط حسابك.</string>
+    <string name="account_delete_action_delete">احذف حسابي</string>
+    <string name="account_delete_action_cancel">أبق على حسابي</string>
+    <string name="account_delete_error">حدث خطأ أثناء حذف حسابك. تأكد من أنك متصل بالإنترنت أو حاول مرة أخرى لاحقًا.</string>
+    <string name="account_delete_error_dismiss">موافق</string>
     <!-- Activity -->
     <string name="profile_tab_activity">الحركة</string>
     <string name="account_activity_header">نشاط حركتك</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">الأداة مفتوحة</item>
+        <item quantity="other">عدد فتح أدوات</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">الانتهاء من الدرس</item>
+        <item quantity="other">استكمالات الدرس</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">مشاركة الشاشة</item>
+        <item quantity="other">الشاشات التي تم مشاركاتها</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">الرابط الذي تم مشاركته</item>
+        <item quantity="other">الروابط تم مشاركتها</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">اللغة المستخدمة</item>
+        <item quantity="other">اللغات المستخدمة</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">جلسة</item>
+        <item quantity="other">جلسات</item>
+        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">شاراتك</string>
     <plurals name="account_activity_badge_tools_opened">

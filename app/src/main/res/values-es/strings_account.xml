@@ -22,6 +22,26 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>
     <string name="account_activity_header">Tu actividad</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Herramienta abierta</item>
+        <item quantity="other">Herramientas abiertas</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Leccion completada</item>
+        <item quantity="other">Lecciones completada</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Pantalla compartida</item>
+        <item quantity="other">Pantalla compartidas</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Enlace compartido</item>
+        <item quantity="other">Enlaces compartido</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Idioma utilizado</item>
+        <item quantity="other">Idiomas utilizados</item>
+    </plurals>
     <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
         <item quantity="one">Sesion</item>
         <item quantity="other">Sesiones</item>
@@ -30,22 +50,22 @@
     <string name="account_activity_badges_header">Tus insignias</string>
     <plurals name="account_activity_badge_tools_opened">
         <item quantity="one">Herramienta %1$,d abierta</item>
-        <item quantity="other">Herramienta %1$,d abierta</item>
+        <item quantity="other">Herramientas %1$,d abierta</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="one">Lección %1$,d completada</item>
-        <item quantity="other">Lección %1$,d completada</item>
+        <item quantity="other">Lecciónes %1$,d completada</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
         <item quantity="one">Artículo %1$,d abierto</item>
-        <item quantity="other">Artículo %1$,d abierto</item>
+        <item quantity="other">Artículos %1$,d abierto</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
         <item quantity="one">Imagen %1$,d compartida</item>
         <item quantity="other">Imagen %1$,d compartida</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="one">Tips de entrenamiento %1$,d completado</item>
+        <item quantity="one">Tip de entrenamiento %1$,d completado</item>
         <item quantity="other">Tips de entrenamiento %1$,d completado</item>
     </plurals>
     <!-- Global Activity -->

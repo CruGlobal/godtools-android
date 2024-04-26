@@ -44,6 +44,10 @@
     <string name="dashboard_tools_section_filter_label">篩選</string>
     <string name="dashboard_tools_section_filter_category_any">不限類別</string>
     <string name="dashboard_tools_section_filter_language_any">不限語言</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="other">%1$d 個可用工具</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">所有個可用工具</string>
     <string name="dashboard_tools_section_categories_label">類別</string>
     <string name="dashboard_tools_section_categories_all">所有工具</string>
     <string name="dashboard_tools_section_spotlight_label">工具精選</string>
@@ -53,6 +57,7 @@
     <string name="tools_list_remove_favorite_dialog_confirm">移除</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">取消</string>
     <string name="tool_card_label_language_unavailable">無法提供 %1$s</string>
+    <string name="tool_card_accessibility_language_available">可使用</string>
     <string name="action_tools_about">詳細資料</string>
     <string name="action_tools_open">開啟</string>
     <!-- In App Update -->

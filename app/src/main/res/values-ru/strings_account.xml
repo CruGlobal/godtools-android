@@ -6,7 +6,19 @@
     <string name="account_create_heading">Создать аккаунт</string>
     <string name="account_create_description">Создайте аккаунт, чтобы вам были доступны реальные истории, слова поддержки и практические советы.</string>
     <string name="account_login_heading">Войти</string>
+    <string name="account_login_description">Войдите в учетную запись, чтобы видеть реальные истории, слова поддержки и практические советы.</string>
+    <string name="account_error_user_already_exists">Учетная запись пользователя уже существует.</string>
+    <string name="account_error_user_not_found">Учетная запись пользователя не найдена.</string>
+    <string name="account_error_unknown">Ошибка входа.</string>
+    <string name="account_error_dialog_dismiss">ОК</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Удалить учетную запись</string>
+    <string name="account_delete_heading">Не уходите так быстро</string>
+    <string name="account_delete_description">Если вы удалите учетную запись, вы больше не сможете пользоваться любимыми инструментами и функциями.</string>
+    <string name="account_delete_action_delete">Удалить мою учетную запись</string>
+    <string name="account_delete_action_cancel">Не удалять учетную запись</string>
+    <string name="account_delete_error">Во время удаления учетной записи произошла ошибка. Проверьте подключение к сети или повторите попытку позже.</string>
+    <string name="account_delete_error_dismiss">ОК</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Активность</string>
     <string name="account_activity_header">Ваша активность</string>
