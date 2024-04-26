@@ -2,19 +2,22 @@
 <resources>
     <!-- Tool Details UI -->
     <string name="menu_add_to_home">ہوم سکرین میں شامل کریں</string>
-    <string name="action_tools_open_tool">"ٹول کھولیں
-
-"</string>
+    <string name="action_tools_open_tool">ٹول کھولیں</string>
     <string name="action_tools_add_favorite">پسندیدہ میں شامل کریں</string>
     <string name="action_tools_remove_favorite">پسندیدہ میں سے خارج کریں</string>
     <string name="action_tools_open_training">یہ ٹول شئیر کرنا سیکھیں</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d وِیُو</item>
+        <item quantity="other">%1$,d وِیُوز</item>
+    </plurals>
     <string name="label_tools_about">کے بارے میں</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d زبان</item>
+        <item quantity="other">%1$,d زبانیں</item>
+    </plurals>
     <string name="tool_details_section_description_conversation_starters">گفتگو کا آغاز</string>
     <string name="tool_details_section_description_outline">خاکہ</string>
-    <string name="tool_details_section_description_bible_references">"بائبل کے حوالہ جات
-
-
-"</string>
+    <string name="tool_details_section_description_bible_references">بائبل کے حوالہ جات</string>
     <string name="tool_details_section_description_languages_available">زبانیں دستیاب</string>
     <string name="tool_details_section_variants_label">تراجم</string>
     <string name="tool_details_section_variants_description">جب ہم کہتے ہیں کہ آپ ایک ٹول کے متعدد ورژن پسند  کر سکتے ہیں۔ تو ہمارا مطلب ہے کہ آپ دل کے بٹن کو دبا سکتے ہیں اور یہ دل/پسندیدہ حصے کے اَیپ کو ظاہر کرے گا ۔</string>

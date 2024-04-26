@@ -10,8 +10,8 @@
     <string name="title_language_settings">Ajustes de idioma</string>
     <string name="language_settings_section_app_language_heading">Idioma de la interfaz de la aplicación</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%1$d Idioma disponible</item>
-        <item quantity="other">%1$d Idiomas disponibles</item>
+        <item quantity="one">%1$,d Idioma disponible</item>
+        <item quantity="other">%1$,d Idiomas disponibles</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Establece el idioma en el que deseas que se muestre toda la aplicación.</string>
     <string name="language_settings_section_offline_heading">Idiomas de herramientas disponibles sin conexión</string>

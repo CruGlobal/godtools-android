@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">Hoạt động toàn cầu</string>
+    <string name="menu_profile">Hoạt động</string>
     <string name="account_joined">Tham gia %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">Tạo tài khoản</string>
     <string name="account_create_description">Tạo một tài khoản để có những câu chuyện, sự khích lệ và gợi ý thực hành trong tầm tay bạn.</string>
     <string name="account_login_heading">Đăng nhập</string>
+    <string name="account_login_description">Đăng nhập vào tài khoản của bạn để đọc các câu chuyện có thật, câu chuyện tạo động lực, và các mẹo hữu ích.</string>
+    <string name="account_error_user_already_exists">Tài khoản người dùng đã tồn tại.</string>
+    <string name="account_error_user_not_found">Không tìm được tài khoản người dùng.</string>
+    <string name="account_error_unknown">Có lỗi khi đăng nhập</string>
+    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Xóa tài khoản</string>
+    <string name="account_delete_heading">Đừng đi quá sớm</string>
+    <string name="account_delete_description">Nếu bạn xóa tài khoản của mình, bạn sẽ không thể truy cập được các công cụ ưa thích hoặc các hoạt động trong tài khoản.</string>
+    <string name="account_delete_action_delete">Xóa tài khoản của tôi</string>
+    <string name="account_delete_action_cancel">Giữ tài khoản của tôi</string>
+    <string name="account_delete_error">Có lỗi xóa tài khoản của bạn. Đảm bảo rằng bạn đang trực tuyến và thử lại sau.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
     <string name="account_activity_header">Hoạt động của bạn</string>

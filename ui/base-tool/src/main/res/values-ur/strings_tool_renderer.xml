@@ -6,8 +6,7 @@
     <string name="tract_content_input_error_required">%1$s  مطلوب ہے</string>
     <string name="tract_content_input_error_invalid_email">مہربانی سے درست پتہ  لکھیں</string>
     <!-- Menu Items -->
-    <string name="menu_training_tips">"تربیتی تجاویز
-"</string>
+    <string name="menu_training_tips">تربیتی تجاویز</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شئیر کریں</string>
     <string name="tool_share_sheet_more_apps">مزید</string>

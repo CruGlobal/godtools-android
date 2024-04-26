@@ -2,7 +2,7 @@
 <resources>
     <!-- App Language UI -->
     <string name="language_settings_app_language_title">程式語言</string>
-    <string name="language_settings_app_language_dialog_message">您已將「%1$s」選為應用程式的語言。這項動作將會變更整個 GodTools 應用程式的語言設定。確定要變更嗎？</string>
+    <string name="language_settings_app_language_dialog_message">您已將 %1$s 選為應用程式的語言。這項動作將會變更整個 GodTools 應用程式的語言設定。確定要變更嗎？</string>
     <string name="language_settings_app_language_dialog_confirm">變更語言</string>
     <string name="language_settings_app_language_dialog_dismiss">現在不用</string>
     <!-- Language Settings UI -->
@@ -10,7 +10,7 @@
     <string name="title_language_settings">語言選項</string>
     <string name="language_settings_section_app_language_heading">應用程式介面語言</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="other">%1$d 種可用語言</item>
+        <item quantity="other">%1$,d 種可用語言</item>
     </plurals>
     <string name="language_settings_section_app_language_description">設定整個應用程式的顯示語言。</string>
     <string name="language_settings_section_offline_heading">離線可用的工具語言</string>

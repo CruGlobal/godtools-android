@@ -44,6 +44,10 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="dashboard_tools_section_filter_label">Bộ lọc</string>
     <string name="dashboard_tools_section_filter_category_any">Bất kỳ loại nào</string>
     <string name="dashboard_tools_section_filter_language_any">Bất kỳ ngôn ngữ nào</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="other">%1$d công cụ sẵn có</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Có sẵn Tất cả các Công cụ</string>
     <string name="dashboard_tools_section_categories_label">Các loại công cụ</string>
     <string name="dashboard_tools_section_categories_all">Tất cả công cụ</string>
     <string name="dashboard_tools_section_spotlight_label">Nổi bật công cụ</string>
@@ -53,7 +57,12 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>
     <string name="tool_card_label_language_unavailable">Không có sẵn trong %1$s</string>
-    <string name="action_tools_about">Giới thiệu</string>
+    <string name="tool_card_accessibility_language_available">Có sẵn</string>
+    <string name="action_tools_about">Chi tiết</string>
     <string name="action_tools_open">Mở</string>
     <!-- In App Update -->
+    <string name="play_update_available">Có sẵn bản cập nhật</string>
+    <string name="play_update_available_action">Tải về</string>
+    <string name="play_update_downloaded">Đã tải về bản cập nhật</string>
+    <string name="play_update_downloaded_action">Tải lại</string>
 </resources>

@@ -6,11 +6,19 @@
     <string name="account_create_heading">Créer un compte</string>
     <string name="account_create_description">Créez un compte pour avoir des histoires vraies, des encouragements et des conseils pratiques à portée de main.</string>
     <string name="account_login_heading">S\'inscrire</string>
+    <string name="account_login_description">Connectez-vous à votre compte pour accéder à des histoires vraies, à des encouragements et disposer de conseils pratiques à portée de main.</string>
     <string name="account_error_user_already_exists">Le compte utilisateur existe déjà.</string>
     <string name="account_error_user_not_found">Compte d\'utilisateur non trouvé.</string>
     <string name="account_error_unknown">Erreur de connexion.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">Supprimer le compte</string>
+    <string name="account_delete_heading">Ne partez pas déjà</string>
+    <string name="account_delete_description">En supprimant votre compte, vous ne pourrez plus accéder à vos outils préférés ou à votre activité de compte.</string>
+    <string name="account_delete_action_delete">Supprimer mon compte</string>
+    <string name="account_delete_action_cancel">Maintenir mon compte</string>
+    <string name="account_delete_error">Une erreur est survenue lors de la suppression de votre compte. Assurez-vous d\'être en ligne ou réessayez plus tard.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>
@@ -18,7 +26,7 @@
     <string name="account_activity_badges_header">Vos badges</string>
     <plurals name="account_activity_badge_tools_opened">
         <item quantity="one">Outil %1$,d ouvert</item>
-        <item quantity="other">Outils %1$,d ouverts</item>
+        <item quantity="other">Outils %1$,d ouvert</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="one">Terminé %1$,d leçon</item>
@@ -26,7 +34,7 @@
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
         <item quantity="one">%1$,d article ouvert</item>
-        <item quantity="other">%1$,d articles  ouvert</item>
+        <item quantity="other">%1$,d articles ouvert</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
         <item quantity="one">%1$,d image partagé</item>

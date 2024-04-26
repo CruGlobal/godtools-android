@@ -20,7 +20,7 @@
     <string name="tract_settings_action_tips_disable">Скрыть подсказки</string>
     <string name="tract_settings_languages_title">Параллельный язык</string>
     <string name="tract_settings_languages_description">Переключайтесь между двумя разными языками в этом инструменте.</string>
-    <string name="tract_settings_languages_parallel">"Параллельный "</string>
+    <string name="tract_settings_languages_parallel">Параллельный</string>
     <string name="tract_settings_languages_none">Нет</string>
     <string name="tract_settings_shareables_title">Связанные изображения</string>
 </resources>

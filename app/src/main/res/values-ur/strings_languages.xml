@@ -9,9 +9,7 @@
     <!-- Language Settings UI -->
     <string name="menu_language_settings">زبان سیٹِنگز</string>
     <string name="title_language_settings">زبان سیٹِنگز</string>
-    <string name="language_settings_section_app_language_heading">"
-اَیپ انٹر فیس کی زبان
-"</string>
+    <string name="language_settings_section_app_language_heading">اَیپ انٹر فیس کی زبان</string>
     <string name="language_settings_section_app_language_description">زبان منتخب کریں جس میں آپ پوری اَیپ کو ڈسپلے کرنا چاہتے ہیں۔</string>
     <string name="language_settings_section_offline_heading">ٹول کی زبانیں جو آف لائن دستیاب ہیں</string>
     <string name="language_settings_section_offline_description">تمام ٹول کو ڈاؤن لوڈ کریں تاکہ وہ تب بھی دستیاب ہوں جب آپ وائی فائی سیل سروس سے دور ہوں ۔ ٹول کے اندر آپشن بٹن کے ذریعے ٹول کی زبان سیٹ کریں۔</string>

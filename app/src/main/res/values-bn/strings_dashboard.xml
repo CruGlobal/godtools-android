@@ -21,6 +21,7 @@
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
     <string name="menu_copyright">কপিরাইট</string>
+    <string name="menu_version">সংস্করণ: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">পাঠসমূহ</string>
     <string name="dashboard_lessons_header_title">আপনার জন্য প্রস্তুত পাঠসমূহ</string>
@@ -41,6 +42,10 @@
     <string name="dashboard_tools_section_filter_label">বিশোধন</string>
     <string name="dashboard_tools_section_filter_category_any">যে কোনো বিভাগ</string>
     <string name="dashboard_tools_section_filter_language_any">যে কোনো ভাষা</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d সাধনী উপলভ্য</item>
+        <item quantity="other">%1$d সাধনীসমূহ উপলভ্য</item>
+    </plurals>
     <string name="dashboard_tools_section_categories_label">শ্রেণী বিভাগ</string>
     <string name="dashboard_tools_section_categories_all">সমস্ত টুলগুলো</string>
     <string name="dashboard_tools_section_spotlight_label">টুল স্পটলাইট</string>

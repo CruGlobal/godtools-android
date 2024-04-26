@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">वैश्विक गतिविधि</string>
+    <string name="menu_profile">गतिविधि</string>
     <string name="account_joined">जॉइंड %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">खाता खोलें</string>
     <string name="account_create_description">अपनी उंगलियों पर वास्तविक कहानियाँ, प्रोत्साहन और व्यावहारिक सुझावों को प्राप्त करने के लिए खाता खोलें।</string>
     <string name="account_login_heading">साइन इन करें</string>
+    <string name="account_login_description">अपने खाते में लॉगिन करें और असल कहानियाँ, प्रेरणा और व्यावहारिक सुझाव पाएँ।</string>
+    <string name="account_error_user_already_exists">यूज़र खाता पहले से मौजूद।</string>
+    <string name="account_error_user_not_found">यूज़र खाता नहीं मिला।</string>
+    <string name="account_error_unknown">लॉगिन में त्रुटि।</string>
+    <string name="account_error_dialog_dismiss">ठीक है</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">खाता हटाएँ</string>
+    <string name="account_delete_heading">इतनी जल्दी न जाएँ!</string>
+    <string name="account_delete_description">खाता हटा देने पर आप अपने पसंदीदा टूल्स या खाता गतिविधि तक नहीं पहुँच पाएँगे।</string>
+    <string name="account_delete_action_delete">मेरा खाता हटाएँ</string>
+    <string name="account_delete_action_cancel">मेरा खाता बनाए रखें</string>
+    <string name="account_delete_error">आपका खाता हटाने में एक त्रुटि हुई। देखें कि आप ऑनलाइन हैं, या बाद में कोशिश करें।</string>
+    <string name="account_delete_error_dismiss">ठीक है</string>
     <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
     <string name="account_activity_header">आपकी गतिविधियाँ</string>
@@ -27,6 +39,10 @@
     <plurals name="account_activity_badge_images_shared">
         <item quantity="one">%1$,d चित्र शेयर किया</item>
         <item quantity="other">%1$,d चित्र शेयर किए</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">%1$,d प्रशिक्षण सुझाव पूरे किए</item>
+        <item quantity="other">%1$,d प्रशिक्षण सुझाव पूरे किए</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">वैश्विक गतिविधि</string>

@@ -10,7 +10,7 @@
     <string name="title_language_settings">语言设置</string>
     <string name="language_settings_section_app_language_heading">应用界面语言</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="other">%1$d种可用语言</item>
+        <item quantity="other">%1$,d 种可用语言</item>
     </plurals>
     <string name="language_settings_section_app_language_description">设置您希望整个应用显示的语言。</string>
     <string name="language_settings_section_offline_heading">离线可用的工具语言</string>
