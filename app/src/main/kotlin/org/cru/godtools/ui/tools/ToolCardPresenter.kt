@@ -92,7 +92,7 @@ class ToolCardPresenter @Inject constructor(
             translation = translation.value,
             appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
             appTranslation = appTranslation,
-            secondLanguage = secondLanguage,
+            secondLanguage = secondLanguage?.takeUnless { appLocale == it.code },
             secondLanguageAvailable = when (secondLanguage?.code) {
                 translation.value?.languageCode -> false
                 else -> secondTranslation != null
