@@ -1,6 +1,5 @@
 package org.cru.godtools.shortcuts
 
-import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.mockk.Called
 import io.mockk.clearMocks
@@ -27,9 +26,6 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.Config.NEWEST_SDK
-import org.robolectric.annotation.Config.OLDEST_SDK
 
 @RunWith(AndroidJUnit4::class)
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -98,7 +94,6 @@ class GodToolsShortcutManagerDispatcherTest {
 
     // region updateShortcutsJob
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Triggers once on startup`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         verify { shortcutManager wasNot Called }
@@ -111,7 +106,6 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Trigger on primaryLanguage Update`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         runCurrent()
@@ -126,7 +120,6 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Trigger on attachments Update`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         runCurrent()
@@ -141,7 +134,6 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Trigger on tools Update`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         runCurrent()
@@ -156,7 +148,6 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Trigger on translations Update`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
         runCurrent()
@@ -171,7 +162,6 @@ class GodToolsShortcutManagerDispatcherTest {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.N_MR1, NEWEST_SDK])
     fun `updateShortcutsJob - Aggregates multiple events`() = testScope.runTest {
         dispatcher.updatePendingShortcutsJob.cancel()
 
@@ -195,15 +185,6 @@ class GodToolsShortcutManagerDispatcherTest {
         coVerify(exactly = 1) { shortcutManager.updateShortcuts() }
         advanceTimeBy(10 * DELAY_UPDATE_SHORTCUTS)
         confirmVerified(shortcutManager)
-    }
-
-    @Test
-    @Config(sdk = [OLDEST_SDK, Build.VERSION_CODES.N])
-    fun `updateShortcutsJob - Not Available For Old Sdks`() = testScope.runTest {
-        dispatcher.updatePendingShortcutsJob.cancel()
-        runCurrent()
-        assertTrue(dispatcher.updateShortcutsJob.isCompleted)
-        verify { shortcutManager wasNot Called }
     }
     // endregion updateShortcutsJob
 }

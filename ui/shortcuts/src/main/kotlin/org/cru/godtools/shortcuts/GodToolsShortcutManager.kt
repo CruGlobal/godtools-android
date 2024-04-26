@@ -2,23 +2,24 @@ package org.cru.godtools.shortcuts
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ShortcutManager
 import android.os.Build
 import androidx.annotation.AnyThread
-import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
-import androidx.core.content.getSystemService
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_CACHED
+import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_PINNED
 import androidx.core.graphics.drawable.IconCompat
 import com.google.android.gms.common.wrappers.InstantApps
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.lang.ref.WeakReference
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,15 +27,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.picasso.getBitmap
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
@@ -51,10 +56,10 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import timber.log.Timber
 
-private const val TYPE_TOOL = "tool|"
-
 internal const val DELAY_UPDATE_SHORTCUTS = 5000L
 internal const val DELAY_UPDATE_PENDING_SHORTCUTS = 100L
+
+private val SUPPORTED_TOOL_TYPES = setOf(Tool.Type.ARTICLE, Tool.Type.CYOA, Tool.Type.TRACT)
 
 @Singleton
 class GodToolsShortcutManager @VisibleForTesting internal constructor(
@@ -91,9 +96,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
-    @get:RequiresApi(Build.VERSION_CODES.N_MR1)
-    private val shortcutManager by lazy { context.getSystemService<ShortcutManager>() }
-
     @VisibleForTesting
     internal val isEnabled = !InstantApps.isInstantApp(context)
 
@@ -106,9 +108,8 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     @AnyThread
     @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            shortcutManager?.reportShortcutUsed(event.toolCode.toolShortcutId)
-        }
+        if (!isEnabled) return
+        ShortcutManagerCompat.reportShortcutUsed(context, ShortcutId.Tool(event.toolCode).id)
     }
     // endregion Events
 
@@ -127,14 +128,15 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     }
 
     @AnyThread
-    fun getPendingToolShortcut(code: String?): PendingShortcut? {
+    fun getPendingToolShortcut(code: String?, vararg locales: Locale?): PendingShortcut? {
         if (!isEnabled) return null
-        val id = code?.toolShortcutId ?: return null
+        if (code == null) return null
+        val id = ShortcutId.Tool(code, *locales)
 
         return synchronized(pendingShortcuts) {
-            pendingShortcuts[id]?.get()
-                ?: PendingShortcut(code).also {
-                    pendingShortcuts[id] = WeakReference(it)
+            pendingShortcuts[id.id]?.get()
+                ?: PendingShortcut(id).also {
+                    pendingShortcuts[id.id] = WeakReference(it)
                     coroutineScope.launch { updatePendingShortcut(it) }
                 }
         }
@@ -161,7 +163,9 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @AnyThread
     private suspend fun updatePendingShortcut(shortcut: PendingShortcut) = shortcut.mutex.withLock {
-        toolsRepository.findTool(shortcut.tool)?.let { shortcut.shortcut = createToolShortcut(it) }
+        shortcut.shortcut = when (shortcut.id) {
+            is ShortcutId.Tool -> createToolShortcut(shortcut.id)
+        }
     }
     // endregion Pending Shortcuts
 
@@ -169,41 +173,61 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val updateShortcutsMutex = Mutex()
 
     @VisibleForTesting
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    internal suspend fun updateShortcuts() = updateShortcutsMutex.withLock {
-        val shortcuts = createAllShortcuts()
-        updateDynamicShortcuts(shortcuts)
-        updatePinnedShortcuts(shortcuts)
+    internal suspend fun updateShortcuts() {
+        updateShortcutsMutex.withLock {
+            coroutineScope {
+                launch { updateDynamicShortcuts() }
+                launch { updatePinnedShortcuts() }
+            }
+        }
     }
 
     @VisibleForTesting
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    internal suspend fun updateDynamicShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
-        val manager = shortcutManager ?: return
+    internal suspend fun updateDynamicShortcuts() {
+        if (!isEnabled) return
 
         val dynamicShortcuts = withContext(ioDispatcher) {
             toolsRepository.getNormalTools()
                 .filter { it.isFavorite }
                 .sortedWith(Tool.COMPARATOR_FAVORITE_ORDER)
-                .asSequence()
-                .mapNotNull { shortcuts[it.shortcutId]?.toShortcutInfo() }
-                .take(manager.maxShortcutCountPerActivity)
+                .asFlow()
+                .mapNotNull { createToolShortcut(it) }
+                .take(ShortcutManagerCompat.getMaxShortcutCountPerActivity(context))
                 .toList()
         }
 
         try {
-            manager.dynamicShortcuts = dynamicShortcuts
+            ShortcutManagerCompat.setDynamicShortcuts(context, dynamicShortcuts)
         } catch (e: IllegalStateException) {
             Timber.tag("GodToolsShortcutManager").e(e, "Error updating dynamic shortcuts")
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N_MR1)
-    private fun updatePinnedShortcuts(shortcuts: Map<String, ShortcutInfoCompat>) {
-        shortcutManager?.apply {
-            disableShortcuts(pinnedShortcuts.map { it.id }.filterNot { shortcuts.containsKey(it) })
-            enableShortcuts(shortcuts.keys.toList())
-            ShortcutManagerCompat.updateShortcuts(context, shortcuts.values.toList())
+    @VisibleForTesting
+    internal suspend fun updatePinnedShortcuts() {
+        if (!isEnabled) return
+
+        withContext(ioDispatcher) {
+            val types = FLAG_MATCH_PINNED or FLAG_MATCH_CACHED
+            val (invalid, shortcuts) = ShortcutManagerCompat.getShortcuts(context, types)
+                .mapNotNull { it.id to ShortcutId.parseId(it.id) }
+                .map { (id, shortcutId) ->
+                    when (shortcutId) {
+                        null -> CompletableDeferred(id to null)
+                        is ShortcutId.Tool -> async { shortcutId.id to createToolShortcut(shortcutId) }
+                    }
+                }
+                .awaitAll()
+                .partition { it.second == null }
+                .let { it.first.map { it.first } to it.second.mapNotNull { it.second } }
+
+            if (invalid.isNotEmpty()) {
+                ShortcutManagerCompat.disableShortcuts(context, invalid, null)
+            }
+            if (shortcuts.isNotEmpty()) {
+                ShortcutManagerCompat.enableShortcuts(context, shortcuts)
+                ShortcutManagerCompat.updateShortcuts(context, shortcuts)
+            }
         }
     }
     // endregion Update Existing Shortcuts
@@ -213,39 +237,44 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         updatePendingShortcuts()
     }
 
-    private suspend fun createAllShortcuts() = withContext(ioDispatcher) {
-        toolsRepository.getAllTools()
-            .map { async { createToolShortcut(it) } }.awaitAll()
-            .filterNotNull()
-            .associateBy { it.id }
+    @VisibleForTesting
+    internal suspend fun createToolShortcut(id: ShortcutId.Tool) = withContext(ioDispatcher) {
+        createToolShortcut(id, toolsRepository.findTool(id.tool))
     }
 
-    @AnyThread
-    private suspend fun createToolShortcut(tool: Tool) = withContext(ioDispatcher) {
-        val code = tool.code ?: return@withContext null
+    private suspend fun createToolShortcut(tool: Tool) = tool.code
+        ?.let { ShortcutId.Tool(it) }
+        ?.let { createToolShortcut(it, tool) }
 
-        // generate the list of locales to use for this tool
-        val locales = buildList {
-            val translation = translationsRepository.findLatestTranslation(code, settings.appLanguage)
-                ?: translationsRepository.findLatestTranslation(code, tool.defaultLocale)
-                ?: return@withContext null
-            add(translation.languageCode)
+    private suspend fun createToolShortcut(id: ShortcutId.Tool, tool: Tool?) = withContext(ioDispatcher) {
+        if (tool == null) return@withContext null
+        val type = tool.type
+        if (type !in SUPPORTED_TOOL_TYPES) return@withContext null
+
+        // generate the list of translations to use for this tool
+        val translations = if (id.isFavoriteToolShortcut) {
+            flowOf(settings.appLanguage, tool.defaultLocale)
+                .mapNotNull { translationsRepository.findLatestTranslation(id.tool, it) }
+                .take(1)
+                .toList()
+        } else {
+            id.locales.mapNotNull { translationsRepository.findLatestTranslation(id.tool, it) }
         }
+        if (translations.isEmpty()) return@withContext null
 
         // generate the target intent for this shortcut
-        val intent = when (tool.type) {
-            Tool.Type.ARTICLE -> context.createArticlesIntent(code, locales[0])
-            Tool.Type.CYOA -> context.createCyoaActivityIntent(code, *locales.toTypedArray())
-            Tool.Type.TRACT -> context.createTractActivityIntent(code, *locales.toTypedArray())
-            else -> return@withContext null
+        val locales = translations.map { it.languageCode }
+        val intent = when (type) {
+            Tool.Type.ARTICLE -> context.createArticlesIntent(id.tool, locales[0])
+            Tool.Type.CYOA -> context.createCyoaActivityIntent(id.tool, *locales.toTypedArray())
+            Tool.Type.TRACT -> context.createTractActivityIntent(id.tool, *locales.toTypedArray())
+            else -> error("Unexpected Tool Type: $type")
         }
         intent.action = Intent.ACTION_VIEW
         intent.putExtra(SHORTCUT_LAUNCH, true)
 
         // Generate the shortcut label
-        val label = sequenceOf(settings.appLanguage, tool.defaultLocale).includeFallbacks().distinct()
-            .firstNotNullOfOrNull { translationsRepository.findLatestTranslation(code, it) }
-            .getName(tool, context)
+        val label = translations.first().getName(tool, context)
 
         // create the icon bitmap
         val icon: IconCompat = tool.detailsBannerId
@@ -265,7 +294,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
             ?: IconCompat.createWithResource(context, org.cru.godtools.ui.R.mipmap.ic_launcher)
 
         // build the shortcut
-        ShortcutInfoCompat.Builder(context, code.toolShortcutId)
+        ShortcutInfoCompat.Builder(context, id.id)
             .setAlwaysBadged()
             .setIntent(intent)
             .setShortLabel(label)
@@ -317,7 +346,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         @VisibleForTesting
         internal val updateShortcutsJob = coroutineScope.launch {
             if (!manager.isEnabled) return@launch
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return@launch
 
             merge(
                 settings.appLanguageFlow,
@@ -331,6 +359,3 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         }
     }
 }
-
-private val Tool.shortcutId get() = code?.toolShortcutId
-private val String.toolShortcutId get() = "$TYPE_TOOL$this"
