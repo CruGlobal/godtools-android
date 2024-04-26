@@ -14,7 +14,7 @@ import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
-import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
+import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ui.activity.BaseActivity
@@ -52,7 +52,7 @@ class ToolDetailsActivity : BaseActivity() {
 
         val screen = ToolDetailsScreen(
             initialTool = initialTool!!,
-            secondLanguage = intent.getParcelableExtraCompat(EXTRA_ADDITIONAL_LANGUAGE, Locale::class.java)
+            secondLanguage = intent.getSerializableExtraCompat(EXTRA_ADDITIONAL_LANGUAGE, Locale::class.java)
         )
         setContent {
             CircuitCompositionLocals(circuit) {
