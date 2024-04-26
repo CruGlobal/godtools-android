@@ -314,28 +314,6 @@ class ToolCardPresenterTest {
             assertTrue(expectMostRecentItem().secondLanguageAvailable)
         }
     }
-
-    @Test
-    fun `ToolCardState - secondLanguageAvailable - Doesn't match the language for the main translation`() = runTest {
-        toolFlow.value = randomTool(TOOL)
-        val translation = randomTranslation(TOOL, Locale.ENGLISH)
-
-        presenterTestOf(
-            presentFunction = {
-                presenter.present(
-                    tool = toolFlow.collectAsState().value,
-                    secondLanguage = Language(Locale.ENGLISH),
-                )
-            }
-        ) {
-            enTranslationFlow.emit(translation)
-
-            assertNotNull(expectMostRecentItem()) { state ->
-                assertFalse(state.secondLanguageAvailable)
-                assertEquals(translation, state.translation)
-            }
-        }
-    }
     // endregion ToolCard.State.secondLanguageAvailable
 
     // region ToolCard.State.availableLanguages
@@ -402,6 +380,36 @@ class ToolCardPresenterTest {
         verify { translationsRepository.getTranslationsFlowForTool(TOOL) }
     }
     // endregion ToolCard.State.availableLanguages
+
+    // region ToolCard.State
+    @Test
+    fun `ToolCardState - GT-2364 - App Language Not Available, Second language matches Default language`() = runTest {
+        appLocaleState.value = Locale.FRENCH
+        toolFlow.value = randomTool(TOOL, defaultLocale = Locale.ENGLISH)
+        val translation = randomTranslation(TOOL, Locale.ENGLISH)
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(
+                    tool = toolFlow.collectAsState().value,
+                    secondLanguage = Language(Locale.ENGLISH),
+                )
+            }
+        ) {
+            enTranslationFlow.emit(translation)
+            frTranslationFlow.emit(null)
+
+            assertNotNull(expectMostRecentItem()) { state ->
+                assertNotNull(state.translation) {
+                    assertEquals(Locale.ENGLISH, it.languageCode)
+                }
+                assertNull(state.appTranslation)
+                assertEquals(Language(Locale.ENGLISH), state.secondLanguage)
+                assertTrue(state.secondLanguageAvailable)
+            }
+        }
+    }
+    // endregion ToolCard.State
 
     // region ToolCard.Event.Click
     @Test
