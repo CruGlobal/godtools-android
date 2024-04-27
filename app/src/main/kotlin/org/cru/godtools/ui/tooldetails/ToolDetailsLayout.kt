@@ -139,7 +139,7 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
     val secondLanguage by rememberUpdatedState(state.secondLanguage)
     val secondTranslation by rememberUpdatedState(state.secondTranslation)
     val downloadProgress by rememberUpdatedState(state.downloadProgress)
-    val shares by remember { derivedStateOf { tool?.shares ?: 0 } }
+    val shares by remember { derivedStateOf { tool?.totalShares ?: 0 } }
     val pages by rememberUpdatedState(state.pages)
 
     val coroutineScope = rememberCoroutineScope()

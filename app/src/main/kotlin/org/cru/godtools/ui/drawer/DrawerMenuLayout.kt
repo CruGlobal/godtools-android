@@ -54,7 +54,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.NavigationDrawerHeadline
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.appLanguage
@@ -321,7 +320,7 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
             // endregion About
 
             NavigationDrawerHeadline(label = {
-                Text(stringResource(R.string.menu_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE))
+                Text(stringResource(R.string.menu_version, state.versionName, state.versionCode))
             })
         }
     }
