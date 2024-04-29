@@ -1,5 +1,7 @@
 package org.cru.godtools.tutorial.layout
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -80,7 +82,14 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
         ) { i ->
             TutorialPageLayout(
                 pages[i],
-                nextPage = { coroutineScope.launch { pagerState.animateScrollToPage(i + 1) } },
+                nextPage = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(
+                            i + 1,
+                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                        )
+                    }
+                },
                 onTutorialAction = onTutorialAction
             )
         }
