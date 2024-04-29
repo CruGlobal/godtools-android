@@ -155,7 +155,7 @@ class ToolViewModels @Inject constructor(
                 banner = bannerFile.collectAsState().value,
                 translation = translation.value,
                 appLanguage = appLanguage.collectAsState().value,
-                appTranslation = appTranslation.collectAsState().value.value,
+                appLanguageAvailable = appTranslation.collectAsState().value.value != null,
                 secondLanguage = secondLanguage,
                 secondLanguageAvailable = secondTranslation.collectAsState().value != null,
                 availableLanguages = availableLanguages.collectAsState().value.size,

@@ -95,7 +95,7 @@ class VariantToolCardTest {
                 state = ToolCard.State(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
-                    appTranslation = randomTranslation(),
+                    appLanguageAvailable = true,
                 ),
             )
         }
@@ -113,7 +113,7 @@ class VariantToolCardTest {
                 state = ToolCard.State(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
-                    appTranslation = null,
+                    appLanguageAvailable = false,
                 ),
             )
         }
@@ -130,7 +130,7 @@ class VariantToolCardTest {
                 state = ToolCard.State(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
-                    appTranslation = null,
+                    appLanguageAvailable = false,
                     secondLanguage = Language(Locale.FRENCH),
                     secondLanguageAvailable = true,
                 ),
@@ -151,7 +151,7 @@ class VariantToolCardTest {
                 state = ToolCard.State(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
-                    appTranslation = randomTranslation(),
+                    appLanguageAvailable = true,
                     secondLanguage = Language(Locale.FRENCH),
                     secondLanguageAvailable = false,
                 ),
