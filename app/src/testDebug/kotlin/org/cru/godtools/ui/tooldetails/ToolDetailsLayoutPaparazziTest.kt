@@ -55,6 +55,7 @@ class ToolDetailsLayoutPaparazziTest(
             description = "Description",
         ),
         banner = banner,
+        drawerState = DrawerMenuScreenStateTestData.closed
     )
 
     @BeforeTest
