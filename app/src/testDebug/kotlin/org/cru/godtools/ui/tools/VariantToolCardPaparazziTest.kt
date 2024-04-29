@@ -8,6 +8,7 @@ import coil.test.FakeImageLoaderEngine
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,7 +17,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.cru.godtools.model.Language
 import org.cru.godtools.ui.BasePaparazziTest
+import org.hamcrest.CoreMatchers.equalTo
+import org.junit.Assume.assumeThat
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -70,5 +74,15 @@ class VariantToolCardPaparazziTest(
     @Test
     fun `VariantToolCard() - Second Language Not Available`() = centerInSnapshot {
         VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguageAvailable = false))
+    }
+
+    @Test
+    fun `VariantToolCard() - GT-2365 - Short Language Name`() {
+        assumeThat(accessibilityMode, equalTo(AccessibilityMode.NO_ACCESSIBILITY))
+        assumeThat(nightMode, equalTo(NightMode.NOTNIGHT))
+
+        centerInSnapshot {
+            VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguage = Language(Locale("cs"))))
+        }
     }
 }
