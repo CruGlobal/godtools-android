@@ -68,7 +68,7 @@ class VariantToolCardPaparazziTest(
 
     @Test
     fun `VariantToolCard() - App Language Not Available`() = centerInSnapshot {
-        VariantToolCard(ToolCardStateTestData.tool.copy(appTranslation = null))
+        VariantToolCard(ToolCardStateTestData.tool.copy(appLanguageAvailable = false))
     }
 
     @Test

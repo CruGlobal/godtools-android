@@ -91,7 +91,7 @@ class ToolCardPresenter @Inject constructor(
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
             translation = translation.value,
             appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
-            appTranslation = appTranslation,
+            appLanguageAvailable = appTranslation != null,
             secondLanguage = secondLanguage?.takeUnless { appLocale == it.code },
             secondLanguageAvailable = secondTranslation != null,
             availableLanguages = when {

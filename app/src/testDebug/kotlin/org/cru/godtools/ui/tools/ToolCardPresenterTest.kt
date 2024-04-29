@@ -256,9 +256,9 @@ class ToolCardPresenterTest {
     }
     // endregion ToolCard.State.appLanguage
 
-    // region ToolCard.State.appTranslation
+    // region ToolCard.State.appLanguageAvailable
     @Test
-    fun `ToolCardState - appTranslation`() = runTest {
+    fun `ToolCardState - appLanguageAvailable`() = runTest {
         toolFlow.value = randomTool(TOOL)
         appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.FRENCH)
@@ -266,13 +266,13 @@ class ToolCardPresenterTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value) }
         ) {
-            assertNull(expectMostRecentItem().appTranslation)
+            assertFalse(expectMostRecentItem().appLanguageAvailable)
             frTranslationFlow.emit(translation)
 
-            assertEquals(translation, expectMostRecentItem().appTranslation)
+            assertTrue(expectMostRecentItem().appLanguageAvailable)
         }
     }
-    // endregion ToolCard.State.appTranslation
+    // endregion ToolCard.State.appLanguageAvailable
 
     // region ToolCard.State.secondLanguage
     @Test
@@ -403,7 +403,7 @@ class ToolCardPresenterTest {
                 assertNotNull(state.translation) {
                     assertEquals(Locale.ENGLISH, it.languageCode)
                 }
-                assertNull(state.appTranslation)
+                assertFalse(state.appLanguageAvailable)
                 assertEquals(Language(Locale.ENGLISH), state.secondLanguage)
                 assertTrue(state.secondLanguageAvailable)
             }

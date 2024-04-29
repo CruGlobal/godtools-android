@@ -25,7 +25,7 @@ object ToolCardStateTestData {
         ),
         availableLanguages = 1234,
         appLanguage = Language(Locale.ENGLISH),
-        appTranslation = randomTranslation(),
+        appLanguageAvailable = true,
         secondLanguage = Language(Locale.FRENCH),
         secondLanguageAvailable = true
     )
