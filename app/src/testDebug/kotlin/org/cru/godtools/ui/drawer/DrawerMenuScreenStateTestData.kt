@@ -10,4 +10,10 @@ object DrawerMenuScreenStateTestData {
         versionName = "Paparazzi Snapshot",
         versionCode = 1
     )
+
+    val closed = State(
+        drawerState = DrawerState(DrawerValue.Closed),
+        versionName = "Paparazzi Snapshot",
+        versionCode = 1
+    )
 }
