@@ -35,6 +35,7 @@ interface ToolsRepository {
     suspend fun unpinTool(code: String)
 
     suspend fun storeToolOrder(tools: List<String>)
+    suspend fun updateToolLocales(code: String, primary: Locale?, parallel: Locale?)
     suspend fun updateToolViews(code: String, delta: Int)
 
     // region Initial Content Methods

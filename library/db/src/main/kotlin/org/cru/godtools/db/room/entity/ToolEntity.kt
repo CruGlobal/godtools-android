@@ -38,6 +38,8 @@ internal class ToolEntity(
     val isHidden: Boolean = false,
     @ColumnInfo(defaultValue = "false")
     val isSpotlight: Boolean = false,
+    val primaryLocale: Locale? = null,
+    val parallelLocale: Locale? = null,
     @ColumnInfo(defaultValue = "")
     val changedFields: String = "",
     val apiId: Long? = null,
@@ -63,6 +65,8 @@ internal class ToolEntity(
         isFavorite = tool.isFavorite,
         isHidden = tool.isHidden,
         isSpotlight = tool.isSpotlight,
+        primaryLocale = tool.primaryLocale,
+        parallelLocale = tool.parallelLocale,
         apiId = tool.apiId,
         changedFields = tool.changedFieldsStr,
     )
@@ -88,6 +92,8 @@ internal class ToolEntity(
         pendingShares = pendingShares,
         metatoolCode = metatoolCode,
         defaultVariantCode = defaultVariantCode,
+        primaryLocale = primaryLocale,
+        parallelLocale = parallelLocale,
         apiId = apiId,
         changedFieldsStr = changedFields,
     )

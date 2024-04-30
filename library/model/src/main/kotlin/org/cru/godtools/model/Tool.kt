@@ -75,6 +75,10 @@ class Tool(
     val shares: Int = 0,
     @JsonApiIgnore
     val pendingShares: Int = 0,
+    @JsonApiIgnore
+    val primaryLocale: Locale? = null,
+    @JsonApiIgnore
+    val parallelLocale: Locale? = null,
     metatoolCode: String? = null,
     defaultVariantCode: String? = null,
     @JsonApiId

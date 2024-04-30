@@ -388,6 +388,24 @@ abstract class ToolsRepositoryIT {
     }
     // endregion storeToolOrder()
 
+    // region updateToolLocales()
+    @Test
+    fun `updateToolLocales()`() = testScope.runTest {
+        val tool = randomTool("tool")
+        repository.storeInitialTools(listOf(tool))
+
+        assertNotNull(repository.findTool("tool")) {
+            assertNull(it.primaryLocale)
+            assertNull(it.parallelLocale)
+        }
+        repository.updateToolLocales("tool", Locale.ENGLISH, Locale.FRENCH)
+        assertNotNull(repository.findTool("tool")) {
+            assertEquals(Locale.ENGLISH, it.primaryLocale)
+            assertEquals(Locale.FRENCH, it.parallelLocale)
+        }
+    }
+    // endregion updateToolLocales()
+
     // region updateToolShares()
     @Test
     fun `updateToolViews()`() = testScope.runTest {
