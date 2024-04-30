@@ -33,7 +33,8 @@ import org.cru.godtools.model.Translation
             "locale",
             "version",
             orders = [Index.Order.ASC, Index.Order.ASC, Index.Order.DESC]
-        )
+        ),
+        Index("locale"),
     ]
 )
 internal class TranslationEntity(
