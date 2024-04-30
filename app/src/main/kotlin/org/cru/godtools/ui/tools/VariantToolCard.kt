@@ -76,7 +76,8 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
                         horizontalArrangement = Arrangement.End,
                     )
 
-                    if (secondLanguage != null) {
+                    // Show the second language availability if it exists and doesn't match the app language
+                    if (secondLanguage != null && secondLanguage?.code != appLanguage?.code) {
                         // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
                         AvailableInLanguage(
                             secondLanguage,

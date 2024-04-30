@@ -77,6 +77,23 @@ class VariantToolCardPaparazziTest(
     }
 
     @Test
+    fun `VariantToolCard() - GT-2362 - Second Language Matches App Language`() {
+        assumeThat(accessibilityMode, equalTo(AccessibilityMode.NO_ACCESSIBILITY))
+        assumeThat(nightMode, equalTo(NightMode.NOTNIGHT))
+
+        centerInSnapshot {
+            VariantToolCard(
+                ToolCardStateTestData.tool.copy(
+                    appLanguage = Language(Locale.ENGLISH),
+                    appLanguageAvailable = true,
+                    secondLanguage = Language(Locale.ENGLISH),
+                    secondLanguageAvailable = true,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `VariantToolCard() - GT-2365 - Short Language Name`() {
         assumeThat(accessibilityMode, equalTo(AccessibilityMode.NO_ACCESSIBILITY))
         assumeThat(nightMode, equalTo(NightMode.NOTNIGHT))
