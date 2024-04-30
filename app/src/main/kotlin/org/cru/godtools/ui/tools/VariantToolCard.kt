@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tools
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -69,11 +70,19 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
                     Text(pluralStringResource(R.plurals.label_tools_languages, languageCount, languageCount))
 
                     // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                    AvailableInLanguage(appLanguage, available = appTranslation != null)
+                    AvailableInLanguage(
+                        appLanguage,
+                        available = appTranslation != null,
+                        horizontalArrangement = Arrangement.End,
+                    )
 
                     if (secondLanguage != null) {
                         // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
-                        AvailableInLanguage(secondLanguage, available = secondLanguageAvailable)
+                        AvailableInLanguage(
+                            secondLanguage,
+                            available = secondLanguageAvailable,
+                            horizontalArrangement = Arrangement.End,
+                        )
                     }
                 }
             }

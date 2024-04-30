@@ -32,8 +32,8 @@ import org.junit.Rule
 
 abstract class BasePaparazziTest(
     private val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
-    private val nightMode: NightMode = NightMode.NOTNIGHT,
-    private val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,
+    protected val nightMode: NightMode = NightMode.NOTNIGHT,
+    protected val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,
     renderingMode: RenderingMode = RenderingMode.NORMAL,
     private val excludeRedundantTests: Boolean = true,
     private val eventBus: EventBus = EventBus(),
