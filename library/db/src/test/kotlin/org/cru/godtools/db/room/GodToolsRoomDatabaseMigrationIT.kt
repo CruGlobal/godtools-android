@@ -5,15 +5,19 @@ import androidx.core.database.getIntOrNull
 import androidx.core.database.getStringOrNull
 import androidx.room.migration.Migration
 import androidx.room.testing.MigrationTestHelper
+import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import org.ccci.gto.android.common.util.database.getString
+import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.model.Tool
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -336,6 +340,25 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("kgp", it.getStringOrNull(0))
                 assertEquals("en", it.getStringOrNull(1))
             }
+        }
+    }
+
+    @Test
+    fun testMigrate21To22() {
+        // create v21 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 21).use { db ->
+            assertFalse(db.dumpIndices("translations").values.any { it == setOf("locale") })
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 22, true, *MIGRATIONS).use { db ->
+            assertTrue(db.dumpIndices("translations").values.any { it == setOf("locale") })
+        }
+    }
+
+    private fun SupportSQLiteDatabase.dumpIndices(table: String) = query("PRAGMA index_list($table)").use { it ->
+        it.map { it.getString(1) }.associateWith { name ->
+            query("PRAGMA index_info($name)").use { it.map { it.getString(2) }.toSet() }
         }
     }
 }
