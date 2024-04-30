@@ -3,21 +3,23 @@ package org.cru.godtools.ui.tools
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.unit.dp
-import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 
@@ -128,13 +130,22 @@ fun SquareToolCard(
                     }
 
                     // Reserve the maximum height consistently across all cards
+                    @OptIn(ExperimentalComposeUiApi::class)
                     Column(modifier = Modifier.invisibleIf(true)) {
-                        Spacer(modifier = Modifier.minLinesHeight(2, state.toolNameStyle))
+                        Text(
+                            "",
+                            minLines = 2,
+                            style = state.toolNameStyle,
+                            modifier = Modifier.clearAndSetSemantics { invisibleToUser() }
+                        )
                         if (showCategory) {
-                            Spacer(
+                            Text(
+                                "",
+                                minLines = 1,
+                                style = toolCategoryStyle,
                                 modifier = Modifier
                                     .padding(top = 2.dp)
-                                    .minLinesHeight(1, toolCategoryStyle)
+                                    .clearAndSetSemantics { invisibleToUser() }
                             )
                         }
                         if (showSecondLanguage && floatParallelLanguageUp) SquareToolCardSecondLanguage(state)
