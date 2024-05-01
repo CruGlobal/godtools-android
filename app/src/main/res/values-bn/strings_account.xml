@@ -1,23 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">বৈশ্বিক ক্রিয়া কলাপ / কার্যকলাপ</string>
-    <string name="account_joined">যোগ দিয়েছেন %1$s</string>
+    <string name="menu_profile">কার্যকলাপ</string>
+    <string name="account_joined">%1$s যোগ দিয়েছেন</string>
     <!-- Create / Login -->
     <string name="account_create_heading">অ্যাকাউন্ট তৈরি করুন</string>
-    <string name="account_create_description">অ্যাকাউন্ট তৈরি করুন যাতে সত্য গল্প, অনুপ্রেরণা এবং ব্যবহারিক উপদেশ আপনার নাগালের মধ্যে থাকে।</string>
-    <string name="account_login_heading">সাইন ইন</string>
-    <string name="account_login_description">"নিজের অ্যাকাউন্টে লগ ইন করুন যাতে সত্য গল্প, অনুপ্রেরণা এবং ব্যবহারিক উপদেশ আপনার নাগালের মধ্যে থাকে। "</string>
+    <string name="account_create_description">বাস্তবিক গল্পগুলি, উৎসাহ, এবং আপনার হাতের কাছে ব্যবহারিক পরামর্শ পেতে একটি অ্যাকাউন্ট তৈরি  করুন</string>
+    <string name="account_login_heading">সাইন ইন করুন</string>
+    <string name="account_login_description">বাস্তবিক গল্পগুলি, উৎসাহ, এবং আপনার হাতের কাছে ব্যবহারিক পরামর্শ পেতে আপনার অ্যাকাউন্টে লগ ইন করুন</string>
+    <string name="account_error_user_already_exists">ব্যবহারকারীর অ্যাকাউন্ট ইতিমধ্যেই আছে</string>
+    <string name="account_error_user_not_found">ব্যবহারকারীর অ্যাকাউন্ট পাওয়া যায় নি</string>
+    <string name="account_error_unknown">লগ ইন করায় ত্রুটি</string>
+    <string name="account_error_dialog_dismiss">ঠিক আছে</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">অ্যাকাউন্ট বিলোপ করুন</string>
+    <string name="account_delete_heading">এত আগে যাবেন না</string>
+    <string name="account_delete_description">যদি আপনি আপনার অ্যাকাউন্ট বিলোপ করে দেন তাহলে আপনি আপনার পছন্দসই সাধনীসমূহ বা অ্যাকাউন্টের কার্যকলাপ অ্যাক্সেস করতে পারবেন না।</string>
+    <string name="account_delete_action_delete">আমার অ্যাকাউন্ট বিলোপ করুন</string>
+    <string name="account_delete_action_cancel">আমার অ্যাকাউন্ট রেখে দিন</string>
+    <string name="account_delete_error">আপনার অ্যাকাউন্ট বিলোপ কেরায় ত্রুটি হয়েছিল। আপনি অনলাইনে তা নিশ্চিত করুন বা পরে আবার চেষ্টা করুন।</string>
+    <string name="account_delete_error_dismiss">ঠিক আছে</string>
     <!-- Activity -->
-    <string name="profile_tab_activity">ক্রিয়াকলাপ / কার্যকলাপ</string>
+    <string name="profile_tab_activity">কার্যকলাপ</string>
     <string name="account_activity_header">আপনার কার্যকলাপ</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">সাধনী খোলা</item>
+        <item quantity="other">সাধনী খুলে যায়</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">পাঠ সম্পূর্ণ</item>
+        <item quantity="other">পাঠ সম্পূর্ণ</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">স্ক্রিন শেয়ার</item>
+        <item quantity="other">স্ক্রিন শেয়ারগুলি</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">লিঙ্ক শেয়ার করা হয়েছে</item>
+        <item quantity="other">লিঙ্কগুলি শেয়ার করা হয়েছে</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ব্যবহৃত ভাষা</item>
+        <item quantity="other">ব্যবহৃত ভাষাগুলি</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">সত্র</item>
+        <item quantity="other">সত্রগুলি</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">আপনার ব্যাজগুলি</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d সাধনী খুলেছি</item>
+        <item quantity="other">%1$,d সাধনীসমূহ খুলেছি</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">%1$,d পাঠগুলি সম্পূর্ণ করেছি</item>
+        <item quantity="other">%1$,d পাঠগুলি সম্পূর্ণ করেছি</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d প্রবন্ধগুলি সম্পূর্ণ করেছি</item>
+        <item quantity="other">%1$,d প্রবন্ধগুলি সম্পূর্ণ করেছি</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d চিত্রগুলি শেয়ার করেছি</item>
+        <item quantity="other">%1$,d চিত্রগুলি শেয়ার করেছি</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">%1$,d প্রশিক্ষণের পরামর্শ সম্পূর্ণ করেছি</item>
+        <item quantity="other">%1$,d প্রশিক্ষণের পরামর্শ সম্পূর্ণ করেছি</item>
+    </plurals>
     <!-- Global Activity -->
-    <string name="account_tab_global_activity">বিশ্বজনীন কার্যকলাপ</string>
-    <string name="profile_global_activity_heading">%1$s বৈশ্বিক ক্রিয়াকলাপ / %$s বিশ্বজনীন কার্যকলাপ</string>
-    <string name="profile_activity_unique_users">অনন্য ব্যবহারকারী / অনন্য ব্যবহারকারীগণ</string>
-    <string name="profile_activity_gospel_presentations">সুসমাচার উপস্থাপন / সুসমাচার উপস্থাপনা</string>
-    <string name="profile_activity_sessions">সেশনস / অধিবেশনসমূহ</string>
-    <string name="profile_activity_countries">দেশ সমূহ / দেশ</string>
+    <string name="account_tab_global_activity">বৈশ্বিক কার্যকলাপ</string>
+    <string name="profile_global_activity_heading">%1$s বৈশ্বিক কার্যকলাপ</string>
+    <string name="profile_activity_unique_users">অনন্য ব্যবহারকারীরা</string>
+    <string name="profile_activity_gospel_presentations">গসপেল পরিবেশনা</string>
+    <string name="profile_activity_sessions">পাঠগুলি</string>
+    <string name="profile_activity_countries">দেশগুলি</string>
 </resources>

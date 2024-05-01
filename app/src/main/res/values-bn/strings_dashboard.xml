@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_get_started">আরম্ভ করুন</string>
+    <string name="menu_heading_get_started">শুরু করুন</string>
     <string name="menu_tutorial">"টিউটোরিয়াল "</string>
-    <string name="menu_heading_account">একাউন্ট</string>
+    <string name="menu_heading_account">অ্যাকাউন্ট</string>
     <string name="menu_login">লগইন করুন</string>
-    <string name="menu_signup">একাউন্ট খুলুন</string>
-    <string name="menu_logout">লগ আউট করুন</string>
+    <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>
+    <string name="menu_logout">লগআউট</string>
     <string name="menu_heading_support">সহায়তা</string>
-    <string name="menu_feedback">মতামত পাঠান</string>
-    <string name="menu_report_bug">ত্রুটির কথা রিপোর্ট করুন</string>
-    <string name="menu_question">প্রশ্ন জিজ্ঞাসা করুন</string>
+    <string name="menu_feedback">ফিডব্যাক পাঠান</string>
+    <string name="menu_report_bug">কোনো বাগ রিপোর্ট করুন</string>
+    <string name="menu_question">কোনো প্রশ্ন করুন</string>
     <string name="menu_heading_share">শেয়ার করুন</string>
-    <string name="menu_review">সমালোচনা করুন</string>
-    <string name="menu_share_story">আমাদের সঙ্গে একটি গল্প শেয়ার করুন</string>
-    <string name="menu_share_godtools">GodTools App শেয়ার করুন</string>
-    <string name="share_app_message">এখানে আপনি Godtools app ডাউনলোড করতে পারেন: http://godtoolsapp.com</string>
-    <string name="share_story_subject">God Tools গল্প</string>
+    <string name="menu_review">কোনো পর্যালোচনা রেখে যান</string>
+    <string name="menu_share_story">আমাদের সাথে একটি গল্প শেয়ার করুন</string>
+    <string name="menu_share_godtools">GodTools শেয়ার করুন</string>
+    <string name="share_app_message">GodTools অ্যাপ ডাউনলোড করুন: https://godtoolsapp.com \n\n
+
+https://knowgod.com/-তে একটি অনলাইন সংস্করণ পাওয়া যাবে</string>
+    <string name="share_story_subject">GodTools গল্প</string>
     <string name="menu_heading_about">বিষয়ে</string>
     <string name="menu_terms_of_use">ব্যবহারের শর্তাবলী</string>
     <string name="menu_privacy_policy">গোপনীয়তা নীতি</string>
-    <string name="menu_copyright">কপিরাইট</string>
+    <string name="menu_copyright">ষ্বত্বাধিকার তথ্য</string>
     <string name="menu_version">সংস্করণ: %1$s (%2$d)</string>
     <!-- Lessons -->
-    <string name="nav_lessons">পাঠসমূহ</string>
-    <string name="dashboard_lessons_header_title">আপনার জন্য প্রস্তুত পাঠসমূহ</string>
-    <string name="dashboard_lessons_header_description">সম্পর্ক স্থাপন করতে এবং অর্থপূর্ণ কথোপকথন শুরু করার জন্য ব্যবহারিক ধারণা সমূহ।</string>
+    <string name="nav_lessons">পাঠগুলি</string>
+    <string name="dashboard_lessons_header_title">আপনার জন্য তৈরি পাঠগুলি</string>
+    <string name="dashboard_lessons_header_description">সম্পর্ক তৈরি করার এবং অর্থপূর্ণ কথাবার্তা শুরু করার ব্যবহারিক ধারণা</string>
     <!-- Home -->
-    <string name="nav_favorite_tools">পছন্দ গুলো</string>
-    <string name="dashboard_home_header_title">GodToolsএ স্বাগতম</string>
-    <string name="dashboard_home_section_featured_lesson">বিশেষ পাঠসমূহ</string>
-    <string name="dashboard_home_section_favorites_title">আপনার প্রিয় টুলসগুলো</string>
-    <string name="dashboard_home_section_favorites_no_tools_title">প্রদর্শন করার মত কোন প্রিয় টুলস  নেই</string>
-    <string name="dashboard_home_section_favorites_no_tools_description">একটি টুল পছন্দের তালিকায় যোগ করতে হার্ট আইকনে আলতো চাপুন এবং এটি অফলাইনে সহজলভ্য  করুন।</string>
-    <string name="dashboard_home_section_favorites_action_view_all">সব দেখুন &gt;</string>
-    <string name="dashboard_home_section_favorites_action_all_tools">টুলস এ যান</string>
-    <string name="tools_list_favorites_banner_text">একটি টুল পছন্দের তালিকায় যোগ করতে হার্ট আইকনে আলতো চাপুন এবং এটি অফলাইনে সহজলভ্য  করুন।</string>
-    <string name="tools_list_favorites_banner_action_dismiss">বাতিল করুন</string>
+    <string name="nav_favorite_tools">পছন্দসই</string>
+    <string name="dashboard_home_header_title">GodTools-এ স্বাগতম</string>
+    <string name="dashboard_home_section_featured_lesson">ফিচার করা পাঠ</string>
+    <string name="dashboard_home_section_favorites_title">আপনার পছন্দসই সাধনীসমূহ</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">প্রদর্শন করার জন্য কোনো পছন্দসই সাধনী নেই</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">কোনো সাধনীকে পছন্দসই করতে হার্ট আইকনে ট্যাপ করুন এবং এটি অনলাইনে উপলভ্য করুন।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">সব দেখুন</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">সাধনীসমূহে যান</string>
+    <string name="tools_list_favorites_banner_text">হার্ট আইকনে ট্যাপ করে সাধনীটিকে উপলভ্য করুন যা তাকে আপনার পছন্দসইতে যোগ করে।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">বরখাস্ত করুন</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">সমস্ত টুলগুলো</string>
-    <string name="dashboard_tools_section_filter_label">বিশোধন</string>
-    <string name="dashboard_tools_section_filter_category_any">যে কোনো বিভাগ</string>
+    <string name="nav_all_tools">সাধনীসমূহ</string>
+    <string name="dashboard_tools_section_filter_label">ফিল্টার</string>
+    <string name="dashboard_tools_section_filter_category_any">যে কোনো শ্রেণী</string>
     <string name="dashboard_tools_section_filter_language_any">যে কোনো ভাষা</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
         <item quantity="one">%1$d সাধনী উপলভ্য</item>
         <item quantity="other">%1$d সাধনীসমূহ উপলভ্য</item>
     </plurals>
-    <string name="dashboard_tools_section_categories_label">শ্রেণী বিভাগ</string>
-    <string name="dashboard_tools_section_categories_all">সমস্ত টুলগুলো</string>
-    <string name="dashboard_tools_section_spotlight_label">টুল স্পটলাইট</string>
-    <string name="dashboard_tools_section_spotlight_description">এখানে কিছু টুল রয়েছে যা আমরা ভেবেছি যে আপনি পছন্দ করতে পারেন</string>
+    <string name="dashboard_tools_section_filter_available_tools_all">সব সাধনীসমূহ উপলভ্য</string>
+    <string name="dashboard_tools_section_categories_label">শ্রেণীগুলি</string>
+    <string name="dashboard_tools_section_categories_all">সব সাধনীগুলি</string>
+    <string name="dashboard_tools_section_spotlight_label">সাধনী স্পটলাইট</string>
+    <string name="dashboard_tools_section_spotlight_description">এখানে কিছু সাধনী আছে যা আপনি পছন্দ করবেন বলে আমাদের মনে হয়</string>
     <!-- Tool Cards -->
-    <string name="tools_list_remove_favorite_dialog_title">পছন্দ থেকে \"%1$s\" সরিয়ে দিন ?</string>
-    <string name="tools_list_remove_favorite_dialog_confirm">সরিয়ে দিন</string>
-    <string name="tools_list_remove_favorite_dialog_dismiss">"বাতিল করুন "</string>
-    <string name="tool_card_label_language_unavailable">%1$sএ সহজলভ্য নয়</string>
-    <string name="action_tools_about">বিস্তারিত</string>
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s” পছন্দসই থেকে বাদ দেব?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">সরান</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">বাতিল</string>
+    <string name="tool_card_label_language_unavailable">%1$s -তে উপলভ্য নয়</string>
+    <string name="tool_card_accessibility_language_available">উপলভ্য</string>
+    <string name="action_tools_about">বিশদ</string>
     <string name="action_tools_open">খুলুন</string>
     <!-- In App Update -->
-    <string name="play_update_available">আধুনিক রূপ পাওয়া যাবে</string>
-    <string name="play_update_downloaded_action">পুনরায় চালান</string>
+    <string name="play_update_available">আপডেট উপলভ্য</string>
+    <string name="play_update_available_action">ডাউনলোড করুন</string>
+    <string name="play_update_downloaded">আপডেট ডাউনলোড করা হয়েছে</string>
+    <string name="play_update_downloaded_action">পৃুনরায় লোড করুন</string>
 </resources>

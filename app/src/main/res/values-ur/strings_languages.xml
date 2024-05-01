@@ -10,10 +10,18 @@
     <string name="menu_language_settings">زبان سیٹِنگز</string>
     <string name="title_language_settings">زبان سیٹِنگز</string>
     <string name="language_settings_section_app_language_heading">اَیپ انٹر فیس کی زبان</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%d زبانیں دستیاب ہیں</item>
+        <item quantity="other">%d زبانیں دستیاب ہیں</item>
+    </plurals>
     <string name="language_settings_section_app_language_description">زبان منتخب کریں جس میں آپ پوری اَیپ کو ڈسپلے کرنا چاہتے ہیں۔</string>
     <string name="language_settings_section_offline_heading">ٹول کی زبانیں جو آف لائن دستیاب ہیں</string>
     <string name="language_settings_section_offline_description">تمام ٹول کو ڈاؤن لوڈ کریں تاکہ وہ تب بھی دستیاب ہوں جب آپ وائی فائی سیل سروس سے دور ہوں ۔ ٹول کے اندر آپشن بٹن کے ذریعے ٹول کی زبان سیٹ کریں۔</string>
     <string name="language_settings_section_offline_action_edit">ڈاؤن لوڈ کی ہُوئی زبان کو ایڈٹ کریں</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">زبانیں تلاش کریں</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d ٹول دستیاب ہے۔</item>
+        <item quantity="other">%1$d ٹولز دستیاب ہیں۔</item>
+    </plurals>
 </resources>
