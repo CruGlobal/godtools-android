@@ -31,6 +31,8 @@ private fun Locale.getLanguageNameStringRes(context: Context?, inLocale: Locale?
     "fil" -> context?.getLocalizedString(inLocale, R.string.language_name_fil)
     "fil-x-taglish" -> context?.getLocalizedString(inLocale, R.string.language_name_fil_x_taglish)
     "sid" -> context?.getLocalizedString(inLocale, R.string.language_name_sid)
+    // TODO: This is a temporary Taglish label until production switches to the fil-x-taglish language tag
+    "en-PH" -> context?.getLocalizedString(inLocale, R.string.language_name_fil_x_taglish)
     else -> null
 }
 
