@@ -62,7 +62,7 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-databinding-compiler = { module = "androidx.databinding:databinding-compiler", version.ref = "android-gradle-plugin" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.6.2"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.7.0"
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx-hilt" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
