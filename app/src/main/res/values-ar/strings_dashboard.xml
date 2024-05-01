@@ -46,12 +46,12 @@ https://godtoolsapp.com \n\n
     <string name="dashboard_tools_section_filter_category_any">أي فئة:</string>
     <string name="dashboard_tools_section_filter_language_any">أي لغة:</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
-        <item quantity="one">الأداة المتاحة %1$d</item>
-        <item quantity="other">الأدوات المتاحة %1$d</item>
-        <item quantity="few">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
-        <item quantity="many">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
-        <item quantity="two">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
-        <item quantity="zero">لغة المصدر لا تحتوي على صيغة الجمع هذه</item>
+        <item quantity="one">%1$d  أداة  متوفرة</item>
+        <item quantity="other">%1$d أدوات متاحة</item>
+        <item quantity="few">%1$d أدوات متوفرة</item>
+        <item quantity="many">%1$d أداة متوفرة</item>
+        <item quantity="two">%1$d  أداة متوفرة</item>
+        <item quantity="zero">لا توجد أدوات متوفرة</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">جميع الأدوات المتاحة</string>
     <string name="dashboard_tools_section_categories_label">الفئات</string>

@@ -45,6 +45,11 @@ https://knowgod.com/
     <string name="dashboard_tools_section_filter_label">فلٹر</string>
     <string name="dashboard_tools_section_filter_category_any">کوئی بھی زمرہ</string>
     <string name="dashboard_tools_section_filter_language_any">کوئی بھی زبان</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d ٹول دستیاب ہے۔</item>
+        <item quantity="other">%1$d ٹولز دستیاب ہیں۔</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">تمام ٹولز دستیاب ہیں۔</string>
     <string name="dashboard_tools_section_categories_label">زمرے</string>
     <string name="dashboard_tools_section_categories_all">تمام ٹولز</string>
     <string name="dashboard_tools_section_spotlight_label">ٹول اسپاٹ لائٹ</string>
