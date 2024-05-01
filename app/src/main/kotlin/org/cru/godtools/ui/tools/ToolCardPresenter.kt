@@ -2,6 +2,7 @@ package org.cru.godtools.ui.tools
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,7 @@ class ToolCardPresenter @Inject constructor(
             translationsRepository.findLatestTranslationFlow(toolCode, appLocale)
                 .onEach { appTranslation = it }
         }
+        val appLanguageAvailable by remember { derivedStateOf { appTranslation != null } }
 
         // Translation
         val defaultLocale = tool.defaultLocale
@@ -70,6 +72,7 @@ class ToolCardPresenter @Inject constructor(
 
         // Second Translation
         val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, secondLanguage?.code)
+        val secondLanguageAvailable by remember { derivedStateOf { secondTranslation != null } }
 
         // eventSink
         val interceptingEventSink: (ToolCard.Event) -> Unit = remember(eventSink) {
@@ -91,9 +94,9 @@ class ToolCardPresenter @Inject constructor(
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
             translation = translation.value,
             appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
-            appLanguageAvailable = appTranslation != null,
-            secondLanguage = secondLanguage?.takeUnless { appLocale == it.code },
-            secondLanguageAvailable = secondTranslation != null,
+            appLanguageAvailable = appLanguageAvailable,
+            secondLanguage = secondLanguage,
+            secondLanguageAvailable = secondLanguageAvailable,
             availableLanguages = when {
                 !loadAvailableLanguages -> 0
                 toolCode == null -> 0

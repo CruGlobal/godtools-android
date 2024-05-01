@@ -286,18 +286,6 @@ class ToolCardPresenterTest {
             assertEquals(language, expectMostRecentItem().secondLanguage)
         }
     }
-
-    @Test
-    fun `ToolCardState - secondLanguage - GT-2362 Removed when matches appLanguage`() = runTest {
-        toolFlow.value = randomTool(TOOL)
-        val language = Language(appLocaleState.value)
-
-        presenterTestOf(
-            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, secondLanguage = language) }
-        ) {
-            assertNull(expectMostRecentItem().secondLanguage)
-        }
-    }
     // endregion ToolCard.State.secondLanguage
 
     // region ToolCard.State.secondLanguageAvailable
