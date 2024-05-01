@@ -1,9 +1,14 @@
 name: "Validate Gradle Wrapper"
-on: [ push, pull_request ]
+
+on:
+  push:
+    branches: [develop, master, feature/*]
+  pull_request:
+    branches: [develop, master, feature/*]
 
 jobs:
-  validation:
-    name: "Validation"
+  validate-gradle-wrapper:
+    name: "Validate Gradle Wrapper"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
