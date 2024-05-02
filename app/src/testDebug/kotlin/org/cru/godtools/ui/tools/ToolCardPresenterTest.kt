@@ -172,6 +172,27 @@ class ToolCardPresenterTest {
     }
     // endregion ToolCard.State.banner
 
+    // region ToolCard.State.isLoaded
+    @Test
+    fun `ToolCardState - isLoaded`() = runTest {
+        toolFlow.value = randomTool(TOOL, defaultLocale = Locale.FRENCH)
+
+        presenterTestOf(
+            presentFunction = { presenter.present(tool = toolFlow.collectAsState().value) }
+        ) {
+            assertFalse(expectMostRecentItem().isLoaded)
+
+            // emit translation for default language
+            frTranslationFlow.emit(randomTranslation(TOOL, Locale.FRENCH))
+            expectNoEvents()
+
+            // emit translation for app language
+            enTranslationFlow.emit(randomTranslation(TOOL, Locale.ENGLISH))
+            assertTrue(expectMostRecentItem().isLoaded)
+        }
+    }
+    // endregion ToolCard.State.isLoaded
+
     // region ToolCard.State.translation
     @Test
     fun `ToolCardState - translation`() = runTest {
@@ -192,7 +213,7 @@ class ToolCardPresenterTest {
 
     @Test
     fun `ToolCardState - translation - fallback to default language`() = runTest {
-        toolFlow.value = randomTool(TOOL)
+        toolFlow.value = randomTool(TOOL, defaultLocale = Locale.ENGLISH)
         appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
@@ -210,7 +231,7 @@ class ToolCardPresenterTest {
 
     @Test
     fun `ToolCardState - translation - don't emit fallback if primary hasn't loaded yet`() = runTest {
-        toolFlow.value = randomTool(TOOL)
+        toolFlow.value = randomTool(TOOL, defaultLocale = Locale.ENGLISH)
         appLocaleState.value = Locale.FRENCH
         val translation = randomTranslation(TOOL, Locale.ENGLISH)
 
@@ -219,9 +240,7 @@ class ToolCardPresenterTest {
         ) {
             enTranslationFlow.emit(translation)
 
-            val state = expectMostRecentItem()
-            assertFalse(state.isLoaded, "isLoaded should only be true once the translation flow emits a value")
-            assertNull(state.translation)
+            assertNull(expectMostRecentItem().translation)
         }
     }
     // endregion ToolCard.State.translation
