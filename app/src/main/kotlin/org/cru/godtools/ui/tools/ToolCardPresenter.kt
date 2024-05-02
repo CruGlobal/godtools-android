@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -66,9 +65,11 @@ class ToolCardPresenter @Inject constructor(
             translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale)
                 .onStart { emit(null) }
         }
+        var isLoaded by remember { mutableStateOf(false) }
         val translation by remember(appTranslationFlow, defaultTranslationFlow) {
-            combine(appTranslationFlow, defaultTranslationFlow) { t1, t2 -> StateFlowValue(t1 ?: t2) }
-        }.collectAsState(StateFlowValue.Initial(null))
+            combine(appTranslationFlow, defaultTranslationFlow) { t1, t2 -> t1 ?: t2 }
+                .onEach { isLoaded = true }
+        }.collectAsState(null)
 
         // Second Translation
         val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, secondLanguage?.code)
@@ -90,9 +91,9 @@ class ToolCardPresenter @Inject constructor(
         return ToolCard.State(
             toolCode = toolCode,
             tool = tool,
-            isLoaded = !translation.isInitial,
+            isLoaded = isLoaded,
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
-            translation = translation.value,
+            translation = translation,
             appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
             appLanguageAvailable = appLanguageAvailable,
             secondLanguage = secondLanguage,
