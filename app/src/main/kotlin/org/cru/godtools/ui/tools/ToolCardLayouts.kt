@@ -37,12 +37,10 @@ import coil.compose.AsyncImage
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
-import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.withCompatFontFamilyFor
-import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 
@@ -91,58 +89,6 @@ sealed class ToolCardEvent(
 fun PreloadTool(tool: Tool) {
     val code = tool.code ?: return
     toolViewModels[code, tool]
-}
-
-@Composable
-fun LessonToolCard(
-    toolCode: String,
-    modifier: Modifier = Modifier,
-    selectedLanguage: Language? = null,
-    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val state = viewModel.toState(language = selectedLanguage)
-    val tool by rememberUpdatedState(state.tool)
-    val language by rememberUpdatedState(state.language)
-    val languageAvailable by rememberUpdatedState(state.languageAvailable)
-    val translation by rememberUpdatedState(state.translation)
-
-    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
-        ElevatedCard(
-            onClick = {
-                onEvent(
-                    ToolCardEvent.Click(
-                        tool?.code,
-                        tool?.type,
-                        translation?.languageCode
-                    )
-                )
-            },
-            elevation = toolCardElevation,
-            modifier = modifier.fillMaxWidth()
-        ) {
-            ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
-
-                ToolCardInfoContent {
-                    AvailableInLanguage(
-                        language = language,
-                        available = languageAvailable,
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .invisibleIf { !state.isLoaded || !languageAvailable }
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable
