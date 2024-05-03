@@ -7,12 +7,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -40,6 +44,7 @@ class ToolCardPresenter @Inject constructor(
     private val translationsRepository: TranslationsRepository,
 ) {
     @Composable
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun present(
         tool: Tool,
         loadAppLanguage: Boolean = false,
@@ -48,26 +53,30 @@ class ToolCardPresenter @Inject constructor(
         eventSink: (ToolCard.Event) -> Unit = {},
     ): ToolCard.State {
         val coroutineScope = rememberCoroutineScope()
-        val toolCode = tool.code
+        val toolCode by rememberUpdatedState(tool.code)
+        val appLocale by settings.produceAppLocaleState()
+        val defaultLocale by rememberUpdatedState(tool.defaultLocale)
 
         // App Translation
-        val appLocale by settings.produceAppLocaleState()
         var appTranslation: Translation? by remember { mutableStateOf(null) }
-        val appTranslationFlow = remember(toolCode, appLocale) {
-            translationsRepository.findLatestTranslationFlow(toolCode, appLocale)
-                .onEach { appTranslation = it }
-        }
         val appLanguageAvailable by remember { derivedStateOf { appTranslation != null } }
 
         // Translation
-        val defaultLocale = tool.defaultLocale
-        val defaultTranslationFlow = remember(toolCode, defaultLocale) {
-            translationsRepository.findLatestTranslationFlow(toolCode, defaultLocale)
-                .onStart { emit(null) }
-        }
         var isLoaded by remember { mutableStateOf(false) }
-        val translation by remember(appTranslationFlow, defaultTranslationFlow) {
-            combine(appTranslationFlow, defaultTranslationFlow) { t1, t2 -> t1 ?: t2 }
+        val translation by remember {
+            val toolCodeFlow = snapshotFlow { toolCode }
+            toolCodeFlow
+                .combine(snapshotFlow { appLocale }) { t, l -> translationsRepository.findLatestTranslationFlow(t, l) }
+                .flatMapLatest { it }
+                .onEach { appTranslation = it }
+                .combine(
+                    toolCodeFlow
+                        .combine(snapshotFlow { defaultLocale }) { t, l ->
+                            translationsRepository.findLatestTranslationFlow(t, l)
+                        }
+                        .flatMapLatest { it }
+                        .onStart { emit(null) }
+                ) { t1, t2 -> t1 ?: t2 }
                 .onEach { isLoaded = true }
         }.collectAsState(null)
 
@@ -80,9 +89,9 @@ class ToolCardPresenter @Inject constructor(
             {
                 when (it) {
                     ToolCard.Event.PinTool ->
-                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.pinTool(toolCode) } }
+                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.pinTool(it) } }
                     ToolCard.Event.UnpinTool ->
-                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(toolCode) } }
+                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(it) } }
                     else -> eventSink(it)
                 }
             }
@@ -100,8 +109,7 @@ class ToolCardPresenter @Inject constructor(
             secondLanguageAvailable = secondLanguageAvailable,
             availableLanguages = when {
                 !loadAvailableLanguages -> 0
-                toolCode == null -> 0
-                else -> rememberAvailableLanguages(toolCode)
+                else -> toolCode?.let { rememberAvailableLanguages(it) } ?: 0
             },
             eventSink = interceptingEventSink,
         )
