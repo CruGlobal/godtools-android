@@ -14,7 +14,7 @@
         <item quantity="other">%1$d  لغات متوفرة</item>
         <item quantity="few">%1$d عض اللغات متوفرة</item>
         <item quantity="many">%1$d  كثير من  اللغات متوفرة</item>
-        <item quantity="two">%1$d لغتان متوفرتان</item>
+        <item quantity="two">%1$d لغات متوفرة</item>
         <item quantity="zero">لا يوجد لغات متوفرة</item>
     </plurals>
     <string name="language_settings_section_app_language_description">عيّن اللغة التي تريد أن يظهر بها التطبيق بالكامل.</string>
@@ -24,11 +24,11 @@
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">لغات البحث</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
-        <item quantity="one">%1$d  أداة متوفرة</item>
+        <item quantity="one">%1$d أداة متوفرة</item>
         <item quantity="other">%1$d أدوات متاحة</item>
         <item quantity="few">%1$d أدوات متوفرة</item>
         <item quantity="many">%1$d أداة متوفرة</item>
-        <item quantity="two">%1$d  أداة متوفرة</item>
-        <item quantity="zero">لا توجد أدوات متوفرة</item>
+        <item quantity="two">d$1% أدواتين متوفرة</item>
+        <item quantity="zero">لا بوجد أدوات متوفرة</item>
     </plurals>
 </resources>

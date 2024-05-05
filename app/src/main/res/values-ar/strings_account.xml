@@ -73,44 +73,44 @@
     <!-- Badges -->
     <string name="account_activity_badges_header">شاراتك</string>
     <plurals name="account_activity_badge_tools_opened">
-        <item quantity="one">أداة مفتوحة %1 , %1</item>
-        <item quantity="other">أدوات مفتوحة %1 , %1</item>
-        <item quantity="few">عدد من الادوات مفتوحين %1 , %1</item>
-        <item quantity="many">ادوات كثيرة مفتوحة %1 , %1</item>
-        <item quantity="two">عدد 2 اداة مفتوحتين %1 , %1</item>
-        <item quantity="zero">لا يوجد اداة مفتوحة %1 , %1</item>
+        <item quantity="one">تم فتح %1$,d من الأدوات</item>
+        <item quantity="other">تم فتح %1$,d من الأدوات</item>
+        <item quantity="few">تم فتح قليل من الأدوات</item>
+        <item quantity="many">تم فتح العديد من الأدوات</item>
+        <item quantity="two">تم فتح 2 من الأدوات</item>
+        <item quantity="zero">لا يوجد ادوات مفتوحة</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
-        <item quantity="one">درس مكتمل  %1 , %1</item>
-        <item quantity="other">دروس مكتملة  %1 , %1</item>
-        <item quantity="few">يوجد بعض الدروس مكتملة  %1 , %1</item>
-        <item quantity="many">يوجد عديد من الدروس مكتملة  %1 , %1</item>
-        <item quantity="two">يوجد درسين مكتملين  %1 , %1</item>
-        <item quantity="zero">لا يوجد دروس مكتملة  %1 , %1</item>
+        <item quantity="one">تم إكمال %1$,d من الدروس</item>
+        <item quantity="other">تم إكمال %1$,d من الدروس</item>
+        <item quantity="few">تم إكمال القليل من الدروس</item>
+        <item quantity="many">تم إكمال العديد من الدروس</item>
+        <item quantity="two">تم إكمال عدد 2 من الدروس</item>
+        <item quantity="zero">لا يوجد دروس مكتملة</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
-        <item quantity="one">مقال مفتوح %1 , %1</item>
-        <item quantity="other">مقالات مفتوحة %1 , %1</item>
-        <item quantity="few">بعض المقالات مفتوحة  %1 , %1</item>
-        <item quantity="many">عديد من المقالات مفتوحة %1 , %1</item>
-        <item quantity="two">عدد 2 مقال مفتوحين%1 , %1</item>
-        <item quantity="zero">لا يوجد مقالات مفتوحة %1 , %1</item>
+        <item quantity="one">تم فتح %1$,d من المقالات</item>
+        <item quantity="other">تم فتح %1$,d من المقالات</item>
+        <item quantity="few">بعض المقالات مفتوحة</item>
+        <item quantity="many">عديد من المقالات مفتوحة</item>
+        <item quantity="two">عدد 2 مقال مفتوحين</item>
+        <item quantity="zero">لا يوجد مقالات مفتوحة</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
-        <item quantity="one">صورة  مشاركة %1 , %1</item>
-        <item quantity="other">صور مشاركة  %1 , %1</item>
-        <item quantity="few">بعض الصور مشاركة %1 , %1</item>
-        <item quantity="many">كثير من الصور مشاركة %1 , %1</item>
-        <item quantity="two">عدد 2 صورة  مشاركة %1 , %1</item>
-        <item quantity="zero">لا يوجد صورة  مشاركة %1 , %1</item>
+        <item quantity="one">تمت مشاركة %1$,d من الصور</item>
+        <item quantity="other">تمت مشاركة %1$,d من الصور</item>
+        <item quantity="few">بعض الصور مشاركة</item>
+        <item quantity="many">العديد من الصور مشاركة</item>
+        <item quantity="two">عدد 2 صورة  مشاركة</item>
+        <item quantity="zero">لا يوجد صورة  مشاركة</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="one">نصائح تدريبية مكتملة %1 , %1</item>
-        <item quantity="other">نصائح تدريبية مكتملة %1 , %1</item>
-        <item quantity="few">بعض من النصائح التدريبية مكتملة %1 , %1</item>
-        <item quantity="many">كثير من النصائح التدريبية مكتملة %1 , %1</item>
-        <item quantity="two">عدد 2 نصائح تدريبية مكتملة %1 , %1</item>
-        <item quantity="zero">لا يوجد نصائح تدريبية مكتملة %1 , %1</item>
+        <item quantity="one">نصائح تدريبية مكتملة %1$,d</item>
+        <item quantity="other">نصائح تدريبية مكتملة %1$,d</item>
+        <item quantity="few">بعض من النصائح التدريبية مكتملة</item>
+        <item quantity="many">العديد من النصائح التدريبية مكتملة</item>
+        <item quantity="two">عدد 2 نصائح تدريبية مكتملة</item>
+        <item quantity="zero">لا يوجد نصائح تدريبية مكتملة</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">النشاط العالمي</string>
