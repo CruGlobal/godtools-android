@@ -50,7 +50,7 @@ https://godtoolsapp.com \n\n
         <item quantity="other">%1$d أدوات متاحة</item>
         <item quantity="few">%1$d أدوات متوفرة</item>
         <item quantity="many">%1$d أداة متوفرة</item>
-        <item quantity="two">d$1% أدواتين متوفرة</item>
+        <item quantity="two">%1$d أدواتين متوفرة</item>
         <item quantity="zero">لا بوجد أدوات متوفرة</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">جميع الأدوات المتاحة</string>
