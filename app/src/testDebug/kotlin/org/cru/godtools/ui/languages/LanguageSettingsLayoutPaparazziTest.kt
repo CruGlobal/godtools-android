@@ -9,6 +9,7 @@ import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.BasePaparazziTest
+import org.cru.godtools.ui.drawer.DrawerMenuScreenStateTestData
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 import org.junit.runner.RunWith
 
@@ -19,6 +20,7 @@ class LanguageSettingsLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val state = State(
+        drawerState = DrawerMenuScreenStateTestData.closed,
         appLanguage = Locale.FRENCH,
         appLanguages = 1234,
         downloadedLanguages = persistentListOf(
@@ -32,5 +34,14 @@ class LanguageSettingsLayoutPaparazziTest(
     @Test
     fun `LanguageSettingsLayout()`() {
         snapshot { LanguageSettingsLayout(state) }
+    }
+
+    @Test
+    fun `LanguageSettingsLayout() - Drawer Open`() {
+        snapshot {
+            LanguageSettingsLayout(
+                state.copy(drawerState = DrawerMenuScreenStateTestData.open)
+            )
+        }
     }
 }
