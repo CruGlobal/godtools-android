@@ -63,8 +63,17 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
     // endregion DownloadManager Methods
 
     // region Initial Content Methods
-    override suspend fun storeInitialTranslations(translations: Collection<Translation>) =
-        dao.insertOrIgnoreTranslations(translations.map { TranslationEntity(it) })
+    @Transaction
+    override suspend fun storeInitialTranslations(translations: Collection<Translation>) {
+        val tools = db.toolsDao.getTools().mapTo(mutableSetOf()) { it.code }
+        val languages = db.languagesDao.getLanguages().mapTo(mutableSetOf()) { it.code }
+        dao.insertOrIgnoreTranslations(
+            translations
+                .filter { it.toolCode in tools }
+                .filter { it.languageCode in languages }
+                .map { TranslationEntity(it) }
+        )
+    }
     // endregion Initial Content Methods
 
     // region ManifestManager Methods

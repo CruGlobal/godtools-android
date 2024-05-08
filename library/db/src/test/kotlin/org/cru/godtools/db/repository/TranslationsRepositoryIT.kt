@@ -339,6 +339,26 @@ abstract class TranslationsRepositoryIT {
             assertEquals(translation.version, it.version)
         }
     }
+
+    @Test
+    fun `storeInitialTranslations() - Language doesn't exist`() = testScope.runTest {
+        val trans1 = randomTranslation(TOOL, Locale.ENGLISH)
+        val trans2 = randomTranslation(TOOL, Locale.ITALIAN)
+        repository.storeInitialTranslations(listOf(trans1, trans2))
+
+        assertNotNull(repository.findTranslation(trans1.id))
+        assertNull(repository.findTranslation(trans2.id))
+    }
+
+    @Test
+    fun `storeInitialTranslations() - Tool doesn't exist`() = testScope.runTest {
+        val trans1 = randomTranslation(TOOL, Locale.ENGLISH)
+        val trans2 = randomTranslation("invalid_tool", Locale.ENGLISH)
+        repository.storeInitialTranslations(listOf(trans1, trans2))
+
+        assertNotNull(repository.findTranslation(trans1.id))
+        assertNull(repository.findTranslation(trans2.id))
+    }
     // endregion storeInitialTranslations()
 
     // region markBrokenManifestNotDownloaded()
