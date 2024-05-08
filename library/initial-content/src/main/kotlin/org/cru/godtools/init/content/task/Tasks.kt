@@ -62,17 +62,22 @@ internal class Tasks @Inject constructor(
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
-    suspend fun loadBundledResources() = withContext(Dispatchers.IO) {
+    suspend fun loadBundledTools(): List<Tool> {
         // short-circuit if we already have any resources loaded
-        if (toolsRepository.getAllTools().isNotEmpty()) return@withContext
+        if (toolsRepository.getAllTools().isNotEmpty()) return emptyList()
 
-        bundledTools.let { resources ->
-            toolsRepository.storeInitialTools(resources)
-            translationsRepository.storeInitialTranslations(
-                resources.flatMap { it.translations.orEmpty().filter { it.isValid } }
-            )
-            attachmentsRepository.storeInitialAttachments(resources.flatMap { it.attachments.orEmpty() })
-        }
+        return readBundledTools()
+            .also { toolsRepository.storeInitialTools(it) }
+    }
+
+    suspend fun loadBundledAttachments(tools: List<Tool>) {
+        attachmentsRepository.storeInitialAttachments(tools.flatMap { it.attachments.orEmpty() })
+    }
+
+    suspend fun loadBundledTranslations(tools: List<Tool>) {
+        translationsRepository.storeInitialTranslations(
+            tools.flatMap { it.translations.orEmpty().filter { it.isValid } }
+        )
     }
 
     suspend fun initFavoriteTools() {
@@ -82,7 +87,7 @@ internal class Tasks @Inject constructor(
 
         coroutineScope {
             val preferred = async {
-                bundledTools.sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
+                readBundledTools().sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
             val available = translationsRepository.getTranslationsForLanguages(listOf(settings.appLanguage))
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
@@ -97,8 +102,8 @@ internal class Tasks @Inject constructor(
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
 
-    private val bundledTools: List<Tool>
-        get() = try {
+    private suspend fun readBundledTools(): List<Tool> = withContext(Dispatchers.IO) {
+        try {
             context.assets.open("tools.json").reader().use { it.readText() }
                 .let { jsonApiConverter.fromJson(it, Tool::class.java) }
                 .data
@@ -108,6 +113,7 @@ internal class Tasks @Inject constructor(
             Timber.tag(TAG).e(e, "Error parsing bundled tools")
             emptyList()
         }
+    }
     // endregion Tool Initial Content Tasks
 
     suspend fun importBundledAttachments() = withContext(Dispatchers.IO) {
@@ -118,7 +124,7 @@ internal class Tasks @Inject constructor(
             attachmentsRepository.getAttachments()
                 .filter { !it.isDownloaded && it.localFilename in files }
                 .forEach { attachment ->
-                    launch(Dispatchers.IO) {
+                    launch {
                         context.assets.open("attachments/${attachment.localFilename}").use {
                             downloadManager.importAttachment(attachment.id, data = it)
                         }
@@ -129,23 +135,24 @@ internal class Tasks @Inject constructor(
         }
     }
 
-    suspend fun importBundledTranslations() = try {
-        withContext(Dispatchers.IO) {
-            context.assets.list("translations")?.forEach { file ->
-                launch {
-                    // load the translation unless it's downloaded already
-                    val id = file.substring(0, file.lastIndexOf('.')).toLongOrNull()
-                    val translation = id?.let { translationsRepository.findTranslation(id) }
-                        ?.takeUnless { it.isDownloaded } ?: return@launch
+    suspend fun importBundledTranslations() {
+        try {
+            withContext(Dispatchers.IO) {
+                context.assets.list("translations")?.forEach { file ->
+                    launch {
+                        // load the translation unless it's downloaded already
+                        val id = file.substring(0, file.lastIndexOf('.')).toLongOrNull()
+                        val translation = id?.let { translationsRepository.findTranslation(id) }
+                            ?.takeUnless { it.isDownloaded } ?: return@launch
 
-                    // short-circuit if a newer translation is already downloaded
-                    val toolCode = translation.toolCode ?: return@launch
-                    val languageCode = translation.languageCode
-                    val latestTranslation =
-                        translationsRepository.findLatestTranslation(toolCode, languageCode, downloadedOnly = true)
-                    if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
+                        // short-circuit if a newer translation is already downloaded
+                        val toolCode = translation.toolCode ?: return@launch
+                        val languageCode = translation.languageCode
+                        val latestTranslation =
+                            translationsRepository.findLatestTranslation(toolCode, languageCode, downloadedOnly = true)
+                        if (latestTranslation != null && latestTranslation.version >= translation.version) return@launch
 
-                    withContext(Dispatchers.IO) {
+                        // actually open and import the translation
                         try {
                             context.assets.open("translations/$file")
                                 .use { downloadManager.importTranslation(translation, it, -1) }
@@ -162,8 +169,8 @@ internal class Tasks @Inject constructor(
                     }
                 }
             }
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Error importing bundled translations")
         }
-    } catch (e: Exception) {
-        Timber.tag(TAG).e(e, "Error importing bundled translations")
     }
 }
