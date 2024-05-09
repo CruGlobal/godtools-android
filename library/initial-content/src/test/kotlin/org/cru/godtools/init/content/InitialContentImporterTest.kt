@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.coVerifyOrder
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlin.test.Test
@@ -16,32 +17,30 @@ import org.cru.godtools.init.content.task.Tasks
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InitialContentImporterTest {
-    private val toolsSemaphore = Semaphore(1, 1)
-    private val languagesSemaphore = Semaphore(1, 1)
+    private val toolsSemaphore = Semaphore(1)
+    private val languagesSemaphore = Semaphore(1)
+    private val translationsSemaphore = Semaphore(1)
 
     private val tasks: Tasks = mockk {
-        coEvery { loadBundledTools() } coAnswers {
-            toolsSemaphore.acquire()
-            emptyList()
-        }
+        every { bundledData() } returns mockk()
+        coEvery { loadBundledTools(any()) } coAnswers { toolsSemaphore.acquire() }
         coEvery { loadBundledLanguages() } coAnswers { languagesSemaphore.acquire() }
         coEvery { loadBundledAttachments(any()) } just Runs
-        coEvery { loadBundledTranslations(any()) } just Runs
-        coEvery { initFavoriteTools() } just Runs
+        coEvery { loadBundledTranslations(any()) } coAnswers { translationsSemaphore.acquire() }
+        coEvery { initFavoriteTools(any()) } just Runs
         coEvery { importBundledAttachments() } just Runs
         coEvery { importBundledTranslations() } just Runs
     }
 
     @Test
     fun `Verify All Tasks run`() = runTest {
-        toolsSemaphore.release()
-        languagesSemaphore.release()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerifyAll {
+            tasks.bundledData()
             tasks.loadBundledLanguages()
-            tasks.loadBundledTools()
-            tasks.initFavoriteTools()
+            tasks.loadBundledTools(any())
+            tasks.initFavoriteTools(any())
             tasks.loadBundledAttachments(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledAttachments()
@@ -50,24 +49,26 @@ class InitialContentImporterTest {
     }
 
     @Test
-    fun `Favorite Tools - Dependent on Tools being loaded`() = runTest {
+    fun `Favorite Tools - Dependent on Translations being loaded`() = runTest {
+        translationsSemaphore.acquire()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
-        coVerify { tasks.loadBundledTools() }
-        coVerify(exactly = 0) { tasks.initFavoriteTools() }
+        coVerify { tasks.loadBundledTranslations(any()) }
+        coVerify(exactly = 0) { tasks.initFavoriteTools(any()) }
 
-        toolsSemaphore.release()
+        translationsSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
-            tasks.initFavoriteTools()
+            tasks.loadBundledTranslations(any())
+            tasks.initFavoriteTools(any())
         }
     }
 
     @Test
     fun `Bundled Attachments - Dependent on Tools being loaded`() = runTest {
+        toolsSemaphore.acquire()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
-        coVerify { tasks.loadBundledTools() }
+        coVerify { tasks.loadBundledTools(any()) }
         coVerify(exactly = 0) {
             tasks.loadBundledAttachments(any())
             tasks.importBundledAttachments()
@@ -75,7 +76,7 @@ class InitialContentImporterTest {
 
         toolsSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledAttachments(any())
             tasks.importBundledAttachments()
         }
@@ -83,11 +84,11 @@ class InitialContentImporterTest {
 
     @Test
     fun `Bundled Translations - Dependent on Tools being loaded`() = runTest {
-        languagesSemaphore.release()
+        toolsSemaphore.acquire()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerify {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledLanguages()
         }
         coVerify(exactly = 0) {
@@ -97,7 +98,7 @@ class InitialContentImporterTest {
 
         toolsSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledTranslations()
         }
@@ -105,11 +106,11 @@ class InitialContentImporterTest {
 
     @Test
     fun `Bundled Translations - Dependent on Languages being loaded`() = runTest {
-        toolsSemaphore.release()
+        languagesSemaphore.acquire()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerify {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledLanguages()
         }
         coVerify(exactly = 0) {
@@ -119,7 +120,7 @@ class InitialContentImporterTest {
 
         languagesSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledTranslations()
         }

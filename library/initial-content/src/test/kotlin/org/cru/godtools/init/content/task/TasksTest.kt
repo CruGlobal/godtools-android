@@ -61,7 +61,7 @@ class TasksTest {
     @Test
     fun `initFavoriteTools() - Already Ran - Last sync recorded`() = runTest {
         coEvery { lastSyncTimeRepository.getLastSyncTime(*anyVararg()) } returns 5
-        tasks.initFavoriteTools()
+        tasks.initFavoriteTools(tasks.bundledData())
         coVerify {
             lastSyncTimeRepository.getLastSyncTime(*anyVararg())
             downloadManager wasNot Called
@@ -73,7 +73,7 @@ class TasksTest {
     @Test
     fun `initFavoriteTools() - Already Ran - Has favorite tools`() = runTest {
         coEvery { toolsRepository.getNormalTools() } returns listOf(Tool("tool", isFavorite = true))
-        tasks.initFavoriteTools()
+        tasks.initFavoriteTools(tasks.bundledData())
         coVerify {
             lastSyncTimeRepository.getLastSyncTime(*anyVararg())
             toolsRepository.getNormalTools()
@@ -90,7 +90,7 @@ class TasksTest {
         coEvery { translationsRepository.getTranslationsForLanguages(any()) } returns translations
         every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
 
-        tasks.initFavoriteTools()
+        tasks.initFavoriteTools(tasks.bundledData())
         coVerifyAll {
             toolsRepository.getNormalTools()
             toolsRepository.pinTool("1", trackChanges = false)
