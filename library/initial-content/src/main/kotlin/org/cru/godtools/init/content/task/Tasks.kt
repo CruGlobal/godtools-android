@@ -43,6 +43,25 @@ internal class Tasks @Inject constructor(
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository
 ) {
+    inner class BundledData {
+        private val _tools by lazy {
+            try {
+                context.assets.open("tools.json").reader().use { it.readText() }
+                    .let { jsonApiConverter.fromJson(it, Tool::class.java) }
+                    .data
+                    .filter { it.isValid }
+            } catch (e: Exception) {
+                // log exception, but it shouldn't be fatal (for now)
+                Timber.tag(TAG).e(e, "Error parsing bundled tools")
+                emptyList()
+            }
+        }
+
+        suspend fun getTools() = withContext(Dispatchers.IO) { _tools }
+    }
+
+    fun bundledData() = BundledData()
+
     // region Language Initial Content Tasks
     suspend fun loadBundledLanguages() {
         // short-circuit if we already have any languages loaded
@@ -62,32 +81,31 @@ internal class Tasks @Inject constructor(
     // endregion Language Initial Content Tasks
 
     // region Tool Initial Content Tasks
-    suspend fun loadBundledTools(): List<Tool> {
+    suspend fun loadBundledTools(bundledData: BundledData) {
         // short-circuit if we already have any resources loaded
-        if (toolsRepository.getAllTools().isNotEmpty()) return emptyList()
+        if (toolsRepository.getAllTools().isNotEmpty()) return
 
-        return readBundledTools()
-            .also { toolsRepository.storeInitialTools(it) }
+        toolsRepository.storeInitialTools(bundledData.getTools())
     }
 
-    suspend fun loadBundledAttachments(tools: List<Tool>) {
-        attachmentsRepository.storeInitialAttachments(tools.flatMap { it.attachments.orEmpty() })
+    suspend fun loadBundledAttachments(data: BundledData) {
+        attachmentsRepository.storeInitialAttachments(data.getTools().flatMap { it.attachments.orEmpty() })
     }
 
-    suspend fun loadBundledTranslations(tools: List<Tool>) {
+    suspend fun loadBundledTranslations(data: BundledData) {
         translationsRepository.storeInitialTranslations(
-            tools.flatMap { it.translations.orEmpty().filter { it.isValid } }
+            data.getTools().flatMap { it.translations.orEmpty().filter { it.isValid } }
         )
     }
 
-    suspend fun initFavoriteTools() {
+    suspend fun initFavoriteTools(data: BundledData) {
         // check to see if we have initialized the default tools before
         if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
         if (toolsRepository.getNormalTools().any { it.isFavorite }) return
 
         coroutineScope {
             val preferred = async {
-                readBundledTools().sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
+                data.getTools().sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
             val available = translationsRepository.getTranslationsForLanguages(listOf(settings.appLanguage))
                 .mapNotNullTo(mutableSetOf()) { it.toolCode }
@@ -100,19 +118,6 @@ internal class Tasks @Inject constructor(
         }
 
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
-    }
-
-    private suspend fun readBundledTools(): List<Tool> = withContext(Dispatchers.IO) {
-        try {
-            context.assets.open("tools.json").reader().use { it.readText() }
-                .let { jsonApiConverter.fromJson(it, Tool::class.java) }
-                .data
-                .filter { it.isValid }
-        } catch (e: Exception) {
-            // log exception, but it shouldn't be fatal (for now)
-            Timber.tag(TAG).e(e, "Error parsing bundled tools")
-            emptyList()
-        }
     }
     // endregion Tool Initial Content Tasks
 

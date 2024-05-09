@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.coVerifyOrder
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlin.test.Test
@@ -21,14 +22,12 @@ class InitialContentImporterTest {
     private val translationsSemaphore = Semaphore(1)
 
     private val tasks: Tasks = mockk {
-        coEvery { loadBundledTools() } coAnswers {
-            toolsSemaphore.acquire()
-            emptyList()
-        }
+        every { bundledData() } returns mockk()
+        coEvery { loadBundledTools(any()) } coAnswers { toolsSemaphore.acquire() }
         coEvery { loadBundledLanguages() } coAnswers { languagesSemaphore.acquire() }
         coEvery { loadBundledAttachments(any()) } just Runs
         coEvery { loadBundledTranslations(any()) } coAnswers { translationsSemaphore.acquire() }
-        coEvery { initFavoriteTools() } just Runs
+        coEvery { initFavoriteTools(any()) } just Runs
         coEvery { importBundledAttachments() } just Runs
         coEvery { importBundledTranslations() } just Runs
     }
@@ -38,9 +37,10 @@ class InitialContentImporterTest {
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerifyAll {
+            tasks.bundledData()
             tasks.loadBundledLanguages()
-            tasks.loadBundledTools()
-            tasks.initFavoriteTools()
+            tasks.loadBundledTools(any())
+            tasks.initFavoriteTools(any())
             tasks.loadBundledAttachments(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledAttachments()
@@ -54,12 +54,12 @@ class InitialContentImporterTest {
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerify { tasks.loadBundledTranslations(any()) }
-        coVerify(exactly = 0) { tasks.initFavoriteTools() }
+        coVerify(exactly = 0) { tasks.initFavoriteTools(any()) }
 
         translationsSemaphore.release()
         coVerifyOrder {
             tasks.loadBundledTranslations(any())
-            tasks.initFavoriteTools()
+            tasks.initFavoriteTools(any())
         }
     }
 
@@ -68,7 +68,7 @@ class InitialContentImporterTest {
         toolsSemaphore.acquire()
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
-        coVerify { tasks.loadBundledTools() }
+        coVerify { tasks.loadBundledTools(any()) }
         coVerify(exactly = 0) {
             tasks.loadBundledAttachments(any())
             tasks.importBundledAttachments()
@@ -76,7 +76,7 @@ class InitialContentImporterTest {
 
         toolsSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledAttachments(any())
             tasks.importBundledAttachments()
         }
@@ -88,7 +88,7 @@ class InitialContentImporterTest {
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerify {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledLanguages()
         }
         coVerify(exactly = 0) {
@@ -98,7 +98,7 @@ class InitialContentImporterTest {
 
         toolsSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledTranslations()
         }
@@ -110,7 +110,7 @@ class InitialContentImporterTest {
         InitialContentImporter(tasks, UnconfinedTestDispatcher(testScheduler))
 
         coVerify {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledLanguages()
         }
         coVerify(exactly = 0) {
@@ -120,7 +120,7 @@ class InitialContentImporterTest {
 
         languagesSemaphore.release()
         coVerifyOrder {
-            tasks.loadBundledTools()
+            tasks.loadBundledTools(any())
             tasks.loadBundledTranslations(any())
             tasks.importBundledTranslations()
         }
