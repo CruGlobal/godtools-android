@@ -19,20 +19,18 @@ class InitialContentImporter internal constructor(tasks: Tasks, dispatcher: Coro
     init {
         coroutineScope.launch {
             val tools = async { tasks.loadBundledTools() }
-            val languages = launch { tasks.loadBundledLanguages() }
 
-            launch {
-                tools.join()
-                tasks.initFavoriteTools()
-            }
             launch {
                 tasks.loadBundledAttachments(tools.await())
                 tasks.importBundledAttachments()
             }
+
             launch {
-                languages.join()
+                tasks.loadBundledLanguages()
                 tasks.loadBundledTranslations(tools.await())
-                tasks.importBundledTranslations()
+
+                launch { tasks.importBundledTranslations() }
+                launch { tasks.initFavoriteTools() }
             }
         }
     }
