@@ -5,7 +5,6 @@ import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.cru.godtools.init.content.task.Tasks
 
@@ -18,22 +17,21 @@ class InitialContentImporter internal constructor(tasks: Tasks, dispatcher: Coro
 
     init {
         coroutineScope.launch {
-            val tools = async { tasks.loadBundledTools() }
+            val bundledData = tasks.bundledData()
+
             val languages = launch { tasks.loadBundledLanguages() }
+            tasks.loadBundledTools(bundledData)
 
             launch {
-                tools.join()
-                tasks.initFavoriteTools()
-            }
-            launch {
-                tasks.loadBundledAttachments(tools.await())
+                tasks.loadBundledAttachments(bundledData)
                 tasks.importBundledAttachments()
             }
-            launch {
-                languages.join()
-                tasks.loadBundledTranslations(tools.await())
-                tasks.importBundledTranslations()
-            }
+
+            languages.join()
+            tasks.loadBundledTranslations(bundledData)
+            launch { tasks.importBundledTranslations() }
+
+            tasks.initFavoriteTools(bundledData)
         }
     }
 }
