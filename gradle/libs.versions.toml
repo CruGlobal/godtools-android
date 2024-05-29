@@ -195,7 +195,7 @@ play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
 play-review = "com.google.android.play:review-ktx:2.0.1"
-play-tagmanager = "com.google.android.gms:play-services-tagmanager:18.0.4"
+play-tagmanager = "com.google.android.gms:play-services-tagmanager:18.1.0"
 retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit2" }
 retrofit2-converters-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit2" }
 robolectric = "org.robolectric:robolectric:4.12.2"
