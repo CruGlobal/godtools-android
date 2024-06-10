@@ -670,9 +670,6 @@ class PageContentLayout @JvmOverloads constructor(
     // endregion View layout logic
 
     @Parcelize
-    private class SavedState(
-        val activeCardPosition: Int,
-        val isBounceFirstCard: Boolean,
-        val superState: Parcelable?
-    ) : Parcelable
+    private class SavedState(val activeCardPosition: Int, val isBounceFirstCard: Boolean, val superState: Parcelable?) :
+        Parcelable
 }

@@ -37,7 +37,9 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     @Assisted private val toolState: State,
     private val pageControllerFactory: PageController.Factory,
     eventBus: EventBus
-) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner), PageController.Callbacks, Observer<Manifest?> {
+) : DataBindingPagerAdapter<TractPageBinding>(lifecycleOwner),
+    PageController.Callbacks,
+    Observer<Manifest?> {
     @AssistedFactory
     interface Factory {
         fun create(

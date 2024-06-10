@@ -6,11 +6,8 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 
 const val SCREEN_CATEGORIES = "Categories"
 
-open class ToolAnalyticsScreenEvent(
-    screen: String,
-    private val tool: String?,
-    locale: Locale? = null
-) : AnalyticsScreenEvent(screen, locale) {
+open class ToolAnalyticsScreenEvent(screen: String, private val tool: String?, locale: Locale? = null) :
+    AnalyticsScreenEvent(screen, locale) {
     protected constructor(screen: String, manifest: Manifest) : this(screen, manifest.code, manifest.locale)
 
     override val appSection get() = tool

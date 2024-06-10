@@ -99,15 +99,13 @@ class ParentControllerTest {
         assertThat(controller.childContainer.children.toList(), contains(instanceOf(Space::class.java)))
     }
 
-    class ConcreteParentController(
-        public override val childContainer: LinearLayout,
-        cache: UiControllerCache
-    ) : ParentController<Paragraph>(
-        Paragraph::class,
-        childContainer,
-        null,
-        UiControllerCache.Factory { _, _ -> cache }
-    )
+    class ConcreteParentController(public override val childContainer: LinearLayout, cache: UiControllerCache) :
+        ParentController<Paragraph>(
+            Paragraph::class,
+            childContainer,
+            null,
+            UiControllerCache.Factory { _, _ -> cache }
+        )
 
     private inline fun <reified T : Base> testController(root: View) = object : BaseController<T>(T::class, root) {}
 }

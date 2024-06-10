@@ -12,7 +12,8 @@ import org.cru.godtools.shared.tool.parser.model.Category
 import org.cru.godtools.tool.article.databinding.ListItemCategoryBinding
 
 internal class CategoriesAdapter(lifecycleOwner: LifecycleOwner? = null) :
-    SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner), Observer<List<Category>?> {
+    SimpleDataBindingAdapter<ListItemCategoryBinding>(lifecycleOwner),
+    Observer<List<Category>?> {
     init {
         setHasStableIds(true)
     }

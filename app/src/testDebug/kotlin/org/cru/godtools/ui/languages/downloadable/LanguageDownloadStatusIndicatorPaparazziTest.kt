@@ -10,9 +10,8 @@ import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
-class LanguageDownloadStatusIndicatorPaparazziTest(
-    @TestParameter nightMode: NightMode
-) : BasePaparazziTest(nightMode = nightMode, renderingMode = RenderingMode.SHRINK) {
+class LanguageDownloadStatusIndicatorPaparazziTest(@TestParameter nightMode: NightMode) :
+    BasePaparazziTest(nightMode = nightMode, renderingMode = RenderingMode.SHRINK) {
     @Test
     fun `LanguageDownloadStatusIndicator()`() = centerInSnapshot {
         Row {

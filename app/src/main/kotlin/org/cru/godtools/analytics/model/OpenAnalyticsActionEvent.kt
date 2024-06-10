@@ -5,11 +5,8 @@ import android.os.Bundle
 private const val PARAM_SOURCE = "cru_source"
 private const val PARAM_TOOL = "cru_tool"
 
-internal class OpenAnalyticsActionEvent(
-    action: String,
-    private val tool: String?,
-    private val source: String
-) : AnalyticsActionEvent(action = action, system = AnalyticsSystem.FIREBASE) {
+internal class OpenAnalyticsActionEvent(action: String, private val tool: String?, private val source: String) :
+    AnalyticsActionEvent(action = action, system = AnalyticsSystem.FIREBASE) {
     companion object {
         const val ACTION_OPEN_LESSON = "open_lesson"
         const val ACTION_OPEN_TOOL = "open_tool"

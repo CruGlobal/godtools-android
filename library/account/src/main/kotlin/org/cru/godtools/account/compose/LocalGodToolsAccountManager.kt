@@ -1,7 +1,6 @@
 package org.cru.godtools.account.compose
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import dagger.hilt.EntryPoint
@@ -24,9 +23,7 @@ internal object LocalGodToolsAccountManager {
     /**
      * Associates a [GodToolsAccountManager] key to a value in a call to [CompositionLocalProvider].
      */
-    infix fun provides(accountManager: GodToolsAccountManager): ProvidedValue<GodToolsAccountManager?> {
-        return LocalComposition.provides(accountManager)
-    }
+    infix fun provides(accountManager: GodToolsAccountManager) = LocalComposition.provides(accountManager)
 }
 
 @EntryPoint

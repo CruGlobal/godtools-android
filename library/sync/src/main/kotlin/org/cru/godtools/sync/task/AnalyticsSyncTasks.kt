@@ -10,7 +10,7 @@ import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 
 private const val SYNC_TIME_GLOBAL_ACTIVITY = "last_synced.global_activity"
-private const val STALE_DURATION_GLOBAL_ACTIVITY = DAY_IN_MS
+private const val STALE_GLOBAL_ACTIVITY = DAY_IN_MS
 
 @Singleton
 internal class AnalyticsSyncTasks @Inject internal constructor(
@@ -22,8 +22,8 @@ internal class AnalyticsSyncTasks @Inject internal constructor(
 
     suspend fun syncGlobalActivity(force: Boolean): Boolean = globalActivityMutex.withLock {
         // short-circuit if we aren't forcing a sync and the data isn't stale
-        if (!force && !lastSyncTimeRepository
-                .isLastSyncStale(SYNC_TIME_GLOBAL_ACTIVITY, staleAfter = STALE_DURATION_GLOBAL_ACTIVITY)
+        if (!force &&
+            !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_GLOBAL_ACTIVITY, staleAfter = STALE_GLOBAL_ACTIVITY)
         ) {
             return@withLock true
         }

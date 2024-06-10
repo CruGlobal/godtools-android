@@ -76,13 +76,17 @@ class ArticlesActivity :
     }
 
     private fun Uri.isGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
-        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) &&
+        pathSegments.orEmpty().size >= 5 &&
         pathSegments?.getOrNull(0) == "deeplink" &&
-        pathSegments?.getOrNull(1) == "tool" && pathSegments?.getOrNull(2) == "article"
+        pathSegments?.getOrNull(1) == "tool" &&
+        pathSegments?.getOrNull(2) == "article"
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
-        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "article"
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
+        pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" &&
+        pathSegments?.getOrNull(1) == "article"
     // endregion Intent Processing
 
     private fun updateToolbarTitle() {

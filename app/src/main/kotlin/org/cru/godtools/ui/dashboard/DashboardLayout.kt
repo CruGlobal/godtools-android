@@ -65,12 +65,8 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal sealed interface DashboardEvent {
-    open class OpenTool(
-        val tool: String?,
-        val type: Tool.Type?,
-        val lang1: Locale?,
-        val lang2: Locale? = null,
-    ) : DashboardEvent
+    open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
+        DashboardEvent
     class OpenLesson(lesson: String?, lang: Locale?) : OpenTool(lesson, Tool.Type.LESSON, lang)
     class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }

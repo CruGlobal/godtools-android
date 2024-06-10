@@ -9,10 +9,8 @@ private const val DEFAULT_BOUNCES = 4
 private const val DEFAULT_HEIGHT_DECAY = 0.75
 
 @Immutable
-class BounceInterpolator(
-    private val bounces: Int = DEFAULT_BOUNCES,
-    decay: Double = DEFAULT_HEIGHT_DECAY
-) : Interpolator {
+class BounceInterpolator(private val bounces: Int = DEFAULT_BOUNCES, decay: Double = DEFAULT_HEIGHT_DECAY) :
+    Interpolator {
     private val heightDecay = 1 - decay
     private val timeDecay = sqrt(heightDecay)
     private val totalTime = (0 until bounces).map { timeDecay.pow(it) }.sum()

@@ -67,10 +67,8 @@ private const val DATABASE_VERSION = 63
  * 63: 2024-01-17
  */
 
-internal class GodToolsDatabase(
-    private val context: Context,
-    private val roomDb: GodToolsRoomDatabase,
-) : WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+internal class GodToolsDatabase(private val context: Context, private val roomDb: GodToolsRoomDatabase) :
+    WalSQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase) = Unit
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
