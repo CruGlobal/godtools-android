@@ -14,10 +14,8 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.greenrobot.eventbus.EventBus
 
 @HiltViewModel
-class LessonsViewModel @Inject constructor(
-    private val eventBus: EventBus,
-    toolsRepository: ToolsRepository,
-) : ViewModel() {
+class LessonsViewModel @Inject constructor(private val eventBus: EventBus, toolsRepository: ToolsRepository) :
+    ViewModel() {
     val lessons = toolsRepository.getLessonsFlow()
         .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder }.mapNotNull { it.code } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())

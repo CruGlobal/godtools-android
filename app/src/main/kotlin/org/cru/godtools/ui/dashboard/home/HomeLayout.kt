@@ -52,12 +52,8 @@ import org.cru.godtools.ui.tools.ToolCardEvent
 private val PADDING_HORIZONTAL = 16.dp
 
 internal sealed interface DashboardHomeEvent {
-    open class OpenTool(
-        val tool: String?,
-        val type: Tool.Type?,
-        val lang1: Locale?,
-        val lang2: Locale? = null,
-    ) : DashboardHomeEvent {
+    open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
+        DashboardHomeEvent {
         constructor(event: ToolCardEvent) : this(event.tool, event.toolType, event.lang1, event.lang2)
     }
     open class OpenToolDetails(val tool: String?) : DashboardHomeEvent {

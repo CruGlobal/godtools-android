@@ -10,8 +10,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.switchCombineWith
 import org.cru.godtools.base.tool.service.ManifestManager
 
 @HiltViewModel
-open class LatestPublishedManifestDataModel @Inject constructor(manifestManager: ManifestManager) :
-    ViewModel() {
+open class LatestPublishedManifestDataModel @Inject constructor(manifestManager: ManifestManager) : ViewModel() {
     val toolCode = MutableLiveData<String?>()
     val locale = MutableLiveData<Locale?>()
 

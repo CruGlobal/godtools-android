@@ -11,8 +11,8 @@ import timber.log.Timber
 
 fun Locale.getPrimaryCollator(): Collator = Collator.getInstance(this).also { it.strength = Collator.PRIMARY }
 
-fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null): String {
-    return getLanguageNameStringRes(context, inLocale)
+fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null, inLocale: Locale? = null) =
+    getLanguageNameStringRes(context, inLocale)
         // use Locale.getDisplayName()
         ?: getOptionalDisplayName(inLocale)
         // use the default name if specified
@@ -24,7 +24,6 @@ fun Locale.getDisplayName(context: Context? = null, defaultName: String? = null,
                 .e(e, "Locale(%s).getDisplayName(defaultName = %s, inLocale = %s)", this, defaultName, inLocale)
             if (inLocale != null) getDisplayName(inLocale) else displayName
         }
-}
 
 private fun Locale.getLanguageNameStringRes(context: Context?, inLocale: Locale?) = when (toLanguageTag()) {
     "fa" -> context?.getLocalizedString(inLocale, R.string.language_name_fa)

@@ -18,7 +18,9 @@ import org.cru.godtools.tool.article.databinding.ArticleCategoriesFragmentBindin
 import org.greenrobot.eventbus.EventBus
 
 @AndroidEntryPoint
-class CategoriesFragment : BaseToolFragment<ArticleCategoriesFragmentBinding>, CategorySelectedListener {
+class CategoriesFragment :
+    BaseToolFragment<ArticleCategoriesFragmentBinding>,
+    CategorySelectedListener {
     constructor() : super(R.layout.article_categories_fragment)
     constructor(code: String, locale: Locale) : super(R.layout.article_categories_fragment, code, locale)
 

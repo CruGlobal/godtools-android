@@ -39,7 +39,9 @@ import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 
 @AndroidEntryPoint
-class TipBottomSheetDialogFragment : BindingBottomSheetDialogFragment<ToolTipBinding>(R.layout.tool_tip), TipCallbacks {
+class TipBottomSheetDialogFragment :
+    BindingBottomSheetDialogFragment<ToolTipBinding>(R.layout.tool_tip),
+    TipCallbacks {
     companion object {
         fun create(tip: Tip): TipBottomSheetDialogFragment? = TipBottomSheetDialogFragment().apply {
             tool = tip.manifest.code ?: return null

@@ -10,9 +10,7 @@ import org.cru.godtools.shared.user.activity.model.UserActivity
 import org.cru.godtools.user.activity.UserActivityManager
 
 @HiltViewModel
-class AccountActivityViewModel @Inject constructor(
-    userActivityManager: UserActivityManager,
-) : ViewModel() {
+class AccountActivityViewModel @Inject constructor(userActivityManager: UserActivityManager) : ViewModel() {
     val userActivity = userActivityManager.userActivityFlow
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UserActivity(emptyMap()))
 }

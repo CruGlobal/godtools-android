@@ -12,9 +12,8 @@ import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
-class AccountActivityBadgesPaparazziTest(
-    @TestParameter nightMode: NightMode,
-) : BasePaparazziTest(nightMode = nightMode, renderingMode = RenderingMode.SHRINK) {
+class AccountActivityBadgesPaparazziTest(@TestParameter nightMode: NightMode) :
+    BasePaparazziTest(nightMode = nightMode, renderingMode = RenderingMode.SHRINK) {
     @Test
     fun `AccountActivityBadges() - All Incomplete`() {
         val activity = UserActivity(emptyMap())

@@ -16,9 +16,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
 
 @Singleton
-class DrawerMenuPresenter @Inject constructor(
-    private val accountManager: GodToolsAccountManager,
-) : Presenter<State> {
+class DrawerMenuPresenter @Inject constructor(private val accountManager: GodToolsAccountManager) : Presenter<State> {
     @Composable
     override fun present(): State {
         val scope = rememberCoroutineScope()

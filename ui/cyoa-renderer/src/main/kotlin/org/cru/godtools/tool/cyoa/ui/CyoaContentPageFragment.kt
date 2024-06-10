@@ -12,9 +12,8 @@ import org.cru.godtools.tool.cyoa.ui.controller.ContentPageController
 import org.cru.godtools.tool.cyoa.ui.controller.bindController
 
 @AndroidEntryPoint
-class CyoaContentPageFragment(
-    page: String? = null
-) : CyoaPageFragment<CyoaPageContentBinding, ContentPageController>(R.layout.cyoa_page_content, page) {
+class CyoaContentPageFragment(page: String? = null) :
+    CyoaPageFragment<CyoaPageContentBinding, ContentPageController>(R.layout.cyoa_page_content, page) {
     override fun supportsPage(page: Page) = page is ContentPage
 
     // region Controller

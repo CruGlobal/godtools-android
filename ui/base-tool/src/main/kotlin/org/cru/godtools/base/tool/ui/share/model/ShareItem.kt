@@ -6,7 +6,9 @@ import android.os.Parcelable
 import androidx.annotation.LayoutRes
 import org.ccci.gto.android.common.Ordered
 
-interface ShareItem : Parcelable, Ordered {
+interface ShareItem :
+    Parcelable,
+    Ordered {
     val shareIntent: Intent? get() = null
 
     @get:LayoutRes

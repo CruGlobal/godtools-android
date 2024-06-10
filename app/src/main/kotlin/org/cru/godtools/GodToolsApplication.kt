@@ -21,7 +21,9 @@ import org.ccci.gto.android.common.util.LocaleUtils
 import timber.log.Timber
 
 @HiltAndroidApp
-open class GodToolsApplication : Application(), Configuration.Provider {
+open class GodToolsApplication :
+    Application(),
+    Configuration.Provider {
     @Inject
     internal lateinit var eagerInitializer: EagerSingletonInitializer
 
