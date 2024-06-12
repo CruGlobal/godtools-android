@@ -38,5 +38,5 @@ jobs:
         run: |
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
-          git commit -am "Record updated snapshots"
+          git commit -am "Record updated snapshots" || echo "No changed snapshots"
           git push
