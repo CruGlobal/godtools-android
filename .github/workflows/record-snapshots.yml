@@ -34,7 +34,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Record snapshots
         run: ./gradlew cleanRecordPaparazzi --scan
-      - name: Commit Podfile.lock
+      - name: Commit snapshots
         run: |
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
