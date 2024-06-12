@@ -33,7 +33,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Record snapshots
-        run: ./gradlew recordPaparazzi --scan
+        run: ./gradlew cleanRecordPaparazzi --scan
       - name: Commit Podfile.lock
         run: |
           git config --global user.name '${{ github.actor }}'
