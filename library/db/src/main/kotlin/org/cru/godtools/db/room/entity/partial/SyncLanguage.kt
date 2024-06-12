@@ -5,5 +5,6 @@ import org.cru.godtools.model.Language
 class SyncLanguage(language: Language) {
     val code = language.code
     val name = language.name
+    val forceLanguageName = language.isForcedName
     val apiId = language.apiId
 }

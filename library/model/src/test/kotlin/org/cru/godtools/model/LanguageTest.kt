@@ -29,6 +29,7 @@ class LanguageTest {
 
         assertTrue(language.isValid)
         assertEquals(1, language.apiId)
+        assertEquals(true, language.isForcedName)
         assertEquals(Locale.ENGLISH, language.code)
         assertEquals("English", language.name)
     }

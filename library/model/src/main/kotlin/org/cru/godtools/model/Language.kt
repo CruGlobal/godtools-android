@@ -12,6 +12,7 @@ import org.cru.godtools.base.util.getPrimaryCollator
 
 private const val JSON_CODE = "code"
 private const val JSON_NAME = "name"
+private const val JSON_FORCE_LANGUAGE_NAME = "force-language-name"
 
 @JsonApiType(Language.JSONAPI_TYPE)
 data class Language(
@@ -19,6 +20,8 @@ data class Language(
     val code: Locale,
     @JsonApiAttribute(JSON_NAME)
     val name: String? = null,
+    @JsonApiAttribute(JSON_FORCE_LANGUAGE_NAME)
+    val isForcedName: Boolean = false,
     @JsonApiIgnore
     val isAdded: Boolean = false,
     @JsonApiId
@@ -29,7 +32,7 @@ data class Language(
     companion object {
         const val JSONAPI_TYPE = "language"
 
-        val JSONAPI_FIELDS = arrayOf(JSON_CODE, JSON_NAME)
+        val JSONAPI_FIELDS = arrayOf(JSON_CODE, JSON_NAME, JSON_FORCE_LANGUAGE_NAME)
 
         val INVALID_CODE = Locale("x", "inv")
 
@@ -68,5 +71,5 @@ data class Language(
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
-        code.takeIf { isValid }?.getDisplayName(context, name, inLocale) ?: name ?: ""
+        code.takeIf { isValid }.takeIf { !isForcedName }?.getDisplayName(context, name, inLocale) ?: name ?: ""
 }
