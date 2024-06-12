@@ -36,7 +36,7 @@ internal class YoutubePlayerActivity : AppCompatActivity() {
                 videoId = withExtras(ExtrasSpec) { videoId },
                 autoPlay = true,
                 recue = true,
-                onPlaybackEnded = { finish() },
+                onPlaybackEnd = { finish() },
                 modifier = Modifier
                     .fillMaxSize()
                     .clickable(
