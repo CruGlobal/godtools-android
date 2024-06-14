@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 23,
-    "identityHash": "cc9bcb0589cdfa212538a9c0bb43b6cb",
+    "identityHash": "b4d990afcd23fd8d647d06ea548cd3fd",
     "entities": [
       {
         "tableName": "attachments",
@@ -73,7 +73,7 @@
       },
       {
         "tableName": "languages",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT, `forceLanguageName` INTEGER NOT NULL DEFAULT false, `isAdded` INTEGER NOT NULL DEFAULT false, `apiId` INTEGER, PRIMARY KEY(`code`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`code` TEXT NOT NULL, `name` TEXT, `isForcedName` INTEGER NOT NULL DEFAULT false, `isAdded` INTEGER NOT NULL DEFAULT false, `apiId` INTEGER, PRIMARY KEY(`code`))",
         "fields": [
           {
             "fieldPath": "code",
@@ -88,8 +88,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "forceLanguageName",
-            "columnName": "forceLanguageName",
+            "fieldPath": "isForcedName",
+            "columnName": "isForcedName",
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "false"
@@ -737,7 +737,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc9bcb0589cdfa212538a9c0bb43b6cb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b4d990afcd23fd8d647d06ea548cd3fd')"
     ]
   }
 }

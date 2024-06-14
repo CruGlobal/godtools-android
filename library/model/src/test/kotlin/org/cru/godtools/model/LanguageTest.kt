@@ -66,10 +66,15 @@ class LanguageTest {
     }
 
     @Test
-    fun `getForceDisplayName()`() {
-        val language = parseJson("language_force_name.json")
-        val context: Context = mockk()
+    fun `getDisplayName() - isForcedName=true`() {
         val inLocale: Locale = Locale.ENGLISH
+        val language = Language(
+            code = inLocale,
+            name = "English - Tester",
+            isForcedName = true
+        )
+        val context: Context = mockk()
+
         assertEquals("English - Tester", language.getDisplayName(context, inLocale))
     }
     // endregion getDisplayName()
