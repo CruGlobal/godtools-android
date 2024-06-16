@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">ይጫኑ</string>
-    <string name="tract_card_previous">ቀዳሚ።</string>
+    <string name="tract_card_previous">ቀዳሚ</string>
     <string name="tract_card_next">ቀጣይ</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">ስክሪን ያጋሩ</string>
+    <string name="menu_live_share_active">ስክሪን ማጋራት ላይ ነው።</string>
+    <string name="share_tool_message_tract_live_share">ሰላም፣ በ GodTools ውስጥ በስክሪን ማጋራት አብረውኝ ይከታተሉ። ይህን ማስፈንጠሪያ ይጠቀሙ፡ %1$s\n\nይህ መልእክት እስከ በኋላ ላይ ካልደረስክ፣ ማስፈንጠሪውያ አሁንም ላይሰራ ይችላል። በሌላ ጊዜ እንደገና መሞከር እንችላለን።</string>
+    <string name="tract_live_share_starting">ስክሪን ማጋራትን በመጀመር ላይ…</string>
+    <string name="tract_live_share_unable_to_connect">ስክሪን ማጋራት ጋር መገናኘት አልተቻለም</string>
+    <string name="tract_live_share_exit_dialog_message">ስክሪን ከማጋራት አሁን መውጣት ይፈልጋሉ?</string>
+    <string name="tract_live_share_exit_dialog_confirm">ውጣ</string>
+    <string name="tract_live_share_exit_dialog_cancel">አቋርጥ</string>
     <!-- Settings -->
+    <string name="menu_settings">ድባቦች</string>
+    <string name="tract_settings_title">የመተግበሪያ አማራጮች</string>
+    <string name="tract_settings_action_share">መስፈንጠሪያ አጋራ</string>
+    <string name="tract_settings_action_tips_disable">ጠቃሚ ምክሮችን ደብቅ</string>
+    <string name="tract_settings_languages_title">ሁለት ቋንቋ</string>
+    <string name="tract_settings_languages_description">በዚህ መተግበሪያ ውስጥ በሁለት የተለያዩ ቋንቋዎች መካከል ይቀያይሩ።</string>
+    <string name="tract_settings_languages_parallel">ትይዪ</string>
+    <string name="tract_settings_languages_none">የለም</string>
+    <string name="tract_settings_shareables_title">ተዛማጅ ግራፊክስ</string>
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">ٹولز</string>
+    <string name="tutorial_features_tools_subhead">ہر ٹول کسی مختلف مرحلے (پہلے، دوران، بعد ) کے گفتگو کے لیے بنایا جاتا ہے۔</string>
+    <string name="tutorial_features_tips_headline">ٹول مشورے</string>
+    <string name="tutorial_features_tips_subhead">گوڈ ٹولز کی تجاویز آپ کی رہنمائی کرتی ہیں جب آپ کسی کو خوشخبری کو سمجھنے اور یسوع سے ملنے میں مدد کرتے ہیں۔</string>
+    <string name="tutorial_features_live_share_headline">اسکرین ساجھا کرنا</string>
+    <string name="tutorial_features_live_share_subhead">جب آپ انجیل پر گفتگو کرنے کے لیے ایک ٹول استعمال کرتے ہیں تو آپ اپنی اسکرین کو دور سے شیئر کر سکتے ہیں تاکہ دوسرا شخص اس کی پیروی کر سکے ۔</string>
+    <string name="tutorial_features_lessons_headline">اسباق</string>
+    <string name="tutorial_features_lessons_subhead">گوڈ ٹُول کے ہر سبق میں آپ کچھ سیکھتے ہیں تاکہ آپ کو خدا کے بارے میں حقیقی گفتگو کرنے میں مدد ملے۔</string>
+    <string name="tutorial_features_final_headline">جب بھی آپ کو اس ٹیوٹوریل کی ضرورت ہو، فہرست میں اسے تلاش کریں۔</string>
+    <string name="tutorial_features_action_continue">جاری رکھیں</string>
+    <string name="tutorial_features_action_close">ٹیوٹوریل بند کرنا</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">مجھے ایک ٹیوٹوریل دکھائیے</string>
+    <string name="tutorial_features_banner_action_open">پروفائل کھولئیے</string>
+    <string name="tutorial_features_banner_action_dismiss">منتشر کرنا</string>
+</resources>

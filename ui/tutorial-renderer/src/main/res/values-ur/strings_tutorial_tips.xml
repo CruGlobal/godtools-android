@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">دوسروں کے ساتھ یہ ٹول ساجھا کرنا سیکھیں</string>
+    <string name="tutorial_tips_learn_text">اس آلے کو دوسروں کے ساتھ شیئر کرنے میں اعتماد حاصل کرنے کے لیے جتنی بھی تجاویز کی ضرورت ہو، ان کا استعمال کریں۔</string>
+    <string name="tutorial_tips_light_headline">رہنمائی کے لیے تجاویز</string>
+    <string name="tutorial_tips_light_text1">اس تربیت کے منتخب اسکرینوں پر آپ کو مختلف آئکنز دیکھنے کو ملیں گے۔ ہر آئکن دبانے سے ایک مشورہ آپ کے سامنے آئے گا جو آپ کو اس اسکرین کے مواد کے بارے میں گفتگو کرنے میں مدد دیگا۔ اگر کوئی اسکرین آئکن نہیں ہے، تو بس مواد کو پڑھ کر اور جس طرح ضروری ہو گفتگو کریں۔</string>
+    <string name="tutorial_tips_start_headline">تجاویز واضح کریں</string>
+    <string name="tutorial_tips_action_continue">جاری</string>
+    <string name="tutorial_tips_action_skip">چھوڑدیں</string>
+    <string name="tutorial_tips_action_start">تربیت شروع کریں</string>
+</resources>

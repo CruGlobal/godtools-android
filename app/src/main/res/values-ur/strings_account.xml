@@ -7,12 +7,57 @@
     <string name="account_create_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے ایک اکاؤنٹ بنائیں۔</string>
     <string name="account_login_heading">سائن اِن</string>
     <string name="account_login_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے اپنے اکاؤنٹ میں لاگ ان کریں۔</string>
+    <string name="account_error_user_already_exists">یوزر اکاؤنٹ پہلے سے موجود ہے</string>
+    <string name="account_error_user_not_found">یوزر اکاؤنٹ نہیں ملا۔</string>
+    <string name="account_error_dialog_dismiss">ٹھیک ہے</string>
     <!-- Delete Account -->
+    <string name="menu_account_delete">اکاؤنٹ ڈلیت کریں</string>
+    <string name="account_delete_heading">جلد مت جائیے</string>
+    <string name="account_delete_description">اگر آپ اپنا اکاؤنٹ ختم کر دیتے ہیں تو آپ اپنے پسندیدہ ٹولز یا اکاؤنٹ کی سرگرمی تک رسائی حاصل نہیں کر پائیں گے۔</string>
+    <string name="account_delete_action_delete">میرا اکاؤنٹ ڈلیٹ کریں</string>
+    <string name="account_delete_action_cancel">میرا اکاؤنٹ برقرار رکھیں</string>
+    <string name="account_delete_error_dismiss">ٹھیک ہے</string>
     <!-- Activity -->
     <string name="profile_tab_activity">سرگرمی</string>
     <string name="account_activity_header">آپ کی سرگرمی</string>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">سبق کی تکمیل</item>
+        <item quantity="other">سبق کی تکمیل</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">سکرین شئیرز</item>
+        <item quantity="other">سکرین شئیرز</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">شئیر کئے گئےلِنکس</item>
+        <item quantity="other">شئیر کئے گئےلِنکس</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">استعمال کی گئی زبانیں</item>
+        <item quantity="other">استعمال کی گئی زبانیں</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">سیشنز</item>
+        <item quantity="other">سیشنز</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">آپ کےنشانات</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">فیصد ٹول کھولے گئے%1$,d</item>
+        <item quantity="other">فیصد ٹول کھولے گئے%1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">فی صداسباق مکمل کئے گئے%1$,d</item>
+        <item quantity="other">فی صداسباق مکمل کئے گئے%1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">فی صد تصاوی شئیر کی گئیں%1$,d</item>
+        <item quantity="other">فی صد تصاوی شئیر کی گئیں%1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">فی صد تربیتی تجاویز %1$,d</item>
+        <item quantity="other">فی صد تربیتی تجاویز %1$,d</item>
+    </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">عالمگیر سرگرمی</string>
     <string name="profile_global_activity_heading">عالمگیر سرگرمی%1$s</string>
