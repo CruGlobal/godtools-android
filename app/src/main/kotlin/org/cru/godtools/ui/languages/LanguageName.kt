@@ -28,8 +28,8 @@ internal fun LanguageName(locale: Locale, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LanguageName(
-        displayName = remember(context, locale, appLanguage) { locale.getDisplayName(context, inLocale = appLanguage) },
-        nativeName = remember(context, locale) { locale.getDisplayName(context, inLocale = locale) },
+        name = remember(context, locale, appLanguage) { locale.getDisplayName(context, inLocale = locale) },
+        secondName = remember(context, locale) { locale.getDisplayName(context, inLocale = appLanguage) },
         modifier = modifier,
     )
 }
@@ -40,8 +40,10 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LanguageName(
-        displayName = remember(context, language, appLanguage) { language.getDisplayName(context, appLanguage) },
-        nativeName = remember(context, language) { language.getDisplayName(context, language.code) },
+        name = remember(context, language, appLanguage) { language.getDisplayName(context, language.code) },
+        secondName = remember(context, language) {
+            language.takeUnless { it.isForcedName }?.getDisplayName(context, appLanguage)
+        },
         modifier = modifier,
     )
 }
@@ -49,16 +51,18 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
 private const val LANGUAGE_NAME_GAP = "[gap]"
 
 @Composable
-private fun LanguageName(displayName: String, nativeName: String, modifier: Modifier = Modifier) {
+private fun LanguageName(name: String, secondName: String?, modifier: Modifier = Modifier) {
     val color = LocalTextStyle.current.color.takeOrElse { LocalContentColor.current }
-    val displayNameColor = color.let { it.copy(alpha = it.alpha * 0.60f) }
+    val secondNameColor = color.let { it.copy(alpha = it.alpha * 0.60f) }
 
     Text(
-        remember(displayName, nativeName, color, displayNameColor) {
+        remember(name, secondName, color, secondNameColor) {
             buildAnnotatedString {
-                withStyle(SpanStyle(color = color)) { append(nativeName) }
-                appendInlineContent(LANGUAGE_NAME_GAP, " ")
-                withStyle(SpanStyle(color = displayNameColor)) { append(displayName) }
+                withStyle(SpanStyle(color = color)) { append(name) }
+                if (secondName != null) {
+                    appendInlineContent(LANGUAGE_NAME_GAP, " ")
+                    withStyle(SpanStyle(color = secondNameColor)) { append(secondName) }
+                }
             }
         },
         maxLines = 1,

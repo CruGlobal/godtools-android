@@ -71,5 +71,5 @@ data class Language(
 
     @JvmOverloads
     fun getDisplayName(context: Context?, inLocale: Locale? = context?.appLanguage) =
-        code.takeIf { isValid }.takeIf { !isForcedName }?.getDisplayName(context, name, inLocale) ?: name ?: ""
+        code.takeIf { isValid && !isForcedName }?.getDisplayName(context, name, inLocale) ?: name ?: ""
 }
