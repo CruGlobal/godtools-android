@@ -230,7 +230,7 @@ test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robol
 
 [plugins]
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.0.0" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.1" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.2" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.2.2" }
