@@ -5,6 +5,7 @@
     "attributes": {
       "code": "en",
       "name": "English",
+      "force-language-name": true,
       "direction": "ltr"
     }
   }

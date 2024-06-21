@@ -29,6 +29,7 @@ class LanguageTest {
 
         assertTrue(language.isValid)
         assertEquals(1, language.apiId)
+        assertEquals(true, language.isForcedName)
         assertEquals(Locale.ENGLISH, language.code)
         assertEquals("English", language.name)
     }
@@ -62,6 +63,19 @@ class LanguageTest {
                 Locale.ENGLISH.getDisplayName(context, "name", inLocale)
             }
         }
+    }
+
+    @Test
+    fun `getDisplayName() - isForcedName=true`() {
+        val inLocale: Locale = Locale.ENGLISH
+        val language = Language(
+            code = inLocale,
+            name = "English - Tester",
+            isForcedName = true
+        )
+        val context: Context = mockk()
+
+        assertEquals("English - Tester", language.getDisplayName(context, inLocale))
     }
     // endregion getDisplayName()
 }
