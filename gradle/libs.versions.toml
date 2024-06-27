@@ -74,7 +74,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.0"
+androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
 androidx-test-junit = "androidx.test.ext:junit:1.2.0"
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
