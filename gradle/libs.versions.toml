@@ -1,7 +1,6 @@
 [versions]
 accompanist = "0.34.0"
 android-gradle-plugin = "8.5.0"
-androidx-compose-compiler = "1.5.14"
 androidx-compose-material = "1.6.8"
 androidx-compose-ui = "1.6.8"
 androidx-core = "1.13.1"
@@ -216,7 +215,6 @@ weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
 youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0"
 
 # HACK: dependencies used to trigger renovate upgrades
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 
 [bundles]
@@ -229,6 +227,7 @@ ktlint-rulesets = ["ktlint-rules-compose"]
 test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.0.0" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.2" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }

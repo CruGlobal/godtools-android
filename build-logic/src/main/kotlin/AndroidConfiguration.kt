@@ -111,8 +111,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 // context(Project)
 fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableCircuit: Boolean = false) {
     buildFeatures.compose = true
-    composeOptions.kotlinCompilerExtensionVersion =
-        project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
+    project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
     // add our base compose dependencies
     project.dependencies.apply {
@@ -136,7 +135,6 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
     project.pluginManager.apply("com.jeppeman.mockposable")
     project.mockposable {
         plugins = listOf("mockk")
-        composeCompilerPluginVersion = project.libs.findVersion("androidx-compose-compiler").get().requiredVersion
     }
 }
 
