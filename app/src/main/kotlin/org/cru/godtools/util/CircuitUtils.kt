@@ -11,7 +11,7 @@ import com.slack.circuit.runtime.screen.Screen
 @Composable
 fun rememberInterceptingNavigator(
     delegate: Navigator,
-    goTo: (screen: Screen, delegate: Navigator) -> Unit = { screen, delegate -> delegate.goTo(screen) },
+    goTo: (screen: Screen, delegate: Navigator) -> Boolean = { screen, delegate -> delegate.goTo(screen) },
 ): Navigator {
     val goTo by rememberUpdatedState(goTo)
 
