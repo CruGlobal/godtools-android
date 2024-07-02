@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<baseline version="1.0">
-    <file name="src/main/kotlin/org/cru/godtools/base/tool/ui/share/ShareBottomSheetDialogFragment.kt">
-        <error line="19" column="46" source="standard:class-signature" />
-    </file>
-    <file name="src/main/kotlin/org/cru/godtools/base/tool/ui/shareable/ShareableImageBottomSheetDialogFragment.kt">
-        <error line="19" column="46" source="standard:class-signature" />
-    </file>
-</baseline>
