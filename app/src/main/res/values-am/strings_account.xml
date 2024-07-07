@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">እንቅስቃሴ</string>
+    <string name="account_joined">%1$s ተቀላቅሏል</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">መለያ ፍጠር</string>
+    <string name="account_create_description">እውነተኛ ታሪኮችን፣ ማበረታቻዎችን እና ተግባራዊ ምክሮችን በእጅዎ ለማግኘት መለያ ይፍጠሩ።</string>
+    <string name="account_login_heading">ግባ</string>
+    <string name="account_login_description">እውነተኛ ታሪኮችን፣ ማበረታቻዎችን እና ተግባራዊ ምክሮችን በእጅዎ ለማግኘት ወደ መለያዎ ይግቡ።</string>
+    <string name="account_error_user_already_exists">የተጠቃሚ መለያ አስቀድሞ አለ።</string>
+    <string name="account_error_user_not_found">የተጠቃሚ መለያ አልተገኘም።</string>
+    <string name="account_error_unknown">መግባት ላይ ስህተት አለ</string>
+    <string name="account_error_dialog_dismiss">እሺ</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">መለያ አጥፋ</string>
+    <string name="account_delete_heading">ቶሎ እንዳትሄድ</string>
+    <string name="account_delete_description">መለያዎን ካጠትፉ የሚወዷቸውን መሳሪያዎች ወይም የመለያ እንቅስቃሴ ማግኘት አይችሉም።</string>
+    <string name="account_delete_action_delete">መለያዬን አጥፋ</string>
+    <string name="account_delete_action_cancel">መለያዬን አታጥፋ</string>
+    <string name="account_delete_error">መለያህን ማጥፋት ላይ ስህተት ነበር። መስመር ላይ መሆንዎን ያረጋግጡ ወይም ቆይተው እንደገና ይሞክሩ።</string>
+    <string name="account_delete_error_dismiss">እሺ</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">እንቅስቃሴ</string>
+    <string name="account_activity_header">የአንተ እንቅስቃሴ</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">የተከፈት ቡክሌት</item>
+        <item quantity="other">የተከፈቱ ቡክሌቶች</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">የትምህርቱ ማጠናቀቅ</item>
+        <item quantity="other">የትምህርት ማጠናቀቂያዎች</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ስክሪን ማጋራት</item>
+        <item quantity="other">ስክሪን ማጋራቶች</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ማስፈንጠሪያ ማጋራት</item>
+        <item quantity="other">ማስፈንጠሪያ ማጋራቶች</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">የተጠቀሙት ቋንቋ</item>
+        <item quantity="other">የተጠቀሙዋቸው ቋንቋዎች</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">ክፍለ ጊዜ</item>
+        <item quantity="other">ክፍለ ጊዜዎች</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">ባጆችህ</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d መሳሪያዎች ተከፍተዋል</item>
+        <item quantity="other">%1$,d መሳሪያዎች ተከፍተዋል</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">የተጠናቀቁ %1$,d ትምህርቶች</item>
+        <item quantity="other">የተጠናቀቁ %1$,d ትምህርቶች</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d ጽሑፎች ተከፍተዋል</item>
+        <item quantity="other">%1$,d ጽሑፎች ተከፍተዋል</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">የተጋሩ %1$,d ምስሎች</item>
+        <item quantity="other">የተጋሩ %1$,d ምስሎች</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">የተጠናቀቁ %1$,d የሥልጠና ምክሮች</item>
+        <item quantity="other">የተጠናቀቁ %1$,d የሥልጠና ምክሮች</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">ዓለም አቀፋዊ እንቅስቃሴ</string>
+    <string name="profile_global_activity_heading">%1$s  ዓለም አቀፋዊ እንቅስቃሴ</string>
+    <string name="profile_activity_unique_users">ልዩ ተጠቃሚዎች</string>
+    <string name="profile_activity_gospel_presentations">የወንጌል ግብዣዎች</string>
+    <string name="profile_activity_sessions">ክፍለ ጊዜዎች</string>
+    <string name="profile_activity_countries">ሀገሮች</string>
+</resources>

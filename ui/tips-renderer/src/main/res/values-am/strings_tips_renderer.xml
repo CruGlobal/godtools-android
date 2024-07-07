@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">ቀጣይ</string>
+    <string name="tract_tips_tip_action_close">ዝጋ</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">ጠይቅ</string>
+    <string name="tract_tips_type_consider">አስቡበት</string>
+    <string name="tract_tips_type_prepare">አዘጋጅ</string>
+    <string name="tract_tips_type_quote">ጥቅስ</string>
+    <string name="tract_tips_type_tip">ጠቃሚ ምክር</string>
+</resources>

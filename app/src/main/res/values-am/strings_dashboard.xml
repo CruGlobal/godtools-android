@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">እንጀምር</string>
+    <string name="menu_tutorial">አጋዥ ስልጠና</string>
+    <string name="menu_heading_account">መለያ</string>
+    <string name="menu_login">ግባ</string>
+    <string name="menu_signup">መለያ ፍጠር</string>
+    <string name="menu_logout">ዉጣ</string>
+    <string name="menu_heading_support">ድጋፍ</string>
+    <string name="menu_feedback">አስተያይት ላክ</string>
+    <string name="menu_report_bug">ስህተት ሪፖርት ያድርጉ</string>
+    <string name="menu_question">ጥያቄ ጠይቅ</string>
+    <string name="menu_heading_share">አጋራ</string>
+    <string name="menu_review">አስተይያት ይፃፉ</string>
+    <string name="menu_share_story">ታሪክ አካፍሉን</string>
+    <string name="menu_share_godtools">GodTools መተግበሪያን አጋራ</string>
+    <string name="share_app_message">የ GodTools መተግበሪያን ያውርዱ: https://godtoolsapp.com \n\n
+
+ሁሉንም የመተግበሪያውን ይዘት ይህን መስፈንጠሪያ በመንካት ማግኘት ይቻላል https://knowgod.com/</string>
+    <string name="share_story_subject">የGodTools ታሪክ</string>
+    <string name="menu_heading_about">ስለ</string>
+    <string name="menu_terms_of_use">የአጠቃቀም ውል</string>
+    <string name="menu_privacy_policy">የግላዊነት መመሪያ</string>
+    <string name="menu_copyright">የቅጂ መብት</string>
+    <string name="menu_version">ሥሪት: %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">ትምህርቶች</string>
+    <string name="dashboard_lessons_header_title">ለእርስዎ የተዘጋጁ ትምህርቶች</string>
+    <string name="dashboard_lessons_header_description">ግንኙነቶችን ለመፍጠር እና ትርጉም ያለው ውይይት ለመጀመር ተግባራዊ ሀሳቦች።</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">የኔ ምርጫ</string>
+    <string name="dashboard_home_header_title">ወደ GodTools እንኳን በደህና መጡ</string>
+    <string name="dashboard_home_section_featured_lesson">ተለይቶ የቀረበ ትምህርት</string>
+    <string name="dashboard_home_section_favorites_title">የእርስዎ ተመራጭ ቡክሌቶች</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">የተመረጡ ቡክሌቶች የሉም</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">ቡክሌቱን ወደ ምርጫዎ ለማስገባት እና ከኢንተርኔት ውጭ የሚገኝ ለማድረግ የልብ ምልክቱን ይንኩ።</string>
+    <string name="dashboard_home_section_favorites_action_view_all">ሁሉንም ይመልከቱ &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ወደ ቡክሌቶች ሂድ</string>
+    <string name="tools_list_favorites_banner_text">ወደ ምርጫዎ የሚያክለውን የልብ ምልክት በመጫን ቡክሌቱን ከመስመር ውጭ የሚገኝ ያድርጉት።</string>
+    <string name="tools_list_favorites_banner_action_dismiss">አጥፋ</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">ቡክሌቶች</string>
+    <string name="dashboard_tools_section_filter_label">አጣራ</string>
+    <string name="dashboard_tools_section_filter_category_any">ማንኛውም ምድብ</string>
+    <string name="dashboard_tools_section_filter_language_any">ማንኛውም ቋንቋ</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d ቡክሌት አለ</item>
+        <item quantity="other">%1$d ቡክሌቶች አሉ</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">ሁሉም ቡክሌቶች ይገኛሉ</string>
+    <string name="dashboard_tools_section_categories_label">ምድቦች</string>
+    <string name="dashboard_tools_section_categories_all">ሁሉም ቡክሌቶች</string>
+    <string name="dashboard_tools_section_spotlight_label">የተመረጡ ቡክሌቶች</string>
+    <string name="dashboard_tools_section_spotlight_description">ሊወዷቸው ይችልሉ ብለን ያሰብናቸውን ቡክሌቶች ከታች ያገኛሉ።</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">“%1$s”  ከምርጫችህ ይጥፋ?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">ያጥፉ</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">አቋርጥ</string>
+    <string name="tool_card_label_language_unavailable">በ %1$s ውስጥ አይገኝም</string>
+    <string name="tool_card_accessibility_language_available">አለ</string>
+    <string name="action_tools_about">ዝርዝሮች</string>
+    <string name="action_tools_open">ክፈት</string>
+    <!-- In App Update -->
+    <string name="play_update_available">አዲስ ስሪት አለ</string>
+    <string name="play_update_available_action">ያዉርዱ</string>
+    <string name="play_update_downloaded">አዲሱ ስሪት ወርዷል</string>
+    <string name="play_update_downloaded_action">ዳግም ጫን</string>
+</resources>

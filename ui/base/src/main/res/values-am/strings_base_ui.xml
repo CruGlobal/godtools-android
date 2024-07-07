@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">%s መክፈት አልተቻለም</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">የወንጌል ግብዣ</string>
+    <string name="tool_category_articles">መጣጥፎች</string>
+    <string name="tool_category_conversation_starter">የውይይት ጀማሪ</string>
+    <string name="tool_category_growth">የክርስቲያን እድገት</string>
+    <string name="tool_category_training">ስልጠና</string>
+    <!-- Sharing -->
+</resources>

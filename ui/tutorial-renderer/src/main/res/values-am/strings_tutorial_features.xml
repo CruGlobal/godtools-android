@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">ቡክሌቶች</string>
+    <string name="tutorial_features_tools_subhead">እያንዳንዱ ቡክሌት ለተለየ የውይይት ጊዜያት የተሠራ ነው- ከውይይት በፊት ፣ ከውይይት ጊዜ ወይም ከውይይት በኋላ።</string>
+    <string name="tutorial_features_tips_headline">የቡክሌት ምክሮች</string>
+    <string name="tutorial_features_tips_subhead">አንድ ሰው ወንጌልን እንዲረዳ እና ኢየሱስን የበለጠ እንዲያውቅ የGodTools ምክሮች ይረዳዎታል።</string>
+    <string name="tutorial_features_live_share_headline">ስክሪን ማጋራት</string>
+    <string name="tutorial_features_live_share_subhead">አሁን ስክሪንህን ማጋራት ትችላለህ ስለዚህ ስለ ወንጌል ለመወያየት ቡክሌቱን ስትጠቀም ሌላው ሰው መከተል ይችላል።</string>
+    <string name="tutorial_features_lessons_headline">ትምህርቶች</string>
+    <string name="tutorial_features_lessons_subhead">በእያንዳንዱ የGodTools ትምህርት ከእግዚአብሔር እውነተኛ ግንኙነቶች እንዲኖሯችሁ የሚረዳ አንድ ነገር ትማራላችሁ።</string>
+    <string name="tutorial_features_final_headline">ይህንን አጋዥ ስልጠና በሚፈልጉበት ጊዜ በማውጫ ውስጥ ያግኙት።</string>
+    <string name="tutorial_features_action_continue">ቀጥል</string>
+    <string name="tutorial_features_action_close">አጋዥ ስልጠናን ዝጋ</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">አጋዥ ስልጠና አሳየኝ</string>
+    <string name="tutorial_features_banner_action_open">አጋዥ ስልጠናን ክፈት</string>
+    <string name="tutorial_features_banner_action_dismiss">አጥፋ</string>
+</resources>
