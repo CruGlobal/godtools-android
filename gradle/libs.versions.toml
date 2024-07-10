@@ -44,7 +44,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
 androidx-browser = "androidx.browser:browser:1.8.0"
 androidx-cardview = "androidx.cardview:cardview:1.0.0"
-androidx-collection-ktx = "androidx.collection:collection-ktx:1.4.0"
+androidx-collection-ktx = "androidx.collection:collection-ktx:1.4.1"
 androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose-material" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidx-compose-material" }
 androidx-compose-material3 = "androidx.compose.material3:material3:1.2.1"
