@@ -14,13 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -174,7 +174,7 @@ private fun ToolDetailsAboutAccordionSection(
         Icon(
             if (expanded) Icons.Filled.Remove else Icons.Filled.Add,
             contentDescription = null,
-            modifier = Modifier.indication(headerInteractions, rememberRipple(bounded = false, radius = 20.dp))
+            modifier = Modifier.indication(headerInteractions, ripple(bounded = false, radius = 20.dp))
         )
     }
     AnimatedVisibility(visible = expanded) {
