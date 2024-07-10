@@ -11,7 +11,6 @@ import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
@@ -27,10 +26,6 @@ class AppLanguageLayoutTest {
     private val events = TestEventSink<AppLanguageScreen.Event>()
 
     @Test
-    @Ignore(
-        "performClick() on an IconButton in a SearchBar doesn't appear to work currently in Robolectric. " +
-            "See: https://github.com/robolectric/robolectric/issues/8420"
-    )
     fun `Action - AppBar Navigate Back`() {
         composeTestRule.run {
             setContent { AppLanguageLayout(AppLanguageScreen.State(eventSink = events)) }
