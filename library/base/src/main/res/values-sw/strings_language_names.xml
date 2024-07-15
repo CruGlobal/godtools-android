@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="language_name_fa">Kipersia (Kifarsi)</string>
+    <string name="language_name_fil">Kifilipino (Kitagalog)</string>
+    <string name="language_name_fil_x_taglish">Kitaglish</string>
+    <string name="language_name_sid">Kisidama</string>
 </resources>
