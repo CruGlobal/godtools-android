@@ -38,7 +38,7 @@ splitties = "3.0.0"
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.0.4"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
-androidx-activity-compose = "androidx.activity:activity-compose:1.9.0"
+androidx-activity-compose = "androidx.activity:activity-compose:1.9.1"
 androidx-annotation = "androidx.annotation:annotation:1.8.1"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
