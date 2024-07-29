@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Navigation Menu -->
-    <string name="menu_heading_get_started">Sākt</string>
+    <string name="menu_heading_get_started">Sākt lietot</string>
     <string name="menu_tutorial">Pamācība</string>
     <string name="menu_heading_account">Konts</string>
     <string name="menu_login">Pierakstīties</string>

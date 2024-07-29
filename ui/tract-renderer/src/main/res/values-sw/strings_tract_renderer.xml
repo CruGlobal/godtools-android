@@ -16,8 +16,8 @@
     <!-- Settings -->
     <string name="menu_settings">Mipangilio</string>
     <string name="tract_settings_title">Chaguzi za Kifaa</string>
-    <string name="tract_settings_action_share">Sambaza kiungo</string>
-    <string name="tract_settings_action_tips_disable">Ficha Vidokezo</string>
+    <string name="tract_settings_action_share">Shirikisha kiungo</string>
+    <string name="tract_settings_action_tips_disable">Ficha vidokezo</string>
     <string name="tract_settings_languages_title">Lugha Inayofanana</string>
     <string name="tract_settings_languages_description">Badilisha kati ya lugha mbili tofauti kwenye kifaa hiki.</string>
     <string name="tract_settings_languages_parallel">Inayofanana</string>
