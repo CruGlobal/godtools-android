@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="language_name_fa">페르시아어</string>
+    <string name="language_name_fil">필리핀어(타갈로그)</string>
+    <string name="language_name_fil_x_taglish">타글리쉬</string>
+    <string name="language_name_sid">시다마</string>
 </resources>

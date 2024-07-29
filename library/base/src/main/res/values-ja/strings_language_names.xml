@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="language_name_fa">ペルシア語（ファールシー語）</string>
+    <string name="language_name_fil">フィリピン（タガログ）語</string>
+    <string name="language_name_fil_x_taglish">タグリッシュ</string>
+    <string name="language_name_sid">シダマ語</string>
 </resources>

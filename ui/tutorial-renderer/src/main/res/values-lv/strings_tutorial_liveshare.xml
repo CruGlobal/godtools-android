@@ -5,7 +5,7 @@
     <string name="tutorial_live_share_description_text">Šī funkcija nosūtīs draugam saiti uz šo rīku. Pēc saites atvēršanas sāksies ekrāna koplietošana.</string>
     <string name="tutorial_live_share_mirrored_headline">Kopīga lietošana</string>
     <string name="tutorial_live_share_mirrored_text">Ritinot rīku savā tālrunī, tava drauga ekrānā notiks tas pats. Šī funkcija ļauj vienlaicīgi izmantot vienu rīku 2 dažādās ierīcēs.</string>
-    <string name="tutorial_live_share_start_headline">Sākt</string>
+    <string name="tutorial_live_share_start_headline">Sākt lietot</string>
     <string name="tutorial_live_share_start_text">Lai sāktu ekrāna koplietošanu, nosūti saiti vienam vai vairākiem cilvēkiem.
 
 Šīs funkcijas darbībai ir nepieciešams, lai visu dalībnieku ierīcēs būtu uzinstalēta lietotne \'GodTools\'.</string>

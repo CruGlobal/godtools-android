@@ -57,7 +57,7 @@
     <string name="tools_list_remove_favorite_dialog_title">“%1$s”  ከምርጫችህ ይጥፋ?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">ያጥፉ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">አቋርጥ</string>
-    <string name="tool_card_label_language_unavailable">በ %1$s ውስጥ አይገኝም</string>
+    <string name="tool_card_label_language_unavailable">በ%1$s ቋንቋ የለም</string>
     <string name="tool_card_accessibility_language_available">አለ</string>
     <string name="action_tools_about">ዝርዝሮች</string>
     <string name="action_tools_open">ክፈት</string>
