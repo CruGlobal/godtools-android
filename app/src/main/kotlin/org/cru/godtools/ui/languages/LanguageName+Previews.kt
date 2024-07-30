@@ -16,6 +16,8 @@ private fun LeftToRightLanguageNames() = Column {
     HorizontalDivider()
     LanguageName(Locale.ENGLISH)
     HorizontalDivider()
+    LanguageName(language = nameLanguage)
+    HorizontalDivider()
     LanguageName(language = forcedNameLanguage)
 }
 
@@ -28,6 +30,8 @@ private fun RightToLeftLanguageNames() = Column {
     HorizontalDivider()
     LanguageName(Locale.ENGLISH)
     HorizontalDivider()
+    LanguageName(language = nameLanguage)
+    HorizontalDivider()
     LanguageName(language = forcedNameLanguage)
 }
 
@@ -35,4 +39,10 @@ private val forcedNameLanguage = Language(
     code = Locale.ENGLISH,
     name = "German",
     isForcedName = true,
+)
+
+private val nameLanguage = Language(
+    code = Locale.UK,
+    name = "German",
+    isForcedName = false,
 )

@@ -40,10 +40,8 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LanguageName(
-        name = remember(context, language, appLanguage) { language.getDisplayName(context, language.code) },
-        secondName = remember(context, language) {
-            language.takeUnless { it.isForcedName }?.getDisplayName(context, appLanguage)
-        },
+        name = remember(context, language) { language.getDisplayName(context, language.code) },
+        secondName = remember(context, language, appLanguage) { language.getDisplayName(context, appLanguage) },
         modifier = modifier,
     )
 }
@@ -51,7 +49,7 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
 private const val LANGUAGE_NAME_GAP = "[gap]"
 
 @Composable
-private fun LanguageName(name: String, secondName: String?, modifier: Modifier = Modifier) {
+private fun LanguageName(name: String, secondName: String, modifier: Modifier = Modifier) {
     val color = LocalTextStyle.current.color.takeOrElse { LocalContentColor.current }
     val secondNameColor = color.let { it.copy(alpha = it.alpha * 0.60f) }
 
@@ -59,10 +57,8 @@ private fun LanguageName(name: String, secondName: String?, modifier: Modifier =
         remember(name, secondName, color, secondNameColor) {
             buildAnnotatedString {
                 withStyle(SpanStyle(color = color)) { append(name) }
-                if (secondName != null) {
-                    appendInlineContent(LANGUAGE_NAME_GAP, " ")
-                    withStyle(SpanStyle(color = secondNameColor)) { append(secondName) }
-                }
+                appendInlineContent(LANGUAGE_NAME_GAP, " ")
+                withStyle(SpanStyle(color = secondNameColor)) { append(secondName) }
             }
         },
         maxLines = 1,
