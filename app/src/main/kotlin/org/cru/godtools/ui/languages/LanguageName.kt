@@ -40,8 +40,8 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     LanguageName(
-        name = remember(context, language, appLanguage) { language.getDisplayName(context, language.code) },
-        secondName = remember(context, language) { language.getDisplayName(context, appLanguage) },
+        name = remember(context, language) { language.getDisplayName(context, language.code) },
+        secondName = remember(context, language, appLanguage) { language.getDisplayName(context, appLanguage) },
         modifier = modifier,
     )
 }
