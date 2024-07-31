@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">このツールを誰とでもシェアする方法を学ぶ</string>
+    <string name="tutorial_tips_learn_text">このツールを他の人とシェアする自信が持てるように、必要なだけたくさんのヒントを使って練習しましょう。</string>
+    <string name="tutorial_tips_light_headline">道を照らすためのヒント</string>
+    <string name="tutorial_tips_light_text1">このトレーニングの特定の画面では、さまざまなアイコンが表示されます。各アイコンを押すと、画面の内容について話すのに役立つヒントが表示されます。</string>
+    <string name="tutorial_tips_light_text2">"アイコンがない画面は、内容を読み進めて、必要に応じて話し合ってください。"</string>
+    <string name="tutorial_tips_start_headline">ヒントを点灯</string>
+    <string name="tutorial_tips_start_text">ヒントが点灯したら、そのトレーニングを完了したことになります。ツールを説明する自信がつくまで、必要なだけ多くのヒントを使って練習しましょう。</string>
+    <string name="tutorial_tips_action_continue">続行</string>
+    <string name="tutorial_tips_action_skip">スキップ</string>
+    <string name="tutorial_tips_action_start">トレーニングを開始</string>
+</resources>

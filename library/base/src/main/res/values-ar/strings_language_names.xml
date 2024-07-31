@@ -2,4 +2,6 @@
 <resources>
     <string name="language_name_fa">فارسي</string>
     <string name="language_name_fil">الفلبينية (تاجالوج)</string>
+    <string name="language_name_fil_x_taglish">Taglish</string>
+    <string name="language_name_sid">Sidama</string>
 </resources>

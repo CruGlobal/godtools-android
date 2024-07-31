@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">アプリ言語</string>
+    <string name="language_settings_app_language_dialog_message">%1$s がアプリ言語として選択されました。これによって、GodToolsアプリ全体の言語が変更されます。よろしいですか？</string>
+    <string name="language_settings_app_language_dialog_confirm">言語を変更する</string>
+    <string name="language_settings_app_language_dialog_dismiss">変更しない</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">言語設定</string>
+    <string name="title_language_settings">言語設定</string>
+    <string name="language_settings_section_app_language_heading">アプリのインターフェース言語</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="other">%1$,d 個の言語が利用できます</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">アプリ全体を表示する言語を設定してください。</string>
+    <string name="language_settings_section_offline_heading">オフラインで使用可能なツール言語</string>
+    <string name="language_settings_section_offline_description">すべてのツールを一つの言語でダウンロードしておくと、WiFiや携帯電話サービスが使えない場合でも、アプリを利用することができます。ツールの中のオプションボタンでツールの言語を設定してください。</string>
+    <string name="language_settings_section_offline_action_edit">ダウンロードされた言語を編集する</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">言語を検索する</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="other">%1$d 個のツールがあります</item>
+    </plurals>
+</resources>

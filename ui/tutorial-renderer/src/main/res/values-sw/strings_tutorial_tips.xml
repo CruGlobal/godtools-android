@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Jifunze kusambaza hiki kifaa kwa mtu yeyote</string>
+    <string name="tutorial_tips_learn_text">Jifunze kutumia mbinu nyingi za kifaa kwa kadri unavyohitaji ili uwe na uwezo wa kushirikisha kifaa hiki kwa wengine.</string>
+    <string name="tutorial_tips_light_headline">Njia za kukuongoza</string>
+    <string name="tutorial_tips_light_text1">Kwenye skrini fulani, utaona alama mbalimbali. Bonyeza alama itakayoonesha mbinu itakayokusaidia kuzungumzia maudhui yaliyo kwenye skrini.</string>
+    <string name="tutorial_tips_light_text2">"Kwa skrini zisizoonesha mbinu zozote, tunapendekeza kusoma maudhui na kujadili kama inavyotakiwa."</string>
+    <string name="tutorial_tips_start_headline">Zingatia mbinu</string>
+    <string name="tutorial_tips_start_text">Ukizingatia mbinu, inakuwa umekamilisha sehemu hiyo ya mafunzo. Huna haja ya kutumia kila mbinu katika kila mazungumzo.</string>
+    <string name="tutorial_tips_action_continue">Endelea</string>
+    <string name="tutorial_tips_action_skip">Ruka</string>
+    <string name="tutorial_tips_action_start">Anza Kufunza</string>
+</resources>

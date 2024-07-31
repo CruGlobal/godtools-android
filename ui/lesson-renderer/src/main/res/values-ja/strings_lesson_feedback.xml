@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">レビュー</string>
+    <string name="lesson_feedback_question_helpful">このレッスンは役に立ちましたか？</string>
+    <string name="lesson_feedback_question_helpful_yes">はい</string>
+    <string name="lesson_feedback_question_helpful_no">いいえ</string>
+    <string name="lesson_feedback_question_readiness">霊的会話を始める準備がどのくらいできていると思いますか？</string>
+    <string name="lesson_feedback_action_submit">フィードバックを送信する</string>
+    <string name="lesson_feedback_action_cancel">スキップ</string>
+</resources>

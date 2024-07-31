@@ -22,6 +22,30 @@
     <!-- Activity -->
     <string name="profile_tab_activity">गतिविधि</string>
     <string name="account_activity_header">आपकी गतिविधियाँ</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">टूल खुले</item>
+        <item quantity="other">टूल खुले</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">पाठ पूरे किए</item>
+        <item quantity="other">पाठ पूरे किए</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">स्क्रीन शेयर किए</item>
+        <item quantity="other">स्क्रीन शेयर किए</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">लिंक्स शेयर किए</item>
+        <item quantity="other">लिंक्स शेयर किए</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">भाषाएँ प्रयोग किए</item>
+        <item quantity="other">भाषाएँ प्रयोग किए</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">सत्र</item>
+        <item quantity="other">सत्र</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">आपके बैज</string>
     <plurals name="account_activity_badge_tools_opened">

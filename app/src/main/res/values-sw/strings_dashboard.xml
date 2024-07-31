@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Anza</string>
+    <string name="menu_tutorial">Mafunzo</string>
+    <string name="menu_heading_account">Akaunti</string>
+    <string name="menu_login">Ingia</string>
+    <string name="menu_signup">Unda Akaunti</string>
+    <string name="menu_logout">Toka</string>
+    <string name="menu_heading_support">Msaada</string>
+    <string name="menu_feedback">Tuma mrejesho</string>
+    <string name="menu_report_bug">Ripoti hitilafu</string>
+    <string name="menu_question">Uliza swali</string>
+    <string name="menu_heading_share">Shirikisha</string>
+    <string name="menu_review">Acha maoni</string>
+    <string name="menu_share_story">"Tushirikishe shuhuda "</string>
+    <string name="menu_share_godtools">Shirikisha GodTools</string>
+    <string name="share_app_message">Pakua programu ya GodTools: https://godtoolsapp.com \n\n
+
+Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
+    <string name="share_story_subject">Hadithi za GodTools</string>
+    <string name="menu_heading_about">Kuhusu</string>
+    <string name="menu_terms_of_use">Masharti ya matumizi</string>
+    <string name="menu_privacy_policy">Sera ya faragha</string>
+    <string name="menu_copyright">Taarifa za Hakimiliki</string>
+    <string name="menu_version">Matoleo: %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Masomo</string>
+    <string name="dashboard_lessons_header_title">Masomo kwa ajili yako</string>
+    <string name="dashboard_lessons_header_description">Mikakati ya kivitendo ya kujenga mahusiano na kuanzisha mazungumzo yenye maana.</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">Vipendwa</string>
+    <string name="dashboard_home_header_title">Karibu kwenye GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Somo lililoangaziwa</string>
+    <string name="dashboard_home_section_favorites_title">Zana uzipendazo</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Hakuna zana unazozipenda za kuonesha</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">"Gusa ikoni ya moyo ili kuonesha kupendezwa na zana hiyo na kufanya ipatikane bila mtandao. "</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Tazama zote &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Nenda kwenye Zana</string>
+    <string name="tools_list_favorites_banner_text">Fanya zana ipatikane bila mtandao kwa kugusa ikoni ya moyo, ambayo itaongeza zana hiyo kwenye vipendwa vyako.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Funga</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Zana</string>
+    <string name="dashboard_tools_section_filter_label">Chagua</string>
+    <string name="dashboard_tools_section_filter_category_any">Aina yoyote</string>
+    <string name="dashboard_tools_section_filter_language_any">Lugha yoyote</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d Zana inayopatikana</item>
+        <item quantity="other">%1$d Zana zinazopatikana</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Zana zote zinazopatikana</string>
+    <string name="dashboard_tools_section_categories_label">Aina</string>
+    <string name="dashboard_tools_section_categories_all">Zana Zote</string>
+    <string name="dashboard_tools_section_spotlight_label">Kiini cha Zana</string>
+    <string name="dashboard_tools_section_spotlight_description">Hapa kuna baadhi ya zana ambazo tulifikiri unaweza kuzipenda</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>
+    <string name="tool_card_label_language_unavailable">Haipatikani kwenye %1$s</string>
+    <string name="tool_card_accessibility_language_available">Inapatikana</string>
+    <string name="action_tools_about">Maelezo zaidi</string>
+    <string name="action_tools_open">Fungua</string>
+    <!-- In App Update -->
+    <string name="play_update_available">Sasisho Linapatikana</string>
+    <string name="play_update_available_action">Pakua</string>
+    <string name="play_update_downloaded">Sasisho limepakuliwa</string>
+    <string name="play_update_downloaded_action">Rudia tena</string>
+</resources>

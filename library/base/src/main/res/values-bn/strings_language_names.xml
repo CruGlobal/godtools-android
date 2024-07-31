@@ -2,4 +2,6 @@
 <resources>
     <string name="language_name_fa">ফারসি / পারসী (ফারশি)</string>
     <string name="language_name_fil">ফিলিপিনো (ট্যাগালগ)</string>
+    <string name="language_name_fil_x_taglish">ট্যাগলিশ</string>
+    <string name="language_name_sid">সিডামা</string>
 </resources>

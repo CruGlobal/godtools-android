@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Bewertung</string>
+    <string name="lesson_feedback_question_helpful">Hat dir diese Lektion geholfen?</string>
+    <string name="lesson_feedback_question_helpful_yes">Ja</string>
+    <string name="lesson_feedback_question_helpful_no">Nein</string>
+    <string name="lesson_feedback_question_readiness">Inwiefern fühlst du dich bereit, ein geistliches Gespräch zu starten?</string>
+    <string name="lesson_feedback_action_submit">Feedback senden</string>
+    <string name="lesson_feedback_action_cancel">Überspringen</string>
+</resources>
