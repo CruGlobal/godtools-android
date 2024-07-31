@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">ホーム画面に追加</string>
+    <string name="action_tools_open_tool">ツールを開く</string>
+    <string name="action_tools_add_favorite">お気に入りに追加</string>
+    <string name="action_tools_remove_favorite">お気に入りから削除</string>
+    <string name="action_tools_open_training">このツールをシェアする方法を学ぶ</string>
+    <plurals name="label_tools_shares">
+        <item quantity="other">表示回数 %1$,d 回</item>
+    </plurals>
+    <string name="label_tools_about">情報</string>
+    <plurals name="label_tools_languages">
+        <item quantity="other">%1$,d 言語</item>
+    </plurals>
+    <string name="tool_details_section_description_conversation_starters">会話を切り出す話題</string>
+    <string name="tool_details_section_description_outline">アウトライン</string>
+    <string name="tool_details_section_description_bible_references">聖書引用</string>
+    <string name="tool_details_section_description_languages_available">利用可能な言語</string>
+    <string name="tool_details_section_variants_label">バージョン</string>
+    <string name="tool_details_section_variants_description">本ツールの他バージョンを下からお選びいただけます。各バージョンによって、スタイルやコンテンツが異なりますので、あなたの会話に最も適したバージョンを見つけてください。同じツールの複数のバージョンをお気に入りに表示させることも可能です。</string>
+</resources>

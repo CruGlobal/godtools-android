@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">アクティビティ</string>
+    <string name="account_joined">参加した日：%1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">アカウントを作成する</string>
+    <string name="account_create_description">アカウントを作成すると、生の証しや、励まし、実践的なお役立ち情報を簡単に見ることができます。</string>
+    <string name="account_login_heading">登録する</string>
+    <string name="account_login_description">アカウントにログインすると、生の証しや、励まし、実践的なお役立ち情報を簡単に見ることができます。</string>
+    <string name="account_error_user_already_exists">ユーザアカウントは既に存在します。</string>
+    <string name="account_error_user_not_found">ユーザアカウントが見つかりません。</string>
+    <string name="account_error_unknown">ログインエラー</string>
+    <string name="account_error_dialog_dismiss">OK</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">アカウントを削除する</string>
+    <string name="account_delete_heading">本当にこの操作を実行しますか。</string>
+    <string name="account_delete_description">アカウントを削除すると、お気に入りのツールやアカウントのアクティビティにアクセスすることができなくなります。</string>
+    <string name="account_delete_action_delete">アカウントを削除する</string>
+    <string name="account_delete_action_cancel">アカウントを維持する</string>
+    <string name="account_delete_error">アカウントを削除する際にエラーが発生しました。オンラインであることを確認するか、少し時間をおいてからお試しください。</string>
+    <string name="account_delete_error_dismiss">OK</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">アクティビティ</string>
+    <string name="account_activity_header">あなたのアクティビティ</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="other">開いたツール</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">修了したレッスン</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="other">シェアしたスクリーン</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="other">リンクのシェア</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="other">使用した言語</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">セッション</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">あなたのバッジ</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">%1$,d 個のツールを開きました</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">%1$,d 本のレッスンを修了しました</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">%1$,d 本の記事を開きました</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">%1$,d 個の画像をシェアしました</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">%1$,d 個のトレーニングのヒントを完了しました</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">世界のアクティビティ</string>
+    <string name="profile_global_activity_heading">%1$s年の世界のアクティビティ</string>
+    <string name="profile_activity_unique_users">一意のユーザ</string>
+    <string name="profile_activity_gospel_presentations">福音の提示</string>
+    <string name="profile_activity_sessions">セッション</string>
+    <string name="profile_activity_countries">国</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">Kifaa unachojitaji hakipatikani</string>
+    <string name="tool_loading">Kifaa unachohitaji kinapakia</string>
+    <string name="tool_offline">Kifaa ulichohitaji kinahitaji kuunganishwa na mtandao ili kifunguke</string>
+    <string name="tract_content_input_error_required">%1$s Inahitajika</string>
+    <string name="tract_content_input_error_invalid_email">Tafadhali weka anwani halali ya barua pepe</string>
+    <!-- Menu Items -->
+    <string name="menu_training_tips">Miongozo ya mafunzo</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Sambaza</string>
+    <string name="tool_share_sheet_more_apps">Mengine</string>
+    <string name="share_tool_message">Kiungo hiki kitakupeleka kwenye toleo la kimtandao ili kuona tulichokuwa tukikizungumzia leo: %1$s \n\n
+
+Programu hii inaweza kupakuliwa kutoka https://godtoolsapp.com
+ 
+Tuzungumze zaidi!</string>
+    <string name="share_tool_message_article">Nilitaka kukushirkisha nakala hii na ningependa kusikia maoni yako kuihusu.\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Sambaza kiungo kwa wengine</string>
+    <string name="feature_discovery_desc_share_tool">Tuma kifaa hiki kwa rafiki kwa kubofya ikoni hii</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Sambaza picha</string>
+</resources>

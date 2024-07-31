@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Shughuli</string>
+    <string name="account_joined">Jumuika %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">Unda Akaunti</string>
+    <string name="account_create_description">Jisajili kwa kuunda akaunti ili uweze kuona shuhuda halisi, kutiwa moyo na kupata mwongozo wa matumizi rahisi.</string>
+    <string name="account_login_heading">Ingia</string>
+    <string name="account_login_description">Jisajili kwa kuunda akaunti ili uweze kuona shuhuda halisi, kutiwa moyo na kupata mwongozo wa matumizi rahisi.</string>
+    <string name="account_error_user_already_exists">Akaunti ya mtumiaji tayari ipo</string>
+    <string name="account_error_user_not_found">Akaunti ya mtumiaji haipo</string>
+    <string name="account_error_unknown">Kuna hitilafu katika kuingia</string>
+    <string name="account_error_dialog_dismiss">Sawa</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Futa Akaunti</string>
+    <string name="account_delete_heading">Usiondoke mapema</string>
+    <string name="account_delete_description">Ikiwa utafuta akaunti yako, hautaweza kufikia zana ulizopenda au shughuli za akaunti yako.</string>
+    <string name="account_delete_action_delete">Futa akaunti yangu</string>
+    <string name="account_delete_action_cancel">Tunza akaunti yangu</string>
+    <string name="account_delete_error">Kumekuwa na hitilafu katika kufuta akaunti yako. Hakikisha una mtandao au jaribu tena baadaye.</string>
+    <string name="account_delete_error_dismiss">Sawa</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">Shughuli</string>
+    <string name="account_activity_header">Shughuli zako</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Zana imefunguliwa</item>
+        <item quantity="other">Zana inafunguka</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Ukamilishaji wa somo</item>
+        <item quantity="other">Ukamilishaji wa masomo</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Shirikisha skrini</item>
+        <item quantity="other">Skrini inashirikisha</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kiungo kimeshirikishwa</item>
+        <item quantity="other">Viungo vilivyoshirikishwa</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Lugha inayotumika</item>
+        <item quantity="other">Lugha zinazopatikana</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kipindi</item>
+        <item quantity="other">Vipindi</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Vyeti vyako</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Zana %1$,d zilizofunguliwa</item>
+        <item quantity="other">Zana %1$,d zilizofunguliwa</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Masomo %1$,d yaliyokamilishwa</item>
+        <item quantity="other">Masomo %1$,d yaliyokamilishwa</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Vifungu %1$,d vilivyofunguliwa</item>
+        <item quantity="other">Vifungu %1$,d vilivyofunguliwa</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Picha %1$,d zilizoshirikishwa</item>
+        <item quantity="other">Picha %1$,d zilizoshirikishwa</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Miongozo ya mafunzo %1$,d iliyokamilishwa</item>
+        <item quantity="other">Miongozo ya mafunzo %1$,d iliyokamilishwa</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Shughuli za kiulimwengu</string>
+    <string name="profile_global_activity_heading">%1$s Shughuli za Kiulimwengu</string>
+    <string name="profile_activity_unique_users">Watumiaji Maalumu</string>
+    <string name="profile_activity_gospel_presentations">Mawasilisho ya Injili</string>
+    <string name="profile_activity_sessions">Vipindi</string>
+    <string name="profile_activity_countries">Nchi</string>
+</resources>

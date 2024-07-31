@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Kifuatacho</string>
+    <string name="tract_tips_tip_action_close">Funga</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Uliza</string>
+    <string name="tract_tips_type_consider">Zingatia</string>
+    <string name="tract_tips_type_prepare">Jiandae</string>
+    <string name="tract_tips_type_quote">Nukuu</string>
+    <string name="tract_tips_type_tip">Mwongozo</string>
+</resources>

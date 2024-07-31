@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">工具</string>
+    <string name="tutorial_features_tools_subhead">每套工具專為不同的對話階段而設計，包括對話前、中、後的階段。</string>
+    <string name="tutorial_features_tips_headline">工具提示</string>
+    <string name="tutorial_features_tips_subhead">GodTools 會亮起提示，可以引導您幫助別人理解福音並遇見耶穌。</string>
+    <string name="tutorial_features_live_share_headline">螢幕分享</string>
+    <string name="tutorial_features_live_share_subhead">現在您可以遠端分享自己的螢幕，讓其他人同步觀看您使用福音工具。</string>
+    <string name="tutorial_features_lessons_headline">課程</string>
+    <string name="tutorial_features_lessons_subhead">GodTools 的每一堂課都能幫助你以上帝為主題，展開有意義的坦誠對話。</string>
+    <string name="tutorial_features_final_headline">隨時在選單中查看教學內容。</string>
+    <string name="tutorial_features_action_continue">繼續</string>
+    <string name="tutorial_features_action_close">關閉教學</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">展示教學</string>
+    <string name="tutorial_features_banner_action_open">打開教學</string>
+    <string name="tutorial_features_banner_action_dismiss">略過</string>
+</resources>

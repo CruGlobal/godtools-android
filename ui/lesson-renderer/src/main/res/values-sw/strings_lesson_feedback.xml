@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Tathmini</string>
+    <string name="lesson_feedback_question_helpful">Je, somo hili limekuwa na msaada kwako?</string>
+    <string name="lesson_feedback_question_helpful_yes">Ndio</string>
+    <string name="lesson_feedback_question_helpful_no">Hapana</string>
+    <string name="lesson_feedback_question_readiness">Je, uko tayari kuanza kufanya mazungumzo ya kiroho?</string>
+    <string name="lesson_feedback_action_submit">Toa mrejesho</string>
+    <string name="lesson_feedback_action_cancel">Ruka</string>
+</resources>
