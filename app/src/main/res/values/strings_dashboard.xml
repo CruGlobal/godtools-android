@@ -31,6 +31,7 @@ An online version can be found at https://knowgod.com/</string>
     <string name="nav_lessons">Lessons</string>
     <string name="dashboard_lessons_header_title">Lessons made for you</string>
     <string name="dashboard_lessons_header_description">Practical ideas to build relationships and start meaningful conversations.</string>
+    <string name="dashboard_lessons_section_filter_label">Lessons in:</string>
 
     <!-- Home -->
     <eat-comment />
