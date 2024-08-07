@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.lessons
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
+import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,8 +17,13 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
+import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
@@ -25,9 +31,26 @@ import org.hamcrest.Matchers.contains
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsViewModelTest {
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
+    private val appLanguagesFlow = MutableStateFlow(Locale.ENGLISH)
+    private val languageFlow = MutableStateFlow(emptyList<Language>())
+    private val translationsFlow = MutableStateFlow(emptyList<Translation>())
 
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
+        every { getLessonsFlowByLanguage(any()) } returns lessonsFlow
+    }
+
+    private val languagesRepository: LanguagesRepository = mockk {
+        every { getLanguagesFlow() } returns languageFlow
+    }
+
+    private val settings: Settings = mockk {
+        every { appLanguage } returns Locale.ENGLISH
+        every { appLanguageFlow } returns appLanguagesFlow
+    }
+
+    private val translationsRepository: TranslationsRepository = mockk{
+        every { getTranslationsFlowForTools(any()) } returns translationsFlow
     }
     private val testScope = TestScope()
 
@@ -36,7 +59,14 @@ class LessonsViewModelTest {
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(StandardTestDispatcher(testScope.testScheduler))
-        viewModel = LessonsViewModel(mockk(), toolsRepository)
+        viewModel = LessonsViewModel(
+            context = mockk(),
+            eventBus = mockk(),
+            toolsRepository = toolsRepository,
+            languagesRepository = languagesRepository,
+            translationsRepository = translationsRepository,
+            settings = settings
+        )
     }
 
     @AfterTest

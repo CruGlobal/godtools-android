@@ -3,6 +3,10 @@ package org.cru.godtools.ui.tools
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -143,10 +147,24 @@ class ToolViewModels @Inject constructor(
 
         @Composable
         fun toState(
+            selectedLanguage: Language? = null,
             secondLanguage: Language? = this.secondLanguage.collectAsState().value,
             eventSink: (ToolCard.Event) -> Unit = {}
         ): ToolCard.State {
-            val translation by firstTranslation.collectAsState()
+            val scope = rememberCoroutineScope()
+
+            val selectedLocale by rememberUpdatedState(selectedLanguage?.code)
+            val selectedTranslation = remember {
+                snapshotFlow { selectedLocale }
+                    .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
+                    .map { StateFlowValue(it) }
+                    .stateIn(scope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
+            }
+
+            val translation by remember {
+                selectedTranslation
+                    .combine(firstTranslation) { t, f -> if (t.isInitial || t.value != null) t else f }
+            }.collectAsState(initial = StateFlowValue.Initial<Translation?>(null))
 
             return ToolCard.State(
                 toolCode = code,
@@ -154,7 +172,7 @@ class ToolViewModels @Inject constructor(
                 isLoaded = translation !is StateFlowValue.Initial,
                 banner = bannerFile.collectAsState().value,
                 translation = translation.value,
-                appLanguage = appLanguage.collectAsState().value,
+                appLanguage = selectedLanguage ?: appLanguage.collectAsState().value,
                 appLanguageAvailable = appTranslation.collectAsState().value.value != null,
                 secondLanguage = secondLanguage,
                 secondLanguageAvailable = secondTranslation.collectAsState().value != null,
