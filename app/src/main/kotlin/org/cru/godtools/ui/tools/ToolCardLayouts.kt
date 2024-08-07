@@ -98,17 +98,26 @@ fun PreloadTool(tool: Tool) {
 fun LessonToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    selectedLanguage: Language? = null,
     viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val state = viewModel.toState()
+    val state = viewModel.toState(selectedLanguage = selectedLanguage)
     val tool by viewModel.tool.collectAsState()
-    val translation by viewModel.firstTranslation.collectAsState()
+    val viewModelTranslation by viewModel.firstTranslation.collectAsState()
 
-    ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { viewModelTranslation.value?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type, translation.value?.languageCode)) },
+            onClick = {
+                onEvent(
+                    ToolCardEvent.Click(
+                        tool?.code,
+                        tool?.type,
+                        viewModelTranslation.value?.languageCode
+                    )
+                )
+            },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
@@ -125,7 +134,7 @@ fun LessonToolCard(
 
                 ToolCardInfoContent {
                     AvailableInLanguage(
-                        language = appLanguage,
+                        language = selectedLanguage ?: appLanguage,
                         translation = { appTranslation.value },
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
