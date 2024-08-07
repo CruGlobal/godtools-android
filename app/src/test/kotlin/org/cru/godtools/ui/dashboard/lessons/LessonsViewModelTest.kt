@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.dashboard.lessons
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -25,31 +27,39 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsViewModelTest {
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
+    private val lessonsByLanguageFlow = MutableStateFlow(emptyList<Tool>())
     private val appLanguagesFlow = MutableStateFlow(Locale.ENGLISH)
-    private val languageFlow = MutableStateFlow(emptyList<Language>())
+    private val languagesFlow = MutableStateFlow(emptyList<Language>())
+    private val languageFlow: MutableStateFlow<Language?> = MutableStateFlow(null)
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
+    private var savedLessonLocale = MutableStateFlow(Locale.ENGLISH)
 
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
-        every { getLessonsFlowByLanguage(any()) } returns lessonsFlow
+        every { getLessonsFlowByLanguage(any()) } returns lessonsByLanguageFlow
     }
 
     private val languagesRepository: LanguagesRepository = mockk {
-        every { getLanguagesFlow() } returns languageFlow
+        every { getLanguagesFlow() } returns languagesFlow
+        every { findLanguageFlow(any()) } returns languageFlow
     }
+
+    private val savedStateHandle: SavedStateHandle = SavedStateHandle()
 
     private val settings: Settings = mockk {
         every { appLanguage } returns Locale.ENGLISH
         every { appLanguageFlow } returns appLanguagesFlow
     }
 
-    private val translationsRepository: TranslationsRepository = mockk{
+    private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns translationsFlow
     }
     private val testScope = TestScope()
@@ -65,6 +75,7 @@ class LessonsViewModelTest {
             toolsRepository = toolsRepository,
             languagesRepository = languagesRepository,
             translationsRepository = translationsRepository,
+            savedStateHandle = savedStateHandle,
             settings = settings
         )
     }
@@ -79,8 +90,9 @@ class LessonsViewModelTest {
         val visible = randomTool("visible", Tool.Type.LESSON, isHidden = false)
         val hidden = randomTool("hidden", Tool.Type.LESSON, isHidden = true)
 
+        languageFlow.value = Language(Locale.ENGLISH)
+        lessonsByLanguageFlow.value = listOf(visible, hidden)
         viewModel.lessons.test {
-            lessonsFlow.value = listOf(visible, hidden)
             runCurrent()
             assertThat(expectMostRecentItem(), contains("visible"))
         }
@@ -91,10 +103,70 @@ class LessonsViewModelTest {
         val first = randomTool("first", Tool.Type.LESSON, defaultOrder = 1, isHidden = false)
         val second = randomTool("second", Tool.Type.LESSON, defaultOrder = 2, isHidden = false)
 
+        languageFlow.value = Language(Locale.ENGLISH)
+        lessonsByLanguageFlow.value = listOf(second, first)
         viewModel.lessons.test {
-            lessonsFlow.value = listOf(second, first)
             runCurrent()
+            coVerify { toolsRepository.getLessonsFlowByLanguage(any()) }
             assertEquals(listOf("first", "second"), expectMostRecentItem())
+        }
+    }
+
+    @Test
+    fun `Property lessons - Filter by language`() = testScope.runTest {
+        val first = randomTool("first", Tool.Type.LESSON, defaultOrder = 1, isHidden = false)
+        val second = randomTool("second", Tool.Type.LESSON, defaultOrder = 2, isHidden = false)
+
+        languageFlow.value = Language(Locale.ENGLISH)
+        savedLessonLocale.value = Locale.ENGLISH
+        viewModel.updateSelectedLanguage(Language(Locale.ENGLISH))
+        lessonsFlow.value = listOf(first, second)
+        lessonsByLanguageFlow.value = listOf(first)
+        appLanguagesFlow.value = Locale.ENGLISH
+        languagesFlow.value = listOf(Language(Locale.ENGLISH))
+
+        viewModel.lessons.test {
+            runCurrent()
+            coVerify { toolsRepository.getLessonsFlowByLanguage(Locale.ENGLISH) }
+            assertEquals(listOf("first"), expectMostRecentItem())
+        }
+    }
+
+    @Test
+    fun `Property filteredLanguages - Filter languages`() = testScope.runTest {
+        val first = Language(Locale.ENGLISH)
+        val second = Language(Locale.FRENCH)
+        val english = randomTranslation(toolCode = "lesson", languageCode = Locale.ENGLISH)
+        val french = randomTranslation(toolCode = "lesson", languageCode = Locale.FRENCH)
+        val lesson = randomTool("lesson", Tool.Type.LESSON, isHidden = false)
+
+        translationsFlow.value = listOf(english, french)
+        lessonsFlow.value = listOf(lesson)
+        languagesFlow.value = listOf(first, second)
+
+        viewModel.filteredLanguages.test {
+            coVerify { translationsRepository.getTranslationsFlowForTools(setOf("lesson")) }
+            assertEquals(listOf(Filter(first, 1), Filter(second, 1)), awaitItem())
+        }
+    }
+
+    @Test
+    fun `Property filteredLanguages - Query Filter languages`() = testScope.runTest {
+        val first = Language(Locale.ENGLISH)
+        val second = Language(Locale.FRENCH)
+        val english = randomTranslation(toolCode = "lesson", languageCode = Locale.ENGLISH)
+        val french = randomTranslation(toolCode = "lesson", languageCode = Locale.FRENCH)
+        val lesson = randomTool("lesson", Tool.Type.LESSON, isHidden = false)
+
+        translationsFlow.value = listOf(english, french)
+        lessonsFlow.value = listOf(lesson)
+        languagesFlow.value = listOf(first, second)
+
+        viewModel.filteredLanguages.test {
+            viewModel.query.value = "Eng"
+            runCurrent()
+            coVerify { languagesRepository.getLanguagesFlow() }
+            assertEquals(listOf(Filter(first, 1)), expectMostRecentItem())
         }
     }
 }
