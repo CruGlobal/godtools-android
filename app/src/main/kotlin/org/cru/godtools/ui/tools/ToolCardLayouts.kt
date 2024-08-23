@@ -103,10 +103,12 @@ fun LessonToolCard(
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
     val state = viewModel.toState(language = selectedLanguage)
-    val tool by viewModel.tool.collectAsState()
-    val viewModelTranslation by viewModel.firstTranslation.collectAsState()
+    val tool by rememberUpdatedState(state.tool)
+    val language by rememberUpdatedState(state.language)
+    val languageAvailable by rememberUpdatedState(state.languageAvailable)
+    val translation by rememberUpdatedState(state.translation)
 
-    ProvideLayoutDirectionFromLocale(locale = { viewModelTranslation.value?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
             elevation = toolCardElevation,
             onClick = {
@@ -114,7 +116,7 @@ fun LessonToolCard(
                     ToolCardEvent.Click(
                         tool?.code,
                         tool?.type,
-                        viewModelTranslation.value?.languageCode
+                        translation?.languageCode
                     )
                 )
             },
@@ -129,17 +131,14 @@ fun LessonToolCard(
             ) {
                 ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
 
-                val appLanguage by viewModel.appLanguage.collectAsState()
-                val appTranslation by viewModel.appTranslation.collectAsState()
-
                 ToolCardInfoContent {
                     AvailableInLanguage(
-                        language = selectedLanguage ?: appLanguage,
-                        translation = { appTranslation.value },
+                        language = language,
+                        available = languageAvailable,
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
                             .align(Alignment.End)
-                            .invisibleIf { appTranslation.isInitial || appLanguage == null }
+                            .invisibleIf { !state.isLoaded || !languageAvailable }
                     )
                 }
             }
