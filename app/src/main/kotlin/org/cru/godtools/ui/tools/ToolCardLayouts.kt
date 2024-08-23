@@ -102,7 +102,7 @@ fun LessonToolCard(
     viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val state = viewModel.toState(selectedLanguage = selectedLanguage)
+    val state = viewModel.toState(language = selectedLanguage)
     val tool by viewModel.tool.collectAsState()
     val viewModelTranslation by viewModel.firstTranslation.collectAsState()
 
