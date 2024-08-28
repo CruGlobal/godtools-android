@@ -16,6 +16,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.EXTRA_LANGUAGES
@@ -110,6 +111,8 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Deep Link - knowgod_com`() {
+        everyGetManifestFlow() returns MutableSharedFlow()
+
         deepLinkScenario(Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
@@ -123,6 +126,8 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Deep Link - knowgod_com - With Page Num`() {
+        everyGetManifestFlow() returns MutableSharedFlow()
+
         deepLinkScenario(Uri.parse("https://knowgod.com/fr/test/3?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
@@ -349,4 +354,6 @@ class TractActivityTest {
         every { translationsRepository.findLatestTranslationFlow(tool ?: any(), locale ?: any(), any()) }
     private fun everyGetManifest(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestLiveData(tool ?: any(), locale ?: any())) }
+    private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
+        every { (manifestManager.getLatestPublishedManifestFlow(tool ?: any(), locale ?: any())) }
 }
