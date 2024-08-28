@@ -6,9 +6,13 @@ import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
@@ -37,7 +41,12 @@ import org.greenrobot.eventbus.EventBus
 )
 class ExternalSingletonsModule {
     @get:Provides
-    val downloadManager: GodToolsDownloadManager by lazy { mockk() }
+    val downloadManager: GodToolsDownloadManager by lazy {
+        mockk {
+            every { downloadLatestPublishedTranslationAsync(any(), any()) } returns CompletableDeferred(true)
+            every { getDownloadProgressFlow(any(), any()) } returns MutableStateFlow(null).asStateFlow()
+        }
+    }
     @get:Provides
     val eventBus by lazy { mockk<EventBus>(relaxUnitFun = true) }
     @get:Provides
@@ -61,7 +70,12 @@ class ExternalSingletonsModule {
         }
     }
     @get:Provides
-    val syncService by lazy { mockk<GodToolsSyncService>() }
+    val syncService: GodToolsSyncService by lazy {
+        mockk {
+            coEvery { syncTool(any(), any()) } returns true
+            every { syncToolSharesAsync() } returns CompletableDeferred(true)
+        }
+    }
     @get:Provides
     val tractShareService by lazy { mockk<TractShareService>() }
     @get:Provides
