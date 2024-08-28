@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,19 +30,27 @@ internal sealed interface DashboardLessonsEvent {
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (DashboardLessonsEvent) -> Unit = {}) {
-    val lessons by viewModel.lessons.collectAsState()
+    val lessons by viewModel.lessons.collectAsState(emptyList())
+    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
+
     LazyColumn(contentPadding = PaddingValues(16.dp)) {
-        item("header", "header") { LessonsHeader() }
+        item("header", "header") {
+            LessonsHeader()
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+            LessonFilters()
+        }
 
         items(lessons, { it }, { "lesson" }) { lesson ->
             LessonToolCard(
                 lesson,
+                selectedLanguage = selectedLanguage,
                 onEvent = {
                     when (it) {
                         is ToolCardEvent.OpenTool, is ToolCardEvent.Click -> {
                             viewModel.recordOpenLessonInAnalytics(it.tool)
                             onEvent(DashboardLessonsEvent.OpenLesson(it.tool, it.lang1))
                         }
+
                         is ToolCardEvent.OpenToolDetails -> {
                             if (BuildConfig.DEBUG) error("$it is currently unsupported for Lessons")
                         }

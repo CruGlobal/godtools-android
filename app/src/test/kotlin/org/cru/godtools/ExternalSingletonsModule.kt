@@ -86,6 +86,7 @@ class ExternalSingletonsModule {
     val languagesRepository: LanguagesRepository by lazy {
         mockk {
             every { getLanguagesFlow() } returns flowOf(emptyList())
+            every { findLanguageFlow(any()) } returns flowOf(null)
         }
     }
     @get:Provides
@@ -95,6 +96,7 @@ class ExternalSingletonsModule {
         mockk {
             every { getFavoriteToolsFlow() } returns flowOf(emptyList())
             every { getLessonsFlow() } returns flowOf(emptyList())
+            every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
             every { getNormalToolsFlow() } returns flowOf(emptyList())
             every { getMetaToolsFlow() } returns flowOf(emptyList())
         }
