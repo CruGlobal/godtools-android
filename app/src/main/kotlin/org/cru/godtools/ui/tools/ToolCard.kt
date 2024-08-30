@@ -14,6 +14,8 @@ object ToolCard {
         val tool: Tool? = null,
         val isLoaded: Boolean = true,
         val banner: File? = null,
+        val language: Language? = null,
+        val languageAvailable: Boolean = false,
         val translation: Translation? = null,
         val appLanguage: Language? = null,
         val appLanguageAvailable: Boolean = false,

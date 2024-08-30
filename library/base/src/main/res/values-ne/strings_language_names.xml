@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="language_name_fa">पारसी</string>
+    <string name="language_name_fa">फारसी (फार्सी)</string>
+    <string name="language_name_fil">फिलिपिनो (तागालोग)</string>
 </resources>

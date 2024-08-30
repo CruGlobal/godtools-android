@@ -3,6 +3,10 @@ package org.cru.godtools.ui.tools
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -143,19 +147,36 @@ class ToolViewModels @Inject constructor(
 
         @Composable
         fun toState(
+            language: Language? = null,
             secondLanguage: Language? = this.secondLanguage.collectAsState().value,
             eventSink: (ToolCard.Event) -> Unit = {}
         ): ToolCard.State {
-            val translation by firstTranslation.collectAsState()
+            val scope = rememberCoroutineScope()
+
+            val locale by rememberUpdatedState(language?.code)
+            val translation by remember {
+                snapshotFlow { locale }
+                    .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
+                    .combine(firstTranslation) { t, f -> if (t != null) StateFlowValue(t) else f }
+                    .stateIn(scope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
+            }.collectAsState()
+
+            val appLanguage by appLanguage.collectAsState()
+            val appTranslation by appTranslation.collectAsState()
 
             return ToolCard.State(
                 toolCode = code,
                 tool = tool.collectAsState().value,
                 isLoaded = translation !is StateFlowValue.Initial,
                 banner = bannerFile.collectAsState().value,
+                language = language ?: appLanguage,
+                languageAvailable = when (language) {
+                    null -> appTranslation.value != null
+                    else -> translation.value?.languageCode == locale
+                },
                 translation = translation.value,
-                appLanguage = appLanguage.collectAsState().value,
-                appLanguageAvailable = appTranslation.collectAsState().value.value != null,
+                appLanguage = appLanguage,
+                appLanguageAvailable = appTranslation.value != null,
                 secondLanguage = secondLanguage,
                 secondLanguageAvailable = secondTranslation.collectAsState().value != null,
                 availableLanguages = availableLanguages.collectAsState().value.size,
