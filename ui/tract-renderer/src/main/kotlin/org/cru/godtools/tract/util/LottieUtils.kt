@@ -11,8 +11,6 @@ fun MenuItem.loadAnimation(context: Context, @RawRes rawRes: Int) {
         icon = LottieDrawable().apply {
             composition = comp
             repeatCount = LottieDrawable.INFINITE
-            // HACK: playAnimation() throws an exception when trying to check if system animations are disabled
-            setIgnoreDisabledSystemAnimations(true)
             playAnimation()
         }
     }
