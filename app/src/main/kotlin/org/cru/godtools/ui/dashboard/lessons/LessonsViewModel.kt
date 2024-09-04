@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
@@ -40,12 +42,17 @@ class LessonsViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     val settings: Settings,
 ) : ViewModel() {
+    init {
+        settings.appLanguageFlow
+            .onEach { updateSelectedLanguage(Language(it)) }
+            .launchIn(viewModelScope)
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val selectedLanguage = savedStateHandle.getStateFlow(KEY_SAVED_LESSON_LANGUAGE_LOCALE, settings.appLanguage)
         .flatMapLatest { locale ->
             languagesRepository.findLanguageFlow(locale).map { it ?: Language(locale) }
-        }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Language(settings.appLanguage))
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), Language(settings.appLanguage))
 
     fun updateSelectedLanguage(newLanguage: Language) {
         savedStateHandle.set(KEY_SAVED_LESSON_LANGUAGE_LOCALE, newLanguage.code)
