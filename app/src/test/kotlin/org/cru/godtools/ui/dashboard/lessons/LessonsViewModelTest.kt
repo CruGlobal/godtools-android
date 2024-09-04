@@ -169,4 +169,16 @@ class LessonsViewModelTest {
             assertEquals(listOf(Filter(first, 1)), expectMostRecentItem())
         }
     }
+
+    @Test
+    fun `Property selectedLanguage - Change with AppLanguage Change`() = testScope.runTest {
+        appLanguagesFlow.value = Locale.ENGLISH
+
+        viewModel.selectedLanguage.test {
+            assertEquals(Locale.ENGLISH, expectMostRecentItem().code)
+            appLanguagesFlow.value = Locale.FRENCH
+            runCurrent()
+            assertEquals(Locale.FRENCH, expectMostRecentItem().code)
+        }
+    }
 }
