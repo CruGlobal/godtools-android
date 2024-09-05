@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.Ordered
+import org.ccci.gto.android.common.base.Ordered
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.api.UserApi

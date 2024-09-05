@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.gtoSupport.androidx.activity)
-    implementation(libs.gtoSupport.core)
+    implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.kotlin.coroutines)
 
     implementation(libs.dagger)
