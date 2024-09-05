@@ -12,7 +12,6 @@ import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.verifyAll
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -58,10 +57,6 @@ class DownloadableLanguagesLayoutTest {
     }
 
     @Test
-    @Ignore(
-        "performClick() on an IconButton in a SearchBar doesn't appear to work currently in Robolectric. " +
-            "See: https://github.com/robolectric/robolectric/issues/8420"
-    )
     fun `DownloadableLanguagesLayout() - Up navigation`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
@@ -99,10 +94,6 @@ class DownloadableLanguagesLayoutTest {
     }
 
     @Test
-    @Ignore(
-        "performClick() on an IconButton in a SearchBar doesn't appear to work currently in Robolectric. " +
-            "See: https://github.com/robolectric/robolectric/issues/8420"
-    )
     fun `DownloadableLanguagesLayout() - Search - Cancel Button`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
