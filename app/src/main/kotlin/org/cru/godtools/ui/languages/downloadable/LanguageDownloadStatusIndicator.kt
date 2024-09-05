@@ -18,6 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -73,6 +75,8 @@ internal fun LanguageDownloadStatusIndicator(
                     progress = { progress },
                     color = MaterialTheme.colorScheme.primary,
                     strokeWidth = (size / 2) - iconPadding,
+                    trackColor = Color.Transparent,
+                    strokeCap = StrokeCap.Butt,
                     modifier = Modifier
                         .padding(iconPadding)
                         .border(size / 12, MaterialTheme.colorScheme.primary, CircleShape)
