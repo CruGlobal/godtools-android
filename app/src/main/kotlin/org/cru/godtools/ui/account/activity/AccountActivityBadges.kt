@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -66,6 +67,9 @@ private fun ActivityBadge(badge: Badge, modifier: Modifier = Modifier) {
 
     ElevatedCard(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = if (badge.isEarned) 4.dp else 0.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = if (badge.isEarned) Color.Unspecified else Color.Transparent
+        ),
         modifier = modifier.size(contentHeight.coerceAtLeast(100.dp))
     ) {
         Spacer(modifier = Modifier.weight(1f))
