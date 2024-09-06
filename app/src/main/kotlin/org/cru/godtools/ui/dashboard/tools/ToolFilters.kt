@@ -20,7 +20,9 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +33,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
@@ -163,7 +166,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
             modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
         ) {
             stickyHeader {
-                Surface(color = MaterialTheme.colorScheme.surface) {
+                Surface(color = MenuDefaults.containerColor) {
                     SearchBar(
                         query,
                         onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
@@ -230,5 +233,6 @@ private fun FilterMenuItem(
 ) = ListItem(
     headlineContent = label,
     supportingContent = supportingText?.let { { Text(it) } },
+    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
     modifier = modifier.clickable(onClick = onClick)
 )
