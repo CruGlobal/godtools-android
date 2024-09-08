@@ -28,6 +28,11 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="nav_lessons">Masomo</string>
     <string name="dashboard_lessons_header_title">Masomo kwa ajili yako</string>
     <string name="dashboard_lessons_header_description">Mikakati ya kivitendo ya kujenga mahusiano na kuanzisha mazungumzo yenye maana.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d Masomo vinavyopatikana</item>
+        <item quantity="other">%1$d Masomo vinavyopatikana</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Masomo yaliyopo:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Vipendwa</string>
     <string name="dashboard_home_header_title">Karibu kwenye GodTools</string>
