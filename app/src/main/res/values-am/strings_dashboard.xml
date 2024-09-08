@@ -28,6 +28,11 @@
     <string name="nav_lessons">ትምህርቶች</string>
     <string name="dashboard_lessons_header_title">ለእርስዎ የተዘጋጁ ትምህርቶች</string>
     <string name="dashboard_lessons_header_description">ግንኙነቶችን ለመፍጠር እና ትርጉም ያለው ውይይት ለመጀመር ተግባራዊ ሀሳቦች።</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d  ትምህርቶች ይገኛሉ</item>
+        <item quantity="other">%1$d  ትምህርቶች ይገኛሉ</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">ትምህርቶች በ</string>
     <!-- Home -->
     <string name="nav_favorite_tools">የኔ ምርጫ</string>
     <string name="dashboard_home_header_title">ወደ GodTools እንኳን በደህና መጡ</string>

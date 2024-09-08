@@ -28,6 +28,12 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="nav_lessons">Nodarbības</string>
     <string name="dashboard_lessons_header_title">Nodarbības, kas pielāgotas tev</string>
     <string name="dashboard_lessons_header_description">Praktiskas idejas attiecību veidošanai un nozīmīgu sarunu uzsākšanai.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">Pieejamas nodarbības: %1$d</item>
+        <item quantity="other">Pieejamas nodarbības: %1$d</item>
+        <item quantity="zero">Pieejamas nodarbības: %1$d</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Nodarbības:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Izlase</string>
     <string name="dashboard_home_header_title">Sveiki!</string>

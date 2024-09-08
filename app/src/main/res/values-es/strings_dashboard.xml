@@ -28,6 +28,11 @@ Puedes acceer a una versión online en https://knowgod.com/</string>
     <string name="nav_lessons">Lecciones</string>
     <string name="dashboard_lessons_header_title">Lecciones hechas para ti</string>
     <string name="dashboard_lessons_header_description">Ideas prácticas para establecer relaciones e iniciar conversaciones significativas.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d Lección disponible</item>
+        <item quantity="other">%1$d Lecciones disponibles</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Lecciones en:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="dashboard_home_header_title">Bienvenido a GodTools</string>

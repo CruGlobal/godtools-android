@@ -28,6 +28,10 @@
     <string name="nav_lessons">レッスン</string>
     <string name="dashboard_lessons_header_title">あなた専用のレッスン</string>
     <string name="dashboard_lessons_header_description">信頼関係を築き、意義のある会話を始めるための実践的なアイデアです。</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="other">%1$d 個のレッスンが利用可能</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">レッスン:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">お気に入り</string>
     <string name="dashboard_home_header_title">GodToolsへようこそ</string>

@@ -28,6 +28,10 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="nav_lessons">Pelajaran</string>
     <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Saudara</string>
     <string name="dashboard_lessons_header_description">Ide-ide praktis membangun hubungan dan memulai percakapan yang bermakna.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="other">%1$d Pelajaran tersedia</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Pelajaran dalam bahasa:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorit</string>
     <string name="dashboard_home_header_title">Selamat datang di GodTools</string>
