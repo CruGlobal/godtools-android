@@ -154,22 +154,22 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
                 }
 
                 itemsIndexed(pinnedLanguages, key = { _, it -> it.code }) { i, it ->
-                    if (i == 0) HorizontalDivider(modifier = Modifier.animateItemPlacement())
+                    if (i == 0) HorizontalDivider(modifier = Modifier.animateItem())
                     LanguageName(
                         it,
                         modifier = Modifier
-                            .animateItemPlacement()
+                            .animateItem()
                             .heightIn(min = 56.dp)
                             .padding(vertical = 4.dp)
                             .wrapContentHeight(Alignment.CenterVertically)
                     )
-                    HorizontalDivider(modifier = Modifier.animateItemPlacement())
+                    HorizontalDivider(modifier = Modifier.animateItem())
                 }
                 item(SECTION_OFFLINE_LANGUAGES_BOTTOM) {
                     Button(
                         onClick = { eventSink(Event.DownloadableLanguages) },
                         modifier = Modifier
-                            .animateItemPlacement()
+                            .animateItem()
                             .padding(top = 24.dp)
                             .fillMaxWidth()
                     ) {

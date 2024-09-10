@@ -57,7 +57,7 @@ internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (
                     }
                 },
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .padding(top = 16.dp)
             )
         }
