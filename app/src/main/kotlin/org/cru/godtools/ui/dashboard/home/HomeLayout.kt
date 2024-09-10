@@ -81,7 +81,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
             Banners(
                 { banner },
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .fillMaxWidth()
             )
         }
@@ -89,7 +89,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
         item("welcome") {
             WelcomeMessage(
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .padding(horizontal = PADDING_HORIZONTAL)
                     .padding(top = 16.dp)
             )
@@ -100,7 +100,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
             item("lesson-header", "lesson-header") {
                 FeaturedLessonsHeader(
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(top = 32.dp, bottom = 16.dp)
                 )
@@ -121,7 +121,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                         }
                     },
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(bottom = 16.dp)
                 )
@@ -135,7 +135,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                     showViewAll = { hasFavoriteTools },
                     onEvent = onEvent,
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
                         .padding(top = 32.dp, bottom = 16.dp),
                 )
@@ -161,7 +161,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                             onEvent(it)
                         },
                         modifier = Modifier
-                            .animateItemPlacement()
+                            .animateItem()
                             .fillMaxWidth()
                     )
                 }
@@ -170,7 +170,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                     NoFavoriteTools(
                         onEvent = onEvent,
                         modifier = Modifier
-                            .animateItemPlacement()
+                            .animateItem()
                             .padding(horizontal = PADDING_HORIZONTAL)
                     )
                 }
@@ -245,7 +245,7 @@ private fun HorizontalFavoriteTools(
                     is ToolCardEvent.OpenToolDetails -> onEvent(DashboardHomeEvent.OpenToolDetails(it))
                 }
             },
-            modifier = Modifier.animateItemPlacement()
+            modifier = Modifier.animateItem()
         )
     }
 }

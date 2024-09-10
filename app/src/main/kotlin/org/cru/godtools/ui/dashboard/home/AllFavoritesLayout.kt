@@ -64,7 +64,7 @@ internal fun AllFavoritesList(
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateItemPlacement()
+                    .animateItem()
             )
         }
 
