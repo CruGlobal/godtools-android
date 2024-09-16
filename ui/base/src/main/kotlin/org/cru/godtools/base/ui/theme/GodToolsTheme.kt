@@ -124,7 +124,7 @@ object GodToolsTheme {
         )
     }
 
-    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { true }
+    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { false }
 
     val isLightColorSchemeActive: Boolean
         @Composable
