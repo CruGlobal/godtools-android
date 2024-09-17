@@ -50,6 +50,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
+import org.cru.godtools.ui.dashboard.common.dropdownButtonColors
 import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -91,6 +92,7 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
     ElevatedButton(
         onClick = { expanded = !expanded },
+        colors = dropdownButtonColors,
         modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
@@ -149,6 +151,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
     ElevatedButton(
         onClick = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+        colors = dropdownButtonColors,
         modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
