@@ -59,7 +59,7 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
-import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
+import org.cru.godtools.tract.ui.settings.TractSettingsBottomSheetDialogFragment
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -109,12 +109,9 @@ class TractActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
-        menuInflater.inflate(R.menu.activity_tract, menu)
-        menu.removeItem(R.id.action_share)
-        menu.removeItem(R.id.action_tips)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
+        menuInflater.inflate(R.menu.activity_tract, menu)
         menu.setupLiveShareMenuItem()
-
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
     }
@@ -124,9 +121,9 @@ class TractActivity :
             InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
             true
         }
-        item.itemId == R.id.action_settings -> {
+        item.itemId == org.cru.godtools.tool.R.id.action_settings -> {
             eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
-            SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
+            TractSettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
             true
         }
         // handle close button if this is an instant app
