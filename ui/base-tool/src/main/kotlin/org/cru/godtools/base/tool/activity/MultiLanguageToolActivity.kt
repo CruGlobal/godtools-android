@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combine
-import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
@@ -52,7 +51,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tool_multilanguage, menu)
-        menu.setupTrainingTipsMenuItem()
+        menu.removeItem(R.id.action_share)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -140,15 +139,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         languageToggle.addOnTabSelectedListener(languageToggleListener)
     }
     // endregion Language Toggle
-
-    // region Training Tips
-    private fun Menu.setupTrainingTipsMenuItem() {
-        findItem(R.id.action_tips)?.let { item ->
-            dataModel.hasTips.observe(this@MultiLanguageToolActivity, item) { isVisible = it }
-            dataModel.showTips.observe(this@MultiLanguageToolActivity, item) { isChecked = it }
-        }
-    }
-    // endregion Training Tips
     // endregion UI
 
     // region Tool sync
