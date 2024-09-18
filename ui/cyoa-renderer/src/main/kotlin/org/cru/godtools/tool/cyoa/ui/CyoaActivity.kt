@@ -15,7 +15,9 @@ import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
@@ -24,6 +26,7 @@ import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
+import org.cru.godtools.tool.cyoa.ui.settings.CyoaSettingsBottomSheetDialogFragment
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 
@@ -52,6 +55,11 @@ class CyoaActivity :
 
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == android.R.id.home && navigateToParentPage() -> true
+        item.itemId == org.cru.godtools.tool.R.id.action_settings -> {
+            eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
+            CyoaSettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
