@@ -24,7 +24,8 @@ import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
 
 abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
-    BaseFragment<B>(layoutId), ShowTipCallback {
+    BaseFragment<B>(layoutId),
+    ShowTipCallback {
     @Inject
     internal lateinit var eventBus: EventBus
 

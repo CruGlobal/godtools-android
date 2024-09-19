@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Zum Homescreen hinzufügen</string>
+    <string name="action_tools_open_tool">Tool öffnen</string>
+    <string name="action_tools_add_favorite">Zu Favoriten hinzufügen</string>
+    <string name="action_tools_remove_favorite">Aus Favoriten entfernen</string>
+    <string name="action_tools_open_training">Lerne, dieses Tool zu teilen</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d Aufruf</item>
+        <item quantity="other">%1$,d Aufrufe</item>
+    </plurals>
+    <string name="label_tools_about">Über</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d Sprache</item>
+        <item quantity="other">%1$,d Sprachen</item>
+    </plurals>
+    <string name="tool_details_section_description_conversation_starters">Gesprächsstarter</string>
+    <string name="tool_details_section_description_outline">Outline</string>
+    <string name="tool_details_section_description_bible_references">Bibelstellen</string>
+    <string name="tool_details_section_description_languages_available">Verfügbare Sprachen</string>
+    <string name="tool_details_section_variants_label">Versionen</string>
+    <string name="tool_details_section_variants_description">Wähle unten eine andere Version dieses Tools. Jede Version hat ihren eigenen Stil und Inhalt, so dass du diejenige finden kannst, die am besten zu deiner Unterhaltung passt. Du kannst mehrere Versionen des gleichen Tools favorisieren.</string>
+</resources>

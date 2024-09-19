@@ -10,9 +10,7 @@ import org.cru.godtools.db.repository.GlobalActivityRepository
 import org.cru.godtools.model.GlobalActivityAnalytics
 
 @HiltViewModel
-class GlobalActivityViewModel @Inject constructor(
-    globalActivityRepository: GlobalActivityRepository
-) : ViewModel() {
+class GlobalActivityViewModel @Inject constructor(globalActivityRepository: GlobalActivityRepository) : ViewModel() {
     val activity = globalActivityRepository.getGlobalActivityFlow()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), GlobalActivityAnalytics())
 }

@@ -6,11 +6,8 @@ import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_OP
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.user.activity.UserCounterNames
 
-class ToolOpenedAnalyticsActionEvent(
-    tool: String,
-    type: Manifest.Type? = null,
-    first: Boolean = false
-) : ToolAnalyticsActionEvent(tool, action = if (first) ACTION_OPEN_FIRST else ACTION_OPEN) {
+class ToolOpenedAnalyticsActionEvent(tool: String, type: Manifest.Type? = null, first: Boolean = false) :
+    ToolAnalyticsActionEvent(tool, action = if (first) ACTION_OPEN_FIRST else ACTION_OPEN) {
     override fun isForSystem(system: AnalyticsSystem) = when (system) {
         AnalyticsSystem.USER -> true
         else -> false

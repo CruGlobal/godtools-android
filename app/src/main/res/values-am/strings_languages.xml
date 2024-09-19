@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">የመተግበሪያ ቋንቋ</string>
+    <string name="language_settings_app_language_dialog_message">%1$sን የመተግበሪያ ዋና ቋንቋ አድርገህ መርጠሀል። ይህ የመላው GodTools መተግበሪያን ቋንቋ ይለውጣል። እርግጠኛ ነህ?</string>
+    <string name="language_settings_app_language_dialog_confirm">ቋንቋ ቀይር</string>
+    <string name="language_settings_app_language_dialog_dismiss">ግድ የለም</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">የቋንቋ ቅንብሮች</string>
+    <string name="title_language_settings">የቋንቋ ማስተካከያ</string>
+    <string name="language_settings_section_app_language_heading">የመተግበሪያ በይነገጽ ቋንቋ</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$,d ቋንቋ ይገኛል</item>
+        <item quantity="other">%1$,d ቋንቋ ይገኛል</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">መላው መተግበሪያ እንዲታይ የሚፈልጉትን ቋንቋ ያዘጋጁ።</string>
+    <string name="language_settings_section_offline_heading">የመተግበሪያ ቋንቋዎች ያለኢንተርኔት የሚሰሩ</string>
+    <string name="language_settings_section_offline_description">ከዋይፋይ ወይም ከአገልግሎት መስጫ ክልል ውጪ ቢሆኑም እንኳ መጠቀም እንዲችሉ በመረጡት ቋንቋ ቡክሌቶቹን ያውርዱ። የመተግበሪያ ቋንቋ የአማራጮች ቁልፍን በመጫን ይምረጡ።</string>
+    <string name="language_settings_section_offline_action_edit">የወረዱ ቋንቋዎችን ያስተካክሉ</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">ቋንቋዎችን ይፈልጉ</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d ቡክሌት አለ</item>
+        <item quantity="other">%1$d ቡክሌቶች አሉ</item>
+    </plurals>
+</resources>

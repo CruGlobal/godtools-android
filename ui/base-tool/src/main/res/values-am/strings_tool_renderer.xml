@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">የፈለጉት መተግበርያ አልተገኘም</string>
+    <string name="tool_loading">የጠየቁት መተግበርያ በሂደት ላይ ነዉ...</string>
+    <string name="tool_offline">የጠየቁት ገፅ ለመክፈት የበይነመረብ ግንኙነት ያስፈልገዋል</string>
+    <string name="tract_content_input_error_required">%1$s እንዲሞላ ይጠበቃል</string>
+    <string name="tract_content_input_error_invalid_email">እባክዎትን ትክክለኛ ኢሜይል ያስገቡ</string>
+    <!-- Menu Items -->
+    <string name="menu_training_tips">የስልጠና ምክሮች</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">ያጋሩ</string>
+    <string name="tool_share_sheet_more_apps">ተጨማሪ</string>
+    <string name="share_tool_message">ዛሬ ስንመለከተዉ የነበረዉ መተግብሪያ(App) በዚህ መስፈንጠሪያ በኩል ማግኘት ይችላሉ: %1$s \n\n
+
+ይህን መተግበሪያ ዌብ ላይ ለመጠቀም መስፈንጠሪያ: https://godtoolsapp.com\n\n
+
+ተጨማሪ እንነጋገር !</string>
+    <string name="share_tool_message_article">ይህን ጽሑፍ ላካፍላችሁ ወደድኩ እና ስለሱ ያለዎትን አስተያየት መስማት እፈልጋለሁ።\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">መስፈንጠሪያ አጋራ</string>
+    <string name="feature_discovery_desc_share_tool">ይህንን በመጫን ለጓደኛህ ይህንን ቡክሌት ላክ።</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">ምስል አጋራ</string>
+</resources>

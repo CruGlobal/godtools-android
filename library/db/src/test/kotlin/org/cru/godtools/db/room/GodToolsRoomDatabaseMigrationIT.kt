@@ -356,6 +356,26 @@ class GodToolsRoomDatabaseMigrationIT {
         }
     }
 
+    @Test
+    fun testMigrate22To23() {
+        val defaultLocaleQuery = "SELECT isForcedName FROM languages WHERE isForcedName = 0"
+
+        // create v22 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 22).use { db ->
+            db.execSQL("INSERT INTO languages (code) VALUES ('en')")
+            assertFailsWith<SQLException> { db.query(defaultLocaleQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 23, false, *MIGRATIONS).use { db ->
+            db.query(defaultLocaleQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(0, it.getIntOrNull(0))
+            }
+        }
+    }
+
     private fun SupportSQLiteDatabase.dumpIndices(table: String) = query("PRAGMA index_list($table)").use { it ->
         it.map { it.getString(1) }.associateWith { name ->
             query("PRAGMA index_info($name)").use { it.map { it.getString(2) }.toSet() }

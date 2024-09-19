@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">도구</string>
+    <string name="tutorial_features_tools_subhead">각 도구는 대화의 각 단계(대화 전, 대화 중, 대화 후)를 위해 만들어졌습니다.</string>
+    <string name="tutorial_features_tips_headline">도구 팁</string>
+    <string name="tutorial_features_tips_subhead">누군가 복음을 이해하고 예수님을 만나는 데 도움을 줄 때 GodTools 팁이 가이드가 되어줍니다.</string>
+    <string name="tutorial_features_live_share_headline">화면 공유</string>
+    <string name="tutorial_features_live_share_subhead">도구를 사용하여 복음에 대해 이야기할 때 다른 사람이 같이 따라갈 수 있도록 이제 원격에서 화면을 공유할 수 있습니다.</string>
+    <string name="tutorial_features_lessons_headline">수업</string>
+    <string name="tutorial_features_lessons_subhead">각 GodTools 수업에서는 하나님에 대해 실제적인 대화를 나누는 데 도움이 되는 내용을 배웁니다.</string>
+    <string name="tutorial_features_final_headline">필요할 때마다 메뉴에서 이 튜토리얼을 찾으세요.</string>
+    <string name="tutorial_features_action_continue">계속하기</string>
+    <string name="tutorial_features_action_close">튜토리얼 닫기</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">튜토리얼 보이기</string>
+    <string name="tutorial_features_banner_action_open">튜토리얼 열기</string>
+    <string name="tutorial_features_banner_action_dismiss">취소</string>
+</resources>

@@ -228,6 +228,28 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getLessonsFlow()
 
+    // region getLessonsFlowByLanguage()
+    @Test
+    fun `getLessonsFlowByLanguage()`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.LESSON)
+        val tool2 = randomTool("tool2", Tool.Type.LESSON)
+        repository.storeInitialTools(listOf(tool1, tool2))
+        languagesRepository.storeInitialLanguages(listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH)))
+
+        repository.getLessonsFlowByLanguage(Locale.ENGLISH).test {
+            assertTrue(awaitItem().isEmpty())
+
+            translationsRepository.storeInitialTranslations(
+                listOf(
+                    randomTranslation("tool1", Locale.ENGLISH),
+                    randomTranslation("tool2", Locale.FRENCH),
+                )
+            )
+            assertEquals(listOf(tool1), awaitItem())
+        }
+    }
+    // endregion getLessonsFlowByLanguage()
+
     // region toolsChangeFlow()
     @Test
     fun `toolsChangeFlow()`() = testScope.runTest {

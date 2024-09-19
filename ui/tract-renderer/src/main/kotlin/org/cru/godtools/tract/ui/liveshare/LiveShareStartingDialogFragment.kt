@@ -1,6 +1,5 @@
 package org.cru.godtools.tract.ui.liveshare
 
-import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -23,12 +22,10 @@ class LiveShareStartingDialogFragment : DialogFragment() {
         startAutoDismissObservers()
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.tract_live_share_starting)
-            .setView(R.layout.tract_live_share_dialog)
-            .create()
-    }
+    override fun onCreateDialog(savedInstanceState: Bundle?) = MaterialAlertDialogBuilder(requireContext())
+        .setTitle(R.string.tract_live_share_starting)
+        .setView(R.layout.tract_live_share_dialog)
+        .create()
 
     private fun startAutoDismissObservers() {
         // auto-dismiss dialog when we have publisherInfo

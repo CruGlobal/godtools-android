@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Skirikisha skrini yako</string>
+    <string name="tutorial_live_share_description_text">Chaguo hili litatuma kiungo cha kifaa hiki kwa rafiki. Kiungo kitakapofunguliwa kitaanzisha kipindi cha kushirikisha skrini.</string>
+    <string name="tutorial_live_share_mirrored_headline">Tukio linaloonekana</string>
+    <string name="tutorial_live_share_mirrored_text">"Unapotumia kifaa hiki kwenye simu yako, skrini ya rafiki yako pia itakuwa na mwitiko uleule. Hii inakusaidia kukitumia kifaa kwa pamoja na kwenye vifaa viwili tofauti vya kielektroniki kwa wakati mmoja.
+"</string>
+    <string name="tutorial_live_share_start_headline">Anza</string>
+    <string name="tutorial_live_share_start_text">"Tuma kiungo kwa mtu mmoja ama zaidi ili kuanzisha kipindi cha kushirikisha skrini. "</string>
+    <string name="tutorial_live_share_action_continue">Endelea</string>
+    <string name="tutorial_live_share_action_skip">Ruka</string>
+    <string name="tutorial_live_share_action_start">Shirikisha kiungo</string>
+</resources>

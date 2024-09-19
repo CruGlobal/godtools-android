@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Werkzeuge</string>
+    <string name="tutorial_features_tools_subhead">Jedes Tool wurde für eine unterschiedliche Phase des Gesprächs entwickelt – vorher, während oder nachher.</string>
+    <string name="tutorial_features_tips_headline">Tool-Tipps</string>
+    <string name="tutorial_features_tips_subhead">GodTools-Tipps helfen dir dabei, einer anderen Person das Evangelium zu erklären und Jesus näher zu bringen.</string>
+    <string name="tutorial_features_live_share_headline">Bildschirmfreigabe</string>
+    <string name="tutorial_features_live_share_subhead">Du kannst jetzt deinen Bildschirm per Fernzugriff freigeben, damit eine andere Person mit dir zusammen das Tool sehen kann, das du beim Gespräch über das Evangelium verwendest.</string>
+    <string name="tutorial_features_lessons_headline">Lektionen</string>
+    <string name="tutorial_features_lessons_subhead">In jeder Lektion von GodTools lernst du etwas, was dir dabei hilft, echte Gespräche über Gott zu führen.</string>
+    <string name="tutorial_features_final_headline">Dieses Tutorial kann über das Menü neu gestartet werden.</string>
+    <string name="tutorial_features_action_continue">Weiter</string>
+    <string name="tutorial_features_action_close">GodTools verwenden / Tutorial schließen</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Tutorial anzeigen</string>
+    <string name="tutorial_features_banner_action_open">Tutorial öffnen</string>
+    <string name="tutorial_features_banner_action_dismiss">Schließen</string>
+</resources>

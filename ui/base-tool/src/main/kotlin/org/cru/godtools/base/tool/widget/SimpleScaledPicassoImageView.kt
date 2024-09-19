@@ -17,7 +17,8 @@ class SimpleScaledPicassoImageView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
     defStyleRes: Int = 0
-) : SimplePicassoImageView(context, attrs, defStyleAttr), ScaledPicassoImageView {
+) : SimplePicassoImageView(context, attrs, defStyleAttr),
+    ScaledPicassoImageView {
     @Inject
     internal lateinit var picasso: Picasso
     override val helper = ScaleHelper(this, attrs, defStyleAttr, defStyleRes, picasso)

@@ -116,12 +116,15 @@ class LessonActivity :
     }
 
     private fun Uri.isGodToolsDeepLink() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
-        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) &&
+        pathSegments.orEmpty().size >= 5 &&
         path?.startsWith("/deeplink/tool/lesson/") == true
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
-        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "lesson"
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
+        pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" &&
+        pathSegments?.getOrNull(1) == "lesson"
     // endregion Intent Processing
 
     // region UI

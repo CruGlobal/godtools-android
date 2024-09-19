@@ -25,7 +25,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Build App
         run: ./gradlew bundle --scan
 
@@ -43,7 +43,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Run ktlint
         run: ./gradlew :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
@@ -67,7 +67,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Run Lint Checks
         run: ./gradlew lint --scan
       - name: Archive lint results
@@ -107,7 +107,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Run Unit Tests
         run: ./gradlew test verifyPaparazzi koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
       - name: Codecov
@@ -121,7 +121,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results-${{ matrix.testShard }}
-          path: "**/build/reports/tests/"
+          path: |
+            **/build/reports/tests/
+            **/build/paparazzi/failures/
 
   qa_build:
     name: Deploy QA Build
@@ -144,7 +146,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: true
       - name: Build QA Universal APK

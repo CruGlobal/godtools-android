@@ -177,8 +177,10 @@ class Tool(
     @Suppress("SENSELESS_COMPARISON")
     val isValid
         get() = !code.isNullOrEmpty() &&
-            type != null && type != Type.UNKNOWN &&
-            apiId != null && apiId != INVALID_ID
+            type != null &&
+            type != Type.UNKNOWN &&
+            apiId != null &&
+            apiId != INVALID_ID
     val totalShares get() = pendingShares + shares
 
     override fun equals(other: Any?) = when {

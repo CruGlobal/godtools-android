@@ -19,7 +19,8 @@ class TabsController private constructor(
     private val binding: ToolContentTabsBinding,
     parentController: BaseController<*>,
     tabControllerFactory: TabController.Factory
-) : BaseController<Tabs>(Tabs::class, binding.root, parentController), OnTabSelectedListener {
+) : BaseController<Tabs>(Tabs::class, binding.root, parentController),
+    OnTabSelectedListener {
     @AssistedInject
     constructor(
         @Assisted parent: ViewGroup,

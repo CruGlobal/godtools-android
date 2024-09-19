@@ -12,12 +12,15 @@ internal class LanguageEntity(
     val code: Locale,
     val name: String?,
     @ColumnInfo(defaultValue = "false")
+    val isForcedName: Boolean = false,
+    @ColumnInfo(defaultValue = "false")
     val isAdded: Boolean = false,
     val apiId: Long? = null,
 ) {
     constructor(language: Language) : this(
         code = language.code,
         name = language.name,
+        isForcedName = language.isForcedName,
         isAdded = language.isAdded,
         apiId = language.apiId,
     )
@@ -25,6 +28,7 @@ internal class LanguageEntity(
     fun toModel() = Language(
         code = code,
         name = name,
+        isForcedName = isForcedName,
         isAdded = isAdded,
         apiId = apiId,
     )

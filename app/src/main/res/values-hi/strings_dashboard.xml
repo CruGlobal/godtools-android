@@ -28,6 +28,11 @@
     <string name="nav_lessons">अध्याय</string>
     <string name="dashboard_lessons_header_title">आपके लिए बनाए गए अध्याय</string>
     <string name="dashboard_lessons_header_description">संबंध बनाने और अर्थपूर्ण वार्तालाप शुरू करने के लिए व्यावहारिक सुझाव।</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d अध्याय उपलब्ध हैं</item>
+        <item quantity="other">%1$d अध्याय उपलब्ध हैं</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">इसमें पाठ:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">पसंदीदा</string>
     <string name="dashboard_home_header_title">GodTools पर स्वागत है</string>

@@ -13,12 +13,11 @@ import org.cru.godtools.tool.cyoa.ui.controller.CardCollectionPageController
 import org.cru.godtools.tool.cyoa.ui.controller.bindController
 
 @AndroidEntryPoint
-class CyoaCardCollectionPageFragment(
-    page: String? = null
-) : CyoaPageFragment<CyoaPageCardCollectionBinding, CardCollectionPageController>(
-    R.layout.cyoa_page_card_collection,
-    page
-) {
+class CyoaCardCollectionPageFragment(page: String? = null) :
+    CyoaPageFragment<CyoaPageCardCollectionBinding, CardCollectionPageController>(
+        R.layout.cyoa_page_card_collection,
+        page
+    ) {
     override fun supportsPage(page: Page) = page is CardCollectionPage
 
     // region Controller

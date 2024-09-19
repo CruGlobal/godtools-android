@@ -5,6 +5,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import java.util.Locale
+import org.cru.godtools.model.Language
 
 @Composable
 @Preview(locale = "en", showBackground = true)
@@ -14,6 +15,10 @@ private fun LeftToRightLanguageNames() = Column {
     LanguageName(Locale.forLanguageTag("bs-BA"))
     HorizontalDivider()
     LanguageName(Locale.ENGLISH)
+    HorizontalDivider()
+    LanguageName(language = nameLanguage)
+    HorizontalDivider()
+    LanguageName(language = forcedNameLanguage)
 }
 
 @Composable
@@ -24,4 +29,20 @@ private fun RightToLeftLanguageNames() = Column {
     LanguageName(Locale.forLanguageTag("bs-BA"))
     HorizontalDivider()
     LanguageName(Locale.ENGLISH)
+    HorizontalDivider()
+    LanguageName(language = nameLanguage)
+    HorizontalDivider()
+    LanguageName(language = forcedNameLanguage)
 }
+
+private val forcedNameLanguage = Language(
+    code = Locale.ENGLISH,
+    name = "German",
+    isForcedName = true,
+)
+
+private val nameLanguage = Language(
+    code = Locale.UK,
+    name = "German",
+    isForcedName = false,
+)

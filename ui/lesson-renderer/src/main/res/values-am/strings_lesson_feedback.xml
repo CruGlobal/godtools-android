@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">ገምግም</string>
+    <string name="lesson_feedback_question_helpful">ይህ ትምህርት ለእርስዎ ጠቃሚ ነበር?</string>
+    <string name="lesson_feedback_question_helpful_yes">አዎ</string>
+    <string name="lesson_feedback_question_helpful_no">አይ</string>
+    <string name="lesson_feedback_question_readiness">መንፈሳዊ ውይይት ለመጀመር ምን ያህል ዝግጁ ነዎት?</string>
+    <string name="lesson_feedback_action_submit">አስተያይት ላክ</string>
+    <string name="lesson_feedback_action_cancel">እለፍ</string>
+</resources>

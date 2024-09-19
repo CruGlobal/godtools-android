@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
 import androidx.annotation.LayoutRes
-import org.ccci.gto.android.common.Ordered
+import org.ccci.gto.android.common.base.Ordered
 
-interface ShareItem : Parcelable, Ordered {
+interface ShareItem :
+    Parcelable,
+    Ordered {
     val shareIntent: Intent? get() = null
 
     @get:LayoutRes

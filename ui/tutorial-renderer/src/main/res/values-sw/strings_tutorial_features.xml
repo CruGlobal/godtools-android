@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Vifaa</string>
+    <string name="tutorial_features_tools_subhead">Kila kifaa kimetengenezwa kwaajili ya hatua tofauti za mazungumzo - kabla, wakati wa au baada ya mazungumzo.</string>
+    <string name="tutorial_features_tips_headline">Miongozo ya kifaa</string>
+    <string name="tutorial_features_tips_subhead">Miongozo ya GodTools inakusaidia wakati unamuelewesha mtu kuhusu Injili na kukutana na Yesu.</string>
+    <string name="tutorial_features_live_share_headline">Kushirikisha skrini</string>
+    <string name="tutorial_features_live_share_subhead">Sasa unapotumia kifaa hiki kujadili Injili, unaweza kushirikisha skrini yako hata ukiwa mbali na mtu mwingine.</string>
+    <string name="tutorial_features_lessons_headline">Masomo</string>
+    <string name="tutorial_features_lessons_subhead">"Katika kila somo la GodTools utajifunza kitu kitakachokusaidia kuwa na mazungumzo ya kweli kuhusu Mungu. "</string>
+    <string name="tutorial_features_final_headline">Utapata mafunzo haya kwenye menyu wakati wowote unapoyahitaji.</string>
+    <string name="tutorial_features_action_continue">Endelea</string>
+    <string name="tutorial_features_action_close">Funga mafunzo</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Onesha mafunzo</string>
+    <string name="tutorial_features_banner_action_open">Fungua Mafunzo</string>
+    <string name="tutorial_features_banner_action_dismiss">Funga</string>
+</resources>

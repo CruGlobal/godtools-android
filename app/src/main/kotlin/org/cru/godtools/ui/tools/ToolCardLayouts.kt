@@ -98,17 +98,28 @@ fun PreloadTool(tool: Tool) {
 fun LessonToolCard(
     toolCode: String,
     modifier: Modifier = Modifier,
+    selectedLanguage: Language? = null,
     viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
     onEvent: (ToolCardEvent) -> Unit = {},
 ) {
-    val state = viewModel.toState()
-    val tool by viewModel.tool.collectAsState()
-    val translation by viewModel.firstTranslation.collectAsState()
+    val state = viewModel.toState(language = selectedLanguage)
+    val tool by rememberUpdatedState(state.tool)
+    val language by rememberUpdatedState(state.language)
+    val languageAvailable by rememberUpdatedState(state.languageAvailable)
+    val translation by rememberUpdatedState(state.translation)
 
-    ProvideLayoutDirectionFromLocale(locale = { translation.value?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
+            onClick = {
+                onEvent(
+                    ToolCardEvent.Click(
+                        tool?.code,
+                        tool?.type,
+                        translation?.languageCode
+                    )
+                )
+            },
             elevation = toolCardElevation,
-            onClick = { onEvent(ToolCardEvent.Click(tool?.code, tool?.type, translation.value?.languageCode)) },
             modifier = modifier.fillMaxWidth()
         ) {
             ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
@@ -120,17 +131,14 @@ fun LessonToolCard(
             ) {
                 ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
 
-                val appLanguage by viewModel.appLanguage.collectAsState()
-                val appTranslation by viewModel.appTranslation.collectAsState()
-
                 ToolCardInfoContent {
                     AvailableInLanguage(
-                        language = appLanguage,
-                        translation = { appTranslation.value },
+                        language = language,
+                        available = languageAvailable,
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier
                             .align(Alignment.End)
-                            .invisibleIf { appTranslation.isInitial || appLanguage == null }
+                            .invisibleIf { !state.isLoaded || !languageAvailable }
                     )
                 }
             }
@@ -199,9 +207,9 @@ fun ToolCard(
 
     ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
+            onClick = { eventSink(ToolCard.Event.Click) },
             elevation = toolCardElevation,
             interactionSource = interactionSource,
-            onClick = { eventSink(ToolCard.Event.Click) },
             modifier = modifier
         ) {
             Box(modifier = Modifier.fillMaxWidth()) {

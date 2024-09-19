@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">ይህን ቡክሌት ከሁሉም ጋር ማጋራት ይማሩ</string>
+    <string name="tutorial_tips_learn_text">ይህንን መተግበሪያ ለሌሎች በማጋራት በራስ የመተማመን ስሜት እንዲሰማዎት የሚፈልጉትን ያህል ጠቃሚ ምክሮችን በመጠቀም ይለማመዱ።</string>
+    <string name="tutorial_tips_light_headline">የበለጠ ሚያስተምሩ ምክሮች</string>
+    <string name="tutorial_tips_light_text1">በተመረጡ ስክሪኖች ላይ የተለያዩ ምልክቶችን ታያለህ። ስለ ስክሪኑ ይዘት ለመናገር የሚረዳዎትን ጠቃሚ ምክር ለማየት ምልክቱን ይጫኑ።</string>
+    <string name="tutorial_tips_light_text2">"ምንም ጠቃሚ ምክሮች ለሌሉት ማያ ገጾች, ይዘቱን ለማንበብ እና እንደ አስፈላጊነቱ ለመወያየት እንመክራለን "</string>
+    <string name="tutorial_tips_start_headline">ምክሮቹን ያብሩ</string>
+    <string name="tutorial_tips_start_text">ጠቃሚ ምክር ሲበራ ያንን ስልጠና ጨርሰዋል። በእያንዳንዱ ውይይት ውስጥ እያንዳንዱን ጠቃሚ ምክር መጠቀም አያስፈልግዎትም.</string>
+    <string name="tutorial_tips_action_continue">ቀጥል</string>
+    <string name="tutorial_tips_action_skip">እለፍ</string>
+    <string name="tutorial_tips_action_start">ስልጠናውን ጀምር</string>
+</resources>

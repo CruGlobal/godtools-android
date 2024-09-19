@@ -26,9 +26,12 @@
       "groupName": "firebase-appdistribution"
     },
     {
+      "groupName": "firebase-crashlytics",
       "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [ "com.google.firebase:firebase-crashlytics" ],
-      "groupName": "firebase-crashlytics"
+      "matchPackagePrefixes": [ 
+        "com.google.firebase:firebase-crashlytics",
+        "com.google.firebase.crashlytics"
+      ]
     },
     {
       "matchManagers": [ "gradle" ],

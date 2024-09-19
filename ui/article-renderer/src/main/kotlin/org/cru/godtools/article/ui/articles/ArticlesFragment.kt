@@ -29,7 +29,9 @@ import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.argOrNull
 
 @AndroidEntryPoint
-class ArticlesFragment : BaseToolFragment<FragmentArticlesBinding>, ArticlesAdapter.Callbacks {
+class ArticlesFragment :
+    BaseToolFragment<FragmentArticlesBinding>,
+    ArticlesAdapter.Callbacks {
     constructor() : super(R.layout.fragment_articles)
     constructor(
         code: String,

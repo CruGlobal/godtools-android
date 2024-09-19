@@ -3,7 +3,7 @@ package org.cru.godtools.account.provider
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.flow.Flow
-import org.ccci.gto.android.common.Ordered
+import org.ccci.gto.android.common.base.Ordered
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.AccountType

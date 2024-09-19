@@ -29,6 +29,15 @@ https://godtoolsapp.com \n\n
     <string name="nav_lessons">الدروس</string>
     <string name="dashboard_lessons_header_title">الدروس المُعدة لأجلك</string>
     <string name="dashboard_lessons_header_description">أفكار عملية لبناء علاقات وبدء محادثات هادفة.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">الدروس متوفرة %1$d</item>
+        <item quantity="other">الدروس متوفرة %1$d</item>
+        <item quantity="few">الدروس متوفرة %1$d</item>
+        <item quantity="many">الدروس متوفرة %1$d</item>
+        <item quantity="two">الدروس متوفرة %1$d</item>
+        <item quantity="zero">الدروس متوفرة %1$d</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">دروس في:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">المفضلة</string>
     <string name="dashboard_home_header_title">مرحبًا بك في GodTools</string>

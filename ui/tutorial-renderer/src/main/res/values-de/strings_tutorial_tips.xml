@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Lerne, dieses Tool zu teilen</string>
+    <string name="tutorial_tips_learn_text">Nutze so viele Tipps, bis du dich sicher fühlst, dieses Tool mit anderen zu teilen.</string>
+    <string name="tutorial_tips_light_headline">Tipps für den Weg</string>
+    <string name="tutorial_tips_light_text1">Auf einigen Bildschirmen dieses Trainings siehst du eine Vielzahl von Symbolen. Drücke auf ein Symbol, um einen Tipp zu erhalten.</string>
+    <string name="tutorial_tips_light_text2">"Er hilft dir, über den Inhalt des Bildschirms zu sprechen. Wenn ein Bildschirm kein Symbol hat, dann lies einfach den Inhalt durch und bespreche den Inhalt bei Bedarf."</string>
+    <string name="tutorial_tips_start_headline">Leuchtende Tipps</string>
+    <string name="tutorial_tips_start_text">Wenn ein Tipp aufleuchtet, hast du diesen Teil des Trainings abgeschlossen. Übe mit so vielen Tipps, bis du dich sicher fühlst, das Tool zu erklären.</string>
+    <string name="tutorial_tips_action_continue">Weiter</string>
+    <string name="tutorial_tips_action_skip">überspringen</string>
+    <string name="tutorial_tips_action_start">Training starten</string>
+</resources>

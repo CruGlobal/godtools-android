@@ -28,6 +28,13 @@
     <string name="nav_lessons">Уроки</string>
     <string name="dashboard_lessons_header_title">Уроки для вас</string>
     <string name="dashboard_lessons_header_description">Практические идеи для построения отношений и начала содержательных бесед.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">Доступны %1$d Уроки</item>
+        <item quantity="other">Доступны %1$d Уроки</item>
+        <item quantity="few"></item>
+        <item quantity="many"></item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Язык уроков:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Избранное</string>
     <string name="dashboard_home_header_title">Добро пожаловать в GodTools</string>

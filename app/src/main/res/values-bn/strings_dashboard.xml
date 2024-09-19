@@ -28,6 +28,11 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
     <string name="nav_lessons">পাঠগুলি</string>
     <string name="dashboard_lessons_header_title">আপনার জন্য তৈরি পাঠগুলি</string>
     <string name="dashboard_lessons_header_description">সম্পর্ক তৈরি করার এবং অর্থপূর্ণ কথাবার্তা শুরু করার ব্যবহারিক ধারণা</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d পাঠসমূহ উপলভ্য</item>
+        <item quantity="other">%1$d পাঠসমূহ উপলভ্য</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">এগুলিতে পাঠসমূহ:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">পছন্দসই</string>
     <string name="dashboard_home_header_title">GodTools-এ স্বাগতম</string>

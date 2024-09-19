@@ -59,6 +59,7 @@ class ToolCardPresenter @Inject constructor(
 
         // App Translation
         var appTranslation: Translation? by remember { mutableStateOf(null) }
+        val appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null
         val appLanguageAvailable by remember { derivedStateOf { appTranslation != null } }
 
         // Translation
@@ -102,8 +103,12 @@ class ToolCardPresenter @Inject constructor(
             tool = tool,
             isLoaded = isLoaded,
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
+            // TODO: add support for specifying a locale for the ToolCardPresenter instead of just defaulting to the
+            //       appLocale
+            language = appLanguage,
+            languageAvailable = appLanguageAvailable,
             translation = translation,
-            appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null,
+            appLanguage = appLanguage,
             appLanguageAvailable = appLanguageAvailable,
             secondLanguage = secondLanguage,
             secondLanguageAvailable = secondLanguageAvailable,

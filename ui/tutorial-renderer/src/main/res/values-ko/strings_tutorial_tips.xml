@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">이 도구 공유 방법 배우기</string>
+    <string name="tutorial_tips_learn_text">자신 있게 이 도구를 다른 사람들에게 공유할 수 있도록 필요한 만큼 팁을 연습하세요.</string>
+    <string name="tutorial_tips_light_headline">길을 밝히는 팁</string>
+    <string name="tutorial_tips_light_text1">이 교육의 특정 화면에서는 다양한 아이콘이 표시됩니다. 각 아이콘을 눌러 화면의 내용을 이야기하는 데 도움이 되는 팁을 확인하세요.</string>
+    <string name="tutorial_tips_light_text2">"아이콘이 없는 화면의 경우, 내용을 읽고 필요에 따라 논의하세요."</string>
+    <string name="tutorial_tips_start_headline">팁 환해지게 만들기</string>
+    <string name="tutorial_tips_start_text">팁이 환해지면 해당 훈련을 완료한 것입니다. 자신 있게 도구를 설명할 수 있을 때까지 필요한 만큼 팁을 활용해 연습해 보세요.</string>
+    <string name="tutorial_tips_action_continue">계속하기</string>
+    <string name="tutorial_tips_action_skip">건너뛰기</string>
+    <string name="tutorial_tips_action_start">훈련 시작</string>
+</resources>

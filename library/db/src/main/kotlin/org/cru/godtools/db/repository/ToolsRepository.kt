@@ -23,6 +23,7 @@ interface ToolsRepository {
     fun getDownloadedToolsFlowByTypesAndLanguage(types: Collection<Tool.Type>, locale: Locale): Flow<List<Tool>>
     fun getMetaToolsFlow() = getToolsFlowByType(Tool.Type.META)
     fun getLessonsFlow() = getToolsFlowByType(Tool.Type.LESSON)
+    fun getLessonsFlowByLanguage(locale: Locale): Flow<List<Tool>>
     fun getNormalToolsFlow() = getToolsFlowByType(Tool.Type.NORMAL_TYPES)
     fun getNormalToolsFlowByLanguage(locale: Locale): Flow<List<Tool>>
     fun getFavoriteToolsFlow() = getNormalToolsFlow()

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">앱 언어</string>
+    <string name="language_settings_app_language_dialog_message">%1$s 을(를) 앱 언어로 선택했습니다. 전체 GodTools 앱 언어가 변경됩니다. 계속하시겠나요?</string>
+    <string name="language_settings_app_language_dialog_confirm">언어 변경</string>
+    <string name="language_settings_app_language_dialog_dismiss">아니요</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">언어 설정</string>
+    <string name="title_language_settings">언어 설정</string>
+    <string name="language_settings_section_app_language_heading">앱 인터페이스 언어</string>
+    <string name="language_settings_section_app_language_description">전체 앱이 표시되기 원하는 언어로 설정합니다.</string>
+    <string name="language_settings_section_offline_heading">오프라인으로 이용 가능한 도구 언어</string>
+    <string name="language_settings_section_offline_description">와이파이나 모바일 데이터 없이도 이용하려면 해당 언어로 이용 가능한 모든 도구를 다운로드하세요. 도구 내 옵션 버튼으로 도구 언어를 설정하세요.</string>
+    <string name="language_settings_section_offline_action_edit">다운로드된 언어 편집</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">언어 검색</string>
+</resources>

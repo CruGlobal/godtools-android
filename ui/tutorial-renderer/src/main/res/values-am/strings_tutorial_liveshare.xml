@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">ስክሪን ያጋሩ</string>
+    <string name="tutorial_live_share_description_text">ይህ አማራጭ ይህን ቡክሌት የሚከፍት ማስፈንጠሪያ ለጓደኛ ይልካል። ማስፈንጠሪያው ሲከፈት የስክሪን ማጋሪያ ክፍለ ጊዜ ይጀምራል።</string>
+    <string name="tutorial_live_share_mirrored_headline">የተጋራ ይዘት</string>
+    <string name="tutorial_live_share_mirrored_text">ቡክሌቱን በስልክዎ ላይ ሲጠቀሙ፣ የጓደኛዎ ማያ ገጽ በተመሳሳይ መንገድ ምላሽ ይሰጣል። ይህ በአንድ ጊዜ በ 2 ስልኮች ላይ በአንድ መተግበሪያ ውስጥ እንዲጠቀሙ ያስችልዎታል።</string>
+    <string name="tutorial_live_share_start_headline">እንጀምር</string>
+    <string name="tutorial_live_share_start_text">የስክሪን ማጋሪያ ክፍለ ጊዜ ለመጀመር ማስፈንጠሪያዉን ለአንድ ወይም ከዚያ በላይ ሰዎች ይላኩ።</string>
+    <string name="tutorial_live_share_action_continue">ቀጥል</string>
+    <string name="tutorial_live_share_action_skip">እለፍ</string>
+    <string name="tutorial_live_share_action_start">መስፈንጠሪያ አጋራ</string>
+</resources>

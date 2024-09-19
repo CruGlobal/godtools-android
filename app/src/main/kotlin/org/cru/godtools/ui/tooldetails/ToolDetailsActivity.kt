@@ -64,8 +64,10 @@ class ToolDetailsActivity : BaseActivity() {
                             goTo = { screen, delegate ->
                                 when (screen) {
                                     // TODO: move this logic into the ToolDetailsPresenter once tutorials use Circuit
-                                    is OpenToolTrainingScreen ->
+                                    is OpenToolTrainingScreen -> {
                                         launchTrainingTips(screen.tool, screen.type, screen.locale)
+                                        true
+                                    }
 
                                     else -> delegate.goTo(screen)
                                 }

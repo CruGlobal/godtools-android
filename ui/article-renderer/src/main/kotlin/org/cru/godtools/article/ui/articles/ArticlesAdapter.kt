@@ -13,10 +13,9 @@ import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.tool.article.databinding.ListItemArticleBinding
 
-class ArticlesAdapter(
-    lifecycleOwner: LifecycleOwner?,
-    private val manifest: LiveData<Manifest?>
-) : SimpleDataBindingAdapter<ListItemArticleBinding>(lifecycleOwner), Observer<List<Article>?> {
+class ArticlesAdapter(lifecycleOwner: LifecycleOwner?, private val manifest: LiveData<Manifest?>) :
+    SimpleDataBindingAdapter<ListItemArticleBinding>(lifecycleOwner),
+    Observer<List<Article>?> {
     interface Callbacks {
         fun onArticleSelected(article: Article?)
     }

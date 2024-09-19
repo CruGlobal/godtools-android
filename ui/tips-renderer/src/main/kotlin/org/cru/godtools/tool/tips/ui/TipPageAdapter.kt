@@ -18,7 +18,9 @@ internal class TipPageAdapter @AssistedInject internal constructor(
     @Assisted lifecycleOwner: LifecycleOwner,
     @Assisted private val toolState: State,
     private val controllerFactory: TipPageController.Factory
-) : SimpleDataBindingAdapter<ToolTipPageBinding>(lifecycleOwner), Observer<Tip?>, TipCallbacks {
+) : SimpleDataBindingAdapter<ToolTipPageBinding>(lifecycleOwner),
+    Observer<Tip?>,
+    TipCallbacks {
     @AssistedFactory
     interface Factory {
         fun create(lifecycleOwner: LifecycleOwner, toolState: State): TipPageAdapter

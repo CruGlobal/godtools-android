@@ -197,12 +197,15 @@ class TractActivity :
     }
 
     private fun Uri.isGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
-        HOST_GODTOOLSAPP_COM.equals(host, true) && pathSegments.orEmpty().size >= 5 &&
+        HOST_GODTOOLSAPP_COM.equals(host, true) &&
+        pathSegments.orEmpty().size >= 5 &&
         path?.startsWith("/deeplink/tool/tract/") == true
 
     private fun Uri.isCustomUriDeepLink() = scheme == SCHEME_GODTOOLS &&
-        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) && pathSegments.orEmpty().size >= 4 &&
-        pathSegments?.getOrNull(0) == "tool" && pathSegments?.getOrNull(1) == "tract"
+        HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
+        pathSegments.orEmpty().size >= 4 &&
+        pathSegments?.getOrNull(0) == "tool" &&
+        pathSegments?.getOrNull(1) == "tract"
 
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])

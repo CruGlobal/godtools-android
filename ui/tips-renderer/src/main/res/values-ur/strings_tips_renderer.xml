@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">اگلا</string>
+    <string name="tract_tips_tip_action_close">بند کریں</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">پوچھیں</string>
+    <string name="tract_tips_type_consider">غور کریں</string>
+    <string name="tract_tips_type_prepare">تیار کریں</string>
+    <string name="tract_tips_type_quote">حوالہ دیں</string>
+    <string name="tract_tips_type_tip">مشورہ</string>
+</resources>

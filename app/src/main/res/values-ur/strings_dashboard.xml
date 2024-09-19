@@ -29,6 +29,11 @@ https://knowgod.com/
     <string name="nav_lessons">اسباق</string>
     <string name="dashboard_lessons_header_title">آپ کے لئے بنائے گئے اسباق</string>
     <string name="dashboard_lessons_header_description">تعلقات استوار کرنے اور با معنی گفتگو شروع کرنے کے عملی خیالات</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">"اسباق دستیاب ہیں۔%1$d "</item>
+        <item quantity="other">"اسباق دستیاب ہیں۔%1$d "</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">اسباق در:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">پسندیدہ</string>
     <string name="dashboard_home_header_title">گاڈ ٹولزمیں خوش آمدید</string>
@@ -59,6 +64,7 @@ https://knowgod.com/
     <string name="tools_list_remove_favorite_dialog_confirm">نکال دیں</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ</string>
     <string name="tool_card_label_language_unavailable">میں دستیاب نہیں%1$s</string>
+    <string name="tool_card_accessibility_language_available">دستیاب</string>
     <string name="action_tools_about">تفصیلات</string>
     <string name="action_tools_open">کھولیں</string>
     <!-- In App Update -->

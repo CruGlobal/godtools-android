@@ -5,9 +5,9 @@ import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import com.slack.circuit.test.TestEventSink
-import kotlin.test.Ignore
 import kotlin.test.Test
 import org.cru.godtools.ui.BasePaparazziTest
+import org.junit.Assume.assumeFalse
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -29,8 +29,10 @@ class DeleteAccountLayoutPaparazziTest(
     }
 
     @Test
-    @Ignore("TODO: Disabled due to https://github.com/cashapp/paparazzi/issues/1025")
     fun `DeleteAccountLayout() - Error`() {
+        // TODO: Accessibility Tests don't currently handle dialogs
+        assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY)
+
         snapshot { DeleteAccountLayout(DeleteAccountScreen.State.Error(events)) }
     }
 }

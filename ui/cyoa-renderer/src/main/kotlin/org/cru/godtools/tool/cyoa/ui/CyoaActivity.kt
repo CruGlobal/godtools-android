@@ -96,12 +96,14 @@ class CyoaActivity :
     private inline val Uri.isGodToolsDeepLink
         get() = (scheme.equals("http", true) || scheme.equals("https", true)) &&
             HOST_GODTOOLSAPP_COM.equals(host, true) &&
-            pathSegments.size >= 5 && path?.startsWith("/deeplink/tool/cyoa/") == true
+            pathSegments.size >= 5 &&
+            path?.startsWith("/deeplink/tool/cyoa/") == true
 
     private inline val Uri.isCustomUriSchemeDeepLink
         get() = SCHEME_GODTOOLS.equals(scheme, true) &&
             HOST_GODTOOLS_CUSTOM_URI.equals(host, true) &&
-            pathSegments.size >= 4 && path?.startsWith("/tool/cyoa/") == true
+            pathSegments.size >= 4 &&
+            path?.startsWith("/tool/cyoa/") == true
     // endregion Intent Processing
 
     private fun setupBinding() {

@@ -37,42 +37,83 @@ object GodToolsTheme {
         // HACK: We are currently disabling surface tint to avoid using tonal elevation on surfaces.
         //       When we transition to using tonal elevation we can revert this back to the default value
         surfaceTint = Color.White,
-        // The following colors were automatically generated using the material 3 theme builder:
-        // https://m3.material.io/theme-builder#/custom
-        // Primary: #3ba4db
-        // Secondary: #3ba4db
-        // Neutral: #8f9193
-        primaryContainer = Color(0xffc7e7ff),
-        onPrimaryContainer = Color(0xff001e2e),
-        secondary = Color(0xff00658e),
-        onSecondary = Color(0xffffffff),
-        secondaryContainer = Color(0xffc7e7ff),
-        onSecondaryContainer = Color(0xff001e2e),
-        background = Color(0xfffcfcff),
-        surface = Color(0xfffcfcff),
-        surfaceVariant = Color(0xffdde3ea),
-        onSurfaceVariant = Color(0xff41484d),
-        outline = Color(0xff71787e),
-        // HACK: This sets the surfaceTint to what should be the primary color.
-        // surfaceTint = Color(0xff00658e),
+
+        // These are the generated colors for the light theme, any manually overridden values are commented out
+//        primary = primaryLight,
+        onPrimary = onPrimaryLight,
+        primaryContainer = primaryContainerLight,
+        onPrimaryContainer = onPrimaryContainerLight,
+        secondary = secondaryLight,
+        onSecondary = onSecondaryLight,
+        secondaryContainer = secondaryContainerLight,
+        onSecondaryContainer = onSecondaryContainerLight,
+        // HACK: we don't currently define a tertiary color, so we will just use the default colors
+//        tertiary = tertiaryLight,
+//        onTertiary = onTertiaryLight,
+//        tertiaryContainer = tertiaryContainerLight,
+//        onTertiaryContainer = onTertiaryContainerLight,
+        error = errorLight,
+        onError = onErrorLight,
+        errorContainer = errorContainerLight,
+        onErrorContainer = onErrorContainerLight,
+        background = backgroundLight,
+//        onBackground = onBackgroundLight,
+        surface = surfaceLight,
+//        onSurface = onSurfaceLight,
+        surfaceVariant = surfaceVariantLight,
+        onSurfaceVariant = onSurfaceVariantLight,
+        outline = outlineLight,
+        outlineVariant = outlineVariantLight,
+        scrim = scrimLight,
+        inverseSurface = inverseSurfaceLight,
+        inverseOnSurface = inverseOnSurfaceLight,
+        inversePrimary = inversePrimaryLight,
+        surfaceDim = surfaceDimLight,
+        surfaceBright = surfaceBrightLight,
+        surfaceContainerLowest = surfaceContainerLowestLight,
+        surfaceContainerLow = surfaceContainerLowLight,
+        surfaceContainer = surfaceContainerLight,
+        surfaceContainerHigh = surfaceContainerHighLight,
+        surfaceContainerHighest = surfaceContainerHighestLight,
     )
 
     internal val darkColorScheme = darkColorScheme(
-        primary = Color(0xff83cfff),
-        onPrimary = Color(0xff00344c),
-        primaryContainer = Color(0xff004c6c),
-        onPrimaryContainer = Color(0xffc7e7ff),
-        secondary = Color(0xff83cfff),
-        onSecondary = Color(0xff00344c),
-        secondaryContainer = Color(0xff004c6c),
-        onSecondaryContainer = Color(0xffc7e7ff),
-        background = Color(0xff191c1e),
-        onBackground = Color(0xffe2e2e5),
-        surface = Color(0xff191c1e),
-        onSurface = Color(0xffe2e2e5),
-        surfaceVariant = Color(0xff41484d),
-        onSurfaceVariant = Color(0xffc1c7ce),
-        outline = Color(0xff8b9198)
+        primary = primaryDark,
+        onPrimary = onPrimaryDark,
+        primaryContainer = primaryContainerDark,
+        onPrimaryContainer = onPrimaryContainerDark,
+        secondary = secondaryDark,
+        onSecondary = onSecondaryDark,
+        secondaryContainer = secondaryContainerDark,
+        onSecondaryContainer = onSecondaryContainerDark,
+        // HACK: we don't currently define a tertiary color, so we will just use the default colors
+//        tertiary = tertiaryDark,
+//        onTertiary = onTertiaryDark,
+//        tertiaryContainer = tertiaryContainerDark,
+//        onTertiaryContainer = onTertiaryContainerDark,
+        error = errorDark,
+        onError = onErrorDark,
+        errorContainer = errorContainerDark,
+        onErrorContainer = onErrorContainerDark,
+        background = backgroundDark,
+        onBackground = onBackgroundDark,
+        surface = surfaceDark,
+        onSurface = onSurfaceDark,
+        surfaceVariant = surfaceVariantDark,
+        onSurfaceVariant = onSurfaceVariantDark,
+        outline = outlineDark,
+        outlineVariant = outlineVariantDark,
+        scrim = scrimDark,
+        inverseSurface = inverseSurfaceDark,
+        inverseOnSurface = inverseOnSurfaceDark,
+        inversePrimary = inversePrimaryDark,
+        surfaceDim = surfaceDimDark,
+        surfaceBright = surfaceBrightDark,
+        surfaceContainerLowest = surfaceContainerLowestDark,
+        surfaceContainerLow = surfaceContainerLowDark,
+        surfaceContainer = surfaceContainerDark,
+        surfaceContainerHigh = surfaceContainerHighDark,
+        surfaceContainerHighest = surfaceContainerHighestDark,
     )
 
     internal val typography = Typography().run {
@@ -83,7 +124,7 @@ object GodToolsTheme {
         )
     }
 
-    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { true }
+    internal val LocalLightColorSchemeActive = staticCompositionLocalOf { false }
 
     val isLightColorSchemeActive: Boolean
         @Composable

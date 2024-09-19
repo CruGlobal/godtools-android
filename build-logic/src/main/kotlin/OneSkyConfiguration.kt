@@ -26,15 +26,20 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
         projectId = 253275
 
         downloadLanguages = listOf(
+            "am",
             "ar",
             "bn",
+            "de",
             "es",
             "fr",
             "hi",
             "id",
+            "ja",
+            "ko",
             "lv",
             "pt",
             "ru",
+            "sw",
             "ur",
             "vi",
             "zh-CN",

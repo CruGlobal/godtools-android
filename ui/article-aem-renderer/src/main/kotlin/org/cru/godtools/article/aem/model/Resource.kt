@@ -23,9 +23,7 @@ class Resource(@field:PrimaryKey val uri: Uri) {
     /**
      * @return true if this resource needs to be downloaded
      */
-    fun needsDownload(): Boolean {
-        return localFileName == null || dateDownloaded == null
-    }
+    fun needsDownload() = localFileName == null || dateDownloaded == null
 
     suspend fun getLocalFile(fs: FileSystem) = localFileName?.let { fs.file(it) }
     suspend fun getInputStream(fs: FileSystem) = getLocalFile(fs)?.inputStream()

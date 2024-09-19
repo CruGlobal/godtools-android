@@ -216,7 +216,8 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
                 LoadingState.NOT_FOUND,
                 LoadingState.INVALID_TYPE,
                 LoadingState.OFFLINE -> availableLocales.firstOrNull {
-                    loadingState[it] != LoadingState.NOT_FOUND && loadingState[it] != LoadingState.INVALID_TYPE &&
+                    loadingState[it] != LoadingState.NOT_FOUND &&
+                        loadingState[it] != LoadingState.INVALID_TYPE &&
                         loadingState[it] != LoadingState.OFFLINE
                 }?.let { activeLocale.value = it }
                 else -> Unit

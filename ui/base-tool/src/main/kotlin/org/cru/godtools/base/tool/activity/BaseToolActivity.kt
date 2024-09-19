@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.Ordered
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.observe
+import org.ccci.gto.android.common.base.Ordered
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED

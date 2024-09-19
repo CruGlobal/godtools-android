@@ -21,11 +21,11 @@ fun YouTubePlayer(
     modifier: Modifier = Modifier,
     autoPlay: Boolean = false,
     recue: Boolean = false,
-    onPlaybackEnded: () -> Unit = {},
+    onPlaybackEnd: () -> Unit = {},
 ) {
     val videoId by rememberUpdatedState(videoId)
     val autoPlay by rememberUpdatedState(autoPlay)
-    val onPlaybackEnded by rememberUpdatedState(onPlaybackEnded)
+    val onPlaybackEnd by rememberUpdatedState(onPlaybackEnd)
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -38,7 +38,7 @@ fun YouTubePlayer(
                 addYouTubePlayerListener(tracker)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-                        if (state == PlayerConstants.PlayerState.ENDED) onPlaybackEnded()
+                        if (state == PlayerConstants.PlayerState.ENDED) onPlaybackEnd()
                     }
                 })
             }

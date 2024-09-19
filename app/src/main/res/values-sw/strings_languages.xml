@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Lugha ya Programu</string>
+    <string name="language_settings_app_language_dialog_message">Umechagua %1$s kama lugha ya programu yako. Hii itabadilisha lugha nzima ya programu ya GodTools. Una uhakika?</string>
+    <string name="language_settings_app_language_dialog_confirm">Badili lugha</string>
+    <string name="language_settings_app_language_dialog_dismiss">Sio lazima</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">Mipangilio ya Lugha</string>
+    <string name="title_language_settings">Mipangilio ya Lugha</string>
+    <string name="language_settings_section_app_language_heading">Lugha ya kiolesura cha Programu</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$,d Lugha zinazopatikana</item>
+        <item quantity="other">%1$,d Lugha zinazopatikana</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Chagua lugha ambayo ungependa programu nzima ioneshwe kwayo.</string>
+    <string name="language_settings_section_offline_heading">Lugha za kifaa zinazopatikana bila ya mtandao</string>
+    <string name="language_settings_section_offline_description">"Pakua vifaa vyote kwa lugha moja ili viweze kupatikana hata kama huna huduma ya WiFi au mtandao wa kwenye simu. Weka lugha ya kifaa kupitia kitufe cha chaguo ndani ya kifaa hicho. "</string>
+    <string name="language_settings_section_offline_action_edit">Hariri lugha zilizopakuliwa</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Tafuta lugha</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d Vifaa vinavyopatikana</item>
+        <item quantity="other">%1$d Vifaa vinavyopatikana</item>
+    </plurals>
+</resources>

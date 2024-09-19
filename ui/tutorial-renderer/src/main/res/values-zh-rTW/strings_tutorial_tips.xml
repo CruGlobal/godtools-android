@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">如何分享此工具的學習指南</string>
+    <string name="tutorial_tips_learn_text">盡量練習使用最多的技巧，讓您自信地向其他人分享此工具。</string>
+    <string name="tutorial_tips_light_headline">輔助解說的螢幕提示</string>
+    <string name="tutorial_tips_light_text1">在本次訓練的螢幕畫面上，您會看到不同的圖示。逐一點按每個圖示，即可顯示提示，幫助您與別人討論畫面的內容。</string>
+    <string name="tutorial_tips_light_text2">"如果螢幕沒有圖示亮起，則只需閱讀內容並根據需要進行討論。"</string>
+    <string name="tutorial_tips_start_headline">提示亮起</string>
+    <string name="tutorial_tips_start_text">提示亮起就表示您完成了該部分的訓練。盡量練習使用最多的技巧，讓您自信地向其他人解說此工具。</string>
+    <string name="tutorial_tips_action_continue">繼續</string>
+    <string name="tutorial_tips_action_skip">跳過</string>
+    <string name="tutorial_tips_action_start">開始訓練</string>
+</resources>

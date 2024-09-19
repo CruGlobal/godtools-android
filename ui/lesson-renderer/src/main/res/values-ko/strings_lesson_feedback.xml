@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">리뷰</string>
+    <string name="lesson_feedback_question_helpful">수업이 유용했나요?</string>
+    <string name="lesson_feedback_question_helpful_yes">네</string>
+    <string name="lesson_feedback_question_helpful_no">아니요</string>
+    <string name="lesson_feedback_question_readiness">영적인 대화를 위해 얼마나 준비된 것 같나요?</string>
+    <string name="lesson_feedback_action_submit">피드백 제출</string>
+    <string name="lesson_feedback_action_cancel">넘어가기</string>
+</resources>

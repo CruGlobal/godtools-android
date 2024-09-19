@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Aktivität</string>
+    <string name="account_joined">Beigetreten %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">Konto einrichten</string>
+    <string name="account_create_description">Richte ein Konto ein, damit du immer echte Geschichten, Ermutigung und praktische Tipps zur Hand hast.</string>
+    <string name="account_login_heading">Anmelden</string>
+    <string name="account_login_description">Logge dich in dein Konto ein, damit du echte Geschichten, Ermutigung und praktische Tipps zur Hand hast.</string>
+    <string name="account_error_user_already_exists">Benutzerkonto bereits vorhanden.</string>
+    <string name="account_error_user_not_found">Benutzerkonto kann nicht gefunden werden.</string>
+    <string name="account_error_unknown">Fehler beim Einloggen.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Konto löschen</string>
+    <string name="account_delete_heading">Gehe nicht so schnell</string>
+    <string name="account_delete_description">Wenn du dein Konto löschst, wirst du keinen Zugriff mehr auf deine beliebten Tools oder deine Kontoaktivität haben.</string>
+    <string name="account_delete_action_delete">Mein Konto löschen</string>
+    <string name="account_delete_action_cancel">Mein Konto beibehalten</string>
+    <string name="account_delete_error">Beim Löschen deines Kontos ist ein Fehler aufgetreten. Stelle sicher, dass du online bist, oder versuche es später noch einmal.</string>
+    <string name="account_delete_error_dismiss">OK</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">Aktivität</string>
+    <string name="account_activity_header">Deine Aktivität</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Tool wird geöffnet</item>
+        <item quantity="other">Tool wird geöffnet</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Abgeschlossene Lektionen</item>
+        <item quantity="other">Abgeschlossene Lektionen</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Bildschirmfreigaben</item>
+        <item quantity="other">Bildschirmfreigaben</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Geteilten Link</item>
+        <item quantity="other">Geteilten Links</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Verwendete Sprachen</item>
+        <item quantity="other">Verwendete Sprachen</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Sitzungen</item>
+        <item quantity="other">Sitzungen</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Deine Badges</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d Tools geöffnet</item>
+        <item quantity="other">%1$,d Tools geöffnet</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">%1$,d Lektionen abgeschlossen</item>
+        <item quantity="other">%1$,d Lektionen abgeschlossen</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d Artikel geöffnet</item>
+        <item quantity="other">%1$,d Artikel geöffnet</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d Bilder geteilt</item>
+        <item quantity="other">%1$,d Bilder geteilt</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">%1$,d Übungstipps abgeschlossen</item>
+        <item quantity="other">%1$,d Übungstipps abgeschlossen</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Globale Aktivität</string>
+    <string name="profile_global_activity_heading">%1$s Globale Aktivität</string>
+    <string name="profile_activity_unique_users">Einmalige Benutzer</string>
+    <string name="profile_activity_gospel_presentations">Präsentationen des Evangeliums</string>
+    <string name="profile_activity_sessions">Sitzungen</string>
+    <string name="profile_activity_countries">Länder</string>
+</resources>
