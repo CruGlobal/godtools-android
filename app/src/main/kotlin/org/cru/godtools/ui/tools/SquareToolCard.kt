@@ -92,7 +92,6 @@ fun SquareToolCard(
     ProvideLayoutDirectionFromLocale(locale = { state.translation?.languageCode }) {
         ElevatedCard(
             onClick = { eventSink(ToolCard.Event.Click) },
-            colors = toolCardColors,
             elevation = toolCardElevation,
             modifier = modifier.width(189.dp)
         ) {

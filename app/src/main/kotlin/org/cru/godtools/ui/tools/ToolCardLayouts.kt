@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.elevatedCardElevation
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.LocalContentColor
@@ -52,12 +51,6 @@ internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
 
 internal val toolViewModels: ToolViewModels @Composable get() = viewModel()
 
-internal val toolCardColors @Composable get() = CardDefaults.elevatedCardColors(
-    containerColor = when {
-        GodToolsTheme.isLightColorSchemeActive -> MaterialTheme.colorScheme.background
-        else -> Color.Unspecified
-    }
-)
 internal val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
 internal val ToolCard.State.toolNameStyle: TextStyle
@@ -126,7 +119,6 @@ fun LessonToolCard(
                     )
                 )
             },
-            colors = toolCardColors,
             elevation = toolCardElevation,
             modifier = modifier.fillMaxWidth()
         ) {
@@ -216,7 +208,6 @@ fun ToolCard(
     ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
         ElevatedCard(
             onClick = { eventSink(ToolCard.Event.Click) },
-            colors = toolCardColors,
             elevation = toolCardElevation,
             interactionSource = interactionSource,
             modifier = modifier

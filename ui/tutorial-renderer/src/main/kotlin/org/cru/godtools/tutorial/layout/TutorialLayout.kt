@@ -2,7 +2,6 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import kotlinx.coroutines.launch
@@ -33,14 +33,19 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAc
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 
+// HACK: we are overriding the background color to be pure white because the animations assume the background is white
+private val tutorialBackgroundColor
+    @Composable
+    get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
+
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
@@ -71,7 +76,9 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
                     .wrapContentSize()
                     .invisibleIf { !indicatorVisible }
             )
-        }
+        },
+        containerColor = tutorialBackgroundColor,
+        contentColor = MaterialTheme.colorScheme.onBackground
     ) { insets ->
         HorizontalPager(
             key = { pages[it] },
@@ -120,6 +127,7 @@ private inline fun TutorialAppBar(
         }
     },
     colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = tutorialBackgroundColor,
         navigationIconContentColor = MaterialTheme.colorScheme.primary,
         actionIconContentColor = MaterialTheme.colorScheme.primary
     ),
