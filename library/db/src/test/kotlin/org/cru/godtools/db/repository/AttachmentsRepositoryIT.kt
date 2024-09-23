@@ -1,6 +1,7 @@
 package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -8,6 +9,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -20,11 +22,17 @@ abstract class AttachmentsRepositoryIT {
     abstract val repository: AttachmentsRepository
     abstract val toolsRepository: ToolsRepository
 
+    private val tool = randomTool("tool")
+    private val tool2 = randomTool("tool2")
+
+    @BeforeTest
+    fun createTools() = runBlocking { toolsRepository.storeToolsFromSync(setOf(tool, tool2)) }
+
     @Test
     fun `findAttachment()`() = testScope.runTest {
         assertNull(repository.findAttachment(1))
 
-        val attachment = Attachment().apply {
+        val attachment = Attachment(tool = tool).apply {
             id = 1
             filename = "test.ext"
         }
@@ -34,7 +42,7 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `findAttachmentFlow()`() = testScope.runTest {
-        val attachment = Attachment().apply {
+        val attachment = Attachment(tool = tool).apply {
             id = 1
             filename = "test.ext"
         }
@@ -51,12 +59,12 @@ abstract class AttachmentsRepositoryIT {
     fun `getAttachments()`() = testScope.runTest {
         repository.storeInitialAttachments(
             listOf(
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 1
                     filename = "name1.bin"
                     isDownloaded = true
                 },
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 2
                     filename = "name2.bin"
                 }
@@ -80,7 +88,7 @@ abstract class AttachmentsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val attachment = Attachment().apply {
+            val attachment = Attachment(tool = tool).apply {
                 id = 1
                 filename = "name1.bin"
                 isDownloaded = false
@@ -100,7 +108,7 @@ abstract class AttachmentsRepositoryIT {
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
         repository.storeInitialAttachments(
             listOf(
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 1
                     isDownloaded = false
                 }
@@ -121,8 +129,6 @@ abstract class AttachmentsRepositoryIT {
     // region storeInitialAttachments()
     @Test
     fun `storeInitialAttachments() - Don't replace already existing attachments`() = testScope.runTest {
-        val tool = randomTool("tool")
-        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) { filename = "sync.bin" }
         repository.storeAttachmentsFromSync(tool, listOf(attachment))
 
@@ -132,13 +138,20 @@ abstract class AttachmentsRepositoryIT {
             assertEquals("sync.bin", it.filename)
         }
     }
+
+    @Test
+    fun `storeInitialAttachments() - Ignore attachments for tools that don't exist`() = testScope.runTest {
+        val missingTool = randomTool("missing")
+        val attachment = Attachment(tool = missingTool)
+
+        repository.storeInitialAttachments(listOf(attachment))
+        assertNull(repository.findAttachment(attachment.id))
+    }
     // endregion storeInitialAttachments()
 
     // region storeAttachmentsFromSync()
     @Test
     fun `storeAttachmentsFromSync() - Update existing attachment`() = testScope.runTest {
-        val tool = randomTool("tool")
-        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "initial.ext"
             sha256 = "initial"
@@ -161,8 +174,6 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `storeAttachmentsFromSync() - Don't overwrite downloaded flag`() = testScope.runTest {
-        val tool = randomTool("tool")
-        toolsRepository.storeToolsFromSync(setOf(tool))
         val attachment = Attachment(tool = tool) {
             filename = "file.ext"
             sha256 = "file"
@@ -178,16 +189,14 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `storeAttachmentsFromSync() - remove stale attachments`() = testScope.runTest {
-        val tool1 = randomTool("tool1")
-        val tool2 = randomTool("tool2")
-        val attachment = Attachment(tool = tool1)
-        val attachmentStale = Attachment(tool = tool1)
-        val attachmentNew = Attachment(tool = tool1)
+        val attachment = Attachment(tool = tool)
+        val attachmentStale = Attachment(tool = tool)
+        val attachmentNew = Attachment(tool = tool)
         val attachmentOtherTool = Attachment(tool = tool2)
-        toolsRepository.storeToolsFromSync(listOf(tool1, tool2))
+        toolsRepository.storeToolsFromSync(listOf(tool, tool2))
         repository.storeInitialAttachments(listOf(attachment, attachmentStale, attachmentOtherTool))
 
-        repository.storeAttachmentsFromSync(tool1, listOf(attachment, attachmentNew))
+        repository.storeAttachmentsFromSync(tool, listOf(attachment, attachmentNew))
         assertNotNull(repository.getAttachments()) {
             assertEquals(3, it.size)
             assertEquals(setOf(attachment.id, attachmentNew.id, attachmentOtherTool.id), it.map { it.id }.toSet())
@@ -198,16 +207,13 @@ abstract class AttachmentsRepositoryIT {
     // region deleteAttachmentsFor()
     @Test
     fun `deleteAttachmentsFor()`() = testScope.runTest {
-        val tool1 = randomTool("tool1")
-        val tool2 = randomTool("tool2")
-        toolsRepository.storeToolsFromSync(setOf(tool1, tool2))
         val attachments = listOf(
-            Attachment(tool = tool1),
+            Attachment(tool = tool),
             Attachment(tool = tool2)
         )
         repository.storeInitialAttachments(attachments)
 
-        repository.deleteAttachmentsFor(tool1)
+        repository.deleteAttachmentsFor(tool)
         assertNotNull(repository.getAttachments()) {
             assertEquals(1, it.size)
             assertEquals(attachments[1].id, it[0].id)

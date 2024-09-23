@@ -79,6 +79,8 @@ class Tool(
     defaultVariantCode: String? = null,
     @JsonApiId
     val apiId: Long? = null,
+    @JsonApiAttribute(JSON_ATTACHMENTS)
+    val apiAttachments: List<Attachment>? = null,
     @JsonApiAttribute(JSON_LATEST_TRANSLATIONS)
     val translations: List<Translation>? = null,
     @JsonApiIgnore
@@ -171,8 +173,6 @@ class Tool(
 
     @JsonApiAttribute(JSON_INITIAL_FAVORITES_PRIORITY)
     val initialFavoritesPriority: Int? = null
-    @JsonApiAttribute(JSON_ATTACHMENTS)
-    val attachments: List<Attachment>? = null
 
     @Suppress("SENSELESS_COMPARISON")
     val isValid
@@ -266,6 +266,7 @@ fun randomTool(
     metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
+    apiAttachments: List<Attachment>? = null,
     changedFieldsStr: String = setOf(ATTR_IS_FAVORITE).filter { Random.nextBoolean() }.joinToString(","),
 ) = Tool(
     code = code,
@@ -289,5 +290,6 @@ fun randomTool(
     metatoolCode = metatoolCode,
     defaultVariantCode = defaultVariantCode,
     apiId = apiId,
+    apiAttachments = apiAttachments,
     changedFieldsStr = changedFieldsStr,
 )
