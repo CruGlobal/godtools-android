@@ -138,6 +138,15 @@ abstract class AttachmentsRepositoryIT {
             assertEquals("sync.bin", it.filename)
         }
     }
+
+    @Test
+    fun `storeInitialAttachments() - Ignore attachments for tools that don't exist`() = testScope.runTest {
+        val missingTool = randomTool("missing")
+        val attachment = Attachment(tool = missingTool)
+
+        repository.storeInitialAttachments(listOf(attachment))
+        assertNull(repository.findAttachment(attachment.id))
+    }
     // endregion storeInitialAttachments()
 
     // region storeAttachmentsFromSync()

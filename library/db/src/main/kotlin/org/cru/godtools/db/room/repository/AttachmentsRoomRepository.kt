@@ -26,8 +26,11 @@ internal abstract class AttachmentsRoomRepository(private val db: GodToolsRoomDa
     override suspend fun updateAttachmentDownloaded(id: Long, isDownloaded: Boolean) =
         dao.updateAttachmentDownloaded(id, isDownloaded)
 
-    override suspend fun storeInitialAttachments(attachments: Collection<Attachment>) =
-        dao.insertOrIgnoreAttachments(attachments.map { AttachmentEntity(it) })
+    @Transaction
+    override suspend fun storeInitialAttachments(attachments: Collection<Attachment>) {
+        val tools = db.toolsDao.getTools().mapTo(mutableSetOf()) { it.code }
+        dao.insertOrIgnoreAttachments(attachments.filter { it.toolCode in tools }.map { AttachmentEntity(it) })
+    }
 
     // region Sync Methods
     @Transaction
