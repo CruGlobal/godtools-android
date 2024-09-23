@@ -32,7 +32,7 @@ abstract class AttachmentsRepositoryIT {
     fun `findAttachment()`() = testScope.runTest {
         assertNull(repository.findAttachment(1))
 
-        val attachment = Attachment().apply {
+        val attachment = Attachment(tool = tool).apply {
             id = 1
             filename = "test.ext"
         }
@@ -42,7 +42,7 @@ abstract class AttachmentsRepositoryIT {
 
     @Test
     fun `findAttachmentFlow()`() = testScope.runTest {
-        val attachment = Attachment().apply {
+        val attachment = Attachment(tool = tool).apply {
             id = 1
             filename = "test.ext"
         }
@@ -59,12 +59,12 @@ abstract class AttachmentsRepositoryIT {
     fun `getAttachments()`() = testScope.runTest {
         repository.storeInitialAttachments(
             listOf(
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 1
                     filename = "name1.bin"
                     isDownloaded = true
                 },
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 2
                     filename = "name2.bin"
                 }
@@ -88,7 +88,7 @@ abstract class AttachmentsRepositoryIT {
             runCurrent()
             expectMostRecentItem()
 
-            val attachment = Attachment().apply {
+            val attachment = Attachment(tool = tool).apply {
                 id = 1
                 filename = "name1.bin"
                 isDownloaded = false
@@ -108,7 +108,7 @@ abstract class AttachmentsRepositoryIT {
     fun `updateAttachmentDownloaded()`() = testScope.runTest {
         repository.storeInitialAttachments(
             listOf(
-                Attachment().apply {
+                Attachment(tool = tool).apply {
                     id = 1
                     isDownloaded = false
                 }
