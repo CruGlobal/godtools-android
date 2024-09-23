@@ -10,17 +10,21 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import java.io.ByteArrayInputStream
 import java.util.Locale
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
+import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
@@ -40,6 +44,9 @@ class TasksTest {
     private val settings: Settings = mockk {
         every { appLanguage } returns Locale("x")
     }
+    private val attachmentsRepository: AttachmentsRepository = mockk {
+        coEvery { getAttachments() } returns emptyList()
+    }
     private val toolsRepository: ToolsRepository = mockk(relaxUnitFun = true) {
         coEvery { getNormalTools() } returns emptyList()
     }
@@ -47,7 +54,7 @@ class TasksTest {
 
     private val tasks = Tasks(
         context,
-        mockk(),
+        attachmentsRepository = attachmentsRepository,
         downloadManager,
         jsonApiConverter,
         languagesRepository = mockk(),
@@ -101,4 +108,33 @@ class TasksTest {
         confirmVerified(toolsRepository)
     }
     // endregion initFavoriteTools()
+
+    // region loadBundledAttachments()
+    private val storedAttachments = slot<Collection<Attachment>>()
+
+    @Test
+    fun `loadBundledAttachments()`() = runTest {
+        val tools = Array(5) {
+            randomTool(type = Tool.Type.TRACT, apiId = it.toLong(), apiAttachments = List(5) { Attachment() })
+        }
+        every { jsonApiConverter.fromJson(any(), Tool::class.java) } returns JsonApiObject.of(*tools)
+        coEvery { attachmentsRepository.storeInitialAttachments(capture(storedAttachments)) } just Runs
+
+        tasks.loadBundledAttachments(tasks.bundledData())
+        coVerifyAll {
+            attachmentsRepository.getAttachments()
+            attachmentsRepository.storeInitialAttachments(any())
+        }
+        assertEquals(25, storedAttachments.captured.size)
+    }
+
+    @Test
+    fun `loadBundledAttachments() - Already Ran - Has attachments`() = runTest {
+        val attachments = List(5) { Attachment() }
+        coEvery { attachmentsRepository.getAttachments() } returns attachments
+
+        tasks.loadBundledAttachments(tasks.bundledData())
+        coVerifyAll { attachmentsRepository.getAttachments() }
+    }
+    // endregion loadBundledAttachments()
 }
