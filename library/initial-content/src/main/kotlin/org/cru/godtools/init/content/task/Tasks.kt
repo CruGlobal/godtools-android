@@ -89,7 +89,7 @@ internal class Tasks @Inject constructor(
     }
 
     suspend fun loadBundledAttachments(data: BundledData) {
-        attachmentsRepository.storeInitialAttachments(data.getTools().flatMap { it.attachments.orEmpty() })
+        attachmentsRepository.storeInitialAttachments(data.getTools().flatMap { it.apiAttachments.orEmpty() })
     }
 
     suspend fun loadBundledTranslations(data: BundledData) {

@@ -39,7 +39,7 @@ class ToolTest {
         assertEquals(Tool.DEFAULT_DEFAULT_LOCALE, tool.defaultLocale)
         assertEquals(10, tool.defaultOrder)
         assertEquals(1L, tool.apiId)
-        assertThat(tool.attachments, hasSize(3))
+        assertThat(tool.apiAttachments, hasSize(3))
         assertThat(tool.translations, hasSize(2))
     }
 
