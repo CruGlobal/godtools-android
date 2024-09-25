@@ -106,6 +106,7 @@ android {
         }
     }
     bundle {
+        density.enableSplit = false
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
