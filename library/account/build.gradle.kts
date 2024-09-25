@@ -1,5 +1,6 @@
 plugins {
     id("godtools.library-conventions")
+    id("kotlin-parcelize")
     alias(libs.plugins.ksp)
 }
 
