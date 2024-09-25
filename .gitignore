@@ -14,6 +14,9 @@ captures/
 out/
 local.properties
 
+# Kotlin project ignores
+.kotlin/
+
 # Fabric/Crashlytics ignores
 com_crashlytics_export_strings.xml
 crashlytics-build.properties
