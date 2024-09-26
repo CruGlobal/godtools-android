@@ -29,6 +29,7 @@ import org.ccci.gto.android.common.retrofit2.converter.LocaleConverterFactory
 import org.ccci.gto.android.common.scarlet.ReferenceLifecycle
 import org.ccci.gto.android.common.scarlet.actioncable.ActionCableMessageAdapterFactory
 import org.ccci.gto.android.common.scarlet.actioncable.okhttp3.ActionCableRequestFactory
+import org.ccci.gto.android.common.scarlet.forceDefaultPlatform
 import org.cru.godtools.api.model.AuthToken
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.api.model.PublisherInfo
@@ -170,6 +171,7 @@ object ApiModule {
         okhttp: OkHttpClient,
         referenceLifecycle: ReferenceLifecycle,
     ) = Scarlet.Builder()
+        .forceDefaultPlatform()
         .webSocketFactory(okhttp.newWebSocketFactory(ActionCableRequestFactory("${baseUrl}cable")))
         .addMessageAdapterFactory(
             ActionCableMessageAdapterFactory.Builder()
