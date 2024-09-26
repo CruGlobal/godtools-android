@@ -76,7 +76,7 @@ private fun AccountActivity(activity: UserActivity, modifier: Modifier = Modifie
         ) {
             AccountActivityItem(
                 label = pluralStringResource(R.plurals.account_activity_screen_shares, activity.screenShares),
-                icon = painterResource(org.cru.godtools.tool.tract.R.drawable.ic_tract_live_share),
+                icon = painterResource(org.cru.godtools.tool.R.drawable.ic_tract_live_share),
                 count = activity.screenShares,
                 colors = UserActivity.Colors.screenShares,
                 modifier = Modifier.weight(1f)
