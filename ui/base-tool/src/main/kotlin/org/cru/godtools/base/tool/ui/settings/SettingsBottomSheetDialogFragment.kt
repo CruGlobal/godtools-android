@@ -19,10 +19,10 @@ import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.R
-import org.cru.godtools.tool.databinding.ToolOptionSheetBinding
+import org.cru.godtools.tool.databinding.ToolSettingsSheetBinding
 
-abstract class ToolOptionsSettingsBottomSheetDialogFragment :
-    BindingBottomSheetDialogFragment<ToolOptionSheetBinding>(R.layout.tool_option_sheet),
+abstract class SettingsBottomSheetDialogFragment :
+    BindingBottomSheetDialogFragment<ToolSettingsSheetBinding>(R.layout.tool_settings_sheet),
     ToolOptionsSheetCallbacks {
 
     // region Lifecycle
@@ -31,7 +31,7 @@ abstract class ToolOptionsSettingsBottomSheetDialogFragment :
         setupDataModel()
     }
 
-    override fun onBindingCreated(binding: ToolOptionSheetBinding, savedInstanceState: Bundle?) {
+    override fun onBindingCreated(binding: ToolSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
         binding.tool = activityDataModel.tool
         binding.activeManifest = activityDataModel.manifest.asLiveData()
@@ -70,7 +70,7 @@ abstract class ToolOptionsSettingsBottomSheetDialogFragment :
     // endregion Data Model
 
     // region UI
-    private fun setupLanguageViews(binding: ToolOptionSheetBinding) {
+    private fun setupLanguageViews(binding: ToolSettingsSheetBinding) {
         binding.languagePrimaryDropdown.apply {
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
@@ -92,7 +92,7 @@ abstract class ToolOptionsSettingsBottomSheetDialogFragment :
         }
     }
 
-    private fun setupShareables(binding: ToolOptionSheetBinding) {
+    private fun setupShareables(binding: ToolSettingsSheetBinding) {
         val adapter = ShareablesAdapter(viewLifecycleOwner, this)
         activityDataModel.activeManifest.observe(viewLifecycleOwner) { adapter.shareables = it?.shareables }
         binding.shareables.adapter = adapter

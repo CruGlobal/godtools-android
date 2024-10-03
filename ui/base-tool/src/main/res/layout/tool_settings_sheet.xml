@@ -45,7 +45,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:text="@string/tract_settings_title"
-            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Title"
+            android:textAppearance="@style/TextAppearance.GodTools.Tool.Settings.Title"
             app:layout_constraintBottom_toTopOf="@id/actions"
             app:layout_constraintEnd_toStartOf="@id/margin_end"
             app:layout_constraintStart_toEndOf="@id/margin_start"
@@ -75,13 +75,13 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action_share"
-            style="@style/Widget.GodTools.Tract.Settings.Action"
+            style="@style/Widget.GodTools.Tool.Settings.Action"
             android:background="@color/gt_blue"
             android:onClick="@{() -> callbacks.shareLink()}" />
 
         <ImageView
             android:id="@+id/action_share_icon"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Icon"
             android:padding="4dp"
             android:src="@drawable/ic_share"
             app:layout_constraintBottom_toTopOf="@id/action_share_label"
@@ -93,7 +93,7 @@
 
         <TextView
             android:id="@+id/action_share_label"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/tract_settings_action_share"
@@ -113,13 +113,13 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action_share_screen"
-            style="@style/Widget.GodTools.Tract.Settings.Action"
+            style="@style/Widget.GodTools.Tool.Settings.Action"
             android:background="@color/gray_F5"
             android:onClick="@{() -> callbacks.shareScreen()}" />
 
         <ImageView
             android:id="@+id/action_share_screen_icon"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Icon"
             android:padding="4dp"
             android:src="@drawable/ic_tract_live_share"
             app:layout_constraintBottom_toTopOf="@id/action_share_screen_label"
@@ -131,7 +131,7 @@
 
         <TextView
             android:id="@+id/action_share_screen_label"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/menu_live_share_publish"
@@ -150,13 +150,13 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/action_tips"
-            style="@style/Widget.GodTools.Tract.Settings.Action"
+            style="@style/Widget.GodTools.Tool.Settings.Action"
             android:background="@drawable/bkg_tips_tip_done"
             android:onClick="@{() -> callbacks.toggleTrainingTips()}" />
 
         <ImageView
             android:id="@+id/action_tips_icon"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Icon"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Icon"
             android:src="@{showTips ? @drawable/ic_disable_tips : @drawable/ic_tips_tip_done, default=@drawable/ic_tips_tip_done}"
             app:layout_constraintBottom_toTopOf="@id/action_tips_label"
             app:layout_constraintEnd_toEndOf="@id/action_tips"
@@ -166,7 +166,7 @@
 
         <TextView
             android:id="@+id/action_tips_label"
-            style="@style/Widget.GodTools.Tract.Settings.Action.Label"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{showTips ? @string/tract_settings_action_tips_disable : @string/menu_training_tips, default=@string/menu_training_tips}"
@@ -191,7 +191,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/tract_settings_languages_title"
-            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Section.Title"
+            android:textAppearance="@style/TextAppearance.GodTools.Tool.Settings.Section.Title"
             app:layout_constraintBottom_toTopOf="@id/languages_description"
             app:layout_constraintEnd_toStartOf="@id/margin_end"
             app:layout_constraintStart_toEndOf="@id/margin_start"
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="@string/tract_settings_languages_description"
-            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Section.Description"
+            android:textAppearance="@style/TextAppearance.GodTools.Tool.Settings.Section.Description"
             app:layout_constraintBottom_toTopOf="@id/languages"
             app:layout_constraintEnd_toStartOf="@id/margin_end"
             app:layout_constraintStart_toEndOf="@id/margin_start"
@@ -222,11 +222,11 @@
             app:layout_constraintStart_toEndOf="@id/margin_start"
             app:layout_constraintTop_toBottomOf="@id/languages_description"
             app:layout_goneMarginBottom="32dp"
-            app:shapeAppearance="@style/ShapeAppearance.GodTools.Tract.Settings.Languages" />
+            app:shapeAppearance="@style/ShapeAppearance.GodTools.Tool.Settings.Languages" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/language_primary"
-            style="@style/Widget.GodTools.Tract.Settings.LanguageDropdown"
+            style="@style/Widget.GodTools.Tool.Settings.LanguageDropdown"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/languages"
@@ -258,7 +258,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/language_parallel"
-            style="@style/Widget.GodTools.Tract.Settings.LanguageDropdown"
+            style="@style/Widget.GodTools.Tool.Settings.LanguageDropdown"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/languages"
@@ -296,7 +296,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="@string/tract_settings_shareables_title"
-            android:textAppearance="@style/TextAppearance.GodTools.Tract.Settings.Section.Title"
+            android:textAppearance="@style/TextAppearance.GodTools.Tool.Settings.Section.Title"
             app:layout_constraintBottom_toTopOf="@id/shareables"
             app:layout_constraintEnd_toStartOf="@id/margin_end"
             app:layout_constraintStart_toEndOf="@id/margin_start"

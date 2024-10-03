@@ -22,8 +22,8 @@ class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: T
     override fun getItemCount() = shareables?.size ?: 0
     private fun getItem(position: Int) = shareables?.getOrNull(position)
     override fun getItemViewType(position: Int) = when (getItem(position)) {
-        is ShareableImage -> R.layout.tool_option_item_shareable_image
-        else -> R.layout.tool_option_item_shareable_image
+        is ShareableImage -> R.layout.tool_settings_item_shareable_image
+        else -> R.layout.tool_settings_item_shareable_image
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
