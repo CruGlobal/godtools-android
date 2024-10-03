@@ -13,7 +13,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -32,10 +31,8 @@ import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
-import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
-import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -59,7 +56,6 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
-import org.cru.godtools.tract.ui.settings.TractSettingsBottomSheetDialogFragment
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -119,11 +115,6 @@ class TractActivity :
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
-            true
-        }
-        item.itemId == org.cru.godtools.tool.R.id.action_settings -> {
-            eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
-            TractSettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
             true
         }
         // handle close button if this is an instant app
@@ -321,12 +312,6 @@ class TractActivity :
     }
 
     // region Share Menu Logic
-    override val shareMenuItemVisible by lazy {
-        // HACK: make this dependent on shareLinkUriLiveData so that there is a subscriber to actually resolve the uri
-        //       before the user clicks the share action
-        shareLinkUriLiveData.map { false }
-    }
-
     override val shareLinkUriLiveData by lazy {
         viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
     }

@@ -5,14 +5,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
@@ -21,7 +25,8 @@ import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolSettingsSheetBinding
 
-abstract class SettingsBottomSheetDialogFragment :
+@AndroidEntryPoint
+class SettingsBottomSheetDialogFragment :
     BindingBottomSheetDialogFragment<ToolSettingsSheetBinding>(R.layout.tool_settings_sheet),
     ToolOptionsSheetCallbacks {
 
@@ -39,10 +44,11 @@ abstract class SettingsBottomSheetDialogFragment :
         binding.showTips = activityDataModel.showTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
+        setupActions(binding)
         setupLanguageViews(binding)
         setupShareables(binding)
     }
-    //endregion Lifecycle
+    // endregion Lifecycle
 
     // region Data Model
     private val activityDataModel by activityViewModels<MultiLanguageToolActivityDataModel>()
@@ -70,6 +76,17 @@ abstract class SettingsBottomSheetDialogFragment :
     // endregion Data Model
 
     // region UI
+    private fun setupActions(binding: ToolSettingsSheetBinding) {
+        val adapter = SettingsActionsAdapter(viewLifecycleOwner)
+        (activity as? MultiLanguageToolActivity<*>)?.let {
+            it.settingsActionsFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .onEach { adapter.actions = it }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+        binding.actions.adapter = adapter
+    }
+
     private fun setupLanguageViews(binding: ToolSettingsSheetBinding) {
         binding.languagePrimaryDropdown.apply {
             val adapter = LanguagesDropdownAdapter(context)
@@ -112,8 +129,6 @@ abstract class SettingsBottomSheetDialogFragment :
     }
 
     // region ToolOptionsSettingsSheetCallbacks
-    override fun toggleTrainingTips() = activityDataModel.showTips.toggleValue()
-
     override fun swapLanguages() {
         val languages = activityDataModel.primaryLocales.value
         activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
@@ -135,9 +150,6 @@ abstract class SettingsBottomSheetDialogFragment :
 }
 
 interface ToolOptionsSheetCallbacks {
-    fun shareLink()
-    fun shareScreen()
     fun shareShareable(shareable: ShareableImage?)
-    fun toggleTrainingTips()
     fun swapLanguages()
 }

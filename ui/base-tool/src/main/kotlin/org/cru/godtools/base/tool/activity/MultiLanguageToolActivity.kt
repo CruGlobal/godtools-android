@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
@@ -19,7 +20,11 @@ import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
+import org.cru.godtools.base.tool.ui.settings.SettingsBottomSheetDialogFragment
+import org.cru.godtools.base.tool.ui.settings.ShareLinkSettingsAction
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.navBarControlColor
@@ -55,8 +60,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_tips -> {
-            dataModel.showTips.value = !dataModel.showTips.value!!
+        R.id.action_settings -> {
+            showSettingsDialog()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -139,6 +144,33 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         languageToggle.addOnTabSelectedListener(languageToggleListener)
     }
     // endregion Language Toggle
+
+    // region Settings
+    open val settingsActionsFlow get() = shareMenuItemVisible.asFlow()
+        .map { shareItemVisible ->
+            buildList {
+                if (shareItemVisible) {
+                    add(
+                        ShareLinkSettingsAction(this@MultiLanguageToolActivity) {
+                            shareCurrentTool()
+                            dismissSettingsDialog()
+                        }
+                    )
+                }
+            }
+        }
+
+    private fun showSettingsDialog() {
+        eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
+        SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
+    }
+
+    protected fun dismissSettingsDialog() {
+        supportFragmentManager.fragments
+            .filterIsInstance<SettingsBottomSheetDialogFragment>()
+            .forEach { it.dismissAllowingStateLoss() }
+    }
+    // endregion Settings
     // endregion UI
 
     // region Tool sync
