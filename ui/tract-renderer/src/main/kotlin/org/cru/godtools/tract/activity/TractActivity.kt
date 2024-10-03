@@ -60,6 +60,7 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
+import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -109,9 +110,10 @@ class TractActivity :
     }
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
-        menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menuInflater.inflate(R.menu.activity_tract, menu)
+        menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menu.setupLiveShareMenuItem()
+
         // Adjust visibility of menu items
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
     }
@@ -245,11 +247,21 @@ class TractActivity :
     // region Settings
     override val settingsActionsFlow get() = combine(
         super.settingsActionsFlow,
+        dataModel.tool,
+        dataModel.manifest,
         dataModel.hasTips.asFlow(),
         dataModel.showTips.asFlow()
-    ) { actions, hasTips, tipsEnabled ->
+    ) { actions, tool, manifest, hasTips, tipsEnabled ->
         buildList {
             addAll(actions)
+            if (tool?.isScreenShareDisabled == false && manifest != null) {
+                add(
+                    LiveShareSettingsAction(this@TractActivity) {
+                        shareLiveShareLink()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
             if (hasTips) {
                 add(
                     ToggleTipsSettingsAction(this@TractActivity, tipsEnabled) {
