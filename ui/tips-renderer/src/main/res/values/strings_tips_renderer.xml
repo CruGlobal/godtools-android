@@ -12,4 +12,9 @@
     <string name="tract_tips_type_prepare">Prepare</string>
     <string name="tract_tips_type_quote">Quote</string>
     <string name="tract_tips_type_tip">Tip</string>
+
+    <!-- Settings -->
+    <eat-comment />
+    <string name="menu_training_tips">Training tips</string>
+    <string name="tract_settings_action_tips_disable">Hide tips</string>
 </resources>

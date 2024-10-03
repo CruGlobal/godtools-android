@@ -11,18 +11,21 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
+import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_PAGE
@@ -40,6 +43,7 @@ import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
+import org.cru.godtools.tool.tips.ui.settings.ToggleTipsSettingsAction
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.databinding.TractActivityBinding
@@ -237,6 +241,26 @@ class TractActivity :
     private fun setupBackground() {
         dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
     }
+
+    // region Settings
+    override val settingsActionsFlow get() = combine(
+        super.settingsActionsFlow,
+        dataModel.hasTips.asFlow(),
+        dataModel.showTips.asFlow()
+    ) { actions, hasTips, tipsEnabled ->
+        buildList {
+            addAll(actions)
+            if (hasTips) {
+                add(
+                    ToggleTipsSettingsAction(this@TractActivity, tipsEnabled) {
+                        dataModel.showTips.toggleValue()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
+        }
+    }
+    // endregion Settings
 
     // region Tool Pager
     @Inject

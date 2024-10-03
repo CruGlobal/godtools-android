@@ -8,10 +8,13 @@ import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
+import androidx.lifecycle.asFlow
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import kotlinx.coroutines.flow.combine
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
+import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -26,6 +29,7 @@ import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
+import org.cru.godtools.tool.tips.ui.settings.ToggleTipsSettingsAction
 
 @AndroidEntryPoint
 class CyoaActivity :
@@ -123,6 +127,26 @@ class CyoaActivity :
         //       it might provide a better way of handling this.
         pageInsets.top = binding.appbar.layoutParams.height
     }
+
+    // region Settings
+    override val settingsActionsFlow get() = combine(
+        super.settingsActionsFlow,
+        dataModel.hasTips.asFlow(),
+        dataModel.showTips.asFlow()
+    ) { actions, hasTips, tipsEnabled ->
+        buildList {
+            addAll(actions)
+            if (hasTips) {
+                add(
+                    ToggleTipsSettingsAction(this@CyoaActivity, tipsEnabled) {
+                        dataModel.showTips.toggleValue()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
+        }
+    }
+    // endregion Settings
 
     // region Training Tips
     override fun showTip(tip: Tip) {
