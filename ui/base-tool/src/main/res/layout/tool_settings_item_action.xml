@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable name="action" type="org.cru.godtools.base.tool.ui.settings.SettingsActionsAdapter.SettingsAction" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/background"
+            style="@style/Widget.GodTools.Tool.Settings.Action"
+            android:background="@{action.background}"
+            android:onClick="@{() -> action.onClick()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icon"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Icon"
+            android:src="@{action.icon}"
+            app:layout_constraintBottom_toTopOf="@id/label"
+            app:layout_constraintEnd_toEndOf="@id/background"
+            app:layout_constraintStart_toStartOf="@id/background"
+            app:layout_constraintTop_toTopOf="@id/background"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:tint="@{action.iconTint != null ? ContextCompat.getColorStateList(context, action.iconTint) : null}" />
+
+        <TextView
+            android:id="@+id/label"
+            style="@style/Widget.GodTools.Tool.Settings.Action.Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:text="@{action != null ? context.getString(action.label) : ``}"
+            android:textColor="@{action.labelColor != null ? ContextCompat.getColor(context, action.labelColor) : @color/primary_text_default_material_light}"
+            app:layout_constraintBottom_toBottomOf="@id/icon"
+            app:layout_constraintEnd_toEndOf="@id/background"
+            app:layout_constraintStart_toStartOf="@id/background"
+            app:layout_constraintTop_toBottomOf="@id/background" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
