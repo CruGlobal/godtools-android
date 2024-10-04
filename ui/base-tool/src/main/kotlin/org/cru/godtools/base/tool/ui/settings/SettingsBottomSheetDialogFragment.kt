@@ -39,10 +39,7 @@ class SettingsBottomSheetDialogFragment :
 
     override fun onBindingCreated(binding: ToolSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
-        binding.tool = activityDataModel.tool
         binding.activeManifest = activityDataModel.manifest.asLiveData()
-        binding.hasTips = activityDataModel.hasTips
-        binding.showTips = activityDataModel.showTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
         setupActions(binding)
@@ -129,13 +126,7 @@ class SettingsBottomSheetDialogFragment :
         if (updateActiveLocale) activeLocale.value = locale
     }
 
-    // region ToolOptionsSettingsSheetCallbacks
-    override fun swapLanguages() {
-        val languages = activityDataModel.primaryLocales.value
-        activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
-        activityDataModel.parallelLocales.value = languages
-    }
-
+    // region ToolSettingsSheetCallbacks
     override fun shareShareable(shareable: ShareableImage?) {
         val manifest = shareable?.manifest
         val tool = manifest?.code
@@ -147,5 +138,11 @@ class SettingsBottomSheetDialogFragment :
         }
         dismissAllowingStateLoss()
     }
-    // endregion ToolOptionsSettingsSheetCallbacks
+
+    override fun swapLanguages() {
+        val languages = activityDataModel.primaryLocales.value
+        activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
+        activityDataModel.parallelLocales.value = languages
+    }
+    // endregion ToolSettingsSheetCallbacks
 }
