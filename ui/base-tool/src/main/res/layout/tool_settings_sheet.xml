@@ -10,7 +10,7 @@
         <import type="org.cru.godtools.model.Language" />
         <import type="org.cru.godtools.shared.tool.parser.model.Manifest" />
 
-        <variable name="callbacks" type="org.cru.godtools.base.tool.ui.settings.ToolOptionsSheetCallbacks" />
+        <variable name="callbacks" type="org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks" />
         <variable name="tool" type="StateFlow&lt;Tool&gt;" />
         <variable name="activeManifest" type="LiveData&lt;Manifest&gt;" />
         <variable name="hasTips" type="LiveData&lt;Boolean&gt;" />

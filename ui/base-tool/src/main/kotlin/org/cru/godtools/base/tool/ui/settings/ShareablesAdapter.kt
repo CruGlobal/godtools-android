@@ -6,12 +6,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
+import org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks
 import org.cru.godtools.shared.tool.parser.model.shareable.Shareable
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
 
-class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: ToolOptionsSheetCallbacks) :
+class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: ToolSettingsSheetCallbacks) :
     SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner) {
     var shareables: List<Shareable>? = null
         set(value) {

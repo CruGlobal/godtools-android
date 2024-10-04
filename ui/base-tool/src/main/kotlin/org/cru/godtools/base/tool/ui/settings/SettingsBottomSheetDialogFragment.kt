@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
+import org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.model.Language
@@ -28,7 +29,7 @@ import org.cru.godtools.tool.databinding.ToolSettingsSheetBinding
 @AndroidEntryPoint
 class SettingsBottomSheetDialogFragment :
     BindingBottomSheetDialogFragment<ToolSettingsSheetBinding>(R.layout.tool_settings_sheet),
-    ToolOptionsSheetCallbacks {
+    ToolSettingsSheetCallbacks {
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,9 +148,4 @@ class SettingsBottomSheetDialogFragment :
         dismissAllowingStateLoss()
     }
     // endregion ToolOptionsSettingsSheetCallbacks
-}
-
-interface ToolOptionsSheetCallbacks {
-    fun shareShareable(shareable: ShareableImage?)
-    fun swapLanguages()
 }
