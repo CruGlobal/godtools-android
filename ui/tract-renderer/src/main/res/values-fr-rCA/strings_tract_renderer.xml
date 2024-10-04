@@ -8,7 +8,7 @@
     <string name="menu_live_share_publish">Partagez votre écran</string>
     <string name="menu_live_share_active">Partage d\'écran actif</string>
     <string name="share_tool_message_tract_live_share">Bonjour, suivez-moi avec GodTools grâce au partage d\'écran. Voici le lien : %1$s\n\nSi vous recevez ce message plus tard, le lien pourrait ne pas fonctionner. Nous pouvons réessayer à un autre moment.</string>
-    <string name="tract_live_share_starting">Début du partage d\'écran...</string>
+    <string name="tract_live_share_starting">Début du partage d\'écran…</string>
     <string name="tract_live_share_unable_to_connect">Impossible de se connecter au partage d\'écran</string>
     <string name="tract_live_share_exit_dialog_message">Quitter la session de partage à distance maintenant ?</string>
     <string name="tract_live_share_exit_dialog_confirm">Quitter</string>

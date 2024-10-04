@@ -8,7 +8,7 @@
     <string name="menu_live_share_publish">分享你的螢幕</string>
     <string name="menu_live_share_active">開啟螢幕分享</string>
     <string name="share_tool_message_tract_live_share">你好，歡迎透過 GodTools 螢幕分享和我一同學習。連結為：%1$s\n\n如果你稍後才收到此訊息，該連結可能已經失效。我們可以改天再試一次。</string>
-    <string name="tract_live_share_starting">正在開始進行螢幕分享……</string>
+    <string name="tract_live_share_starting">正在開始進行螢幕分享…</string>
     <string name="tract_live_share_unable_to_connect">無法連接到螢幕分享</string>
     <string name="tract_live_share_exit_dialog_message">確定要現在離開遠端分享會？</string>
     <string name="tract_live_share_exit_dialog_confirm">離開</string>

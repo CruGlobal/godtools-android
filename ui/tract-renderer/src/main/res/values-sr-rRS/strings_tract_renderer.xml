@@ -8,7 +8,7 @@
     <string name="menu_live_share_publish">Подели екран</string>
     <string name="menu_live_share_active">Активно дељење екрана</string>
     <string name="share_tool_message_tract_live_share">Здраво, пратите заједно са мном у апликацији GodTools преко дељења екрана. Ево везе: %1$s\n\nАко ову поруку не примите до касније, веза можда неће радити. Можемо да пробамо поново други пут.</string>
-    <string name="tract_live_share_starting">Почетак дељења екрана...</string>
+    <string name="tract_live_share_starting">Почетак дељења екрана…</string>
     <string name="tract_live_share_unable_to_connect">Повезивање са дељењем екрана није могуће</string>
     <string name="tract_live_share_exit_dialog_message">Изађите из сесије даљинског дељења одмах?</string>
     <string name="tract_live_share_exit_dialog_confirm">Излаз</string>
