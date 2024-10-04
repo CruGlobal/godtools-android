@@ -14,10 +14,6 @@ fun ToggleTipsSettingsAction(context: Context, tipsEnabled: Boolean, onClick: ()
             else -> R.string.tool_settings_action_tips_enable
         },
         icon = if (tipsEnabled) R.drawable.ic_disable_tips else R.drawable.ic_tips_tip_done,
-        background = ResourcesCompat.getDrawable(
-            context.resources,
-            R.drawable.bkg_tips_tip_done,
-            context.theme
-        ),
+        background = ResourcesCompat.getDrawable(context.resources, R.drawable.bkg_tips_tip_done, context.theme),
         onClick = onClick
     )
