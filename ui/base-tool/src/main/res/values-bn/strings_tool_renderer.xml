@@ -21,12 +21,11 @@ http://godtoolsapp.com \n\n থেকে app টিকে ডাউনলোড 
     <string name="tool_shareable_action_share_image">ছবি শেয়ার করুন</string>
     <!-- Settings -->
     <string name="menu_settings">সেটিং</string>
-    <string name="tract_settings_title">টুল অপশনস</string>
-    <string name="tract_settings_action_share">লিংক শেয়ার করুন</string>
-    <string name="tract_settings_languages_title">সমান্তরাল ভাষা</string>
-    <string name="tract_settings_languages_description">এই টুলে দুটি ভিন্ন ভাষার মধ্যে বিনিময়/ তুলনা করুন।</string>
-    <string name="tract_settings_languages_parallel">সমান্তরাল</string>
-    <string name="tract_settings_languages_none">একটিও না</string>
-    <string name="tract_settings_shareables_title">সম্পর্কিত গ্রাফিক্স</string>
-    <string name="menu_training_tips">প্রশিক্ষণ টিপস</string>
+    <string name="tool_settings_title">টুল অপশনস</string>
+    <string name="tool_settings_action_share">লিংক শেয়ার করুন</string>
+    <string name="tool_settings_languages_title">সমান্তরাল ভাষা</string>
+    <string name="tool_settings_languages_description">এই টুলে দুটি ভিন্ন ভাষার মধ্যে বিনিময়/ তুলনা করুন।</string>
+    <string name="tool_settings_languages_parallel">সমান্তরাল</string>
+    <string name="tool_settings_languages_none">একটিও না</string>
+    <string name="tool_settings_shareables_title">সম্পর্কিত গ্রাফিক্স</string>
 </resources>

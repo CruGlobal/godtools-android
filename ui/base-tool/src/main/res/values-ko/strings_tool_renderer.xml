@@ -20,12 +20,11 @@
     <string name="tool_shareable_action_share_image">이미지 공유</string>
     <!-- Settings -->
     <string name="menu_settings">설정</string>
-    <string name="tract_settings_title">도구 옵션</string>
-    <string name="tract_settings_action_share">링크 공유하기</string>
-    <string name="tract_settings_languages_title">병행 언어</string>
-    <string name="tract_settings_languages_description">이 도구에서 두 개의 다른 언어를 전환합니다.</string>
-    <string name="tract_settings_languages_parallel">병행</string>
-    <string name="tract_settings_languages_none">없음</string>
-    <string name="tract_settings_shareables_title">관련 그래픽</string>
-    <string name="menu_training_tips">트레이닝 팁</string>
+    <string name="tool_settings_title">도구 옵션</string>
+    <string name="tool_settings_action_share">링크 공유하기</string>
+    <string name="tool_settings_languages_title">병행 언어</string>
+    <string name="tool_settings_languages_description">이 도구에서 두 개의 다른 언어를 전환합니다.</string>
+    <string name="tool_settings_languages_parallel">병행</string>
+    <string name="tool_settings_languages_none">없음</string>
+    <string name="tool_settings_shareables_title">관련 그래픽</string>
 </resources>

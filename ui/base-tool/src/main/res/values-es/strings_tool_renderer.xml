@@ -20,12 +20,11 @@ La aplicación se puede descargar en https://godtoolsapp.com \n\n
     <string name="tool_shareable_action_share_image">Comparte una imagen</string>
     <!-- Settings -->
     <string name="menu_settings">Ajustes</string>
-    <string name="tract_settings_title">Opciones de Herramientas</string>
-    <string name="tract_settings_action_share">Comparte enlace</string>
-    <string name="tract_settings_languages_title">Idioma paralelo</string>
-    <string name="tract_settings_languages_description">Alterna entre dos idiomas diferentes en esta herramienta.</string>
-    <string name="tract_settings_languages_parallel">Paralelo</string>
-    <string name="tract_settings_languages_none">Ninguno</string>
-    <string name="tract_settings_shareables_title">Gráficos relacionados</string>
-    <string name="menu_training_tips">Consejos de entrenamiento</string>
+    <string name="tool_settings_title">Opciones de Herramientas</string>
+    <string name="tool_settings_action_share">Comparte enlace</string>
+    <string name="tool_settings_languages_title">Idioma paralelo</string>
+    <string name="tool_settings_languages_description">Alterna entre dos idiomas diferentes en esta herramienta.</string>
+    <string name="tool_settings_languages_parallel">Paralelo</string>
+    <string name="tool_settings_languages_none">Ninguno</string>
+    <string name="tool_settings_shareables_title">Gráficos relacionados</string>
 </resources>

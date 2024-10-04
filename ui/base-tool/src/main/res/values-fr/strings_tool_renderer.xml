@@ -20,12 +20,11 @@ Parlons-en davantage !</string>
     <string name="tool_shareable_action_share_image">Partager l\'image</string>
     <!-- Settings -->
     <string name="menu_settings">Paramètres</string>
-    <string name="tract_settings_title">Options de l\'outil</string>
-    <string name="tract_settings_action_share">Partager lien</string>
-    <string name="tract_settings_languages_title">Langue secondaire</string>
-    <string name="tract_settings_languages_description">Cet outil permet de basculer entre deux langues différentes.</string>
-    <string name="tract_settings_languages_parallel">Parallèle</string>
-    <string name="tract_settings_languages_none">Aucun</string>
-    <string name="tract_settings_shareables_title">Graphiques connexes</string>
-    <string name="menu_training_tips">Conseils de formation</string>
+    <string name="tool_settings_title">Options de l\'outil</string>
+    <string name="tool_settings_action_share">Partager lien</string>
+    <string name="tool_settings_languages_title">Langue secondaire</string>
+    <string name="tool_settings_languages_description">Cet outil permet de basculer entre deux langues différentes.</string>
+    <string name="tool_settings_languages_parallel">Parallèle</string>
+    <string name="tool_settings_languages_none">Aucun</string>
+    <string name="tool_settings_shareables_title">Graphiques connexes</string>
 </resources>

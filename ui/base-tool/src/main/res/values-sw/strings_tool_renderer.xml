@@ -20,12 +20,11 @@ Tuzungumze zaidi!</string>
     <string name="tool_shareable_action_share_image">Sambaza picha</string>
     <!-- Settings -->
     <string name="menu_settings">Mipangilio</string>
-    <string name="tract_settings_title">Chaguzi za Kifaa</string>
-    <string name="tract_settings_action_share">Shirikisha kiungo</string>
-    <string name="tract_settings_languages_title">Lugha Inayofanana</string>
-    <string name="tract_settings_languages_description">Badilisha kati ya lugha mbili tofauti kwenye kifaa hiki.</string>
-    <string name="tract_settings_languages_parallel">Inayofanana</string>
-    <string name="tract_settings_languages_none">Hakuna</string>
-    <string name="tract_settings_shareables_title">Michoro inayoshabihana</string>
-    <string name="menu_training_tips">Miongozo ya mafunzo</string>
+    <string name="tool_settings_title">Chaguzi za Kifaa</string>
+    <string name="tool_settings_action_share">Shirikisha kiungo</string>
+    <string name="tool_settings_languages_title">Lugha Inayofanana</string>
+    <string name="tool_settings_languages_description">Badilisha kati ya lugha mbili tofauti kwenye kifaa hiki.</string>
+    <string name="tool_settings_languages_parallel">Inayofanana</string>
+    <string name="tool_settings_languages_none">Hakuna</string>
+    <string name="tool_settings_shareables_title">Michoro inayoshabihana</string>
 </resources>

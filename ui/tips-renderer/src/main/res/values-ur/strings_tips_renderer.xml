@@ -10,6 +10,6 @@
     <string name="tract_tips_type_quote">حوالہ دیں</string>
     <string name="tract_tips_type_tip">مشورہ</string>
     <!-- Settings -->
-    <string name="menu_training_tips">تربیتی تجاویز</string>
-    <string name="tract_settings_action_tips_disable">تجاویز چھپائیں</string>
+    <string name="tool_settings_action_tips_enable">تربیتی تجاویز</string>
+    <string name="tool_settings_action_tips_disable">تجاویز چھپائیں</string>
 </resources>

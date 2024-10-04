@@ -10,6 +10,6 @@
     <string name="tract_tips_type_quote">ጥቅስ</string>
     <string name="tract_tips_type_tip">ጠቃሚ ምክር</string>
     <!-- Settings -->
-    <string name="menu_training_tips">የስልጠና ምክሮች</string>
-    <string name="tract_settings_action_tips_disable">ጠቃሚ ምክሮችን ደብቅ</string>
+    <string name="tool_settings_action_tips_enable">የስልጠና ምክሮች</string>
+    <string name="tool_settings_action_tips_disable">ጠቃሚ ምክሮችን ደብቅ</string>
 </resources>

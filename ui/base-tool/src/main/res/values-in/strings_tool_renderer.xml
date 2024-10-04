@@ -20,12 +20,11 @@ Mari bicara lebih banyak!</string>
     <string name="tool_shareable_action_share_image">Bagikan gambar</string>
     <!-- Settings -->
     <string name="menu_settings">Pengaturan</string>
-    <string name="tract_settings_title">Pilihan Alat</string>
-    <string name="tract_settings_action_share">"Bagikan tautan "</string>
-    <string name="tract_settings_languages_title">Bahasa Paralel</string>
-    <string name="tract_settings_languages_description">Sandingkan dua bahasa pada sarana ini</string>
-    <string name="tract_settings_languages_parallel">Paralel</string>
-    <string name="tract_settings_languages_none">Tidak ada</string>
-    <string name="tract_settings_shareables_title">Grafis yang berhubungan</string>
-    <string name="menu_training_tips">Saran-saran latihan</string>
+    <string name="tool_settings_title">Pilihan Alat</string>
+    <string name="tool_settings_action_share">"Bagikan tautan "</string>
+    <string name="tool_settings_languages_title">Bahasa Paralel</string>
+    <string name="tool_settings_languages_description">Sandingkan dua bahasa pada sarana ini</string>
+    <string name="tool_settings_languages_parallel">Paralel</string>
+    <string name="tool_settings_languages_none">Tidak ada</string>
+    <string name="tool_settings_shareables_title">Grafis yang berhubungan</string>
 </resources>

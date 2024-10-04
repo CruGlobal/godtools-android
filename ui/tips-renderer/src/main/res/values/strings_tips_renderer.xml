@@ -15,6 +15,6 @@
 
     <!-- Settings -->
     <eat-comment />
-    <string name="menu_training_tips">Training tips</string>
-    <string name="tract_settings_action_tips_disable">Hide tips</string>
+    <string name="tool_settings_action_tips_enable">Training tips</string>
+    <string name="tool_settings_action_tips_disable">Hide tips</string>
 </resources>

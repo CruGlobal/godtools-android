@@ -8,7 +8,7 @@ import org.cru.godtools.tool.R
 @Suppress("FunctionName")
 fun ShareLinkSettingsAction(context: Context, onClick: () -> Unit) = SettingsActionsAdapter.SettingsAction(
     id = 1,
-    label = R.string.tract_settings_action_share,
+    label = R.string.tool_settings_action_share,
     labelColor = org.cru.godtools.ui.R.color.white,
     icon = R.drawable.ic_tool_settings_share,
     iconTint = org.cru.godtools.ui.R.color.white,

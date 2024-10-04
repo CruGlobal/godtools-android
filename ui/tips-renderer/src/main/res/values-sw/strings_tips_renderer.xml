@@ -10,6 +10,6 @@
     <string name="tract_tips_type_quote">Nukuu</string>
     <string name="tract_tips_type_tip">Mwongozo</string>
     <!-- Settings -->
-    <string name="menu_training_tips">Miongozo ya mafunzo</string>
-    <string name="tract_settings_action_tips_disable">Ficha vidokezo</string>
+    <string name="tool_settings_action_tips_enable">Miongozo ya mafunzo</string>
+    <string name="tool_settings_action_tips_disable">Ficha vidokezo</string>
 </resources>

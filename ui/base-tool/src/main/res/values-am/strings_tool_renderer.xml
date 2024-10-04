@@ -20,12 +20,11 @@
     <string name="tool_shareable_action_share_image">ምስል አጋራ</string>
     <!-- Settings -->
     <string name="menu_settings">ድባቦች</string>
-    <string name="tract_settings_title">የመተግበሪያ አማራጮች</string>
-    <string name="tract_settings_action_share">መስፈንጠሪያ አጋራ</string>
-    <string name="tract_settings_languages_title">ሁለት ቋንቋ</string>
-    <string name="tract_settings_languages_description">በዚህ መተግበሪያ ውስጥ በሁለት የተለያዩ ቋንቋዎች መካከል ይቀያይሩ።</string>
-    <string name="tract_settings_languages_parallel">ትይዪ</string>
-    <string name="tract_settings_languages_none">የለም</string>
-    <string name="tract_settings_shareables_title">ተዛማጅ ግራፊክስ</string>
-    <string name="menu_training_tips">የስልጠና ምክሮች</string>
+    <string name="tool_settings_title">የመተግበሪያ አማራጮች</string>
+    <string name="tool_settings_action_share">መስፈንጠሪያ አጋራ</string>
+    <string name="tool_settings_languages_title">ሁለት ቋንቋ</string>
+    <string name="tool_settings_languages_description">በዚህ መተግበሪያ ውስጥ በሁለት የተለያዩ ቋንቋዎች መካከል ይቀያይሩ።</string>
+    <string name="tool_settings_languages_parallel">ትይዪ</string>
+    <string name="tool_settings_languages_none">የለም</string>
+    <string name="tool_settings_shareables_title">ተዛማጅ ግራፊክስ</string>
 </resources>

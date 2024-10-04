@@ -10,6 +10,6 @@
     <string name="tract_tips_type_quote">Citação</string>
     <string name="tract_tips_type_tip">Dica</string>
     <!-- Settings -->
-    <string name="menu_training_tips">Dicas de treinamento</string>
-    <string name="tract_settings_action_tips_disable">Ocultar dicas</string>
+    <string name="tool_settings_action_tips_enable">Dicas de treinamento</string>
+    <string name="tool_settings_action_tips_disable">Ocultar dicas</string>
 </resources>

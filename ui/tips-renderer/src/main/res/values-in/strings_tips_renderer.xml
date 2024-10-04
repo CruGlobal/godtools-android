@@ -10,6 +10,6 @@
     <string name="tract_tips_type_quote">Kutip</string>
     <string name="tract_tips_type_tip">Saran</string>
     <!-- Settings -->
-    <string name="menu_training_tips">Saran-saran latihan</string>
-    <string name="tract_settings_action_tips_disable">Sembunyikan saran</string>
+    <string name="tool_settings_action_tips_enable">Saran-saran latihan</string>
+    <string name="tool_settings_action_tips_disable">Sembunyikan saran</string>
 </resources>
