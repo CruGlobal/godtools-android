@@ -8,7 +8,7 @@
     <string name="menu_live_share_publish">ແບ່ງປັນໜ້າຈໍຂອງທ່ານ</string>
     <string name="menu_live_share_active">ການແບ່ງປັນໜ້າຈໍເປີດໃຊ້ງານຢູ່</string>
     <string name="share_tool_message_tract_live_share">ສະບາຍດີ, ຕິດຕາມຂ້າພະເຈົ້າໃນ GodTools ຜ່ານການແບ່ງປັນໜ້າຈໍ. ນີ້ແມ່ນລິ້ງ: %1$s\n\nຖ້າທ່ານບໍ່ໄດ້ຮັບຂໍ້ຄວາມນີ້ໃນພາຍຫຼັງ, ລິ້ງອາດຈະຍັງໃຊ້ງານບໍ່ໄດ້. ພວກເຮົາສາມາດລອງໃໝ່ອີກຄັ້ງໃນເວລາອື່ນ.</string>
-    <string name="tract_live_share_starting">ເລີ່ມແບ່ງປັນໜ້າຈໍ...</string>
+    <string name="tract_live_share_starting">ເລີ່ມແບ່ງປັນໜ້າຈໍ…</string>
     <string name="tract_live_share_unable_to_connect">ບໍ່ສາມາດເຊື່ອມຕໍ່ກັບການແບ່ງປັນໜ້າຈໍ</string>
     <string name="tract_live_share_exit_dialog_message">ອອກຈາກເຊດຊັນແບ່ງປັນທາງໄກດຽວນີ້ບໍ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ອອກ</string>

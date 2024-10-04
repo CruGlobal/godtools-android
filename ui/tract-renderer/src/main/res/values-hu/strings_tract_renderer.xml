@@ -8,7 +8,7 @@
     <string name="menu_live_share_publish">Képernyő megosztása</string>
     <string name="menu_live_share_active">Képernyőmegosztás aktív</string>
     <string name="share_tool_message_tract_live_share">Szia! Gyere, tarts velem a GodTools világába képernyőmegosztáson keresztül. A hivatkozás: %1$s\n\nHa csak később kapod meg ezt az üzenetet, lehet, hogy a hivatkozás még nem működik. Egy későbbi alkalommal újra próbálkozhatunk.</string>
-    <string name="tract_live_share_starting">Képernyőmegosztás indítása...</string>
+    <string name="tract_live_share_starting">Képernyőmegosztás indítása…</string>
     <string name="tract_live_share_unable_to_connect">Nem lehet csatlakozni a képernyőmegosztáshoz</string>
     <string name="tract_live_share_exit_dialog_message">Kilép most a távmegosztási munkamenetből?</string>
     <string name="tract_live_share_exit_dialog_confirm">Kilépés</string>
