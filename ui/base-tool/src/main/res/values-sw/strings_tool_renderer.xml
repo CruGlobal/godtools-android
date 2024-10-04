@@ -5,8 +5,6 @@
     <string name="tool_offline">Kifaa ulichohitaji kinahitaji kuunganishwa na mtandao ili kifunguke</string>
     <string name="tract_content_input_error_required">%1$s Inahitajika</string>
     <string name="tract_content_input_error_invalid_email">Tafadhali weka anwani halali ya barua pepe</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Miongozo ya mafunzo</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Sambaza</string>
     <string name="tool_share_sheet_more_apps">Mengine</string>
@@ -20,4 +18,14 @@ Tuzungumze zaidi!</string>
     <string name="feature_discovery_desc_share_tool">Tuma kifaa hiki kwa rafiki kwa kubofya ikoni hii</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Sambaza picha</string>
+    <!-- Settings -->
+    <string name="menu_settings">Mipangilio</string>
+    <string name="tract_settings_title">Chaguzi za Kifaa</string>
+    <string name="tract_settings_action_share">Shirikisha kiungo</string>
+    <string name="tract_settings_languages_title">Lugha Inayofanana</string>
+    <string name="tract_settings_languages_description">Badilisha kati ya lugha mbili tofauti kwenye kifaa hiki.</string>
+    <string name="tract_settings_languages_parallel">Inayofanana</string>
+    <string name="tract_settings_languages_none">Hakuna</string>
+    <string name="tract_settings_shareables_title">Michoro inayoshabihana</string>
+    <string name="menu_training_tips">Miongozo ya mafunzo</string>
 </resources>

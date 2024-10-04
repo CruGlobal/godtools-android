@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">तैयारी करें</string>
     <string name="tract_tips_type_quote">हवाला</string>
     <string name="tract_tips_type_tip">टिप</string>
+    <!-- Settings -->
+    <string name="menu_training_tips">प्रशिक्षण सुझाव</string>
+    <string name="tract_settings_action_tips_disable">सुझाव छिपाएँ</string>
 </resources>

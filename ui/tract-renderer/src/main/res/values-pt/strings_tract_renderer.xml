@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Sair da sessão de compartilhamento remoto agora?</string>
     <string name="tract_live_share_exit_dialog_confirm">Sair</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
-    <!-- Settings -->
-    <string name="menu_settings">Configurações</string>
-    <string name="tract_settings_title">Opções de Ferramenta</string>
-    <string name="tract_settings_action_share">Compartilhar link</string>
-    <string name="tract_settings_action_tips_disable">Ocultar dicas</string>
-    <string name="tract_settings_languages_title">Idioma Paralelo</string>
-    <string name="tract_settings_languages_description">Alterne entre dois idiomas diferentes nesta ferramenta.</string>
-    <string name="tract_settings_languages_parallel">Paralelo</string>
-    <string name="tract_settings_languages_none">Nenhum</string>
-    <string name="tract_settings_shareables_title">Gráficos relacionados</string>
 </resources>

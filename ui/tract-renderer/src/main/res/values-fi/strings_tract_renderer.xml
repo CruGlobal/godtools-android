@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Haluatko poistua etäjaosta?</string>
     <string name="tract_live_share_exit_dialog_confirm">Poistu</string>
     <string name="tract_live_share_exit_dialog_cancel">Peruuta</string>
-    <!-- Settings -->
-    <string name="menu_settings">Asetukset</string>
-    <string name="tract_settings_title">Työkaluvaihtoehdot</string>
-    <string name="tract_settings_action_share">Jaa linkki</string>
-    <string name="tract_settings_action_tips_disable">Piilota vinkit</string>
-    <string name="tract_settings_languages_title">Rinnakkaiskieli</string>
-    <string name="tract_settings_languages_description">Voit siirtyä kielestä toiseen tässä työkalussa.</string>
-    <string name="tract_settings_languages_parallel">Rinnakkainen</string>
-    <string name="tract_settings_languages_none">Ei mitään</string>
-    <string name="tract_settings_shareables_title">Vastaavat grafiikat</string>
 </resources>

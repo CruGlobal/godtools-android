@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Quitter la session de partage à distance maintenant ?</string>
     <string name="tract_live_share_exit_dialog_confirm">Quitter</string>
     <string name="tract_live_share_exit_dialog_cancel">Annuler</string>
-    <!-- Settings -->
-    <string name="menu_settings">Paramètres</string>
-    <string name="tract_settings_title">Options de l\'outil</string>
-    <string name="tract_settings_action_share">Partager lien</string>
-    <string name="tract_settings_action_tips_disable">Cacher des astuces</string>
-    <string name="tract_settings_languages_title">Langue secondaire</string>
-    <string name="tract_settings_languages_description">Cet outil permet de basculer entre deux langues différentes.</string>
-    <string name="tract_settings_languages_parallel">Parallèle</string>
-    <string name="tract_settings_languages_none">Aucun</string>
-    <string name="tract_settings_shareables_title">Graphiques connexes</string>
 </resources>

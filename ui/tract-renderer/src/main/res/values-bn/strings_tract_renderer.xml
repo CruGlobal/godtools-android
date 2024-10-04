@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">এখনই \'রিমোট শেয়ারিং সেশন\' থেকে প্রস্থান করবেন ?</string>
     <string name="tract_live_share_exit_dialog_confirm">বেরিয়ে আসুন</string>
     <string name="tract_live_share_exit_dialog_cancel">বাতিল করুন</string>
-    <!-- Settings -->
-    <string name="menu_settings">সেটিং</string>
-    <string name="tract_settings_title">টুল অপশনস</string>
-    <string name="tract_settings_action_share">লিংক শেয়ার করুন</string>
-    <string name="tract_settings_action_tips_disable">টিপস লুকান</string>
-    <string name="tract_settings_languages_title">সমান্তরাল ভাষা</string>
-    <string name="tract_settings_languages_description">এই টুলে দুটি ভিন্ন ভাষার মধ্যে বিনিময়/ তুলনা করুন।</string>
-    <string name="tract_settings_languages_parallel">সমান্তরাল</string>
-    <string name="tract_settings_languages_none">একটিও না</string>
-    <string name="tract_settings_shareables_title">সম্পর্কিত গ্রাফিক্স</string>
 </resources>

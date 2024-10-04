@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">ਕੀ ਹੁਣ ਰਿਮੋਟ ਸ਼ੇਅਰਿੰਗ ਸੈਸ਼ਨ ਤੋਂ ਨਿਕਾਸ ਕਰਨਾ ਹੈ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ਨਿਕਾਸ ਕਰੋ</string>
     <string name="tract_live_share_exit_dialog_cancel">ਰੱਦ ਕਰੋ</string>
-    <!-- Settings -->
-    <string name="menu_settings">ਸੈਟਿੰਗਾਂ</string>
-    <string name="tract_settings_title">ਟੂਲ ਵਿਕਲਪ</string>
-    <string name="tract_settings_action_share">ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ</string>
-    <string name="tract_settings_action_tips_disable">ਸੁਝਾਅ ਲੁਕਾਓ</string>
-    <string name="tract_settings_languages_title">ਸਮਾਨਾਂਤਰ ਭਾਸ਼ਾ</string>
-    <string name="tract_settings_languages_description">ਇਸ ਟੂਲ ਵਿੱਚ ਦੋ ਵੱਖ-ਵੱਖ ਭਾਸ਼ਾਵਾਂ ਵਿਚਕਾਰ ਟੌਗਲ ਕਰੋ।</string>
-    <string name="tract_settings_languages_parallel">ਸਮਾਨਾਂਤਰ</string>
-    <string name="tract_settings_languages_none">ਕੋਈ ਨਹੀਂ</string>
-    <string name="tract_settings_shareables_title">ਸੰਬੰਧਿਤ ਗਰਾਫਿਕਸ</string>
 </resources>

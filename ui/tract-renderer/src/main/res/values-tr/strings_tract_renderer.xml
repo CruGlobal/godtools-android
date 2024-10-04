@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Uzaktan paylaşım oturumundan şimdi çıkılsın mı?</string>
     <string name="tract_live_share_exit_dialog_confirm">Çık</string>
     <string name="tract_live_share_exit_dialog_cancel">İptal</string>
-    <!-- Settings -->
-    <string name="menu_settings">Ayarlar</string>
-    <string name="tract_settings_title">Araç Seçenekleri</string>
-    <string name="tract_settings_action_share">Bağlantı paylaş</string>
-    <string name="tract_settings_action_tips_disable">İpuçlarını gizle</string>
-    <string name="tract_settings_languages_title">Paralel dil</string>
-    <string name="tract_settings_languages_description">Bu araçta iki farklı dil arasında geçiş yapabilirsin.</string>
-    <string name="tract_settings_languages_parallel">Paralel</string>
-    <string name="tract_settings_languages_none">Yok</string>
-    <string name="tract_settings_shareables_title">İlgili grafikler</string>
 </resources>

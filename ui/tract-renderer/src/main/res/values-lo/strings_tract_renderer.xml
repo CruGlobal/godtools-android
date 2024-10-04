@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">ອອກຈາກເຊດຊັນແບ່ງປັນທາງໄກດຽວນີ້ບໍ?</string>
     <string name="tract_live_share_exit_dialog_confirm">ອອກ</string>
     <string name="tract_live_share_exit_dialog_cancel">ຍົກເລີກ</string>
-    <!-- Settings -->
-    <string name="menu_settings">ການຕັ້ງຄ່າ</string>
-    <string name="tract_settings_title">ຕົວເລືອກເຄື່ອງມື</string>
-    <string name="tract_settings_action_share">ແບ່ງປັນລິ້ງ</string>
-    <string name="tract_settings_action_tips_disable">ເຊື່ອງເຄັດລັບ</string>
-    <string name="tract_settings_languages_title">ພາສາຄູ່ຂະໜານ</string>
-    <string name="tract_settings_languages_description">ສະຫຼັບລະຫວ່າງສອງພາສາທີ່ແຕກຕ່າງກັນໃນເຄື່ອງມື.</string>
-    <string name="tract_settings_languages_parallel">ຄູ່ຂະໜານ</string>
-    <string name="tract_settings_languages_none">ບໍ່ມີ</string>
-    <string name="tract_settings_shareables_title">ກຣາຟິກທີ່ກ່ຽວຂ້ອງ</string>
 </resources>

@@ -5,8 +5,6 @@
     <string name="tool_offline">Запрошенный вами инструмент требует подключение к Интернету</string>
     <string name="tract_content_input_error_required">Необходимо ввести %1$s</string>
     <string name="tract_content_input_error_invalid_email">Введите правильный адрес эл. почты</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Подсказки по обучению</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Поделиться</string>
     <string name="tool_share_sheet_more_apps">Больше</string>
@@ -20,4 +18,14 @@
     <string name="feature_discovery_desc_share_tool">Нажмите на значок, чтобы рассказать об этом инструменте друзьям</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Поделитесь изображением</string>
+    <!-- Settings -->
+    <string name="menu_settings">Настройки</string>
+    <string name="tract_settings_title">Параметры инструмента</string>
+    <string name="tract_settings_action_share">Поделитесь ссылкой</string>
+    <string name="tract_settings_languages_title">Параллельный язык</string>
+    <string name="tract_settings_languages_description">Переключайтесь между двумя разными языками в этом инструменте.</string>
+    <string name="tract_settings_languages_parallel">Параллельный</string>
+    <string name="tract_settings_languages_none">Нет</string>
+    <string name="tract_settings_shareables_title">Связанные изображения</string>
+    <string name="menu_training_tips">Подсказки по обучению</string>
 </resources>

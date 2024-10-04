@@ -5,8 +5,6 @@
     <string name="tool_offline">Une connexion Internet est nécessaire pour ouvrir l\'outil que vous avez demandé</string>
     <string name="tract_content_input_error_required">%1$s est obligatoire</string>
     <string name="tract_content_input_error_invalid_email">Veuillez saisir une adresse e-mail valide</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Conseils de formation</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Partager</string>
     <string name="tool_share_sheet_more_apps">Plus</string>
@@ -20,4 +18,14 @@ Parlons-en davantage !</string>
     <string name="feature_discovery_desc_share_tool">Envoyez cet outil à un ami en cliquant sur cette icône</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Partager l\'image</string>
+    <!-- Settings -->
+    <string name="menu_settings">Paramètres</string>
+    <string name="tract_settings_title">Options de l\'outil</string>
+    <string name="tract_settings_action_share">Partager lien</string>
+    <string name="tract_settings_languages_title">Langue secondaire</string>
+    <string name="tract_settings_languages_description">Cet outil permet de basculer entre deux langues différentes.</string>
+    <string name="tract_settings_languages_parallel">Parallèle</string>
+    <string name="tract_settings_languages_none">Aucun</string>
+    <string name="tract_settings_shareables_title">Graphiques connexes</string>
+    <string name="menu_training_tips">Conseils de formation</string>
 </resources>

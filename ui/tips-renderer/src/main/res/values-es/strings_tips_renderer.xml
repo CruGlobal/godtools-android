@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Prepara</string>
     <string name="tract_tips_type_quote">Citar</string>
     <string name="tract_tips_type_tip">Consejo</string>
+    <!-- Settings -->
+    <string name="menu_training_tips">Consejos de entrenamiento</string>
+    <string name="tract_settings_action_tips_disable">Ocultar consejos</string>
 </resources>

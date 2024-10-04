@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">¿Salir ahora de la sesión de pantalla compartida?</string>
     <string name="tract_live_share_exit_dialog_confirm">Salir</string>
     <string name="tract_live_share_exit_dialog_cancel">Cancelar</string>
-    <!-- Settings -->
-    <string name="menu_settings">Ajustes</string>
-    <string name="tract_settings_title">Opciones de Herramientas</string>
-    <string name="tract_settings_action_share">Comparte enlace</string>
-    <string name="tract_settings_action_tips_disable">Ocultar consejos</string>
-    <string name="tract_settings_languages_title">Idioma paralelo</string>
-    <string name="tract_settings_languages_description">Alterna entre dos idiomas diferentes en esta herramienta.</string>
-    <string name="tract_settings_languages_parallel">Paralelo</string>
-    <string name="tract_settings_languages_none">Ninguno</string>
-    <string name="tract_settings_shareables_title">Gráficos relacionados</string>
 </resources>

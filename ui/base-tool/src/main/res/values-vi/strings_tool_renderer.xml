@@ -5,8 +5,6 @@
     <string name="tool_offline">Công cụ bạn yêu cầu cần kết nối Internet để mở</string>
     <string name="tract_content_input_error_required">%1$s là bắt buộc</string>
     <string name="tract_content_input_error_invalid_email">Vui lòng nhập địa chỉ email hợp lệ</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Gợi ý hướng dẫn</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Chia sẻ</string>
     <string name="tool_share_sheet_more_apps">Xem thêm</string>
@@ -20,4 +18,14 @@ Hãy trò chuyện thêm nhé!</string>
     <string name="feature_discovery_desc_share_tool">Bấm vào biểu tượng này để chia sẻ công cụ cho người khác.</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Chia sẻ hình ảnh</string>
+    <!-- Settings -->
+    <string name="menu_settings">Cài đặt</string>
+    <string name="tract_settings_title">Những lựa chọn</string>
+    <string name="tract_settings_action_share">Chia sẻ đường link</string>
+    <string name="tract_settings_languages_title">Ngôn ngữ song song</string>
+    <string name="tract_settings_languages_description">Chuyển đổi giữa 2 ngôn ngữ khác nhau trong công cụ này.</string>
+    <string name="tract_settings_languages_parallel">Song song</string>
+    <string name="tract_settings_languages_none">Không</string>
+    <string name="tract_settings_shareables_title">Hình ảnh tương ứng</string>
+    <string name="menu_training_tips">Gợi ý hướng dẫn</string>
 </resources>

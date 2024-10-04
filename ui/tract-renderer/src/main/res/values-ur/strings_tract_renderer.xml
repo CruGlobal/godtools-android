@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">کیا ابھی سکرین شئیرنگ سیشن سے  خارج ہوں؟</string>
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">منسوخ</string>
-    <!-- Settings -->
-    <string name="menu_settings">ترتیبات</string>
-    <string name="tract_settings_title">ٹول آپشن</string>
-    <string name="tract_settings_action_share">لنک شئیر کریں</string>
-    <string name="tract_settings_action_tips_disable">تجاویز چھپائیں</string>
-    <string name="tract_settings_languages_title">متوازی زبان</string>
-    <string name="tract_settings_languages_description">اِس ٹول میں دو زبانوں کے درمیان مواصلات</string>
-    <string name="tract_settings_languages_parallel">متوازی</string>
-    <string name="tract_settings_languages_none">کوئی نہیں</string>
-    <string name="tract_settings_shareables_title">متعلقہ تصاویر</string>
 </resources>

@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">准备</string>
     <string name="tract_tips_type_quote">引用</string>
     <string name="tract_tips_type_tip">提示</string>
+    <!-- Settings -->
+    <string name="menu_training_tips">培训提示</string>
+    <string name="tract_settings_action_tips_disable">隐藏提示</string>
 </resources>
