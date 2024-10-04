@@ -5,8 +5,6 @@
     <string name="tool_offline">آپ کے مطلوبہ ٹول کو انٹر نیٹ کنکشن آن ہونے کی</string>
     <string name="tract_content_input_error_required">%1$s  مطلوب ہے</string>
     <string name="tract_content_input_error_invalid_email">مہربانی سے درست پتہ  لکھیں</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">تربیتی تجاویز</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شئیر کریں</string>
     <string name="tool_share_sheet_more_apps">مزید</string>
@@ -21,4 +19,13 @@
     <string name="feature_discovery_desc_share_tool">اِس آئیکن پر کلک کر کے یہ ٹول کسی دوست کو بھیجیں۔</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">تصویر شئیر کریں</string>
+    <!-- Settings -->
+    <string name="menu_settings">ترتیبات</string>
+    <string name="tool_settings_title">ٹول آپشن</string>
+    <string name="tool_settings_action_share">لنک شئیر کریں</string>
+    <string name="tool_settings_languages_title">متوازی زبان</string>
+    <string name="tool_settings_languages_description">اِس ٹول میں دو زبانوں کے درمیان مواصلات</string>
+    <string name="tool_settings_languages_parallel">متوازی</string>
+    <string name="tool_settings_languages_none">کوئی نہیں</string>
+    <string name="tool_settings_shareables_title">متعلقہ تصاویر</string>
 </resources>

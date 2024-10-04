@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">حضر</string>
     <string name="tract_tips_type_quote">إقتباس</string>
     <string name="tract_tips_type_tip">فكرة عملية</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">نصائح للتدريب</string>
+    <string name="tool_settings_action_tips_disable">إخفاء النصائح</string>
 </resources>

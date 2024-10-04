@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Préparer</string>
     <string name="tract_tips_type_quote">Citation</string>
     <string name="tract_tips_type_tip">Conseil</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Conseils de formation</string>
+    <string name="tool_settings_action_tips_disable">Cacher des astuces</string>
 </resources>

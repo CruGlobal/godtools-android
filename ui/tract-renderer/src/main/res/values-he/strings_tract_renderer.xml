@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">לצאת מהשיתוף מרחוק עכשיו?</string>
     <string name="tract_live_share_exit_dialog_confirm">יציאה</string>
     <string name="tract_live_share_exit_dialog_cancel">בטל</string>
-    <!-- Settings -->
-    <string name="menu_settings">הגדרות</string>
-    <string name="tract_settings_title">הגדרות כלים</string>
-    <string name="tract_settings_action_share">שתף קישור</string>
-    <string name="tract_settings_action_tips_disable">הסתר טיפים</string>
-    <string name="tract_settings_languages_title">שפה מקבילה</string>
-    <string name="tract_settings_languages_description">החלף בין שתי שפות שונות בכלי זה.</string>
-    <string name="tract_settings_languages_parallel">מקביל</string>
-    <string name="tract_settings_languages_none">כלום</string>
-    <string name="tract_settings_shareables_title">גרפיקה מקושרת</string>
 </resources>

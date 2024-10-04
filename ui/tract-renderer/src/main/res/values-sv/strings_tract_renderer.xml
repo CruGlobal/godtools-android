@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Vill du avsluta fjärrdelningssessionen nu?</string>
     <string name="tract_live_share_exit_dialog_confirm">Avsluta</string>
     <string name="tract_live_share_exit_dialog_cancel">Avbryt</string>
-    <!-- Settings -->
-    <string name="menu_settings">Inställningar</string>
-    <string name="tract_settings_title">Verktygsalternativ</string>
-    <string name="tract_settings_action_share">Dela länk</string>
-    <string name="tract_settings_action_tips_disable">Göm tips</string>
-    <string name="tract_settings_languages_title">Parallellt språk</string>
-    <string name="tract_settings_languages_description">Växla mellan två olika språk med det här verktyget.</string>
-    <string name="tract_settings_languages_parallel">Parallellt</string>
-    <string name="tract_settings_languages_none">Ingen</string>
-    <string name="tract_settings_shareables_title">Relevant grafiskt material</string>
 </resources>

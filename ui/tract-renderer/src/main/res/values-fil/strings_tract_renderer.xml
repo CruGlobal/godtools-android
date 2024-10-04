@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Umalis na sa session ng remote na pagbabahagi?</string>
     <string name="tract_live_share_exit_dialog_confirm">Umalis</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselahin</string>
-    <!-- Settings -->
-    <string name="menu_settings">Mga Setting</string>
-    <string name="tract_settings_title">Mga Opsyon ng Tool</string>
-    <string name="tract_settings_action_share">Ibahagi ang link</string>
-    <string name="tract_settings_action_tips_disable">Itago ang mga tip</string>
-    <string name="tract_settings_languages_title">Parallel na Wika</string>
-    <string name="tract_settings_languages_description">Mag-toggle sa pagitan ng dalawang magkaibang wika sa tool na ito.</string>
-    <string name="tract_settings_languages_parallel">Parallel</string>
-    <string name="tract_settings_languages_none">Wala</string>
-    <string name="tract_settings_shareables_title">Mga nauugnay na graphics</string>
 </resources>

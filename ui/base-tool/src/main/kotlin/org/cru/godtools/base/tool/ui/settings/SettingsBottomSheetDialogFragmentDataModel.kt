@@ -1,4 +1,4 @@
-package org.cru.godtools.tract.ui.settings
+package org.cru.godtools.base.tool.ui.settings
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_tips"
-        android:checkable="true"
-        android:title="@string/menu_training_tips"
-        app:showAsAction="never" />
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
+        android:orderInCategory="400"
+        android:title="@string/menu_settings"
+        app:showAsAction="always" />
 </menu>

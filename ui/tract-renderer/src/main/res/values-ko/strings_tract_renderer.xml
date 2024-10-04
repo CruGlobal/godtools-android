@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">지금 원격 공유 세션에서 나갈까요?</string>
     <string name="tract_live_share_exit_dialog_confirm">나가기</string>
     <string name="tract_live_share_exit_dialog_cancel">취소</string>
-    <!-- Settings -->
-    <string name="menu_settings">설정</string>
-    <string name="tract_settings_title">도구 옵션</string>
-    <string name="tract_settings_action_share">링크 공유하기</string>
-    <string name="tract_settings_action_tips_disable">팁 숨기기</string>
-    <string name="tract_settings_languages_title">병행 언어</string>
-    <string name="tract_settings_languages_description">이 도구에서 두 개의 다른 언어를 전환합니다.</string>
-    <string name="tract_settings_languages_parallel">병행</string>
-    <string name="tract_settings_languages_none">없음</string>
-    <string name="tract_settings_shareables_title">관련 그래픽</string>
 </resources>

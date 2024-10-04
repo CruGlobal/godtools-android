@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">準備</string>
     <string name="tract_tips_type_quote">金句</string>
     <string name="tract_tips_type_tip">提示</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">訓練提示</string>
+    <string name="tool_settings_action_tips_disable">隱藏提示</string>
 </resources>

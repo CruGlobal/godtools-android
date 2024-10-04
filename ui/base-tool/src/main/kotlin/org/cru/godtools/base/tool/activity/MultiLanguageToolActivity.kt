@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
@@ -16,11 +17,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combine
-import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
+import org.cru.godtools.base.tool.ui.settings.SettingsBottomSheetDialogFragment
+import org.cru.godtools.base.tool.ui.settings.ShareLinkSettingsAction
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.navBarControlColor
@@ -52,12 +56,12 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tool_multilanguage, menu)
-        menu.setupTrainingTipsMenuItem()
+        menu.removeItem(R.id.action_share)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_tips -> {
-            dataModel.showTips.value = !dataModel.showTips.value!!
+        R.id.action_settings -> {
+            showSettingsDialog()
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -141,14 +145,32 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     }
     // endregion Language Toggle
 
-    // region Training Tips
-    private fun Menu.setupTrainingTipsMenuItem() {
-        findItem(R.id.action_tips)?.let { item ->
-            dataModel.hasTips.observe(this@MultiLanguageToolActivity, item) { isVisible = it }
-            dataModel.showTips.observe(this@MultiLanguageToolActivity, item) { isChecked = it }
+    // region Settings
+    open val settingsActionsFlow get() = shareMenuItemVisible.asFlow()
+        .map { shareItemVisible ->
+            buildList {
+                if (shareItemVisible) {
+                    add(
+                        ShareLinkSettingsAction(this@MultiLanguageToolActivity) {
+                            shareCurrentTool()
+                            dismissSettingsDialog()
+                        }
+                    )
+                }
+            }
         }
+
+    private fun showSettingsDialog() {
+        eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
+        SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
     }
-    // endregion Training Tips
+
+    protected fun dismissSettingsDialog() {
+        supportFragmentManager.fragments
+            .filterIsInstance<SettingsBottomSheetDialogFragment>()
+            .forEach { it.dismissAllowingStateLoss() }
+    }
+    // endregion Settings
     // endregion UI
 
     // region Tool sync

@@ -5,8 +5,6 @@
     <string name="tool_offline">A ferramenta que você solicitou requer uma conexão com a internet para poder abrir</string>
     <string name="tract_content_input_error_required">Se requer %1$s</string>
     <string name="tract_content_input_error_invalid_email">Por favor, digite um endereço de e-mail válido</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Dicas de treinamento</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Compartilhar</string>
     <string name="tool_share_sheet_more_apps">Mais</string>
@@ -20,4 +18,13 @@ Vamos conversar mais!</string>
     <string name="feature_discovery_desc_share_tool">Envie esta ferramenta a um amigo selecionando este ícone</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Compartilhar imagem</string>
+    <!-- Settings -->
+    <string name="menu_settings">Configurações</string>
+    <string name="tool_settings_title">Opções de Ferramenta</string>
+    <string name="tool_settings_action_share">Compartilhar link</string>
+    <string name="tool_settings_languages_title">Idioma Paralelo</string>
+    <string name="tool_settings_languages_description">Alterne entre dois idiomas diferentes nesta ferramenta.</string>
+    <string name="tool_settings_languages_parallel">Paralelo</string>
+    <string name="tool_settings_languages_none">Nenhum</string>
+    <string name="tool_settings_shareables_title">Gráficos relacionados</string>
 </resources>

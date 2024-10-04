@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">ออกจากเซสชันการแชร์ทางไกลตอนนี้หรือไม่</string>
     <string name="tract_live_share_exit_dialog_confirm">ออก</string>
     <string name="tract_live_share_exit_dialog_cancel">ยกเลิก</string>
-    <!-- Settings -->
-    <string name="menu_settings">การตั้งค่า</string>
-    <string name="tract_settings_title">ตัวเลือกเครื่องมือ</string>
-    <string name="tract_settings_action_share">แชร์ลิงค์</string>
-    <string name="tract_settings_action_tips_disable">ซ่อนเคล็ดลับ</string>
-    <string name="tract_settings_languages_title">ภาษาพาราเลล</string>
-    <string name="tract_settings_languages_description">สลับไปมาระหว่างสองภาษาในเครื่องมือนี้</string>
-    <string name="tract_settings_languages_parallel">พาราเลล</string>
-    <string name="tract_settings_languages_none">ไม่มี</string>
-    <string name="tract_settings_shareables_title">กราฟิกที่เกี่ยวข้อง</string>
 </resources>

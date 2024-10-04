@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">立即退出远程共享会话？</string>
     <string name="tract_live_share_exit_dialog_confirm">退出</string>
     <string name="tract_live_share_exit_dialog_cancel">取消</string>
-    <!-- Settings -->
-    <string name="menu_settings">设置</string>
-    <string name="tract_settings_title">工具选项</string>
-    <string name="tract_settings_action_share">分享链接</string>
-    <string name="tract_settings_action_tips_disable">隐藏提示</string>
-    <string name="tract_settings_languages_title">同步语言</string>
-    <string name="tract_settings_languages_description">在这个工具中切换两种不同的语言。</string>
-    <string name="tract_settings_languages_parallel">"同步 "</string>
-    <string name="tract_settings_languages_none">无</string>
-    <string name="tract_settings_shareables_title">相关图片</string>
 </resources>

@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">遠隔共有セッションを今すぐ終了しますか？</string>
     <string name="tract_live_share_exit_dialog_confirm">終了</string>
     <string name="tract_live_share_exit_dialog_cancel">キャンセル</string>
-    <!-- Settings -->
-    <string name="menu_settings">設定</string>
-    <string name="tract_settings_title">ツールオプション</string>
-    <string name="tract_settings_action_share">リンクをシェア</string>
-    <string name="tract_settings_action_tips_disable">ヒントを非表示</string>
-    <string name="tract_settings_languages_title">並列言語</string>
-    <string name="tract_settings_languages_description">本ツール内で2つの言語を切り替えることができます。</string>
-    <string name="tract_settings_languages_parallel">並列</string>
-    <string name="tract_settings_languages_none">なし</string>
-    <string name="tract_settings_shareables_title">関連する画像</string>
 </resources>

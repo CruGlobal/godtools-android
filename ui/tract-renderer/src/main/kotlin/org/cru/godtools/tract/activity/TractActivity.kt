@@ -11,19 +11,21 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.map
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.ccci.gto.android.common.androidx.lifecycle.observe
 import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
+import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_PAGE
@@ -32,10 +34,8 @@ import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
-import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
-import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -43,6 +43,7 @@ import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
+import org.cru.godtools.tool.tips.ui.settings.ToggleTipsSettingsAction
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.databinding.TractActivityBinding
@@ -59,7 +60,7 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
-import org.cru.godtools.tract.ui.settings.SettingsBottomSheetDialogFragment
+import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
 import org.cru.godtools.tract.util.isTractDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
@@ -110,8 +111,6 @@ class TractActivity :
 
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
         menuInflater.inflate(R.menu.activity_tract, menu)
-        menu.removeItem(R.id.action_share)
-        menu.removeItem(R.id.action_tips)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menu.setupLiveShareMenuItem()
 
@@ -122,11 +121,6 @@ class TractActivity :
     override fun onOptionsItemSelected(item: MenuItem) = when {
         item.itemId == R.id.action_install -> {
             InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
-            true
-        }
-        item.itemId == R.id.action_settings -> {
-            eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
-            SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
             true
         }
         // handle close button if this is an instant app
@@ -250,6 +244,36 @@ class TractActivity :
         dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
     }
 
+    // region Settings
+    override val settingsActionsFlow get() = combine(
+        super.settingsActionsFlow,
+        dataModel.tool,
+        dataModel.manifest,
+        dataModel.hasTips.asFlow(),
+        dataModel.showTips.asFlow()
+    ) { actions, tool, manifest, hasTips, tipsEnabled ->
+        buildList {
+            addAll(actions)
+            if (tool?.isScreenShareDisabled == false && manifest != null) {
+                add(
+                    LiveShareSettingsAction(this@TractActivity) {
+                        shareLiveShareLink()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
+            if (hasTips) {
+                add(
+                    ToggleTipsSettingsAction(this@TractActivity, tipsEnabled) {
+                        dataModel.showTips.toggleValue()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
+        }
+    }
+    // endregion Settings
+
     // region Tool Pager
     @Inject
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
@@ -324,12 +348,6 @@ class TractActivity :
     }
 
     // region Share Menu Logic
-    override val shareMenuItemVisible by lazy {
-        // HACK: make this dependent on shareLinkUriLiveData so that there is a subscriber to actually resolve the uri
-        //       before the user clicks the share action
-        shareLinkUriLiveData.map { false }
-    }
-
     override val shareLinkUriLiveData by lazy {
         viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
     }

@@ -1,48 +1,48 @@
-package org.cru.godtools.tract.ui.settings
+package org.cru.godtools.base.tool.ui.settings
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
-import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.ccci.gto.android.common.material.bottomsheet.BindingBottomSheetDialogFragment
-import org.cru.godtools.base.tool.activity.BaseToolActivity
+import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
+import org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
-import org.cru.godtools.tool.tract.R
-import org.cru.godtools.tool.tract.databinding.TractSettingsSheetBinding
-import org.cru.godtools.tract.activity.TractActivity
-import org.cru.godtools.tract.databinding.TractSettingsSheetCallbacks
+import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolSettingsSheetBinding
 
 @AndroidEntryPoint
 class SettingsBottomSheetDialogFragment :
-    BindingBottomSheetDialogFragment<TractSettingsSheetBinding>(R.layout.tract_settings_sheet),
-    TractSettingsSheetCallbacks {
+    BindingBottomSheetDialogFragment<ToolSettingsSheetBinding>(R.layout.tool_settings_sheet),
+    ToolSettingsSheetCallbacks {
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupDataModel()
     }
 
-    override fun onBindingCreated(binding: TractSettingsSheetBinding, savedInstanceState: Bundle?) {
+    override fun onBindingCreated(binding: ToolSettingsSheetBinding, savedInstanceState: Bundle?) {
         binding.callbacks = this
-        binding.tool = activityDataModel.tool
         binding.activeManifest = activityDataModel.manifest.asLiveData()
-        binding.hasTips = activityDataModel.hasTips
-        binding.showTips = activityDataModel.showTips
         binding.primaryLanguage = primaryLanguage
         binding.parallelLanguage = parallelLanguage
+        setupActions(binding)
         setupLanguageViews(binding)
         setupShareables(binding)
     }
@@ -74,7 +74,18 @@ class SettingsBottomSheetDialogFragment :
     // endregion Data Model
 
     // region UI
-    private fun setupLanguageViews(binding: TractSettingsSheetBinding) {
+    private fun setupActions(binding: ToolSettingsSheetBinding) {
+        val adapter = SettingsActionsAdapter(viewLifecycleOwner)
+        (activity as? MultiLanguageToolActivity<*>)?.let {
+            it.settingsActionsFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .onEach { adapter.actions = it }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
+        binding.actions.adapter = adapter
+    }
+
+    private fun setupLanguageViews(binding: ToolSettingsSheetBinding) {
         binding.languagePrimaryDropdown.apply {
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
@@ -84,7 +95,7 @@ class SettingsBottomSheetDialogFragment :
             setOnItemClickListener { _, _, pos, _ -> adapter.getItem(pos)?.code?.let { updatePrimaryLanguage(it) } }
         }
         binding.languageParallelDropdown.apply {
-            val none = Language(code = Locale("x", "none"), name = getString(R.string.tract_settings_languages_none))
+            val none = Language(code = Locale("x", "none"), name = getString(R.string.tool_settings_languages_none))
             val adapter = LanguagesDropdownAdapter(context)
             dataModel.sortedLanguages
                 .combineWith(primaryLanguage) { l, prim -> listOf(none) + l.filterNot { it.code == prim?.code } }
@@ -96,7 +107,7 @@ class SettingsBottomSheetDialogFragment :
         }
     }
 
-    private fun setupShareables(binding: TractSettingsSheetBinding) {
+    private fun setupShareables(binding: ToolSettingsSheetBinding) {
         val adapter = ShareablesAdapter(viewLifecycleOwner, this)
         activityDataModel.activeManifest.observe(viewLifecycleOwner) { adapter.shareables = it?.shareables }
         binding.shareables.adapter = adapter
@@ -115,17 +126,7 @@ class SettingsBottomSheetDialogFragment :
         if (updateActiveLocale) activeLocale.value = locale
     }
 
-    // region TractSettingsSheetCallbacks
-    override fun shareLink() {
-        (activity as? BaseToolActivity<*>)?.shareCurrentTool()
-        dismissAllowingStateLoss()
-    }
-
-    override fun shareScreen() {
-        (activity as? TractActivity)?.shareLiveShareLink()
-        dismissAllowingStateLoss()
-    }
-
+    // region ToolSettingsSheetCallbacks
     override fun shareShareable(shareable: ShareableImage?) {
         val manifest = shareable?.manifest
         val tool = manifest?.code
@@ -138,12 +139,10 @@ class SettingsBottomSheetDialogFragment :
         dismissAllowingStateLoss()
     }
 
-    override fun toggleTrainingTips() = activityDataModel.showTips.toggleValue()
-
     override fun swapLanguages() {
         val languages = activityDataModel.primaryLocales.value
         activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
         activityDataModel.parallelLocales.value = languages
     }
-    // endregion TractSettingsSheetCallbacks
+    // endregion ToolSettingsSheetCallbacks
 }

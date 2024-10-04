@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Izhod iz seje deljenja na daljavo?</string>
     <string name="tract_live_share_exit_dialog_confirm">Izhod</string>
     <string name="tract_live_share_exit_dialog_cancel">Prekliči</string>
-    <!-- Settings -->
-    <string name="menu_settings">Nastavitve</string>
-    <string name="tract_settings_title">Možnosti orodja</string>
-    <string name="tract_settings_action_share">Deli povezavo</string>
-    <string name="tract_settings_action_tips_disable">Skrij nasvete</string>
-    <string name="tract_settings_languages_title">Vzporedni jezik</string>
-    <string name="tract_settings_languages_description">V tem orodju lahko preklapljate med dvema različnima jezikoma.</string>
-    <string name="tract_settings_languages_parallel">Vzporedno</string>
-    <string name="tract_settings_languages_none">Brez</string>
-    <string name="tract_settings_shareables_title">Povezane grafike</string>
 </resources>

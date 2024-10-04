@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Kilép most a távmegosztási munkamenetből?</string>
     <string name="tract_live_share_exit_dialog_confirm">Kilépés</string>
     <string name="tract_live_share_exit_dialog_cancel">Mégse</string>
-    <!-- Settings -->
-    <string name="menu_settings">Beállítások</string>
-    <string name="tract_settings_title">Eszköz opciók</string>
-    <string name="tract_settings_action_share">Link megosztása</string>
-    <string name="tract_settings_action_tips_disable">Tippek elrejtése</string>
-    <string name="tract_settings_languages_title">Párhuzamos nyelv</string>
-    <string name="tract_settings_languages_description">Ebben az eszközben két különböző nyelv között válthatsz.</string>
-    <string name="tract_settings_languages_parallel">Párhuzamos</string>
-    <string name="tract_settings_languages_none">Egyik sem</string>
-    <string name="tract_settings_shareables_title">Kapcsolódó grafika</string>
 </resources>

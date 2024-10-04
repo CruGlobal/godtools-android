@@ -5,8 +5,6 @@
     <string name="tool_offline">リクエストされたツールを開くためにはインターネット接続が必要です</string>
     <string name="tract_content_input_error_required">%1$sが必要です</string>
     <string name="tract_content_input_error_invalid_email">有効なメールアドレスを入力してください</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">トレーニングのヒント</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">シェア</string>
     <string name="tool_share_sheet_more_apps">その他</string>
@@ -20,4 +18,13 @@
     <string name="feature_discovery_desc_share_tool">このアイコンをクリックして、このツールを友達に送りましょう</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">画像をシェア</string>
+    <!-- Settings -->
+    <string name="menu_settings">設定</string>
+    <string name="tool_settings_title">ツールオプション</string>
+    <string name="tool_settings_action_share">リンクをシェア</string>
+    <string name="tool_settings_languages_title">並列言語</string>
+    <string name="tool_settings_languages_description">本ツール内で2つの言語を切り替えることができます。</string>
+    <string name="tool_settings_languages_parallel">並列</string>
+    <string name="tool_settings_languages_none">なし</string>
+    <string name="tool_settings_shareables_title">関連する画像</string>
 </resources>

@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Ukončiť reláciu zdieľania na diaľku?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ukončiť</string>
     <string name="tract_live_share_exit_dialog_cancel">Zrušiť</string>
-    <!-- Settings -->
-    <string name="menu_settings">Nastavenia</string>
-    <string name="tract_settings_title">Možnosti nástrojov</string>
-    <string name="tract_settings_action_share">Zdieľať odkaz</string>
-    <string name="tract_settings_action_tips_disable">Skryť tipy</string>
-    <string name="tract_settings_languages_title">Vedľajší jazyk</string>
-    <string name="tract_settings_languages_description">Prepínajte sa v tomto nástroji medzi dvoma jazykmi.</string>
-    <string name="tract_settings_languages_parallel">Vedľajší</string>
-    <string name="tract_settings_languages_none">Žiadny</string>
-    <string name="tract_settings_shareables_title">Súvisiaca grafika</string>
 </resources>

@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Sagatavojies</string>
     <string name="tract_tips_type_quote">Citāts</string>
     <string name="tract_tips_type_tip">Padoms</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Apmācības padomi</string>
+    <string name="tool_settings_action_tips_disable">Paslēpt padomus</string>
 </resources>

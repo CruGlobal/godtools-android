@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Wil jy nou die afstanddeelsessie verlaat?</string>
     <string name="tract_live_share_exit_dialog_confirm">Verlaat</string>
     <string name="tract_live_share_exit_dialog_cancel">Kanselleer</string>
-    <!-- Settings -->
-    <string name="menu_settings">Instellings</string>
-    <string name="tract_settings_title">Gereedskap-opsies</string>
-    <string name="tract_settings_action_share">Deel ’n skakel</string>
-    <string name="tract_settings_action_tips_disable">Vesteek wenke</string>
-    <string name="tract_settings_languages_title">Parallelle taal</string>
-    <string name="tract_settings_languages_description">Wissel tussen twee verskillende tale in hierdie gereedskap.</string>
-    <string name="tract_settings_languages_parallel">Parallel</string>
-    <string name="tract_settings_languages_none">Geen</string>
-    <string name="tract_settings_shareables_title">Verwante grafika</string>
 </resources>
