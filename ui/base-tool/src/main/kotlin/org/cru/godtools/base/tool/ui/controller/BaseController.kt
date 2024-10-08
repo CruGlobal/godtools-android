@@ -1,5 +1,6 @@
 package org.cru.godtools.base.tool.ui.controller
 
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
@@ -160,7 +161,7 @@ abstract class BaseController<T : Base> protected constructor(
         model.url?.let { url ->
             val manifest = model.manifest
             eventBus.post(ExitLinkActionEvent(manifest.code, url, manifest.locale))
-            root.context.openUrl(url)
+            root.context.openUrl(Uri.parse(url))
         }
     }
     // endregion Clickable

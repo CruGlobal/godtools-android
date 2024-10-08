@@ -19,5 +19,5 @@ class ArticleAnalyticsScreenEvent(article: Article, tool: String?, locale: Local
 
     override val appSubSection get() = APP_SUB_SECTION_ARTICLE
 
-    override val userCounterName = UserCounterNames.ARTICLE_OPEN(article.uri)
+    override val userCounterName = UserCounterNames.ARTICLE_OPEN(article.uri.toString())
 }

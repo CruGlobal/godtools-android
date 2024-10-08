@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.account.activity
 
-import android.net.Uri
 import com.android.ide.common.rendering.api.SessionParams.RenderingMode
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
@@ -27,7 +26,7 @@ class AccountActivityBadgesPaparazziTest(@TestParameter nightMode: NightMode) :
             buildMap {
                 repeat(6) { put(UserCounterNames.TOOL_OPEN("tool$it"), it + 1) }
                 repeat(4) { put("lesson_completions.$it", it + 1) }
-                repeat(7) { put(UserCounterNames.ARTICLE_OPEN(Uri.parse("example:$it")), it + 1) }
+                repeat(7) { put(UserCounterNames.ARTICLE_OPEN("example:$it"), it + 1) }
                 put(UserCounterNames.IMAGE_SHARED, 7)
                 put(UserCounterNames.TIPS_COMPLETED, 8)
             }
@@ -42,7 +41,7 @@ class AccountActivityBadgesPaparazziTest(@TestParameter nightMode: NightMode) :
             buildMap {
                 repeat(10) { put(UserCounterNames.TOOL_OPEN("tool$it"), it + 1) }
                 repeat(10) { put("lesson_completions.$it", it + 1) }
-                repeat(10) { put(UserCounterNames.ARTICLE_OPEN(Uri.parse("example:$it")), it + 1) }
+                repeat(10) { put(UserCounterNames.ARTICLE_OPEN("example:$it"), it + 1) }
                 put(UserCounterNames.IMAGE_SHARED, 10)
                 put(UserCounterNames.TIPS_COMPLETED, 20)
             }
