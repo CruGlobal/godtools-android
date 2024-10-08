@@ -36,6 +36,8 @@ import org.cru.godtools.shared.common.model.ThemeType
 import org.cru.godtools.shared.user.activity.model.Badge
 import org.cru.godtools.shared.user.activity.model.Badge.BadgeType
 import org.cru.godtools.shared.user.activity.model.UserActivity
+import org.cru.godtools.shared.user.activity.model.color
+import org.cru.godtools.shared.user.activity.model.containerColor
 
 private val BADGE_SIZE = 48.dp
 
