@@ -99,7 +99,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
         translations.filterNot { repository.isProcessed(it) }.map { translation ->
             launch {
                 manifestManager.getManifest(translation)?.let { manifest ->
-                    repository.addAemImports(translation, manifest.aemImports)
+                    repository.addAemImports(translation, manifest.aemImports.map { Uri.parse(it) })
                     coroutineScope.launch { syncAemImportsFromManifest(manifest, false) }
                 }
             }
@@ -112,7 +112,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     // region AEM Import
     suspend fun syncAemImportsFromManifest(manifest: Manifest?, force: Boolean): Unit = coroutineScope {
-        manifest?.aemImports?.forEach { launch { syncAemImport(it, force) } }
+        manifest?.aemImports?.forEach { launch { syncAemImport(Uri.parse(it), force) } }
     }
 
     /**
