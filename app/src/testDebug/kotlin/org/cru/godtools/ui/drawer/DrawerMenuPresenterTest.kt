@@ -15,7 +15,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.account.GodToolsAccountManager
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -34,7 +34,7 @@ class DrawerMenuPresenterTest {
     )
 
     @AfterTest
-    fun cleanup() = clearAndroidUiDispatcher()
+    fun cleanup() = AndroidUiDispatcherUtil.runScheduledDispatches()
 
     @Test
     fun `State - isLoggedIn`() = runTest {

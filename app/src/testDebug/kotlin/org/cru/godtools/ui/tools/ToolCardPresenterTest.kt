@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -86,7 +86,7 @@ class ToolCardPresenterTest {
     )
 
     @AfterTest
-    fun cleanup() = clearAndroidUiDispatcher()
+    fun cleanup() = AndroidUiDispatcherUtil.runScheduledDispatches()
 
     // region ToolCard.State.tool
     @Test

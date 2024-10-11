@@ -22,8 +22,8 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.base.Settings
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -55,7 +55,7 @@ class AppLanguagePresenterTest {
 
     @AfterTest
     fun cleanup() {
-        clearAndroidUiDispatcher()
+        AndroidUiDispatcherUtil.runScheduledDispatches()
         unmockkObject(LocaleConfigCompat)
     }
 
