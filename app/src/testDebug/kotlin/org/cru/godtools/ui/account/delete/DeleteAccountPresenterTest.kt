@@ -14,7 +14,7 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertIs
 import kotlinx.coroutines.test.runTest
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
 import org.cru.godtools.ui.account.delete.DeleteAccountScreen.State
@@ -34,7 +34,7 @@ class DeleteAccountPresenterTest {
     private val presenter = DeleteAccountPresenter(navigator, accountManager)
 
     @AfterTest
-    fun cleanup() = clearAndroidUiDispatcher()
+    fun cleanup() = AndroidUiDispatcherUtil.runScheduledDispatches()
 
     @Test
     fun `Delete Account - succeeds`() = runTest {

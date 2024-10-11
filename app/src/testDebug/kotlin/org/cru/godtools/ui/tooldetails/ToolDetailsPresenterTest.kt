@@ -38,8 +38,8 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
@@ -163,7 +163,7 @@ class ToolDetailsPresenterTest {
     @AfterTest
     fun cleanup() {
         unmockkStatic("org.cru.godtools.downloadmanager.compose.DownloadLatestTranslationKt")
-        clearAndroidUiDispatcher()
+        AndroidUiDispatcherUtil.runScheduledDispatches()
     }
 
     // region State.tool
