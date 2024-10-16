@@ -12,5 +12,7 @@ sealed interface LoginResponse : Parcelable {
         data object UserNotFound : Error()
         @Parcelize
         data object UserAlreadyExists : Error()
+        @Parcelize
+        data object NotConnected : Error()
     }
 }

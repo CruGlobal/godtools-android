@@ -8,12 +8,14 @@ import androidx.core.app.ActivityOptionsCompat
 import dagger.Lazy
 import java.io.IOException
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.base.Ordered
+import org.cru.godtools.account.AccountModule.Companion.IS_CONNECTED_STATE_FLOW_ACCOUNTS
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.api.UserApi
@@ -33,13 +36,20 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     @get:VisibleForTesting
     internal val providers: List<AccountProvider>,
     private val userApi: Lazy<UserApi>,
+    @Named(IS_CONNECTED_STATE_FLOW_ACCOUNTS)
+    private val isConnected: StateFlow<Boolean>,
     coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
     @Inject
     internal constructor(
         providers: Set<@JvmSuppressWildcards AccountProvider>,
         userApi: Lazy<UserApi>,
-    ) : this(providers.sortedWith(Ordered.COMPARATOR), userApi)
+        @Named(IS_CONNECTED_STATE_FLOW_ACCOUNTS)
+        isConnected: StateFlow<Boolean>,
+        coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
+    ) : this(providers.sortedWith(Ordered.COMPARATOR), userApi, isConnected)
+
+    private val isConnectedFlow = isConnected.stateIn(coroutineScope, SharingStarted.Eagerly, false)
 
     // region Active Provider
     @VisibleForTesting
@@ -75,12 +85,20 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     ): ActivityResultLauncher<AccountType> {
         val launchers = providers.associate {
             it.type to it.rememberLauncherForLogin(createAccount) { result ->
+                val exceptionOrNull = result.exceptionOrNull()
                 onResponse(
                     when {
                         result.isSuccess -> LoginResponse.Success
-                        else -> when (result.exceptionOrNull()) {
-                            AuthenticationException.UserNotFound -> LoginResponse.Error.UserNotFound
-                            AuthenticationException.UserAlreadyExists -> LoginResponse.Error.UserAlreadyExists
+                        else -> when {
+                            exceptionOrNull == AuthenticationException.UserNotFound -> {
+                                LoginResponse.Error.UserNotFound
+                            }
+
+                            exceptionOrNull == AuthenticationException.UserAlreadyExists -> {
+                                LoginResponse.Error.UserAlreadyExists
+                            }
+
+                            !isConnectedFlow.value -> LoginResponse.Error.NotConnected
                             else -> LoginResponse.Error()
                         }
                     }
