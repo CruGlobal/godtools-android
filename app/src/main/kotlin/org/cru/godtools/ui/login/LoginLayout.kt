@@ -28,6 +28,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +52,11 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit) {
+fun LoginLayout(
+    modifier: Modifier = Modifier,
+    createAccount: Boolean = false,
+    onEvent: (event: LoginLayoutEvent) -> Unit = {},
+) {
     var loginError: LoginResponse.Error? by rememberSaveable { mutableStateOf(null) }
     val loginLauncher = rememberLoginLauncher(createAccount) {
         when (it) {
@@ -66,7 +71,7 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(GodToolsTheme.GT_BLUE)
             .verticalScroll(rememberScrollState())
@@ -176,7 +181,7 @@ private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
 @Composable
 private fun NoInternetError(createAccount: Boolean, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    val isConnected by context.isConnectedFlow().collectAsState(true)
+    val isConnected by remember { context.isConnectedFlow() }.collectAsState(true)
 
     if (!isConnected) {
         AlertDialog(
