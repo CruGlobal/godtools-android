@@ -31,6 +31,8 @@ import org.cru.godtools.R
 import org.cru.godtools.shared.common.model.ThemeType
 import org.cru.godtools.shared.user.activity.model.IconColors
 import org.cru.godtools.shared.user.activity.model.UserActivity
+import org.cru.godtools.shared.user.activity.model.color
+import org.cru.godtools.shared.user.activity.model.containerColor
 import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
