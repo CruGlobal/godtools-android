@@ -48,16 +48,22 @@ class GodToolsAccountManagerTest {
     }
     private val testScope = TestScope()
     private val userApi: UserApi = mockk()
+    private val isConnectedFlow = MutableStateFlow(true)
 
     private val manager = GodToolsAccountManager(
         providers = listOf(provider1, provider2),
         userApi = { userApi },
+        isConnected = isConnectedFlow,
         coroutineScope = testScope.backgroundScope,
     )
 
     @Test
     fun verifyInjectedProvidersSorted() {
-        val manager = GodToolsAccountManager(providers = setOf(provider2, provider1), userApi = { userApi })
+        val manager = GodToolsAccountManager(
+            providers = setOf(provider2, provider1),
+            userApi = { userApi },
+            isConnected = isConnectedFlow
+        )
         assertEquals(listOf(provider1, provider2), manager.providers)
     }
 

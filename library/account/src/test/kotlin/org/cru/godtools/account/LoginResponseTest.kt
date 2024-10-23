@@ -33,6 +33,12 @@ class LoginResponseTest {
         assertEquals(LoginResponse.Error.UserAlreadyExists, readParcelable(data))
     }
 
+    @Test
+    fun `LoginResponse - Error - NotConnected - Parcelable`() {
+        val data = writeParcelable(LoginResponse.Error.NotConnected)
+        assertEquals(LoginResponse.Error.NotConnected, readParcelable(data))
+    }
+
     private fun writeParcelable(obj: Parcelable) = Parcel.obtain()
         .apply { writeParcelable(obj, 0) }
         .marshall()
