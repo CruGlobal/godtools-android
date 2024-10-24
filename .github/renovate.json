@@ -7,10 +7,9 @@
   "dependencyDashboard": true,
   "packageRules": [
     {
-      "groupName": "Kotlin, KSP and Compose",
-      "description": "Compose compiler is tightly coupled to Kotlin version.",
+      "groupName": "Kotlin and KSP",
+      "description": "Kotlin and KSP are tightly coupled.",
       "matchPackagePrefixes": [
-        "androidx.compose.compiler",
         "org.jetbrains.kotlin:kotlin",
         "com.google.devtools.ksp"
       ],
