@@ -1,49 +1,66 @@
 {
   "extends": [
-    "config:base",
-    ":switchToGradleLite"
+    "config:recommended"
   ],
-  "labels": [ "dependencies" ],
+  "labels": [
+    "dependencies"
+  ],
   "dependencyDashboard": true,
   "packageRules": [
     {
       "groupName": "Kotlin and KSP",
       "description": "Kotlin and KSP are tightly coupled.",
-      "matchPackagePrefixes": [
-        "org.jetbrains.kotlin:kotlin",
-        "com.google.devtools.ksp"
-      ],
-    },
-    {
-      "matchManagers": ["gradle"],
-      "matchPackageNames": ["com.google.guava:guava"],
-      "allowedVersions": "!/-jre$/"
-    },
-    {
-      "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [ "com.google.firebase:firebase-appdistribution" ],
-      "groupName": "firebase-appdistribution"
-    },
-    {
-      "groupName": "firebase-crashlytics",
-      "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [ 
-        "com.google.firebase:firebase-crashlytics",
-        "com.google.firebase.crashlytics"
+      "matchPackageNames": [
+        "org.jetbrains.kotlin:kotlin{/,}**",
+        "com.google.devtools.ksp{/,}**"
       ]
     },
     {
-      "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [ "com.google.firebase:firebase-inappmessaging" ],
-      "groupName": "firebase-inappmessaging"
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "com.google.guava:guava"
+      ],
+      "allowedVersions": "!/-jre$/"
     },
     {
-      "matchManagers": [ "gradle" ],
-      "matchPackagePrefixes": [
-        "com.google.firebase:firebase-perf",
-        "com.google.firebase:perf-plugin"
+      "matchManagers": [
+        "gradle"
       ],
-      "groupName": "firebase-perf"
+      "groupName": "firebase-appdistribution",
+      "matchPackageNames": [
+        "com.google.firebase:firebase-appdistribution{/,}**"
+      ]
+    },
+    {
+      "groupName": "firebase-crashlytics",
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "com.google.firebase:firebase-crashlytics{/,}**",
+        "com.google.firebase.crashlytics{/,}**"
+      ]
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "groupName": "firebase-inappmessaging",
+      "matchPackageNames": [
+        "com.google.firebase:firebase-inappmessaging{/,}**"
+      ]
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "groupName": "firebase-perf",
+      "matchPackageNames": [
+        "com.google.firebase:firebase-perf{/,}**",
+        "com.google.firebase:perf-plugin{/,}**"
+      ]
     }
   ]
 }
