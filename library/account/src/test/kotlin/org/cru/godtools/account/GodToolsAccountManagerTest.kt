@@ -1,5 +1,6 @@
 package org.cru.godtools.account
 
+import android.content.Context
 import app.cash.turbine.test
 import io.mockk.Called
 import io.mockk.coEvery
@@ -48,16 +49,19 @@ class GodToolsAccountManagerTest {
     }
     private val testScope = TestScope()
     private val userApi: UserApi = mockk()
+    private val context: Context = mockk()
 
     private val manager = GodToolsAccountManager(
         providers = listOf(provider1, provider2),
         userApi = { userApi },
+        context = context,
         coroutineScope = testScope.backgroundScope,
     )
 
     @Test
     fun verifyInjectedProvidersSorted() {
-        val manager = GodToolsAccountManager(providers = setOf(provider2, provider1), userApi = { userApi })
+        val manager =
+            GodToolsAccountManager(providers = setOf(provider2, provider1), userApi = { userApi }, context = context)
         assertEquals(listOf(provider1, provider2), manager.providers)
     }
 
