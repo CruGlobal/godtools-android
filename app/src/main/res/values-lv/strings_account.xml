@@ -11,6 +11,9 @@
     <string name="account_error_user_not_found">Lietotāja konts nav atrasts.</string>
     <string name="account_error_unknown">Kļūda, piesakoties sistēmā.</string>
     <string name="account_error_dialog_dismiss">OK</string>
+    <string name="account_error_not_connected">Lūdzu, pārbaudi savienojumu ar internetu un mēģini vēlreiz.</string>
+    <string name="account_error_not_connected_title">Nav savienojuma ar internetu</string>
+    <string name="account_error_title">Autentifikācija neizdevās</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Dzēst kontu</string>
     <string name="account_delete_heading">Neej tik drīz</string>
