@@ -164,6 +164,10 @@ class ToolDetailsPresenterTest {
     fun cleanup() {
         unmockkStatic("org.cru.godtools.downloadmanager.compose.DownloadLatestTranslationKt")
         AndroidUiDispatcherUtil.runScheduledDispatches()
+
+        navigator.assertGoToIsEmpty()
+        navigator.assertPopIsEmpty()
+        navigator.assertResetRootIsEmpty()
     }
 
     // region State.tool
@@ -335,7 +339,6 @@ class ToolDetailsPresenterTest {
             assertTrue(expected equalsIntent intent)
         }
 
-        navigator.assertIsEmpty()
         verifyAll {
             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
         }
@@ -365,7 +368,6 @@ class ToolDetailsPresenterTest {
             assertTrue(expected equalsIntent intent)
         }
 
-        navigator.assertIsEmpty()
         verifyAll {
             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
         }
@@ -390,8 +392,6 @@ class ToolDetailsPresenterTest {
             assertEquals(Tool.Type.TRACT, type)
             assertEquals(Locale.ENGLISH, locale)
         }
-
-        navigator.assertIsEmpty()
     }
     // endregion Event.OpenToolTraining
 

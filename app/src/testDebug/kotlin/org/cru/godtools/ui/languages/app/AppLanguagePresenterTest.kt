@@ -57,6 +57,10 @@ class AppLanguagePresenterTest {
     fun cleanup() {
         AndroidUiDispatcherUtil.runScheduledDispatches()
         unmockkObject(LocaleConfigCompat)
+
+        navigator.assertGoToIsEmpty()
+        navigator.assertPopIsEmpty()
+        navigator.assertResetRootIsEmpty()
     }
 
     // region State.languages
@@ -68,7 +72,6 @@ class AppLanguagePresenterTest {
             assertEquals(listOf(Locale.ENGLISH), awaitItem().languages)
         }
         verifyAll { LocaleConfigCompat.getSupportedLocales(any()) }
-        navigator.assertIsEmpty()
     }
 
     @Test
@@ -83,7 +86,6 @@ class AppLanguagePresenterTest {
             appLocaleState.value = Locale("es")
             assertEquals(listOf(Locale("es"), Locale.FRENCH), expectMostRecentItem().languages)
         }
-        navigator.assertIsEmpty()
     }
 
     @Test
@@ -101,7 +103,6 @@ class AppLanguagePresenterTest {
             eventSink(AppLanguageScreen.Event.UpdateLanguageQuery(""))
             assertEquals(listOf(Locale.ENGLISH, Locale("es")), expectMostRecentItem().languages)
         }
-        navigator.assertIsEmpty()
     }
     // endregion State.languages
 
@@ -122,7 +123,6 @@ class AppLanguagePresenterTest {
             awaitItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.FRENCH))
 
             assertEquals(Locale.FRENCH, awaitItem().selectedLanguage)
-            navigator.assertIsEmpty()
         }
     }
 
@@ -169,7 +169,7 @@ class AppLanguagePresenterTest {
         }
 
         assertNotEquals(Locale.FRENCH, appLocaleState.value)
-        navigator.assertIsEmpty()
+        navigator.assertPopIsEmpty()
     }
     // endregion Event.DismissConfirmDialog
 }
