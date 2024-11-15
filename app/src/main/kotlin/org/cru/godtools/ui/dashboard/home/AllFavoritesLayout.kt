@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,7 +31,6 @@ import org.cru.godtools.ui.tools.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolViewModels
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun AllFavoritesList(
     onEvent: (ToolCardEvent) -> Unit,
     viewModel: HomeViewModel = viewModel(),
