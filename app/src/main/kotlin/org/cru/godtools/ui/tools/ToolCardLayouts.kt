@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -144,52 +143,6 @@ fun LessonToolCard(
             }
         }
     }
-}
-
-@Composable
-fun ToolCard(
-    viewModel: ToolViewModels.ToolViewModel,
-    modifier: Modifier = Modifier,
-    additionalLanguage: Language? = null,
-    confirmRemovalFromFavorites: Boolean = false,
-    showActions: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-
-    val state = viewModel.toState(secondLanguage = additionalLanguage) {
-        when (it) {
-            ToolCard.Event.Click -> onEvent(
-                ToolCardEvent.Click(
-                    tool = tool?.code,
-                    type = tool?.type,
-                    lang1 = firstTranslation.value?.languageCode,
-                    lang2 = additionalLanguage?.code,
-                )
-            )
-            ToolCard.Event.OpenTool -> onEvent(
-                ToolCardEvent.OpenTool(
-                    tool = tool?.code,
-                    type = tool?.type,
-                    lang1 = firstTranslation.value?.languageCode,
-                    lang2 = additionalLanguage?.code,
-                )
-            )
-            ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(tool?.code))
-            ToolCard.Event.PinTool -> viewModel.pinTool()
-            ToolCard.Event.UnpinTool -> viewModel.unpinTool()
-        }
-    }
-
-    ToolCard(
-        state = state,
-        modifier = modifier,
-        confirmRemovalFromFavorites = confirmRemovalFromFavorites,
-        showActions = showActions,
-        interactionSource = interactionSource,
-    )
 }
 
 @Composable

@@ -67,30 +67,52 @@ internal fun AllFavoritesList(
         }
 
         items(favoriteTools, key = { "tool:${it.code}" }) { tool ->
-            ReorderableItem(reorderableState, "tool:${tool.code}") { isDragging ->
+            val toolViewModel = toolViewModels[tool.code.orEmpty(), tool]
+            val firstTranslation by toolViewModel.firstTranslation.collectAsState()
+
+            val toolState = toolViewModel.toState {
+                when (it) {
+                    ToolCard.Event.Click -> {
+                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
+                        onEvent(
+                            ToolCardEvent.Click(
+                                tool = tool.code,
+                                type = tool.type,
+                                lang1 = firstTranslation.value?.languageCode,
+                            )
+                        )
+                    }
+                    ToolCard.Event.OpenTool -> {
+                        viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
+                        onEvent(
+                            ToolCardEvent.OpenTool(
+                                tool = tool.code,
+                                type = tool.type,
+                                lang1 = firstTranslation.value?.languageCode,
+                            )
+                        )
+                    }
+                    ToolCard.Event.OpenToolDetails -> {
+                        viewModel.recordOpenClickInAnalytics(
+                            ACTION_OPEN_TOOL_DETAILS,
+                            tool.code,
+                            SOURCE_FAVORITE
+                        )
+                        onEvent(ToolCardEvent.OpenToolDetails(tool.code))
+                    }
+                    ToolCard.Event.PinTool -> toolViewModel.pinTool()
+                    ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
+                }
+            }
+
+            ReorderableItem(reorderableState, "tool:${toolState.toolCode}") { isDragging ->
                 val interactionSource = remember { MutableInteractionSource() }
                 interactionSource.reorderableDragInteractions(isDragging)
 
                 ToolCard(
-                    toolViewModels[tool.code.orEmpty(), tool],
+                    toolState,
                     confirmRemovalFromFavorites = true,
                     interactionSource = interactionSource,
-                    onEvent = {
-                        when (it) {
-                            is ToolCardEvent.Click,
-                            is ToolCardEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
-                                ACTION_OPEN_TOOL,
-                                it.tool,
-                                SOURCE_FAVORITE
-                            )
-                            is ToolCardEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
-                                ACTION_OPEN_TOOL_DETAILS,
-                                it.tool,
-                                SOURCE_FAVORITE
-                            )
-                        }
-                        onEvent(it)
-                    },
                     modifier = Modifier
                         .padding(top = 16.dp)
                         .fillMaxWidth()
