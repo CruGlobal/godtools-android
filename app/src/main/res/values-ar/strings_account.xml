@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">لم يتم العثور على حساب المستخدم.</string>
     <string name="account_error_unknown">خطأ في تسجيل الدخول.</string>
     <string name="account_error_dialog_dismiss">موافق</string>
+    <string name="account_error_not_connected">يرجى التأكد من اتصالك بالانترنت وإعادة المحاولة.</string>
+    <string name="account_error_not_connected_title">لا يوجد اتصال بالإنترنت</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">حذف الحساب</string>
     <string name="account_delete_heading">لا تغادرنا بهذه السرعة</string>

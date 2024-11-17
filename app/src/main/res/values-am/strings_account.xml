@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">የተጠቃሚ መለያ አልተገኘም።</string>
     <string name="account_error_unknown">መግባት ላይ ስህተት አለ</string>
     <string name="account_error_dialog_dismiss">እሺ</string>
+    <string name="account_error_not_connected">እባክዎ የበይነመረብ ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።</string>
+    <string name="account_error_not_connected_title">ምንም የበይነመረብ ግንኙነት የለም።</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">መለያ አጥፋ</string>
     <string name="account_delete_heading">ቶሎ እንዳትሄድ</string>

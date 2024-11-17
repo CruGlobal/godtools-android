@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">Không tìm được tài khoản người dùng.</string>
     <string name="account_error_unknown">Có lỗi khi đăng nhập</string>
     <string name="account_error_dialog_dismiss">OK</string>
+    <string name="account_error_not_connected">Vui lòng kiểm tra kết nối internet của bạn và thử lại.</string>
+    <string name="account_error_not_connected_title">Không có kết nối internet</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Xóa tài khoản</string>
     <string name="account_delete_heading">Đừng đi quá sớm</string>

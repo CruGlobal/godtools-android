@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">Conta de usuário não encontrada.</string>
     <string name="account_error_unknown">Erro ao tentar acessar.</string>
     <string name="account_error_dialog_dismiss">OK</string>
+    <string name="account_error_not_connected">Verifique sua ligação à Internet e tente novamente.</string>
+    <string name="account_error_not_connected_title">Sem ligação à Internet</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Deletar Conta</string>
     <string name="account_delete_heading">Não saia ainda</string>

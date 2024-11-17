@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">找不到用户账户。</string>
     <string name="account_error_unknown">登录错误。</string>
     <string name="account_error_dialog_dismiss">确定</string>
+    <string name="account_error_not_connected">请检查你的互联网连接，然后重试。</string>
+    <string name="account_error_not_connected_title">没有网络连接</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">删除账户</string>
     <string name="account_delete_heading">别这么快离开</string>
