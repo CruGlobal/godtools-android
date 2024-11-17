@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">यूज़र खाता नहीं मिला।</string>
     <string name="account_error_unknown">लॉगिन में त्रुटि।</string>
     <string name="account_error_dialog_dismiss">ठीक है</string>
+    <string name="account_error_not_connected">कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
+    <string name="account_error_not_connected_title">कोई इंटरनेट कनेक्शन नहीं</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">खाता हटाएँ</string>
     <string name="account_delete_heading">इतनी जल्दी न जाएँ!</string>

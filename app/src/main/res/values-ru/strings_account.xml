@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">Учетная запись пользователя не найдена.</string>
     <string name="account_error_unknown">Ошибка входа.</string>
     <string name="account_error_dialog_dismiss">ОК</string>
+    <string name="account_error_not_connected">Проверьте подключение к сети и попробуйте еще раз.</string>
+    <string name="account_error_not_connected_title">Отсутствует подключение к Интернету</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Удалить учетную запись</string>
     <string name="account_delete_heading">Не уходите так быстро</string>

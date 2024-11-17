@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">یوزر اکاؤنٹ نہیں ملا۔</string>
     <string name="account_error_unknown">غلطی</string>
     <string name="account_error_dialog_dismiss">ٹھیک ہے</string>
+    <string name="account_error_not_connected">براہِ کرم اپنا انٹرنیٹ کنیکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
+    <string name="account_error_not_connected_title">کوئی انٹرنیٹ کنیکشن نہیں ہے</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">اکاؤنٹ ڈلیت کریں</string>
     <string name="account_delete_heading">جلد مت جائیے</string>

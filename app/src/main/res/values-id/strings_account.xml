@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">Pengguna tidak ditemukan</string>
     <string name="account_error_unknown">Kesalahan saat masuk.</string>
     <string name="account_error_dialog_dismiss">OK</string>
+    <string name="account_error_not_connected">Silakan periksa koneksi internet dan coba lagi.</string>
+    <string name="account_error_not_connected_title">Tidak ada koneksi internet</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Hapus Akun</string>
     <string name="account_delete_heading">Jangan pergi begitu cepat</string>

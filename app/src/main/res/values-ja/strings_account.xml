@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">ユーザアカウントが見つかりません。</string>
     <string name="account_error_unknown">ログインエラー</string>
     <string name="account_error_dialog_dismiss">OK</string>
+    <string name="account_error_not_connected">インターネット接続を確認してからもう一度お試しください。</string>
+    <string name="account_error_not_connected_title">インターネット接続がありません</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">アカウントを削除する</string>
     <string name="account_delete_heading">本当にこの操作を実行しますか。</string>

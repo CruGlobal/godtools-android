@@ -11,6 +11,8 @@
     <string name="account_error_user_not_found">사용자 계정을 찾을 수 없습니다.</string>
     <string name="account_error_unknown">로그인 오류</string>
     <string name="account_error_dialog_dismiss">확인</string>
+    <string name="account_error_not_connected">인터넷 연결을 확인하고 다시 시도하세요.</string>
+    <string name="account_error_not_connected_title">인터넷 연결 없음</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">계정 삭제</string>
     <string name="account_delete_heading">아직 떠나기엔 일러요</string>
