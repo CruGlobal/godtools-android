@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tools
 
+import android.graphics.drawable.Drawable
 import java.io.File
 import java.util.Locale
 import org.cru.godtools.model.Language
@@ -9,6 +10,9 @@ import org.cru.godtools.model.randomTranslation
 
 object ToolCardStateTestData {
     val banner: File = File.createTempFile("tool", "png")
+    val bannerDrawable by lazy {
+        Drawable.createFromStream(this.javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
+    }
 
     val tool = ToolCard.State(
         tool = randomTool(

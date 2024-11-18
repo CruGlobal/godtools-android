@@ -1,5 +1,9 @@
-package org.cru.godtools.ui.tools
+package org.cru.godtools.ui.dashboard.home
 
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.Modifier
+import app.cash.paparazzi.DeviceConfig
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -15,17 +19,26 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.ui.BasePaparazziTest
+import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen.UiState
+import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
-class SquareToolCardPaparazziTest(
+class AllFavoritesLayoutPaparazziTest(
+    @TestParameter(valuesProvider = DeviceConfigProvider::class) deviceConfig: DeviceConfig,
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
-) : BasePaparazziTest(nightMode = nightMode, accessibilityMode = accessibilityMode) {
-    private val toolState = ToolCardStateTestData.tool.copy(translation = null)
-    private val toolStateFavorite = ToolCardStateTestData.toolFavorite.copy(translation = null)
+) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
+    private val state = UiState(
+        tools = listOf(
+            ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool3", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool4", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool5", translation = null),
+        )
+    )
 
     @BeforeTest
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
@@ -52,18 +65,9 @@ class SquareToolCardPaparazziTest(
     }
 
     @Test
-    fun `SquareToolCard() - Default`() = centerInSnapshot { SquareToolCard(toolState) }
-
-    @Test
-    fun `SquareToolCard() - Downloading`() = centerInSnapshot {
-        SquareToolCard(toolState.copy(downloadProgress = DownloadProgress(2, 5)))
-    }
-
-    @Test
-    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot { SquareToolCard(toolStateFavorite) }
-
-    @Test
-    fun `SquareToolCard() - Show Second Language`() = centerInSnapshot {
-        SquareToolCard(toolState, showSecondLanguage = true)
+    fun `AllFavoritesLayout()`() {
+        snapshot {
+            AllFavoritesLayout(state, modifier = Modifier.background(MaterialTheme.colorScheme.background))
+        }
     }
 }
