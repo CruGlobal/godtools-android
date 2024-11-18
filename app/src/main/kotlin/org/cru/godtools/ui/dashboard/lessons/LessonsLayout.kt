@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.lessons
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -28,7 +27,6 @@ internal sealed interface DashboardLessonsEvent {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (DashboardLessonsEvent) -> Unit = {}) {
     val lessons by viewModel.lessons.collectAsState(emptyList())
     val selectedLanguage by viewModel.selectedLanguage.collectAsState()
