@@ -43,6 +43,7 @@ class DashboardActivity : BaseActivity() {
                     DashboardLayout(
                         onEvent = { e ->
                             when (e) {
+                                is DashboardEvent.OpenIntent -> startActivity(e.intent)
                                 is DashboardEvent.OpenTool ->
                                     openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
                                 is DashboardEvent.OpenToolDetails ->
