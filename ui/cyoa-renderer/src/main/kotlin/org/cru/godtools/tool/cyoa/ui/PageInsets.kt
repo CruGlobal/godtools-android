@@ -8,9 +8,9 @@ import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.androidx.lifecycle.delegate
 
 private const val LEFT = "left"
-private const val TOP = "left"
-private const val RIGHT = "left"
-private const val BOTTOM = "left"
+private const val TOP = "top"
+private const val RIGHT = "right"
+private const val BOTTOM = "bottom"
 
 private const val DEFAULT_LEFT = 0
 private const val DEFAULT_TOP = 0
