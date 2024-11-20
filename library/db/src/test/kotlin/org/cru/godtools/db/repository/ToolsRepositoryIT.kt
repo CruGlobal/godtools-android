@@ -391,7 +391,7 @@ abstract class ToolsRepositoryIT {
     // region updateToolLocales()
     @Test
     fun `updateToolLocales()`() = testScope.runTest {
-        val tool = randomTool("tool")
+        val tool = randomTool("tool", primaryLocale = null, parallelLocale = null)
         repository.storeInitialTools(listOf(tool))
 
         assertNotNull(repository.findTool("tool")) {

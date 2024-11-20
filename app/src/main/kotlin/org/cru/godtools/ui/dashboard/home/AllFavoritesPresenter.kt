@@ -60,7 +60,10 @@ class AllFavoritesPresenter @AssistedInject constructor(
                             ToolCard.Event.OpenTool -> {
                                 val intent = tool.createToolIntent(
                                     context = context,
-                                    languages = listOfNotNull(state.translation?.languageCode),
+                                    languages = listOfNotNull(
+                                        tool.primaryLocale ?: state.translation?.languageCode,
+                                        tool.parallelLocale
+                                    ),
                                 )
 
                                 if (intent != null) {
