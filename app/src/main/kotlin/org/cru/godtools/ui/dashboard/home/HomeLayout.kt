@@ -3,7 +3,6 @@ package org.cru.godtools.ui.dashboard.home
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -65,7 +64,6 @@ internal sealed interface DashboardHomeEvent {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeViewModel = viewModel()) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
     val spotlightLessons by viewModel.spotlightLessons.collectAsState()
@@ -223,7 +221,6 @@ private fun FavoritesHeader(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun HorizontalFavoriteTools(
     tools: () -> List<Tool>,
     onEvent: (DashboardHomeEvent) -> Unit,
