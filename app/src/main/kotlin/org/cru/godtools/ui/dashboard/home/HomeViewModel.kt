@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val spotlightLessons = toolsRepository.getLessonsFlow()
-        .map { it.filter { !it.isHidden && it.isSpotlight }.mapNotNull { it.code } }
+        .map { it.filter { !it.isHidden && it.isSpotlight } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     val favoriteTools = toolsRepository.getFavoriteToolsFlow()

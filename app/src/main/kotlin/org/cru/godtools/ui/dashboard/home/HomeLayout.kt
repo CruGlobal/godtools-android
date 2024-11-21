@@ -71,7 +71,30 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
 
     val state = UiState(
         banner = viewModel.banner.collectAsState().value,
-        spotlightLessons = viewModel.spotlightLessons.collectAsState().value,
+        spotlightLessons = viewModel.spotlightLessons.collectAsState().value.mapNotNull { lesson ->
+            key(lesson) {
+                lateinit var lessonState: ToolCard.State
+                lessonState = toolViewModels[lesson.code ?: return@mapNotNull null, lesson].toState {
+                    when (it) {
+                        ToolCard.Event.Click -> {
+                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, lesson.code, SOURCE_FEATURED)
+                            onEvent(
+                                DashboardHomeEvent.OpenLesson(
+                                    ToolCardEvent.Click(
+                                        lessonState.tool?.code,
+                                        lessonState.tool?.type,
+                                        lessonState.translation?.languageCode
+                                    )
+                                )
+                            )
+                        }
+
+                        else -> if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
+                    }
+                }
+                lessonState
+            }
+        },
         favoriteTools = favoriteTools.orEmpty().take(5).mapNotNull { tool ->
             key(tool.code) {
                 val toolViewModel = toolViewModels[tool.code ?: return@mapNotNull null, tool]
@@ -105,7 +128,6 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
     )
 
     val banner by rememberUpdatedState(state.banner)
-    val spotlightLessons by rememberUpdatedState(state.spotlightLessons)
     val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
 
     val hasFavoriteTools by rememberUpdatedState(state.favoriteTools.isNotEmpty())
@@ -133,7 +155,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
         }
 
         // featured lessons
-        if (spotlightLessons.isNotEmpty()) {
+        if (state.spotlightLessons.isNotEmpty()) {
             item("lesson-header", "lesson-header") {
                 FeaturedLessonsHeader(
                     modifier = Modifier
@@ -143,20 +165,13 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                 )
             }
 
-            items(spotlightLessons, key = { it }, contentType = { "lesson-tool-card" }) { lesson ->
+            items(
+                state.spotlightLessons,
+                key = { it.toolCode.orEmpty() },
+                contentType = { "lesson-tool-card" }
+            ) { lessonState ->
                 LessonToolCard(
-                    lesson,
-                    onEvent = {
-                        when (it) {
-                            is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> {
-                                viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, it.tool, SOURCE_FEATURED)
-                                onEvent(DashboardHomeEvent.OpenLesson(it))
-                            }
-                            is ToolCardEvent.OpenToolDetails -> {
-                                if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
-                            }
-                        }
-                    },
+                    lessonState,
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
