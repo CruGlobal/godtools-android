@@ -22,9 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -43,6 +42,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -66,12 +66,21 @@ internal sealed interface DashboardHomeEvent {
 @Composable
 internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeViewModel = viewModel()) {
     val favoriteTools by viewModel.favoriteTools.collectAsState()
-    val spotlightLessons by viewModel.spotlightLessons.collectAsState()
-    val favoriteToolsLoaded by remember { derivedStateOf { favoriteTools != null } }
-    val hasFavoriteTools by remember { derivedStateOf { !favoriteTools.isNullOrEmpty() } }
+
+    val state = UiState(
+        banner = viewModel.banner.collectAsState().value,
+        spotlightLessons = viewModel.spotlightLessons.collectAsState().value,
+        favoriteTools = favoriteTools.orEmpty().take(5),
+        favoriteToolsLoaded = favoriteTools != null,
+    )
+
+    val banner by rememberUpdatedState(state.banner)
+    val spotlightLessons by rememberUpdatedState(state.spotlightLessons)
+    val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
+
+    val hasFavoriteTools by rememberUpdatedState(state.favoriteTools.isNotEmpty())
 
     val columnState = rememberLazyListState()
-    val banner by viewModel.banner.collectAsState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
@@ -130,7 +139,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
         if (favoriteToolsLoaded) {
             item("favorites-header") {
                 FavoritesHeader(
-                    showViewAll = { hasFavoriteTools },
+                    showViewAll = hasFavoriteTools,
                     onEvent = onEvent,
                     modifier = Modifier
                         .animateItem()
@@ -142,7 +151,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
             if (hasFavoriteTools) {
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
-                        { favoriteTools.orEmpty().take(5) },
+                        state,
                         onEvent = {
                             when {
                                 it is DashboardHomeEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
@@ -193,7 +202,7 @@ private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
 
 @Composable
 private fun FavoritesHeader(
-    showViewAll: () -> Boolean,
+    showViewAll: Boolean,
     onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) = Row(modifier = modifier.fillMaxWidth()) {
@@ -206,7 +215,7 @@ private fun FavoritesHeader(
     )
 
     AnimatedVisibility(
-        showViewAll(),
+        showViewAll,
         enter = fadeIn(),
         exit = fadeOut(),
         modifier = Modifier.alignByBaseline()
@@ -222,7 +231,7 @@ private fun FavoritesHeader(
 
 @Composable
 private fun HorizontalFavoriteTools(
-    tools: () -> List<Tool>,
+    state: UiState,
     onEvent: (DashboardHomeEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) = LazyRow(
@@ -230,7 +239,7 @@ private fun HorizontalFavoriteTools(
     horizontalArrangement = Arrangement.spacedBy(16.dp),
     modifier = modifier
 ) {
-    items(tools(), key = { it.code.orEmpty() }) {
+    items(state.favoriteTools, key = { it.code.orEmpty() }) {
         PreloadTool(it)
 
         SquareToolCard(
