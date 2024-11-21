@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,9 +45,10 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
-import org.cru.godtools.ui.tools.PreloadTool
 import org.cru.godtools.ui.tools.SquareToolCard
+import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
+import org.cru.godtools.ui.tools.toolViewModels
 
 private val PADDING_HORIZONTAL = 16.dp
 
@@ -70,7 +72,35 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
     val state = UiState(
         banner = viewModel.banner.collectAsState().value,
         spotlightLessons = viewModel.spotlightLessons.collectAsState().value,
-        favoriteTools = favoriteTools.orEmpty().take(5),
+        favoriteTools = favoriteTools.orEmpty().take(5).mapNotNull { tool ->
+            key(tool.code) {
+                val toolViewModel = toolViewModels[tool.code ?: return@mapNotNull null, tool]
+                lateinit var toolState: ToolCard.State
+                toolState = toolViewModel.toState {
+                    when (it) {
+                        ToolCard.Event.Click, ToolCard.Event.OpenTool -> {
+                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
+                            onEvent(
+                                DashboardHomeEvent.OpenTool(
+                                    ToolCardEvent.Click(
+                                        tool = tool.code,
+                                        type = tool.type,
+                                        lang1 = toolState.translation?.languageCode,
+                                    )
+                                )
+                            )
+                        }
+                        ToolCard.Event.OpenToolDetails -> {
+                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, tool.code, SOURCE_FAVORITE)
+                            onEvent(DashboardHomeEvent.OpenToolDetails(tool.code))
+                        }
+                        ToolCard.Event.PinTool -> toolViewModel.pinTool()
+                        ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
+                    }
+                }
+                toolState
+            }
+        },
         favoriteToolsLoaded = favoriteTools != null,
     )
 
@@ -152,21 +182,6 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
                 item("favorites", "favorites") {
                     HorizontalFavoriteTools(
                         state,
-                        onEvent = {
-                            when {
-                                it is DashboardHomeEvent.OpenTool -> viewModel.recordOpenClickInAnalytics(
-                                    ACTION_OPEN_TOOL,
-                                    it.tool,
-                                    SOURCE_FAVORITE
-                                )
-                                it is DashboardHomeEvent.OpenToolDetails -> viewModel.recordOpenClickInAnalytics(
-                                    ACTION_OPEN_TOOL_DETAILS,
-                                    it.tool,
-                                    SOURCE_FAVORITE
-                                )
-                            }
-                            onEvent(it)
-                        },
                         modifier = Modifier
                             .animateItem()
                             .fillMaxWidth()
@@ -230,29 +245,19 @@ private fun FavoritesHeader(
 }
 
 @Composable
-private fun HorizontalFavoriteTools(
-    state: UiState,
-    onEvent: (DashboardHomeEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) = LazyRow(
-    contentPadding = PaddingValues(horizontal = 16.dp),
-    horizontalArrangement = Arrangement.spacedBy(16.dp),
-    modifier = modifier
-) {
-    items(state.favoriteTools, key = { it.code.orEmpty() }) {
-        PreloadTool(it)
-
-        SquareToolCard(
-            toolCode = it.code.orEmpty(),
-            confirmRemovalFromFavorites = true,
-            onEvent = {
-                when (it) {
-                    is ToolCardEvent.Click, is ToolCardEvent.OpenTool -> onEvent(DashboardHomeEvent.OpenTool(it))
-                    is ToolCardEvent.OpenToolDetails -> onEvent(DashboardHomeEvent.OpenToolDetails(it))
-                }
-            },
-            modifier = Modifier.animateItem()
-        )
+private fun HorizontalFavoriteTools(state: UiState, modifier: Modifier = Modifier) {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
+    ) {
+        items(state.favoriteTools, key = { it.toolCode.orEmpty() }) { toolState ->
+            SquareToolCard(
+                state = toolState,
+                confirmRemovalFromFavorites = true,
+                modifier = Modifier.animateItem()
+            )
+        }
     }
 }
 
