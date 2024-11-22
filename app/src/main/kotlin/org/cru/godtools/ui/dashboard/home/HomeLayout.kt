@@ -132,6 +132,11 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
         }
     }
 
+    HomeLayout(state)
+}
+
+@Composable
+internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
     val banner by rememberUpdatedState(state.banner)
     val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
 
@@ -140,7 +145,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp)) {
+    LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
         item("banners", "banners") {
             Banners(
                 { banner },
