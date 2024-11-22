@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.home
 
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
@@ -13,5 +14,11 @@ internal data object HomeScreen : Screen {
         val spotlightLessons: List<ToolCard.State> = emptyList(),
         val favoriteTools: List<ToolCard.State> = emptyList(),
         val favoriteToolsLoaded: Boolean = false,
+        val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
+
+    sealed interface UiEvent : CircuitUiEvent {
+        data object ViewAllFavorites : UiEvent
+        data object ViewAllTools : UiEvent
+    }
 }

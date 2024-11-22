@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
@@ -43,6 +42,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -125,7 +125,12 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
             }
         },
         favoriteToolsLoaded = favoriteTools != null,
-    )
+    ) {
+        when (it) {
+            UiEvent.ViewAllFavorites -> onEvent(DashboardHomeEvent.ViewAllFavorites)
+            UiEvent.ViewAllTools -> onEvent(DashboardHomeEvent.ViewAllTools)
+        }
+    }
 
     val banner by rememberUpdatedState(state.banner)
     val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
@@ -184,8 +189,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
         if (favoriteToolsLoaded) {
             item("favorites-header") {
                 FavoritesHeader(
-                    showViewAll = hasFavoriteTools,
-                    onEvent = onEvent,
+                    state = state,
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
@@ -205,7 +209,7 @@ internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeV
             } else {
                 item("favorites-empty", "favorites-empty") {
                     NoFavoriteTools(
-                        onEvent = onEvent,
+                        state = state,
                         modifier = Modifier
                             .animateItem()
                             .padding(horizontal = PADDING_HORIZONTAL)
@@ -231,11 +235,9 @@ private fun FeaturedLessonsHeader(modifier: Modifier = Modifier) = Text(
 )
 
 @Composable
-private fun FavoritesHeader(
-    showViewAll: Boolean,
-    onEvent: (DashboardHomeEvent) -> Unit,
-    modifier: Modifier = Modifier,
-) = Row(modifier = modifier.fillMaxWidth()) {
+private fun FavoritesHeader(state: UiState, modifier: Modifier = Modifier) = Row(modifier = modifier.fillMaxWidth()) {
+    val eventSink by rememberUpdatedState(state.eventSink)
+
     Text(
         stringResource(R.string.dashboard_home_section_favorites_title),
         style = MaterialTheme.typography.titleLarge,
@@ -245,7 +247,7 @@ private fun FavoritesHeader(
     )
 
     AnimatedVisibility(
-        showViewAll,
+        state.favoriteTools.isNotEmpty(),
         enter = fadeIn(),
         exit = fadeOut(),
         modifier = Modifier.alignByBaseline()
@@ -254,7 +256,7 @@ private fun FavoritesHeader(
             stringResource(R.string.dashboard_home_section_favorites_action_view_all),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable { onEvent(DashboardHomeEvent.ViewAllFavorites) }
+            modifier = Modifier.clickable { eventSink(UiEvent.ViewAllFavorites) }
         )
     }
 }
@@ -276,15 +278,16 @@ private fun HorizontalFavoriteTools(state: UiState, modifier: Modifier = Modifie
     }
 }
 
-@Preview
 @Composable
-private fun NoFavoriteTools(modifier: Modifier = Modifier, onEvent: (DashboardHomeEvent) -> Unit = {}) = Surface(
+private fun NoFavoriteTools(state: UiState, modifier: Modifier = Modifier) = Surface(
     color = MaterialTheme.colorScheme.surfaceVariant,
     shape = RectangleShape,
     modifier = modifier
         .fillMaxWidth()
         .heightIn(min = 215.dp)
 ) {
+    val eventSink by rememberUpdatedState(state.eventSink)
+
     Column(verticalArrangement = Arrangement.Center, modifier = Modifier.padding(16.dp)) {
         Text(
             stringResource(R.string.dashboard_home_section_favorites_no_tools_title),
@@ -299,7 +302,7 @@ private fun NoFavoriteTools(modifier: Modifier = Modifier, onEvent: (DashboardHo
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            onClick = { onEvent(DashboardHomeEvent.ViewAllTools) },
+            onClick = { eventSink(UiEvent.ViewAllTools) },
             modifier = Modifier
                 .padding(top = 8.dp)
                 .align(Alignment.CenterHorizontally)
