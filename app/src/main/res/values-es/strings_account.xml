@@ -7,13 +7,13 @@
     <string name="account_create_description">Crea una cuenta para tener a tu alcance historias reales, ánimos y consejos prácticos.</string>
     <string name="account_login_heading">Iniciar sesión</string>
     <string name="account_login_description">Accede a tu cuenta para tener a tu alcance historias reales, motivación y consejos prácticos.</string>
+    <string name="account_error_title">Autenticación fallida</string>
     <string name="account_error_user_already_exists">La cuenta del usuario ya existe.</string>
     <string name="account_error_user_not_found">No se encontró la cuenta del usuario.</string>
+    <string name="account_error_not_connected_title">No hay conexión a internet</string>
+    <string name="account_error_not_connected">Comprueba tu conexión a internet y vuelve a intentarlo.</string>
     <string name="account_error_unknown">Error al iniciar sesión.</string>
     <string name="account_error_dialog_dismiss">Aceptar</string>
-    <string name="account_error_not_connected">Comprueba tu conexión a internet y vuelve a intentarlo.</string>
-    <string name="account_error_not_connected_title">No hay conexión a internet</string>
-    <string name="account_error_title">Autenticación fallida</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Eliminar Cuenta</string>
     <string name="account_delete_heading">Don\'t go so soon</string>
