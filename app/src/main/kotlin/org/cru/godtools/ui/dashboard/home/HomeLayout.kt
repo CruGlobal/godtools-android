@@ -21,9 +21,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,111 +29,19 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Locale
-import org.cru.godtools.BuildConfig
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
-import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
-import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
-import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardEvent
-import org.cru.godtools.ui.tools.toolViewModels
 
 private val PADDING_HORIZONTAL = 16.dp
 
-internal sealed interface DashboardHomeEvent {
-    open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
-        DashboardHomeEvent {
-        constructor(event: ToolCardEvent) : this(event.tool, event.toolType, event.lang1, event.lang2)
-    }
-    open class OpenToolDetails(val tool: String?) : DashboardHomeEvent {
-        constructor(event: ToolCardEvent.OpenToolDetails) : this(event.tool)
-    }
-    class OpenLesson(event: ToolCardEvent) : OpenTool(event.tool, Tool.Type.LESSON, event.lang1)
-    data object ViewAllFavorites : DashboardHomeEvent
-    data object ViewAllTools : DashboardHomeEvent
-}
-
 @Composable
-internal fun HomeContent(onEvent: (DashboardHomeEvent) -> Unit, viewModel: HomeViewModel = viewModel()) {
-    val favoriteTools by viewModel.favoriteTools.collectAsState()
-
-    val state = UiState(
-        banner = viewModel.banner.collectAsState().value,
-        spotlightLessons = viewModel.spotlightLessons.collectAsState().value.mapNotNull { lesson ->
-            key(lesson) {
-                lateinit var lessonState: ToolCard.State
-                lessonState = toolViewModels[lesson.code ?: return@mapNotNull null, lesson].toState {
-                    when (it) {
-                        ToolCard.Event.Click -> {
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_LESSON, lesson.code, SOURCE_FEATURED)
-                            onEvent(
-                                DashboardHomeEvent.OpenLesson(
-                                    ToolCardEvent.Click(
-                                        lessonState.tool?.code,
-                                        lessonState.tool?.type,
-                                        lessonState.translation?.languageCode
-                                    )
-                                )
-                            )
-                        }
-
-                        else -> if (BuildConfig.DEBUG) error("$it is currently unsupported for Lesson Cards")
-                    }
-                }
-                lessonState
-            }
-        },
-        favoriteTools = favoriteTools.orEmpty().take(5).mapNotNull { tool ->
-            key(tool.code) {
-                val toolViewModel = toolViewModels[tool.code ?: return@mapNotNull null, tool]
-                lateinit var toolState: ToolCard.State
-                toolState = toolViewModel.toState {
-                    when (it) {
-                        ToolCard.Event.Click, ToolCard.Event.OpenTool -> {
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)
-                            onEvent(
-                                DashboardHomeEvent.OpenTool(
-                                    ToolCardEvent.Click(
-                                        tool = tool.code,
-                                        type = tool.type,
-                                        lang1 = toolState.translation?.languageCode,
-                                    )
-                                )
-                            )
-                        }
-                        ToolCard.Event.OpenToolDetails -> {
-                            viewModel.recordOpenClickInAnalytics(ACTION_OPEN_TOOL_DETAILS, tool.code, SOURCE_FAVORITE)
-                            onEvent(DashboardHomeEvent.OpenToolDetails(tool.code))
-                        }
-                        ToolCard.Event.PinTool -> toolViewModel.pinTool()
-                        ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
-                    }
-                }
-                toolState
-            }
-        },
-        favoriteToolsLoaded = favoriteTools != null,
-    ) {
-        when (it) {
-            UiEvent.ViewAllFavorites -> onEvent(DashboardHomeEvent.ViewAllFavorites)
-            UiEvent.ViewAllTools -> onEvent(DashboardHomeEvent.ViewAllTools)
-        }
-    }
-
-    HomeLayout(state)
-}
-
-@Composable
+@CircuitInject(HomeScreen::class, SingletonComponent::class)
 internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
     val banner by rememberUpdatedState(state.banner)
     val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
