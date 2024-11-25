@@ -8,7 +8,7 @@ import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
-internal data object HomeScreen : Screen {
+data object HomeScreen : Screen {
     data class UiState(
         val banner: BannerType? = null,
         val spotlightLessons: List<ToolCard.State> = emptyList(),
