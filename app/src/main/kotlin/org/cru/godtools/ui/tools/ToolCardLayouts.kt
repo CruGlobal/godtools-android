@@ -41,7 +41,6 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.base.ui.util.withCompatFontFamilyFor
-import org.cru.godtools.model.Tool
 import org.cru.godtools.model.getName
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
@@ -72,17 +71,9 @@ private val toolCardInfoLabelColor: Color @Composable get() {
 }
 private val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
-sealed class ToolCardEvent(
-    val tool: String?,
-    val toolType: Tool.Type?,
-    val lang1: Locale? = null,
-    val lang2: Locale? = null
-) {
-    class Click(tool: String?, type: Tool.Type?, lang1: Locale? = null, lang2: Locale? = null) :
-        ToolCardEvent(tool, type, lang1, lang2)
-    class OpenTool(tool: String?, type: Tool.Type?, lang1: Locale?, lang2: Locale? = null) :
-        ToolCardEvent(tool, type, lang1, lang2)
-    class OpenToolDetails(tool: String?, val additionalLocale: Locale? = null) : ToolCardEvent(tool, null)
+sealed class ToolCardEvent(val tool: String?, val lang1: Locale? = null) {
+    class Click(tool: String?, lang1: Locale? = null) : ToolCardEvent(tool, lang1)
+    class OpenTool(tool: String?, lang1: Locale?) : ToolCardEvent(tool, lang1)
 }
 
 @Composable
