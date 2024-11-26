@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
-import org.cru.godtools.BuildConfig
 import org.cru.godtools.R
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.ToolCardEvent
@@ -47,10 +46,6 @@ internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (
                         is ToolCardEvent.OpenTool, is ToolCardEvent.Click -> {
                             viewModel.recordOpenLessonInAnalytics(it.tool)
                             onEvent(DashboardLessonsEvent.OpenLesson(it.tool, it.lang1))
-                        }
-
-                        is ToolCardEvent.OpenToolDetails -> {
-                            if (BuildConfig.DEBUG) error("$it is currently unsupported for Lessons")
                         }
                     }
                 },

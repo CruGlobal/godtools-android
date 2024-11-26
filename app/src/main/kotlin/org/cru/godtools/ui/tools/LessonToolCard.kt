@@ -28,7 +28,7 @@ fun LessonToolCard(
     state = viewModel.toState(language = selectedLanguage) {
         when (it) {
             ToolCard.Event.Click ->
-                onEvent(ToolCardEvent.Click(state.tool?.code, state.tool?.type, state.translation?.languageCode))
+                onEvent(ToolCardEvent.Click(state.tool?.code, state.translation?.languageCode))
             else -> TODO()
         }
     }
