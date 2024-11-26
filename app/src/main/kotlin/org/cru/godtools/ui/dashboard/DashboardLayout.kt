@@ -57,8 +57,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
-import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
-import org.cru.godtools.ui.dashboard.home.HomeContent
+import org.cru.godtools.ui.dashboard.home.HomeScreen
 import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
@@ -130,26 +129,12 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 },
                             )
 
-                            Page.HOME -> HomeContent(
-                                onEvent = {
-                                    when (it) {
-                                        DashboardHomeEvent.ViewAllFavorites -> {
-                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                        }
-                                        DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
-                                        is DashboardHomeEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.type, it.lang1, it.lang2))
-                                        is DashboardHomeEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
-                                    }
-                                }
-                            )
-
+                            Page.HOME,
                             Page.FAVORITE_TOOLS,
                             Page.ALL_TOOLS -> {
                                 CircuitContent(
                                     screen = when (page) {
+                                        Page.HOME -> HomeScreen
                                         Page.FAVORITE_TOOLS -> AllFavoritesScreen
                                         Page.ALL_TOOLS -> ToolsScreen
                                         else -> error("Page $page is not converted to Circuit yet")
@@ -157,6 +142,10 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                     onNavEvent = {
                                         when (it) {
                                             is NavEvent.GoTo -> when (val screen = it.screen) {
+                                                AllFavoritesScreen -> {
+                                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                                }
                                                 is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
                                                 is ToolDetailsScreen -> onEvent(
                                                     DashboardEvent.OpenToolDetails(
@@ -164,6 +153,9 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                                         screen.secondLanguage,
                                                     )
                                                 )
+                                            }
+                                            is NavEvent.ResetRoot -> when (it.newRoot) {
+                                                ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                             }
                                             else -> Unit
                                         }

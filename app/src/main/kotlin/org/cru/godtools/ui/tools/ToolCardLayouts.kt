@@ -86,12 +86,6 @@ sealed class ToolCardEvent(
 }
 
 @Composable
-fun PreloadTool(tool: Tool) {
-    val code = tool.code ?: return
-    toolViewModels[code, tool]
-}
-
-@Composable
 fun ToolCard(
     state: ToolCard.State,
     modifier: Modifier = Modifier,
