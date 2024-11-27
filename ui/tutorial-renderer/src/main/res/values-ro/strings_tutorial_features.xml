@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Instrumente</string>
+    <string name="tutorial_features_tools_subhead">Fiecare instrument este creat pentru o etapă diferită a conversației – înainte, în timpul conversației sau după.</string>
+    <string name="tutorial_features_tips_headline">Recomandări pentru instrumente</string>
+    <string name="tutorial_features_tips_subhead">Recomandările GodTools te ghidează pe măsură ce ajuți pe cineva să înțeleagă Evanghelia și să-L întâlnească pe Isus.</string>
+    <string name="tutorial_features_live_share_headline">Partajarea ecranului</string>
+    <string name="tutorial_features_live_share_subhead">Acum poți partaja ecranul de la distanță, astfel încât cealaltă persoană să poată urmări în timp ce utilizezi un instrument pentru a discuta Evanghelia.</string>
+    <string name="tutorial_features_lessons_headline">Lecții</string>
+    <string name="tutorial_features_lessons_subhead">În fiecare lecție GodTools înveți ceva care să te ajute să ai conversații reale despre Dumnezeu.</string>
+    <string name="tutorial_features_final_headline">Poți găsi acest tutorial în meniu oricând ai nevoie.</string>
+    <string name="tutorial_features_action_continue">Continuă</string>
+    <string name="tutorial_features_action_close">Închide tutorialul</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Arată-mi un Tutorial</string>
+    <string name="tutorial_features_banner_action_open">Deschide Tutorialul</string>
+    <string name="tutorial_features_banner_action_dismiss">Respinge</string>
+</resources>
