@@ -7,7 +7,7 @@
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">Partajează ecranul</string>
     <string name="menu_live_share_active">Partajare Ecran Activă</string>
-    <string name="share_tool_message_tract_live_share">Bună, urmează-mă în GodTools prin partajarea ecranului. Iată linkul: %1$s\n\nDacă nu primești acest mesaj până mai târziu, este posibil ca linkul să nu funcționeze. Poți încerca ulterior.</string>
+    <string name="share_tool_message_tract_live_share">Bună, urmează-mă în GodTools prin partajarea ecranului. Iată linkul: %1$s\n\nDacă ai primit acest mesaj prea târziu, este posibil ca linkul să nu funcționeze. Mai târziu putem să mai încercăm.</string>
     <string name="tract_live_share_starting">Începe Partajarea Ecranului…</string>
     <string name="tract_live_share_unable_to_connect">Imposibil de conectat la Partajarea Ecranului</string>
     <string name="tract_live_share_exit_dialog_message">Părăsești sesiunea de partajare la distanță acum?</string>
