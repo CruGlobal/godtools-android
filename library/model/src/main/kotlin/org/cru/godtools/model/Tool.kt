@@ -75,6 +75,10 @@ class Tool(
     val shares: Int = 0,
     @JsonApiIgnore
     val pendingShares: Int = 0,
+    @JsonApiIgnore
+    val primaryLocale: Locale? = null,
+    @JsonApiIgnore
+    val parallelLocale: Locale? = null,
     metatoolCode: String? = null,
     defaultVariantCode: String? = null,
     @JsonApiId
@@ -263,6 +267,8 @@ fun randomTool(
     isSpotlight: Boolean = Random.nextBoolean(),
     shares: Int = Random.nextInt(),
     pendingShares: Int = Random.nextInt(),
+    primaryLocale: Locale? = Locale.GERMAN.takeIf { Random.nextBoolean() },
+    parallelLocale: Locale? = Locale.FRENCH.takeIf { Random.nextBoolean() },
     metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
@@ -287,6 +293,8 @@ fun randomTool(
     isScreenShareDisabled = Random.nextBoolean(),
     shares = shares,
     pendingShares = pendingShares,
+    primaryLocale = primaryLocale,
+    parallelLocale = parallelLocale,
     metatoolCode = metatoolCode,
     defaultVariantCode = defaultVariantCode,
     apiId = apiId,

@@ -16,6 +16,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -60,7 +61,11 @@ class HomePresenterTest {
     }
     private val toolCardPresenter: ToolCardPresenter = mockk {
         everyComposable { present(tool = any(), eventSink = any()) }.answers {
-            ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(4))
+            ToolCard.State(
+                toolCode = firstArg<Tool>().code,
+                translation = randomTranslation(languageCode = Locale.ENGLISH),
+                eventSink = arg(4)
+            )
         }
     }
 
@@ -178,14 +183,6 @@ class HomePresenterTest {
     // endregion State.spotlightLessons
 
     // region State.favoriteTools
-    private val favoriteTool = randomTool(type = Tool.Type.TRACT, isHidden = false)
-    private val favoriteToolTranslation = randomTranslation(favoriteTool.code, languageCode = Locale.FRENCH)
-    init {
-        everyComposable { toolCardPresenter.present(tool = favoriteTool, eventSink = any()) }.answers {
-            ToolCard.State(toolCode = favoriteTool.code, translation = favoriteToolTranslation, eventSink = arg(4))
-        }
-    }
-
     @Test
     fun `State - favoriteTools`() = runTest {
         val tools = List(3) { randomTool(type = Tool.Type.TRACT, isHidden = false) }
@@ -211,37 +208,64 @@ class HomePresenterTest {
 
     @Test
     fun `State - favoriteTools - Event - Click`() = runTest {
-        presenter.test {
-            toolsFlow.emit(listOf(favoriteTool))
-            expectMostRecentItem().favoriteTools[0].eventSink(ToolCard.Event.Click)
+        val tool = randomTool(type = Tool.Type.TRACT, primaryLocale = null, parallelLocale = null)
 
-            assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
-                val expected = favoriteTool.createToolIntent(context, listOf(favoriteToolTranslation.languageCode))
-                assertTrue(expected equalsIntent it.intent)
+        presenter.test {
+            toolsFlow.emit(listOf(tool))
+            assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
+                toolState.eventSink(ToolCard.Event.Click)
+
+                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
+                    val expected = tool.createToolIntent(context, listOf(toolState.translation!!.languageCode))
+                    assertTrue(expected equalsIntent screen.intent)
+                }
             }
         }
     }
 
     @Test
     fun `State - favoriteTools - Event - OpenTool`() = runTest {
-        presenter.test {
-            toolsFlow.emit(listOf(favoriteTool))
-            expectMostRecentItem().favoriteTools[0].eventSink(ToolCard.Event.OpenTool)
+        val tool = randomTool(type = Tool.Type.TRACT, primaryLocale = null, parallelLocale = null)
 
-            assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
-                val expected = favoriteTool.createToolIntent(context, listOf(favoriteToolTranslation.languageCode))
-                assertTrue(expected equalsIntent it.intent)
+        presenter.test {
+            toolsFlow.emit(listOf(tool))
+            assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
+                toolState.eventSink(ToolCard.Event.OpenTool)
+
+                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
+                    val expected = tool.createToolIntent(context, listOf(toolState.translation!!.languageCode))
+                    assertTrue(expected equalsIntent screen.intent)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `State - favoriteTools - Event - OpenTool - Saved Languages`() = runTest {
+        val tool = randomTool(type = Tool.Type.TRACT, primaryLocale = Locale.GERMAN, parallelLocale = Locale.FRENCH)
+
+        presenter.test {
+            toolsFlow.emit(listOf(tool))
+            assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
+                toolState.eventSink(ToolCard.Event.OpenTool)
+
+                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
+                    val expected = tool.createToolIntent(context, listOf(Locale.GERMAN, Locale.FRENCH))
+                    assertTrue(expected equalsIntent screen.intent)
+                }
             }
         }
     }
 
     @Test
     fun `State - favoriteTools - Event - OpenToolDetails`() = runTest {
+        val tool = randomTool(type = Tool.Type.TRACT)
+
         presenter.test {
-            toolsFlow.emit(listOf(favoriteTool))
+            toolsFlow.emit(listOf(tool))
             expectMostRecentItem().favoriteTools[0].eventSink(ToolCard.Event.OpenToolDetails)
 
-            assertEquals(ToolDetailsScreen(favoriteTool.code!!), navigator.awaitNextScreen())
+            assertEquals(ToolDetailsScreen(tool.code!!), navigator.awaitNextScreen())
         }
     }
     // endregion State.favoriteTools

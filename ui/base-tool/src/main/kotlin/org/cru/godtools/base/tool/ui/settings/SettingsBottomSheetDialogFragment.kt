@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
+import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,6 +22,7 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.base.ui.languages.LanguagesDropdownAdapter
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.R
@@ -118,12 +120,14 @@ class SettingsBottomSheetDialogFragment :
         val updateActiveLocale = activeLocale.value in primaryLocales.value.orEmpty()
         primaryLocales.value = listOf(locale)
         if (updateActiveLocale) activeLocale.value = locale
+        storeToolLocales()
     }
 
     private fun updateParallelLanguage(locale: Locale?) = with(activityDataModel) {
         val updateActiveLocale = activeLocale.value in parallelLocales.value.orEmpty()
         parallelLocales.value = listOfNotNull(locale)
         if (updateActiveLocale) activeLocale.value = locale
+        storeToolLocales()
     }
 
     // region ToolSettingsSheetCallbacks
@@ -143,6 +147,22 @@ class SettingsBottomSheetDialogFragment :
         val languages = activityDataModel.primaryLocales.value
         activityDataModel.primaryLocales.value = activityDataModel.parallelLocales.value
         activityDataModel.parallelLocales.value = languages
+        storeToolLocales()
     }
     // endregion ToolSettingsSheetCallbacks
+
+    @Inject
+    internal lateinit var toolsRepository: ToolsRepository
+
+    private fun storeToolLocales(
+        tool: String? = activityDataModel.toolCode.value,
+        primaryLocale: Locale? = activityDataModel.primaryLocales.value?.firstOrNull(),
+        parallelLocale: Locale? = activityDataModel.parallelLocales.value?.firstOrNull(),
+    ) {
+        if (tool != null) {
+            lifecycleScope.launch {
+                toolsRepository.updateToolLocales(tool, primaryLocale, parallelLocale)
+            }
+        }
+    }
 }

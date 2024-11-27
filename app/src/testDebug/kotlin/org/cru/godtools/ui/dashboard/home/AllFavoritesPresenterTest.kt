@@ -141,9 +141,10 @@ class AllFavoritesPresenterTest {
         coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
 
+    // region ToolCard.Event.Click
     @Test
     fun `ToolCard - Event - Click`() = runTest {
-        val tool = randomTool("tool", Tool.Type.TRACT)
+        val tool = randomTool("tool", Tool.Type.TRACT, primaryLocale = null, parallelLocale = null)
         toolsFlow.value = listOf(tool)
         everyComposable { toolCardPresenter.present(tool = tool, eventSink = any()) }.answers {
             ToolCard.State(
@@ -164,6 +165,31 @@ class AllFavoritesPresenterTest {
 
         verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
     }
+
+    @Test
+    fun `ToolCard - Event - Click - Saved Languages`() = runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT, primaryLocale = Locale.FRENCH, parallelLocale = Locale.GERMAN)
+        toolsFlow.value = listOf(tool)
+        everyComposable { toolCardPresenter.present(tool = tool, eventSink = any()) }.answers {
+            ToolCard.State(
+                toolCode = firstArg<Tool>().code,
+                translation = randomTranslation(languageCode = Locale.ENGLISH),
+                eventSink = arg(4)
+            )
+        }
+
+        presenter.test {
+            expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
+
+            assertTrue {
+                assertIs<IntentScreen>(navigator.awaitNextScreen()).intent
+                    .equalsIntent(tool.createToolIntent(context, languages = listOf(Locale.FRENCH, Locale.GERMAN)))
+            }
+        }
+
+        verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
+    }
+    // endregion ToolCard.Event.Click
 
     @Test
     fun `ToolCard - Event - OpenToolDetails`() = runTest {
