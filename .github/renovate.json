@@ -12,7 +12,8 @@
       "description": "Kotlin and KSP are tightly coupled.",
       "matchPackageNames": [
         "org.jetbrains.kotlin:kotlin{/,}**",
-        "com.google.devtools.ksp{/,}**"
+        "com.google.devtools.ksp{/,}**",
+        "org.jetbrains.kotlin.plugin.compose{/,}**"
       ]
     },
     {
