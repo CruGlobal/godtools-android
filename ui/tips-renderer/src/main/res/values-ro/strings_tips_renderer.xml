@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Următorul</string>
+    <string name="tract_tips_tip_action_close">Închide</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Întreabă</string>
+    <string name="tract_tips_type_consider">Gândește</string>
+    <string name="tract_tips_type_prepare">Pregătește-te</string>
+    <string name="tract_tips_type_quote">Citat</string>
+    <string name="tract_tips_type_tip">Recomandări</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Recomandări pentru antrenare</string>
+    <string name="tool_settings_action_tips_disable">Ascunde recomandările</string>
+</resources>
