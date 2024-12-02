@@ -9,10 +9,11 @@
   "packageRules": [
     {
       "groupName": "Kotlin and KSP",
-      "description": "Kotlin and KSP are tightly coupled.",
+      "description": "Kotlin, KSP and Mockposable are tightly coupled.",
       "matchPackageNames": [
-        "org.jetbrains.kotlin:kotlin{/,}**",
         "com.google.devtools.ksp{/,}**",
+        "com.jeppeman.mockposable:mockposable-gradle{/,}**",
+        "org.jetbrains.kotlin:kotlin{/,}**",
         "org.jetbrains.kotlin.plugin.compose{/,}**"
       ]
     },
