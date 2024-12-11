@@ -50,14 +50,19 @@ fun Context.createArticlesIntent(toolCode: String, language: Locale) =
 // region CyoaActivity
 private const val ACTIVITY_CLASS_CYOA = "org.cru.godtools.tool.cyoa.ui.CyoaActivity"
 
-fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?) =
-    startActivity(createCyoaActivityIntent(toolCode, *languages))
+fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
+    startActivity(createCyoaActivityIntent(toolCode, *languages, showTips = showTips))
 
-fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?, pageId: String? = null) =
-    Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
-        .putExtra(EXTRA_TOOL, toolCode)
-        .putLanguagesExtra(*languages)
-        .putExtra(EXTRA_PAGE, pageId)
+fun Context.createCyoaActivityIntent(
+    toolCode: String,
+    vararg languages: Locale?,
+    pageId: String? = null,
+    showTips: Boolean = false,
+) = Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
+    .putExtra(EXTRA_TOOL, toolCode)
+    .putLanguagesExtra(*languages)
+    .putExtra(EXTRA_PAGE, pageId)
+    .putExtra(EXTRA_SHOW_TIPS, showTips)
 // endregion CyoaActivity
 
 // region TractActivity

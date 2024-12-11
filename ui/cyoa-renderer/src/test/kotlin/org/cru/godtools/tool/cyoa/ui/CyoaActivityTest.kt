@@ -18,6 +18,12 @@ import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
 import javax.inject.Inject
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
@@ -37,13 +43,7 @@ import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
 import org.cru.godtools.shared.tool.parser.model.page.controlColor
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
@@ -83,7 +83,7 @@ class CyoaActivityTest {
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
 
-    @Before
+    @BeforeTest
     fun setupMocks() {
         hiltRule.inject()
         every { manifestManager.getLatestPublishedManifestFlow(TOOL, Locale.ENGLISH) } returns manifestEnglish
@@ -153,6 +153,7 @@ class CyoaActivityTest {
                 assertEquals(TOOL, it.dataModel.toolCode.value)
                 assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
                 assertEquals("page1", it.pageFragment!!.pageId)
+                assertFalse(it.dataModel.showTips.value!!)
             }
         }
     }
@@ -166,6 +167,20 @@ class CyoaActivityTest {
                 assertNull(it.pageFragment)
                 manifestEnglish.value = manifest(listOf(page1, page2))
                 assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Normal Launch - Show Tips`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, showTips = true)) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+                assertTrue(it.dataModel.showTips.value!!)
             }
         }
     }
