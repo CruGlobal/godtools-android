@@ -55,6 +55,7 @@ class ExternalSingletonsModule {
     val syncService by lazy {
         mockk<GodToolsSyncService> {
             coEvery { syncTool(any(), any()) } returns true
+            coEvery { syncToolSharesAsync() } returns CompletableDeferred(true)
         }
     }
     @get:Provides
