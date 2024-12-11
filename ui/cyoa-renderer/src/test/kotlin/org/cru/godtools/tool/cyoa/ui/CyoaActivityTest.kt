@@ -210,6 +210,34 @@ class CyoaActivityTest {
     }
 
     @Test
+    fun `Intent Processing - Is showTips True`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, showTips = true)) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(true, it.dataModel.showTips.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Is showTips False`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = context.createCyoaActivityIntent(TOOL, Locale.ENGLISH, showTips = false)) {
+            it.onActivity {
+                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals(false, it.dataModel.showTips.value)
+                assertEquals(listOf(Locale.ENGLISH), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
     fun `Intent Processing - godtoolsapp_com Deep Link - Specific Page`() {
         manifestEnglish.value = manifest(listOf(page1, page2))
 
