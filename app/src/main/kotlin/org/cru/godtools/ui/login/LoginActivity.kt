@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +35,7 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         finishWhenAuthenticated()
 
+        enableEdgeToEdge()
         setContent {
             GodToolsTheme {
                 LoginLayout(
