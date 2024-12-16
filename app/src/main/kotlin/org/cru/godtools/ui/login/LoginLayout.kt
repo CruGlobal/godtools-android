@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -68,6 +69,7 @@ fun LoginLayout(
         modifier = modifier
             .fillMaxSize()
             .background(GodToolsTheme.GT_BLUE)
+            .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
         CompositionLocalProvider(LocalContentColor provides Color.White) {
