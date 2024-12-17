@@ -13,8 +13,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -96,18 +98,25 @@ internal class GoogleAccountProvider @Inject constructor(
     // endregion Login/Logout
 
     override suspend fun authenticateWithMobileContentApi(createUser: Boolean): Result<AuthToken> {
-        var account = GoogleSignIn.getLastSignedInAccount(context)
-            ?: return Result.failure(AuthenticationException.MissingCredentials)
-        var resp = account.authenticateWithMobileContentApi(createUser)
-
-        if (account.idToken == null || resp?.isSuccessful != true) {
-            account = refreshSignIn() ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
-            resp = account.authenticateWithMobileContentApi(createUser)
+        try {
+            var account = GoogleSignIn.getLastSignedInAccount(context)
                 ?: return Result.failure(AuthenticationException.MissingCredentials)
-        }
+            var resp = account.authenticateWithMobileContentApi(createUser)
 
-        return resp.extractAuthToken()
-            .onSuccess { prefs.edit { putString(account.PREF_USER_ID, it.userId) } }
+            if (account.idToken == null || resp?.isSuccessful != true) {
+                account = refreshSignIn() ?: return Result.failure(AuthenticationException.UnableToRefreshCredentials)
+                resp = account.authenticateWithMobileContentApi(createUser)
+                    ?: return Result.failure(AuthenticationException.MissingCredentials)
+            }
+
+            return resp.extractAuthToken()
+                .onSuccess { prefs.edit { putString(account.PREF_USER_ID, it.userId) } }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            if (e !is IOException) Timber.tag(TAG).e(e, "Unexpected error authenticating with Google")
+            return Result.failure(e)
+        }
     }
 
     private suspend fun GoogleSignInAccount.authenticateWithMobileContentApi(createUser: Boolean) =
