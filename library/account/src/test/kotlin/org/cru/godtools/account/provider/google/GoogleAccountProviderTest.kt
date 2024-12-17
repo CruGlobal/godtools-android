@@ -19,6 +19,7 @@ import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
+import java.net.UnknownHostException
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.AfterTest
@@ -28,6 +29,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runCurrent
@@ -42,11 +45,12 @@ import org.cru.godtools.api.model.AuthToken
 import org.junit.runner.RunWith
 import retrofit2.Response
 
-private const val ID_TOKEN_INVALID = "invalid"
 private const val ID_TOKEN_VALID = "valid"
+private const val ID_TOKEN_INVALID = "invalid"
+private const val ID_TOKEN_EXCEPTION = "exception"
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalUuidApi::class)
 class GoogleAccountProviderTest {
     private val lastSignedInAccount = MutableStateFlow<GoogleSignInAccount?>(null)
     private val userId = UUID.randomUUID().toString()
@@ -189,6 +193,25 @@ class GoogleAccountProviderTest {
             userId,
             provider.prefs.getString(lastSignedInAccount.value!!.PREF_USER_ID, "")
         )
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - Api Exception - UnknownHostException()`() = runTest {
+        val exception = UnknownHostException()
+        val token = Uuid.random().toString()
+        lastSignedInAccount.value = mockk { every { idToken } returns token }
+
+        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = token, createUser = createUser)) }
+            .throws(exception)
+
+        assertEquals(
+            Result.failure(exception),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
+        coVerifyAll {
+            authApi.authenticate(AuthToken.Request(googleIdToken = token, createUser = createUser))
+            googleSignInClient wasNot Called
+        }
     }
 
     @Test
