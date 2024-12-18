@@ -209,6 +209,8 @@ class Tool(
         isScreenShareDisabled != other.isScreenShareDisabled -> false
         shares != other.shares -> false
         pendingShares != other.pendingShares -> false
+        primaryLocale != other.primaryLocale -> false
+        parallelLocale != other.parallelLocale -> false
         apiId != other.apiId -> false
         metatoolCode != other.metatoolCode -> false
         defaultVariantCode != other.defaultVariantCode -> false
@@ -234,6 +236,8 @@ class Tool(
         result = 31 * result + isScreenShareDisabled.hashCode()
         result = 31 * result + shares
         result = 31 * result + pendingShares
+        result = 31 * result + (primaryLocale?.hashCode() ?: 0)
+        result = 31 * result + (parallelLocale?.hashCode() ?: 0)
         result = 31 * result + (apiId?.hashCode() ?: 0)
         result = 31 * result + (metatoolCode?.hashCode() ?: 0)
         result = 31 * result + (defaultVariantCode?.hashCode() ?: 0)
