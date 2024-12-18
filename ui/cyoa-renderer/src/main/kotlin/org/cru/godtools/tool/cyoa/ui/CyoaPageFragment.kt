@@ -5,8 +5,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.map
 import javax.inject.Inject
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
@@ -62,7 +62,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     // region Page
     internal var pageId by arg<String>()
         private set
-    internal val page by lazy { dataModel.manifest.map { it?.findPage(pageId) }.asLiveData() }
+    internal val page by lazy { dataModel.manifest.filterNotNull().map { it.findPage(pageId) }.asLiveData() }
 
     init {
         page?.let { pageId = page }
