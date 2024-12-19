@@ -124,6 +124,7 @@ class HomePresenter @AssistedInject constructor(
                                     tool.primaryLocale ?: state.translation?.languageCode,
                                     tool.parallelLocale
                                 ),
+                                saveLanguageSettings = true
                             )
 
                             if (intent != null) {
