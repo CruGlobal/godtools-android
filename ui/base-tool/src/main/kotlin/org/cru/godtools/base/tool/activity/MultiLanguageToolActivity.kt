@@ -24,6 +24,7 @@ import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.ui.settings.SettingsBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.settings.ShareLinkSettingsAction
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.base.ui.EXTRA_SAVE_LANGUAGE_SETTINGS
 import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
@@ -162,7 +163,9 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     private fun showSettingsDialog() {
         eventBus.post(ToolAnalyticsActionEvent(null, ACTION_SETTINGS))
-        SettingsBottomSheetDialogFragment().show(supportFragmentManager, null)
+        SettingsBottomSheetDialogFragment(
+            saveLanguageSettings = intent?.getBooleanExtra(EXTRA_SAVE_LANGUAGE_SETTINGS, false) ?: false,
+        ).show(supportFragmentManager, null)
     }
 
     protected fun dismissSettingsDialog() {

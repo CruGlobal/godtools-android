@@ -215,10 +215,12 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.Click)
 
-                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
-                    val expected = tool.createToolIntent(context, listOf(toolState.translation!!.languageCode))
-                    assertTrue(expected equalsIntent screen.intent)
-                }
+                val expected = tool.createToolIntent(
+                    context,
+                    listOf(toolState.translation!!.languageCode),
+                    saveLanguageSettings = true
+                )
+                assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expected)
             }
         }
     }
@@ -232,10 +234,12 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.OpenTool)
 
-                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
-                    val expected = tool.createToolIntent(context, listOf(toolState.translation!!.languageCode))
-                    assertTrue(expected equalsIntent screen.intent)
-                }
+                val expected = tool.createToolIntent(
+                    context,
+                    listOf(toolState.translation!!.languageCode),
+                    saveLanguageSettings = true
+                )
+                assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expected)
             }
         }
     }
@@ -249,10 +253,12 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.OpenTool)
 
-                assertIs<IntentScreen>(navigator.awaitNextScreen()).let { screen ->
-                    val expected = tool.createToolIntent(context, listOf(Locale.GERMAN, Locale.FRENCH))
-                    assertTrue(expected equalsIntent screen.intent)
-                }
+                val expected = tool.createToolIntent(
+                    context,
+                    listOf(Locale.GERMAN, Locale.FRENCH),
+                    saveLanguageSettings = true
+                )
+                assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expected)
             }
         }
     }

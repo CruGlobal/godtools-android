@@ -27,11 +27,17 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolSettingsSheetBinding
+import splitties.fragmentargs.argOrDefault
 
 @AndroidEntryPoint
-class SettingsBottomSheetDialogFragment :
+class SettingsBottomSheetDialogFragment() :
     BindingBottomSheetDialogFragment<ToolSettingsSheetBinding>(R.layout.tool_settings_sheet),
     ToolSettingsSheetCallbacks {
+    constructor(saveLanguageSettings: Boolean) : this() {
+        isSaveLanguageSettings = saveLanguageSettings
+    }
+
+    private var isSaveLanguageSettings by argOrDefault(false)
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,7 +165,7 @@ class SettingsBottomSheetDialogFragment :
         primaryLocale: Locale? = activityDataModel.primaryLocales.value?.firstOrNull(),
         parallelLocale: Locale? = activityDataModel.parallelLocales.value?.firstOrNull(),
     ) {
-        if (tool != null) {
+        if (isSaveLanguageSettings && tool != null) {
             lifecycleScope.launch {
                 toolsRepository.updateToolLocales(tool, primaryLocale, parallelLocale)
             }

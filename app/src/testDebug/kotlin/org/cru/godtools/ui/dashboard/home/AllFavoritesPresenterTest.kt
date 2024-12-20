@@ -157,10 +157,12 @@ class AllFavoritesPresenterTest {
         presenter.test {
             expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
 
-            assertTrue {
-                assertIs<IntentScreen>(navigator.awaitNextScreen()).intent
-                    .equalsIntent(tool.createToolIntent(context, languages = listOf(Locale.ENGLISH)))
-            }
+            val expected = tool.createToolIntent(
+                context,
+                languages = listOf(Locale.ENGLISH),
+                saveLanguageSettings = true
+            )
+            assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expected)
         }
 
         verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
@@ -181,10 +183,12 @@ class AllFavoritesPresenterTest {
         presenter.test {
             expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
 
-            assertTrue {
-                assertIs<IntentScreen>(navigator.awaitNextScreen()).intent
-                    .equalsIntent(tool.createToolIntent(context, languages = listOf(Locale.FRENCH, Locale.GERMAN)))
-            }
+            val expected = tool.createToolIntent(
+                context,
+                languages = listOf(Locale.FRENCH, Locale.GERMAN),
+                saveLanguageSettings = true
+            )
+            assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expected)
         }
 
         verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
