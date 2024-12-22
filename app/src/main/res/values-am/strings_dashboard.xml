@@ -65,7 +65,7 @@
     <string name="tool_card_label_language_unavailable">በ%1$s ቋንቋ የለም</string>
     <string name="tool_card_accessibility_language_available">አለ</string>
     <string name="action_tools_about">ዝርዝሮች</string>
-    <string name="action_tools_open">ክፈት</string>
+    <string name="action_tools_open">ይከፈቱ</string>
     <!-- In App Update -->
     <string name="play_update_available">አዲስ ስሪት አለ</string>
     <string name="play_update_available_action">ያዉርዱ</string>

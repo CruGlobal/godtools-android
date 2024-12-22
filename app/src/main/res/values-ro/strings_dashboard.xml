@@ -31,7 +31,7 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d Lecție disponibilă</item>
         <item quantity="other">%1$d Lecții disponibile</item>
-        <item quantity="few">Lecții disponibile</item>
+        <item quantity="few">%1$d Lecții disponibile</item>
     </plurals>
     <string name="dashboard_lessons_section_filter_label">Lecții în:</string>
     <!-- Home -->
@@ -51,9 +51,9 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="dashboard_tools_section_filter_category_any">Orice categorie</string>
     <string name="dashboard_tools_section_filter_language_any">Orice limbă</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
-        <item quantity="one">%1$d Instrumente disponibile</item>
+        <item quantity="one">%1$d Instrument disponibile</item>
         <item quantity="other">%1$d Instrumente disponibile</item>
-        <item quantity="few">Instrumente disponibile</item>
+        <item quantity="few">%1$d Instrumente disponibile</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">Toate instrumentele disponibile</string>
     <string name="dashboard_tools_section_categories_label">Categorii</string>
@@ -67,7 +67,7 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="tool_card_label_language_unavailable">Indisponibil în %1$s</string>
     <string name="tool_card_accessibility_language_available">Disponibil</string>
     <string name="action_tools_about">Detalii</string>
-    <string name="action_tools_open">Deschide</string>
+    <string name="action_tools_open">Începe</string>
     <!-- In App Update -->
     <string name="play_update_available">Actualizare disponibilă</string>
     <string name="play_update_available_action">Descarcă</string>

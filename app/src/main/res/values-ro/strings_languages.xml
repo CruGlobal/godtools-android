@@ -21,8 +21,8 @@
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Căută limba preferată</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
-        <item quantity="one">%1$d Instrumente disponibile</item>
+        <item quantity="one">%1$d Instrument disponibile</item>
         <item quantity="other">%1$d Instrumente disponibile</item>
-        <item quantity="few">Instrumente disponibile</item>
+        <item quantity="few">%1$d Instrumente disponibile</item>
     </plurals>
 </resources>
