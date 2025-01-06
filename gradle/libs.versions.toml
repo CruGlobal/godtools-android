@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.36.0"
-android-gradle-plugin = "8.7.3"
+android-gradle-plugin = "8.8.0-rc02"
 androidx-activity = "1.9.3"
 androidx-compose-material = "1.7.6"
 androidx-compose-runtime = "1.7.6"
