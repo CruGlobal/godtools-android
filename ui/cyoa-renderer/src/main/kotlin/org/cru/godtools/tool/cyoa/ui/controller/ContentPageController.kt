@@ -7,6 +7,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
@@ -75,3 +76,8 @@ fun CyoaPageContentBinding.bindController(
     enableTips: LiveData<Boolean>,
     toolState: State
 ) = controller ?: factory.create(this, enableTips, toolState)
+
+fun CyoaPageContentBinding.bindController(
+    factory: ContentPageController.Factory,
+    parentController: BaseController<*>,
+) = controller ?: factory.create(this, parentController.enableTips, parentController.toolState)

@@ -1,12 +1,28 @@
 package org.cru.godtools.tool.cyoa.ui.controller
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
+import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
+import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
+import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
+import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
+import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.shared.tool.parser.model.page.ContentPage
+import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.state.State
+import org.cru.godtools.tool.cyoa.R
+import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPagePageCollectionBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
@@ -16,6 +32,7 @@ class PageCollectionPageController @AssistedInject constructor(
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     eventBus: EventBus,
+    private val contentPageControllerFactory: ContentPageController.Factory,
 ) : BaseController<PageCollectionPage>(PageCollectionPage::class, binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
@@ -37,7 +54,77 @@ class PageCollectionPageController @AssistedInject constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
+        bindPages(model?.pages.orEmpty())
     }
+
+    // region Pages ViewPager
+    private val adapter = CyoaPageCollectionPagePageDataBindingAdapter()
+
+    private fun bindPages(pages: List<Page>) {
+        binding.pages.whileMaintainingVisibleCurrentItem {
+            adapter.pages = pages
+            // lazily set the adapter now that pages are bound so it will correctly restore SavedState
+            if (binding.pages.adapter == null) binding.pages.adapter = adapter
+        }
+    }
+
+    inner class CyoaPageCollectionPagePageDataBindingAdapter : SimpleDataBindingAdapter<ViewDataBinding>() {
+        init {
+            setHasStableIds(true)
+        }
+
+        private var primaryItemObserver: PrimaryItemChangeObserver<*>? = null
+
+        var pages = emptyList<Page>()
+            set(value) {
+                field = value
+                notifyDataSetChanged()
+            }
+
+        override fun getItemCount() = pages.size
+        override fun getItemId(position: Int) = Ids.generate(pages[position].id)
+        override fun getItemViewType(position: Int) = when (pages[position]) {
+            is ContentPage -> R.layout.cyoa_page_content
+            else -> R.layout.cyoa_page_content
+        }
+
+        // region Lifecycle
+        override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ViewDataBinding =
+            DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false)
+                .also {
+                    it.lifecycleOwner = this@PageCollectionPageController.lifecycleOwner
+                        ?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+
+                    when (it) {
+                        is CyoaPageContentBinding ->
+                            it.bindController(contentPageControllerFactory, this@PageCollectionPageController)
+                    }
+                }
+
+        override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+            primaryItemObserver = onUpdatePrimaryItem(recyclerView) { primary, previous ->
+                (previous?.binding?.lifecycleOwner as? ConstrainedStateLifecycleOwner)?.apply {
+                    maxState = minOf(maxState, Lifecycle.State.STARTED)
+                }
+                (primary?.binding?.lifecycleOwner as? ConstrainedStateLifecycleOwner)?.apply {
+                    maxState = maxOf(maxState, Lifecycle.State.RESUMED)
+                }
+            }
+        }
+
+        override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
+            when (binding) {
+                is CyoaPageContentBinding -> binding.controller?.model = pages[position] as? ContentPage
+            }
+        }
+
+        override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+            primaryItemObserver?.unregister()
+            primaryItemObserver = null
+        }
+        // endregion Lifecycle
+    }
+    // endregion Pages ViewPager
 }
 
 fun CyoaPagePageCollectionBinding.bindController(
