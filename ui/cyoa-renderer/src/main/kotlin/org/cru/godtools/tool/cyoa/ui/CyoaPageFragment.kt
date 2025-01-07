@@ -2,10 +2,12 @@ package org.cru.godtools.tool.cyoa.ui
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.core.graphics.Insets
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
@@ -18,7 +20,6 @@ import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.fragment.BaseFragment
 import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
-import org.cru.godtools.tool.cyoa.BR
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
@@ -41,8 +42,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
 
     override fun onBindingCreated(binding: B, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
-        binding.setVariable(BR.contentInsets, pageInsets.insets)
-        setupPageController(binding)
+        setupPageController(binding, pageInsets.insets)
     }
 
     override fun onResume() {
@@ -83,7 +83,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     // region Controller
     protected var controller: C? = null
 
-    protected open fun setupPageController(binding: B) = Unit
+    protected open fun setupPageController(binding: B, insets: StateFlow<Insets>) = Unit
     protected open fun cleanupPageController() {
         controller = null
     }
