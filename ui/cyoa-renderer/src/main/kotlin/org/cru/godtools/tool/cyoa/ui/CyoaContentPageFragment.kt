@@ -1,7 +1,9 @@
 package org.cru.godtools.tool.cyoa.ui
 
+import androidx.core.graphics.Insets
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
@@ -20,7 +22,8 @@ class CyoaContentPageFragment(page: String? = null) :
     @Inject
     internal lateinit var controllerFactory: ContentPageController.Factory
 
-    override fun setupPageController(binding: CyoaPageContentBinding) {
+    override fun setupPageController(binding: CyoaPageContentBinding, insets: StateFlow<Insets>) {
+        binding.contentInsets = insets
         controller =
             binding.bindController(controllerFactory, viewLifecycleOwner, dataModel.enableTips, toolState.toolState)
                 .also { page.filterIsInstance<ContentPage>().observe(viewLifecycleOwner, it) }

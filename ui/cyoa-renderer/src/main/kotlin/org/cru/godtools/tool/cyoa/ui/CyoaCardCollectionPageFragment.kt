@@ -1,8 +1,10 @@
 package org.cru.godtools.tool.cyoa.ui
 
+import androidx.core.graphics.Insets
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.StateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
@@ -24,7 +26,8 @@ class CyoaCardCollectionPageFragment(page: String? = null) :
     @Inject
     internal lateinit var controllerFactory: CardCollectionPageController.Factory
 
-    override fun setupPageController(binding: CyoaPageCardCollectionBinding) {
+    override fun setupPageController(binding: CyoaPageCardCollectionBinding, insets: StateFlow<Insets>) {
+        binding.contentInsets = insets
         binding.cards.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = triggerAnalyticsScreenView()
         })
