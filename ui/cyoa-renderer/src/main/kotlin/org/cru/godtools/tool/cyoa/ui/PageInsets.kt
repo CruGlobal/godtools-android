@@ -3,8 +3,10 @@ package org.cru.godtools.tool.cyoa.ui
 import androidx.core.graphics.Insets
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
-import org.ccci.gto.android.common.androidx.lifecycle.combine
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.delegate
 
 private const val LEFT = "left"
@@ -24,9 +26,9 @@ class PageInsets(savedState: SavedStateHandle) : ViewModel() {
     var bottom by savedState.delegate(BOTTOM, ifNull = DEFAULT_BOTTOM)
 
     val insets = combine(
-        savedState.getLiveData(LEFT, DEFAULT_LEFT).distinctUntilChanged(),
-        savedState.getLiveData(TOP, DEFAULT_TOP).distinctUntilChanged(),
-        savedState.getLiveData(RIGHT, DEFAULT_RIGHT).distinctUntilChanged(),
-        savedState.getLiveData(BOTTOM, DEFAULT_BOTTOM).distinctUntilChanged()
-    ) { l, t, r, b -> Insets.of(l, t, r, b) }
+        savedState.getStateFlow(LEFT, DEFAULT_LEFT),
+        savedState.getStateFlow(TOP, DEFAULT_TOP),
+        savedState.getStateFlow(RIGHT, DEFAULT_RIGHT),
+        savedState.getStateFlow(BOTTOM, DEFAULT_BOTTOM)
+    ) { l, t, r, b -> Insets.of(l, t, r, b) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), Insets.NONE)
 }
