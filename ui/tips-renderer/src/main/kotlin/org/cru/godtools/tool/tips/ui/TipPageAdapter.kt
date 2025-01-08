@@ -15,7 +15,7 @@ import org.cru.godtools.tool.tips.ui.controller.TipPageController
 import org.cru.godtools.tool.tips.ui.controller.bindController
 
 internal class TipPageAdapter @AssistedInject internal constructor(
-    @Assisted lifecycleOwner: LifecycleOwner,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted private val toolState: State,
     private val controllerFactory: TipPageController.Factory
 ) : SimpleDataBindingAdapter<ToolTipPageBinding>(lifecycleOwner),
@@ -43,10 +43,12 @@ internal class TipPageAdapter @AssistedInject internal constructor(
     }
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
-        ToolTipPageBinding.inflate(LayoutInflater.from(parent.context), parent, false).apply {
-            bindController(controllerFactory, toolState)
-            callbacks = this@TipPageAdapter
-        }
+        ToolTipPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+    override fun onViewDataBindingCreated(binding: ToolTipPageBinding, viewType: Int) {
+        binding.bindController(controllerFactory, lifecycleOwner, toolState)
+        binding.callbacks = this
+    }
 
     override fun onBindViewDataBinding(binding: ToolTipPageBinding, position: Int) {
         binding.controller?.model = getItem(position)
