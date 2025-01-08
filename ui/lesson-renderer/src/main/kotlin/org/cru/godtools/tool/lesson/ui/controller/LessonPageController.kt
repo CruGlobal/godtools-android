@@ -1,11 +1,10 @@
 package org.cru.godtools.tool.lesson.ui.controller
 
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
-import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.ParentController
@@ -18,25 +17,23 @@ import org.greenrobot.eventbus.EventBus
 
 class LessonPageController @AssistedInject constructor(
     @Assisted private val binding: LessonPageBinding,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted override val toolState: State,
     cacheFactory: UiControllerCache.Factory,
     eventBus: EventBus
 ) : ParentController<LessonPage>(LessonPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
-        fun create(binding: LessonPageBinding, toolState: State): LessonPageController
+        fun create(binding: LessonPageBinding, lifecycleOwner: LifecycleOwner, toolState: State): LessonPageController
     }
-
-    override val lifecycleOwner = binding.lifecycleOwner
-        ?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
-        ?.also { binding.lifecycleOwner = it }
 
     private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
 
-        lifecycleOwner?.lifecycle?.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume {
                 pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
             }
@@ -52,5 +49,8 @@ class LessonPageController @AssistedInject constructor(
     override val childContainer get() = binding.content
 }
 
-fun LessonPageBinding.bindController(factory: LessonPageController.Factory, toolState: State) =
-    controller ?: factory.create(this, toolState)
+fun LessonPageBinding.bindController(
+    factory: LessonPageController.Factory,
+    lifecycleOwner: LifecycleOwner,
+    toolState: State,
+) = controller ?: factory.create(this, lifecycleOwner, toolState)
