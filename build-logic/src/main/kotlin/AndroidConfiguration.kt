@@ -57,24 +57,24 @@ internal fun Project.excludeAndroidSdkDependencies() {
 }
 
 private fun BaseExtension.configureSdk() {
-    compileSdkVersion(34)
+    compileSdkVersion(35)
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
     }
 }
 
 private fun BaseExtension.configureCompilerOptions(project: Project) {
     project.extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
-        jvmToolchain(17)
+        jvmToolchain(21)
     }
 
     compileOptions {
         // HACK: workaround a kotlin.jvmToolchain bug
         //       see: https://issuetracker.google.com/issues/260059413
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
         freeCompilerArgs += "-Xjvm-default=all"

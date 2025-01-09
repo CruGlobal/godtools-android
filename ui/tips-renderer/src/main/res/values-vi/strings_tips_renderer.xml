@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Chuẩn bị</string>
     <string name="tract_tips_type_quote">Trích dẫn</string>
     <string name="tract_tips_type_tip">Lời gợi ý</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Gợi ý hướng dẫn</string>
+    <string name="tool_settings_action_tips_disable">Ẩn phần gợi ý</string>
 </resources>

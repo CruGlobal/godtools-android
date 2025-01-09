@@ -15,6 +15,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import java.net.UnknownHostException
 import java.util.Date
 import java.util.UUID
 import kotlin.random.Random
@@ -231,6 +232,20 @@ class FacebookAccountProviderTest {
         coVerifyAll {
             api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
             accessTokenManager.refreshCurrentAccessToken()
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - Error - api throws UnknownHostException`() = runTest {
+        val accessToken = accessToken()
+        val createUser = Random.nextBoolean()
+        val exception = UnknownHostException()
+        currentAccessTokenFlow.value = accessToken
+        coEvery { api.authenticate(any()) } throws exception
+
+        assertEquals(Result.failure(exception), provider.authenticateWithMobileContentApi(createUser))
+        coVerifyAll {
+            api.authenticate(AuthToken.Request(fbAccessToken = accessToken.token, createUser = createUser))
         }
     }
 

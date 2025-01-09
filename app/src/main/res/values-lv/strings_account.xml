@@ -7,8 +7,11 @@
     <string name="account_create_description">Izveido kontu, lai tev būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
     <string name="account_login_heading">Pierakstīties</string>
     <string name="account_login_description">Ieej savā kontā, lai būtu pieejami patiesi stāsti, iedrošinājums un praktiski padomi.</string>
+    <string name="account_error_title">Autentifikācija neizdevās</string>
     <string name="account_error_user_already_exists">Lietotāja konts jau pastāv.</string>
     <string name="account_error_user_not_found">Lietotāja konts nav atrasts.</string>
+    <string name="account_error_not_connected_title">Nav savienojuma ar internetu</string>
+    <string name="account_error_not_connected">Lūdzu, pārbaudi savienojumu ar internetu un mēģini vēlreiz.</string>
     <string name="account_error_unknown">Kļūda, piesakoties sistēmā.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->

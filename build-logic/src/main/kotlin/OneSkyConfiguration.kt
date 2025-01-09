@@ -38,6 +38,7 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
             "ko",
             "lv",
             "pt",
+            "ro",
             "ru",
             "sw",
             "ur",

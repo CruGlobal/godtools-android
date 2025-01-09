@@ -116,7 +116,7 @@ fun DownloadableLanguagesLayout(
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(languages, key = { _, it -> it.code }) { i, it ->
-                LanguageListItem(languageViewModels.get(it), Modifier.animateItemPlacement())
+                LanguageListItem(languageViewModels.get(it), Modifier.animateItem())
                 if (i + 1 < languages.size) HorizontalDivider()
             }
         }

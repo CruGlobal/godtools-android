@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,7 +33,6 @@ import org.cru.godtools.ui.tools.ToolViewModels
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 @CircuitInject(ToolsScreen::class, SingletonComponent::class)
 internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
     val toolViewModels: ToolViewModels = viewModel()
@@ -54,7 +52,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
             Banners(
                 { banner },
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .fillMaxWidth()
             )
         }
@@ -64,13 +62,13 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
                 ToolSpotlight(
                     spotlightTools,
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .padding(top = 16.dp)
                 )
 
                 HorizontalDivider(
                     modifier = Modifier
-                        .animateItemPlacement()
+                        .animateItem()
                         .padding(horizontal = MARGIN_TOOLS_LAYOUT_HORIZONTAL, top = 16.dp)
                 )
             }
@@ -80,7 +78,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
             ToolFilters(
                 filters = filters,
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .padding(vertical = 16.dp)
             )
         }
@@ -100,7 +98,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
                 state = toolState,
                 showActions = false,
                 modifier = Modifier
-                    .animateItemPlacement()
+                    .animateItem()
                     .padding(bottom = 16.dp, horizontal = 16.dp)
             )
         }

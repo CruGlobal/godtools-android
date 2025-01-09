@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Uscire subito dalla sessione di condivisione remota?</string>
     <string name="tract_live_share_exit_dialog_confirm">Esci</string>
     <string name="tract_live_share_exit_dialog_cancel">Annulla</string>
-    <!-- Settings -->
-    <string name="menu_settings">Impostazioni</string>
-    <string name="tract_settings_title">Opzioni strumento</string>
-    <string name="tract_settings_action_share">Condividi link</string>
-    <string name="tract_settings_action_tips_disable">Nascondi consigli</string>
-    <string name="tract_settings_languages_title">Lingua parallela</string>
-    <string name="tract_settings_languages_description">Alterna tra due lingue diverse in questo strumento.</string>
-    <string name="tract_settings_languages_parallel">Parallela</string>
-    <string name="tract_settings_languages_none">Nessuna</string>
-    <string name="tract_settings_shareables_title">Grafiche correlate</string>
 </resources>

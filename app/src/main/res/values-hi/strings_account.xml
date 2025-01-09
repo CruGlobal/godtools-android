@@ -7,8 +7,11 @@
     <string name="account_create_description">अपनी उंगलियों पर वास्तविक कहानियाँ, प्रोत्साहन और व्यावहारिक सुझावों को प्राप्त करने के लिए खाता खोलें।</string>
     <string name="account_login_heading">साइन इन करें</string>
     <string name="account_login_description">अपने खाते में लॉगिन करें और असल कहानियाँ, प्रेरणा और व्यावहारिक सुझाव पाएँ।</string>
+    <string name="account_error_title">प्रमाणीकरण विफल</string>
     <string name="account_error_user_already_exists">यूज़र खाता पहले से मौजूद।</string>
     <string name="account_error_user_not_found">यूज़र खाता नहीं मिला।</string>
+    <string name="account_error_not_connected_title">कोई इंटरनेट कनेक्शन नहीं</string>
+    <string name="account_error_not_connected">कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
     <string name="account_error_unknown">लॉगिन में त्रुटि।</string>
     <string name="account_error_dialog_dismiss">ठीक है</string>
     <!-- Delete Account -->

@@ -56,6 +56,9 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
         }
     }
 
+    override suspend fun updateToolLocales(code: String, primary: Locale?, parallel: Locale?) =
+        dao.updateToolLocales(code, primary, parallel)
+
     override suspend fun updateToolViews(code: String, delta: Int) = dao.updateToolViews(code, delta)
 
     override suspend fun storeInitialTools(tools: Collection<Tool>) =

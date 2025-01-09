@@ -376,6 +376,28 @@ class GodToolsRoomDatabaseMigrationIT {
         }
     }
 
+    @Test
+    fun testMigrate23To24() {
+        val localesQuery = "SELECT code, primaryLocale, parallelLocale FROM tools WHERE code = 'kgp'"
+
+        // create v23 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 23).use { db ->
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            assertFailsWith<SQLException> { db.query(localesQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 24, true, *MIGRATIONS).use { db ->
+            db.query(localesQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("kgp", it.getStringOrNull(0))
+                assertEquals(null, it.getStringOrNull(1))
+                assertEquals(null, it.getStringOrNull(2))
+            }
+        }
+    }
+
     private fun SupportSQLiteDatabase.dumpIndices(table: String) = query("PRAGMA index_list($table)").use { it ->
         it.map { it.getString(1) }.associateWith { name ->
             query("PRAGMA index_info($name)").use { it.map { it.getString(2) }.toSet() }

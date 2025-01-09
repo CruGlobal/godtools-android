@@ -5,8 +5,6 @@
     <string name="tool_offline">আপনার অনুরোধ করা টুলটি খোলার জন্য একটি ইন্টারনেট সংযোগ প্রয়োজন৷</string>
     <string name="tract_content_input_error_required">%1$s দরকার</string>
     <string name="tract_content_input_error_invalid_email">দয়া করে একটি বৈধ ইমেইল এড্রেস প্রবেশ করান</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">প্রশিক্ষণ টিপস</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">শেয়ার করুন</string>
     <string name="tool_share_sheet_more_apps">আরও</string>
@@ -21,4 +19,13 @@ http://godtoolsapp.com \n\n থেকে app টিকে ডাউনলোড 
     <string name="feature_discovery_desc_share_tool">এই আইকনটিকে ক্লিক করার দ্বারা এই টুলটিকে একজন বন্ধুর কাছে পাঠান</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">ছবি শেয়ার করুন</string>
+    <!-- Settings -->
+    <string name="menu_settings">সেটিং</string>
+    <string name="tool_settings_title">টুল অপশনস</string>
+    <string name="tool_settings_action_share">লিংক শেয়ার করুন</string>
+    <string name="tool_settings_languages_title">সমান্তরাল ভাষা</string>
+    <string name="tool_settings_languages_description">এই টুলে দুটি ভিন্ন ভাষার মধ্যে বিনিময়/ তুলনা করুন।</string>
+    <string name="tool_settings_languages_parallel">সমান্তরাল</string>
+    <string name="tool_settings_languages_none">একটিও না</string>
+    <string name="tool_settings_shareables_title">সম্পর্কিত গ্রাফিক্স</string>
 </resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Să începem</string>
+    <string name="menu_tutorial">Tutorial</string>
+    <string name="menu_heading_account">Cont</string>
+    <string name="menu_login">Conectare</string>
+    <string name="menu_signup">Creează cont</string>
+    <string name="menu_logout">Deconectare</string>
+    <string name="menu_heading_support">Suport</string>
+    <string name="menu_feedback">Trimite feedback</string>
+    <string name="menu_report_bug">Raportează o eroare</string>
+    <string name="menu_question">Pune o întrebare</string>
+    <string name="menu_heading_share">Distribuie</string>
+    <string name="menu_review">Scrie părerea ta</string>
+    <string name="menu_share_story">Împărtășește o experiență cu noi</string>
+    <string name="menu_share_godtools">Distribuie aplicația GodTools</string>
+    <string name="share_app_message">Descarcă aplicația GodTools: https://godtoolsapp.com \n\n
+
+Găsești versiunea online aici https://knowgod.com/</string>
+    <string name="share_story_subject">Istorii cu GodTools</string>
+    <string name="menu_heading_about">Despre</string>
+    <string name="menu_terms_of_use">Condiții de utilizare</string>
+    <string name="menu_privacy_policy">Politica de confidențialitate</string>
+    <string name="menu_copyright">Copyright</string>
+    <string name="menu_version">Versiune: %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Lecții</string>
+    <string name="dashboard_lessons_header_title">Lecții create pentru tine</string>
+    <string name="dashboard_lessons_header_description">Idei practice pentru a construi relații și a începe conversații relevante.</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d Lecție disponibilă</item>
+        <item quantity="other">%1$d Lecții disponibile</item>
+        <item quantity="few">%1$d Lecții disponibile</item>
+    </plurals>
+    <string name="dashboard_lessons_section_filter_label">Lecții în:</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">Favorite</string>
+    <string name="dashboard_home_header_title">Bun venit la GodTools</string>
+    <string name="dashboard_home_section_featured_lesson">Lecție recomandată</string>
+    <string name="dashboard_home_section_favorites_title">Instrumentele tale preferate</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Niciun instrument preferat de afișat</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Atinge pictograma inimă pentru a adăuga la favorite un instrument și a-l face disponibil offline.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Vezi toate &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Accesează Instrumentele</string>
+    <string name="tools_list_favorites_banner_text">Fă un instrument disponibil offline apăsând pictograma inimă care o adaugă la Favorite.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Anulează</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Instrumente</string>
+    <string name="dashboard_tools_section_filter_label">Filtru</string>
+    <string name="dashboard_tools_section_filter_category_any">Orice categorie</string>
+    <string name="dashboard_tools_section_filter_language_any">Orice limbă</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d Instrument disponibile</item>
+        <item quantity="other">%1$d Instrumente disponibile</item>
+        <item quantity="few">%1$d Instrumente disponibile</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Toate instrumentele disponibile</string>
+    <string name="dashboard_tools_section_categories_label">Categorii</string>
+    <string name="dashboard_tools_section_categories_all">Toate instrumentele</string>
+    <string name="dashboard_tools_section_spotlight_label">Instrumentele Recomandate</string>
+    <string name="dashboard_tools_section_spotlight_description">Iată câteva instrumente care credem că îți vor plăcea</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Elimini “%1$s” din Favorite?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Elimină</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Anulează</string>
+    <string name="tool_card_label_language_unavailable">Indisponibil în %1$s</string>
+    <string name="tool_card_accessibility_language_available">Disponibil</string>
+    <string name="action_tools_about">Detalii</string>
+    <string name="action_tools_open">Începe</string>
+    <!-- In App Update -->
+    <string name="play_update_available">Actualizare disponibilă</string>
+    <string name="play_update_available_action">Descarcă</string>
+    <string name="play_update_downloaded">Actualizare descărcată</string>
+    <string name="play_update_downloaded_action">Reîncarcă</string>
+</resources>

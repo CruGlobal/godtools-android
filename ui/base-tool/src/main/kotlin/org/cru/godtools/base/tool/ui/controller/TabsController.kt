@@ -13,6 +13,7 @@ import org.ccci.gto.android.common.material.tabs.setBackgroundTint
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.shared.tool.parser.model.Tabs
 import org.cru.godtools.shared.tool.parser.model.primaryColor
+import org.cru.godtools.shared.tool.parser.model.stylesParent
 import org.cru.godtools.tool.databinding.ToolContentTabsBinding
 
 class TabsController private constructor(
@@ -71,7 +72,7 @@ class TabsController private constructor(
         bindingTabs = true
 
         // update tabs for the TabLayout
-        val primaryColor = model?.stylesParent.primaryColor
+        val primaryColor = model.stylesParent.primaryColor
         binding.tabs.removeAllTabs()
         model?.tabs?.forEach {
             binding.tabs.apply {

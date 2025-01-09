@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">اکنون از جلسه اشتراک‌گذاری راه‌دور خارج می‌شوید؟</string>
     <string name="tract_live_share_exit_dialog_confirm">خروج</string>
     <string name="tract_live_share_exit_dialog_cancel">لغو</string>
-    <!-- Settings -->
-    <string name="menu_settings">تنظیمات</string>
-    <string name="tract_settings_title">گزینه‌های ابزار</string>
-    <string name="tract_settings_action_share">اشتراک‌گذاری لینک</string>
-    <string name="tract_settings_action_tips_disable">پنهان‌کردن نکات</string>
-    <string name="tract_settings_languages_title">زبان موازی</string>
-    <string name="tract_settings_languages_description">در این ابزار بین دو زبان جابه‌جا شوید.</string>
-    <string name="tract_settings_languages_parallel">موازی</string>
-    <string name="tract_settings_languages_none">وجود ندارد</string>
-    <string name="tract_settings_shareables_title">گرافیک‌های مرتبط</string>
 </resources>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -16,9 +17,9 @@ fun Context.startAccountActivity() = startActivity(
 
 @AndroidEntryPoint
 class AccountActivity : BaseActivity() {
-    // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             GodToolsTheme {
                 DrawerMenuLayout {
@@ -31,5 +32,4 @@ class AccountActivity : BaseActivity() {
             }
         }
     }
-    // endregion Lifecycle
 }

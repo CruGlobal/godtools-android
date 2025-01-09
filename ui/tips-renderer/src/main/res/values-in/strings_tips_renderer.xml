@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Siapkan</string>
     <string name="tract_tips_type_quote">Kutip</string>
     <string name="tract_tips_type_tip">Saran</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Saran-saran latihan</string>
+    <string name="tool_settings_action_tips_disable">Sembunyikan saran</string>
 </resources>

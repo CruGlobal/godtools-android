@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -22,59 +20,6 @@ import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-
-@Composable
-fun SquareToolCard(
-    toolCode: String,
-    modifier: Modifier = Modifier,
-    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
-    showCategory: Boolean = true,
-    showSecondLanguage: Boolean = false,
-    showActions: Boolean = true,
-    floatParallelLanguageUp: Boolean = true,
-    confirmRemovalFromFavorites: Boolean = false,
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    val tool by viewModel.tool.collectAsState()
-    val firstTranslation by viewModel.firstTranslation.collectAsState()
-    val secondTranslation by viewModel.secondTranslation.collectAsState()
-
-    val eventSink: (ToolCard.Event) -> Unit = remember(viewModel) {
-        {
-            when (it) {
-                ToolCard.Event.Click -> onEvent(
-                    ToolCardEvent.Click(
-                        tool = tool?.code,
-                        type = tool?.type,
-                        lang1 = firstTranslation.value?.languageCode,
-                        lang2 = secondTranslation?.languageCode
-                    )
-                )
-                ToolCard.Event.OpenTool -> onEvent(
-                    ToolCardEvent.OpenTool(
-                        tool = tool?.code,
-                        type = tool?.type,
-                        lang1 = firstTranslation.value?.languageCode,
-                        lang2 = secondTranslation?.languageCode
-                    )
-                )
-                ToolCard.Event.OpenToolDetails -> onEvent(ToolCardEvent.OpenToolDetails(toolCode))
-                ToolCard.Event.PinTool -> viewModel.pinTool()
-                ToolCard.Event.UnpinTool -> viewModel.unpinTool()
-            }
-        }
-    }
-
-    SquareToolCard(
-        state = viewModel.toState(eventSink = eventSink),
-        modifier = modifier,
-        showCategory = showCategory,
-        showSecondLanguage = showSecondLanguage,
-        showActions = showActions,
-        floatParallelLanguageUp = floatParallelLanguageUp,
-        confirmRemovalFromFavorites = confirmRemovalFromFavorites,
-    )
-}
 
 @Composable
 fun SquareToolCard(

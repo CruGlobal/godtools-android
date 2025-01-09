@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Ukončit nyní vzdálené sdílení?</string>
     <string name="tract_live_share_exit_dialog_confirm">Ukončit</string>
     <string name="tract_live_share_exit_dialog_cancel">Zrušit</string>
-    <!-- Settings -->
-    <string name="menu_settings">Nastavení</string>
-    <string name="tract_settings_title">Možnosti nástroje</string>
-    <string name="tract_settings_action_share">Sdílet odkaz</string>
-    <string name="tract_settings_action_tips_disable">Skrýt tipy</string>
-    <string name="tract_settings_languages_title">Paralelní jazyk</string>
-    <string name="tract_settings_languages_description">Přepnout mezi dvěma různými jazyky v tomto nástroji.</string>
-    <string name="tract_settings_languages_parallel">Paralelní</string>
-    <string name="tract_settings_languages_none">Žádný</string>
-    <string name="tract_settings_shareables_title">Související grafika</string>
 </resources>

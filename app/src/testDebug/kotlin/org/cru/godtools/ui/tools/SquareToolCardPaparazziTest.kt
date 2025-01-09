@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.tools
 
-import android.graphics.drawable.Drawable
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -32,13 +31,12 @@ class SquareToolCardPaparazziTest(
     @OptIn(ExperimentalCoilApi::class, ExperimentalCoroutinesApi::class)
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        val file = Drawable.createFromStream(javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
         Coil.setImageLoader(
             ImageLoader.Builder(paparazzi.context)
                 .components {
                     add(
                         FakeImageLoaderEngine.Builder()
-                            .intercept(ToolCardStateTestData.banner, file)
+                            .intercept(ToolCardStateTestData.banner, ToolCardStateTestData.bannerDrawable)
                             .build()
                     )
                 }

@@ -18,7 +18,7 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
     when (type) {
         Type.TRACT -> startTractActivity(code, *languages, showTips = showTips)
         Type.ARTICLE -> startArticlesActivity(code, languages[0])
-        Type.CYOA -> startCyoaActivity(code, *languages)
+        Type.CYOA -> startCyoaActivity(code, *languages, showTips = showTips)
         Type.LESSON -> startLessonActivity(code, languages[0])
         Type.META, Type.UNKNOWN -> Unit
     }
@@ -28,16 +28,22 @@ fun Tool.createToolIntent(
     languages: List<Locale>,
     activeLocale: Locale? = null,
     showTips: Boolean = false,
+    saveLanguageSettings: Boolean = false,
 ) = code?.let { code ->
     when (type) {
         Type.TRACT -> context.createTractActivityIntent(
             code,
             *languages.toTypedArray(),
             activeLocale = activeLocale,
-            showTips = showTips
+            showTips = showTips,
+            saveLanguageSettings = saveLanguageSettings,
         )
         Type.ARTICLE -> context.createArticlesIntent(code, languages[0])
-        Type.CYOA -> context.createCyoaActivityIntent(code, *languages.toTypedArray())
+        Type.CYOA -> context.createCyoaActivityIntent(
+            code,
+            *languages.toTypedArray(),
+            saveLanguageSettings = saveLanguageSettings
+        )
         Type.LESSON -> context.createLessonActivityIntent(code, languages[0])
         Type.META, Type.UNKNOWN -> null
     }

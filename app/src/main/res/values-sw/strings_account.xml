@@ -9,6 +9,8 @@
     <string name="account_login_description">Jisajili kwa kuunda akaunti ili uweze kuona shuhuda halisi, kutiwa moyo na kupata mwongozo wa matumizi rahisi.</string>
     <string name="account_error_user_already_exists">Akaunti ya mtumiaji tayari ipo</string>
     <string name="account_error_user_not_found">Akaunti ya mtumiaji haipo</string>
+    <string name="account_error_not_connected_title">Hakuna muunganisho wa mtandao.</string>
+    <string name="account_error_not_connected">Tafadhali angalia muunganisho wako wa mtandao na ujaribu tena.</string>
     <string name="account_error_unknown">Kuna hitilafu katika kuingia</string>
     <string name="account_error_dialog_dismiss">Sawa</string>
     <!-- Delete Account -->

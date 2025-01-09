@@ -7,8 +7,11 @@
     <string name="account_create_description">Richte ein Konto ein, damit du immer echte Geschichten, Ermutigung und praktische Tipps zur Hand hast.</string>
     <string name="account_login_heading">Anmelden</string>
     <string name="account_login_description">Logge dich in dein Konto ein, damit du echte Geschichten, Ermutigung und praktische Tipps zur Hand hast.</string>
+    <string name="account_error_title">Authentifizierung fehlgeschlagen.</string>
     <string name="account_error_user_already_exists">Benutzerkonto bereits vorhanden.</string>
     <string name="account_error_user_not_found">Benutzerkonto kann nicht gefunden werden.</string>
+    <string name="account_error_not_connected_title">Keine Internetverbindung</string>
+    <string name="account_error_not_connected">Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
     <string name="account_error_unknown">Fehler beim Einloggen.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->

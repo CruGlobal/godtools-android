@@ -1,6 +1,9 @@
 package org.cru.godtools.base.ui.activity
 
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
@@ -16,6 +19,7 @@ abstract class BaseBindingActivity<B : ViewBinding> protected constructor(@Layou
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.BLACK))
         setupDataBinding()
     }
 

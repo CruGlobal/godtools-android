@@ -38,17 +38,19 @@ class AccordionSectionControllerTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val baseLifecycleOwner = TestLifecycleOwner()
-    private val eventBus = mockk<EventBus>(relaxUnitFun = true)
-    private val accordionController = AccordionController(
-        mockkToolContentAccordionBinding(),
-        mockk {
-            every { eventBus } returns this@AccordionSectionControllerTest.eventBus
-            every { lifecycleOwner } returns baseLifecycleOwner
-            every { toolState } returns State()
-        },
-        mockk()
-    )
+    private val baseLifecycleOwner by lazy { TestLifecycleOwner() }
+    private val eventBus: EventBus = mockk(relaxUnitFun = true)
+    private val accordionController by lazy {
+        AccordionController(
+            mockkToolContentAccordionBinding(),
+            mockk {
+                every { eventBus } returns this@AccordionSectionControllerTest.eventBus
+                every { lifecycleOwner } returns baseLifecycleOwner
+                every { toolState } returns State()
+            },
+            mockk()
+        )
+    }
 
     private lateinit var controller: AccordionController.SectionController
 

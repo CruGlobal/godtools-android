@@ -7,8 +7,11 @@
     <string name="account_create_description">Buat akun untuk mendapatkan kisah-kisah nyata, dorongan, dan tip praktis dengan ujung jari Saudara.</string>
     <string name="account_login_heading">Masuk</string>
     <string name="account_login_description">Masuk ke akun Saudara untuk mendapatkan kisah nyata, dorongan, dan tip praktis di ujung jari Saudara.</string>
+    <string name="account_error_title">Autentikasi Gagal</string>
     <string name="account_error_user_already_exists">Akun pengguna sudah dipakai.</string>
     <string name="account_error_user_not_found">Pengguna tidak ditemukan</string>
+    <string name="account_error_not_connected_title">Tidak ada koneksi internet</string>
+    <string name="account_error_not_connected">Silakan periksa koneksi internet dan coba lagi.</string>
     <string name="account_error_unknown">Kesalahan saat masuk.</string>
     <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->

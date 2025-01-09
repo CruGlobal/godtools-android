@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -37,12 +38,14 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
+        enableEdgeToEdge()
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
                     DashboardLayout(
                         onEvent = { e ->
                             when (e) {
+                                is DashboardEvent.OpenIntent -> startActivity(e.intent)
                                 is DashboardEvent.OpenTool ->
                                     openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
                                 is DashboardEvent.OpenToolDetails ->

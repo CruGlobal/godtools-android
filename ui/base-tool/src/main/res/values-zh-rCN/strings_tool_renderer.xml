@@ -5,8 +5,6 @@
     <string name="tool_offline">你请求的工具需要有互联网连接才能打开</string>
     <string name="tract_content_input_error_required">需要 %1$s</string>
     <string name="tract_content_input_error_invalid_email">请输入有效的电子邮件地址</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">培训提示</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">分享</string>
     <string name="tool_share_sheet_more_apps">更多</string>
@@ -20,4 +18,13 @@
     <string name="feature_discovery_desc_share_tool">点击此图标，将这款工具发送给朋友</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">分享图片</string>
+    <!-- Settings -->
+    <string name="menu_settings">设置</string>
+    <string name="tool_settings_title">工具选项</string>
+    <string name="tool_settings_action_share">分享链接</string>
+    <string name="tool_settings_languages_title">同步语言</string>
+    <string name="tool_settings_languages_description">在这个工具中切换两种不同的语言。</string>
+    <string name="tool_settings_languages_parallel">"同步 "</string>
+    <string name="tool_settings_languages_none">无</string>
+    <string name="tool_settings_shareables_title">相关图片</string>
 </resources>

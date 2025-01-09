@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
+import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
@@ -54,17 +56,16 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
-import org.cru.godtools.ui.dashboard.home.AllFavoritesList
-import org.cru.godtools.ui.dashboard.home.DashboardHomeEvent
-import org.cru.godtools.ui.dashboard.home.HomeContent
+import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
+import org.cru.godtools.ui.dashboard.home.HomeScreen
 import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCardEvent
 
 internal sealed interface DashboardEvent {
+    class OpenIntent(val intent: Intent) : DashboardEvent
     open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
         DashboardEvent
     class OpenLesson(lesson: String?, lang: Locale?) : OpenTool(lesson, Tool.Type.LESSON, lang)
@@ -128,52 +129,33 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                 },
                             )
 
-                            Page.HOME -> HomeContent(
-                                onEvent = {
-                                    when (it) {
-                                        DashboardHomeEvent.ViewAllFavorites -> {
-                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                        }
-                                        DashboardHomeEvent.ViewAllTools -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
-                                        is DashboardHomeEvent.OpenTool ->
-                                            onEvent(DashboardEvent.OpenTool(it.tool, it.type, it.lang1, it.lang2))
-                                        is DashboardHomeEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
-                                    }
-                                }
-                            )
-
-                            Page.FAVORITE_TOOLS -> AllFavoritesList(
-                                onEvent = {
-                                    when (it) {
-                                        is ToolCardEvent.Click,
-                                        is ToolCardEvent.OpenTool, -> onEvent(
-                                            DashboardEvent.OpenTool(
-                                                tool = it.tool,
-                                                type = it.toolType,
-                                                lang1 = it.lang1,
-                                                lang2 = it.lang2,
-                                            )
-                                        )
-                                        is ToolCardEvent.OpenToolDetails ->
-                                            onEvent(DashboardEvent.OpenToolDetails(it.tool))
-                                    }
-                                },
-                            )
-
+                            Page.HOME,
+                            Page.FAVORITE_TOOLS,
                             Page.ALL_TOOLS -> {
                                 CircuitContent(
-                                    screen = ToolsScreen,
+                                    screen = when (page) {
+                                        Page.HOME -> HomeScreen
+                                        Page.FAVORITE_TOOLS -> AllFavoritesScreen
+                                        Page.ALL_TOOLS -> ToolsScreen
+                                        else -> error("Page $page is not converted to Circuit yet")
+                                    },
                                     onNavEvent = {
                                         when (it) {
                                             is NavEvent.GoTo -> when (val screen = it.screen) {
+                                                AllFavoritesScreen -> {
+                                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                                }
+                                                is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
                                                 is ToolDetailsScreen -> onEvent(
                                                     DashboardEvent.OpenToolDetails(
                                                         screen.initialTool,
                                                         screen.secondLanguage,
                                                     )
                                                 )
+                                            }
+                                            is NavEvent.ResetRoot -> when (it.newRoot) {
+                                                ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                             }
                                             else -> Unit
                                         }

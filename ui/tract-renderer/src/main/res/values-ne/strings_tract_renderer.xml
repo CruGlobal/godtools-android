@@ -8,19 +8,9 @@
     <string name="menu_live_share_publish">आफ्नो स्क्रिन साझा गर्नुहोस्</string>
     <string name="menu_live_share_active">स्क्रिन साझेदारी सक्रिय</string>
     <string name="share_tool_message_tract_live_share">नमस्ते, स्क्रिन साझेदारी मार्फत GodTools मा मसँग पछ्याउनुहोस्। यहाँ लिङ्क दिइएको छ: %1$s\n\nयदि तपाईंले पछिसम्म यो सन्देश प्राप्त गर्नुभएन भने, यो लिङ्कले काम नगर्न पनि सक्छ। हामी अर्को पटक पुन: प्रयास गर्नेछौँ।</string>
-    <string name="tract_live_share_starting">स्क्रिन साझेदारी सुरु गर्दै...</string>
+    <string name="tract_live_share_starting">स्क्रिन साझेदारी सुरु गर्दै…</string>
     <string name="tract_live_share_unable_to_connect">"स्क्रिन साझेदारीमा जोड्न असमर्थ "</string>
     <string name="tract_live_share_exit_dialog_message">के अहिले रिमोट सेयरिङबाट बाहिर निस्किने हो?</string>
     <string name="tract_live_share_exit_dialog_confirm">बाहिरिनुहोस्</string>
     <string name="tract_live_share_exit_dialog_cancel">रद्द गर्नुहोस्</string>
-    <!-- Settings -->
-    <string name="menu_settings">"सेटिङहरु "</string>
-    <string name="tract_settings_title">उपकरण विकल्प</string>
-    <string name="tract_settings_action_share">लिङ्क साझा गर्नुहोस्</string>
-    <string name="tract_settings_action_tips_disable">सुझावहरू लुकाउनुहोस्</string>
-    <string name="tract_settings_languages_title">समानान्तर भाषा</string>
-    <string name="tract_settings_languages_description">यस उपकरणमा दुई फरक भाषाहरू बीच टगल गर्नुहोस्।</string>
-    <string name="tract_settings_languages_parallel">समानान्तर</string>
-    <string name="tract_settings_languages_none">कुनै पनि छैन</string>
-    <string name="tract_settings_shareables_title">सम्बन्धित ग्राफिक्स</string>
 </resources>

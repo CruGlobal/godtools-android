@@ -19,7 +19,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
-class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
+data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
     data class State(
         val toolCode: String? = null,
         val tool: Tool? = null,

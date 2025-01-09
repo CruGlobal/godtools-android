@@ -204,7 +204,7 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                         count,
                     ),
                     onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code)) },
-                    modifier = Modifier.animateItemPlacement()
+                    modifier = Modifier.animateItem()
                 )
             }
         }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
@@ -50,6 +51,7 @@ class ToolDetailsActivity : BaseActivity() {
             return
         }
 
+        enableEdgeToEdge()
         val screen = ToolDetailsScreen(
             initialTool = initialTool!!,
             secondLanguage = intent.getSerializableExtraCompat(EXTRA_ADDITIONAL_LANGUAGE, Locale::class.java)

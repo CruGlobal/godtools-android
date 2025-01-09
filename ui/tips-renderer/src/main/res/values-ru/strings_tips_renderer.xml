@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">Подготовьтесь</string>
     <string name="tract_tips_type_quote">Цитата</string>
     <string name="tract_tips_type_tip">Подсказка</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Подсказки по обучению</string>
+    <string name="tool_settings_action_tips_disable">Скрыть подсказки</string>
 </resources>

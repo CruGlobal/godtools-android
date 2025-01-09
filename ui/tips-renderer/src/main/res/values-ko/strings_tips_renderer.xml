@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">준비</string>
     <string name="tract_tips_type_quote">인용</string>
     <string name="tract_tips_type_tip">팁</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">트레이닝 팁</string>
+    <string name="tool_settings_action_tips_disable">팁 숨기기</string>
 </resources>

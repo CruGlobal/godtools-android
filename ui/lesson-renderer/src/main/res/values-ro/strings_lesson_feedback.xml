@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lesson_feedback_title">Părerea ta</string>
+    <string name="lesson_feedback_question_helpful">Ți-a fost de ajutor această lecție?</string>
+    <string name="lesson_feedback_question_helpful_yes">Da</string>
+    <string name="lesson_feedback_question_helpful_no">Nu</string>
+    <string name="lesson_feedback_question_readiness">Cât de pregătit te simți să începi o conversație spirituală?</string>
+    <string name="lesson_feedback_action_submit">Trimite feedback</string>
+    <string name="lesson_feedback_action_cancel">Omite</string>
+</resources>

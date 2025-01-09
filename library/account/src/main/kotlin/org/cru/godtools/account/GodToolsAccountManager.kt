@@ -1,11 +1,13 @@
 package org.cru.godtools.account
 
+import android.content.Context
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.core.app.ActivityOptionsCompat
 import dagger.Lazy
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.base.Ordered
+import org.ccci.gto.android.common.util.content.isConnected
 import org.cru.godtools.account.provider.AccountProvider
 import org.cru.godtools.account.provider.AuthenticationException
 import org.cru.godtools.api.UserApi
@@ -33,13 +36,16 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
     @get:VisibleForTesting
     internal val providers: List<AccountProvider>,
     private val userApi: Lazy<UserApi>,
+    private val context: Context,
     coroutineScope: CoroutineScope = CoroutineScope(SupervisorJob()),
 ) {
     @Inject
     internal constructor(
         providers: Set<@JvmSuppressWildcards AccountProvider>,
         userApi: Lazy<UserApi>,
-    ) : this(providers.sortedWith(Ordered.COMPARATOR), userApi)
+        @ApplicationContext
+        context: Context,
+    ) : this(providers.sortedWith(Ordered.COMPARATOR), userApi, context)
 
     // region Active Provider
     @VisibleForTesting
@@ -80,8 +86,13 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
                         result.isSuccess -> LoginResponse.Success
                         else -> when (result.exceptionOrNull()) {
                             AuthenticationException.UserNotFound -> LoginResponse.Error.UserNotFound
+
                             AuthenticationException.UserAlreadyExists -> LoginResponse.Error.UserAlreadyExists
-                            else -> LoginResponse.Error()
+
+                            else -> when {
+                                !context.isConnected() -> LoginResponse.Error.NotConnected
+                                else -> LoginResponse.Error()
+                            }
                         }
                     }
                 )

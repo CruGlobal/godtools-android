@@ -75,6 +75,10 @@ class Tool(
     val shares: Int = 0,
     @JsonApiIgnore
     val pendingShares: Int = 0,
+    @JsonApiIgnore
+    val primaryLocale: Locale? = null,
+    @JsonApiIgnore
+    val parallelLocale: Locale? = null,
     metatoolCode: String? = null,
     defaultVariantCode: String? = null,
     @JsonApiId
@@ -205,6 +209,8 @@ class Tool(
         isScreenShareDisabled != other.isScreenShareDisabled -> false
         shares != other.shares -> false
         pendingShares != other.pendingShares -> false
+        primaryLocale != other.primaryLocale -> false
+        parallelLocale != other.parallelLocale -> false
         apiId != other.apiId -> false
         metatoolCode != other.metatoolCode -> false
         defaultVariantCode != other.defaultVariantCode -> false
@@ -230,6 +236,8 @@ class Tool(
         result = 31 * result + isScreenShareDisabled.hashCode()
         result = 31 * result + shares
         result = 31 * result + pendingShares
+        result = 31 * result + (primaryLocale?.hashCode() ?: 0)
+        result = 31 * result + (parallelLocale?.hashCode() ?: 0)
         result = 31 * result + (apiId?.hashCode() ?: 0)
         result = 31 * result + (metatoolCode?.hashCode() ?: 0)
         result = 31 * result + (defaultVariantCode?.hashCode() ?: 0)
@@ -263,6 +271,8 @@ fun randomTool(
     isSpotlight: Boolean = Random.nextBoolean(),
     shares: Int = Random.nextInt(),
     pendingShares: Int = Random.nextInt(),
+    primaryLocale: Locale? = Locale.GERMAN.takeIf { Random.nextBoolean() },
+    parallelLocale: Locale? = Locale.FRENCH.takeIf { Random.nextBoolean() },
     metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
@@ -287,6 +297,8 @@ fun randomTool(
     isScreenShareDisabled = Random.nextBoolean(),
     shares = shares,
     pendingShares = pendingShares,
+    primaryLocale = primaryLocale,
+    parallelLocale = parallelLocale,
     metatoolCode = metatoolCode,
     defaultVariantCode = defaultVariantCode,
     apiId = apiId,

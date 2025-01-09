@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">準備する</string>
     <string name="tract_tips_type_quote">引用</string>
     <string name="tract_tips_type_tip">ヒント</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">トレーニングのヒント</string>
+    <string name="tool_settings_action_tips_disable">ヒントを非表示</string>
 </resources>

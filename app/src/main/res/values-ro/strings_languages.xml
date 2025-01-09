@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Limba Aplicației</string>
+    <string name="language_settings_app_language_dialog_message">Ați selectat %1$s ca limbă a aplicației. Acest lucru va schimba limba întregii aplicații GodTools. Esti sigur?</string>
+    <string name="language_settings_app_language_dialog_confirm">Schimbă limba</string>
+    <string name="language_settings_app_language_dialog_dismiss">Anulează</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">Setări de limbă</string>
+    <string name="title_language_settings">Setări de Limbă</string>
+    <string name="language_settings_section_app_language_heading">Limba de interfață a aplicației</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$,d Limbi disponibile</item>
+        <item quantity="other">%1$,d Limbi disponibile</item>
+        <item quantity="few">Limbi disponibile</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Setați limba în care doriți să fie afișată întreaga aplicație.</string>
+    <string name="language_settings_section_offline_heading">Limbi pentru instrumente disponibile offline</string>
+    <string name="language_settings_section_offline_description">Descărcați toate instrumentele într-o limbă pentru a le face disponibile chiar dacă nu aveți acces WiFi sau serviciul celular. Setați limba instrumentului prin intermediul butonului de opțiuni din cadrul unui instrument.</string>
+    <string name="language_settings_section_offline_action_edit">Editează limbile descărcate</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Căută limba preferată</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d Instrument disponibile</item>
+        <item quantity="other">%1$d Instrumente disponibile</item>
+        <item quantity="few">%1$d Instrumente disponibile</item>
+    </plurals>
+</resources>

@@ -2,9 +2,11 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -65,16 +67,16 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
             )
         },
         bottomBar = {
-            val indicatorVisible by remember { derivedStateOf { currentPage.showIndicator } }
             HorizontalPagerIndicator(
                 pagerState = pagerState,
                 pageCount = pagerState.pageCount,
                 activeColor = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
+                    .navigationBarsPadding()
                     .fillMaxWidth()
                     .height(dimensionResource(R.dimen.tutorial_indicator_height))
                     .wrapContentSize()
-                    .invisibleIf { !indicatorVisible }
+                    .invisibleIf { !currentPage.showIndicator }
             )
         },
         containerColor = tutorialBackgroundColor,
@@ -85,6 +87,7 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
             state = pagerState,
             modifier = Modifier
                 .padding(insets)
+                .consumeWindowInsets(insets)
                 .fillMaxSize()
         ) { i ->
             TutorialPageLayout(

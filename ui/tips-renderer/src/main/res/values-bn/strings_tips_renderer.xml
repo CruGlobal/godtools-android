@@ -9,4 +9,7 @@
     <string name="tract_tips_type_prepare">প্রস্তুত করুন</string>
     <string name="tract_tips_type_quote">উদ্ধৃত করুন</string>
     <string name="tract_tips_type_tip">টিপ</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">প্রশিক্ষণ টিপস</string>
+    <string name="tool_settings_action_tips_disable">টিপস লুকান</string>
 </resources>

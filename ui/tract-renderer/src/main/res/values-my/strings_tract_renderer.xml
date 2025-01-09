@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">အဝေးမှ မျှဝေခြင်း အပိုင်းမှ ယခု ထွက်မလား။</string>
     <string name="tract_live_share_exit_dialog_confirm">ထွက်မည်</string>
     <string name="tract_live_share_exit_dialog_cancel">ပယ်ဖျက်မည်</string>
-    <!-- Settings -->
-    <string name="menu_settings">ဆက်တင်များ</string>
-    <string name="tract_settings_title">ကိရိယာ ရွေးချယ်စရာများ</string>
-    <string name="tract_settings_action_share">လင့်ခ် မျှဝေရန်</string>
-    <string name="tract_settings_action_tips_disable">အကြံပြုချက်များ ဝှက်ရန်</string>
-    <string name="tract_settings_languages_title">ယှဉ်တွဲ အသုံးပြုနိုင်သော ဘာသာစကား</string>
-    <string name="tract_settings_languages_description">ဤကိရိယာတွင် ဘာသာစကားနှစ်ခုကြား ကူးပြောင်းပါ။</string>
-    <string name="tract_settings_languages_parallel">ယှဉ်တွဲ အသုံးပြုနိုင်သော</string>
-    <string name="tract_settings_languages_none">မရှိပါ</string>
-    <string name="tract_settings_shareables_title">သက်ဆိုင်ရာ ဂရပ်ဖစ်များ</string>
 </resources>

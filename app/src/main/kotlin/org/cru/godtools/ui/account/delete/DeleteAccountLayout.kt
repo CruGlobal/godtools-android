@@ -3,6 +3,7 @@ package org.cru.godtools.ui.account.delete
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,6 +57,7 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(it)
+                .consumeWindowInsets(it)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {

@@ -7,8 +7,11 @@
     <string name="account_create_description">قم بإنشاء حساب للحصول على قصص حقيقية وتشجيع ونصائح عملية في متناول يدك.</string>
     <string name="account_login_heading">تسجيل دخول</string>
     <string name="account_login_description">قم بتسجيل الدخول إلى حسابك لتحصل على قصص حقيقية وتشجيعات ونصائح عملية في متناول يدك</string>
+    <string name="account_error_title">فشل التحقق من الهوية</string>
     <string name="account_error_user_already_exists">حساب المستخدم موجود بالفعل.</string>
     <string name="account_error_user_not_found">لم يتم العثور على حساب المستخدم.</string>
+    <string name="account_error_not_connected_title">لا يوجد اتصال بالإنترنت</string>
+    <string name="account_error_not_connected">يرجى التأكد من اتصالك بالانترنت وإعادة المحاولة.</string>
     <string name="account_error_unknown">خطأ في تسجيل الدخول.</string>
     <string name="account_error_dialog_dismiss">موافق</string>
     <!-- Delete Account -->

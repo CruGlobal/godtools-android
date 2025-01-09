@@ -4,6 +4,7 @@
     <color name="tintable">#FF000000</color>
     <color name="tintable_20">#33000000</color>
 
+    <color name="black">#000000</color>
     <color name="gray_5A">#5A5A5A</color>
     <color name="gray_80">#808080</color>
     <color name="gray_97">#979797</color>

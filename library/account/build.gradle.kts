@@ -1,5 +1,6 @@
 plugins {
     id("godtools.library-conventions")
+    id("kotlin-parcelize")
     alias(libs.plugins.ksp)
 }
 
@@ -17,6 +18,7 @@ dependencies {
     implementation(libs.gtoSupport.androidx.activity)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.kotlin.coroutines)
+    implementation(libs.gtoSupport.util)
 
     implementation(libs.dagger)
     implementation(libs.hilt)

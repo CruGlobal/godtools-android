@@ -58,7 +58,7 @@ class AemArticleManagerTest {
     fun `processDownloadedTranslations()`() = testScope.runTest {
         val translation = randomTranslation()
         val translations = listOf(translation)
-        val imports = listOf<Uri>(mockk())
+        val imports = listOf("https://www.example.com/test.json")
         val manifest = mockk<Manifest> { every { aemImports } returns imports }
         val repository = aemDb.translationRepository()
         coEvery { repository.isProcessed(any()) } returns false
@@ -70,7 +70,7 @@ class AemArticleManagerTest {
         coVerifyAll {
             repository.isProcessed(translation)
             manifestManager.getManifest(translation)
-            repository.addAemImports(translation, imports)
+            repository.addAemImports(translation, imports.map { Uri.parse(it) })
             repository.removeMissingTranslations(translations)
         }
         coVerify { articleManager.syncAemImportsFromManifest(manifest, any()) }

@@ -5,8 +5,6 @@
     <string name="tool_offline">Tava pieprasītā rīka atvēršanai ir nepieciešams interneta pieslēgums.</string>
     <string name="tract_content_input_error_required">Lauks \"%1$s\" aizpildāms obligāti!</string>
     <string name="tract_content_input_error_invalid_email">Lūdzu, ievadi derīgu e-pasta adresi!</string>
-    <!-- Menu Items -->
-    <string name="menu_training_tips">Apmācības padomi</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Dalies</string>
     <string name="tool_share_sheet_more_apps">Vairāk</string>
@@ -20,4 +18,13 @@ Turpināsim sarunu!</string>
     <string name="feature_discovery_desc_share_tool">Nosūti šo rīku draugam, noklikšķinot uz ikonas</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">Kopīgo attēlu</string>
+    <!-- Settings -->
+    <string name="menu_settings">Iestatījumi</string>
+    <string name="tool_settings_title">Rīka iestatījumi</string>
+    <string name="tool_settings_action_share">Kopīgot saiti</string>
+    <string name="tool_settings_languages_title">Paralēlā valoda</string>
+    <string name="tool_settings_languages_description">Iespēja pārslēgties starp divām dažādām valodām šajā rīkā.</string>
+    <string name="tool_settings_languages_parallel">paralēlā</string>
+    <string name="tool_settings_languages_none">Noņemt</string>
+    <string name="tool_settings_shareables_title">Saistītie attēli</string>
 </resources>

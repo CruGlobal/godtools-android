@@ -16,6 +16,8 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.dashboard.Page
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SHOW_TIPS"
+const val EXTRA_SAVE_LANGUAGE_SETTINGS =
+    "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SAVE_LANGUAGE_SETTINGS"
 
 // region DashboardActivity
 private const val ACTIVITY_CLASS_DASHBOARD = "org.cru.godtools.ui.dashboard.DashboardActivity"
@@ -50,14 +52,21 @@ fun Context.createArticlesIntent(toolCode: String, language: Locale) =
 // region CyoaActivity
 private const val ACTIVITY_CLASS_CYOA = "org.cru.godtools.tool.cyoa.ui.CyoaActivity"
 
-fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?) =
-    startActivity(createCyoaActivityIntent(toolCode, *languages))
+fun Activity.startCyoaActivity(toolCode: String, vararg languages: Locale?, showTips: Boolean = false) =
+    startActivity(createCyoaActivityIntent(toolCode, *languages, showTips = showTips))
 
-fun Context.createCyoaActivityIntent(toolCode: String, vararg languages: Locale?, pageId: String? = null) =
-    Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
-        .putExtra(EXTRA_TOOL, toolCode)
-        .putLanguagesExtra(*languages)
-        .putExtra(EXTRA_PAGE, pageId)
+fun Context.createCyoaActivityIntent(
+    toolCode: String,
+    vararg languages: Locale?,
+    pageId: String? = null,
+    showTips: Boolean = false,
+    saveLanguageSettings: Boolean = false,
+) = Intent().setClassName(this, ACTIVITY_CLASS_CYOA)
+    .putExtra(EXTRA_TOOL, toolCode)
+    .putLanguagesExtra(*languages)
+    .putExtra(EXTRA_PAGE, pageId)
+    .putExtra(EXTRA_SHOW_TIPS, showTips)
+    .putExtra(EXTRA_SAVE_LANGUAGE_SETTINGS, saveLanguageSettings)
 // endregion CyoaActivity
 
 // region TractActivity
@@ -71,13 +80,15 @@ fun Context.createTractActivityIntent(
     vararg languages: Locale?,
     activeLocale: Locale? = null,
     page: Int = 0,
-    showTips: Boolean = false
+    showTips: Boolean = false,
+    saveLanguageSettings: Boolean = false,
 ) = Intent().setClassName(this, ACTIVITY_CLASS_TRACT)
     .putExtra(EXTRA_TOOL, toolCode)
     .putLanguagesExtra(*languages)
     .putExtra(EXTRA_ACTIVE_LOCALE, activeLocale)
     .putExtra(EXTRA_PAGE, page)
     .putExtra(EXTRA_SHOW_TIPS, showTips)
+    .putExtra(EXTRA_SAVE_LANGUAGE_SETTINGS, saveLanguageSettings)
 // endregion TractActivity
 
 fun Context.buildToolExtras(toolCode: String, language: Locale) = BaseActivity.buildExtras(this).apply {

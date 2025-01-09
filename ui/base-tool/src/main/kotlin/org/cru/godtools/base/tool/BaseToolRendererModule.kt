@@ -43,7 +43,7 @@ abstract class BaseToolRendererModule {
         @Provides
         @Reusable
         fun parserConfig(@ApplicationContext context: Context) = ParserConfig()
-            .withAppVersion(DeviceType.ANDROID, context.versionName.substringBefore("-"))
+            .withAppVersion(DeviceType.ANDROID, context.versionName?.substringBefore("-"))
             .withSupportedFeatures(setOf(FEATURE_ANIMATION, FEATURE_CONTENT_CARD, FEATURE_FLOW, FEATURE_MULTISELECT))
 
         @Provides

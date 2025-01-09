@@ -106,6 +106,7 @@ android {
         }
     }
     bundle {
+        density.enableSplit = false
         language.enableSplit = false
     }
     dynamicFeatures += ":feature:bundledcontent"
@@ -205,6 +206,7 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
+    testApi(testFixtures(libs.gtoSupport.androidx.compose))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.androidx.test.espresso.core)

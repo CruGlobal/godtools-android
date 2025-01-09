@@ -13,14 +13,4 @@
     <string name="tract_live_share_exit_dialog_message">Ar išjungti nuotolinio bendrinimo sesiją dabar?</string>
     <string name="tract_live_share_exit_dialog_confirm">Išjungti</string>
     <string name="tract_live_share_exit_dialog_cancel">Atšaukti</string>
-    <!-- Settings -->
-    <string name="menu_settings">Nustatymai</string>
-    <string name="tract_settings_title">Siūlomi įrankiai</string>
-    <string name="tract_settings_action_share">Bendrinti nuorodą</string>
-    <string name="tract_settings_action_tips_disable">Slėpti patarimus</string>
-    <string name="tract_settings_languages_title">Paralelinė kalba</string>
-    <string name="tract_settings_languages_description">Šiame įrankyje galite įjungti dvi skirtingas kalbas.</string>
-    <string name="tract_settings_languages_parallel">Paralelinė</string>
-    <string name="tract_settings_languages_none">Jokia</string>
-    <string name="tract_settings_shareables_title">Susijusi grafika</string>
 </resources>

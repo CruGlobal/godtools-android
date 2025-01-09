@@ -7,8 +7,11 @@
     <string name="account_create_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے ایک اکاؤنٹ بنائیں۔</string>
     <string name="account_login_heading">سائن اِن</string>
     <string name="account_login_description">اپنی انگلی کے اشارے پر حقیقی کہانیاں، حوصلہ افزائی، اور عملی تجاویز حاصل کرنے کے لیے اپنے اکاؤنٹ میں لاگ ان کریں۔</string>
+    <string name="account_error_title">تصدیق ناکام رہی</string>
     <string name="account_error_user_already_exists">یوزر اکاؤنٹ پہلے سے موجود ہے</string>
     <string name="account_error_user_not_found">یوزر اکاؤنٹ نہیں ملا۔</string>
+    <string name="account_error_not_connected_title">کوئی انٹرنیٹ کنیکشن نہیں ہے</string>
+    <string name="account_error_not_connected">براہِ کرم اپنا انٹرنیٹ کنیکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
     <string name="account_error_unknown">غلطی</string>
     <string name="account_error_dialog_dismiss">ٹھیک ہے</string>
     <!-- Delete Account -->

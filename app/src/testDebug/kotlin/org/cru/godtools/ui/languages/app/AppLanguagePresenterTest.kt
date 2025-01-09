@@ -22,8 +22,8 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
-import org.cru.godtools.TestUtils.clearAndroidUiDispatcher
 import org.cru.godtools.base.Settings
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -55,8 +55,12 @@ class AppLanguagePresenterTest {
 
     @AfterTest
     fun cleanup() {
-        clearAndroidUiDispatcher()
+        AndroidUiDispatcherUtil.runScheduledDispatches()
         unmockkObject(LocaleConfigCompat)
+
+        navigator.assertGoToIsEmpty()
+        navigator.assertPopIsEmpty()
+        navigator.assertResetRootIsEmpty()
     }
 
     // region State.languages
@@ -68,7 +72,6 @@ class AppLanguagePresenterTest {
             assertEquals(listOf(Locale.ENGLISH), awaitItem().languages)
         }
         verifyAll { LocaleConfigCompat.getSupportedLocales(any()) }
-        navigator.assertIsEmpty()
     }
 
     @Test
@@ -83,7 +86,6 @@ class AppLanguagePresenterTest {
             appLocaleState.value = Locale("es")
             assertEquals(listOf(Locale("es"), Locale.FRENCH), expectMostRecentItem().languages)
         }
-        navigator.assertIsEmpty()
     }
 
     @Test
@@ -101,7 +103,6 @@ class AppLanguagePresenterTest {
             eventSink(AppLanguageScreen.Event.UpdateLanguageQuery(""))
             assertEquals(listOf(Locale.ENGLISH, Locale("es")), expectMostRecentItem().languages)
         }
-        navigator.assertIsEmpty()
     }
     // endregion State.languages
 
@@ -122,7 +123,6 @@ class AppLanguagePresenterTest {
             awaitItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.FRENCH))
 
             assertEquals(Locale.FRENCH, awaitItem().selectedLanguage)
-            navigator.assertIsEmpty()
         }
     }
 
@@ -169,7 +169,7 @@ class AppLanguagePresenterTest {
         }
 
         assertNotEquals(Locale.FRENCH, appLocaleState.value)
-        navigator.assertIsEmpty()
+        navigator.assertPopIsEmpty()
     }
     // endregion Event.DismissConfirmDialog
 }

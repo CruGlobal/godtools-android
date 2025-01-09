@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -48,7 +49,11 @@ private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEvent) -> Unit) {
+fun LoginLayout(
+    modifier: Modifier = Modifier,
+    createAccount: Boolean = false,
+    onEvent: (event: LoginLayoutEvent) -> Unit = {},
+) {
     var loginError: LoginResponse.Error? by rememberSaveable { mutableStateOf(null) }
     val loginLauncher = rememberLoginLauncher(createAccount) {
         when (it) {
@@ -61,9 +66,10 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(GodToolsTheme.GT_BLUE)
+            .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
         CompositionLocalProvider(LocalContentColor provides Color.White) {
@@ -147,10 +153,21 @@ fun LoginLayout(createAccount: Boolean = false, onEvent: (event: LoginLayoutEven
 private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
     if (error != null) {
         AlertDialog(
+            title = {
+                Text(
+                    stringResource(
+                        when (error) {
+                            LoginResponse.Error.NotConnected -> R.string.account_error_not_connected_title
+                            else -> R.string.account_error_title
+                        }
+                    )
+                )
+            },
             text = {
                 Text(
                     stringResource(
                         when (error) {
+                            LoginResponse.Error.NotConnected -> R.string.account_error_not_connected
                             LoginResponse.Error.UserAlreadyExists -> R.string.account_error_user_already_exists
                             LoginResponse.Error.UserNotFound -> R.string.account_error_user_not_found
                             else -> R.string.account_error_unknown
