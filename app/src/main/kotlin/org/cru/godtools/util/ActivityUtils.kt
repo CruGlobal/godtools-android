@@ -2,6 +2,7 @@ package org.cru.godtools.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import java.util.Locale
 import org.cru.godtools.base.tool.createLessonActivityIntent
 import org.cru.godtools.base.tool.startLessonActivity
@@ -29,8 +30,11 @@ fun Tool.createToolIntent(
     activeLocale: Locale? = null,
     showTips: Boolean = false,
     saveLanguageSettings: Boolean = false,
-) = code?.let { code ->
-    when (type) {
+): Intent? {
+    val code = code ?: return null
+    if (languages.isEmpty()) return null
+
+    return when (type) {
         Type.TRACT -> context.createTractActivityIntent(
             code,
             *languages.toTypedArray(),
