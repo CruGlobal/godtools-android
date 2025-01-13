@@ -63,7 +63,7 @@ internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val viewModel = viewModel<AccountViewModel>()
     val user by viewModel.user.collectAsState()
-    val pages by viewModel.pages.collectAsState()
+    val pages by viewModel.pages.collectAsState(emptyList())
     val refreshing by viewModel.isSyncRunning.collectAsState()
 
     val pagerState = rememberPagerState { pages.size }
