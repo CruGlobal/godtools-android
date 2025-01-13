@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -23,6 +24,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.tutorial.PageSet
@@ -40,6 +42,7 @@ class HomePresenter @AssistedInject constructor(
     @ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
+    private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
@@ -107,8 +110,15 @@ class HomePresenter @AssistedInject constructor(
             }
 
     @Composable
-    private fun rememberFavoriteTools() = remember { toolsRepository.getFavoriteToolsFlow().map { it.take(5) } }
-        .collectAsState(null).value
+    private fun rememberFavoriteTools() = remember {
+        toolsRepository.getFavoriteToolsFlow()
+            .map {
+                it.take(
+                    remoteConfig.getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS)
+                        .coerceIn(0, Int.MAX_VALUE.toLong()).toInt()
+                )
+            }
+    }.collectAsState(null).value
         ?.mapNotNull { tool ->
             val toolCode = tool.code ?: return@mapNotNull null
 
