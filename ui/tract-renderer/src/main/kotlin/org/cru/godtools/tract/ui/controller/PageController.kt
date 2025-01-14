@@ -62,6 +62,7 @@ class PageController @AssistedInject internal constructor(
 
     @VisibleForTesting
     internal val heroController = heroControllerFactory.create(binding.hero, this)
+        .apply { lifecycleOwner.maxState = Lifecycle.State.RESUMED }
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {

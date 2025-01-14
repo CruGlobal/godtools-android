@@ -10,6 +10,9 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -23,9 +26,6 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.tract.databinding.TractPageHeroBinding
 import org.greenrobot.eventbus.EventBus
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -37,14 +37,14 @@ class HeroControllerTest {
 
     private lateinit var controller: HeroController
 
-    @Before
+    @BeforeTest
     fun setup() {
         val dispatcher = StandardTestDispatcher()
         scheduler = dispatcher.scheduler
         Dispatchers.setMain(dispatcher)
 
         val binding = TractPageHeroBinding.inflate(LayoutInflater.from(ApplicationProvider.getApplicationContext()))
-        val pageController = mockk<PageController> {
+        val pageController: PageController = mockk {
             every { lifecycleOwner } returns ConstrainedStateLifecycleOwner(baseLifecycleOwner)
             every { eventBus } returns this@HeroControllerTest.eventBus
             every { toolState } returns State()
@@ -53,7 +53,7 @@ class HeroControllerTest {
         controller = HeroController(binding, pageController, mockk())
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         Dispatchers.resetMain()
     }
@@ -72,6 +72,7 @@ class HeroControllerTest {
 
         // event1 with no delay
         baseLifecycleOwner.currentState = Lifecycle.State.RESUMED
+        controller.lifecycleOwner.maxState = Lifecycle.State.RESUMED
         scheduler.runCurrent()
         verify(exactly = 1) { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event == event1 }) }
         confirmVerified(eventBus)

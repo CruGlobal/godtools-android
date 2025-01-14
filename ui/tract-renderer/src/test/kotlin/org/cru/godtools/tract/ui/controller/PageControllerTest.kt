@@ -88,25 +88,25 @@ class PageControllerTest {
         controller.model = TractPage(cards = { listOf(mockk(relaxed = true), mockk(relaxed = true)) })
 
         // initially hero is visible
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
 
         // change to the first card
         binding.pageContentLayout.changeActiveCard(0, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
 
         // change to the second card
         binding.pageContentLayout.changeActiveCard(1, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
         assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
 
         // change to the hero
         binding.pageContentLayout.changeActiveCard(-1, false)
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
     }
