@@ -139,10 +139,12 @@ class PageController @AssistedInject internal constructor(
     }
 
     private fun updateChildrenLifecycles(old: CardController?, new: CardController?) {
-        if (old == new) return
-
-        (if (old != null) old.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.STARTED
-        (if (new != null) new.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.RESUMED
+        if (old !== new) {
+            with(old?.lifecycleOwner ?: heroController.lifecycleOwner) {
+                maxState = minOf(maxState, Lifecycle.State.STARTED)
+            }
+        }
+        (new?.lifecycleOwner ?: heroController.lifecycleOwner).maxState = Lifecycle.State.RESUMED
     }
 
     @UiThread
@@ -177,6 +179,7 @@ class PageController @AssistedInject internal constructor(
                     -1 -> {
                         // recycle this view holder
                         parent.removeView(holder.root)
+                        with(holder.lifecycleOwner) { maxState = minOf(Lifecycle.State.CREATED, maxState) }
                         holder.model = null
                         recycledCardControllers.release(holder)
                     }
@@ -203,6 +206,7 @@ class PageController @AssistedInject internal constructor(
             }
             cardControllers.forEachIndexed { i, it ->
                 it.model = visibleCards.getOrNull(i)
+                with(it.lifecycleOwner) { maxState = maxOf(Lifecycle.State.STARTED, maxState) }
                 if (parent !== it.root.parent) parent.addCard(it.root, i)
             }
         } finally {
