@@ -11,6 +11,7 @@ import androidx.viewpager.widget.PagerAdapter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.Ids
 import org.ccci.gto.android.common.viewpager.adapter.DataBindingPagerAdapter
@@ -86,9 +87,12 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         TractPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun onViewDataBindingCreated(binding: TractPageBinding) {
-        binding.bindController(pageControllerFactory, lifecycleOwner, enableTips, toolState).also {
-            it.callbacks = this
-        }
+        binding.bindController(
+            pageControllerFactory,
+            ConstrainedStateLifecycleOwner(lifecycleOwner ?: return, Lifecycle.State.CREATED),
+            enableTips,
+            toolState
+        ).also { it.callbacks = this }
     }
 
     override fun onBindViewDataBinding(
@@ -96,14 +100,17 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
         binding: TractPageBinding,
         position: Int
     ) {
-        binding.controller?.let { controller ->
-            controller.model = getItem(position)
-            controller.lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
+        binding.controller?.let {
+            it.model = getItem(position)
+            with(it.lifecycleOwner) { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
         }
     }
 
     override fun onViewDataBindingRecycled(holder: DataBindingViewHolder<TractPageBinding>, binding: TractPageBinding) {
-        binding.controller?.lifecycleOwner?.maxState = Lifecycle.State.CREATED
+        binding.controller?.let {
+            it.lifecycleOwner.maxState = Lifecycle.State.CREATED
+            it.model = null
+        }
     }
 
     override fun onUpdatePrimaryItem(

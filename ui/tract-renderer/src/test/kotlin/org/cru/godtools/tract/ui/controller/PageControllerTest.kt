@@ -14,6 +14,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.mockk
 import javax.inject.Inject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
@@ -58,7 +59,7 @@ class PageControllerTest {
         binding = TractPageBinding.inflate(LayoutInflater.from(activity))
         controller = PageController(
             binding,
-            baseLifecycleOwner,
+            ConstrainedStateLifecycleOwner(baseLifecycleOwner, Lifecycle.State.STARTED),
             ImmutableLiveData(false),
             State(),
             eventBus,
@@ -83,7 +84,7 @@ class PageControllerTest {
 
     @Test
     fun verifyUpdateChildrenLifecycles() {
-        controller.lifecycleOwner!!.maxState = Lifecycle.State.RESUMED
+        controller.lifecycleOwner.maxState = Lifecycle.State.RESUMED
         controller.model = TractPage(cards = { listOf(mockk(relaxed = true), mockk(relaxed = true)) })
 
         // initially hero is visible
