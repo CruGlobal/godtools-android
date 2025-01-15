@@ -3,10 +3,12 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.cru.godtools.base.tool.model.isGoneStateFlow
+import org.cru.godtools.base.tool.model.isInvisibleStateFlow
 import org.cru.godtools.shared.tool.parser.model.Base
 import org.cru.godtools.shared.tool.parser.model.Button
 import org.cru.godtools.tool.BR
@@ -27,8 +29,8 @@ internal sealed class ButtonController<T : ViewDataBinding>(
     public override fun onBind() {
         super.onBind()
         binding.setVariable(BR.model, model)
-        binding.setVariable(BR.isGone, model?.isGoneFlow(toolState)?.asLiveData())
-        binding.setVariable(BR.isInvisible, model?.isInvisibleFlow(toolState)?.asLiveData())
+        binding.setVariable(BR.isGone, model?.isGoneStateFlow(toolState, lifecycleOwner.lifecycleScope))
+        binding.setVariable(BR.isInvisible, model?.isInvisibleStateFlow(toolState, lifecycleOwner.lifecycleScope))
     }
 }
 

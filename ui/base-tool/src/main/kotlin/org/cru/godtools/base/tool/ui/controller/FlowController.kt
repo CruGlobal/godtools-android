@@ -3,10 +3,12 @@ package org.cru.godtools.base.tool.ui.controller
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.cru.godtools.base.tool.model.isGoneStateFlow
+import org.cru.godtools.base.tool.model.isInvisibleStateFlow
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.shared.tool.parser.model.Flow
 import org.cru.godtools.tool.databinding.ToolContentFlowBinding
@@ -83,8 +85,8 @@ class FlowController private constructor(
         override fun onBind() {
             super.onBind()
             binding.model = model
-            binding.isGone = model?.isGoneFlow(toolState)?.asLiveData()
-            binding.isInvisible = model?.isInvisibleFlow(toolState)?.asLiveData()
+            binding.isGone = model?.isGoneStateFlow(toolState, lifecycleOwner.lifecycleScope)
+            binding.isInvisible = model?.isInvisibleStateFlow(toolState, lifecycleOwner.lifecycleScope)
         }
     }
 }

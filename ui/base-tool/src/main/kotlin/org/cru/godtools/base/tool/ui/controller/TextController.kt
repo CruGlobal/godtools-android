@@ -2,10 +2,12 @@ package org.cru.godtools.base.tool.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.cru.godtools.base.tool.model.isGoneStateFlow
+import org.cru.godtools.base.tool.model.isInvisibleStateFlow
 import org.cru.godtools.shared.tool.parser.model.Text
 import org.cru.godtools.tool.databinding.ToolContentTextBinding
 
@@ -27,7 +29,7 @@ internal class TextController private constructor(
     public override fun onBind() {
         super.onBind()
         binding.model = model
-        binding.isInvisible = model?.isInvisibleFlow(toolState)?.asLiveData()
-        binding.isGone = model?.isGoneFlow(toolState)?.asLiveData()
+        binding.isInvisible = model?.isInvisibleStateFlow(toolState, lifecycleOwner.lifecycleScope)
+        binding.isGone = model?.isGoneStateFlow(toolState, lifecycleOwner.lifecycleScope)
     }
 }
