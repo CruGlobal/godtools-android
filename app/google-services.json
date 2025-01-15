@@ -3,7 +3,7 @@
     "project_number": "71275134527",
     "firebase_url": "https://godtools-b2f82.firebaseio.com",
     "project_id": "godtools-b2f82",
-    "storage_bucket": "godtools-b2f82.appspot.com"
+    "storage_bucket": "godtools-b2f82.firebasestorage.app"
   },
   "client": [
     {

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
@@ -11,6 +12,7 @@ import com.slack.circuitx.android.IntentScreen
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
+import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,6 +27,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_FEATURES
 import org.cru.godtools.db.repository.ToolsRepository
@@ -51,6 +54,9 @@ class HomePresenterTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
+    private val remoteConfig: FirebaseRemoteConfig = mockk {
+        every { getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns 5
+    }
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns this@HomePresenterTest.appLanguageFlow
         every { isFeatureDiscoveredFlow(any()) } returns flowOf(true)
@@ -74,6 +80,7 @@ class HomePresenterTest {
     private val presenter = HomePresenter(
         context = context,
         eventBus = eventBus,
+        remoteConfig = remoteConfig,
         settings = settings,
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
@@ -194,14 +201,16 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `State - favoriteTools - limit to 5 tools`() = runTest {
+    fun `State - favoriteTools - limit to configured number of tools`() = runTest {
         val tools = List(10) { randomTool(type = Tool.Type.TRACT, isHidden = false) }
+        val limit = Random.nextLong(1, 10)
+        every { remoteConfig.getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns limit
 
         presenter.test {
             toolsFlow.emit(tools)
             expectMostRecentItem().favoriteTools.let {
-                assertEquals(5, it.size)
-                assertEquals(tools.take(5).map { it.code }, it.map { it.toolCode })
+                assertEquals(limit.toInt(), it.size)
+                assertEquals(tools.take(limit.toInt()).map { it.code }, it.map { it.toolCode })
             }
         }
     }
