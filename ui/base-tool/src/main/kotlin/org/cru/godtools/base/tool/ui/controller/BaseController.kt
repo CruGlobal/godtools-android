@@ -48,7 +48,8 @@ abstract class BaseController<T : Base> protected constructor(
         eventBus ?: parentController?.eventBus ?: error("No EventBus found in controller hierarchy")
     }
 
-    open val lifecycleOwner: LifecycleOwner? get() = parentController?.lifecycleOwner
+    open val lifecycleOwner: LifecycleOwner
+        get() = parentController?.lifecycleOwner ?: error("No LifecycleOwner found in controller hierarchy")
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     open val toolState: State get() = checkNotNull(parentController?.toolState)
 
