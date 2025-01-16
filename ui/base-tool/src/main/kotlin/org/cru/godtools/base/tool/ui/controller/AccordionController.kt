@@ -85,17 +85,16 @@ class AccordionController @VisibleForTesting internal constructor(
         private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
         override val lifecycleOwner =
-            accordionController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+            ConstrainedStateLifecycleOwner(accordionController.lifecycleOwner, Lifecycle.State.CREATED)
 
         init {
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
             binding.activeSection = accordionController.activeSection
 
-            accordionController.lifecycleOwner
-                ?.let { accordionController.activeSection.observe(it) { updateLifecycleMaxState() } }
+            accordionController.activeSection.observe(accordionController.lifecycleOwner) { updateLifecycleMaxState() }
 
-            lifecycleOwner?.lifecycle?.apply {
+            with(lifecycleOwner.lifecycle) {
                 onResume {
                     pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
                 }
@@ -115,7 +114,7 @@ class AccordionController @VisibleForTesting internal constructor(
         }
 
         private fun updateLifecycleMaxState() {
-            lifecycleOwner?.maxState = when {
+            lifecycleOwner.maxState = when {
                 accordionController.isActiveSection(model) -> Lifecycle.State.RESUMED
                 model != null -> Lifecycle.State.STARTED
                 else -> Lifecycle.State.CREATED

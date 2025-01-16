@@ -46,8 +46,7 @@ class CardController private constructor(
         fun onDismissCard(controller: CardController)
     }
 
-    override val lifecycleOwner =
-        pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.STARTED) }
+    override val lifecycleOwner = ConstrainedStateLifecycleOwner(pageController.lifecycleOwner, Lifecycle.State.CREATED)
 
     private val callbacks: Callbacks = pageController
     private var pendingAnalyticsEvents: List<Job>? = null
@@ -57,7 +56,7 @@ class CardController private constructor(
         binding.controller = this
         binding.enableTips = pageController.enableTips
 
-        lifecycleOwner?.lifecycle?.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }
             onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
         }

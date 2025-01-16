@@ -70,7 +70,7 @@ class CardCollectionPageController @AssistedInject constructor(
     private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
     init {
-        lifecycleOwner.lifecycle.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume {
                 pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
             }
@@ -168,25 +168,27 @@ class CardCollectionPageController @AssistedInject constructor(
 
     class CardController private constructor(
         val binding: CyoaPageCardCollectionCardBinding,
-        parentController: BaseController<*>,
+        pageController: CardCollectionPageController,
         cacheFactory: UiControllerCache.Factory
-    ) : ParentController<Card>(Card::class, binding.root, parentController, cacheFactory) {
+    ) : ParentController<Card>(Card::class, binding.root, pageController, cacheFactory) {
         @AssistedInject
         internal constructor(
             @Assisted parent: ViewGroup,
-            @Assisted parentController: BaseController<*>,
+            @Assisted pageController: CardCollectionPageController,
             cacheFactory: UiControllerCache.Factory
         ) : this(
             CyoaPageCardCollectionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            parentController,
+            pageController,
             cacheFactory
         )
 
         @AssistedFactory
-        interface Factory : BaseController.Factory<CardController>
+        interface Factory {
+            fun create(parent: ViewGroup, pageController: CardCollectionPageController): CardController
+        }
 
         override val lifecycleOwner =
-            super.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+            ConstrainedStateLifecycleOwner(pageController.lifecycleOwner, Lifecycle.State.CREATED)
         override val childContainer get() = binding.content
 
         init {

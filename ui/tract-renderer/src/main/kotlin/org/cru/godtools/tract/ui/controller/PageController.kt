@@ -5,7 +5,6 @@ import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -33,7 +32,7 @@ import org.greenrobot.eventbus.EventBus
 
 class PageController @AssistedInject internal constructor(
     @Assisted private val binding: TractPageBinding,
-    @Assisted baseLifecycleOwner: LifecycleOwner?,
+    @Assisted override val lifecycleOwner: ConstrainedStateLifecycleOwner,
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     eventBus: EventBus,
@@ -49,7 +48,7 @@ class PageController @AssistedInject internal constructor(
     interface Factory {
         fun create(
             binding: TractPageBinding,
-            lifecycleOwner: LifecycleOwner?,
+            lifecycleOwner: ConstrainedStateLifecycleOwner,
             enableTips: LiveData<Boolean>,
             toolState: State
         ): PageController
@@ -61,12 +60,9 @@ class PageController @AssistedInject internal constructor(
         fun goToNextPage()
     }
 
-    override val lifecycleOwner =
-        baseLifecycleOwner?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
-            .also { binding.lifecycleOwner = it }
-
     @VisibleForTesting
     internal val heroController = heroControllerFactory.create(binding.hero, this)
+        .apply { lifecycleOwner.maxState = Lifecycle.State.RESUMED }
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {
@@ -74,16 +70,17 @@ class PageController @AssistedInject internal constructor(
         }
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or
             settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_SWIPED)
         binding.pageContentLayout.activeCardListener = this
         binding.enableTips = enableTips
 
-        lifecycleOwner?.lifecycle?.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume { binding.isVisible = true }
             onPause { binding.isVisible = false }
-        } ?: run { binding.isVisible = true }
+        }
     }
 
     // region Lifecycle
@@ -142,10 +139,12 @@ class PageController @AssistedInject internal constructor(
     }
 
     private fun updateChildrenLifecycles(old: CardController?, new: CardController?) {
-        if (old == new) return
-
-        (if (old != null) old.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.STARTED
-        (if (new != null) new.lifecycleOwner else heroController.lifecycleOwner)?.maxState = Lifecycle.State.RESUMED
+        if (old !== new) {
+            with(old?.lifecycleOwner ?: heroController.lifecycleOwner) {
+                maxState = minOf(maxState, Lifecycle.State.STARTED)
+            }
+        }
+        (new?.lifecycleOwner ?: heroController.lifecycleOwner).maxState = Lifecycle.State.RESUMED
     }
 
     @UiThread
@@ -180,6 +179,7 @@ class PageController @AssistedInject internal constructor(
                     -1 -> {
                         // recycle this view holder
                         parent.removeView(holder.root)
+                        with(holder.lifecycleOwner) { maxState = minOf(Lifecycle.State.CREATED, maxState) }
                         holder.model = null
                         recycledCardControllers.release(holder)
                     }
@@ -206,6 +206,7 @@ class PageController @AssistedInject internal constructor(
             }
             cardControllers.forEachIndexed { i, it ->
                 it.model = visibleCards.getOrNull(i)
+                with(it.lifecycleOwner) { maxState = maxOf(Lifecycle.State.STARTED, maxState) }
                 if (parent !== it.root.parent) parent.addCard(it.root, i)
             }
         } finally {
@@ -283,7 +284,7 @@ class PageController @AssistedInject internal constructor(
 
 internal fun TractPageBinding.bindController(
     factory: PageController.Factory,
-    lifecycleOwner: LifecycleOwner? = null,
+    lifecycleOwner: ConstrainedStateLifecycleOwner,
     enableTips: LiveData<Boolean>,
     toolState: State
 ) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)

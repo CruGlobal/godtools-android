@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChangeObserver
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
@@ -19,7 +20,7 @@ import org.cru.godtools.tool.lesson.ui.controller.LessonPageController
 import org.cru.godtools.tool.lesson.ui.controller.bindController
 
 class LessonPageAdapter @AssistedInject internal constructor(
-    @Assisted lifecycleOwner: LifecycleOwner,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted private val callbacks: Callbacks?,
     @Assisted private val toolState: State,
     private val controllerFactory: LessonPageController.Factory
@@ -53,8 +54,10 @@ class LessonPageAdapter @AssistedInject internal constructor(
     // region Lifecycle
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         primaryItemObserver = onUpdatePrimaryItem(recyclerView) { primary, previous ->
-            previous?.binding?.controller?.lifecycleOwner?.apply { maxState = minOf(maxState, Lifecycle.State.STARTED) }
-            primary?.binding?.controller?.lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.RESUMED) }
+            (previous?.binding?.controller?.lifecycleOwner as? ConstrainedStateLifecycleOwner)
+                ?.apply { maxState = minOf(maxState, Lifecycle.State.STARTED) }
+            (primary?.binding?.controller?.lifecycleOwner as? ConstrainedStateLifecycleOwner)
+                ?.apply { maxState = maxOf(maxState, Lifecycle.State.RESUMED) }
         }
     }
 
@@ -63,20 +66,29 @@ class LessonPageAdapter @AssistedInject internal constructor(
 
     override fun onViewDataBindingCreated(binding: LessonPageBinding, viewType: Int) {
         binding.callbacks = callbacks
-        binding.bindController(controllerFactory, toolState)
+        binding.bindController(
+            controllerFactory,
+            ConstrainedStateLifecycleOwner(lifecycleOwner, Lifecycle.State.CREATED),
+            toolState
+        )
     }
 
     override fun onBindViewDataBinding(binding: LessonPageBinding, position: Int) {
         binding.controller?.apply {
             model = getItem(position)
-            lifecycleOwner?.apply { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
+            (lifecycleOwner as? ConstrainedStateLifecycleOwner)
+                ?.apply { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
         }
         binding.isFirstPage = position == 0
         binding.isLastPage = position == pages.size - 1
     }
 
     override fun onViewDataBindingRecycled(binding: LessonPageBinding) {
-        binding.controller?.lifecycleOwner?.apply { maxState = minOf(maxState, Lifecycle.State.CREATED) }
+        binding.controller?.apply {
+            (lifecycleOwner as? ConstrainedStateLifecycleOwner)
+                ?.apply { maxState = minOf(maxState, Lifecycle.State.CREATED) }
+            model = null
+        }
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

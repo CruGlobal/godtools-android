@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.controller
 
+import androidx.lifecycle.Lifecycle
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -23,13 +24,13 @@ class HeroController @AssistedInject internal constructor(
         fun create(binding: TractPageHeroBinding, pageController: PageController): HeroController
     }
 
-    override val lifecycleOwner = pageController.lifecycleOwner?.let { ConstrainedStateLifecycleOwner(it) }
+    override val lifecycleOwner = ConstrainedStateLifecycleOwner(pageController.lifecycleOwner, Lifecycle.State.CREATED)
 
     override val childContainer get() = binding.content
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {
-        lifecycleOwner?.lifecycle?.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume { pendingAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE)) }
             onPause { pendingAnalyticsEvents?.cancelPendingAnalyticsEvents() }
         }

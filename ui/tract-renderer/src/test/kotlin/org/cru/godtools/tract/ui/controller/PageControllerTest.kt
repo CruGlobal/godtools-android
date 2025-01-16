@@ -14,17 +14,18 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.mockk
 import javax.inject.Inject
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
+import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.greenrobot.eventbus.EventBus
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
@@ -51,14 +52,14 @@ class PageControllerTest {
 
     private lateinit var controller: PageController
 
-    @Before
+    @BeforeTest
     fun setup() {
         hiltRule.inject()
         val activity = Robolectric.buildActivity(TestActivity::class.java).create().get()
         binding = TractPageBinding.inflate(LayoutInflater.from(activity))
         controller = PageController(
             binding,
-            baseLifecycleOwner,
+            ConstrainedStateLifecycleOwner(baseLifecycleOwner, Lifecycle.State.STARTED),
             ImmutableLiveData(false),
             State(),
             eventBus,
@@ -71,7 +72,7 @@ class PageControllerTest {
 
     @Test
     fun verifyOnToggleCard() {
-        controller.model = TractPage(cards = { listOf(mockk(relaxed = true)) })
+        controller.model = TractPage(cards = { listOf(TractPage.Card(it)) })
 
         val cardController = controller.cardControllers.first()
         assertNull(binding.pageContentLayout.activeCard)
@@ -83,31 +84,31 @@ class PageControllerTest {
 
     @Test
     fun verifyUpdateChildrenLifecycles() {
-        controller.lifecycleOwner!!.maxState = Lifecycle.State.RESUMED
-        controller.model = TractPage(cards = { listOf(mockk(relaxed = true), mockk(relaxed = true)) })
+        controller.lifecycleOwner.maxState = Lifecycle.State.RESUMED
+        controller.model = TractPage(cards = { listOf(TractPage.Card(it), TractPage.Card(it)) })
 
         // initially hero is visible
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the first card
         binding.pageContentLayout.changeActiveCard(0, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the second card
         binding.pageContentLayout.changeActiveCard(1, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the hero
         binding.pageContentLayout.changeActiveCard(-1, false)
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner!!.lifecycle.currentState)
-        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner!!.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
     }
 
     @AndroidEntryPoint

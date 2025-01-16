@@ -1,5 +1,6 @@
 package org.cru.godtools.tool.tips.ui.controller
 
+import androidx.lifecycle.LifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -12,20 +13,21 @@ import org.greenrobot.eventbus.EventBus
 
 class TipPageController @AssistedInject internal constructor(
     @Assisted private val binding: ToolTipPageBinding,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted override val toolState: State,
     eventBus: EventBus,
     cacheFactory: UiControllerCache.Factory
 ) : ParentController<TipPage>(TipPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
-        fun create(binding: ToolTipPageBinding, toolState: State): TipPageController
+        fun create(binding: ToolTipPageBinding, lifecycleOwner: LifecycleOwner, toolState: State): TipPageController
     }
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
     }
 
-    override val lifecycleOwner get() = binding.lifecycleOwner
     override val childContainer get() = binding.content
 
     override fun onBind() {
@@ -34,5 +36,8 @@ class TipPageController @AssistedInject internal constructor(
     }
 }
 
-fun ToolTipPageBinding.bindController(factory: TipPageController.Factory, toolState: State) =
-    controller ?: factory.create(this, toolState)
+fun ToolTipPageBinding.bindController(
+    factory: TipPageController.Factory,
+    lifecycleOwner: LifecycleOwner,
+    toolState: State,
+) = controller ?: factory.create(this, lifecycleOwner, toolState)

@@ -1,5 +1,6 @@
 package org.cru.godtools.tool.cyoa.ui.controller
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus
 
 class ContentPageController @AssistedInject constructor(
     @Assisted private val binding: CyoaPageContentBinding,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     cacheFactory: UiControllerCache.Factory,
@@ -28,6 +30,7 @@ class ContentPageController @AssistedInject constructor(
     interface Factory {
         fun create(
             binding: CyoaPageContentBinding,
+            lifecycleOwner: LifecycleOwner,
             enableTips: LiveData<Boolean>,
             toolState: State
         ): ContentPageController
@@ -36,6 +39,7 @@ class ContentPageController @AssistedInject constructor(
     internal var callbacks: ShowTipCallback? = null
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
     }
 
@@ -44,14 +48,13 @@ class ContentPageController @AssistedInject constructor(
         binding.page = model
     }
 
-    override val lifecycleOwner = binding.lifecycleOwner
     override val childContainer = binding.content
 
     // region Analytics Events
     private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
     init {
-        lifecycleOwner?.lifecycle?.apply {
+        with(lifecycleOwner.lifecycle) {
             onResume {
                 pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
             }
@@ -72,6 +75,7 @@ class ContentPageController @AssistedInject constructor(
 
 fun CyoaPageContentBinding.bindController(
     factory: ContentPageController.Factory,
+    lifecycleOwner: LifecycleOwner,
     enableTips: LiveData<Boolean>,
     toolState: State
-) = controller ?: factory.create(this, enableTips, toolState)
+) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)
