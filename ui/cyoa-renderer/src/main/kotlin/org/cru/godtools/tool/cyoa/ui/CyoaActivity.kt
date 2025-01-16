@@ -23,6 +23,7 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
@@ -224,6 +225,7 @@ class CyoaActivity :
         val fragment = when (page) {
             is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
             is ContentPage -> CyoaContentPageFragment(page.id)
+            is PageCollectionPage -> CyoaPageCollectionPageFragment(page.id)
             else -> return
         }
         val fm = supportFragmentManager
