@@ -205,7 +205,7 @@ class CardCollectionPageController @AssistedInject constructor(
         private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
         init {
-            lifecycleOwner?.lifecycle?.apply {
+            with(lifecycleOwner.lifecycle) {
                 onResume {
                     model?.let { eventBus.post(CyoaCardCollectionPageAnalyticsScreenEvent(it)) }
                     pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
