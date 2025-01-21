@@ -2,6 +2,7 @@ package org.cru.godtools.tool.cyoa.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.core.graphics.Insets
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -19,6 +20,7 @@ import org.ccci.gto.android.common.androidx.viewpager2.adapter.PrimaryItemChange
 import org.ccci.gto.android.common.androidx.viewpager2.adapter.onUpdatePrimaryItem
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.util.Ids
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
@@ -31,7 +33,9 @@ import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 
 class PageCollectionPageController @AssistedInject constructor(
-    @Assisted private val binding: CyoaPagePageCollectionBinding,
+    @Assisted
+    @get:VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val binding: CyoaPagePageCollectionBinding,
     @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted private val contentInsets: StateFlow<Insets>,
     @Assisted override val enableTips: LiveData<Boolean>,
@@ -61,6 +65,12 @@ class PageCollectionPageController @AssistedInject constructor(
         super.onBind()
         binding.page = model
         bindPages(model?.pages.orEmpty())
+    }
+
+    fun onNewPageEvent(event: Event): Boolean {
+        binding.pages.currentItem =
+            model?.pages?.indexOfFirst { event.id in it.listeners }?.takeIf { it != -1 } ?: return false
+        return true
     }
 
     // region Pages ViewPager

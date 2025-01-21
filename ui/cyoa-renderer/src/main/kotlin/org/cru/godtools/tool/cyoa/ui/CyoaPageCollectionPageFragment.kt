@@ -5,6 +5,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.StateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.filterIsInstance
+import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.tool.cyoa.R
@@ -19,6 +20,8 @@ class CyoaPageCollectionPageFragment(page: String? = null) :
         page
     ) {
     override fun supportsPage(page: Page) = page is PageCollectionPage
+
+    override fun onNewPageEvent(event: Event) = controller?.onNewPageEvent(event) == true
 
     // region Controller
     @Inject

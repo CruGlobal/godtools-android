@@ -2,6 +2,7 @@ package org.cru.godtools.tool.cyoa.ui
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.annotation.VisibleForTesting
 import androidx.core.graphics.Insets
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.activityViewModels
@@ -43,6 +44,11 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
         setupPageController(binding, pageInsets.insets)
     }
 
+    /**
+     * @return true if the current page handled the new page event, false otherwise
+     */
+    internal open fun onNewPageEvent(event: Event): Boolean = false
+
     internal fun onContentEvent(event: Event) {
         controller?.onContentEvent(event)
     }
@@ -74,7 +80,8 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     // endregion InvalidPageListener
 
     // region Controller
-    protected var controller: C? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    internal var controller: C? = null
 
     protected open fun setupPageController(binding: B, insets: StateFlow<Insets>) = Unit
     protected open fun cleanupPageController() {

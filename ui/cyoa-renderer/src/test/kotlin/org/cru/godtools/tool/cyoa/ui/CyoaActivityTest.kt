@@ -37,6 +37,7 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
@@ -80,6 +81,8 @@ class CyoaActivityTest {
     private val cardCollectionPage1 = cardCollectionPage("page1")
     private val cardCollectionPage2 = cardCollectionPage("page2")
 
+    private val pageCollectionPage1 = pageCollectionPage("pageCollection1")
+
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
 
@@ -108,6 +111,12 @@ class CyoaActivityTest {
         initializeMockk()
         every { cards } returns emptyList()
         block()
+    }
+
+    private fun pageCollectionPage(id: String): PageCollectionPage = mockk {
+        every { this@mockk.id } returns id
+        initializeMockk()
+        every { pages } returns emptyList()
     }
 
     private fun Page.initializeMockk() {
@@ -416,6 +425,41 @@ class CyoaActivityTest {
 
         scenario {
             it.onActivity {
+                it.processContentEvent(eventId1.event())
+                it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `checkForPageEvent() - Single Event - go to new subpage`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page2.listeners } returns setOf(eventId1)
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
+                val pageBinding = (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding
+                assertEquals(0, pageBinding.pages.currentItem)
+
+                it.processContentEvent(eventId1.event())
+                it.assertPageStack("pageCollection1")
+                assertEquals(1, pageBinding.pages.currentItem)
+            }
+        }
+    }
+
+    @Test
+    fun `checkForPageEvent() - Single Event - dismiss initial page & go to new page, not the subpage`() {
+        every { pageCollectionPage1.dismissListeners } returns setOf(eventId1)
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page2.listeners } returns setOf(eventId1)
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
                 it.processContentEvent(eventId1.event())
                 it.assertPageStack("page2")
             }
