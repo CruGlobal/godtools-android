@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
-import org.ccci.gto.android.common.androidx.lifecycle.notNull
-import org.ccci.gto.android.common.androidx.lifecycle.observeOnce
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
@@ -43,11 +41,6 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     override fun onBindingCreated(binding: B, savedInstanceState: Bundle?) {
         super.onBindingCreated(binding, savedInstanceState)
         setupPageController(binding, pageInsets.insets)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        page.notNull().observeOnce(this) { triggerAnalyticsScreenView() }
     }
 
     internal fun onContentEvent(event: Event) {
@@ -95,8 +88,4 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
         findListener<ShowTipCallback>()?.showTip(tip)
     }
     // endregion Training Tips
-
-    // region Analytics
-    protected abstract fun triggerAnalyticsScreenView()
-    // endregion Analytics
 }

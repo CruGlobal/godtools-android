@@ -37,7 +37,4 @@ class CyoaPageCollectionPageFragment(page: String? = null) :
             .also { it.callbacks = this }
     }
     // endregion Controller
-
-    // TODO: figure out Analytics Events
-    override fun triggerAnalyticsScreenView() = Unit
 }

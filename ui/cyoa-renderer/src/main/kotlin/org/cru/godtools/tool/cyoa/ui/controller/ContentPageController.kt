@@ -15,6 +15,7 @@ import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.state.State
+import org.cru.godtools.tool.cyoa.analytics.model.CyoaPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
@@ -57,6 +58,7 @@ class ContentPageController @AssistedInject constructor(
     init {
         with(lifecycleOwner.lifecycle) {
             onResume {
+                model?.let { eventBus.post(CyoaPageAnalyticsScreenEvent(it)) }
                 pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
             }
             onPause {

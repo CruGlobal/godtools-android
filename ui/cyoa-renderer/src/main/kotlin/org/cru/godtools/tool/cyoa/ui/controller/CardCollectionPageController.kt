@@ -31,6 +31,7 @@ import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage.Card
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.R
+import org.cru.godtools.tool.cyoa.analytics.model.CyoaCardCollectionPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
@@ -90,7 +91,6 @@ class CardCollectionPageController @AssistedInject constructor(
 
     // region Cards ViewPager
     private val adapter = CyoaCardCollectionPageCardDataBindingAdapter()
-    internal val currentCard get() = model?.cards?.getOrNull(binding.cards.currentItem)
 
     init {
         with(binding.cards) {
@@ -207,6 +207,7 @@ class CardCollectionPageController @AssistedInject constructor(
         init {
             lifecycleOwner?.lifecycle?.apply {
                 onResume {
+                    model?.let { eventBus.post(CyoaCardCollectionPageAnalyticsScreenEvent(it)) }
                     pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
                 }
                 onPause {
