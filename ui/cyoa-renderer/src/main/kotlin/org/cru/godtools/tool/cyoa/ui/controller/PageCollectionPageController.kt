@@ -67,6 +67,12 @@ class PageCollectionPageController @AssistedInject constructor(
         bindPages(model?.pages.orEmpty())
     }
 
+    fun onUpdatePageParams(params: Map<String, String>) {
+        params[PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE]
+            ?.let { activePage -> model?.pages?.indexOfFirst { it.id == activePage }?.takeUnless { it == -1 } }
+            ?.let { binding.pages.setCurrentItem(it, false) }
+    }
+
     fun onNewPageEvent(event: Event): Boolean {
         binding.pages.currentItem =
             model?.pages?.indexOfFirst { event.id in it.listeners }?.takeIf { it != -1 } ?: return false

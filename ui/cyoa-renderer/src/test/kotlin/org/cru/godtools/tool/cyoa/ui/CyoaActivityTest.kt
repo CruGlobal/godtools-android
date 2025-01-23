@@ -99,14 +99,14 @@ class CyoaActivityTest {
         pages = { pages }
     )
 
-    private fun contentPage(id: String, block: ContentPage.() -> Unit = {}) = mockk<ContentPage> {
+    private fun contentPage(id: String, block: ContentPage.() -> Unit = {}): ContentPage = mockk {
         every { this@mockk.id } returns id
         initializeMockk()
         every { content } returns emptyList()
         block()
     }
 
-    private fun cardCollectionPage(id: String, block: CardCollectionPage.() -> Unit = {}) = mockk<CardCollectionPage> {
+    private fun cardCollectionPage(id: String, block: CardCollectionPage.() -> Unit = {}): CardCollectionPage = mockk {
         every { this@mockk.id } returns id
         initializeMockk()
         every { cards } returns emptyList()
@@ -123,6 +123,7 @@ class CyoaActivityTest {
         every { manifest } returns manifest()
         every { isHidden } returns false
         every { parentPage } returns null
+        every { parentPageParams } returns emptyMap()
         every { listeners } returns emptySet()
         every { dismissListeners } returns emptySet()
         every { getAnalyticsEvents(any()) } returns emptyList()
@@ -325,6 +326,35 @@ class CyoaActivityTest {
     }
 
     @Test
+    fun `navigateToParentPage() - Skip extra entries - With parent params`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page3.parentPage } returns pageCollectionPage1
+        every { page3.parentPageParams } returns mapOf(PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE to "page2")
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    0,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
+
+                it.showPage(page2)
+                it.showPage(page3)
+                it.assertPageStack("pageCollection1", "page2", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    1,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
+            }
+        }
+    }
+
+    @Test
     fun `navigateToParentPage() - Parent not in backstack`() {
         every { page3.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
@@ -336,6 +366,28 @@ class CyoaActivityTest {
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
                 it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Parent not in backstack - With parent params`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page3.parentPage } returns pageCollectionPage1
+        every { page3.parentPageParams } returns mapOf(PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE to "page2")
+        manifestEnglish.value = manifest(listOf(page1, pageCollectionPage1, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page3)
+                it.assertPageStack("page1", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    1,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
             }
         }
     }
@@ -662,7 +714,7 @@ class CyoaActivityTest {
 
     private fun CyoaActivity.assertPageStack(vararg pages: String) {
         supportFragmentManager.executePendingTransactions()
-        assertEquals(pages.size - 1, supportFragmentManager.backStackEntryCount)
+        assertEquals(pages.size, supportFragmentManager.backStackEntryCount + 1, "Incorrect number of pages in stack")
         pages.dropLast(1).forEachIndexed { i, page ->
             assertEquals(page, supportFragmentManager.getBackStackEntryAt(i).name)
         }

@@ -22,6 +22,7 @@ import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 import splitties.fragmentargs.arg
+import splitties.fragmentargs.argOrNull
 
 abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
     BaseFragment<B>(layoutId),
@@ -44,6 +45,11 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
         setupPageController(binding, pageInsets.insets)
     }
 
+    override fun onResume() {
+        super.onResume()
+        pageArgs?.let { updatePageParams(it) }
+    }
+
     /**
      * @return true if the current page handled the new page event, false otherwise
      */
@@ -62,10 +68,26 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     internal var pageId by arg<String>()
         private set
     internal val page by lazy { dataModel.manifest.filterNotNull().map { it.findPage(pageId) }.asLiveData() }
+    private var pageArgs: HashMap<String, String>? by argOrNull()
 
     init {
         page?.let { pageId = page }
     }
+
+    internal fun updatePageParams(params: Map<String, String>) {
+        if (!isResumed) {
+            pageArgs = HashMap(params)
+            return
+        }
+
+        if (params.isNotEmpty()) {
+            onUpdatePageParams(params)
+        }
+
+        pageArgs = null
+    }
+
+    protected open fun onUpdatePageParams(params: Map<String, String>) = Unit
 
     // region InvalidPageListener
     fun interface InvalidPageListener {

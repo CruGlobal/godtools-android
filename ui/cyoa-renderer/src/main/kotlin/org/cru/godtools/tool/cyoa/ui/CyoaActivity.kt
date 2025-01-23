@@ -63,7 +63,7 @@ class CyoaActivity :
     override fun onInvalidPage(fragment: CyoaPageFragment<*, *>, page: Page?) {
         if (fragment !== pageFragment) return
         when {
-            page != null -> showPage(page, true)
+            page != null -> showPage(page, replaceCurrentPage = true)
             supportFragmentManager.backStackEntryCount == 0 -> finish()
             else -> supportFragmentManager.popBackStack()
         }
@@ -169,7 +169,7 @@ class CyoaActivity :
         if (pageFragment != null) return
 
         (manifest.findPage(savedState.initialPage) ?: manifest.pages.firstOrNull { !it.isHidden })
-            ?.let { showPage(it, true) }
+            ?.let { showPage(it, replaceCurrentPage = true) }
     }
 
     private fun checkForPageEvent(event: Event) {
@@ -198,6 +198,7 @@ class CyoaActivity :
     @VisibleForTesting
     internal fun navigateToParentPage(): Boolean {
         val parent = activePage?.parentPage
+        val parentParams = activePage?.parentPageParams.orEmpty()
         if (parent != null) {
             with(supportFragmentManager) {
                 // find closest ancestor that is currently in the back stack
@@ -207,7 +208,11 @@ class CyoaActivity :
                     val ancestorId = ancestor.id
                     if (backStackEntries.any { it.name == ancestorId }) {
                         popBackStack(ancestorId, POP_BACK_STACK_INCLUSIVE)
-                        if (ancestor !== parent) showPage(parent)
+                        if (ancestor !== parent) {
+                            showPage(parent, parentParams)
+                        } else if (parentParams.isNotEmpty()) {
+                            pageFragment?.updatePageParams(parentParams)
+                        }
                         return true
                     }
 
@@ -217,7 +222,7 @@ class CyoaActivity :
 
                 // otherwise pop entire backstack and show parent page as the root page
                 if (backStackEntryCount > 0) popBackStack(getBackStackEntryAt(0).id, POP_BACK_STACK_INCLUSIVE)
-                showPage(parent, true)
+                showPage(parent, parentParams, replaceCurrentPage = true)
                 return true
             }
         }
@@ -225,13 +230,14 @@ class CyoaActivity :
     }
 
     @VisibleForTesting
-    internal fun showPage(page: Page, replaceCurrentPage: Boolean = false) {
+    internal fun showPage(page: Page, params: Map<String, String> = emptyMap(), replaceCurrentPage: Boolean = false) {
         val fragment = when (page) {
             is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
             is ContentPage -> CyoaContentPageFragment(page.id)
             is PageCollectionPage -> CyoaPageCollectionPageFragment(page.id)
             else -> return
         }
+        fragment.updatePageParams(params)
         val fm = supportFragmentManager
         fm.commit {
             setReorderingAllowed(true)
