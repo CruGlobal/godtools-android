@@ -4,6 +4,8 @@ import androidx.annotation.RestrictTo
 import java.util.Locale
 import java.util.UUID
 import kotlin.random.Random
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiAttribute
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiId
 import org.ccci.gto.android.common.jsonapi.annotation.JsonApiIgnore
@@ -81,6 +83,10 @@ class Tool(
     val parallelLocale: Locale? = null,
     metatoolCode: String? = null,
     defaultVariantCode: String? = null,
+    @JsonApiIgnore
+    val progress: Double? = null,
+    @JsonApiIgnore
+    val progressLastPageId: String? = null,
     @JsonApiId
     val apiId: Long? = null,
     @JsonApiAttribute(JSON_ATTACHMENTS)
@@ -211,6 +217,8 @@ class Tool(
         pendingShares != other.pendingShares -> false
         primaryLocale != other.primaryLocale -> false
         parallelLocale != other.parallelLocale -> false
+        progress != other.progress -> false
+        progressLastPageId != other.progressLastPageId -> false
         apiId != other.apiId -> false
         metatoolCode != other.metatoolCode -> false
         defaultVariantCode != other.defaultVariantCode -> false
@@ -238,6 +246,8 @@ class Tool(
         result = 31 * result + pendingShares
         result = 31 * result + (primaryLocale?.hashCode() ?: 0)
         result = 31 * result + (parallelLocale?.hashCode() ?: 0)
+        result = 31 * result + (progress?.hashCode() ?: 0)
+        result = 31 * result + (progressLastPageId?.hashCode() ?: 0)
         result = 31 * result + (apiId?.hashCode() ?: 0)
         result = 31 * result + (metatoolCode?.hashCode() ?: 0)
         result = 31 * result + (defaultVariantCode?.hashCode() ?: 0)
@@ -247,6 +257,7 @@ class Tool(
 
 // TODO: move this to testFixtures once they support Kotlin source files
 @RestrictTo(RestrictTo.Scope.TESTS)
+@OptIn(ExperimentalUuidApi::class)
 fun randomTool(
     code: String = UUID.randomUUID().toString(),
     type: Tool.Type = Tool.Type.entries.random(),
@@ -275,6 +286,8 @@ fun randomTool(
     parallelLocale: Locale? = Locale.FRENCH.takeIf { Random.nextBoolean() },
     metatoolCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
     defaultVariantCode: String? = UUID.randomUUID().toString().takeIf { Random.nextBoolean() },
+    progress: Double? = Random.nextDouble(0.0, 1.0).takeIf { Random.nextBoolean() },
+    progressLastPageId: String? = Uuid.random().toString().takeIf { Random.nextBoolean() },
     apiId: Long? = Random.nextLong().takeIf { Random.nextBoolean() },
     apiAttachments: List<Attachment>? = null,
     changedFieldsStr: String = setOf(ATTR_IS_FAVORITE).filter { Random.nextBoolean() }.joinToString(","),
@@ -301,6 +314,8 @@ fun randomTool(
     parallelLocale = parallelLocale,
     metatoolCode = metatoolCode,
     defaultVariantCode = defaultVariantCode,
+    progress = progress,
+    progressLastPageId = progressLastPageId,
     apiId = apiId,
     apiAttachments = apiAttachments,
     changedFieldsStr = changedFieldsStr,

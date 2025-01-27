@@ -42,6 +42,8 @@ internal class ToolEntity(
     val parallelLocale: Locale? = null,
     @ColumnInfo(defaultValue = "")
     val changedFields: String = "",
+    val progress: Double? = null,
+    val progressLastPageId: String? = null,
     val apiId: Long? = null,
 ) {
     constructor(tool: Tool) : this(
@@ -67,6 +69,8 @@ internal class ToolEntity(
         isSpotlight = tool.isSpotlight,
         primaryLocale = tool.primaryLocale,
         parallelLocale = tool.parallelLocale,
+        progress = tool.progress,
+        progressLastPageId = tool.progressLastPageId,
         apiId = tool.apiId,
         changedFields = tool.changedFieldsStr,
     )
@@ -94,6 +98,8 @@ internal class ToolEntity(
         defaultVariantCode = defaultVariantCode,
         primaryLocale = primaryLocale,
         parallelLocale = parallelLocale,
+        progress = progress,
+        progressLastPageId = progressLastPageId,
         apiId = apiId,
         changedFieldsStr = changedFields,
     )
