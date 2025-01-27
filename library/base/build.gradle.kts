@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.datastore.preferences)
 
-    implementation(libs.firebase.config)
+    api(libs.firebase.config)
 
     implementation(libs.gtoSupport.androidx.core)
     implementation(libs.gtoSupport.androidx.lifecycle)

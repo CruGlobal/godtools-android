@@ -23,6 +23,7 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
@@ -62,7 +63,7 @@ class CyoaActivity :
     override fun onInvalidPage(fragment: CyoaPageFragment<*, *>, page: Page?) {
         if (fragment !== pageFragment) return
         when {
-            page != null -> showPage(page, true)
+            page != null -> showPage(page, replaceCurrentPage = true)
             supportFragmentManager.backStackEntryCount == 0 -> finish()
             else -> supportFragmentManager.popBackStack()
         }
@@ -168,17 +169,21 @@ class CyoaActivity :
         if (pageFragment != null) return
 
         (manifest.findPage(savedState.initialPage) ?: manifest.pages.firstOrNull { !it.isHidden })
-            ?.let { showPage(it, true) }
+            ?.let { showPage(it, replaceCurrentPage = true) }
     }
 
     private fun checkForPageEvent(event: Event) {
         val pageFragment = pageFragment
-
         val dismissCurrentPage = pageFragment?.page?.value?.dismissListeners?.contains(event.id) == true
-        val newPage = dataModel.manifest.value?.pages?.firstOrNull { it.listeners.contains(event.id) }
 
         // trigger any page content listeners if we aren't dismissing the current page
         if (!dismissCurrentPage) pageFragment?.onContentEvent(event)
+
+        // resolve any potential new page, allowing subpage navigation to override when appropriate
+        val newPage = when {
+            !dismissCurrentPage && pageFragment?.onNewPageEvent(event) == true -> null
+            else -> dataModel.manifest.value?.pages?.firstOrNull { event.id in it.listeners }
+        }
 
         // dismiss/show pages as necessary
         when {
@@ -193,6 +198,7 @@ class CyoaActivity :
     @VisibleForTesting
     internal fun navigateToParentPage(): Boolean {
         val parent = activePage?.parentPage
+        val parentParams = activePage?.parentPageParams.orEmpty()
         if (parent != null) {
             with(supportFragmentManager) {
                 // find closest ancestor that is currently in the back stack
@@ -202,7 +208,11 @@ class CyoaActivity :
                     val ancestorId = ancestor.id
                     if (backStackEntries.any { it.name == ancestorId }) {
                         popBackStack(ancestorId, POP_BACK_STACK_INCLUSIVE)
-                        if (ancestor !== parent) showPage(parent)
+                        if (ancestor !== parent) {
+                            showPage(parent, parentParams)
+                        } else if (parentParams.isNotEmpty()) {
+                            pageFragment?.updatePageParams(parentParams)
+                        }
                         return true
                     }
 
@@ -212,7 +222,7 @@ class CyoaActivity :
 
                 // otherwise pop entire backstack and show parent page as the root page
                 if (backStackEntryCount > 0) popBackStack(getBackStackEntryAt(0).id, POP_BACK_STACK_INCLUSIVE)
-                showPage(parent, true)
+                showPage(parent, parentParams, replaceCurrentPage = true)
                 return true
             }
         }
@@ -220,12 +230,14 @@ class CyoaActivity :
     }
 
     @VisibleForTesting
-    internal fun showPage(page: Page, replaceCurrentPage: Boolean = false) {
+    internal fun showPage(page: Page, params: Map<String, String> = emptyMap(), replaceCurrentPage: Boolean = false) {
         val fragment = when (page) {
             is CardCollectionPage -> CyoaCardCollectionPageFragment(page.id)
             is ContentPage -> CyoaContentPageFragment(page.id)
+            is PageCollectionPage -> CyoaPageCollectionPageFragment(page.id)
             else -> return
         }
+        fragment.updatePageParams(params)
         val fm = supportFragmentManager
         fm.commit {
             setReorderingAllowed(true)

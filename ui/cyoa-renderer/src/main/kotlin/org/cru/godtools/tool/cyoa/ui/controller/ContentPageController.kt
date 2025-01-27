@@ -8,12 +8,14 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.state.State
+import org.cru.godtools.tool.cyoa.analytics.model.CyoaPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
@@ -56,6 +58,7 @@ class ContentPageController @AssistedInject constructor(
     init {
         with(lifecycleOwner.lifecycle) {
             onResume {
+                model?.let { eventBus.post(CyoaPageAnalyticsScreenEvent(it)) }
                 pendingVisibleAnalyticsEvents = triggerAnalyticsEvents(model?.getAnalyticsEvents(Trigger.VISIBLE))
             }
             onPause {
@@ -79,3 +82,13 @@ fun CyoaPageContentBinding.bindController(
     enableTips: LiveData<Boolean>,
     toolState: State
 ) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)
+
+fun CyoaPageContentBinding.bindController(
+    factory: ContentPageController.Factory,
+    parentController: BaseController<*>,
+) = controller ?: factory.create(
+    this,
+    parentController.lifecycleOwner,
+    parentController.enableTips,
+    parentController.toolState
+)

@@ -37,6 +37,7 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
+import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
@@ -80,6 +81,8 @@ class CyoaActivityTest {
     private val cardCollectionPage1 = cardCollectionPage("page1")
     private val cardCollectionPage2 = cardCollectionPage("page2")
 
+    private val pageCollectionPage1 = pageCollectionPage("pageCollection1")
+
     private val eventId1 = EventId.parse("event1").first()
     private val eventId2 = EventId.parse("event2").first()
 
@@ -96,24 +99,31 @@ class CyoaActivityTest {
         pages = { pages }
     )
 
-    private fun contentPage(id: String, block: ContentPage.() -> Unit = {}) = mockk<ContentPage> {
+    private fun contentPage(id: String, block: ContentPage.() -> Unit = {}): ContentPage = mockk {
         every { this@mockk.id } returns id
         initializeMockk()
         every { content } returns emptyList()
         block()
     }
 
-    private fun cardCollectionPage(id: String, block: CardCollectionPage.() -> Unit = {}) = mockk<CardCollectionPage> {
+    private fun cardCollectionPage(id: String, block: CardCollectionPage.() -> Unit = {}): CardCollectionPage = mockk {
         every { this@mockk.id } returns id
         initializeMockk()
         every { cards } returns emptyList()
         block()
     }
 
+    private fun pageCollectionPage(id: String): PageCollectionPage = mockk {
+        every { this@mockk.id } returns id
+        initializeMockk()
+        every { pages } returns emptyList()
+    }
+
     private fun Page.initializeMockk() {
         every { manifest } returns manifest()
         every { isHidden } returns false
         every { parentPage } returns null
+        every { parentPageParams } returns emptyMap()
         every { listeners } returns emptySet()
         every { dismissListeners } returns emptySet()
         every { getAnalyticsEvents(any()) } returns emptyList()
@@ -316,6 +326,35 @@ class CyoaActivityTest {
     }
 
     @Test
+    fun `navigateToParentPage() - Skip extra entries - With parent params`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page3.parentPage } returns pageCollectionPage1
+        every { page3.parentPageParams } returns mapOf(PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE to "page2")
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2, page3))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    0,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
+
+                it.showPage(page2)
+                it.showPage(page3)
+                it.assertPageStack("pageCollection1", "page2", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    1,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
+            }
+        }
+    }
+
+    @Test
     fun `navigateToParentPage() - Parent not in backstack`() {
         every { page3.parentPage } returns page2
         manifestEnglish.value = manifest(listOf(page1, page2, page3))
@@ -327,6 +366,28 @@ class CyoaActivityTest {
 
                 assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
                 it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToParentPage() - Parent not in backstack - With parent params`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page3.parentPage } returns pageCollectionPage1
+        every { page3.parentPageParams } returns mapOf(PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE to "page2")
+        manifestEnglish.value = manifest(listOf(page1, pageCollectionPage1, page3))
+
+        scenario {
+            it.onActivity {
+                it.showPage(page3)
+                it.assertPageStack("page1", "page3")
+
+                assertTrue(shadowOf(it).clickMenuItem(android.R.id.home))
+                it.assertPageStack("pageCollection1")
+                assertEquals(
+                    1,
+                    (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding.pages.currentItem
+                )
             }
         }
     }
@@ -416,6 +477,41 @@ class CyoaActivityTest {
 
         scenario {
             it.onActivity {
+                it.processContentEvent(eventId1.event())
+                it.assertPageStack("page2")
+            }
+        }
+    }
+
+    @Test
+    fun `checkForPageEvent() - Single Event - go to new subpage`() {
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page2.listeners } returns setOf(eventId1)
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
+                val pageBinding = (it.pageFragment as CyoaPageCollectionPageFragment).controller!!.binding
+                assertEquals(0, pageBinding.pages.currentItem)
+
+                it.processContentEvent(eventId1.event())
+                it.assertPageStack("pageCollection1")
+                assertEquals(1, pageBinding.pages.currentItem)
+            }
+        }
+    }
+
+    @Test
+    fun `checkForPageEvent() - Single Event - dismiss initial page & go to new page, not the subpage`() {
+        every { pageCollectionPage1.dismissListeners } returns setOf(eventId1)
+        every { pageCollectionPage1.pages } returns listOf(page1, page2)
+        every { page2.listeners } returns setOf(eventId1)
+        manifestEnglish.value = manifest(listOf(pageCollectionPage1, page2))
+
+        scenario {
+            it.onActivity {
+                it.assertPageStack("pageCollection1")
                 it.processContentEvent(eventId1.event())
                 it.assertPageStack("page2")
             }
@@ -618,7 +714,7 @@ class CyoaActivityTest {
 
     private fun CyoaActivity.assertPageStack(vararg pages: String) {
         supportFragmentManager.executePendingTransactions()
-        assertEquals(pages.size - 1, supportFragmentManager.backStackEntryCount)
+        assertEquals(pages.size, supportFragmentManager.backStackEntryCount + 1, "Incorrect number of pages in stack")
         pages.dropLast(1).forEachIndexed { i, page ->
             assertEquals(page, supportFragmentManager.getBackStackEntryAt(i).name)
         }

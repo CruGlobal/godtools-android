@@ -21,6 +21,7 @@ object MockBaseModule {
 
     @get:Provides
     val remoteConfig: FirebaseRemoteConfig = mockk {
+        every { getBoolean(any()) } returns false
         every { getLong(any()) } returns 0
     }
 }

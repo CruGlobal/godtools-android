@@ -1,6 +1,7 @@
 package org.cru.godtools.base.tool
 
 import android.content.Context
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,6 +13,7 @@ import dagger.multibindings.IntoSet
 import javax.inject.Named
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.cru.godtools.base.CONFIG_TOOL_CONTENT_FEATURE_PAGE_COLLECTION
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ContentEventAnalyticsHandler
 import org.cru.godtools.shared.tool.parser.ManifestParser
@@ -20,6 +22,7 @@ import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_ANIMAT
 import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_CONTENT_CARD
 import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_FLOW
 import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_MULTISELECT
+import org.cru.godtools.shared.tool.parser.ParserConfig.Companion.FEATURE_PAGE_COLLECTION
 import org.cru.godtools.shared.tool.parser.model.DeviceType
 import org.cru.godtools.shared.tool.parser.xml.AndroidXmlPullParserFactory
 import org.greenrobot.eventbus.meta.SubscriberInfoIndex
@@ -42,9 +45,19 @@ abstract class BaseToolRendererModule {
 
         @Provides
         @Reusable
-        fun parserConfig(@ApplicationContext context: Context) = ParserConfig()
+        fun parserConfig(@ApplicationContext context: Context, remoteConfig: FirebaseRemoteConfig) = ParserConfig()
             .withAppVersion(DeviceType.ANDROID, context.versionName?.substringBefore("-"))
-            .withSupportedFeatures(setOf(FEATURE_ANIMATION, FEATURE_CONTENT_CARD, FEATURE_FLOW, FEATURE_MULTISELECT))
+            .withSupportedFeatures(
+                buildSet {
+                    add(FEATURE_ANIMATION)
+                    add(FEATURE_CONTENT_CARD)
+                    add(FEATURE_FLOW)
+                    add(FEATURE_MULTISELECT)
+                    if (remoteConfig.getBoolean(CONFIG_TOOL_CONTENT_FEATURE_PAGE_COLLECTION)) {
+                        add(FEATURE_PAGE_COLLECTION)
+                    }
+                }
+            )
 
         @Provides
         @Reusable
