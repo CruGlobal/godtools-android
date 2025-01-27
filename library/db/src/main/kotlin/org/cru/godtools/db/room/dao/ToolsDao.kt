@@ -66,6 +66,8 @@ internal interface ToolsDao {
     suspend fun updateToolOrder(code: String, order: Int)
     @Query("UPDATE tools SET primaryLocale = :primary, parallelLocale = :parallel WHERE code = :code")
     suspend fun updateToolLocales(code: String, primary: Locale?, parallel: Locale?)
+    @Query("UPDATE tools SET progress = :progress, progressLastPageId = :lastPageId WHERE code = :code")
+    suspend fun updateToolProgress(code: String, progress: Double?, lastPageId: String?)
     @Query("UPDATE tools SET pendingShares = pendingShares + :views WHERE code = :code")
     suspend fun updateToolViews(code: String, views: Int)
     @Delete
