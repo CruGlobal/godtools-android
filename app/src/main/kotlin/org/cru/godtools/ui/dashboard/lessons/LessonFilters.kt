@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard.lessons
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,8 +11,6 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
@@ -25,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -42,6 +38,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.languages.LanguageName
 
 private val DROPDOWN_LESSON_MAX_HEIGHT = 700.dp
@@ -136,16 +133,3 @@ internal fun LessonLanguageFilter(modifier: Modifier = Modifier, viewModel: Less
         }
     }
 }
-
-@Composable
-private fun FilterMenuItem(
-    label: @Composable () -> Unit,
-    supportingText: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    headlineContent = label,
-    supportingContent = supportingText?.let { { Text(it) } },
-    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-    modifier = modifier.clickable(onClick = onClick)
-)
