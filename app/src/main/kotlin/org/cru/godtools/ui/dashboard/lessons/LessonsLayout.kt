@@ -19,7 +19,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
 import org.cru.godtools.R
 import org.cru.godtools.ui.tools.LessonToolCard
-import org.cru.godtools.ui.tools.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.toolViewModels
 
 internal sealed interface DashboardLessonsEvent {
     class OpenLesson(val lesson: String?, val lang: Locale?) : DashboardLessonsEvent
@@ -38,17 +39,19 @@ internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (
         }
 
         items(lessons, { it }, { "lesson" }) { lesson ->
-            LessonToolCard(
-                lesson,
-                selectedLanguage = selectedLanguage,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.OpenTool, is ToolCardEvent.Click -> {
-                            viewModel.recordOpenLessonInAnalytics(it.tool)
-                            onEvent(DashboardLessonsEvent.OpenLesson(it.tool, it.lang1))
-                        }
+            lateinit var state: ToolCard.State
+            state = toolViewModels[lesson].toState(language = selectedLanguage) {
+                when (it) {
+                    ToolCard.Event.Click -> {
+                        viewModel.recordOpenLessonInAnalytics(lesson)
+                        onEvent(DashboardLessonsEvent.OpenLesson(lesson, state.translation?.languageCode))
                     }
-                },
+                    else -> TODO()
+                }
+            }
+
+            LessonToolCard(
+                state,
                 modifier = Modifier
                     .animateItem()
                     .padding(top = 16.dp)

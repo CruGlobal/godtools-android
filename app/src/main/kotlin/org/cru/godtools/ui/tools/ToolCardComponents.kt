@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getCategory
@@ -57,11 +56,6 @@ private val toolCardInfoLabelColor: Color @Composable get() {
     return remember(baseColor) { with(baseColor) { copy(alpha = alpha * 0.6f) } }
 }
 private val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
-
-sealed class ToolCardEvent(val tool: String?, val lang1: Locale? = null) {
-    class Click(tool: String?, lang1: Locale? = null) : ToolCardEvent(tool, lang1)
-    class OpenTool(tool: String?, lang1: Locale?) : ToolCardEvent(tool, lang1)
-}
 
 @Composable
 internal fun ToolBanner(state: ToolCard.State, modifier: Modifier = Modifier) = AsyncImage(
