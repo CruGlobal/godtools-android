@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,7 +27,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
+import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.greenrobot.eventbus.EventBus
 
 const val KEY_SAVED_LESSON_LANGUAGE_LOCALE = "savedLessonLanguageLocale"
@@ -89,8 +90,9 @@ class LessonsViewModel @Inject constructor(
     ) { languages, appLanguage, query, toolCounts ->
         languages
             .filterByDisplayAndNativeName(query, context, appLanguage)
-            .map { Filter(it, toolCounts[it.code] ?: 0) }
+            .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
             .filter { it.count > 0 }
+            .toImmutableList()
     }
 
     // region Analytics

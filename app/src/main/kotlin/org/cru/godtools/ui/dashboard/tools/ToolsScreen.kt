@@ -23,9 +23,7 @@ data object ToolsScreen : Screen {
     data class Filters(
         val categoryFilter: FilterMenu.UiState<String?> = FilterMenu.UiState(),
         val languageFilter: FilterMenu.UiState<Language?> = FilterMenu.UiState(),
-    ) : CircuitUiState {
-        data class Filter<T>(val item: T, val count: Int)
-    }
+    ) : CircuitUiState
 
     sealed interface Event : CircuitUiEvent {
         data class OpenToolDetails(val tool: String, val source: String? = null) : Event

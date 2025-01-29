@@ -28,7 +28,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
+import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.contains
 
@@ -146,7 +146,7 @@ class LessonsViewModelTest {
 
         viewModel.filteredLanguages.test {
             coVerify { translationsRepository.getTranslationsFlowForTools(setOf("lesson")) }
-            assertEquals(listOf(Filter(first, 1), Filter(second, 1)), awaitItem())
+            assertEquals(listOf(FilterMenu.UiState.Item(first, 1), FilterMenu.UiState.Item(second, 1)), awaitItem())
         }
     }
 
@@ -166,7 +166,7 @@ class LessonsViewModelTest {
             viewModel.query.value = "Eng"
             runCurrent()
             coVerify { languagesRepository.getLanguagesFlow() }
-            assertEquals(listOf(Filter(first, 1)), expectMostRecentItem())
+            assertEquals(listOf(FilterMenu.UiState.Item(first, 1)), expectMostRecentItem())
         }
     }
 
