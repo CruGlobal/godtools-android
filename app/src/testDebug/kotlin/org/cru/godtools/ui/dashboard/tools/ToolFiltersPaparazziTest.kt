@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
@@ -8,8 +9,10 @@ import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.util.Locale
 import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.BasePaparazziTest
+import org.cru.godtools.ui.dashboard.filters.FilterMenu.UiState
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -19,17 +22,17 @@ class ToolFiltersPaparazziTest(
 ) : BasePaparazziTest(nightMode = nightMode, accessibilityMode = accessibilityMode) {
     @Test
     fun `LanguageFilter - Button - No Language Selected`() = renderLanguageFilter(
-        ToolsScreen.Filters(
-            selectedLanguage = null,
-            showLanguagesMenu = false,
+        UiState(
+            selectedItem = null,
+            menuExpanded = mutableStateOf(false),
         )
     )
 
     @Test
     fun `LanguageFilter - Button - English Selected`() = renderLanguageFilter(
-        ToolsScreen.Filters(
-            selectedLanguage = Language(Locale.ENGLISH),
-            showLanguagesMenu = false,
+        UiState(
+            selectedItem = Language(Locale.ENGLISH),
+            menuExpanded = mutableStateOf(false),
         )
     )
 
@@ -40,18 +43,18 @@ class ToolFiltersPaparazziTest(
     @Test
     @Ignore("Ignored for now due to LayoutLib rendering issues")
     fun `LanguageFilter - Dropdown Menu`() = renderLanguageFilter(
-        ToolsScreen.Filters(
-            selectedLanguage = Language(Locale.ENGLISH),
-            showLanguagesMenu = true,
-            languages = listOf(
-                ToolsScreen.Filters.Filter(Language(Locale.ENGLISH), 12345),
-                ToolsScreen.Filters.Filter(Language(Locale.FRENCH), 1),
-                ToolsScreen.Filters.Filter(Language(Locale("es")), 3),
+        UiState(
+            selectedItem = Language(Locale.ENGLISH),
+            menuExpanded = mutableStateOf(true),
+            items = persistentListOf(
+                UiState.Item(Language(Locale.ENGLISH), 12345),
+                UiState.Item(Language(Locale.FRENCH), 1),
+                UiState.Item(Language(Locale("es")), 3),
             ),
         )
     )
 
-    private fun renderLanguageFilter(filters: ToolsScreen.Filters) = centerInSnapshot {
-        LanguageFilter(filters, modifier = Modifier.fillMaxWidth(0.5f))
+    private fun renderLanguageFilter(state: UiState<Language>) = centerInSnapshot {
+        LanguageFilter(state, modifier = Modifier.fillMaxWidth(0.5f))
     }
 }

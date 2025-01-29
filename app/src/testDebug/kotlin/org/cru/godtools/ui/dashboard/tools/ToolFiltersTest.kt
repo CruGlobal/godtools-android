@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -11,9 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import kotlin.test.Test
+import kotlin.test.assertTrue
+import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
+import org.cru.godtools.ui.dashboard.filters.FilterMenu.Event
+import org.cru.godtools.ui.dashboard.filters.FilterMenu.UiState
+import org.cru.godtools.ui.dashboard.filters.FilterMenu.UiState.Item
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -24,17 +29,17 @@ class ToolFiltersTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<ToolsScreen.FiltersEvent>()
+    private val events = TestEventSink<Event<*>>()
 
     // region CategoriesFilter
     @Test
     fun `CategoryFilter() - Shows selected category`() {
         composeTestRule.setContent {
             CategoryFilter(
-                ToolsScreen.Filters(
-                    selectedCategory = Tool.CATEGORY_GOSPEL,
+                UiState(
+                    selectedItem = Tool.CATEGORY_GOSPEL,
                     eventSink = events,
-                ),
+                )
             )
         }
 
@@ -46,8 +51,8 @@ class ToolFiltersTest {
     fun `CategoryFilter() - Shows Any Category when no category is specified`() {
         composeTestRule.setContent {
             CategoryFilter(
-                ToolsScreen.Filters(
-                    selectedCategory = null,
+                UiState(
+                    selectedItem = null,
                     eventSink = events,
                 ),
             )
@@ -60,7 +65,7 @@ class ToolFiltersTest {
     @Test
     fun `CategoryFilter() - Dropdown Menu - Show when button is clicked`() {
         composeTestRule.setContent {
-            CategoryFilter(ToolsScreen.Filters(eventSink = events))
+            CategoryFilter(UiState(eventSink = events))
         }
 
         // dropdown menu not shown
@@ -76,12 +81,12 @@ class ToolFiltersTest {
     fun `CategoryFilter() - Dropdown Menu - Show categories`() {
         composeTestRule.setContent {
             CategoryFilter(
-                filters = ToolsScreen.Filters(
-                    categories = listOf(
-                        Filter(Tool.CATEGORY_GOSPEL, 1),
-                        Filter(Tool.CATEGORY_ARTICLES, 1)
+                UiState(
+                    items = persistentListOf(
+                        Item(Tool.CATEGORY_GOSPEL, 1),
+                        Item(Tool.CATEGORY_ARTICLES, 1)
                     ),
-                    eventSink = events,
+                    eventSink = events
                 ),
             )
         }
@@ -97,12 +102,12 @@ class ToolFiltersTest {
     fun `CategoryFilter() - Dropdown Menu - Select 'Any category' option`() {
         composeTestRule.setContent {
             CategoryFilter(
-                filters = ToolsScreen.Filters(
-                    selectedCategory = Tool.CATEGORY_GOSPEL,
-                    categories = listOf(
-                        Filter(Tool.CATEGORY_GOSPEL, 1),
-                        Filter(Tool.CATEGORY_ARTICLES, 1)
+                UiState(
+                    items = persistentListOf(
+                        Item(Tool.CATEGORY_GOSPEL, 1),
+                        Item(Tool.CATEGORY_ARTICLES, 1)
                     ),
+                    selectedItem = Tool.CATEGORY_GOSPEL,
                     eventSink = events,
                 ),
             )
@@ -111,17 +116,17 @@ class ToolFiltersTest {
 
         composeTestRule.onNodeWithText("Any category", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertDoesNotExist()
-        events.assertEvent(ToolsScreen.FiltersEvent.SelectCategory(null))
+        events.assertEvent(Event.SelectItem(null))
     }
 
     @Test
     fun `CategoryFilter() - Dropdown Menu - Select a category`() {
         composeTestRule.setContent {
             CategoryFilter(
-                filters = ToolsScreen.Filters(
-                    categories = listOf(
-                        Filter(Tool.CATEGORY_GOSPEL, 1),
-                        Filter(Tool.CATEGORY_ARTICLES, 1)
+                UiState(
+                    items = persistentListOf(
+                        Item(Tool.CATEGORY_GOSPEL, 1),
+                        Item(Tool.CATEGORY_ARTICLES, 1)
                     ),
                     eventSink = events,
                 ),
@@ -131,7 +136,7 @@ class ToolFiltersTest {
 
         composeTestRule.onNodeWithText("Gospel", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithTag(TEST_TAG_FILTER_DROPDOWN).assertDoesNotExist()
-        events.assertEvent(ToolsScreen.FiltersEvent.SelectCategory(Tool.CATEGORY_GOSPEL))
+        events.assertEvent(Event.SelectItem(Tool.CATEGORY_GOSPEL))
     }
     // endregion CategoryFilter
 
@@ -140,10 +145,10 @@ class ToolFiltersTest {
     fun `LanguageFilter() - Shows selectedLanguage`() {
         composeTestRule.setContent {
             LanguageFilter(
-                ToolsScreen.Filters(
-                    selectedLanguage = Language(Locale.ENGLISH),
+                UiState(
+                    selectedItem = Language(Locale.ENGLISH),
                     eventSink = events,
-                ),
+                )
             )
         }
 
@@ -155,8 +160,8 @@ class ToolFiltersTest {
     fun `LanguageFilter() - Shows Any Language when no language is specified`() {
         composeTestRule.setContent {
             LanguageFilter(
-                ToolsScreen.Filters(
-                    selectedLanguage = null,
+                UiState(
+                    selectedItem = null,
                     eventSink = events,
                 ),
             )
@@ -168,29 +173,32 @@ class ToolFiltersTest {
 
     @Test
     fun `LanguageFilter() - Button toggles menu`() {
+        val menuExpanded = mutableStateOf(false)
         composeTestRule.setContent {
             LanguageFilter(
-                ToolsScreen.Filters(
-                    selectedLanguage = Language(Locale.ENGLISH),
+                UiState(
+                    menuExpanded = menuExpanded,
+                    selectedItem = Language(Locale.ENGLISH),
                     eventSink = events,
-                )
+                ),
             )
         }
 
         // click button to show dropdown
         composeTestRule.onNodeWithText("English").assertHasClickAction().performClick()
-        events.assertEvent(ToolsScreen.FiltersEvent.ToggleLanguagesMenu)
+        assertTrue(menuExpanded.value)
+        events.assertNoEvents()
     }
 
     @Test
     fun `LanguageFilter() - Dropdown Menu - Show languages`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.Filters(
-                    showLanguagesMenu = true,
-                    languages = listOf(
-                        Filter(Language(Locale.FRENCH), 1),
-                        Filter(Language(Locale.GERMAN), 1),
+                UiState(
+                    menuExpanded = mutableStateOf(true),
+                    items = persistentListOf(
+                        Item(Language(Locale.FRENCH), 1),
+                        Item(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
                 ),
@@ -200,45 +208,46 @@ class ToolFiltersTest {
         composeTestRule.onNodeWithText("English", substring = true, ignoreCase = true).assertDoesNotExist()
         composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).assertExists()
         composeTestRule.onNodeWithText("German", substring = true, ignoreCase = true).assertExists()
+        events.assertNoEvents()
     }
 
     @Test
     fun `LanguageFilter() - Dropdown Menu - Select 'Any language' option`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.Filters(
-                    selectedLanguage = Language(Locale.FRENCH),
-                    showLanguagesMenu = true,
-                    languages = listOf(
-                        Filter(Language(Locale.FRENCH), 1),
-                        Filter(Language(Locale.GERMAN), 1),
+                UiState(
+                    menuExpanded = mutableStateOf(true),
+                    items = persistentListOf(
+                        Item(Language(Locale.FRENCH), 1),
+                        Item(Language(Locale.GERMAN), 1),
                     ),
+                    selectedItem = Language(Locale.FRENCH),
                     eventSink = events,
                 ),
             )
         }
 
         composeTestRule.onNodeWithText("Any language", substring = true, ignoreCase = true).performClick()
-        events.assertEvent(ToolsScreen.FiltersEvent.SelectLanguage(null))
+        events.assertEvent(Event.SelectItem(null))
     }
 
     @Test
     fun `LanguageFilter() - Dropdown Menu - Select a language`() {
         composeTestRule.setContent {
             LanguageFilter(
-                filters = ToolsScreen.Filters(
-                    showLanguagesMenu = true,
-                    languages = listOf(
-                        Filter(Language(Locale.FRENCH), 1),
-                        Filter(Language(Locale.GERMAN), 1),
+                UiState(
+                    menuExpanded = mutableStateOf(true),
+                    items = persistentListOf(
+                        Item(Language(Locale.FRENCH), 1),
+                        Item(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
-                ),
+                )
             )
         }
 
         composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).performClick()
-        events.assertEvents(ToolsScreen.FiltersEvent.SelectLanguage(Locale.FRENCH))
+        events.assertEvents(Event.SelectItem(Language(Locale.FRENCH)))
     }
     // endregion LanguageFilter
 }

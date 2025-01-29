@@ -41,7 +41,7 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
     val spotlightTools by rememberUpdatedState(state.spotlightTools)
     val filters by rememberUpdatedState(state.filters)
     val tools by rememberUpdatedState(state.tools)
-    val selectedLanguage by rememberUpdatedState(state.filters.selectedLanguage)
+    val selectedLanguage by rememberUpdatedState(state.filters.languageFilter.selectedItem)
     val eventSink by rememberUpdatedState(state.eventSink)
 
     val columnState = rememberLazyListState()

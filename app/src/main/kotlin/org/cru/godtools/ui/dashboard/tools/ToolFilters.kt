@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +18,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.SearchBar
@@ -28,12 +25,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
@@ -50,6 +44,9 @@ import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getToolCategoryName
+import org.cru.godtools.model.Language
+import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -73,8 +70,8 @@ internal fun ToolFilters(filters: ToolsScreen.Filters, modifier: Modifier = Modi
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
-            CategoryFilter(filters, modifier = Modifier.weight(1f))
-            LanguageFilter(filters, modifier = Modifier.weight(1f))
+            CategoryFilter(filters.categoryFilter, modifier = Modifier.weight(1f))
+            LanguageFilter(filters.languageFilter, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -82,12 +79,12 @@ internal fun ToolFilters(filters: ToolsScreen.Filters, modifier: Modifier = Modi
 @Composable
 @VisibleForTesting
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
-    val categories by rememberUpdatedState(filters.categories)
-    val selectedCategory by rememberUpdatedState(filters.selectedCategory)
-    val eventSink by rememberUpdatedState(filters.eventSink)
+internal fun CategoryFilter(state: FilterMenu.UiState<String>, modifier: Modifier = Modifier) {
+    val categories by rememberUpdatedState(state.items)
+    val selectedCategory by rememberUpdatedState(state.selectedItem)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var expanded by state.menuExpanded
 
     ElevatedButton(
         onClick = { expanded = !expanded },
@@ -113,7 +110,7 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                 label = stringResource(R.string.dashboard_tools_section_filter_category_any),
                 supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
                 onClick = {
-                    eventSink(ToolsScreen.FiltersEvent.SelectCategory(null))
+                    eventSink(FilterMenu.Event.SelectItem(null))
                     expanded = false
                 }
             )
@@ -126,7 +123,7 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                         count,
                     ),
                     onClick = {
-                        eventSink(ToolsScreen.FiltersEvent.SelectCategory(category))
+                        eventSink(FilterMenu.Event.SelectItem(category))
                         expanded = false
                     }
                 )
@@ -138,17 +135,17 @@ internal fun CategoryFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 @Composable
 @VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
+internal fun LanguageFilter(state: FilterMenu.UiState<Language>, modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val languages by rememberUpdatedState(filters.languages)
-    val query by rememberUpdatedState(filters.languageQuery)
-    val selectedLanguage by rememberUpdatedState(filters.selectedLanguage)
-    val eventSink by rememberUpdatedState(filters.eventSink)
+    val languages by rememberUpdatedState(state.items)
+    val selectedLanguage by rememberUpdatedState(state.selectedItem)
+    val eventSink by rememberUpdatedState(state.eventSink)
 
-    val expanded by rememberUpdatedState(filters.showLanguagesMenu)
+    var expanded by state.menuExpanded
+    var query by state.query
 
     ElevatedButton(
-        onClick = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+        onClick = { expanded = !expanded },
         modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
@@ -162,15 +159,15 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
 
         LazyDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { eventSink(ToolsScreen.FiltersEvent.ToggleLanguagesMenu) },
+            onDismissRequest = { expanded = false },
             modifier = Modifier.sizeIn(maxHeight = DROPDOWN_MAX_HEIGHT, maxWidth = DROPDOWN_MAX_WIDTH)
         ) {
             stickyHeader {
                 Surface(color = MenuDefaults.containerColor) {
                     SearchBar(
                         query,
-                        onQueryChange = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
-                        onSearch = { eventSink(ToolsScreen.FiltersEvent.UpdateLanguageQuery(it)) },
+                        onQueryChange = { query = it },
+                        onSearch = { query = it },
                         active = false,
                         onActiveChange = {},
                         colors = GodToolsTheme.searchBarColors,
@@ -190,7 +187,10 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                 FilterMenuItem(
                     label = stringResource(R.string.dashboard_tools_section_filter_language_any),
                     supportingText = stringResource(R.string.dashboard_tools_section_filter_available_tools_all),
-                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(null)) }
+                    onClick = {
+                        eventSink(FilterMenu.Event.SelectItem(null))
+                        expanded = false
+                    }
                 )
             }
 
@@ -203,36 +203,13 @@ internal fun LanguageFilter(filters: ToolsScreen.Filters, modifier: Modifier = M
                         count,
                         count,
                     ),
-                    onClick = { eventSink(ToolsScreen.FiltersEvent.SelectLanguage(it.code)) },
+                    onClick = {
+                        eventSink(FilterMenu.Event.SelectItem(it))
+                        expanded = false
+                    },
                     modifier = Modifier.animateItem()
                 )
             }
         }
     }
 }
-
-@Composable
-private fun FilterMenuItem(
-    label: String,
-    supportingText: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = FilterMenuItem(
-    label = { Text(label) },
-    supportingText = supportingText,
-    onClick = onClick,
-    modifier = modifier,
-)
-
-@Composable
-private fun FilterMenuItem(
-    label: @Composable () -> Unit,
-    supportingText: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = ListItem(
-    headlineContent = label,
-    supportingContent = supportingText?.let { { Text(it) } },
-    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-    modifier = modifier.clickable(onClick = onClick)
-)
