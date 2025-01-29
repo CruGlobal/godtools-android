@@ -3,11 +3,11 @@ package org.cru.godtools.ui.dashboard.tools
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
-import java.util.Locale
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
@@ -21,25 +21,13 @@ data object ToolsScreen : Screen {
     ) : CircuitUiState
 
     data class Filters(
-        val categories: List<Filter<String>> = emptyList(),
-        val selectedCategory: String? = null,
-        val showLanguagesMenu: Boolean = false,
-        val languages: List<Filter<Language>> = emptyList(),
-        val languageQuery: String = "",
-        val selectedLanguage: Language? = null,
-        val eventSink: (FiltersEvent) -> Unit = {},
+        val categoryFilter: FilterMenu.UiState<String> = FilterMenu.UiState(),
+        val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
     ) : CircuitUiState {
         data class Filter<T>(val item: T, val count: Int)
     }
 
     sealed interface Event : CircuitUiEvent {
         data class OpenToolDetails(val tool: String, val source: String? = null) : Event
-    }
-
-    sealed interface FiltersEvent : CircuitUiEvent {
-        data object ToggleLanguagesMenu : FiltersEvent
-        data class UpdateLanguageQuery(val query: String) : FiltersEvent
-        data class SelectCategory(val category: String?) : FiltersEvent
-        data class SelectLanguage(val locale: Locale?) : FiltersEvent
     }
 }

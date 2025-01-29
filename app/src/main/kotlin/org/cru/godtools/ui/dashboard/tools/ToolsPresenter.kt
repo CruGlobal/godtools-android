@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -19,6 +19,9 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +42,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen.Filters.Filter
+import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -59,7 +62,7 @@ class ToolsPresenter @AssistedInject constructor(
     @Composable
     override fun present(): ToolsScreen.State {
         val filters = rememberFilters()
-        val selectedLocale by rememberUpdatedState(filters.selectedLanguage?.code)
+        val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
         val eventSink: (ToolsScreen.Event) -> Unit = remember {
             {
@@ -76,9 +79,12 @@ class ToolsPresenter @AssistedInject constructor(
 
         return ToolsScreen.State(
             banner = rememberBanner(),
-            spotlightTools = rememberSpotlightTools(secondLanguage = filters.selectedLanguage, eventSink = eventSink),
+            spotlightTools = rememberSpotlightTools(
+                secondLanguage = filters.languageFilter.selectedItem,
+                eventSink = eventSink
+            ),
             filters = filters,
-            tools = rememberFilteredToolsFlow(filters.selectedCategory, filters.selectedLanguage?.code)
+            tools = rememberFilteredToolsFlow(filters.categoryFilter.selectedItem, selectedLocale)
                 .collectAsState(emptyList()).value,
             eventSink = eventSink,
         )
@@ -94,60 +100,64 @@ class ToolsPresenter @AssistedInject constructor(
     private fun rememberFilters(): ToolsScreen.Filters {
         val scope = rememberCoroutineScope()
 
-        // selected category
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
-
-        // selected language
         val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
-        var showLanguagesMenu by rememberSaveable { mutableStateOf(false) }
-        var languageQuery by rememberSaveable { mutableStateOf("") }
 
-        val filtersEventSink: (ToolsScreen.FiltersEvent) -> Unit = remember {
-            {
-                when (it) {
-                    is ToolsScreen.FiltersEvent.SelectCategory -> scope.launch {
-                        settings.updateDashboardFilterCategory(it.category)
-                    }
-                    is ToolsScreen.FiltersEvent.SelectLanguage -> scope.launch {
-                        settings.updateDashboardFilterLocale(it.locale)
-                        showLanguagesMenu = false
-                        languageQuery = ""
-                    }
-                    is ToolsScreen.FiltersEvent.UpdateLanguageQuery -> languageQuery = it.query
-                    ToolsScreen.FiltersEvent.ToggleLanguagesMenu -> {
-                        showLanguagesMenu = !showLanguagesMenu
-                        languageQuery = ""
-                    }
-                }
-            }
+        val languageMenuExpanded = rememberSaveable { mutableStateOf(false) }
+        val languageQuery = rememberSaveable { mutableStateOf("") }
+        LaunchedEffect(languageMenuExpanded.value) {
+            if (!languageMenuExpanded.value) languageQuery.value = ""
         }
 
         return ToolsScreen.Filters(
-            categories = rememberFilterCategories(selectedLocale),
-            selectedCategory = selectedCategory,
-            showLanguagesMenu = showLanguagesMenu,
-            languages = rememberFilterLanguages(selectedCategory, languageQuery),
-            languageQuery = languageQuery,
-            selectedLanguage = languagesRepository.rememberLanguage(selectedLocale),
-            eventSink = filtersEventSink,
+            categoryFilter = FilterMenu.UiState(
+                menuExpanded = rememberSaveable { mutableStateOf(false) },
+                items = rememberFilterCategories(selectedLocale),
+                query = remember { mutableStateOf("") },
+                selectedItem = selectedCategory,
+                eventSink = {
+                    when (it) {
+                        is FilterMenu.Event.SelectItem -> scope.launch {
+                            settings.updateDashboardFilterCategory(it.item)
+                        }
+                    }
+                }
+            ),
+            languageFilter = FilterMenu.UiState(
+                menuExpanded = languageMenuExpanded,
+                items = rememberFilterLanguages(selectedCategory, languageQuery.value),
+                selectedItem = languagesRepository.rememberLanguage(selectedLocale),
+                query = languageQuery,
+                eventSink = {
+                    when (it) {
+                        is FilterMenu.Event.SelectItem -> scope.launch {
+                            settings.updateDashboardFilterLocale(it.item?.code)
+                        }
+                    }
+                }
+            ),
         )
     }
 
     @Composable
-    private fun rememberFilterCategories(selectedLanguage: Locale?): List<Filter<String>> {
+    private fun rememberFilterCategories(selectedLanguage: Locale?): ImmutableList<FilterMenu.UiState.Item<String>> {
         val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
 
         return remember(filteredToolsFlow) {
             filteredToolsFlow.map {
                 it.groupBy { it.category }
-                    .mapNotNull { (category, tools) -> category?.let { Filter(category, tools.size) } }
+                    .mapNotNull { (category, tools) -> category?.let { FilterMenu.UiState.Item(category, tools.size) } }
+                    .toImmutableList()
             }
-        }.collectAsState(emptyList()).value
+        }.collectAsState(persistentListOf()).value
     }
 
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun rememberFilterLanguages(category: String?, query: String): List<Filter<Language>> {
+    private fun rememberFilterLanguages(
+        category: String?,
+        query: String,
+    ): ImmutableList<FilterMenu.UiState.Item<Language>> {
         val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
         val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
         val toolsFlow = rememberFilteredToolsFlow(category = category)
@@ -182,9 +192,10 @@ class ToolsPresenter @AssistedInject constructor(
             ) { languages, appLang, query, toolCounts ->
                 languages
                     .filterByDisplayAndNativeName(query, context, appLang)
-                    .map { Filter(it, toolCounts[it.code] ?: 0) }
+                    .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
+                    .toImmutableList()
             }
-        }.collectAsState(emptyList()).value
+        }.collectAsState(persistentListOf()).value
     }
 
     @Composable
