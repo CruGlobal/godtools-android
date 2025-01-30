@@ -8,6 +8,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.io.IOException
 import org.cru.godtools.sync.task.UserFavoriteToolsSyncTasks
 
 private const val WORK_NAME = "SyncDirtyFavoriteTools"
@@ -24,6 +25,9 @@ internal class SyncDirtyFavoriteToolsWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val favoriteToolsSyncTasks: UserFavoriteToolsSyncTasks
 ) : CoroutineWorker(context, workerParams) {
-    override suspend fun doWork() =
+    override suspend fun doWork() = try {
         if (favoriteToolsSyncTasks.syncDirtyFavoriteTools()) Result.success() else Result.retry()
+    } catch (_: IOException) {
+        Result.retry()
+    }
 }
