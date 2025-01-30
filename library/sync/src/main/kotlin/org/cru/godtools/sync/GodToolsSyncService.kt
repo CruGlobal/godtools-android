@@ -11,7 +11,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -43,7 +42,6 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     private val coroutineScope: CoroutineScope = CoroutineScope(coroutineDispatcher + SupervisorJob()),
 ) {
     @Inject
-    @OptIn(ExperimentalCoroutinesApi::class)
     internal constructor(
         workManager: Lazy<WorkManager>,
         syncTasks: Map<Class<out BaseSyncTasks>, @JvmSuppressWildcards Provider<BaseSyncTasks>>,
