@@ -11,9 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.util.Locale
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.cru.godtools.R
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.LessonToolCard
@@ -34,45 +34,56 @@ internal sealed interface DashboardLessonsEvent {
 
 @Composable
 internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (DashboardLessonsEvent) -> Unit = {}) {
+    val languageFilter = FilterMenu.UiState(
+        menuExpanded = rememberSaveable { mutableStateOf(false) },
+        query = rememberSaveable { mutableStateOf("") },
+        items = viewModel.filteredLanguages.collectAsState(persistentListOf()).value,
+        selectedItem = viewModel.selectedLanguage.collectAsState().value,
+        eventSink = {
+            when (it) {
+                is FilterMenu.Event.SelectItem -> it.item?.let { viewModel.updateSelectedLanguage(it) }
+            }
+        }
+    )
+    LaunchedEffect(languageFilter.query.value) { viewModel.query.value = languageFilter.query.value }
+
     val state = LessonsScreen.UiState(
-        languageFilter = FilterMenu.UiState(
-            menuExpanded = rememberSaveable { mutableStateOf(false) },
-            query = rememberSaveable { mutableStateOf("") },
-            items = viewModel.filteredLanguages.collectAsState(persistentListOf()).value,
-            selectedItem = viewModel.selectedLanguage.collectAsState().value,
-            eventSink = {
-                when (it) {
-                    is FilterMenu.Event.SelectItem -> it.item?.let { viewModel.updateSelectedLanguage(it) }
+        languageFilter = languageFilter,
+        lessons = viewModel.lessons.collectAsState().value
+            .map { lesson ->
+                key(lesson) {
+                    lateinit var state: ToolCard.State
+                    state = toolViewModels[lesson].toState(language = languageFilter.selectedItem) {
+                        when (it) {
+                            ToolCard.Event.Click -> {
+                                viewModel.recordOpenLessonInAnalytics(lesson)
+                                onEvent(DashboardLessonsEvent.OpenLesson(lesson, state.translation?.languageCode))
+                            }
+
+                            else -> TODO()
+                        }
+                    }
+                    state
                 }
             }
-        )
+            .toImmutableList()
     )
-    LaunchedEffect(state.languageFilter.query.value) { viewModel.query.value = state.languageFilter.query.value }
 
-    val lessons by viewModel.lessons.collectAsState(emptyList())
-    val selectedLanguage by rememberUpdatedState(state.languageFilter.selectedItem)
+    LessonsLayout(state)
+}
 
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+@Composable
+internal fun LessonsLayout(state: LessonsScreen.UiState, modifier: Modifier = Modifier) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), modifier = modifier) {
         item("header", "header") {
             LessonsHeader()
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
             LessonFilters(state)
         }
 
-        items(lessons, { it }, { "lesson" }) { lesson ->
-            lateinit var state: ToolCard.State
-            state = toolViewModels[lesson].toState(language = selectedLanguage) {
-                when (it) {
-                    ToolCard.Event.Click -> {
-                        viewModel.recordOpenLessonInAnalytics(lesson)
-                        onEvent(DashboardLessonsEvent.OpenLesson(lesson, state.translation?.languageCode))
-                    }
-                    else -> TODO()
-                }
-            }
-
+        items(state.lessons, { it.toolCode.orEmpty() }, { "lesson" }) { toolState ->
             LessonToolCard(
-                state,
+                toolState,
                 modifier = Modifier
                     .animateItem()
                     .padding(top = 16.dp)
