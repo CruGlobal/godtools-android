@@ -157,7 +157,7 @@ class ToolsPresenter @AssistedInject constructor(
     private fun rememberFilterLanguages(
         category: String?,
         query: String,
-    ): ImmutableList<FilterMenu.UiState.Item<Language>> {
+    ): ImmutableList<FilterMenu.UiState.Item<Language?>> {
         val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
         val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
         val toolsFlow = rememberFilteredToolsFlow(category = category)
@@ -192,7 +192,8 @@ class ToolsPresenter @AssistedInject constructor(
             ) { languages, appLang, query, toolCounts ->
                 languages
                     .filterByDisplayAndNativeName(query, context, appLang)
-                    .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
+                    .let { listOf(null) + it }
+                    .map { FilterMenu.UiState.Item(it, toolCounts[it?.code] ?: 0) }
                     .toImmutableList()
             }
         }.collectAsState(persistentListOf()).value

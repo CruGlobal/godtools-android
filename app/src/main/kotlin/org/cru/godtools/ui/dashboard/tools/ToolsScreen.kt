@@ -22,7 +22,7 @@ data object ToolsScreen : Screen {
 
     data class Filters(
         val categoryFilter: FilterMenu.UiState<String> = FilterMenu.UiState(),
-        val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
+        val languageFilter: FilterMenu.UiState<Language?> = FilterMenu.UiState(),
     ) : CircuitUiState {
         data class Filter<T>(val item: T, val count: Int)
     }
