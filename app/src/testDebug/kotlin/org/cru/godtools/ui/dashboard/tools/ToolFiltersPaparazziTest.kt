@@ -47,6 +47,7 @@ class ToolFiltersPaparazziTest(
             selectedItem = Language(Locale.ENGLISH),
             menuExpanded = mutableStateOf(true),
             items = persistentListOf(
+                UiState.Item(null, 0),
                 UiState.Item(Language(Locale.ENGLISH), 12345),
                 UiState.Item(Language(Locale.FRENCH), 1),
                 UiState.Item(Language(Locale("es")), 3),
@@ -54,7 +55,7 @@ class ToolFiltersPaparazziTest(
         )
     )
 
-    private fun renderLanguageFilter(state: UiState<Language>) = centerInSnapshot {
+    private fun renderLanguageFilter(state: UiState<Language?>) = centerInSnapshot {
         LanguageFilter(state, modifier = Modifier.fillMaxWidth(0.5f))
     }
 }

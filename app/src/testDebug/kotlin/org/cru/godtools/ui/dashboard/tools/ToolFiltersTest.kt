@@ -197,6 +197,7 @@ class ToolFiltersTest {
                 UiState(
                     menuExpanded = mutableStateOf(true),
                     items = persistentListOf(
+                        Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
                         Item(Language(Locale.GERMAN), 1),
                     ),
@@ -218,6 +219,7 @@ class ToolFiltersTest {
                 UiState(
                     menuExpanded = mutableStateOf(true),
                     items = persistentListOf(
+                        Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
                         Item(Language(Locale.GERMAN), 1),
                     ),
@@ -238,6 +240,7 @@ class ToolFiltersTest {
                 UiState(
                     menuExpanded = mutableStateOf(true),
                     items = persistentListOf(
+                        Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
                         Item(Language(Locale.GERMAN), 1),
                     ),

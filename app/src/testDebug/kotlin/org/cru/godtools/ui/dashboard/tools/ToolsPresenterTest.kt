@@ -247,7 +247,11 @@ class ToolsPresenterTest {
         presenter.test {
             languagesFlow.value = languages
             assertEquals(
-                languages.map { FilterMenu.UiState.Item(it, 0) },
+                listOf(
+                    FilterMenu.UiState.Item(null, 0),
+                    FilterMenu.UiState.Item(Language(Locale.ENGLISH), 0),
+                    FilterMenu.UiState.Item(Language(Locale.FRENCH), 0)
+                ),
                 expectMostRecentItem().filters.languageFilter.items
             )
         }
@@ -266,7 +270,11 @@ class ToolsPresenterTest {
 
             gospelLanguagesFlow.value = languages
             assertEquals(
-                languages.map { FilterMenu.UiState.Item(it, 0) },
+                listOf(
+                    FilterMenu.UiState.Item(null, 0),
+                    FilterMenu.UiState.Item(Language(Locale.ENGLISH), 0),
+                    FilterMenu.UiState.Item(Language(Locale.FRENCH), 0)
+                ),
                 expectMostRecentItem().filters.languageFilter.items
             )
         }
@@ -292,6 +300,7 @@ class ToolsPresenterTest {
 
             assertEquals(
                 listOf(
+                    FilterMenu.UiState.Item(null, 0),
                     FilterMenu.UiState.Item(Language(Locale.ENGLISH), 2),
                     FilterMenu.UiState.Item(Language(Locale.FRENCH), 1)
                 ),
@@ -308,12 +317,22 @@ class ToolsPresenterTest {
         presenter.test {
             expectMostRecentItem().filters.languageFilter.let {
                 it.menuExpanded.value = true
-                assertEquals(languages.map { FilterMenu.UiState.Item(it, 0) }, it.items)
+                assertEquals(
+                    listOf(
+                        FilterMenu.UiState.Item(null, 0),
+                        FilterMenu.UiState.Item(Language(Locale.ENGLISH), 0),
+                        FilterMenu.UiState.Item(Language(Locale.FRENCH), 0),
+                    ),
+                    it.items
+                )
                 it.query.value = "french"
             }
 
             assertEquals(
-                listOf(FilterMenu.UiState.Item(Language(Locale.FRENCH), 0)),
+                listOf(
+                    FilterMenu.UiState.Item(null, 0),
+                    FilterMenu.UiState.Item(Language(Locale.FRENCH), 0)
+                ),
                 expectMostRecentItem().filters.languageFilter.items
             )
         }
