@@ -54,7 +54,7 @@ object FilterMenu {
     }
 
     sealed interface Event<T> : CircuitUiEvent {
-        data class SelectItem<T>(val item: T?) : Event<T>
+        data class SelectItem<T>(val item: T) : Event<T>
     }
 }
 

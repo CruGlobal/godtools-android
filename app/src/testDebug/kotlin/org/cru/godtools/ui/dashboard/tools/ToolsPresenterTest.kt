@@ -165,8 +165,8 @@ class ToolsPresenterTest {
         presenter.test {
             assertEquals(
                 listOf(
-                    FilterMenu.UiState.Item(Tool.CATEGORY_GOSPEL, 1),
-                    FilterMenu.UiState.Item(Tool.CATEGORY_ARTICLES, 1)
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1),
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 1)
                 ),
                 expectMostRecentItem().filters.categoryFilter.items
             )
@@ -182,7 +182,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             assertEquals(
-                listOf(FilterMenu.UiState.Item(Tool.CATEGORY_GOSPEL, 2)),
+                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 2)),
                 expectMostRecentItem().filters.categoryFilter.items
             )
         }
@@ -198,8 +198,8 @@ class ToolsPresenterTest {
         presenter.test {
             assertEquals(
                 listOf(
-                    FilterMenu.UiState.Item(Tool.CATEGORY_ARTICLES, 1),
-                    FilterMenu.UiState.Item(Tool.CATEGORY_GOSPEL, 1)
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 1),
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)
                 ),
                 expectMostRecentItem().filters.categoryFilter.items
             )
@@ -217,7 +217,7 @@ class ToolsPresenterTest {
         presenter.test {
             metatoolsFlow.value = listOf(meta)
             assertEquals(
-                listOf(FilterMenu.UiState.Item(Tool.CATEGORY_GOSPEL, 1)),
+                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
                 expectMostRecentItem().filters.categoryFilter.items
             )
         }
@@ -232,7 +232,7 @@ class ToolsPresenterTest {
 
         presenter.test {
             assertEquals(
-                listOf(FilterMenu.UiState.Item(Tool.CATEGORY_GOSPEL, 1)),
+                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
                 expectMostRecentItem().filters.categoryFilter.items
             )
         }

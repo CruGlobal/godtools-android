@@ -140,13 +140,13 @@ class ToolsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberFilterCategories(selectedLanguage: Locale?): ImmutableList<FilterMenu.UiState.Item<String>> {
+    private fun rememberFilterCategories(selectedLanguage: Locale?): ImmutableList<FilterMenu.UiState.Item<String?>> {
         val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
 
         return remember(filteredToolsFlow) {
             filteredToolsFlow.map {
                 it.groupBy { it.category }
-                    .mapNotNull { (category, tools) -> category?.let { FilterMenu.UiState.Item(category, tools.size) } }
+                    .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
                     .toImmutableList()
             }
         }.collectAsState(persistentListOf()).value

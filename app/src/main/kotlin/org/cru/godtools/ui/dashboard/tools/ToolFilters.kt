@@ -66,7 +66,7 @@ internal fun ToolFilters(filters: ToolsScreen.Filters, modifier: Modifier = Modi
 @Composable
 @VisibleForTesting
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun CategoryFilter(state: FilterMenu.UiState<String>, modifier: Modifier = Modifier) {
+internal fun CategoryFilter(state: FilterMenu.UiState<String?>, modifier: Modifier = Modifier) {
     val categories by rememberUpdatedState(state.items)
     val selectedCategory by rememberUpdatedState(state.selectedItem)
     val eventSink by rememberUpdatedState(state.eventSink)
