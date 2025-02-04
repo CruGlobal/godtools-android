@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.ccci.gto.android.common.androidx.compose.material3.ui.button.ButtonWithTrailingIconContentPadding
 import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.util.getToolCategoryName
@@ -73,6 +75,7 @@ internal fun CategoryFilter(state: FilterMenu.UiState<String>, modifier: Modifie
 
     ElevatedButton(
         onClick = { expanded = !expanded },
+        contentPadding = ButtonDefaults.ButtonWithTrailingIconContentPadding,
         modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
