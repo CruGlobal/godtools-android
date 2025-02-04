@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -31,6 +32,7 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.ccci.gto.android.common.androidx.compose.material3.ui.button.ButtonWithTrailingIconContentPadding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.list.ListItemStartPadding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.menu.LazyDropdownMenu
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -77,6 +79,7 @@ fun <T> LazyFilterMenu(
             if (!expanded) query = ""
             expanded = true
         },
+        contentPadding = ButtonDefaults.ButtonWithTrailingIconContentPadding,
         modifier = modifier.semantics { role = Role.DropdownList }
     ) {
         Text(
