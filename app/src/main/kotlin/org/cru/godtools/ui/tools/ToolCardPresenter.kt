@@ -10,16 +10,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
@@ -32,7 +36,6 @@ import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 
 @Singleton
 class ToolCardPresenter @Inject constructor(
@@ -47,6 +50,7 @@ class ToolCardPresenter @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun present(
         tool: Tool,
+        customLocale: Locale? = null,
         loadAppLanguage: Boolean = false,
         secondLanguage: Language? = null,
         loadAvailableLanguages: Boolean = false,
@@ -54,30 +58,51 @@ class ToolCardPresenter @Inject constructor(
     ): ToolCard.State {
         val coroutineScope = rememberCoroutineScope()
         val toolCode by rememberUpdatedState(tool.code)
-        val appLocale by settings.produceAppLocaleState()
-        val defaultLocale by rememberUpdatedState(tool.defaultLocale)
 
         // App Translation
-        var appTranslation: Translation? by remember { mutableStateOf(null) }
+        val appLocale by settings.produceAppLocaleState()
+        val appTranslationFlow = remember {
+            combine(
+                snapshotFlow { toolCode },
+                snapshotFlow { appLocale },
+            ) { t, l -> translationsRepository.findLatestTranslationFlow(t, l) }
+                .flatMapLatest { it }
+                .shareIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), 1)
+        }
+        val appTranslation by appTranslationFlow.collectAsState(null)
         val appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null
-        val appLanguageAvailable by remember { derivedStateOf { appTranslation != null } }
 
-        // Translation
+        // Custom Translation
+        val customLocaleFlow = remember { MutableStateFlow(customLocale) }.apply { value = customLocale }
+        val customLanguage = languagesRepository.rememberLanguage(customLocale)
+        val customTranslationFlow = remember {
+            combine(
+                snapshotFlow { toolCode },
+                customLocaleFlow
+            ) { t, l -> translationsRepository.findLatestTranslationFlow(t, l) }
+                .flatMapLatest { it }
+                .shareIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), 1)
+        }
+        val customTranslation by customTranslationFlow.collectAsState(null)
+
+        // Default Translation
+        val defaultLocale by rememberUpdatedState(tool.defaultLocale)
+        val defaultTranslationFlow = remember {
+            combine(
+                snapshotFlow { toolCode },
+                snapshotFlow { defaultLocale }
+            ) { t, l -> translationsRepository.findLatestTranslationFlow(t, l) }
+                .flatMapLatest { it }
+                .onStart { emit(null) }
+        }
+
+        // Primary Translation
         var isLoaded by remember { mutableStateOf(false) }
         val translation by remember {
-            val toolCodeFlow = snapshotFlow { toolCode }
-            toolCodeFlow
-                .combine(snapshotFlow { appLocale }) { t, l -> translationsRepository.findLatestTranslationFlow(t, l) }
-                .flatMapLatest { it }
-                .onEach { appTranslation = it }
-                .combine(
-                    toolCodeFlow
-                        .combine(snapshotFlow { defaultLocale }) { t, l ->
-                            translationsRepository.findLatestTranslationFlow(t, l)
-                        }
-                        .flatMapLatest { it }
-                        .onStart { emit(null) }
-                ) { t1, t2 -> t1 ?: t2 }
+            combine(
+                customLocaleFlow.flatMapLatest { if (it != null) customTranslationFlow else appTranslationFlow },
+                defaultTranslationFlow
+            ) { t1, t2 -> t1 ?: t2 }
                 .onEach { isLoaded = true }
         }.collectAsState(null)
 
@@ -103,13 +128,17 @@ class ToolCardPresenter @Inject constructor(
             tool = tool,
             isLoaded = isLoaded,
             banner = attachmentsRepository.rememberAttachmentFile(fileSystem, tool.bannerId),
-            // TODO: add support for specifying a locale for the ToolCardPresenter instead of just defaulting to the
-            //       appLocale
-            language = appLanguage,
-            languageAvailable = appLanguageAvailable,
+            language = when (customLocale) {
+                null -> appLanguage
+                else -> customLanguage
+            },
+            languageAvailable = when (customLocale) {
+                null -> appTranslation != null
+                else -> customTranslation != null
+            },
             translation = translation,
             appLanguage = appLanguage,
-            appLanguageAvailable = appLanguageAvailable,
+            appLanguageAvailable = appTranslation != null,
             secondLanguage = secondLanguage,
             secondLanguageAvailable = secondLanguageAvailable,
             availableLanguages = when {

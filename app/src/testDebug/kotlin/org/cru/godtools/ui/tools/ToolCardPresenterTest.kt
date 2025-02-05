@@ -243,6 +243,53 @@ class ToolCardPresenterTest {
             assertNull(expectMostRecentItem().translation)
         }
     }
+
+    @Test
+    fun `ToolCardState - translation - custom locale`() = runTest {
+        toolFlow.value = randomTool(TOOL)
+        appLocaleState.value = Locale.ENGLISH
+        val translation = randomTranslation(TOOL, Locale.FRENCH)
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(tool = toolFlow.collectAsState().value, customLocale = Locale.FRENCH)
+            }
+        ) {
+            frTranslationFlow.emit(translation)
+
+            val state = expectMostRecentItem()
+            assertTrue(state.isLoaded)
+            assertEquals(translation, state.translation)
+        }
+    }
+
+    @Test
+    fun `ToolCardState - translation - custom locale - fallback to default language`() = runTest {
+        toolFlow.value = randomTool(TOOL, defaultLocale = Locale.ENGLISH)
+        appLocaleState.value = Locale.GERMAN
+        val translation = randomTranslation(TOOL, Locale.ENGLISH)
+
+        presenterTestOf(
+            presentFunction = {
+                presenter.present(tool = toolFlow.collectAsState().value, customLocale = Locale.FRENCH)
+            }
+        ) {
+            enTranslationFlow.emit(translation)
+            assertNotNull(expectMostRecentItem()) {
+                assertNull(
+                    it.translation,
+                    "Translation should not be returned until the custom translation has attempted to load"
+                )
+                assertFalse(it.isLoaded, "isLoaded should be false until the custom translation has attempted to load")
+            }
+
+            frTranslationFlow.emit(null)
+            assertNotNull(expectMostRecentItem()) {
+                assertTrue(it.isLoaded)
+                assertEquals(translation, it.translation)
+            }
+        }
+    }
     // endregion ToolCard.State.translation
 
     // region ToolCard.State.appLanguage
