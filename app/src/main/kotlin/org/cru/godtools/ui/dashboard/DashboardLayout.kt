@@ -58,8 +58,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
 import org.cru.godtools.ui.dashboard.home.HomeScreen
-import org.cru.godtools.ui.dashboard.lessons.DashboardLessonsEvent
-import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
+import org.cru.godtools.ui.dashboard.lessons.LessonsScreen
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -68,7 +67,6 @@ internal sealed interface DashboardEvent {
     class OpenIntent(val intent: Intent) : DashboardEvent
     open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
         DashboardEvent
-    class OpenLesson(lesson: String?, lang: Locale?) : OpenTool(lesson, Tool.Type.LESSON, lang)
     class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }
 
@@ -120,20 +118,13 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
                         when (page) {
-                            Page.LESSONS -> LessonsLayout(
-                                onEvent = {
-                                    when (it) {
-                                        is DashboardLessonsEvent.OpenLesson ->
-                                            onEvent(DashboardEvent.OpenLesson(it.lesson, it.lang))
-                                    }
-                                },
-                            )
-
+                            Page.LESSONS,
                             Page.HOME,
                             Page.FAVORITE_TOOLS,
                             Page.ALL_TOOLS -> {
                                 CircuitContent(
                                     screen = when (page) {
+                                        Page.LESSONS -> LessonsScreen
                                         Page.HOME -> HomeScreen
                                         Page.FAVORITE_TOOLS -> AllFavoritesScreen
                                         Page.ALL_TOOLS -> ToolsScreen
