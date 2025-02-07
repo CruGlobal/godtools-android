@@ -68,6 +68,6 @@ class LessonToolCardPaparazziTest(
 
     @Test
     fun `LessonToolCard() - Not Available`() = centerInSnapshot {
-        LessonToolCard(toolState.copy(appLanguageAvailable = false))
+        LessonToolCard(toolState.copy(languageAvailable = false))
     }
 }

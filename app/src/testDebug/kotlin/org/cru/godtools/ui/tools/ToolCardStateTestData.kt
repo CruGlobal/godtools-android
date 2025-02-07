@@ -22,6 +22,8 @@ object ToolCardStateTestData {
             isFavorite = false,
         ),
         banner = banner,
+        language = Language(Locale.ENGLISH),
+        languageAvailable = true,
         translation = randomTranslation(
             "tool",
             name = "Translated Tool Title",
