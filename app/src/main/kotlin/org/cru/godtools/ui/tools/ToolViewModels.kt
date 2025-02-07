@@ -15,9 +15,7 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -28,7 +26,6 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.kotlin.coroutines.flow.StateFlowValue
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
-import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
@@ -48,7 +45,6 @@ class ToolViewModels @Inject constructor(
     private val downloadManager: GodToolsDownloadManager,
     private val fileSystem: ToolFileSystem,
     private val languagesRepository: LanguagesRepository,
-    private val manifestManager: ManifestManager,
     private val settings: Settings,
     private val syncService: GodToolsSyncService,
     private val toolsRepository: ToolsRepository,
@@ -65,33 +61,20 @@ class ToolViewModels @Inject constructor(
         .flatMapLatest { languagesRepository.findLanguageFlow(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    // TODO: determine if we need to repurpose this functionality for the Language Update
-    private val parallelLanguage: StateFlow<Language?> = MutableStateFlow(null)
-
     inner class ToolViewModel(val code: String, initialTool: Tool? = null) {
         val tool = toolsRepository.findToolFlow(code)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialTool)
 
-        val banner = tool
-            .map { it?.bannerId }.distinctUntilChanged()
-            .flatMapLatest { it?.let { attachmentsRepository.findAttachmentFlow(it) } ?: flowOf(null) }
-            .map { it?.takeIf { it.isDownloaded } }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val bannerFile = tool.attachmentFileFlow { it?.bannerId }
+        private val bannerFile = tool.attachmentFileFlow { it?.bannerId }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val detailsBanner = tool.attachmentFileFlow { it?.detailsBannerId ?: it?.bannerId }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-        val detailsBannerAnimation = tool.attachmentFileFlow { it?.detailsBannerAnimationId }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-        val availableLanguages = translationsRepository.getTranslationsFlowForTool(code)
+        private val availableLanguages = translationsRepository.getTranslationsFlowForTool(code)
             .map { it.map { it.languageCode }.toSet() }
             .distinctUntilChanged()
             .flatMapLatest { languagesRepository.getLanguagesFlowForLocales(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-        val appTranslation = settings.appLanguageFlow
+        private val appTranslation = settings.appLanguageFlow
             .flatMapLatest { translationsRepository.findLatestTranslationFlow(code, it) }
             .map { StateFlowValue(it) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
@@ -108,25 +91,20 @@ class ToolViewModels @Inject constructor(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val appLanguage get() = this@ToolViewModels.appLanguage
-        val parallelLanguage get() = this@ToolViewModels.parallelLanguage
+        private val appLanguage get() = this@ToolViewModels.appLanguage
 
-        val firstTranslation = appTranslation
+        private val firstTranslation = appTranslation
             .combine(defaultTranslation) { p, d -> if (p.isInitial || p.value != null) p else d }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), StateFlowValue.Initial<Translation?>(null))
-        val secondTranslation = additionalTranslation
+        private val secondTranslation = additionalTranslation
             .combine(firstTranslation) { p, f -> p?.takeUnless { p.languageCode == f.value?.languageCode } }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val secondLanguage = secondTranslation
+        private val secondLanguage = secondTranslation
             .flatMapLatest { it?.languageCode?.let { languagesRepository.findLanguageFlow(it) } ?: flowOf(null) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-        val firstManifest = firstTranslation
-            .map { it.value?.let { manifestManager.getManifest(it) } }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-        val downloadProgress = firstTranslation
+        private val downloadProgress = firstTranslation
             .combine(secondTranslation) { f, s -> f.value ?: s }
             .flatMapLatest {
                 it?.let { downloadManager.getDownloadProgressFlow(code, it.languageCode) } ?: flowOf(null)
