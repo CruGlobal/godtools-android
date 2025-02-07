@@ -9,46 +9,28 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Locale
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
 import org.cru.godtools.ui.tools.LessonToolCard
-import org.cru.godtools.ui.tools.ToolCardEvent
-
-internal sealed interface DashboardLessonsEvent {
-    class OpenLesson(val lesson: String?, val lang: Locale?) : DashboardLessonsEvent
-}
 
 @Composable
-internal fun LessonsLayout(viewModel: LessonsViewModel = viewModel(), onEvent: (DashboardLessonsEvent) -> Unit = {}) {
-    val lessons by viewModel.lessons.collectAsState(emptyList())
-    val selectedLanguage by viewModel.selectedLanguage.collectAsState()
-
-    LazyColumn(contentPadding = PaddingValues(16.dp)) {
+@CircuitInject(LessonsScreen::class, SingletonComponent::class)
+internal fun LessonsLayout(state: LessonsScreen.UiState, modifier: Modifier = Modifier) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), modifier = modifier) {
         item("header", "header") {
             LessonsHeader()
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-            LessonFilters()
+            LessonFilters(state)
         }
 
-        items(lessons, { it }, { "lesson" }) { lesson ->
+        items(state.lessons, { it.toolCode.orEmpty() }, { "lesson" }) { toolState ->
             LessonToolCard(
-                lesson,
-                selectedLanguage = selectedLanguage,
-                onEvent = {
-                    when (it) {
-                        is ToolCardEvent.OpenTool, is ToolCardEvent.Click -> {
-                            viewModel.recordOpenLessonInAnalytics(it.tool)
-                            onEvent(DashboardLessonsEvent.OpenLesson(it.tool, it.lang1))
-                        }
-                    }
-                },
+                toolState,
                 modifier = Modifier
                     .animateItem()
                     .padding(top = 16.dp)

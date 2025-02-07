@@ -131,7 +131,7 @@ class ToolDetailsPresenterTest {
                 loadAvailableLanguages = true,
                 eventSink = any()
             )
-        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(4)) }
+        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
     }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(

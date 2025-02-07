@@ -70,7 +70,7 @@ class HomePresenterTest {
             ToolCard.State(
                 toolCode = firstArg<Tool>().code,
                 translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(4)
+                eventSink = arg(5)
             )
         }
     }
@@ -174,7 +174,7 @@ class HomePresenterTest {
         val lesson = randomTool(type = Tool.Type.LESSON, isHidden = false, isSpotlight = true)
         val translation = randomTranslation(lesson.code, languageCode = Locale.FRENCH)
         everyComposable { toolCardPresenter.present(tool = lesson, eventSink = any()) }.answers {
-            ToolCard.State(toolCode = lesson.code, translation = translation, eventSink = arg(4))
+            ToolCard.State(toolCode = lesson.code, translation = translation, eventSink = arg(5))
         }
         lessonsFlow.value = listOf(lesson)
 

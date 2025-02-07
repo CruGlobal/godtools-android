@@ -57,7 +57,7 @@ class AllFavoritesPresenterTest {
     private val toolCardPresenter: ToolCardPresenter = mockk {
         everyComposable {
             present(tool = any(), eventSink = any())
-        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(4)) }
+        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
     }
 
     private val navigator = FakeNavigator(AllFavoritesScreen)
@@ -150,7 +150,7 @@ class AllFavoritesPresenterTest {
             ToolCard.State(
                 toolCode = firstArg<Tool>().code,
                 translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(4)
+                eventSink = arg(5)
             )
         }
 
@@ -176,7 +176,7 @@ class AllFavoritesPresenterTest {
             ToolCard.State(
                 toolCode = firstArg<Tool>().code,
                 translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(4)
+                eventSink = arg(5)
             )
         }
 

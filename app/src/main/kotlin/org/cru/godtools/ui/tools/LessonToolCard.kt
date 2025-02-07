@@ -14,27 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.model.Language
-
-@Composable
-fun LessonToolCard(
-    toolCode: String,
-    modifier: Modifier = Modifier,
-    selectedLanguage: Language? = null,
-    viewModel: ToolViewModels.ToolViewModel = toolViewModels[toolCode],
-    onEvent: (ToolCardEvent) -> Unit = {},
-) {
-    lateinit var state: ToolCard.State
-    state = viewModel.toState(language = selectedLanguage) {
-        when (it) {
-            ToolCard.Event.Click ->
-                onEvent(ToolCardEvent.Click(state.tool?.code, state.translation?.languageCode))
-            else -> TODO()
-        }
-    }
-
-    LessonToolCard(state = state, modifier = modifier)
-}
 
 @Composable
 fun LessonToolCard(state: ToolCard.State, modifier: Modifier = Modifier) {
