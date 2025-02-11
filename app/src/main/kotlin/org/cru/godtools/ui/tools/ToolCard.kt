@@ -40,10 +40,21 @@ object ToolCard {
         val appLanguageAvailable: Boolean = false,
         val secondLanguage: Language? = null,
         val secondLanguageAvailable: Boolean = false,
+        val progress: Progress? = null,
         val availableLanguages: Int = 0,
         val downloadProgress: DownloadProgress? = null,
         val eventSink: (Event) -> Unit = {},
-    ) : CircuitUiState
+    ) : CircuitUiState {
+        sealed interface Progress {
+            val progress: Double
+
+            @JvmInline
+            value class InProgress(override val progress: Double) : Progress
+            data object Completed : Progress {
+                override val progress = 1.0
+            }
+        }
+    }
 
     sealed interface Event : CircuitUiEvent {
         data object Click : Event
