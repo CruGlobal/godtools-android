@@ -16,7 +16,7 @@ import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 
 @Composable
-fun LessonToolCard(state: ToolCard.State, modifier: Modifier = Modifier) {
+fun LessonToolCard(state: ToolCard.State, modifier: Modifier = Modifier, showLanguage: Boolean = false) {
     val isLoaded by rememberUpdatedState(state.isLoaded)
     val translation by rememberUpdatedState(state.translation)
     val language by rememberUpdatedState(state.language)
@@ -38,15 +38,17 @@ fun LessonToolCard(state: ToolCard.State, modifier: Modifier = Modifier) {
             ) {
                 ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
 
-                ToolCardInfoContent {
-                    AvailableInLanguage(
-                        language = language,
-                        available = languageAvailable,
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .invisibleIf { !isLoaded || language == null }
-                    )
+                if (showLanguage) {
+                    ToolCardInfoContent {
+                        AvailableInLanguage(
+                            language = language,
+                            available = languageAvailable,
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .invisibleIf { !isLoaded || language == null }
+                        )
+                    }
                 }
             }
         }

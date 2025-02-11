@@ -53,7 +53,7 @@ class LessonToolCardPaparazziTest(
     }
 
     @Test
-    fun `LessonToolCard() - Default`() = centerInSnapshot { LessonToolCard(toolState) }
+    fun `LessonToolCard() - Default`() = centerInSnapshot { LessonToolCard(toolState, showLanguage = true) }
 
     @Test
     fun `LessonToolCard() - Long Title`() = centerInSnapshot {
@@ -62,12 +62,18 @@ class LessonToolCardPaparazziTest(
                 translation = randomTranslation(
                     name = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
                 )
-            )
+            ),
+            showLanguage = true
         )
     }
 
     @Test
     fun `LessonToolCard() - Not Available`() = centerInSnapshot {
-        LessonToolCard(toolState.copy(appLanguageAvailable = false))
+        LessonToolCard(toolState.copy(languageAvailable = false), showLanguage = true)
+    }
+
+    @Test
+    fun `LessonToolCard() - Hide Language`() = centerInSnapshot {
+        LessonToolCard(toolState, showLanguage = false)
     }
 }

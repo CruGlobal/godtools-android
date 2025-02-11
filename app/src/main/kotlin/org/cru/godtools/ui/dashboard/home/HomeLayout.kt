@@ -88,6 +88,7 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
             ) { lessonState ->
                 LessonToolCard(
                     lessonState,
+                    showLanguage = false,
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
