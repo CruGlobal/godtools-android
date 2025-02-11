@@ -31,6 +31,7 @@ internal fun LessonsLayout(state: LessonsScreen.UiState, modifier: Modifier = Mo
         items(state.lessons, { it.toolCode.orEmpty() }, { "lesson" }) { toolState ->
             LessonToolCard(
                 toolState,
+                showLanguage = true,
                 modifier = Modifier
                     .animateItem()
                     .padding(top = 16.dp)
