@@ -31,11 +31,13 @@ An online version can be found at https://knowgod.com/</string>
     <string name="nav_lessons">Lessons</string>
     <string name="dashboard_lessons_header_title">Lessons made for you</string>
     <string name="dashboard_lessons_header_description">Practical ideas to build relationships and start meaningful conversations.</string>
+    <string name="dashboard_lessons_section_filter_label">Lessons in:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d Lesson available</item>
         <item quantity="other">%1$d Lessons available</item>
     </plurals>
-    <string name="dashboard_lessons_section_filter_label">Lessons in:</string>
+    <string name="dashboard_lessons_progress_completed">Completed</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Complete</string>
 
     <!-- Home -->
     <eat-comment />
