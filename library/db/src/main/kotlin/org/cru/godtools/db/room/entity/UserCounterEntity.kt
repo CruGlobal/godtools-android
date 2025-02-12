@@ -14,9 +14,10 @@ internal class UserCounterEntity(
     @ColumnInfo(defaultValue = "0")
     val delta: Int = 0,
 ) {
-    fun toModel() = UserCounter(name).also {
-        it.delta = delta
-        it.apiCount = count
-        it.apiDecayedCount = decayedCount
-    }
+    fun toModel() = UserCounter(
+        name = name,
+        apiCount = count,
+        apiDecayedCount = decayedCount,
+        delta = delta
+    )
 }

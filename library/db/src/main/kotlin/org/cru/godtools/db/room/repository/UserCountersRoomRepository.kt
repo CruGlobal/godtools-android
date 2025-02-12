@@ -35,7 +35,7 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
     }
 
     override suspend fun resetCountersMissingFromSync(counters: Collection<UserCounter>) {
-        dao.update(counters.map { SyncUserCounter(it.id, count = 0, decayedCount = 0.0) })
+        dao.update(counters.map { SyncUserCounter(it.name, count = 0, decayedCount = 0.0) })
     }
     // endregion Sync methods
 

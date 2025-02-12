@@ -15,7 +15,7 @@ class UserCounterTest {
     @Test
     fun testJsonApiParsing() {
         val counter = parseJson("user_counter.json").dataSingle!!
-        assertEquals("tool_opens", counter.id)
+        assertEquals("tool_opens", counter.name)
         assertEquals(41, counter.apiCount)
         assertEquals(26.000768, counter.apiDecayedCount, 0.000001)
     }
