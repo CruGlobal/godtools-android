@@ -40,7 +40,7 @@ class UserActivityManager @VisibleForTesting internal constructor(
     fun isValidCounterName(name: String) = UserCounter.VALID_NAME.matches(name)
 
     private val countersFlow = userCountersRepository.getCountersFlow()
-        .map { it.associateBy({ it.id }, { it.count }) }
+        .map { it.associateBy({ it.name }, { it.count }) }
         .shareIn(coroutineScope, SharingStarted.WhileSubscribed(), 1)
         .distinctUntilChanged()
 

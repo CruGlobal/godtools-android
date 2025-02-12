@@ -45,9 +45,9 @@ internal class UserCounterSyncTasks @Inject internal constructor(
             ?.data ?: return false
 
         userCountersRepository.transaction {
-            val existing = userCountersRepository.getCounters().associateBy { it.id }.toMutableMap()
+            val existing = userCountersRepository.getCounters().associateBy { it.name }.toMutableMap()
             userCountersRepository.storeCountersFromSync(counters)
-            counters.forEach { existing.remove(it.id) }
+            counters.forEach { existing.remove(it.name) }
             userCountersRepository.resetCountersMissingFromSync(existing.values)
         }
         lastSyncTimeRepository.resetLastSyncTime(SYNC_TIME_COUNTERS, isPrefix = true)
@@ -62,15 +62,15 @@ internal class UserCounterSyncTasks @Inject internal constructor(
         coroutineScope {
             // process any counters that need to be updated
             userCountersRepository.getDirtyCounters()
-                .filter { UserCounter.VALID_NAME.matches(it.id) }
+                .filter { UserCounter.VALID_NAME.matches(it.name) }
                 .map { counter ->
                     async {
-                        val updated = countersApi.updateCounter(counter.id, counter).takeIf { it.isSuccessful }
+                        val updated = countersApi.updateCounter(counter.name, counter).takeIf { it.isSuccessful }
                             ?.body()?.takeUnless { it.hasErrors }
                             ?.dataSingle ?: return@async false
 
                         userCountersRepository.transaction {
-                            userCountersRepository.updateCounter(counter.id, 0 - counter.delta)
+                            userCountersRepository.updateCounter(counter.name, 0 - counter.delta)
                             userCountersRepository.storeCounterFromSync(updated)
                         }
                         true
