@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -31,11 +32,13 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.db.repository.produceLatestTranslationState
 import org.cru.godtools.db.repository.rememberAttachmentFile
 import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
 
 @Singleton
 class ToolCardPresenter @Inject constructor(
@@ -45,6 +48,7 @@ class ToolCardPresenter @Inject constructor(
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
+    private val userCountersRepository: UserCountersRepository,
 ) {
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -141,12 +145,30 @@ class ToolCardPresenter @Inject constructor(
             appLanguageAvailable = appTranslation != null,
             secondLanguage = secondLanguage,
             secondLanguageAvailable = secondLanguageAvailable,
+            progress = rememberProgress(toolCode, tool.progress),
             availableLanguages = when {
                 !loadAvailableLanguages -> 0
                 else -> toolCode?.let { rememberAvailableLanguages(it) } ?: 0
             },
             eventSink = interceptingEventSink,
         )
+    }
+
+    @Composable
+    private fun rememberProgress(toolCode: String?, progress: Double?): ToolCard.State.Progress? {
+        val completed by remember(toolCode) {
+            when {
+                toolCode == null -> flowOf(false)
+                else -> userCountersRepository.findCounterFlow(LESSON_COMPLETION(toolCode))
+                    .map { (it?.count ?: 0) > 0 }
+            }
+        }.collectAsState(false)
+
+        return when {
+            completed -> ToolCard.State.Progress.Completed
+            progress != null -> ToolCard.State.Progress.InProgress(progress)
+            else -> null
+        }
     }
 
     @Composable
