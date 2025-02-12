@@ -1,8 +1,11 @@
 package org.cru.godtools.db.repository
 
+import app.cash.turbine.test
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.UserCounter
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +20,26 @@ abstract class UserCountersRepositoryIT {
     internal abstract val repository: UserCountersRepository
 
     @Test
-    fun `updateUserCounter()`() = runTest {
+    fun `findCounterFlow()`() = runTest {
+        repository.findCounterFlow(COUNTER).test {
+            assertNull(awaitItem())
+
+            repository.updateCounter(COUNTER2, 3)
+            assertNull(awaitItem())
+
+            repository.updateCounter(COUNTER, 2)
+            assertEquals(2, assertNotNull(awaitItem()).delta)
+
+            repository.updateCounter(COUNTER, 3)
+            assertEquals(5, assertNotNull(awaitItem()).delta)
+
+            repository.updateCounter(COUNTER, -4)
+            assertEquals(1, assertNotNull(awaitItem()).delta)
+        }
+    }
+
+    @Test
+    fun `updateCounter()`() = runTest {
         assertNull(findCounter(COUNTER))
         repository.updateCounter(COUNTER, 2)
         assertEquals(2, findCounter(COUNTER)!!.delta)
@@ -58,5 +80,5 @@ abstract class UserCountersRepositoryIT {
         }
     }
 
-    private suspend fun findCounter(id: String) = repository.getCounters().firstOrNull { it.name == id }
+    private suspend fun findCounter(id: String) = repository.findCounterFlow(id).first()
 }

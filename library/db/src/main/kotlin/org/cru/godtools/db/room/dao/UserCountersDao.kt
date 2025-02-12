@@ -16,6 +16,8 @@ internal interface UserCountersDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnore(counter: UserCounterEntity)
 
+    @Query("SELECT * FROM user_counters WHERE name = :name")
+    fun findUserCounterFlow(name: String): Flow<UserCounterEntity?>
     @Query("SELECT * FROM user_counters")
     suspend fun getUserCounters(): List<UserCounterEntity>
     @Query("SELECT * FROM user_counters")
