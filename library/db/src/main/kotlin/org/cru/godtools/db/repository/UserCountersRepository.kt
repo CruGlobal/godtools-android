@@ -6,6 +6,7 @@ import org.cru.godtools.model.UserCounter
 interface UserCountersRepository {
     suspend fun <R> transaction(block: suspend () -> R): R
 
+    fun findCounterFlow(name: String): Flow<UserCounter?>
     suspend fun getCounters(): List<UserCounter>
     fun getCountersFlow(): Flow<List<UserCounter>>
     suspend fun updateCounter(name: String, delta: Int)
