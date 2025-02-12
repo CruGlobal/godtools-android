@@ -16,10 +16,12 @@ import io.mockk.verify
 import io.mockk.verifyAll
 import java.io.File
 import java.util.Locale
+import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -34,11 +36,15 @@ import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.db.repository.UserCountersRepository
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.model.UserCounter
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -74,6 +80,9 @@ class ToolCardPresenterTest {
         every { findLatestTranslationFlow(TOOL, Locale.ENGLISH) } returns enTranslationFlow
         every { findLatestTranslationFlow(TOOL, Locale.FRENCH) } returns frTranslationFlow
     }
+    private val userCountersRepository: UserCountersRepository = mockk {
+        every { findCounterFlow(any()) } returns flowOf(null)
+    }
     private val events = TestEventSink<ToolCard.Event>()
 
     private val presenter = ToolCardPresenter(
@@ -83,6 +92,7 @@ class ToolCardPresenterTest {
         languagesRepository = languagesRepository,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
+        userCountersRepository = userCountersRepository,
     )
 
     @AfterTest
@@ -369,6 +379,42 @@ class ToolCardPresenterTest {
         }
     }
     // endregion ToolCard.State.secondLanguageAvailable
+
+    // region ToolCard.State.progress
+    @Test
+    fun `ToolCardState - progress - not started`() = runTest {
+        val tool = randomTool(TOOL, Tool.Type.LESSON, progress = null)
+
+        presenterTestOf(presentFunction = { presenter.present(tool) }) {
+            assertNull(expectMostRecentItem().progress)
+        }
+    }
+
+    @Test
+    fun `ToolCardState - progress - in progress`() = runTest {
+        val tool = randomTool(TOOL, Tool.Type.LESSON, progress = Random.nextDouble(0.0, 1.0))
+
+        presenterTestOf(presentFunction = { presenter.present(tool) }) {
+            assertEquals(
+                tool.progress!!,
+                assertIs<ToolCard.State.Progress.InProgress>(expectMostRecentItem().progress).progress,
+                0.0001
+            )
+        }
+    }
+
+    @Test
+    fun `ToolCardState - progress - completed`() = runTest {
+        val tool = randomTool(TOOL, Tool.Type.LESSON, progress = Random.nextDouble(0.0, 1.0))
+        every {
+            userCountersRepository.findCounterFlow(LESSON_COMPLETION(TOOL))
+        } returns flowOf(UserCounter(apiCount = 1))
+
+        presenterTestOf(presentFunction = { presenter.present(tool) }) {
+            assertEquals(ToolCard.State.Progress.Completed, expectMostRecentItem().progress)
+        }
+    }
+    // endregion ToolCard.State.progress
 
     // region ToolCard.State.availableLanguages
     @Test
