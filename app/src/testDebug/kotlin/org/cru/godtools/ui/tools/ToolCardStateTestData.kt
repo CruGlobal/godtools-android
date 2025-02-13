@@ -33,7 +33,8 @@ object ToolCardStateTestData {
         appLanguage = Language(Locale.ENGLISH),
         appLanguageAvailable = true,
         secondLanguage = Language(Locale.FRENCH),
-        secondLanguageAvailable = true
+        secondLanguageAvailable = true,
+        progress = ToolCard.State.Progress.InProgress(0.6),
     )
 
     val toolFavorite = tool.copy(

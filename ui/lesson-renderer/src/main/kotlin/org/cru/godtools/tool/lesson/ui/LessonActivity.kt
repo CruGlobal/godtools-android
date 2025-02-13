@@ -36,6 +36,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -56,6 +57,10 @@ class LessonActivity :
         supportedType = Manifest.Type.LESSON
     ),
     LessonPageAdapter.Callbacks {
+
+    @Inject
+    internal lateinit var toolsRepository: ToolsRepository
+
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
     private val toolState: ToolStateHolder by viewModels()
@@ -71,7 +76,7 @@ class LessonActivity :
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.setupPages()
-        setupProgressIndicator()
+        setupProgressTracking()
     }
 
     override fun onResume() {
@@ -130,21 +135,34 @@ class LessonActivity :
     // region UI
     override val toolbar get() = binding.appbar
 
-    // region Progress Indicator
-    private fun setupProgressIndicator() {
-        dataModel.pages.observe(this@LessonActivity) { updateProgressIndicator(pages = it) }
+    // region Progress
+    private fun setupProgressTracking() {
+        dataModel.pages.observe(this@LessonActivity) { updateProgress(pages = it) }
     }
 
-    private fun updateProgressIndicator(
+    private fun updateProgress(
         position: Int = binding.pages.currentItem,
         pages: List<LessonPage>? = dataModel.pages.value
     ) {
-        binding.progress.max = pages?.count { !it.isHidden } ?: 0
+        val max = pages?.count { !it.isHidden } ?: 0
+        val progress = pages?.take(position + 1)?.count { !it.isHidden }?.coerceAtMost(max) ?: 0
+
+        // update progress in database
+        lifecycleScope.launch {
+            toolsRepository.updateToolProgress(
+                tool,
+                if (max == 0) 0.0 else (progress.toDouble() / max),
+                pages?.getOrNull(position)?.id
+            )
+        }
+
+        // update progress indicator
+        binding.progress.max = max
         // TODO: switch to setProgressCompat(p, true) once this bug is fixed:
         //       https://github.com/material-components/material-components-android/issues/2051
-        binding.progress.progress = pages?.take(position + 1)?.count { !it.isHidden } ?: 0
+        binding.progress.progress = progress
     }
-    // endregion Progress Indicator
+    // endregion Progress
 
     // region Pages
     @Inject
@@ -171,7 +189,7 @@ class LessonActivity :
             }
 
             override fun onPageSelected(position: Int) {
-                updateProgressIndicator(position = position)
+                updateProgress(position = position)
                 trackPageInAnalytics(dataModel.pages.value?.getOrNull(position))
                 dataModel.pageReached.value = maxOf(position, dataModel.pageReached.value)
             }

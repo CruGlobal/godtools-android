@@ -53,7 +53,9 @@ class LessonToolCardPaparazziTest(
     }
 
     @Test
-    fun `LessonToolCard() - Default`() = centerInSnapshot { LessonToolCard(toolState, showLanguage = true) }
+    fun `LessonToolCard() - Default`() = centerInSnapshot {
+        LessonToolCard(toolState, showLanguage = true, showProgress = true)
+    }
 
     @Test
     fun `LessonToolCard() - Long Title`() = centerInSnapshot {
@@ -63,8 +65,14 @@ class LessonToolCardPaparazziTest(
                     name = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
                 )
             ),
-            showLanguage = true
+            showLanguage = true,
+            showProgress = true,
         )
+    }
+
+    @Test
+    fun `LessonToolCard() - Progress - Completed`() = centerInSnapshot {
+        LessonToolCard(toolState.copy(progress = ToolCard.State.Progress.Completed), showProgress = true)
     }
 
     @Test
@@ -74,6 +82,11 @@ class LessonToolCardPaparazziTest(
 
     @Test
     fun `LessonToolCard() - Hide Language`() = centerInSnapshot {
-        LessonToolCard(toolState, showLanguage = false)
+        LessonToolCard(toolState, showLanguage = false, showProgress = true)
+    }
+
+    @Test
+    fun `LessonToolCard() - Hide Progress`() = centerInSnapshot {
+        LessonToolCard(toolState, showLanguage = true, showProgress = false)
     }
 }

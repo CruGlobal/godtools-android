@@ -11,19 +11,22 @@ private const val JSON_DECAYED_COUNT = "decayed-count"
 private const val JSON_INCREMENT = "increment"
 
 @JsonApiType(JSON_API_TYPE)
-class UserCounter @JvmOverloads constructor(@JsonApiId val id: String = "") {
+data class UserCounter(
+    @JsonApiId
+    val name: String = "",
+    @JsonApiAttribute(JSON_COUNT, serialize = false)
+    val apiCount: Int = 0,
+    @JsonApiAttribute(JSON_DECAYED_COUNT, serialize = false)
+    val apiDecayedCount: Double = 0.0,
+    @JsonApiAttribute(JSON_INCREMENT, deserialize = false)
+    val delta: Int = 0
+) {
+    internal constructor() : this("")
+
     companion object {
         val VALID_NAME = Regex("[a-zA-Z0-9_\\-.]+")
     }
 
-    @JsonApiAttribute(JSON_INCREMENT, deserialize = false)
-    var delta: Int = 0
-
-    @JsonApiAttribute(JSON_COUNT, serialize = false)
-    var apiCount: Int = 0
     val count get() = apiCount + delta
-
-    @JsonApiAttribute(JSON_DECAYED_COUNT, serialize = false)
-    var apiDecayedCount: Double = 0.0
     val decayedCount get() = apiDecayedCount + delta
 }

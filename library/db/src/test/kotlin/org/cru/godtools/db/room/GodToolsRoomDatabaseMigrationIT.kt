@@ -398,6 +398,28 @@ class GodToolsRoomDatabaseMigrationIT {
         }
     }
 
+    @Test
+    fun testMigrate24To25() {
+        val toolsQuery = "SELECT progress, progressLastPageId FROM tools WHERE code = 'kgp'"
+
+        // create v24 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 24).use { db ->
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            assertFailsWith<SQLException> { db.query(toolsQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 25, true, *MIGRATIONS).use { db ->
+            db.execSQL("UPDATE tools SET progress = 0.3, progressLastPageId = 'last_page'")
+            db.query(toolsQuery).use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(0.3, it.getDouble(0), 0.0001)
+                assertEquals("last_page", it.getStringOrNull(1))
+            }
+        }
+    }
+
     private fun SupportSQLiteDatabase.dumpIndices(table: String) = query("PRAGMA index_list($table)").use { it ->
         it.map { it.getString(1) }.associateWith { name ->
             query("PRAGMA index_info($name)").use { it.map { it.getString(2) }.toSet() }

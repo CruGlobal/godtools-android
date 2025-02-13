@@ -88,7 +88,7 @@ class UserActivityManagerTest {
                 assertTrue(it.badges.none { it.isEarned })
             }
 
-            countersFlow.value = listOf(UserCounter(UserCounterNames.SESSION).apply { apiCount = 5 })
+            countersFlow.value = listOf(UserCounter(UserCounterNames.SESSION, apiCount = 5))
             assertNotNull(awaitItem()) {
                 assertEquals(5, it.sessions)
                 assertTrue(it.badges.none { it.isEarned })
