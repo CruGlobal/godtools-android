@@ -15,7 +15,7 @@ android {
 
 onesky {
     sourceStringFiles = listOf(
-        "strings_lesson_feedback.xml",
+        "strings_lesson_renderer.xml",
     )
 }
 
