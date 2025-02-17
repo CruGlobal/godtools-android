@@ -92,6 +92,7 @@ class HomePresenter @AssistedInject constructor(
                                 val intent = lesson.createToolIntent(
                                     context = context,
                                     languages = listOfNotNull(lessonState.translation?.languageCode),
+                                    resumeProgress = true,
                                 )
 
                                 if (intent != null) {
