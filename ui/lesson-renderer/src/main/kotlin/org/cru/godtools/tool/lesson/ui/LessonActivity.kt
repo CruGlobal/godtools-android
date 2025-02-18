@@ -31,11 +31,13 @@ import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
+import org.cru.godtools.base.tool.EXTRA_RESUME_PAGE
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -45,8 +47,11 @@ import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
+import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogFragment
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
 import org.cru.godtools.user.activity.UserActivityManager
+
+private const val TAG_RESUME_DIALOG = "resume_dialog"
 
 @AndroidEntryPoint
 class LessonActivity :
@@ -56,6 +61,10 @@ class LessonActivity :
         supportedType = Manifest.Type.LESSON
     ),
     LessonPageAdapter.Callbacks {
+
+    @Inject
+    internal lateinit var toolsRepository: ToolsRepository
+
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
     private val toolState: ToolStateHolder by viewModels()
@@ -65,13 +74,14 @@ class LessonActivity :
         super.onCreate(savedInstanceState)
         if (isFinishing) return
         if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.LESSON)
+        setupResumeDialog()
         setupFeedbackDialog()
     }
 
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.setupPages()
-        setupProgressIndicator()
+        setupProgressTracking()
     }
 
     override fun onResume() {
@@ -130,21 +140,36 @@ class LessonActivity :
     // region UI
     override val toolbar get() = binding.appbar
 
-    // region Progress Indicator
-    private fun setupProgressIndicator() {
-        dataModel.pages.observe(this@LessonActivity) { updateProgressIndicator(pages = it) }
+    // region Progress
+    private fun setupProgressTracking() {
+        dataModel.pages.observe(this@LessonActivity) { updateProgress(pages = it) }
     }
 
-    private fun updateProgressIndicator(
+    private fun updateProgress(
         position: Int = binding.pages.currentItem,
         pages: List<LessonPage>? = dataModel.pages.value
     ) {
-        binding.progress.max = pages?.count { !it.isHidden } ?: 0
+        val max = pages?.count { !it.isHidden } ?: 0
+        val progress = pages?.take(position + 1)?.count { !it.isHidden }?.coerceAtMost(max) ?: 0
+
+        // update progress in database unless we are waiting for the user to resume/restart
+        if (resumePageId == null) {
+            lifecycleScope.launch {
+                toolsRepository.updateToolProgress(
+                    tool,
+                    if (max == 0) 0.0 else (progress.toDouble() / max),
+                    pages?.getOrNull(position)?.id
+                )
+            }
+        }
+
+        // update progress indicator
+        binding.progress.max = max
         // TODO: switch to setProgressCompat(p, true) once this bug is fixed:
         //       https://github.com/material-components/material-components-android/issues/2051
-        binding.progress.progress = pages?.take(position + 1)?.count { !it.isHidden } ?: 0
+        binding.progress.progress = progress
     }
-    // endregion Progress Indicator
+    // endregion Progress
 
     // region Pages
     @Inject
@@ -171,7 +196,7 @@ class LessonActivity :
             }
 
             override fun onPageSelected(position: Int) {
-                updateProgressIndicator(position = position)
+                updateProgress(position = position)
                 trackPageInAnalytics(dataModel.pages.value?.getOrNull(position))
                 dataModel.pageReached.value = maxOf(position, dataModel.pageReached.value)
             }
@@ -196,6 +221,48 @@ class LessonActivity :
         binding.pages.currentItem += 1
     }
     // endregion Pages
+
+    // region Resume Progress
+    private var resumePageId: String?
+        get() = intent?.getStringExtra(EXTRA_RESUME_PAGE)
+        set(value) {
+            intent?.putExtra(EXTRA_RESUME_PAGE, value)
+        }
+
+    private fun indexOfResumePage(): Int {
+        val pageId = resumePageId ?: return -1
+        val pages = dataModel.pages.value?.takeIf { it.isNotEmpty() } ?: return -1
+
+        return dataModel.manifest.value?.findPage(pageId)
+            ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
+            ?.let { pages.indexOf(it) } ?: -1
+    }
+
+    private fun setupResumeDialog() {
+        supportFragmentManager.setFragmentResultListener(LessonResumeDialogFragment.RESULT_RESUME, this) { _, _ ->
+            indexOfResumePage().takeIf { it >= 0 }?.let { binding.pages.currentItem = it }
+            resumePageId = null
+            updateProgress()
+        }
+        supportFragmentManager.setFragmentResultListener(LessonResumeDialogFragment.RESULT_RESTART, this) { _, _ ->
+            resumePageId = null
+            updateProgress()
+        }
+
+        dataModel.pages.observe(this) { triggerResumeProgress() }
+    }
+
+    private fun triggerResumeProgress() {
+        if (supportFragmentManager.findFragmentByTag(TAG_RESUME_DIALOG) != null) return
+        val pages = dataModel.pages.value?.takeIf { it.isNotEmpty() } ?: return
+
+        if (indexOfResumePage() in 1 until pages.size - 1) {
+            LessonResumeDialogFragment().show(supportFragmentManager, TAG_RESUME_DIALOG)
+        } else {
+            resumePageId = null
+        }
+    }
+    // endregion Resume Progress
 
     // region Feedback
     private fun setupFeedbackDialog() {

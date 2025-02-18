@@ -17,6 +17,7 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
 
     override suspend fun <R> transaction(block: suspend () -> R) = db.withTransaction(block)
 
+    override fun findCounterFlow(name: String) = dao.findUserCounterFlow(name).map { it?.toModel() }
     override suspend fun getCounters() = dao.getUserCounters().map { it.toModel() }
     override fun getCountersFlow() = dao.getUserCountersFlow().map { it.map { it.toModel() } }
 
@@ -35,7 +36,7 @@ internal abstract class UserCountersRoomRepository(private val db: GodToolsRoomD
     }
 
     override suspend fun resetCountersMissingFromSync(counters: Collection<UserCounter>) {
-        dao.update(counters.map { SyncUserCounter(it.id, count = 0, decayedCount = 0.0) })
+        dao.update(counters.map { SyncUserCounter(it.name, count = 0, decayedCount = 0.0) })
     }
     // endregion Sync methods
 

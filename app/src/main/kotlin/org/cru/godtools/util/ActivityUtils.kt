@@ -30,6 +30,7 @@ fun Tool.createToolIntent(
     activeLocale: Locale? = null,
     showTips: Boolean = false,
     saveLanguageSettings: Boolean = false,
+    resumeProgress: Boolean = false
 ): Intent? {
     val code = code ?: return null
     if (languages.isEmpty()) return null
@@ -48,7 +49,11 @@ fun Tool.createToolIntent(
             *languages.toTypedArray(),
             saveLanguageSettings = saveLanguageSettings
         )
-        Type.LESSON -> context.createLessonActivityIntent(code, languages[0])
+        Type.LESSON -> context.createLessonActivityIntent(
+            code,
+            languages[0],
+            resumePageId = progressLastPageId.takeIf { resumeProgress }
+        )
         Type.META, Type.UNKNOWN -> null
     }
 }

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <eat-comment />
+    <string name="lesson_resume_title">Resume progress?</string>
+    <string name="lesson_resume_message">Would you like to pick up where you left off?</string>
+    <string name="lesson_resume_action_resume">Continue</string>
+    <string name="lesson_resume_action_restart">Start over</string>
+
+    <!-- Lesson Feedback Dialog -->
+    <eat-comment />
     <string name="lesson_feedback_title">Review</string>
     <string name="lesson_feedback_question_helpful">Was this lesson helpful for you?</string>
     <string name="lesson_feedback_question_helpful_yes">Yes</string>

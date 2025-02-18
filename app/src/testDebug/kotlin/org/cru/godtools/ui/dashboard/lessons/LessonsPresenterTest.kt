@@ -273,7 +273,11 @@ class LessonsPresenterTest {
         presenter.test {
             expectMostRecentItem().lessons[1].eventSink(ToolCard.Event.Click)
 
-            val expectedIntent = enLessonsFlow.value[1].createToolIntent(context, languages = listOf(Locale.ENGLISH))
+            val expectedIntent = enLessonsFlow.value[1].createToolIntent(
+                context,
+                languages = listOf(Locale.ENGLISH),
+                resumeProgress = true
+            )
             assertTrue(assertIs<IntentScreen>(navigator.awaitNextScreen()).intent equalsIntent expectedIntent)
         }
         verify { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, "lesson2", SOURCE_LESSONS)) }

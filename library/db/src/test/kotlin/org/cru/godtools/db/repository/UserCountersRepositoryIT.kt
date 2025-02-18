@@ -1,8 +1,11 @@
 package org.cru.godtools.db.repository
 
+import app.cash.turbine.test
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.UserCounter
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +20,26 @@ abstract class UserCountersRepositoryIT {
     internal abstract val repository: UserCountersRepository
 
     @Test
-    fun `updateUserCounter()`() = runTest {
+    fun `findCounterFlow()`() = runTest {
+        repository.findCounterFlow(COUNTER).test {
+            assertNull(awaitItem())
+
+            repository.updateCounter(COUNTER2, 3)
+            assertNull(awaitItem())
+
+            repository.updateCounter(COUNTER, 2)
+            assertEquals(2, assertNotNull(awaitItem()).delta)
+
+            repository.updateCounter(COUNTER, 3)
+            assertEquals(5, assertNotNull(awaitItem()).delta)
+
+            repository.updateCounter(COUNTER, -4)
+            assertEquals(1, assertNotNull(awaitItem()).delta)
+        }
+    }
+
+    @Test
+    fun `updateCounter()`() = runTest {
         assertNull(findCounter(COUNTER))
         repository.updateCounter(COUNTER, 2)
         assertEquals(2, findCounter(COUNTER)!!.delta)
@@ -31,25 +53,19 @@ abstract class UserCountersRepositoryIT {
     fun `getDirtyCounters()`() = runTest {
         assertThat(repository.getDirtyCounters(), `is`(empty()))
         repository.updateCounter(COUNTER, 2)
-        assertThat(repository.getDirtyCounters().map { it.id }, containsInAnyOrder(COUNTER))
+        assertThat(repository.getDirtyCounters().map { it.name }, containsInAnyOrder(COUNTER))
         repository.updateCounter(COUNTER2, 2)
-        assertThat(repository.getDirtyCounters().map { it.id }, containsInAnyOrder(COUNTER, COUNTER2))
+        assertThat(repository.getDirtyCounters().map { it.name }, containsInAnyOrder(COUNTER, COUNTER2))
         repository.updateCounter(COUNTER, -2)
-        assertThat(repository.getDirtyCounters().map { it.id }, containsInAnyOrder(COUNTER2))
+        assertThat(repository.getDirtyCounters().map { it.name }, containsInAnyOrder(COUNTER2))
         repository.updateCounter(COUNTER2, -2)
         assertThat(repository.getDirtyCounters(), `is`(empty()))
     }
 
     @Test
     fun `storeCountersFromSync()`() = runTest {
-        val counter1 = UserCounter(COUNTER).apply {
-            apiCount = 2
-            apiDecayedCount = 1.0
-        }
-        val counter2 = UserCounter(COUNTER2).apply {
-            apiCount = 4
-            apiDecayedCount = 3.0
-        }
+        val counter1 = UserCounter(COUNTER, apiCount = 2, apiDecayedCount = 1.0)
+        val counter2 = UserCounter(COUNTER2, apiCount = 4, apiDecayedCount = 3.0)
         repository.updateCounter(COUNTER2, 2)
         repository.storeCountersFromSync(listOf(counter1, counter2))
         with(findCounter(COUNTER)!!) {
@@ -64,5 +80,5 @@ abstract class UserCountersRepositoryIT {
         }
     }
 
-    private suspend fun findCounter(id: String) = repository.getCounters().firstOrNull { it.id == id }
+    private suspend fun findCounter(id: String) = repository.findCounterFlow(id).first()
 }

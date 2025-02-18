@@ -132,7 +132,7 @@ class LessonsPresenter @AssistedInject constructor(
                                         tool.createToolIntent(
                                             context = context,
                                             languages = listOfNotNull(toolState.translation?.languageCode),
-                                            saveLanguageSettings = true
+                                            resumeProgress = true
                                         ) ?: return@present
                                     )
                                 )

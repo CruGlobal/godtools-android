@@ -2,6 +2,7 @@ package org.cru.godtools.db.repository
 
 import app.cash.turbine.test
 import java.util.Locale
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -406,6 +407,27 @@ abstract class ToolsRepositoryIT {
     }
     // endregion updateToolLocales()
 
+    // region updateToolProgress()
+    @Test
+    fun `updateToolProgress()`() = testScope.runTest {
+        val code = "tool"
+        val initialTool = randomTool(code, progress = null, progressLastPageId = null)
+        repository.storeInitialTools(listOf(initialTool))
+        assertNotNull(repository.findTool(code)) {
+            assertNull(it.progress)
+            assertNull(it.progressLastPageId)
+        }
+
+        val progress = Random.nextDouble(0.0, 1.0)
+        val lastPageId = "last_page"
+        repository.updateToolProgress(code, progress, lastPageId)
+        assertNotNull(repository.findTool(code)) {
+            assertEquals(progress, assertNotNull(it.progress), 0.0001)
+            assertEquals(lastPageId, it.progressLastPageId)
+        }
+    }
+    // endregion updateToolProgress()
+
     // region updateToolShares()
     @Test
     fun `updateToolViews()`() = testScope.runTest {
@@ -509,6 +531,27 @@ abstract class ToolsRepositoryIT {
 
         repository.storeToolsFromSync(setOf(tool))
         assertNotNull(repository.findTool("tool")) { assertEquals(5, it.pendingShares) }
+    }
+
+    @Test
+    fun `storeToolsFromSync() - Don't pave over progress`() = testScope.runTest {
+        val tool = randomTool("tool", progress = null, progressLastPageId = null)
+        repository.storeInitialTools(setOf(tool))
+        assertNotNull(repository.findTool("tool")) {
+            assertNull(it.progress)
+            assertNull(it.progressLastPageId)
+        }
+        repository.updateToolProgress("tool", 0.5, "page1")
+        assertNotNull(repository.findTool("tool")) {
+            assertEquals(0.5, assertNotNull(it.progress), 0.00001)
+            assertEquals("page1", it.progressLastPageId)
+        }
+
+        repository.storeToolsFromSync(setOf(tool))
+        assertNotNull(repository.findTool("tool")) {
+            assertEquals(0.5, assertNotNull(it.progress), 0.00001)
+            assertEquals("page1", it.progressLastPageId)
+        }
     }
     // endregion storeToolsFromSync()
 
