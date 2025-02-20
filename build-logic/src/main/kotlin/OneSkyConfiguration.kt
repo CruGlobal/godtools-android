@@ -18,7 +18,7 @@ private val ONESKY_LANGUAGE_CODE_OVERRIDES = mapOf(
 
 fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
     extra.set(DEPRECATE_STRINGS_FLAG, true)
-    apply(plugin = "co.brainly.onesky")
+    apply(plugin = "org.cru.mobile.fork.co.brainly.onesky")
 
     configure<OneSkyPluginExtension> {
         apiKey = findProperty(PROP_API_KEY)?.toString().orEmpty()

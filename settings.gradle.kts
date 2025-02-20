@@ -1,5 +1,11 @@
 pluginManagement {
     repositories {
+        maven {
+            url = uri("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
+            content {
+                includeGroup("org.cru.mobile.fork.co.brainly")
+            }
+        }
         google()
         gradlePluginPortal()
         mavenCentral()
