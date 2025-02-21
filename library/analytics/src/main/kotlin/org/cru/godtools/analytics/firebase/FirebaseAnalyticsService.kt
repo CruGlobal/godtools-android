@@ -103,7 +103,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
     init {
         userManager.userFlow
             .onEach {
-                firebase.setUserId(it?.ssoGuid)
+                firebase.setUserId(it?.id)
                 firebase.setUserProperty(USER_PROP_GR_MASTER_PERSON_ID, it?.grMasterPersonId)
                 firebase.setUserProperty(USER_PROP_SSO_GUID, it?.ssoGuid)
             }
