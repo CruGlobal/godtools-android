@@ -70,9 +70,9 @@ class FirebaseAnalyticsServiceTest {
         confirmVerified(firebase)
 
         // active user
-        userFlow.emit(User(ssoGuid = "GUID"))
+        userFlow.emit(User(id = "user_id"))
         runCurrent()
-        verify(exactly = 1) { firebase.setUserId("GUID") }
+        verify(exactly = 1) { firebase.setUserId("user_id") }
         confirmVerified(firebase)
 
         // user logs out
@@ -80,7 +80,7 @@ class FirebaseAnalyticsServiceTest {
         runCurrent()
         verifyOrder {
             firebase.setUserId(null)
-            firebase.setUserId("GUID")
+            firebase.setUserId("user_id")
             firebase.setUserId(null)
         }
     }
