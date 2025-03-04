@@ -182,7 +182,7 @@ class HomePresenterTest {
             expectMostRecentItem().spotlightLessons[0].eventSink(ToolCard.Event.Click)
 
             assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
-                val expected = lesson.createToolIntent(context, listOf(translation.languageCode))
+                val expected = lesson.createToolIntent(context, listOf(translation.languageCode), resumeProgress = true)
                 assertTrue(expected equalsIntent it.intent)
             }
         }
