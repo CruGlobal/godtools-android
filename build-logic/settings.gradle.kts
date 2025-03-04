@@ -4,6 +4,12 @@ plugins {
 
 dependencyResolutionManagement {
     repositories {
+        maven {
+            url = uri("https://cruglobal.jfrog.io/artifactory/maven-mobile/")
+            content {
+                includeGroup("org.cru.mobile.fork.co.brainly")
+            }
+        }
         google()
         gradlePluginPortal()
         mavenCentral()
@@ -15,8 +21,3 @@ dependencyResolutionManagement {
         }
     }
 }
-
-// TODO: temporarily import our forked version of the onesky-gradle-plugin until
-//       https://github.com/brainly/onesky-gradle-plugin/pull/12 is merged
-//       see: https://jira.cru.org/browse/GT-2344
-includeBuild("../imported/onesky-gradle-plugin")
