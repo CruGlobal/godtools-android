@@ -58,7 +58,7 @@ androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", vers
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose-ui" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose-ui" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose-ui" }
-androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0"
+androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.1"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.0"
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-databinding-compiler = { module = "androidx.databinding:databinding-compiler", version.ref = "android-gradle-plugin" }
