@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">レビュー</string>
     <string name="lesson_feedback_question_helpful">このレッスンは役に立ちましたか？</string>
     <string name="lesson_feedback_question_helpful_yes">はい</string>

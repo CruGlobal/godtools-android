@@ -28,10 +28,10 @@
     <string name="nav_lessons">수업</string>
     <string name="dashboard_lessons_header_title">맞춤 수업</string>
     <string name="dashboard_lessons_header_description">관계를 형성하고 의미 있는 대화를 시작하기 위한 실용적인 아이디어입니다.</string>
+    <string name="dashboard_lessons_section_filter_label">수업 언어:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="other">이용 가능한 수업: %1$d</item>
     </plurals>
-    <string name="dashboard_lessons_section_filter_label">수업 언어:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">즐겨찾기</string>
     <string name="dashboard_home_header_title">GodTools에 오신 걸 환영합니다</string>

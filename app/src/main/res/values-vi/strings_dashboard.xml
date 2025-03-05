@@ -28,10 +28,10 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="nav_lessons">Bài học</string>
     <string name="dashboard_lessons_header_title">Bài học dành cho bạn</string>
     <string name="dashboard_lessons_header_description">Những ý tưởng thiết thực giúp xây dựng mối quan hệ và bắt đầu cuộc trò chuyện đầy ý nghĩa.</string>
+    <string name="dashboard_lessons_section_filter_label">Bài học bằng:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="other">%1$d Bài học sẵn có</item>
     </plurals>
-    <string name="dashboard_lessons_section_filter_label">Bài học bằng:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Yêu thích</string>
     <string name="dashboard_home_header_title">Chào mừng đến với GodTools</string>
