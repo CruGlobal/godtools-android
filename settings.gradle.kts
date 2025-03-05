@@ -24,7 +24,6 @@ dependencyResolutionManagement {
                 includeGroup("org.ccci.gto.android")
                 includeGroup("org.ccci.gto.android.testing")
                 includeGroup("org.cru.godtools.kotlin")
-                includeGroup("org.cru.mobile.fork.antlr-kotlin")
                 includeGroup("org.cru.mobile.fork.material-color-utilities")
 
                 // Included groups to support renovate updates
