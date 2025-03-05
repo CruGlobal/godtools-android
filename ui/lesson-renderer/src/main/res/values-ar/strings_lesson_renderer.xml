@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">مراجعة</string>
     <string name="lesson_feedback_question_helpful">هل كان هذا الدرس مفيدًا لك؟</string>
     <string name="lesson_feedback_question_helpful_yes">نعم</string>

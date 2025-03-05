@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">回顾</string>
     <string name="lesson_feedback_question_helpful">这个课程对你有帮助吗？</string>
     <string name="lesson_feedback_question_helpful_yes">是的</string>

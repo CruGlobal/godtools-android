@@ -28,10 +28,10 @@
     <string name="nav_lessons">課程</string>
     <string name="dashboard_lessons_header_title">為您打造的課程</string>
     <string name="dashboard_lessons_header_description">建立關係和開始有意義對話的實用想法</string>
+    <string name="dashboard_lessons_section_filter_label">課程語言：</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="other">%1$d 個可用 課程</item>
     </plurals>
-    <string name="dashboard_lessons_section_filter_label">課程語言：</string>
     <!-- Home -->
     <string name="nav_favorite_tools">我的最愛</string>
     <string name="dashboard_home_header_title">歡迎使用 GodTools</string>

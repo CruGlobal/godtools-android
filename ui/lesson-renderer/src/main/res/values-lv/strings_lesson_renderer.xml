@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Atsākt progresu</string>
+    <string name="lesson_resume_message">Vai vēlies turpināt iesākto?</string>
+    <string name="lesson_resume_action_resume">Turpināt</string>
+    <string name="lesson_resume_action_restart">Sākt no sākuma</string>
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Atsauksmes</string>
     <string name="lesson_feedback_question_helpful">Vai šī nodarbība bija tev noderīga?</string>
     <string name="lesson_feedback_question_helpful_yes">Jā</string>

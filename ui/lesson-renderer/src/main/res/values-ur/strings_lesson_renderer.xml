@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">جائزہ لیں</string>
     <string name="lesson_feedback_question_helpful">کیا یہ سبق آپ کے لئے مددگار تھا ؟</string>
     <string name="lesson_feedback_question_helpful_yes">ہاں</string>

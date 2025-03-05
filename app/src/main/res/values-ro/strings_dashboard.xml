@@ -28,12 +28,12 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="nav_lessons">Lecții</string>
     <string name="dashboard_lessons_header_title">Lecții create pentru tine</string>
     <string name="dashboard_lessons_header_description">Idei practice pentru a construi relații și a începe conversații relevante.</string>
+    <string name="dashboard_lessons_section_filter_label">Lecții în:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d Lecție disponibilă</item>
         <item quantity="other">%1$d Lecții disponibile</item>
         <item quantity="few">%1$d Lecții disponibile</item>
     </plurals>
-    <string name="dashboard_lessons_section_filter_label">Lecții în:</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorite</string>
     <string name="dashboard_home_header_title">Bun venit la GodTools</string>

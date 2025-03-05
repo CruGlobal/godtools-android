@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Resume Dialog -->
+    <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">পর্যালোচনা</string>
     <string name="lesson_feedback_question_helpful">এই পাঠটি কি আপনার জন্য সহায়ক ছিল?</string>
     <string name="lesson_feedback_question_helpful_yes">হ্যাঁ</string>
