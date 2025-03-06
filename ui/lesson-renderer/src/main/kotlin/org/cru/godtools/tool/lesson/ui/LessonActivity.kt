@@ -13,6 +13,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,7 @@ import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
+import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_PAGE_SWIPED
 import org.cru.godtools.base.tool.EXTRA_RESUME_PAGE
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
@@ -82,6 +84,7 @@ class LessonActivity :
         super.onBindingChanged()
         binding.setupPages()
         setupProgressTracking()
+        binding.trackPageSwipedFeatureDiscovery()
     }
 
     override fun onResume() {
@@ -287,6 +290,37 @@ class LessonActivity :
     }
     // endregion Feedback
     // endregion UI
+
+    // region Feature Discovery
+    private fun LessonActivityBinding.trackPageSwipedFeatureDiscovery() {
+        if (settings.isFeatureDiscovered(FEATURE_LESSON_PAGE_SWIPED)) return
+
+        // record that the page was scrolled for feature discovery
+        pages.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            private var dragging = false
+            private var page = 0
+
+            override fun onPageScrollStateChanged(state: Int) {
+                when (state) {
+                    SCROLL_STATE_DRAGGING -> {
+                        if (!dragging) page = pages.currentItem
+                        dragging = true
+                    }
+
+                    SCROLL_STATE_IDLE -> {
+                        if (dragging && pages.currentItem != page) {
+                            settings.setFeatureDiscovered(FEATURE_LESSON_PAGE_SWIPED)
+
+                            // unregister the callback now that we recorded the feature was discovered
+                            pages.unregisterOnPageChangeCallback(this)
+                        }
+                        dragging = false
+                    }
+                }
+            }
+        })
+    }
+    // endregion Feature Discovery
 
     override fun checkForManifestEvent(manifest: Manifest, event: Event) {
         if (event.id in manifest.dismissListeners && showFeedbackDialogIfNecessary()) return
