@@ -11,7 +11,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.tool.service.FollowupService
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.downloadmanager.DownloadManagerModule
@@ -46,13 +45,6 @@ class ExternalSingletonsModule {
     val picasso by lazy {
         mockk<Picasso> {
             every { load(any<Uri>()) } answers { mockk(relaxed = true) }
-        }
-    }
-    @get:Provides
-    val settings by lazy {
-        mockk<Settings> {
-            every { isFeatureDiscovered(any()) } returns true
-            every { isFeatureDiscoveredLiveData(any()) } returns MutableLiveData(true)
         }
     }
     @get:Provides

@@ -155,8 +155,7 @@ object GodToolsTheme {
 }
 
 @Composable
-fun GodToolsTheme(content: @Composable () -> Unit) {
-    val isDarkTheme = isSystemInDarkTheme() && BuildConfig.DEBUG
+fun GodToolsTheme(isDarkTheme: Boolean = isSystemInDarkTheme() && BuildConfig.DEBUG, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = when {
             isDarkTheme -> GodToolsTheme.darkColorScheme

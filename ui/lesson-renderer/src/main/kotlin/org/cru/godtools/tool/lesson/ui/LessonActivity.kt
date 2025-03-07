@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -15,19 +17,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_IDLE
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.slack.circuit.overlay.ContentWithOverlays
+import com.slack.circuit.overlay.OverlayEffect
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
+import org.cru.godtools.base.CONFIG_TUTORIAL_LESSON_PAGE_SWIPE
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
@@ -39,6 +47,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
@@ -50,6 +59,7 @@ import org.cru.godtools.tool.lesson.analytics.model.LessonPageAnalyticsScreenEve
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
 import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogFragment
+import org.cru.godtools.tool.lesson.ui.swipetutorial.LessonSwipeTutorialAnimatedModalOverlay
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
 import org.cru.godtools.user.activity.UserActivityManager
 
@@ -83,6 +93,7 @@ class LessonActivity :
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.setupPages()
+        binding.setupComposeOverlays()
         setupProgressTracking()
         binding.trackPageSwipedFeatureDiscovery()
     }
@@ -289,6 +300,25 @@ class LessonActivity :
         return false
     }
     // endregion Feedback
+
+    // region Compose Overlays
+    private fun LessonActivityBinding.setupComposeOverlays() {
+        overlay.setContent {
+            GodToolsTheme(isDarkTheme = false) {
+                ContentWithOverlays {
+                    val showSwipeTutorial by viewModel.showPageSwipeTutorial.collectAsState(false)
+                    if (showSwipeTutorial) {
+                        OverlayEffect {
+                            delay(800)
+                            show(LessonSwipeTutorialAnimatedModalOverlay())
+                            settings.setFeatureDiscovered(FEATURE_LESSON_PAGE_SWIPED)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // endregion Compose Overlays
     // endregion UI
 
     // region Feature Discovery
@@ -337,6 +367,7 @@ class LessonActivity :
 class LessonActivityDataModel @Inject constructor(
     downloadManager: GodToolsDownloadManager,
     manifestManager: ManifestManager,
+    private val remoteConfig: FirebaseRemoteConfig,
     settings: Settings,
     translationsRepository: TranslationsRepository,
     userActivityManager: UserActivityManager,
@@ -359,4 +390,7 @@ class LessonActivityDataModel @Inject constructor(
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
         .combine(pageReached) { discovered, page -> !discovered && page > 3 }
         .asLiveData()
+
+    internal val showPageSwipeTutorial = settings.isFeatureDiscoveredFlow(FEATURE_LESSON_PAGE_SWIPED)
+        .map { !it && remoteConfig.getBoolean(CONFIG_TUTORIAL_LESSON_PAGE_SWIPE) }
 }
