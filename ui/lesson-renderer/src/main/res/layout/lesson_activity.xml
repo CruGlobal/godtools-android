@@ -89,5 +89,10 @@
                     tools:progress="1" />
             </androidx.appcompat.widget.Toolbar>
         </FrameLayout>
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 </layout>

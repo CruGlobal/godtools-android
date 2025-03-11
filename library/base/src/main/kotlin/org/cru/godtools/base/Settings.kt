@@ -54,6 +54,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
         const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TOOL_FAVORITE = "toolFavorite"
         const val FEATURE_LESSON_FEEDBACK = "lessonFeedback."
+        const val FEATURE_LESSON_PAGE_SWIPED = "lessonPageSwiped"
         const val FEATURE_TRACT_CARD_SWIPED = "tractCardSwiped"
         const val FEATURE_TRACT_CARD_CLICKED = "tractCardClicked"
         const val FEATURE_TUTORIAL_ONBOARDING = "tutorialOnboarding"

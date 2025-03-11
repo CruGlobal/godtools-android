@@ -7,6 +7,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.tool.lesson"
 
+    configureCompose(project)
     configureQaBuildType(project)
     configureGodToolsCustomUri()
 
@@ -22,6 +23,8 @@ onesky {
 dependencies {
     api(project(":ui:base-tool"))
 
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.viewpager2)
@@ -36,7 +39,9 @@ dependencies {
     implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 
+    implementation(libs.circuit.overlay)
     implementation(libs.hilt)
+    implementation(libs.lottie.compose)
     implementation(libs.materialComponents)
     implementation(libs.splitties.fragmentargs)
 

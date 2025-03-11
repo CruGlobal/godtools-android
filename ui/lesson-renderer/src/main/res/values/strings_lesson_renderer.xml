@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
+    <eat-comment />
+    <string name="lesson_tutorial_swipe_message">Swipe to change pages</string>
+    <string name="lesson_tutorial_swipe_action_ok">Got it</string>
+
     <!-- Lesson Resume Dialog -->
     <eat-comment />
     <string name="lesson_resume_title">Resume progress?</string>
