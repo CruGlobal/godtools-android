@@ -45,7 +45,7 @@ internal fun AvailableInLanguage(
         val name = remember(language, context, appLanguage) { language?.getDisplayName(context, appLanguage).orEmpty() }
 
         Text(
-            if (available) name else stringResource(R.string.tool_card_label_language_unavailable, name),
+            name,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -56,7 +56,7 @@ internal fun AvailableInLanguage(
             painterResource(if (available) R.drawable.ic_language_available else R.drawable.ic_language_unavailable),
             contentDescription = when {
                 available -> stringResource(R.string.tool_card_accessibility_language_available)
-                else -> null
+                else -> stringResource(R.string.tool_card_accessibility_language_unavailable)
             },
             modifier = Modifier
                 .padding(start = 4.dp)

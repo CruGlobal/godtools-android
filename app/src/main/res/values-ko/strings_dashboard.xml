@@ -59,7 +59,6 @@
     <string name="tools_list_remove_favorite_dialog_title">즐겨찾기에서 “%1$s”을(를) 제거할까요?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">제거</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">취소</string>
-    <string name="tool_card_label_language_unavailable">%1$s 에서 이용 불가</string>
     <string name="tool_card_accessibility_language_available">이용 가능</string>
     <string name="action_tools_about">상세 정보</string>
     <string name="action_tools_open">열기</string>

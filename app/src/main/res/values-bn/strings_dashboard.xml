@@ -64,7 +64,6 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
     <string name="tools_list_remove_favorite_dialog_title">“%1$s” পছন্দসই থেকে বাদ দেব?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">সরান</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">বাতিল</string>
-    <string name="tool_card_label_language_unavailable">%1$s -তে উপলভ্য নয়</string>
     <string name="tool_card_accessibility_language_available">উপলভ্য</string>
     <string name="action_tools_about">বিশদ</string>
     <string name="action_tools_open">খুলুন</string>
