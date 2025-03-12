@@ -8,6 +8,7 @@ import coil.test.FakeImageLoaderEngine
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,6 +17,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
@@ -64,6 +66,21 @@ class LessonToolCardPaparazziTest(
                 translation = randomTranslation(
                     name = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
                 )
+            ),
+            showLanguage = true,
+            showProgress = true,
+        )
+    }
+
+    @Test
+    fun `LessonToolCard() - Tool Language - RTL Language`() = centerInSnapshot {
+        LessonToolCard(
+            toolState.copy(
+                translation = randomTranslation(
+                    languageCode = Locale.forLanguageTag("ar"),
+                    name = "كيف تظهر الإنجيل بحياتك"
+                ),
+                language = Language(Locale.forLanguageTag("ar")),
             ),
             showLanguage = true,
             showProgress = true,
