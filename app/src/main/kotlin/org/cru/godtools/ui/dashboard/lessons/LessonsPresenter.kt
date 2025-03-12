@@ -72,6 +72,8 @@ class LessonsPresenter @AssistedInject constructor(
         val locale = rememberSaveable(appLanguage) { mutableStateOf(appLanguage) }
         val query = rememberSaveable { mutableStateOf("") }
 
+        val languagesFlow = rememberLanguagesFlow()
+
         return FilterMenu.UiState(
             menuExpanded = rememberSaveable { mutableStateOf(false) },
             query = query,
@@ -83,7 +85,7 @@ class LessonsPresenter @AssistedInject constructor(
             }.collectAsState(Language(locale.value)).value,
             items = remember {
                 combine(
-                    languagesRepository.getLanguagesFlow(),
+                    languagesFlow,
                     snapshotFlow { query.value },
                     settings.appLanguageFlow,
                     toolsRepository.getLessonsFlow()
@@ -108,6 +110,14 @@ class LessonsPresenter @AssistedInject constructor(
                 }
             }
         )
+    }
+
+    @Composable
+    private fun rememberLanguagesFlow() = remember {
+        languagesRepository.getLanguagesFlow()
+            .combine(settings.appLanguageFlow) { languages, appLanguage ->
+                languages.sortedWith(Language.displayNameComparator(context, appLanguage))
+            }
     }
 
     @Composable

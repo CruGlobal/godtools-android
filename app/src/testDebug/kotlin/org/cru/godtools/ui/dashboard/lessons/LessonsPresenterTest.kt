@@ -130,6 +130,26 @@ class LessonsPresenterTest {
     }
 
     @Test
+    fun `State - languageFilter - items - Sorted by app language display name`() = runTest {
+        lessonsFlow.value = listOf(randomTool("lesson"))
+        languagesFlow.value = listOf(
+            Language(Locale("es")),
+            Language(Locale.FRENCH),
+        )
+        translationsFlow.value = listOf(
+            randomTranslation("lesson", languageCode = Locale("es")),
+            randomTranslation("lesson", languageCode = Locale.FRENCH),
+        )
+
+        presenter.test {
+            assertEquals(
+                listOf(Language(Locale.FRENCH), Language(Locale("es"))),
+                expectMostRecentItem().languageFilter.items.map { it.item }
+            )
+        }
+    }
+
+    @Test
     fun `State - languageFilter - items - Include languages with at least 1 translation`() = runTest {
         lessonsFlow.value = listOf(randomTool("lesson"))
         languagesFlow.value = listOf(
