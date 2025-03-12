@@ -304,7 +304,7 @@ class LessonActivity :
     // region Compose Overlays
     private fun LessonActivityBinding.setupComposeOverlays() {
         overlay.setContent {
-            GodToolsTheme(isDarkTheme = false) {
+            GodToolsTheme(darkTheme = false) {
                 ContentWithOverlays {
                     val showSwipeTutorial by viewModel.showPageSwipeTutorial.collectAsState(false)
                     if (showSwipeTutorial) {

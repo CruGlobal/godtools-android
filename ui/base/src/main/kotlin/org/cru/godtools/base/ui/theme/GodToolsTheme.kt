@@ -2,6 +2,7 @@
 
 package org.cru.godtools.base.ui.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
@@ -12,15 +13,22 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import org.cru.godtools.base.ui.compose.CompositionLocals
+import org.cru.godtools.base.ui.theme.GodToolsTheme.LocalExtendedColorScheme
 import org.cru.godtools.base.ui.theme.GodToolsTheme.LocalLightColorSchemeActive
+import org.cru.godtools.base.ui.theme.GodToolsTheme.extendedDark
+import org.cru.godtools.base.ui.theme.GodToolsTheme.extendedLight
 import org.cru.godtools.ui.BuildConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,6 +37,11 @@ object GodToolsTheme {
     val GT_DARK_GREEN = Color(red = 0x58, green = 0xAA, blue = 0x42)
     val GT_RED = Color(red = 0xE5, green = 0x5B, blue = 0x36)
     val GRAY_E6 = Color(red = 0xE6, green = 0xE6, blue = 0xE6)
+
+    @Immutable
+    data class ExtendedColorScheme(val green: ColorFamily, val red: ColorFamily)
+    @Immutable
+    data class ColorFamily(val color: Color, val onColor: Color, val colorContainer: Color, val onColorContainer: Color)
 
     internal val lightColorScheme = lightColorScheme(
         primary = GT_BLUE,
@@ -116,6 +129,36 @@ object GodToolsTheme {
         surfaceContainerHighest = surfaceContainerHighestDark,
     )
 
+    internal val extendedLight = ExtendedColorScheme(
+        green = ColorFamily(
+            greenLight,
+            onGreenLight,
+            greenContainerLight,
+            onGreenContainerLight,
+        ),
+        red = ColorFamily(
+            redLight,
+            onRedLight,
+            redContainerLight,
+            onRedContainerLight,
+        ),
+    )
+
+    internal val extendedDark = ExtendedColorScheme(
+        green = ColorFamily(
+            greenDark,
+            onGreenDark,
+            greenContainerDark,
+            onGreenContainerDark,
+        ),
+        red = ColorFamily(
+            redDark,
+            onRedDark,
+            redContainerDark,
+            onRedContainerDark,
+        ),
+    )
+
     internal val typography = Typography().run {
         copy(
             titleMedium = titleMedium.copy(
@@ -125,12 +168,19 @@ object GodToolsTheme {
     }
 
     internal val LocalLightColorSchemeActive = staticCompositionLocalOf { false }
+    internal val LocalExtendedColorScheme = staticCompositionLocalOf { extendedLight }
 
     val isLightColorSchemeActive: Boolean
         @Composable
         @ReadOnlyComposable
         get() = LocalLightColorSchemeActive.current
 
+    val extendedColorScheme: ExtendedColorScheme
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalExtendedColorScheme.current
+
+    // region Component Colors
     val searchBarColors: SearchBarColors
         @Composable
         get() = when {
@@ -152,20 +202,33 @@ object GodToolsTheme {
             )
             else -> TopAppBarDefaults.topAppBarColors()
         }
+    // endregion Component Colors
 }
 
 @Composable
-fun GodToolsTheme(isDarkTheme: Boolean = isSystemInDarkTheme() && BuildConfig.DEBUG, content: @Composable () -> Unit) {
+fun GodToolsTheme(
+    darkTheme: Boolean = isSystemInDarkTheme() && BuildConfig.DEBUG,
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
         colorScheme = when {
-            isDarkTheme -> GodToolsTheme.darkColorScheme
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
+            darkTheme -> GodToolsTheme.darkColorScheme
             else -> GodToolsTheme.lightColorScheme
         },
         typography = GodToolsTheme.typography
     ) {
         CompositionLocals {
             CompositionLocalProvider(
-                LocalLightColorSchemeActive provides !isDarkTheme,
+                LocalLightColorSchemeActive provides !darkTheme,
+                LocalExtendedColorScheme provides when {
+                    darkTheme -> extendedDark
+                    else -> extendedLight
+                },
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),
                 content = content
             )
