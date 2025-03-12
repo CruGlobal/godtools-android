@@ -32,6 +32,8 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="other">%1$d Pelajaran tersedia</item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">Selesai</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d Selesai</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorit</string>
     <string name="dashboard_home_header_title">Selamat datang di GodTools</string>

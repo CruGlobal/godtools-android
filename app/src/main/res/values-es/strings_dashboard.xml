@@ -33,6 +33,8 @@ Puedes acceer a una versión online en https://knowgod.com/</string>
         <item quantity="one">%1$d Lección disponible</item>
         <item quantity="other">%1$d Lecciones disponibles</item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">Completado</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d completado</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="dashboard_home_header_title">Bienvenido a GodTools</string>

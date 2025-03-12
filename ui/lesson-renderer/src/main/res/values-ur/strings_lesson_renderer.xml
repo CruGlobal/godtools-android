@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">پیش رفت دوبارہ شروع کریں</string>
+    <string name="lesson_resume_message">کیا آپ وہاں سے دوبارہ آغاز کرنا چاہیں گے جہاں آپ نے چھوڑا تھا؟</string>
+    <string name="lesson_resume_action_resume">جاری رکھیں</string>
+    <string name="lesson_resume_action_restart">دوبارہ شروع کریں</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">جائزہ لیں</string>
     <string name="lesson_feedback_question_helpful">کیا یہ سبق آپ کے لئے مددگار تھا ؟</string>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Rejelea Maendeleo</string>
+    <string name="lesson_resume_message">Je, ungependa kuendelea kutoka mahali ulipoachia?</string>
+    <string name="lesson_resume_action_resume">Endelea</string>
+    <string name="lesson_resume_action_restart">Anza upya</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Tathmini</string>
     <string name="lesson_feedback_question_helpful">Je, somo hili limekuwa na msaada kwako?</string>

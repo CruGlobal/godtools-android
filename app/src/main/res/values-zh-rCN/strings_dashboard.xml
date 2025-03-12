@@ -32,6 +32,8 @@
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="other">%1$d 种可用课程</item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">已完成</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d% 完成</string>
     <!-- Home -->
     <string name="nav_favorite_tools">收藏夹</string>
     <string name="dashboard_home_header_title">欢迎来到Godtools信仰分享工具</string>

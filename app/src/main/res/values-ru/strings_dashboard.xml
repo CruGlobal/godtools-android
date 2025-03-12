@@ -35,6 +35,8 @@
         <item quantity="few"></item>
         <item quantity="many"></item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">Завершено</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d Заполнено</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Избранное</string>
     <string name="dashboard_home_header_title">Добро пожаловать в GodTools</string>

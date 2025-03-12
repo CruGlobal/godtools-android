@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">ካቆሙበት ለመቀጠል</string>
+    <string name="lesson_resume_message">ከየት መቀጠል ይፈልጋሉ ?</string>
+    <string name="lesson_resume_action_resume">ካቆምኩበት</string>
+    <string name="lesson_resume_action_restart">ከመጀመሪያው</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">ገምግም</string>
     <string name="lesson_feedback_question_helpful">ይህ ትምህርት ለእርስዎ ጠቃሚ ነበር?</string>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">恢復進度</string>
+    <string name="lesson_resume_message">您想繼續從上次停止的地方開始嗎？</string>
+    <string name="lesson_resume_action_resume">繼續</string>
+    <string name="lesson_resume_action_restart">重新開始</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">評論</string>
     <string name="lesson_feedback_question_helpful">本課程是否對您有幫助？</string>

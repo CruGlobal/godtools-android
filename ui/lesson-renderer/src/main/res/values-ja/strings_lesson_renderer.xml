@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">進捗を再開</string>
+    <string name="lesson_resume_message">中断したところから再開しますか？</string>
+    <string name="lesson_resume_action_resume">続行</string>
+    <string name="lesson_resume_action_restart">やり直す</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">レビュー</string>
     <string name="lesson_feedback_question_helpful">このレッスンは役に立ちましたか？</string>

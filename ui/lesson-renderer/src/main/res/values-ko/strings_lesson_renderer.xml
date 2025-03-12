@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">진행 재개</string>
+    <string name="lesson_resume_message">중단한 지점부터 계속하시겠습니까?</string>
+    <string name="lesson_resume_action_resume">계속</string>
+    <string name="lesson_resume_action_restart">다시 시작</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">리뷰</string>
     <string name="lesson_feedback_question_helpful">수업이 유용했나요?</string>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">प्रगति जारी रखें</string>
+    <string name="lesson_resume_message">वहीं से जारी रखें जहाँ से आपने छोड़ा था?</string>
+    <string name="lesson_resume_action_resume">जारी रखें</string>
+    <string name="lesson_resume_action_restart">पुनः शुरू करें</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">समीक्षा</string>
     <string name="lesson_feedback_question_helpful">क्या यह पाठ आपके लिए उपयोगी था?</string>

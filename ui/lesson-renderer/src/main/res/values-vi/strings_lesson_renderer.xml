@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Tiếp tục Tiến trình</string>
+    <string name="lesson_resume_message">Bạn có muốn tiếp tục từ nơi bạn đã dừng lại không?</string>
+    <string name="lesson_resume_action_resume">Tiếp tục</string>
+    <string name="lesson_resume_action_restart">Bắt đầu lại</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Xem lại</string>
     <string name="lesson_feedback_question_helpful">Bài học này có giúp ích cho bạn không?</string>

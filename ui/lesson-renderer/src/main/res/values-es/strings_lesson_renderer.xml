@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Reanudar progreso</string>
+    <string name="lesson_resume_message">¿Quieres continuar desde donde lo dejaste?</string>
+    <string name="lesson_resume_action_resume">Continuar</string>
+    <string name="lesson_resume_action_restart">Comenzar de nuevo</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Revisión</string>
     <string name="lesson_feedback_question_helpful">¿Esta lección te ha sido útil?</string>

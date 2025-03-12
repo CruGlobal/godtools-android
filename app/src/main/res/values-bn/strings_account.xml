@@ -9,6 +9,8 @@
     <string name="account_login_description">বাস্তবিক গল্পগুলি, উৎসাহ, এবং আপনার হাতের কাছে ব্যবহারিক পরামর্শ পেতে আপনার অ্যাকাউন্টে লগ ইন করুন</string>
     <string name="account_error_user_already_exists">ব্যবহারকারীর অ্যাকাউন্ট ইতিমধ্যেই আছে</string>
     <string name="account_error_user_not_found">ব্যবহারকারীর অ্যাকাউন্ট পাওয়া যায় নি</string>
+    <string name="account_error_not_connected_title">ইন্টারনেট সংযোগ নেই</string>
+    <string name="account_error_not_connected">অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন</string>
     <string name="account_error_unknown">লগ ইন করায় ত্রুটি</string>
     <string name="account_error_dialog_dismiss">ঠিক আছে</string>
     <!-- Delete Account -->
