@@ -33,6 +33,8 @@ Há uma versão online aqui: https://knowgod.com/</string>
         <item quantity="one">Sessōes %1$d disponível</item>
         <item quantity="other">Sessōes %1$d disponível</item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">Concluído</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d concluído</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="dashboard_home_header_title">Bem-vindo(a) ao GodTools</string>

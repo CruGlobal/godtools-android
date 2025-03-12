@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Lanjutkan Kemajuan</string>
+    <string name="lesson_resume_message">Apakah Anda ingin melanjutkan dari tempat Anda berhenti?</string>
+    <string name="lesson_resume_action_resume">Lanjutkan</string>
+    <string name="lesson_resume_action_restart">Mulai Ulang</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Melihat kembali</string>
     <string name="lesson_feedback_question_helpful">Apakah pelajaran ini membantu Saudara?</string>

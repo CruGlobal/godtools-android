@@ -38,6 +38,8 @@ https://godtoolsapp.com \n\n
         <item quantity="two">الدروس متوفرة %1$d</item>
         <item quantity="zero">الدروس متوفرة %1$d</item>
     </plurals>
+    <string name="dashboard_lessons_progress_completed">تم</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d اكتمل</string>
     <!-- Home -->
     <string name="nav_favorite_tools">المفضلة</string>
     <string name="dashboard_home_header_title">مرحبًا بك في GodTools</string>

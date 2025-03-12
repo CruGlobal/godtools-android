@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">প্রগতি পুনরায় চালু করুন</string>
+    <string name="lesson_resume_message">আপনি কি যেখানে ছেড়ে গেছেন তা থেকে পুনরায় শুরু করতে চান?</string>
+    <string name="lesson_resume_action_resume">অগ্রসর হন</string>
+    <string name="lesson_resume_action_restart">পুনরায় শুরু করুন</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">পর্যালোচনা</string>
     <string name="lesson_feedback_question_helpful">এই পাঠটি কি আপনার জন্য সহায়ক ছিল?</string>

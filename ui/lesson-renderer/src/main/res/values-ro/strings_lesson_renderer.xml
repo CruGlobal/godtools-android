@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Lesson Swipe Tutorial -->
     <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Reia progresul</string>
+    <string name="lesson_resume_message">Ai vrea să reiai de unde ai rămas?</string>
+    <string name="lesson_resume_action_resume">Continuă</string>
+    <string name="lesson_resume_action_restart">Începe de la capăt</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">Părerea ta</string>
     <string name="lesson_feedback_question_helpful">Ți-a fost de ajutor această lecție?</string>
