@@ -11,13 +11,9 @@ internal enum class Page(
     @StringRes val action: Int? = null,
     @RawRes val animation: Int? = null,
     @DrawableRes val image: Int? = null,
-    val showIndicator: Boolean = true,
     val showMenu: Boolean = true
 ) {
-    ONBOARDING_WELCOME(
-        showIndicator = false,
-        showMenu = false
-    ),
+    ONBOARDING_WELCOME(showMenu = false),
     ONBOARDING_CONVERSATIONS(
         title = R.string.tutorial_onboarding_conversations_headline,
         content = R.string.tutorial_onboarding_conversations_subhead,

@@ -32,7 +32,6 @@ import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
-import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -76,7 +75,6 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
                     .fillMaxWidth()
                     .height(dimensionResource(R.dimen.tutorial_indicator_height))
                     .wrapContentSize()
-                    .invisibleIf { !currentPage.showIndicator }
             )
         },
         containerColor = tutorialBackgroundColor,
