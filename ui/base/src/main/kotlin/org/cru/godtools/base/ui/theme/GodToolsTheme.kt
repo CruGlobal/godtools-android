@@ -2,6 +2,7 @@
 
 package org.cru.godtools.base.ui.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
@@ -12,12 +13,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import org.cru.godtools.base.ui.compose.CompositionLocals
 import org.cru.godtools.base.ui.theme.GodToolsTheme.LocalLightColorSchemeActive
@@ -155,17 +159,25 @@ object GodToolsTheme {
 }
 
 @Composable
-fun GodToolsTheme(isDarkTheme: Boolean = isSystemInDarkTheme() && BuildConfig.DEBUG, content: @Composable () -> Unit) {
+fun GodToolsTheme(
+    darkTheme: Boolean = isSystemInDarkTheme() && BuildConfig.DEBUG,
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
         colorScheme = when {
-            isDarkTheme -> GodToolsTheme.darkColorScheme
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
+            darkTheme -> GodToolsTheme.darkColorScheme
             else -> GodToolsTheme.lightColorScheme
         },
         typography = GodToolsTheme.typography
     ) {
         CompositionLocals {
             CompositionLocalProvider(
-                LocalLightColorSchemeActive provides !isDarkTheme,
+                LocalLightColorSchemeActive provides !darkTheme,
                 LocalContentColor provides contentColorFor(MaterialTheme.colorScheme.background),
                 content = content
             )
