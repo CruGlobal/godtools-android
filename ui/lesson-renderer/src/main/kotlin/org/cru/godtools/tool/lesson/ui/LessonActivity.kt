@@ -163,21 +163,21 @@ class LessonActivity :
         position: Int = binding.pages.currentItem,
         pages: List<LessonPage>? = dataModel.pages.value
     ) {
-        val max = pages?.count { !it.isHidden } ?: 0
-        val progress = pages?.take(position + 1)?.count { !it.isHidden }?.coerceAtMost(max) ?: 0
-
         // update progress in database unless we are waiting for the user to resume/restart
         if (resumePageId == null) {
             lifecycleScope.launch {
                 toolsRepository.updateToolProgress(
                     tool,
-                    if (max == 0) 0.0 else (progress.toDouble() / max),
+                    if (pages.isNullOrEmpty()) 0.0 else (position.toDouble() / pages.size),
                     pages?.getOrNull(position)?.id
                 )
             }
         }
 
         // update progress indicator
+        val max = pages?.count { !it.isHidden } ?: 0
+        val progress = pages?.take(position + 1)?.count { !it.isHidden }?.coerceAtMost(max) ?: 0
+
         binding.progress.max = max
         // TODO: switch to setProgressCompat(p, true) once this bug is fixed:
         //       https://github.com/material-components/material-components-android/issues/2051
