@@ -11,9 +11,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisallowComposableCalls
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,23 +24,6 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Translation
-
-@Composable
-internal inline fun AvailableInLanguage(
-    language: Language?,
-    crossinline translation: @DisallowComposableCalls () -> Translation?,
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-) {
-    val available by remember { derivedStateOf { translation() != null } }
-    AvailableInLanguage(
-        language,
-        available = available,
-        horizontalArrangement = horizontalArrangement,
-        modifier = modifier
-    )
-}
 
 @Composable
 internal fun AvailableInLanguage(
