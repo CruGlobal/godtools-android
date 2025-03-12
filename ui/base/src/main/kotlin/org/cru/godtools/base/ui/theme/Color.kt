@@ -8,23 +8,26 @@ import androidx.compose.ui.graphics.Color
 // Secondary: #3BA4DB
 // Neutral: #8F9193
 // Color match: false
+// Extended Colors:
+//   Green: #6EDC50
+//   Red: #E55B36
 
 internal val primaryLight = Color(0xFF216487)
 internal val onPrimaryLight = Color(0xFFFFFFFF)
 internal val primaryContainerLight = Color(0xFFC7E7FF)
-internal val onPrimaryContainerLight = Color(0xFF001E2E)
+internal val onPrimaryContainerLight = Color(0xFF004C6C)
 internal val secondaryLight = Color(0xFF216487)
 internal val onSecondaryLight = Color(0xFFFFFFFF)
 internal val secondaryContainerLight = Color(0xFFC7E7FF)
-internal val onSecondaryContainerLight = Color(0xFF001E2E)
+internal val onSecondaryContainerLight = Color(0xFF004C6C)
 internal val tertiaryLight = Color(0xFF62597C)
 internal val onTertiaryLight = Color(0xFFFFFFFF)
 internal val tertiaryContainerLight = Color(0xFFE8DDFF)
-internal val onTertiaryContainerLight = Color(0xFF1E1635)
+internal val onTertiaryContainerLight = Color(0xFF4A4263)
 internal val errorLight = Color(0xFFBA1A1A)
 internal val onErrorLight = Color(0xFFFFFFFF)
 internal val errorContainerLight = Color(0xFFFFDAD6)
-internal val onErrorContainerLight = Color(0xFF410002)
+internal val onErrorContainerLight = Color(0xFF93000A)
 internal val backgroundLight = Color(0xFFF6FAFE)
 internal val onBackgroundLight = Color(0xFF181C20)
 internal val surfaceLight = Color(0xFFF6FAFE)
@@ -80,3 +83,21 @@ internal val surfaceContainerLowDark = Color(0xFF171C1F)
 internal val surfaceContainerDark = Color(0xFF1B2023)
 internal val surfaceContainerHighDark = Color(0xFF262B2E)
 internal val surfaceContainerHighestDark = Color(0xFF303538)
+
+internal val greenLight = Color(0xFF416834)
+internal val onGreenLight = Color(0xFFFFFFFF)
+internal val greenContainerLight = Color(0xFFC2EFAE)
+internal val onGreenContainerLight = Color(0xFF2A4F1F)
+internal val redLight = Color(0xFF8F4B39)
+internal val onRedLight = Color(0xFFFFFFFF)
+internal val redContainerLight = Color(0xFFFFDBD1)
+internal val onRedContainerLight = Color(0xFF723524)
+
+internal val greenDark = Color(0xFFA7D394)
+internal val onGreenDark = Color(0xFF13380A)
+internal val greenContainerDark = Color(0xFF2A4F1F)
+internal val onGreenContainerDark = Color(0xFFC2EFAE)
+internal val redDark = Color(0xFFFFB4A1)
+internal val onRedDark = Color(0xFF561F10)
+internal val redContainerDark = Color(0xFF723524)
+internal val onRedContainerDark = Color(0xFFFFDBD1)
