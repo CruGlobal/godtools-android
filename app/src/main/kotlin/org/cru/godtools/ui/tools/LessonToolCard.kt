@@ -31,68 +31,67 @@ fun LessonToolCard(
     showProgress: Boolean = false,
 ) {
     val isLoaded by rememberUpdatedState(state.isLoaded)
-    val translation by rememberUpdatedState(state.translation)
     val language by rememberUpdatedState(state.language)
     val languageAvailable by rememberUpdatedState(state.languageAvailable)
     val eventSink by rememberUpdatedState(state.eventSink)
 
-    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
-        ElevatedCard(
-            onClick = { eventSink(ToolCard.Event.Click) },
-            elevation = toolCardElevation,
-            modifier = modifier.fillMaxWidth()
+    ElevatedCard(
+        onClick = { eventSink(ToolCard.Event.Click) },
+        elevation = toolCardElevation,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
-            ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
+            ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
                 ToolName(state, minLines = 2, modifier = Modifier.fillMaxWidth())
+            }
 
-                if (showProgress) {
-                    val progress by animateFloatAsState(state.progress?.progress?.toFloat() ?: 0f)
-                    LinearProgressIndicator(
-                        { progress },
-                        gapSize = 0.dp,
-                        drawStopIndicator = {},
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .invisibleIf { state.progress !is Progress.InProgress }
-                    )
-                }
+            if (showProgress) {
+                val progress by animateFloatAsState(state.progress?.progress?.toFloat() ?: 0f)
+                LinearProgressIndicator(
+                    { progress },
+                    gapSize = 0.dp,
+                    drawStopIndicator = {},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .invisibleIf { state.progress !is Progress.InProgress }
+                )
+            }
 
-                if (showProgress || showLanguage) {
-                    ToolCardInfoContent {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            if (showProgress) {
-                                Text(
-                                    when (state.progress) {
-                                        null -> ""
-                                        is Progress.InProgress -> stringResource(
-                                            R.string.dashboard_lessons_progress_in_progress,
-                                            (state.progress.progress * 100).toInt().coerceIn(0, 100)
-                                        )
-                                        Progress.Completed -> stringResource(
-                                            R.string.dashboard_lessons_progress_completed
-                                        )
-                                    },
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            }
+            if (showProgress || showLanguage) {
+                ToolCardInfoContent {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (showProgress) {
+                            Text(
+                                when (state.progress) {
+                                    null -> ""
+                                    is Progress.InProgress -> stringResource(
+                                        R.string.dashboard_lessons_progress_in_progress,
+                                        (state.progress.progress * 100).toInt().coerceIn(0, 100)
+                                    )
+                                    Progress.Completed -> stringResource(
+                                        R.string.dashboard_lessons_progress_completed
+                                    )
+                                },
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        }
 
-                            Spacer(Modifier.weight(1f))
+                        Spacer(Modifier.weight(1f))
 
-                            if (showLanguage) {
-                                AvailableInLanguage(
-                                    language = language,
-                                    available = languageAvailable,
-                                    horizontalArrangement = Arrangement.End,
-                                    modifier = Modifier.invisibleIf { !isLoaded || language == null }
-                                )
-                            }
+                        if (showLanguage) {
+                            AvailableInLanguage(
+                                language = language,
+                                available = languageAvailable,
+                                horizontalArrangement = Arrangement.End,
+                                modifier = Modifier.invisibleIf { !isLoaded || language == null }
+                            )
                         }
                     }
                 }

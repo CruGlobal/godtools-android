@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.text.layoutDirection
 import java.util.Locale
 
 // TODO: Should this be moved to gto-support?
@@ -25,6 +26,23 @@ fun ProvideLayoutDirectionFromLocale(locale: () -> Locale?, content: @Composable
                 }
             } ?: currentLayoutDirection
         }
+    }
+
+    CompositionLocalProvider(
+        LocalLayoutDirection provides layoutDirection,
+        content = content
+    )
+}
+
+@Composable
+fun ProvideLayoutDirectionFromLocale(locale: Locale?, content: @Composable () -> Unit) {
+    val currentLayoutDirection = LocalLayoutDirection.current
+    val layoutDirection = remember(locale, currentLayoutDirection) {
+        when (locale?.layoutDirection) {
+            View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
+            View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
+            else -> null
+        } ?: currentLayoutDirection
     }
 
     CompositionLocalProvider(
