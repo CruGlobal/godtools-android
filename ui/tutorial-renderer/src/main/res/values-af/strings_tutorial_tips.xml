@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Leer om met enige iemand te deel</string>
+    <string name="tutorial_tips_learn_text">Oefen om soveel wenke te gebruik as wat jy nodig het om selfversekerd te voel om hierdie hulpmiddel met ander te deel.</string>
+    <string name="tutorial_tips_light_headline">Wenke om die weg te verlig</string>
+    <string name="tutorial_tips_light_text1">Op sekere skerms sal jy \'n verskeidenheid ikone sien. Druk op die ikoon om \'n wenk te vertoon wat jou sal help om oor die inhoud van die skerm te praat.</string>
+    <string name="tutorial_tips_light_text2">"Vir die skerms sonder wenke, beveel ons aan om deur die inhoud te lees en dit te bespreek soos nodig."</string>
+    <string name="tutorial_tips_start_headline">Verlig die wenke</string>
+    <string name="tutorial_tips_start_text">Wanneer die wenk verlig, het jy die deel van die opleiding voltooi.  Jy het nie nodig om elke wenk in elke geskrep te gebruik nie.</string>
+    <string name="tutorial_tips_action_continue">Gaan voort</string>
+    <string name="tutorial_tips_action_skip">Slaan oor</string>
+    <string name="tutorial_tips_action_start">Begin opleiding</string>
+</resources>

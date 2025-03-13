@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_change_language">Qooqa filadhu</string>
+    <string name="tutorial_onboarding_welcome">Baga nagaan dhufte</string>
+    <string name="tutorial_onboarding_welcome_2">Haasaa hundumaaf qophaa\'aadha</string>
+    <string name="tutorial_onboarding_welcome_action_video">Viidiyoo ilaali</string>
+    <string name="tutorial_onboarding_conversations_headline">Waa\'ee Waaqayyoo nama kam waliinuu haasa\'i</string>
+    <string name="tutorial_onboarding_conversations_subhead">GodTools\'n waa\'ee Waaqayyoo haasaa hiika qabu namoota waliin akka ati gootuuf si gargaara.</string>
+    <string name="tutorial_onboarding_prepare_headline">Yeroowwan barbaachisoo ta\'aniif qophaa\'i</string>
+    <string name="tutorial_onboarding_prepare_subhead">Akkamitti waa\'ee amantii namoota waliin haasa\'uu qaama jireenya kee guyyaa guyyaa godhachuu akka dandeessu baradhu</string>
+    <string name="tutorial_onboarding_share_headline">Namni tokko akkanni Yesusiin baruuf gargaari</string>
+    <string name="tutorial_onboarding_share_subhead">GodTools\'n wangeela karaa ifaa ta\'eefi namaaf galuun akka ati haasa\'uu dandeessuuf app si gargaarudha.</string>
+    <string name="tutorial_onboarding_action_begin">Eegali</string>
+    <string name="tutorial_onboarding_action_next">Itti Fufi</string>
+    <string name="tutorial_onboarding_action_skip">Irra darbi</string>
+    <string name="tutorial_onboarding_action_start">Eegali</string>
+</resources>

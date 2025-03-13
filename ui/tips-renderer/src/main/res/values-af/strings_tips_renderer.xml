@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Volgende</string>
+    <string name="tract_tips_tip_action_close">Maak toe</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Vra</string>
+    <string name="tract_tips_type_consider">Oorweeg</string>
+    <string name="tract_tips_type_prepare">Berei voor</string>
+    <string name="tract_tips_type_quote">Haal aan</string>
+    <string name="tract_tips_type_tip">Wenk</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Opleidingswenke</string>
+    <string name="tool_settings_action_tips_disable">Vesteek wenke</string>
+</resources>

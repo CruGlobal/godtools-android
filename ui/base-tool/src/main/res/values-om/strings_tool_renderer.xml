@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">Barruun ati barbaadde hin argamne</string>
+    <string name="tool_loading">Barruun ati barbaadde banamaa jira...</string>
+    <string name="tool_offline">Barruun ati barbaadde banuudhaaf tajaajila interneetii gaafata</string>
+    <string name="tract_content_input_error_required">%1$s galchuun dirqama.</string>
+    <string name="tract_content_input_error_invalid_email">Maaloo iimeelii sirrii galchaa</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Qoodi</string>
+    <string name="tool_share_sheet_more_apps">Caalaa</string>
+    <string name="share_tool_message">Liinkiin kun: %1$s \n\n gara marsariitii wanta nuti sila haasa\'aa turreetti si geessa. 
+
+App isaa https://godtoolsapp.com \n\n irraa buufachuu ni dandeessa.
+
+Kana caalaa irratti haa dubbannu!</string>
+    <string name="share_tool_message_article">Barruu kana siif qooduu fi waa\'ee isaa maal akka ati yaaddu baruun barbaade.\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">Liinkii qoodi</string>
+    <string name="feature_discovery_desc_share_tool">Mallattoo kanatti bu\'uudhaan barruu kana hiriyaakeef qoodi</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Suura qoodi</string>
+    <!-- Settings -->
+    <string name="menu_settings">Sirreeffamoota</string>
+    <string name="tool_settings_title">Filannoowwan barruu</string>
+    <string name="tool_settings_action_share">Liinkii qoodi</string>
+    <string name="tool_settings_languages_title">Afaan walcinaa</string>
+    <string name="tool_settings_languages_description">Barruu kana keessatti afaan lamaan gidduu jijjiiri.</string>
+    <string name="tool_settings_languages_parallel">Walcinaa</string>
+    <string name="tool_settings_languages_none">Homaa</string>
+    <string name="tool_settings_shareables_title">Suurawwan wal fakkaatan</string>
+</resources>

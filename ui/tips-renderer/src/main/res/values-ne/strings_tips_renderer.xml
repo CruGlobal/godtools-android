@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">"अर्को "</string>
+    <string name="tract_tips_tip_action_close">"बन्द गर्नुहोस् "</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">"सोध्नुहोस् "</string>
+    <string name="tract_tips_type_consider">"विचार गर्नुहोस् "</string>
+    <string name="tract_tips_type_prepare">"तयारी हुनुहोस् "</string>
+    <string name="tract_tips_type_quote">भनाई</string>
+    <string name="tract_tips_type_tip">"सुझाव "</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">"तालिमका सुझावहरु "</string>
+    <string name="tool_settings_action_tips_disable">सुझावहरू लुकाउनुहोस्</string>
+</resources>

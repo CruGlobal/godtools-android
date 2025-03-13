@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Onboarding Tutorial -->
+    <string name="tutorial_onboarding_change_language">"भाषा छान्नुहोस् "</string>
+    <string name="tutorial_onboarding_welcome">स्वागत</string>
+    <string name="tutorial_onboarding_welcome_2">हरेक कुराकानी को लागि तयारी</string>
+    <string name="tutorial_onboarding_welcome_action_video">भिडियो हेर्नुहोस्</string>
+    <string name="tutorial_onboarding_conversations_headline">जो कोहिसंग परमेश्वरको बारेमा कुराकानी गर्नुहोस्</string>
+    <string name="tutorial_onboarding_conversations_subhead">गडटूल्सले तपाईलाई परमेश्वरको बारेमा अर्थपूर्ण कुराकानी गर्न मद्दत गर्दछ।</string>
+    <string name="tutorial_onboarding_prepare_headline">महत्त्वपूर्ण क्षणहरुको लागि तयार हुनुहोस्</string>
+    <string name="tutorial_onboarding_prepare_subhead">विश्वासको बारेमा कुराकानीलाई कसरी आफ्नो जीवनको व्यवहारिक भाग बनाउने भनेर सिक्नुहोस्।</string>
+    <string name="tutorial_onboarding_share_headline">येशूलाई खोज्न अरुको मद्दत गर्नुहोस्</string>
+    <string name="tutorial_onboarding_share_subhead">गडटूल्स सुसमाचारलाई स्पष्ट र सान्दर्भिक तरिकाले संचार गर्नको लागि तपाइँको मार्गदर्शक हो।</string>
+    <string name="tutorial_onboarding_action_begin">सुरु</string>
+    <string name="tutorial_onboarding_action_next">अर्को</string>
+    <string name="tutorial_onboarding_action_skip">छोड्नुहोस्</string>
+    <string name="tutorial_onboarding_action_start">सुरु गर्नुहोस्</string>
+</resources>

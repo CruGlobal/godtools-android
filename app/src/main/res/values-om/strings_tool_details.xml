@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Skriinii jalqabaa bilbilakee irra kaa\'i</string>
+    <string name="action_tools_open_tool">Barruu kana bani</string>
+    <string name="action_tools_add_favorite">Jaallatamootti dabali</string>
+    <string name="action_tools_remove_favorite">Jaallatamoo keessaa balleessi</string>
+    <string name="action_tools_open_training">Barruu kana qooduu baradhu</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">Namoonni %1$,d ilaalaniiru</item>
+        <item quantity="other">Namoonni %1$,d ilaalaniiru</item>
+    </plurals>
+    <string name="label_tools_about">Waa\'ee</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">Afaanota %1$,d</item>
+        <item quantity="other">Afaanota %1$,d</item>
+    </plurals>
+    <string name="tool_details_section_description_conversation_starters">Haasaa jalqabduuwwan</string>
+    <string name="tool_details_section_description_outline">Qabxiilee murteessoo</string>
+    <string name="tool_details_section_description_bible_references">Wabiiwwan macaafa qulqulluu</string>
+    <string name="tool_details_section_description_languages_available">Afaanota jiran</string>
+    <string name="tool_details_section_variants_label">Gosoota</string>
+    <string name="tool_details_section_variants_description">Gosa kan biraa, barruu kanaa filadhu. Gosni addaa addaa hunduu akkaataa dhiyeenyaa fi qabiyyee adda addaa qaba, atis haasaakeef kan si fayyadu filachuu ni dandeessa. Barruu tokko gosa adda addaatiin barruu jaallatamoo kee jalatti galmeessuu dandeessa.</string>
+</resources>

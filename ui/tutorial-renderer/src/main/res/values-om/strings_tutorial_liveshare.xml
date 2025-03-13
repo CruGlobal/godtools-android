@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Live Share Tutorial -->
+    <string name="tutorial_live_share_description_headline">Fuula skriinii kee qoodi</string>
+    <string name="tutorial_live_share_description_text">Filannoon kun liinkii barruu kanaa hiriyaa keef erga. Yeroo liinkiin sun banamu skriiniikee hiriyaakeef qooda.</string>
+    <string name="tutorial_live_share_mirrored_headline">Skriiniikee qoodi</string>
+    <string name="tutorial_live_share_mirrored_text">Yeroo ati bilbilakee irraa tuqxu skriiniin bilbila hiriyaakees ni socho\'a. Kunis akka isin waliin barruu sana keessa deemtanii waliin ilaaltaniif sin gargaara.</string>
+    <string name="tutorial_live_share_start_headline">Eegali</string>
+    <string name="tutorial_live_share_start_text">Skriiniikee qooduudhaaf link kana nama tokkoof ykn sanaa oliif ergi.</string>
+    <string name="tutorial_live_share_action_continue">Itti fufi</string>
+    <string name="tutorial_live_share_action_skip">Irra darbi</string>
+    <string name="tutorial_live_share_action_start">Liinkii qoodi</string>
+</resources>

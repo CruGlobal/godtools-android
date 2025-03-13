@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Itti Fufi</string>
+    <string name="tract_tips_tip_action_close">Cufi</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Gaafadhu</string>
+    <string name="tract_tips_type_consider">Ilaalcha keessa galchi</string>
+    <string name="tract_tips_type_prepare">Qopheessi</string>
+    <string name="tract_tips_type_quote">Caqasa</string>
+    <string name="tract_tips_type_tip">Yaada gorsaa</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Yaadota gorsaa leenjiidhaaf</string>
+    <string name="tool_settings_action_tips_disable">Yaadota gorsaa dhoksi</string>
+</resources>

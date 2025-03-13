@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Aktiwiteite</string>
+    <string name="account_joined">Aangesluit %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">Skep rekening</string>
+    <string name="account_create_description">Skep \'n rekening om regte stories, aanmoediging en praktiese wenke op jou vingerpunte te hê.</string>
+    <string name="account_login_heading">Teken in</string>
+    <string name="account_login_description">Teken in op jou rekening om regte stories, aanmoediging en praktiese wenke op jou vingerpunte te hê.</string>
+    <string name="account_error_title">Outentifikasie het misluk</string>
+    <string name="account_error_user_already_exists">Gebruikersrekening bestaan reeds.</string>
+    <string name="account_error_user_not_found">Gebruikersrekening kannie gevind word nie.</string>
+    <string name="account_error_not_connected_title">Geen Internetverbinding</string>
+    <string name="account_error_not_connected">Kontroleer asseblief u internetverbinding en probeer weer.</string>
+    <string name="account_error_unknown">Fout by aanteken.</string>
+    <string name="account_error_dialog_dismiss">Ok</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Verwyder rekening</string>
+    <string name="account_delete_heading">Moenie so haastig gaan nie</string>
+    <string name="account_delete_description">As jy jou rekening verwyder, sal jy nie toegang hê tot jou gunsteling hulpmiddel of rekeningaktiwiteit nie.</string>
+    <string name="account_delete_action_delete">Verwyder my rekening</string>
+    <string name="account_delete_action_cancel">Behou my rekening</string>
+    <string name="account_delete_error">Kon nie jou rekening uitvee nie. Maak seker jy is aanlyn of probeer weer later.</string>
+    <string name="account_delete_error_dismiss">Ok</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">Aktiwiteit</string>
+    <string name="account_activity_header">Jou aktiwiteite</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Hulpmiddel open</item>
+        <item quantity="other">Hulpmiddel open</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Les voltooi</item>
+        <item quantity="other">Lesse voltooi</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Deel skerms</item>
+        <item quantity="other">Deel skerms</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Skakel gedeel</item>
+        <item quantity="other">Skakels gedeel</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Tale gebruik</item>
+        <item quantity="other">Tale gebruik</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Sessie</item>
+        <item quantity="other">Sessies</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Jou plakkers</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d Hulpmddel geopen</item>
+        <item quantity="other">%1$,d Hulpmddels geopen</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">%1$,d Voltooide lesse</item>
+        <item quantity="other">%1$,d Voltooide lesse</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d Hulpmddel geopen</item>
+        <item quantity="other">%1$,d Hulpmddels geopen</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d Beelde gedeel</item>
+        <item quantity="other">%1$,d Beelde gedeel</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">%1$,d Opleidingswenke voltooi</item>
+        <item quantity="other">%1$,d Opleidingswenke voltooi</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Globale Aktiwiteit</string>
+    <string name="profile_global_activity_heading">%1$s Globale Aktiwiteit</string>
+    <string name="profile_activity_unique_users">Unieke Gebruikers</string>
+    <string name="profile_activity_gospel_presentations">Evangelie Aanbiedings</string>
+    <string name="profile_activity_sessions">Sessies</string>
+    <string name="profile_activity_countries">Lande</string>
+</resources>

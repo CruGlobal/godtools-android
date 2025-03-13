@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">"मुख्य पृष्ठमा जोद्नुहोस् "</string>
+    <string name="action_tools_open_tool">टूल खोल्नुहोस्</string>
+    <string name="action_tools_add_favorite">मन पर्ने टूलमा थप्नुहोस्</string>
+    <string name="action_tools_remove_favorite">मन पर्ने टूलबाट हटाउनुहोस्</string>
+    <string name="action_tools_open_training">यो टूल साझेदारी गर्न सिक्नुहोस्</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d ले हेर्यो</item>
+        <item quantity="other">"%1$,d ले हेर्यो "</item>
+    </plurals>
+    <string name="label_tools_about">टूलको बारेमा</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d भाषा</item>
+        <item quantity="other">%1$,d भाषाहरु</item>
+    </plurals>
+    <string name="tool_details_section_description_conversation_starters">"कुराकानी सुरुवातकर्ताहरु "</string>
+    <string name="tool_details_section_description_outline">बाहिरी रुपरेखा</string>
+    <string name="tool_details_section_description_bible_references">बाइबल सन्दर्भ सामाग्रीहरु</string>
+    <string name="tool_details_section_description_languages_available">भाषाहरू उपलब्ध छन्</string>
+    <string name="tool_details_section_variants_label">संस्करणहरु</string>
+    <string name="tool_details_section_variants_description">तलको यो टूलको फरक संस्करण छान्नुहोस्। प्रत्येक संस्करणमा अनौठो शैली र सामग्री छ; तपाईले आफ्नो कुराकानीको लागि सबैभन्दा राम्रो संस्करण फेला पार्न सक्नुहुन्छ। तपाईले एउटै टूलको लागि अरु संस्करणहरू मनपर्नेमा जोड्न सक्नुहुन्छ।</string>
+</resources>
