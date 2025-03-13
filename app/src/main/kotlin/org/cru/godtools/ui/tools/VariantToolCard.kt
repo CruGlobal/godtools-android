@@ -37,7 +37,7 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
 
     val eventSink by rememberUpdatedState(state.eventSink)
 
-    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = translation?.languageCode) {
         ElevatedCard(
             elevation = toolCardElevation,
             onClick = { eventSink(ToolCard.Event.Click) },

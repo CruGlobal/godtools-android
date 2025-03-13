@@ -73,12 +73,11 @@ fun ToolCard(
     showActions: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val translation by rememberUpdatedState(state.translation)
     val secondLanguage by rememberUpdatedState(state.secondLanguage)
     val downloadProgress by rememberUpdatedState(state.downloadProgress)
     val eventSink by rememberUpdatedState(state.eventSink)
 
-    ProvideLayoutDirectionFromLocale(locale = { translation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
             onClick = { eventSink(ToolCard.Event.Click) },
             elevation = toolCardElevation,
