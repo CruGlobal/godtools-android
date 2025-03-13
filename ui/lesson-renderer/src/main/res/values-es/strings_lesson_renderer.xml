@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Desliza para cambiar páginas</string>
+    <string name="lesson_tutorial_swipe_action_ok">Entendido</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">Reanudar progreso</string>
     <string name="lesson_resume_message">¿Quieres continuar desde donde lo dejaste?</string>

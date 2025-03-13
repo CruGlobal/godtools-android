@@ -10,8 +10,8 @@
     <string name="title_language_settings">भाषा सेटिंग्स</string>
     <string name="language_settings_section_app_language_heading">ऐप इंटरफ़ेस की भाषा</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%1$d भाषा उपलब्ध है</item>
-        <item quantity="other">%1$d भाषाएँ उपलब्ध हैं</item>
+        <item quantity="one">%1$,d भाषाएं</item>
+        <item quantity="other">%1$,d भाषाएं</item>
     </plurals>
     <string name="language_settings_section_app_language_description">वह भाषा सेट करें जिसमें आप पूरे ऐप को देखना चाहते हैं।</string>
     <string name="language_settings_section_offline_heading">ऑफ़लाइन उपलब्ध टूल भाषाएँ</string>

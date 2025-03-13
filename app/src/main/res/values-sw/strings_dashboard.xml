@@ -34,7 +34,7 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
         <item quantity="other">%1$d Masomo vinavyopatikana</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Imekamilika</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d Kamili</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Kamili</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Vipendwa</string>
     <string name="dashboard_home_header_title">Karibu kwenye GodTools</string>

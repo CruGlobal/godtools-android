@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">पृष्ठ बदलने के लिए स्वाइप करें</string>
+    <string name="lesson_tutorial_swipe_action_ok">समझ गया</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">प्रगति जारी रखें</string>
     <string name="lesson_resume_message">वहीं से जारी रखें जहाँ से आपने छोड़ा था?</string>

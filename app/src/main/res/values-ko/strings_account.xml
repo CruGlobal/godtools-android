@@ -27,6 +27,12 @@
     <string name="account_activity_header">내 활동</string>
     <!-- Badges -->
     <string name="account_activity_badges_header">내 배지</string>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="other">완료한 수업 수: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="other">완료한 트레이닝 팁 수: %1$,d</item>
+    </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">글로벌 활동</string>
     <string name="profile_global_activity_heading">글로벌 활동 수: %1$s</string>

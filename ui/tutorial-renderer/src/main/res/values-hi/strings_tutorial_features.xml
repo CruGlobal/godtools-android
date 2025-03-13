@@ -10,7 +10,7 @@
     <string name="tutorial_features_lessons_subhead">प्रत्येक गॉडटूल्स पाठ में आप कुछ न कुछ सीखते हैं जिससे आपको परमेश्वर के साथ वास्तविक वार्तालाप करने में मदद मिलती है।</string>
     <string name="tutorial_features_final_headline">दुबारा देखने के लिए यह ट्यूटोरियल मेन्यु में उपलब्ध है</string>
     <string name="tutorial_features_action_continue">जारी रखें</string>
-    <string name="tutorial_features_action_close">GodTools का उपयोग शुरू करें</string>
+    <string name="tutorial_features_action_close">ट्यूटोरियल बंद करें</string>
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">मुझे एक ट्यूटोरियल दिखाएं</string>
     <string name="tutorial_features_banner_action_open">ट्यूटोरियल खोलें</string>

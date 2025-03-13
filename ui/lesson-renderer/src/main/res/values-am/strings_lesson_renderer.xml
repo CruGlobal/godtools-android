@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">ገፆችን ለመቀየር ያንሸራቱ</string>
+    <string name="lesson_tutorial_swipe_action_ok">ገባኝ</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">ካቆሙበት ለመቀጠል</string>
     <string name="lesson_resume_message">ከየት መቀጠል ይፈልጋሉ ?</string>

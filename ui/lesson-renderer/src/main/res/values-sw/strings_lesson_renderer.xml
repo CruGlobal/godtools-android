@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Telezesha kidole ili kubadilisha kurasa</string>
+    <string name="lesson_tutorial_swipe_action_ok">Nimeelewa</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">Rejelea Maendeleo</string>
     <string name="lesson_resume_message">Je, ungependa kuendelea kutoka mahali ulipoachia?</string>

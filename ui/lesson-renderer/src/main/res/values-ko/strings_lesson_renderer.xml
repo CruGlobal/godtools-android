@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">밀어서 페이지를 바꾸세요</string>
+    <string name="lesson_tutorial_swipe_action_ok">알았어</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">진행 재개</string>
     <string name="lesson_resume_message">중단한 지점부터 계속하시겠습니까?</string>

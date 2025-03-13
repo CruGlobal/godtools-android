@@ -33,7 +33,7 @@
         <item quantity="other">이용 가능한 수업: %1$d</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">완료</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d 완료</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% 완료</string>
     <!-- Home -->
     <string name="nav_favorite_tools">즐겨찾기</string>
     <string name="dashboard_home_header_title">GodTools에 오신 걸 환영합니다</string>

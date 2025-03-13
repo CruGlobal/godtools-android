@@ -7,7 +7,7 @@
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">आफ्नो स्क्रिन साझा गर्नुहोस्</string>
     <string name="menu_live_share_active">स्क्रिन साझेदारी सक्रिय छ</string>
-    <string name="share_tool_message_tract_live_share">हेल्लो नमस्ते, स्क्रिन साझेदारी मार्फत गडटूल्समा मलाई पछ्याउनुहोस्। यहाँ लिङ्क दिइएको छ: %1$s\n\nयदि तपाईंले पछिसम्म पनि यो सन्देश प्राप्त गर्नुभएन भने, यो लिङ्कले काम नगर्न पनि सक्छ। हामी अर्को पटक पुन: प्रयास गर्नेछौँ।</string>
+    <string name="share_tool_message_tract_live_share">हेल्लो नमस्ते, स्क्रिन साझेदारी मार्फत गडटूल्समा मलाई पछ्याउनुहोस्। लिङ्क यहाँ दिइएको छ: %1$s\n\nयदि तपाईंले पछिसम्म पनि यो सन्देश प्राप्त गर्नुभएन भने, यो लिङ्कले काम नगर्न पनि सक्छ। हामी अर्को पटक पुन: प्रयास गर्नेछौँ।</string>
     <string name="tract_live_share_starting">स्क्रिन साझेदारी सुरु गर्दै…</string>
     <string name="tract_live_share_unable_to_connect">"स्क्रिन साझेदारीमा जोड्न असमर्थ "</string>
     <string name="tract_live_share_exit_dialog_message">के अहिले रिमोट सेयरिङबाट बाहिर निस्किने हो?</string>

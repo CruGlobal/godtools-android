@@ -7,6 +7,7 @@
     <string name="account_create_description">Jisajili kwa kuunda akaunti ili uweze kuona shuhuda halisi, kutiwa moyo na kupata mwongozo wa matumizi rahisi.</string>
     <string name="account_login_heading">Ingia</string>
     <string name="account_login_description">Jisajili kwa kuunda akaunti ili uweze kuona shuhuda halisi, kutiwa moyo na kupata mwongozo wa matumizi rahisi.</string>
+    <string name="account_error_title">Uthibitishaji Umeshindwa</string>
     <string name="account_error_user_already_exists">Akaunti ya mtumiaji tayari ipo</string>
     <string name="account_error_user_not_found">Akaunti ya mtumiaji haipo</string>
     <string name="account_error_not_connected_title">Hakuna muunganisho wa mtandao.</string>

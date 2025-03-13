@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Geser untuk mengganti halaman</string>
+    <string name="lesson_tutorial_swipe_action_ok">Mengerti</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">Lanjutkan Kemajuan</string>
     <string name="lesson_resume_message">Apakah Anda ingin melanjutkan dari tempat Anda berhenti?</string>

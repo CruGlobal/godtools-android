@@ -34,7 +34,7 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
         <item quantity="other">%1$d পাঠসমূহ উপলভ্য</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">সম্পূর্ণ</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d সম্পূর্ণ করুন</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% সম্পূর্ণ করুন</string>
     <!-- Home -->
     <string name="nav_favorite_tools">পছন্দসই</string>
     <string name="dashboard_home_header_title">GodTools-এ স্বাগতম</string>
