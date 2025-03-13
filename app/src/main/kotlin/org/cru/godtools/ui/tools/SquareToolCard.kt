@@ -34,7 +34,7 @@ fun SquareToolCard(
     val downloadProgress by rememberUpdatedState(state.downloadProgress)
     val eventSink by rememberUpdatedState(state.eventSink)
 
-    ProvideLayoutDirectionFromLocale(locale = { state.translation?.languageCode }) {
+    ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
             onClick = { eventSink(ToolCard.Event.Click) },
             elevation = toolCardElevation,
