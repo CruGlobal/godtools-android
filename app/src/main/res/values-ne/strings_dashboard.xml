@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">"सुरु गर्नुहोस् "</string>
+    <string name="menu_tutorial">ट्यूटोरियल</string>
+    <string name="menu_heading_account">"खाता "</string>
+    <string name="menu_login">"प्रवेश "</string>
+    <string name="menu_signup">खाता खोल्नुहोस्</string>
+    <string name="menu_logout">निष्काशन</string>
+    <string name="menu_heading_support">"सहयोग "</string>
+    <string name="menu_feedback">प्रतिक्रिया पठाउनुहोस्</string>
+    <string name="menu_report_bug">समस्या रिपोर्ट गर्नुहोस्</string>
+    <string name="menu_question">"प्रश्न सोध्नुहोस् "</string>
+    <string name="menu_heading_share">"साझा गर्नुहोस "</string>
+    <string name="menu_review">समीक्षा छोड्नुहोस्</string>
+    <string name="menu_share_story">"हामीहरुलाई आफ्नो  कथा बताउनुहोस् "</string>
+    <string name="menu_share_godtools">"गडटूल्स साझा गर्नुहोस् "</string>
+    <string name="share_app_message">GodTools एप डाउनलोड गर्नुहोस् : https://godtoolsapp.com \n\n
+
+अनलाइन संस्करणमा पनि पाउन सकिन्छ :
+https://knowgod.com/</string>
+    <string name="share_story_subject">"GodTools को कथा "</string>
+    <string name="menu_heading_about">"टूलको बारेमा "</string>
+    <string name="menu_terms_of_use">"प्रयोग शर्तहरु "</string>
+    <string name="menu_privacy_policy">"गोपनीय नीति
+"</string>
+    <string name="menu_copyright">प्रतिलिपि अधिकार जानकारी</string>
+    <string name="menu_version">संस्करण : %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">"पाठहरु "</string>
+    <string name="dashboard_lessons_header_title">"तपाईको लागि बनाइएको पाठहरु "</string>
+    <string name="dashboard_lessons_header_description">सम्बन्ध निर्माण गर्न र अर्थपूर्ण कुराकानी सुरु गर्न व्यावहारिक विचारहरू।</string>
+    <string name="dashboard_lessons_section_filter_label">यी पाठहरूमा:</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d पाठ उपलब्छध छ</item>
+        <item quantity="other">%1$d पाठहरु उपलब्छध छन्</item>
+    </plurals>
+    <string name="dashboard_lessons_progress_completed">पूरा भयो</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% सकियो</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">मनपर्ने</string>
+    <string name="dashboard_home_header_title">गड टूल्समा स्वागत छ</string>
+    <string name="dashboard_home_section_featured_lesson">विशेष पाठ</string>
+    <string name="dashboard_home_section_favorites_title">"तपाईको मनपर्ने सामग्रीहरु "</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">प्रदर्शन गर्न मनपर्ने सामग्री छैन</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">कुनै सामग्री मनपर्ने र यसलाई अफलाइन उपलब्ध गराउन हृदय आइकनमा थिच्नुहोस् ।</string>
+    <string name="dashboard_home_section_favorites_action_view_all">सबै हेर्नुहोस् &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">सामग्रीमा जानुहोस्</string>
+    <string name="tools_list_favorites_banner_text">तपाईको मनपर्नेमा थप्ने मुटु आइकनमा थिचेर अफलाइनमा उपकरण उपलब्ध बनाउनुहोस्।</string>
+    <string name="tools_list_favorites_banner_action_dismiss">खारेज गर्नुहोस्</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">सामग्रीहरु</string>
+    <string name="dashboard_tools_section_filter_label">फिल्टर गर्नुहोस्</string>
+    <string name="dashboard_tools_section_filter_category_any">"कुनै पनि वर्गीकरण "</string>
+    <string name="dashboard_tools_section_filter_language_any">"कुनै पनि भाषा "</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d सामग्री उपलब्ध छ</item>
+        <item quantity="other">"%1$d सामग्रीहरु उपलब्ध छन् "</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">"सबै सामग्रीहरु उपलब्ध छन् "</string>
+    <string name="dashboard_tools_section_categories_label">"श्रेणी "</string>
+    <string name="dashboard_tools_section_categories_all">सबै सामाग्रीहरु</string>
+    <string name="dashboard_tools_section_spotlight_label">सामग्री स्पटलाइट</string>
+    <string name="dashboard_tools_section_spotlight_description">यहाँ केहि सामग्रीहरु छन् जुन तपाईलाई मन पर्न सक्छ</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">मनपर्नेबाट \"%1$s\" हटाउने हो?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">हटाउनुहोस्</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">रद्द गर्नुहोस्</string>
+    <string name="tool_card_accessibility_language_available">"उपलब्ध छ "</string>
+    <string name="action_tools_about">विवरण</string>
+    <string name="action_tools_open">खोल्नुहोस्</string>
+    <!-- In App Update -->
+    <string name="play_update_available">अपडेट उपलब्ध छ</string>
+    <string name="play_update_available_action">डाउनलोड गर्नुहोस्</string>
+    <string name="play_update_downloaded">"अपडेट डाउनलोड भयो "</string>
+    <string name="play_update_downloaded_action">पुन: लोड गर्नुहोस्</string>
+</resources>

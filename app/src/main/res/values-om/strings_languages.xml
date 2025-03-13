@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Qooqa app</string>
+    <string name="language_settings_app_language_dialog_message">Afaan %1$s akka afaan app kanaa ta\'uuf filatteetta. Kunis afaan guutummaa app GodTools jijjira. Akkas akka ta\'u ni barbaaddaa?</string>
+    <string name="language_settings_app_language_dialog_confirm">Qooqa jijjiiri</string>
+    <string name="language_settings_app_language_dialog_dismiss">Dhiisi</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">Sirreeffamoota Afaanii</string>
+    <string name="title_language_settings">Sirreeffamoota Afaanii</string>
+    <string name="language_settings_section_app_language_heading">Qooqa app kanaa</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">Afaanota %1$,d \'tu jira</item>
+        <item quantity="other">Afaanota %1$,d \'tu jira</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Qooqa appn kun guutummaan isaa akka ittiin mul\'atu barbaaddu filadhu.</string>
+    <string name="language_settings_section_offline_heading">Afaanota barruu buufamanii jiran</string>
+    <string name="language_settings_section_offline_description">Barruuwwan afaan kanaan jiran yeroo networkii ykn WiFi hin qabnettis argachuuf buufadhu. Afaan barruu sanaa filannoowwan baruu sanaa keessa galii sirreessi.</string>
+    <string name="language_settings_section_offline_action_edit">Afaanota buufamanii jiran sirreessi</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Afaanota barbaadi</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">Barruuwwan %1$d \'tu jira</item>
+        <item quantity="other">Barruuwwan %1$d \'tu jira</item>
+    </plurals>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">%s banuun hin danda\'amne</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Afeerraa wangeelaa</string>
+    <string name="tool_category_articles">barreeffama gabaabaa</string>
+    <string name="tool_category_conversation_starter">Haasaa jalqabduuwwan</string>
+    <string name="tool_category_growth">Guddina Kiristiyaanaa</string>
+    <string name="tool_category_training">Leenjii</string>
+    <!-- Sharing -->
+</resources>

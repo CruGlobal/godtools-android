@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">तपाईले अनुरोध गर्नु भएको टूल भेटिएन</string>
+    <string name="tool_loading">तपाईले अनुरोध गरेको टूल लोड हुँदैछ...</string>
+    <string name="tool_offline">तपाईले अनुरोध गर्नुभएको टूल खोल्न इन्टरनेट चाहिन्छ</string>
+    <string name="tract_content_input_error_required">%1$s को आवश्यकता छ</string>
+    <string name="tract_content_input_error_invalid_email">कृपया मान्य हुने इमेल ठेगाना राख्नुहोस्</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">"साझा गर्नुहोस "</string>
+    <string name="tool_share_sheet_more_apps">थप</string>
+    <string name="share_tool_message">यो लिङ्कले तपाईलाई आज हामीले के कुरा गरिरहेका थियौं भन्ने वेब संस्करणमा लैजान्छ: %1$s \n\n
+
+यो एप https://godtoolsapp.com \n\n बाट डाउनलोड गर्न सकिन्छ ।
+
+अझ धेरै जानकारीको लागि !</string>
+    <string name="share_tool_message_article">म तपाईसँग यो लेख साझा गर्न चाहन्छु र यस बारे तपाईको विचार सुन्न चाहन्छु।\n%1$s</string>
+    <string name="feature_discovery_title_share_tool">लिङ्क साझा गर्नुहोस्</string>
+    <string name="feature_discovery_desc_share_tool">यो आइकनमा क्लिक गरेर साथीलाई यो टुल पठाउनुहोस्</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">तस्बिर साझा गर्नुहोस्</string>
+    <!-- Settings -->
+    <string name="menu_settings">सेटिङहरु</string>
+    <string name="tool_settings_title">टूलको छनौट</string>
+    <string name="tool_settings_action_share">लिङ्क साझा गर्नुहोस्</string>
+    <string name="tool_settings_languages_title">समानान्तर भाषा</string>
+    <string name="tool_settings_languages_description">यस टूलमा दुई फरक भाषाहरूलाई मिलाउनुहोस्।</string>
+    <string name="tool_settings_languages_parallel">समानान्तर</string>
+    <string name="tool_settings_languages_none">कुनै पनि होइन</string>
+    <string name="tool_settings_shareables_title">सम्बन्धित ग्राफिक्स</string>
+</resources>

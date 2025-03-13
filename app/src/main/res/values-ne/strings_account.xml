@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">"क्रियाकलाप "</string>
+    <string name="account_joined">जोडियो  %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">"खाता खोल्नुहोस् "</string>
+    <string name="account_create_description">तपाईको औंलामा वास्तविक कथाहरू, प्रोत्साहन, र व्यावहारिक सुझावहरू पाउनको लागि खाता सिर्जना गर्नुहोस्।</string>
+    <string name="account_login_heading">"दर्ता गर्नुहोस् "</string>
+    <string name="account_login_description">आफ्नो औँलामा वास्तविक कथाहरू, प्रोत्साहन, र व्यावहारिक सुझावहरू पाउन आफ्नो खातामा प्रवेश  गर्नुहोस्।</string>
+    <string name="account_error_title">प्रमाणीकरण असफल भयो</string>
+    <string name="account_error_user_already_exists">प्रयोगकर्ता खाता पहिल्यै अवस्थित छ।</string>
+    <string name="account_error_user_not_found">प्रयोगकर्ता खाता भेटिएन।</string>
+    <string name="account_error_not_connected_title">इन्टरनेट जडान छैन</string>
+    <string name="account_error_not_connected">कृपया आफ्नो इन्टरनेट जडान जाँच गर्नुहोस् र फेरि प्रयास गर्नुहोस्।</string>
+    <string name="account_error_unknown">लग इन गर्दा त्रुटि भयो।</string>
+    <string name="account_error_dialog_dismiss">"ठिक छ "</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">"खाता मेटाउनुहोस् "</string>
+    <string name="account_delete_heading">"छिटो नजानुहोस् "</string>
+    <string name="account_delete_description">यदि तपाईले आफ्नो खाता मेटाउनुभयो भने तपाईले आफ्नो मनपर्ने सामाग्रीहरु वा खाता गतिविधिहरू प्रयोग गर्न सक्नु  हुनुहुने छैन।</string>
+    <string name="account_delete_action_delete">"मेरो खाता मेटाउनुहोस् "</string>
+    <string name="account_delete_action_cancel">"मेरो खाता राख्नुहोस् "</string>
+    <string name="account_delete_error">तपाईको खाता मेटाउने क्रममा त्रुटि भयो।  तपाई अनलाइन हुनुहुन्छ भनि निश्चित गर्नुहोस् वा पछि पुन: प्रयास गर्नुहोस्।</string>
+    <string name="account_delete_error_dismiss">"ठिक छ "</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">"क्रियाकलाप "</string>
+    <string name="account_activity_header">"तपाईको क्रियाकलाप "</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">"सामग्री खोल्नुहोस् "</item>
+        <item quantity="other">सामग्री खुल्छ</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">"पाठ पुरा भएको "</item>
+        <item quantity="other">"पाठ पुरा भएको छ "</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">"स्क्रिन साझा गर्नुहोस् "</item>
+        <item quantity="other">"स्क्रिन साझा भएको छ "</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">"लिंक साझा भएको छ "</item>
+        <item quantity="other">"लिंकहरु साझा भएका छन् "</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">"भाषा प्रयोग भएको छ "</item>
+        <item quantity="other">"भाषाहरु प्रयोग भएका छन् "</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">सेसन</item>
+        <item quantity="other">सेसनहरु</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">तपाईका ब्याजहरू</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">%1$,d सामग्रीहरु खोलियो</item>
+        <item quantity="other">%1$,d सामाग्रीहरु खोलियो</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">"%1$,d पूरा भएको पाठहरु "</item>
+        <item quantity="other">"%1$,d पूरा भएको पाठहरु "</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">%1$,d लेखहरू खोलियो</item>
+        <item quantity="other">%1$,d लेखहरू खोलियो</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">%1$,d तस्बिरहरू साझा गरियो</item>
+        <item quantity="other">%1$,d तस्बिरहरू साझा गरियो</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">%1$,d तालिम सुझावहरू पूरा गरियो</item>
+        <item quantity="other">%1$,d तालिम सुझावहरू पूरा गरियो</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">विश्वव्यापी गतिविधि</string>
+    <string name="profile_global_activity_heading">%1$s विश्वव्यापी गतिविधि</string>
+    <string name="profile_activity_unique_users">विशेष प्रयोगकर्ताहरू</string>
+    <string name="profile_activity_gospel_presentations">"सुसमाचार प्रस्तुतीकरण "</string>
+    <string name="profile_activity_sessions">"पाठहरू "</string>
+    <string name="profile_activity_countries">"देशहरु "</string>
+</resources>

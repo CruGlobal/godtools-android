@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">Barruu kana namaaf qooduu baradhu</string>
+    <string name="tutorial_tips_learn_text">Yaadotaa gorsaa jiran fayyadamiitii, hamma namaaf qooduudhaaf ofitti amanamummaan sitti dhaga\'amutti barruu kana dubbisi.</string>
+    <string name="tutorial_tips_light_headline">Yaadota gorsaa si gargaaruu danda\'an</string>
+    <string name="tutorial_tips_light_text1">Fuulaawwan baruu kanaa irratti mallattoowwan gosa adda adaa argita. Yaada gorsaa wanta fuula sana irra jiru haasa\'uuf si gargaaru argachuuf mallattoolee fuula sana irra jiran tuqi. Yoo fuula sana irra mallattoon hin jiru ta\'e, barreeffama fuula sana irra jiru dubbisuudhaan akka siif mijatetti irratti dubbadhu.</string>
+    <string name="tutorial_tips_light_text2">"Fuulawwan yaada gorsaa hin qabne, ofiikeetii dubbistee yaada sana irratti akka dubbattu si gorsina."</string>
+    <string name="tutorial_tips_start_headline">Yaadota gorsaa ibsi</string>
+    <string name="tutorial_tips_start_text">Yeroo yaadni gorsaa ifu, leenjii sana xumurteetta jechuudha. Yaadota gorsaa hamma barbaadde fayyadamuudhaan, hamma barruu sana ibsuuf ofitti amanamummaa horattutti shaakali.</string>
+    <string name="tutorial_tips_action_continue">Itti fufi</string>
+    <string name="tutorial_tips_action_skip">Irra darbi</string>
+    <string name="tutorial_tips_action_start">Leenjii eegali</string>
+</resources>

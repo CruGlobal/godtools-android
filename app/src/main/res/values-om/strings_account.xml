@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Sochiiwwan</string>
+    <string name="account_joined">Gaafa %1$s Fayyadamuu eegalte</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">Akkaawontii uumi</string>
+    <string name="account_create_description">Seenaa dhugaa qabaachuuf, ergaawwan jajjabinaa fi yaadota gorsaa haala salphaa ta\'een argachuuf, akkaawontii uummadhu.</string>
+    <string name="account_login_heading">Seeni</string>
+    <string name="account_login_description">Seenaa dhugaa, ergaawwan jajjabinaa fi yaadota gorsaa haala salphaa ta\'een argachuuf seeni.</string>
+    <string name="account_error_title">Seensi hin milkoofne</string>
+    <string name="account_error_user_already_exists">Akkaawontiin duraan baname jira.</string>
+    <string name="account_error_user_not_found">Akkaawontiin baname hin jiru.</string>
+    <string name="account_error_not_connected_title">Qunnamtiin interneetii hin jiru</string>
+    <string name="account_error_not_connected">Maaloo tajaajila interneetii qabaachuu kee mirkaneeffadhuutii, irra deebi\'i yaali.</string>
+    <string name="account_error_unknown">Seenuu irratti dogoggorri uumameera.</string>
+    <string name="account_error_dialog_dismiss">TOLE</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Akkaawontii balleessi</string>
+    <string name="account_delete_heading">Akkas daftee hin deemiin</string>
+    <string name="account_delete_description">Yoo akkaawontii kee balleessite, barruuwwan jaallattuufi wantoota akkawontii kee irraa qabdu hunda ni dhabda.</string>
+    <string name="account_delete_action_delete">Akkaawontii koo balleessi</string>
+    <string name="account_delete_action_cancel">Akkaawontii koo tursi</string>
+    <string name="account_delete_error">Akkaawontii kee balleessuu irratti rakkinni uumameera. Tajaajila interneetii akka qabdu mirkaneeffadhu ykn xiqqoo turii irra deebi\'ii yaali.</string>
+    <string name="account_delete_error_dismiss">TOLE</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">Sochiiwwan</string>
+    <string name="account_activity_header">Sochiiwwan kee</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Yeroo barruu kana bante</item>
+        <item quantity="other">Yeroo barruu kana bante</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Barannoowwan barattee xumurtee</item>
+        <item quantity="other">Barannoowwan barattee xumurtee</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Yeroo skiriiniikee qoodde</item>
+        <item quantity="other">Yeroo skiriiniikee qoodde</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Liinkii ati qoodde</item>
+        <item quantity="other">Liinkiiwwan ati qoodde</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Afaanota fayyadamte</item>
+        <item quantity="other">Afaanota fayyadamte</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Yeroo fayyadamaa</item>
+        <item quantity="other">Yeroo fayyadamaa</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Baajiiwwan kee</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Barruuwwan %1$,d banteetta</item>
+        <item quantity="other">Barruuwwan %1$,d banteetta</item>
+    </plurals>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Barannoowwan %1$,d xumurteetta</item>
+        <item quantity="other">Barannoowwan %1$,d xumurteetta</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">Barruuwwan %1$,d banteetta</item>
+        <item quantity="other">Barruuwwan %1$,d banteetta</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">Suurota %1$,d qooddeetta</item>
+        <item quantity="other">Suurota %1$,d qooddeetta</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">Yaadota gorsaa leenjii %1$,d xumurteetta</item>
+        <item quantity="other">Yaadota gorsaa leenjii %1$,d xumurteetta</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Sochii addunyaalessaa</string>
+    <string name="profile_global_activity_heading">%1$s Sochii addunyaalessaa</string>
+    <string name="profile_activity_unique_users">Fayyadamtoota, namoota adda addaa</string>
+    <string name="profile_activity_gospel_presentations">Ibsaawwan Wangeelaa</string>
+    <string name="profile_activity_sessions">Yeroo fayyadamaa</string>
+    <string name="profile_activity_countries">Biyyoota</string>
+</resources>

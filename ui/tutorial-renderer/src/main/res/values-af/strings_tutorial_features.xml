@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Wenke</string>
+    <string name="tutorial_features_tools_subhead">Elke wenk is geskep vir verskillende stadiums van die gesprek- voor, gedurende of na dit.</string>
+    <string name="tutorial_features_tips_headline">Hulpmiddelwenke</string>
+    <string name="tutorial_features_tips_subhead">GodTools-wenke lei jou terwyl jy iemand help om die evangelie te verstaan en Jesus te ontmoet.</string>
+    <string name="tutorial_features_live_share_headline">Deel skerm</string>
+    <string name="tutorial_features_live_share_subhead">Jy kan nou jou skerm op afstand deel sodat die ander persoon kan volg terwyl jy \'n hulpmiddel gebruik om die evangelie te bespreek.</string>
+    <string name="tutorial_features_lessons_headline">Lesse</string>
+    <string name="tutorial_features_lessons_subhead">In elke GodTools-les leer jy iets wat jou sal help om werklike gesprekke oor God te hê.</string>
+    <string name="tutorial_features_final_headline">Vind hierdie handleiding in die menu wanneer jy dit nodig het.</string>
+    <string name="tutorial_features_action_continue">Gaan aan</string>
+    <string name="tutorial_features_action_close">Maak handleiding toe</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Wys vir my \'n handleiding</string>
+    <string name="tutorial_features_banner_action_open">Open Handleiding</string>
+    <string name="tutorial_features_banner_action_dismiss">Wys af</string>
+</resources>

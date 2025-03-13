@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Fuula kan biraatti darbuuf gara bitaatti ykn mirgaatti skriinii kana buti</string>
+    <string name="lesson_tutorial_swipe_action_ok">Naaf galeera</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Bakka dhaabdee itti fufi</string>
+    <string name="lesson_resume_message">Bakka itti dhaabdee itti fufuu barbaaddaa?</string>
+    <string name="lesson_resume_action_resume">Itti fufi</string>
+    <string name="lesson_resume_action_restart">Jalqabaa eegali</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">Gamaggami</string>
+    <string name="lesson_feedback_question_helpful">Barannoon kun si fayyadeeraa?</string>
+    <string name="lesson_feedback_question_helpful_yes">Eeyyee</string>
+    <string name="lesson_feedback_question_helpful_no">Lakki</string>
+    <string name="lesson_feedback_question_readiness">Haasaa hafuuraa nama waliin eegaluuf hammam qophaa\'aadha jettee of yaadda?</string>
+    <string name="lesson_feedback_action_submit">Duubdeebii ergi</string>
+    <string name="lesson_feedback_action_cancel">Irra darbi</string>
+</resources>

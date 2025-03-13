@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Barruuwwan</string>
+    <string name="tutorial_features_tools_subhead">Barruun tokko tokkoon isaa sadarkaa haasaa adda addaatiif qophaa\'e - haasaa dura, yeroo haasaa fi haasaa booda.</string>
+    <string name="tutorial_features_tips_headline">Yaadota gorsaa barruu kanaa</string>
+    <string name="tutorial_features_tips_subhead">Yaadonni gorsaa GodTools deemsa ati akka namni wangeela hubatuu fi gara Yesusitti dhufu gochuuf deemtu keessatti si gargaaru.</string>
+    <string name="tutorial_features_live_share_headline">Skriinii qooduu</string>
+    <string name="tutorial_features_live_share_subhead">Amma fageenyarratti namni ati itti haasoftu akka si hordofu gochuudhaaf skiriinii kee fageenyarratti qooduu ni dandeessa.</string>
+    <string name="tutorial_features_lessons_headline">Barannoowwan</string>
+    <string name="tutorial_features_lessons_subhead">Barannoowwan GodTools tokko tokkoo isaanii keessatti haasaa dhugaa waa\'ee Waaqayyoo namoota waliin gochuuf wantoota si gargaaran ni baratta.</string>
+    <string name="tutorial_features_final_headline">Agarsiistuu fayyadamaa kana yeroo barbaaddetti meenuu keessatti ni argatta.</string>
+    <string name="tutorial_features_action_continue">Itti fufi</string>
+    <string name="tutorial_features_action_close">Agarsiistuu fayyadamaa cufi</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Akkaataa fayyadamaa natti agarsiisi</string>
+    <string name="tutorial_features_banner_action_open">Agarsiistuu fayyadamaa bani</string>
+    <string name="tutorial_features_banner_action_dismiss">Cufii dhisii</string>
+</resources>

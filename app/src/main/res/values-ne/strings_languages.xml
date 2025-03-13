@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">"एपको भाषा "</string>
+    <string name="language_settings_app_language_dialog_message">तपाईले आफ्नो एपको भाषाको रूपमा %1$s चयन गर्नुभएको छ। यसले सम्पूर्ण गडटूल्स एपको भाषा परिवर्तन गर्नेछ। के तपाई पक्का हुनुहुन्छ?</string>
+    <string name="language_settings_app_language_dialog_confirm">"भाषा परिवर्तन "</string>
+    <string name="language_settings_app_language_dialog_dismiss">केहि पर्दैन</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">भाषा सेटिङहरू</string>
+    <string name="title_language_settings">भाषा सेटिङहरू</string>
+    <string name="language_settings_section_app_language_heading">एप इन्टरफेस भाषा</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$,d भाषाहरू उपलब्ध छन्</item>
+        <item quantity="other">%1$,d भाषाहरू उपलब्ध छन्</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">तपाईले सम्पूर्ण एपलाई देखाउन चाहनुभएको भाषामा सेट गर्नुहोस्।</string>
+    <string name="language_settings_section_offline_heading">टूल भाषाहरू अफलाइन उपलब्ध छन्</string>
+    <string name="language_settings_section_offline_description">तपाई वाइफाइ वा मोबाइल इन्टरनेट सेवाबाट बाहिर हुँदा पनि यसलाई उपलब्ध गराउन एकै भाषामा सबै टूल डाउनलोड गर्नुहोस्। टूल भित्र छनौट बटन मार्फत टूल भाषा सेट गर्नुहोस्।</string>
+    <string name="language_settings_section_offline_action_edit">डाउनलोड गरिएका भाषाहरू सम्पादन गर्नुहोस्</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">भाषाहरू खोज्नुहोस्</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d टूलहरू उपलब्ध छन्</item>
+        <item quantity="other">%1$d टूलहरू उपलब्ध छन्</item>
+    </plurals>
+</resources>

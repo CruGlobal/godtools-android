@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Eegali</string>
+    <string name="menu_tutorial">Agarsiistuu fayyadamaa</string>
+    <string name="menu_heading_account">Akkaawontii</string>
+    <string name="menu_login">Seeni</string>
+    <string name="menu_signup">Akkaawontii uumi</string>
+    <string name="menu_logout">Bahi</string>
+    <string name="menu_heading_support">Gargaarsa</string>
+    <string name="menu_feedback">Duubdeebii ergi</string>
+    <string name="menu_report_bug">Rakkoo app gabaasi</string>
+    <string name="menu_question">Gaaffii gaafadhu</string>
+    <string name="menu_heading_share">Qoodi</string>
+    <string name="menu_review">Gamaggama kaa\'i</string>
+    <string name="menu_share_story">Seenaakee nuuf qoodi</string>
+    <string name="menu_share_godtools">GodTools qoodi</string>
+    <string name="share_app_message">App GodTools buufadhu: https://godtoolsapp.com\n\n 
+Marsariitii https://knowgod.com/ irrattis argachuu ni dandeessa.</string>
+    <string name="share_story_subject">Seenaa GodTools</string>
+    <string name="menu_heading_about">Waa\'ee</string>
+    <string name="menu_terms_of_use">Haala fayyadamaa</string>
+    <string name="menu_privacy_policy">Privacy policy</string>
+    <string name="menu_copyright">Odeeffannoo mirga waraabbii</string>
+    <string name="menu_version">Version: %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Barannoowwan</string>
+    <string name="dashboard_lessons_header_title">Barannoowwan siif qopha\'an</string>
+    <string name="dashboard_lessons_header_description">Yaadota qabatamaa hariiroo ijaaruu fi haasawa hiika qabu jalqabuuf gargaaraan.</string>
+    <string name="dashboard_lessons_section_filter_label">Barannoowwaan afaan:</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">Barannoowwan %1$d \'tu jira</item>
+        <item quantity="other">Barannoowwan %1$d \'tu jira</item>
+    </plurals>
+    <string name="dashboard_lessons_progress_completed">Xumurteetta</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Xumurameera</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">Kan jaallataman</string>
+    <string name="dashboard_home_header_title">Baga nagaan gara GodTools\'tti dhufte</string>
+    <string name="dashboard_home_section_featured_lesson">Barannoo addatti dhiyaate</string>
+    <string name="dashboard_home_section_favorites_title">Barruuwwan ati jaallatte</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Barruun jaallatamoon hin jiran.</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Barruu tokko jaallatamootti dabaluuf mallattoo onnee tuqi.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Hundumaa ilaali &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Gara barruuwwanii deemi</string>
+    <string name="tools_list_favorites_banner_text">Barruu tokko ooflaayinii argachuuf mallattoo onneetti bu\'i, sana booda barruuwwan jaallatamookeetti dabalama.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">Cufii dhisii</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">Barruuwwan</string>
+    <string name="dashboard_tools_section_filter_label">Qoodi</string>
+    <string name="dashboard_tools_section_filter_category_any">Garee hundumaa</string>
+    <string name="dashboard_tools_section_filter_language_any">Afaan hundumaa</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">Barruuwwan %1$d \'tu jira</item>
+        <item quantity="other">Barruuwwan %1$d \'tu jira</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Barruuwwan hunda \'tu jira</string>
+    <string name="dashboard_tools_section_categories_label">Gosoota</string>
+    <string name="dashboard_tools_section_categories_all">Barruuwwan hunda</string>
+    <string name="dashboard_tools_section_spotlight_label">Barruuwwan filatamoo</string>
+    <string name="dashboard_tools_section_spotlight_description">Barruuwwan nuti ni jaallatta jennee yaadne</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Jaallatamoo keessaa “%1$s” balleessi?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Irraa kaasuu</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Dhiisi</string>
+    <string name="tool_card_accessibility_language_available">Jira</string>
+    <string name="action_tools_about">Gadi fageenya</string>
+    <string name="action_tools_open">Bani</string>
+    <!-- In App Update -->
+    <string name="play_update_available">Update\'n jira</string>
+    <string name="play_update_available_action">Buusuu</string>
+    <string name="play_update_downloaded">Update\'n buufameera</string>
+    <string name="play_update_downloaded_action">Irra deebi\'ii fe\'i</string>
+</resources>

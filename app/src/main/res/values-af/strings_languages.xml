@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">App Taal</string>
+    <string name="language_settings_app_language_dialog_message">Jy het %1$s as jou app-taal gekies. Dit sal die taal van die hele GodTools-app verander. Is jy seker?</string>
+    <string name="language_settings_app_language_dialog_confirm">Verander taal</string>
+    <string name="language_settings_app_language_dialog_dismiss">Maak nie saak nie</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">Taalinstellings</string>
+    <string name="title_language_settings">Taalinstellings</string>
+    <string name="language_settings_section_app_language_heading">App-koppelvlak taal</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$d Tale beskikbaar</item>
+        <item quantity="other">%1$,d Languages available</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Stel die taal in wat jy wil hê die hele app moet in vertoon.</string>
+    <string name="language_settings_section_offline_heading">Hulpmiddel  tale beskikbaar vanlyn\"</string>
+    <string name="language_settings_section_offline_description">Laai al die hulpmiddel in \'n taal af om dit beskikbaar te maak, selfs al is jy buite WiFi of selfoondiens. Stel die hulpmiddeltaal in via die opsieknoppie binne \'n gereedskap.</string>
+    <string name="language_settings_section_offline_action_edit">Wysig afgelaaide tale</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">Soek tale</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d Hulpmiddel beskikbaar</item>
+        <item quantity="other">%1$d Hulpmiddels beskikbaar</item>
+    </plurals>
+</resources>

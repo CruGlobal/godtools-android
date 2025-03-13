@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">यो उपकरण अरुसँग साझेदारी गर्न सिक्नुहोस्</string>
+    <string name="tutorial_tips_learn_text">अरूसँग यो उपकरण साझेदारी गर्दा विश्वस्त महसुस गराउन  आवश्यक भए सुझावहरू प्रयोग गर्ने अभ्यास गर्नुहोस्।</string>
+    <string name="tutorial_tips_light_headline">बाटो उज्यालो पार्न सुझावहरू</string>
+    <string name="tutorial_tips_light_text1">चयन गरिएका स्क्रिनहरूमा, तपाईंले विभिन्न किसिमका आइकनहरू देख्नुहुनेछ। स्क्रिनको सामग्रीको बारेमा कुरा गर्न मद्दतको लागि सुझाव आइकनमा थिच्नुहोस्।</string>
+    <string name="tutorial_tips_light_text2">"कुनै सुझावहरू नभएका स्क्रिनहरूका लागि, हामी सामग्री पढ्न र आवश्यकता अनुसार छलफल गर्न सिफारिस गर्छौं।"</string>
+    <string name="tutorial_tips_start_headline">सुझावहरू उज्यालो पार्नुहोस्</string>
+    <string name="tutorial_tips_start_text">जब एक सुझाव उज्यालो हुन्छ, तपाईले तालिमको त्यो भाग पूरा गर्नुभयो। तपाईले हरेक कुराकानीमा प्रत्येक सुझाव प्रयोग गर्न आवश्यक छैन।</string>
+    <string name="tutorial_tips_action_continue">जारी राख्नुहोस्</string>
+    <string name="tutorial_tips_action_skip">"छोड्नुहोस् "</string>
+    <string name="tutorial_tips_action_start">"तालिम सुरु गर्नुहोस् "</string>
+</resources>
