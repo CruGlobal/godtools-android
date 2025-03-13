@@ -19,6 +19,7 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
         projectId = 253275
 
         downloadLanguages = listOf(
+            "af",
             "am",
             "ar",
             "bn",
@@ -30,6 +31,8 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
             "ja",
             "ko",
             "lv",
+            "ne",
+            "om",
             "pt",
             "ro",
             "ru",
