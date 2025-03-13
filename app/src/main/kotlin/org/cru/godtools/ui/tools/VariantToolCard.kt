@@ -15,12 +15,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.model.getTagline
+
+internal const val TEST_TAG_SECOND_LANGUAGE_AVAILABILITY = "second_language_availability"
 
 @Composable
 internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifier, isSelected: Boolean = false) {
@@ -69,7 +72,6 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
                 ) {
                     Text(pluralStringResource(R.plurals.label_tools_languages, languageCount, languageCount))
 
-                    // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
                     AvailableInLanguage(
                         appLanguage,
                         available = appLanguageAvailable,
@@ -78,11 +80,11 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
 
                     // Show the second language availability if it exists and doesn't match the app language
                     if (secondLanguage != null && secondLanguage?.code != appLanguage?.code) {
-                        // TODO: I believe we need to suppress the "Unavailable in" prefix for this phrase
                         AvailableInLanguage(
                             secondLanguage,
                             available = secondLanguageAvailable,
                             horizontalArrangement = Arrangement.End,
+                            modifier = Modifier.testTag(TEST_TAG_SECOND_LANGUAGE_AVAILABILITY)
                         )
                     }
                 }

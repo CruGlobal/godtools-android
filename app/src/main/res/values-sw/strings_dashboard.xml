@@ -64,7 +64,6 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_title">Ondoa \"%1$s\" kutoka kwa Vipendwa?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Ondoa</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Ghairi</string>
-    <string name="tool_card_label_language_unavailable">Haipatikani kwenye %1$s</string>
     <string name="tool_card_accessibility_language_available">Inapatikana</string>
     <string name="action_tools_about">Maelezo</string>
     <string name="action_tools_open">Fungua</string>

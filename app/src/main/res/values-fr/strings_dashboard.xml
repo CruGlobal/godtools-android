@@ -64,7 +64,6 @@ Une version en ligne est disponible sur https://knowgod.com</string>
     <string name="tools_list_remove_favorite_dialog_title">Supprimer « %1$s » des favoris ?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Supprimer</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Annuler</string>
-    <string name="tool_card_label_language_unavailable">Non disponible en %1$s</string>
     <string name="tool_card_accessibility_language_available">Disponible</string>
     <string name="action_tools_about">Détails</string>
     <string name="action_tools_open">Ouvrir</string>

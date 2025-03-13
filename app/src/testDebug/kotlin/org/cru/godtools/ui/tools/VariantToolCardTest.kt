@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.tools
 
 import android.app.Application
+import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
@@ -8,17 +10,17 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.filterToOne
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.printToString
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import java.util.UUID
 import kotlin.test.Test
+import org.cru.godtools.R
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
@@ -30,7 +32,9 @@ import org.robolectric.annotation.Config
 @Config(application = Application::class)
 class VariantToolCardTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+
+    private fun stringRes(@StringRes id: Int) = composeTestRule.activity.getString(id)
 
     private val events = TestEventSink<ToolCard.Event>()
 
@@ -103,7 +107,7 @@ class VariantToolCardTest {
         composeTestRule.onNodeWithText("English", useUnmergedTree = true)
             .onSiblings()
             .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
-            .assertContentDescriptionEquals("Available")
+            .assertContentDescriptionEquals(stringRes(R.string.tool_card_accessibility_language_available))
     }
 
     @Test
@@ -118,7 +122,10 @@ class VariantToolCardTest {
             )
         }
 
-        composeTestRule.onNodeWithText("Not available in English").assertExists()
+        composeTestRule.onNodeWithText("English", useUnmergedTree = true)
+            .onSiblings()
+            .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
+            .assertContentDescriptionEquals(stringRes(R.string.tool_card_accessibility_language_unavailable))
     }
     // endregion VariantToolCard - App Language
 
@@ -140,8 +147,7 @@ class VariantToolCardTest {
         composeTestRule.onNodeWithText("French", useUnmergedTree = true)
             .onSiblings()
             .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
-            .assertContentDescriptionEquals("Available")
-            .printToString().let { println(it) }
+            .assertContentDescriptionEquals(stringRes(R.string.tool_card_accessibility_language_available))
     }
 
     @Test
@@ -158,7 +164,10 @@ class VariantToolCardTest {
             )
         }
 
-        composeTestRule.onNodeWithText("Not available in French").assertExists()
+        composeTestRule.onNodeWithText("French", useUnmergedTree = true)
+            .onSiblings()
+            .filterToOne(expectValue(SemanticsProperties.Role, Role.Image))
+            .assertContentDescriptionEquals(stringRes(R.string.tool_card_accessibility_language_unavailable))
     }
     // endregion VariantToolCard - Second Language
 }

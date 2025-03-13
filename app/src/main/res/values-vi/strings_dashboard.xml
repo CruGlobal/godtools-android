@@ -62,7 +62,6 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
     <string name="tools_list_remove_favorite_dialog_title">Gỡ \"%1$s\" ra khỏi Ưa thích?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Gỡ bỏ</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Hủy</string>
-    <string name="tool_card_label_language_unavailable">Không có sẵn trong %1$s</string>
     <string name="tool_card_accessibility_language_available">Có sẵn</string>
     <string name="action_tools_about">Chi tiết</string>
     <string name="action_tools_open">Mở</string>

@@ -190,7 +190,6 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
                         Spacer(modifier = Modifier.weight(1f))
                         AvailableInLanguage(
                             language = secondLanguage,
-                            color = GodToolsTheme.GT_DARK_GREEN,
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
