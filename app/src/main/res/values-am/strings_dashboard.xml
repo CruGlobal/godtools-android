@@ -34,7 +34,7 @@
         <item quantity="other">%1$d  ትምህርቶች ይገኛሉ</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">አጠናቀዋል</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d አጠናቀዋል</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% አጠናቀዋል</string>
     <!-- Home -->
     <string name="nav_favorite_tools">የኔ ምርጫ</string>
     <string name="dashboard_home_header_title">ወደ GodTools እንኳን በደህና መጡ</string>

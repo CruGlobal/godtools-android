@@ -34,7 +34,7 @@ Une version en ligne est disponible sur https://knowgod.com</string>
         <item quantity="other">%1$d Leçons disponibles</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Terminé</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d Terminer</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Terminer</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoris</string>
     <string name="dashboard_home_header_title">Bienvenue sur GodTools</string>

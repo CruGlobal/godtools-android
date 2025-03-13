@@ -58,7 +58,7 @@
         <item quantity="other">分享了%1$,d张图片</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
-        <item quantity="other">完成了%1$,d个培训提示</item>
+        <item quantity="other">完成了%1$,d 个培训提示</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">全球活动</string>

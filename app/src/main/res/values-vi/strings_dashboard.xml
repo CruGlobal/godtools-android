@@ -33,7 +33,7 @@ Một phiên bản trực tuyến có thể tìm thấy ở https://knowgod.com/
         <item quantity="other">%1$d Bài học sẵn có</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Hoàn Tất</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d hoàn tất</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% hoàn tất</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Yêu thích</string>
     <string name="dashboard_home_header_title">Chào mừng đến với GodTools</string>

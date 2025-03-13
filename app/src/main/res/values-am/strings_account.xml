@@ -7,6 +7,7 @@
     <string name="account_create_description">እውነተኛ ታሪኮችን፣ ማበረታቻዎችን እና ተግባራዊ ምክሮችን በእጅዎ ለማግኘት መለያ ይፍጠሩ።</string>
     <string name="account_login_heading">ግባ</string>
     <string name="account_login_description">እውነተኛ ታሪኮችን፣ ማበረታቻዎችን እና ተግባራዊ ምክሮችን በእጅዎ ለማግኘት ወደ መለያዎ ይግቡ።</string>
+    <string name="account_error_title">ማንነቶን ማረጋገጥ አልተሳካም</string>
     <string name="account_error_user_already_exists">የተጠቃሚ መለያ አስቀድሞ አለ።</string>
     <string name="account_error_user_not_found">የተጠቃሚ መለያ አልተገኘም።</string>
     <string name="account_error_not_connected_title">ምንም የበይነመረብ ግንኙነት የለም።</string>

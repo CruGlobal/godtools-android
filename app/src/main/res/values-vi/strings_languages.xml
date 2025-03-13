@@ -10,7 +10,7 @@
     <string name="title_language_settings">Các thiết lập ngôn ngữ</string>
     <string name="language_settings_section_app_language_heading">Giao diện ngôn ngữ của ứng dụng</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="other">%1$d Ngôn ngữ sẵn có</item>
+        <item quantity="other">%1$,d Ngôn ngữ sẵn có</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Cài đặt ngôn ngữ mà bạn muốn cho toàn bộ ứng dụng.</string>
     <string name="language_settings_section_offline_heading">Công cụ ngôn ngữ sẵn có khi offline</string>

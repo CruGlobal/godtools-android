@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Wische, um die Seite zu wechseln.</string>
+    <string name="lesson_tutorial_swipe_action_ok">Alles klar</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">Fortschritt fortsetzen</string>
     <string name="lesson_resume_message">Möchten Sie dort weitermachen, wo Sie aufgehört haben?</string>

@@ -22,7 +22,7 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="menu_heading_about">Despre</string>
     <string name="menu_terms_of_use">Condiții de utilizare</string>
     <string name="menu_privacy_policy">Politica de confidențialitate</string>
-    <string name="menu_copyright">Copyright</string>
+    <string name="menu_copyright">Informații Copyright</string>
     <string name="menu_version">Versiune: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lecții</string>
@@ -35,7 +35,7 @@ Găsești versiunea online aici https://knowgod.com/</string>
         <item quantity="few">%1$d Lecții disponibile</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Completat</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d Finalizat</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Finalizat</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favorite</string>
     <string name="dashboard_home_header_title">Bun venit la GodTools</string>
