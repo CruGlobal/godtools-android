@@ -65,6 +65,7 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
     <string name="tools_list_remove_favorite_dialog_confirm">সরান</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">বাতিল</string>
     <string name="tool_card_accessibility_language_available">উপলভ্য</string>
+    <string name="tool_card_accessibility_language_unavailable">পাওয়া যায় না</string>
     <string name="action_tools_about">বিশদ</string>
     <string name="action_tools_open">খুলুন</string>
     <!-- In App Update -->

@@ -60,6 +60,7 @@
     <string name="tools_list_remove_favorite_dialog_confirm">제거</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">취소</string>
     <string name="tool_card_accessibility_language_available">이용 가능</string>
+    <string name="tool_card_accessibility_language_unavailable">사용할 수 없음</string>
     <string name="action_tools_about">상세 정보</string>
     <string name="action_tools_open">열기</string>
     <!-- In App Update -->

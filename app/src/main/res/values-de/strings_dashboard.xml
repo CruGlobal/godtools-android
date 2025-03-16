@@ -65,6 +65,7 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Entfernen</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Abbrechen</string>
     <string name="tool_card_accessibility_language_available">Verfügbar</string>
+    <string name="tool_card_accessibility_language_unavailable">Nicht verfügbar</string>
     <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Öffnen</string>
     <!-- In App Update -->
