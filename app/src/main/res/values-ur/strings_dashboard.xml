@@ -66,6 +66,7 @@ https://knowgod.com/
     <string name="tools_list_remove_favorite_dialog_confirm">نکال دیں</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ</string>
     <string name="tool_card_accessibility_language_available">دستیاب</string>
+    <string name="tool_card_accessibility_language_unavailable">دستیاب نہیں۔</string>
     <string name="action_tools_about">تفصیلات</string>
     <string name="action_tools_open">کھولیں</string>
     <!-- In App Update -->

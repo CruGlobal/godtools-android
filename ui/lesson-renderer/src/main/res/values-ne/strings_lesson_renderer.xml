@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
-    <string name="lesson_tutorial_swipe_message">पृष्ठहरू परिवर्तन गर्न स्वाइप (तल-माथि या दायाँ-बायाँ) गर्नुहोस्</string>
-    <string name="lesson_tutorial_swipe_action_ok">बुझियो</string>
+    <string name="lesson_tutorial_swipe_message">पृष्ठहरू परिवर्तन गर्न स्वाइप गर्नुहोस्</string>
+    <string name="lesson_tutorial_swipe_action_ok">बुझेँ</string>
     <!-- Lesson Resume Dialog -->
-    <string name="lesson_resume_title">प्रगति सुचारु गर्ने हो?</string>
-    <string name="lesson_resume_message">तपाईंले जहाँ छोड्नुभएको थियो त्यहीँबाट सुरु गर्न चाहनुहुन्छ?</string>
+    <string name="lesson_resume_title">पुनःसुरु गर्नुहोस् ?</string>
+    <string name="lesson_resume_message">के तपाईं जहाँ छोड्नुभएको थियो त्यहीँबाट सुरु गर्न चाहनुहुन्छ ?</string>
     <string name="lesson_resume_action_resume">जारी राख्नुहोस्</string>
-    <string name="lesson_resume_action_restart">फेरि सुरु गर्नुहोस्</string>
+    <string name="lesson_resume_action_restart">पुनःसुरु गर्नुहोस्</string>
     <!-- Lesson Feedback Dialog -->
     <string name="lesson_feedback_title">समीक्षा गर्नुहोस्</string>
     <string name="lesson_feedback_question_helpful">के यो पाठ तपाईको लागि उपयोगी भयो?</string>

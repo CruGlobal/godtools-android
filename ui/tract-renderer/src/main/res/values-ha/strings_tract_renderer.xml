@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tract_card_previous">"Na baya "</string>
-    <string name="tract_card_next">Na Biye</string>
+    <string name="menu_install">Kafa</string>
+    <string name="tract_card_previous">Na baya</string>
+    <string name="tract_card_next">Na gaba</string>
     <!-- Live Sharing -->
+    <string name="menu_live_share_publish">Raba allon ku</string>
+    <string name="menu_live_share_active">Raba allo yana aiki</string>
+    <string name="share_tool_message_tract_live_share">Barka dai, bi tare da ni a cikin GodTools ta hanyar raba allo. Ga hanyar haɗin yanar gizon: %1$s\n\nIdan baku sami wannan saƙon ba sai daga baya, hanyar haɗin yanar gizon bazai yi aiki ba. Za mu iya sake gwadawa a wani lokaci.</string>
+    <string name="tract_live_share_starting">Fara raba allo…</string>
+    <string name="tract_live_share_unable_to_connect">An kasa haɗi zuwa raba allo</string>
+    <string name="tract_live_share_exit_dialog_message">Fita zaman raba nesa yanzu?</string>
+    <string name="tract_live_share_exit_dialog_confirm">Fita</string>
+    <string name="tract_live_share_exit_dialog_cancel">Sake</string>
 </resources>

@@ -39,7 +39,7 @@ https://godtoolsapp.com \n\n
         <item quantity="zero">الدروس متوفرة %1$d</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">تم</string>
-    <string name="dashboard_lessons_progress_in_progress">%%%1$d اكتمل</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% اكتمل</string>
     <!-- Home -->
     <string name="nav_favorite_tools">المفضلة</string>
     <string name="dashboard_home_header_title">مرحبًا بك في GodTools</string>
@@ -74,6 +74,7 @@ https://godtoolsapp.com \n\n
     <string name="tools_list_remove_favorite_dialog_confirm">إزالة</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">إلغاء</string>
     <string name="tool_card_accessibility_language_available">متاح</string>
+    <string name="tool_card_accessibility_language_unavailable">"غير متوفر "</string>
     <string name="action_tools_about">التفاصيل</string>
     <string name="action_tools_open">فتح</string>
     <!-- In App Update -->

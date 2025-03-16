@@ -67,6 +67,7 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Elimină</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Anulează</string>
     <string name="tool_card_accessibility_language_available">Disponibil</string>
+    <string name="tool_card_accessibility_language_unavailable">Indisponibil</string>
     <string name="action_tools_about">Detalii</string>
     <string name="action_tools_open">Începe</string>
     <!-- In App Update -->

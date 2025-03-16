@@ -30,13 +30,13 @@ https://knowgod.com/</string>
     <string name="nav_lessons">"पाठहरु "</string>
     <string name="dashboard_lessons_header_title">"तपाईको लागि बनाइएको पाठहरु "</string>
     <string name="dashboard_lessons_header_description">सम्बन्ध निर्माण गर्न र अर्थपूर्ण कुराकानी सुरु गर्न व्यावहारिक विचारहरू।</string>
-    <string name="dashboard_lessons_section_filter_label">यी पाठहरूमा:</string>
+    <string name="dashboard_lessons_section_filter_label">पाठहरुमा:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d पाठ उपलब्छध छ</item>
         <item quantity="other">%1$d पाठहरु उपलब्छध छन्</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">पूरा भयो</string>
-    <string name="dashboard_lessons_progress_in_progress">%1$d%% सकियो</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% पूरा</string>
     <!-- Home -->
     <string name="nav_favorite_tools">मनपर्ने</string>
     <string name="dashboard_home_header_title">गड टूल्समा स्वागत छ</string>
@@ -49,7 +49,7 @@ https://knowgod.com/</string>
     <string name="tools_list_favorites_banner_text">तपाईको मनपर्नेमा थप्ने मुटु आइकनमा थिचेर अफलाइनमा उपकरण उपलब्ध बनाउनुहोस्।</string>
     <string name="tools_list_favorites_banner_action_dismiss">खारेज गर्नुहोस्</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">सामग्रीहरु</string>
+    <string name="nav_all_tools">उपकरणहरु</string>
     <string name="dashboard_tools_section_filter_label">फिल्टर गर्नुहोस्</string>
     <string name="dashboard_tools_section_filter_category_any">"कुनै पनि वर्गीकरण "</string>
     <string name="dashboard_tools_section_filter_language_any">"कुनै पनि भाषा "</string>
@@ -67,6 +67,7 @@ https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_confirm">हटाउनुहोस्</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">रद्द गर्नुहोस्</string>
     <string name="tool_card_accessibility_language_available">"उपलब्ध छ "</string>
+    <string name="tool_card_accessibility_language_unavailable">उपलब्ध छैन</string>
     <string name="action_tools_about">विवरण</string>
     <string name="action_tools_open">खोल्नुहोस्</string>
     <!-- In App Update -->

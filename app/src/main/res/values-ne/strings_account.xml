@@ -7,7 +7,7 @@
     <string name="account_create_description">तपाईको औंलामा वास्तविक कथाहरू, प्रोत्साहन, र व्यावहारिक सुझावहरू पाउनको लागि खाता सिर्जना गर्नुहोस्।</string>
     <string name="account_login_heading">"दर्ता गर्नुहोस् "</string>
     <string name="account_login_description">आफ्नो औँलामा वास्तविक कथाहरू, प्रोत्साहन, र व्यावहारिक सुझावहरू पाउन आफ्नो खातामा प्रवेश  गर्नुहोस्।</string>
-    <string name="account_error_title">प्रमाणीकरण असफल भयो</string>
+    <string name="account_error_title">प्रमाणीकरण असफल</string>
     <string name="account_error_user_already_exists">प्रयोगकर्ता खाता पहिल्यै अवस्थित छ।</string>
     <string name="account_error_user_not_found">प्रयोगकर्ता खाता भेटिएन।</string>
     <string name="account_error_not_connected_title">इन्टरनेट जडान छैन</string>

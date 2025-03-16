@@ -63,6 +63,7 @@
     <string name="tools_list_remove_favorite_dialog_confirm">削除</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">キャンセル</string>
     <string name="tool_card_accessibility_language_available">使用可能</string>
+    <string name="tool_card_accessibility_language_unavailable">利用不可</string>
     <string name="action_tools_about">詳細</string>
     <string name="action_tools_open">開く</string>
     <!-- In App Update -->
