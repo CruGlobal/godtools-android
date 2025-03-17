@@ -16,6 +16,7 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -74,6 +75,8 @@ class LessonsPresenterTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
+
+        every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
         every { getLessonsFlowByLanguage(Locale.ENGLISH) } returns enLessonsFlow
     }
     private val translationsRepository: TranslationsRepository = mockk {
@@ -107,6 +110,20 @@ class LessonsPresenterTest {
     fun `State - languageFilter - selectedItem - default to app language`() = runTest {
         presenter.test {
             assertEquals(appLangFlow.value, expectMostRecentItem().languageFilter.selectedItem?.code)
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - selectedItem - reset to app language when app language changes`() = runTest {
+        presenter.test {
+            assertNotNull(expectMostRecentItem().languageFilter) {
+                assertEquals(Locale.ENGLISH, it.selectedItem?.code)
+                it.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            }
+            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+
+            appLangFlow.value = Locale.GERMAN
+            assertEquals(Locale.GERMAN, expectMostRecentItem().languageFilter.selectedItem?.code)
         }
     }
     // endregion State.languageFilter.selectedItem

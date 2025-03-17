@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.lessons
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -69,7 +70,7 @@ class LessonsPresenter @AssistedInject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun rememberLanguagesFilter(): FilterMenu.UiState<Language> {
         val appLanguage by settings.appLanguageFlow.collectAsState()
-        val locale = rememberSaveable(appLanguage) { mutableStateOf(appLanguage) }
+        val locale by remember { derivedStateOf { mutableStateOf(appLanguage) } }
         val query = rememberSaveable { mutableStateOf("") }
 
         val languagesFlow = rememberLanguagesFlow()
