@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.invisibleToUser
@@ -75,7 +74,6 @@ fun SquareToolCard(
                     }
 
                     // Reserve the maximum height consistently across all cards
-                    @OptIn(ExperimentalComposeUiApi::class)
                     Column(modifier = Modifier.invisibleIf(true)) {
                         Text(
                             "",
