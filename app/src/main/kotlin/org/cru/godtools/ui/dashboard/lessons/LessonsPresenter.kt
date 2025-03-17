@@ -2,13 +2,14 @@ package org.cru.godtools.ui.dashboard.lessons
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -70,20 +71,21 @@ class LessonsPresenter @AssistedInject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun rememberLanguagesFilter(): FilterMenu.UiState<Language> {
         val appLanguage by settings.appLanguageFlow.collectAsState()
-        val locale by remember { derivedStateOf { mutableStateOf(appLanguage) } }
-        val query = rememberSaveable { mutableStateOf("") }
+        var locale by rememberSaveable { mutableStateOf(appLanguage to appLanguage) }
+        LaunchedEffect(appLanguage) { if (locale.first != appLanguage) locale = appLanguage to appLanguage }
 
+        val query = rememberSaveable { mutableStateOf("") }
         val languagesFlow = rememberLanguagesFlow()
 
         return FilterMenu.UiState(
             menuExpanded = rememberSaveable { mutableStateOf(false) },
             query = query,
             selectedItem = remember {
-                snapshotFlow { locale.value }
+                snapshotFlow { locale.second }
                     .flatMapLatest { locale ->
                         languagesRepository.findLanguageFlow(locale).map { it ?: Language(locale) }
                     }
-            }.collectAsState(Language(locale.value)).value,
+            }.collectAsState(Language(locale.second)).value,
             items = remember {
                 combine(
                     languagesFlow,
@@ -107,7 +109,7 @@ class LessonsPresenter @AssistedInject constructor(
             }.collectAsState(persistentListOf()).value,
             eventSink = {
                 when (it) {
-                    is FilterMenu.Event.SelectItem -> locale.value = it.item.code
+                    is FilterMenu.Event.SelectItem -> locale = appLanguage to it.item.code
                 }
             }
         )
