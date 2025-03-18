@@ -73,7 +73,7 @@ fun LessonToolCard(
                                     null -> ""
                                     is Progress.InProgress -> stringResource(
                                         R.string.dashboard_lessons_progress_in_progress,
-                                        (state.progress.progress * 100).toInt().coerceIn(0, 100)
+                                        Math.round(state.progress.progress * 100).coerceIn(0, 100)
                                     )
                                     Progress.Completed -> stringResource(
                                         R.string.dashboard_lessons_progress_completed
