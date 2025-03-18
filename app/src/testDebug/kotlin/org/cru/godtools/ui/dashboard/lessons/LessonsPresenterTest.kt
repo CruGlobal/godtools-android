@@ -2,9 +2,18 @@ package org.cru.godtools.ui.dashboard.lessons
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.test.junit4.StateRestorationTester
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.ReceiveTurbine
+import app.cash.turbine.Turbine
 import com.jeppeman.mockposable.mockk.everyComposable
+import com.slack.circuit.backstack.SaveableBackStack
+import com.slack.circuit.foundation.Circuit
+import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -16,6 +25,7 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -42,6 +52,7 @@ import org.cru.godtools.ui.tools.eventSinkArg
 import org.cru.godtools.ui.tools.toolArg
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
+import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -74,13 +85,16 @@ class LessonsPresenterTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
+
+        every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
         every { getLessonsFlowByLanguage(Locale.ENGLISH) } returns enLessonsFlow
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns translationsFlow
     }
 
-    private val navigator = FakeNavigator(LessonsScreen)
+    private val backStack = SaveableBackStack(LessonsScreen)
+    private val navigator = FakeNavigator(backStack)
 
     private val presenter = LessonsPresenter(
         context = context,
@@ -92,6 +106,35 @@ class LessonsPresenterTest {
         translationsRepository = translationsRepository,
         navigator = navigator,
     )
+
+    // region StateRestorationTester Support
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+    private val stateRestorationTester = StateRestorationTester(composeTestRule)
+
+    // This logic is based on the Sample AnsweringNavigatorTest in the circuit library.
+    // see: https://github.com/slackhq/circuit/blob/main/circuit-foundation/src/jvmTest/kotlin/com/slack/circuit/foundation/AnsweringNavigatorTest.kt
+    private fun testPresenterWithStateRestoration(): ReceiveTurbine<LessonsScreen.UiState> {
+        val presenterState = Turbine<LessonsScreen.UiState>()
+
+        val circuit = Circuit.Builder()
+            .addPresenter<LessonsScreen, LessonsScreen.UiState> { s, n, _ -> presenter }
+            .addUi<LessonsScreen, LessonsScreen.UiState> { state, _ -> SideEffect { presenterState.add(state) } }
+            .build()
+
+        stateRestorationTester.setContent {
+            CircuitCompositionLocals(circuit) {
+                NavigableCircuitContent(navigator, backStack = backStack)
+            }
+        }
+        composeTestRule.waitForIdle()
+
+        return presenterState
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.test(validate: suspend ReceiveTurbine<T>.() -> Unit) = validate()
+    // endregion StateRestorationTester Support
 
     @AfterTest
     fun cleanup() {
@@ -107,6 +150,35 @@ class LessonsPresenterTest {
     fun `State - languageFilter - selectedItem - default to app language`() = runTest {
         presenter.test {
             assertEquals(appLangFlow.value, expectMostRecentItem().languageFilter.selectedItem?.code)
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - selectedItem - reset to app language when app language changes`() = runTest {
+        presenter.test {
+            assertNotNull(expectMostRecentItem().languageFilter) {
+                assertEquals(Locale.ENGLISH, it.selectedItem?.code)
+                it.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            }
+            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+
+            appLangFlow.value = Locale.GERMAN
+            assertEquals(Locale.GERMAN, expectMostRecentItem().languageFilter.selectedItem?.code)
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - selectedItem - persisted through state save & restore`() = runTest {
+        testPresenterWithStateRestoration().test {
+            assertNotNull(expectMostRecentItem().languageFilter) {
+                assertEquals(Locale.ENGLISH, it.selectedItem?.code)
+                it.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            }
+            composeTestRule.waitForIdle()
+            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+
+            stateRestorationTester.emulateSavedInstanceStateRestore()
+            assertEquals(Locale.FRENCH, awaitItem().languageFilter.selectedItem?.code)
         }
     }
     // endregion State.languageFilter.selectedItem
@@ -211,6 +283,18 @@ class LessonsPresenterTest {
         }
     }
     // endregion State.languageFilter.items
+
+    // region State.languageFilter.query
+    @Test
+    fun `State - languageFilter - query - persisted through state save & restore`() = runTest {
+        testPresenterWithStateRestoration().test {
+            expectMostRecentItem().languageFilter.query.value = "test"
+
+            stateRestorationTester.emulateSavedInstanceStateRestore()
+            assertEquals("test", expectMostRecentItem().languageFilter.query.value)
+        }
+    }
+    // endregion State.languageFilter.query
 
     // region State.languageFilter Event.SelectItem
     @Test
