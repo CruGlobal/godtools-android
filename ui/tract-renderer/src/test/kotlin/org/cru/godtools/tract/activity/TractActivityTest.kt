@@ -33,6 +33,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
+private const val TOOL2 = "tool2"
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
@@ -103,7 +104,7 @@ class TractActivityTest {
     fun `processIntent() - Deep Link - knowgod_com`() {
         everyGetManifestFlow() returns MutableSharedFlow()
 
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/tool/v1/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
                 assertEquals("kgp", it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -118,7 +119,7 @@ class TractActivityTest {
     fun `processIntent() - Deep Link - knowgod_com - With Page Num`() {
         everyGetManifestFlow() returns MutableSharedFlow()
 
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp/3?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/tool/v1/kgp/3?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
                 assertEquals("kgp", it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
@@ -202,7 +203,7 @@ class TractActivityTest {
 
             // update tool & languages
             it.onActivity {
-                it.dataModel.toolCode.value = "other"
+                it.dataModel.toolCode.value = TOOL2
                 it.dataModel.primaryLocales.value = listOf(Locale.GERMAN)
                 it.dataModel.parallelLocales.value = listOf(Locale.CHINESE)
             }
@@ -210,7 +211,7 @@ class TractActivityTest {
             // recreate activity, which should keep previously set tool and locales
             it.recreate()
             it.onActivity {
-                assertEquals("other", it.dataModel.toolCode.value)
+                assertEquals(TOOL2, it.dataModel.toolCode.value)
                 assertEquals(Locale.GERMAN, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(Locale.CHINESE, it.dataModel.parallelLocales.value!!.single())
                 assertFalse(it.isFinishing)
@@ -220,7 +221,7 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Preserve tool and language changes - Deep Link`() {
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/tool/v1/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
             // initially parse deep link
             it.onActivity {
                 assertEquals("kgp", it.dataModel.toolCode.value)
@@ -231,7 +232,7 @@ class TractActivityTest {
 
             // update tool & languages
             it.onActivity {
-                it.dataModel.toolCode.value = "other"
+                it.dataModel.toolCode.value = TOOL2
                 it.dataModel.primaryLocales.value = listOf(Locale.GERMAN)
                 it.dataModel.parallelLocales.value = listOf(Locale.CHINESE)
             }
@@ -239,7 +240,7 @@ class TractActivityTest {
             // recreate activity, which should keep previously set tool and locales
             it.recreate()
             it.onActivity {
-                assertEquals("other", it.dataModel.toolCode.value)
+                assertEquals(TOOL2, it.dataModel.toolCode.value)
                 assertEquals(Locale.GERMAN, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(Locale.CHINESE, it.dataModel.parallelLocales.value!!.single())
                 assertFalse(it.isFinishing)

@@ -15,6 +15,7 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="knowgod.com" />
+                <data android:pathPattern="/.*/tool/v1/.*" />
 
                 <!-- Legacy deep links -->
                 <data android:pathPattern="/.*/connectingwithgod.*" />
