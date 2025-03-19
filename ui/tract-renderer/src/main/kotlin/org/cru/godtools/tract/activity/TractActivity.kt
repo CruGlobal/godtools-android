@@ -61,7 +61,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
-import org.cru.godtools.tract.util.isTractDeepLink
+import org.cru.godtools.tract.util.isTractLegacyDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
@@ -164,7 +164,7 @@ class TractActivity :
             val path = data.pathSegments ?: return
 
             when {
-                data.isTractDeepLink() -> {
+                data.isTractLegacyDeepLink() -> {
                     dataModel.toolCode.value = path[1]
                     val (primary, parallel) = data.deepLinkLanguages
                     dataModel.primaryLocales.value = primary

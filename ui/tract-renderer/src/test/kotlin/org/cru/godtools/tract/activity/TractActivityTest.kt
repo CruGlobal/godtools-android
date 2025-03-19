@@ -103,9 +103,9 @@ class TractActivityTest {
     fun `processIntent() - Deep Link - knowgod_com`() {
         everyGetManifestFlow() returns MutableSharedFlow()
 
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
-                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals("kgp", it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
                 assertEquals(Locale.FRENCH, it.dataModel.activeLocale.value)
@@ -118,9 +118,9 @@ class TractActivityTest {
     fun `processIntent() - Deep Link - knowgod_com - With Page Num`() {
         everyGetManifestFlow() returns MutableSharedFlow()
 
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test/3?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp/3?primaryLanguage=en&parallelLanguage=es,fr")) {
             it.onActivity {
-                assertEquals(TOOL, it.dataModel.toolCode.value)
+                assertEquals("kgp", it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
                 assertEquals(Locale.FRENCH, it.dataModel.activeLocale.value)
@@ -220,10 +220,10 @@ class TractActivityTest {
 
     @Test
     fun `processIntent() - Preserve tool and language changes - Deep Link`() {
-        deepLinkScenario(Uri.parse("https://knowgod.com/fr/test?primaryLanguage=en&parallelLanguage=es,fr")) {
+        deepLinkScenario(Uri.parse("https://knowgod.com/fr/kgp?primaryLanguage=en&parallelLanguage=es,fr")) {
             // initially parse deep link
             it.onActivity {
-                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals("kgp", it.dataModel.toolCode.value)
                 assertEquals(Locale.ENGLISH, it.dataModel.primaryLocales.value!!.single())
                 assertEquals(listOf(Locale("es"), Locale.FRENCH), it.dataModel.parallelLocales.value)
                 assertFalse(it.isFinishing)
