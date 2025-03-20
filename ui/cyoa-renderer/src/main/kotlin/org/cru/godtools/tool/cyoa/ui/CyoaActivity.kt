@@ -26,6 +26,7 @@ import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tool.cyoa.CyoaDeepLink
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaActivityBinding
 import org.cru.godtools.tool.tips.ShowTipCallback
@@ -78,16 +79,27 @@ class CyoaActivity :
     override fun processIntent(intent: Intent, savedInstanceState: Bundle?) {
         super.processIntent(intent, savedInstanceState)
         if (savedInstanceState == null || !isValidStartState) {
-            val data = intent.data
+            val data = intent.data ?: return
+
+            val deepLink = CyoaDeepLink.parseKnowGodDeepLink(data)
+            if (deepLink != null) {
+                dataModel.toolCode.value = deepLink.tool
+                dataModel.primaryLocales.value = deepLink.primaryLocales
+                dataModel.parallelLocales.value = deepLink.parallelLocales
+                dataModel.activeLocale.value = deepLink.activeLocale
+                savedState.initialPage = deepLink.page
+                return
+            }
+
             when {
-                data?.isGodToolsDeepLink == true -> {
+                data.isGodToolsDeepLink -> {
                     val path = data.pathSegments
                     dataModel.toolCode.value = path.getOrNull(3)
                     dataModel.primaryLocales.value = listOfNotNull(path.getOrNull(4)?.let { Locale.forLanguageTag(it) })
                     dataModel.parallelLocales.value = emptyList()
                     savedState.initialPage = path.getOrNull(5)
                 }
-                data?.isCustomUriSchemeDeepLink == true -> {
+                data.isCustomUriSchemeDeepLink -> {
                     val path = data.pathSegments
                     dataModel.toolCode.value = path.getOrNull(2)
                     dataModel.primaryLocales.value = listOfNotNull(path.getOrNull(3)?.let { Locale.forLanguageTag(it) })
