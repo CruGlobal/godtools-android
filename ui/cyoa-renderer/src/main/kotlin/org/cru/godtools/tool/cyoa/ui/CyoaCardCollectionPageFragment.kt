@@ -20,6 +20,11 @@ class CyoaCardCollectionPageFragment(page: String? = null) :
     ) {
     override fun supportsPage(page: Page) = page is CardCollectionPage
 
+    override fun onUpdatePageParams(params: Map<String, String?>) {
+        super.onUpdatePageParams(params)
+        controller?.onUpdatePageParams(params)
+    }
+
     // region Controller
     @Inject
     internal lateinit var controllerFactory: CardCollectionPageController.Factory

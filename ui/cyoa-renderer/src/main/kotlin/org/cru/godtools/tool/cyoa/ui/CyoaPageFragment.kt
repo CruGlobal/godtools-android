@@ -27,6 +27,10 @@ import splitties.fragmentargs.argOrNull
 abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@LayoutRes layoutId: Int, page: String?) :
     BaseFragment<B>(layoutId),
     ShowTipCallback {
+    companion object {
+        internal const val PARAM_POSITION = "position"
+    }
+
     @Inject
     internal lateinit var eventBus: EventBus
 
@@ -68,13 +72,13 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
     internal var pageId by arg<String>()
         private set
     internal val page by lazy { dataModel.manifest.filterNotNull().map { it.findPage(pageId) }.asLiveData() }
-    private var pageArgs: HashMap<String, String>? by argOrNull()
+    private var pageArgs: HashMap<String, String?>? by argOrNull()
 
     init {
         page?.let { pageId = page }
     }
 
-    internal fun updatePageParams(params: Map<String, String>) {
+    internal fun updatePageParams(params: Map<String, String?>) {
         if (!isResumed) {
             pageArgs = HashMap(params)
             return
@@ -87,7 +91,7 @@ abstract class CyoaPageFragment<B : ViewDataBinding, C : BaseController<*>>(@Lay
         pageArgs = null
     }
 
-    protected open fun onUpdatePageParams(params: Map<String, String>) = Unit
+    protected open fun onUpdatePageParams(params: Map<String, String?>) = Unit
 
     // region InvalidPageListener
     fun interface InvalidPageListener {

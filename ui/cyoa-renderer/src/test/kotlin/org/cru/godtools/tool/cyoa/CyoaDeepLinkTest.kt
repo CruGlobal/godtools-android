@@ -20,17 +20,19 @@ class CyoaDeepLinkTest {
             assertEquals(emptyList(), it.parallelLocales)
             assertEquals(Locale.ENGLISH, it.activeLocale)
             assertNull(it.page)
+            assertNull(it.pagePosition)
         }
     }
 
     @Test
     fun `parseKnowGodDeepLink() - With Page Number`() {
-        assertNotNull(CyoaDeepLink.parseKnowGodDeepLink(Uri.parse("https://knowgod.com/en/tool/v2/openers/family"))) {
+        assertNotNull(CyoaDeepLink.parseKnowGodDeepLink(Uri.parse("https://knowgod.com/en/tool/v2/openers/family/2"))) {
             assertEquals("openers", it.tool)
             assertEquals(listOf(Locale.ENGLISH), it.primaryLocales)
             assertEquals(emptyList(), it.parallelLocales)
             assertEquals(Locale.ENGLISH, it.activeLocale)
             assertEquals("family", it.page)
+            assertEquals("2", it.pagePosition)
         }
     }
 

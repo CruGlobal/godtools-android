@@ -29,6 +29,7 @@ import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPagePageCollectionBinding
+import org.cru.godtools.tool.cyoa.ui.CyoaPageFragment
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 
@@ -67,7 +68,10 @@ class PageCollectionPageController @AssistedInject constructor(
         bindPages(model?.pages.orEmpty())
     }
 
-    fun onUpdatePageParams(params: Map<String, String>) {
+    fun onUpdatePageParams(params: Map<String, String?>) {
+        params[CyoaPageFragment.PARAM_POSITION]?.toIntOrNull()
+            ?.let { binding.pages.setCurrentItem(it, false) }
+
         params[PageCollectionPage.PARENT_PARAM_ACTIVE_PAGE]
             ?.let { activePage -> model?.pages?.indexOfFirst { it.id == activePage }?.takeUnless { it == -1 } }
             ?.let { binding.pages.setCurrentItem(it, false) }

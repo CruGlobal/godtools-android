@@ -11,12 +11,14 @@ internal data class CyoaDeepLink(
     val parallelLocales: List<Locale>,
     val activeLocale: Locale,
     val page: String? = null,
+    val pagePosition: String? = null,
 ) {
     companion object {
-        // region https://knowgod.com/en/tool/v2/openers/page_id
+        // region https://knowgod.com/en/tool/v2/openers/page_id/position
         private const val KNOWGOD_PATH_LOCALE = 0
         private const val KNOWGOD_PATH_TOOL = 3
         private const val KNOWGOD_PATH_PAGE = 4
+        private const val KNOWGOD_PATH_PAGE_POSITION = 5
 
         fun parseKnowGodDeepLink(uri: Uri): CyoaDeepLink? {
             if (!isKnowGodDeepLink(uri)) return null
@@ -29,6 +31,7 @@ internal data class CyoaDeepLink(
                 parallelLocales = emptyList(),
                 activeLocale = locale,
                 page = uri.pathSegments.getOrNull(KNOWGOD_PATH_PAGE),
+                pagePosition = uri.pathSegments.getOrNull(KNOWGOD_PATH_PAGE_POSITION),
             )
         }
 
@@ -37,6 +40,6 @@ internal data class CyoaDeepLink(
             uri.pathSegments.size >= 4 &&
             uri.pathSegments[1].equals("tool", true) &&
             uri.pathSegments[2].equals("v2", true)
-        // endregion https://knowgod.com/en/tool/v2/openers/page_id
+        // endregion https://knowgod.com/en/tool/v2/openers/page_id/position
     }
 }
