@@ -7,6 +7,7 @@
     <string name="account_create_description">বাস্তবিক গল্পগুলি, উৎসাহ, এবং আপনার হাতের কাছে ব্যবহারিক পরামর্শ পেতে একটি অ্যাকাউন্ট তৈরি  করুন</string>
     <string name="account_login_heading">সাইন ইন করুন</string>
     <string name="account_login_description">বাস্তবিক গল্পগুলি, উৎসাহ, এবং আপনার হাতের কাছে ব্যবহারিক পরামর্শ পেতে আপনার অ্যাকাউন্টে লগ ইন করুন</string>
+    <string name="account_error_title">প্রমাণীকরণ ব্যর্থ হয়েছে</string>
     <string name="account_error_user_already_exists">ব্যবহারকারীর অ্যাকাউন্ট ইতিমধ্যেই আছে</string>
     <string name="account_error_user_not_found">ব্যবহারকারীর অ্যাকাউন্ট পাওয়া যায় নি</string>
     <string name="account_error_not_connected_title">ইন্টারনেট সংযোগ নেই</string>
