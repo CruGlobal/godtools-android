@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Swiep om bladsye te verander</string>
+    <string name="lesson_tutorial_swipe_action_ok">Het dit</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">Gaan voort?</string>
     <string name="lesson_resume_message">Wil jy voortgaan waar jy opgehou het?</string>

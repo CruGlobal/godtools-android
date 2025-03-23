@@ -10,8 +10,8 @@
     <string name="title_language_settings">Taalinstellings</string>
     <string name="language_settings_section_app_language_heading">App-koppelvlak taal</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%1$d Tale beskikbaar</item>
-        <item quantity="other">%1$,d Languages available</item>
+        <item quantity="one">%1$,d Taal beskikbaar</item>
+        <item quantity="other">%1$,d Tale beskikbaar</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Stel die taal in wat jy wil hê die hele app moet in vertoon.</string>
     <string name="language_settings_section_offline_heading">Hulpmiddel  tale beskikbaar vanlyn\"</string>

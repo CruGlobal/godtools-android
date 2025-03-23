@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">"পেজ পরিবর্তন করতে সোয়াইপ করুন "</string>
+    <string name="lesson_tutorial_swipe_action_ok">বুঝেছি</string>
     <!-- Lesson Resume Dialog -->
     <string name="lesson_resume_title">প্রগতি পুনরায় চালু করুন</string>
     <string name="lesson_resume_message">আপনি কি যেখানে ছেড়ে গেছেন তা থেকে পুনরায় শুরু করতে চান?</string>

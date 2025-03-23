@@ -10,8 +10,8 @@
     <string name="title_language_settings">ভাষা সেটিংস</string>
     <string name="language_settings_section_app_language_heading">অ্যাপের ইন্টারফেসের সেটিংস</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%d ভাষাগুলি উপলব্ধ</item>
-        <item quantity="other">%d ভাষাগুলি উপলব্ধ</item>
+        <item quantity="one">%1$,d ভাষাগুলি উপলব্ধ</item>
+        <item quantity="other">%1$,d ভাষাগুলি উপলব্ধ</item>
     </plurals>
     <string name="language_settings_section_app_language_description">"যে ভাষায় আপনি সমগ্র অ্যাপের প্রদর্শন চান সেটি সেট করুন "</string>
     <string name="language_settings_section_offline_heading">অফলাইনে প্রাপ্ত সাধনের ভাষা</string>
