@@ -34,6 +34,7 @@ import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.analytics.model.CyoaCardCollectionPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionCardBinding
+import org.cru.godtools.tool.cyoa.ui.CyoaPageFragment
 import org.cru.godtools.tool.tips.ShowTipCallback
 import org.greenrobot.eventbus.EventBus
 
@@ -65,6 +66,11 @@ class CardCollectionPageController @AssistedInject constructor(
         super.onBind()
         binding.page = model
         bindCards(model?.cards.orEmpty())
+    }
+
+    fun onUpdatePageParams(params: Map<String, String?>) {
+        params[CyoaPageFragment.PARAM_POSITION]?.toIntOrNull()
+            ?.let { binding.cards.setCurrentItem(it, false) }
     }
 
     // region Analytics Events

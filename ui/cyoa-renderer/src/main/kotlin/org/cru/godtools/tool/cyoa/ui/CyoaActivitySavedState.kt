@@ -7,4 +7,5 @@ import org.cru.godtools.base.EXTRA_PAGE
 
 class CyoaActivitySavedState(savedStateHandle: SavedStateHandle) : ViewModel() {
     var initialPage by savedStateHandle.delegate<String?>(EXTRA_PAGE)
+    var initialPagePos by savedStateHandle.delegate<String?>()
 }

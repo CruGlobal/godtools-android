@@ -21,7 +21,7 @@ class CyoaPageCollectionPageFragment(page: String? = null) :
     ) {
     override fun supportsPage(page: Page) = page is PageCollectionPage
 
-    override fun onUpdatePageParams(params: Map<String, String>) {
+    override fun onUpdatePageParams(params: Map<String, String?>) {
         super.onUpdatePageParams(params)
         controller?.onUpdatePageParams(params)
     }

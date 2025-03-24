@@ -46,6 +46,7 @@ import org.cru.godtools.tool.tips.ui.TipBottomSheetDialogFragment
 import org.cru.godtools.tool.tips.ui.settings.ToggleTipsSettingsAction
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
+import org.cru.godtools.tool.tract.TractDeepLink
 import org.cru.godtools.tool.tract.databinding.TractActivityBinding
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
@@ -61,7 +62,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.ui.liveshare.LiveShareExitDialogFragment
 import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
-import org.cru.godtools.tract.util.isTractDeepLink
+import org.cru.godtools.tract.util.isTractLegacyDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivityResultContract
@@ -163,8 +164,20 @@ class TractActivity :
             val data = intent.data?.normalizeScheme() ?: return
             val path = data.pathSegments ?: return
 
+            val deepLink = TractDeepLink.parseKnowGodDeepLink(data)
+            if (deepLink != null) {
+                dataModel.toolCode.value = deepLink.tool
+                dataModel.primaryLocales.value = deepLink.primaryLocales
+                dataModel.parallelLocales.value = deepLink.parallelLocales
+                if (savedInstanceState == null) {
+                    dataModel.activeLocale.value = deepLink.activeLocale
+                    deepLink.page?.let { initialPage = it }
+                }
+                return
+            }
+
             when {
-                data.isTractDeepLink() -> {
+                data.isTractLegacyDeepLink() -> {
                     dataModel.toolCode.value = path[1]
                     val (primary, parallel) = data.deepLinkLanguages
                     dataModel.primaryLocales.value = primary
