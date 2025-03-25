@@ -96,10 +96,10 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
         register(FLAVOR_ENV_STAGE) {
             dimension = FLAVOR_DIMENSION_ENV
 
-            // only enable this flavor for debug buildTypes
+            // only enable this flavor for debug & QA buildTypes
             project.extensions.configure<AndroidComponentsExtension<*, *, *>>("androidComponents") {
                 beforeVariants(selector().withFlavor(FLAVOR_DIMENSION_ENV to FLAVOR_ENV_STAGE)) {
-                    it.enable = it.buildType == "debug"
+                    it.enable = it.buildType == BUILD_TYPE_DEBUG || it.buildType == BUILD_TYPE_QA
                 }
             }
         }
