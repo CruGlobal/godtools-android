@@ -40,6 +40,9 @@ android {
 
     productFlavors {
         named("stage") {
+            versionNameSuffix = "-stage"
+            applicationIdSuffix = ".stage"
+
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
 
             // Facebook

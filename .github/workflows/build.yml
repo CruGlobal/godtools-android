@@ -142,9 +142,9 @@ jobs:
         with:
           cache-read-only: true
       - name: Build QA Universal APK
-        run: ./gradlew :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
+        run: ./gradlew :app:packageStageQaUniversalApk :app:packageProductionQaUniversalApk -PfirebaseAppDistributionBuild --scan
         env:
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreStorePassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_firebaseAppDistributionKeystoreKeyPassword: ${{ secrets.BETA_KEYSTORE_PASSWORD }}
       - name: Upload QA Build to Firebase
-        run: ./gradlew appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan
+        run: ./gradlew appDistributionUploadStageQa appDistributionUploadProductionQa -PfirebaseAppDistributionBuild --scan

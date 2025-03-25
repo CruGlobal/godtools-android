@@ -145,6 +145,76 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71275134527:android:6d26a7e1a4f31428c5028a",
+        "android_client_info": {
+          "package_name": "org.keynote.godtools.android.stage.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyC0F3GlyiX2LYZDhTlkKYf-gSwvCkr4mg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71275134527-ce3brdpatbtsn54sk1ngvro0en2nnaf6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "71275134527-4stabhk838h3jpkt9mfrt1r8tisaj9r1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cru.godtools",
+                "app_store_id": "542773210"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71275134527:android:ab2dd0a3b7290aa5c5028a",
+        "android_client_info": {
+          "package_name": "org.keynote.godtools.android.stage.qa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdAxbQyiDhbm34bDvzx2HOYsYXr2VjLRI"
+        },
+        {
+          "current_key": "AIzaSyC0F3GlyiX2LYZDhTlkKYf-gSwvCkr4mg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71275134527-ce3brdpatbtsn54sk1ngvro0en2nnaf6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "71275134527-4stabhk838h3jpkt9mfrt1r8tisaj9r1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cru.godtools",
+                "app_store_id": "542773210"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
