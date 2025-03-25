@@ -224,9 +224,6 @@ dependencies {
 // region Firebase App Distribution
 if (project.hasProperty("firebaseAppDistributionBuild")) {
     firebaseAppDistribution {
-        artifactPath = layout.buildDirectory
-            .file("outputs/apk_from_bundle/productionQa/app-production-qa-universal.apk")
-            .get().asFile.path
         releaseNotes = generateFirebaseAppDistributionReleaseNotes()
         serviceCredentialsFile = rootProject.file("firebase/firebase_api_key.json").path
         groups = "android-testers"
@@ -246,6 +243,15 @@ fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
         append("* ").append(it.shortMessage).append('\n')
+    }
+}
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        val assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
+
+        val appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
+        appDistributionTask.dependsOn.add(assembleTask)
     }
 }
 // endregion Firebase App Distribution
