@@ -41,7 +41,7 @@ class LessonSwipeTutorialAnimatedModalOverlay :
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f))
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.9f))
                 .clickable(null, null) { navigator.finish(Unit) }
                 .padding(horizontal = 32.dp)
                 .fillMaxSize()
