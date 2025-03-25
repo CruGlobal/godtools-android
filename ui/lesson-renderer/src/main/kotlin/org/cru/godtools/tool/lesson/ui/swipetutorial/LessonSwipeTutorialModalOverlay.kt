@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -40,7 +41,7 @@ class LessonSwipeTutorialAnimatedModalOverlay :
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f))
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.9f))
                 .clickable(null, null) { navigator.finish(Unit) }
                 .padding(horizontal = 32.dp)
                 .fillMaxSize()
@@ -48,6 +49,7 @@ class LessonSwipeTutorialAnimatedModalOverlay :
             Text(
                 stringResource(R.string.lesson_tutorial_swipe_message),
                 color = MaterialTheme.colorScheme.onPrimary,
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineLarge,
             )
 
@@ -63,7 +65,10 @@ class LessonSwipeTutorialAnimatedModalOverlay :
                 onClick = { navigator.finish(Unit) },
                 modifier = Modifier.widthIn(min = 200.dp)
             ) {
-                Text(stringResource(R.string.lesson_tutorial_swipe_action_ok))
+                Text(
+                    stringResource(R.string.lesson_tutorial_swipe_action_ok),
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }
