@@ -84,20 +84,12 @@ internal fun ToolName(
 }
 
 @Composable
-internal fun ToolCategory(state: ToolCard.State, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-    val tool by rememberUpdatedState(state.tool)
-    val translation by rememberUpdatedState(state.translation)
-    val locale by remember { derivedStateOf { translation?.languageCode } }
-    val category by remember(context) { derivedStateOf { tool.getCategory(context, locale) } }
-
-    Text(
-        category,
-        style = toolCategoryStyle,
-        maxLines = 1,
-        modifier = modifier.testTag(TEST_TAG_TOOL_CATEGORY)
-    )
-}
+internal fun ToolCategory(state: ToolCard.State, modifier: Modifier = Modifier) = Text(
+    state.tool.getCategory(LocalContext.current),
+    style = toolCategoryStyle,
+    maxLines = 1,
+    modifier = modifier.testTag(TEST_TAG_TOOL_CATEGORY)
+)
 
 @Composable
 internal fun ToolCardInfoContent(content: @Composable () -> Unit) = CompositionLocalProvider(
