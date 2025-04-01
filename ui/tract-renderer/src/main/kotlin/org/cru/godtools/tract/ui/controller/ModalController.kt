@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.controller
 
+import androidx.lifecycle.LifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -12,16 +13,18 @@ import org.greenrobot.eventbus.EventBus
 
 class ModalController @AssistedInject internal constructor(
     @Assisted private val binding: TractContentModalBinding,
+    @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted override val toolState: State,
     eventBus: EventBus,
     cacheFactory: UiControllerCache.Factory
 ) : ParentController<Modal>(Modal::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
-        fun create(binding: TractContentModalBinding, toolState: State): ModalController
+        fun create(binding: TractContentModalBinding, lifecycleOwner: LifecycleOwner, toolState: State): ModalController
     }
 
     init {
+        binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
     }
 
@@ -33,5 +36,8 @@ class ModalController @AssistedInject internal constructor(
     }
 }
 
-internal fun TractContentModalBinding.bindController(factory: ModalController.Factory, toolState: State) =
-    controller ?: factory.create(this, toolState)
+internal fun TractContentModalBinding.bindController(
+    factory: ModalController.Factory,
+    lifecycleOwner: LifecycleOwner,
+    toolState: State,
+) = controller ?: factory.create(this, lifecycleOwner, toolState)

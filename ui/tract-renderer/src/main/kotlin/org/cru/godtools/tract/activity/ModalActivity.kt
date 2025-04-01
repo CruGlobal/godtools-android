@@ -75,7 +75,7 @@ class ModalActivity : BaseBindingActivity<TractModalActivityBinding>(R.layout.tr
     }
 
     override fun onBindingChanged() {
-        binding.modalLayout.bindController(modalControllerFactory, toolState.toolState)
+        binding.modalLayout.bindController(modalControllerFactory, this, toolState.toolState)
             .also { dataModel.modal.observe(this, it) }
     }
 
