@@ -115,8 +115,13 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     Event.OpenTool -> tool?.let { tool ->
                         val intent = tool.createToolIntent(
                             context = context,
-                            languages = listOfNotNull(translation?.languageCode, secondTranslation?.languageCode),
-                            activeLocale = if (secondTranslation != null) screen.secondLanguage else null
+                            languages = when (tool.type) {
+                                Tool.Type.ARTICLE -> listOfNotNull(
+                                    secondTranslation?.languageCode ?: translation?.languageCode
+                                )
+                                else -> listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
+                            },
+                            activeLocale = secondTranslation?.languageCode
                         )
 
                         if (intent != null) {
