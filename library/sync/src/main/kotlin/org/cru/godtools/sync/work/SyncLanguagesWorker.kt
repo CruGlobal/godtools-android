@@ -8,9 +8,10 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.io.IOException
 import org.cru.godtools.sync.task.LanguagesSyncTasks
 
-private const val WORK_NAME = "SyncTools"
+private const val WORK_NAME = "SyncLanguages"
 
 internal fun WorkManager.scheduleSyncLanguagesWork() =
     enqueueUniqueWork(WORK_NAME, ExistingWorkPolicy.KEEP, SyncWorkRequestBuilder<SyncLanguagesWorker>().build())
@@ -21,5 +22,9 @@ internal class SyncLanguagesWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val languageSyncTasks: LanguagesSyncTasks
 ) : CoroutineWorker(context, workerParams) {
-    override suspend fun doWork() = if (languageSyncTasks.syncLanguages()) Result.success() else Result.retry()
+    override suspend fun doWork() = try {
+        if (languageSyncTasks.syncLanguages()) Result.success() else Result.retry()
+    } catch (_: IOException) {
+        Result.retry()
+    }
 }
