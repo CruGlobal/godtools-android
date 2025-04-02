@@ -310,21 +310,35 @@ abstract class ToolsRepositoryIT {
     }
 
     @Test
+    fun `pinTool() - Update Order`() = testScope.runTest {
+        repository.storeInitialTools(
+            listOf(
+                randomTool("tool1", Tool.Type.TRACT, isFavorite = true, order = Int.MIN_VALUE),
+                randomTool("tool2", Tool.Type.TRACT, isFavorite = true, order = Int.MAX_VALUE),
+                randomTool("tool3", Tool.Type.TRACT, isFavorite = false, order = 0)
+            )
+        )
+
+        repository.pinTool("tool3")
+        assertEquals(listOf("tool1", "tool2", "tool3"), repository.getFavoriteToolsFlow().first().map { it.code })
+    }
+
+    @Test
     fun `pinTool() - No Change`() = testScope.runTest {
         val code = "pinTool"
-        repository.storeInitialTools(listOf(Tool(code, isFavorite = true)))
+        repository.storeInitialTools(listOf(Tool(code, isFavorite = true, order = Int.MIN_VALUE)))
 
-        repository.findToolFlow(code).test {
-            assertNotNull(awaitItem()) {
-                assertTrue(it.isFavorite)
-                assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
-            }
+        assertNotNull(repository.findTool(code)) {
+            assertTrue(it.isFavorite)
+            assertEquals(Int.MIN_VALUE, it.order)
+            assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
+        }
 
-            repository.pinTool(code)
-            assertNotNull(awaitItem()) {
-                assertTrue(it.isFavorite)
-                assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
-            }
+        repository.pinTool(code)
+        assertNotNull(repository.findTool(code)) {
+            assertTrue(it.isFavorite)
+            assertEquals(Int.MIN_VALUE, it.order)
+            assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
         }
     }
     // endregion pinTool()
@@ -354,17 +368,15 @@ abstract class ToolsRepositoryIT {
         val code = "unpinTool"
         repository.storeInitialTools(listOf(Tool(code, isFavorite = false)))
 
-        repository.findToolFlow(code).test {
-            assertNotNull(awaitItem()) {
-                assertFalse(it.isFavorite)
-                assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
-            }
+        assertNotNull(repository.findTool(code)) {
+            assertFalse(it.isFavorite)
+            assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
+        }
 
-            repository.unpinTool(code)
-            assertNotNull(awaitItem()) {
-                assertFalse(it.isFavorite)
-                assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
-            }
+        repository.unpinTool(code)
+        assertNotNull(repository.findTool(code)) {
+            assertFalse(it.isFavorite)
+            assertFalse(Tool.ATTR_IS_FAVORITE in it.changedFields)
         }
     }
     // endregion unpinTool()

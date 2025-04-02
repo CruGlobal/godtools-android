@@ -36,14 +36,19 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     @Transaction
     override suspend fun pinTool(code: String, trackChanges: Boolean) {
-        val tool = dao.findToolFavorite(code) ?: return
+        val tool = dao.findToolFavorite(code)?.takeUnless { it.isFavorite } ?: return
+        val currentOrder = dao.getTools()
+            .filter { it.isFavorite }
+            .sortedWith(compareBy<ToolEntity> { it.order }.then(compareBy { it.defaultOrder }))
+            .map { it.code }
         if (trackChanges) tool.isTrackingChanges = true
         tool.isFavorite = true
         dao.update(tool)
+        storeToolOrder(currentOrder + code)
     }
     @Transaction
     override suspend fun unpinTool(code: String) {
-        val tool = dao.findToolFavorite(code) ?: return
+        val tool = dao.findToolFavorite(code)?.takeIf { it.isFavorite } ?: return
         tool.trackChanges { it.isFavorite = false }
         dao.update(tool)
     }
