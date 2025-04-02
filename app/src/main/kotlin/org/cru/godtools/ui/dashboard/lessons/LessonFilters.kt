@@ -1,7 +1,9 @@
 package org.cru.godtools.ui.dashboard.lessons
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,13 +17,14 @@ import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
 import org.cru.godtools.ui.languages.LanguageName
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 internal fun LessonFilters(state: LessonsScreen.UiState, modifier: Modifier = Modifier) {
-    Row(modifier = modifier) {
+    FlowRow(modifier = modifier) {
         Text(
             stringResource(R.string.dashboard_lessons_section_filter_label),
             modifier = Modifier
                 .alignByBaseline()
-                .padding(end = 36.dp)
+                .padding(end = 8.dp)
         )
         LazyFilterMenu(
             state.languageFilter,
@@ -34,6 +37,7 @@ internal fun LessonFilters(state: LessonsScreen.UiState, modifier: Modifier = Mo
             },
             modifier = Modifier
                 .weight(1f)
+                .widthIn(min = 175.dp)
                 .alignByBaseline()
         )
     }

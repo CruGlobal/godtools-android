@@ -27,6 +27,7 @@ import org.junit.Rule
 
 abstract class BasePaparazziTest(
     private val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
+    protected val locale: String? = null,
     protected val nightMode: NightMode = NightMode.NOTNIGHT,
     protected val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,
     renderingMode: RenderingMode = RenderingMode.NORMAL,
@@ -50,7 +51,7 @@ abstract class BasePaparazziTest(
 
     @get:Rule
     val paparazzi = Paparazzi(
-        deviceConfig = deviceConfig.copy(nightMode = nightMode),
+        deviceConfig = deviceConfig.copy(locale = locale, nightMode = nightMode),
         renderingMode = when (accessibilityMode) {
             AccessibilityMode.ACCESSIBILITY -> when (renderingMode) {
                 RenderingMode.SHRINK -> RenderingMode.NORMAL
@@ -67,11 +68,14 @@ abstract class BasePaparazziTest(
     @BeforeTest
     fun excludeRedundantTests() {
         if (excludeRedundantTests) {
-            // don't run accessibility mode for night mode, we already test it for Not Night
-            assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && nightMode == NightMode.NIGHT)
-
             // don't run accessibility mode for devices other than the NEXUS_5
             assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && deviceConfig != DeviceConfig.NEXUS_5)
+
+            // don't run accessibility mode for locales other than English
+            assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && locale != null)
+
+            // don't run accessibility mode for night mode, we already test it for Not Night
+            assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY && nightMode == NightMode.NIGHT)
         }
     }
 
