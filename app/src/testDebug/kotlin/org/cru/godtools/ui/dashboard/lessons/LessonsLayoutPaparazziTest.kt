@@ -31,9 +31,15 @@ import org.junit.runner.RunWith
 @RunWith(TestParameterInjector::class)
 class LessonsLayoutPaparazziTest(
     @TestParameter(valuesProvider = DeviceConfigProvider::class) deviceConfig: DeviceConfig,
+    @TestParameter("null", "in") locale: String?,
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
-) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
+) : BasePaparazziTest(
+    deviceConfig = deviceConfig,
+    locale = locale,
+    nightMode = nightMode,
+    accessibilityMode = accessibilityMode
+) {
     private val state = UiState(
         languageFilter = FilterMenu.UiState(
             selectedItem = Language(Locale.ENGLISH)
