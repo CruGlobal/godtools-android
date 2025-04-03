@@ -93,23 +93,25 @@ class LessonsPresenter @AssistedInject constructor(
             items = remember {
                 combine(
                     languagesFlow,
-                    snapshotFlow { query.value },
                     settings.appLanguageFlow,
-                    toolsRepository.getLessonsFlow()
-                        .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
-                        .distinctUntilChanged()
-                        .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
-                        .map {
-                            it.groupBy { it.languageCode }
-                                .mapValues { it.value.distinctBy { it.toolCode }.count() }
-                        },
-                ) { languages, query, appLanguage, toolCounts ->
-                    languages
-                        .filterByDisplayAndNativeName(query, context, appLanguage)
-                        .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
-                        .filter { it.count > 0 }
-                        .toImmutableList()
-                }
+                    snapshotFlow { query.value },
+                ) { languages, appLang, query -> languages.filterByDisplayAndNativeName(query, context, appLang) }
+                    .flowOn(ioDispatcher)
+                    .combine(
+                        toolsRepository.getLessonsFlow()
+                            .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+                            .distinctUntilChanged()
+                            .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
+                            .map {
+                                it.groupBy { it.languageCode }
+                                    .mapValues { it.value.distinctBy { it.toolCode }.count() }
+                            }
+                    ) { languages, toolCounts ->
+                        languages
+                            .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
+                            .filter { it.count > 0 }
+                            .toImmutableList()
+                    }
             }.collectAsState(persistentListOf()).value,
             eventSink = {
                 when (it) {
