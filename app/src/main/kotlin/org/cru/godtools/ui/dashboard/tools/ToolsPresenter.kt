@@ -194,14 +194,14 @@ class ToolsPresenter @AssistedInject constructor(
                 languagesFlow,
                 settings.appLanguageFlow,
                 queryFlow,
-                toolCountsFlow,
-            ) { languages, appLang, query, toolCounts ->
-                languages
-                    .filterByDisplayAndNativeName(query, context, appLang)
-                    .let { listOf(null) + it }
-                    .map { FilterMenu.UiState.Item(it, toolCounts[it?.code] ?: 0) }
-                    .toImmutableList()
-            }
+            ) { languages, appLang, query -> languages.filterByDisplayAndNativeName(query, context, appLang) }
+                .flowOn(ioDispatcher)
+                .combine(toolCountsFlow) { languages, toolCounts ->
+                    languages
+                        .let { listOf(null) + it }
+                        .map { FilterMenu.UiState.Item(it, toolCounts[it?.code] ?: 0) }
+                        .toImmutableList()
+                }
         }.collectAsState(persistentListOf()).value
     }
 
