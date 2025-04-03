@@ -14,6 +14,7 @@ import dagger.multibindings.IntoSet
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import org.ccci.gto.android.common.dagger.coroutines.CoroutinesModule
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
 import org.ccci.gto.android.common.dagger.splitinstall.SplitInstallModule
@@ -21,6 +22,7 @@ import org.cru.godtools.service.AccountListRegistrationService
 
 @Module(
     includes = [
+        CoroutinesModule::class,
         EagerModule::class,
         SplitInstallModule::class
     ]

@@ -22,14 +22,18 @@ import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
@@ -57,6 +61,7 @@ class ToolsPresenter @AssistedInject constructor(
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
+    @DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<ToolsScreen.State> {
     @Composable
@@ -173,6 +178,7 @@ class ToolsPresenter @AssistedInject constructor(
                 .combine(settings.appLanguageFlow) { languages, appLang ->
                     languages.sortedWith(Language.displayNameComparator(context, appLang))
                 }
+                .flowOn(ioDispatcher)
 
             val toolCountsFlow = toolsFlow
                 .map { it.mapNotNullTo(mutableSetOf()) { it.code } }

@@ -13,6 +13,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import org.ccci.gto.android.common.dagger.coroutines.CoroutinesModule
 import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.AnalyticsModule
@@ -36,7 +37,7 @@ import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.greenrobot.eventbus.EventBus
 
-@Module(includes = [EagerModule::class])
+@Module(includes = [CoroutinesModule::class, EagerModule::class])
 @TestInstallIn(
     components = [SingletonComponent::class],
     replaces = [
