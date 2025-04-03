@@ -35,8 +35,11 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
@@ -75,12 +78,15 @@ private const val TOOL = "tool"
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class ToolDetailsPresenterTest {
     private val isConnected = MutableStateFlow(true)
     private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val appLocaleState = mutableStateOf(Locale.ENGLISH)
     private val toolFlow = MutableStateFlow<Tool?>(null)
     private val normalToolsFlow = MutableStateFlow(emptyList<Tool>())
+
+    private val testScope = TestScope()
 
     private val attachmentsRepository: AttachmentsRepository = mockk {
         every { findAttachmentFlow(any()) } returns flowOf(null)
@@ -151,6 +157,7 @@ class ToolDetailsPresenterTest {
         drawerMenuPresenter = drawerMenuPresenter,
         toolCardPresenter = toolCardPresenter,
         screen = screen,
+        ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
         navigator = navigator,
     )
 
@@ -172,7 +179,7 @@ class ToolDetailsPresenterTest {
 
     // region State.tool
     @Test
-    fun `State - tool`() = runTest {
+    fun `State - tool`() = testScope.runTest {
         createPresenter().test {
             assertNull(expectMostRecentItem().tool)
 
@@ -185,7 +192,7 @@ class ToolDetailsPresenterTest {
 
     // region State.banner
     @Test
-    fun `State - banner - prefer detailsBannerId`() = runTest {
+    fun `State - banner - prefer detailsBannerId`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, detailsBannerId = Random.nextLong(), bannerId = Random.nextLong())
         val file = File.createTempFile("prefix", "suffix")
         val attachment = Attachment {
@@ -203,7 +210,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `State - banner - fallback to bannerId`() = runTest {
+    fun `State - banner - fallback to bannerId`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, detailsBannerId = null, bannerId = Random.nextLong())
         val file = File.createTempFile("prefix", "suffix")
         val attachment = Attachment {
@@ -223,7 +230,7 @@ class ToolDetailsPresenterTest {
 
     // region State.bannerAnimation
     @Test
-    fun `State - bannerAnimation`() = runTest {
+    fun `State - bannerAnimation`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, detailsBannerAnimationId = Random.nextLong())
         val file = File.createTempFile("prefix", "suffix")
         val attachment = Attachment {
@@ -245,7 +252,7 @@ class ToolDetailsPresenterTest {
 
     // region State.downloadProgress
     @Test
-    fun `State - downloadProgress`() = runTest {
+    fun `State - downloadProgress`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL)
         val translationFlow = MutableStateFlow(randomTranslation(TOOL, Locale.ENGLISH))
 
@@ -261,7 +268,7 @@ class ToolDetailsPresenterTest {
 
     // region State.hasShortcut
     @Test
-    fun `State - hasShortcut`() = runTest {
+    fun `State - hasShortcut`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL)
 
         every { shortcutManager.canPinToolShortcut(any()) } returns true
@@ -272,7 +279,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `State - hasShortcut - false`() = runTest {
+    fun `State - hasShortcut - false`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL)
 
         every { shortcutManager.canPinToolShortcut(any()) } returns false
@@ -285,7 +292,7 @@ class ToolDetailsPresenterTest {
 
     // region State.variants
     @Test
-    fun `State - variants`() = runTest {
+    fun `State - variants`() = testScope.runTest {
         val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
         val variant1 = randomTool("variant1", Tool.Type.TRACT, metatoolCode = "meta")
         val tool2 = randomTool("tool2", Tool.Type.TRACT, metatoolCode = null)
@@ -309,7 +316,7 @@ class ToolDetailsPresenterTest {
 
     // region State.drawerState
     @Test
-    fun `State - drawerState`() = runTest {
+    fun `State - drawerState`() = testScope.runTest {
         val drawerState = DrawerMenuScreen.State(
             drawerState = DrawerState(DrawerValue.Open),
             isLoggedIn = Random.nextBoolean()
@@ -324,7 +331,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.OpenTool
     @Test
-    fun `Event - OpenTool - Tract Tool`() = runTest {
+    fun `Event - OpenTool - Tract Tool`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
@@ -345,7 +352,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `Event - OpenTool - Tract Tool - With Second Language`() = runTest {
+    fun `Event - OpenTool - Tract Tool - With Second Language`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
         every { languagesRepository.findLanguageFlow(Locale.FRENCH) } returns flowOf(Language(Locale.FRENCH))
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
@@ -376,7 +383,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.OpenToolTraining
     @Test
-    fun `Event - OpenToolTraining - Tract Tool`() = runTest {
+    fun `Event - OpenToolTraining - Tract Tool`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
         every {
             translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
@@ -397,7 +404,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.PinShortcut
     @Test
-    fun `Event - PinShortcut`() = runTest {
+    fun `Event - PinShortcut`() = testScope.runTest {
         val pendingShortcut: PendingShortcut = mockk()
         every { shortcutManager.canPinToolShortcut(any()) } returns true
         every { shortcutManager.getPendingToolShortcut(any(), *anyVararg()) } returns pendingShortcut
@@ -415,7 +422,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.PinTool
     @Test
-    fun `Event - PinTool`() = runTest {
+    fun `Event - PinTool`() = testScope.runTest {
         coEvery { toolsRepository.pinTool(any(), any()) } just Runs
         every { settings.setFeatureDiscovered(any()) } just Runs
         coEvery { syncService.syncDirtyFavoriteTools() } returns true
@@ -434,7 +441,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.UnpinTool
     @Test
-    fun `Event - UnpinTool`() = runTest {
+    fun `Event - UnpinTool`() = testScope.runTest {
         coEvery { toolsRepository.unpinTool(any()) } just Runs
         coEvery { syncService.syncDirtyFavoriteTools() } returns true
 
@@ -452,7 +459,7 @@ class ToolDetailsPresenterTest {
 
     // region Event.SwitchVariant
     @Test
-    fun `Event - SwitchVariant`() = runTest {
+    fun `Event - SwitchVariant`() = testScope.runTest {
         createPresenter(ToolDetailsScreen("initial")).test {
             assertNotNull(expectMostRecentItem()) {
                 assertEquals("initial", it.toolCode)
@@ -467,7 +474,7 @@ class ToolDetailsPresenterTest {
 
     // region SideEffect - DownloadLatestTranslation
     @Test
-    fun `SideEffect - DownloadLatestTranslation`() = runTest {
+    fun `SideEffect - DownloadLatestTranslation`() = testScope.runTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
@@ -480,7 +487,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - DownloadLatestTranslation - Second Language`() = runTest {
+    fun `SideEffect - DownloadLatestTranslation - Second Language`() = testScope.runTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
@@ -496,7 +503,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - DownloadLatestTranslation - isConnected`() = runTest {
+    fun `SideEffect - DownloadLatestTranslation - isConnected`() = testScope.runTest {
         isConnected.value = false
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
@@ -519,7 +526,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - DownloadLatestTranslation - Trigger on variant change`() = runTest {
+    fun `SideEffect - DownloadLatestTranslation - Trigger on variant change`() = testScope.runTest {
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
