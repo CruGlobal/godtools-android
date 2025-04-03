@@ -25,14 +25,18 @@ import javax.inject.Named
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
@@ -83,8 +87,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private val syncService: GodToolsSyncService,
     private val drawerMenuPresenter: DrawerMenuPresenter,
     private val toolCardPresenter: ToolCardPresenter,
-    @Named(IS_CONNECTED_STATE_FLOW)
-    private val isConnected: StateFlow<Boolean>,
+    @DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
+    @Named(IS_CONNECTED_STATE_FLOW) private val isConnected: StateFlow<Boolean>,
     @Assisted private val screen: ToolDetailsScreen,
     @Assisted private val navigator: Navigator,
 ) : Presenter<State> {
@@ -243,6 +247,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                 .combine(settings.appLanguageFlow) { langs, appLocale ->
                     langs.getSortedDisplayNames(context, appLocale).toImmutableList()
                 }
+                .flowOn(ioDispatcher)
         }.collectAsState(persistentListOf()).value
     }
 
