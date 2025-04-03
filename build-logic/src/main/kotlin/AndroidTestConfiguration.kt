@@ -1,5 +1,5 @@
 import com.android.build.gradle.TestedExtension
-import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
@@ -49,13 +49,11 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
 
     // Kotlin Kover
     project.plugins.apply("org.jetbrains.kotlinx.kover")
-    project.extensions.configure<KoverReportExtension> {
+    project.extensions.configure<KoverProjectExtension> {
         project.androidComponents.onVariants {
-            androidReports(it.name) {
-                xml {
-                    // HACK: update the report file so that codecov picks it up automatically
-                    setReportFile(project.layout.buildDirectory.file("reports/kover/${it.name}/report.xml"))
-                }
+            reports.variant(it.name) {
+                // HACK: update the report file so that codecov picks it up automatically
+                xml.xmlFile.set(project.layout.buildDirectory.file("reports/kover/${it.name}/report.xml"))
             }
         }
     }
