@@ -24,11 +24,15 @@ import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
+import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
@@ -53,8 +57,8 @@ class LessonsPresenter @AssistedInject constructor(
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
-    @Assisted
-    private val navigator: Navigator,
+    @DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
+    @Assisted private val navigator: Navigator,
 ) : Presenter<LessonsScreen.UiState> {
     @Composable
     override fun present(): LessonsScreen.UiState {
@@ -89,23 +93,25 @@ class LessonsPresenter @AssistedInject constructor(
             items = remember {
                 combine(
                     languagesFlow,
-                    snapshotFlow { query.value },
                     settings.appLanguageFlow,
-                    toolsRepository.getLessonsFlow()
-                        .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
-                        .distinctUntilChanged()
-                        .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
-                        .map {
-                            it.groupBy { it.languageCode }
-                                .mapValues { it.value.distinctBy { it.toolCode }.count() }
-                        },
-                ) { languages, query, appLanguage, toolCounts ->
-                    languages
-                        .filterByDisplayAndNativeName(query, context, appLanguage)
-                        .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
-                        .filter { it.count > 0 }
-                        .toImmutableList()
-                }
+                    snapshotFlow { query.value },
+                ) { languages, appLang, query -> languages.filterByDisplayAndNativeName(query, context, appLang) }
+                    .flowOn(ioDispatcher)
+                    .combine(
+                        toolsRepository.getLessonsFlow()
+                            .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+                            .distinctUntilChanged()
+                            .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
+                            .map {
+                                it.groupBy { it.languageCode }
+                                    .mapValues { it.value.distinctBy { it.toolCode }.count() }
+                            }
+                    ) { languages, toolCounts ->
+                        languages
+                            .map { FilterMenu.UiState.Item(it, toolCounts[it.code] ?: 0) }
+                            .filter { it.count > 0 }
+                            .toImmutableList()
+                    }
             }.collectAsState(persistentListOf()).value,
             eventSink = {
                 when (it) {
@@ -121,6 +127,7 @@ class LessonsPresenter @AssistedInject constructor(
             .combine(settings.appLanguageFlow) { languages, appLanguage ->
                 languages.sortedWith(Language.displayNameComparator(context, appLanguage))
             }
+            .flowOn(ioDispatcher)
     }
 
     @Composable

@@ -27,8 +27,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
@@ -58,12 +61,15 @@ import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class LessonsPresenterTest {
     private val appLangFlow = MutableStateFlow(Locale.ENGLISH)
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val enLessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
+
+    private val testScope = TestScope()
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
@@ -104,6 +110,7 @@ class LessonsPresenterTest {
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
+        ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
         navigator = navigator,
     )
 
@@ -147,14 +154,14 @@ class LessonsPresenterTest {
 
     // region State.languageFilter.selectedItem
     @Test
-    fun `State - languageFilter - selectedItem - default to app language`() = runTest {
+    fun `State - languageFilter - selectedItem - default to app language`() = testScope.runTest {
         presenter.test {
             assertEquals(appLangFlow.value, expectMostRecentItem().languageFilter.selectedItem?.code)
         }
     }
 
     @Test
-    fun `State - languageFilter - selectedItem - reset to app language when app language changes`() = runTest {
+    fun `State - languageFilter - selectedItem - reset to app locale when app locale changes`() = testScope.runTest {
         presenter.test {
             assertNotNull(expectMostRecentItem().languageFilter) {
                 assertEquals(Locale.ENGLISH, it.selectedItem?.code)
@@ -168,7 +175,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - selectedItem - persisted through state save & restore`() = runTest {
+    fun `State - languageFilter - selectedItem - persisted through state save & restore`() = testScope.runTest {
         testPresenterWithStateRestoration().test {
             assertNotNull(expectMostRecentItem().languageFilter) {
                 assertEquals(Locale.ENGLISH, it.selectedItem?.code)
@@ -185,7 +192,7 @@ class LessonsPresenterTest {
 
     // region State.languageFilter.items
     @Test
-    fun `State - languageFilter - items`() = runTest {
+    fun `State - languageFilter - items`() = testScope.runTest {
         lessonsFlow.value = listOf(randomTool("lesson"))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
@@ -202,7 +209,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - items - Sorted by app language display name`() = runTest {
+    fun `State - languageFilter - items - Sorted by app language display name`() = testScope.runTest {
         lessonsFlow.value = listOf(randomTool("lesson"))
         languagesFlow.value = listOf(
             Language(Locale("es")),
@@ -222,7 +229,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - items - Include languages with at least 1 translation`() = runTest {
+    fun `State - languageFilter - items - Include languages with at least 1 translation`() = testScope.runTest {
         lessonsFlow.value = listOf(randomTool("lesson"))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
@@ -236,7 +243,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - items - filtered by query`() = runTest {
+    fun `State - languageFilter - items - filtered by query`() = testScope.runTest {
         lessonsFlow.value = listOf(randomTool("lesson"))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
@@ -255,7 +262,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - items - include count of lessons per language`() = runTest {
+    fun `State - languageFilter - items - include count of lessons per language`() = testScope.runTest {
         lessonsFlow.value = listOf(randomTool("lesson"), randomTool("lesson2"))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
@@ -286,7 +293,7 @@ class LessonsPresenterTest {
 
     // region State.languageFilter.query
     @Test
-    fun `State - languageFilter - query - persisted through state save & restore`() = runTest {
+    fun `State - languageFilter - query - persisted through state save & restore`() = testScope.runTest {
         testPresenterWithStateRestoration().test {
             expectMostRecentItem().languageFilter.query.value = "test"
 
@@ -298,7 +305,7 @@ class LessonsPresenterTest {
 
     // region State.languageFilter Event.SelectItem
     @Test
-    fun `State - languageFilter - Event - SelectItem`() = runTest {
+    fun `State - languageFilter - Event - SelectItem`() = testScope.runTest {
         every { toolsRepository.getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
 
         presenter.test {
@@ -313,7 +320,7 @@ class LessonsPresenterTest {
 
     // region State.lessons
     @Test
-    fun `State - lessons`() = runTest {
+    fun `State - lessons`() = testScope.runTest {
         enLessonsFlow.value = listOf(
             randomTool("lesson1", isHidden = false, defaultOrder = 0),
             randomTool("lesson2", isHidden = false, defaultOrder = 1),
@@ -325,7 +332,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - lessons - hide hidden lessons`() = runTest {
+    fun `State - lessons - hide hidden lessons`() = testScope.runTest {
         enLessonsFlow.value = listOf(
             randomTool("lesson1", isHidden = false, defaultOrder = 0),
             randomTool("lesson2", isHidden = true, defaultOrder = 1),
@@ -338,7 +345,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - lessons - sorted by defaultOrder`() = runTest {
+    fun `State - lessons - sorted by defaultOrder`() = testScope.runTest {
         enLessonsFlow.value = listOf(
             randomTool("lesson2", isHidden = false, defaultOrder = 1),
             randomTool("lesson1", isHidden = false, defaultOrder = 0),
@@ -350,7 +357,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - lessons - Filtered by selected language`() = runTest {
+    fun `State - lessons - Filtered by selected language`() = testScope.runTest {
         every { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
             .returns(flowOf(listOf(randomTool("lesson", isHidden = false))))
 
@@ -368,7 +375,7 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - lessons - Event - Click`() = runTest {
+    fun `State - lessons - Event - Click`() = testScope.runTest {
         enLessonsFlow.value = listOf(
             randomTool("lesson1", isHidden = false, defaultOrder = 0),
             randomTool("lesson2", type = Tool.Type.LESSON, isHidden = false, defaultOrder = 1),
