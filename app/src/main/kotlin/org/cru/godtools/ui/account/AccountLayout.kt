@@ -54,7 +54,7 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.model.User
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.account.activity.AccountActivityLayout
-import org.cru.godtools.ui.account.globalactivity.AccountGlobalActivityLayout
+import org.cru.godtools.ui.account.globalactivity.GlobalActivityLayout
 
 internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
@@ -96,7 +96,8 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 ) {
                     when (pages[it]) {
                         AccountPage.ACTIVITY -> AccountActivityLayout()
-                        AccountPage.GLOBAL_ACTIVITY -> AccountGlobalActivityLayout()
+                        AccountPage.GLOBAL_ACTIVITY ->
+                            GlobalActivityLayout(Modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL))
                     }
                 }
             }
