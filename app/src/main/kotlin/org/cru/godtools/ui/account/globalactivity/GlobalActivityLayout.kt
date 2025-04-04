@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.Year
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
@@ -90,12 +89,12 @@ private fun GlobalActivityCard(label: String, count: Int, modifier: Modifier = M
     )
     Text(
         label,
-        style = MaterialTheme.typography.bodyMedium,
+        style = labelStyle,
         textAlign = TextAlign.Center,
+        minLines = 2,
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 8.dp, bottom = 8.dp, horizontal = 16.dp)
-            .minLinesHeight(2, textStyle = labelStyle)
     )
     Spacer(Modifier.weight(1f))
 }
