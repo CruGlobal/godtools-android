@@ -138,7 +138,7 @@ internal fun LanguageFilter(state: FilterMenu.UiState<Language?>, modifier: Modi
     itemLabel = { (lang) ->
         when (lang) {
             null -> Text(stringResource(R.string.dashboard_tools_section_filter_language_any))
-            else -> LanguageName(lang.code)
+            else -> LanguageName(lang)
         }
     },
     itemSupportingText = { (lang, count) ->

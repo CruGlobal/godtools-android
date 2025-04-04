@@ -31,7 +31,7 @@ internal fun LessonFilters(state: LessonsScreen.UiState, modifier: Modifier = Mo
             buttonLabelText = state.languageFilter.selectedItem
                 ?.getDisplayName(LocalContext.current, LocalAppLanguage.current).orEmpty(),
             itemKey = { (it) -> it.code },
-            itemLabel = { LanguageName(it.item.code) },
+            itemLabel = { LanguageName(it.item) },
             itemSupportingText = { (_, count) ->
                 pluralStringResource(R.plurals.dashboard_lessons_section_filter_available_lessons, count, count)
             },
