@@ -2,7 +2,8 @@ package org.cru.godtools.ui.account.globalactivity
 
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -12,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,43 +27,45 @@ import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeig
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
-import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 
 @Composable
-fun AccountGlobalActivityLayout() = Column(modifier = Modifier.padding(horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)) {
-    val viewModel = viewModel<GlobalActivityViewModel>()
-    val activity by viewModel.activity.collectAsState()
+fun GlobalActivityLayout(modifier: Modifier = Modifier, viewModel: GlobalActivityViewModel = viewModel()) {
+    GlobalActivityLayout(GlobalActivityScreen.UiState(viewModel.activity.collectAsState().value), modifier)
+}
 
+@Composable
+@OptIn(ExperimentalLayoutApi::class)
+fun GlobalActivityLayout(state: GlobalActivityScreen.UiState, modifier: Modifier = Modifier) = Column(modifier) {
     Text(
         stringResource(R.string.profile_global_activity_heading, Year.now().value),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(top = 32.dp)
     )
 
-    Row(
+    FlowRow(
+        maxItemsInEachRow = 2,
         horizontalArrangement = spacedBy(16.dp),
-        modifier = Modifier.padding(top = 8.dp)
+        verticalArrangement = spacedBy(16.dp),
+        modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
     ) {
         GlobalActivityCard(
             stringResource(R.string.profile_activity_unique_users),
-            activity.users,
+            state.activity.users,
             modifier = Modifier.weight(1f)
         )
         GlobalActivityCard(
             stringResource(R.string.profile_activity_gospel_presentations),
-            activity.gospelPresentations,
+            state.activity.gospelPresentations,
             modifier = Modifier.weight(1f)
         )
-    }
-    Row(horizontalArrangement = spacedBy(16.dp), modifier = Modifier.padding(vertical = 16.dp)) {
         GlobalActivityCard(
             stringResource(R.string.profile_activity_sessions),
-            activity.launches,
+            state.activity.launches,
             modifier = Modifier.weight(1f)
         )
         GlobalActivityCard(
             stringResource(R.string.profile_activity_countries),
-            activity.countries,
+            state.activity.countries,
             modifier = Modifier.weight(1f)
         )
     }
