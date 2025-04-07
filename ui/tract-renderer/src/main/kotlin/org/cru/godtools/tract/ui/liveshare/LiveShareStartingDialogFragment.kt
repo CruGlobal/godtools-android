@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.liveData
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.fragment.app.findListener
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.cru.godtools.tool.tract.R
@@ -41,10 +44,14 @@ class LiveShareStartingDialogFragment : DialogFragment() {
         }
 
         // auto-dismiss dialog if we are unable to connect after 10 seconds
-        lifecycleScope.launchWhenResumed {
-            delay(10_000)
-            context?.let { Toast.makeText(it, R.string.tract_live_share_unable_to_connect, Toast.LENGTH_LONG).show() }
-            dismissAllowingStateLoss()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                delay(10_000)
+                context?.let {
+                    Toast.makeText(it, R.string.tract_live_share_unable_to_connect, Toast.LENGTH_LONG).show()
+                }
+                dismissAllowingStateLoss()
+            }
         }
     }
 }
