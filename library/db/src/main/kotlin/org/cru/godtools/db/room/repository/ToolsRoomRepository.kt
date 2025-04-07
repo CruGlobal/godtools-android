@@ -44,7 +44,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
         if (trackChanges) tool.isTrackingChanges = true
         tool.isFavorite = true
         dao.update(tool)
-        storeToolOrder(currentOrder + code)
+        storeToolOrder(listOf(code) + currentOrder)
     }
     @Transaction
     override suspend fun unpinTool(code: String) {
