@@ -38,13 +38,13 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
@@ -116,7 +116,7 @@ fun DownloadableLanguagesLayout(
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(languages, key = { _, it -> it.code }) { i, it ->
-                LanguageListItem(languageViewModels.get(it), Modifier.animateItem())
+                LanguageListItem(languageViewModels.get(it).toState(), Modifier.animateItem())
                 if (i + 1 < languages.size) HorizontalDivider()
             }
         }
@@ -124,44 +124,42 @@ fun DownloadableLanguagesLayout(
 }
 
 @Composable
-private fun LanguageListItem(viewModel: LanguageViewModels.LanguageViewModel, modifier: Modifier = Modifier) {
-    val scope = rememberCoroutineScope()
-    val language by viewModel.language.collectAsState()
-    val toolsAvailable by viewModel.numberOfTools.collectAsState()
-
-    ListItem(
-        headlineContent = { LanguageName(language) },
-        supportingContent = {
-            val tools = toolsAvailable
-            Text(pluralStringResource(R.plurals.language_settings_downloadable_languages_available_tools, tools, tools))
-        },
-        trailingContent = {
-            var confirmRemoval by rememberSaveable { mutableStateOf(false) }
-            LaunchedEffect(confirmRemoval) {
-                delay(3_000)
-                confirmRemoval = false
-            }
-            val toolsDownloaded by viewModel.toolsDownloaded.collectAsState()
-
-            LanguageDownloadStatusIndicator(
-                isPinned = language.isAdded,
-                downloadedTools = toolsDownloaded,
-                totalTools = toolsAvailable,
-                isConfirmRemoval = confirmRemoval,
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple(bounded = false),
-                    ) {
-                        when {
-                            !language.isAdded -> scope.launch(NonCancellable) { viewModel.pin() }
-                            !confirmRemoval -> confirmRemoval = true
-                            else -> scope.launch(NonCancellable) { viewModel.unpin() }
-                        }
-                    }
-                    .padding(8.dp)
+private fun LanguageListItem(state: UiState.UiLanguage, modifier: Modifier = Modifier) = ListItem(
+    headlineContent = { LanguageName(state.language) },
+    supportingContent = {
+        Text(
+            pluralStringResource(
+                R.plurals.language_settings_downloadable_languages_available_tools,
+                state.totalTools,
+                state.totalTools
             )
-        },
-        modifier = modifier
-    )
-}
+        )
+    },
+    trailingContent = {
+        var confirmRemoval by rememberSaveable { mutableStateOf(false) }
+        LaunchedEffect(confirmRemoval) {
+            delay(3_000)
+            confirmRemoval = false
+        }
+
+        LanguageDownloadStatusIndicator(
+            isPinned = state.language.isAdded,
+            downloadedTools = state.downloadedTools,
+            totalTools = state.totalTools,
+            isConfirmRemoval = confirmRemoval,
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(bounded = false),
+                ) {
+                    when {
+                        !state.language.isAdded -> state.eventSink(UiState.UiLanguage.UiEvent.PinLanguage)
+                        !confirmRemoval -> confirmRemoval = true
+                        else -> state.eventSink(UiState.UiLanguage.UiEvent.UnpinLanguage)
+                    }
+                }
+                .padding(8.dp)
+        )
+    },
+    modifier = modifier
+)
