@@ -320,7 +320,7 @@ abstract class ToolsRepositoryIT {
         )
 
         repository.pinTool("tool3")
-        assertEquals(listOf("tool1", "tool2", "tool3"), repository.getFavoriteToolsFlow().first().map { it.code })
+        assertEquals(listOf("tool3", "tool1", "tool2"), repository.getFavoriteToolsFlow().first().map { it.code })
     }
 
     @Test
