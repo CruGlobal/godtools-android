@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.languages.downloadable
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -38,7 +38,10 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
@@ -54,19 +57,43 @@ sealed interface DownloadableLanguagesEvent {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 fun DownloadableLanguagesLayout(
     viewModel: DownloadableLanguagesViewModel = viewModel(),
     languageViewModels: LanguageViewModels = viewModel(),
     onEvent: (DownloadableLanguagesEvent) -> Unit = {},
 ) {
     val coroutineScope = rememberCoroutineScope()
+
+    val state = UiState(
+        query = rememberSaveable { mutableStateOf("") },
+        languages = viewModel.languages.collectAsState().value
+            .map { languageViewModels.get(it).toState() }
+            .toImmutableList(),
+        eventSink = {
+            when (it) {
+                UiState.UiEvent.NavigateUp -> onEvent(DownloadableLanguagesEvent.NavigateUp)
+            }
+        }
+    )
+    LaunchedEffect(Unit) {
+        snapshotFlow { state.query.value }
+            .onEach { viewModel.updateSearchQuery(it) }
+            .launchIn(coroutineScope)
+    }
+
+    DownloadableLanguagesLayout(state)
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
+    val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
 
-    val searchQuery by viewModel.searchQuery.collectAsState()
+    var searchQuery by state.query
     val updateSearchQuery: (String) -> Unit = remember {
         {
-            viewModel.updateSearchQuery(it)
+            searchQuery = it
             coroutineScope.launch { lazyListState.animateScrollToItem(0) }
         }
     }
@@ -84,14 +111,14 @@ fun DownloadableLanguagesLayout(
                 colors = GodToolsTheme.searchBarColors,
                 leadingIcon = {
                     IconButton(
-                        onClick = { onEvent(DownloadableLanguagesEvent.NavigateUp) },
+                        onClick = { state.eventSink(UiState.UiEvent.NavigateUp) },
                         modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
                     }
                 },
-                trailingIcon = {
-                    if (searchQuery.isNotEmpty()) {
+                trailingIcon = searchQuery.takeIf { it.isNotEmpty() }?.let {
+                    {
                         IconButton(
                             onClick = { updateSearchQuery("") },
                             modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
@@ -107,17 +134,16 @@ fun DownloadableLanguagesLayout(
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
-        }
+        },
+        modifier = modifier
     ) { contentPadding ->
-        val languages by viewModel.languages.collectAsState(emptyList())
-
         LazyColumn(
             state = lazyListState,
             modifier = Modifier.padding(contentPadding)
         ) {
-            itemsIndexed(languages, key = { _, it -> it.code }) { i, it ->
-                LanguageListItem(languageViewModels.get(it).toState(), Modifier.animateItem())
-                if (i + 1 < languages.size) HorizontalDivider()
+            itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
+                LanguageListItem(it, Modifier.animateItem())
+                if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
     }
