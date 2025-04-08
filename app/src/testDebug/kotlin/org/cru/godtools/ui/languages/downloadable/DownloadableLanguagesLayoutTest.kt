@@ -2,23 +2,20 @@ package org.cru.godtools.ui.languages.downloadable
 
 import android.app.Application
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.mockk.every
-import io.mockk.excludeRecords
-import io.mockk.mockk
-import io.mockk.verifyAll
+import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import kotlin.test.fail
-import kotlinx.coroutines.flow.MutableStateFlow
-import org.cru.godtools.model.Language
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -29,26 +26,14 @@ class DownloadableLanguagesLayoutTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val searchQueryFlow = MutableStateFlow("")
-    private val languagesFlow = MutableStateFlow(emptyList<Language>())
-    private val languageViewModels: LanguageViewModels = mockk()
-    private val viewModel: DownloadableLanguagesViewModel = mockk {
-        every { searchQuery } returns searchQueryFlow
-        every { updateSearchQuery(any()) } answers { searchQueryFlow.value = firstArg() }
-        every { languages } returns languagesFlow
-    }
-    private val eventCallback: Function1<DownloadableLanguagesEvent, Unit> = mockk(relaxed = true) {
-        excludeRecords { this@mockk.equals(any()) }
-    }
+    private val query = mutableStateOf("")
+
+    private val eventSink = TestEventSink<UiState.UiEvent>()
 
     @Test
     fun `DownloadableLanguagesLayout() - Back navigation`() {
         composeTestRule.setContent {
-            DownloadableLanguagesLayout(
-                viewModel = viewModel,
-                languageViewModels = languageViewModels,
-                onEvent = eventCallback,
-            )
+            DownloadableLanguagesLayout(UiState())
         }
 
         assertFalse(composeTestRule.activity.isFinishing)
@@ -60,33 +45,33 @@ class DownloadableLanguagesLayoutTest {
     fun `DownloadableLanguagesLayout() - Up navigation`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
-                viewModel = viewModel,
-                languageViewModels = languageViewModels,
-                onEvent = eventCallback,
+                UiState(
+                    query = remember { mutableStateOf("ab") },
+                    eventSink = eventSink
+                )
             )
         }
 
-        searchQueryFlow.value = "ab"
+        eventSink.assertNoEvents()
         composeTestRule.onNodeWithTag(TEST_TAG_NAVIGATE_UP).performClick()
-        composeTestRule.runOnIdle {
-            verifyAll { eventCallback(DownloadableLanguagesEvent.NavigateUp) }
-        }
+        eventSink.assertEvent(UiState.UiEvent.NavigateUp)
     }
 
     @Test
     fun `DownloadableLanguagesLayout() - Search - Back Navigation`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
-                viewModel = viewModel,
-                languageViewModels = languageViewModels,
-                onEvent = { fail() },
+                UiState(
+                    query = query,
+                    eventSink = eventSink
+                )
             )
         }
 
-        searchQueryFlow.value = "search"
+        query.value = "search"
         composeTestRule.runOnIdle { Espresso.pressBack() }
         assertFalse(composeTestRule.activity.isFinishing)
-        assertEquals("", searchQueryFlow.value)
+        assertEquals("", query.value)
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
 
         composeTestRule.runOnIdle { Espresso.pressBack() }
@@ -97,15 +82,16 @@ class DownloadableLanguagesLayoutTest {
     fun `DownloadableLanguagesLayout() - Search - Cancel Button`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
-                viewModel = viewModel,
-                languageViewModels = languageViewModels,
-                onEvent = { fail() },
+                UiState(
+                    query = query,
+                    eventSink = eventSink
+                )
             )
         }
 
-        searchQueryFlow.value = "search"
+        query.value = "search"
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH, useUnmergedTree = true).performClick()
-        assertEquals("", searchQueryFlow.value)
+        assertEquals("", query.value)
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
     }
 
@@ -113,16 +99,17 @@ class DownloadableLanguagesLayoutTest {
     fun `DownloadableLanguagesLayout() - Search - Cancel Button only visible when searching`() {
         composeTestRule.setContent {
             DownloadableLanguagesLayout(
-                viewModel = viewModel,
-                languageViewModels = languageViewModels,
-                onEvent = { fail() },
+                UiState(
+                    query = query,
+                    eventSink = eventSink
+                )
             )
         }
 
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
-        searchQueryFlow.value = "search"
+        query.value = "search"
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertExists().assertIsDisplayed()
-        searchQueryFlow.value = ""
+        query.value = ""
         composeTestRule.onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
     }
 }

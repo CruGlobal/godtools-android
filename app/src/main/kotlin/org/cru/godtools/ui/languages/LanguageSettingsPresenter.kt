@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import com.slack.circuitx.android.IntentScreen
 import com.slack.circuitx.effects.ImpressionEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -26,7 +25,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 import org.cru.godtools.ui.languages.app.AppLanguageScreen
-import org.cru.godtools.ui.languages.downloadable.createDownloadableLanguagesIntent
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
     @ApplicationContext
@@ -49,8 +48,7 @@ class LanguageSettingsPresenter @AssistedInject constructor(
                 when (it) {
                     Event.NavigateUp -> navigator.pop()
                     Event.AppLanguage -> navigator.goTo(AppLanguageScreen)
-                    Event.DownloadableLanguages ->
-                        navigator.goTo(IntentScreen(context.createDownloadableLanguagesIntent()))
+                    Event.DownloadableLanguages -> navigator.goTo(DownloadableLanguagesScreen)
                 }
             }
         )

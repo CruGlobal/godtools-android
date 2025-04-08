@@ -210,6 +210,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     testApi(testFixtures(libs.gtoSupport.androidx.compose))
+    testImplementation(testFixtures(project(":library:model")))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.androidx.test.espresso.core)
