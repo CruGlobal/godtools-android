@@ -2,7 +2,11 @@ plugins {
     id("godtools.library-conventions")
 }
 
-android.namespace = "org.cru.godtools.model"
+android {
+    namespace = "org.cru.godtools.model"
+
+    testFixtures.enable = true
+}
 
 dependencies {
     implementation(project(":library:base"))
