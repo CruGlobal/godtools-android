@@ -38,6 +38,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -85,6 +87,7 @@ fun DownloadableLanguagesLayout(
 }
 
 @Composable
+@CircuitInject(DownloadableLanguagesScreen::class, SingletonComponent::class)
 @OptIn(ExperimentalMaterial3Api::class)
 fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
