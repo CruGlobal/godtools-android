@@ -77,6 +77,7 @@ include("ui:base")
 include("ui:base-tool")
 include("ui:cyoa-renderer")
 include("ui:lesson-renderer")
+include("ui:opt-in-notification-renderer")
 include("ui:shortcuts")
 include("ui:tips-renderer")
 include("ui:tract-renderer")
@@ -95,3 +96,4 @@ if (System.getenv("GITHUB_ACTIONS")?.toBoolean() == true) {
         }
     }
 }
+include(":ui:opt-in-notification-renderer")
