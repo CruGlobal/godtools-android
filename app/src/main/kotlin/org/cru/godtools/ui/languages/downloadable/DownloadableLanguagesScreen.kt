@@ -19,9 +19,9 @@ object DownloadableLanguagesScreen : Screen {
     ) : CircuitUiState {
         data class UiLanguage(
             val language: Language,
-            val downloadedTools: Int,
-            val totalTools: Int,
-            val eventSink: (UiEvent) -> Unit,
+            val downloadedTools: Int = 0,
+            val totalTools: Int = 0,
+            val eventSink: (UiEvent) -> Unit = {},
         ) : CircuitUiState {
             sealed interface UiEvent : CircuitUiEvent {
                 data object PinLanguage : UiEvent
