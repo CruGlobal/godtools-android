@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -70,31 +71,40 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             SearchBar(
-                query = searchQuery,
-                onQueryChange = updateSearchQuery,
-                onSearch = updateSearchQuery,
-                active = false,
-                onActiveChange = {},
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchQuery,
+                        onQueryChange = updateSearchQuery,
+                        onSearch = updateSearchQuery,
+                        expanded = false,
+                        onExpandedChange = { },
+                        leadingIcon = {
+                            IconButton(
+                                onClick = { state.eventSink(UiEvent.NavigateUp) },
+                                modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
+                            ) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                            }
+                        },
+                        trailingIcon = searchQuery.takeUnless { it.isEmpty() }?.let {
+                            {
+                                IconButton(
+                                    onClick = { updateSearchQuery("") },
+                                    modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
+                                ) {
+                                    Icon(Icons.Filled.Close, null)
+                                }
+                            }
+                        },
+                        placeholder = {
+                            Text(stringResource(R.string.language_settings_downloadable_languages_search))
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                expanded = false,
+                onExpandedChange = {},
                 colors = GodToolsTheme.searchBarColors,
-                leadingIcon = {
-                    IconButton(
-                        onClick = { state.eventSink(UiEvent.NavigateUp) },
-                        modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
-                    }
-                },
-                trailingIcon = searchQuery.takeIf { it.isNotEmpty() }?.let {
-                    {
-                        IconButton(
-                            onClick = { updateSearchQuery("") },
-                            modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
-                        ) {
-                            Icon(Icons.Filled.Close, null)
-                        }
-                    }
-                },
-                placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
                 content = {},
                 modifier = Modifier
                     .padding(horizontal = 8.dp, bottom = 8.dp)
