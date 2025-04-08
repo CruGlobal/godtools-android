@@ -65,17 +65,6 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                             language = lang,
                             downloadedTools = rememberDownloadedTools(lang.code),
                             totalTools = rememberTotalTools(lang.code),
-                            eventSink = {
-                                when (it) {
-                                    UiLanguage.UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
-                                        languagesRepository.pinLanguage(lang.code)
-                                    }
-
-                                    UiLanguage.UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
-                                        languagesRepository.unpinLanguage(lang.code)
-                                    }
-                                }
-                            }
                         )
                     }
                 }
@@ -83,6 +72,10 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
             eventSink = {
                 when (it) {
                     UiState.UiEvent.NavigateUp -> navigator.pop()
+                    is UiState.UiEvent.PinLanguage ->
+                        coroutineScope.launch(NonCancellable) { languagesRepository.pinLanguage(it.locale) }
+                    is UiState.UiEvent.UnpinLanguage ->
+                        coroutineScope.launch(NonCancellable) { languagesRepository.unpinLanguage(it.locale) }
                 }
             }
         )

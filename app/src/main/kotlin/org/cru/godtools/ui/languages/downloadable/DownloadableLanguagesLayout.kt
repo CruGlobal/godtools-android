@@ -44,6 +44,8 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
@@ -76,7 +78,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
                 colors = GodToolsTheme.searchBarColors,
                 leadingIcon = {
                     IconButton(
-                        onClick = { state.eventSink(UiState.UiEvent.NavigateUp) },
+                        onClick = { state.eventSink(UiEvent.NavigateUp) },
                         modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
@@ -107,7 +109,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
-                LanguageListItem(it, Modifier.animateItem())
+                LanguageListItem(it, state.eventSink, Modifier.animateItem())
                 if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
@@ -115,7 +117,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LanguageListItem(state: UiState.UiLanguage, modifier: Modifier = Modifier) = ListItem(
+private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, modifier: Modifier = Modifier) = ListItem(
     headlineContent = { LanguageName(state.language) },
     supportingContent = {
         Text(
@@ -144,9 +146,9 @@ private fun LanguageListItem(state: UiState.UiLanguage, modifier: Modifier = Mod
                     indication = ripple(bounded = false),
                 ) {
                     when {
-                        !state.language.isAdded -> state.eventSink(UiState.UiLanguage.UiEvent.PinLanguage)
+                        !state.language.isAdded -> eventSink(UiEvent.PinLanguage(state.language.code))
                         !confirmRemoval -> confirmRemoval = true
-                        else -> state.eventSink(UiState.UiLanguage.UiEvent.UnpinLanguage)
+                        else -> eventSink(UiEvent.UnpinLanguage(state.language.code))
                     }
                 }
                 .padding(8.dp)
