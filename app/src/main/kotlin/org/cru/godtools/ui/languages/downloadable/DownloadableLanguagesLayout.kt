@@ -23,27 +23,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
@@ -53,38 +47,6 @@ import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.Ui
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
-
-sealed interface DownloadableLanguagesEvent {
-    data object NavigateUp : DownloadableLanguagesEvent
-}
-
-@Composable
-fun DownloadableLanguagesLayout(
-    viewModel: DownloadableLanguagesViewModel = viewModel(),
-    languageViewModels: LanguageViewModels = viewModel(),
-    onEvent: (DownloadableLanguagesEvent) -> Unit = {},
-) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val state = UiState(
-        query = rememberSaveable { mutableStateOf("") },
-        languages = viewModel.languages.collectAsState().value
-            .map { languageViewModels.get(it).toState() }
-            .toImmutableList(),
-        eventSink = {
-            when (it) {
-                UiState.UiEvent.NavigateUp -> onEvent(DownloadableLanguagesEvent.NavigateUp)
-            }
-        }
-    )
-    LaunchedEffect(Unit) {
-        snapshotFlow { state.query.value }
-            .onEach { viewModel.updateSearchQuery(it) }
-            .launchIn(coroutineScope)
-    }
-
-    DownloadableLanguagesLayout(state)
-}
 
 @Composable
 @CircuitInject(DownloadableLanguagesScreen::class, SingletonComponent::class)
