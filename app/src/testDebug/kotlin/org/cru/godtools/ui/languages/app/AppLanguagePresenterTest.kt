@@ -143,7 +143,7 @@ class AppLanguagePresenterTest {
 
             with(expectMostRecentItem()) {
                 val selectedLanguage = assertNotNull(selectedLanguage)
-                navigator.assertIsEmpty()
+                navigator.assertPopIsEmpty()
                 eventSink(AppLanguageScreen.Event.ConfirmLanguage(selectedLanguage))
             }
 
