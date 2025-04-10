@@ -11,6 +11,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -27,11 +31,7 @@ import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
 import org.greenrobot.eventbus.EventBus
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccordionSectionControllerTest {
@@ -54,7 +54,7 @@ class AccordionSectionControllerTest {
 
     private lateinit var controller: AccordionController.SectionController
 
-    @Before
+    @BeforeTest
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         controller = AccordionController.SectionController(
@@ -68,7 +68,7 @@ class AccordionSectionControllerTest {
         )
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         Dispatchers.resetMain()
     }
@@ -120,18 +120,13 @@ class AccordionSectionControllerTest {
         // trigger events by entering resumed state
         baseLifecycleOwner.lifecycle.currentState = Lifecycle.State.RESUMED
         verify(exactly = 1) { section.getAnalyticsEvents(AnalyticsEvent.Trigger.VISIBLE) }
-        verifyAll {
-            eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === event })
-        }
+        verifyAll { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === event }) }
         confirmVerified(eventBus)
 
         // check delayed event executes
         advanceTimeBy(1000)
         runCurrent()
-        verifyAll {
-            eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === event })
-            eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === delayedEvent1 })
-        }
+        verifyAll { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === delayedEvent1 }) }
         confirmVerified(eventBus)
         clearMocks(eventBus)
 
