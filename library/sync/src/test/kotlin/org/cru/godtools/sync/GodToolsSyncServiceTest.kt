@@ -6,11 +6,16 @@ import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerifyAll
 import io.mockk.every
-import io.mockk.excludeRecords
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.spyk
 import java.io.IOException
 import javax.inject.Provider
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
@@ -22,11 +27,6 @@ import org.cru.godtools.sync.task.ToolSyncTasks
 import org.cru.godtools.sync.task.UserCounterSyncTasks
 import org.cru.godtools.sync.work.scheduleSyncToolSharesWork
 import org.cru.godtools.sync.work.scheduleSyncToolsWork
-import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
 import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,7 +40,9 @@ class GodToolsSyncServiceTest {
         coEvery { syncDirtyCounters() } returns true
     }
 
-    private val timber: Timber.Tree = mockk(relaxed = true)
+    private val timber: Timber.Tree = spyk(object : Timber.Tree() {
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) = Unit
+    })
     private val workManager: WorkManager = mockk()
     private val testScope = TestScope()
 
@@ -54,13 +56,12 @@ class GodToolsSyncServiceTest {
         coroutineScope = testScope.backgroundScope
     )
 
-    @Before
+    @BeforeTest
     fun setup() {
         Timber.plant(timber)
-        excludeRecords { Timber.tag(any()) }
     }
 
-    @After
+    @AfterTest
     fun cleanup() {
         Timber.uproot(timber)
     }
