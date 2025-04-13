@@ -32,8 +32,8 @@
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">Доступны %1$d Уроки</item>
         <item quantity="other">Доступны %1$d Уроки</item>
-        <item quantity="few"></item>
-        <item quantity="many"></item>
+        <item quantity="few">Доступны %1$d Уроки</item>
+        <item quantity="many">Доступны %1$d Уроки</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Завершено</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Заполнено</string>
