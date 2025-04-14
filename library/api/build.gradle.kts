@@ -16,9 +16,6 @@ android {
     }
 }
 
-// TODO: remove these bug workarounds once they are no longer needed
-exportAgpGeneratedSourcesToKsp()
-
 dependencies {
     api(project(":library:model"))
 

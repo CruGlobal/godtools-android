@@ -119,9 +119,6 @@ ksp {
     arg("dagger.fastInit", "enabled")
 }
 
-// TODO: remove these bug workarounds once they are no longer needed
-exportAgpGeneratedSourcesToKsp()
-
 onesky {
     sourceStringFiles = listOf(
         "strings_account.xml",
