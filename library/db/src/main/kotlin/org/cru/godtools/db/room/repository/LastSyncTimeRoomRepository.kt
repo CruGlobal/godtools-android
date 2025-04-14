@@ -21,8 +21,11 @@ internal abstract class LastSyncTimeRoomRepository(private val db: GodToolsRoomD
 
     override suspend fun updateLastSyncTime(vararg key: Any) = dao.insertOrReplace(LastSyncTimeEntity(key))
 
+    // TODO: workaround for https://issuetracker.google.com/issues/409942764
+    //       consolidate the 2 functions once the bug in AndroidX Room is fixed
+    override suspend fun resetLastSyncTime(vararg key: Any, isPrefix: Boolean) = resetLastSyncTime(isPrefix, *key)
     @Transaction
-    override suspend fun resetLastSyncTime(vararg key: Any, isPrefix: Boolean) {
+    protected open suspend fun resetLastSyncTime(isPrefix: Boolean, vararg key: Any) {
         val flattened = LastSyncTimeEntity.flattenKey(key)
         dao.deleteLastSyncTime(flattened)
         if (isPrefix) {
