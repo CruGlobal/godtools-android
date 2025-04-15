@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Desliza para cambiar páginas</string>
+    <string name="lesson_tutorial_swipe_action_ok">Entendido</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Reanudar progreso</string>
+    <string name="lesson_resume_message">¿Quieres continuar desde donde lo dejaste?</string>
+    <string name="lesson_resume_action_resume">Continuar</string>
+    <string name="lesson_resume_action_restart">Comenzar de nuevo</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">Revisión</string>
+    <string name="lesson_feedback_question_helpful">¿Esta lección te ha sido útil?</string>
+    <string name="lesson_feedback_question_helpful_yes">Sí</string>
+    <string name="lesson_feedback_question_helpful_no">No</string>
+    <string name="lesson_feedback_question_readiness">¿Qué tan preparado te sientes para iniciar una conversación espiritual?</string>
+    <string name="lesson_feedback_action_submit">Enviar comentarios</string>
+    <string name="lesson_feedback_action_cancel">Omitir</string>
+</resources>

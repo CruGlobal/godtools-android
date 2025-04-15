@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.overlay.ContentWithOverlays
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -42,17 +43,20 @@ class DashboardActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    DashboardLayout(
-                        onEvent = { e ->
-                            when (e) {
-                                is DashboardEvent.OpenIntent -> startActivity(e.intent)
-                                is DashboardEvent.OpenTool ->
-                                    openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                                is DashboardEvent.OpenToolDetails ->
-                                    e.tool?.let { startToolDetailsActivity(it, e.lang) }
-                            }
-                        },
-                    )
+                    ContentWithOverlays {
+                        DashboardLayout(
+                            onEvent = { e ->
+                                when (e) {
+                                    is DashboardEvent.OpenIntent -> startActivity(e.intent)
+                                    is DashboardEvent.OpenTool ->
+                                        openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
+
+                                    is DashboardEvent.OpenToolDetails ->
+                                        e.tool?.let { startToolDetailsActivity(it, e.lang) }
+                                }
+                            },
+                        )
+                    }
                 }
             }
         }

@@ -96,4 +96,3 @@ if (System.getenv("GITHUB_ACTIONS")?.toBoolean() == true) {
         }
     }
 }
-include(":ui:opt-in-notification-renderer")

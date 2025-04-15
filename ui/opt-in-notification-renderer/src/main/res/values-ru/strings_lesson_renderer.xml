@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Проведите по экрану, чтобы листать страницы</string>
+    <string name="lesson_tutorial_swipe_action_ok">Понятно</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Продолжить урок</string>
+    <string name="lesson_resume_message">Вы хотели бы продолжить с того места, на котором остановились?</string>
+    <string name="lesson_resume_action_resume">Продолжить</string>
+    <string name="lesson_resume_action_restart">Начать заново</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">Отзыв</string>
+    <string name="lesson_feedback_question_helpful">Был ли этот урок полезным?</string>
+    <string name="lesson_feedback_question_helpful_yes">Да</string>
+    <string name="lesson_feedback_question_helpful_no">Нет</string>
+    <string name="lesson_feedback_question_readiness">Насколько вы чувствуете себя готовыми начать разговор о вере?</string>
+    <string name="lesson_feedback_action_submit">Отправить отзыв</string>
+    <string name="lesson_feedback_action_cancel">Пропустить</string>
+</resources>

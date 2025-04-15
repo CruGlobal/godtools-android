@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">पृष्ठहरू परिवर्तन गर्न स्वाइप गर्नुहोस्</string>
+    <string name="lesson_tutorial_swipe_action_ok">बुझेँ</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">पुनःसुरु गर्नुहोस् ?</string>
+    <string name="lesson_resume_message">के तपाईं जहाँ छोड्नुभएको थियो त्यहीँबाट सुरु गर्न चाहनुहुन्छ ?</string>
+    <string name="lesson_resume_action_resume">जारी राख्नुहोस्</string>
+    <string name="lesson_resume_action_restart">पुनःसुरु गर्नुहोस्</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">समीक्षा गर्नुहोस्</string>
+    <string name="lesson_feedback_question_helpful">के यो पाठ तपाईको लागि उपयोगी भयो?</string>
+    <string name="lesson_feedback_question_helpful_yes">"भयो "</string>
+    <string name="lesson_feedback_question_helpful_no">"भएन "</string>
+    <string name="lesson_feedback_question_readiness">आत्मिकी कुराकानी सुरु गर्न तपाई कत्तिको तयार हुनुहुन्छ?</string>
+    <string name="lesson_feedback_action_submit">प्रतिक्रिया पठाउनुहोस्</string>
+    <string name="lesson_feedback_action_cancel">"छोड्नुहोस् "</string>
+</resources>

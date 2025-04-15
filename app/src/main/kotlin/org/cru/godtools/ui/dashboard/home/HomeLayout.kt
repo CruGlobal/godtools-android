@@ -22,7 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -30,9 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.overlay.OverlayEffect
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
@@ -51,7 +56,24 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
     val columnState = rememberLazyListState()
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
+    var testShouldShow by remember { mutableStateOf(true) }
+
+    ShowTheDialog(testShouldShow)
+
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
+        item {
+            Button(
+                onClick = {
+                    testShouldShow = !testShouldShow
+                },
+
+            ) {
+                Text("Change Bool")
+            }
+        }
+
+
+
         item("banners", "banners") {
             Banners(
                 { banner },
@@ -129,6 +151,19 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
                     )
                 }
             }
+        }
+    }
+}
+//here
+@Composable
+private fun ShowTheDialog(shouldShow: Boolean) {
+    OverlayEffect {
+        if (shouldShow) {
+            println("showOverlay is TRUE")
+            val result = show(OptInNotificationModalOverlay())
+            println("Result: $result")
+        } else {
+            println("showOverlay is FALSE")
         }
     }
 }

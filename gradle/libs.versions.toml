@@ -36,6 +36,7 @@ retrofit2 = "2.11.0"
 scarlet = "0.1.12"
 splitties = "3.0.0"
 agp = "8.9.1"
+cameraEffects = "1.4.2"
 
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
@@ -223,6 +224,7 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1"
 
 # HACK: dependencies used to trigger renovate upgrades
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
+androidx-camera-effects = { group = "androidx.camera", name = "camera-effects", version.ref = "cameraEffects" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]

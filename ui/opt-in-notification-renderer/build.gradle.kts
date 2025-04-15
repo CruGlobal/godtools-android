@@ -1,87 +1,58 @@
 plugins {
     id("godtools.library-conventions")
+    kotlin("kapt")
     alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "org.cru.godtools.shortcuts"
+    namespace = "org.cru.godtools.tool.optInNotification"
 
-    createEventBusIndex("org.cru.godtools.shortcuts.ShortcutsEventBusIndex")
+    configureCompose(project)
+    configureQaBuildType(project)
+    configureGodToolsCustomUri()
+
+    buildFeatures.dataBinding = true
+}
+
+onesky {
+    sourceStringFiles = listOf(
+        "strings_lesson_renderer.xml",
+    )
 }
 
 dependencies {
+    api(project(":ui:base-tool"))
 
-    implementation(project(":library:base"))
-    implementation(project(":library:db"))
-    implementation(project(":library:model"))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.viewpager2)
 
-    implementation(project(":ui:base"))
-    implementation(project(":ui:base-tool"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.hilt.work)
-    api(libs.androidx.work.ktx)
-
-    implementation(libs.firebase.perf.ktx)
-
+    implementation(libs.gtoSupport.androidx.databinding)
+    implementation(libs.gtoSupport.androidx.fragment)
+    implementation(libs.gtoSupport.androidx.lifecycle)
+    implementation(libs.gtoSupport.androidx.recyclerview)
+    implementation(libs.gtoSupport.androidx.viewpager2)
     implementation(libs.gtoSupport.core)
-    implementation(libs.gtoSupport.dagger)
-    implementation(libs.gtoSupport.picasso)
+    implementation(libs.gtoSupport.eventbus)
+    implementation(libs.gtoSupport.materialComponents)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.dagger)
+    implementation(libs.circuit.overlay)
     implementation(libs.hilt)
-    implementation(libs.picasso)
+    implementation(libs.lottie.compose)
+    implementation(libs.materialComponents)
+    implementation(libs.splitties.fragmentargs)
 
-    testImplementation(libs.gtoSupport.testing.timber)
-    testImplementation(libs.kotlin.coroutines.test)
+    // TODO: transition to KSP for dagger once Data Binding is no longer used
+    //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
+    //       see: https://issuetracker.google.com/issues/173030256#comment10
+    kapt(libs.dagger.compiler)
+    kapt(libs.hilt.compiler)
 
-    ksp(libs.androidx.hilt.compiler)
-    ksp(libs.dagger.compiler)
-    ksp(libs.hilt.compiler)
+    testImplementation(project(":library:account"))
+    testImplementation(project(":library:model"))
+    testImplementation(libs.hilt.testing)
+    kaptTest(libs.hilt.compiler)
 }
-
-
-//plugins {
-//    id("godtools.library-conventions")
-//    alias(libs.plugins.hilt)
-//    alias(libs.plugins.ksp)
-//}
-//
-//android {
-//    namespace = "org.cru.godtools.shortcuts"
-//
-//    createEventBusIndex("org.cru.godtools.shortcuts.ShortcutsEventBusIndex")
-//}
-//
-//dependencies {
-//    implementation(project(":library:base"))
-//    implementation(project(":library:db"))
-//    implementation(project(":library:model"))
-//
-//    implementation(project(":ui:base"))
-//    implementation(project(":ui:base-tool"))
-//
-//    implementation(libs.androidx.core.ktx)
-//    implementation(libs.androidx.hilt.work)
-//    api(libs.androidx.work.ktx)
-//
-//    implementation(libs.firebase.perf.ktx)
-//
-//    implementation(libs.gtoSupport.core)
-//    implementation(libs.gtoSupport.dagger)
-//    implementation(libs.gtoSupport.picasso)
-//    implementation(libs.gtoSupport.util)
-//
-//    implementation(libs.dagger)
-//    implementation(libs.hilt)
-//    implementation(libs.picasso)
-//
-//    testImplementation(libs.gtoSupport.testing.timber)
-//    testImplementation(libs.kotlin.coroutines.test)
-//
-//    ksp(libs.androidx.hilt.compiler)
-//    ksp(libs.dagger.compiler)
-//    ksp(libs.hilt.compiler)
-//}

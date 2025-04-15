@@ -144,6 +144,7 @@ dependencies {
     implementation(project(":ui:base"))
     implementation(project(":ui:cyoa-renderer"))
     implementation(project(":ui:lesson-renderer"))
+    implementation(project(":ui:opt-in-notification-renderer"))
     implementation(project(":ui:shortcuts"))
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
@@ -187,6 +188,7 @@ dependencies {
     api(libs.eventbus)
     implementation(libs.circuitx.android)
     implementation(libs.circuitx.effects)
+    implementation(libs.circuit.overlay)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)
@@ -194,6 +196,7 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
     implementation(libs.youtubePlayer)
+    implementation(libs.androidx.camera.effects)
 
     debugImplementation(libs.androidx.compose.runtime.tracing)
     debugImplementation(libs.facebook.flipper)

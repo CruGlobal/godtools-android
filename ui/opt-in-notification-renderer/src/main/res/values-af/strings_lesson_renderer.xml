@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Swiep om bladsye te verander</string>
+    <string name="lesson_tutorial_swipe_action_ok">Het dit</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Gaan voort?</string>
+    <string name="lesson_resume_message">Wil jy voortgaan waar jy opgehou het?</string>
+    <string name="lesson_resume_action_resume">Hou aan</string>
+    <string name="lesson_resume_action_restart">Begin van voor af</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">Hersien</string>
+    <string name="lesson_feedback_question_helpful">Het hierdie les jou gehelp?</string>
+    <string name="lesson_feedback_question_helpful_yes">Ja</string>
+    <string name="lesson_feedback_question_helpful_no">Nee</string>
+    <string name="lesson_feedback_question_readiness">Hoe gereed voel jy om \'n geestelike gesprek te begin?</string>
+    <string name="lesson_feedback_action_submit">Stuur terugvoer</string>
+    <string name="lesson_feedback_action_cancel">Slaan oor</string>
+</resources>
