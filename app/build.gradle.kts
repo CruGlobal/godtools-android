@@ -144,7 +144,6 @@ dependencies {
     implementation(project(":ui:base"))
     implementation(project(":ui:cyoa-renderer"))
     implementation(project(":ui:lesson-renderer"))
-    implementation(project(":ui:opt-in-notification-renderer"))
     implementation(project(":ui:shortcuts"))
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
