@@ -88,89 +88,79 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
 
-        DrawerMenuLayout(drawerState = drawerState) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {},
-                        navigationIcon = {
-                            when {
-                                hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
-                                    Icon(Icons.AutoMirrored.Default.ArrowBack, null)
-                                }
-
-                                else -> IconButton(onClick = {
-                                    scope.launch {
-                                        drawerState.toggle()
-                                    }
-                                }) {
-                                    Icon(Icons.Default.Menu, null)
-                                }
+    DrawerMenuLayout(drawerState = drawerState) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {},
+                    navigationIcon = {
+                        when {
+                            hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
+                                Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
-                        },
-                        colors = GodToolsTheme.topAppBarColors,
-                    )
-                },
-                bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
-                snackbarHost = { SnackbarHost(snackbarHostState) }
+                            else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
+                                Icon(Icons.Default.Menu, null)
+                            }
+                        }
+                    },
+                    colors = GodToolsTheme.topAppBarColors,
+                )
+            },
+            bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) {
+            val saveableStateHolder = rememberSaveableStateHolder()
+            Box(
+                modifier = Modifier
+                    .padding(it)
+                    .pullRefresh(refreshState)
             ) {
-                val saveableStateHolder = rememberSaveableStateHolder()
-                Box(
-                    modifier = Modifier
-                        .padding(it)
-                        .pullRefresh(refreshState)
-                ) {
-                    Crossfade(currentPage, label = "Main Content Crossfade") { page ->
-                        saveableStateHolder.SaveableStateProvider(page) {
-                            when (page) {
-                                Page.LESSONS,
-                                Page.HOME,
-                                Page.FAVORITE_TOOLS,
-                                Page.ALL_TOOLS
-                                    -> {
-                                    CircuitContent(
-                                        screen = when (page) {
-                                            Page.LESSONS -> LessonsScreen
-                                            Page.HOME -> HomeScreen
-                                            Page.FAVORITE_TOOLS -> AllFavoritesScreen
-                                            Page.ALL_TOOLS -> ToolsScreen
-                                            else -> error("Page $page is not converted to Circuit yet")
-                                        },
-                                        onNavEvent = {
-                                            when (it) {
-                                                is NavEvent.GoTo -> when (val screen = it.screen) {
-                                                    AllFavoritesScreen -> {
-                                                        saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                                        viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                                    }
-
-                                                    is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
-                                                    is ToolDetailsScreen -> onEvent(
-                                                        DashboardEvent.OpenToolDetails(
-                                                            screen.initialTool,
-                                                            screen.secondLanguage,
-                                                        )
+                Crossfade(currentPage, label = "Main Content Crossfade") { page ->
+                    saveableStateHolder.SaveableStateProvider(page) {
+                        when (page) {
+                            Page.LESSONS,
+                            Page.HOME,
+                            Page.FAVORITE_TOOLS,
+                            Page.ALL_TOOLS -> {
+                                CircuitContent(
+                                    screen = when (page) {
+                                        Page.LESSONS -> LessonsScreen
+                                        Page.HOME -> HomeScreen
+                                        Page.FAVORITE_TOOLS -> AllFavoritesScreen
+                                        Page.ALL_TOOLS -> ToolsScreen
+                                        else -> error("Page $page is not converted to Circuit yet")
+                                    },
+                                    onNavEvent = {
+                                        when (it) {
+                                            is NavEvent.GoTo -> when (val screen = it.screen) {
+                                                AllFavoritesScreen -> {
+                                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
+                                                }
+                                                is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
+                                                is ToolDetailsScreen -> onEvent(
+                                                    DashboardEvent.OpenToolDetails(
+                                                        screen.initialTool,
+                                                        screen.secondLanguage,
                                                     )
-                                                }
-
-                                                is NavEvent.ResetRoot -> when (it.newRoot) {
-                                                    ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
-                                                }
-
-                                                else -> Unit
+                                                )
                                             }
-                                        },
-                                    )
-                                }
+                                            is NavEvent.ResetRoot -> when (it.newRoot) {
+                                                ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
+                                            }
+                                            else -> Unit
+                                        }
+                                    },
+                                )
                             }
                         }
                     }
-
-                    PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
                 }
+
+                PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
             }
         }
-
+    }
 }
 
 @Composable
@@ -217,5 +207,3 @@ private fun DashboardBottomNavBar(currentPage: Page, onSelectPage: (Page) -> Uni
         )
     }
 }
-
-
