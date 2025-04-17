@@ -154,6 +154,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.hilt.work)
+    implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work)
 

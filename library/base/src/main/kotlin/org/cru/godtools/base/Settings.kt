@@ -8,12 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
+import androidx.core.net.ParseException
 import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -50,6 +53,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
 
         // feature discovery
         const val FEATURE_LANGUAGE_SETTINGS = "languageSettings"
+        const val FEATURE_OPT_IN_NOTIFICATION = "optInNotification"
         const val FEATURE_TOOL_OPENED = "toolOpened"
         const val FEATURE_TOOL_SHARE = "toolShare"
         const val FEATURE_TOOL_FAVORITE = "toolFavorite"
@@ -65,6 +69,9 @@ class Settings internal constructor(private val context: Context, coroutineScope
         // Dashboard Settings
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
+
+        const val LAST_PROMPTED_OPT_IN_NOTIFICATION = "lastPromptedOptInNotification"
+        const val OPT_IN_NOTIFICATION_PROMPT_COUNT ="optInNotificationPromptCount"
     }
 
     // region Language Settings
@@ -131,6 +138,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
     fun getDashboardFilterCategoryFlow() = dataStorePreferences.data
         .map { it[KEY_DASHBOARD_FILTER_CATEGORY] }
         .distinctUntilChanged()
+
     suspend fun updateDashboardFilterCategory(category: String?) {
         dataStorePreferences.updateData {
             it.toMutablePreferences().apply {
@@ -145,6 +153,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
     fun getDashboardFilterLocaleFlow() = dataStorePreferences.data
         .map { it[KEY_DASHBOARD_FILTER_LOCALE]?.let { Locale.forLanguageTag(it) } }
         .distinctUntilChanged()
+
     suspend fun updateDashboardFilterLocale(locale: Locale?) {
         dataStorePreferences.updateData {
             it.toMutablePreferences().apply {
@@ -156,6 +165,44 @@ class Settings internal constructor(private val context: Context, coroutineScope
         }
     }
     // endregion Dashboard Settings
+
+    // region OptInNotification
+
+    private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+
+    fun getLastPromptedOptInNotification(): Date? {
+        val lastPrompted = prefs.getString(LAST_PROMPTED_OPT_IN_NOTIFICATION, null)
+
+        println("lastPrompted retrieved: $lastPrompted")
+        return lastPrompted?.let {
+            try {
+                dateFormat.parse(it)
+            } catch (e: ParseException) {
+                null
+            }
+        }
+    }
+
+    fun getOptInNotificationPromptCount(): Int {
+        val promptCount = prefs.getInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, 0)
+
+        println("promptCount retrieved: $promptCount")
+        return promptCount
+    }
+
+    fun recordOptInNotificationPrompt() {
+        val currentPromptCount = getOptInNotificationPromptCount()
+        val updatedPromptCount = currentPromptCount + 1
+
+        val dateString = dateFormat.format(Date())
+
+        prefs.edit {
+            putString(LAST_PROMPTED_OPT_IN_NOTIFICATION, dateString)
+            putInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, updatedPromptCount)
+        }
+    }
+
+    // endregion OptInNotification
 
     // region Campaign Tracking
     fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {

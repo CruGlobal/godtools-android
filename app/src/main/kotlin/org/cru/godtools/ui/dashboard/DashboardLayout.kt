@@ -3,7 +3,11 @@ package org.cru.godtools.ui.dashboard
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -11,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -32,12 +38,15 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
@@ -67,12 +76,18 @@ internal sealed interface DashboardEvent {
     class OpenIntent(val intent: Intent) : DashboardEvent
     open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
         DashboardEvent
+
     class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
+internal fun DashboardLayout(
+    requestPermission: suspend () -> Unit,
+    openNotificationSettings: () -> Unit,
+    onEvent: (DashboardEvent) -> Unit,
+    viewModel: DashboardViewModel = viewModel(),
+) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -87,17 +102,47 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
 
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
+    //here
+    val showOverlay by viewModel.isOptInNotificationActive.collectAsState()
+    if (showOverlay) {
+        OverlayEffect {
+            show(
+                OptInNotificationModalOverlay(
+                    requestPermission = requestPermission,
+                )
+            )
+            viewModel.setIsOptInNotificationActive(false)
+        }
+    }
+    //here
+    val showPermissionDialog by viewModel.showNotificationSettingsDialog.collectAsState()
+    if (showPermissionDialog) {
+        NotificationSettingsDialog(openNotificationSettings = openNotificationSettings, viewModel = viewModel)
+    }
 
     DrawerMenuLayout(drawerState = drawerState) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {},
+                    actions = {
+                        //here
+                        TextButton(
+                            modifier = Modifier.fillMaxWidth(), onClick = {
+                                viewModel.shouldPromptNotificationSheet()
+                            }) {
+                            Text(
+                                "shouldPromptNotificationSheet()", textAlign = TextAlign.Center, color = Color.White
+                            )
+                        }
+
+                    },
                     navigationIcon = {
                         when {
                             hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
+
                             else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
                                 Icon(Icons.Default.Menu, null)
                             }
@@ -107,8 +152,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                 )
             },
             bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) {
+            snackbarHost = { SnackbarHost(snackbarHostState) }) {
             val saveableStateHolder = rememberSaveableStateHolder()
             Box(
                 modifier = Modifier
@@ -121,7 +165,8 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                             Page.LESSONS,
                             Page.HOME,
                             Page.FAVORITE_TOOLS,
-                            Page.ALL_TOOLS -> {
+                            Page.ALL_TOOLS,
+                                -> {
                                 CircuitContent(
                                     screen = when (page) {
                                         Page.LESSONS -> LessonsScreen
@@ -137,6 +182,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                                     saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
                                                     viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
                                                 }
+
                                                 is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
                                                 is ToolDetailsScreen -> onEvent(
                                                     DashboardEvent.OpenToolDetails(
@@ -145,9 +191,11 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                                                     )
                                                 )
                                             }
+
                                             is NavEvent.ResetRoot -> when (it.newRoot) {
                                                 ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                             }
+
                                             else -> Unit
                                         }
                                     },
@@ -164,6 +212,40 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
 }
 
 @Composable
+private fun NotificationSettingsDialog(openNotificationSettings: () -> Unit, viewModel: DashboardViewModel) {
+    AlertDialog(
+        title = { Text("Enable Notifications") },
+        text = { Text("Notifications are disabled. Please enable them in Settings.") },
+        confirmButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
+                TextButton(onClick = {
+                    openNotificationSettings()
+                    viewModel.setShowNotificationSettingsDialog(false)
+                }) {
+                    Text("Settings")
+                }
+            }
+        },
+        dismissButton = {
+            Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
+                TextButton(onClick = {
+                    viewModel.setShowNotificationSettingsDialog(false)
+                }) {
+                    Text("Cancel")
+                }
+            }
+        },
+        onDismissRequest = {
+            viewModel.setShowNotificationSettingsDialog(false)
+        },
+    )
+}
+
+@Composable
 private fun DashboardLayoutAnalytics(page: Page) {
     val eventBus = LocalEventBus.current
     when (page) {
@@ -171,10 +253,12 @@ private fun DashboardLayoutAnalytics(page: Page) {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_LESSONS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS)) }
         }
+
         Page.HOME, Page.FAVORITE_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME)) }
         }
+
         Page.ALL_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS)) }

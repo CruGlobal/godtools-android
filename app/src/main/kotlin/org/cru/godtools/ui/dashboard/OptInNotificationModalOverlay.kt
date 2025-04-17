@@ -2,7 +2,6 @@ package org.cru.godtools.ui.dashboard
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -29,6 +28,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,15 +40,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.Overlay
 import com.slack.circuit.overlay.OverlayNavigator
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 
-class OptInNotificationModalOverlay : Overlay<Unit> {
+class OptInNotificationModalOverlay(
+    val requestPermission: suspend () -> Unit,
+) : Overlay<Unit> {
 
     @Composable
     override fun Content(navigator: OverlayNavigator<Unit>) {
         BackHandler { navigator.finish(Unit) }
 
+
+        val coroutineScope = rememberCoroutineScope()
         val transitionState = remember { MutableTransitionState(false) }
 
         LaunchedEffect(Unit) { transitionState.targetState = true }
@@ -59,6 +64,7 @@ class OptInNotificationModalOverlay : Overlay<Unit> {
             }
         }
 
+        // TODO - DSR: Adaptive sizing for tablets
         Surface(
             color = Color.Transparent, modifier = Modifier
                 .fillMaxSize()
@@ -101,9 +107,7 @@ class OptInNotificationModalOverlay : Overlay<Unit> {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Box(
-                                modifier = Modifier
-
-                                    .fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Image(
                                     painter = painterResource(id = R.drawable.notification_graphic),
@@ -148,7 +152,14 @@ class OptInNotificationModalOverlay : Overlay<Unit> {
                                     .height(48.dp)
                                     .fillMaxWidth(),
                                 shape = RoundedCornerShape(5.dp),
-                                onClick = {}) {
+                                onClick = {
+                                    coroutineScope.launch {
+                                        requestPermission()
+                                        transitionState.targetState = false
+                                    }
+                                    // if hard denied:
+
+                                }) {
                                 Text(
                                     "Allow Notifications",
                                     textAlign = TextAlign.Center,
@@ -158,10 +169,10 @@ class OptInNotificationModalOverlay : Overlay<Unit> {
                             TextButton(
                                 modifier = Modifier
                                     .padding(bottom = 40.dp, top = 6.dp)
-                                    .fillMaxWidth(),
-                                onClick = {
+                                    .fillMaxWidth(), onClick = {
 
                                     transitionState.targetState = false
+
                                 }) {
                                 Text(
                                     "Maybe Later",
