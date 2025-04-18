@@ -197,6 +197,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.youtubePlayer)
     implementation(libs.androidx.camera.effects)
+    implementation(libs.androidx.material3.window.size.class1.android)
 
     debugImplementation(libs.androidx.compose.runtime.tracing)
     debugImplementation(libs.facebook.flipper)

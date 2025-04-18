@@ -43,6 +43,7 @@ import com.slack.circuit.overlay.OverlayNavigator
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
+import org.cru.godtools.util.isTablet
 
 class OptInNotificationModalOverlay(
     val requestPermission: suspend () -> Unit,
@@ -52,6 +53,7 @@ class OptInNotificationModalOverlay(
     override fun Content(navigator: OverlayNavigator<Unit>) {
         BackHandler { navigator.finish(Unit) }
 
+        val isTablet = isTablet()
 
         val coroutineScope = rememberCoroutineScope()
         val transitionState = remember { MutableTransitionState(false) }
@@ -64,7 +66,7 @@ class OptInNotificationModalOverlay(
             }
         }
 
-        // TODO - DSR: Adaptive sizing for tablets
+        // TODO - DSR: Test adaptive sizing for tablets
         Surface(
             color = Color.Transparent, modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +90,7 @@ class OptInNotificationModalOverlay(
                 Box {
                     Card(
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = if (isTablet) 150.dp else 16.dp)
                             .align(Alignment.BottomCenter)
                             .offset(y = 4.dp)
                             .fillMaxWidth()

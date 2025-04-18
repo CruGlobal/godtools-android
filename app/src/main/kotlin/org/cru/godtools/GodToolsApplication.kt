@@ -18,6 +18,7 @@ import org.ccci.gto.android.common.dagger.eager.EagerSingletonInitializer
 import org.ccci.gto.android.common.firebase.crashlytics.timber.CrashlyticsTree
 import org.ccci.gto.android.common.kermit.TimberLogWriter
 import org.ccci.gto.android.common.util.LocaleUtils
+import org.cru.godtools.util.isTablet
 import timber.log.Timber
 
 @HiltAndroidApp

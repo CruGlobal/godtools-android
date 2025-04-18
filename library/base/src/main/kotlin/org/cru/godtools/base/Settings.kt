@@ -70,8 +70,9 @@ class Settings internal constructor(private val context: Context, coroutineScope
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
 
+        // OptInNotification
         const val LAST_PROMPTED_OPT_IN_NOTIFICATION = "lastPromptedOptInNotification"
-        const val OPT_IN_NOTIFICATION_PROMPT_COUNT ="optInNotificationPromptCount"
+        const val OPT_IN_NOTIFICATION_PROMPT_COUNT = "optInNotificationPromptCount"
     }
 
     // region Language Settings

@@ -141,6 +141,7 @@ class DashboardActivity : BaseActivity() {
 
     private fun triggerOnboardingIfNecessary() {
         if (settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) return
+        viewModel.isOnboardingLaunch = true
         startTutorialActivity(PageSet.ONBOARDING)
     }
 
@@ -187,7 +188,6 @@ class DashboardActivity : BaseActivity() {
                 permissionLauncher.launch(
                     Manifest.permission.POST_NOTIFICATIONS
                 )
-                // TODO - DSR: move this to the bottom sheet
                 settings.setFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION)
             } else {
                 continuation.resume(true)

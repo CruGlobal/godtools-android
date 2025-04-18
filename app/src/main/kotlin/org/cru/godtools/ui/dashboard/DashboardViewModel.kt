@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -67,6 +68,8 @@ class DashboardViewModel @Inject constructor(
     // endregion Sync logic
 
     // region optInNotification logic
+    var isOnboardingLaunch = false
+
     private val _permissionStatus = MutableStateFlow<PermissionStatus?>(null)
     val permissionStatus: StateFlow<PermissionStatus?> = _permissionStatus
 
@@ -103,7 +106,11 @@ class DashboardViewModel @Inject constructor(
         calendar.add(Calendar.MONTH, -2)
         val twoMonthsAgo = calendar.time
 
-        if (settings.launches == 1) {
+        // TODO: Remove sdk version checks for optInNotification logic once minSdk = 33 or greater
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            println("Returning due to ineligible SDK version")
+            return}
+        if (isOnboardingLaunch) {
             println("Returning due to onboarding launch")
             return}
         if (permissionStatus.value == PermissionStatus.APPROVED) {

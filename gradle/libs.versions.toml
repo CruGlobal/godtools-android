@@ -37,6 +37,7 @@ scarlet = "0.1.12"
 splitties = "3.0.0"
 agp = "8.9.1"
 cameraEffects = "1.4.2"
+material3WindowSizeClassAndroid = "1.3.2"
 
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
@@ -226,6 +227,7 @@ youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1"
 # HACK: dependencies used to trigger renovate upgrades
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 androidx-camera-effects = { group = "androidx.camera", name = "camera-effects", version.ref = "cameraEffects" }
+androidx-material3-window-size-class1-android = { group = "androidx.compose.material3", name = "material3-window-size-class-android", version.ref = "material3WindowSizeClassAndroid" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
