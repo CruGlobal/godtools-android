@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -55,7 +56,7 @@ class ToolFiltersPaparazziTest(
         )
     )
 
-    private fun renderLanguageFilter(state: UiState<Language?>) = centerInSnapshot {
+    private fun renderLanguageFilter(state: UiState<Language?>) = centerInSnapshot(Modifier.fillMaxSize()) {
         LanguageFilter(state, modifier = Modifier.fillMaxWidth(0.5f))
     }
 }

@@ -90,11 +90,11 @@ abstract class BasePaparazziTest(
         }
     }
 
-    protected fun centerInSnapshot(content: @Composable BoxScope.() -> Unit) {
+    protected fun centerInSnapshot(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
         snapshot {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                modifier = modifier.background(MaterialTheme.colorScheme.background),
                 content = content,
             )
         }
