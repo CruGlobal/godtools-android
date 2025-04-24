@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import app.cash.paparazzi.DeviceConfig
@@ -98,7 +99,12 @@ class HomeLayoutPaparazziTest(
 
     private fun snapshotHomeLayout(state: UiState) {
         snapshot {
-            HomeLayout(state, modifier = Modifier.background(MaterialTheme.colorScheme.background))
+            HomeLayout(
+                state,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            )
         }
     }
 }
