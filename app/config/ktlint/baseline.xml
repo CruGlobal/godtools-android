@@ -3,9 +3,6 @@
     <file name="src/main/kotlin/org/cru/godtools/ui/account/AccountLayout.kt">
         <error line="63" column="9" source="compose:vm-injection-check" />
     </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/account/globalactivity/GlobalActivityLayout.kt">
-        <error line="33" column="5" source="compose:modifier-missing-check" />
-    </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/banner/FavoriteToolsBanner.kt">
         <error line="17" column="9" source="compose:vm-injection-check" />
     </file>
@@ -17,8 +14,5 @@
     </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/tools/ToolsLayout.kt">
         <error line="38" column="9" source="compose:vm-injection-check" />
-    </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/languages/downloadable/DownloadableLanguagesLayout.kt">
-        <error line="58" column="5" source="compose:modifier-missing-check" />
     </file>
 </baseline>
