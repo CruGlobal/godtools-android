@@ -5,12 +5,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,6 +19,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,7 +42,6 @@ import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
-import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -71,7 +70,7 @@ internal sealed interface DashboardEvent {
 }
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -83,7 +82,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
     BackHandler(hasBackStack) { viewModel.popPageStack() }
 
     val refreshing by viewModel.isSyncRunning.collectAsState()
-    val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
+    val refreshState = rememberPullToRefreshState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
@@ -113,7 +112,7 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
             Box(
                 modifier = Modifier
                     .padding(it)
-                    .pullRefresh(refreshState)
+                    .pullToRefresh(refreshing, state = refreshState, onRefresh = { viewModel.triggerSync(true) })
             ) {
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
@@ -157,7 +156,11 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
                     }
                 }
 
-                PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+                PullToRefreshDefaults.Indicator(
+                    state = refreshState,
+                    isRefreshing = refreshing,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
         }
     }
