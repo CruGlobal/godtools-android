@@ -63,7 +63,11 @@ internal fun AllFavoritesLayout(state: UiState, modifier: Modifier = Modifier) {
         }
 
         items(tools, key = { "tool:${it.toolCode}" }) { toolState ->
-            ReorderableItem(reorderableState, "tool:${toolState.toolCode}") { isDragging ->
+            ReorderableItem(
+                state = reorderableState,
+                key = "tool:${toolState.toolCode}",
+                defaultDraggingModifier = Modifier.animateItem()
+            ) { isDragging ->
                 val interactionSource = remember { MutableInteractionSource() }
                 interactionSource.reorderableDragInteractions(isDragging)
 

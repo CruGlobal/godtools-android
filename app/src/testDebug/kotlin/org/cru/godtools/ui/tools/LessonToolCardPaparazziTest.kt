@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.tools
 
 import android.graphics.drawable.Drawable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -55,12 +57,12 @@ class LessonToolCardPaparazziTest(
     }
 
     @Test
-    fun `LessonToolCard() - Default`() = centerInSnapshot {
+    fun `LessonToolCard() - Default`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(toolState, showLanguage = true, showProgress = true)
     }
 
     @Test
-    fun `LessonToolCard() - Long Title`() = centerInSnapshot {
+    fun `LessonToolCard() - Long Title`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(
             toolState.copy(
                 translation = randomTranslation(
@@ -73,7 +75,7 @@ class LessonToolCardPaparazziTest(
     }
 
     @Test
-    fun `LessonToolCard() - Tool Language - RTL Language`() = centerInSnapshot {
+    fun `LessonToolCard() - Tool Language - RTL Language`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(
             toolState.copy(
                 translation = randomTranslation(
@@ -88,22 +90,22 @@ class LessonToolCardPaparazziTest(
     }
 
     @Test
-    fun `LessonToolCard() - Progress - Completed`() = centerInSnapshot {
+    fun `LessonToolCard() - Progress - Completed`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(toolState.copy(progress = ToolCard.State.Progress.Completed), showProgress = true)
     }
 
     @Test
-    fun `LessonToolCard() - Not Available`() = centerInSnapshot {
+    fun `LessonToolCard() - Not Available`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(toolState.copy(languageAvailable = false), showLanguage = true)
     }
 
     @Test
-    fun `LessonToolCard() - Hide Language`() = centerInSnapshot {
+    fun `LessonToolCard() - Hide Language`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(toolState, showLanguage = false, showProgress = true)
     }
 
     @Test
-    fun `LessonToolCard() - Hide Progress`() = centerInSnapshot {
+    fun `LessonToolCard() - Hide Progress`() = centerInSnapshot(Modifier.fillMaxSize()) {
         LessonToolCard(toolState, showLanguage = true, showProgress = false)
     }
 }

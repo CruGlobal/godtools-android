@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.tools
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -48,5 +50,5 @@ class ToolCardPaparazziTest(@TestParameter nightMode: NightMode, @TestParameter 
     }
 
     @Test
-    fun `ToolCard() - Default`() = centerInSnapshot { ToolCard(toolState) }
+    fun `ToolCard() - Default`() = centerInSnapshot(Modifier.fillMaxSize()) { ToolCard(toolState) }
 }

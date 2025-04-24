@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.tools
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -52,18 +54,20 @@ class SquareToolCardPaparazziTest(
     }
 
     @Test
-    fun `SquareToolCard() - Default`() = centerInSnapshot { SquareToolCard(toolState) }
+    fun `SquareToolCard() - Default`() = centerInSnapshot(Modifier.fillMaxSize()) { SquareToolCard(toolState) }
 
     @Test
-    fun `SquareToolCard() - Downloading`() = centerInSnapshot {
+    fun `SquareToolCard() - Downloading`() = centerInSnapshot(Modifier.fillMaxSize()) {
         SquareToolCard(toolState.copy(downloadProgress = DownloadProgress(2, 5)))
     }
 
     @Test
-    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot { SquareToolCard(toolStateFavorite) }
+    fun `SquareToolCard() - Favorite Tool`() = centerInSnapshot(Modifier.fillMaxSize()) {
+        SquareToolCard(toolStateFavorite)
+    }
 
     @Test
-    fun `SquareToolCard() - Show Second Language`() = centerInSnapshot {
+    fun `SquareToolCard() - Show Second Language`() = centerInSnapshot(Modifier.fillMaxSize()) {
         SquareToolCard(toolState, showSecondLanguage = true)
     }
 }

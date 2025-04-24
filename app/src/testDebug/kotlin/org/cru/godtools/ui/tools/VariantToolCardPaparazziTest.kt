@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.tools
 
 import android.graphics.drawable.Drawable
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import coil.Coil
 import coil.ImageLoader
 import coil.annotation.ExperimentalCoilApi
@@ -54,25 +56,27 @@ class VariantToolCardPaparazziTest(
     }
 
     @Test
-    fun `VariantToolCard() - Default`() = centerInSnapshot { VariantToolCard(ToolCardStateTestData.tool) }
+    fun `VariantToolCard() - Default`() = centerInSnapshot(Modifier.fillMaxSize()) {
+        VariantToolCard(ToolCardStateTestData.tool)
+    }
 
     @Test
-    fun `VariantToolCard() - Selected`() = centerInSnapshot {
+    fun `VariantToolCard() - Selected`() = centerInSnapshot(Modifier.fillMaxSize()) {
         VariantToolCard(ToolCardStateTestData.tool, isSelected = true)
     }
 
     @Test
-    fun `VariantToolCard() - No second Language`() = centerInSnapshot {
+    fun `VariantToolCard() - No second Language`() = centerInSnapshot(Modifier.fillMaxSize()) {
         VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguage = null, secondLanguageAvailable = false))
     }
 
     @Test
-    fun `VariantToolCard() - App Language Not Available`() = centerInSnapshot {
+    fun `VariantToolCard() - App Language Not Available`() = centerInSnapshot(Modifier.fillMaxSize()) {
         VariantToolCard(ToolCardStateTestData.tool.copy(appLanguageAvailable = false))
     }
 
     @Test
-    fun `VariantToolCard() - Second Language Not Available`() = centerInSnapshot {
+    fun `VariantToolCard() - Second Language Not Available`() = centerInSnapshot(Modifier.fillMaxSize()) {
         VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguageAvailable = false))
     }
 
@@ -81,7 +85,7 @@ class VariantToolCardPaparazziTest(
         assumeThat(accessibilityMode, equalTo(AccessibilityMode.NO_ACCESSIBILITY))
         assumeThat(nightMode, equalTo(NightMode.NOTNIGHT))
 
-        centerInSnapshot {
+        centerInSnapshot(Modifier.fillMaxSize()) {
             VariantToolCard(
                 ToolCardStateTestData.tool.copy(
                     appLanguage = Language(Locale.ENGLISH),
@@ -98,7 +102,7 @@ class VariantToolCardPaparazziTest(
         assumeThat(accessibilityMode, equalTo(AccessibilityMode.NO_ACCESSIBILITY))
         assumeThat(nightMode, equalTo(NightMode.NOTNIGHT))
 
-        centerInSnapshot {
+        centerInSnapshot(Modifier.fillMaxSize()) {
             VariantToolCard(ToolCardStateTestData.tool.copy(secondLanguage = Language(Locale("cs"))))
         }
     }
