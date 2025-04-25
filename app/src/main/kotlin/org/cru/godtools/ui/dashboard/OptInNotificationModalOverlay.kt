@@ -10,6 +10,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,6 +37,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.Overlay
@@ -47,7 +49,9 @@ import org.cru.godtools.util.isTablet
 
 class OptInNotificationModalOverlay(
     val requestPermission: suspend () -> Unit,
+    val isHardDenied: Boolean,
 ) : Overlay<Unit> {
+
 
     @Composable
     override fun Content(navigator: OverlayNavigator<Unit>) {
@@ -66,7 +70,6 @@ class OptInNotificationModalOverlay(
             }
         }
 
-        // TODO - DSR: Test adaptive sizing for tablets
         Surface(
             color = Color.Transparent, modifier = Modifier
                 .fillMaxSize()
@@ -87,10 +90,14 @@ class OptInNotificationModalOverlay(
                     ),
                 ),
             ) {
-                Box {
+                BoxWithConstraints {
+                    val totalWidth = constraints.maxWidth.dp
+                    val isLargeTablet = totalWidth > 1700.dp
+
+                    println("totalWidth: $totalWidth")
                     Card(
                         modifier = Modifier
-                            .padding(horizontal = if (isTablet) 150.dp else 16.dp)
+                            .padding(horizontal = if (isTablet) if (isLargeTablet) 200.dp else 150.dp else 16.dp)
                             .align(Alignment.BottomCenter)
                             .offset(y = 4.dp)
                             .fillMaxWidth()
@@ -105,7 +112,7 @@ class OptInNotificationModalOverlay(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 28.dp, vertical = 28.dp),
+                                .padding(horizontal = 28.dp, vertical = if (isTablet) 32.dp else 28.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Box(
@@ -114,41 +121,68 @@ class OptInNotificationModalOverlay(
                                 Image(
                                     painter = painterResource(id = R.drawable.notification_graphic),
                                     contentDescription = null,
-                                    modifier = Modifier.fillMaxWidth(),
+                                    modifier = if (isTablet) Modifier
+                                        .fillMaxWidth()
+                                        .height(180.dp) else Modifier.fillMaxWidth(),
                                     contentScale = ContentScale.Fit
                                 )
                                 HorizontalDivider(
                                     color = MaterialTheme.colorScheme.primary,
-                                    thickness = 2.4.dp,
+                                    thickness = if (isTablet) 3.2.dp else 2.4.dp,
                                     modifier = Modifier
                                         .align(Alignment.BottomCenter)
                                         .fillMaxWidth()
                                 )
                             }
+                            BoxWithConstraints {
+                                val availableWidth = constraints.maxWidth.dp
 
-                            Text(
-                                "Get Tips and Encouragement",
-                                color = MaterialTheme.colorScheme.primary,
-                                textAlign = TextAlign.Center,
-                                // TODO - DSR: ensure text never overflows to multiple lines
-                                style = MaterialTheme.typography.labelLarge.copy(
-                                    fontSize = 23.sp, fontWeight = FontWeight(750), letterSpacing = 0.9.sp
-                                ),
-                                modifier = Modifier.padding(vertical = 18.dp)
-                            )
-                            Text(
-                                "Stay equipped for conversations.\nAllow notifications today.",
-                                color = MaterialTheme.colorScheme.onSurface,
-                                textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    fontSize = 19.sp,
-                                    fontWeight = FontWeight(weight = 420),
-                                    letterSpacing = 0.9.sp,
-                                    lineHeight = 24.sp
-                                ),
-                                modifier = Modifier.padding(bottom = 20.dp)
-                            )
+                                val titleFontSize = when {
+                                    availableWidth > 1000.dp -> if (isTablet) 25.sp else 23.sp
+                                    availableWidth > 800.dp -> if (isTablet) 28.sp else 21.sp
+                                    else -> 19.sp
+                                }
 
+                                val bodyFontSize = when {
+                                    availableWidth > 1000.dp -> if (isTablet) 22.sp else 20.sp
+                                    availableWidth > 800.dp -> if (isTablet) 22.sp else 17.sp
+                                    else -> 16.sp
+                                }
+
+
+                                Column {
+                                    Text(
+                                        "Get Tips and Encouragement",
+                                        color = MaterialTheme.colorScheme.primary,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.labelLarge.copy(
+                                            fontSize = titleFontSize,
+                                            fontWeight = FontWeight(750),
+                                            letterSpacing = 0.9.sp,
+//
+                                        ),
+                                        modifier = Modifier
+                                            .padding(vertical = if (isTablet) 24.dp else 20.dp)
+                                            .fillMaxWidth()
+                                    )
+                                    Text(
+                                        "Stay equipped for conversations.\nAllow notifications today.",
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall.copy(
+                                            fontSize = bodyFontSize,
+                                            fontWeight = FontWeight(weight = 420),
+                                            letterSpacing = 0.9.sp,
+                                            lineHeight = if (isTablet) 28.sp else 24.sp,
+
+                                            ),
+                                        modifier = Modifier
+                                            .padding(bottom = if (isTablet) 26.dp else 22.dp)
+                                            .fillMaxWidth()
+                                    )
+                                }
+
+                            }
                             Button(
                                 modifier = Modifier
                                     .height(48.dp)
@@ -161,11 +195,12 @@ class OptInNotificationModalOverlay(
                                     }
                                     // if hard denied:
 
-                                }) {
+                                },
+                            ) {
                                 Text(
-                                    "Allow Notifications",
+                                    if (isHardDenied) "Notification Settings" else "Allow Notifications",
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp)
+                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
                                 )
                             }
                             TextButton(
@@ -179,7 +214,7 @@ class OptInNotificationModalOverlay(
                                 Text(
                                     "Maybe Later",
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp)
+                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
                                 )
                             }
                         }

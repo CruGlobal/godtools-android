@@ -109,6 +109,7 @@ internal fun DashboardLayout(
             show(
                 OptInNotificationModalOverlay(
                     requestPermission = requestPermission,
+                    isHardDenied = viewModel.permissionStatus.value == PermissionStatus.HARD_DENIED
                 )
             )
             viewModel.setIsOptInNotificationActive(false)

@@ -78,7 +78,7 @@ class DashboardActivity : BaseActivity() {
                 GodToolsTheme {
                     ContentWithOverlays {
                         DashboardLayout(
-                            requestPermission = { requestNotificationPermission() },
+                             requestPermission = { requestNotificationPermission() },
                             openNotificationSettings = { openNotificationSettings() },
                             onEvent = { e ->
                                 when (e) {
@@ -146,7 +146,6 @@ class DashboardActivity : BaseActivity() {
     }
 
     // region optInNotification
-
     private fun checkNotificationPermissionStatus() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -194,9 +193,9 @@ class DashboardActivity : BaseActivity() {
                 permissionContinuation = null
             }
         } else {
-                // TODO - DSR: await the result of settings dialog before dismissing bottom sheet
-            viewModel.setShowNotificationSettingsDialog(true)
-
+//            If we end up using the secondary dialog, await the result of settings dialog before dismissing bottom sheet
+//            viewModel.setShowNotificationSettingsDialog(true)
+            openNotificationSettings()
             continuation.resume(true)
             permissionContinuation = null
         }
@@ -208,8 +207,6 @@ class DashboardActivity : BaseActivity() {
         }
         startActivity(intent)
     }
-
-
     // endregion optInNotification
 
     // region ToolsAdapterCallbacks
