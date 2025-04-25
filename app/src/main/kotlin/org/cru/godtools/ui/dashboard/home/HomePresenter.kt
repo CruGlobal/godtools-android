@@ -51,13 +51,14 @@ class HomePresenter @AssistedInject constructor(
 ) : Presenter<UiState> {
     @Composable
     override fun present(): UiState {
+        val spotlightLessons = rememberSpotlightLessons()
         val favoriteTools = rememberFavoriteTools()
 
         return UiState(
+            dataLoaded = spotlightLessons != null && favoriteTools != null,
             banner = rememberBanner(),
-            spotlightLessons = rememberSpotlightLessons(),
+            spotlightLessons = spotlightLessons.orEmpty(),
             favoriteTools = favoriteTools.orEmpty(),
-            favoriteToolsLoaded = favoriteTools != null,
         ) {
             when (it) {
                 UiEvent.ViewAllFavorites -> navigator.goTo(AllFavoritesScreen)
@@ -80,8 +81,8 @@ class HomePresenter @AssistedInject constructor(
     @Composable
     private fun rememberSpotlightLessons() =
         remember { toolsRepository.getLessonsFlow().map { it.filter { !it.isHidden && it.isSpotlight } } }
-            .collectAsState(emptyList()).value
-            .mapNotNull { lesson ->
+            .collectAsState(null).value
+            ?.mapNotNull { lesson ->
                 val lessonCode = lesson.code ?: return@mapNotNull null
 
                 key(lessonCode) {
