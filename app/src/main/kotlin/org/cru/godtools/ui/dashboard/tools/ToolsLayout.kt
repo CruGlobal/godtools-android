@@ -48,6 +48,8 @@ internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, modifier = modifier) {
+        if (!state.dataLoaded) return@LazyColumn
+
         item("banners", "banners") {
             Banners(
                 { banner },

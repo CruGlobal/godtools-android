@@ -82,15 +82,19 @@ class ToolsPresenter @AssistedInject constructor(
             }
         }
 
+        val spotlightTools = rememberSpotlightTools(
+            secondLanguage = filters.languageFilter.selectedItem,
+            eventSink = eventSink
+        )
+        val tools by rememberFilteredToolsFlow(filters.categoryFilter.selectedItem, selectedLocale)
+            .collectAsState(null)
+
         return ToolsScreen.State(
             banner = rememberBanner(),
-            spotlightTools = rememberSpotlightTools(
-                secondLanguage = filters.languageFilter.selectedItem,
-                eventSink = eventSink
-            ),
+            dataLoaded = spotlightTools != null && tools != null,
+            spotlightTools = spotlightTools.orEmpty(),
             filters = filters,
-            tools = rememberFilteredToolsFlow(filters.categoryFilter.selectedItem, selectedLocale)
-                .collectAsState(emptyList()).value,
+            tools = tools.orEmpty(),
             eventSink = eventSink,
         )
     }
@@ -209,14 +213,14 @@ class ToolsPresenter @AssistedInject constructor(
     private fun rememberSpotlightTools(
         secondLanguage: Language?,
         eventSink: (ToolsScreen.Event) -> Unit,
-    ): List<ToolCard.State> {
+    ): List<ToolCard.State>? {
         val tools by remember {
             toolsRepository.getNormalToolsFlow()
                 .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
-        }.collectAsState(emptyList())
+        }.collectAsState(null)
         val eventSink by rememberUpdatedState(eventSink)
 
-        return tools.map { tool ->
+        return tools?.map { tool ->
             val toolCode by rememberUpdatedState(tool.code)
             val toolEventSink: (ToolCard.Event) -> Unit = remember {
                 {
