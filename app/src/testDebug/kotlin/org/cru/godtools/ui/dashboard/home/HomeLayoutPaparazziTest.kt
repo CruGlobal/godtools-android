@@ -25,6 +25,7 @@ import org.cru.godtools.ui.BasePaparazziTest
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
+import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -34,6 +35,7 @@ class HomeLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val state = UiState(
+        dataLoaded = true,
         spotlightLessons = listOf(
             ToolCardStateTestData.tool.copy(toolCode = "lesson", translation = null)
         ),
@@ -44,7 +46,6 @@ class HomeLayoutPaparazziTest(
             ToolCardStateTestData.tool.copy(toolCode = "tool4", translation = null),
             ToolCardStateTestData.tool.copy(toolCode = "tool5", translation = null),
         ),
-        favoriteToolsLoaded = true
     )
 
     @BeforeTest
@@ -83,18 +84,25 @@ class HomeLayoutPaparazziTest(
     }
 
     @Test
-    fun `HomeLayout() - Favorites Not Loaded`() {
-        snapshotHomeLayout(state.copy(favoriteTools = emptyList(), favoriteToolsLoaded = false))
-    }
+    fun `HomeLayout() - Data Not Loaded`() {
+        assumeTrue(
+            "Only do a single screenshot since this is currently a blank screen",
+            deviceConfig == DeviceConfig.NEXUS_5 &&
+                nightMode == NightMode.NOTNIGHT &&
+                accessibilityMode == AccessibilityMode.NO_ACCESSIBILITY
+        )
 
-    @Test
-    fun `HomeLayout() - No Favorites`() {
-        snapshotHomeLayout(state.copy(favoriteTools = emptyList()))
+        snapshotHomeLayout(state.copy(dataLoaded = false, favoriteTools = emptyList()))
     }
 
     @Test
     fun `HomeLayout() - No Spotlight Lessons`() {
         snapshotHomeLayout(state.copy(spotlightLessons = emptyList()))
+    }
+
+    @Test
+    fun `HomeLayout() - No Favorites`() {
+        snapshotHomeLayout(state.copy(favoriteTools = emptyList()))
     }
 
     private fun snapshotHomeLayout(state: UiState) {

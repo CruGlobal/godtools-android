@@ -26,7 +26,7 @@ import org.junit.Assume.assumeFalse
 import org.junit.Rule
 
 abstract class BasePaparazziTest(
-    private val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
+    protected val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
     protected val locale: String? = null,
     protected val nightMode: NightMode = NightMode.NOTNIGHT,
     protected val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,

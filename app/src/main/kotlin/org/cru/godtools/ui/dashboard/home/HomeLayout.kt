@@ -43,15 +43,14 @@ private val PADDING_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
-    val banner by rememberUpdatedState(state.banner)
-    val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
-
-    val hasFavoriteTools by rememberUpdatedState(state.favoriteTools.isNotEmpty())
-
     val columnState = rememberLazyListState()
+
+    val banner by rememberUpdatedState(state.banner)
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
+        if (!state.dataLoaded) return@LazyColumn
+
         item("banners", "banners") {
             Banners(
                 { banner },
@@ -99,35 +98,33 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
         }
 
         // favorite tools
-        if (favoriteToolsLoaded) {
-            item("favorites-header") {
-                FavoritesHeader(
+        item("favorites-header") {
+            FavoritesHeader(
+                state = state,
+                modifier = Modifier
+                    .animateItem()
+                    .padding(horizontal = PADDING_HORIZONTAL)
+                    .padding(top = 32.dp, bottom = 16.dp),
+            )
+        }
+
+        if (state.favoriteTools.isNotEmpty()) {
+            item("favorites", "favorites") {
+                HorizontalFavoriteTools(
+                    state,
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                )
+            }
+        } else {
+            item("favorites-empty", "favorites-empty") {
+                NoFavoriteTools(
                     state = state,
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp),
                 )
-            }
-
-            if (hasFavoriteTools) {
-                item("favorites", "favorites") {
-                    HorizontalFavoriteTools(
-                        state,
-                        modifier = Modifier
-                            .animateItem()
-                            .fillMaxWidth()
-                    )
-                }
-            } else {
-                item("favorites-empty", "favorites-empty") {
-                    NoFavoriteTools(
-                        state = state,
-                        modifier = Modifier
-                            .animateItem()
-                            .padding(horizontal = PADDING_HORIZONTAL)
-                    )
-                }
             }
         }
     }
