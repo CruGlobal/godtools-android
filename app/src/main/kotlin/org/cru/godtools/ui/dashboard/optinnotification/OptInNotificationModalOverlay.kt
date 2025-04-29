@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.dashboard
+package org.cru.godtools.ui.dashboard.optinnotification
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -35,9 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.Overlay
@@ -47,11 +47,17 @@ import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.util.isTablet
 
+enum class PermissionStatus {
+    APPROVED, // Approved
+    SOFT_DENIED,  // Denied but requestable
+    HARD_DENIED, // Denied and no longer requestable
+    UNDETERMINED // First time request
+}
+
 class OptInNotificationModalOverlay(
     val requestPermission: suspend () -> Unit,
     val isHardDenied: Boolean,
 ) : Overlay<Unit> {
-
 
     @Composable
     override fun Content(navigator: OverlayNavigator<Unit>) {
@@ -149,10 +155,10 @@ class OptInNotificationModalOverlay(
                                     else -> 16.sp
                                 }
 
-
+                                println("availableWidth: $availableWidth")
                                 Column {
                                     Text(
-                                        "Get Tips and Encouragement",
+                                        stringResource(R.string.opt_in_notification_title),
                                         color = MaterialTheme.colorScheme.primary,
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.labelLarge.copy(
@@ -166,7 +172,7 @@ class OptInNotificationModalOverlay(
                                             .fillMaxWidth()
                                     )
                                     Text(
-                                        "Stay equipped for conversations.\nAllow notifications today.",
+                                        stringResource(R.string.opt_in_notification_body),
                                         color = MaterialTheme.colorScheme.onSurface,
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.headlineSmall.copy(
@@ -198,7 +204,7 @@ class OptInNotificationModalOverlay(
                                 },
                             ) {
                                 Text(
-                                    if (isHardDenied) "Notification Settings" else "Allow Notifications",
+                                    if (isHardDenied) stringResource(R.string.opt_in_notification_notification_settings) else stringResource(R.string.opt_in_notification_allow_notifications),
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
                                 )
@@ -212,7 +218,7 @@ class OptInNotificationModalOverlay(
 
                                 }) {
                                 Text(
-                                    "Maybe Later",
+                                    stringResource(R.string.opt_in_notification_maybe_later),
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
                                 )

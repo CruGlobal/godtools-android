@@ -23,8 +23,6 @@ private fun detectTablet(): Boolean {
     return detectedTablet
 }
 
-// TODO - DSR: Improve tablet detection logic
-
 @Composable
 fun isTablet(): Boolean {
     val hasRun = remember { mutableStateOf(false) }

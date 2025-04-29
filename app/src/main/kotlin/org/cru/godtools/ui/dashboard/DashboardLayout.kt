@@ -3,11 +3,7 @@ package org.cru.godtools.ui.dashboard
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
@@ -15,7 +11,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -38,10 +32,8 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
@@ -68,6 +60,8 @@ import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
 import org.cru.godtools.ui.dashboard.home.HomeScreen
 import org.cru.godtools.ui.dashboard.lessons.LessonsScreen
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
+import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -84,7 +78,6 @@ internal sealed interface DashboardEvent {
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 internal fun DashboardLayout(
     requestPermission: suspend () -> Unit,
-    openNotificationSettings: () -> Unit,
     onEvent: (DashboardEvent) -> Unit,
     viewModel: DashboardViewModel = viewModel(),
 ) {
@@ -102,23 +95,18 @@ internal fun DashboardLayout(
 
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
-    //here
-    val showOverlay by viewModel.isOptInNotificationActive.collectAsState()
+
+    val showOverlay by viewModel.showOptInNotification.collectAsState()
     if (showOverlay) {
         OverlayEffect {
             show(
                 OptInNotificationModalOverlay(
                     requestPermission = requestPermission,
-                    isHardDenied = viewModel.permissionStatus.value == PermissionStatus.HARD_DENIED
+                    isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
                 )
             )
-            viewModel.setIsOptInNotificationActive(false)
+            viewModel.setShowOptInNotification(false)
         }
-    }
-    //here
-    val showPermissionDialog by viewModel.showNotificationSettingsDialog.collectAsState()
-    if (showPermissionDialog) {
-        NotificationSettingsDialog(openNotificationSettings = openNotificationSettings, viewModel = viewModel)
     }
 
     DrawerMenuLayout(drawerState = drawerState) {
@@ -126,18 +114,6 @@ internal fun DashboardLayout(
             topBar = {
                 TopAppBar(
                     title = {},
-                    actions = {
-                        //here
-                        TextButton(
-                            modifier = Modifier.fillMaxWidth(), onClick = {
-                                viewModel.shouldPromptNotificationSheet()
-                            }) {
-                            Text(
-                                "shouldPromptNotificationSheet()", textAlign = TextAlign.Center, color = Color.White
-                            )
-                        }
-
-                    },
                     navigationIcon = {
                         when {
                             hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
@@ -210,40 +186,6 @@ internal fun DashboardLayout(
             }
         }
     }
-}
-
-@Composable
-private fun NotificationSettingsDialog(openNotificationSettings: () -> Unit, viewModel: DashboardViewModel) {
-    AlertDialog(
-        title = { Text("Enable Notifications") },
-        text = { Text("Notifications are disabled. Please enable them in Settings.") },
-        confirmButton = {
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-            ) {
-                TextButton(onClick = {
-                    openNotificationSettings()
-                    viewModel.setShowNotificationSettingsDialog(false)
-                }) {
-                    Text("Settings")
-                }
-            }
-        },
-        dismissButton = {
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-            ) {
-                TextButton(onClick = {
-                    viewModel.setShowNotificationSettingsDialog(false)
-                }) {
-                    Text("Cancel")
-                }
-            }
-        },
-        onDismissRequest = {
-            viewModel.setShowNotificationSettingsDialog(false)
-        },
-    )
 }
 
 @Composable

@@ -1,14 +1,9 @@
 package org.cru.godtools.ui.dashboard
 
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,9 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 
 private const val KEY_PAGE_STACK = "pageStack"
 
@@ -27,7 +22,6 @@ private const val KEY_PAGE_STACK = "pageStack"
 class DashboardViewModel @Inject constructor(
     private val syncService: GodToolsSyncService,
     private val savedState: SavedStateHandle,
-    private val settings: Settings,
 ) : ViewModel() {
     // region Page Stack
     private var pageStack: List<Page>
@@ -68,65 +62,18 @@ class DashboardViewModel @Inject constructor(
     // endregion Sync logic
 
     // region optInNotification logic
-    var isOnboardingLaunch = false
-
-    private val _permissionStatus = MutableStateFlow<PermissionStatus?>(null)
-    val permissionStatus: StateFlow<PermissionStatus?> = _permissionStatus
+    var permissionStatus: PermissionStatus? = null
+        private set
 
     fun setPermissionStatus(status: PermissionStatus) {
-        _permissionStatus.value = status
+        permissionStatus = status
     }
 
-    private val _isOptInNotificationActive = MutableStateFlow(false)
-    val isOptInNotificationActive: StateFlow<Boolean> = _isOptInNotificationActive
+    private val _showOptInNotification = MutableStateFlow(false)
+    val showOptInNotification: StateFlow<Boolean> = _showOptInNotification
 
-    fun setIsOptInNotificationActive(bool: Boolean) {
-        _isOptInNotificationActive.value = bool
-    }
-
-    private val _showNotificationSettingsDialog = MutableStateFlow(false)
-    val showNotificationSettingsDialog: StateFlow<Boolean> = _showNotificationSettingsDialog
-
-    fun setShowNotificationSettingsDialog(bool: Boolean) {
-        _showNotificationSettingsDialog.value = bool
-    }
-
-    fun shouldPromptNotificationSheet() {
-
-        // ensure notification status is refreshed
-
-
-        val lastPrompted = settings.getLastPromptedOptInNotification() ?: Date(Long.MIN_VALUE)
-        val promptCount = settings.getOptInNotificationPromptCount()
-
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val lastPromptedTestDate = dateFormat.parse("01/01/2020") ?: Date()
-
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, -2)
-        val twoMonthsAgo = calendar.time
-
-        // TODO: Remove sdk version checks for optInNotification logic once minSdk = 33 or greater
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            println("Returning due to ineligible SDK version")
-            return}
-        if (isOnboardingLaunch) {
-            println("Returning due to onboarding launch")
-            return}
-        if (permissionStatus.value == PermissionStatus.APPROVED) {
-            println("Returning due to approved permission status")
-            return}
-        // TODO - DSR: update prompt count value
-        if (promptCount > 1000) {
-            println("Returning due to prompt count")
-            return}
-
-        // return if isOnboardingLaunch, notification permission is already granted, or promptCount exceeds maxPrompts
-
-        if (lastPromptedTestDate < twoMonthsAgo) {
-            _isOptInNotificationActive.value = true
-            settings.recordOptInNotificationPrompt()
-        }
+    fun setShowOptInNotification(bool: Boolean) {
+        _showOptInNotification.value = bool
     }
     // endregion optInNotification logic
 
