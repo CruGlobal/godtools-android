@@ -165,7 +165,6 @@ class OptInNotificationModalOverlay(
                                             fontSize = titleFontSize,
                                             fontWeight = FontWeight(750),
                                             letterSpacing = 0.9.sp,
-//
                                         ),
                                         modifier = Modifier
                                             .padding(vertical = if (isTablet) 24.dp else 20.dp)

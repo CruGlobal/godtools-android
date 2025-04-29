@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.overlay.ContentWithOverlays
@@ -37,10 +38,12 @@ class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
-    // optInNotification
+
+    @Inject lateinit var remoteConfig: FirebaseRemoteConfig
     private val optInNotificationController by lazy {
-        OptInNotificationController(this, viewModel, settings)
+        OptInNotificationController(this, viewModel, remoteConfig, settings)
     }
+
     lateinit var permissionLauncher: ActivityResultLauncher<String>
     var permissionContinuation: Continuation<Boolean>? = null
 
