@@ -58,7 +58,6 @@ class DashboardViewModel @Inject constructor(
             syncsRunning.value--
         }
     }
-
     // endregion Sync logic
 
     // region optInNotification logic

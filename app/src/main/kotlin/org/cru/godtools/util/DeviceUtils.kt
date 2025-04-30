@@ -32,11 +32,6 @@ fun isTablet(): Boolean {
         val detectedTablet = detectTablet()
         isTablet.value = detectedTablet
         hasRun.value = true
-        if (isTablet.value) {
-            println("Detected Tablet")
-        } else {
-            println("Detected Phone")
-        }
     }
     return isTablet.value
 }

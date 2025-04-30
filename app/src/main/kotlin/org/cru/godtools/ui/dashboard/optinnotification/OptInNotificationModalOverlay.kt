@@ -100,7 +100,6 @@ class OptInNotificationModalOverlay(
                     val totalWidth = constraints.maxWidth.dp
                     val isLargeTablet = totalWidth > 1700.dp
 
-                    println("totalWidth: $totalWidth")
                     Card(
                         modifier = Modifier
                             .padding(horizontal = if (isTablet) if (isLargeTablet) 200.dp else 150.dp else 16.dp)
@@ -155,7 +154,6 @@ class OptInNotificationModalOverlay(
                                     else -> 16.sp
                                 }
 
-                                println("availableWidth: $availableWidth")
                                 Column {
                                     Text(
                                         stringResource(R.string.opt_in_notification_title),
@@ -198,12 +196,12 @@ class OptInNotificationModalOverlay(
                                         requestPermission()
                                         transitionState.targetState = false
                                     }
-                                    // if hard denied:
-
                                 },
                             ) {
                                 Text(
-                                    if (isHardDenied) stringResource(R.string.opt_in_notification_notification_settings) else stringResource(R.string.opt_in_notification_allow_notifications),
+                                    if (isHardDenied) stringResource(R.string.opt_in_notification_notification_settings) else stringResource(
+                                        R.string.opt_in_notification_allow_notifications
+                                    ),
                                     textAlign = TextAlign.Center,
                                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
                                 )

@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.dashboard
 
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
@@ -24,6 +26,7 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -32,6 +35,7 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -90,7 +94,20 @@ internal fun DashboardLayout(requestPermission: suspend () -> Unit, onEvent: (Da
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
 
+    // region optInNotification
     val showOverlay by viewModel.showOptInNotification.collectAsState()
+
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    LaunchedEffect(showOverlay) {
+        activity?.requestedOrientation = if (showOverlay) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+    }
+
     if (showOverlay) {
         OverlayEffect {
             show(
@@ -102,6 +119,7 @@ internal fun DashboardLayout(requestPermission: suspend () -> Unit, onEvent: (Da
             viewModel.setShowOptInNotification(false)
         }
     }
+    // endregion optInNotification
 
     DrawerMenuLayout(drawerState = drawerState) {
         Scaffold(

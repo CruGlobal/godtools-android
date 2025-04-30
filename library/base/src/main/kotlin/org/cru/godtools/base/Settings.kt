@@ -167,14 +167,12 @@ class Settings internal constructor(private val context: Context, coroutineScope
     }
     // endregion Dashboard Settings
 
-    // region OptInNotification
-
+    // region optInNotification
     private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
 
     fun getLastPromptedOptInNotification(): Date? {
         val lastPrompted = prefs.getString(LAST_PROMPTED_OPT_IN_NOTIFICATION, null)
 
-        println("lastPrompted retrieved: $lastPrompted")
         return lastPrompted?.let {
             try {
                 dateFormat.parse(it)
@@ -187,7 +185,6 @@ class Settings internal constructor(private val context: Context, coroutineScope
     fun getOptInNotificationPromptCount(): Int {
         val promptCount = prefs.getInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, 0)
 
-        println("promptCount retrieved: $promptCount")
         return promptCount
     }
 
@@ -202,8 +199,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
             putInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, updatedPromptCount)
         }
     }
-
-    // endregion OptInNotification
+    // endregion optInNotification
 
     // region Campaign Tracking
     fun isAddedToCampaign(oktaId: String? = null, guid: String? = null) = when {

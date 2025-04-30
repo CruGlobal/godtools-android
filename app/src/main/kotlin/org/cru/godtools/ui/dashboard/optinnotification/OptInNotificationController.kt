@@ -8,10 +8,8 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import kotlin.coroutines.resume
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.cru.godtools.base.CONFIG_UI_OPT_IN_NOTIFICATION_ENABLED
@@ -45,26 +43,22 @@ class OptInNotificationController(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             when {
                 !settings.isFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION) -> {
-                    println("status via controller: Undetermined")
                     return PermissionStatus.UNDETERMINED
                 }
 
                 ContextCompat.checkSelfPermission(
                     activity, Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED -> {
-                    println("status via controller: Approved")
                     return PermissionStatus.APPROVED
                 }
 
                 ActivityCompat.shouldShowRequestPermissionRationale(
                     activity, Manifest.permission.POST_NOTIFICATIONS
                 ) -> {
-                    println("status via controller: Soft Denied")
                     return PermissionStatus.SOFT_DENIED
                 }
 
                 else -> {
-                    println("status via controller: Hard Denied")
                     return PermissionStatus.HARD_DENIED
                 }
             }
@@ -85,9 +79,6 @@ class OptInNotificationController(
         val lastPrompted = settings.getLastPromptedOptInNotification() ?: Date(Long.MIN_VALUE)
         val promptCount = settings.getOptInNotificationPromptCount()
 
-        val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val lastPromptedTestDate = dateFormat.parse("01/01/2020") ?: Date()
-
         val remoteTimeIntervalLong = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_TIME_INTERVAL)
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_YEAR, -remoteTimeIntervalLong.toInt())
@@ -98,29 +89,11 @@ class OptInNotificationController(
         val remoteFeatureEnabled = remoteConfig.getBoolean(CONFIG_UI_OPT_IN_NOTIFICATION_ENABLED)
 
         // TODO: Remove sdk version checks for optInNotification logic once minSdk = 33 or greater
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            println("Returning due to ineligible SDK version")
-            return
-        }
-        if (!remoteFeatureEnabled) {
-            return
-        }
-        if (isOnboardingLaunch) {
-            println("Returning due to onboarding launch")
-            return
-        }
-        if (viewModel.permissionStatus == PermissionStatus.APPROVED) {
-            println("Returning due to approved permission status")
-            return
-        }
-        if (promptCount > remotePromptLimit) {
-            println("Returning due to prompt count")
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || !remoteFeatureEnabled || isOnboardingLaunch || viewModel.permissionStatus == PermissionStatus.APPROVED || promptCount > remotePromptLimit) {
             return
         }
 
-        // return if isOnboardingLaunch, notification permission is already granted, or promptCount exceeds maxPrompts
-
-        if (lastPromptedTestDate < remoteTimeInterval) {
+        if (lastPrompted < remoteTimeInterval) {
             viewModel.setShowOptInNotification(true)
             settings.recordOptInNotificationPrompt()
         }

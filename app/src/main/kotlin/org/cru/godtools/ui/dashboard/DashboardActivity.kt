@@ -11,8 +11,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.overlay.ContentWithOverlays
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -58,7 +56,7 @@ class DashboardActivity : BaseActivity() {
         if (savedInstanceState == null) intent?.let { processIntent(it) }
         triggerOnboardingIfNecessary()
 
-        //region optInNotification
+        // region optInNotification
         optInNotificationController.init()
 
         permissionLauncher = registerForActivityResult(
