@@ -19,7 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,19 +43,18 @@ private val PADDING_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(HomeScreen::class, SingletonComponent::class)
 internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
-    val banner by rememberUpdatedState(state.banner)
-    val favoriteToolsLoaded by rememberUpdatedState(state.favoriteToolsLoaded)
-
-    val hasFavoriteTools by rememberUpdatedState(state.favoriteTools.isNotEmpty())
-
     val columnState = rememberLazyListState()
+
+    val banner by rememberUpdatedState(state.banner)
     LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
+        if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {
             Banners(
-                { banner }, modifier = Modifier
+                { banner },
+                modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()
             )
@@ -85,7 +83,8 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
             items(
                 state.spotlightLessons,
                 key = { it.toolCode.orEmpty() },
-                contentType = { "lesson-tool-card" }) { lessonState ->
+                contentType = { "lesson-tool-card" }
+            ) { lessonState ->
                 LessonToolCard(
                     lessonState,
                     showLanguage = false,
@@ -99,33 +98,33 @@ internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
         }
 
         // favorite tools
-        if (favoriteToolsLoaded) {
-            item("favorites-header") {
-                FavoritesHeader(
+        item("favorites-header") {
+            FavoritesHeader(
+                state = state,
+                modifier = Modifier
+                    .animateItem()
+                    .padding(horizontal = PADDING_HORIZONTAL)
+                    .padding(top = 32.dp, bottom = 16.dp),
+            )
+        }
+
+        if (state.favoriteTools.isNotEmpty()) {
+            item("favorites", "favorites") {
+                HorizontalFavoriteTools(
+                    state,
+                    modifier = Modifier
+                        .animateItem()
+                        .fillMaxWidth()
+                )
+            }
+        } else {
+            item("favorites-empty", "favorites-empty") {
+                NoFavoriteTools(
                     state = state,
                     modifier = Modifier
                         .animateItem()
                         .padding(horizontal = PADDING_HORIZONTAL)
-                        .padding(top = 32.dp, bottom = 16.dp),
                 )
-            }
-
-            if (hasFavoriteTools) {
-                item("favorites", "favorites") {
-                    HorizontalFavoriteTools(
-                        state, modifier = Modifier
-                            .animateItem()
-                            .fillMaxWidth()
-                    )
-                }
-            } else {
-                item("favorites-empty", "favorites-empty") {
-                    NoFavoriteTools(
-                        state = state, modifier = Modifier
-                            .animateItem()
-                            .padding(horizontal = PADDING_HORIZONTAL)
-                    )
-                }
             }
         }
     }
@@ -158,13 +157,17 @@ private fun FavoritesHeader(state: UiState, modifier: Modifier = Modifier) = Row
     )
 
     AnimatedVisibility(
-        state.favoriteTools.isNotEmpty(), enter = fadeIn(), exit = fadeOut(), modifier = Modifier.alignByBaseline()
+        state.favoriteTools.isNotEmpty(),
+        enter = fadeIn(),
+        exit = fadeOut(),
+        modifier = Modifier.alignByBaseline()
     ) {
         Text(
             stringResource(R.string.dashboard_home_section_favorites_action_view_all),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable { eventSink(UiEvent.ViewAllFavorites) })
+            modifier = Modifier.clickable { eventSink(UiEvent.ViewAllFavorites) }
+        )
     }
 }
 
@@ -177,7 +180,9 @@ private fun HorizontalFavoriteTools(state: UiState, modifier: Modifier = Modifie
     ) {
         items(state.favoriteTools, key = { it.toolCode.orEmpty() }) { toolState ->
             SquareToolCard(
-                state = toolState, confirmRemovalFromFavorites = true, modifier = Modifier.animateItem()
+                state = toolState,
+                confirmRemovalFromFavorites = true,
+                modifier = Modifier.animateItem()
             )
         }
     }
