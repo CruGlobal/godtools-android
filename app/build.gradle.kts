@@ -119,9 +119,6 @@ ksp {
     arg("dagger.fastInit", "enabled")
 }
 
-// TODO: remove these bug workarounds once they are no longer needed
-exportAgpGeneratedSourcesToKsp()
-
 onesky {
     sourceStringFiles = listOf(
         "strings_account.xml",
@@ -149,7 +146,6 @@ dependencies {
     implementation(project(":ui:tutorial-renderer"))
 
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.datastore)
@@ -213,6 +209,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     testApi(testFixtures(libs.gtoSupport.androidx.compose))
+    testImplementation(testFixtures(project(":library:model")))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.androidx.test.espresso.core)

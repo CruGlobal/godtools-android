@@ -24,6 +24,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -63,33 +64,40 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
     Scaffold(
         topBar = {
             SearchBar(
-                query = state.languageQuery,
-                onQueryChange = { eventSink(Event.UpdateLanguageQuery(it)) },
-                onSearch = { eventSink(Event.UpdateLanguageQuery(it)) },
-                active = false,
-                onActiveChange = {},
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = languageQuery,
+                        onQueryChange = { eventSink(Event.UpdateLanguageQuery(it)) },
+                        onSearch = { eventSink(Event.UpdateLanguageQuery(it)) },
+                        expanded = false,
+                        onExpandedChange = {},
+                        leadingIcon = {
+                            IconButton(
+                                onClick = { eventSink(Event.NavigateBack) },
+                                modifier = Modifier.testTag(TEST_TAG_ACTION_BACK),
+                            ) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                            }
+                        },
+                        trailingIcon = {
+                            if (languageQuery.isNotEmpty()) {
+                                IconButton(
+                                    onClick = { eventSink(Event.UpdateLanguageQuery("")) },
+                                    modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
+                                ) {
+                                    Icon(Icons.Filled.Close, null)
+                                }
+                            } else {
+                                Icon(Icons.Filled.Search, null)
+                            }
+                        },
+                        placeholder = { Text(stringResource(R.string.language_settings_app_language_title)) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                expanded = false,
+                onExpandedChange = {},
                 colors = GodToolsTheme.searchBarColors,
-                leadingIcon = {
-                    IconButton(
-                        onClick = { eventSink(Event.NavigateBack) },
-                        modifier = Modifier.testTag(TEST_TAG_ACTION_BACK),
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
-                    }
-                },
-                trailingIcon = {
-                    if (languageQuery.isNotEmpty()) {
-                        IconButton(
-                            onClick = { eventSink(Event.UpdateLanguageQuery("")) },
-                            modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
-                        ) {
-                            Icon(Icons.Filled.Close, null)
-                        }
-                    } else {
-                        Icon(Icons.Filled.Search, null)
-                    }
-                },
-                placeholder = { Text(stringResource(R.string.language_settings_app_language_title)) },
                 content = {},
                 modifier = Modifier
                     .padding(horizontal = 8.dp, bottom = 8.dp)

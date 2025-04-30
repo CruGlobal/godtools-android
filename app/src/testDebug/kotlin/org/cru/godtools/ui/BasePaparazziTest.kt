@@ -26,7 +26,7 @@ import org.junit.Assume.assumeFalse
 import org.junit.Rule
 
 abstract class BasePaparazziTest(
-    private val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
+    protected val deviceConfig: DeviceConfig = DeviceConfig.NEXUS_5,
     protected val locale: String? = null,
     protected val nightMode: NightMode = NightMode.NOTNIGHT,
     protected val accessibilityMode: AccessibilityMode = AccessibilityMode.NO_ACCESSIBILITY,
@@ -90,11 +90,11 @@ abstract class BasePaparazziTest(
         }
     }
 
-    protected fun centerInSnapshot(content: @Composable BoxScope.() -> Unit) {
+    protected fun centerInSnapshot(modifier: Modifier = Modifier, content: @Composable BoxScope.() -> Unit) {
         snapshot {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                modifier = modifier.background(MaterialTheme.colorScheme.background),
                 content = content,
             )
         }

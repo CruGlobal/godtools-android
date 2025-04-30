@@ -108,12 +108,6 @@
             android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
-            android:name=".ui.languages.downloadable.DownloadableLanguagesActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.languages.LanguageSettingsActivity"
-            android:screenOrientation="@integer/default_screen_orientation" />
-
-        <activity
             android:name=".ui.languages.LanguageSettingsActivity"
             android:exported="true"
             android:label="@string/title_language_settings"

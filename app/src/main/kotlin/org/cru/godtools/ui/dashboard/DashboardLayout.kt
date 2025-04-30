@@ -5,12 +5,9 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -22,6 +19,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +43,6 @@ import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
-import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -70,17 +69,12 @@ internal sealed interface DashboardEvent {
     class OpenIntent(val intent: Intent) : DashboardEvent
     open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
         DashboardEvent
-
     class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
 }
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(
-    requestPermission: suspend () -> Unit,
-    onEvent: (DashboardEvent) -> Unit,
-    viewModel: DashboardViewModel = viewModel(),
-) {
+@OptIn(ExperimentalMaterial3Api::class)
+internal fun DashboardLayout(requestPermission: suspend () -> Unit, onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -91,7 +85,7 @@ internal fun DashboardLayout(
     BackHandler(hasBackStack) { viewModel.popPageStack() }
 
     val refreshing by viewModel.isSyncRunning.collectAsState()
-    val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
+    val refreshState = rememberPullToRefreshState()
 
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
@@ -119,7 +113,6 @@ internal fun DashboardLayout(
                             hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
-
                             else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
                                 Icon(Icons.Default.Menu, null)
                             }
@@ -129,12 +122,13 @@ internal fun DashboardLayout(
                 )
             },
             bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
-            snackbarHost = { SnackbarHost(snackbarHostState) }) {
+            snackbarHost = { SnackbarHost(snackbarHostState) }
+        ) {
             val saveableStateHolder = rememberSaveableStateHolder()
             Box(
                 modifier = Modifier
                     .padding(it)
-                    .pullRefresh(refreshState)
+                    .pullToRefresh(refreshing, state = refreshState, onRefresh = { viewModel.triggerSync(true) })
             ) {
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
@@ -142,8 +136,7 @@ internal fun DashboardLayout(
                             Page.LESSONS,
                             Page.HOME,
                             Page.FAVORITE_TOOLS,
-                            Page.ALL_TOOLS,
-                                -> {
+                            Page.ALL_TOOLS -> {
                                 CircuitContent(
                                     screen = when (page) {
                                         Page.LESSONS -> LessonsScreen
@@ -159,7 +152,6 @@ internal fun DashboardLayout(
                                                     saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
                                                     viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
                                                 }
-
                                                 is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
                                                 is ToolDetailsScreen -> onEvent(
                                                     DashboardEvent.OpenToolDetails(
@@ -168,11 +160,9 @@ internal fun DashboardLayout(
                                                     )
                                                 )
                                             }
-
                                             is NavEvent.ResetRoot -> when (it.newRoot) {
                                                 ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
                                             }
-
                                             else -> Unit
                                         }
                                     },
@@ -182,7 +172,11 @@ internal fun DashboardLayout(
                     }
                 }
 
-                PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+                PullToRefreshDefaults.Indicator(
+                    state = refreshState,
+                    isRefreshing = refreshing,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
         }
     }
@@ -196,12 +190,10 @@ private fun DashboardLayoutAnalytics(page: Page) {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_LESSONS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS)) }
         }
-
         Page.HOME, Page.FAVORITE_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME)) }
         }
-
         Page.ALL_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
             OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS)) }

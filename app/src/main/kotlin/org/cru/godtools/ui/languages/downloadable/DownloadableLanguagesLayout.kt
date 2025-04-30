@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.languages.downloadable
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,11 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,36 +36,32 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.NonCancellable
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
 
-sealed interface DownloadableLanguagesEvent {
-    data object NavigateUp : DownloadableLanguagesEvent
-}
-
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-fun DownloadableLanguagesLayout(
-    viewModel: DownloadableLanguagesViewModel = viewModel(),
-    languageViewModels: LanguageViewModels = viewModel(),
-    onEvent: (DownloadableLanguagesEvent) -> Unit = {},
-) {
+@CircuitInject(DownloadableLanguagesScreen::class, SingletonComponent::class)
+@OptIn(ExperimentalMaterial3Api::class)
+fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
 
-    val searchQuery by viewModel.searchQuery.collectAsState()
+    var searchQuery by state.query
     val updateSearchQuery: (String) -> Unit = remember {
         {
-            viewModel.updateSearchQuery(it)
+            searchQuery = it
             coroutineScope.launch { lazyListState.animateScrollToItem(0) }
         }
     }
@@ -76,92 +71,98 @@ fun DownloadableLanguagesLayout(
     Scaffold(
         topBar = {
             SearchBar(
-                query = searchQuery,
-                onQueryChange = updateSearchQuery,
-                onSearch = updateSearchQuery,
-                active = false,
-                onActiveChange = {},
+                inputField = {
+                    SearchBarDefaults.InputField(
+                        query = searchQuery,
+                        onQueryChange = updateSearchQuery,
+                        onSearch = updateSearchQuery,
+                        expanded = false,
+                        onExpandedChange = { },
+                        leadingIcon = {
+                            IconButton(
+                                onClick = { state.eventSink(UiEvent.NavigateUp) },
+                                modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
+                            ) {
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
+                            }
+                        },
+                        trailingIcon = searchQuery.takeUnless { it.isEmpty() }?.let {
+                            {
+                                IconButton(
+                                    onClick = { updateSearchQuery("") },
+                                    modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
+                                ) {
+                                    Icon(Icons.Filled.Close, null)
+                                }
+                            }
+                        },
+                        placeholder = {
+                            Text(stringResource(R.string.language_settings_downloadable_languages_search))
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                expanded = false,
+                onExpandedChange = {},
                 colors = GodToolsTheme.searchBarColors,
-                leadingIcon = {
-                    IconButton(
-                        onClick = { onEvent(DownloadableLanguagesEvent.NavigateUp) },
-                        modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
-                    }
-                },
-                trailingIcon = {
-                    if (searchQuery.isNotEmpty()) {
-                        IconButton(
-                            onClick = { updateSearchQuery("") },
-                            modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
-                        ) {
-                            Icon(Icons.Filled.Close, null)
-                        }
-                    }
-                },
-                placeholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
                 content = {},
                 modifier = Modifier
                     .padding(horizontal = 8.dp, bottom = 8.dp)
                     .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally)
             )
-        }
+        },
+        modifier = modifier
     ) { contentPadding ->
-        val languages by viewModel.languages.collectAsState(emptyList())
-
         LazyColumn(
             state = lazyListState,
             modifier = Modifier.padding(contentPadding)
         ) {
-            itemsIndexed(languages, key = { _, it -> it.code }) { i, it ->
-                LanguageListItem(languageViewModels.get(it), Modifier.animateItem())
-                if (i + 1 < languages.size) HorizontalDivider()
+            itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
+                LanguageListItem(it, state.eventSink, Modifier.animateItem())
+                if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
     }
 }
 
 @Composable
-private fun LanguageListItem(viewModel: LanguageViewModels.LanguageViewModel, modifier: Modifier = Modifier) {
-    val scope = rememberCoroutineScope()
-    val language by viewModel.language.collectAsState()
-    val toolsAvailable by viewModel.numberOfTools.collectAsState()
-
-    ListItem(
-        headlineContent = { LanguageName(language) },
-        supportingContent = {
-            val tools = toolsAvailable
-            Text(pluralStringResource(R.plurals.language_settings_downloadable_languages_available_tools, tools, tools))
-        },
-        trailingContent = {
-            var confirmRemoval by rememberSaveable { mutableStateOf(false) }
-            LaunchedEffect(confirmRemoval) {
-                delay(3_000)
-                confirmRemoval = false
-            }
-            val toolsDownloaded by viewModel.toolsDownloaded.collectAsState()
-
-            LanguageDownloadStatusIndicator(
-                isPinned = language.isAdded,
-                downloadedTools = toolsDownloaded,
-                totalTools = toolsAvailable,
-                isConfirmRemoval = confirmRemoval,
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = ripple(bounded = false),
-                    ) {
-                        when {
-                            !language.isAdded -> scope.launch(NonCancellable) { viewModel.pin() }
-                            !confirmRemoval -> confirmRemoval = true
-                            else -> scope.launch(NonCancellable) { viewModel.unpin() }
-                        }
-                    }
-                    .padding(8.dp)
+private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, modifier: Modifier = Modifier) = ListItem(
+    headlineContent = { LanguageName(state.language) },
+    supportingContent = {
+        Text(
+            pluralStringResource(
+                R.plurals.language_settings_downloadable_languages_available_tools,
+                state.totalTools,
+                state.totalTools
             )
-        },
-        modifier = modifier
-    )
-}
+        )
+    },
+    trailingContent = {
+        var confirmRemoval by rememberSaveable { mutableStateOf(false) }
+        LaunchedEffect(confirmRemoval) {
+            delay(3_000)
+            confirmRemoval = false
+        }
+
+        LanguageDownloadStatusIndicator(
+            isPinned = state.language.isAdded,
+            downloadedTools = state.downloadedTools,
+            totalTools = state.totalTools,
+            isConfirmRemoval = confirmRemoval,
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(bounded = false),
+                ) {
+                    when {
+                        !state.language.isAdded -> eventSink(UiEvent.PinLanguage(state.language.code))
+                        !confirmRemoval -> confirmRemoval = true
+                        else -> eventSink(UiEvent.UnpinLanguage(state.language.code))
+                    }
+                }
+                .padding(8.dp)
+        )
+    },
+    modifier = modifier
+)

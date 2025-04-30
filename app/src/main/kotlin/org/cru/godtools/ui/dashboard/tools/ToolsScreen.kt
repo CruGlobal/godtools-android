@@ -14,6 +14,7 @@ import org.cru.godtools.ui.tools.ToolCard
 data object ToolsScreen : Screen {
     data class State(
         val banner: BannerType? = null,
+        val dataLoaded: Boolean = true,
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<Tool> = emptyList(),

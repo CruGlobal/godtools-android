@@ -9,7 +9,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
-import com.slack.circuitx.android.IntentScreen
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -20,12 +19,9 @@ import java.util.Locale
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
-import org.ccci.gto.android.common.util.os.equalsBundle
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
@@ -33,7 +29,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.app.AppLanguageScreen
-import org.cru.godtools.ui.languages.downloadable.createDownloadableLanguagesIntent
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -141,13 +137,7 @@ class LanguageSettingsPresenterTest {
     fun `Event - DownloadableLanguages`() = runTest {
         presenter.test {
             expectMostRecentItem().eventSink(Event.DownloadableLanguages)
-
-            with(navigator.awaitNextScreen()) {
-                assertIs<IntentScreen>(this)
-                val expected = context.createDownloadableLanguagesIntent()
-                assertEquals(expected.component, intent.component)
-                assertTrue(expected.extras equalsBundle intent.extras)
-            }
+            assertEquals(DownloadableLanguagesScreen, navigator.awaitNextScreen())
         }
     }
     // endregion Event.DownloadableLanguages

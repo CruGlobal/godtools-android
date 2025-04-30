@@ -10,10 +10,10 @@ import org.cru.godtools.ui.tools.ToolCard
 @Parcelize
 data object HomeScreen : Screen {
     data class UiState(
+        val dataLoaded: Boolean = true,
         val banner: BannerType? = null,
         val spotlightLessons: List<ToolCard.State> = emptyList(),
         val favoriteTools: List<ToolCard.State> = emptyList(),
-        val favoriteToolsLoaded: Boolean = false,
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 

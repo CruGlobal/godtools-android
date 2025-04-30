@@ -11,7 +11,6 @@ import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.randomTool
@@ -85,8 +84,7 @@ abstract class AttachmentsRepositoryIT {
     @Test
     fun `attachmentsChangeFlow()`() = testScope.runTest {
         repository.attachmentsChangeFlow().test {
-            runCurrent()
-            expectMostRecentItem()
+            awaitItem()
 
             val attachment = Attachment(tool = tool).apply {
                 id = 1
@@ -94,12 +92,10 @@ abstract class AttachmentsRepositoryIT {
                 isDownloaded = false
             }
             repository.storeInitialAttachments(listOf(attachment))
-            runCurrent()
-            expectMostRecentItem()
+            awaitItem()
 
             repository.updateAttachmentDownloaded(attachment.id, true)
-            runCurrent()
-            expectMostRecentItem()
+            awaitItem()
         }
     }
     // endregion attachmentsChangeFlow()

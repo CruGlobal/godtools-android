@@ -12,11 +12,8 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +26,9 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +45,6 @@ import java.time.format.FormatStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.ccci.gto.android.common.androidx.compose.material3.ui.pullrefresh.PullRefreshIndicator
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
@@ -59,7 +58,7 @@ import org.cru.godtools.ui.account.globalactivity.GlobalActivityLayout
 internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val viewModel = viewModel<AccountViewModel>()
     val user by viewModel.user.collectAsState()
@@ -67,7 +66,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val refreshing by viewModel.isSyncRunning.collectAsState()
 
     val pagerState = rememberPagerState { pages.size }
-    val refreshState = rememberPullRefreshState(refreshing, onRefresh = { viewModel.triggerSync(true) })
+    val refreshState = rememberPullToRefreshState()
 
     RecordAccountPageAnalytics(pages.getOrNull(pagerState.currentPage))
     Scaffold {
@@ -75,7 +74,7 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
             Modifier
                 .padding(it)
                 .consumeWindowInsets(it)
-                .pullRefresh(refreshState)
+                .pullToRefresh(refreshing, refreshState, onRefresh = { viewModel.triggerSync(true) })
         ) {
             Column(
                 modifier = Modifier
@@ -102,7 +101,11 @@ internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
                 }
             }
 
-            PullRefreshIndicator(refreshing, refreshState, modifier = Modifier.align(Alignment.TopCenter))
+            PullToRefreshDefaults.Indicator(
+                state = refreshState,
+                isRefreshing = refreshing,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 }
