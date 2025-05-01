@@ -54,7 +54,7 @@ enum class PermissionStatus {
     UNDETERMINED // First time request
 }
 
-class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, val isHardDenied: Boolean,) :
+class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, val isHardDenied: Boolean) :
     Overlay<Unit> {
 
     @Composable

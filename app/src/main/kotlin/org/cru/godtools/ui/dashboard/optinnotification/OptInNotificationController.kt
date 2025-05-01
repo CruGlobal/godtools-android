@@ -89,12 +89,13 @@ class OptInNotificationController(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
             !remoteFeatureEnabled ||
             isOnboardingLaunch ||
-            viewModel.permissionStatus == PermissionStatus.APPROVED
+            viewModel.permissionStatus == PermissionStatus.APPROVED ||
+            promptCount > remotePromptLimit
         ) {
             return
         }
-        // TODO: revert testing changes
-        if (lastPrompted.isAfter(remoteTimeInterval)) {
+
+        if (lastPrompted.isBefore(remoteTimeInterval)) {
             viewModel.setShowOptInNotification(true)
             settings.recordOptInNotificationPrompt()
         }
