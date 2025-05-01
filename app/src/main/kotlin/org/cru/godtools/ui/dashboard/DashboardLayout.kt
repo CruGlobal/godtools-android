@@ -1,9 +1,7 @@
 package org.cru.godtools.ui.dashboard
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -26,7 +24,6 @@ import androidx.compose.material3.pulltorefresh.pullToRefresh
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -99,16 +96,6 @@ internal fun DashboardLayout(
 
     // region optInNotification
     val showOverlay by viewModel.showOptInNotification.collectAsState()
-
-    val activity = LocalActivity.current
-
-    LaunchedEffect(showOverlay) {
-        activity?.requestedOrientation = if (showOverlay) {
-            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        } else {
-            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-    }
 
     if (showOverlay) {
         OverlayEffect {

@@ -37,7 +37,8 @@ class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
-    @Inject lateinit var remoteConfig: FirebaseRemoteConfig
+    @Inject
+    lateinit var remoteConfig: FirebaseRemoteConfig
     private val optInNotificationController by lazy {
         OptInNotificationController(this, viewModel, remoteConfig, settings)
     }
@@ -77,18 +78,11 @@ class DashboardActivity : BaseActivity() {
                             onEvent = { e ->
                                 when (e) {
                                     is DashboardEvent.OpenIntent -> startActivity(e.intent)
-                                    is DashboardEvent.OpenTool -> openTool(
-                                        e.tool,
-                                        e.type,
-                                        *listOfNotNull(e.lang1, e.lang2).toTypedArray()
-                                    )
+                                    is DashboardEvent.OpenTool ->
+                                        openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
 
-                                    is DashboardEvent.OpenToolDetails -> e.tool?.let {
-                                        startToolDetailsActivity(
-                                            it,
-                                            e.lang
-                                        )
-                                    }
+                                    is DashboardEvent.OpenToolDetails ->
+                                        e.tool?.let { startToolDetailsActivity(it, e.lang) }
                                 }
                             },
                         )
@@ -118,15 +112,11 @@ class DashboardActivity : BaseActivity() {
             intent.action == Intent.ACTION_VIEW -> {
                 val data = intent.data
                 when {
-                    data?.isDashboardCustomUriSchemeDeepLink() == true -> viewModel.updateCurrentPage(
-                        findPageByUriPathSegment(data.pathSegments.getOrNull(1))
-                    )
+                    data?.isDashboardCustomUriSchemeDeepLink() == true ->
+                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
 
-                    data?.isDashboardGodToolsDeepLink() == true -> viewModel.updateCurrentPage(
-                        findPageByUriPathSegment(
-                            data.pathSegments.getOrNull(2)
-                        )
-                    )
+                    data?.isDashboardGodToolsDeepLink() == true ->
+                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(2)))
 
                     data?.isDashboardLessonsDeepLink() == true -> viewModel.updateCurrentPage(Page.LESSONS)
                 }

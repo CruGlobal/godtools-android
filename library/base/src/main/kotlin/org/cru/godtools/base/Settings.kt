@@ -166,17 +166,10 @@ class Settings internal constructor(private val context: Context, coroutineScope
     // endregion Dashboard Settings
 
     // region optInNotification
-    fun getLastPromptedOptInNotification(): LocalDate {
-        val lastPrompted = LocalDate.ofEpochDay(prefs.getLong(LAST_PROMPTED_OPT_IN_NOTIFICATION, 0))
+    fun getLastPromptedOptInNotification(): LocalDate =
+        LocalDate.ofEpochDay(prefs.getLong(LAST_PROMPTED_OPT_IN_NOTIFICATION, 0))
 
-        return lastPrompted
-    }
-
-    fun getOptInNotificationPromptCount(): Int {
-        val promptCount = prefs.getInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, 0)
-
-        return promptCount
-    }
+    fun getOptInNotificationPromptCount(): Int = prefs.getInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, 0)
 
     fun recordOptInNotificationPrompt() {
         val currentPromptCount = getOptInNotificationPromptCount()
