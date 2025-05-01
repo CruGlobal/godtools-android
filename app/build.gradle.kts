@@ -1,3 +1,5 @@
+import com.google.firebase.appdistribution.gradle.AppDistributionExtension
+
 plugins {
     id("godtools.application-conventions")
     alias(libs.plugins.firebase.appdistribution)
@@ -226,12 +228,33 @@ if (project.hasProperty("firebaseAppDistributionBuild")) {
         groups = "android-testers"
     }
 
-    android.buildTypes.named("qa") {
-        signingConfig = android.signingConfigs.create("firebaseAppDistribution") {
-            storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
-            storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
-            keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
-            keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
+    android {
+        buildTypes.named("qa") {
+            signingConfig = android.signingConfigs.create("firebaseAppDistribution") {
+                storeFile = project.properties["firebaseAppDistributionKeystorePath"]?.let { rootProject.file(it) }
+                storePassword = project.properties["firebaseAppDistributionKeystoreStorePassword"]?.toString()
+                keyAlias = project.properties["firebaseAppDistributionKeystoreKeyAlias"]?.toString()
+                keyPassword = project.properties["firebaseAppDistributionKeystoreKeyPassword"]?.toString()
+            }
+        }
+
+        // we need to use the universal APK for Firebase App Distribution
+        // TODO: hardcoding an apk path is very brittle and doesn't support buildTypes other than QA
+        productFlavors {
+            named("stage") {
+                extensions.configure<AppDistributionExtension> {
+                    artifactPath = layout.buildDirectory
+                        .file("outputs/apk_from_bundle/stageQa/app-stage-qa-universal.apk")
+                        .get().asFile.path
+                }
+            }
+            named("production") {
+                extensions.configure<AppDistributionExtension> {
+                    artifactPath = layout.buildDirectory
+                        .file("outputs/apk_from_bundle/productionQa/app-production-qa-universal.apk")
+                        .get().asFile.path
+                }
+            }
         }
     }
 }
@@ -245,10 +268,10 @@ fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
 
 afterEvaluate {
     android.applicationVariants.all { variant ->
-        val assembleTask = project.tasks.getByName("assemble${variant.name.capitalize()}")
+        val packageUniversalApkTask = project.tasks.getByName("package${variant.name.capitalize()}UniversalApk")
 
         val appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
-        appDistributionTask.dependsOn.add(assembleTask)
+        appDistributionTask.dependsOn.add(packageUniversalApkTask)
     }
 }
 // endregion Firebase App Distribution
