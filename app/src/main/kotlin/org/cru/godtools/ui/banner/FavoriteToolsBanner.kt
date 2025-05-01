@@ -13,9 +13,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.Settings
 
 @Composable
-internal fun FavoriteToolsBanner(modifier: Modifier = Modifier) {
-    val viewModel = viewModel<FavoriteToolsBannerViewModel>()
-
+internal fun FavoriteToolsBanner(modifier: Modifier = Modifier, viewModel: FavoriteToolsBannerViewModel = viewModel()) {
     Banner(
         text = stringResource(R.string.tools_list_favorites_banner_text),
         primaryButton = stringResource(R.string.tools_list_favorites_banner_action_dismiss),

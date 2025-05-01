@@ -8,15 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.core.content.edit
 import androidx.core.content.pm.PackageInfoCompat
-import androidx.core.net.ParseException
 import androidx.core.os.LocaleListCompat
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -70,7 +68,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
 
-        // OptInNotification
+        // optInNotification
         const val LAST_PROMPTED_OPT_IN_NOTIFICATION = "lastPromptedOptInNotification"
         const val OPT_IN_NOTIFICATION_PROMPT_COUNT = "optInNotificationPromptCount"
     }
@@ -168,18 +166,10 @@ class Settings internal constructor(private val context: Context, coroutineScope
     // endregion Dashboard Settings
 
     // region optInNotification
-    private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    fun getLastPromptedOptInNotification(): LocalDate {
+        val lastPrompted = LocalDate.ofEpochDay(prefs.getLong(LAST_PROMPTED_OPT_IN_NOTIFICATION, 0))
 
-    fun getLastPromptedOptInNotification(): Date? {
-        val lastPrompted = prefs.getString(LAST_PROMPTED_OPT_IN_NOTIFICATION, null)
-
-        return lastPrompted?.let {
-            try {
-                dateFormat.parse(it)
-            } catch (e: ParseException) {
-                null
-            }
-        }
+        return lastPrompted
     }
 
     fun getOptInNotificationPromptCount(): Int {
@@ -192,10 +182,10 @@ class Settings internal constructor(private val context: Context, coroutineScope
         val currentPromptCount = getOptInNotificationPromptCount()
         val updatedPromptCount = currentPromptCount + 1
 
-        val dateString = dateFormat.format(Date())
+        val today = LocalDate.now()
 
         prefs.edit {
-            putString(LAST_PROMPTED_OPT_IN_NOTIFICATION, dateString)
+            putLong(LAST_PROMPTED_OPT_IN_NOTIFICATION, today.toEpochDay())
             putInt(OPT_IN_NOTIFICATION_PROMPT_COUNT, updatedPromptCount)
         }
     }

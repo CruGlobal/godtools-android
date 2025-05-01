@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="opt_in_notification_title">Recibe Consejos y Motivación</string>
-    <string name="opt_in_notification_body">Mantente preparado para las conversaciones.\nPermite las notificaciones hoy.</string>
-    <string name="opt_in_notification_allow_notifications">Permitir Notificaciones</string>
-    <string name="opt_in_notification_notification_settings">Configuración de Notificaciones</string>
-    <string name="opt_in_notification_maybe_later">Quizás Más Tarde</string>
-</resources>

@@ -19,7 +19,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
@@ -28,15 +27,16 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolViewModels
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
 @CircuitInject(ToolsScreen::class, SingletonComponent::class)
-internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
-    val toolViewModels: ToolViewModels = viewModel()
-
+internal fun ToolsLayout(
+    state: ToolsScreen.State,
+    modifier: Modifier = Modifier,
+    toolViewModels: ToolViewModels = viewModel()
+) {
     val banner by rememberUpdatedState(state.banner)
     val spotlightTools by rememberUpdatedState(state.spotlightTools)
     val filters by rememberUpdatedState(state.filters)

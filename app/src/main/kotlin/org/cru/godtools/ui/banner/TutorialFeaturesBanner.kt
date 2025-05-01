@@ -17,9 +17,11 @@ import org.cru.godtools.tutorial.startTutorialActivity
 import org.greenrobot.eventbus.EventBus
 
 @Composable
-internal fun TutorialFeaturesBanner(modifier: Modifier = Modifier) {
+internal fun TutorialFeaturesBanner(
+    modifier: Modifier = Modifier,
+    viewModel: TutorialFeaturesBannerViewModel = viewModel()
+) {
     val context = LocalContext.current
-    val viewModel = viewModel<TutorialFeaturesBannerViewModel>()
 
     Banner(
         text = stringResource(R.string.tutorial_features_banner_text),

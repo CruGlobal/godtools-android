@@ -48,8 +48,10 @@ class DashboardViewModel @Inject constructor(
 
     fun triggerSync(force: Boolean = false) {
         viewModelScope.launch {
-            @Suppress("DeferredResultUnused") syncService.syncFollowupsAsync()
-            @Suppress("DeferredResultUnused") syncService.syncToolSharesAsync()
+            @Suppress("DeferredResultUnused")
+            syncService.syncFollowupsAsync()
+            @Suppress("DeferredResultUnused")
+            syncService.syncToolSharesAsync()
             syncsRunning.value++
             coroutineScope {
                 launch { syncService.syncFavoriteTools(force) }
@@ -57,6 +59,10 @@ class DashboardViewModel @Inject constructor(
             }
             syncsRunning.value--
         }
+    }
+
+    init {
+        triggerSync()
     }
     // endregion Sync logic
 
@@ -75,8 +81,4 @@ class DashboardViewModel @Inject constructor(
         _showOptInNotification.value = bool
     }
     // endregion optInNotification logic
-
-    init {
-        triggerSync()
-    }
 }

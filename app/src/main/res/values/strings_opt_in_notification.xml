@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="opt_in_notification_title">Get Tips and Encouragement</string>
-    <string name="opt_in_notification_body">Stay equipped for conversations.\nAllow notifications today.</string>
-    <string name="opt_in_notification_allow_notifications">Allow Notifications</string>
-    <string name="opt_in_notification_notification_settings">Notification Settings</string>
-    <string name="opt_in_notification_maybe_later">Maybe Later</string>
-</resources>

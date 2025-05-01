@@ -1,9 +1,9 @@
 package org.cru.godtools.ui.dashboard
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -35,7 +35,6 @@ import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -78,7 +77,11 @@ internal sealed interface DashboardEvent {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(requestPermission: suspend () -> Unit, onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
+internal fun DashboardLayout(
+    requestPermission: suspend () -> Unit,
+    onEvent: (DashboardEvent) -> Unit,
+    viewModel: DashboardViewModel = viewModel()
+) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -97,8 +100,7 @@ internal fun DashboardLayout(requestPermission: suspend () -> Unit, onEvent: (Da
     // region optInNotification
     val showOverlay by viewModel.showOptInNotification.collectAsState()
 
-    val context = LocalContext.current
-    val activity = context as? Activity
+    val activity = LocalActivity.current
 
     LaunchedEffect(showOverlay) {
         activity?.requestedOrientation = if (showOverlay) {

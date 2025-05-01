@@ -148,9 +148,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.windowsizeclass)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.hilt.work)
-    implementation (libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work)
 
@@ -192,7 +192,6 @@ dependencies {
     implementation(libs.lottie)
     implementation(libs.lottie.compose)
     implementation(libs.youtubePlayer)
-    implementation(libs.androidx.material3.window.size.class1.android)
 
     debugImplementation(libs.androidx.compose.runtime.tracing)
     debugImplementation(libs.facebook.flipper)

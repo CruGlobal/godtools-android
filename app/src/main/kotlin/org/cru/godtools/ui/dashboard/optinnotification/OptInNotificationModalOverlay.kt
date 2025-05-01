@@ -49,15 +49,13 @@ import org.cru.godtools.util.isTablet
 
 enum class PermissionStatus {
     APPROVED, // Approved
-    SOFT_DENIED,  // Denied but requestable
+    SOFT_DENIED, // Denied but requestable
     HARD_DENIED, // Denied and no longer requestable
     UNDETERMINED // First time request
 }
 
-class OptInNotificationModalOverlay(
-    val requestPermission: suspend () -> Unit,
-    val isHardDenied: Boolean,
-) : Overlay<Unit> {
+class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, val isHardDenied: Boolean,) :
+    Overlay<Unit> {
 
     @Composable
     override fun Content(navigator: OverlayNavigator<Unit>) {
@@ -77,9 +75,10 @@ class OptInNotificationModalOverlay(
         }
 
         Surface(
-            color = Color.Transparent, modifier = Modifier
+            color = Color.Transparent,
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.2f))
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.2f))
         ) {
             AnimatedVisibility(
                 visibleState = transitionState,
@@ -102,7 +101,13 @@ class OptInNotificationModalOverlay(
 
                     Card(
                         modifier = Modifier
-                            .padding(horizontal = if (isTablet) if (isLargeTablet) 200.dp else 150.dp else 16.dp)
+                            .padding(
+                                horizontal = when {
+                                    isLargeTablet -> 200.dp
+                                    isTablet -> 150.dp
+                                    else -> 16.dp
+                                }
+                            )
                             .align(Alignment.BottomCenter)
                             .offset(y = 4.dp)
                             .fillMaxWidth()
@@ -113,7 +118,7 @@ class OptInNotificationModalOverlay(
                             containerColor = Color.White
                         ),
 
-                        ) {
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -126,9 +131,13 @@ class OptInNotificationModalOverlay(
                                 Image(
                                     painter = painterResource(id = R.drawable.notification_graphic),
                                     contentDescription = null,
-                                    modifier = if (isTablet) Modifier
-                                        .fillMaxWidth()
-                                        .height(180.dp) else Modifier.fillMaxWidth(),
+                                    modifier = if (isTablet) {
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .height(180.dp)
+                                    } else {
+                                        Modifier.fillMaxWidth()
+                                    },
                                     contentScale = ContentScale.Fit
                                 )
                                 HorizontalDivider(
@@ -178,13 +187,12 @@ class OptInNotificationModalOverlay(
                                             letterSpacing = 0.9.sp,
                                             lineHeight = if (isTablet) 28.sp else 24.sp,
 
-                                            ),
+                                        ),
                                         modifier = Modifier
                                             .padding(bottom = if (isTablet) 26.dp else 22.dp)
                                             .fillMaxWidth()
                                     )
                                 }
-
                             }
                             Button(
                                 modifier = Modifier
@@ -199,30 +207,37 @@ class OptInNotificationModalOverlay(
                                 },
                             ) {
                                 Text(
-                                    if (isHardDenied) stringResource(R.string.opt_in_notification_notification_settings) else stringResource(
-                                        R.string.opt_in_notification_allow_notifications
-                                    ),
+                                    if (isHardDenied) {
+                                        stringResource(R.string.opt_in_notification_notification_settings)
+                                    } else {
+                                        stringResource(
+                                            R.string.opt_in_notification_allow_notifications
+                                        )
+                                    },
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = if (isTablet) 22.sp else 17.sp
+                                    )
                                 )
                             }
                             TextButton(
                                 modifier = Modifier
                                     .padding(bottom = 40.dp, top = 6.dp)
-                                    .fillMaxWidth(), onClick = {
-
+                                    .fillMaxWidth(),
+                                onClick = {
                                     transitionState.targetState = false
-
-                                }) {
+                                }
+                            ) {
                                 Text(
                                     stringResource(R.string.opt_in_notification_maybe_later),
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = if (isTablet) 22.sp else 17.sp)
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = if (isTablet) 22.sp else 17.sp
+                                    )
                                 )
                             }
                         }
                     }
-
                 }
             }
         }

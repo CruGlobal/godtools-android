@@ -32,12 +32,10 @@ import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationControll
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.util.openToolActivity
 
-
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
     private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
-
 
     @Inject lateinit var remoteConfig: FirebaseRemoteConfig
     private val optInNotificationController by lazy {
@@ -80,12 +78,15 @@ class DashboardActivity : BaseActivity() {
                                 when (e) {
                                     is DashboardEvent.OpenIntent -> startActivity(e.intent)
                                     is DashboardEvent.OpenTool -> openTool(
-                                        e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray()
+                                        e.tool,
+                                        e.type,
+                                        *listOfNotNull(e.lang1, e.lang2).toTypedArray()
                                     )
 
                                     is DashboardEvent.OpenToolDetails -> e.tool?.let {
                                         startToolDetailsActivity(
-                                            it, e.lang
+                                            it,
+                                            e.lang
                                         )
                                     }
                                 }
