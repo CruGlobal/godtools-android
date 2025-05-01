@@ -59,8 +59,7 @@ internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun AccountLayout(onEvent: (AccountLayoutEvent) -> Unit = {}) {
-    val viewModel = viewModel<AccountViewModel>()
+internal fun AccountLayout(viewModel: AccountViewModel = viewModel(), onEvent: (AccountLayoutEvent) -> Unit = {}) {
     val user by viewModel.user.collectAsState()
     val pages by viewModel.pages.collectAsState(emptyList())
     val refreshing by viewModel.isSyncRunning.collectAsState()

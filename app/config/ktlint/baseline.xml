@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <baseline version="1.0">
-    <file name="src/main/kotlin/org/cru/godtools/ui/account/AccountLayout.kt">
-        <error line="63" column="9" source="compose:vm-injection-check" />
-    </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/banner/FavoriteToolsBanner.kt">
-        <error line="17" column="9" source="compose:vm-injection-check" />
-    </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/banner/TutorialFeaturesBanner.kt">
-        <error line="22" column="9" source="compose:vm-injection-check" />
-    </file>
     <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/AppUpdateSnackbar.kt">
         <error line="24" column="14" source="compose:compositionlocal-allowlist" />
     </file>
