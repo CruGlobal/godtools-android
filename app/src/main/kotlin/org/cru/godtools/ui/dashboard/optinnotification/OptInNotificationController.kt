@@ -94,8 +94,8 @@ class OptInNotificationController(
         ) {
             return
         }
-        // TODO: revert testing changes
-        if (lastPrompted.isAfter(remoteTimeInterval)) {
+
+        if (lastPrompted.isBefore(remoteTimeInterval)) {
             viewModel.setShowOptInNotification(true)
             settings.recordOptInNotificationPrompt()
         }
