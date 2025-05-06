@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
@@ -58,6 +59,8 @@ import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
 import org.cru.godtools.ui.dashboard.home.HomeScreen
 import org.cru.godtools.ui.dashboard.lessons.LessonsScreen
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
+import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -71,7 +74,11 @@ internal sealed interface DashboardEvent {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
+internal fun DashboardLayout(
+    requestPermission: suspend () -> Unit,
+    onEvent: (DashboardEvent) -> Unit,
+    viewModel: DashboardViewModel = viewModel()
+) {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -86,6 +93,22 @@ internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: Dashb
 
     val snackbarHostState = remember { SnackbarHostState() }
     AppUpdateSnackbar(snackbarHostState)
+
+    // region optInNotification
+    val showOverlay by viewModel.showOptInNotification.collectAsState()
+
+    if (showOverlay) {
+        OverlayEffect {
+            show(
+                OptInNotificationModalOverlay(
+                    requestPermission = requestPermission,
+                    isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
+                )
+            )
+            viewModel.setShowOptInNotification(false)
+        }
+    }
+    // endregion optInNotification
 
     DrawerMenuLayout(drawerState = drawerState) {
         Scaffold(
