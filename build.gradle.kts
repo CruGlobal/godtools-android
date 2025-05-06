@@ -16,3 +16,13 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
 }
+
+allprojects {
+    // configure the project version
+    if (!project.findProperty("releaseBuild")?.toString().toBoolean()) {
+        project.findProperty("versionSuffix")?.toString()
+            ?.takeIf { it.matches(Regex("\\S+")) }
+            ?.let { version = "$version-$it" }
+        version = "$version-SNAPSHOT"
+    }
+}
