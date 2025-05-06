@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
-        versionName = "6.3.4-SNAPSHOT"
+        versionName = project.version.toString()
         versionCode = grgit.log(mapOf("includes" to listOf("HEAD"))).size + 4029265
 
         proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
