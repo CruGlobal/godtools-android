@@ -23,6 +23,6 @@ ktlint {
     version.set(libs.versions.ktlint)
 
     filter {
-        exclude { it.file.path.startsWith("${buildDir.path}/") }
+        exclude { it.file in layout.buildDirectory.asFileTree }
     }
 }
