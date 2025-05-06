@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.optinnotification
 
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -32,7 +34,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.AnimatedOverlay
 import com.slack.circuit.overlay.OverlayNavigator
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.util.isTablet
 
@@ -63,6 +65,8 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
         val isTablet = isTablet()
 
         val coroutineScope = rememberCoroutineScope()
+
+        val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
         Surface(
             color = Color.Transparent,
@@ -87,17 +91,23 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                     )
                 )
             ) {
-                val totalWidth = constraints.maxWidth.dp
-                val isLargeTablet = totalWidth > 1700.dp
+                val screenWidthDp = with(LocalDensity.current) { constraints.maxWidth.toDp() }
+                val isLargeTablet = if (isLandscape) screenWidthDp >= 1200.dp else screenWidthDp >= 800.dp
+                val paddingFraction = when {
+                    isTablet -> when {
+                        isLandscape -> if (isLargeTablet) 0.3f else 0.275f
+                        else -> if (isLargeTablet) 0.2f else 0.15f
+                    }
+
+                    else -> 0.05f
+                }
+
+                val cardPadding = screenWidthDp * paddingFraction
 
                 Card(
                     modifier = Modifier
                         .padding(
-                            horizontal = when {
-                                isLargeTablet -> 200.dp
-                                isTablet -> 150.dp
-                                else -> 16.dp
-                            }
+                            horizontal = cardPadding
                         )
                         .align(Alignment.BottomCenter)
                         .offset(y = 4.dp)
@@ -112,11 +122,16 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 28.dp, vertical = if (isTablet) 32.dp else 28.dp),
+                            .padding(
+                                start = 28.dp,
+                                end = 28.dp,
+                                top = 10.dp,
+                                bottom = if (isTablet) 32.dp else 28.dp
+                            ),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Box(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(fraction = 0.95f)
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.notification_graphic),
@@ -128,7 +143,6 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                                 } else {
                                     Modifier.fillMaxWidth()
                                 },
-                                contentScale = ContentScale.Fit
                             )
                             HorizontalDivider(
                                 color = MaterialTheme.colorScheme.primary,
@@ -144,13 +158,15 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                             val titleFontSize = when {
                                 availableWidth > 1000.dp -> if (isTablet) 25.sp else 23.sp
                                 availableWidth > 800.dp -> if (isTablet) 28.sp else 21.sp
-                                else -> 19.sp
+                                availableWidth < 400.dp -> 16.sp
+                                else -> if (isTablet) 24.sp else 19.sp
                             }
 
                             val bodyFontSize = when {
                                 availableWidth > 1000.dp -> if (isTablet) 22.sp else 20.sp
                                 availableWidth > 800.dp -> if (isTablet) 22.sp else 17.sp
-                                else -> 16.sp
+                                availableWidth < 400.dp -> 13.sp
+                                else -> if (isTablet) 20.sp else 16.sp
                             }
 
                             Column {

@@ -78,8 +78,8 @@ class OptInNotificationController(
         val lastPrompted = settings.getLastPromptedOptInNotification()
         val promptCount = settings.getOptInNotificationPromptCount()
 
-        val remoteTimeIntervalLong = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_TIME_INTERVAL)
-        val remoteTimeInterval = LocalDate.now().minusDays(remoteTimeIntervalLong)
+        val remoteTimeDays = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_TIME_INTERVAL)
+        val remoteTimeDate = LocalDate.now().minusDays(remoteTimeDays)
 
         val remotePromptLimit = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_PROMPT_LIMIT).toInt()
 
@@ -95,7 +95,7 @@ class OptInNotificationController(
             return
         }
 
-        if (lastPrompted.isBefore(remoteTimeInterval)) {
+        if (lastPrompted.isBefore(remoteTimeDate)) {
             viewModel.setShowOptInNotification(true)
             settings.recordOptInNotificationPrompt()
         }
