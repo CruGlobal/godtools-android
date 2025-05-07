@@ -58,7 +58,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
                 with<T, Boolean> { block() }
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 false
             } catch (e: Exception) {
                 Timber.tag(TAG).e(e, "Unhandled sync exception")
