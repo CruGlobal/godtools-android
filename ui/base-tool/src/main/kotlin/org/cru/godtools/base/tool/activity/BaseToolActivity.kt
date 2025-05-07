@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -157,7 +158,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         window.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             viewModel.manifest.asLiveData().observe(this@BaseToolActivity) {
-                statusBarColor = it.navBarColor.toHslColor().darken(0.12f).toColorInt()
+                statusBarColor = it.navBarColor.toColorInt().toHslColor().darken(0.12f).toColorInt()
             }
         }
     }

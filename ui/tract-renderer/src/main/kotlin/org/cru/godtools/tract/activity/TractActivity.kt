@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -254,7 +255,7 @@ class TractActivity :
     }
 
     private fun setupBackground() {
-        dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor) }
+        dataModel.activeManifest.observe(this) { window.decorView.setBackgroundColor(it.backgroundColor.toColorInt()) }
     }
 
     // region Settings

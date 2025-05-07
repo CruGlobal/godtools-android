@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.UiThread
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import dagger.assisted.Assisted
@@ -77,7 +78,7 @@ class TabsController private constructor(
         model?.tabs?.forEach {
             binding.tabs.apply {
                 val tab = newTab().apply {
-                    setBackgroundTint(primaryColor)
+                    setBackgroundTint(primaryColor.toColorInt())
                     text = it.label?.text
                 }
                 addTab(tab)

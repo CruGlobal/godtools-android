@@ -13,13 +13,14 @@ androidx-viewpager2 = "1.1.0"
 androidx-work = "2.10.1"
 circuit = "0.28.0"
 coil = "2.7.0"
+colormath = "3.6.1"
 dagger = "2.56.2"
 eventbus = "3.3.1"
 facebook = "18.0.3"
 facebook-flipper = "0.273.0"
 firebase-crashlytics = "19.4.3"
 firebase-perf = "21.0.5"
-godtoolsShared = "1.1.4"
+godtoolsShared = "1.2.0-SNAPSHOT"
 google-auto-value = "1.11.0"
 gtoSupport = "4.4.0-SNAPSHOT"
 kotlin = "2.1.21"
@@ -88,6 +89,7 @@ circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref 
 circuitx-effects = { module = "com.slack.circuit:circuitx-effects", version.ref = "circuit" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
+colormath-android-colorint = { module = "com.github.ajalt.colormath:colormath-ext-android-colorint", version.ref = "colormath" }
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }

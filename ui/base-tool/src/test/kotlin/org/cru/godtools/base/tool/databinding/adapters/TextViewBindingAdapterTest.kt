@@ -10,6 +10,8 @@ import android.graphics.Typeface.NORMAL
 import android.view.Gravity
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
+import com.github.ajalt.colormath.model.RGB
 import kotlin.random.Random
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.Text
@@ -45,7 +47,7 @@ class TextViewBindingAdapterTest {
             Manifest(),
             text = "text",
             textScale = 2.0,
-            textColor = Color.RED,
+            textColor = RGB(1, 0, 0),
             textAlign = Text.Align.CENTER,
             textStyles = setOf(Text.Style.BOLD, Text.Style.ITALIC, Text.Style.UNDERLINE)
         )
@@ -64,7 +66,7 @@ class TextViewBindingAdapterTest {
         val text = Text(Manifest(), text = "text", textScale = 1.5, textColor = null, textAlign = Text.Align.END)
         view.bindTextNode(text, baseTextSize)
         assertEquals("text", view.text)
-        assertEquals(text.textColor, view.textColors.defaultColor)
+        assertEquals(text.textColor.toColorInt(), view.textColors.defaultColor)
         assertEquals(Text.Align.END.gravity, view.gravity and Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
         assertEquals(1.5f * baseTextSize, view.textSize, 0.001f)
         assertEquals(NORMAL, view.typeface?.style ?: NORMAL)
@@ -75,14 +77,14 @@ class TextViewBindingAdapterTest {
     fun verifyBindTextNodeTextColor() {
         with(Text(Manifest())) {
             view.bindTextNode(this, null)
-            assertEquals(textColor, view.textColors.defaultColor)
+            assertEquals(textColor.toColorInt(), view.textColors.defaultColor)
         }
 
-        view.bindTextNode(Text(Manifest(), textColor = Color.GREEN), null)
+        view.bindTextNode(Text(Manifest(), textColor = RGB(0, 1, 0)), null)
         assertEquals(Color.GREEN, view.textColors.defaultColor)
 
         view.bindTextNode(null, null)
-        assertEquals((null as Text?).textColor, view.textColors.defaultColor)
+        assertEquals((null as Text?).textColor.toColorInt(), view.textColors.defaultColor)
     }
 
     @Test

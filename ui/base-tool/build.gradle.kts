@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.gtoSupport.util)
 
     api(libs.taptargetview)
+    implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
     implementation(libs.google.auto.value.annotations)
     implementation(libs.hilt)
