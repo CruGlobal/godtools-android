@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.widget.ImageViewCompat
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.ajalt.colormath.model.RGB
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -70,7 +71,7 @@ class TractPageCallToActionBindingTest {
 
     @Test
     fun verifyArrowColor() {
-        binding.callToAction = CallToAction(controlColor = Color.GREEN)
+        binding.callToAction = CallToAction(controlColor = RGB(0, 1, 0, 1))
         binding.executePendingBindings()
 
         assertEquals(Color.GREEN, ImageViewCompat.getImageTintList(binding.callToActionArrow)!!.defaultColor)

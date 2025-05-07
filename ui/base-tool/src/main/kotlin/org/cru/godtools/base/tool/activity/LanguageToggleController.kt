@@ -1,5 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
 import org.ccci.gto.android.common.material.tabs.setBackgroundTint
@@ -64,7 +65,7 @@ class LanguageToggleController(private val tabs: TabLayout) {
     }
 
     private fun configureTabs() {
-        val controlColor = activeManifest.navBarControlColor
+        val controlColor = activeManifest.navBarControlColor.toColorInt()
         tabs.forEachTab { tab ->
             val locale = tab.tag as? Locale
 

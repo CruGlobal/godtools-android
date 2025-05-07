@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayout
 import java.util.Locale
@@ -123,8 +124,8 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
         languageToggle.clipToOutline = true
         dataModel.activeManifest.observe(this) { manifest ->
             // determine colors for the language toggle
-            val controlColor = manifest.navBarControlColor
-            var selectedColor = manifest.navBarColor
+            val controlColor = manifest.navBarControlColor.toColorInt()
+            var selectedColor = manifest.navBarColor.toColorInt()
             if (Color.alpha(selectedColor) < 255) {
                 // XXX: the expected behavior is to support transparent text. But we currently don't support
                 //      transparent text, so pick white or black based on the control color

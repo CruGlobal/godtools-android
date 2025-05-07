@@ -3,7 +3,6 @@ package org.cru.godtools.tool.cyoa.ui
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
-import android.graphics.Color
 import android.net.Uri
 import android.view.ViewGroup
 import androidx.activity.viewModels
@@ -11,6 +10,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.ajalt.colormath.model.RGB
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -41,7 +41,6 @@ import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
-import org.cru.godtools.shared.tool.parser.model.page.controlColor
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.cyoa.R
 import org.junit.Rule
@@ -127,11 +126,11 @@ class CyoaActivityTest {
         every { listeners } returns emptySet()
         every { dismissListeners } returns emptySet()
         every { getAnalyticsEvents(any()) } returns emptyList()
-        every { backgroundColor } returns Color.BLUE
+        every { backgroundColor } returns RGB(0, 0, 1, 1)
         every { backgroundImage } returns null
         every { backgroundImageGravity } returns Gravity.CENTER
         every { backgroundImageScaleType } returns ImageScaleType.FILL
-        every { controlColor } returns Color.CYAN
+        every { controlColor } returns RGB(1, 0, 1, 1)
     }
 
     private fun EventId.event() = Event.Builder(manifest())

@@ -6,6 +6,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableEndTarget
 import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
 import org.ccci.gto.android.common.util.dpToPixelSize
@@ -37,7 +38,7 @@ internal fun TextView.bindTextNode(text: Text?, textSize: Float?) {
     val size = text.textScale * (textSize ?: context.resources.getDimension(R.dimen.tool_content_text_size_base))
     setTextSize(TypedValue.COMPLEX_UNIT_PX, size.toFloat())
 
-    setTextColor(text.textColor)
+    setTextColor(text.textColor.toColorInt())
 
     // set the alignment for the text
     gravity = (gravity and Gravity.VERTICAL_GRAVITY_MASK) or text.textAlign.gravity
