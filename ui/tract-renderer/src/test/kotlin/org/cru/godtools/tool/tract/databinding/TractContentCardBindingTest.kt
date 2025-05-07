@@ -7,7 +7,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.spyk
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.ccci.gto.android.common.testing.dagger.hilt.HiltTestActivity
@@ -34,13 +33,12 @@ class TractContentCardBindingTest {
 
     private lateinit var binding: TractContentCardBinding
 
-    private val card: Card = mockk(relaxed = true) {
-        every { manifest } answers { this@TractContentCardBindingTest.page.manifest }
-        every { page } answers { this@TractContentCardBindingTest.page }
-        every { isLastVisibleCard } returns true
-    }
-    private val callToAction = spyk(CallToAction())
-    private val page = TractPage(cards = { listOf(card) }, callToAction = { callToAction })
+    private val page = TractPage(
+        cards = { listOf(spyk(Card(it))) },
+        callToAction = { spyk(CallToAction(it)) }
+    )
+    private val card = page.cards.last()
+    private val callToAction get() = page.callToAction
     private val tip = Tip(id = "tip")
 
     @Before
