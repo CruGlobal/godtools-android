@@ -8,12 +8,12 @@ import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.spyk
 import java.io.IOException
 import javax.inject.Provider
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -40,9 +40,15 @@ class GodToolsSyncServiceTest {
         coEvery { syncDirtyCounters() } returns true
     }
 
-    private val timber: Timber.Tree = spyk(object : Timber.Tree() {
-        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) = Unit
-    })
+    private data class LogEntry(val priority: Int, val tag: String?, val message: String, val t: Throwable?)
+    private val timber = object : Timber.Tree() {
+        val logs = mutableListOf<LogEntry>()
+        fun assertNoLogs() = assertTrue(logs.isEmpty())
+
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+            logs += LogEntry(priority, tag, message, t)
+        }
+    }
     private val workManager: WorkManager = mockk()
     private val testScope = TestScope()
 
@@ -72,9 +78,9 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
-            timber wasNot Called
             workManager wasNot Called
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -88,9 +94,9 @@ class GodToolsSyncServiceTest {
         assertTrue(job.isCancelled)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
-            timber wasNot Called
             workManager.scheduleSyncToolsWork()
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -101,9 +107,9 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
-            timber wasNot Called
             workManager.scheduleSyncToolsWork()
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -114,9 +120,9 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
-            timber wasNot Called
             workManager.scheduleSyncToolsWork()
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -128,9 +134,10 @@ class GodToolsSyncServiceTest {
         syncService.syncTools(false)
         coVerifyAll {
             toolsSyncTasks.syncTools(false)
-            timber.e(e, any())
             workManager.scheduleSyncToolsWork()
         }
+        assertEquals(1, timber.logs.size)
+        assertEquals(e, timber.logs[0].t)
     }
     // endregion syncTools()
 
@@ -140,9 +147,9 @@ class GodToolsSyncServiceTest {
         syncService.syncToolSharesAsync().await()
         coVerifyAll {
             toolsSyncTasks.syncShares()
-            timber wasNot Called
             workManager wasNot Called
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -156,9 +163,9 @@ class GodToolsSyncServiceTest {
         assertTrue(job.isCancelled)
         coVerifyAll {
             toolsSyncTasks.syncShares()
-            timber wasNot Called
             workManager.scheduleSyncToolSharesWork()
         }
+        timber.assertNoLogs()
     }
 
     @Test
@@ -169,9 +176,9 @@ class GodToolsSyncServiceTest {
         syncService.syncToolSharesAsync().await()
         coVerifyAll {
             toolsSyncTasks.syncShares()
-            timber wasNot Called
             workManager.scheduleSyncToolSharesWork()
         }
+        timber.assertNoLogs()
     }
     // endregion syncToolSharesAsync()
 
