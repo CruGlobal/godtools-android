@@ -14,6 +14,7 @@ env:
   ORG_GRADLE_PROJECT_releaseBuild: ${{ github.event_name == 'workflow_dispatch' && inputs.triggerRelease && (github.ref == 'refs/heads/master') }}
   ORG_GRADLE_PROJECT_versionSuffix: >-
     ${{
+      (github.event_name == 'push' && github.ref == 'refs/heads/feature/compose' && 'compose') ||
       (github.event_name == 'push' && github.ref == 'refs/heads/feature/opt-in-notification' && 'notifications') ||
       (github.event_name == 'pull_request' && format('PR{0}', github.event.pull_request.number)) ||
       ''
@@ -132,6 +133,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       (github.event_name == 'push' && github.ref == 'refs/heads/develop') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/feature/compose') ||
       (github.event_name == 'push' && github.ref == 'refs/heads/feature/opt-in-notification') ||
       (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'Publish PR QA Build'))
     needs: [build, ktlint, lint, tests]
