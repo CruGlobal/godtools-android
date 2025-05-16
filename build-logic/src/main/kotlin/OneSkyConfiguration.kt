@@ -26,6 +26,7 @@ fun Project.onesky(configuration: OneSkyPluginExtension.() -> Unit) {
             "de",
             "es",
             "fr",
+            "ha",
             "hi",
             "id",
             "ja",
