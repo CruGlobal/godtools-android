@@ -1,19 +1,28 @@
 package org.cru.godtools.tool.cyoa.ui.controller
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.core.graphics.Insets
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import javax.inject.Named
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.StateFlow
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.base.tool.ui.controller.ParentController
-import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.renderer.content.RenderContentStack
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -28,9 +37,10 @@ class ContentPageController @AssistedInject constructor(
     @Assisted private val contentInsets: StateFlow<Insets>,
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
-    cacheFactory: UiControllerCache.Factory,
-    eventBus: EventBus
-) : ParentController<ContentPage>(ContentPage::class, binding.root, cacheFactory = cacheFactory, eventBus = eventBus) {
+    eventBus: EventBus,
+    @Named(TOOL_RESOURCE_FILE_SYSTEM)
+    private val resourceFileSystem: FileSystem,
+) : BaseController<ContentPage>(ContentPage::class, binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(
@@ -53,9 +63,19 @@ class ContentPageController @AssistedInject constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-    }
+        binding.compose.setContent {
+            val insets by contentInsets.collectAsState()
 
-    override val childContainer = binding.content
+            ProvideRendererServices(resourceFileSystem) {
+                RenderContentStack(
+                    model?.content.orEmpty(),
+                    modifier = Modifier
+                        .padding(WindowInsets(top = insets.top).asPaddingValues()),
+                    state = toolState,
+                )
+            }
+        }
+    }
 
     // region Analytics Events
     private var pendingVisibleAnalyticsEvents: List<Job>? = null
