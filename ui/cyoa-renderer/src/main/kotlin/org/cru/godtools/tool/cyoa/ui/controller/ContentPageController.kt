@@ -1,11 +1,13 @@
 package org.cru.godtools.tool.cyoa.ui.controller
 
+import androidx.core.graphics.Insets
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.StateFlow
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.ui.controller.BaseController
@@ -23,6 +25,7 @@ import org.greenrobot.eventbus.EventBus
 class ContentPageController @AssistedInject constructor(
     @Assisted private val binding: CyoaPageContentBinding,
     @Assisted override val lifecycleOwner: LifecycleOwner,
+    @Assisted private val contentInsets: StateFlow<Insets>,
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     cacheFactory: UiControllerCache.Factory,
@@ -33,6 +36,7 @@ class ContentPageController @AssistedInject constructor(
         fun create(
             binding: CyoaPageContentBinding,
             lifecycleOwner: LifecycleOwner,
+            contentInsets: StateFlow<Insets>,
             enableTips: LiveData<Boolean>,
             toolState: State
         ): ContentPageController
@@ -43,6 +47,7 @@ class ContentPageController @AssistedInject constructor(
     init {
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
+        binding.contentInsets = contentInsets
     }
 
     override fun onBind() {
@@ -79,16 +84,19 @@ class ContentPageController @AssistedInject constructor(
 fun CyoaPageContentBinding.bindController(
     factory: ContentPageController.Factory,
     lifecycleOwner: LifecycleOwner,
+    contentInsets: StateFlow<Insets>,
     enableTips: LiveData<Boolean>,
     toolState: State
-) = controller ?: factory.create(this, lifecycleOwner, enableTips, toolState)
+) = controller ?: factory.create(this, lifecycleOwner, contentInsets, enableTips, toolState)
 
 fun CyoaPageContentBinding.bindController(
     factory: ContentPageController.Factory,
     parentController: BaseController<*>,
+    contentInsets: StateFlow<Insets>,
 ) = controller ?: factory.create(
     this,
     parentController.lifecycleOwner,
+    contentInsets,
     parentController.enableTips,
     parentController.toolState
 )

@@ -122,10 +122,11 @@ class PageCollectionPageController @AssistedInject constructor(
                         ?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
 
                     when (it) {
-                        is CyoaPageContentBinding -> {
-                            it.contentInsets = contentInsets
-                            it.bindController(contentPageControllerFactory, this@PageCollectionPageController)
-                        }
+                        is CyoaPageContentBinding -> it.bindController(
+                            contentPageControllerFactory,
+                            this@PageCollectionPageController,
+                            contentInsets
+                        )
                     }
                 }
 
