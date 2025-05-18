@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="menu_profile">Ayyuka</string>
+    <string name="account_joined">An haɗa %1$s</string>
+    <!-- Create / Login -->
+    <string name="account_create_heading">Ƙirƙiro ma\'ajiya</string>
+    <string name="account_create_description">Ƙirƙiro asusu don samun labarai na gaske, ƙarfafawa, da shawarwari masu amfani a hannunku.</string>
+    <string name="account_login_heading">Shiga</string>
+    <string name="account_login_description">Shiga cikin asusunku don samun labarai na gaske, ƙarfafawa, da shawarwari masu amfani a hannunku.</string>
+    <string name="account_error_title">An gaza tantancewa</string>
+    <string name="account_error_user_already_exists">An riga an sami asusun mai amfani.</string>
+    <string name="account_error_user_not_found">Ba a sami asusun mai amfani ba.</string>
+    <string name="account_error_not_connected_title">Babu haɗin intanet</string>
+    <string name="account_error_not_connected">Da fatan za a duba haɗin intanet ɗin ku kuma a sake gwadawa</string>
+    <string name="account_error_unknown">Kuskuren shiga</string>
+    <string name="account_error_dialog_dismiss">KO</string>
+    <!-- Delete Account -->
+    <string name="menu_account_delete">Share Account</string>
+    <string name="account_delete_heading">Kar ku tafi da wuri</string>
+    <string name="account_delete_description">Idan kun share asusunku ba za ku iya samun damar kayan aikin da kuka fi so ko ayyukan asusu ba.</string>
+    <string name="account_delete_action_delete">Share asusuna</string>
+    <string name="account_delete_action_cancel">Ajiye asusuna</string>
+    <string name="account_delete_error">An sami kuskure wajen share asusun ku.  Tabbatar kana kan layi ko gwadawa daga baya.</string>
+    <string name="account_delete_error_dismiss">KO</string>
+    <!-- Activity -->
+    <string name="profile_tab_activity">Ayyuka</string>
+    <string name="account_activity_header">Ayyukan ku</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kayan aiki yana buɗewa</item>
+        <item quantity="other">Kayan aiki yana buɗewa</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Kammala darasi</item>
+        <item quantity="other">Kammala darasi</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Raba allo</item>
+        <item quantity="other">Raba allo</item>
+    </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">An raba hanyoyin haɗin gwiwa</item>
+        <item quantity="other">An raba hanyoyin haɗin gwiwa</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">An raba hanyoyin haɗin gwiwa</item>
+        <item quantity="other">An raba hanyoyin haɗin gwiwa</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Zama</item>
+        <item quantity="other">Zama</item>
+    </plurals>
+    <!-- Badges -->
+    <string name="account_activity_badges_header">Alamomin ku</string>
+    <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="one">Kammala %1$,d darussa</item>
+        <item quantity="other">Kammala %1$,d darussa</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="one">An buɗe %1$,d labarai</item>
+        <item quantity="other">An buɗe %1$,d labarai</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="one">An raba hotuna %1$,d</item>
+        <item quantity="other">An raba hotuna %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_tips_completed">
+        <item quantity="one">An kammala %1$,d shawarwarin horo</item>
+        <item quantity="other">An kammala %1$,d shawarwarin horo</item>
+    </plurals>
+    <!-- Global Activity -->
+    <string name="account_tab_global_activity">Ayyukan Duniya</string>
+    <string name="profile_global_activity_heading">Ayyukan Duniya%1$s</string>
+    <string name="profile_activity_unique_users">Musamman Masu Amfani</string>
+    <string name="profile_activity_gospel_presentations">Gabatarwar Bishara</string>
+    <string name="profile_activity_sessions">Zama</string>
+    <string name="profile_activity_countries">Kasashe</string>
+</resources>

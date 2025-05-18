@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Language UI -->
+    <string name="language_settings_app_language_title">Harshen app</string>
+    <string name="language_settings_app_language_dialog_message">Kun zaɓi %1$s azaman yaren app ɗin ku. Wannan zai canza yaren dukan GodTools app. Kun tabbata?</string>
+    <string name="language_settings_app_language_dialog_confirm">canza harshe</string>
+    <string name="language_settings_app_language_dialog_dismiss">kada ka damu</string>
+    <!-- Language Settings UI -->
+    <string name="menu_language_settings">Saitunan Harshe</string>
+    <string name="title_language_settings">Saitunan Harshe</string>
+    <string name="language_settings_section_app_language_heading">Harshen Interface App</string>
+    <plurals name="language_settings_section_app_language_available">
+        <item quantity="one">%1$,D akwai harsuna</item>
+        <item quantity="other">%1$,D akwai harsuna</item>
+    </plurals>
+    <string name="language_settings_section_app_language_description">Saita yaren da kuke son a nuna duk app ɗin a ciki.</string>
+    <string name="language_settings_section_offline_heading">Harsunan kayan aiki suna samuwa a layi</string>
+    <string name="language_settings_section_offline_description">Zazzage duk kayan aikin da ke cikin yare don samar da su ko da ba ku da WiFi ko sabis na salula. Saita yaren kayan aiki ta maɓallin Zaɓuɓɓuka a cikin kayan aiki.</string>
+    <string name="language_settings_section_offline_action_edit">Gyara harsunan da aka sauke</string>
+    <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_search">bincika harsuna</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="one">%1$d akwai kayan aikin</item>
+        <item quantity="other">%1$d akwai kayan aikin</item>
+    </plurals>
+</resources>

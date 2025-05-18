@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_features_tools_headline">Kayan aiki</string>
+    <string name="tutorial_features_tools_subhead">Ana yin kowane kayan aiki don wani mataki na tattaunawa daban- kafin, lokacin ko bayan.</string>
+    <string name="tutorial_features_tips_headline">Tips Tool</string>
+    <string name="tutorial_features_tips_subhead">Godtools shawarwari suna jagorantar ku yayin da kuke taimaka wa wani ya fahimci bishara kuma ya gamu da Yesu.</string>
+    <string name="tutorial_features_live_share_headline">Raba allo</string>
+    <string name="tutorial_features_live_share_subhead">Yanzu zaku iya raba allonku daga nesa don ɗayan zai iya bi yayin da kuke amfani da kayan aiki don tattauna bishara.</string>
+    <string name="tutorial_features_lessons_headline">Darussan</string>
+    <string name="tutorial_features_lessons_subhead">A cikin kowane darasi na Godtools za ku koyi wani abu don taimaka muku samun tattaunawa ta gaske game da Allah.</string>
+    <string name="tutorial_features_final_headline">Nemo wannan koyawa a cikin menu a duk lokacin da kuke buƙata.</string>
+    <string name="tutorial_features_action_continue">Ci gaba</string>
+    <string name="tutorial_features_action_close">kusa koyawa</string>
+    <!-- Training Tutorial Banner -->
+    <string name="tutorial_features_banner_text">Nuna min koyawa</string>
+    <string name="tutorial_features_banner_action_open">Bude koyawa</string>
+    <string name="tutorial_features_banner_action_dismiss">sallama</string>
+</resources>

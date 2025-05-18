@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tool Details UI -->
+    <string name="menu_add_to_home">Ƙara zuwa allon gida</string>
+    <string name="action_tools_open_tool">Bude kayan aiki</string>
+    <string name="action_tools_add_favorite">Ƙara zuwa abubuwan da aka fi so</string>
+    <string name="action_tools_remove_favorite">Cire daga abubuwan da aka fi so</string>
+    <string name="action_tools_open_training">koyi raba wannan kayan aikin</string>
+    <plurals name="label_tools_shares">
+        <item quantity="one">%1$,d ra\'ayoyi</item>
+        <item quantity="other">%1$,d ra\'ayoyi</item>
+    </plurals>
+    <string name="label_tools_about">Kamar</string>
+    <plurals name="label_tools_languages">
+        <item quantity="one">%1$,d harsuna</item>
+        <item quantity="other">%1$,d harsuna</item>
+    </plurals>
+    <string name="tool_details_section_description_conversation_starters">Mafarin tattaunawa</string>
+    <string name="tool_details_section_description_outline">zayyana</string>
+    <string name="tool_details_section_description_bible_references">Nassoshi na Littafi Mai Tsarki</string>
+    <string name="tool_details_section_description_languages_available">Akwai harsuna</string>
+    <string name="tool_details_section_variants_label">iri</string>
+    <string name="tool_details_section_variants_description">Zaɓi wani nau\'in wannan kayan aikin daban a ƙasa. Kowace sigar tana da salo na musamman da abun ciki don haka zaku iya samun wanda ya fi dacewa don tattaunawar ku. Kuna iya fi so nau\'ikan kayan aiki iri ɗaya.</string>
+</resources>

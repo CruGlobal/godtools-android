@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">Fara</string>
+    <string name="menu_tutorial">koyawa</string>
+    <string name="menu_heading_account">ajiya</string>
+    <string name="menu_login">shiga</string>
+    <string name="menu_signup">Ƙirƙiri Asusu</string>
+    <string name="menu_logout">fita</string>
+    <string name="menu_heading_support">"goya baya "</string>
+    <string name="menu_feedback">Aika martan</string>
+    <string name="menu_report_bug">Ba da rahoton kwaro</string>
+    <string name="menu_question">Yi Tambaya</string>
+    <string name="menu_heading_share">raba</string>
+    <string name="menu_review">Bar bita</string>
+    <string name="menu_share_story">Raba labari tare da mu</string>
+    <string name="menu_share_godtools">Raba GodTools</string>
+    <string name="share_app_message">https://godtoolsapp.com</string>
+    <string name="share_story_subject">Labarin GodTools</string>
+    <string name="menu_heading_about">Game da</string>
+    <string name="menu_terms_of_use">Sharuɗɗan Amfani</string>
+    <string name="menu_privacy_policy">Sigar bayanin</string>
+    <string name="menu_copyright">haƙƙin mallaka</string>
+    <string name="menu_version">Sigar:  %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">Darussan</string>
+    <string name="dashboard_lessons_header_title">Darussan da aka yi muku</string>
+    <string name="dashboard_lessons_header_description">ra\'ayoyi masu amfani don gina dangantaka da fara tattaunawa mai ma\'ana</string>
+    <string name="dashboard_lessons_section_filter_label">Darussa a cikin:</string>
+    <string name="dashboard_lessons_progress_completed">An kammala</string>
+    <string name="dashboard_lessons_progress_in_progress">%1$d%% Cikkake</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">waɗanda aka fi so</string>
+    <string name="dashboard_home_header_title">Barka da zuwa Godtools</string>
+    <string name="dashboard_home_section_featured_lesson">Babban Darasi</string>
+    <string name="dashboard_home_section_favorites_title">Kayan aikin da kuka fi so</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">Babu kayan aikin da aka fi so don nunawa</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Matsa gunkin zuciya don fi so kayan aiki kuma sanya shi samuwa a layi.</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Duba duk &gt;</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">Je zuwa Kayan aiki</string>
+    <string name="tools_list_favorites_banner_text">Samar da kayan aiki a layi ta hanyar danna alamar zuciya wanda ke ƙara shi zuwa abubuwan da kuka fi so.</string>
+    <string name="tools_list_favorites_banner_action_dismiss">sallama</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">kayan aiki</string>
+    <string name="dashboard_tools_section_filter_label">Tace</string>
+    <string name="dashboard_tools_section_filter_category_any">kowane nau\'i</string>
+    <string name="dashboard_tools_section_filter_language_any">kowane harshe</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d akwai kayan aikin</item>
+        <item quantity="other">%1$d akwai kayan aikin</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">Duk kayan aikin akwai</string>
+    <string name="dashboard_tools_section_categories_label">nau\'i</string>
+    <string name="dashboard_tools_section_categories_all">Duk kayan aiki</string>
+    <string name="dashboard_tools_section_spotlight_label">Hasken kayan aiki</string>
+    <string name="dashboard_tools_section_spotlight_description">Ga wasu kayan aikin da muke tunanin za ku so</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">Cire \"%1$s\" daga waɗanda aka fi so?</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">Motsa</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">Sake</string>
+    <string name="tool_card_accessibility_language_available">Wanda akwai</string>
+    <string name="tool_card_accessibility_language_unavailable">Babu</string>
+    <string name="action_tools_about">cikakken bayani</string>
+    <string name="action_tools_open">Wanda aka buɗe</string>
+    <!-- In App Update -->
+    <string name="play_update_available">Akwai sabuntawa</string>
+    <string name="play_update_available_action">zazzage</string>
+    <string name="play_update_downloaded">An zazzage sabuntawa</string>
+    <string name="play_update_downloaded_action">sake kunnawa</string>
+</resources>

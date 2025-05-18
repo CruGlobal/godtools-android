@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Training Tips -->
+    <string name="tract_tips_tip_action_next">Na gaba</string>
+    <string name="tract_tips_tip_action_close">Na kusa</string>
+    <!-- Tip Types -->
+    <string name="tract_tips_type_ask">Tambaya</string>
+    <string name="tract_tips_type_consider">Yi la\'akari da</string>
+    <string name="tract_tips_type_prepare">Shirya</string>
+    <string name="tract_tips_type_quote">Sa farashi</string>
+    <string name="tract_tips_type_tip">Kuɗin hidima</string>
+    <!-- Settings -->
+    <string name="tool_settings_action_tips_enable">Nasihun horo</string>
+    <string name="tool_settings_action_tips_disable">boye tukwici</string>
+</resources>
