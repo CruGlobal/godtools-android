@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tool_not_found">Ba za a iya samun kayan aikin da kuka nema ba</string>
+    <string name="tool_loading">Kayan aikin da kuka nema yana lodawa…</string>
+    <string name="tool_offline">Kayan aikin da kuka nema yana buƙatar haɗin Intanet don buɗewa</string>
+    <string name="tract_content_input_error_required">%1$s ana buƙata</string>
+    <string name="tract_content_input_error_invalid_email">Da fatan za a shigar da ingantaccen adireshin imel</string>
+    <!-- Share Tool Functionality -->
+    <string name="menu_share_tool">Raba</string>
+    <string name="tool_share_sheet_more_apps">Akwai kari</string>
+    <string name="share_tool_message">Wannan hanyar haɗin zai kai ku zuwa sigar yanar gizo ta abin da muke magana akai a yau:  %1$s \n\n
+ 
+Zaku  iya saukar da app din zuwa wayar ku daga https://godtoolsapp.com \n\n
+
+Bari mu kara magana!</string>
+    <string name="share_tool_message_article">Ina so in raba wannan labarin tare da ku kuma ina so in ji ra\'ayoyin ku game da shi. %1$s</string>
+    <string name="feature_discovery_title_share_tool">Raba hanyar haɗi</string>
+    <string name="feature_discovery_desc_share_tool">Aika wannan kayan aikin zuwa aboki ta danna wannan gunkin</string>
+    <!-- Shareables -->
+    <string name="tool_shareable_action_share_image">Raba Hoto</string>
+    <!-- Settings -->
+    <string name="menu_settings">Saituna</string>
+    <string name="tool_settings_title">Zaɓuɓɓukan Kayan aiki</string>
+    <string name="tool_settings_action_share">Raba hanyar haɗi</string>
+    <string name="tool_settings_languages_title">Layi daya</string>
+    <string name="tool_settings_languages_description">Juya tsakanin harsuna biyu daban-daban a cikin wannan kayan aikin.</string>
+    <string name="tool_settings_languages_parallel">Na faralel</string>
+    <string name="tool_settings_languages_none">Baby kodaya</string>
+    <string name="tool_settings_shareables_title">Hotuna masu alaƙa</string>
+</resources>

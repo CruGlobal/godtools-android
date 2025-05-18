@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lesson Swipe Tutorial -->
+    <string name="lesson_tutorial_swipe_message">Shafa don canza shafuka</string>
+    <string name="lesson_tutorial_swipe_action_ok">Na samu</string>
+    <!-- Lesson Resume Dialog -->
+    <string name="lesson_resume_title">Cigaba?</string>
+    <string name="lesson_resume_message">Kuna so cigaba daga inda kuka tsaya?</string>
+    <string name="lesson_resume_action_resume">Ci gaba</string>
+    <string name="lesson_resume_action_restart">Tsake farawa</string>
+    <!-- Lesson Feedback Dialog -->
+    <string name="lesson_feedback_title">Bita</string>
+    <string name="lesson_feedback_question_helpful">Shin wannan darasi ya taimaka muku?</string>
+    <string name="lesson_feedback_question_helpful_yes">Ee</string>
+    <string name="lesson_feedback_question_helpful_no">A\'a</string>
+    <string name="lesson_feedback_question_readiness">Yaya shirye kuke ji don fara tattaunawa ta ruhaniya?</string>
+    <string name="lesson_feedback_action_submit">Aika martani</string>
+    <string name="lesson_feedback_action_cancel">Ƙetare(Sallake)</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tips Tutorial -->
+    <string name="tutorial_tips_learn_headline">koyi raba wannan kayan aiki tare da kowa</string>
+    <string name="tutorial_tips_learn_text">Yi amfani da shawarwari da yawa kamar yadda kuke buƙatar jin kwarin gwiwa raba wannan kayan aikin tare da wasu.</string>
+    <string name="tutorial_tips_light_headline">Nasihu don haskaka hanya</string>
+    <string name="tutorial_tips_light_text1">A kan zaɓaɓɓun fuska, za ku ga gumaka iri-iri. Danna alamar don bayyana tip wanda zai taimaka maka magana game da abun ciki na allon.</string>
+    <string name="tutorial_tips_light_text2">"Don allon fuska ba tare da shawarwari ba, muna ba da shawarar karantawa ta cikin abun ciki da tattaunawa kamar yadda ake buƙata."</string>
+    <string name="tutorial_tips_start_headline">Haskaka Tukwici</string>
+    <string name="tutorial_tips_start_text">Lokacin da tip ya haskaka, kun kammala wannan yanki na horon. Ba kwa buƙatar amfani da kowane tukwici a cikin kowane tattaunawa.</string>
+    <string name="tutorial_tips_action_continue">Ci gaba</string>
+    <string name="tutorial_tips_action_skip">Ƙetare(Sallake)</string>
+    <string name="tutorial_tips_action_start">Fara horo</string>
+</resources>

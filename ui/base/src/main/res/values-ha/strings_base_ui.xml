@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">An kasa buɗe %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">Gayyatar Bishara</string>
+    <string name="tool_category_articles">Labarai</string>
+    <string name="tool_category_conversation_starter">Fara Tattaunawa</string>
+    <string name="tool_category_growth">Ci gaban Kirista</string>
+    <string name="tool_category_training">Horowa</string>
+    <!-- Sharing -->
+</resources>
