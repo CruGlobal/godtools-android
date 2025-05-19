@@ -92,6 +92,7 @@ class AemArticleActivity :
     // endregion Lifecycle
 
     // region Intent parsing
+
     /**
      * @return true if the intent was successfully processed, otherwise return false
      */

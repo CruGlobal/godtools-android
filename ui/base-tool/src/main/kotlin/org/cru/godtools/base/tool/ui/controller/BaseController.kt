@@ -117,6 +117,7 @@ abstract class BaseController<T : Base> protected constructor(
     // endregion Content Events
 
     // region UI
+
     /**
      * This method provides a mechanism for binding arbitrary model controllers to a ViewGroup
      */
