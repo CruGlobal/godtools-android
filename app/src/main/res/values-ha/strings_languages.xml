@@ -10,8 +10,8 @@
     <string name="title_language_settings">Saitunan Harshe</string>
     <string name="language_settings_section_app_language_heading">Harshen Interface App</string>
     <plurals name="language_settings_section_app_language_available">
-        <item quantity="one">%1$,D akwai harsuna</item>
-        <item quantity="other">%1$,D akwai harsuna</item>
+        <item quantity="one">%1$,d akwai harsuna</item>
+        <item quantity="other">%1$,d akwai harsuna</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Saita yaren da kuke son a nuna duk app ɗin a ciki.</string>
     <string name="language_settings_section_offline_heading">Harsunan kayan aiki suna samuwa a layi</string>

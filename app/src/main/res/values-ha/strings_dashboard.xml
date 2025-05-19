@@ -27,6 +27,10 @@
     <string name="dashboard_lessons_header_title">Darussan da aka yi muku</string>
     <string name="dashboard_lessons_header_description">ra\'ayoyi masu amfani don gina dangantaka da fara tattaunawa mai ma\'ana</string>
     <string name="dashboard_lessons_section_filter_label">Darussa a cikin:</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">%1$d akwai darussa</item>
+        <item quantity="other">%1$d akwai darussa</item>
+    </plurals>
     <string name="dashboard_lessons_progress_completed">An kammala</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Cikkake</string>
     <!-- Home -->
