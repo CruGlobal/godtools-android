@@ -82,8 +82,8 @@ class CyoaActivityTest {
 
     private val pageCollectionPage1 = pageCollectionPage("pageCollection1")
 
-    private val eventId1 = EventId.parse("event1").first()
-    private val eventId2 = EventId.parse("event2").first()
+    private val eventId1 = EventId(name = "event1")
+    private val eventId2 = EventId(name = "event2")
 
     @BeforeTest
     fun setupMocks() {
