@@ -6,6 +6,9 @@
     <!-- This permission should be obvious -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Push notification permission -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <!-- Unused permissions, kept around for older android in case we want to start using them again -->
     <uses-permission
         android:name="android.permission.VIBRATE"
