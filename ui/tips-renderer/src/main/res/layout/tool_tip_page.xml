@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.base.tool.model.ManifestKt" />
         <import type="org.cru.godtools.shared.tool.parser.model.StylesKt" />
         <import type="org.cru.godtools.shared.tool.parser.model.BaseKt" />
         <import type="org.cru.godtools.tool.tips.R" />
@@ -43,7 +44,7 @@
             android:layout_marginBottom="16dp"
             android:onClick="@{() -> page.isLastPage ? callbacks.closeTip(true) : callbacks.goToNextPage()}"
             android:saveEnabled="false"
-            android:text="@{ContextKt.getString(context, page.manifest.locale, page.isLastPage ? R.string.tract_tips_tip_action_close : R.string.tract_tips_tip_action_next), default=@string/tract_tips_tip_action_next}"
+            android:text="@{ContextKt.getString(context, ManifestKt.getPlatformLocale(page.manifest), page.isLastPage ? R.string.tract_tips_tip_action_close : R.string.tract_tips_tip_action_next), default=@string/tract_tips_tip_action_next}"
             android:textColor="@{StylesKt.getPrimaryTextColor(BaseKt.getStylesParent(page))}"
             app:backgroundTintCompat="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(page))}"
             app:layout_constraintBottom_toBottomOf="parent"

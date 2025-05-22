@@ -19,6 +19,7 @@ import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
+import io.fluidsonic.locale.toPlatform
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -303,7 +304,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processContentEvent(event: Event) {
         val manifest = activeManifest ?: return
-        if (manifest.code != event.tool || manifest.locale != event.locale) return
+        if (manifest.code != event.tool || manifest.locale?.toPlatform() != event.locale) return
 
         checkForManifestEvent(manifest, event)
         if (isFinishing) return

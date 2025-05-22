@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.activity
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import io.fluidsonic.locale.toCommon
 import io.mockk.Called
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -136,11 +137,11 @@ class BaseToolRendererViewModelTest {
         viewModel.locale.value = Locale("")
         verify { userActivityManager wasNot Called }
 
-        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH.toCommon())
         coVerify { userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.ENGLISH)) }
         confirmVerified(userActivityManager)
 
-        manifestFlow.value = Manifest(locale = Locale.FRENCH)
+        manifestFlow.value = Manifest(locale = Locale.FRENCH.toCommon())
         coVerify { userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.FRENCH)) }
         confirmVerified(userActivityManager)
     }
@@ -153,10 +154,10 @@ class BaseToolRendererViewModelTest {
         viewModel.locale.value = Locale("")
         verify { userActivityManager wasNot Called }
 
-        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
-        manifestFlow.value = Manifest(locale = Locale.FRENCH)
-        manifestFlow.value = Manifest(locale = Locale.FRENCH)
-        manifestFlow.value = Manifest(locale = Locale.ENGLISH)
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH.toCommon())
+        manifestFlow.value = Manifest(locale = Locale.FRENCH.toCommon())
+        manifestFlow.value = Manifest(locale = Locale.FRENCH.toCommon())
+        manifestFlow.value = Manifest(locale = Locale.ENGLISH.toCommon())
         coVerify(exactly = 1) {
             userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.ENGLISH))
             userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(Locale.FRENCH))

@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +46,7 @@ class TipBottomSheetDialogFragment :
     companion object {
         fun create(tip: Tip): TipBottomSheetDialogFragment? = TipBottomSheetDialogFragment().apply {
             tool = tip.manifest.code ?: return null
-            locale = tip.manifest.locale ?: return null
+            locale = tip.manifest.locale?.toPlatform() ?: return null
             this.tip = tip.id
         }
     }

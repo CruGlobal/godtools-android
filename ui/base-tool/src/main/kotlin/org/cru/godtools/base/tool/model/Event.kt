@@ -1,5 +1,6 @@
 package org.cru.godtools.base.tool.model
 
+import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import org.cru.godtools.shared.tool.parser.model.EventId
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -13,7 +14,7 @@ class Event private constructor(builder: Builder) {
     class Builder(manifest: Manifest? = null) {
         internal lateinit var id: EventId
         internal var tool: String? = manifest?.code
-        internal var locale: Locale? = manifest?.locale
+        internal var locale: Locale? = manifest?.locale?.toPlatform()
         internal val fields = mutableMapOf<String, String>()
 
         fun id(id: EventId) = apply { this.id = id }

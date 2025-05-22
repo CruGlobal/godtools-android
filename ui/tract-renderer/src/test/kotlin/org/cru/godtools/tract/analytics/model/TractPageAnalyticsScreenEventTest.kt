@@ -1,5 +1,7 @@
 package org.cru.godtools.tract.analytics.model
 
+import io.fluidsonic.locale.toCommon
+import io.fluidsonic.locale.toPlatform
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -13,7 +15,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TractPageAnalyticsScreenEventTest {
-    private val manifest = Manifest(code = "tool", locale = Locale.FRANCE)
+    private val manifest = Manifest(code = "tool", locale = Locale.FRANCE.toCommon())
     private val page = spyk(TractPage(manifest)) {
         every { position } returns 0
     }
@@ -21,7 +23,7 @@ class TractPageAnalyticsScreenEventTest {
     @Test
     fun testEventGeneration() {
         val event = TractPageAnalyticsScreenEvent(page)
-        assertEquals(manifest.locale, event.locale)
+        assertEquals(manifest.locale?.toPlatform(), event.locale)
         assertEquals(manifest.code, event.appSection)
     }
 

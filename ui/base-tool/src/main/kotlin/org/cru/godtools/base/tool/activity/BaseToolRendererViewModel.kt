@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.activity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -53,7 +54,7 @@ open class BaseToolRendererViewModel(
     // region User Counters
     private val toolLanguagesSeen = mutableSetOf<Locale>()
     private val toolLanguageUsedJob = manifest
-        .mapNotNull { it?.locale }
+        .mapNotNull { it?.locale?.toPlatform() }
         .filter { toolLanguagesSeen.add(it) }
         // TODO: should we switch this to use the Analytics framework instead?
         .onEach { userActivityManager.updateCounter(UserCounterNames.LANGUAGE_USED(it)) }

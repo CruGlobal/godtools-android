@@ -14,6 +14,7 @@ import com.github.ajalt.colormath.model.RGB
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.fluidsonic.locale.toCommon
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -94,7 +95,7 @@ class CyoaActivityTest {
     private fun manifest(pages: List<Page> = emptyList()) = Manifest(
         code = TOOL,
         type = Manifest.Type.CYOA,
-        locale = Locale.ENGLISH,
+        locale = Locale.ENGLISH.toCommon(),
         pages = { pages }
     )
 
