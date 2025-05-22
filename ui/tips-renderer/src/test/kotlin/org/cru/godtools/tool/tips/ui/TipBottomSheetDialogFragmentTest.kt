@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.tips.ui
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.fluidsonic.locale.toCommon
 import java.util.Locale
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -14,7 +15,9 @@ class TipBottomSheetDialogFragmentTest {
     @Test
     fun testCreateFragment() {
         assertNull(TipBottomSheetDialogFragment.create(Tip(Manifest(code = "code", locale = null))))
-        assertNull(TipBottomSheetDialogFragment.create(Tip(Manifest(code = null, locale = Locale.ENGLISH))))
-        assertNotNull(TipBottomSheetDialogFragment.create(Tip(Manifest(code = "code", locale = Locale.ENGLISH))))
+        assertNull(TipBottomSheetDialogFragment.create(Tip(Manifest(code = null, locale = Locale.ENGLISH.toCommon()))))
+        assertNotNull(
+            TipBottomSheetDialogFragment.create(Tip(Manifest(code = "code", locale = Locale.ENGLISH.toCommon())))
+        )
     }
 }

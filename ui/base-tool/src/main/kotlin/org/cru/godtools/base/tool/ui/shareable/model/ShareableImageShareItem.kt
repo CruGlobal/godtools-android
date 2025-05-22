@@ -8,6 +8,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.fluidsonic.locale.toPlatform
 import java.io.File
 import java.util.Locale
 import kotlinx.parcelize.Parcelize
@@ -35,7 +36,7 @@ class ShareableImageShareItem(
         @Assisted shareable: ShareableImage
     ) : this(
         shareable.manifest.code,
-        shareable.manifest.locale,
+        shareable.manifest.locale?.toPlatform(),
         shareable.id,
         shareable.resource?.getFileBlocking(fileSystem),
         shareable.buildShareIntent(context)

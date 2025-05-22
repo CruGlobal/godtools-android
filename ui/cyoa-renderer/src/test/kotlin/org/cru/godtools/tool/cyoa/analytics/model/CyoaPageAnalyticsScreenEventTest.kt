@@ -1,5 +1,6 @@
 package org.cru.godtools.tool.cyoa.analytics.model
 
+import io.fluidsonic.locale.toCommon
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -16,7 +17,7 @@ private const val PAGE = "page"
 
 class CyoaPageAnalyticsScreenEventTest {
     private val page: Page = mockk {
-        every { manifest } returns Manifest(code = TOOL, locale = Locale.ENGLISH)
+        every { manifest } returns Manifest(code = TOOL, locale = Locale.ENGLISH.toCommon())
         every { id } returns PAGE
     }
 

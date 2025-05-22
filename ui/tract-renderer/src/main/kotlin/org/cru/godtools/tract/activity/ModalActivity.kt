@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.distinctUntilChanged
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.fluidsonic.locale.toPlatform
 import javax.inject.Inject
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.util.os.getLocale
@@ -37,7 +38,7 @@ internal fun Activity.startModalActivity(modal: Modal) = startActivity(
     Intent(this, ModalActivity::class.java).putExtras(
         Bundle(4).apply {
             putString(EXTRA_TOOL, modal.manifest.code)
-            putLocale(EXTRA_LANGUAGE, modal.manifest.locale)
+            putLocale(EXTRA_LANGUAGE, modal.manifest.locale?.toPlatform())
             putString(EXTRA_PAGE, modal.page.id)
             putString(EXTRA_MODAL, modal.id)
         }

@@ -6,6 +6,7 @@
         <import type="kotlinx.coroutines.flow.StateFlow" />
         <import type="org.ccci.gto.android.common.compat.view.ProgressBarCompat" />
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.base.tool.model.ManifestKt" />
         <import type="org.cru.godtools.shared.tool.parser.model.tips.Tip" />
         <import type="org.cru.godtools.shared.tool.parser.model.tips.TipKt" />
         <import type="org.cru.godtools.tool.tips.util.TipTypeKt" />
@@ -70,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="@dimen/tool_tip_margin_horiz"
-            android:text="@{ContextKt.getString(context, tip.manifest.locale, TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
+            android:text="@{ContextKt.getString(context, ManifestKt.getPlatformLocale(tip.manifest), TipTypeKt.getStringRes(tip.type)), default=@string/tract_tips_type_tip}"
             android:textColor="@{TipKt.getTextColor(tip), default=@color/gray_5A}"
             android:textSize="@dimen/tool_tip_text_size_label"
             android:textStyle="bold"

@@ -9,6 +9,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
@@ -140,7 +141,7 @@ class SettingsBottomSheetDialogFragment() :
     override fun shareShareable(shareable: ShareableImage?) {
         val manifest = shareable?.manifest
         val tool = manifest?.code
-        val locale = manifest?.locale
+        val locale = manifest?.locale?.toPlatform()
         val id = shareable?.id
         if (tool != null && locale != null && id != null) {
             activity?.supportFragmentManager

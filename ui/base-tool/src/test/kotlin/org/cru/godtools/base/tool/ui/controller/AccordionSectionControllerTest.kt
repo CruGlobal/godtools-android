@@ -28,6 +28,7 @@ import org.ccci.gto.android.common.util.getDeclaredFieldOrNull
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
 import org.greenrobot.eventbus.EventBus
@@ -138,7 +139,7 @@ class AccordionSectionControllerTest {
     }
 
     private fun createSection(id: String): Accordion.Section = mockk(relaxed = true) {
-        every { manifest } returns mockk(relaxed = true) { every { locale } returns null }
+        every { manifest } returns Manifest()
         every { this@mockk.id } returns id
     }
 }

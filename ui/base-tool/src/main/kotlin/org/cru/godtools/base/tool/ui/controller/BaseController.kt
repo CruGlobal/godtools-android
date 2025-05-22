@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import io.fluidsonic.locale.toPlatform
 import kotlin.reflect.KClass
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -162,7 +163,7 @@ abstract class BaseController<T : Base> protected constructor(
         sendEvents(model.events)
         model.url?.let { url ->
             val manifest = model.manifest
-            eventBus.post(ExitLinkActionEvent(manifest.code, url, manifest.locale))
+            eventBus.post(ExitLinkActionEvent(manifest.code, url, manifest.locale?.toPlatform()))
             root.context.openUrl(Uri.parse(url))
         }
     }
@@ -178,7 +179,7 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun TrainingTipsRepository.isTipComplete(tipId: String?): LiveData<Boolean> {
         val manifest = model?.manifest
         val tool = manifest?.code
-        val locale = manifest?.locale
+        val locale = manifest?.locale?.toPlatform()
         return when {
             tool == null || locale == null || tipId == null -> ImmutableLiveData(false)
             else -> isTipCompleteFlow(tool, locale, tipId).distinctUntilChanged().asLiveData()

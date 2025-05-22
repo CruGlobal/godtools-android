@@ -17,6 +17,7 @@ import androidx.lifecycle.distinctUntilChanged
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.instantapps.InstantApps
 import dagger.hilt.android.AndroidEntryPoint
+import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
@@ -369,7 +370,7 @@ class TractActivity :
         val tool = code ?: return null
         val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
-            .appendEncodedPath(locale.toLanguageTag().lowercase(Locale.ENGLISH))
+            .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
             .appendPath(tool)
             .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
@@ -434,7 +435,7 @@ class TractActivity :
 
     private fun sendLiveShareNavigationEvent(page: TractPage, card: Card?) {
         publisherController.sendNavigationEvent(
-            NavigationEvent(page.manifest.code, page.manifest.locale, page.position, card?.position)
+            NavigationEvent(page.manifest.code, page.manifest.locale?.toPlatform(), page.position, card?.position)
         )
     }
 

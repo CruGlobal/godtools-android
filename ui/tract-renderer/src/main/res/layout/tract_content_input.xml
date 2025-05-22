@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="org.ccci.gto.android.common.util.content.ContextKt" />
+        <import type="org.cru.godtools.base.tool.model.ManifestKt" />
         <import type="org.cru.godtools.shared.tool.parser.model.BaseKt" />
         <import type="org.cru.godtools.shared.tool.parser.model.Input.Type" />
         <import type="org.cru.godtools.shared.tool.parser.model.StylesKt" />
@@ -24,7 +25,7 @@
         android:hint="@{(model.label ?? model.placeholder).text}"
         android:textColorHint="@{TextKt.getTextColor(model.label ?? model.placeholder)}"
         app:boxStrokeColor="@{StylesKt.getPrimaryColor(BaseKt.getStylesParent(model))}"
-        app:error="@{InputUtilsKt.getMessage(error, context, model.manifest.locale, model.name, input.text)}"
+        app:error="@{InputUtilsKt.getMessage(error, context, ManifestKt.getPlatformLocale(model.manifest), model.name, input.text)}"
         app:errorEnabled="@{error != null}"
         app:hintTextColor="@{TextKt.getTextColor(model.placeholder ?? model.label)}"
         app:visibleIf="@{model != null &amp;&amp; model.type != Type.HIDDEN}">
