@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">獲取實用技巧與鼓勵</string>
+    <string name="opt_in_notification_body">隨時準備好聊天。   今天就開啟通知。</string>
+    <string name="opt_in_notification_allow_notifications">允許通知</string>
+    <string name="opt_in_notification_notification_settings">通知設定</string>
+    <string name="opt_in_notification_maybe_later">也許待會</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">開始使用</string>
     <string name="menu_tutorial">教學</string>

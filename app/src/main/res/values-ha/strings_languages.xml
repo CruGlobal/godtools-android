@@ -3,8 +3,8 @@
     <!-- App Language UI -->
     <string name="language_settings_app_language_title">Harshen app</string>
     <string name="language_settings_app_language_dialog_message">Kun zaɓi %1$s azaman yaren app ɗin ku. Wannan zai canza yaren dukan GodTools app. Kun tabbata?</string>
-    <string name="language_settings_app_language_dialog_confirm">canza harshe</string>
-    <string name="language_settings_app_language_dialog_dismiss">kada ka damu</string>
+    <string name="language_settings_app_language_dialog_confirm">Canza harshe</string>
+    <string name="language_settings_app_language_dialog_dismiss">Kada ka damu</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">Saitunan Harshe</string>
     <string name="title_language_settings">Saitunan Harshe</string>
