@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">Saņem padomus un iedrošinājumu</string>
+    <string name="opt_in_notification_body">Esi sagatavots sarunām.\nAtļauj paziņojumus jau šodien!</string>
+    <string name="opt_in_notification_allow_notifications">Atļaut paziņojumus</string>
+    <string name="opt_in_notification_notification_settings">Paziņojumu iestatījumi</string>
+    <string name="opt_in_notification_maybe_later">Varbūt vēlāk</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Sākt lietot</string>
     <string name="menu_tutorial">Pamācība</string>

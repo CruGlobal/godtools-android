@@ -5,7 +5,7 @@
     <string name="action_tools_open_tool">Bude kayan aiki</string>
     <string name="action_tools_add_favorite">Ƙara zuwa abubuwan da aka fi so</string>
     <string name="action_tools_remove_favorite">Cire daga abubuwan da aka fi so</string>
-    <string name="action_tools_open_training">koyi raba wannan kayan aikin</string>
+    <string name="action_tools_open_training">Koyi raba wannan kayan aikin</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d ra\'ayoyi</item>
         <item quantity="other">%1$,d ra\'ayoyi</item>
@@ -16,9 +16,9 @@
         <item quantity="other">%1$,d harsuna</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">Mafarin tattaunawa</string>
-    <string name="tool_details_section_description_outline">zayyana</string>
+    <string name="tool_details_section_description_outline">Zayyana</string>
     <string name="tool_details_section_description_bible_references">Nassoshi na Littafi Mai Tsarki</string>
     <string name="tool_details_section_description_languages_available">Akwai harsuna</string>
-    <string name="tool_details_section_variants_label">iri</string>
+    <string name="tool_details_section_variants_label">Iri</string>
     <string name="tool_details_section_variants_description">Zaɓi wani nau\'in wannan kayan aikin daban a ƙasa. Kowace sigar tana da salo na musamman da abun ciki don haka zaku iya samun wanda ya fi dacewa don tattaunawar ku. Kuna iya fi so nau\'ikan kayan aiki iri ɗaya.</string>
 </resources>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">Nhận Lời khuyên và Sự khích lệ</string>
+    <string name="opt_in_notification_body">Luôn sẵn sàng cho những cuộc trò chuyện. Bật thông báo ngay hôm nay.</string>
+    <string name="opt_in_notification_allow_notifications">Cho phép thông báo</string>
+    <string name="opt_in_notification_notification_settings">Cài đặt Thông báo</string>
+    <string name="opt_in_notification_maybe_later">Có lẽ Để sau</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Bắt đầu</string>
     <string name="menu_tutorial">Hướng dẫn</string>

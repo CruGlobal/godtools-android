@@ -51,6 +51,10 @@
     </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Alamomin ku</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="one">Kayan aiki daya dake bude</item>
+        <item quantity="other">Kayan aiki dake bude</item>
+    </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="one">Kammala %1$,d darussa</item>
         <item quantity="other">Kammala %1$,d darussa</item>
