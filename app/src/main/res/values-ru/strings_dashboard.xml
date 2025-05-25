@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">Получайте советы и слова поддержки</string>
+    <string name="opt_in_notification_body">Подготовьтесь к беседе. Включите уведомления прямо сейчас.</string>
+    <string name="opt_in_notification_allow_notifications">Разрешить уведомления</string>
+    <string name="opt_in_notification_notification_settings">Настройки уведомлений</string>
+    <string name="opt_in_notification_maybe_later">Возможно, позже</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Начать</string>
     <string name="menu_tutorial">Руководство для использования</string>

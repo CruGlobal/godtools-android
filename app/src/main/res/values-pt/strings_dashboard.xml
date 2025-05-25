@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">Recebe dicas e encorajamento</string>
+    <string name="opt_in_notification_body">Fique preparado para as conversas. Permita notificações hoje.</string>
+    <string name="opt_in_notification_allow_notifications">Permitir Notificações</string>
+    <string name="opt_in_notification_notification_settings">Configurações de notificações</string>
+    <string name="opt_in_notification_maybe_later">Talvez mais tarde</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Comece</string>
     <string name="menu_tutorial">Tutorial</string>

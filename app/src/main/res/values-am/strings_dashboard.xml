@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">ጠቃሚ ምክሮችን እና ማበረታቻዎችን ያግኙ</string>
+    <string name="opt_in_notification_body">ማሳወቂያዎች እንዲላክሎት ዛሬውኑ ይፍቀዱ !  ለቀጣይ ውይይት ዝግጁ ይሁኑ!</string>
+    <string name="opt_in_notification_allow_notifications">ማሳወቂያዎችን ፍቀድ</string>
+    <string name="opt_in_notification_notification_settings">የማሳወቂያ ቅንብሮች</string>
+    <string name="opt_in_notification_maybe_later">ምናልባት ወደፊት</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">እንጀምር</string>
     <string name="menu_tutorial">አጋዥ ስልጠና</string>

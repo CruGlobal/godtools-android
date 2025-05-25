@@ -14,6 +14,6 @@
     <string name="lesson_feedback_question_helpful_yes">Da</string>
     <string name="lesson_feedback_question_helpful_no">Nu</string>
     <string name="lesson_feedback_question_readiness">Cât de pregătit te simți să începi o conversație spirituală?</string>
-    <string name="lesson_feedback_action_submit">Trimite feedback</string>
+    <string name="lesson_feedback_action_submit">Trimite un feedback</string>
     <string name="lesson_feedback_action_cancel">Omite</string>
 </resources>

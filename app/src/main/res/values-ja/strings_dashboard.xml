@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">実践的なお役立ち情報と励ましを手に入れよう</string>
+    <string name="opt_in_notification_body">会話への準備を整えましょう。 通知を許可してください。</string>
+    <string name="opt_in_notification_allow_notifications">通知を許可する</string>
+    <string name="opt_in_notification_notification_settings">通知設定</string>
+    <string name="opt_in_notification_maybe_later">たぶん後で</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">開始する</string>
     <string name="menu_tutorial">チュートリアル</string>
