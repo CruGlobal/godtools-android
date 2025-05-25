@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">सुझाव और प्रेरणा पाएँ</string>
+    <string name="opt_in_notification_body">बातचीत के लिए तैयार रहें।\nआज सूचनाओं की अनुमति दें।</string>
+    <string name="opt_in_notification_allow_notifications">सूचनाओं की अनुमति दें</string>
+    <string name="opt_in_notification_notification_settings">नोटिफिकेशन सेटिंग्स</string>
+    <string name="opt_in_notification_maybe_later">शायद बाद में</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">अभी शुरू करें</string>
     <string name="menu_tutorial">ट्यूटोरियल</string>

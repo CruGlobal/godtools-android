@@ -3,7 +3,7 @@
     <!-- Live Share Tutorial -->
     <string name="tutorial_live_share_description_headline">Raba allon ku</string>
     <string name="tutorial_live_share_description_text">Wannan zaɓin zai aika hanyar haɗi zuwa wannan kayan aikin ga aboki. Lokacin da aka buɗe hanyar haɗin yanar gizon zai fara zaman raba allo.</string>
-    <string name="tutorial_live_share_mirrored_headline">gwanintar madubi</string>
+    <string name="tutorial_live_share_mirrored_headline">Gwanintar madubi</string>
     <string name="tutorial_live_share_mirrored_text">Yayin da kake gungurawa kayan aiki akan wayarka, allon abokinka zai amsa ta hanya guda. Wannan yana ba ku damar tafiya ta kayan aiki tare akan na\'urori 2 a lokaci guda.</string>
     <string name="tutorial_live_share_start_headline">Fara</string>
     <string name="tutorial_live_share_start_text">Aika hanyar haɗi zuwa mutum ɗaya ko fiye don fara zaman raba allo yanzu.</string>

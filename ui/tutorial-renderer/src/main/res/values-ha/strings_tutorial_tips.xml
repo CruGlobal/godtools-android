@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tips Tutorial -->
-    <string name="tutorial_tips_learn_headline">koyi raba wannan kayan aiki tare da kowa</string>
+    <string name="tutorial_tips_learn_headline">Koyi raba wannan kayan aiki tare da kowa</string>
     <string name="tutorial_tips_learn_text">Yi amfani da shawarwari da yawa kamar yadda kuke buƙatar jin kwarin gwiwa raba wannan kayan aikin tare da wasu.</string>
     <string name="tutorial_tips_light_headline">Nasihu don haskaka hanya</string>
     <string name="tutorial_tips_light_text1">A kan zaɓaɓɓun fuska, za ku ga gumaka iri-iri. Danna alamar don bayyana tip wanda zai taimaka maka magana game da abun ciki na allon.</string>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">Primește sfaturi și încurajare</string>
+    <string name="opt_in_notification_body">Fii pregătit pentru conversații.\nPermite notificările de azi.</string>
+    <string name="opt_in_notification_allow_notifications">Permite Notificări</string>
+    <string name="opt_in_notification_notification_settings">Setarea Notificărilor</string>
+    <string name="opt_in_notification_maybe_later">Poate mai târziu</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Să începem</string>
     <string name="menu_tutorial">Tutorial</string>

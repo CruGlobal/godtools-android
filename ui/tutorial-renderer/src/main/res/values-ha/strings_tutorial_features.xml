@@ -14,5 +14,5 @@
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">Nuna min koyawa</string>
     <string name="tutorial_features_banner_action_open">Bude koyawa</string>
-    <string name="tutorial_features_banner_action_dismiss">sallama</string>
+    <string name="tutorial_features_banner_action_dismiss">Sallama</string>
 </resources>
