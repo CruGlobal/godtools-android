@@ -22,10 +22,10 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVi
 import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
 import org.cru.godtools.shared.tool.parser.model.page.Page
 import org.cru.godtools.shared.tool.parser.model.page.PageCollectionPage
-import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageContentBinding
 import org.cru.godtools.tool.cyoa.databinding.CyoaPagePageCollectionBinding

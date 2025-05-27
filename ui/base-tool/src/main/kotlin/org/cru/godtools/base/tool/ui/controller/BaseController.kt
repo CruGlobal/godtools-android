@@ -24,14 +24,15 @@ import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.db.repository.TrainingTipsRepository
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.Base
 import org.cru.godtools.shared.tool.parser.model.Clickable
 import org.cru.godtools.shared.tool.parser.model.EventId
 import org.cru.godtools.shared.tool.parser.model.HasAnalyticsEvents
+import org.cru.godtools.shared.tool.parser.model.resolve
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
-import org.cru.godtools.shared.tool.state.State
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseController<T : Base> protected constructor(

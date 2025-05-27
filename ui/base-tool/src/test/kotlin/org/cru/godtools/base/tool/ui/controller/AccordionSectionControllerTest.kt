@@ -26,10 +26,10 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.ccci.gto.android.common.util.getDeclaredFieldOrNull
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent
 import org.cru.godtools.shared.tool.parser.model.Manifest
-import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.databinding.ToolContentAccordionSectionBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
