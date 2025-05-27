@@ -25,11 +25,11 @@ import org.ccci.gto.android.common.util.Ids
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ParentController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage.Card
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
-import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.cyoa.R
 import org.cru.godtools.tool.cyoa.analytics.model.CyoaCardCollectionPageAnalyticsScreenEvent
 import org.cru.godtools.tool.cyoa.databinding.CyoaPageCardCollectionBinding

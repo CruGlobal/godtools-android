@@ -21,8 +21,8 @@ import kotlin.test.assertNull
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
-import org.cru.godtools.shared.tool.state.State
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
