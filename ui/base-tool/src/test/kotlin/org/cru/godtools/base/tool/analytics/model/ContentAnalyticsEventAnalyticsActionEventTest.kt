@@ -15,7 +15,8 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
     @Test
     fun testFirebaseEventName() {
         val event = ContentAnalyticsEventAnalyticsActionEvent(
-            AnalyticsEvent(action = "A b_c.d-e", systems = setOf(FIREBASE))
+            AnalyticsEvent(action = "A b_c.d-e", systems = setOf(FIREBASE)),
+            null
         )
         assertEquals("A b_c.d-e", event.firebaseEventName)
     }
@@ -23,7 +24,8 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
     @Test
     fun testFirebaseParams() {
         val event = ContentAnalyticsEventAnalyticsActionEvent(
-            AnalyticsEvent(systems = setOf(FIREBASE), attributes = mapOf("cru.Key" to "value"))
+            AnalyticsEvent(systems = setOf(FIREBASE), attributes = mapOf("cru.Key" to "value")),
+            null
         )
         with(event.firebaseParams) {
             assertFalse(containsKey("cru_key"))
@@ -35,7 +37,7 @@ class ContentAnalyticsEventAnalyticsActionEventTest {
     @Test
     fun testUserAnalyticsEvent() {
         val event =
-            ContentAnalyticsEventAnalyticsActionEvent(AnalyticsEvent(action = "userEvent", systems = setOf(USER)))
+            ContentAnalyticsEventAnalyticsActionEvent(AnalyticsEvent(action = "userEvent", systems = setOf(USER)), null)
         assertEquals("userEvent", event.userCounterName)
     }
 }
