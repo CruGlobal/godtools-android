@@ -92,7 +92,7 @@ class AccordionController @VisibleForTesting internal constructor(
             binding.controller = this
             binding.activeSection = accordionController.activeSection
 
-            accordionController.activeSection.observe(accordionController.lifecycleOwner) { updateLifecycleMaxState() }
+            accordionController.activeSection.observe(lifecycleOwner) { updateLifecycleMaxState() }
 
             with(lifecycleOwner.lifecycle) {
                 onResume {
