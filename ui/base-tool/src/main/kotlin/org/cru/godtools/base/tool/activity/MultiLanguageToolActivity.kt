@@ -24,7 +24,6 @@ import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionE
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.ui.settings.SettingsBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.settings.ShareLinkSettingsAction
-import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.EXTRA_SAVE_LANGUAGE_SETTINGS
 import org.cru.godtools.shared.tool.analytics.ToolAnalyticsActionNames.ACTION_SETTINGS
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -36,8 +35,6 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     @LayoutRes contentLayoutId: Int,
     private val supportedType: Manifest.Type
 ) : BaseToolActivity<B>(contentLayoutId) {
-    protected val toolState: ToolStateHolder by viewModels()
-
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

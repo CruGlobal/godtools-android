@@ -6,11 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.flowWithLifecycle
@@ -39,6 +42,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
@@ -49,12 +53,15 @@ import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.ui.util.getTypeface
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.applyTypefaceSpan
+import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
@@ -95,6 +102,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         setupToolSync()
         setupStatusBar()
         setupFeatureDiscovery()
+        subscribeToRendererStateEvents()
         eventBus.register(this, this)
     }
 
@@ -297,6 +305,23 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         locales: List<Locale> = localesToDownload.value
     ) = tools.forEach { t -> locales.forEach { l -> downloadManager.downloadLatestPublishedTranslationAsync(t, l) } }
     // endregion Tool sync/download logic
+
+    // region Renderer State
+    protected val toolState: ToolStateHolder by viewModels()
+
+    private fun subscribeToRendererStateEvents() {
+        toolState.toolState.events
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach {
+                when (it) {
+                    is State.Event.OpenUrl -> openUrl(it.url.toUri())
+                    is State.Event.AnalyticsEventTriggered ->
+                        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(it.event, activeManifest))
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+    // endregion Renderer State
 
     // region Content Event Logic
     @MainThread
