@@ -100,13 +100,19 @@ abstract class BaseController<T : Base> protected constructor(
         if (ids.isNullOrEmpty()) return
         if (!validate(ids)) return
 
+        // TODO: temporarily pipe eventIds into the Renderer State
+        toolState.triggerContentEvents(ids)
+
         // build the event by walking up the controller hierarchy first in case a parent controller wants to build the
         // event. If a parent controller doesn't build the event, then we populate the event with our own local state.
         val builder = Event.Builder(model?.manifest)
         if (!buildEvent(builder)) onBuildEvent(builder, false)
 
-        // trigger an event for every id provided
-        ids.flatMap { it.resolve(toolState) }.forEach { eventBus.post(builder.id(it).build()) }
+        // trigger an event for the followup content event if it is present
+        ids
+            .flatMap { it.resolve(toolState) }
+            .filter { it == EventId.FOLLOWUP }
+            .forEach { eventBus.post(builder.id(it).build()) }
     }
 
     /**

@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":library:model"))
 
     api(libs.godtoolsShared.parser)
+    api(libs.godtoolsShared.renderer)
     implementation(libs.godtoolsShared.user.activity)
 
     implementation(libs.androidx.appcompat)
