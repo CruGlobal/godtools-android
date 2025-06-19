@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
+    implementation(libs.gtoSupport.okio)
     implementation(libs.gtoSupport.util)
 
     api(libs.taptargetview)

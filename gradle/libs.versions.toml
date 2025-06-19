@@ -154,6 +154,7 @@ gtoSupport-leakcanary = { module = "org.ccci.gto.android:gto-support-leakcanary2
 gtoSupport-lottie = { module = "org.ccci.gto.android:gto-support-lottie", version.ref = "gtoSupport" }
 gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-material-components", version.ref = "gtoSupport" }
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
+gtoSupport-okio = { module = "org.ccci.gto.android:gto-support-okio", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-play-auth = { module = "org.ccci.gto.android:gto-support-play-auth", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
