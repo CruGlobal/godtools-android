@@ -88,7 +88,6 @@ class ModalActivity : BaseBindingActivity<TractModalActivityBinding>(R.layout.tr
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onContentEvent(event: Event) {
-        if (event.tool != dataModel.toolCode.value && event.locale != dataModel.locale.value) return
         checkForDismissEvent(event)
     }
 

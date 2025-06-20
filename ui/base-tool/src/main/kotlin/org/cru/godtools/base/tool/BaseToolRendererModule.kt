@@ -11,8 +11,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import javax.inject.Named
+import kotlinx.coroutines.runBlocking
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
 import org.ccci.gto.android.common.androidx.lifecycle.net.isConnectedLiveData
 import org.ccci.gto.android.common.dagger.eager.EagerSingleton
+import org.ccci.gto.android.common.okio.chroot
+import org.ccci.gto.android.common.okio.readOnly
 import org.cru.godtools.base.CONFIG_TOOL_CONTENT_FEATURE_PAGE_COLLECTION
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ContentEventAnalyticsHandler
@@ -37,6 +42,7 @@ abstract class BaseToolRendererModule {
 
     companion object {
         const val IS_CONNECTED_LIVE_DATA = "LIVE_DATA_IS_CONNECTED"
+        const val TOOL_RESOURCE_FILE_SYSTEM = "TOOL_RESOURCE_FILE_SYSTEM"
 
         @Provides
         @Reusable
@@ -67,6 +73,13 @@ abstract class BaseToolRendererModule {
             },
             config
         )
+
+        @Provides
+        @Reusable
+        @Named(TOOL_RESOURCE_FILE_SYSTEM)
+        fun resourceFileSystem(fileSystem: ToolFileSystem) = FileSystem.SYSTEM
+            .readOnly()
+            .chroot(runBlocking { fileSystem.rootDir() }.toOkioPath())
 
         @IntoSet
         @Provides

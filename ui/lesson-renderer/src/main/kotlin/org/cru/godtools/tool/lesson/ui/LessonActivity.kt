@@ -46,7 +46,6 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
@@ -79,7 +78,6 @@ class LessonActivity :
 
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
-    private val toolState: ToolStateHolder by viewModels()
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {

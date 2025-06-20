@@ -21,7 +21,7 @@ facebook = "18.0.3"
 facebook-flipper = "0.273.0"
 firebase-crashlytics = "19.4.4"
 firebase-perf = "21.0.5"
-godtoolsShared = "1.2.0"
+godtoolsShared = "1.3.0-compose-SNAPSHOT"
 google-auto-value = "1.11.0"
 gtoSupport = "4.4.1"
 kotlin = "2.1.21"
@@ -49,6 +49,7 @@ androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
 androidx-browser = "androidx.browser:browser:1.8.0"
 androidx-cardview = "androidx.cardview:cardview:1.0.0"
 androidx-collection-ktx = "androidx.collection:collection-ktx:1.5.0"
+androidx-compose-foundation-layout = "androidx.compose.foundation:foundation-layout:1.8.1"
 androidx-compose-material-icons-extended = "androidx.compose.material:material-icons-extended:1.7.8"
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "androidx-compose-material3" }
 androidx-compose-material3-windowsizeclass = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "androidx-compose-material3" }
@@ -114,6 +115,7 @@ firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.
 godtoolsShared-analytics = { module = "org.cru.godtools.kotlin:analytics", version.ref = "godtoolsShared" }
 godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref = "godtoolsShared" }
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
+godtoolsShared-renderer = { module = "org.cru.godtools.kotlin:renderer", version.ref = "godtoolsShared" }
 godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
 google-auto-value = { module = "com.google.auto.value:auto-value", version.ref = "google-auto-value" }
 google-auto-value-annotations = { module = "com.google.auto.value:auto-value-annotations", version.ref = "google-auto-value" }
@@ -153,6 +155,7 @@ gtoSupport-leakcanary = { module = "org.ccci.gto.android:gto-support-leakcanary2
 gtoSupport-lottie = { module = "org.ccci.gto.android:gto-support-lottie", version.ref = "gtoSupport" }
 gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-material-components", version.ref = "gtoSupport" }
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
+gtoSupport-okio = { module = "org.ccci.gto.android:gto-support-okio", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-play-auth = { module = "org.ccci.gto.android:gto-support-play-auth", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }

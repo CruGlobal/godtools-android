@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":library:model"))
 
     api(libs.godtoolsShared.parser)
+    api(libs.godtoolsShared.renderer)
     implementation(libs.godtoolsShared.user.activity)
 
     implementation(libs.androidx.appcompat)
@@ -58,6 +59,7 @@ dependencies {
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
     implementation(libs.gtoSupport.materialComponents)
+    implementation(libs.gtoSupport.okio)
     implementation(libs.gtoSupport.util)
 
     api(libs.taptargetview)
