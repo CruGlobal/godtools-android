@@ -106,31 +106,21 @@
                     android:cropToPadding="false"
                     android:scaleType="matrix"
                     app:gravity="@{TractPageKt.getBackgroundImageGravity(model)}"
-                    app:layout_constraintBottom_toBottomOf="@id/content_scroll_view"
+                    app:layout_constraintBottom_toBottomOf="@id/compose"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/content_scroll_view"
+                    app:layout_constraintTop_toTopOf="@id/compose"
                     app:picassoFile="@{model.backgroundImage}"
                     app:scaleType="@{TractPageKt.getBackgroundImageScaleType(model)}"
                     app:visibleIf="@{model.backgroundImage != null}" />
 
-                <org.ccci.gto.android.common.widget.HackyNestedScrollView
-                    android:id="@+id/content_scroll_view"
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="4dp"
-                    android:fadingEdgeLength="24dp"
-                    android:fillViewport="true"
-                    android:requiresFadingEdge="vertical"
                     app:layout_constraintBottom_toTopOf="@id/bottom_nav"
-                    app:layout_constraintTop_toBottomOf="@id/label_divider">
-
-                    <LinearLayout
-                        android:id="@+id/content"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" />
-                </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+                    app:layout_constraintTop_toBottomOf="@id/label_divider" />
 
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/bottom_nav"
