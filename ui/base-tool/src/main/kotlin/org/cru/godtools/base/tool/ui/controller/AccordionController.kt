@@ -56,7 +56,7 @@ class AccordionController @VisibleForTesting internal constructor(
             model?.sections.orEmpty(),
             sectionControllers.toMutableList(),
             acquireController = { sectionFactory.create(binding.sections, this) },
-            releaseController = { it.lifecycleOwner?.maxState = Lifecycle.State.DESTROYED }
+            releaseController = { it.lifecycleOwner.maxState = Lifecycle.State.DESTROYED }
         )
     }
     // endregion Sections
