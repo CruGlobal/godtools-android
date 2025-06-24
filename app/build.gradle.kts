@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.grgit)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.mockposable)
     alias(libs.plugins.paparazzi)
 }
 
@@ -259,6 +260,11 @@ if (project.hasProperty("firebaseAppDistributionBuild")) {
             }
         }
     }
+}
+
+// configure mockposable
+mockposable {
+    plugins = listOf("mockk")
 }
 
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {

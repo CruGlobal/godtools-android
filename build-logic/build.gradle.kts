@@ -15,7 +15,6 @@ dependencies {
     implementation(libs.kotlin.kover.gradlePlugin)
     implementation(libs.ksp.gradlePlugin)
     implementation(libs.ktlint.gradle)
-    implementation(libs.mockposable)
     implementation(libs.onesky.gradlePlugin)
 }
 
