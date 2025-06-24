@@ -128,12 +128,6 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
 
         project.ksp.arg("circuit.codegen.mode", "hilt")
     }
-
-    // configure mockposable
-    project.pluginManager.apply("com.jeppeman.mockposable")
-    project.mockposable {
-        plugins = listOf("mockk")
-    }
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.
