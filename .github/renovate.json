@@ -12,6 +12,7 @@
       "description": "Kotlin, KSP and Mockposable are tightly coupled.",
       "matchPackageNames": [
         "com.google.devtools.ksp{/,}**",
+        "com.jeppeman.mockposable{/,}**",
         "com.jeppeman.mockposable:mockposable-gradle{/,}**",
         "org.jetbrains.kotlin:kotlin{/,}**",
         "org.jetbrains.kotlin.plugin.compose{/,}**"
