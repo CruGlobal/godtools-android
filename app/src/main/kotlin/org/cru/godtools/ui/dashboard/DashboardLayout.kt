@@ -35,6 +35,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
@@ -43,7 +45,6 @@ import com.slack.circuitx.android.IntentScreen
 import java.util.Locale
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
-import org.ccci.gto.android.common.androidx.lifecycle.compose.OnResume
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_ALL_TOOLS
@@ -195,15 +196,21 @@ private fun DashboardLayoutAnalytics(page: Page) {
     when (page) {
         Page.LESSONS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_LESSONS))
-            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS)) }
+            LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
+            }
         }
         Page.HOME, Page.FAVORITE_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
-            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME)) }
+            LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
+            }
         }
         Page.ALL_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
-            OnResume { eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS)) }
+            LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS))
+            }
         }
     }
 }
