@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Không có kết nối internet</string>
     <string name="account_error_not_connected">Vui lòng kiểm tra kết nối internet của bạn và thử lại.</string>
     <string name="account_error_unknown">Có lỗi khi đăng nhập</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Xóa tài khoản</string>
     <string name="account_delete_heading">Đừng đi quá sớm</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">Xóa tài khoản của tôi</string>
     <string name="account_delete_action_cancel">Giữ tài khoản của tôi</string>
     <string name="account_delete_error">Có lỗi xóa tài khoản của bạn. Đảm bảo rằng bạn đang trực tuyến và thử lại sau.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
     <string name="account_activity_header">Hoạt động của bạn</string>
