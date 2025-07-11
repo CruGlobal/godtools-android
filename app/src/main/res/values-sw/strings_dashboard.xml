@@ -19,7 +19,7 @@
     <string name="menu_question">Uliza swali</string>
     <string name="menu_heading_share">Shirikisha</string>
     <string name="menu_review">Acha maoni</string>
-    <string name="menu_share_story">"Tushirikishe shuhuda "</string>
+    <string name="menu_share_story">Tushirikishe shuhuda </string>
     <string name="menu_share_godtools">Shirikisha GodTools</string>
     <string name="share_app_message">Pakua programu ya GodTools: https://godtoolsapp.com \n\n
 
@@ -47,7 +47,7 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="dashboard_home_section_featured_lesson">Somo lililoangaziwa</string>
     <string name="dashboard_home_section_favorites_title">Zana uzipendazo</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Hakuna zana unazozipenda za kuonesha</string>
-    <string name="dashboard_home_section_favorites_no_tools_description">"Gusa ikoni ya moyo ili kuonesha kupendezwa na zana hiyo na kufanya ipatikane bila mtandao. "</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Gusa ikoni ya moyo ili kuonesha kupendezwa na zana hiyo na kufanya ipatikane bila mtandao. </string>
     <string name="dashboard_home_section_favorites_action_view_all">Tazama zote &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">Nenda kwenye Zana</string>
     <string name="tools_list_favorites_banner_text">Fanya zana ipatikane bila mtandao kwa kugusa ikoni ya moyo, ambayo itaongeza zana hiyo kwenye vipendwa vyako.</string>
