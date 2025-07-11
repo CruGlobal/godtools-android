@@ -3,7 +3,6 @@
     <string name="toast_unable_to_launch_activity">Impossible d\'ouvrir %s</string>
     <!-- Tool Categories -->
     <string name="tool_category_gospel">Invitation à Évangile</string>
-    <string name="tool_category_articles">Articles</string>
     <string name="tool_category_conversation_starter">Lanceur de conversation</string>
     <string name="tool_category_growth">Croissance chrétienne</string>
     <string name="tool_category_training">Formation</string>
