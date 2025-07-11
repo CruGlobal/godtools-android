@@ -31,7 +31,7 @@
     <string name="menu_copyright">版权信息</string>
     <string name="menu_version">版本：%1$s (%2$d)</string>
     <!-- Lessons -->
-    <string name="nav_lessons">"课程 "</string>
+    <string name="nav_lessons">课程 </string>
     <string name="dashboard_lessons_header_title">为你制定的课程</string>
     <string name="dashboard_lessons_header_description">建立关系，开启有意义对话的实用点子</string>
     <string name="dashboard_lessons_section_filter_label">课程所用语言：</string>
