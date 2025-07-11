@@ -122,15 +122,6 @@ ksp {
     arg("dagger.fastInit", "enabled")
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_account.xml",
-        "strings_dashboard.xml",
-        "strings_languages.xml",
-        "strings_tool_details.xml",
-    )
-}
-
 dependencies {
     api(project(":library:api"))
     api(project(":library:base"))

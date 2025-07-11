@@ -11,12 +11,6 @@ android {
     buildFeatures.dataBinding = true
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_tips_renderer.xml",
-    )
-}
-
 dependencies {
     api(project(":ui:base-tool"))
     implementation(project(":library:model"))

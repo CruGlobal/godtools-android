@@ -9,15 +9,6 @@ android {
     configureCompose(project)
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_language_names.xml",
-    )
-
-    // an empty list downloads all available languages
-    downloadLanguages = emptyList()
-}
-
 dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.datastore.preferences)
