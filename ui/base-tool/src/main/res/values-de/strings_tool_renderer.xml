@@ -24,7 +24,6 @@ Lass uns mehr reden!</string>
     <string name="tool_settings_action_share">Link teilen</string>
     <string name="tool_settings_languages_title">Zweite Sprache</string>
     <string name="tool_settings_languages_description">Wechsle zwischen zwei verschiedenen Sprachen in diesem Tool.</string>
-    <string name="tool_settings_languages_parallel">Parallel</string>
     <string name="tool_settings_languages_none">Keine</string>
     <string name="tool_settings_shareables_title">Verwandte Grafiken</string>
 </resources>
