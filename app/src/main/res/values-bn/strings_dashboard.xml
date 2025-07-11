@@ -8,7 +8,7 @@
     <string name="opt_in_notification_maybe_later">হয়তো পরে</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">শুরু করুন</string>
-    <string name="menu_tutorial">"টিউটোরিয়াল "</string>
+    <string name="menu_tutorial">টিউটোরিয়াল </string>
     <string name="menu_heading_account">অ্যাকাউন্ট</string>
     <string name="menu_login">লগইন করুন</string>
     <string name="menu_signup">অ্যাকাউন্ট তৈরি করুন</string>

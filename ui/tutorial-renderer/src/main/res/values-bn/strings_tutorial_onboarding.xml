@@ -2,14 +2,14 @@
 <resources>
     <!-- Onboarding Tutorial -->
     <string name="tutorial_onboarding_change_language">ভাষা মনোনয়ন</string>
-    <string name="tutorial_onboarding_welcome">"স্বাগতম "</string>
+    <string name="tutorial_onboarding_welcome">স্বাগতম </string>
     <string name="tutorial_onboarding_welcome_2">প্রতিটি কথোপকথনের জন্য প্রস্তুত</string>
     <string name="tutorial_onboarding_welcome_action_video">ভিডিও দেখুন</string>
     <string name="tutorial_onboarding_conversations_headline">অন্য কারো সাথে ঈশ্বর সম্পর্কে কথা বলুন</string>
     <string name="tutorial_onboarding_conversations_subhead">GodTools আপনাকে ঈশ্বর সম্পর্কে অর্থপূর্ণ কথোপকথন করতে সাহায্য করে।</string>
     <string name="tutorial_onboarding_prepare_headline">গুরুত্বপূর্ণ মুহূর্তের জন্য প্রস্তুত করুন</string>
     <string name="tutorial_onboarding_prepare_subhead">বিশ্বাস সম্পর্কে কথোপকথন করতে শিখুন যা আপনার জীবনের স্বাভাবিকএকটি  অংশ</string>
-    <string name="tutorial_onboarding_share_headline">"আপনার টুলস পছন্দ করুন I "</string>
+    <string name="tutorial_onboarding_share_headline">আপনার টুলস পছন্দ করুন I </string>
     <string name="tutorial_onboarding_share_subhead">GodTools স্পষ্ট এবং প্রাসঙ্গিক উপায়ে সুসমাচার প্রচারের জন্য আপনার গাইড।</string>
     <string name="tutorial_onboarding_action_begin">শুরু করুন</string>
     <string name="tutorial_onboarding_action_next">পরবর্তী</string>
