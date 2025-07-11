@@ -24,7 +24,6 @@ Kom ons gesels verder!</string>
     <string name="tool_settings_action_share">Deel ’n skakel</string>
     <string name="tool_settings_languages_title">Parallelle taal</string>
     <string name="tool_settings_languages_description">Wissel tussen twee verskillende tale in hierdie hulpmiddel.</string>
-    <string name="tool_settings_languages_parallel">Parallel</string>
     <string name="tool_settings_languages_none">Geen</string>
     <string name="tool_settings_shareables_title">Verwante grafika</string>
 </resources>
