@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.AnimatedOverlay
 import com.slack.circuit.overlay.OverlayNavigator
+import com.slack.circuit.overlay.OverlayTransitionController
 import kotlinx.coroutines.launch
 import org.cru.godtools.R
 import org.cru.godtools.util.isTablet
@@ -60,7 +61,10 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
     AnimatedOverlay<Unit>(enterTransition = EnterTransition.None, exitTransition = ExitTransition.None) {
 
     @Composable
-    override fun AnimatedVisibilityScope.AnimatedContent(navigator: OverlayNavigator<Unit>) {
+    override fun AnimatedVisibilityScope.AnimatedContent(
+        navigator: OverlayNavigator<Unit>,
+        transitionController: OverlayTransitionController,
+    ) {
         BackHandler { navigator.finish(Unit) }
 
         val isTablet = isTablet()
