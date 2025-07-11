@@ -19,12 +19,6 @@ android {
     }
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_base_ui.xml",
-    )
-}
-
 dependencies {
     api(project(":library:base"))
     implementation(project(":library:model"))

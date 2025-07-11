@@ -10,7 +10,7 @@
     <string name="share_tool_message_tract_live_share">Habari, Fuatana na mimi kwenye GodTools kupitia skrini iliyoshirikishwa. Kiungo ni hiki: %1$s\n\nKama mpaka baadae hautopokea ujumbe huu, basi kiungo kinaweza kuwa hakifanyi kazi. Tunaweza kujaribu tena wakati mwingine.</string>
     <string name="tract_live_share_starting">Anza Kushirkisha Skrini</string>
     <string name="tract_live_share_unable_to_connect">Imeshindwa kuunganisha kwenye kitufe cha Shirikisha Skrini</string>
-    <string name="tract_live_share_exit_dialog_message">"Sasa unataka kutoka kwenye kipindi cha kushirikisha kwa mbali? "</string>
+    <string name="tract_live_share_exit_dialog_message">Sasa unataka kutoka kwenye kipindi cha kushirikisha kwa mbali? </string>
     <string name="tract_live_share_exit_dialog_confirm">Toka</string>
     <string name="tract_live_share_exit_dialog_cancel">Ghairi</string>
 </resources>

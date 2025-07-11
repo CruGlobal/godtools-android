@@ -1,0 +1,41 @@
+"project_id": "805338"
+"api_token_env": "CROWDIN_API_TOKEN"
+"base_path": "."
+"base_url": "https://api.crowdin.com"
+
+"preserve_hierarchy": true
+
+files: [
+  {
+    "source": "/app/src/main/res/values/strings*.xml",
+    "translation": "/app/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/library/base/src/main/res/values/strings*.xml",
+    "translation": "/library/base/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/base/src/main/res/values/strings*.xml",
+    "translation": "/ui/base/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/base-tool/src/main/res/values/strings*.xml",
+    "translation": "/ui/base-tool/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/lesson-renderer/src/main/res/values/strings*.xml",
+    "translation": "/ui/lesson-renderer/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/tips-renderer/src/main/res/values/strings*.xml",
+    "translation": "/ui/tips-renderer/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/tract-renderer/src/main/res/values/strings*.xml",
+    "translation": "/ui/tract-renderer/src/main/res/values-%android_code%/%original_file_name%",
+  },
+  {
+    "source": "/ui/tutorial-renderer/src/main/res/values/strings*.xml",
+    "translation": "/ui/tutorial-renderer/src/main/res/values-%android_code%/%original_file_name%",
+  },
+]

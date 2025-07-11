@@ -8,14 +8,14 @@
     <string name="action_tools_open_training">Află cum să partajezi acest instrument</string>
     <plurals name="label_tools_shares">
         <item quantity="one">%1$,d Vizualizare</item>
-        <item quantity="other">%1$,d Vizualizări</item>
         <item quantity="few">%1$,d Vizualizări</item>
+        <item quantity="other">%1$,d Vizualizări</item>
     </plurals>
     <string name="label_tools_about">Despre</string>
     <plurals name="label_tools_languages">
         <item quantity="one">%1$,d Limbă</item>
-        <item quantity="other">%1$,d Limbi</item>
         <item quantity="few">%1$,d Limbi</item>
+        <item quantity="other">%1$,d Limbi</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">Inițierea conversațiilor</string>
     <string name="tool_details_section_description_outline">Contur</string>

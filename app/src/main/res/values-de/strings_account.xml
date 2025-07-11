@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Keine Internetverbindung</string>
     <string name="account_error_not_connected">Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
     <string name="account_error_unknown">Fehler beim Einloggen.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Konto löschen</string>
     <string name="account_delete_heading">Gehe nicht so schnell</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">Mein Konto löschen</string>
     <string name="account_delete_action_cancel">Mein Konto beibehalten</string>
     <string name="account_delete_error">Beim Löschen deines Kontos ist ein Fehler aufgetreten. Stelle sicher, dass du online bist, oder versuche es später noch einmal.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivität</string>
     <string name="account_activity_header">Deine Aktivität</string>

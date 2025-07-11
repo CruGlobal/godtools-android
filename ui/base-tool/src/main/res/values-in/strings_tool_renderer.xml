@@ -21,7 +21,7 @@ Mari bicara lebih banyak!</string>
     <!-- Settings -->
     <string name="menu_settings">Pengaturan</string>
     <string name="tool_settings_title">Pilihan Alat</string>
-    <string name="tool_settings_action_share">"Bagikan tautan "</string>
+    <string name="tool_settings_action_share">Bagikan tautan </string>
     <string name="tool_settings_languages_title">Bahasa Paralel</string>
     <string name="tool_settings_languages_description">Sandingkan dua bahasa pada sarana ini</string>
     <string name="tool_settings_languages_parallel">Paralel</string>

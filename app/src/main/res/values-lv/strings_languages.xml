@@ -10,9 +10,9 @@
     <string name="title_language_settings">Valodas iestatījumi</string>
     <string name="language_settings_section_app_language_heading">Lietotnes valoda</string>
     <plurals name="language_settings_section_app_language_available">
+        <item quantity="zero">Pieejamo valodu skaits: %1$d</item>
         <item quantity="one">Pieejamo valodu skaits: %1$d</item>
         <item quantity="other">Pieejamo valodu skaits: %1$d</item>
-        <item quantity="zero">Pieejamo valodu skaits: %1$d</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Iestati sev vēlamo valodu, kurā pārslēgt lietotni.</string>
     <string name="language_settings_section_offline_heading">Rīka valodas pieejamas bezsaistē</string>
@@ -21,8 +21,8 @@
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Meklēt valodu</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="zero">Pieejamo rīku skaits: %1$d</item>
         <item quantity="one">Pieejamo rīku skaits: %1$d</item>
         <item quantity="other">Pieejamo rīku skaits: %1$d</item>
-        <item quantity="zero">Pieejamo rīku skaits: %1$d</item>
     </plurals>
 </resources>

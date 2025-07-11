@@ -15,7 +15,7 @@
     </plurals>
     <string name="language_settings_section_app_language_description">Chagua lugha ambayo ungependa programu nzima ioneshwe kwayo.</string>
     <string name="language_settings_section_offline_heading">Lugha za kifaa zinazopatikana bila ya mtandao</string>
-    <string name="language_settings_section_offline_description">"Pakua vifaa vyote kwa lugha moja ili viweze kupatikana hata kama huna huduma ya WiFi au mtandao wa kwenye simu. Weka lugha ya kifaa kupitia kitufe cha chaguo ndani ya kifaa hicho. "</string>
+    <string name="language_settings_section_offline_description">Pakua vifaa vyote kwa lugha moja ili viweze kupatikana hata kama huna huduma ya WiFi au mtandao wa kwenye simu. Weka lugha ya kifaa kupitia kitufe cha chaguo ndani ya kifaa hicho. </string>
     <string name="language_settings_section_offline_action_edit">Hariri lugha zilizopakuliwa</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Tafuta lugha</string>

@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Nu există conexiune la internet</string>
     <string name="account_error_not_connected">Verifică conexiunea la internet și încearcă din nou.</string>
     <string name="account_error_unknown">Eroare la conectare.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Șterge contul</string>
     <string name="account_delete_heading">Nu pleca atât de repede</string>
@@ -21,66 +20,65 @@
     <string name="account_delete_action_delete">Ștergeți-mi contul</string>
     <string name="account_delete_action_cancel">Păstrează-mi contul</string>
     <string name="account_delete_error">A apărut o eroare la ștergerea contului dvs. Asigură-te că ești online sau mai încearcă o dată mai târziu.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Activitate</string>
     <string name="account_activity_header">Activitatea ta</string>
     <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
         <item quantity="one">Instrument deschis</item>
-        <item quantity="other">Instrumente deschise</item>
         <item quantity="few">Instrumente deschise</item>
+        <item quantity="other">Instrumente deschise</item>
     </plurals>
     <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
         <item quantity="one">Lecție finisată</item>
-        <item quantity="other">Lecții finisate</item>
         <item quantity="few">Lecții finisate</item>
+        <item quantity="other">Lecții finisate</item>
     </plurals>
     <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
         <item quantity="one">Ecran partajat</item>
-        <item quantity="other">Ecrane partajate</item>
         <item quantity="few">Ecrane partajate</item>
+        <item quantity="other">Ecrane partajate</item>
     </plurals>
     <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
         <item quantity="one">Link partajat</item>
-        <item quantity="other">Link-uri partajate</item>
         <item quantity="few">Link-uri partajate</item>
+        <item quantity="other">Link-uri partajate</item>
     </plurals>
     <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
         <item quantity="one">Limbă folosită</item>
-        <item quantity="other">Limbi folosite</item>
         <item quantity="few">Limbi folosite</item>
+        <item quantity="other">Limbi folosite</item>
     </plurals>
     <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
         <item quantity="one">Sesiune</item>
-        <item quantity="other">Sesiuni</item>
         <item quantity="few">Sesiuni</item>
+        <item quantity="other">Sesiuni</item>
     </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Insignele tale</string>
     <plurals name="account_activity_badge_tools_opened">
         <item quantity="one">Instrumente deschise %1$,d</item>
-        <item quantity="other">Instrumente deschise %1$,d</item>
         <item quantity="few">Instrumente deschise %1$,d</item>
+        <item quantity="other">Instrumente deschise %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="one">Lecții finisate %1$,d</item>
-        <item quantity="other">Lecții finisate %1$,d</item>
         <item quantity="few">Lecții finisate %1$,d</item>
+        <item quantity="other">Lecții finisate %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
         <item quantity="one">Articole deschise %1$,d</item>
-        <item quantity="other">Articole deschise %1$,d</item>
         <item quantity="few">Articole deschise %1$,d</item>
+        <item quantity="other">Articole deschise %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
         <item quantity="one">Imagini distribuite %1$,d</item>
-        <item quantity="other">Imagini distribuite %1$,d</item>
         <item quantity="few">Imagini distribuite %1$,d</item>
+        <item quantity="other">Imagini distribuite %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
         <item quantity="one">Antrenări de recomandări finisate %1$,d</item>
-        <item quantity="other">Antrenări de recomandări finisate %1$,d</item>
         <item quantity="few">Antrenări de recomandări finisate %1$,d</item>
+        <item quantity="other">Antrenări de recomandări finisate %1$,d</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Activitate Globală</string>

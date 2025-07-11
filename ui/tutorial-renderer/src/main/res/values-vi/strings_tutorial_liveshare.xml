@@ -8,6 +8,6 @@
     <string name="tutorial_live_share_start_headline">Bắt đầu</string>
     <string name="tutorial_live_share_start_text">Gửi link tới một hoặc nhiều người để bắt đầu chia sẻ màn hình ngay bây giờ.</string>
     <string name="tutorial_live_share_action_continue">Tiếp tục</string>
-    <string name="tutorial_live_share_action_skip">"Bỏ qua "</string>
+    <string name="tutorial_live_share_action_skip">Bỏ qua </string>
     <string name="tutorial_live_share_action_start">Chia sẻ đường link</string>
 </resources>

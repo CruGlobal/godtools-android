@@ -11,9 +11,9 @@
     <string name="language_settings_section_app_language_heading">Язык интерфейса приложения</string>
     <plurals name="language_settings_section_app_language_available">
         <item quantity="one">%1$d доступный язык</item>
-        <item quantity="other">%1$d доступные языки</item>
         <item quantity="few">%1$d доступных языков</item>
         <item quantity="many">%1$d доступных языков</item>
+        <item quantity="other">%1$d доступные языки</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Установите основной язык для всего приложения.</string>
     <string name="language_settings_section_offline_heading">Языки инструментов доступны офлайн</string>
@@ -23,8 +23,8 @@
     <string name="language_settings_downloadable_languages_search">Искать языки</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">Доступен %1$d инструмент</item>
-        <item quantity="other">Доступны %1$d инструментов</item>
         <item quantity="few">Доступны %1$d инструментов</item>
         <item quantity="many">Доступны %1$d инструментов</item>
+        <item quantity="other">Доступны %1$d инструментов</item>
     </plurals>
 </resources>
