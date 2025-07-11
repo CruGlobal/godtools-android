@@ -37,9 +37,9 @@
     <string name="dashboard_lessons_section_filter_label">Язык уроков:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">Доступны %1$d Уроки</item>
-        <item quantity="other">Доступны %1$d Уроки</item>
         <item quantity="few">Доступны %1$d Уроки</item>
         <item quantity="many">Доступны %1$d Уроки</item>
+        <item quantity="other">Доступны %1$d Уроки</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Завершено</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Заполнено</string>
@@ -61,9 +61,9 @@
     <string name="dashboard_tools_section_filter_language_any">Любой язык</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
         <item quantity="one">Доступен %1$d инструмент</item>
-        <item quantity="other">Доступны %1$d инструментов</item>
         <item quantity="few">Доступны %1$d инструментов</item>
         <item quantity="many">Доступны %1$d инструментов</item>
+        <item quantity="other">Доступны %1$d инструментов</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">Все доступные инструменты</string>
     <string name="dashboard_tools_section_categories_label">Категории</string>
