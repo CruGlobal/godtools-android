@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App Language UI -->
-    <string name="language_settings_app_language_title">"एपको भाषा "</string>
+    <string name="language_settings_app_language_title">एपको भाषा </string>
     <string name="language_settings_app_language_dialog_message">तपाईले आफ्नो एपको भाषाको रूपमा %1$s चयन गर्नुभएको छ। यसले सम्पूर्ण गडटूल्स एपको भाषा परिवर्तन गर्नेछ। के तपाई पक्का हुनुहुन्छ?</string>
-    <string name="language_settings_app_language_dialog_confirm">"भाषा परिवर्तन "</string>
+    <string name="language_settings_app_language_dialog_confirm">भाषा परिवर्तन </string>
     <string name="language_settings_app_language_dialog_dismiss">केहि पर्दैन</string>
     <!-- Language Settings UI -->
     <string name="menu_language_settings">भाषा सेटिङहरू</string>

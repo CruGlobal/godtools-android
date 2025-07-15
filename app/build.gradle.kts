@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.grgit)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.mockposable)
     alias(libs.plugins.paparazzi)
 }
 
@@ -119,15 +120,6 @@ android {
 
 ksp {
     arg("dagger.fastInit", "enabled")
-}
-
-onesky {
-    sourceStringFiles = listOf(
-        "strings_account.xml",
-        "strings_dashboard.xml",
-        "strings_languages.xml",
-        "strings_tool_details.xml",
-    )
 }
 
 dependencies {
@@ -259,6 +251,11 @@ if (project.hasProperty("firebaseAppDistributionBuild")) {
             }
         }
     }
+}
+
+// configure mockposable
+mockposable {
+    plugins = listOf("mockk")
 }
 
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {

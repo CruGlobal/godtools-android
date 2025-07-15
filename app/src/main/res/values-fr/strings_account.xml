@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Aucune connexion Internet</string>
     <string name="account_error_not_connected">Veuillez vérifier votre connexion Internet et réessayer.</string>
     <string name="account_error_unknown">Erreur de connexion.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Supprimer le compte</string>
     <string name="account_delete_heading">Ne partez pas déjà</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">Supprimer mon compte</string>
     <string name="account_delete_action_cancel">Maintenir mon compte</string>
     <string name="account_delete_error">Une erreur est survenue lors de la suppression de votre compte. Assurez-vous d\'être en ligne ou réessayez plus tard.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>
@@ -52,6 +50,5 @@
     <string name="profile_global_activity_heading">%1$s  Activité globale</string>
     <string name="profile_activity_unique_users">Utilisateurs Uniques</string>
     <string name="profile_activity_gospel_presentations">Présentations de l\'Evangile</string>
-    <string name="profile_activity_sessions">Sessions</string>
     <string name="profile_activity_countries">Pays</string>
 </resources>

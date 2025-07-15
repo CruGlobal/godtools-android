@@ -2,17 +2,17 @@
 <resources>
     <string name="tutorial_features_tools_headline">टूल्स</string>
     <string name="tutorial_features_tools_subhead">अघि, त्यहि समयमा वा पछि गरेर  प्रत्येक सामग्री कुराकानीको फरक चरणको लागि बनाइएको छ ।</string>
-    <string name="tutorial_features_tips_headline">"सामग्री सुझावहरु "</string>
+    <string name="tutorial_features_tips_headline">सामग्री सुझावहरु </string>
     <string name="tutorial_features_tips_subhead">तपाईले कसैलाई सुसमाचार बुझ्न र येशूलाई भेट्न मद्दत गर्दा गडटूल्स सुझावहरूले तपाईलाई मार्गदर्शन गर्दछ।</string>
     <string name="tutorial_features_live_share_headline">स्क्रिन साझा गर्दै</string>
     <string name="tutorial_features_live_share_subhead">अब तपाईले आफु बसेकै ठाउँबाट तपाईको स्क्रिन साझा गर्न सक्नुहुन्छ र सुसमाचार छलफल गर्न टूल प्रयोग गर्दा अर्को व्यक्तिले तपाईलाई पछ्याउन सक्छ।</string>
     <string name="tutorial_features_lessons_headline">पाठहरु</string>
     <string name="tutorial_features_lessons_subhead">गडटूल्सको प्रत्येक पाठमा तपाईले परमेश्वरको बारेमा वास्तविक कुराकानी गर्न मद्दत हुने केहि कुरा सिक्नुहुन्छ।</string>
     <string name="tutorial_features_final_headline">तपाईलाई यो आवश्यक परेको खण्डमा मेनुमा यो ट्यूटोरियल भेटाउनु हुनेछ ।</string>
-    <string name="tutorial_features_action_continue">"जारी राख्नुहोस् "</string>
+    <string name="tutorial_features_action_continue">जारी राख्नुहोस् </string>
     <string name="tutorial_features_action_close">ट्यूटोरियल बन्द गर्नुहोस्</string>
     <!-- Training Tutorial Banner -->
     <string name="tutorial_features_banner_text">मलाई ट्यूटोरियल देखाउनुहोस्</string>
-    <string name="tutorial_features_banner_action_open">"ट्यूटोरियल खोल्नुहोस् "</string>
+    <string name="tutorial_features_banner_action_open">ट्यूटोरियल खोल्नुहोस् </string>
     <string name="tutorial_features_banner_action_dismiss">खारेज गर्नुहोस्</string>
 </resources>

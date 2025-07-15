@@ -8,7 +8,6 @@
     <string name="opt_in_notification_maybe_later">Vielleicht später</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Los geht‘s</string>
-    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_heading_account">Konto</string>
     <string name="menu_login">Anmelden</string>
     <string name="menu_signup">Konto einrichten</string>
@@ -24,12 +23,10 @@
     <string name="share_app_message">Lade die GodTools-App herunter: https://godtoolsapp.com \n\n
 
 Eine Online-Version findest du unter https://knowgod.com/</string>
-    <string name="share_story_subject">GodTools Story</string>
     <string name="menu_heading_about">Über</string>
     <string name="menu_terms_of_use">Nutzungsbedingungen</string>
     <string name="menu_privacy_policy">Datenschutzbestimmungen</string>
     <string name="menu_copyright">Copyright Hinweise</string>
-    <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lektionen</string>
     <string name="dashboard_lessons_header_title">Für dich gemachte Lektionen</string>
@@ -48,13 +45,11 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="dashboard_home_section_favorites_title">Deine Favoriten unter den Tools</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Keine Favoriten unter den Tools anzeigen</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Tippe auf das Herzsymbol, um ein Tool zu einem Favoriten und dadurch offline zugänglich zu machen.</string>
-    <string name="dashboard_home_section_favorites_action_view_all">"Alle &gt; ansehen "</string>
+    <string name="dashboard_home_section_favorites_action_view_all">Alle &gt; ansehen </string>
     <string name="dashboard_home_section_favorites_action_all_tools">Zu Tools gehen</string>
     <string name="tools_list_favorites_banner_text">Mache ein Tool offline zugänglich, indem du auf das Herzsymbol tippst. Es wird dadurch zu den Favoriten hinzugefügt.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ablehnen</string>
     <!-- All Tools -->
-    <string name="nav_all_tools">Tools</string>
-    <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Beliebige Kategorie</string>
     <string name="dashboard_tools_section_filter_language_any">Beliebige Sprache</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
@@ -72,7 +67,6 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Abbrechen</string>
     <string name="tool_card_accessibility_language_available">Verfügbar</string>
     <string name="tool_card_accessibility_language_unavailable">Nicht verfügbar</string>
-    <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Öffnen</string>
     <!-- In App Update -->
     <string name="play_update_available">Update verfügbar</string>

@@ -14,12 +14,6 @@ android {
     buildFeatures.dataBinding = true
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_lesson_renderer.xml",
-    )
-}
-
 dependencies {
     api(project(":ui:base-tool"))
 

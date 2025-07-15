@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">インターネット接続がありません</string>
     <string name="account_error_not_connected">インターネット接続を確認してからもう一度お試しください。</string>
     <string name="account_error_unknown">ログインエラー</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">アカウントを削除する</string>
     <string name="account_delete_heading">本当にこの操作を実行しますか。</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">アカウントを削除する</string>
     <string name="account_delete_action_cancel">アカウントを維持する</string>
     <string name="account_delete_error">アカウントを削除する際にエラーが発生しました。オンラインであることを確認するか、少し時間をおいてからお試しください。</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">アクティビティ</string>
     <string name="account_activity_header">あなたのアクティビティ</string>

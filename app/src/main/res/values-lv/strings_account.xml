@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Nav savienojuma ar internetu</string>
     <string name="account_error_not_connected">Lūdzu, pārbaudi savienojumu ar internetu un mēģini vēlreiz.</string>
     <string name="account_error_unknown">Kļūda, piesakoties sistēmā.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Dzēst kontu</string>
     <string name="account_delete_heading">Neej tik drīz</string>
@@ -21,66 +20,65 @@
     <string name="account_delete_action_delete">Izdzēst manu kontu</string>
     <string name="account_delete_action_cancel">Paturēt manu kontu</string>
     <string name="account_delete_error">Dzēšot tavu kontu, radās kļūda. Pārliecinies, vai esi tiešsaistē, vai mēģini vēlāk…</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>
     <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Atvērtie rīki</item>
         <item quantity="one">Atvērtie rīki</item>
         <item quantity="other">Atvērtie rīki</item>
-        <item quantity="zero">Atvērtie rīki</item>
     </plurals>
     <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Pabeigtās nodarbības</item>
         <item quantity="one">Pabeigtās nodarbības</item>
         <item quantity="other">Pabeigtās nodarbības</item>
-        <item quantity="zero">Pabeigtās nodarbības</item>
     </plurals>
     <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Kopīgotie ekrāni</item>
         <item quantity="one">Kopīgotie ekrāni</item>
         <item quantity="other">Kopīgotie ekrāni</item>
-        <item quantity="zero">Kopīgotie ekrāni</item>
     </plurals>
     <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Kopīgotās saites</item>
         <item quantity="one">Kopīgotās saites</item>
         <item quantity="other">Kopīgotās saites</item>
-        <item quantity="zero">Kopīgotās saites</item>
     </plurals>
     <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Izmantotās valodas</item>
         <item quantity="one">Izmantotās valodas</item>
         <item quantity="other">Izmantotās valodas</item>
-        <item quantity="zero">Izmantotās valodas</item>
     </plurals>
     <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="zero">Sesijas</item>
         <item quantity="one">Sesijas</item>
         <item quantity="other">Sesijas</item>
-        <item quantity="zero">Sesijas</item>
     </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Tavi žetoni</string>
     <plurals name="account_activity_badge_tools_opened">
+        <item quantity="zero">Atvērto rīku skaits: %1$,d</item>
         <item quantity="one">Atvērto rīku skaits: %1$,d</item>
         <item quantity="other">Atvērto rīku skaits: %1$,d</item>
-        <item quantity="zero">Atvērto rīku skaits: %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
+        <item quantity="zero">Pabeigta(s) nodarbība(s): %1$,d</item>
         <item quantity="one">Pabeigta(s) nodarbība(s): %1$,d</item>
         <item quantity="other">Pabeigta(s) nodarbība(s): %1$,d</item>
-        <item quantity="zero">Pabeigta(s) nodarbība(s): %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_articles_opened">
+        <item quantity="zero">Atvērto rakstu skaits: %1$,d</item>
         <item quantity="one">Atvērto rakstu skaits: %1$,d</item>
         <item quantity="other">Atvērto rakstu skaits: %1$,d</item>
-        <item quantity="zero">Atvērto rakstu skaits: %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_images_shared">
+        <item quantity="zero">Kopīgoto attēlu skaits: %1$,d</item>
         <item quantity="one">Kopīgoto attēlu skaits: %1$,d</item>
         <item quantity="other">Kopīgoto attēlu skaits: %1$,d</item>
-        <item quantity="zero">Kopīgoto attēlu skaits: %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
+        <item quantity="zero">Izmantoti apmācības padomi: %1$,d</item>
         <item quantity="one">Izmantoti apmācības padomi: %1$,d</item>
         <item quantity="other">Izmantoti apmācības padomi: %1$,d</item>
-        <item quantity="zero">Izmantoti apmācības padomi: %1$,d</item>
     </plurals>
     <!-- Global Activity -->
     <string name="account_tab_global_activity">Globālā aktivitāte</string>

@@ -8,7 +8,6 @@
     <string name="opt_in_notification_maybe_later">Talvez mais tarde</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Comece</string>
-    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_heading_account">Conta</string>
     <string name="menu_login">Acessar</string>
     <string name="menu_signup">Criar conta</string>

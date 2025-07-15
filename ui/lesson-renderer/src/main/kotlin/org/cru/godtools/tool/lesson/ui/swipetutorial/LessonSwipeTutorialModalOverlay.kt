@@ -29,12 +29,16 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.slack.circuit.overlay.AnimatedOverlay
 import com.slack.circuit.overlay.OverlayNavigator
+import com.slack.circuit.overlay.OverlayTransitionController
 import org.cru.godtools.tool.lesson.R
 
 class LessonSwipeTutorialAnimatedModalOverlay :
     AnimatedOverlay<Unit>(enterTransition = fadeIn(), exitTransition = fadeOut()) {
     @Composable
-    override fun AnimatedVisibilityScope.AnimatedContent(navigator: OverlayNavigator<Unit>) {
+    override fun AnimatedVisibilityScope.AnimatedContent(
+        navigator: OverlayNavigator<Unit>,
+        transitionController: OverlayTransitionController,
+    ) {
         BackHandler { navigator.finish(Unit) }
 
         Column(

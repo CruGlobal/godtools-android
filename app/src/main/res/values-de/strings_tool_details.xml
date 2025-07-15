@@ -16,7 +16,6 @@
         <item quantity="other">%1$,d Sprachen</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">Gesprächsstarter</string>
-    <string name="tool_details_section_description_outline">Outline</string>
     <string name="tool_details_section_description_bible_references">Bibelstellen</string>
     <string name="tool_details_section_description_languages_available">Verfügbare Sprachen</string>
     <string name="tool_details_section_variants_label">Versionen</string>

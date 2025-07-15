@@ -5,12 +5,10 @@ import com.android.build.gradle.TestedExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
-import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 
 internal const val BUILD_TYPE_DEBUG = "debug"
 internal const val BUILD_TYPE_QA = "qa"
@@ -74,9 +72,6 @@ private fun BaseExtension.configureCompilerOptions(project: Project) {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-    (this as ExtensionAware).extensions.findByType<KotlinJvmOptions>()?.apply {
-        freeCompilerArgs += "-Xjvm-default=all"
-    }
 }
 
 private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {
@@ -127,12 +122,6 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
         project.dependencies.addProvider("ksp", project.libs.findLibrary("circuit-codegen").get())
 
         project.ksp.arg("circuit.codegen.mode", "hilt")
-    }
-
-    // configure mockposable
-    project.pluginManager.apply("com.jeppeman.mockposable")
-    project.mockposable {
-        plugins = listOf("mockk")
     }
 }
 

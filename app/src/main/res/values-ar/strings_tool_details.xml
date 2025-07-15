@@ -7,21 +7,21 @@
     <string name="action_tools_remove_favorite">إزالة من المفضلة</string>
     <string name="action_tools_open_training">تعلم مشاركة هذه الأداة</string>
     <plurals name="label_tools_shares">
+        <item quantity="zero">%1$,d مشاهدة</item>
         <item quantity="one">%1$,d مشاهدة</item>
-        <item quantity="other">%1$,d مشاهدات</item>
+        <item quantity="two">%1$,d مشاهدتين</item>
         <item quantity="few">%1$,d مشاهدات</item>
         <item quantity="many">%1$,d مشاهدات</item>
-        <item quantity="two">%1$,d مشاهدتين</item>
-        <item quantity="zero">%1$,d مشاهدة</item>
+        <item quantity="other">%1$,d مشاهدات</item>
     </plurals>
     <string name="label_tools_about">حول</string>
     <plurals name="label_tools_languages">
+        <item quantity="zero">%1$,d لغة</item>
         <item quantity="one">%1$,d لغة</item>
-        <item quantity="other">%1$,d لغات</item>
+        <item quantity="two">%1$,d لغتين</item>
         <item quantity="few">%1$,d لغات</item>
         <item quantity="many">%1$,d لغات</item>
-        <item quantity="two">%1$,d لغتين</item>
-        <item quantity="zero">%1$,d لغة</item>
+        <item quantity="other">%1$,d لغات</item>
     </plurals>
     <string name="tool_details_section_description_conversation_starters">بدايات المحادثة</string>
     <string name="tool_details_section_description_outline">الخطوط العريضة</string>

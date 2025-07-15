@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Tidak ada koneksi internet</string>
     <string name="account_error_not_connected">Silakan periksa koneksi internet dan coba lagi.</string>
     <string name="account_error_unknown">Kesalahan saat masuk.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Hapus Akun</string>
     <string name="account_delete_heading">Jangan pergi begitu cepat</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">Hapus akun saya</string>
     <string name="account_delete_action_cancel">Pertahankan akun saya</string>
     <string name="account_delete_error">Terjadi kesalahan saat menghapus akun Saudara. Pastikan Saudara online atau coba lagi nanti.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitas</string>
     <string name="account_activity_header">Aktifitas Saudara</string>
@@ -46,7 +44,7 @@
     <!-- Badges -->
     <string name="account_activity_badges_header">Lencana Saudara</string>
     <plurals name="account_activity_badge_tools_opened">
-        <item quantity="other">" %1$,d Alat yang telah dibuka"</item>
+        <item quantity="other"> %1$,d Alat yang telah dibuka</item>
     </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="other">%1$,d Pelajaran yang diselesaikan</item>

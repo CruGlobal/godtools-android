@@ -6,7 +6,7 @@
     <string name="tract_content_input_error_required">%1$s को आवश्यकता छ</string>
     <string name="tract_content_input_error_invalid_email">कृपया मान्य हुने इमेल ठेगाना राख्नुहोस्</string>
     <!-- Share Tool Functionality -->
-    <string name="menu_share_tool">"साझा गर्नुहोस "</string>
+    <string name="menu_share_tool">साझा गर्नुहोस </string>
     <string name="tool_share_sheet_more_apps">थप</string>
     <string name="share_tool_message">यो लिङ्कले तपाईलाई आज हामीले के कुरा गरिरहेका थियौं भन्ने वेब संस्करणमा लैजान्छ: %1$s \n\n
 

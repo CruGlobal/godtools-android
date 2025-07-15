@@ -9,6 +9,6 @@
     <string name="tutorial_tips_start_headline">सुझावहरू उज्यालो पार्नुहोस्</string>
     <string name="tutorial_tips_start_text">जब एक सुझाव उज्यालो हुन्छ, तपाईले तालिमको त्यो भाग पूरा गर्नुभयो। तपाईले हरेक कुराकानीमा प्रत्येक सुझाव प्रयोग गर्न आवश्यक छैन।</string>
     <string name="tutorial_tips_action_continue">जारी राख्नुहोस्</string>
-    <string name="tutorial_tips_action_skip">"छोड्नुहोस् "</string>
-    <string name="tutorial_tips_action_start">"तालिम सुरु गर्नुहोस् "</string>
+    <string name="tutorial_tips_action_skip">छोड्नुहोस् </string>
+    <string name="tutorial_tips_action_start">तालिम सुरु गर्नुहोस् </string>
 </resources>

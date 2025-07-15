@@ -11,8 +11,8 @@
     <string name="language_settings_section_app_language_heading">Limba de interfață a aplicației</string>
     <plurals name="language_settings_section_app_language_available">
         <item quantity="one">%1$,d Limbi disponibile</item>
-        <item quantity="other">%1$,d Limbi disponibile</item>
         <item quantity="few">Limbi disponibile</item>
+        <item quantity="other">%1$,d Limbi disponibile</item>
     </plurals>
     <string name="language_settings_section_app_language_description">Setați limba în care doriți să fie afișată întreaga aplicație.</string>
     <string name="language_settings_section_offline_heading">Limbi pentru instrumente disponibile offline</string>
@@ -22,7 +22,7 @@
     <string name="language_settings_downloadable_languages_search">Căută limba preferată</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Instrument disponibile</item>
-        <item quantity="other">%1$d Instrumente disponibile</item>
         <item quantity="few">%1$d Instrumente disponibile</item>
+        <item quantity="other">%1$d Instrumente disponibile</item>
     </plurals>
 </resources>

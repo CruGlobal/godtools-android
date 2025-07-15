@@ -13,7 +13,6 @@
     <string name="account_error_not_connected_title">Sem ligação à Internet</string>
     <string name="account_error_not_connected">Verifique sua ligação à Internet e tente novamente.</string>
     <string name="account_error_unknown">Erro ao tentar acessar.</string>
-    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Deletar Conta</string>
     <string name="account_delete_heading">Não saia ainda</string>
@@ -21,7 +20,6 @@
     <string name="account_delete_action_delete">Deletar minha conta</string>
     <string name="account_delete_action_cancel">Guardar minha conta</string>
     <string name="account_delete_error">Houve um erro ao deletar sua conta. Verifique se está conectado ou tente novamente mais tarde.</string>
-    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Atividade</string>
     <string name="account_activity_header">Sua atividade</string>

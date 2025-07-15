@@ -30,15 +30,14 @@ https://knowgod.com/
     <string name="menu_terms_of_use">استعمال کی شرائط</string>
     <string name="menu_privacy_policy">راز داری کی پالیسی</string>
     <string name="menu_copyright">جملہ حقوق کی معلومات</string>
-    <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">اسباق</string>
     <string name="dashboard_lessons_header_title">آپ کے لئے بنائے گئے اسباق</string>
     <string name="dashboard_lessons_header_description">تعلقات استوار کرنے اور با معنی گفتگو شروع کرنے کے عملی خیالات</string>
     <string name="dashboard_lessons_section_filter_label">اسباق در:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
-        <item quantity="one">"اسباق دستیاب ہیں۔%1$d "</item>
-        <item quantity="other">"اسباق دستیاب ہیں۔%1$d "</item>
+        <item quantity="one">اسباق دستیاب ہیں۔%1$d </item>
+        <item quantity="other">اسباق دستیاب ہیں۔%1$d </item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">مکمل ہوا</string>
     <string name="dashboard_lessons_progress_in_progress">%%%1$d کامل</string>

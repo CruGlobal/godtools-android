@@ -20,14 +20,6 @@ android {
     }
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_tract_renderer.xml"
-    )
-
-    downloadLanguages = emptyList()
-}
-
 dependencies {
     api(project(":ui:base-tool"))
     api(project(":ui:tutorial-renderer"))

@@ -8,7 +8,6 @@
     <string name="opt_in_notification_maybe_later">Poate mai târziu</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Să începem</string>
-    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_heading_account">Cont</string>
     <string name="menu_login">Conectare</string>
     <string name="menu_signup">Creează cont</string>
@@ -37,8 +36,8 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="dashboard_lessons_section_filter_label">Lecții în:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
         <item quantity="one">%1$d Lecție disponibilă</item>
-        <item quantity="other">%1$d Lecții disponibile</item>
         <item quantity="few">%1$d Lecții disponibile</item>
+        <item quantity="other">%1$d Lecții disponibile</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Completat</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Finalizat</string>
@@ -60,8 +59,8 @@ Găsești versiunea online aici https://knowgod.com/</string>
     <string name="dashboard_tools_section_filter_language_any">Orice limbă</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
         <item quantity="one">%1$d Instrument disponibile</item>
-        <item quantity="other">%1$d Instrumente disponibile</item>
         <item quantity="few">%1$d Instrumente disponibile</item>
+        <item quantity="other">%1$d Instrumente disponibile</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">Toate instrumentele disponibile</string>
     <string name="dashboard_tools_section_categories_label">Categorii</string>

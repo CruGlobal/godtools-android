@@ -36,9 +36,9 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="dashboard_lessons_header_description">Praktiskas idejas attiecību veidošanai un nozīmīgu sarunu uzsākšanai.</string>
     <string name="dashboard_lessons_section_filter_label">Nodarbības:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="zero">Pieejamas nodarbības: %1$d</item>
         <item quantity="one">Pieejamas nodarbības: %1$d</item>
         <item quantity="other">Pieejamas nodarbības: %1$d</item>
-        <item quantity="zero">Pieejamas nodarbības: %1$d</item>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Pabeigts</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% pabeigts</string>
@@ -59,9 +59,9 @@ Rīku tīmekļa versijas ir pieejamas: https://KnowGod.com/lv</string>
     <string name="dashboard_tools_section_filter_category_any">Visas kategorijas</string>
     <string name="dashboard_tools_section_filter_language_any">Visas valodas</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="zero">Pieejamo rīku skaits: %1$d</item>
         <item quantity="one">Pieejamo rīku skaits: %1$d</item>
         <item quantity="other">Pieejamo rīku skaits: %1$d</item>
-        <item quantity="zero">Pieejamo rīku skaits: %1$d</item>
     </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">Pieejami visi rīki</string>
     <string name="dashboard_tools_section_categories_label">Kategorijas</string>

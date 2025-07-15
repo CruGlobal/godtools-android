@@ -15,12 +15,6 @@ android {
     buildFeatures.dataBinding = true
 }
 
-onesky {
-    sourceStringFiles = listOf(
-        "strings_cyoa_renderer.xml",
-    )
-}
-
 dependencies {
     api(project(":ui:base-tool"))
     implementation(project(":ui:tips-renderer"))
