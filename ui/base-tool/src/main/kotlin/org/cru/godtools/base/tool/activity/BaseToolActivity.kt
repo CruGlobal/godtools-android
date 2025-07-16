@@ -22,6 +22,7 @@ import androidx.lifecycle.map
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
+import io.fluidsonic.locale.toPlatform
 import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
@@ -314,9 +315,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach {
                 when (it) {
-                    is State.Event.OpenUrl -> openUrl(it.url.toUri())
                     is State.Event.AnalyticsEventTriggered ->
                         eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(it.event, activeManifest))
+                    is State.Event.OpenUrl -> openUrl(it.url.toUri())
+                    is State.Event.SubmitForm ->
+                        followupService.handleSubmitFormEvent(it, activeManifest?.locale?.toPlatform())
                 }
             }
             .launchIn(lifecycleScope)
