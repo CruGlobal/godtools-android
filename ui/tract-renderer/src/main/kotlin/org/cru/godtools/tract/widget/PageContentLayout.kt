@@ -26,7 +26,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
-import androidx.core.view.NestedScrollingParent
+import androidx.core.view.NestedScrollingParent2
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.children
 import androidx.core.view.forEach
@@ -67,7 +67,7 @@ class PageContentLayout @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes),
     ViewTreeObserver.OnGlobalLayoutListener,
-    NestedScrollingParent {
+    NestedScrollingParent2 {
     // region Lifecycle
     override fun onRestoreInstanceState(state: Parcelable?) = when (state) {
         is SavedState -> {
@@ -248,11 +248,25 @@ class PageContentLayout @JvmOverloads constructor(
      * @return true so that we will get the onNestedFling calls from descendant NestedScrollingChild
      */
     override fun onStartNestedScroll(child: View, target: View, nestedScrollAxes: Int) = true
+    override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int) = true
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int) =
         nestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes)
+    override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) =
+        nestedScrollingParentHelper.onNestedScrollAccepted(child, target, axes, type)
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray) = Unit
+    override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) = Unit
     override fun onNestedScroll(target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int) {}
+    override fun onNestedScroll(
+        target: View,
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        type: Int,
+    ) {}
     override fun onStopNestedScroll(child: View) = nestedScrollingParentHelper.onStopNestedScroll(child)
+    override fun onStopNestedScroll(target: View, type: Int) =
+        nestedScrollingParentHelper.onStopNestedScroll(target, type)
     override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float) = false
     override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean) =
         flingCard(velocityY * -1)
