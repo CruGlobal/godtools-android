@@ -3,6 +3,9 @@ package org.cru.godtools.tract.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.lifecycle.Lifecycle
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -76,6 +79,7 @@ class CardController private constructor(
                 RenderContentStack(
                     model?.content.orEmpty(),
                     state = toolState,
+                    modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())
                 )
             }
         }
