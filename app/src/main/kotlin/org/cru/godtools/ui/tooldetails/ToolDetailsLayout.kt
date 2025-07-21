@@ -66,7 +66,6 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIn
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
@@ -175,7 +174,6 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
 
                 Text(
                     translation.getName(tool).orEmpty(),
-                    fontFamily = translation?.getFontFamilyOrNull(),
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.padding(top = 40.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )

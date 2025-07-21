@@ -49,9 +49,7 @@ import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
-import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
-import org.cru.godtools.base.ui.util.applyTypefaceSpan
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
@@ -412,7 +410,4 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     }
 
     private val Intent?.isShortcutLaunch get() = this?.getBooleanExtra(SHORTCUT_LAUNCH, false) ?: false
-
-    override fun setTitle(title: CharSequence) =
-        super.setTitle(title.applyTypefaceSpan(activeManifest?.getTypeface(this)))
 }
