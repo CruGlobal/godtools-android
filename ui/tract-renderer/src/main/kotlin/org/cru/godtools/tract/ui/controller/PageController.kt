@@ -3,12 +3,20 @@ package org.cru.godtools.tract.ui.controller
 import android.view.View
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import javax.inject.Named
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
@@ -17,10 +25,13 @@ import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_CLICKED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TRACT_CARD_SWIPED
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.tract.RenderTractHero
+import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.shared.tool.parser.model.tract.Modal
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
@@ -36,9 +47,9 @@ class PageController @AssistedInject internal constructor(
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     eventBus: EventBus,
+    @param:Named(TOOL_RESOURCE_FILE_SYSTEM) private val resourceFileSystem: FileSystem,
     private val settings: Settings,
     private val tipsRepository: TrainingTipsRepository,
-    heroControllerFactory: HeroController.Factory,
     private val cardControllerFactory: CardController.Factory
 ) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
     CardController.Callbacks,
@@ -61,8 +72,7 @@ class PageController @AssistedInject internal constructor(
     }
 
     @VisibleForTesting
-    internal val heroController = heroControllerFactory.create(binding.hero, this)
-        .apply { lifecycleOwner.maxState = Lifecycle.State.RESUMED }
+    internal val heroLifecycleOwner = ConstrainedStateLifecycleOwner(lifecycleOwner, Lifecycle.State.RESUMED)
     var callbacks: Callbacks?
         get() = binding.callbacks
         set(value) {
@@ -89,7 +99,21 @@ class PageController @AssistedInject internal constructor(
         binding.page = model
         binding.isHeaderTipComplete = tipsRepository.isTipComplete(model?.header?.tip?.id)
         binding.isCallToActionTipComplete = tipsRepository.isTipComplete(model?.callToAction?.tip?.id)
-        heroController.model = model?.hero
+        binding.hero.setContent {
+            CompositionLocalProvider(LocalLifecycleOwner provides heroLifecycleOwner) {
+                ProvideRendererServices(resourceFileSystem) {
+                    model?.let {
+                        RenderTractHero(
+                            it,
+                            state = toolState,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        )
+                    }
+                }
+            }
+        }
         updateVisibleCards()
     }
 
@@ -140,11 +164,11 @@ class PageController @AssistedInject internal constructor(
 
     private fun updateChildrenLifecycles(old: CardController?, new: CardController?) {
         if (old !== new) {
-            with(old?.lifecycleOwner ?: heroController.lifecycleOwner) {
+            with(old?.lifecycleOwner ?: heroLifecycleOwner) {
                 maxState = minOf(maxState, Lifecycle.State.STARTED)
             }
         }
-        (new?.lifecycleOwner ?: heroController.lifecycleOwner).maxState = Lifecycle.State.RESUMED
+        (new?.lifecycleOwner ?: heroLifecycleOwner).maxState = Lifecycle.State.RESUMED
     }
 
     @UiThread
@@ -269,7 +293,7 @@ class PageController @AssistedInject internal constructor(
     }
 
     private fun propagateEventToChildren(event: Event) {
-        activeCardController?.onContentEvent(event) ?: heroController.onContentEvent(event)
+        activeCardController?.onContentEvent(event)
     }
     // endregion Content Events
 
