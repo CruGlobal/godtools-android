@@ -26,7 +26,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StyleRes
 import androidx.annotation.UiThread
 import androidx.core.content.withStyledAttributes
-import androidx.core.view.NestedScrollingParent2
+import androidx.core.view.NestedScrollingParent3
 import androidx.core.view.NestedScrollingParentHelper
 import androidx.core.view.children
 import androidx.core.view.forEach
@@ -67,7 +67,7 @@ class PageContentLayout @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes),
     ViewTreeObserver.OnGlobalLayoutListener,
-    NestedScrollingParent2 {
+    NestedScrollingParent3 {
     // region Lifecycle
     override fun onRestoreInstanceState(state: Parcelable?) = when (state) {
         is SavedState -> {
@@ -263,6 +263,15 @@ class PageContentLayout @JvmOverloads constructor(
         dxUnconsumed: Int,
         dyUnconsumed: Int,
         type: Int,
+    ) {}
+    override fun onNestedScroll(
+        target: View,
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        type: Int,
+        consumed: IntArray,
     ) {}
     override fun onStopNestedScroll(child: View) = nestedScrollingParentHelper.onStopNestedScroll(child)
     override fun onStopNestedScroll(target: View, type: Int) =
