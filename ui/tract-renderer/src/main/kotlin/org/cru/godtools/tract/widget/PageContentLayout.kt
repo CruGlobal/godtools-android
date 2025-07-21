@@ -208,7 +208,7 @@ class PageContentLayout @JvmOverloads constructor(
             changeActiveCard(activeCardPosition - 1, true)
             return true
         }
-        if (velocityY <= 0 - minVelocity && cardPositionOffset + activeCardPosition < childCount - 1) {
+        if (velocityY <= 0 - minVelocity && activeCardPosition < totalCards - 1) {
             changeActiveCard(activeCardPosition + 1, true)
             settings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED)
             return true
