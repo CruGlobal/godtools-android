@@ -43,7 +43,6 @@ import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.model.getDescription
 
 internal const val TEST_TAG_LANGUAGES_AVAILABLE = "languages_available"
@@ -204,7 +203,6 @@ private fun ToolDetailsLinkifiedText(text: String?, state: ToolDetailsScreen.Sta
                 uriHandler.openUri(url)
             }
         },
-        fontFamily = translation?.getFontFamilyOrNull(),
         modifier = modifier
     )
 }

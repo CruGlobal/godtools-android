@@ -20,7 +20,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.base.ui.util.getFontFamilyOrNull
 import org.cru.godtools.model.getTagline
 
 internal const val TEST_TAG_SECOND_LANGUAGE_AVAILABILITY = "second_language_availability"
@@ -56,7 +55,6 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
                     ToolName(state)
                     Text(
                         translation.getTagline(tool).orEmpty(),
-                        fontFamily = translation?.getFontFamilyOrNull(),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(top = 4.dp)
                     )
