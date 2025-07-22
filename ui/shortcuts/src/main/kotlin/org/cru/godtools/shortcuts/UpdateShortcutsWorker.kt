@@ -7,8 +7,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.perf.ktx.performance
+import com.google.firebase.Firebase
+import com.google.firebase.perf.performance
 import com.google.firebase.perf.trace
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
