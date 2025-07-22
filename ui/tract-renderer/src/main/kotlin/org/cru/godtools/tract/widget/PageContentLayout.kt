@@ -208,7 +208,7 @@ class PageContentLayout @JvmOverloads constructor(
             changeActiveCard(activeCardPosition - 1, true)
             return true
         }
-        if (velocityY <= 0 - minVelocity && cardPositionOffset + activeCardPosition < childCount - 1) {
+        if (velocityY <= 0 - minVelocity && activeCardPosition < totalCards - 1) {
             changeActiveCard(activeCardPosition + 1, true)
             settings.setFeatureDiscovered(Settings.FEATURE_TRACT_CARD_SWIPED)
             return true
@@ -276,7 +276,7 @@ class PageContentLayout @JvmOverloads constructor(
     override fun onStopNestedScroll(child: View) = nestedScrollingParentHelper.onStopNestedScroll(child)
     override fun onStopNestedScroll(target: View, type: Int) =
         nestedScrollingParentHelper.onStopNestedScroll(target, type)
-    override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float) = false
+    override fun onNestedPreFling(target: View, velocityX: Float, velocityY: Float) = flingCard(velocityY * -1)
     override fun onNestedFling(target: View, velocityX: Float, velocityY: Float, consumed: Boolean) =
         flingCard(velocityY * -1)
     override fun getNestedScrollAxes() = nestedScrollingParentHelper.nestedScrollAxes
