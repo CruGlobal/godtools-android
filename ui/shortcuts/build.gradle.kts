@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.androidx.hilt.work)
     api(libs.androidx.work.ktx)
 
-    implementation(libs.firebase.perf.ktx)
+    implementation(libs.firebase.perf)
 
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.dagger)
