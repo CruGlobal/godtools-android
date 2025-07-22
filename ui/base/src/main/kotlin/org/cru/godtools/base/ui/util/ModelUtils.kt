@@ -4,9 +4,6 @@ package org.cru.godtools.base.ui.util
 
 import android.content.Context
 import android.content.res.Resources
-import android.os.Build
-import androidx.annotation.DeprecatedSinceApi
-import androidx.compose.ui.text.TextStyle
 import java.util.Locale
 import org.ccci.gto.android.common.util.content.localizeIfPossible
 import org.cru.godtools.model.Tool
@@ -16,20 +13,10 @@ import org.cru.godtools.ui.R
 import timber.log.Timber
 
 @JvmName("getTranslationName")
-fun Translation?.getName(tool: Tool?, context: Context?) =
-    this?.let { name?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.name ?: ""
+fun Translation?.getName(tool: Tool?, context: Context?) = this?.name ?: tool?.name ?: ""
 
 @JvmName("getTranslationDescription")
-fun Translation?.getDescription(tool: Tool?, context: Context?) =
-    this?.let { description?.applyTypefaceSpan(getTypeface(context)) } ?: tool?.description ?: ""
-
-@DeprecatedSinceApi(Build.VERSION_CODES.M)
-fun Translation.getFontFamilyOrNull() = languageCode.getFontFamilyOrNull()
-
-@DeprecatedSinceApi(Build.VERSION_CODES.M)
-fun TextStyle.withCompatFontFamilyFor(translation: Translation?) = withCompatFontFamilyFor(translation?.languageCode)
-
-private fun Translation.getTypeface(context: Context?) = context?.getTypeface(languageCode)
+fun Translation?.getDescription(tool: Tool?, context: Context?) = this?.description ?: tool?.description ?: ""
 
 // region Tool Category
 @JvmName("getToolCategory")

@@ -12,7 +12,6 @@ import org.ccci.gto.android.common.picasso.widget.TextViewDrawableStartTarget
 import org.ccci.gto.android.common.util.dpToPixelSize
 import org.cru.godtools.base.tool.dagger.picasso
 import org.cru.godtools.base.tool.model.getFileBlocking
-import org.cru.godtools.base.tool.ui.util.getTypeface
 import org.cru.godtools.base.toolFileSystem
 import org.cru.godtools.shared.tool.parser.model.Resource
 import org.cru.godtools.shared.tool.parser.model.Text
@@ -27,7 +26,7 @@ import splitties.bitflags.withFlag
 @BindingAdapter("android:text", "android:textSize", requireAll = false)
 internal fun TextView.bindTextNode(text: Text?, textSize: Float?) {
     this.text = text?.text
-    setTypeface(text?.manifest?.getTypeface(context), text?.typefaceStyle ?: Typeface.NORMAL)
+    setTypeface(null, text?.typefaceStyle ?: Typeface.NORMAL)
     paintFlags = paintFlags.let {
         if (Text.Style.UNDERLINE in text?.textStyles.orEmpty()) {
             it.withFlag(Paint.UNDERLINE_TEXT_FLAG)

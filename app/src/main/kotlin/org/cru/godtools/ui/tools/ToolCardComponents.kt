@@ -8,10 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -26,7 +23,6 @@ import coil.compose.AsyncImage
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getCategory
-import org.cru.godtools.base.ui.util.withCompatFontFamilyFor
 import org.cru.godtools.model.getName
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
@@ -39,15 +35,7 @@ internal val ToolCard.State.toolNameStyle: TextStyle
     @Composable
     get() {
         val baseStyle = MaterialTheme.typography.titleMedium
-        val translation by rememberUpdatedState(translation)
-
-        return remember(baseStyle) {
-            derivedStateOf {
-                baseStyle
-                    .withCompatFontFamilyFor(translation)
-                    .merge(TextStyle(fontWeight = FontWeight.Bold))
-            }
-        }.value
+        return remember(baseStyle) { baseStyle.merge(TextStyle(fontWeight = FontWeight.Bold)) }
     }
 
 internal val toolCategoryStyle @Composable get() = MaterialTheme.typography.bodySmall
