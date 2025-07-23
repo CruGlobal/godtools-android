@@ -193,7 +193,7 @@ okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
-play-auth = "com.google.android.gms:play-services-auth:21.3.0"
+play-auth = "com.google.android.gms:play-services-auth:21.4.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
