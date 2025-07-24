@@ -79,5 +79,5 @@ internal val MIGRATION_10_11: Migration = object : Migration(10, 11) {
 internal fun RoomDatabase.Builder<ArticleRoomDatabase>.enableMigrations() = addMigrations(MIGRATION_8_9)
     .addMigrations(MIGRATION_9_10)
     .addMigrations(MIGRATION_10_11)
-    .fallbackToDestructiveMigration()
+    .fallbackToDestructiveMigration(true)
 // endregion Migrations
