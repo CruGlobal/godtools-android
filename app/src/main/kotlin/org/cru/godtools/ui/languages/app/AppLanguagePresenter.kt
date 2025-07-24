@@ -26,7 +26,7 @@ import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.base.util.getPrimaryCollator
 
 class AppLanguagePresenter @AssistedInject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val settings: Settings,
     @Assisted private val navigator: Navigator,

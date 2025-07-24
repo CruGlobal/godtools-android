@@ -53,7 +53,7 @@ import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
     private val settings: Settings,
@@ -61,7 +61,7 @@ class ToolsPresenter @AssistedInject constructor(
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
-    @DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<ToolsScreen.State> {
     @Composable
