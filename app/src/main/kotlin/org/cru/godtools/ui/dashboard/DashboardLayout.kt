@@ -151,7 +151,6 @@ internal fun DashboardLayout(
                                         Page.HOME -> HomeScreen
                                         Page.FAVORITE_TOOLS -> AllFavoritesScreen
                                         Page.ALL_TOOLS -> ToolsScreen
-                                        else -> error("Page $page is not converted to Circuit yet")
                                     },
                                     onNavEvent = {
                                         when (it) {
