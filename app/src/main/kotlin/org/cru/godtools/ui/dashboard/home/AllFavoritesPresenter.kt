@@ -36,7 +36,7 @@ import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
 class AllFavoritesPresenter @AssistedInject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
     private val toolCardPresenter: ToolCardPresenter,
