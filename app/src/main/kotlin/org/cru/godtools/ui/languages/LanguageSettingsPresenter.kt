@@ -28,7 +28,7 @@ import org.cru.godtools.ui.languages.app.AppLanguageScreen
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val settings: Settings,
     private val languagesRepository: LanguagesRepository,
