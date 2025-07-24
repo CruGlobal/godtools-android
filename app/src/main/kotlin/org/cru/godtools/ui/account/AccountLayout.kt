@@ -46,7 +46,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
-import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
+import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
@@ -153,7 +153,7 @@ private fun AccountLayoutHeader(
                 modifier = Modifier
                     .padding(top = 8.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
                     .align(Alignment.CenterHorizontally)
-                    .invisibleIf { user?.createdAt == null }
+                    .invisibleIf(user?.createdAt == null)
             )
 
             TabRow(
