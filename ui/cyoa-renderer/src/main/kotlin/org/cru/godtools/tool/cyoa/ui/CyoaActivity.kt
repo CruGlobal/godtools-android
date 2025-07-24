@@ -216,7 +216,7 @@ class CyoaActivity :
             newPage != null -> showPage(newPage, replaceCurrentPage = dismissCurrentPage)
             dismissCurrentPage -> when {
                 supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
-                pageFragment != null -> supportFragmentManager.commit { remove(pageFragment) }
+                else -> supportFragmentManager.commit { remove(pageFragment) }
             }
         }
     }
