@@ -8,6 +8,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
@@ -108,6 +110,7 @@ class PageController @AssistedInject internal constructor(
                             state = toolState,
                             modifier = Modifier
                                 .fillMaxSize()
+                                .nestedScroll(rememberNestedScrollInteropConnection())
                                 .verticalScroll(rememberScrollState())
                         )
                     }
