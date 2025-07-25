@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.godtoolsShared.user.activity)
 
     implementation(libs.androidx.cardview)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)

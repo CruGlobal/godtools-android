@@ -14,13 +14,16 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.mockk.mockk
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.tool.tract.databinding.TractPageBinding
@@ -43,9 +46,10 @@ class PageControllerTest {
     @Inject
     lateinit var eventBus: EventBus
     @Inject
-    lateinit var settings: Settings
+    @Named(TOOL_RESOURCE_FILE_SYSTEM)
+    lateinit var resourceFileSystem: FileSystem
     @Inject
-    lateinit var heroControllerFactory: HeroController.Factory
+    lateinit var settings: Settings
     @Inject
     lateinit var cardControllerFactory: CardController.Factory
     private val baseLifecycleOwner = TestLifecycleOwner(Lifecycle.State.RESUMED)
@@ -63,9 +67,9 @@ class PageControllerTest {
             ImmutableLiveData(false),
             State(),
             eventBus,
+            resourceFileSystem,
             settings,
             mockk(),
-            heroControllerFactory,
             cardControllerFactory
         )
     }
@@ -88,25 +92,25 @@ class PageControllerTest {
         controller.model = TractPage(cards = { listOf(TractPage.Card(it), TractPage.Card(it)) })
 
         // initially hero is visible
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroLifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the first card
         binding.pageContentLayout.changeActiveCard(0, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroLifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the second card
         binding.pageContentLayout.changeActiveCard(1, false)
-        assertEquals(Lifecycle.State.STARTED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.STARTED, controller.heroLifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.RESUMED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
 
         // change to the hero
         binding.pageContentLayout.changeActiveCard(-1, false)
-        assertEquals(Lifecycle.State.RESUMED, controller.heroController.lifecycleOwner.lifecycle.currentState)
+        assertEquals(Lifecycle.State.RESUMED, controller.heroLifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[0].lifecycleOwner.lifecycle.currentState)
         assertEquals(Lifecycle.State.STARTED, controller.cardControllers[1].lifecycleOwner.lifecycle.currentState)
     }
