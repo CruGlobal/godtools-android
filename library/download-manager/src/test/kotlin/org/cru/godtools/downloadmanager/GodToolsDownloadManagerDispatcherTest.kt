@@ -50,7 +50,7 @@ class GodToolsDownloadManagerDispatcherTest {
     }
     private val downloadManager = mockk<GodToolsDownloadManager> {
         coEvery { downloadLatestPublishedTranslation(any()) } returns true
-        coJustRun { downloadAttachment(any()) }
+        coEvery { downloadAttachment(any()) } returns true
     }
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk {
         every { getDownloadedFilesFlow() } returns downloadedFilesFlow

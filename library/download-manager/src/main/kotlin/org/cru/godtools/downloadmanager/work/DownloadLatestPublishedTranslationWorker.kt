@@ -18,7 +18,6 @@ import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.TranslationKey
 
 private const val WORK_NAME = "DownloadTranslation"
-private const val TAG_DOWNLOAD_MANAGER = "DownloadManager"
 private const val KEY_TRANSLATION = "translation"
 
 internal fun WorkManager.scheduleDownloadTranslationWork(key: TranslationKey) = enqueueUniqueWork(

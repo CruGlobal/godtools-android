@@ -57,6 +57,7 @@ import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.downloadmanager.work.scheduleDownloadAttachmentWork
 import org.cru.godtools.downloadmanager.work.scheduleDownloadTranslationWork
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -150,19 +151,18 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     // endregion Download Progress
 
     // region Attachments
-    @VisibleForTesting
-    internal suspend fun downloadAttachment(attachmentId: Long) {
-        if (!fs.exists()) return
+    internal suspend fun downloadAttachment(attachmentId: Long): Boolean {
+        require(fs.exists())
 
         attachmentsMutex.withLock(attachmentId) {
-            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
-            val filename = attachment.localFilename ?: return
+            val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return true
+            val filename = attachment.localFilename ?: return true
             val wasDownloaded = attachment.isDownloaded
 
             filesystemMutex.read.withLock {
                 filesMutex.withLock(filename) {
                     val downloadedFile = downloadedFilesRepository.findDownloadedFile(filename)
-                    if (attachment.isDownloaded && downloadedFile != null) return
+                    if (attachment.isDownloaded && downloadedFile != null) return true
                     attachment.isDownloaded = downloadedFile != null
 
                     if (downloadedFile == null) {
@@ -176,13 +176,19 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                                     downloadedFilesRepository.insertOrIgnore(file)
                                     attachment.isDownloaded = true
                                 }
-                        } catch (ignored: IOException) {
+                        } catch (_: IOException) {
                         }
                     }
 
                     if (attachment.isDownloaded || wasDownloaded) {
                         attachmentsRepository.updateAttachmentDownloaded(attachmentId, attachment.isDownloaded)
                     }
+
+                    if (!attachment.isDownloaded) {
+                        workManager.get().scheduleDownloadAttachmentWork(attachmentId)
+                    }
+
+                    return attachment.isDownloaded
                 }
             }
         }
