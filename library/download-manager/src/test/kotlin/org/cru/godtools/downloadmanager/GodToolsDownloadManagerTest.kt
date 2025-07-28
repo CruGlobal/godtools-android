@@ -20,6 +20,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import io.mockk.verifyAll
 import io.mockk.verifyOrder
 import java.io.File
 import java.io.IOException
@@ -50,6 +51,7 @@ import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.downloadmanager.work.WORK_NAME_DOWNLOAD_ATTACHMENT
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
@@ -90,7 +92,7 @@ class GodToolsDownloadManagerTest {
     private val translationsRepository: TranslationsRepository = mockk {
         coEvery { markStaleTranslationsAsNotDownloaded() } returns false
     }
-    private val workManager = mockk<WorkManager> {
+    private val workManager: WorkManager = mockk {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
     }
     private val testScope = TestScope()
@@ -161,13 +163,14 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(any()) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        assertTrue(downloadManager.downloadAttachment(attachment.id))
         assertContentEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
+            workManager wasNot Called
         }
     }
 
@@ -175,9 +178,12 @@ class GodToolsDownloadManagerTest {
     fun `downloadAttachment() - Already Downloaded`() = testScope.runTest {
         attachment.isDownloaded = true
 
-        downloadManager.downloadAttachment(attachment.id)
+        assertTrue(downloadManager.downloadAttachment(attachment.id))
         assertTrue(attachment.isDownloaded)
-        verify { attachmentsApi wasNot Called }
+        verifyAll {
+            attachmentsApi wasNot Called
+            workManager wasNot Called
+        }
     }
 
     @Test
@@ -188,13 +194,14 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(attachment.id) } returns Response.success(response)
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        assertTrue(downloadManager.downloadAttachment(attachment.id))
         assertContentEquals(testData, file.readBytes())
         assertTrue(attachment.isDownloaded)
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile())
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, true)
+            workManager wasNot Called
         }
     }
 
@@ -205,13 +212,18 @@ class GodToolsDownloadManagerTest {
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
         coEvery { attachment.getFile(fs) } returns file
 
-        downloadManager.downloadAttachment(attachment.id)
+        assertFalse(downloadManager.downloadAttachment(attachment.id))
         assertFalse(file.exists())
         assertFalse(attachment.isDownloaded)
         coVerify(inverse = true) { downloadedFilesRepository.insertOrIgnore(attachment.asDownloadedFile()) }
         coVerifySequence {
             attachmentsApi.download(attachment.id)
             attachmentsRepository.updateAttachmentDownloaded(attachment.id, false)
+            workManager.enqueueUniqueWork(
+                "$WORK_NAME_DOWNLOAD_ATTACHMENT:${attachment.id}",
+                ExistingWorkPolicy.KEEP,
+                any<OneTimeWorkRequest>()
+            )
         }
     }
 
@@ -220,9 +232,16 @@ class GodToolsDownloadManagerTest {
         coEvery { downloadedFilesRepository.findDownloadedFile(attachment.localFilename!!) } returns null
         coEvery { attachmentsApi.download(attachment.id) } throws IOException()
 
-        downloadManager.downloadAttachment(attachment.id)
+        assertFalse(downloadManager.downloadAttachment(attachment.id))
         assertFalse(attachment.isDownloaded)
-        coVerifySequence { attachmentsApi.download(attachment.id) }
+        coVerifySequence {
+            attachmentsApi.download(attachment.id)
+            workManager.enqueueUniqueWork(
+                "$WORK_NAME_DOWNLOAD_ATTACHMENT:${attachment.id}",
+                ExistingWorkPolicy.KEEP,
+                any<OneTimeWorkRequest>()
+            )
+        }
     }
     // endregion downloadAttachment()
 
