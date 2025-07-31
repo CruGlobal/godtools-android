@@ -53,11 +53,11 @@ internal fun Project.excludeAndroidSdkDependencies() {
 }
 
 private fun BaseExtension.configureSdk() {
-    compileSdkVersion(35)
+    compileSdkVersion(36)
 
     defaultConfig {
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
     }
 }
 
