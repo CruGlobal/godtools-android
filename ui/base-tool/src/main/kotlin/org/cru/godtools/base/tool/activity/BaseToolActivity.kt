@@ -64,6 +64,7 @@ import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
@@ -318,10 +319,13 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
                     is State.Event.OpenUrl -> openUrl(it.url.toUri())
                     is State.Event.SubmitForm ->
                         followupService.handleSubmitFormEvent(it, activeManifest?.locale?.toPlatform())
+                    is State.Event.OpenTip -> activeManifest?.findTip(it.tipId)?.let { showTip(it) }
                 }
             }
             .launchIn(lifecycleScope)
     }
+
+    protected open fun showTip(tip: Tip) = Unit
     // endregion Renderer State
 
     // region Content Event Logic
