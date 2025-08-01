@@ -22,6 +22,7 @@ import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.shared.renderer.content.RenderContentStack
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.ContentPage
@@ -40,6 +41,7 @@ class ContentPageController @AssistedInject constructor(
     eventBus: EventBus,
     @param:Named(TOOL_RESOURCE_FILE_SYSTEM)
     private val resourceFileSystem: FileSystem,
+    private val tipsRepository: TipsRepository,
 ) : BaseController<ContentPage>(ContentPage::class, binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
@@ -66,7 +68,7 @@ class ContentPageController @AssistedInject constructor(
         binding.compose.setContent {
             val insets by contentInsets.collectAsState()
 
-            ProvideRendererServices(resourceFileSystem) {
+            ProvideRendererServices(resourceFileSystem, tipsRepository = tipsRepository) {
                 RenderContentStack(
                     model?.content.orEmpty(),
                     modifier = Modifier
