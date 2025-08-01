@@ -38,7 +38,7 @@ class ContentPageController @AssistedInject constructor(
     @Assisted override val enableTips: LiveData<Boolean>,
     @Assisted override val toolState: State,
     eventBus: EventBus,
-    @Named(TOOL_RESOURCE_FILE_SYSTEM)
+    @param:Named(TOOL_RESOURCE_FILE_SYSTEM)
     private val resourceFileSystem: FileSystem,
 ) : BaseController<ContentPage>(ContentPage::class, binding.root, eventBus = eventBus) {
     @AssistedFactory

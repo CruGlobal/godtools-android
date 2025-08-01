@@ -24,7 +24,7 @@ class LessonPageController @AssistedInject constructor(
     @Assisted override val lifecycleOwner: LifecycleOwner,
     @Assisted override val toolState: State,
     eventBus: EventBus,
-    @Named(TOOL_RESOURCE_FILE_SYSTEM)
+    @param:Named(TOOL_RESOURCE_FILE_SYSTEM)
     private val resourceFileSystem: FileSystem,
 ) : BaseController<LessonPage>(LessonPage::class, binding.root, eventBus = eventBus) {
     @AssistedFactory
