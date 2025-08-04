@@ -73,6 +73,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
 
     private fun setupDataModel() {
         dataModel.supportedType.value = supportedType
+        dataModel.showTips.observe(this) { toolState.toolState.showTips.value = it }
     }
     // endregion Data Model
 

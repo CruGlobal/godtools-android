@@ -30,6 +30,7 @@ import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.shared.renderer.content.RenderContentStack
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
@@ -180,17 +181,20 @@ class CardCollectionPageController @AssistedInject constructor(
     class CardController private constructor(
         val binding: CyoaPageCardCollectionCardBinding,
         pageController: CardCollectionPageController,
-        private val resourceFileSystem: FileSystem
+        private val resourceFileSystem: FileSystem,
+        private val tipsRepository: TipsRepository,
     ) : BaseController<Card>(Card::class, binding.root, pageController) {
         @AssistedInject
         internal constructor(
             @Assisted parent: ViewGroup,
             @Assisted pageController: CardCollectionPageController,
             @Named(TOOL_RESOURCE_FILE_SYSTEM) resourceFileSystem: FileSystem,
+            tipsRepository: TipsRepository,
         ) : this(
             CyoaPageCardCollectionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             pageController,
-            resourceFileSystem
+            resourceFileSystem,
+            tipsRepository,
         )
 
         @AssistedFactory
@@ -210,7 +214,7 @@ class CardCollectionPageController @AssistedInject constructor(
             super.onBind()
             binding.model = model
             binding.compose.setContent {
-                ProvideRendererServices(resourceFileSystem) {
+                ProvideRendererServices(resourceFileSystem, tipsRepository) {
                     RenderContentStack(
                         model?.content.orEmpty(),
                         state = toolState,

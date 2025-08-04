@@ -32,6 +32,7 @@ import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.db.repository.TrainingTipsRepository
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.tract.RenderTractHero
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -51,7 +52,8 @@ class PageController @AssistedInject internal constructor(
     eventBus: EventBus,
     @param:Named(TOOL_RESOURCE_FILE_SYSTEM) private val resourceFileSystem: FileSystem,
     private val settings: Settings,
-    private val tipsRepository: TrainingTipsRepository,
+    private val tipsRepository: TipsRepository,
+    private val trainingTipsRepository: TrainingTipsRepository,
     private val cardControllerFactory: CardController.Factory
 ) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
     CardController.Callbacks,
@@ -99,11 +101,11 @@ class PageController @AssistedInject internal constructor(
     override fun onBind() {
         super.onBind()
         binding.page = model
-        binding.isHeaderTipComplete = tipsRepository.isTipComplete(model?.header?.tip?.id)
-        binding.isCallToActionTipComplete = tipsRepository.isTipComplete(model?.callToAction?.tip?.id)
+        binding.isHeaderTipComplete = trainingTipsRepository.isTipComplete(model?.header?.tip?.id)
+        binding.isCallToActionTipComplete = trainingTipsRepository.isTipComplete(model?.callToAction?.tip?.id)
         binding.hero.setContent {
             CompositionLocalProvider(LocalLifecycleOwner provides heroLifecycleOwner) {
-                ProvideRendererServices(resourceFileSystem) {
+                ProvideRendererServices(resourceFileSystem, tipsRepository = tipsRepository) {
                     model?.let {
                         RenderTractHero(
                             it,
