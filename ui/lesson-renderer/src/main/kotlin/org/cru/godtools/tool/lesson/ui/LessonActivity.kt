@@ -36,6 +36,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.cru.godtools.base.CONFIG_TUTORIAL_LESSON_PAGE_SWIPE
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
@@ -121,7 +122,7 @@ class LessonActivity :
 
         when (intent.action) {
             ACTION_VIEW -> when {
-                data.isGodToolsDeepLink() -> {
+                data.isDynalinksDeepLink() || data.isGodToolsDeepLink() -> {
                     dataModel.toolCode.value = path[3]
                     dataModel.locale.value = Locale.forLanguageTag(path[4])
                 }
@@ -138,6 +139,11 @@ class LessonActivity :
             }
         }
     }
+
+    private fun Uri.isDynalinksDeepLink() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
+        HOST_DYNALINKS.equals(host, true) &&
+        pathSegments.orEmpty().size >= 5 &&
+        path?.startsWith("/deeplink/tool/lesson/") == true
 
     private fun Uri.isGodToolsDeepLink() = ("http".equals(scheme, true) || "https".equals(scheme, true)) &&
         HOST_GODTOOLSAPP_COM.equals(host, true) &&

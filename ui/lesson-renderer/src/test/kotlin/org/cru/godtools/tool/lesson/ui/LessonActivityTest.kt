@@ -14,6 +14,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.createLessonActivityIntent
 import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
@@ -81,6 +82,18 @@ class LessonActivityTest {
     @Test
     fun `processIntent() - godtoolsapp_com Deep Link`() {
         val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/lesson/$TOOL/en"))
+        ActivityScenario.launch<LessonActivity>(intent).use {
+            it.onActivity {
+                assertEquals(TOOL, it.tool)
+                assertEquals(Locale.ENGLISH, it.locale)
+                assertFalse(it.isFinishing)
+            }
+        }
+    }
+
+    @Test
+    fun `processIntent() - dynalinks Deep Link`() {
+        val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/lesson/$TOOL/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
