@@ -15,6 +15,7 @@ import dagger.hilt.android.testing.HiltTestApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.base.ui.dashboard.Page
@@ -105,6 +106,27 @@ class DashboardActivityTest {
     @Test
     fun `Intent Processing - Deep Link - godtoolsapp_com - Tools`() {
         scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/dashboard/tools"))) {
+            it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - dynalinks - Home`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/dashboard/home"))) {
+            it.onActivity { assertEquals(Page.HOME, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - dynalinks - Lessons`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/dashboard/lessons"))) {
+            it.onActivity { assertEquals(Page.LESSONS, it.viewModel.currentPage.value) }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - Deep Link - dynalinks - Tools`() {
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/dashboard/tools"))) {
             it.onActivity { assertEquals(Page.ALL_TOOLS, it.viewModel.currentPage.value) }
         }
     }

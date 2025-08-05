@@ -112,13 +112,15 @@ class DashboardActivity : BaseActivity() {
             intent.action == Intent.ACTION_VIEW -> {
                 val data = intent.data
                 when {
-                    data?.isDashboardCustomUriSchemeDeepLink() == true ->
+                    data == null -> Unit
+
+                    data.isDashboardCustomUriSchemeDeepLink() ->
                         viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
 
-                    data?.isDashboardGodToolsDeepLink() == true ->
+                    data.isDashboardDynalinksDeepLink() || data.isDashboardGodToolsDeepLink() ->
                         viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(2)))
 
-                    data?.isDashboardLessonsDeepLink() == true -> viewModel.updateCurrentPage(Page.LESSONS)
+                    data.isDashboardLessonsDeepLink() -> viewModel.updateCurrentPage(Page.LESSONS)
                 }
             }
         }
