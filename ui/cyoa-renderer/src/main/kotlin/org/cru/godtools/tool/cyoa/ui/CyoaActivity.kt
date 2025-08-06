@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
 import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
@@ -93,7 +94,7 @@ class CyoaActivity :
             }
 
             when {
-                data.isGodToolsDeepLink -> {
+                data.isDynalinksDeepLink || data.isGodToolsDeepLink -> {
                     val path = data.pathSegments
                     dataModel.toolCode.value = path.getOrNull(3)
                     dataModel.primaryLocales.value = listOfNotNull(path.getOrNull(4)?.let { Locale.forLanguageTag(it) })
@@ -110,6 +111,12 @@ class CyoaActivity :
             }
         }
     }
+
+    private inline val Uri.isDynalinksDeepLink
+        get() = (scheme.equals("http", true) || scheme.equals("https", true)) &&
+            HOST_DYNALINKS.equals(host, true) &&
+            pathSegments.size >= 5 &&
+            path?.startsWith("/deeplink/tool/cyoa/") == true
 
     private inline val Uri.isGodToolsDeepLink
         get() = (scheme.equals("http", true) || scheme.equals("https", true)) &&
