@@ -27,7 +27,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
@@ -65,7 +65,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
@@ -104,7 +104,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
@@ -145,7 +145,7 @@ jobs:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
         run: echo $FIREBASE_API_KEY > firebase/firebase_api_key.json
       - name: Setup Java JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: "temurin"
           java-version-file: ".java-version"
