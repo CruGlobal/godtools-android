@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.graphics.Insets
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -57,6 +58,7 @@ class ContentPageController @AssistedInject constructor(
     internal var callbacks: ShowTipCallback? = null
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.contentInsets = contentInsets
