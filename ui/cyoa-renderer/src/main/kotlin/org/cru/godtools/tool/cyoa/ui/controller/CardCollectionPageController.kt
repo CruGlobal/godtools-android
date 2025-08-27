@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -206,6 +207,7 @@ class CardCollectionPageController @AssistedInject constructor(
             ConstrainedStateLifecycleOwner(pageController.lifecycleOwner, Lifecycle.State.CREATED)
 
         init {
+            binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
         }

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -63,6 +64,7 @@ class CardController private constructor(
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.enableTips = pageController.enableTips

@@ -9,6 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -58,6 +59,7 @@ class PageCollectionPageController @AssistedInject constructor(
     internal var callbacks: ShowTipCallback? = null
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
     }

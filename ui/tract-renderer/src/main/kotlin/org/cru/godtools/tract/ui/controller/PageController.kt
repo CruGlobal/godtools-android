@@ -14,6 +14,7 @@ import androidx.core.util.Pools
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -84,6 +85,7 @@ class PageController @AssistedInject internal constructor(
         }
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.cardsDiscovered = settings.isFeatureDiscoveredLiveData(FEATURE_TRACT_CARD_CLICKED) or

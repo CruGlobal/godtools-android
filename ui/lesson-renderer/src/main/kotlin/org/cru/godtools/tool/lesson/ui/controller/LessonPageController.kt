@@ -1,6 +1,7 @@
 package org.cru.godtools.tool.lesson.ui.controller
 
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -37,6 +38,7 @@ class LessonPageController @AssistedInject constructor(
     private var pendingVisibleAnalyticsEvents: List<Job>? = null
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
 
