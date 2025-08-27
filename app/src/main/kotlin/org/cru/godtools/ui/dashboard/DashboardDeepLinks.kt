@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard
 
 import android.net.Uri
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.ui.dashboard.Page
@@ -11,6 +12,11 @@ internal fun Uri.isDashboardLessonsDeepLink() =
 
 internal fun Uri.isDashboardGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
     host.equals(HOST_GODTOOLSAPP_COM, true) &&
+    pathSegments[0] == "deeplink" &&
+    pathSegments[1] == "dashboard"
+
+internal fun Uri.isDashboardDynalinksDeepLink() = (scheme == "http" || scheme == "https") &&
+    host.equals(HOST_DYNALINKS, true) &&
     pathSegments[0] == "deeplink" &&
     pathSegments[1] == "dashboard"
 

@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.account.globalactivity
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.Year
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.androidx.compose.material3.ui.card.ElevatedCard
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
@@ -72,11 +73,11 @@ fun GlobalActivityLayout(state: GlobalActivityScreen.UiState, modifier: Modifier
 
 @Composable
 private fun GlobalActivityCard(label: String, count: Int, modifier: Modifier = Modifier) = ElevatedCard(
+    contentVerticalArrangement = Arrangement.Center,
     modifier = modifier.heightIn(min = 128.dp)
 ) {
     val labelStyle = MaterialTheme.typography.bodyMedium
 
-    Spacer(Modifier.weight(1f))
     Spacer(Modifier.height(computeHeightForDefaultText(labelStyle, 2) - computeHeightForDefaultText(labelStyle, 1)))
     Text(
         count.format(),
@@ -96,5 +97,4 @@ private fun GlobalActivityCard(label: String, count: Int, modifier: Modifier = M
             .align(Alignment.CenterHorizontally)
             .padding(top = 8.dp, bottom = 8.dp, horizontal = 16.dp)
     )
-    Spacer(Modifier.weight(1f))
 }

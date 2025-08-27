@@ -18,16 +18,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.model.getName
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
-
-internal val toolViewModels: ToolViewModels @Composable get() = viewModel()
 
 internal val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
@@ -66,8 +62,9 @@ internal fun ToolName(
         state.translation.getName(state.tool).orEmpty(),
         style = style,
         maxLines = maxLines,
+        minLines = minLines,
         overflow = TextOverflow.Ellipsis,
-        modifier = modifier.minLinesHeight(minLines = minLines, textStyle = style)
+        modifier = modifier
     )
 }
 

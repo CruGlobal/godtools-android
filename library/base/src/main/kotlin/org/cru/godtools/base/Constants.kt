@@ -10,6 +10,7 @@ const val EXTRA_PAGE = "page"
 const val EXTRA_ACTIVE_LOCALE = "activeLocale"
 
 const val SCHEME_GODTOOLS = "godtools"
+const val HOST_DYNALINKS = "godtools.dynalinks.app"
 const val HOST_GODTOOLSAPP_COM = "godtoolsapp.com"
 const val HOST_GET_GODTOOLSAPP_COM = "get.godtoolsapp.com"
 const val HOST_KNOWGOD_COM = "knowgod.com"

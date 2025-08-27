@@ -2,6 +2,7 @@ package org.cru.godtools.article.aem.ui
 
 import android.app.Activity
 import android.net.Uri
+import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -28,13 +29,13 @@ internal class ArticleWebViewClient @Inject constructor(
 ) : WebViewClient() {
     var activity: Activity? by weak()
 
-    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        activity?.openUrl(Uri.parse(url))
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest): Boolean {
+        activity?.openUrl(request.url)
         return true
     }
 
-    override fun shouldInterceptRequest(view: WebView, url: String): WebResourceResponse? {
-        val uri = Uri.parse(url)
+    override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+        val uri = request.url
         if (uri.scheme == "data") return null
         return uri.getResponseFromFile() ?: notFoundResponse()
     }

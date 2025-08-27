@@ -43,12 +43,12 @@ import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.Ui
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 class DownloadableLanguagesPresenter @AssistedInject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val languagesRepository: LanguagesRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
-    @DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
+    @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     @Composable

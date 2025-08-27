@@ -18,7 +18,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.ccci.gto.android.common.androidx.compose.ui.draw.invisibleIf
+import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.ui.tools.ToolCard.State.Progress
@@ -60,7 +60,7 @@ fun LessonToolCard(
                     drawStopIndicator = {},
                     modifier = Modifier
                         .fillMaxWidth()
-                        .invisibleIf { state.progress !is Progress.InProgress }
+                        .invisibleIf(state.progress !is Progress.InProgress)
                 )
             }
 

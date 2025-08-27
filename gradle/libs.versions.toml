@@ -1,36 +1,36 @@
 [versions]
 accompanist = "0.36.0"
-android-gradle-plugin = "8.11.1"
+android-gradle-plugin = "8.12.1"
 androidx-activity = "1.10.1"
 androidx-compose-foundation = "1.8.1"
 androidx-compose-material3 = "1.3.2"
-androidx-compose-runtime = "1.8.3"
-androidx-compose-ui = "1.8.3"
-androidx-core = "1.16.0"
+androidx-compose-runtime = "1.9.0"
+androidx-compose-ui = "1.9.0"
+androidx-core = "1.17.0"
 androidx-datastore = "1.1.7"
 androidx-hilt = "1.2.0"
-androidx-lifecycle = "2.9.2"
+androidx-lifecycle = "2.9.3"
 androidx-room = "2.7.2"
 androidx-viewpager2 = "1.1.0"
-androidx-work = "2.10.2"
-circuit = "0.29.1"
+androidx-work = "2.10.3"
+circuit = "0.30.0"
 coil = "2.7.0"
 colormath = "3.6.1"
-dagger = "2.57"
+dagger = "2.57.1"
 eventbus = "3.3.1"
-facebook = "18.0.3"
+facebook = "18.1.3"
 facebook-flipper = "0.273.0"
 firebase-crashlytics = "20.0.0"
-firebase-perf = "21.0.5"
+firebase-perf = "22.0.0"
 godtoolsShared = "1.3.0-compose-SNAPSHOT"
 google-auto-value = "1.11.0"
-gtoSupport = "4.4.1"
-kotlin = "2.2.0"
+gtoSupport = "4.5.0-SNAPSHOT"
+kotlin = "2.2.10"
 kotlinCoroutines = "1.10.2"
 kotlinKover = "0.9.1"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.10-2.0.2"
 ktlint = "1.7.1"
-ktlintGradle = "13.0.0"
+ktlintGradle = "13.1.0"
 lottie = "6.6.7"
 okhttp3 = "5.1.0"
 play-app-update = "2.1.0"
@@ -47,7 +47,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-annotation = "androidx.annotation:annotation:1.9.1"
 androidx-appcompat = "androidx.appcompat:appcompat:1.7.1"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
-androidx-browser = "androidx.browser:browser:1.8.0"
+androidx-browser = "androidx.browser:browser:1.9.0"
 androidx-cardview = "androidx.cardview:cardview:1.0.0"
 androidx-collection-ktx = "androidx.collection:collection-ktx:1.5.0"
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose-foundation" }
@@ -68,7 +68,7 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx
 androidx-databinding-compiler = { module = "androidx.databinding:databinding-compiler", version.ref = "android-gradle-plugin" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
-androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.8"
+androidx-fragment-ktx = "androidx.fragment:fragment-ktx:1.8.9"
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx-hilt" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
@@ -80,8 +80,8 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx-room" }
 androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "androidx-room" }
 androidx-swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.6.1"
-androidx-test-junit = "androidx.test.ext:junit:1.2.1"
+androidx-test-espresso-core = "androidx.test.espresso:espresso-core:3.7.0"
+androidx-test-junit = "androidx.test.ext:junit:1.3.0"
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
 androidx-work = { module = "androidx.work:work-runtime", version.ref = "androidx-work" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work" }
@@ -110,10 +110,9 @@ firebase-config = "com.google.firebase:firebase-config:23.0.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:22.1.0"
-firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:21.0.2"
-firebase-messaging = "com.google.firebase:firebase-messaging:24.1.2"
+firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:22.0.0"
+firebase-messaging = "com.google.firebase:firebase-messaging:25.0.0"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
-firebase-perf-ktx = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebase-perf" }
 godtoolsShared-analytics = { module = "org.cru.godtools.kotlin:analytics", version.ref = "godtoolsShared" }
 godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref = "godtoolsShared" }
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
@@ -176,7 +175,7 @@ hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref 
 javapoet = "com.squareup:javapoet:1.13.0"
 json = "org.json:json:20250517"
 jsonUnit-assertj = "net.javacrumbs.json-unit:json-unit-assertj:4.1.1"
-jsoup = "org.jsoup:jsoup:1.21.1"
+jsoup = "org.jsoup:jsoup:1.21.2"
 junit = "junit:junit:4.13.2"
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
@@ -188,7 +187,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
-ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.4.26"
+ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.4.27"
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.14"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
@@ -201,7 +200,7 @@ okio-fakefilesystem = "com.squareup.okio:okio-fakefilesystem:3.16.0"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
-play-auth = "com.google.android.gms:play-services-auth:21.3.0"
+play-auth = "com.google.android.gms:play-services-auth:21.4.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
@@ -241,8 +240,8 @@ test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robol
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.1.1" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.5" }
-firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.0" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.1" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.3" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.2" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }

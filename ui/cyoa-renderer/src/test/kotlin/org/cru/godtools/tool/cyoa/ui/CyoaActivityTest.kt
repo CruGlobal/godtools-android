@@ -26,6 +26,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
@@ -239,6 +240,32 @@ class CyoaActivityTest {
         manifestEnglish.value = manifest(listOf(page1, page2))
 
         scenario(Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/cyoa/test/en/page2"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
+                assertEquals("page2", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - dynalinks Deep Link`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/cyoa/test/en"))) {
+            it.onActivity {
+                assertEquals("test", it.dataModel.toolCode.value)
+                assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)
+                assertEquals("page1", it.pageFragment!!.pageId)
+            }
+        }
+    }
+
+    @Test
+    fun `Intent Processing - dynalinks Deep Link - Specific Page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario(Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/cyoa/test/en/page2"))) {
             it.onActivity {
                 assertEquals("test", it.dataModel.toolCode.value)
                 assertEquals(listOf(Locale("en")), it.dataModel.primaryLocales.value)

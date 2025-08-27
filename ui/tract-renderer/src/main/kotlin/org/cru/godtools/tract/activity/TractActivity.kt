@@ -31,6 +31,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_PAGE
+import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
@@ -189,7 +190,7 @@ class TractActivity :
                         data.deepLinkPage?.let { initialPage = it }
                     }
                 }
-                data.isGodToolsDeepLink() -> {
+                data.isDynalinksDeepLink() || data.isGodToolsDeepLink() -> {
                     dataModel.toolCode.value = path[3]
                     dataModel.primaryLocales.value =
                         sequenceOf(Locale.forLanguageTag(path[4])).includeFallbacks().toList()
@@ -204,6 +205,11 @@ class TractActivity :
             }
         }
     }
+
+    private fun Uri.isDynalinksDeepLink() = (scheme == "http" || scheme == "https") &&
+        HOST_DYNALINKS.equals(host, true) &&
+        pathSegments.orEmpty().size >= 5 &&
+        path?.startsWith("/deeplink/tool/tract/") == true
 
     private fun Uri.isGodToolsDeepLink() = (scheme == "http" || scheme == "https") &&
         HOST_GODTOOLSAPP_COM.equals(host, true) &&
