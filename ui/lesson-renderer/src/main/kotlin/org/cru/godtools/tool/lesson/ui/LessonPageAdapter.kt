@@ -65,11 +65,11 @@ class LessonPageAdapter @AssistedInject internal constructor(
         LessonPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
     override fun onViewDataBindingCreated(binding: LessonPageBinding, viewType: Int) {
-        binding.callbacks = callbacks
         binding.bindController(
             controllerFactory,
             ConstrainedStateLifecycleOwner(lifecycleOwner, Lifecycle.State.CREATED),
-            toolState
+            toolState,
+            callbacks
         )
     }
 
@@ -79,8 +79,6 @@ class LessonPageAdapter @AssistedInject internal constructor(
             (lifecycleOwner as? ConstrainedStateLifecycleOwner)
                 ?.apply { maxState = maxOf(maxState, Lifecycle.State.STARTED) }
         }
-        binding.isFirstPage = position == 0
-        binding.isLastPage = position == pages.size - 1
     }
 
     override fun onViewDataBindingRecycled(binding: LessonPageBinding) {
