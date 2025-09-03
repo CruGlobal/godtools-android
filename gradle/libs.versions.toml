@@ -236,7 +236,7 @@ firebase-appdistribution = { id = "com.google.firebase.appdistribution", version
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.1" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.3" }
-grgit = { id = "org.ajoberstar.grgit", version = "5.3.2" }
+grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
