@@ -1,6 +1,6 @@
 [versions]
 accompanist = "0.36.0"
-android-gradle-plugin = "8.12.1"
+android-gradle-plugin = "8.13.0"
 androidx-activity = "1.10.1"
 androidx-compose-foundation = "1.8.1"
 androidx-compose-material3 = "1.3.2"
@@ -20,8 +20,8 @@ dagger = "2.57.1"
 eventbus = "3.3.1"
 facebook = "18.1.3"
 facebook-flipper = "0.273.0"
-firebase-crashlytics = "20.0.0"
-firebase-perf = "22.0.0"
+firebase-crashlytics = "20.0.1"
+firebase-perf = "22.0.1"
 godtoolsShared = "1.3.0-compose-SNAPSHOT"
 google-auto-value = "1.11.0"
 gtoSupport = "4.5.0-SNAPSHOT"
@@ -243,7 +243,7 @@ firebase-appdistribution = { id = "com.google.firebase.appdistribution", version
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.6" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.1" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.3" }
-grgit = { id = "org.ajoberstar.grgit", version = "5.3.2" }
+grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
