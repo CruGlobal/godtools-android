@@ -58,7 +58,7 @@ class ToolSettingsItemActionBindingTest {
         binding.executePendingBindings()
 
         assertEquals(
-            context.getColor(androidx.appcompat.R.color.primary_text_default_material_light),
+            context.getColor(com.google.android.material.R.color.m3_default_color_primary_text),
             binding.label.textColors.defaultColor
         )
     }

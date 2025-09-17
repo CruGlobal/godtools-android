@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:lines="2"
             android:text="@{action != null ? context.getString(action.label) : ``}"
-            android:textColor="@{action.labelColor != null ? ContextCompat.getColor(context, action.labelColor) : @color/primary_text_default_material_light}"
+            android:textColor="@{action.labelColor != null ? ContextCompat.getColor(context, action.labelColor) : @color/m3_default_color_primary_text}"
             app:layout_constraintBottom_toBottomOf="@id/icon"
             app:layout_constraintEnd_toEndOf="@id/background"
             app:layout_constraintStart_toStartOf="@id/background"
