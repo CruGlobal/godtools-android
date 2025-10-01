@@ -9,33 +9,41 @@ files: [
   {
     "source": "/app/src/main/res/values/strings*.xml",
     "translation": "/app/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/library/base/src/main/res/values/strings*.xml",
     "translation": "/library/base/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/base/src/main/res/values/strings*.xml",
     "translation": "/ui/base/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/base-tool/src/main/res/values/strings*.xml",
     "translation": "/ui/base-tool/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/lesson-renderer/src/main/res/values/strings*.xml",
     "translation": "/ui/lesson-renderer/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/tips-renderer/src/main/res/values/strings*.xml",
     "translation": "/ui/tips-renderer/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/tract-renderer/src/main/res/values/strings*.xml",
     "translation": "/ui/tract-renderer/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
   {
     "source": "/ui/tutorial-renderer/src/main/res/values/strings*.xml",
     "translation": "/ui/tutorial-renderer/src/main/res/values-%android_code%/%original_file_name%",
+    "update_option": "update_as_unapproved"
   },
 ]
