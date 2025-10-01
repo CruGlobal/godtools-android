@@ -12,6 +12,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import java.util.Locale
+import kotlin.test.Ignore
 import org.cru.godtools.base.EXTRA_LANGUAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -39,6 +40,7 @@ class LessonActivityTest {
 
     // region Intent processing
     @Test
+    @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - Valid direct`() {
         ActivityScenario.launch<LessonActivity>(context.createLessonActivityIntent(TOOL, Locale.ENGLISH)).use {
             it.onActivity {
@@ -68,6 +70,7 @@ class LessonActivityTest {
     }
 
     @Test
+    @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - Legacy Lesson deeplink`() {
         val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/lessons/test/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
@@ -80,6 +83,7 @@ class LessonActivityTest {
     }
 
     @Test
+    @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - godtoolsapp_com Deep Link`() {
         val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/lesson/$TOOL/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
@@ -92,6 +96,7 @@ class LessonActivityTest {
     }
 
     @Test
+    @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - dynalinks Deep Link`() {
         val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/lesson/$TOOL/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
@@ -104,6 +109,7 @@ class LessonActivityTest {
     }
 
     @Test
+    @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - Custom URI Deep Link`() {
         val intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/lesson/$TOOL/en"))
         ActivityScenario.launch<LessonActivity>(intent).use {
