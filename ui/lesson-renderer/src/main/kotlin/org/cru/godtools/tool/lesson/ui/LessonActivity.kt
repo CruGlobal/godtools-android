@@ -31,6 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
@@ -117,7 +118,7 @@ class LessonActivity :
             // record the highest page reached for feedback functionality
             LaunchedEffect(Unit) {
                 snapshotFlow { pagerState.settledPage }.collect { page ->
-                    dataModel.pageReached.value = maxOf(page, dataModel.pageReached.value)
+                    dataModel.pageReached.update { maxOf(it, page) }
                 }
             }
 
