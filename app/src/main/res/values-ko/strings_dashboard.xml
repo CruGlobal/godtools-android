@@ -56,6 +56,9 @@
     <string name="dashboard_tools_section_filter_label">필터</string>
     <string name="dashboard_tools_section_filter_category_any">모든 카테고리</string>
     <string name="dashboard_tools_section_filter_language_any">모든 언어</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="other">이용 가능한 도구 수: %1$d</item>
+    </plurals>
     <string name="dashboard_tools_section_filter_available_tools_all">모든 도구 이용 가능</string>
     <string name="dashboard_tools_section_categories_label">카테고리</string>
     <string name="dashboard_tools_section_categories_all">모든 도구</string>

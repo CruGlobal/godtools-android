@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="menu_install">Buusi</string>
+    <string name="menu_share_tract">Barruu kana ergi</string>
     <string name="tract_card_previous">Duubatti</string>
     <string name="tract_card_next">Itti Fufi</string>
     <!-- Live Sharing -->

@@ -23,6 +23,21 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Hoạt động</string>
     <string name="account_activity_header">Hoạt động của bạn</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Mở công cụ</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Hoàn thành bài học</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Chia sẻ màn hình</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Ngôn ngữ sử dụng</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">Phần</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Huy hiệu</string>
     <plurals name="account_activity_badge_tools_opened">
