@@ -50,6 +50,8 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tools_list_favorites_banner_text">Mache ein Tool offline zugänglich, indem du auf das Herzsymbol tippst. Es wird dadurch zu den Favoriten hinzugefügt.</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ablehnen</string>
     <!-- All Tools -->
+    <string name="nav_all_tools">Tools</string>
+    <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Beliebige Kategorie</string>
     <string name="dashboard_tools_section_filter_language_any">Beliebige Sprache</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
@@ -67,6 +69,7 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tools_list_remove_favorite_dialog_dismiss">Abbrechen</string>
     <string name="tool_card_accessibility_language_available">Verfügbar</string>
     <string name="tool_card_accessibility_language_unavailable">Nicht verfügbar</string>
+    <string name="action_tools_about">Details</string>
     <string name="action_tools_open">Öffnen</string>
     <!-- In App Update -->
     <string name="play_update_available">Update verfügbar</string>

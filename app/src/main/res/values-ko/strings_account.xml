@@ -25,6 +25,21 @@
     <!-- Activity -->
     <string name="profile_tab_activity">활동</string>
     <string name="account_activity_header">내 활동</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="other">도구 열기</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">완료한 수업</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="other">공유한 화면</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="other">사용한 언어</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="other">세션</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">내 배지</string>
     <plurals name="account_activity_badge_lessons_completed">

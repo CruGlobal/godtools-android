@@ -15,4 +15,7 @@
     <string name="language_settings_section_offline_action_edit">다운로드된 언어 편집</string>
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">언어 검색</string>
+    <plurals name="language_settings_downloadable_languages_available_tools">
+        <item quantity="other">이용 가능한 도구 수: %1$d</item>
+    </plurals>
 </resources>

@@ -23,6 +23,22 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Activité</string>
     <string name="account_activity_header">Votre activité</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Ouvertures des outil</item>
+        <item quantity="other">Ouvertures des outils</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Achèvement des leçon</item>
+        <item quantity="other">Achèvement des leçons</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Partage d\'écran</item>
+        <item quantity="other">Partages d\'écran</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Langue utilisées</item>
+        <item quantity="other">Langues utilisées</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Vos badges</string>
     <plurals name="account_activity_badge_tools_opened">

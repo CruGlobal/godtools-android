@@ -25,6 +25,36 @@
     <!-- Activity -->
     <string name="profile_tab_activity">Активность</string>
     <string name="account_activity_header">Ваша активность</string>
+    <plurals name="account_activity_tool_opens" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Инструмент открыт</item>
+        <item quantity="few">Инструментов открыто</item>
+        <item quantity="many">Инструментов открыто</item>
+        <item quantity="other">Инструментов открыто</item>
+    </plurals>
+    <plurals name="account_activity_lesson_completions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Урок пройден</item>
+        <item quantity="few">Уроков пройдено</item>
+        <item quantity="many">Урока пройдено</item>
+        <item quantity="other">Уроков пройдено</item>
+    </plurals>
+    <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Раз показан экран</item>
+        <item quantity="few">Раза показан экран</item>
+        <item quantity="many">Раз показан экран</item>
+        <item quantity="other">Раз показан экран</item>
+    </plurals>
+    <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Язык использован</item>
+        <item quantity="few">Языка использовано</item>
+        <item quantity="many">Языков использовано</item>
+        <item quantity="other">Языков использовано</item>
+    </plurals>
+    <plurals name="account_activity_sessions" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Сессия</item>
+        <item quantity="few">Сессии</item>
+        <item quantity="many">Сеансы</item>
+        <item quantity="other">Сессий</item>
+    </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">Ваши значки</string>
     <plurals name="account_activity_badge_tools_opened">
