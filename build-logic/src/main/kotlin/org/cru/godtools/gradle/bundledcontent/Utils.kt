@@ -8,7 +8,7 @@ internal fun File.loadJson() = inputStream().use { JSONObject(JSONTokener(it)) }
 internal fun JSONObject.writeJson(file: File) = file.writer().use { write(it) }
 
 internal fun JSONObject.optJSONArrayOrJSONObject(key: String) =
-    (optJSONArray(key)?.filterIsInstance<JSONObject>() ?: listOfNotNull(optJSONObject("data")))
+    (optJSONArray(key)?.filterIsInstance<JSONObject>() ?: listOfNotNull(optJSONObject(key)))
 internal val JSONObject.jsonApiType get() = optString("type", null)
 internal val JSONObject.jsonApiId get() = optString("id", null)?.toIntOrNull()
 internal val JSONObject.attributes get() = optJSONObject("attributes")
