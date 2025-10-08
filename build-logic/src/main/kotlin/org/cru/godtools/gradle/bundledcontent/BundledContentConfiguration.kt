@@ -76,7 +76,8 @@ private fun LibraryVariant.registerDownloadBundledToolsJsonTask(
             // attributes
             "manifest", "onesky-project-id", "total-views",
             // relationships
-            "system", "translations", "latest-drafts-translations", "pages", "custom-manifests", "tips"
+            "system", "translations", "latest-drafts-translations", "pages", "custom-manifests", "tips",
+            "resource-scores"
         )
         removeAttributesFor["attachment"] = listOf("file", "is-zipped")
         removeAttributesFor["language"] = listOf("direction")

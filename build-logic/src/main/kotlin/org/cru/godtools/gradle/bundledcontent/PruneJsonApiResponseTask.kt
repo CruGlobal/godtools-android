@@ -63,7 +63,7 @@ abstract class PruneJsonApiResponseTask : DefaultTask() {
     private fun JSONArray.sortJsonApiObjects() {
         val sorted = filterIsInstance<JSONObject>()
             .onEach { if (sortRelationships) it.sortJsonApiRelationships() }
-            .sortedBy { it.optInt("id") }.sortedBy { it.getString("type") }
+            .sortedWith(compareBy({ it.optString("type") }, { it.optInt("id") }))
         clear()
         putAll(sorted)
     }
