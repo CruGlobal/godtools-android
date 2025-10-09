@@ -32,7 +32,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Build App
         run: ./gradlew bundle --scan
 
@@ -48,7 +48,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run ktlint
         run: ./gradlew :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
@@ -70,7 +70,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run Lint Checks
         run: ./gradlew lint --scan
       - name: Archive lint results
@@ -109,7 +109,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
       - name: Run Unit Tests
         run: ./gradlew test verifyPaparazzi koverXmlReportDebug koverXmlReportProductionDebug --max-workers 1 --scan
       - name: Codecov
@@ -150,7 +150,7 @@ jobs:
           distribution: "temurin"
           java-version-file: ".java-version"
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
         with:
           cache-read-only: true
       - name: Upload QA Build to Firebase
