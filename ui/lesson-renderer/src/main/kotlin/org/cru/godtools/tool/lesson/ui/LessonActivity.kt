@@ -31,6 +31,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
@@ -103,7 +104,6 @@ class LessonActivity :
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.compose.setContent {
-            val pagerState = rememberLessonPagerState()
             val eventSink: (LessonScreen.UiEvent) -> Unit = {
                 when (it) {
                     LessonScreen.UiEvent.CloseLesson -> {
@@ -111,21 +111,6 @@ class LessonActivity :
                             finish()
                         }
                     }
-                }
-            }
-
-            // record the highest page reached for feedback functionality
-            LaunchedEffect(Unit) {
-                snapshotFlow { pagerState.settledPage }.collect { page ->
-                    dataModel.pageReached.value = maxOf(page, dataModel.pageReached.value)
-                }
-            }
-
-            // record the current progress for lesson resume functionality
-            LaunchedEffect(Unit) {
-                snapshotFlow { pagerState.settledPage }.collect {
-                    // TODO: this isn't properly capturing the page id
-                    updateProgress(it)
                 }
             }
 
@@ -145,12 +130,32 @@ class LessonActivity :
                     }
                     LessonScreen.UiState.Loading(progress, eventSink)
                 }
-                else -> LessonScreen.UiState.Loaded(
-                    manifest = manifest,
-                    state = toolState.toolState,
-                    pagerState = pagerState,
-                    eventSink = eventSink
-                )
+                else -> {
+                    val lessonPagerState = rememberLessonPagerState(manifest)
+                    val pagerState = lessonPagerState.pagerState
+
+                    // record the highest page reached for feedback functionality
+                    LaunchedEffect(pagerState) {
+                        snapshotFlow { pagerState.settledPage }.collect { page ->
+                            dataModel.pageReached.update { maxOf(it, page) }
+                        }
+                    }
+
+                    // record the current progress for lesson resume functionality
+                    LaunchedEffect(pagerState) {
+                        snapshotFlow { pagerState.settledPage }.collect {
+                            // TODO: this isn't properly capturing the page id
+                            updateProgress(it)
+                        }
+                    }
+
+                    LessonScreen.UiState.Loaded(
+                        manifest = manifest,
+                        state = toolState.toolState,
+                        lessonPager = lessonPagerState,
+                        eventSink = eventSink
+                    )
+                }
             }
 
             // render the Lesson

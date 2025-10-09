@@ -32,7 +32,6 @@ import org.cru.godtools.shared.tool.parser.model.Clickable
 import org.cru.godtools.shared.tool.parser.model.EventId
 import org.cru.godtools.shared.tool.parser.model.HasAnalyticsEvents
 import org.cru.godtools.shared.tool.parser.model.recordTriggered
-import org.cru.godtools.shared.tool.parser.model.resolve
 import org.cru.godtools.shared.tool.parser.model.shouldTrigger
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.greenrobot.eventbus.EventBus
