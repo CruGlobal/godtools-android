@@ -11,12 +11,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.overlay.ContentWithOverlays
@@ -29,10 +31,10 @@ import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -65,12 +67,10 @@ import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
 import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
-import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogFragment
+import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogOverlay
 import org.cru.godtools.tool.lesson.ui.swipetutorial.LessonSwipeTutorialAnimatedModalOverlay
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
 import org.cru.godtools.user.activity.UserActivityManager
-
-private const val TAG_RESUME_DIALOG = "resume_dialog"
 
 @AndroidEntryPoint
 class LessonActivity :
@@ -97,13 +97,14 @@ class LessonActivity :
         super.onCreate(savedInstanceState)
         if (isFinishing) return
         if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.LESSON)
-        setupResumeDialog()
         setupFeedbackDialog()
     }
 
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.compose.setContent {
+            var resumePageId by rememberSaveable { mutableStateOf(intent?.getStringExtra(EXTRA_RESUME_PAGE)) }
+
             val eventSink: (LessonScreen.UiEvent) -> Unit = {
                 when (it) {
                     LessonScreen.UiEvent.CloseLesson -> {
@@ -142,10 +143,11 @@ class LessonActivity :
                     }
 
                     // record the current progress for lesson resume functionality
-                    LaunchedEffect(pagerState) {
-                        snapshotFlow { pagerState.settledPage }.collect {
-                            // TODO: this isn't properly capturing the page id
-                            updateProgress(it)
+                    if (resumePageId == null) {
+                        LaunchedEffect(pagerState) {
+                            snapshotFlow { pagerState.settledPage }
+                                .conflate()
+                                .collect { updateProgress(it, lessonPagerState.pages) }
                         }
                     }
 
@@ -163,6 +165,22 @@ class LessonActivity :
                 GodToolsTheme(darkTheme = false) {
                     ContentWithOverlays {
                         RenderLesson(state)
+
+                        // resume lesson progress dialog
+                        if (state is LessonScreen.UiState.Loaded && resumePageId != null) {
+                            OverlayEffect(resumePageId) {
+                                val pageId = resumePageId ?: return@OverlayEffect
+                                if (state.indexOfResumePage(pageId) in 1 until state.lessonPager.pages.size - 1) {
+                                    val result = show(LessonResumeDialogOverlay(pageId))
+                                    if (result is LessonResumeDialogOverlay.Result.Resume) {
+                                        val index = state.indexOfResumePage(result.pageId)
+                                        if (index >= 0) state.lessonPager.pagerState.animateScrollToPage(index)
+                                    }
+                                }
+
+                                resumePageId = null
+                            }
+                        }
 
                         // swipe tutorial Overlay
                         // TODO: figure out a more scalable way to handle multiple different overlays
@@ -226,64 +244,19 @@ class LessonActivity :
 
     // region UI
     // region Progress
-    private fun updateProgress(
-        position: Int,
-        // TODO: this isn't an accurate list of pages
-        pages: List<LessonPage>? = dataModel.pages.value
-    ) {
-        // update progress in database unless we are waiting for the user to resume/restart
-        if (resumePageId == null) {
-            lifecycleScope.launch {
-                toolsRepository.updateToolProgress(
-                    tool,
-                    if (pages.isNullOrEmpty()) 0.0 else (position.toDouble() / pages.size),
-                    pages?.getOrNull(position)?.id
-                )
-            }
-        }
+    private suspend fun updateProgress(position: Int, pages: List<LessonPage>) {
+        toolsRepository.updateToolProgress(
+            tool,
+            if (pages.isEmpty()) 0.0 else (position.toDouble() / pages.size),
+            pages.getOrNull(position)?.id
+        )
     }
     // endregion Progress
 
     // region Resume Progress
-    private var resumePageId: String?
-        get() = intent?.getStringExtra(EXTRA_RESUME_PAGE)
-        set(value) {
-            intent?.putExtra(EXTRA_RESUME_PAGE, value)
-        }
-
-    private fun indexOfResumePage(): Int {
-        val pageId = resumePageId ?: return -1
-        val pages = dataModel.pages.value?.takeIf { it.isNotEmpty() } ?: return -1
-
-        return dataModel.manifest.value?.findPage(pageId)
-            ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
-            ?.let { pages.indexOf(it) } ?: -1
-    }
-
-    private fun setupResumeDialog() {
-        supportFragmentManager.setFragmentResultListener(LessonResumeDialogFragment.RESULT_RESUME, this) { _, _ ->
-            // TODO: figure out how to navigate the pager to the correct page
-            indexOfResumePage().takeIf { it >= 0 } // ?.let { binding.pages.currentItem = it }
-            resumePageId = null
-        }
-        supportFragmentManager.setFragmentResultListener(LessonResumeDialogFragment.RESULT_RESTART, this) { _, _ ->
-            resumePageId = null
-        }
-
-        // TODO: figure out a new trigger condition for the resume dialog
-        dataModel.pages.observe(this) { triggerResumeProgress() }
-    }
-
-    private fun triggerResumeProgress() {
-        if (supportFragmentManager.findFragmentByTag(TAG_RESUME_DIALOG) != null) return
-        val pages = dataModel.pages.value?.takeIf { it.isNotEmpty() } ?: return
-
-        if (indexOfResumePage() in 1 until pages.size - 1) {
-            LessonResumeDialogFragment().show(supportFragmentManager, TAG_RESUME_DIALOG)
-        } else {
-            resumePageId = null
-        }
-    }
+    private fun LessonScreen.UiState.Loaded.indexOfResumePage(pageId: String?) = manifest.findPage(pageId)
+        ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
+        ?.let { return lessonPager.pages.indexOf(it) } ?: -1
     // endregion Resume Progress
 
     // region Feedback
