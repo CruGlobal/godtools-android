@@ -101,6 +101,8 @@ class LessonActivity :
         if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.LESSON)
     }
 
+    override fun inflateBinding() = LessonActivityBinding.inflate(layoutInflater, null, false)
+
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.compose.setContent {

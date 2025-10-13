@@ -11,7 +11,7 @@ android {
     configureQaBuildType(project)
     configureGodToolsCustomUri()
 
-    buildFeatures.dataBinding = true
+    buildFeatures.viewBinding = true
 }
 
 dependencies {
