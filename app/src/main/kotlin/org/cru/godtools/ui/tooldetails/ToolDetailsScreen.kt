@@ -27,6 +27,7 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         val bannerAnimation: File? = null,
         val downloadProgress: DownloadProgress? = null,
         val hasShortcut: Boolean = false,
+        val hasTips: Boolean = false,
         val translation: Translation? = null,
         val secondTranslation: Translation? = null,
         val secondLanguage: Language? = null,

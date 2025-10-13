@@ -111,6 +111,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
             }
         }
         val isConnected by isConnected.collectAsState()
+        val manifest by manifestManager.produceManifestState(translation)
+        val secondManifest by manifestManager.produceManifestState(secondTranslation)
 
         val eventSink: (Event) -> Unit = remember {
             {
@@ -174,10 +176,11 @@ class ToolDetailsPresenter @AssistedInject constructor(
             bannerAnimation = attachmentsRepository.rememberAttachmentFile(fileSystem, tool?.detailsBannerAnimationId),
             downloadProgress = downloadManager.rememberDownloadProgress(toolCode, translation?.languageCode),
             hasShortcut = shortcutManager.canPinToolShortcut(tool),
+            hasTips = manifest?.hasTips == true || secondManifest?.hasTips == true,
             translation = translation,
             secondTranslation = secondTranslation,
             secondLanguage = secondLanguage,
-            manifest = manifestManager.produceManifestState(translation).value,
+            manifest = manifest,
             pages = rememberPages(hasVariants = variants.isNotEmpty()),
             availableLanguages = rememberAvailableLanguages(toolCode),
             variants = variants,
