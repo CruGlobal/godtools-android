@@ -138,6 +138,7 @@ gtoSupport-animation = { module = "org.ccci.gto.android:gto-support-animation", 
 gtoSupport-api-okhttp3 = { module = "org.ccci.gto.android:gto-support-api-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-appcompat = { module = "org.ccci.gto.android:gto-support-appcompat", version.ref = "gtoSupport" }
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
+gtoSupport-circuit = { module = "org.ccci.gto.android:gto-support-circuit", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
 gtoSupport-core = { module = "org.ccci.gto.android:gto-support-core", version.ref = "gtoSupport" }
 gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }

@@ -45,6 +45,7 @@ dependencies {
 
     testImplementation(project(":library:account"))
     testImplementation(project(":library:model"))
+    testImplementation(testFixtures(libs.gtoSupport.circuit))
     testImplementation(libs.hilt.testing)
     testImplementation(libs.okio.fakefilesystem)
     kaptTest(libs.hilt.compiler)
