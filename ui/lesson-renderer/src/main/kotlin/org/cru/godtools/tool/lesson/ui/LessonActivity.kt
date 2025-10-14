@@ -4,7 +4,7 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,6 +32,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -65,8 +66,9 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
 import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.lesson.R
+import org.cru.godtools.tool.lesson.analytics.model.LessonFeedbackAnalyticsEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
-import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogFragment
+import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogOverlay
 import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogOverlay
 import org.cru.godtools.tool.lesson.ui.swipetutorial.LessonSwipeTutorialAnimatedModalOverlay
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
@@ -97,27 +99,45 @@ class LessonActivity :
         super.onCreate(savedInstanceState)
         if (isFinishing) return
         if (savedInstanceState == null) trackToolOpen(tool, Manifest.Type.LESSON)
-        setupFeedbackDialog()
     }
+
+    override fun inflateBinding() = LessonActivityBinding.inflate(layoutInflater, null, false)
 
     override fun onBindingChanged() {
         super.onBindingChanged()
         binding.compose.setContent {
             var resumePageId by rememberSaveable { mutableStateOf(intent?.getStringExtra(EXTRA_RESUME_PAGE)) }
 
+            val showFeedback by dataModel.showFeedback.observeAsState(false)
+            var showFeedbackDialog by rememberSaveable { mutableStateOf(false) }
+
+            // handle dismiss events
+            val manifest = dataModel.manifest.collectAsState().value
+            LaunchedEffect(toolState.toolState, manifest) {
+                toolState.toolState.contentEvents
+                    .filter { it in manifest?.dismissListeners.orEmpty() }
+                    .collect {
+                        if (showFeedback) {
+                            showFeedbackDialog = true
+                        } else {
+                            finish()
+                        }
+                    }
+            }
+
+            // determine the UI Rendering state
+            val loadingState = activeToolLoadingStateLiveData.observeAsState().value
             val eventSink: (LessonScreen.UiEvent) -> Unit = {
                 when (it) {
                     LessonScreen.UiEvent.CloseLesson -> {
-                        if (!showFeedbackDialogIfNecessary()) {
+                        if (showFeedback) {
+                            showFeedbackDialog = true
+                        } else {
                             finish()
                         }
                     }
                 }
             }
-
-            // determine the UI Rendering state
-            val loadingState = activeToolLoadingStateLiveData.observeAsState().value
-            val manifest = dataModel.manifest.collectAsState().value
             val state = when {
                 loadingState == LoadingState.OFFLINE -> LessonScreen.UiState.Offline(eventSink)
                 loadingState == LoadingState.NOT_FOUND || loadingState == LoadingState.INVALID_TYPE ->
@@ -192,6 +212,28 @@ class LessonActivity :
                                 settings.setFeatureDiscovered(FEATURE_LESSON_PAGE_SWIPED)
                             }
                         }
+
+                        // feedback overlay
+                        BackHandler(enabled = showFeedback) { showFeedbackDialog = true }
+                        if (showFeedbackDialog) {
+                            val pageReached by dataModel.pageReached.collectAsState()
+                            OverlayEffect {
+                                val result = show(LessonFeedbackDialogOverlay(pageReached))
+                                if (result is LessonFeedbackDialogOverlay.Result.Submit) {
+                                    eventBus.post(
+                                        LessonFeedbackAnalyticsEvent(
+                                            tool,
+                                            locale,
+                                            pageReached = result.pageReached,
+                                            helpful = result.helpful,
+                                            readiness = result.readiness
+                                        )
+                                    )
+                                }
+                                settings.setFeatureDiscovered(FEATURE_LESSON_FEEDBACK + tool)
+                                finish()
+                            }
+                        }
                     }
                 }
             }
@@ -258,34 +300,10 @@ class LessonActivity :
         ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
         ?.let { return lessonPager.pages.indexOf(it) } ?: -1
     // endregion Resume Progress
-
-    // region Feedback
-    private fun setupFeedbackDialog() {
-        supportFragmentManager.setFragmentResultListener(LessonFeedbackDialogFragment.RESULT_DISMISSED, this) { _, _ ->
-            finish()
-        }
-        onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(false) {
-                override fun handleOnBackPressed() {
-                    showFeedbackDialogIfNecessary()
-                }
-            }.also { cb -> dataModel.showFeedback.observe(this) { cb.isEnabled = it } }
-        )
-    }
-
-    private fun showFeedbackDialogIfNecessary(): Boolean {
-        if (dataModel.showFeedback.value == true) {
-            LessonFeedbackDialogFragment(tool, locale, dataModel.pageReached.value).show(supportFragmentManager, null)
-            return true
-        }
-        return false
-    }
-    // endregion Feedback
     // endregion UI
 
     override fun checkForManifestEvent(manifest: Manifest, event: Event) {
-        if (event.id in manifest.dismissListeners && showFeedbackDialogIfNecessary()) return
-        super.checkForManifestEvent(manifest, event)
+        // suppress dismissListeners which are handled elsewhere
     }
 }
 

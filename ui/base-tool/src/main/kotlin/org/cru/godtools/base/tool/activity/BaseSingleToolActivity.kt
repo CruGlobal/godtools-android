@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.VisibleForTesting
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.viewbinding.ViewBinding
 import java.util.Locale
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -21,7 +21,7 @@ import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.model.Language
 import org.cru.godtools.shared.tool.parser.model.Manifest
 
-abstract class BaseSingleToolActivity<B : ViewDataBinding>(
+abstract class BaseSingleToolActivity<B : ViewBinding>(
     @LayoutRes contentLayoutId: Int,
     private val requireTool: Boolean,
     private val supportedType: Manifest.Type?

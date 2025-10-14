@@ -19,6 +19,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
+import androidx.viewbinding.ViewBinding
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
@@ -72,7 +73,7 @@ import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     lateinit var downloadManager: GodToolsDownloadManager
@@ -108,9 +109,11 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
 
     @CallSuper
     override fun onBindingChanged() {
-        binding.setVariable(BR.manifest, viewModel.manifest.asLiveData())
-        binding.setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
-        binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
+        (binding as? ViewDataBinding)?.apply {
+            setVariable(BR.manifest, viewModel.manifest.asLiveData())
+            setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
+            setVariable(BR.loadingState, activeToolLoadingStateLiveData)
+        }
     }
 
     override fun onSetupActionBar() {
@@ -132,7 +135,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         // invalidate the binding to force it to re-color the updated menu
         // TODO: this is a very brute-force way of forcing a recoloring of menu items.
         //       We should try and figure out a more targeted solution at some point.
-        binding.invalidateAll()
+        (binding as? ViewDataBinding)?.invalidateAll()
 
         return super.onPrepareOptionsMenu(menu)
     }
