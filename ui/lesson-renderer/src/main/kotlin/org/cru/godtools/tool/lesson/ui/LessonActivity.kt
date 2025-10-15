@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.overlay.ContentWithOverlays
@@ -37,8 +36,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import okio.FileSystem
-import org.ccci.gto.android.common.androidx.lifecycle.SetLiveData
-import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.cru.godtools.base.CONFIG_TUTORIAL_LESSON_PAGE_SWIPE
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -324,12 +321,6 @@ class LessonActivityDataModel @Inject constructor(
     userActivityManager,
     savedState
 ) {
-    val visiblePages = SetLiveData<String>(synchronous = true)
-
-    val pages = manifest.asLiveData().combineWith(visiblePages) { manifest, visible ->
-        manifest?.pages.orEmpty().filterIsInstance<LessonPage>().filter { !it.isHidden || it.id in visible }
-    }.distinctUntilChanged()
-
     val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
     val showFeedback = toolCode
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
