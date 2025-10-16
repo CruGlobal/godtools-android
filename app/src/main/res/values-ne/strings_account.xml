@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="menu_profile">क्रियाकलाप </string>
+    <string name="menu_profile">क्रियाकलाप</string>
     <string name="account_joined">जोडियो  %1$s</string>
     <!-- Create / Login -->
     <string name="account_create_heading">खाता खोल्नुहोस् </string>
