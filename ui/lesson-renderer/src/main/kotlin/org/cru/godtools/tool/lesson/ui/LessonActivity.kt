@@ -32,6 +32,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -168,6 +169,15 @@ class LessonActivity :
                         }
                     }
 
+                    // record feature discovery on page swipe
+                    LaunchedEffect(pagerState) {
+                        val initialPage = pagerState.settledPage
+                        snapshotFlow { pagerState.settledPage }
+                            .filter { it != initialPage }
+                            .first()
+                        settings.setFeatureDiscovered(FEATURE_LESSON_PAGE_SWIPED)
+                    }
+
                     LessonScreen.UiState.Loaded(
                         manifest = manifest,
                         state = toolState.toolState,
@@ -202,7 +212,7 @@ class LessonActivity :
                         // swipe tutorial Overlay
                         // TODO: figure out a more scalable way to handle multiple different overlays
                         val showSwipeTutorial by viewModel.showPageSwipeTutorial.collectAsState(false)
-                        if (showSwipeTutorial) {
+                        if (state is LessonScreen.UiState.Loaded && showSwipeTutorial) {
                             OverlayEffect {
                                 delay(800)
                                 show(LessonSwipeTutorialAnimatedModalOverlay())
