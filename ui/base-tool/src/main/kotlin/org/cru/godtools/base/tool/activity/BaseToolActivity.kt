@@ -46,6 +46,7 @@ import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
@@ -317,7 +318,9 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach {
                 when (it) {
-                    is State.Event.AnalyticsEventTriggered ->
+                    is State.Event.AnalyticsEvent.ScreenView ->
+                        eventBus.post(ToolAnalyticsScreenEvent(it.screenName, it.tool, it.locale?.toPlatform()))
+                    is State.Event.AnalyticsEvent.ContentEvent ->
                         eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(it.event, activeManifest))
                     is State.Event.OpenUrl -> openUrl(it.url.toUri())
                     is State.Event.SubmitForm ->
