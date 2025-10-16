@@ -3,7 +3,7 @@
     <string name="menu_install">ইনস্টল করুন</string>
     <string name="menu_share_tract">এই টুলটিকে পাঠান </string>
     <string name="tract_card_previous">পিছে </string>
-    <string name="tract_card_next">পরে </string>
+    <string name="tract_card_next">পরে</string>
     <!-- Live Sharing -->
     <string name="menu_live_share_publish">আপনার স্ক্রিন শেয়ার করুন </string>
     <string name="menu_live_share_active">\'স্ক্রিন শেয়ার করা\' সক্রিয় করুন </string>
