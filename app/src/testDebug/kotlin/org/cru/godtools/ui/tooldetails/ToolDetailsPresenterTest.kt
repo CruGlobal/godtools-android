@@ -334,19 +334,19 @@ class ToolDetailsPresenterTest {
     // region State.hasTips
     @Test
     fun `State - hasTips`() = testScope.runTest {
-        val manifest: Manifest = mockk { every {hasTips} returns true }
+        val manifest: Manifest = mockk { every { hasTips } returns true }
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
-            coEvery { manifestManager.getManifest(any()) } returns manifest
+        coEvery { manifestManager.getManifest(any()) } returns manifest
 
         createPresenter().test {
             assertTrue(expectMostRecentItem().hasTips)
         }
-        }
+    }
 
     @Test
-    fun `State - hasTips - no tips`() =  testScope.runTest {
+    fun `State - hasTips - no tips`() = testScope.runTest {
         val manifest: Manifest = mockk { every { hasTips } returns false }
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
@@ -359,7 +359,7 @@ class ToolDetailsPresenterTest {
     }
 
     @Test
-    fun `State - hasTips - secondary language hasTips`() =  testScope.runTest {
+    fun `State - hasTips - secondary language hasTips`() = testScope.runTest {
         val primaryManifest: Manifest = mockk { every { hasTips } returns false }
         val secondaryManifest: Manifest = mockk { every { hasTips } returns true }
         val primaryTranslation = randomTranslation()
