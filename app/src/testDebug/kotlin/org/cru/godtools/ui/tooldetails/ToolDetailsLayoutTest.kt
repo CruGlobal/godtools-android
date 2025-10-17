@@ -78,7 +78,7 @@ class ToolDetailsLayoutTest {
     fun `Action - Tool Training Button - visible when manifest has tips`() {
         renderToolDetailsLayout(
             State(
-                manifest = mockk { every { hasTips } returns true },
+                hasTips = true,
                 eventSink = events,
             )
         )
@@ -91,18 +91,10 @@ class ToolDetailsLayoutTest {
     fun `Action - Tool Training Button - gone when manifest does not have tips`() {
         renderToolDetailsLayout(
             State(
-                manifest = mockk { every { hasTips } returns false },
+                hasTips = false,
                 eventSink = events,
             )
         )
-
-        composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
-        events.assertNoEvents()
-    }
-
-    @Test
-    fun `Action - Tool Training Button - gone when manifest does not exist`() {
-        renderToolDetailsLayout(State(manifest = null, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertDoesNotExist()
         events.assertNoEvents()
