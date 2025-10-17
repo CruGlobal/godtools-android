@@ -180,7 +180,6 @@ class ToolDetailsPresenter @AssistedInject constructor(
             translation = translation,
             secondTranslation = secondTranslation,
             secondLanguage = secondLanguage,
-            manifest = manifest,
             pages = rememberPages(hasVariants = variants.isNotEmpty()),
             availableLanguages = rememberAvailableLanguages(toolCode),
             variants = variants,

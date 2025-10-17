@@ -31,7 +31,6 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         val translation: Translation? = null,
         val secondTranslation: Translation? = null,
         val secondLanguage: Language? = null,
-        val manifest: Manifest? = null,
         val pages: ImmutableList<Page> = persistentListOf(Page.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: ImmutableList<ToolCard.State> = persistentListOf(),
