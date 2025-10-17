@@ -344,11 +344,9 @@ class ToolDetailsPresenterTest {
             assertTrue(expectMostRecentItem().hasTips)
         }
         }
-    // endregion State.hasTips
 
-    // region State doesn't hasTips
     @Test
-    fun `State does NOT hasTips `() =  testScope.runTest {
+    fun `State - hasTips - no tips`() =  testScope.runTest {
         val manifest: Manifest = mockk { every { hasTips } returns false }
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
@@ -356,15 +354,12 @@ class ToolDetailsPresenterTest {
         coEvery { manifestManager.getManifest(any()) } returns manifest
 
         createPresenter().test {
-//            assertTrue(!expectMostRecentItem().hasTips)
             assertFalse(expectMostRecentItem().hasTips)
         }
     }
-    // endregion State doesn't hasTips
 
-    // region secondary language hasTips
     @Test
-    fun `State - secondary manifest hasTips`() =  testScope.runTest {
+    fun `State - hasTips - secondary language hasTips`() =  testScope.runTest {
         val primaryManifest: Manifest = mockk { every { hasTips } returns false }
         val secondaryManifest: Manifest = mockk { every { hasTips } returns true }
         val primaryTranslation = randomTranslation()
@@ -382,7 +377,7 @@ class ToolDetailsPresenterTest {
             assertTrue(expectMostRecentItem().hasTips)
         }
     }
-    // endregion secondary language hasTips
+    // endregion State.hasTips
 
     // region Event.OpenTool
     @Test
