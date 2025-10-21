@@ -10,18 +10,23 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.google.android.instantapps.InstantApps
+import com.slack.circuit.overlay.ContentWithOverlays
+import com.slack.circuit.overlay.OverlayEffect
 import dagger.hilt.android.AndroidEntryPoint
 import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.notNull
@@ -36,9 +41,13 @@ import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_LIVE_SHARE
 import org.cru.godtools.base.URI_SHARE_BASE
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
+import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.shared.renderer.tips.TipsRepository
+import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
@@ -51,6 +60,7 @@ import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tool.tract.TractDeepLink
 import org.cru.godtools.tool.tract.databinding.TractActivityBinding
+import org.cru.godtools.tool.tract.ui.ModalOverlay
 import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
 import org.cru.godtools.tract.PARAM_PARALLEL_LANGUAGE
 import org.cru.godtools.tract.PARAM_PRIMARY_LANGUAGE
@@ -79,6 +89,12 @@ class TractActivity :
     TipBottomSheetDialogFragment.Callbacks {
     private val savedState: TractActivitySavedState by viewModels()
 
+    @Inject
+    @Named(TOOL_RESOURCE_FILE_SYSTEM)
+    internal lateinit var resourceFileSystem: FileSystem
+    @Inject
+    lateinit var tipsRepository: TipsRepository
+
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +115,7 @@ class TractActivity :
     override fun onBindingChanged() {
         super.onBindingChanged()
         setupBinding()
+        setupComposeOverlay()
     }
 
     override fun onContentChanged() {
@@ -295,6 +312,29 @@ class TractActivity :
     }
     // endregion Settings
 
+    // region Compose Overlay
+    private val modalState = mutableStateOf<Modal?>(null)
+
+    private fun setupComposeOverlay() {
+        binding.composeOverlay.setContent {
+            ProvideRendererServices(resources = resourceFileSystem, tipsRepository = tipsRepository) {
+                GodToolsTheme(darkTheme = false) {
+                    ContentWithOverlays {
+                        val modal = modalState.value
+                        if (modal != null) {
+                            OverlayEffect {
+                                show(ModalOverlay(modal, toolState.toolState))
+                                modalState.value = null
+                            }
+                        }
+                        // Modal Overlay
+                    }
+                }
+            }
+        }
+    }
+    // endregion Compose Overlay
+
     // region Tool Pager
     @Inject
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
@@ -353,7 +393,9 @@ class TractActivity :
         pager.currentItem = position
     }
 
-    override fun showModal(modal: Modal) = startModalActivity(modal)
+    override fun showModal(modal: Modal) {
+        modalState.value = modal
+    }
     override fun showTip(tip: Tip) {
         TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
     }
