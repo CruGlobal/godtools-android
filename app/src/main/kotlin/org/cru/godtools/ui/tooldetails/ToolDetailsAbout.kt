@@ -34,12 +34,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.ccci.gto.android.common.androidx.compose.material3.ClickableText
-import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addUriAnnotations
-import org.ccci.gto.android.common.androidx.compose.ui.text.getUriAnnotations
+import org.ccci.gto.android.common.androidx.compose.material3.ui.text.addLinks
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
@@ -126,7 +126,7 @@ internal fun ToolDetailsLanguages(
     state: ToolDetailsScreen.State,
     expanded: Boolean,
     onToggleLanguages: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val languages by rememberUpdatedState(state.availableLanguages)
     if (languages.isEmpty()) return
@@ -152,7 +152,7 @@ private fun ToolDetailsAboutAccordionSection(
     expanded: Boolean,
     modifier: Modifier = Modifier,
     onToggleSection: () -> Unit = {},
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) = Column(modifier = modifier.fillMaxWidth()) {
     val headerInteractions = remember { MutableInteractionSource() }
     Row(
@@ -194,15 +194,17 @@ private fun ToolDetailsLinkifiedText(text: String?, state: ToolDetailsScreen.Sta
     val tool by rememberUpdatedState(state.tool?.code)
     val translation by rememberUpdatedState(state.translation)
 
-    val linkified = text.orEmpty().addUriAnnotations(Linkify.WEB_URLS)
-    ClickableText(
-        linkified,
-        onClick = {
-            linkified.getUriAnnotations(it, it).firstOrNull()?.let { (url) ->
-                eventBus.post(ExitLinkActionEvent(tool, url, translation?.languageCode))
-                uriHandler.openUri(url)
-            }
-        },
+    val linkified = text.orEmpty().addLinks(
+        Linkify.WEB_URLS,
+        linkInteractionListener = LinkInteractionListener { link ->
+            val url = (link as? LinkAnnotation.Url)?.url ?: return@LinkInteractionListener
+            eventBus.post(ExitLinkActionEvent(tool, url, translation?.languageCode))
+            uriHandler.openUri(url)
+        }
+    )
+
+    Text(
+        text = linkified,
         modifier = modifier
     )
 }
