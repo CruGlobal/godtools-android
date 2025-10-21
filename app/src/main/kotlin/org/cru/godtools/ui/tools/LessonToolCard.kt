@@ -90,7 +90,7 @@ fun LessonToolCard(
                                 language = language,
                                 available = languageAvailable,
                                 horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.invisibleIf { !isLoaded || language == null }
+                                modifier = Modifier.invisibleIf(!isLoaded || language == null)
                             )
                         }
                     }
