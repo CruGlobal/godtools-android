@@ -65,10 +65,5 @@
                 android:name="default-url"
                 android:value="https://knowgod.com/en/kgp/?useDeviceLanguage=true" />
         </activity>
-
-        <activity
-            android:name="org.cru.godtools.tract.activity.ModalActivity"
-            android:exported="false"
-            android:theme="@style/Theme.GodTools.Tract.Activity.Modal" />
     </application>
 </manifest>

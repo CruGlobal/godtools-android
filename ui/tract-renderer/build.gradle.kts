@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.util)
 
+    implementation(libs.circuit.overlay)
     implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
     implementation(libs.hilt)
