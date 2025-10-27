@@ -7,11 +7,11 @@ import org.cru.godtools.base.Settings
 
 enum class PageSet(
     internal val feature: String? = null,
-    internal val pages: List<Page>,
+    private val pages: List<Page>,
     private val supportedLocales: Set<Locale> = emptySet(),
     internal val menu: List<Pair<AppBarAction, Action>> = emptyList(),
     internal val showUpNavigation: Boolean = true,
-    internal val analyticsBaseScreenName: String
+    internal val analyticsBaseScreenName: String,
 ) {
     ONBOARDING(
         feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
@@ -35,7 +35,12 @@ enum class PageSet(
             Page.FEATURES_LIVE_SHARE,
             Page.FEATURES_FINAL
         ),
-        supportedLocales = setOf(Locale.ENGLISH, Locale("lv"))
+        supportedLocales = setOf(
+            Locale.ENGLISH,
+            Locale.forLanguageTag("lv"),
+            Locale.CHINESE,
+            Locale.FRENCH
+        )
     ),
     LIVE_SHARE(
         menu = listOf(AppBarAction(titleRes = R.string.tutorial_live_share_action_skip) to Action.LIVE_SHARE_SKIP),
@@ -59,6 +64,8 @@ enum class PageSet(
 
     fun supportsLocale(locale: Locale?) =
         locale != null && sequenceOf(locale).includeFallbacks().any { supportedLocales.contains(it) }
+
+    internal fun pagesFor(locale: Locale) = pages.filter { it.supportsLocale(locale) }
 
     companion object {
         val DEFAULT = ONBOARDING
