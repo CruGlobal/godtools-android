@@ -3,6 +3,8 @@ package org.cru.godtools.tutorial
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import java.util.Locale
+import org.ccci.gto.android.common.util.includeFallbacks
 
 internal enum class Page(
     @StringRes val title: Int? = null,
@@ -11,7 +13,9 @@ internal enum class Page(
     @StringRes val action: Int? = null,
     @RawRes val animation: Int? = null,
     @DrawableRes val image: Int? = null,
-    val showMenu: Boolean = true
+    private val supportedLocales: Set<Locale> = emptySet(),
+    private val disabledLocales: Set<Locale> = emptySet(),
+    val showMenu: Boolean = true,
 ) {
     ONBOARDING_WELCOME(showMenu = false),
     ONBOARDING_CONVERSATIONS(
@@ -43,7 +47,13 @@ internal enum class Page(
         title = R.string.tutorial_features_tips_headline,
         content = R.string.tutorial_features_tips_subhead,
         action = R.string.tutorial_features_action_continue,
-        animation = R.raw.anim_tutorial_features_tips
+        animation = R.raw.anim_tutorial_features_tips,
+        supportedLocales = setOf(
+            Locale.ENGLISH,
+//            Locale.CHINESE,
+            Locale.FRENCH,
+//            Locale("lv")
+        )
     ),
     FEATURES_LIVE_SHARE(
         title = R.string.tutorial_features_live_share_headline,
@@ -97,5 +107,9 @@ internal enum class Page(
         content = R.string.tutorial_tips_start_text,
         animation = R.raw.anim_tutorial_tips_light,
         showMenu = false
-    )
+    );
+
+    fun supportsLocale(locale: Locale) =
+        (supportedLocales.isEmpty() || sequenceOf(locale).includeFallbacks().any { it in supportedLocales }) &&
+            (disabledLocales.isEmpty() || sequenceOf(locale).includeFallbacks().none { it in disabledLocales })
 }
