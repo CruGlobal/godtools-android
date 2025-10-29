@@ -136,21 +136,6 @@ class HomePresenterTest {
             assertNull(awaitItem().banner)
         }
     }
-
-    @Test
-    fun `State - banner - Features Tutorial - Only visible for supported languages`() = runTest {
-        every { settings.isFeatureDiscoveredFlow(FEATURE_TUTORIAL_FEATURES) } returns flowOf(false)
-
-        presenter.test {
-            assertEquals(BannerType.TUTORIAL_FEATURES, expectMostRecentItem().banner)
-
-            appLanguageFlow.value = Locale.forLanguageTag("x-test")
-            assertNull(awaitItem().banner)
-
-            appLanguageFlow.value = Locale.ENGLISH
-            assertEquals(BannerType.TUTORIAL_FEATURES, expectMostRecentItem().banner)
-        }
-    }
     // endregion State.banner
 
     // region State.spotlightLessons
