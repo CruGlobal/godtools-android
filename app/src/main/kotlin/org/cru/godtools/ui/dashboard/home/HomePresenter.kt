@@ -146,12 +146,14 @@ class HomePresenter @AssistedInject constructor(
                                 navigator.goTo(IntentScreen(intent))
                             }
                         }
+
                         ToolCard.Event.OpenToolDetails -> {
                             eventBus.post(
                                 OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                             )
                             navigator.goTo(ToolDetailsScreen(toolCode))
                         }
+
                         ToolCard.Event.PinTool,
                         ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
