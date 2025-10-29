@@ -50,9 +50,8 @@ internal enum class Page(
         animation = R.raw.anim_tutorial_features_tips,
         supportedLocales = setOf(
             Locale.ENGLISH,
-//            Locale.CHINESE,
-            Locale.FRENCH,
-//            Locale("lv")
+            Locale.forLanguageTag("lv"),
+            Locale.forLanguageTag("id")
         )
     ),
     FEATURES_LIVE_SHARE(
