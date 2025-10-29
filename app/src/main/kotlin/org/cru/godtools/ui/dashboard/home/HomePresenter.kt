@@ -72,7 +72,7 @@ class HomePresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
             .combine(settings.appLanguageFlow) { discovered, language ->
                 when {
-                    !discovered && PageSet.FEATURES.supportsLocale(language) -> BannerType.TUTORIAL_FEATURES
+                    !discovered -> BannerType.TUTORIAL_FEATURES
                     else -> null
                 }
             }
