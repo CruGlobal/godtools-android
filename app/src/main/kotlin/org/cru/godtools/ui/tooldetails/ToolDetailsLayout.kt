@@ -274,8 +274,7 @@ internal fun ToolDetailsActions(state: State, modifier: Modifier = Modifier) = C
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
 
-    val manifest by rememberUpdatedState(state.manifest)
-    if (manifest?.hasTips == true) {
+    if (state.hasTips) {
         Button(
             onClick = { eventSink(Event.OpenToolTraining) },
             modifier = Modifier

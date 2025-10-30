@@ -116,6 +116,6 @@ private fun SquareToolCardSecondLanguage(state: ToolCard.State) = ToolCardInfoCo
         horizontalArrangement = Arrangement.Start,
         modifier = Modifier
             .padding(top = 2.dp)
-            .invisibleIf { !available }
+            .invisibleIf(!available)
     )
 }

@@ -59,8 +59,10 @@ import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
@@ -328,6 +330,54 @@ class ToolDetailsPresenterTest {
         }
     }
     // endregion State.drawerState
+
+    // region State.hasTips
+    @Test
+    fun `State - hasTips`() = testScope.runTest {
+        val manifest: Manifest = mockk { every { hasTips } returns true }
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+
+        coEvery { manifestManager.getManifest(any()) } returns manifest
+
+        createPresenter().test {
+            assertTrue(expectMostRecentItem().hasTips)
+        }
+    }
+
+    @Test
+    fun `State - hasTips - no tips`() = testScope.runTest {
+        val manifest: Manifest = mockk { every { hasTips } returns false }
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+
+        coEvery { manifestManager.getManifest(any()) } returns manifest
+
+        createPresenter().test {
+            assertFalse(expectMostRecentItem().hasTips)
+        }
+    }
+
+    @Test
+    fun `State - hasTips - secondary language hasTips`() = testScope.runTest {
+        val primaryManifest: Manifest = mockk { every { hasTips } returns false }
+        val secondaryManifest: Manifest = mockk { every { hasTips } returns true }
+        val primaryTranslation = randomTranslation()
+        val secondaryTranslation = randomTranslation()
+
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(primaryTranslation))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
+            .returns(flowOf(secondaryTranslation))
+
+        coEvery { manifestManager.getManifest(primaryTranslation) } returns primaryManifest
+        coEvery { manifestManager.getManifest(secondaryTranslation) } returns secondaryManifest
+
+        createPresenter(ToolDetailsScreen(TOOL, secondLanguage = Locale.FRENCH)).test {
+            assertTrue(expectMostRecentItem().hasTips)
+        }
+    }
+    // endregion State.hasTips
 
     // region Event.OpenTool
     @Test

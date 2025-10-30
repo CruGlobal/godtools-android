@@ -55,7 +55,7 @@ class ToolDetailsLayoutPaparazziTest(
             description = "Description",
         ),
         banner = banner,
-        drawerState = DrawerMenuScreenStateTestData.closed
+        drawerState = DrawerMenuScreenStateTestData.closed,
     )
 
     @BeforeTest
@@ -121,6 +121,15 @@ class ToolDetailsLayoutPaparazziTest(
             state.copy(
                 secondLanguage = Language(Locale.FRENCH),
                 secondTranslation = randomTranslation(),
+            )
+        )
+    }
+
+    @Test
+    fun `ToolDetailsLayout() - Learn to share this tool button`() = snapshot {
+        ToolDetailsLayout(
+            state.copy(
+                hasTips = true
             )
         )
     }
