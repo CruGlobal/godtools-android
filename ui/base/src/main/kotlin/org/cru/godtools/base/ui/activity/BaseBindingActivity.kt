@@ -19,7 +19,7 @@ abstract class BaseBindingActivity<B : ViewBinding> protected constructor(@Layou
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(Color.BLACK))
+        enableEdgeToEdge(statusBarStyle = statusBarStyle)
         setupDataBinding()
     }
 
@@ -50,6 +50,8 @@ abstract class BaseBindingActivity<B : ViewBinding> protected constructor(@Layou
         onBindingChanged()
     }
     // endregion View & Data Binding
+
+    protected open val statusBarStyle = SystemBarStyle.dark(Color.BLACK)
 
     // region ActionBar
     protected open val toolbar: Toolbar? get() = null
