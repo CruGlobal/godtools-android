@@ -2,8 +2,10 @@ package org.cru.godtools.tool.lesson.ui
 
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
@@ -292,6 +294,13 @@ class LessonActivity :
     // endregion Intent Processing
 
     // region UI
+    override val statusBarStyle = SystemBarStyle.light(
+        // EdgeToEdge.DefaultLightScrim
+        scrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF),
+        // EdgeToEdge.DefaultDarkScrim
+        darkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+    )
+
     // region Progress
     private suspend fun updateProgress(position: Int, pages: List<LessonPage>) {
         toolsRepository.updateToolProgress(
