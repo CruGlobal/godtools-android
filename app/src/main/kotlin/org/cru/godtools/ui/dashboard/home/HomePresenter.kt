@@ -72,7 +72,7 @@ class HomePresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
             .combine(settings.appLanguageFlow) { discovered, language ->
                 when {
-                    !discovered && PageSet.FEATURES.supportsLocale(language) -> BannerType.TUTORIAL_FEATURES
+                    !discovered -> BannerType.TUTORIAL_FEATURES
                     else -> null
                 }
             }
@@ -146,12 +146,14 @@ class HomePresenter @AssistedInject constructor(
                                 navigator.goTo(IntentScreen(intent))
                             }
                         }
+
                         ToolCard.Event.OpenToolDetails -> {
                             eventBus.post(
                                 OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                             )
                             navigator.goTo(ToolDetailsScreen(toolCode))
                         }
+
                         ToolCard.Event.PinTool,
                         ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
