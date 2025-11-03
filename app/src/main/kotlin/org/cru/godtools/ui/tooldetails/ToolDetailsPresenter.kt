@@ -125,6 +125,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                                 Tool.Type.ARTICLE -> listOfNotNull(
                                     secondTranslation?.languageCode ?: translation?.languageCode
                                 )
+
                                 else -> listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
                             },
                             activeLocale = secondTranslation?.languageCode
@@ -139,7 +140,14 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     Event.OpenToolTraining -> tool?.let {
                         // TODO: handle opening training tips and optionally showing the tutorial locally once the
                         //       tutorial uses Circuit.
-                        navigator.goTo(OpenToolTrainingScreen(it.code, it.type, translation?.languageCode))
+                        navigator.goTo(
+                            OpenToolTrainingScreen(
+                                it.code,
+                                it.type,
+                                translation?.languageCode,
+                                secondTranslation?.languageCode
+                            )
+                        )
                     }
 
                     Event.PinTool -> coroutineScope.launch {

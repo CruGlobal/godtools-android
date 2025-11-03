@@ -9,4 +9,9 @@ import org.cru.godtools.model.Tool
  * This is a temporary screen to help bridge functionality until Tutorials use Circuit.
  */
 @Parcelize
-internal class OpenToolTrainingScreen(val tool: String?, val type: Tool.Type, val locale: Locale?) : Screen
+internal class OpenToolTrainingScreen(
+    val tool: String?,
+    val type: Tool.Type,
+    val locale: Locale?,
+    val secondaryLocale: Locale? = null,
+) : Screen

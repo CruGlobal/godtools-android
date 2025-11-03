@@ -8,6 +8,7 @@ import org.cru.godtools.model.Tool
 private const val KEY_TOOL = "KEY_TIPS_TOOL"
 private const val KEY_TYPE = "KEY_TIPS_TYPE"
 private const val KEY_LANGUAGE = "KEY_TIPS_LANGUAGE"
+private const val KEY_SECONDARY_LANGUAGE = "KEY_TIPS_SECONDARY_LANGUAGE"
 
 class SelectedToolSavedState(private val savedState: SavedStateHandle) : ViewModel() {
     var tool
@@ -19,4 +20,7 @@ class SelectedToolSavedState(private val savedState: SavedStateHandle) : ViewMod
     var language
         get() = savedState.get<Locale>(KEY_LANGUAGE)
         set(value) = savedState.set(KEY_LANGUAGE, value)
+    var secondaryLanguage
+        get() = savedState.get<Locale>(KEY_SECONDARY_LANGUAGE)
+        set(value) = savedState.set(KEY_SECONDARY_LANGUAGE, value)
 }
