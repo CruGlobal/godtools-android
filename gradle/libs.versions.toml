@@ -12,7 +12,7 @@ androidx-lifecycle = "2.9.4"
 androidx-room = "2.8.3"
 androidx-viewpager2 = "1.1.0"
 androidx-work = "2.11.0"
-circuit = "0.30.0"
+circuit = "0.31.0"
 coil = "2.7.0"
 colormath = "3.6.1"
 dagger = "2.57.2"
@@ -178,6 +178,7 @@ kotlin-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coro
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
+kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
