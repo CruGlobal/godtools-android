@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jeppeman.mockposable.mockk.everyComposable
+import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -317,8 +318,7 @@ class HomePresenterTest {
 
             navigator.awaitResetRoot().let {
                 assertEquals(ToolsScreen, it.newRoot)
-                assertTrue(it.saveState)
-                assertTrue(it.restoreState)
+                assertEquals(Navigator.StateOptions.SaveAndRestore, it.options)
             }
 
             cancelAndIgnoreRemainingEvents()
