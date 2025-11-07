@@ -13,5 +13,6 @@ abstract class BaseArticleActivity<B : ViewDataBinding> protected constructor(
     protected constructor(@LayoutRes contentLayoutId: Int) : this(contentLayoutId, true)
 
     @get:StringRes
-    override val shareLinkMessageRes get() = R.string.share_tool_message_article
+    override val shareLinkMessageWithQrCodeRes get() = R.string.share_tool_message_article
+//    override val shareLinkMessageRes get() = R.string.share_tool_message_article
 }
