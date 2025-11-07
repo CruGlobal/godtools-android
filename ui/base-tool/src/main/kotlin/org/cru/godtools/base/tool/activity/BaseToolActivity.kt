@@ -1,7 +1,12 @@
 package org.cru.godtools.base.tool.activity
 
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
+import android.service.chooser.ChooserAction
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +15,7 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
@@ -78,9 +84,11 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     lateinit var downloadManager: GodToolsDownloadManager
+
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
+
     @Inject
     internal lateinit var toolsRepository: ToolsRepository
 
@@ -146,6 +154,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
             shareCurrentTool()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
@@ -161,10 +170,11 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected val activeManifest get() = viewModel.manifest.value
 
     // region Status Bar / Toolbar logic
-    override val toolbar get() = when (val it = binding) {
-        is ToolGenericFragmentActivityBinding -> it.appbar
-        else -> super.toolbar
-    }
+    override val toolbar
+        get() = when (val it = binding) {
+            is ToolGenericFragmentActivityBinding -> it.appbar
+            else -> super.toolbar
+        }
 
     private fun setupStatusBar() {
         window.apply {
@@ -184,8 +194,10 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected open val shareMenuItemVisible by lazy { shareLinkUriLiveData.map { it != null } }
 
     protected open val shareLinkTitle get() = activeManifest?.title
+
     @get:StringRes
-    protected open val shareLinkMessageRes get() = R.string.share_tool_message
+//    protected open val shareLinkMessageRes get() = R.string.share_tool_message
+    protected open val shareLinkMessageWithQrCodeRes get() = R.string.share_tool_message_with_qr_code
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 
@@ -226,8 +238,9 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
-        @StringRes message: Int = shareLinkMessageRes,
-        shareUrl: String? = shareLinkUri
+//        @StringRes message: Int = shareLinkMessageRes,
+        @StringRes message: Int = shareLinkMessageWithQrCodeRes,
+        shareUrl: String? = shareLinkUri,
     ) = shareUrl?.let {
         Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -236,13 +249,29 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     protected fun showShareActivityChooser(
         title: String? = shareLinkTitle,
-        @StringRes message: Int = shareLinkMessageRes,
-        shareUrl: String? = shareLinkUri
+        @StringRes message: Int = shareLinkMessageWithQrCodeRes,
+        shareUrl: String? = shareLinkUri,
     ) {
         val intent = buildShareIntent(title, message, shareUrl) ?: return
+//        val customActionChooser = Intent.createChooser(intent, "CustomAction?")
+//        val shareSheetCustomActions = arrayOf(
+//            ChooserAction.Builder(
+//                Icon.createWithResource(this, R.drawable.ic_checkmark),
+//                "Share this tool with a QR Code",
+//                PendingIntent.getBroadcast(this,
+//                    1,
+//                    Intent(Intent.ACTION_VIEW),
+//                    PendingIntent.FLAG_IMMUTABLE
+//            )
+//        ).build()
+//        )
+//        customActionChooser.putExtra(Intent.EXTRA_CHOOSER_CUSTOM_ACTIONS, shareSheetCustomActions)
+//        val chooser = Intent.createChooser(intent, "Share tool link")
         DefaultShareItem(intent).triggerAction(this)
+//        startActivity(customActionChooser)
     }
     // endregion Share tool logic
 
@@ -260,12 +289,13 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
                 translation: Translation? = null,
                 manifestType: Manifest.Type? = null,
                 isConnected: Boolean = true,
-                isSyncFinished: Boolean = true
+                isSyncFinished: Boolean = true,
             ) = when {
                 manifest != null -> when {
                     manifestType != null && manifest.type != manifestType -> INVALID_TYPE
                     else -> LOADED
                 }
+
                 isSyncFinished && translation == null -> NOT_FOUND
                 !isConnected -> OFFLINE
                 else -> LOADING
@@ -306,7 +336,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
 
     private fun downloadTranslations(
         tools: List<String> = toolsToDownload.value,
-        locales: List<Locale> = localesToDownload.value
+        locales: List<Locale> = localesToDownload.value,
     ) = tools.forEach { t -> locales.forEach { l -> downloadManager.downloadLatestPublishedTranslationAsync(t, l) } }
     // endregion Tool sync/download logic
 
@@ -403,6 +433,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
                     dispatchDelayedFeatureDiscovery(feature, force, 17)
                 }
             }
+
             else -> super.onShowFeatureDiscovery(feature, force)
         }
     }
