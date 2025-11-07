@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.graphics.Insets
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -73,9 +74,10 @@ class ContentPageController @AssistedInject constructor(
             ProvideRendererServices(resourceFileSystem, tipsRepository = tipsRepository) {
                 RenderContentStack(
                     model?.content.orEmpty(),
-                    modifier = Modifier
-                        .padding(WindowInsets(top = insets.top).asPaddingValues()),
                     state = toolState,
+                    modifier = Modifier
+                        .padding(WindowInsets(top = insets.top).asPaddingValues())
+                        .padding(horizontal = 16.dp)
                 )
             }
         }
