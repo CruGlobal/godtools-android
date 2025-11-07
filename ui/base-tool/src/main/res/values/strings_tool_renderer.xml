@@ -4,6 +4,17 @@
     <string name="tool_loading">The tool you requested is loading…</string>
     <string name="tool_offline">The tool you requested requires an internet connection to open</string>
 
+<!--    temporary qr code testing-->
+    <string name="share_tool_message_with_qr_code">
+    \n\n
+    This QR Code will take you to the web version of what we were talking about today. \n\n
+    If you can\'t scan the QR code, here\'s a website link: %1$s \n\n
+
+    The app can be downloaded from https://godtoolsapp.com \n\n
+
+    Let’s talk more!
+    </string>
+
     <string name="tract_content_input_error_required">%1$s is required</string>
     <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
 
