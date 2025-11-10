@@ -1,12 +1,8 @@
 package org.cru.godtools.base.tool.activity
 
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
-import android.service.chooser.ChooserAction
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -196,8 +192,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected open val shareLinkTitle get() = activeManifest?.title
 
     @get:StringRes
-//    protected open val shareLinkMessageRes get() = R.string.share_tool_message
-    protected open val shareLinkMessageWithQrCodeRes get() = R.string.share_tool_message_with_qr_code
+    protected open val shareLinkMessageRes get() = R.string.share_tool_message_with_qr_code
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 
@@ -238,8 +233,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
-//        @StringRes message: Int = shareLinkMessageRes,
-        @StringRes message: Int = shareLinkMessageWithQrCodeRes,
+        @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri,
     ) = shareUrl?.let {
         Intent(Intent.ACTION_SEND).apply {
@@ -252,26 +246,11 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     protected fun showShareActivityChooser(
         title: String? = shareLinkTitle,
-        @StringRes message: Int = shareLinkMessageWithQrCodeRes,
+        @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri,
     ) {
         val intent = buildShareIntent(title, message, shareUrl) ?: return
-//        val customActionChooser = Intent.createChooser(intent, "CustomAction?")
-//        val shareSheetCustomActions = arrayOf(
-//            ChooserAction.Builder(
-//                Icon.createWithResource(this, R.drawable.ic_checkmark),
-//                "Share this tool with a QR Code",
-//                PendingIntent.getBroadcast(this,
-//                    1,
-//                    Intent(Intent.ACTION_VIEW),
-//                    PendingIntent.FLAG_IMMUTABLE
-//            )
-//        ).build()
-//        )
-//        customActionChooser.putExtra(Intent.EXTRA_CHOOSER_CUSTOM_ACTIONS, shareSheetCustomActions)
-//        val chooser = Intent.createChooser(intent, "Share tool link")
         DefaultShareItem(intent).triggerAction(this)
-//        startActivity(customActionChooser)
     }
     // endregion Share tool logic
 
