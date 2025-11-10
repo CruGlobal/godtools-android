@@ -20,6 +20,7 @@ import org.ccci.gto.android.common.androidx.lifecycle.onResume
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.tract.RenderTractCardContent
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices
@@ -82,12 +83,14 @@ class CardController private constructor(
         binding.model = model
         binding.compose.setContent {
             ProvideRendererServices(resourceFileSystem, tipsRepository = tipsRepository) {
-                model?.let { model ->
-                    RenderTractCardContent(
-                        model,
-                        state = toolState,
-                        modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())
-                    )
+                GodToolsTheme(darkTheme = false) {
+                    model?.let { model ->
+                        RenderTractCardContent(
+                            model,
+                            state = toolState,
+                            modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())
+                        )
+                    }
                 }
             }
         }
