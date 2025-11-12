@@ -22,7 +22,6 @@ import org.cru.godtools.base.tool.ui.controller.MultiselectController
 import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.CardOptionController
 import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.FlatOptionController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
-import org.cru.godtools.base.tool.ui.controller.ParagraphController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
@@ -36,7 +35,6 @@ import org.cru.godtools.shared.tool.parser.model.Flow
 import org.cru.godtools.shared.tool.parser.model.Image
 import org.cru.godtools.shared.tool.parser.model.Link
 import org.cru.godtools.shared.tool.parser.model.Multiselect
-import org.cru.godtools.shared.tool.parser.model.Paragraph
 import org.cru.godtools.shared.tool.parser.model.Spacer
 import org.cru.godtools.shared.tool.parser.model.Tabs
 import org.cru.godtools.shared.tool.parser.model.Text
@@ -113,11 +111,6 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Multiselect.Option::class, VARIATION_MULTISELECT_OPTION_FLAT)
     internal abstract fun flatOptionControllerFactory(f: FlatOptionController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Paragraph::class)
-    internal abstract fun paragraphControllerFactory(factory: ParagraphController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
