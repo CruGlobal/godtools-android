@@ -20,7 +20,6 @@ import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
 import org.cru.godtools.base.tool.ui.util.layoutDirection
 import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.db.repository.TrainingTipsRepository
@@ -78,7 +77,6 @@ abstract class BaseController<T : Base> protected constructor(
     // endregion Lifecycle
 
     open fun supportsModel(model: Base) = modelClass.isInstance(model)
-    internal fun releaseTo(cache: UiControllerCache) = model?.let { cache.release(it, this) }
 
     // region AnalyticsEvents
     protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =

@@ -59,7 +59,6 @@ dependencies {
     api(libs.taptargetview)
     implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
-    implementation(libs.google.auto.value.annotations)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
     implementation(libs.lottie)
@@ -73,7 +72,6 @@ dependencies {
     //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
     //       see: https://issuetracker.google.com/issues/173030256#comment10
     kapt(libs.dagger.compiler)
-    kapt(libs.google.auto.value)
     kapt(libs.hilt.compiler)
 
     testImplementation(kotlin("reflect"))
