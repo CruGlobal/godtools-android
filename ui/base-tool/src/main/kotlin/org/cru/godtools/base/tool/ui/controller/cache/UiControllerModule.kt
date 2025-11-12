@@ -9,7 +9,6 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.IntoSet
 import dagger.multibindings.Multibinds
-import org.cru.godtools.base.tool.ui.controller.AccordionController
 import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
@@ -22,7 +21,6 @@ import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
-import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.shared.tool.parser.model.Animation
 import org.cru.godtools.shared.tool.parser.model.Button
 import org.cru.godtools.shared.tool.parser.model.Image
@@ -43,11 +41,6 @@ private const val VARIATION_MULTISELECT_OPTION_FLAT = 2
 abstract class UiControllerModule {
     @Multibinds
     abstract fun variationResolvers(): Set<VariationResolver>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Accordion::class)
-    internal abstract fun accordionControllerFactory(factory: AccordionController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
