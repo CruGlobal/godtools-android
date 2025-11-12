@@ -7,19 +7,12 @@ import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.cache.UiControllerType
-import org.cru.godtools.shared.tool.parser.model.Form
 import org.cru.godtools.shared.tool.parser.model.Input
-import org.cru.godtools.tract.ui.controller.FormController
 import org.cru.godtools.tract.ui.controller.InputController
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class TractUiControllerModule {
-    @Binds
-    @IntoMap
-    @UiControllerType(Form::class)
-    internal abstract fun formControllerFactory(factory: FormController.Factory): BaseController.Factory<*>
-
     @Binds
     @IntoMap
     @UiControllerType(Input::class)
