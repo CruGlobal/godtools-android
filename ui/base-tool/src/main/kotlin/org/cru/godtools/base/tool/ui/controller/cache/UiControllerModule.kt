@@ -14,9 +14,6 @@ import org.cru.godtools.base.tool.ui.controller.BaseController
 import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.ImageController
 import org.cru.godtools.base.tool.ui.controller.LinkController
-import org.cru.godtools.base.tool.ui.controller.MultiselectController
-import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.CardOptionController
-import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.FlatOptionController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
 import org.cru.godtools.base.tool.ui.controller.TextController
@@ -66,21 +63,6 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Link::class)
     internal abstract fun linkControllerFactory(factory: LinkController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Multiselect::class)
-    internal abstract fun multiselectControllerFactory(f: MultiselectController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Multiselect.Option::class, VARIATION_MULTISELECT_OPTION_CARD)
-    internal abstract fun cardOptionControllerFactory(f: CardOptionController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Multiselect.Option::class, VARIATION_MULTISELECT_OPTION_FLAT)
-    internal abstract fun flatOptionControllerFactory(f: FlatOptionController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
