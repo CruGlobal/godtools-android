@@ -67,7 +67,12 @@ class ToolDetailsActivity : BaseActivity() {
                                 when (screen) {
                                     // TODO: move this logic into the ToolDetailsPresenter once tutorials use Circuit
                                     is OpenToolTrainingScreen -> {
-                                        launchTrainingTips(screen.tool, screen.type, screen.locale)
+                                        launchTrainingTips(
+                                            screen.tool,
+                                            screen.type,
+                                            screen.locale,
+                                            screen.secondaryLocale
+                                        )
                                         true
                                     }
 
@@ -96,17 +101,21 @@ class ToolDetailsActivity : BaseActivity() {
         code: String? = selectedTool.tool,
         type: Tool.Type? = selectedTool.type,
         locale: Locale? = selectedTool.language,
+        secondaryLocale: Locale? = selectedTool.secondaryLanguage,
         skipTutorial: Boolean = false,
     ): Unit = when {
         code == null || type == null || locale == null -> Unit
         skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
             settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
-            openToolActivity(code, type, locale, showTips = true)
+            val locales = listOfNotNull(locale, secondaryLocale)
+            openToolActivity(code, type, *locales.toTypedArray(), showTips = true)
         }
+
         else -> {
             selectedTool.tool = code
             selectedTool.type = type
             selectedTool.language = locale
+            selectedTool.secondaryLanguage = secondaryLocale
             tipsTutorialLauncher.launch(PageSet.TIPS)
         }
     }

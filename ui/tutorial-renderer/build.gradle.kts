@@ -14,6 +14,10 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    failOnNoDiscoveredTests.set(false)
+}
+
 dependencies {
     implementation(project(":library:analytics"))
     implementation(project(":library:base"))

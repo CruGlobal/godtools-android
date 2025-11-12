@@ -10,7 +10,6 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.mockk.verifyAll
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -121,13 +120,13 @@ class AccordionSectionControllerTest {
         // trigger events by entering resumed state
         baseLifecycleOwner.lifecycle.currentState = Lifecycle.State.RESUMED
         verify(exactly = 1) { section.getAnalyticsEvents(AnalyticsEvent.Trigger.VISIBLE) }
-        verifyAll { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === event }) }
+        verify { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === event }) }
         confirmVerified(eventBus)
 
         // check delayed event executes
         advanceTimeBy(1000)
         runCurrent()
-        verifyAll { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === delayedEvent1 }) }
+        verify { eventBus.post(match<ContentAnalyticsEventAnalyticsActionEvent> { it.event === delayedEvent1 }) }
         confirmVerified(eventBus)
         clearMocks(eventBus)
 

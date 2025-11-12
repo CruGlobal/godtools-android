@@ -50,8 +50,7 @@ private val tutorialBackgroundColor
 internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
-    val pages = pageSet.pages
-
+    val pages = remember { pageSet.pagesFor(locale) }
     val pagerState = rememberPagerState { pages.size }
     val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }
 

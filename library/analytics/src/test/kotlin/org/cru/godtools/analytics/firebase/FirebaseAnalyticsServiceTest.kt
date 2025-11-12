@@ -8,7 +8,6 @@ import io.mockk.excludeRecords
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import io.mockk.verifyAll
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -66,18 +65,19 @@ class FirebaseAnalyticsServiceTest {
         // no active user
         userFlow.emit(null)
         runCurrent()
-        verifyAll { firebase.setUserId(null) }
+        verify { firebase.setUserId(null) }
         confirmVerified(firebase)
 
         // active user
         userFlow.emit(User(id = "user_id"))
         runCurrent()
-        verifyAll { firebase.setUserId("user_id") }
+        verify { firebase.setUserId("user_id") }
         confirmVerified(firebase)
 
         // user logs out
         userFlow.emit(null)
         runCurrent()
-        verifyAll { firebase.setUserId(null) }
+        verify { firebase.setUserId(null) }
+        confirmVerified(firebase)
     }
 }

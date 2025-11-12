@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jeppeman.mockposable.mockk.everyComposable
+import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -134,21 +135,6 @@ class HomePresenterTest {
 
             featuresTutorialDiscovered.value = true
             assertNull(awaitItem().banner)
-        }
-    }
-
-    @Test
-    fun `State - banner - Features Tutorial - Only visible for supported languages`() = runTest {
-        every { settings.isFeatureDiscoveredFlow(FEATURE_TUTORIAL_FEATURES) } returns flowOf(false)
-
-        presenter.test {
-            assertEquals(BannerType.TUTORIAL_FEATURES, expectMostRecentItem().banner)
-
-            appLanguageFlow.value = Locale.forLanguageTag("x-test")
-            assertNull(awaitItem().banner)
-
-            appLanguageFlow.value = Locale.ENGLISH
-            assertEquals(BannerType.TUTORIAL_FEATURES, expectMostRecentItem().banner)
         }
     }
     // endregion State.banner
@@ -332,8 +318,7 @@ class HomePresenterTest {
 
             navigator.awaitResetRoot().let {
                 assertEquals(ToolsScreen, it.newRoot)
-                assertTrue(it.saveState)
-                assertTrue(it.restoreState)
+                assertEquals(Navigator.StateOptions.SaveAndRestore, it.options)
             }
 
             cancelAndIgnoreRemainingEvents()

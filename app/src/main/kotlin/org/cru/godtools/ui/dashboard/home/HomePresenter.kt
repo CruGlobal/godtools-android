@@ -27,7 +27,6 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
@@ -62,7 +61,7 @@ class HomePresenter @AssistedInject constructor(
         ) {
             when (it) {
                 UiEvent.ViewAllFavorites -> navigator.goTo(AllFavoritesScreen)
-                UiEvent.ViewAllTools -> navigator.resetRoot(ToolsScreen, saveState = true, restoreState = true)
+                UiEvent.ViewAllTools -> navigator.resetRoot(ToolsScreen, Navigator.StateOptions.SaveAndRestore)
             }
         }
     }
@@ -72,7 +71,7 @@ class HomePresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
             .combine(settings.appLanguageFlow) { discovered, language ->
                 when {
-                    !discovered && PageSet.FEATURES.supportsLocale(language) -> BannerType.TUTORIAL_FEATURES
+                    !discovered -> BannerType.TUTORIAL_FEATURES
                     else -> null
                 }
             }
@@ -146,12 +145,14 @@ class HomePresenter @AssistedInject constructor(
                                 navigator.goTo(IntentScreen(intent))
                             }
                         }
+
                         ToolCard.Event.OpenToolDetails -> {
                             eventBus.post(
                                 OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                             )
                             navigator.goTo(ToolDetailsScreen(toolCode))
                         }
+
                         ToolCard.Event.PinTool,
                         ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
