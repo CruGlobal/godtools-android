@@ -66,7 +66,6 @@ dependencies {
     implementation(libs.picasso.transformations)
     implementation(libs.splitties.bitflags)
     implementation(libs.splitties.fragmentargs)
-    implementation(libs.youtubePlayer)
 
     // TODO: transition to KSP for dagger once Data Binding is no longer used
     //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
