@@ -7,6 +7,8 @@ plugins {
 android {
     namespace = "org.cru.godtools.tool.tips"
 
+    configureCompose(project)
+
     defaultConfig.vectorDrawables.useSupportLibrary = true
     buildFeatures.dataBinding = true
 }
@@ -15,6 +17,7 @@ dependencies {
     api(project(":ui:base-tool"))
     implementation(project(":library:model"))
 
+    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
