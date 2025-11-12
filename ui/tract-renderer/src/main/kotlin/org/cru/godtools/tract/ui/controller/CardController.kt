@@ -3,17 +3,27 @@ package org.cru.godtools.tract.ui.controller
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import javax.inject.Named
 import kotlinx.coroutines.Job
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.ui.controller.ParentController
-import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.base.tool.ui.controller.BaseController
+import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.shared.renderer.tips.TipsRepository
+import org.cru.godtools.shared.renderer.tract.RenderTractCardContent
+import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.tract.TractPage.Card
 import org.cru.godtools.tool.tract.databinding.TractContentCardBinding
@@ -21,17 +31,20 @@ import org.cru.godtools.tool.tract.databinding.TractContentCardBinding
 class CardController private constructor(
     private val binding: TractContentCardBinding,
     pageController: PageController,
-    cacheFactory: UiControllerCache.Factory
-) : ParentController<Card>(Card::class, binding.root, pageController, cacheFactory) {
+    private val resourceFileSystem: FileSystem,
+    private val tipsRepository: TipsRepository,
+) : BaseController<Card>(Card::class, binding.root, pageController) {
     @AssistedInject
     internal constructor(
         @Assisted parent: ViewGroup,
         @Assisted pageController: PageController,
-        cacheFactory: UiControllerCache.Factory
+        @Named(TOOL_RESOURCE_FILE_SYSTEM) resourceFileSystem: FileSystem,
+        tipsRepository: TipsRepository,
     ) : this(
         binding = TractContentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
         pageController = pageController,
-        cacheFactory = cacheFactory
+        resourceFileSystem = resourceFileSystem,
+        tipsRepository = tipsRepository,
     )
 
     @AssistedFactory
@@ -52,6 +65,7 @@ class CardController private constructor(
     private var pendingAnalyticsEvents: List<Job>? = null
 
     init {
+        binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
         binding.lifecycleOwner = lifecycleOwner
         binding.controller = this
         binding.enableTips = pageController.enableTips
@@ -67,6 +81,19 @@ class CardController private constructor(
     override fun onBind() {
         super.onBind()
         binding.model = model
+        binding.compose.setContent {
+            ProvideRendererServices(resourceFileSystem, tipsRepository = tipsRepository) {
+                GodToolsTheme(darkTheme = false) {
+                    model?.let { model ->
+                        RenderTractCardContent(
+                            model,
+                            state = toolState,
+                            modifier = Modifier.nestedScroll(rememberNestedScrollInteropConnection())
+                        )
+                    }
+                }
+            }
+        }
     }
 
     @CallSuper
@@ -75,8 +102,6 @@ class CardController private constructor(
         processDismissEvent(event)
     }
     // endregion Lifecycle
-
-    override val childContainer get() = binding.content
 
     private fun processDismissEvent(event: Event) {
         if (model?.dismissListeners?.contains(event.id) == true) dismissCard()

@@ -29,23 +29,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <org.ccci.gto.android.common.widget.HackyNestedScrollView
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginBottom="@dimen/tool_content_margin_half"
-                    android:fillViewport="true"
                     app:layout_constraintBottom_toTopOf="@id/page_counter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:id="@+id/content"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="@dimen/tool_content_margin"
-                        android:orientation="vertical" />
-                </org.ccci.gto.android.common.widget.HackyNestedScrollView>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/page_counter"

@@ -1,7 +1,7 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -11,7 +11,7 @@ android {
     configureQaBuildType(project)
     configureGodToolsCustomUri()
 
-    buildFeatures.dataBinding = true
+    buildFeatures.viewBinding = true
 }
 
 dependencies {
@@ -19,34 +19,21 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.compose.runtime.livedata)
 
-    implementation(libs.gtoSupport.androidx.databinding)
-    implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
-    implementation(libs.gtoSupport.androidx.recyclerview)
-    implementation(libs.gtoSupport.androidx.viewpager2)
-    implementation(libs.gtoSupport.core)
-    implementation(libs.gtoSupport.eventbus)
-    implementation(libs.gtoSupport.materialComponents)
-    implementation(libs.gtoSupport.util)
 
     implementation(libs.circuit.overlay)
     implementation(libs.hilt)
     implementation(libs.lottie.compose)
-    implementation(libs.materialComponents)
-    implementation(libs.splitties.fragmentargs)
 
-    // TODO: transition to KSP for dagger once Data Binding is no longer used
-    //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
-    //       see: https://issuetracker.google.com/issues/173030256#comment10
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(project(":library:account"))
     testImplementation(project(":library:model"))
+    testImplementation(testFixtures(libs.gtoSupport.circuit))
     testImplementation(libs.hilt.testing)
-    kaptTest(libs.hilt.compiler)
+    testImplementation(libs.okio.fakefilesystem)
+    kspTest(libs.hilt.compiler)
 }

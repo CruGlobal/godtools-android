@@ -8,6 +8,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.tool.tract"
 
+    configureCompose(project)
     configureQaBuildType(project)
     configureGodToolsCustomUri()
     createEventBusIndex("org.cru.godtools.tract.TractEventBusIndex")
@@ -32,6 +33,8 @@ dependencies {
     implementation(libs.godtoolsShared.user.activity)
 
     implementation(libs.androidx.cardview)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -52,6 +55,7 @@ dependencies {
     implementation(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.util)
 
+    implementation(libs.circuit.overlay)
     implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
     implementation(libs.hilt)

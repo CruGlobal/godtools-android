@@ -6,16 +6,20 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
+import androidx.viewbinding.ViewBinding
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
@@ -40,7 +44,9 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.IS_CONNECTED_LIVE_DATA
 import org.cru.godtools.base.tool.SHORTCUT_LAUNCH
+import org.cru.godtools.base.tool.analytics.model.ContentAnalyticsEventAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ShareActionEvent
+import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsScreenEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
@@ -49,14 +55,18 @@ import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
+import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
+import org.cru.godtools.base.ui.util.openUrl
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.downloadmanager.GodToolsDownloadManager
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.event.ToolUsedEvent
+import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
+import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
@@ -64,7 +74,7 @@ import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId: Int) :
+abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int) :
     BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     lateinit var downloadManager: GodToolsDownloadManager
@@ -94,14 +104,17 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         setupToolSync()
         setupStatusBar()
         setupFeatureDiscovery()
+        subscribeToRendererStateEvents()
         eventBus.register(this, this)
     }
 
     @CallSuper
     override fun onBindingChanged() {
-        binding.setVariable(BR.manifest, viewModel.manifest.asLiveData())
-        binding.setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
-        binding.setVariable(BR.loadingState, activeToolLoadingStateLiveData)
+        (binding as? ViewDataBinding)?.apply {
+            setVariable(BR.manifest, viewModel.manifest.asLiveData())
+            setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
+            setVariable(BR.loadingState, activeToolLoadingStateLiveData)
+        }
     }
 
     override fun onSetupActionBar() {
@@ -123,7 +136,7 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
         // invalidate the binding to force it to re-color the updated menu
         // TODO: this is a very brute-force way of forcing a recoloring of menu items.
         //       We should try and figure out a more targeted solution at some point.
-        binding.invalidateAll()
+        (binding as? ViewDataBinding)?.invalidateAll()
 
         return super.onPrepareOptionsMenu(menu)
     }
@@ -297,12 +310,35 @@ abstract class BaseToolActivity<B : ViewDataBinding>(@LayoutRes contentLayoutId:
     ) = tools.forEach { t -> locales.forEach { l -> downloadManager.downloadLatestPublishedTranslationAsync(t, l) } }
     // endregion Tool sync/download logic
 
+    // region Renderer State
+    protected val toolState: ToolStateHolder by viewModels()
+
+    private fun subscribeToRendererStateEvents() {
+        toolState.toolState.events
+            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            .onEach {
+                when (it) {
+                    is State.Event.AnalyticsEvent.ScreenView ->
+                        eventBus.post(ToolAnalyticsScreenEvent(it.screenName, it.tool, it.locale?.toPlatform()))
+                    is State.Event.AnalyticsEvent.ContentEvent ->
+                        eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(it.event, activeManifest))
+                    is State.Event.OpenUrl -> openUrl(it.url.toUri())
+                    is State.Event.SubmitForm ->
+                        followupService.handleSubmitFormEvent(it, activeManifest?.locale?.toPlatform())
+                    is State.Event.OpenTip -> activeManifest?.findTip(it.tipId)?.let { showTip(it) }
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    protected open fun showTip(tip: Tip) = Unit
+    // endregion Renderer State
+
     // region Content Event Logic
     @MainThread
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processContentEvent(event: Event) {
         val manifest = activeManifest ?: return
-        if (manifest.code != event.tool || manifest.locale?.toPlatform() != event.locale) return
 
         checkForManifestEvent(manifest, event)
         if (isFinishing) return

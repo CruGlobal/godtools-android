@@ -139,6 +139,8 @@ dependencies {
     implementation(project(":ui:tract-renderer"))
     implementation(project(":ui:tutorial-renderer"))
 
+    implementation(platform(libs.okhttp3.bom))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)

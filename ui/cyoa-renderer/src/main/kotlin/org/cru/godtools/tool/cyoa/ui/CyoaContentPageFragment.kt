@@ -22,11 +22,15 @@ class CyoaContentPageFragment(page: String? = null) :
     internal lateinit var controllerFactory: ContentPageController.Factory
 
     override fun setupPageController(binding: CyoaPageContentBinding, insets: StateFlow<Insets>) {
-        binding.contentInsets = insets
-        controller =
-            binding.bindController(controllerFactory, viewLifecycleOwner, dataModel.enableTips, toolState.toolState)
-                .also { page.filterIsInstance<ContentPage>().observe(viewLifecycleOwner, it) }
-                .also { it.callbacks = this }
+        controller = binding.bindController(
+            controllerFactory,
+            viewLifecycleOwner,
+            insets,
+            dataModel.enableTips,
+            toolState.toolState
+        )
+            .also { page.filterIsInstance<ContentPage>().observe(viewLifecycleOwner, it) }
+            .also { it.callbacks = this }
     }
     // endregion Controller
 }

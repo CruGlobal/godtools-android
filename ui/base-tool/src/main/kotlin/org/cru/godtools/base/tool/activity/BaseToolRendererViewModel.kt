@@ -44,7 +44,7 @@ open class BaseToolRendererViewModel(
         .combine(supportedType) { m, t -> m?.takeIf { t == null || it.type == t } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    internal val downloadProgress = toolCode.combineTransformLatest(locale) { tool, locale ->
+    val downloadProgress = toolCode.combineTransformLatest(locale) { tool, locale ->
         when {
             tool == null || locale == null -> emit(null)
             else -> emitAll(downloadManager.getDownloadProgressFlow(tool, locale))

@@ -2,15 +2,20 @@ package org.cru.godtools.tool.cyoa.ui.controller
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import javax.inject.Named
 import kotlin.math.abs
 import kotlinx.coroutines.Job
+import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.ConstrainedStateLifecycleOwner
 import org.ccci.gto.android.common.androidx.lifecycle.onPause
 import org.ccci.gto.android.common.androidx.lifecycle.onResume
@@ -22,10 +27,12 @@ import org.ccci.gto.android.common.androidx.viewpager2.widget.currentItemLiveDat
 import org.ccci.gto.android.common.androidx.viewpager2.widget.registerPageTransformerFix
 import org.ccci.gto.android.common.androidx.viewpager2.widget.whileMaintainingVisibleCurrentItem
 import org.ccci.gto.android.common.util.Ids
+import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.base.tool.ui.controller.ParentController
-import org.cru.godtools.base.tool.ui.controller.cache.UiControllerCache
+import org.cru.godtools.shared.renderer.content.RenderContentStack
 import org.cru.godtools.shared.renderer.state.State
+import org.cru.godtools.shared.renderer.tips.TipsRepository
+import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.AnalyticsEvent.Trigger
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage
 import org.cru.godtools.shared.tool.parser.model.page.CardCollectionPage.Card
@@ -175,17 +182,20 @@ class CardCollectionPageController @AssistedInject constructor(
     class CardController private constructor(
         val binding: CyoaPageCardCollectionCardBinding,
         pageController: CardCollectionPageController,
-        cacheFactory: UiControllerCache.Factory
-    ) : ParentController<Card>(Card::class, binding.root, pageController, cacheFactory) {
+        private val resourceFileSystem: FileSystem,
+        private val tipsRepository: TipsRepository,
+    ) : BaseController<Card>(Card::class, binding.root, pageController) {
         @AssistedInject
         internal constructor(
             @Assisted parent: ViewGroup,
             @Assisted pageController: CardCollectionPageController,
-            cacheFactory: UiControllerCache.Factory
+            @Named(TOOL_RESOURCE_FILE_SYSTEM) resourceFileSystem: FileSystem,
+            tipsRepository: TipsRepository,
         ) : this(
             CyoaPageCardCollectionCardBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             pageController,
-            cacheFactory
+            resourceFileSystem,
+            tipsRepository,
         )
 
         @AssistedFactory
@@ -195,9 +205,9 @@ class CardCollectionPageController @AssistedInject constructor(
 
         override val lifecycleOwner =
             ConstrainedStateLifecycleOwner(pageController.lifecycleOwner, Lifecycle.State.CREATED)
-        override val childContainer get() = binding.content
 
         init {
+            binding.root.setViewTreeLifecycleOwner(lifecycleOwner)
             binding.lifecycleOwner = lifecycleOwner
             binding.controller = this
         }
@@ -205,6 +215,15 @@ class CardCollectionPageController @AssistedInject constructor(
         override fun onBind() {
             super.onBind()
             binding.model = model
+            binding.compose.setContent {
+                ProvideRendererServices(resourceFileSystem, tipsRepository) {
+                    RenderContentStack(
+                        model?.content.orEmpty(),
+                        state = toolState,
+                        contentPadding = PaddingValues(vertical = 16.dp),
+                    )
+                }
+            }
         }
 
         // region Analytics Events
