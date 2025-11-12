@@ -44,7 +44,7 @@ class ContentPageController @AssistedInject constructor(
     @param:Named(TOOL_RESOURCE_FILE_SYSTEM)
     private val resourceFileSystem: FileSystem,
     private val tipsRepository: TipsRepository,
-) : BaseController<ContentPage>(ContentPage::class, binding.root, eventBus = eventBus) {
+) : BaseController<ContentPage>(binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(

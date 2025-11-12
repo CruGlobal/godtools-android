@@ -56,7 +56,7 @@ class PageController @AssistedInject internal constructor(
     private val tipsRepository: TipsRepository,
     private val trainingTipsRepository: TrainingTipsRepository,
     private val cardControllerFactory: CardController.Factory
-) : BaseController<TractPage>(TractPage::class, binding.root, eventBus = eventBus),
+) : BaseController<TractPage>(binding.root, eventBus = eventBus),
     CardController.Callbacks,
     PageContentLayout.OnActiveCardListener {
 
