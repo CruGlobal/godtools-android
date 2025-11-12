@@ -20,7 +20,6 @@ import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionCont
 import org.cru.godtools.base.tool.ui.controller.MultiselectController.OptionController.FlatOptionController
 import org.cru.godtools.base.tool.ui.controller.OutlinedButtonController
 import org.cru.godtools.base.tool.ui.controller.SpacerController
-import org.cru.godtools.base.tool.ui.controller.TabsController
 import org.cru.godtools.base.tool.ui.controller.TextController
 import org.cru.godtools.base.tool.ui.controller.VideoController
 import org.cru.godtools.shared.tool.parser.model.Accordion
@@ -30,7 +29,6 @@ import org.cru.godtools.shared.tool.parser.model.Image
 import org.cru.godtools.shared.tool.parser.model.Link
 import org.cru.godtools.shared.tool.parser.model.Multiselect
 import org.cru.godtools.shared.tool.parser.model.Spacer
-import org.cru.godtools.shared.tool.parser.model.Tabs
 import org.cru.godtools.shared.tool.parser.model.Text
 import org.cru.godtools.shared.tool.parser.model.Video
 
@@ -95,11 +93,6 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Spacer::class)
     internal abstract fun spacerControllerFactory(factory: SpacerController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Tabs::class)
-    internal abstract fun tabsControllerFactory(factory: TabsController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
