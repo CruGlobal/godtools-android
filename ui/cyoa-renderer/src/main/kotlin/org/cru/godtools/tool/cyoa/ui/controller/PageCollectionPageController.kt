@@ -44,7 +44,7 @@ class PageCollectionPageController @AssistedInject constructor(
     @Assisted override val toolState: State,
     eventBus: EventBus,
     private val contentPageControllerFactory: ContentPageController.Factory,
-) : BaseController<PageCollectionPage>(PageCollectionPage::class, binding.root, eventBus = eventBus) {
+) : BaseController<PageCollectionPage>(binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(

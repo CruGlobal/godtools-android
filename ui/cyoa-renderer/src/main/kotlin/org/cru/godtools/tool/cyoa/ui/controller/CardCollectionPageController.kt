@@ -52,7 +52,7 @@ class CardCollectionPageController @AssistedInject constructor(
     @Assisted override val toolState: State,
     private val cardControllerFactory: CardController.Factory,
     eventBus: EventBus
-) : BaseController<CardCollectionPage>(CardCollectionPage::class, binding.root, eventBus = eventBus) {
+) : BaseController<CardCollectionPage>(binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(
@@ -184,7 +184,7 @@ class CardCollectionPageController @AssistedInject constructor(
         pageController: CardCollectionPageController,
         private val resourceFileSystem: FileSystem,
         private val tipsRepository: TipsRepository,
-    ) : BaseController<Card>(Card::class, binding.root, pageController) {
+    ) : BaseController<Card>(binding.root, pageController) {
         @AssistedInject
         internal constructor(
             @Assisted parent: ViewGroup,

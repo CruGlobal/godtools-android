@@ -33,7 +33,7 @@ class CardController private constructor(
     pageController: PageController,
     private val resourceFileSystem: FileSystem,
     private val tipsRepository: TipsRepository,
-) : BaseController<Card>(Card::class, binding.root, pageController) {
+) : BaseController<Card>(binding.root, pageController) {
     @AssistedInject
     internal constructor(
         @Assisted parent: ViewGroup,

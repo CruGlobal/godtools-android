@@ -28,7 +28,7 @@ class TipPageController @AssistedInject internal constructor(
     @param:Named(TOOL_RESOURCE_FILE_SYSTEM)
     private val resourceFileSystem: FileSystem,
     private val tipsRepository: TipsRepository,
-) : BaseController<TipPage>(TipPage::class, binding.root, eventBus = eventBus) {
+) : BaseController<TipPage>(binding.root, eventBus = eventBus) {
     @AssistedFactory
     interface Factory {
         fun create(binding: ToolTipPageBinding, lifecycleOwner: LifecycleOwner, toolState: State): TipPageController
