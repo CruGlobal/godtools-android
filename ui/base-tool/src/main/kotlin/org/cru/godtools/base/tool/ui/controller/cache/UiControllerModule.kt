@@ -12,7 +12,6 @@ import dagger.multibindings.Multibinds
 import org.cru.godtools.base.tool.ui.controller.AccordionController
 import org.cru.godtools.base.tool.ui.controller.AnimationController
 import org.cru.godtools.base.tool.ui.controller.BaseController
-import org.cru.godtools.base.tool.ui.controller.CardController
 import org.cru.godtools.base.tool.ui.controller.ContainedButtonController
 import org.cru.godtools.base.tool.ui.controller.FlowController
 import org.cru.godtools.base.tool.ui.controller.ImageController
@@ -28,7 +27,6 @@ import org.cru.godtools.base.tool.ui.controller.VideoController
 import org.cru.godtools.shared.tool.parser.model.Accordion
 import org.cru.godtools.shared.tool.parser.model.Animation
 import org.cru.godtools.shared.tool.parser.model.Button
-import org.cru.godtools.shared.tool.parser.model.Card
 import org.cru.godtools.shared.tool.parser.model.Flow
 import org.cru.godtools.shared.tool.parser.model.Image
 import org.cru.godtools.shared.tool.parser.model.Link
@@ -69,11 +67,6 @@ abstract class UiControllerModule {
     @IntoMap
     @UiControllerType(Button::class, VARIATION_BUTTON_OUTLINED)
     internal abstract fun outlinedButtonFactory(factory: OutlinedButtonController.Factory): BaseController.Factory<*>
-
-    @Binds
-    @IntoMap
-    @UiControllerType(Card::class)
-    internal abstract fun cardControllerFactory(factory: CardController.Factory): BaseController.Factory<*>
 
     @Binds
     @IntoMap
