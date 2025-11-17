@@ -240,6 +240,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
             type = "text/plain"
             putExtra(Intent.EXTRA_SUBJECT, title.orEmpty())
             putExtra(Intent.EXTRA_TEXT, getString(message, shareUrl))
+            putExtra("EXTRA_SHARE_TOOL_URL", shareUrl)
         }
     }
 
