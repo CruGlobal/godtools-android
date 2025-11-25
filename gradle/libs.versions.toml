@@ -35,8 +35,6 @@ play-app-update = "2.1.0"
 retrofit2 = "3.0.0"
 scarlet = "0.1.12"
 splitties = "3.0.0"
-agp = "8.13.0"
-lifecycleRuntimeKtx = "2.9.4"
 composeBom = "2024.09.00"
 
 [libraries]
@@ -224,10 +222,10 @@ tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
 youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0"
+zxing = "com.google.zxing:core:3.5.1"
 
 # HACK: dependencies used to trigger renovate upgrades
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
@@ -252,5 +250,3 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
 mockposable = { id = "com.jeppeman.mockposable", version = "0.15" }
 paparazzi = { id = "app.cash.paparazzi", version = "2.0.0-alpha02" }
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

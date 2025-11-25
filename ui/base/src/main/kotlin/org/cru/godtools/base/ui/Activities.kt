@@ -1,8 +1,11 @@
 package org.cru.godtools.base.ui
 
 import android.app.Activity
+import android.app.ActivityOptions
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import java.util.Locale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -103,3 +106,33 @@ private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(
     //       If the shortcut fails to open then singleString mode is still required
     Bundle().apply { putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true) }
 )
+
+private const val ACTIVITY_CLASS_QR_CODE = "org.cru.godtools.qrcode.activity.QRCodeActivity"
+
+fun Context.createQrCodeIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
+    .putExtra("EXTRA_SHARE_URL", data)
+
+fun Context.createQrCodePendingIntent(data: String?): PendingIntent {
+    val intent = createQrCodeIntent(data)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        val options = ActivityOptions.makeBasic().apply {
+            setPendingIntentCreatorBackgroundActivityStartMode(
+                ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED
+            )
+        }
+        return PendingIntent.getActivity(
+            this,
+            42,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            options.toBundle()
+        )
+    } else {
+        return PendingIntent.getActivity(
+            this,
+            42,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+}

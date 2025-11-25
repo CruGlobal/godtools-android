@@ -1,7 +1,6 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import androidx.databinding.ViewDataBinding
@@ -192,7 +190,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected open val shareLinkTitle get() = activeManifest?.title
 
     @get:StringRes
-    protected open val shareLinkMessageRes get() = R.string.share_tool_message_with_qr_code
+    protected open val shareLinkMessageRes get() = R.string.share_tool_message
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
     private val shareLinkUri get() = shareLinkUriLiveData.value
 
@@ -221,7 +219,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     private fun getShareItems(): Collection<ShareItem> = buildList {
-        buildShareIntent()?.let { add(DefaultShareItem(it)) }
+        buildShareIntent()?.let { add(DefaultShareItem(it, shareLinkUri)) }
         addAll(getShareableShareItems())
     }.filter { it.isValid }
 
@@ -244,14 +242,13 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     protected fun showShareActivityChooser(
         title: String? = shareLinkTitle,
         @StringRes message: Int = shareLinkMessageRes,
         shareUrl: String? = shareLinkUri,
     ) {
         val intent = buildShareIntent(title, message, shareUrl) ?: return
-        DefaultShareItem(intent).triggerAction(this)
+        DefaultShareItem(intent, shareUrl).triggerAction(this)
     }
     // endregion Share tool logic
 
