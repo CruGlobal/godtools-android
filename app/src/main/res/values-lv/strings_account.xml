@@ -13,6 +13,7 @@
     <string name="account_error_not_connected_title">Nav savienojuma ar internetu</string>
     <string name="account_error_not_connected">Lūdzu, pārbaudi savienojumu ar internetu un mēģini vēlreiz.</string>
     <string name="account_error_unknown">Kļūda, piesakoties sistēmā.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Dzēst kontu</string>
     <string name="account_delete_heading">Neej tik drīz</string>
@@ -20,6 +21,7 @@
     <string name="account_delete_action_delete">Izdzēst manu kontu</string>
     <string name="account_delete_action_cancel">Paturēt manu kontu</string>
     <string name="account_delete_error">Dzēšot tavu kontu, radās kļūda. Pārliecinies, vai esi tiešsaistē, vai mēģini vēlāk…</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Aktivitāte</string>
     <string name="account_activity_header">Tava aktivitāte</string>
