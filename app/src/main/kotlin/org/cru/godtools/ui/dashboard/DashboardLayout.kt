@@ -140,42 +140,36 @@ internal fun DashboardLayout(
             ) {
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
-                        when (page) {
-                            Page.LESSONS,
-                            Page.HOME,
-                            Page.FAVORITE_TOOLS,
-                            Page.ALL_TOOLS -> {
-                                CircuitContent(
-                                    screen = when (page) {
-                                        Page.LESSONS -> LessonsScreen
-                                        Page.HOME -> HomeScreen
-                                        Page.FAVORITE_TOOLS -> AllFavoritesScreen
-                                        Page.ALL_TOOLS -> ToolsScreen
-                                    },
-                                    onNavEvent = {
-                                        when (it) {
-                                            is NavEvent.GoTo -> when (val screen = it.screen) {
-                                                AllFavoritesScreen -> {
-                                                    saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                                    viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                                }
-                                                is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
-                                                is ToolDetailsScreen -> onEvent(
-                                                    DashboardEvent.OpenToolDetails(
-                                                        screen.initialTool,
-                                                        screen.secondLanguage,
-                                                    )
-                                                )
-                                            }
-                                            is NavEvent.ResetRoot -> when (it.newRoot) {
-                                                ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
-                                            }
-                                            else -> Unit
+                        CircuitContent(
+                            screen = when (page) {
+                                Page.LESSONS -> LessonsScreen
+                                Page.HOME -> HomeScreen
+                                Page.FAVORITE_TOOLS -> AllFavoritesScreen
+                                Page.ALL_TOOLS -> ToolsScreen
+                            },
+                            onNavEvent = {
+                                when (it) {
+                                    is NavEvent.GoTo -> when (val screen = it.screen) {
+                                        AllFavoritesScreen -> {
+                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
+                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
                                         }
-                                    },
-                                )
-                            }
-                        }
+
+                                        is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
+
+                                        is ToolDetailsScreen -> onEvent(
+                                            DashboardEvent.OpenToolDetails(screen.initialTool, screen.secondLanguage)
+                                        )
+                                    }
+
+                                    is NavEvent.ResetRoot -> when (it.newRoot) {
+                                        ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
+                                    }
+
+                                    else -> Unit
+                                }
+                            },
+                        )
                     }
                 }
 
