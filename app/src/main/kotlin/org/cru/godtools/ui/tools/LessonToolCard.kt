@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
@@ -71,10 +72,12 @@ fun LessonToolCard(
                             Text(
                                 when (state.progress) {
                                     null -> ""
+
                                     is Progress.InProgress -> stringResource(
                                         R.string.dashboard_lessons_progress_in_progress,
-                                        Math.round(state.progress.progress * 100).coerceIn(0, 100)
+                                        (state.progress.progress * 100).roundToInt().coerceIn(0, 100)
                                     )
+
                                     Progress.Completed -> stringResource(
                                         R.string.dashboard_lessons_progress_completed
                                     )

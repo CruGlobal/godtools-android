@@ -43,20 +43,16 @@ abstract class BaseSingleToolActivity<B : ViewBinding>(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val tool: String
-        get() = when {
-            !requireTool -> throw UnsupportedOperationException(
-                "You cannot get the tool code on a fragment that doesn't require a tool"
-            )
-            else -> checkNotNull(dataModel.toolCode.value) { "requireTool is true, but a tool wasn't specified" }
+        get() {
+            require(requireTool) { "You cannot get the tool code on an activity that doesn't require a tool" }
+            return checkNotNull(dataModel.toolCode.value) { "requireTool is true, but a tool wasn't specified" }
         }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
     val locale: Locale
-        get() = when {
-            !requireTool -> throw UnsupportedOperationException(
-                "You cannot get the locale on a fragment that doesn't require a tool"
-            )
-            else -> checkNotNull(dataModel.locale.value?.takeUnless { it == Language.INVALID_CODE }) {
+        get() {
+            require(requireTool) { "You cannot get the locale on an activity that doesn't require a tool" }
+            return checkNotNull(dataModel.locale.value?.takeUnless { it == Language.INVALID_CODE }) {
                 "requireTool is true, but a valid locale wasn't specified"
             }
         }

@@ -50,6 +50,7 @@ abstract class BasePaparazziTest(
     }
 
     @get:Rule
+    @Suppress("ktlint:standard:blank-line-between-when-conditions")
     val paparazzi = Paparazzi(
         deviceConfig = deviceConfig.copy(locale = locale, nightMode = nightMode),
         renderingMode = when (accessibilityMode) {

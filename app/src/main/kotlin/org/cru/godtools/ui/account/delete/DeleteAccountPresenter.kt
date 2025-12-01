@@ -43,7 +43,9 @@ class DeleteAccountPresenter @AssistedInject constructor(
                             }
                         }
                     }
+
                     Event.ClearError -> error = false
+
                     Event.Close -> navigator.pop()
                 }
             }

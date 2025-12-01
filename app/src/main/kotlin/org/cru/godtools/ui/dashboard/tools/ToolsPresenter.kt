@@ -222,23 +222,21 @@ class ToolsPresenter @AssistedInject constructor(
 
         return tools?.map { tool ->
             val toolCode by rememberUpdatedState(tool.code)
-            val toolEventSink: (ToolCard.Event) -> Unit = remember {
-                {
+
+            toolCardPresenter.present(
+                tool = tool,
+                secondLanguage = secondLanguage,
+                eventSink = {
                     when (it) {
                         ToolCard.Event.Click,
                         ToolCard.Event.OpenTool,
                         ToolCard.Event.OpenToolDetails ->
                             toolCode?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
+
                         ToolCard.Event.PinTool,
                         ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
                 }
-            }
-
-            toolCardPresenter.present(
-                tool = tool,
-                secondLanguage = secondLanguage,
-                eventSink = toolEventSink,
             )
         }
     }

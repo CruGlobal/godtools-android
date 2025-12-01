@@ -54,7 +54,9 @@ interface ScaledPicassoImageView : PicassoImageView {
 
         override fun onSetUpdateScale(update: RequestCreator, size: Dimension) {
             when (val scaleType = scaleType) {
-                ImageScaleType.FILL, ImageScaleType.FILL_X, ImageScaleType.FILL_Y -> {
+                ImageScaleType.FILL,
+                ImageScaleType.FILL_X,
+                ImageScaleType.FILL_Y -> {
                     if (size.width > 0 && scaleType == ImageScaleType.FILL_X) {
                         update.resize(size.width, 0).onlyScaleDown()
                     } else if (size.height > 0 && scaleType == ImageScaleType.FILL_Y) {
@@ -68,10 +70,12 @@ interface ScaledPicassoImageView : PicassoImageView {
                         ScaledCropTransformation(size.width, size.height, scaleType, gravityHorizontal, gravityVertical)
                     )
                 }
+
                 ImageScaleType.FIT -> {
                     update.resize(size.width, size.height).onlyScaleDown()
                     update.centerInside()
                 }
+
                 else -> super.onSetUpdateScale(update, size)
             }
         }

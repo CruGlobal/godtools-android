@@ -39,11 +39,12 @@ class ArticlesActivity :
         setupFragments()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when {
-        item.itemId == android.R.id.home && supportFragmentManager.backStackEntryCount > 0 -> {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home if (supportFragmentManager.backStackEntryCount > 0) -> {
             supportFragmentManager.popBackStack()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -66,6 +67,7 @@ class ArticlesActivity :
                     dataModel.toolCode.value = path[3]
                     dataModel.locale.value = Locale.forLanguageTag(path[4])
                 }
+
                 // Sample deep link: godtools://org.cru.godtools/tool/article/{tool}/{locale}
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]

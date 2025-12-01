@@ -25,11 +25,8 @@ internal abstract class TranslationsRoomRepository(private val db: GodToolsRoomD
         else -> dao.getLatestTranslations(code, locale).firstOrNull { !downloadedOnly || it.isDownloaded }?.toModel()
     }
 
-    override fun findLatestTranslationFlow(
-        code: String?,
-        locale: Locale?,
-        downloadedOnly: Boolean,
-    ): Flow<Translation?> = when {
+    @Suppress("ktlint:standard:blank-line-between-when-conditions")
+    override fun findLatestTranslationFlow(code: String?, locale: Locale?, downloadedOnly: Boolean) = when {
         code == null || locale == null -> flowOf(null)
         else -> dao.getLatestTranslationsFlow(code, locale)
             .map { it.firstOrNull { !downloadedOnly || it.isDownloaded }?.toModel() }

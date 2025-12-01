@@ -50,12 +50,13 @@ class AppLanguagePresenter @AssistedInject constructor(
                         }
                     }
 
-                    AppLanguageScreen.Event.DismissConfirmDialog -> confirmLanguage = null
                     is AppLanguageScreen.Event.ConfirmLanguage -> {
                         settings.appLanguage = it.language
                         confirmLanguage = null
                         navigator.pop()
                     }
+
+                    AppLanguageScreen.Event.DismissConfirmDialog -> confirmLanguage = null
                 }
             }
         }

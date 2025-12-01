@@ -304,6 +304,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
                 // rename temporary file based on digest
                 val dedup = digest?.let { fs.file("${it.digest().toHexString()}.bin") }
+                @Suppress("ktlint:standard:blank-line-between-when-conditions")
                 val output = when {
                     dedup == null -> tmpFile
                     dedup.exists() -> {

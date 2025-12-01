@@ -140,8 +140,10 @@ class LessonActivity :
             }
             val state = when {
                 loadingState == LoadingState.OFFLINE -> LessonScreen.UiState.Offline(eventSink)
+
                 loadingState == LoadingState.NOT_FOUND || loadingState == LoadingState.INVALID_TYPE ->
                     LessonScreen.UiState.Missing(eventSink)
+
                 manifest == null || loadingState == LoadingState.LOADING -> {
                     val downloadProgress by viewModel.downloadProgress.collectAsState()
                     val progress by remember {
@@ -151,6 +153,7 @@ class LessonActivity :
                     }
                     LessonScreen.UiState.Loading(progress, eventSink)
                 }
+
                 else -> {
                     val lessonPagerState = rememberLessonPagerState(manifest)
                     val pagerState = lessonPagerState.pagerState
@@ -262,11 +265,13 @@ class LessonActivity :
                     dataModel.toolCode.value = path[3]
                     dataModel.locale.value = Locale.forLanguageTag(path[4])
                 }
+
                 // Sample deep link: godtools://org.cru.godtools/tool/lesson/{tool}/{locale}
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]
                     dataModel.locale.value = Locale.forLanguageTag(path[3])
                 }
+
                 // Sample Lesson deep link: https://godtoolsapp.com/lessons/lessonholyspirit/en
                 data.isLessonDeepLink() -> {
                     dataModel.toolCode.value = path[1]

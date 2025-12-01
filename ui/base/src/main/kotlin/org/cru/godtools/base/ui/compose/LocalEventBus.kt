@@ -21,6 +21,7 @@ object LocalEventBus {
      */
     val current: EventBus
         @Composable
+        @Suppress("ktlint:standard:blank-line-between-when-conditions")
         get() = LocalComposition.current
             ?: when {
                 LocalInspectionMode.current -> EventBus()

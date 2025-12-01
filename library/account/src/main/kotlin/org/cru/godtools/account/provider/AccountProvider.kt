@@ -44,6 +44,7 @@ internal fun Response<JsonApiObject<AuthToken>>.extractAuthToken() = when {
             else -> Result.success(data)
         }
     }
+
     else -> errorBody()?.string()
         ?.let {
             try {

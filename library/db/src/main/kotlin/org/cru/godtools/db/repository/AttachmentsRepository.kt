@@ -37,9 +37,8 @@ interface AttachmentsRepository {
 @Composable
 fun AttachmentsRepository.rememberAttachmentFile(fileSystem: FileSystem, attachmentId: Long?) =
     remember(fileSystem, attachmentId) {
-        when {
-            attachmentId != null -> findAttachmentFlow(attachmentId)
-                .map { it?.takeIf { it.isDownloaded }?.getFile(fileSystem) }
-            else -> flowOf(null)
+        when (attachmentId) {
+            null -> flowOf(null)
+            else -> findAttachmentFlow(attachmentId).map { it?.takeIf { it.isDownloaded }?.getFile(fileSystem) }
         }
     }.collectAsState(null).value

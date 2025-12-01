@@ -117,6 +117,7 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
     private val pendingShortcuts = mutableMapOf<String, WeakReference<PendingShortcut>>()
 
     @AnyThread
+    @Suppress("ktlint:standard:blank-line-between-when-conditions")
     fun canPinToolShortcut(tool: Tool?) = when {
         !isEnabled -> false
         else -> when (tool?.type) {

@@ -157,6 +157,7 @@ class LessonsPresenter @AssistedInject constructor(
                                     )
                                 )
                             }
+
                             ToolCard.Event.OpenTool,
                             ToolCard.Event.OpenToolDetails,
                             ToolCard.Event.PinTool,

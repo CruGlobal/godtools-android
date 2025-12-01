@@ -117,21 +117,25 @@ private val Badge.icon
             2 -> painterResource(R.drawable.ic_badge_tools_opened_2)
             else -> painterResource(R.drawable.ic_badge_tools_opened_3)
         }
+
         BadgeType.LESSONS_COMPLETED -> when (variant) {
             1 -> painterResource(R.drawable.ic_badge_lesson_completed_1)
             2 -> painterResource(R.drawable.ic_badge_lesson_completed_2)
             else -> painterResource(R.drawable.ic_badge_lesson_completed_3)
         }
+
         BadgeType.ARTICLES_OPENED -> when (variant) {
             1 -> painterResource(R.drawable.ic_badge_articles_opened_1)
             2 -> painterResource(R.drawable.ic_badge_articles_opened_2)
             else -> painterResource(R.drawable.ic_badge_articles_opened_3)
         }
+
         BadgeType.IMAGES_SHARED -> when (variant) {
             1 -> painterResource(R.drawable.ic_badge_images_shared_1)
             2 -> painterResource(R.drawable.ic_badge_images_shared_2)
             else -> painterResource(R.drawable.ic_badge_images_shared_3)
         }
+
         BadgeType.TIPS_COMPLETED -> when (variant) {
             1 -> painterResource(R.drawable.ic_badge_tips_completed_1)
             2 -> painterResource(R.drawable.ic_badge_tips_completed_2)
@@ -147,21 +151,25 @@ private val Badge.label
             progressTarget,
             progressTarget
         )
+
         BadgeType.LESSONS_COMPLETED -> pluralStringResource(
             R.plurals.account_activity_badge_lessons_completed,
             progressTarget,
             progressTarget
         )
+
         BadgeType.ARTICLES_OPENED -> pluralStringResource(
             R.plurals.account_activity_badge_articles_opened,
             progressTarget,
             progressTarget
         )
+
         BadgeType.IMAGES_SHARED -> pluralStringResource(
             R.plurals.account_activity_badge_images_shared,
             progressTarget,
             progressTarget
         )
+
         BadgeType.TIPS_COMPLETED -> pluralStringResource(
             R.plurals.account_activity_badge_tips_completed,
             progressTarget,

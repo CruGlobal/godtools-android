@@ -75,6 +75,7 @@ class PageContentLayout @JvmOverloads constructor(
             changeActiveCard(state.activeCardPosition, false)
             isBounceFirstCard = state.isBounceFirstCard
         }
+
         else -> super.onRestoreInstanceState(state)
     }
 
@@ -223,8 +224,10 @@ class PageContentLayout @JvmOverloads constructor(
             override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float) = when {
                 // ignore flings that are "an incomplete event stream or error state"
                 e1 == null -> false
+
                 // ignore flings when the initial event is in the gutter
                 isEventInGutter(e1) -> false
+
                 else -> flingCard(velocityY)
             }
         }
@@ -233,8 +236,10 @@ class PageContentLayout @JvmOverloads constructor(
     override fun onInterceptTouchEvent(ev: MotionEvent) = gestureDetector.onTouchEvent(ev)
     override fun onTouchEvent(event: MotionEvent) = when {
         gestureDetector.onTouchEvent(event) -> true
+
         // we always consume the down event if it reaches us so that we can continue to process future events
         event.action == MotionEvent.ACTION_DOWN -> true
+
         else -> super.onTouchEvent(event)
     }
 
@@ -373,13 +378,15 @@ class PageContentLayout @JvmOverloads constructor(
         val show = mutableListOf<Animator>()
         forEachIndexed { i, child ->
             when (child.childType) {
-                CHILD_TYPE_HERO, CHILD_TYPE_CARD -> {
+                CHILD_TYPE_HERO,
+                CHILD_TYPE_CARD -> {
                     // position offset animation only
                     val targetY = getChildTargetY(i).toFloat()
                     if (child.y != targetY) {
                         offset.add(ObjectAnimator.ofFloat(child, Y, targetY))
                     }
                 }
+
                 CHILD_TYPE_CALL_TO_ACTION -> {
                     // alpha animation only
                     val targetAlpha = getChildTargetAlpha(child)
@@ -393,6 +400,7 @@ class PageContentLayout @JvmOverloads constructor(
                         }
                     }
                 }
+
                 CHILD_TYPE_CALL_TO_ACTION_TIP -> {
                     // alpha animation only
                     val targetAlpha = getChildTargetAlpha(child)
@@ -454,10 +462,12 @@ class PageContentLayout @JvmOverloads constructor(
             // determine how much height is used by subsequent views
             val heightUsed = when (lp.childType) {
                 CHILD_TYPE_CARD -> max(nextCardLp?.cardPeekOffset ?: 0, callToActionHeight)
+
                 CHILD_TYPE_HERO -> when (nextCardLp) {
                     null -> callToActionHeight
                     else -> cardStackHeight + nextCardLp.cardPaddingOffset
                 }
+
                 else -> 0
             }
 
@@ -596,8 +606,10 @@ class PageContentLayout @JvmOverloads constructor(
             CHILD_TYPE_HERO -> when {
                 // we are currently displaying the hero
                 activeCardPosition < 0 -> child.top
+
                 else -> 0 - parentBottom
             }
+
             CHILD_TYPE_CARD -> {
                 // no cards currently active, so stack the cards
                 if (activeCardPosition < 0) {
@@ -613,16 +625,21 @@ class PageContentLayout @JvmOverloads constructor(
                     else -> measuredHeight - paddingTop
                 }
             }
-            CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> child.top
+
+            CHILD_TYPE_CALL_TO_ACTION,
+            CHILD_TYPE_CALL_TO_ACTION_TIP -> child.top
+
             else -> child.top
         }
     }
 
     private fun getChildTargetAlpha(child: View) = when (child.childType) {
-        CHILD_TYPE_CALL_TO_ACTION, CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
+        CHILD_TYPE_CALL_TO_ACTION,
+        CHILD_TYPE_CALL_TO_ACTION_TIP -> when {
             activeCardPosition + 1 >= totalCards -> 1f
             else -> 0f
         }
+
         else -> 1f
     }
 

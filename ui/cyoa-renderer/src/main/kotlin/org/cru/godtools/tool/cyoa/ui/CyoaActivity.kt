@@ -101,6 +101,7 @@ class CyoaActivity :
                     dataModel.parallelLocales.value = emptyList()
                     savedState.initialPage = path.getOrNull(5)
                 }
+
                 data.isCustomUriSchemeDeepLink -> {
                     val path = data.pathSegments
                     dataModel.toolCode.value = path.getOrNull(2)
@@ -221,6 +222,7 @@ class CyoaActivity :
         // dismiss/show pages as necessary
         when {
             newPage != null -> showPage(newPage, replaceCurrentPage = dismissCurrentPage)
+
             dismissCurrentPage -> when {
                 supportFragmentManager.backStackEntryCount > 0 -> supportFragmentManager.popBackStack()
                 else -> supportFragmentManager.commit { remove(pageFragment) }

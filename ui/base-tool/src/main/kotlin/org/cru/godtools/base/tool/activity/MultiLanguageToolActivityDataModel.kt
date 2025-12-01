@@ -220,6 +220,7 @@ class MultiLanguageToolActivityDataModel @Inject constructor(
                         loadingState[it] != LoadingState.INVALID_TYPE &&
                         loadingState[it] != LoadingState.OFFLINE
                 }?.let { activeLocale.value = it }
+
                 else -> Unit
             }
         }

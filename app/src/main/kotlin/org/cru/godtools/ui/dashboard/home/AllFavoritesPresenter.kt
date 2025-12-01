@@ -74,12 +74,14 @@ class AllFavoritesPresenter @AssistedInject constructor(
                                     navigator.goTo(IntentScreen(intent))
                                 }
                             }
+
                             ToolCard.Event.OpenToolDetails -> {
                                 eventBus.post(
                                     OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                                 )
                                 navigator.goTo(ToolDetailsScreen(toolCode))
                             }
+
                             ToolCard.Event.PinTool,
                             ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                         }
@@ -90,6 +92,7 @@ class AllFavoritesPresenter @AssistedInject constructor(
         ) {
             when (it) {
                 is UiEvent.MoveTool -> tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
+
                 UiEvent.CommitToolOrder -> scope.launch(NonCancellable) {
                     toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
                 }

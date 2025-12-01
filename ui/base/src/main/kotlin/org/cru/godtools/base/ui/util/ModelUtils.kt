@@ -24,12 +24,14 @@ fun Tool?.getCategory(context: Context, locale: Locale? = null) = getToolCategor
 fun getToolCategoryName(category: String?, context: Context, locale: Locale? = null) =
     category?.let { c -> context.localizeIfPossible(locale).getToolCategoryStringRes(c) ?: c }.orEmpty()
 
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 private fun Context.getToolCategoryStringRes(category: String) = when (category.lowercase(Locale.ROOT)) {
     Tool.CATEGORY_GOSPEL -> getString(R.string.tool_category_gospel)
     Tool.CATEGORY_ARTICLES -> getString(R.string.tool_category_articles)
     Tool.CATEGORY_CONVERSATION_STARTERS -> getString(R.string.tool_category_conversation_starter)
     Tool.CATEGORY_GROWTH -> getString(R.string.tool_category_growth)
     Tool.CATEGORY_TRAINING -> getString(R.string.tool_category_training)
+
     else -> {
         val e = Resources.NotFoundException("tool_category_$category was not found")
         when {

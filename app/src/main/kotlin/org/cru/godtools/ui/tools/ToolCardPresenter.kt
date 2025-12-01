@@ -118,10 +118,14 @@ class ToolCardPresenter @Inject constructor(
         val interceptingEventSink: (ToolCard.Event) -> Unit = remember(eventSink) {
             {
                 when (it) {
-                    ToolCard.Event.PinTool ->
-                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.pinTool(it) } }
-                    ToolCard.Event.UnpinTool ->
-                        coroutineScope.launch(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(it) } }
+                    ToolCard.Event.PinTool -> coroutineScope.launch(NonCancellable) {
+                        toolCode?.let { toolsRepository.pinTool(it) }
+                    }
+
+                    ToolCard.Event.UnpinTool -> coroutineScope.launch(NonCancellable) {
+                        toolCode?.let { toolsRepository.unpinTool(it) }
+                    }
+
                     else -> eventSink(it)
                 }
             }
@@ -159,8 +163,7 @@ class ToolCardPresenter @Inject constructor(
         val completed by remember(toolCode) {
             when {
                 toolCode == null -> flowOf(false)
-                else -> userCountersRepository.findCounterFlow(LESSON_COMPLETION(toolCode))
-                    .map { (it?.count ?: 0) > 0 }
+                else -> userCountersRepository.findCounterFlow(LESSON_COMPLETION(toolCode)).map { (it?.count ?: 0) > 0 }
             }
         }.collectAsState(false)
 

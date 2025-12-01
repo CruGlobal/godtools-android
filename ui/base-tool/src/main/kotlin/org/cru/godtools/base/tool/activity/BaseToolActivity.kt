@@ -260,6 +260,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         OFFLINE;
 
         companion object {
+            @Suppress("ktlint:standard:blank-line-between-when-conditions")
             fun determineToolState(
                 manifest: Manifest? = null,
                 translation: Translation? = null,
@@ -323,6 +324,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         toolState.toolState.events
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach {
+                @Suppress("ktlint:standard:blank-line-between-when-conditions")
                 when (it) {
                     is State.Event.AnalyticsEvent.ScreenView ->
                         eventBus.post(ToolAnalyticsScreenEvent(it.screenName, it.tool, it.locale?.toPlatform()))

@@ -36,6 +36,20 @@ fun Tool.createToolIntent(
     if (languages.isEmpty()) return null
 
     return when (type) {
+        Type.ARTICLE -> context.createArticlesIntent(code, languages[0])
+
+        Type.CYOA -> context.createCyoaActivityIntent(
+            code,
+            *languages.toTypedArray(),
+            saveLanguageSettings = saveLanguageSettings
+        )
+
+        Type.LESSON -> context.createLessonActivityIntent(
+            code,
+            languages[0],
+            resumePageId = progressLastPageId.takeIf { resumeProgress }
+        )
+
         Type.TRACT -> context.createTractActivityIntent(
             code,
             *languages.toTypedArray(),
@@ -43,17 +57,7 @@ fun Tool.createToolIntent(
             showTips = showTips,
             saveLanguageSettings = saveLanguageSettings,
         )
-        Type.ARTICLE -> context.createArticlesIntent(code, languages[0])
-        Type.CYOA -> context.createCyoaActivityIntent(
-            code,
-            *languages.toTypedArray(),
-            saveLanguageSettings = saveLanguageSettings
-        )
-        Type.LESSON -> context.createLessonActivityIntent(
-            code,
-            languages[0],
-            resumePageId = progressLastPageId.takeIf { resumeProgress }
-        )
+
         Type.META, Type.UNKNOWN -> null
     }
 }
