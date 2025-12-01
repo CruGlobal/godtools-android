@@ -3,7 +3,6 @@ package org.cru.godtools.article.aem.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.net.Uri
-import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.webkit.WebView
@@ -36,11 +35,7 @@ internal class AemArticleViewModel @Inject constructor(
     }
 
     private fun buildWebView(activity: Activity) {
-        val context = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
-                ContextThemeWrapper(activity.applicationContext, activity.theme)
-            else -> ContextThemeWrapper(activity.applicationContext, org.cru.godtools.tool.R.style.Theme_GodTools_Tool)
-        }
+        val context = ContextThemeWrapper(activity.applicationContext, activity.theme)
 
         webView = WebView(context).apply {
             layoutParams = ViewGroup.LayoutParams(
