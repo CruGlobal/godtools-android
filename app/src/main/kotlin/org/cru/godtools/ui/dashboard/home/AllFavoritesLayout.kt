@@ -92,12 +92,12 @@ private fun MutableInteractionSource.reorderableDragInteractions(isDragging: Boo
         }
     }
     LaunchedEffect(isDragging) {
-        when (val start = dragState.start) {
-            null -> if (isDragging) dragState.start = DragInteraction.Start().also { emit(it) }
-            else -> if (!isDragging) {
-                dragState.start = null
-                emit(DragInteraction.Stop(start))
-            }
+        val start = dragState.start
+        if (isDragging && start == null) {
+            dragState.start = DragInteraction.Start().also { emit(it) }
+        } else if (!isDragging && start != null) {
+            dragState.start = null
+            emit(DragInteraction.Stop(start))
         }
     }
 }
