@@ -1,4 +1,4 @@
-package org.cru.godtools.ui
+package org.cru.godtools.base.ui
 
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
@@ -18,11 +18,11 @@ import app.cash.paparazzi.accessibility.AccessibilityRenderExtension
 import com.android.ide.common.rendering.api.SessionParams.RenderingMode
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider
-import kotlin.test.BeforeTest
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.greenrobot.eventbus.EventBus
 import org.junit.Assume.assumeFalse
+import org.junit.Before
 import org.junit.Rule
 
 abstract class BasePaparazziTest(
@@ -65,7 +65,7 @@ abstract class BasePaparazziTest(
         },
     )
 
-    @BeforeTest
+    @Before
     fun excludeRedundantTests() {
         if (excludeRedundantTests) {
             // don't run accessibility mode for devices other than the NEXUS_5

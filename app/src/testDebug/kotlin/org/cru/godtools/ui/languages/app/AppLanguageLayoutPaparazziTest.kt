@@ -8,7 +8,7 @@ import java.util.Locale
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
-import org.cru.godtools.ui.BasePaparazziTest
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)

@@ -6,7 +6,7 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
-import org.cru.godtools.ui.BasePaparazziTest
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.junit.Assume.assumeFalse
 import org.junit.runner.RunWith
 

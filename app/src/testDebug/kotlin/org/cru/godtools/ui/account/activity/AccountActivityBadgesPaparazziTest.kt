@@ -5,9 +5,9 @@ import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import kotlin.test.Test
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.shared.user.activity.UserCounterNames
 import org.cru.godtools.shared.user.activity.model.UserActivity
-import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)

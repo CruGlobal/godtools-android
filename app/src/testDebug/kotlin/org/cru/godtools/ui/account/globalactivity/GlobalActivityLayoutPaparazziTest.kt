@@ -7,8 +7,8 @@ import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import kotlin.test.Test
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.GlobalActivityAnalytics
-import org.cru.godtools.ui.BasePaparazziTest
 import org.cru.godtools.ui.account.ACCOUNT_PAGE_MARGIN_HORIZONTAL
 import org.junit.runner.RunWith
 
