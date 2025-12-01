@@ -16,8 +16,8 @@ android {
 }
 
 dependencies {
-    api(project(":ui:base-tool"))
-    implementation(project(":ui:tips-renderer"))
+    api(projects.ui.baseTool)
+    implementation(projects.ui.tipsRenderer)
 
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.fragment.ktx)
@@ -40,8 +40,8 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
-    testImplementation(project(":library:account"))
-    testImplementation(project(":library:model"))
+    testImplementation(projects.library.account)
+    testImplementation(projects.library.model)
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.gtoSupport.kotlin.coroutines)

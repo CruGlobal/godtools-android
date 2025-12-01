@@ -17,9 +17,9 @@ android {
 }
 
 dependencies {
-    api(project(":ui:article-aem-renderer"))
-    implementation(project(":library:base"))
-    implementation(project(":ui:base-tool"))
+    api(projects.ui.articleAemRenderer)
+    implementation(projects.library.base)
+    implementation(projects.ui.baseTool)
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -44,8 +44,8 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
-    testImplementation(project(":library:account"))
-    testImplementation(project(":library:model"))
+    testImplementation(projects.library.account)
+    testImplementation(projects.library.model)
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.hilt.testing)
     kaptTest(libs.hilt.compiler)

@@ -20,8 +20,8 @@ android {
 }
 
 dependencies {
-    api(project(":library:base"))
-    implementation(project(":library:model"))
+    api(projects.library.base)
+    implementation(projects.library.model)
 
     api(libs.androidx.appcompat)
     compileOnly(libs.androidx.fragment.ktx)
@@ -49,5 +49,5 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
-    testImplementation(project(":ui:tract-renderer"))
+    testImplementation(projects.ui.tractRenderer)
 }

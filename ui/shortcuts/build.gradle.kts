@@ -11,12 +11,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:base"))
-    implementation(project(":library:db"))
-    implementation(project(":library:model"))
-
-    implementation(project(":ui:base"))
-    implementation(project(":ui:base-tool"))
+    implementation(projects.library.base)
+    implementation(projects.library.db)
+    implementation(projects.library.model)
+    implementation(projects.ui.base)
+    implementation(projects.ui.baseTool)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.hilt.work)

@@ -21,14 +21,14 @@ android {
 }
 
 dependencies {
-    api(project(":ui:base-tool"))
-    api(project(":ui:tutorial-renderer"))
-    implementation(project(":library:api"))
-    implementation(project(":library:base"))
-    implementation(project(":library:db"))
-    implementation(project(":library:model"))
-    implementation(project(":library:sync"))
-    implementation(project(":ui:tips-renderer"))
+    api(projects.ui.baseTool)
+    api(projects.ui.tutorialRenderer)
+    implementation(projects.library.api)
+    implementation(projects.library.base)
+    implementation(projects.library.db)
+    implementation(projects.library.model)
+    implementation(projects.library.sync)
+    implementation(projects.ui.tipsRenderer)
 
     implementation(libs.godtoolsShared.user.activity)
 
@@ -74,7 +74,7 @@ dependencies {
     kapt(libs.dagger.compiler)
     kapt(libs.hilt.compiler)
 
-    testImplementation(project(":library:account"))
+    testImplementation(projects.library.account)
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.gtoSupport.testing.dagger)

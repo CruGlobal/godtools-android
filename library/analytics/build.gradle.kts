@@ -13,10 +13,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:base"))
-    implementation(project(":library:account"))
-    implementation(project(":library:user-data"))
-    implementation(project(":ui:base"))
+    implementation(projects.library.account)
+    implementation(projects.library.base)
+    implementation(projects.library.userData)
+    implementation(projects.ui.base)
 
     api(libs.godtoolsShared.analytics)
 

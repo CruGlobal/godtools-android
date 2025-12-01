@@ -6,10 +6,10 @@ plugins {
 android.namespace = "org.cru.godtools.user"
 
 dependencies {
-    api(project(":library:model"))
-    implementation(project(":library:account"))
-    implementation(project(":library:db"))
-    implementation(project(":library:sync"))
+    api(projects.library.model)
+    implementation(projects.library.account)
+    implementation(projects.library.db)
+    implementation(projects.library.sync)
 
     api(libs.godtoolsShared.user.activity)
 

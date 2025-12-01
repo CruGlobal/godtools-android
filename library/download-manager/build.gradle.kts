@@ -17,10 +17,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:api"))
-    implementation(project(":library:base"))
-    implementation(project(":library:db"))
-    implementation(project(":library:model"))
+    implementation(projects.library.api)
+    implementation(projects.library.base)
+    implementation(projects.library.db)
+    implementation(projects.library.model)
 
     implementation(libs.godtoolsShared.parser)
 

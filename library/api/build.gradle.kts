@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(project(":library:model"))
+    api(projects.library.model)
 
     api(libs.gtoSupport.api.okhttp3)
     api(libs.gtoSupport.jsonapi.retrofit2)
