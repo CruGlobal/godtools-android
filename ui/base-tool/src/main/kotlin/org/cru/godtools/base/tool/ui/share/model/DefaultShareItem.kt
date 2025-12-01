@@ -12,12 +12,12 @@ import org.cru.godtools.base.ui.createQrCodePendingIntent
 import org.cru.godtools.tool.R
 
 @Parcelize
-class DefaultShareItem(override val shareIntent: Intent, var urlStringForQrCode: String? = null) : ShareItem {
+class DefaultShareItem(override val shareIntent: Intent, val urlStringForQrCode: String? = null) : ShareItem {
     override val order get() = Ordered.HIGHEST_PRECEDENCE
 
     override fun triggerAction(activity: Activity) {
         val chooserIntent = Intent.createChooser(shareIntent, null)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && urlStringForQrCode != null) {
             val qrCodeCustomAction = arrayOf(
                 ChooserAction.Builder(
                     Icon.createWithResource(activity, R.drawable.ic_qr_code),

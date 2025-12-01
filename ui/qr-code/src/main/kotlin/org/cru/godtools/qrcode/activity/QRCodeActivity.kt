@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import androidx.core.graphics.createBitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 import timber.log.Timber
 
 class QRCodeActivity : ComponentActivity() {
@@ -39,7 +39,7 @@ class QRCodeActivity : ComponentActivity() {
         }
 
         setContent {
-            MaterialTheme {
+            GodToolsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     QRCodeScreen(
                         url = url,
@@ -71,7 +71,7 @@ private fun QRCodeScreen(url: String, modifier: Modifier = Modifier) {
         ) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = "QR Code",
+                contentDescription = null,
                 modifier = Modifier.aspectRatio(1f)
             )
             Text(text = url, modifier = Modifier.align(Alignment.BottomCenter))
