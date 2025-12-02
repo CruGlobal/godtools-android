@@ -32,6 +32,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,7 +60,7 @@ internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
 @CircuitInject(AppLanguageScreen::class, SingletonComponent::class)
 internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifier = Modifier) {
     val eventSink by rememberUpdatedState(state.eventSink)
-    val languageQuery by rememberUpdatedState(state.languageQuery)
+    var languageQuery by state.languageQuery
 
     Scaffold(
         topBar = {
@@ -67,8 +68,8 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                 inputField = {
                     SearchBarDefaults.InputField(
                         query = languageQuery,
-                        onQueryChange = { eventSink(Event.UpdateLanguageQuery(it)) },
-                        onSearch = { eventSink(Event.UpdateLanguageQuery(it)) },
+                        onQueryChange = { languageQuery = it },
+                        onSearch = { languageQuery = it },
                         expanded = false,
                         onExpandedChange = {},
                         leadingIcon = {
@@ -82,7 +83,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                         trailingIcon = {
                             if (languageQuery.isNotEmpty()) {
                                 IconButton(
-                                    onClick = { eventSink(Event.UpdateLanguageQuery("")) },
+                                    onClick = { languageQuery = "" },
                                     modifier = Modifier.testTag(TEST_TAG_CANCEL_SEARCH),
                                 ) {
                                     Icon(Icons.Filled.Close, null)

@@ -1,6 +1,8 @@
 package org.cru.godtools.ui.languages.app
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -62,7 +64,7 @@ class AppLanguageLayoutTest {
     fun `Search - Cancel Button not visible when not searching`() {
         composeTestRule.run {
             setContent {
-                AppLanguageLayout(state = AppLanguageScreen.State(languageQuery = "", eventSink = events))
+                AppLanguageLayout(state = AppLanguageScreen.State(eventSink = events))
             }
 
             onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
@@ -73,7 +75,12 @@ class AppLanguageLayoutTest {
     fun `Search - Cancel Button visible when searching`() {
         composeTestRule.run {
             setContent {
-                AppLanguageLayout(state = AppLanguageScreen.State(languageQuery = "query", eventSink = events))
+                AppLanguageLayout(
+                    state = AppLanguageScreen.State(
+                        languageQuery = remember { mutableStateOf("query") },
+                        eventSink = events,
+                    )
+                )
             }
 
             onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertExists()

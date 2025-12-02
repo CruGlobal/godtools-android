@@ -1,5 +1,7 @@
 package org.cru.godtools.ui.languages.app
 
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import app.cash.paparazzi.DeviceConfig
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
@@ -31,7 +33,7 @@ class AppLanguageLayoutPaparazziTest(
         snapshot {
             AppLanguageLayout(
                 state.copy(
-                    languageQuery = "en",
+                    languageQuery = remember { mutableStateOf("en") },
                     languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH)
                 )
             )
