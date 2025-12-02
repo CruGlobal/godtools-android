@@ -21,7 +21,7 @@ class DefaultShareItem(override val shareIntent: Intent, val urlStringForQrCode:
             val qrCodeCustomAction = arrayOf(
                 ChooserAction.Builder(
                     Icon.createWithResource(activity, R.drawable.ic_qr_code),
-                    getString(activity, R.string.share_by_qr_code),
+                    getString(activity, R.string.share_action_qr_code),
                     activity.createQrCodeActivityPendingIntent(urlStringForQrCode),
                 ).build()
             )
