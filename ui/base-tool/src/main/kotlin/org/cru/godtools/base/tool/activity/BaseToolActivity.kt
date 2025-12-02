@@ -78,9 +78,11 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     BaseBindingActivity<B>(contentLayoutId) {
     @Inject
     lateinit var downloadManager: GodToolsDownloadManager
+
     @Inject
     @Named(IS_CONNECTED_LIVE_DATA)
     internal lateinit var isConnected: LiveData<Boolean>
+
     @Inject
     internal lateinit var toolsRepository: ToolsRepository
 
@@ -146,6 +148,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
             shareCurrentTool()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle
@@ -161,10 +164,11 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected val activeManifest get() = viewModel.manifest.value
 
     // region Status Bar / Toolbar logic
-    override val toolbar get() = when (val it = binding) {
-        is ToolGenericFragmentActivityBinding -> it.appbar
-        else -> super.toolbar
-    }
+    override val toolbar
+        get() = when (val it = binding) {
+            is ToolGenericFragmentActivityBinding -> it.appbar
+            else -> super.toolbar
+        }
 
     private fun setupStatusBar() {
         window.apply {
@@ -184,6 +188,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected open val shareMenuItemVisible by lazy { shareLinkUriLiveData.map { it != null } }
 
     protected open val shareLinkTitle get() = activeManifest?.title
+
     @get:StringRes
     protected open val shareLinkMessageRes get() = R.string.share_tool_message
     protected open val shareLinkUriLiveData = emptyLiveData<String>()
@@ -214,7 +219,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     private fun getShareItems(): Collection<ShareItem> = buildList {
-        buildShareIntent()?.let { add(DefaultShareItem(it)) }
+        buildShareIntent()?.let { add(DefaultShareItem(it, shareLinkUri)) }
         addAll(getShareableShareItems())
     }.filter { it.isValid }
 
@@ -227,7 +232,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
         @StringRes message: Int = shareLinkMessageRes,
-        shareUrl: String? = shareLinkUri
+        shareUrl: String? = shareLinkUri,
     ) = shareUrl?.let {
         Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
@@ -239,10 +244,10 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     protected fun showShareActivityChooser(
         title: String? = shareLinkTitle,
         @StringRes message: Int = shareLinkMessageRes,
-        shareUrl: String? = shareLinkUri
+        shareUrl: String? = shareLinkUri,
     ) {
         val intent = buildShareIntent(title, message, shareUrl) ?: return
-        DefaultShareItem(intent).triggerAction(this)
+        DefaultShareItem(intent, shareUrl).triggerAction(this)
     }
     // endregion Share tool logic
 
@@ -260,12 +265,13 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
                 translation: Translation? = null,
                 manifestType: Manifest.Type? = null,
                 isConnected: Boolean = true,
-                isSyncFinished: Boolean = true
+                isSyncFinished: Boolean = true,
             ) = when {
                 manifest != null -> when {
                     manifestType != null && manifest.type != manifestType -> INVALID_TYPE
                     else -> LOADED
                 }
+
                 isSyncFinished && translation == null -> NOT_FOUND
                 !isConnected -> OFFLINE
                 else -> LOADING
@@ -306,7 +312,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
 
     private fun downloadTranslations(
         tools: List<String> = toolsToDownload.value,
-        locales: List<Locale> = localesToDownload.value
+        locales: List<Locale> = localesToDownload.value,
     ) = tools.forEach { t -> locales.forEach { l -> downloadManager.downloadLatestPublishedTranslationAsync(t, l) } }
     // endregion Tool sync/download logic
 
@@ -403,6 +409,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
                     dispatchDelayedFeatureDiscovery(feature, force, 17)
                 }
             }
+
             else -> super.onShowFeatureDiscovery(feature, force)
         }
     }

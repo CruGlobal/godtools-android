@@ -223,6 +223,7 @@ tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
 weakdelegate = "com.github.Karumi:WeakDelegate:1.0.1"
 youtubePlayer = "com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0"
+zxing = "com.google.zxing:core:3.5.1"
 
 # HACK: dependencies used to trigger renovate upgrades
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }

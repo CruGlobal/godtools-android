@@ -1,8 +1,12 @@
 package org.cru.godtools.base.ui
 
 import android.app.Activity
+import android.app.ActivityOptions
+import android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import java.util.Locale
 import org.ccci.gto.android.common.util.os.putLocale
@@ -103,3 +107,25 @@ private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(
     //       If the shortcut fails to open then singleString mode is still required
     Bundle().apply { putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true) }
 )
+
+// region QRCodeActivity
+private const val ACTIVITY_CLASS_QR_CODE = "org.cru.godtools.qrcode.activity.QRCodeActivity"
+const val EXTRA_SHARE_URL = "EXTRA_SHARE_URL"
+
+fun Context.createQrCodeActivityIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
+    .putExtra(EXTRA_SHARE_URL, data)
+
+fun Context.createQrCodePendingIntent(data: String): PendingIntent = PendingIntent.getActivity(
+    this,
+    0,
+    createQrCodeActivityIntent(data),
+    PendingIntent.FLAG_IMMUTABLE,
+    ActivityOptions.makeBasic()
+        .apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setPendingIntentCreatorBackgroundActivityStartMode(MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
+            }
+        }
+        .toBundle()
+)
+// endregion QRCodeActivity
