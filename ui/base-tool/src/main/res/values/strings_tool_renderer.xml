@@ -19,11 +19,11 @@
     <string name="share_tool_message_article">I wanted to share this article with you and would like to hear your thoughts about it.\n%1$s</string>
     <string name="feature_discovery_title_share_tool">Share a link</string>
     <string name="feature_discovery_desc_share_tool">Send this tool to a friend by clicking this icon</string>
+    <string name="share_by_qr_code">Share by QR Code</string>
 
     <!-- Shareables -->
     <eat-comment />
     <string name="tool_shareable_action_share_image">Share image</string>
-    <string name="share_by_qr_code">Share by QR Code</string>
 
     <!-- Settings -->
     <eat-comment />

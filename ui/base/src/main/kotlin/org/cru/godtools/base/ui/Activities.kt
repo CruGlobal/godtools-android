@@ -109,8 +109,9 @@ private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(
 
 private const val ACTIVITY_CLASS_QR_CODE = "org.cru.godtools.qrcode.activity.QRCodeActivity"
 
+const val EXTRA_SHARE_URL = "EXTRA_SHARE_URL"
 fun Context.createQrCodeIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
-    .putExtra("EXTRA_SHARE_URL", data)
+    .putExtra(EXTRA_SHARE_URL, data)
 
 fun Context.createQrCodePendingIntent(data: String?): PendingIntent {
     val intent = createQrCodeIntent(data)

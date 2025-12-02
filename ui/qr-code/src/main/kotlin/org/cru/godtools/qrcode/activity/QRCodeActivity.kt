@@ -22,6 +22,7 @@ import androidx.core.graphics.createBitmap
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
+import org.cru.godtools.base.ui.EXTRA_SHARE_URL
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import timber.log.Timber
 
@@ -30,7 +31,7 @@ class QRCodeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val url = intent.getStringExtra("EXTRA_SHARE_URL")
+        val url = intent.getStringExtra(EXTRA_SHARE_URL)
         if (url == null) {
             finish()
             return

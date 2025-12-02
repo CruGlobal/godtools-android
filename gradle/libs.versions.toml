@@ -35,7 +35,6 @@ play-app-update = "2.1.0"
 retrofit2 = "3.0.0"
 scarlet = "0.1.12"
 splitties = "3.0.0"
-composeBom = "2024.09.00"
 
 [libraries]
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
@@ -226,8 +225,6 @@ zxing = "com.google.zxing:core:3.5.1"
 
 # HACK: dependencies used to trigger renovate upgrades
 ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 
 [bundles]
 androidx-compose = ["androidx-compose-runtime", "androidx-compose-ui", "androidx-compose-ui-tooling-preview"]
