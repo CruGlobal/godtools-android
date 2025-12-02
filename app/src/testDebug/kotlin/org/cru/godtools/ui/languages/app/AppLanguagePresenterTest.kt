@@ -92,16 +92,16 @@ class AppLanguagePresenterTest {
     fun `State - languages - filtered by language query`() = runTest {
         appLocaleState.value = Locale.ENGLISH
         every { LocaleConfigCompat.getSupportedLocales(any()) }
-            .returns(LocaleListCompat.create(Locale.ENGLISH, Locale("es")))
+            .returns(LocaleListCompat.create(Locale.ENGLISH, Locale.forLanguageTag("es")))
 
         presenter.test {
-            val eventSink = expectMostRecentItem().eventSink
+            val query = expectMostRecentItem().languageQuery
 
-            eventSink(AppLanguageScreen.Event.UpdateLanguageQuery("Spanish"))
-            assertEquals(listOf(Locale("es")), expectMostRecentItem().languages)
+            query.value = "Spanish"
+            assertEquals(listOf(Locale.forLanguageTag("es")), expectMostRecentItem().languages)
 
-            eventSink(AppLanguageScreen.Event.UpdateLanguageQuery(""))
-            assertEquals(listOf(Locale.ENGLISH, Locale("es")), expectMostRecentItem().languages)
+            query.value = ""
+            assertEquals(listOf(Locale.ENGLISH, Locale.forLanguageTag("es")), expectMostRecentItem().languages)
         }
     }
     // endregion State.languages

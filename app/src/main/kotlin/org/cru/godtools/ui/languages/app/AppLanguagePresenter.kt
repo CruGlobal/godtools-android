@@ -34,7 +34,7 @@ class AppLanguagePresenter @AssistedInject constructor(
     @Composable
     override fun present(): AppLanguageScreen.State {
         val appLocale by settings.produceAppLocaleState()
-        var languageQuery by remember { mutableStateOf("") }
+        val languageQuery = remember { mutableStateOf("") }
         var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
 
         val eventSink: (AppLanguageScreen.Event) -> Unit = remember {
@@ -42,7 +42,6 @@ class AppLanguagePresenter @AssistedInject constructor(
                 when (it) {
                     AppLanguageScreen.Event.NavigateBack -> navigator.pop()
 
-                    is AppLanguageScreen.Event.UpdateLanguageQuery -> languageQuery = it.query
                     is AppLanguageScreen.Event.SelectLanguage -> {
                         if (it.language == appLocale) {
                             navigator.pop()
@@ -62,7 +61,7 @@ class AppLanguagePresenter @AssistedInject constructor(
         }
 
         return AppLanguageScreen.State(
-            languages = rememberLanguages(appLocale, languageQuery),
+            languages = rememberLanguages(appLocale, languageQuery.value),
             languageQuery = languageQuery,
             selectedLanguage = confirmLanguage,
             eventSink = eventSink,
