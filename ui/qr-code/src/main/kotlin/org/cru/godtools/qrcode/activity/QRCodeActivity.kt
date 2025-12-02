@@ -11,9 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
@@ -40,17 +38,14 @@ class QRCodeActivity : ComponentActivity() {
 
         setContent {
             GodToolsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    QRCodeScreen(
-                        url = url,
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize(1f)
-                            .clickable {
-                                finish()
-                            }
-                    )
-                }
+                QRCodeScreen(
+                    url = url,
+                    modifier = Modifier
+                        .fillMaxSize(1f)
+                        .clickable {
+                            finish()
+                        }
+                )
             }
         }
     }
