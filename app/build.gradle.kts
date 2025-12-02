@@ -135,7 +135,7 @@ dependencies {
     implementation(projects.ui.base)
     implementation(projects.ui.cyoaRenderer)
     implementation(projects.ui.lessonRenderer)
-    implementation(projects.ui.qr-code)
+    implementation(projects.ui.qrCode)
     implementation(projects.ui.shortcuts)
     implementation(projects.ui.tractRenderer)
     implementation(projects.ui.tutorialRenderer)
