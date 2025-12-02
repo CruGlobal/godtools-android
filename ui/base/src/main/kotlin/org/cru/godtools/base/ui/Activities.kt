@@ -2,6 +2,7 @@ package org.cru.godtools.base.ui
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -107,33 +108,24 @@ private fun Intent.putLanguagesExtra(vararg languages: Locale?) = putExtras(
     Bundle().apply { putLocaleArray(EXTRA_LANGUAGES, languages.filterNotNull().toTypedArray(), true) }
 )
 
+// region QRCodeActivity
 private const val ACTIVITY_CLASS_QR_CODE = "org.cru.godtools.qrcode.activity.QRCodeActivity"
-
 const val EXTRA_SHARE_URL = "EXTRA_SHARE_URL"
-fun Context.createQrCodeIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
+
+fun Context.createQrCodeActivityIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
     .putExtra(EXTRA_SHARE_URL, data)
 
-fun Context.createQrCodePendingIntent(data: String?): PendingIntent {
-    val intent = createQrCodeIntent(data)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-        val options = ActivityOptions.makeBasic().apply {
-            setPendingIntentCreatorBackgroundActivityStartMode(
-                ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED
-            )
+fun Context.createQrCodePendingIntent(data: String): PendingIntent = PendingIntent.getActivity(
+    this,
+    0,
+    createQrCodeActivityIntent(data),
+    PendingIntent.FLAG_IMMUTABLE,
+    ActivityOptions.makeBasic()
+        .apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setPendingIntentCreatorBackgroundActivityStartMode(MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
+            }
         }
-        return PendingIntent.getActivity(
-            this,
-            42,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
-            options.toBundle()
-        )
-    } else {
-        return PendingIntent.getActivity(
-            this,
-            42,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-}
+        .toBundle()
+)
+// endregion QRCodeActivity
