@@ -115,7 +115,7 @@ const val EXTRA_SHARE_URL = "EXTRA_SHARE_URL"
 fun Context.createQrCodeActivityIntent(data: String?): Intent = Intent().setClassName(this, ACTIVITY_CLASS_QR_CODE)
     .putExtra(EXTRA_SHARE_URL, data)
 
-fun Context.createQrCodePendingIntent(data: String): PendingIntent = PendingIntent.getActivity(
+fun Context.createQrCodeActivityPendingIntent(data: String): PendingIntent = PendingIntent.getActivity(
     this,
     0,
     createQrCodeActivityIntent(data),

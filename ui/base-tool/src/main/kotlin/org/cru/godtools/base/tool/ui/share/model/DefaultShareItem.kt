@@ -8,7 +8,7 @@ import android.service.chooser.ChooserAction
 import androidx.core.content.ContextCompat.getString
 import kotlinx.parcelize.Parcelize
 import org.ccci.gto.android.common.base.Ordered
-import org.cru.godtools.base.ui.createQrCodePendingIntent
+import org.cru.godtools.base.ui.createQrCodeActivityPendingIntent
 import org.cru.godtools.tool.R
 
 @Parcelize
@@ -22,7 +22,7 @@ class DefaultShareItem(override val shareIntent: Intent, val urlStringForQrCode:
                 ChooserAction.Builder(
                     Icon.createWithResource(activity, R.drawable.ic_qr_code),
                     getString(activity, R.string.share_by_qr_code),
-                    activity.createQrCodePendingIntent(urlStringForQrCode),
+                    activity.createQrCodeActivityPendingIntent(urlStringForQrCode),
                 ).build()
             )
             chooserIntent.putExtra(Intent.EXTRA_CHOOSER_CUSTOM_ACTIONS, qrCodeCustomAction)
