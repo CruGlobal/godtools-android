@@ -21,8 +21,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.BasePaparazziTest
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsScreen.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData

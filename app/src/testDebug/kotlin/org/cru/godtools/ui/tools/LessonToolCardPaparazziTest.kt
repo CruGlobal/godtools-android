@@ -19,9 +19,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)

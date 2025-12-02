@@ -10,8 +10,8 @@ import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.util.Locale
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.BasePaparazziTest
 import org.junit.Test
 import org.junit.runner.RunWith
 

@@ -215,6 +215,8 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.testparameterinjector)
     testImplementation(libs.turbine)
+
+    testDebugImplementation(testFixtures(projects.ui.base))
 }
 
 // region Firebase App Distribution

@@ -7,8 +7,8 @@ import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.util.Locale
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
+import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.BasePaparazziTest
 import org.cru.godtools.ui.drawer.DrawerMenuScreenStateTestData
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
 import org.junit.runner.RunWith

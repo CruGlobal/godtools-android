@@ -17,6 +17,8 @@ android {
         dataBinding = true
         viewBinding = true
     }
+
+    testFixtures.enable = true
 }
 
 dependencies {
@@ -50,4 +52,13 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     testImplementation(projects.ui.tractRenderer)
+
+    testFixturesApi(libs.testparameterinjector)
+    testFixturesImplementation(libs.androidx.activity.compose)
+    testFixturesImplementation(libs.androidx.compose.foundation)
+    testFixturesImplementation(libs.androidx.compose.material3)
+    testFixturesImplementation(libs.androidx.compose.ui)
+    testFixturesImplementation(libs.androidx.lifecycle.runtime.testing)
+    testFixturesImplementation(libs.junit)
+    testFixturesImplementation(libs.paparazzi)
 }
