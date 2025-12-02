@@ -8,6 +8,10 @@ android {
     configureCompose(project)
 }
 
+tasks.withType<Test> {
+    failOnNoDiscoveredTests.set(false)
+}
+
 dependencies {
     implementation(project(":ui:base"))
 
