@@ -6,10 +6,10 @@ plugins {
 android.namespace = "org.cru.godtools.sync"
 
 dependencies {
-    implementation(project(":library:account"))
-    implementation(project(":library:api"))
-    implementation(project(":library:db"))
-    implementation(project(":library:model"))
+    implementation(projects.library.account)
+    implementation(projects.library.api)
+    implementation(projects.library.db)
+    implementation(projects.library.model)
 
     implementation(libs.androidx.collection.ktx)
     implementation(libs.androidx.core.ktx)

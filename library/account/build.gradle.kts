@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:api"))
+    implementation(projects.library.api)
 
     implementation(libs.androidx.activity.compose)
 

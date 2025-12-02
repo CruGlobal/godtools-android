@@ -19,8 +19,8 @@ ksp {
 }
 
 dependencies {
-    implementation(project(":library:base"))
-    api(project(":library:model"))
+    api(projects.library.model)
+    implementation(projects.library.base)
 
     implementation(libs.androidx.room)
     implementation(libs.androidx.room.ktx)

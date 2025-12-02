@@ -28,10 +28,10 @@ androidComponents {
 }
 
 dependencies {
-    implementation(project(":library:base"))
-    implementation(project(":library:db"))
-    implementation(project(":library:download-manager"))
-    implementation(project(":library:model"))
+    implementation(projects.library.base)
+    implementation(projects.library.db)
+    implementation(projects.library.downloadManager)
+    implementation(projects.library.model)
 
     implementation(libs.kotlin.coroutines)
 

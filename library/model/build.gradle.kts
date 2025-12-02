@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":library:base"))
+    implementation(projects.library.base)
 
     implementation(libs.androidx.annotation)
 

@@ -19,9 +19,9 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(project(":library:analytics"))
-    implementation(project(":library:base"))
-    implementation(project(":ui:base"))
+    implementation(projects.library.analytics)
+    implementation(projects.library.base)
+    implementation(projects.ui.base)
 
     implementation(libs.godtoolsShared.analytics)
 

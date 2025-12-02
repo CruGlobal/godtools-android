@@ -6,7 +6,7 @@ plugins {
 android.namespace = "org.cru.godtools.feature.bundledcontent"
 
 dependencies {
-    implementation(project(":library:initial-content"))
+    implementation(projects.library.initialContent)
 
     implementation(libs.gtoSupport.dagger)
 

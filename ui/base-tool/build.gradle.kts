@@ -20,14 +20,14 @@ android {
 }
 
 dependencies {
-    api(project(":library:analytics"))
-    api(project(":library:db"))
-    api(project(":library:download-manager"))
-    api(project(":library:sync"))
-    api(project(":library:user-data"))
-    api(project(":ui:base"))
-    implementation(project(":library:base"))
-    implementation(project(":library:model"))
+    api(projects.library.analytics)
+    api(projects.library.db)
+    api(projects.library.downloadManager)
+    api(projects.library.sync)
+    api(projects.library.userData)
+    api(projects.ui.base)
+    implementation(projects.library.base)
+    implementation(projects.library.model)
 
     api(libs.godtoolsShared.parser)
     api(libs.godtoolsShared.renderer)

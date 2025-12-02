@@ -14,8 +14,8 @@ android {
 }
 
 dependencies {
-    api(project(":ui:base-tool"))
-    implementation(project(":library:model"))
+    api(projects.ui.baseTool)
+    implementation(projects.library.model)
 
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.fragment.ktx)

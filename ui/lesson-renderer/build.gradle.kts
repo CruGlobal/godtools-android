@@ -15,7 +15,7 @@ android {
 }
 
 dependencies {
-    api(project(":ui:base-tool"))
+    api(projects.ui.baseTool)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
@@ -30,8 +30,8 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
-    testImplementation(project(":library:account"))
-    testImplementation(project(":library:model"))
+    testImplementation(projects.library.account)
+    testImplementation(projects.library.model)
     testImplementation(testFixtures(libs.gtoSupport.circuit))
     testImplementation(libs.hilt.testing)
     testImplementation(libs.okio.fakefilesystem)
