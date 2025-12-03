@@ -51,7 +51,11 @@ internal enum class Page(
         supportedLocales = setOf(
             Locale.ENGLISH,
             Locale.forLanguageTag("lv"),
-            Locale.forLanguageTag("id")
+            Locale.forLanguageTag("id"),
+            Locale.forLanguageTag("es"),
+            Locale.forLanguageTag("af"),
+            Locale.forLanguageTag("af"),
+            Locale.forLanguageTag("vi"),
         )
     ),
     FEATURES_LIVE_SHARE(
