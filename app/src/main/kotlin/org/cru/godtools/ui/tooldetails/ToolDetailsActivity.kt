@@ -105,6 +105,7 @@ class ToolDetailsActivity : BaseActivity() {
         skipTutorial: Boolean = false,
     ): Unit = when {
         code == null || type == null || locale == null -> Unit
+
         skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
             settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
             val locales = listOfNotNull(locale, secondaryLocale)

@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+
 package org.cru.godtools.account.compose
 
 import androidx.compose.runtime.Composable

@@ -92,6 +92,7 @@ internal fun AccountLayout(viewModel: AccountViewModel = viewModel(), onEvent: (
                     verticalAlignment = Alignment.Top,
                     key = { pages[it] },
                 ) {
+                    @Suppress("ktlint:standard:blank-line-between-when-conditions")
                     when (pages[it]) {
                         AccountPage.ACTIVITY -> AccountActivityLayout()
                         AccountPage.GLOBAL_ACTIVITY ->

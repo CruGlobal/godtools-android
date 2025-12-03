@@ -113,6 +113,7 @@ internal fun Banner(
                             secondaryActionPlaceable?.placeRelative(secondaryActionPosition)
                         }
                     }
+
                     // default layout
                     else -> {
                         val iconPosition = when (iconPlaceable) {
@@ -132,6 +133,7 @@ internal fun Banner(
                         )
                         val secondaryActionPosition = when (secondaryActionPlaceable) {
                             null -> IntOffset.Zero
+
                             else -> {
                                 val sameLinePosition = IntOffset(
                                     primaryActionPosition.x - actionMargin - secondaryActionPlaceable.width,

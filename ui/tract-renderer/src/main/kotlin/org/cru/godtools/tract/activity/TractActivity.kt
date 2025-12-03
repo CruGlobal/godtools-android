@@ -139,16 +139,18 @@ class TractActivity :
         menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when {
-        item.itemId == R.id.action_install -> {
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_install -> {
             InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
             true
         }
+
         // handle close button if this is an instant app
-        item.itemId == android.R.id.home && InstantApps.isInstantApp(this) -> {
+        android.R.id.home if (InstantApps.isInstantApp(this)) -> {
             finish()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -207,12 +209,14 @@ class TractActivity :
                         data.deepLinkPage?.let { initialPage = it }
                     }
                 }
+
                 data.isDynalinksDeepLink() || data.isGodToolsDeepLink() -> {
                     dataModel.toolCode.value = path[3]
                     dataModel.primaryLocales.value =
                         sequenceOf(Locale.forLanguageTag(path[4])).includeFallbacks().toList()
                     path.getOrNull(5)?.toIntOrNull()?.let { initialPage = it }
                 }
+
                 data.isCustomUriDeepLink() -> {
                     dataModel.toolCode.value = path[2]
                     dataModel.primaryLocales.value =
@@ -433,6 +437,7 @@ class TractActivity :
     private val liveShareTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
         when (it) {
             RESULT_CANCELED -> publisherController.started = false
+
             else -> {
                 savedState.liveShareTutorialShown = true
                 settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
@@ -458,10 +463,14 @@ class TractActivity :
         publisherController.started = true
         when {
             !savedState.liveShareTutorialShown &&
-                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 ->
+                settings.getFeatureDiscoveredCount("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}") < 3 -> {
                 liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
-            publisherController.publisherInfo.value == null ->
+            }
+
+            publisherController.publisherInfo.value == null -> {
                 LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
+            }
+
             else -> {
                 val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
                 val shareUrl = (activeManifest?.buildShareLink() ?: return)

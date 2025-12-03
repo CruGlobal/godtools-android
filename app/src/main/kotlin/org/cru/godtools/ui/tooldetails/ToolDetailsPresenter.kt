@@ -118,6 +118,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
             {
                 when (it) {
                     Event.NavigateUp -> navigator.pop()
+
                     Event.OpenTool -> tool?.let { tool ->
                         val intent = tool.createToolIntent(
                             context = context,
@@ -162,6 +163,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     }
 
                     is Event.SwitchVariant -> toolCode = it.variant
+
                     Event.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
                 }
             }

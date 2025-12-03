@@ -81,9 +81,13 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
                         db.execSQL(ToolTable.SQL_V48_CREATE_SPOTLIGHT)
                         db.execSQL(ToolTable.SQL_V48_POPULATE_SPOTLIGHT)
                     }
+
                     49 -> db.execSQL(ToolTable.SQL_V49_ALTER_DETAILS_BANNER_ANIMATION)
+
                     50 -> db.execSQL(ToolTable.SQL_V50_ALTER_META_TOOL)
+
                     51 -> db.execSQL(ToolTable.SQL_V51_ALTER_DEFAULT_VARIANT)
+
                     52 -> {
                         db.query(
                             UserCounterTable.TABLE_NAME,
@@ -111,6 +115,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(UserCounterTable.SQL_DELETE_TABLE)
                     }
+
                     53 -> {
                         db.query(
                             GlobalActivityAnalyticsTable.TABLE_NAME,
@@ -140,6 +145,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(GlobalActivityAnalyticsTable.SQL_DELETE_TABLE)
                     }
+
                     54 -> {
                         db.query(
                             TrainingTipTable.TABLE_NAME,
@@ -173,6 +179,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(TrainingTipTable.SQL_DELETE_TABLE)
                     }
+
                     55 -> {
                         db.query(
                             FollowupTable.TABLE_NAME,
@@ -205,6 +212,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(FollowupTable.SQL_DELETE_TABLE)
                     }
+
                     56 -> {
                         db.query(
                             LanguageTable.TABLE_NAME,
@@ -232,11 +240,13 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(LanguageTable.SQL_DELETE_TABLE)
                     }
+
                     57 -> {
                         db.execSQL(TranslationTable.SQL_V57_ALTER_DETAILS_OUTLINE)
                         db.execSQL(TranslationTable.SQL_V57_ALTER_DETAILS_BIBLE_REFERENCES)
                         db.execSQL(TranslationTable.SQL_V57_ALTER_DETAILS_CONVERSATION_STARTERS)
                     }
+
                     58 -> {
                         db.query(
                             DownloadedFileTable.TABLE_NAME,
@@ -258,6 +268,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(DownloadedFileTable.SQL_DELETE_TABLE)
                     }
+
                     59 -> {
                         db.query(
                             ToolTable.TABLE_NAME,
@@ -276,6 +287,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(ToolTable.SQL_DELETE_TABLE)
                     }
+
                     60 -> {
                         db.query(
                             AttachmentTable.TABLE_NAME,
@@ -298,6 +310,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(AttachmentTable.SQL_DELETE_TABLE)
                     }
+
                     61 -> {
                         db.query(
                             TranslationTable.TABLE_NAME,
@@ -320,6 +333,7 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(TranslationTable.SQL_DELETE_TABLE)
                     }
+
                     62 -> {
                         db.query(
                             TranslationFileTable.TABLE_NAME,
@@ -342,7 +356,9 @@ internal class GodToolsDatabase(private val context: Context, private val roomDb
 
                         db.execSQL(TranslationFileTable.SQL_DELETE_TABLE)
                     }
+
                     63 -> db.execSQL(LastSyncTable.SQL_DELETE_TABLE)
+
                     else -> throw SQLiteException("Unrecognized db version:$upgradeTo old:$oldVersion new:$newVersion")
                 }
 

@@ -3,7 +3,4 @@
     <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/AppUpdateSnackbar.kt">
         <error line="24" column="14" source="compose:compositionlocal-allowlist" />
     </file>
-    <file name="src/main/kotlin/org/cru/godtools/ui/dashboard/tools/ToolsLayout.kt">
-        <error line="38" column="9" source="compose:vm-injection-check" />
-    </file>
 </baseline>

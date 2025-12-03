@@ -214,6 +214,7 @@ class PageController @AssistedInject internal constructor(
                         holder.model = null
                         recycledCardControllers.release(holder)
                     }
+
                     else -> {
                         holders[newPos] = holder
 
@@ -222,6 +223,7 @@ class PageController @AssistedInject internal constructor(
                             activeCard = holder.root
                         }
 
+                        @Suppress("ktlint:standard:blank-line-between-when-conditions")
                         when {
                             // remove this view for now, we will re-add it shortly
                             lastNewPos > newPos -> parent.removeView(holder.root)
@@ -248,6 +250,7 @@ class PageController @AssistedInject internal constructor(
         when {
             // restore the active card
             activeCard !== invalid -> parent.changeActiveCard(activeCard, false)
+
             // trigger onActiveCard in case the active card changed during binding
             else -> onActiveCardChanged(parent.activeCard)
         }

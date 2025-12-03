@@ -186,6 +186,7 @@ object GodToolsTheme {
             isLightColorSchemeActive -> SearchBarDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant
             )
+
             else -> SearchBarDefaults.colors()
         }
 
@@ -199,6 +200,7 @@ object GodToolsTheme {
                 titleContentColor = MaterialTheme.colorScheme.onPrimary,
                 actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
             )
+
             else -> TopAppBarDefaults.topAppBarColors()
         }
     // endregion Component Colors
@@ -216,7 +218,9 @@ fun GodToolsTheme(
                 val context = LocalContext.current
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             }
+
             darkTheme -> GodToolsTheme.darkColorScheme
+
             else -> GodToolsTheme.lightColorScheme
         },
         typography = GodToolsTheme.typography

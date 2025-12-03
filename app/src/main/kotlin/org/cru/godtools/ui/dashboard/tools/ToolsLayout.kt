@@ -91,10 +91,14 @@ internal fun ToolsLayout(
             val toolViewModel = toolViewModels[tool.code.orEmpty(), tool]
             val toolState = toolViewModel.toState(secondLanguage = selectedLanguage) {
                 when (it) {
-                    ToolCard.Event.Click, ToolCard.Event.OpenTool, ToolCard.Event.OpenToolDetails ->
-                        tool.code?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+                    ToolCard.Event.Click,
+                    ToolCard.Event.OpenTool,
+                    ToolCard.Event.OpenToolDetails -> tool.code?.let { toolCode ->
+                        eventSink(ToolsScreen.Event.OpenToolDetails(toolCode, SOURCE_ALL_TOOLS))
+                    }
 
                     ToolCard.Event.PinTool -> toolViewModel.pinTool()
+
                     ToolCard.Event.UnpinTool -> toolViewModel.unpinTool()
                 }
             }

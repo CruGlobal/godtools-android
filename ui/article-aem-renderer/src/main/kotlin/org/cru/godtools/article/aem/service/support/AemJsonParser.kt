@@ -24,6 +24,7 @@ private val SUPPORTED_TEMPLATES = setOf(
 /**
  * Find and parse any AEM articles in the provided JSONObject
  */
+@Suppress("ktlint:standard:blank-line-between-when-conditions")
 fun JSONObject.findAemArticles(url: Uri): Sequence<Article> = when (optString(TAG_TYPE)) {
     // parse this JSON node based on it's type & subtype
     TYPE_PAGE -> when {

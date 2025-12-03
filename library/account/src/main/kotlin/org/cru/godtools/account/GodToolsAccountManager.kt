@@ -82,13 +82,13 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         val launchers = providers.associate {
             it.type to it.rememberLauncherForLogin(createAccount) { result ->
                 onResponse(
+                    @Suppress("ktlint:standard:blank-line-between-when-conditions")
                     when {
                         result.isSuccess -> LoginResponse.Success
+
                         else -> when (result.exceptionOrNull()) {
-                            AuthenticationException.UserNotFound -> LoginResponse.Error.UserNotFound
-
                             AuthenticationException.UserAlreadyExists -> LoginResponse.Error.UserAlreadyExists
-
+                            AuthenticationException.UserNotFound -> LoginResponse.Error.UserNotFound
                             else -> when {
                                 !context.isConnected() -> LoginResponse.Error.NotConnected
                                 else -> LoginResponse.Error()

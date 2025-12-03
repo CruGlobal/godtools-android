@@ -35,6 +35,7 @@ internal fun TutorialMedia(
             modifier = modifier
         )
     }
+
     page.image != null -> Image(
         painter = painterResource(page.image),
         contentDescription = null,
@@ -42,5 +43,6 @@ internal fun TutorialMedia(
         contentScale = imageContentScale,
         modifier = modifier
     )
+
     else -> Spacer(modifier)
 }

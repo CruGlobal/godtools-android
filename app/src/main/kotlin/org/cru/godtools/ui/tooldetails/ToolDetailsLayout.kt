@@ -240,6 +240,7 @@ private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
             recue = true,
             modifier = modifier
         )
+
         state.bannerAnimation != null -> {
             val composition by rememberLottieComposition(LottieCompositionSpec.File(state.bannerAnimation.path))
             val progress by animateLottieCompositionAsState(
@@ -253,12 +254,14 @@ private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
                 modifier = modifier
             )
         }
+
         state.banner != null -> AsyncImage(
             model = state.banner,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier
         )
+
         else -> Spacer(modifier = modifier.background(GodToolsTheme.GRAY_E6))
     }
 }

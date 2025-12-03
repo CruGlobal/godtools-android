@@ -30,6 +30,7 @@ internal fun TutorialPageLayout(
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )
+
     Page.LIVE_SHARE_DESCRIPTION,
     Page.LIVE_SHARE_MIRRORED,
     Page.LIVE_SHARE_START -> TutorialLiveShareLayout(
@@ -38,11 +39,13 @@ internal fun TutorialPageLayout(
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )
+
     Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(
         nextPage = nextPage,
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )
+
     Page.ONBOARDING_CONVERSATIONS,
     Page.ONBOARDING_PREPARE,
     Page.ONBOARDING_SHARE -> TutorialOnboardingLayout(
@@ -51,6 +54,7 @@ internal fun TutorialPageLayout(
         onTutorialAction = onTutorialAction,
         modifier = modifier,
     )
+
     Page.TIPS_LEARN,
     Page.TIPS_LIGHT,
     Page.TIPS_START -> TutorialTipsLayout(

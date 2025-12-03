@@ -121,6 +121,7 @@ internal fun DashboardLayout(
                             hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
+
                             else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
                                 Icon(Icons.Default.Menu, null)
                             }
@@ -193,12 +194,14 @@ private fun DashboardLayoutAnalytics(page: Page) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
             }
         }
+
         Page.HOME, Page.FAVORITE_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
             }
         }
+
         Page.ALL_TOOLS -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {

@@ -26,13 +26,13 @@ internal sealed interface ShortcutId {
 
             fun parseId(id: String): Tool? {
                 val components = id.split(SEPARATOR)
-                return when {
-                    components.size < 2 -> null
-                    components[0] != TYPE -> null
-                    else -> Tool(
+                return when (components[0]) {
+                    TYPE if (components.size >= 2) -> Tool(
                         tool = components[1],
                         locales = components.subList(2, components.size).map { Locale.forLanguageTag(it) }
                     )
+
+                    else -> null
                 }
             }
         }

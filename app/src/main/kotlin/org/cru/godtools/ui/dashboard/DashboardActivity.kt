@@ -76,11 +76,11 @@ class DashboardActivity : BaseActivity() {
                         DashboardLayout(
                             requestPermission = { optInNotificationController.requestNotificationPermission() },
                             onEvent = { e ->
+                                @Suppress("ktlint:standard:blank-line-between-when-conditions")
                                 when (e) {
                                     is DashboardEvent.OpenIntent -> startActivity(e.intent)
                                     is DashboardEvent.OpenTool ->
                                         openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-
                                     is DashboardEvent.OpenToolDetails ->
                                         e.tool?.let { startToolDetailsActivity(it, e.lang) }
                                 }
@@ -109,6 +109,7 @@ class DashboardActivity : BaseActivity() {
         val page = intent.getSerializableExtraCompat(EXTRA_PAGE, Page::class.java)
         when {
             page != null -> viewModel.updateCurrentPage(page)
+
             intent.action == Intent.ACTION_VIEW -> {
                 val data = intent.data
                 when {

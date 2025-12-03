@@ -40,6 +40,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 class DownloadableLanguagesPresenter @AssistedInject constructor(
@@ -71,11 +72,15 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                 .toImmutableList(),
             eventSink = {
                 when (it) {
-                    UiState.UiEvent.NavigateUp -> navigator.pop()
-                    is UiState.UiEvent.PinLanguage ->
-                        coroutineScope.launch(NonCancellable) { languagesRepository.pinLanguage(it.locale) }
-                    is UiState.UiEvent.UnpinLanguage ->
-                        coroutineScope.launch(NonCancellable) { languagesRepository.unpinLanguage(it.locale) }
+                    UiEvent.NavigateUp -> navigator.pop()
+
+                    is UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
+                        languagesRepository.pinLanguage(it.locale)
+                    }
+
+                    is UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
+                        languagesRepository.unpinLanguage(it.locale)
+                    }
                 }
             }
         )

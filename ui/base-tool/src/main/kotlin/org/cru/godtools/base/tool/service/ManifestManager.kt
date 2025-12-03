@@ -52,11 +52,14 @@ class ManifestManager @Inject constructor(
     suspend fun getManifest(translation: Translation): Manifest? {
         val manifestFileName = translation.manifestFileName ?: return null
         return when (val result = parseManifest(manifestFileName)) {
-            is ParserResult.Error.Corrupted, is ParserResult.Error.NotFound -> {
+            is ParserResult.Data -> result.manifest
+
+            is ParserResult.Error.Corrupted,
+            is ParserResult.Error.NotFound -> {
                 translationsRepository.markBrokenManifestNotDownloaded(manifestFileName)
                 null
             }
-            is ParserResult.Data -> result.manifest
+
             else -> null
         }
     }

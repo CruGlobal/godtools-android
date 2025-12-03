@@ -63,6 +63,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
             showSettingsDialog()
             true
         }
+
         else -> super.onOptionsItemSelected(item)
     }
     // endregion Lifecycle

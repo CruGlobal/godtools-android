@@ -82,8 +82,11 @@ class TutorialActivity : AppCompatActivity() {
                 setResult(RESULT_CANCELED)
                 finish()
             }
+
             Action.ONBOARDING_CHANGE_LANGUAGE -> startAppLanguageActivity()
+
             Action.ONBOARDING_WATCH_VIDEO -> startYoutubePlayerActivity("RvhZ_wuxAgE")
+
             Action.ONBOARDING_LAUNCH_ARTICLES -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
                 val locale = sequenceOf(appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
@@ -91,26 +94,31 @@ class TutorialActivity : AppCompatActivity() {
                 startArticlesActivity("es", locale)
                 finish()
             }
+
             Action.ONBOARDING_LAUNCH_LESSONS -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
                 startDashboardActivity(DashboardPage.LESSONS)
                 finish()
             }
+
             Action.ONBOARDING_LAUNCH_TOOLS -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
                 startDashboardActivity(DashboardPage.ALL_TOOLS)
                 finish()
             }
+
             Action.ONBOARDING_SKIP -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
                 setResult(RESULT_OK)
                 finish()
             }
+
             Action.ONBOARDING_FINISH -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
                 setResult(RESULT_OK)
                 finish()
             }
+
             Action.FEATURES_FINISH,
             Action.LIVE_SHARE_SKIP,
             Action.LIVE_SHARE_FINISH,

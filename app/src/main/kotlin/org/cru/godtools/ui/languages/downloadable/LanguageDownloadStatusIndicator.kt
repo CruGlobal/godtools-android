@@ -50,16 +50,19 @@ internal fun LanguageDownloadStatusIndicator(
                 null,
                 tint = MaterialTheme.colorScheme.outline,
             )
+
             isConfirmRemoval -> Icon(
                 Icons.Outlined.Cancel,
                 null,
                 tint = GodToolsTheme.GT_RED,
             )
+
             downloaded == total -> Icon(
                 Icons.Outlined.CheckCircle,
                 null,
                 tint = MaterialTheme.colorScheme.primary,
             )
+
             else -> {
                 val progress by animateFloatAsState(
                     label = "Download Progress",
