@@ -8,7 +8,20 @@ import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -45,6 +58,7 @@ import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_PAGE_SWIPED
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
@@ -192,11 +206,31 @@ class LessonActivity :
                 }
             }
 
+            val shareLinkUri by shareLinkUriLiveData.observeAsState()
+
             // render the Lesson
             ProvideRendererServices(resources = resourceFileSystem, tipsRepository = tipsRepository) {
                 GodToolsTheme(darkTheme = false) {
                     ContentWithOverlays {
-                        RenderLesson(state)
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            RenderLesson(state)
+
+                            if (shareLinkUri != null && state is LessonScreen.UiState.Loaded) {
+                                IconButton(
+                                    onClick = { shareCurrentTool() },
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .windowInsetsPadding(WindowInsets.statusBars)
+                                        .padding(top = 4.dp, end = 4.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(org.cru.godtools.tool.R.drawable.ic_share),
+                                        contentDescription = getString(org.cru.godtools.tool.R.string.menu_share_tool),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+                        }
 
                         // resume lesson progress dialog
                         if (state is LessonScreen.UiState.Loaded && resumePageId != null) {
@@ -321,6 +355,23 @@ class LessonActivity :
         ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
         ?.let { return lessonPager.pages.indexOf(it) } ?: -1
     // endregion Resume Progress
+
+    // region Share Menu Logic
+    override val shareLinkUriLiveData by lazy {
+        viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
+    }
+
+    private fun Manifest.buildShareLink(): Uri.Builder? {
+        val tool = code ?: return null
+        val locale = locale ?: return null
+        return URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
+            .appendPath("tool")
+            .appendPath("lesson")
+            .appendPath(tool)
+            .appendQueryParameter("icid", "gtshare")
+    }
+    // endregion Share Menu Logic
     // endregion UI
 
     override fun checkForManifestEvent(manifest: Manifest, event: Event) {
