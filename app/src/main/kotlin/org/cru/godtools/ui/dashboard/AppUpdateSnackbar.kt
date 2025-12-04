@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:compose:compositionlocal-allowlist")
+
 package org.cru.godtools.ui.dashboard
 
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -11,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.ktx.AppUpdateResult
@@ -32,6 +35,8 @@ internal fun AppUpdateSnackbar(hostState: SnackbarHostState) {
 
     val context = LocalContext.current
     val appUpdateManager = LocalAppUpdateManager.current ?: remember { AppUpdateManagerFactory.create(context) }
+    val resources = LocalResources.current
+
     val appUpdateResult = remember(appUpdateManager) {
         appUpdateManager.requestUpdateFlow()
             .catch { emit(AppUpdateResult.NotAvailable) }
@@ -44,8 +49,8 @@ internal fun AppUpdateSnackbar(hostState: SnackbarHostState) {
                 if ((updateInfo.clientVersionStalenessDays ?: Int.MIN_VALUE) < 14) return@LaunchedEffect
 
                 val result = hostState.showSnackbar(
-                    context.getString(R.string.play_update_available),
-                    actionLabel = context.getString(R.string.play_update_available_action),
+                    resources.getString(R.string.play_update_available),
+                    actionLabel = resources.getString(R.string.play_update_available_action),
                     withDismissAction = true,
                     duration = SnackbarDuration.Indefinite
                 )
@@ -60,8 +65,8 @@ internal fun AppUpdateSnackbar(hostState: SnackbarHostState) {
 
             is AppUpdateResult.Downloaded -> {
                 val result = hostState.showSnackbar(
-                    context.getString(R.string.play_update_downloaded),
-                    actionLabel = context.getString(R.string.play_update_downloaded_action),
+                    resources.getString(R.string.play_update_downloaded),
+                    actionLabel = resources.getString(R.string.play_update_downloaded_action),
                     withDismissAction = true,
                     duration = SnackbarDuration.Indefinite
                 )
