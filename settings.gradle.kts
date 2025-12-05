@@ -62,6 +62,7 @@ dependencyResolutionManagement {
 rootProject.name = "godtools"
 
 includeBuild("build-logic")
+includeBuild("../kotlin-mpp-godtools-tool-parser")
 
 include("library:account")
 include("library:analytics")

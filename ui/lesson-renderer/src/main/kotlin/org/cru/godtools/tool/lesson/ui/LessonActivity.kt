@@ -193,11 +193,18 @@ class LessonActivity :
                 }
             }
 
+            val shareLinkUri by shareLinkUriLiveData.observeAsState()
+
             // render the Lesson
             ProvideRendererServices(resources = resourceFileSystem, tipsRepository = tipsRepository) {
                 GodToolsTheme(darkTheme = false) {
                     ContentWithOverlays {
-                        RenderLesson(state)
+                        RenderLesson(
+                            state = state,
+                            onShareClick = if (shareLinkUri != null && state is LessonScreen.UiState.Loaded) {
+                                { shareCurrentTool() }
+                            } else null
+                        )
 
                         // resume lesson progress dialog
                         if (state is LessonScreen.UiState.Loaded && resumePageId != null) {
