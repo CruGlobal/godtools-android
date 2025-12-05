@@ -128,6 +128,7 @@ class LessonActivity :
 
             // determine the UI Rendering state
             val loadingState = activeToolLoadingStateLiveData.observeAsState().value
+            val shareLinkUri by shareLinkUriLiveData.observeAsState()
             val eventSink: (LessonScreen.UiEvent) -> Unit = {
                 when (it) {
                     LessonScreen.UiEvent.CloseLesson -> {
@@ -135,6 +136,11 @@ class LessonActivity :
                             showFeedbackDialog = true
                         } else {
                             finish()
+                        }
+                    }
+                    LessonScreen.UiEvent.ShareLesson -> {
+                        if (shareLinkUri != null) {
+                            shareCurrentTool()
                         }
                     }
                 }
@@ -193,17 +199,12 @@ class LessonActivity :
                 }
             }
 
-            val shareLinkUri by shareLinkUriLiveData.observeAsState()
-
             // render the Lesson
             ProvideRendererServices(resources = resourceFileSystem, tipsRepository = tipsRepository) {
                 GodToolsTheme(darkTheme = false) {
                     ContentWithOverlays {
                         RenderLesson(
-                            state = state,
-                            onShareClick = if (shareLinkUri != null && state is LessonScreen.UiState.Loaded) {
-                                { shareCurrentTool() }
-                            } else null
+                            state = state
                         )
 
                         // resume lesson progress dialog
