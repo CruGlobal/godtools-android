@@ -6,6 +6,11 @@
     "dependencies"
   ],
   "dependencyDashboard": true,
+  "ignoreDeps": [
+    "string:facebook_app_id",
+    "string:fb_login_protocol_scheme",
+    "string:facebook_client_token"
+  ],
   "packageRules": [
     {
       "groupName": "Kotlin",
@@ -63,6 +68,17 @@
         "com.google.firebase:firebase-perf{/,}**",
         "com.google.firebase:perf-plugin{/,}**"
       ]
+    },
+    {
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchPackageNames": [
+        "string:facebook_app_id",
+        "string:fb_login_protocol_scheme",
+        "string:facebook_client_token"
+      ],
+      "enabled": false
     }
   ]
 }
