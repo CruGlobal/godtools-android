@@ -9,14 +9,12 @@ android {
     configureCompose(project)
 }
 
-tasks.withType<Test> {
-    failOnNoDiscoveredTests.set(false)
-}
-
 dependencies {
     implementation(project(":ui:base"))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
+
     implementation(libs.timber)
     implementation(libs.zxing)
 
