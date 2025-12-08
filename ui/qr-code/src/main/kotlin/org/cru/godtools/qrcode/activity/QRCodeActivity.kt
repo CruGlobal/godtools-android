@@ -53,7 +53,7 @@ class QRCodeActivity : ComponentActivity() {
 }
 
 @Composable
-private fun QRCodeScreen(url: String, modifier: Modifier = Modifier) {
+internal fun QRCodeScreen(url: String, modifier: Modifier = Modifier) {
     val bitmapState = produceState<Bitmap?>(
         initialValue = null,
         key1 = url
