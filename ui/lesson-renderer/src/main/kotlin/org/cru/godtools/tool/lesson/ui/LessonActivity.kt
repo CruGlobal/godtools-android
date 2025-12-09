@@ -54,6 +54,7 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
@@ -169,6 +170,7 @@ class LessonActivity :
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.settledPage }.collect { page ->
                             dataModel.pageReached.update { maxOf(it, page) }
+                            dataModel.currentPage.value = page
                         }
                     }
 
@@ -333,19 +335,23 @@ class LessonActivity :
 
     // region Share Menu Logic
     override val shareLinkUriLiveData by lazy {
-        viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
+        combine(viewModel.manifest, viewModel.currentPage) { manifest, page ->
+            manifest?.buildShareLink(page)?.build()?.toString()
+        }.asLiveData()
     }
 
-    private fun Manifest.buildShareLink(): Uri.Builder? {
+    private fun Manifest.buildShareLink(page: Int = 0): Uri.Builder? {
         val tool = code ?: return null
         val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
             .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
-            .appendPath("tool")
             .appendPath("lesson")
             .appendPath(tool)
+            .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
+
+    override fun getShareableShareItems() = emptyList<ShareableImageShareItem>()
     // endregion Share Menu Logic
     // endregion UI
 
@@ -372,6 +378,7 @@ class LessonActivityDataModel @Inject constructor(
     savedState
 ) {
     val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
+    val currentPage = savedState.getMutableStateFlow(viewModelScope, "currentPage", 0)
     val showFeedback = toolCode
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
         .combine(pageReached) { discovered, page -> !discovered && page > 3 }
