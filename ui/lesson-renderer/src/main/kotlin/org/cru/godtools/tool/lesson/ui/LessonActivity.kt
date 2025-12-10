@@ -196,7 +196,8 @@ class LessonActivity :
                         manifest = manifest,
                         state = toolState.toolState,
                         lessonPager = lessonPagerState,
-                        eventSink = eventSink
+                        eventSink = eventSink,
+                        showShareAction = shareLinkUri != null,
                     )
                 }
             }
