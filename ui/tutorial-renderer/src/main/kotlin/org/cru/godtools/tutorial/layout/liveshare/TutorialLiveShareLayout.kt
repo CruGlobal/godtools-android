@@ -1,6 +1,8 @@
 package org.cru.godtools.tutorial.layout.liveshare
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +11,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -79,16 +83,40 @@ internal fun TutorialLiveShareLayout(
 
     Spacer(modifier = Modifier.weight(1f))
 
-    Button(
-        onClick = {
-            when (page) {
-                Page.LIVE_SHARE_START -> onTutorialAction(Action.LIVE_SHARE_FINISH)
-                else -> nextPage()
+//
+
+    if (page == Page.LIVE_SHARE_START) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedButton(
+                onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Generate QR Code")
             }
-        },
-        modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
-            .fillMaxWidth(0.8f)
-            .align(Alignment.CenterHorizontally)
-    ) { Text(page.action?.let { stringResource(it) }.orEmpty()) }
+
+            Button(
+                onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(page.action?.let { stringResource(it) }.orEmpty())
+            }
+        }
+    } else {
+        Button(
+            onClick = { nextPage() },
+            modifier = Modifier
+                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(page.action?.let { stringResource(it) }.orEmpty())
+        }
+    }
 }
+
