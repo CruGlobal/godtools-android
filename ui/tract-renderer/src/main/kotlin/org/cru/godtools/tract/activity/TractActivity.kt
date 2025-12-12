@@ -45,6 +45,7 @@ import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
+import org.cru.godtools.base.ui.startQrCodeActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices

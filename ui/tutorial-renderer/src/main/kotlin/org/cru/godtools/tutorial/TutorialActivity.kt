@@ -43,10 +43,15 @@ fun Context.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutoria
 
 @AndroidEntryPoint
 class TutorialActivity : AppCompatActivity() {
+    companion object {
+        const val RESULT_SHOW_QR_CODE = 10
+    }
+
     private val pageSet get() = intent?.getSerializableExtraCompat(ARG_PAGE_SET, PageSet::class.java) ?: PageSet.DEFAULT
 
     @Inject
     internal lateinit var eventBus: EventBus
+
     @Inject
     internal lateinit var settings: Settings
 
@@ -116,6 +121,11 @@ class TutorialActivity : AppCompatActivity() {
             Action.ONBOARDING_FINISH -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
                 setResult(RESULT_OK)
+                finish()
+            }
+
+            Action.LIVE_SHARE_QR_CODE -> {
+                setResult(RESULT_SHOW_QR_CODE)
                 finish()
             }
 
