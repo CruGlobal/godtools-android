@@ -119,7 +119,7 @@ fun Context.createQrCodeActivityPendingIntent(data: String): PendingIntent = Pen
     this,
     0,
     createQrCodeActivityIntent(data),
-    PendingIntent.FLAG_IMMUTABLE,
+    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
     ActivityOptions.makeBasic()
         .apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
