@@ -16,8 +16,14 @@ import org.ccci.gto.android.common.androidx.lifecycle.notNull
 import org.cru.godtools.tool.tract.R
 import org.cru.godtools.tract.activity.TractActivity
 import org.cru.godtools.tract.liveshare.TractPublisherController
+import splitties.fragmentargs.arg
 
-class LiveShareStartingDialogFragment : DialogFragment() {
+class LiveShareStartingDialogFragment() : DialogFragment() {
+    constructor(showQrCode: Boolean): this() {
+        this.showQrCode = showQrCode
+    }
+    internal var showQrCode: Boolean by arg()
+
     private val publisherController: TractPublisherController by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +44,7 @@ class LiveShareStartingDialogFragment : DialogFragment() {
                 delay(2_000)
                 emitSource(it)
             }.notNull().observe(this@LiveShareStartingDialogFragment) {
-                findListener<TractActivity>()?.shareLiveShareLink()
+                findListener<TractActivity>()?.shareLiveShareLink(showQrCode)
                 dismissAllowingStateLoss()
             }
         }
