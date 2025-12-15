@@ -11,7 +11,7 @@
     <eat-comment />
     <string name="menu_share_tool">Share</string>
     <string name="tool_share_sheet_more_apps">More</string>
-    <string name="share_tool_message">%1$s</string>
+    <string name="share_tool_message" translatable="false">%1$s</string>
     <string name="share_tool_message_article">I wanted to share this article with you and would like to hear your thoughts about it.\n%1$s</string>
     <string name="share_action_qr_code">Share by QR Code</string>
     <string name="feature_discovery_title_share_tool">Share a link</string>
