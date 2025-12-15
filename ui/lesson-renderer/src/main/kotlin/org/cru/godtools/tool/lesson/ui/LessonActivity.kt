@@ -136,6 +136,8 @@ class LessonActivity :
                             finish()
                         }
                     }
+
+                    LessonScreen.UiEvent.ShareLesson -> Unit
                 }
             }
             val state = when {
@@ -186,6 +188,7 @@ class LessonActivity :
                     LessonScreen.UiState.Loaded(
                         manifest = manifest,
                         state = toolState.toolState,
+                        showShareAction = false,
                         lessonPager = lessonPagerState,
                         eventSink = eventSink
                     )
