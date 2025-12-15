@@ -22,6 +22,7 @@ class LiveShareStartingDialogFragment() : DialogFragment() {
     constructor(showQrCode: Boolean): this() {
         this.showQrCode = showQrCode
     }
+
     internal var showQrCode: Boolean by arg()
 
     private val publisherController: TractPublisherController by activityViewModels()
