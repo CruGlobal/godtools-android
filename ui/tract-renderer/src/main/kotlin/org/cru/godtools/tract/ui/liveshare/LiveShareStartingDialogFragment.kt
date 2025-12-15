@@ -19,7 +19,7 @@ import org.cru.godtools.tract.liveshare.TractPublisherController
 import splitties.fragmentargs.arg
 
 class LiveShareStartingDialogFragment() : DialogFragment() {
-    constructor(showQrCode: Boolean): this() {
+    constructor(showQrCode: Boolean) : this() {
         this.showQrCode = showQrCode
     }
 
