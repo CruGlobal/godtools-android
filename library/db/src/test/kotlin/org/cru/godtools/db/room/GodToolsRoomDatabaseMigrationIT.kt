@@ -328,7 +328,7 @@ class GodToolsRoomDatabaseMigrationIT {
 
         // create v20 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 20).use { db ->
-            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf<Any>("kgp", Tool.Type.TRACT))
             assertFailsWith<SQLException> { db.query(defaultLocaleQuery) }
         }
 
@@ -382,7 +382,7 @@ class GodToolsRoomDatabaseMigrationIT {
 
         // create v23 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 23).use { db ->
-            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf<Any>("kgp", Tool.Type.TRACT))
             assertFailsWith<SQLException> { db.query(localesQuery) }
         }
 
@@ -404,7 +404,7 @@ class GodToolsRoomDatabaseMigrationIT {
 
         // create v24 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 24).use { db ->
-            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf("kgp", Tool.Type.TRACT))
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf<Any>("kgp", Tool.Type.TRACT))
             assertFailsWith<SQLException> { db.query(toolsQuery) }
         }
 
