@@ -65,6 +65,7 @@ import org.cru.godtools.shared.renderer.util.ProvideRendererServices
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.lesson.LessonPage
 import org.cru.godtools.tool.lesson.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tool.lesson.LessonDeepLink
 import org.cru.godtools.tool.lesson.R
 import org.cru.godtools.tool.lesson.analytics.model.LessonFeedbackAnalyticsEvent
 import org.cru.godtools.tool.lesson.databinding.LessonActivityBinding
@@ -93,6 +94,7 @@ class LessonActivity :
 
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
+    private var initialPage: Int? = null
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,7 +157,7 @@ class LessonActivity :
                 }
 
                 else -> {
-                    val lessonPagerState = rememberLessonPagerState(manifest)
+                    val lessonPagerState = rememberLessonPagerState(manifest, initialPage ?: 0)
                     val pagerState = lessonPagerState.pagerState
 
                     // record the highest page reached for feedback functionality
@@ -276,6 +278,14 @@ class LessonActivity :
                 data.isLessonDeepLink() -> {
                     dataModel.toolCode.value = path[1]
                     dataModel.locale.value = Locale.forLanguageTag(path[2])
+                }
+
+                // Defer to LessonDeepLink processing
+                else -> {
+                    val deepLink = LessonDeepLink.parseKnowGodDeepLink(data) ?: return
+                    dataModel.toolCode.value = deepLink.lesson
+                    dataModel.locale.value = deepLink.locale
+                    initialPage = deepLink.page
                 }
             }
         }
