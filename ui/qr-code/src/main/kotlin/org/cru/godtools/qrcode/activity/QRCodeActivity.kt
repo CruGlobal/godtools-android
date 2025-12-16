@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
@@ -70,7 +69,6 @@ internal fun QRCodeScreen(url: String, modifier: Modifier = Modifier) {
                 contentDescription = null,
                 modifier = Modifier.aspectRatio(1f)
             )
-            Text(text = url, modifier = Modifier.align(Alignment.BottomCenter))
         }
     }
 }

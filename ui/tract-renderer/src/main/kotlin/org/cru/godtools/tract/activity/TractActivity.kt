@@ -45,6 +45,7 @@ import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
+import org.cru.godtools.base.ui.startQrCodeActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.renderer.tips.TipsRepository
 import org.cru.godtools.shared.renderer.util.ProvideRendererServices
@@ -78,6 +79,7 @@ import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
 import org.cru.godtools.tract.util.isTractLegacyDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.TutorialActivity
 import org.cru.godtools.tutorial.TutorialActivityResultContract
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
@@ -409,7 +411,7 @@ class TractActivity :
 
     private fun trackTractPage(
         page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
-        card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard
+        card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard,
     ) {
         page?.let { eventBus.post(TractPageAnalyticsScreenEvent(page, card)) }
     }
@@ -441,7 +443,7 @@ class TractActivity :
             else -> {
                 savedState.liveShareTutorialShown = true
                 settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
-                shareLiveShareLink()
+                shareLiveShareLink(it == TutorialActivity.RESULT_SHOW_QR_CODE)
             }
         }
     }
@@ -459,7 +461,7 @@ class TractActivity :
         }
     }
 
-    internal fun shareLiveShareLink() {
+    internal fun shareLiveShareLink(showQrCode: Boolean = false) {
         publisherController.started = true
         when {
             !savedState.liveShareTutorialShown &&
@@ -468,7 +470,7 @@ class TractActivity :
             }
 
             publisherController.publisherInfo.value == null -> {
-                LiveShareStartingDialogFragment().showAllowingStateLoss(supportFragmentManager, null)
+                LiveShareStartingDialogFragment(showQrCode).showAllowingStateLoss(supportFragmentManager, null)
             }
 
             else -> {
@@ -485,7 +487,15 @@ class TractActivity :
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
                 eventBus.post(ShareScreenEngagedActionEvent(dataModel.toolCode.value))
-                showShareActivityChooser(message = R.string.share_tool_message_tract_live_share, shareUrl = shareUrl)
+
+                if (showQrCode) {
+                    startQrCodeActivity(shareUrl)
+                } else {
+                    showShareActivityChooser(
+                        message = R.string.share_tool_message_tract_live_share,
+                        shareUrl = shareUrl
+                    )
+                }
             }
         }
     }
