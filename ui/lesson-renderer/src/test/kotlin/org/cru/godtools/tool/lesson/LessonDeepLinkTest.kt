@@ -31,11 +31,20 @@ class LessonDeepLinkTest {
     }
 
     @Test
-    fun `parseKnowGodDeepLink() - Non-numeric Page`() {
-        assertNotNull(LessonDeepLink.parseKnowGodDeepLink(Uri.parse("https://knowgod.com/en/lesson/lessonhs/one"))) {
+    fun `parseKnowGodDeepLink() - Invalid Page number`() {
+        // non-numeric
+        assertNotNull(LessonDeepLink.parseKnowGodDeepLink(Uri.parse("https://knowgod.com/en/lesson/lessonhs/asdf"))) {
             assertEquals("lessonhs", it.lesson)
             assertEquals(Locale.forLanguageTag("en"), it.locale)
-            // non-numeric page should result in null page
+            // invalid page should result in null page
+            assertNull(it.page)
+        }
+
+        // negative
+        assertNotNull(LessonDeepLink.parseKnowGodDeepLink(Uri.parse("https://knowgod.com/en/lesson/lessonhs/-1"))) {
+            assertEquals("lessonhs", it.lesson)
+            assertEquals(Locale.forLanguageTag("en"), it.locale)
+            // invalid page should result in null page
             assertNull(it.page)
         }
     }

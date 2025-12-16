@@ -17,7 +17,7 @@ internal data class LessonDeepLink(val lesson: String, val locale: Locale, val p
             return LessonDeepLink(
                 lesson = uri.pathSegments[KNOWGOD_PATH_LESSON],
                 locale = Locale.forLanguageTag(uri.pathSegments[KNOWGOD_PATH_LOCALE]),
-                page = uri.pathSegments.getOrNull(KNOWGOD_PATH_PAGE)?.toIntOrNull()
+                page = uri.pathSegments.getOrNull(KNOWGOD_PATH_PAGE)?.toIntOrNull()?.takeUnless { it < 0 }
             )
         }
 
