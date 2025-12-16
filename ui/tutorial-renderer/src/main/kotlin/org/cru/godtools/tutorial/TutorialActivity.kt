@@ -51,7 +51,6 @@ class TutorialActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var eventBus: EventBus
-
     @Inject
     internal lateinit var settings: Settings
 

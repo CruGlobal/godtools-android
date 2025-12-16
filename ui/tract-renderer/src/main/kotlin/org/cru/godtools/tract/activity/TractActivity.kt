@@ -94,7 +94,6 @@ class TractActivity :
     @Inject
     @Named(TOOL_RESOURCE_FILE_SYSTEM)
     internal lateinit var resourceFileSystem: FileSystem
-
     @Inject
     lateinit var tipsRepository: TipsRepository
 
@@ -248,27 +247,25 @@ class TractActivity :
 
     @VisibleForTesting
     internal val Uri.deepLinkSelectedLanguage get() = Locale.forLanguageTag(pathSegments[0])
-
     @VisibleForTesting
     internal val Uri.deepLinkPage get() = pathSegments.getOrNull(2)?.toIntOrNull()
 
     @VisibleForTesting
-    internal val Uri.deepLinkLanguages: Pair<List<Locale>, List<Locale>>
-        get() {
-            val primary = LinkedHashSet<Locale>()
-            val parallel = LinkedHashSet<Locale>()
-            val selected = deepLinkSelectedLanguage
+    internal val Uri.deepLinkLanguages: Pair<List<Locale>, List<Locale>> get() {
+        val primary = LinkedHashSet<Locale>()
+        val parallel = LinkedHashSet<Locale>()
+        val selected = deepLinkSelectedLanguage
 
-            if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
-                primary += sequenceOf(Locale.getDefault()).includeFallbacks()
-            }
-            primary += extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).includeFallbacks()
-            parallel += extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).includeFallbacks()
-
-            if (selected !in primary && selected !in parallel) primary += sequenceOf(selected).includeFallbacks()
-
-            return Pair(primary.toList(), parallel.toList())
+        if (getQueryParameter(PARAM_USE_DEVICE_LANGUAGE)?.isNotEmpty() == true) {
+            primary += sequenceOf(Locale.getDefault()).includeFallbacks()
         }
+        primary += extractLanguagesFromDeepLinkParam(PARAM_PRIMARY_LANGUAGE).includeFallbacks()
+        parallel += extractLanguagesFromDeepLinkParam(PARAM_PARALLEL_LANGUAGE).includeFallbacks()
+
+        if (selected !in primary && selected !in parallel) primary += sequenceOf(selected).includeFallbacks()
+
+        return Pair(primary.toList(), parallel.toList())
+    }
 
     private fun Uri.extractLanguagesFromDeepLinkParam(param: String) = getQueryParameters(param)
         .asSequence()
@@ -292,34 +289,33 @@ class TractActivity :
     }
 
     // region Settings
-    override val settingsActionsFlow
-        get() = combine(
-            super.settingsActionsFlow,
-            dataModel.tool,
-            dataModel.manifest,
-            dataModel.hasTips.asFlow(),
-            dataModel.showTips.asFlow()
-        ) { actions, tool, manifest, hasTips, tipsEnabled ->
-            buildList {
-                addAll(actions)
-                if (tool?.isScreenShareDisabled == false && manifest != null) {
-                    add(
-                        LiveShareSettingsAction(this@TractActivity) {
-                            shareLiveShareLink()
-                            dismissSettingsDialog()
-                        }
-                    )
-                }
-                if (hasTips) {
-                    add(
-                        ToggleTipsSettingsAction(this@TractActivity, tipsEnabled) {
-                            dataModel.showTips.toggleValue()
-                            dismissSettingsDialog()
-                        }
-                    )
-                }
+    override val settingsActionsFlow get() = combine(
+        super.settingsActionsFlow,
+        dataModel.tool,
+        dataModel.manifest,
+        dataModel.hasTips.asFlow(),
+        dataModel.showTips.asFlow()
+    ) { actions, tool, manifest, hasTips, tipsEnabled ->
+        buildList {
+            addAll(actions)
+            if (tool?.isScreenShareDisabled == false && manifest != null) {
+                add(
+                    LiveShareSettingsAction(this@TractActivity) {
+                        shareLiveShareLink()
+                        dismissSettingsDialog()
+                    }
+                )
+            }
+            if (hasTips) {
+                add(
+                    ToggleTipsSettingsAction(this@TractActivity, tipsEnabled) {
+                        dataModel.showTips.toggleValue()
+                        dismissSettingsDialog()
+                    }
+                )
             }
         }
+    }
     // endregion Settings
 
     // region Compose Overlay
@@ -368,7 +364,6 @@ class TractActivity :
             }
         }
     }
-
     @VisibleForTesting
     internal var initialPage = 0
 
@@ -407,7 +402,6 @@ class TractActivity :
     override fun showModal(modal: Modal) {
         modalState.value = modal
     }
-
     override fun showTip(tip: Tip) {
         TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
     }
@@ -426,7 +420,6 @@ class TractActivity :
     override val shareLinkUriLiveData by lazy {
         viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
     }
-
     private fun Manifest.buildShareLink(page: Int = pager.currentItem): Uri.Builder? {
         val tool = code ?: return null
         val locale = locale ?: return null
@@ -458,7 +451,6 @@ class TractActivity :
     private val liveShareState: LiveData<Pair<State, State>> by lazy {
         publisherController.state.combineWith(subscriberController.state) { pState, sState -> pState to sState }
     }
-
     private fun Menu.setupLiveShareMenuItem() {
         findItem(R.id.action_live_share_active)?.let { item ->
             item.loadAnimation(this@TractActivity, R.raw.anim_tract_live_share)
