@@ -17,7 +17,7 @@ import org.hamcrest.Matchers.lessThanOrEqualTo
 import org.hamcrest.Matchers.not
 
 private const val KEY = "key"
-private val COMPOUND_KEY = arrayOf(KEY, 1, true)
+private val COMPOUND_KEY = arrayOf<Any>(KEY, 1, true)
 
 abstract class LastSyncTimeRepositoryIT {
     internal abstract val repository: LastSyncTimeRepository

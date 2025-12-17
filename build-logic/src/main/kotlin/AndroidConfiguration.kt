@@ -44,6 +44,14 @@ private fun Project.configureCommonDependencies() {
         // exclude guava transitive compileOnly dependencies
         exclude(group = "com.google.j2objc", module = "j2objc-annotations")
     }
+
+    // HACK: sync kotlin-metadata-jvm version for Dagger
+    //       This works around dagger/hilt depending on an older version when upgrading to Kotlin 2.3.0.
+    //       This can be removed when Dagger/Hilt is upgraded and the the build completes successfully without this
+    //       override.
+    configurations.configureEach {
+        resolutionStrategy.force(libs.findLibrary("kotlin-metadata-jvm").get())
+    }
 }
 
 internal fun Project.excludeAndroidSdkDependencies() {

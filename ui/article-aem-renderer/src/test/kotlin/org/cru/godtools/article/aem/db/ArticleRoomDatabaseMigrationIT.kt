@@ -47,7 +47,7 @@ class ArticleRoomDatabaseMigrationIT {
                 """
                 INSERT INTO articles (uri, uuid, title, canonicalUri, shareUri, date_created, date_updated)
                 VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                arrayOf("uri:1", "", "", "https://www.example.com", "https://www.example.com", 0, 0)
+                arrayOf<Any>("uri:1", "", "", "https://www.example.com", "https://www.example.com", 0, 0)
             )
             close()
         }

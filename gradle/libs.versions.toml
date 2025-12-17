@@ -23,7 +23,7 @@ firebase-crashlytics = "20.0.3"
 firebase-perf = "22.0.4"
 godtoolsShared = "1.3.1"
 gtoSupport = "4.5.0"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinCoroutines = "1.10.2"
 kotlinKover = "0.9.4"
 ksp = "2.3.4"
@@ -181,6 +181,7 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
 kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
+kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
@@ -247,5 +248,5 @@ grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
-mockposable = { id = "com.jeppeman.mockposable", version = "0.15" }
+mockposable = { id = "com.jeppeman.mockposable", version = "0.16" }
 paparazzi = { id = "app.cash.paparazzi", version.ref = "paparazzi" }
