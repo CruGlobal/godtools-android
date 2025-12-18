@@ -1,7 +1,6 @@
 package org.cru.godtools.tool.lesson.ui
 
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -45,9 +44,9 @@ import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_PAGE_SWIPED
+import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.EXTRA_RESUME_PAGE
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
@@ -139,6 +138,7 @@ class LessonActivity :
                             finish()
                         }
                     }
+
                     LessonScreen.UiEvent.ShareLesson -> {
                         if (shareLinkUri != null) {
                             shareCurrentTool()
@@ -272,7 +272,7 @@ class LessonActivity :
         val path = data.pathSegments ?: return
 
         when (intent.action) {
-            ACTION_VIEW -> when {
+            Intent.ACTION_VIEW -> when {
                 data.isDynalinksDeepLink() || data.isGodToolsDeepLink() -> {
                     dataModel.toolCode.value = path[3]
                     dataModel.locale.value = Locale.forLanguageTag(path[4])
