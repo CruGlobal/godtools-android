@@ -2,7 +2,6 @@ package org.cru.godtools.tool.lesson.ui
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
@@ -72,7 +71,10 @@ class LessonActivityTest {
     @Test
     @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - Legacy Lesson deeplink`() {
-        val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/lessons/test/en"))
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://$HOST_GODTOOLSAPP_COM/lessons/test/en"),
+        )
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
@@ -85,7 +87,10 @@ class LessonActivityTest {
     @Test
     @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - godtoolsapp_com Deep Link`() {
-        val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/lesson/$TOOL/en"))
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://$HOST_GODTOOLSAPP_COM/deeplink/tool/lesson/$TOOL/en"),
+        )
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
@@ -98,7 +103,10 @@ class LessonActivityTest {
     @Test
     @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - dynalinks Deep Link`() {
-        val intent = Intent(ACTION_VIEW, Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/lesson/$TOOL/en"))
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://$HOST_DYNALINKS/deeplink/tool/lesson/$TOOL/en"),
+        )
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
@@ -111,7 +119,10 @@ class LessonActivityTest {
     @Test
     @Ignore("Disabled until compose 1.10.0 is released with https://youtrack.jetbrains.com/issue/CMP-6612 fixed")
     fun `processIntent() - Custom URI Deep Link`() {
-        val intent = Intent(ACTION_VIEW, Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/lesson/$TOOL/en"))
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("godtools://$HOST_GODTOOLS_CUSTOM_URI/tool/lesson/$TOOL/en"),
+        )
         ActivityScenario.launch<LessonActivity>(intent).use {
             it.onActivity {
                 assertEquals(TOOL, it.tool)
@@ -127,7 +138,7 @@ class LessonActivityTest {
             "https://example.com/lessons/test/en",
             "https://godtoolsapp.com/lessons/",
             "https://godtoolsapp.com/lessons/test",
-        ).map { Intent(ACTION_VIEW, Uri.parse(it)) }.forEach {
+        ).map { Intent(Intent.ACTION_VIEW, Uri.parse(it)) }.forEach {
             assertThrows(RuntimeException::class.java) { ActivityScenario.launch<LessonActivity>(it) }
         }
 
@@ -135,7 +146,7 @@ class LessonActivityTest {
         listOf(
             "https://godtoolsapp.com/lessons/test/",
             "https://godtoolsapp.com/lessons//en",
-        ).map { Intent(ACTION_VIEW, Uri.parse(it)) }.forEach {
+        ).map { Intent(Intent.ACTION_VIEW, Uri.parse(it)) }.forEach {
             ActivityScenario.launch<LessonActivity>(it).use {
                 assertEquals(Lifecycle.State.DESTROYED, it.state)
             }

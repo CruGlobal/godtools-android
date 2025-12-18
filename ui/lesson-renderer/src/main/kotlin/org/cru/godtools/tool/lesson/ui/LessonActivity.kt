@@ -1,7 +1,6 @@
 package org.cru.godtools.tool.lesson.ui
 
 import android.content.Intent
-import android.content.Intent.ACTION_VIEW
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -47,12 +46,14 @@ import org.cru.godtools.base.SCHEME_GODTOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_FEEDBACK
 import org.cru.godtools.base.Settings.Companion.FEATURE_LESSON_PAGE_SWIPED
+import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.EXTRA_RESUME_PAGE
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
+import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
@@ -129,6 +130,7 @@ class LessonActivity :
 
             // determine the UI Rendering state
             val loadingState = activeToolLoadingStateLiveData.observeAsState().value
+            val shareLinkUri by shareLinkUriLiveData.observeAsState()
             val eventSink: (LessonScreen.UiEvent) -> Unit = {
                 when (it) {
                     LessonScreen.UiEvent.CloseLesson -> {
@@ -136,6 +138,12 @@ class LessonActivity :
                             showFeedbackDialog = true
                         } else {
                             finish()
+                        }
+                    }
+
+                    LessonScreen.UiEvent.ShareLesson -> {
+                        if (shareLinkUri != null) {
+                            shareCurrentTool()
                         }
                     }
                 }
@@ -164,6 +172,7 @@ class LessonActivity :
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.settledPage }.collect { page ->
                             dataModel.pageReached.update { maxOf(it, page) }
+                            dataModel.currentPage.value = page
                         }
                     }
 
@@ -189,7 +198,8 @@ class LessonActivity :
                         manifest = manifest,
                         state = toolState.toolState,
                         lessonPager = lessonPagerState,
-                        eventSink = eventSink
+                        eventSink = eventSink,
+                        showShareAction = shareLinkUri != null,
                     )
                 }
             }
@@ -198,7 +208,9 @@ class LessonActivity :
             ProvideRendererServices(resources = resourceFileSystem, tipsRepository = tipsRepository) {
                 GodToolsTheme(darkTheme = false) {
                     ContentWithOverlays {
-                        RenderLesson(state)
+                        RenderLesson(
+                            state = state
+                        )
 
                         // resume lesson progress dialog
                         if (state is LessonScreen.UiState.Loaded && resumePageId != null) {
@@ -262,7 +274,7 @@ class LessonActivity :
         val path = data.pathSegments ?: return
 
         when (intent.action) {
-            ACTION_VIEW -> when {
+            Intent.ACTION_VIEW -> when {
                 data.isDynalinksDeepLink() || data.isGodToolsDeepLink() -> {
                     dataModel.toolCode.value = path[3]
                     dataModel.locale.value = Locale.forLanguageTag(path[4])
@@ -331,6 +343,27 @@ class LessonActivity :
         ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
         ?.let { return lessonPager.pages.indexOf(it) } ?: -1
     // endregion Resume Progress
+
+    // region Share Menu Logic
+    override val shareLinkUriLiveData by lazy {
+        combine(viewModel.manifest, viewModel.currentPage) { manifest, page ->
+            manifest?.buildShareLink(page)?.build()?.toString()
+        }.asLiveData()
+    }
+
+    private fun Manifest.buildShareLink(page: Int = 0): Uri.Builder? {
+        val tool = code ?: return null
+        val locale = locale ?: return null
+        return URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
+            .appendPath("lesson")
+            .appendPath(tool)
+            .apply { if (page > 0) appendPath(page.toString()) }
+            .appendQueryParameter("icid", "gtshare")
+    }
+
+    override fun getShareableShareItems() = emptyList<ShareableImageShareItem>()
+    // endregion Share Menu Logic
     // endregion UI
 
     override fun checkForManifestEvent(manifest: Manifest, event: Event) {
@@ -356,6 +389,7 @@ class LessonActivityDataModel @Inject constructor(
     savedState
 ) {
     val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
+    val currentPage = savedState.getMutableStateFlow(viewModelScope, "currentPage", 0)
     val showFeedback = toolCode
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
         .combine(pageReached) { discovered, page -> !discovered && page > 3 }
