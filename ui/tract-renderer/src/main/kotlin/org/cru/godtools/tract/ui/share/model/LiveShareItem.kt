@@ -11,6 +11,6 @@ class LiveShareItem : ShareItem {
     override val actionLayout get() = R.layout.tract_share_item_live_share
 
     override fun triggerAction(activity: Activity) {
-        (activity as? TractActivity)?.shareLiveShareLink()
+        (activity as? TractActivity)?.showLiveShareTutorial()
     }
 }

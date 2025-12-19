@@ -301,7 +301,7 @@ class TractActivity :
             if (tool?.isScreenShareDisabled == false && manifest != null) {
                 add(
                     LiveShareSettingsAction(this@TractActivity) {
-                        shareLiveShareLink()
+                        showLiveShareTutorial()
                         dismissSettingsDialog()
                     }
                 )
@@ -461,7 +461,7 @@ class TractActivity :
         }
     }
 
-    internal fun shareLiveShareLink(showQrCode: Boolean = false) {
+    internal fun showLiveShareTutorial() {
         publisherController.started = true
         when {
             !savedState.liveShareTutorialShown &&
@@ -469,6 +469,15 @@ class TractActivity :
                 liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE)
             }
 
+            else -> {
+                liveShareTutorialLauncher.launch(PageSet.LIVE_SHARE_START_PAGE_ONLY)
+            }
+        }
+    }
+
+    internal fun shareLiveShareLink(showQrCode: Boolean = false) {
+        publisherController.started = true
+        when {
             publisherController.publisherInfo.value == null -> {
                 LiveShareStartingDialogFragment(showQrCode).showAllowingStateLoss(supportFragmentManager, null)
             }
