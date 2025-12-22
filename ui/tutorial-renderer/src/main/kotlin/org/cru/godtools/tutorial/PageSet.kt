@@ -2,7 +2,6 @@ package org.cru.godtools.tutorial
 
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAction
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
 
 enum class PageSet(
@@ -10,6 +9,7 @@ enum class PageSet(
     private val pages: List<Page>,
     internal val menu: List<Pair<AppBarAction, Action>> = emptyList(),
     internal val showUpNavigation: Boolean = true,
+    internal val showPageIndicator: Boolean = true,
     internal val analyticsBaseScreenName: String,
 ) {
     ONBOARDING(
@@ -44,6 +44,13 @@ enum class PageSet(
             Page.LIVE_SHARE_MIRRORED,
             Page.LIVE_SHARE_START
         )
+    ),
+    LIVE_SHARE_START_PAGE_ONLY(
+        analyticsBaseScreenName = "tutorial-live-share-short",
+        pages = listOf(
+            Page.LIVE_SHARE_START
+        ),
+        showPageIndicator = false,
     ),
     TIPS(
         menu = listOf(AppBarAction(titleRes = R.string.tutorial_tips_action_skip) to Action.TIPS_SKIP),

@@ -65,16 +65,18 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
             )
         },
         bottomBar = {
-            HorizontalPagerIndicator(
-                pagerState = pagerState,
-                pageCount = pagerState.pageCount,
-                activeColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .fillMaxWidth()
-                    .height(dimensionResource(R.dimen.tutorial_indicator_height))
-                    .wrapContentSize()
-            )
+            if (pageSet.showPageIndicator) {
+                HorizontalPagerIndicator(
+                    pagerState = pagerState,
+                    pageCount = pagerState.pageCount,
+                    activeColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .fillMaxWidth()
+                        .height(dimensionResource(R.dimen.tutorial_indicator_height))
+                        .wrapContentSize()
+                )
+            }
         },
         containerColor = tutorialBackgroundColor,
         contentColor = MaterialTheme.colorScheme.onBackground
