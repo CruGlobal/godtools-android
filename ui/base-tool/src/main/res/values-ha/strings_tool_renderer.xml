@@ -8,12 +8,8 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Raba</string>
     <string name="tool_share_sheet_more_apps">Akwai kari</string>
-    <string name="share_tool_message">Wannan hanyar haɗin zai kai ku zuwa sigar yanar gizo ta abin da muke magana akai a yau:  %1$s \n\n
- 
-Zaku  iya saukar da app din zuwa wayar ku daga https://godtoolsapp.com \n\n
-
-Bari mu kara magana!</string>
     <string name="share_tool_message_article">Ina so in raba wannan labarin tare da ku kuma ina so in ji ra\'ayoyin ku game da shi. %1$s</string>
+    <string name="share_action_qr_code">Raba ta Lambar QR</string>
     <string name="feature_discovery_title_share_tool">Raba hanyar haɗi</string>
     <string name="feature_discovery_desc_share_tool">Aika wannan kayan aikin zuwa aboki ta danna wannan gunkin</string>
     <!-- Shareables -->

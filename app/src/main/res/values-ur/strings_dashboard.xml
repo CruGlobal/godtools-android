@@ -30,6 +30,7 @@ https://knowgod.com/
     <string name="menu_terms_of_use">استعمال کی شرائط</string>
     <string name="menu_privacy_policy">راز داری کی پالیسی</string>
     <string name="menu_copyright">جملہ حقوق کی معلومات</string>
+    <string name="menu_version">نسخہ: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">اسباق</string>
     <string name="dashboard_lessons_header_title">آپ کے لئے بنائے گئے اسباق</string>

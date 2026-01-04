@@ -8,12 +8,8 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ያጋሩ</string>
     <string name="tool_share_sheet_more_apps">ተጨማሪ</string>
-    <string name="share_tool_message">ዛሬ ስንመለከተዉ የነበረዉ መተግብሪያ(App) በዚህ መስፈንጠሪያ በኩል ማግኘት ይችላሉ: %1$s \n\n
-
-ይህን መተግበሪያ ዌብ ላይ ለመጠቀም መስፈንጠሪያ: https://godtoolsapp.com\n\n
-
-ተጨማሪ እንነጋገር !</string>
     <string name="share_tool_message_article">ይህን ጽሑፍ ላካፍላችሁ ወደድኩ እና ስለሱ ያለዎትን አስተያየት መስማት እፈልጋለሁ።\n%1$s</string>
+    <string name="share_action_qr_code">በQR ኮድ ያጋሩ</string>
     <string name="feature_discovery_title_share_tool">መስፈንጠሪያ አጋራ</string>
     <string name="feature_discovery_desc_share_tool">ይህንን በመጫን ለጓደኛህ ይህንን ቡክሌት ላክ።</string>
     <!-- Shareables -->

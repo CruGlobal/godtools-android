@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">جاری رکھیں</string>
     <string name="tutorial_live_share_action_skip">چھوڑ دیں</string>
     <string name="tutorial_live_share_action_start">لنک شئیر کریں</string>
+    <string name="tutorial_live_share_action_generate_qr_code">QR کوڈ بنائیں</string>
 </resources>

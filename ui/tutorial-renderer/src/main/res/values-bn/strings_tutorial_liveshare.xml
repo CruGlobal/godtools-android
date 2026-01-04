@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">চালিয়ে যান</string>
     <string name="tutorial_live_share_action_skip">এড়িয়ে যান</string>
     <string name="tutorial_live_share_action_start">লিঙ্ক শেয়ার করুন </string>
+    <string name="tutorial_live_share_action_generate_qr_code">QR কোড তৈরি করুন</string>
 </resources>

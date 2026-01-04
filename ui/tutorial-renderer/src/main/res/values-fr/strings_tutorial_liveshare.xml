@@ -12,4 +12,5 @@ Pour bénéficier de cette expérience, tous les participants doivent avoir tél
     <string name="tutorial_live_share_action_continue">Continuer</string>
     <string name="tutorial_live_share_action_skip">Passer</string>
     <string name="tutorial_live_share_action_start">Partager lien</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Générer un code QR</string>
 </resources>

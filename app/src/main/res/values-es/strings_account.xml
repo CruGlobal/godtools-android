@@ -17,8 +17,10 @@
     <!-- Delete Account -->
     <string name="menu_account_delete">Eliminar Cuenta</string>
     <string name="account_delete_heading">No te vayas tan pronto</string>
+    <string name="account_delete_description">Si borras tu cuenta, no podrás acceder a tus herramientas favoritas ni a la actividad de tu cuenta.</string>
     <string name="account_delete_action_delete">Eliminar mi cuenta</string>
     <string name="account_delete_action_cancel">Conservar mi cuenta</string>
+    <string name="account_delete_error">Se ha producido un error al eliminar tu cuenta. Asegúrate de estar conectado a Internet o vuelve a intentarlo más tarde.</string>
     <string name="account_delete_error_dismiss">Aceptar</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Actividad</string>

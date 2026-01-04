@@ -8,12 +8,8 @@
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Compartilhar</string>
     <string name="tool_share_sheet_more_apps">Mais</string>
-    <string name="share_tool_message">Este link irá levá-lo a uma versão web do que estávamos a comentar hoje: %1$s \n\n
-
-O aplicativo pode ser baixado em https://godtoolsapp.com \n\n
-
-Vamos conversar mais!</string>
     <string name="share_tool_message_article">Quero compartilhar este texto com você e gostaria de saber o que você pensa dele.\n%1$s</string>
+    <string name="share_action_qr_code">Compartilhe por código QR</string>
     <string name="feature_discovery_title_share_tool">Compartilhar um link</string>
     <string name="feature_discovery_desc_share_tool">Envie esta ferramenta a um amigo selecionando este ícone</string>
     <!-- Shareables -->

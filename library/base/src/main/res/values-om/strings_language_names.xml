@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="language_name_fa">Afaan Faarsi (Farsii)</string>
+    <string name="language_name_fil">Afaan Filippiins (Tagalog)</string>
+    <string name="language_name_fil_x_taglish">Taglish jedhu</string>
+    <string name="language_name_sid">Sidaamaa</string>
+</resources>

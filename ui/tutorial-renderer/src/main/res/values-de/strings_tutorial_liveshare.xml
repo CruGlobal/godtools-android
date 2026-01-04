@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Weiter</string>
     <string name="tutorial_live_share_action_skip">überspringen</string>
     <string name="tutorial_live_share_action_start">Einen Link teilen</string>
+    <string name="tutorial_live_share_action_generate_qr_code">QR-Code generieren</string>
 </resources>

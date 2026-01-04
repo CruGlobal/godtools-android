@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">استمرار</string>
     <string name="tutorial_live_share_action_skip">تجاوز</string>
     <string name="tutorial_live_share_action_start">شارك رابطاً</string>
+    <string name="tutorial_live_share_action_generate_qr_code">إنشاء رمز QR</string>
 </resources>

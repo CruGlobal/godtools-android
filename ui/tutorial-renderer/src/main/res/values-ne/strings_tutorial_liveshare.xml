@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">जारी राख्नुहोस्</string>
     <string name="tutorial_live_share_action_skip">छोड्नुहोस्</string>
     <string name="tutorial_live_share_action_start">लिङ्क साझा गर्नुहोस्</string>
+    <string name="tutorial_live_share_action_generate_qr_code">QR कोड उत्पन्न गर्नुहोस्</string>
 </resources>

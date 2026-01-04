@@ -43,6 +43,12 @@
         <item quantity="many">Раз показан экран</item>
         <item quantity="other">Раз показан экран</item>
     </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="one">Ссылкой поделились</item>
+        <item quantity="few">Ссылками поделились</item>
+        <item quantity="many">Ссылками поделились</item>
+        <item quantity="other">Ссылками поделились</item>
+    </plurals>
     <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
         <item quantity="one">Язык использован</item>
         <item quantity="few">Языка использовано</item>
