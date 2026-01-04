@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">繼續</string>
     <string name="tutorial_live_share_action_skip">跳過</string>
     <string name="tutorial_live_share_action_start">分享連結</string>
+    <string name="tutorial_live_share_action_generate_qr_code">產生二維碼</string>
 </resources>

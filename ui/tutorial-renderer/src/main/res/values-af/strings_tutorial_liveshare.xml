@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Gaan voort</string>
     <string name="tutorial_live_share_action_skip">Slaan oor</string>
     <string name="tutorial_live_share_action_start">Deel \'n skakel</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Genereer QR-kode</string>
 </resources>

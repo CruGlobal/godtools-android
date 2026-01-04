@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="language_name_fa">Persies (Farsi)</string>
+    <string name="language_name_fil">Filippyns (Tagalog)</string>
     <string name="language_name_fil_x_taglish">Die netwerkverbinding was verbreek</string>
     <string name="language_name_sid"> Netwerkverbinding is verbreek</string>
 </resources>

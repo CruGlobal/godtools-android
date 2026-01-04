@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Ci gaba</string>
     <string name="tutorial_live_share_action_skip">Ƙetare(Sallake)</string>
     <string name="tutorial_live_share_action_start">Raba hanyar haɗi</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Samar da Lambar QR</string>
 </resources>

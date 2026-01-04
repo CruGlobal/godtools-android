@@ -6,5 +6,6 @@
     <string name="tool_category_articles">Artikel</string>
     <string name="tool_category_conversation_starter">Gesprächsstarter</string>
     <string name="tool_category_growth">Christliches Wachstum</string>
+    <string name="tool_category_training">Training</string>
     <!-- Sharing -->
 </resources>

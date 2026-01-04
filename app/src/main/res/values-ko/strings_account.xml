@@ -34,6 +34,9 @@
     <plurals name="account_activity_screen_shares" tools:ignore="ImpliedQuantity">
         <item quantity="other">공유한 화면</item>
     </plurals>
+    <plurals name="account_activity_links_shared" tools:ignore="ImpliedQuantity">
+        <item quantity="other">공유된 링크 수</item>
+    </plurals>
     <plurals name="account_activity_languages_used" tools:ignore="ImpliedQuantity">
         <item quantity="other">사용한 언어</item>
     </plurals>
@@ -42,8 +45,17 @@
     </plurals>
     <!-- Badges -->
     <string name="account_activity_badges_header">내 배지</string>
+    <plurals name="account_activity_badge_tools_opened">
+        <item quantity="other">열어본 도구 수: %1$,d</item>
+    </plurals>
     <plurals name="account_activity_badge_lessons_completed">
         <item quantity="other">완료한 수업 수: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_articles_opened">
+        <item quantity="other">열어본 글 수: %1$,d</item>
+    </plurals>
+    <plurals name="account_activity_badge_images_shared">
+        <item quantity="other">공유한 이미지 수: %1$,d</item>
     </plurals>
     <plurals name="account_activity_badge_tips_completed">
         <item quantity="other">완료한 트레이닝 팁 수: %1$,d</item>

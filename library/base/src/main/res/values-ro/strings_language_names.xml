@@ -2,4 +2,6 @@
 <resources>
     <string name="language_name_fa">Persană (Farsi)</string>
     <string name="language_name_fil">Filipineză (Tagalog)</string>
+    <string name="language_name_fil_x_taglish">Tagliș</string>
+    <string name="language_name_sid">Sidama</string>
 </resources>

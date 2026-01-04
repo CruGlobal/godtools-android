@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Itti fufi</string>
     <string name="tutorial_live_share_action_skip">Irra darbi</string>
     <string name="tutorial_live_share_action_start">Liinkii qoodi</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Koodii QR uumuu</string>
 </resources>

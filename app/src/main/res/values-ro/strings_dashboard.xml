@@ -8,6 +8,7 @@
     <string name="opt_in_notification_maybe_later">Poate mai târziu</string>
     <!-- Navigation Menu -->
     <string name="menu_heading_get_started">Să începem</string>
+    <string name="menu_tutorial">Tutorial</string>
     <string name="menu_heading_account">Cont</string>
     <string name="menu_login">Conectare</string>
     <string name="menu_signup">Creează cont</string>

@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">続行</string>
     <string name="tutorial_live_share_action_skip">スキップ</string>
     <string name="tutorial_live_share_action_start">リンクをシェア</string>
+    <string name="tutorial_live_share_action_generate_qr_code">QRコードを生成する</string>
 </resources>

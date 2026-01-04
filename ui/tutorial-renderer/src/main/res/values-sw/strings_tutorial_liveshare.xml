@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Endelea</string>
     <string name="tutorial_live_share_action_skip">Ruka</string>
     <string name="tutorial_live_share_action_start">Shirikisha kiungo</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Tengeneza Msimbo wa QR</string>
 </resources>

@@ -13,6 +13,7 @@
     <string name="account_error_not_connected_title">Nu există conexiune la internet</string>
     <string name="account_error_not_connected">Verifică conexiunea la internet și încearcă din nou.</string>
     <string name="account_error_unknown">Eroare la conectare.</string>
+    <string name="account_error_dialog_dismiss">OK</string>
     <!-- Delete Account -->
     <string name="menu_account_delete">Șterge contul</string>
     <string name="account_delete_heading">Nu pleca atât de repede</string>
@@ -20,6 +21,7 @@
     <string name="account_delete_action_delete">Ștergeți-mi contul</string>
     <string name="account_delete_action_cancel">Păstrează-mi contul</string>
     <string name="account_delete_error">A apărut o eroare la ștergerea contului dvs. Asigură-te că ești online sau mai încearcă o dată mai târziu.</string>
+    <string name="account_delete_error_dismiss">OK</string>
     <!-- Activity -->
     <string name="profile_tab_activity">Activitate</string>
     <string name="account_activity_header">Activitatea ta</string>

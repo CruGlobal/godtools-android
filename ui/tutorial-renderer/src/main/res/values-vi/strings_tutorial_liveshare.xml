@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Tiếp tục</string>
     <string name="tutorial_live_share_action_skip">Bỏ qua </string>
     <string name="tutorial_live_share_action_start">Chia sẻ đường link</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Tạo mã QR</string>
 </resources>

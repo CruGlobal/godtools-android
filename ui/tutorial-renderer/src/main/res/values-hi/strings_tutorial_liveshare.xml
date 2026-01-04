@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">जारी रखें</string>
     <string name="tutorial_live_share_action_skip">छोड़ें</string>
     <string name="tutorial_live_share_action_start">लिंक साझा करें</string>
+    <string name="tutorial_live_share_action_generate_qr_code">क्यूआर कोड जनरेट करें</string>
 </resources>

@@ -12,4 +12,5 @@
     <string name="tutorial_live_share_action_continue">Turpināt</string>
     <string name="tutorial_live_share_action_skip">Izlaist</string>
     <string name="tutorial_live_share_action_start">Kopīgo saiti</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Izveidot QR kodu</string>
 </resources>

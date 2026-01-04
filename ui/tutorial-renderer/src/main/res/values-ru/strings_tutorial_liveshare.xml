@@ -10,4 +10,5 @@
     <string name="tutorial_live_share_action_continue">Продолжить</string>
     <string name="tutorial_live_share_action_skip">Пропустить</string>
     <string name="tutorial_live_share_action_start">Поделитесь ссылкой</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Сгенерировать QR-код</string>
 </resources>

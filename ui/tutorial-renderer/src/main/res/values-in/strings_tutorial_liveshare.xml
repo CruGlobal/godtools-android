@@ -12,4 +12,5 @@ Pengalaman ini saat ini mengharuskan semua peserta untuk mengunduh aplikasi GodT
     <string name="tutorial_live_share_action_continue">Lanjutkan</string>
     <string name="tutorial_live_share_action_skip">Lewati</string>
     <string name="tutorial_live_share_action_start">Bagikan tautan</string>
+    <string name="tutorial_live_share_action_generate_qr_code">Buat Kode QR</string>
 </resources>
