@@ -10,6 +10,10 @@ android {
 
     buildFeatures.viewBinding = true
 
+    defaultConfig {
+        consumerProguardFiles("src/main/proguard-jsoup.pro")
+    }
+
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }
     }
