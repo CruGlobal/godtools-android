@@ -6,6 +6,7 @@ import app.cash.paparazzi.DeviceConfig
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import java.time.Year
 import kotlin.test.Test
 import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.GlobalActivityAnalytics
@@ -19,6 +20,7 @@ class GlobalActivityLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     val state = GlobalActivityScreen.UiState(
+        year = Year.of(2025),
         activity = GlobalActivityAnalytics(
             users = 1234,
             gospelPresentations = 4321,
