@@ -84,28 +84,28 @@ internal fun TutorialLiveShareLayout(
 
     when (page) {
         Page.LIVE_SHARE_START -> Column(
+            modifier = Modifier
+                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+                .fillMaxWidth()
+        ) {
+            OutlinedButton(
+                onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
                 modifier = Modifier
-                    .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(.8f)
+                    .align(Alignment.CenterHorizontally)
             ) {
-                OutlinedButton(
-                    onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
-                    modifier = Modifier
-                        .fillMaxWidth(.8f)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
-                }
-
-                Button(
-                    onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
-                    modifier = Modifier
-                        .fillMaxWidth(.8f)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    Text(page.action?.let { stringResource(it) }.orEmpty())
-                }
+                Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
             }
+
+            Button(
+                onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
+                modifier = Modifier
+                    .fillMaxWidth(.8f)
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(page.action?.let { stringResource(it) }.orEmpty())
+            }
+        }
 
         else ->
             Button(
