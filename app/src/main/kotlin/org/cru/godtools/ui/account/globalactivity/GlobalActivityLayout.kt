@@ -30,14 +30,14 @@ import org.cru.godtools.R
 
 @Composable
 fun GlobalActivityLayout(modifier: Modifier = Modifier, viewModel: GlobalActivityViewModel = viewModel()) {
-    GlobalActivityLayout(GlobalActivityScreen.UiState(viewModel.activity.collectAsState().value), modifier)
+    GlobalActivityLayout(GlobalActivityScreen.UiState(activity = viewModel.activity.collectAsState().value), modifier)
 }
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 fun GlobalActivityLayout(state: GlobalActivityScreen.UiState, modifier: Modifier = Modifier) = Column(modifier) {
     Text(
-        stringResource(R.string.profile_global_activity_heading, Year.now().value),
+        stringResource(R.string.profile_global_activity_heading, state.year.value),
         style = MaterialTheme.typography.titleLarge,
         modifier = Modifier.padding(top = 32.dp)
     )
