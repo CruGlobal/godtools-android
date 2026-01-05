@@ -82,40 +82,34 @@ internal fun TutorialLiveShareLayout(
 
     Spacer(modifier = Modifier.weight(1f))
 
-    when (page) {
-        Page.LIVE_SHARE_START -> Column(
-            modifier = Modifier
-                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
-                .fillMaxWidth()
-        ) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+            .fillMaxWidth()
+    ) {
+        if (page == Page.LIVE_SHARE_START) {
             OutlinedButton(
                 onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
                 modifier = Modifier
-                    .fillMaxWidth(.8f)
+                    .fillMaxWidth(0.8f)
                     .align(Alignment.CenterHorizontally)
             ) {
                 Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
             }
-
-            Button(
-                onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
-                modifier = Modifier
-                    .fillMaxWidth(.8f)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(page.action?.let { stringResource(it) }.orEmpty())
-            }
         }
 
-        else ->
-            Button(
-                onClick = { nextPage() },
-                modifier = Modifier
-                    .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
-                    .fillMaxWidth(0.8f)
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Text(page.action?.let { stringResource(it) }.orEmpty())
-            }
+        Button(
+            onClick = {
+                when (page) {
+                    Page.LIVE_SHARE_START -> onTutorialAction(Action.LIVE_SHARE_FINISH)
+                    else -> nextPage()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(page.action?.let { stringResource(it) }.orEmpty())
+        }
     }
 }
