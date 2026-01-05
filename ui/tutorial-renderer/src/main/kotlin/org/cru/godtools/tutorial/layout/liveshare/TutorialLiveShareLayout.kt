@@ -83,27 +83,29 @@ internal fun TutorialLiveShareLayout(
     Spacer(modifier = Modifier.weight(1f))
 
     when (page) {
-        Page.LIVE_SHARE_START -> Row(
-            modifier = Modifier
-                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedButton(
-                onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
-                modifier = Modifier.weight(1f)
+        Page.LIVE_SHARE_START -> Column(
+                modifier = Modifier
+                    .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+                    .fillMaxWidth()
             ) {
-                Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
-            }
+                OutlinedButton(
+                    onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
+                    modifier = Modifier
+                        .fillMaxWidth(.8f)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
+                }
 
-            Button(
-                onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(page.action?.let { stringResource(it) }.orEmpty())
+                Button(
+                    onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
+                    modifier = Modifier
+                        .fillMaxWidth(.8f)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(page.action?.let { stringResource(it) }.orEmpty())
+                }
             }
-        }
 
         else ->
             Button(
