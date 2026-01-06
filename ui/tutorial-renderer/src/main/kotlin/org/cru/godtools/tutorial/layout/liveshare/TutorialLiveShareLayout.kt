@@ -84,7 +84,7 @@ internal fun TutorialLiveShareLayout(
 
     Column(
         modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
+            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
             .fillMaxWidth()
     ) {
         if (page == Page.LIVE_SHARE_START) {
