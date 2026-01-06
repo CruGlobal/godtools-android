@@ -42,7 +42,7 @@ internal fun TutorialLiveShareLayout(
     val titleStyle = MaterialTheme.typography.titleLarge
     val contentStyle = MaterialTheme.typography.bodyLarge
 
-    Spacer(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.weight(1.4f))
 
     Column(
         modifier = Modifier
@@ -84,7 +84,7 @@ internal fun TutorialLiveShareLayout(
 
     Column(
         modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
             .fillMaxWidth()
     ) {
         if (page == Page.LIVE_SHARE_START) {
@@ -96,6 +96,8 @@ internal fun TutorialLiveShareLayout(
             ) {
                 Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
             }
+        } else {
+            Spacer(modifier = Modifier.height(48.dp))
         }
 
         Button(
