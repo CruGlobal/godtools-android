@@ -13,7 +13,7 @@ import org.cru.godtools.tutorial.Page
     device = Devices.PIXEL_3A,
     widthDp = 3 * 393
 )
-private fun TipsTutorial() = Row {
+private fun LiveShareTutorial() = Row {
     TutorialLiveShareLayout(page = Page.LIVE_SHARE_DESCRIPTION, modifier = Modifier.weight(1f))
     TutorialLiveShareLayout(page = Page.LIVE_SHARE_MIRRORED, modifier = Modifier.weight(1f))
     TutorialLiveShareLayout(page = Page.LIVE_SHARE_START, modifier = Modifier.weight(1f))
