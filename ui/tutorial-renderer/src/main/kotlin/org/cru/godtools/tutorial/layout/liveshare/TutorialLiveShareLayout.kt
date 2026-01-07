@@ -42,7 +42,7 @@ internal fun TutorialLiveShareLayout(
     val titleStyle = MaterialTheme.typography.titleLarge
     val contentStyle = MaterialTheme.typography.bodyLarge
 
-    Spacer(modifier = Modifier.weight(1f))
+    Spacer(modifier = Modifier.weight(1.4f))
 
     Column(
         modifier = Modifier
@@ -82,38 +82,36 @@ internal fun TutorialLiveShareLayout(
 
     Spacer(modifier = Modifier.weight(1f))
 
-    when (page) {
-        Page.LIVE_SHARE_START -> Row(
-            modifier = Modifier
-                .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
+            .fillMaxWidth()
+    ) {
+        if (page == Page.LIVE_SHARE_START) {
             OutlinedButton(
                 onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
-            }
-
-            Button(
-                onClick = { onTutorialAction(Action.LIVE_SHARE_FINISH) },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text(page.action?.let { stringResource(it) }.orEmpty())
-            }
-        }
-
-        else ->
-            Button(
-                onClick = { nextPage() },
                 modifier = Modifier
-                    .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN, vertical = 16.dp)
                     .fillMaxWidth(0.8f)
                     .align(Alignment.CenterHorizontally)
             ) {
-                Text(page.action?.let { stringResource(it) }.orEmpty())
+                Text(stringResource(R.string.tutorial_live_share_action_generate_qr_code))
             }
+        } else {
+            Spacer(modifier = Modifier.height(48.dp))
+        }
+
+        Button(
+            onClick = {
+                when (page) {
+                    Page.LIVE_SHARE_START -> onTutorialAction(Action.LIVE_SHARE_FINISH)
+                    else -> nextPage()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(page.action?.let { stringResource(it) }.orEmpty())
+        }
     }
 }
