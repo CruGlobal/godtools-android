@@ -117,7 +117,7 @@ godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
 godtoolsShared-renderer = { module = "org.cru.godtools.kotlin:renderer", version.ref = "godtoolsShared" }
 godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
-gradleDownloadTask = "de.undercouch:gradle-download-task:5.6.0"
+gradleDownloadTask = "de.undercouch:gradle-download-task:5.7.0"
 gtoSupport-androidx-activity = { module = "org.ccci.gto.android:gto-support-androidx-activity", version.ref = "gtoSupport" }
 gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-androidx-collection", version.ref = "gtoSupport" }
 gtoSupport-androidx-compose = { module = "org.ccci.gto.android:gto-support-androidx-compose", version.ref = "gtoSupport" }
