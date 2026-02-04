@@ -59,7 +59,7 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
 
         return UiState(
             query = query,
-            languages = rememberLanguagesFlow(query).collectAsState(emptyList()).value
+            languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
                 .map { lang ->
                     key(lang.code) {
                         UiLanguage(
@@ -87,7 +87,7 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLanguagesFlow(query: State<String>): Flow<List<Language>> {
+    private fun rememberLanguagesFlow(query: () -> String): Flow<List<Language>> {
         var floatedLanguages: Set<Locale>? by rememberSaveable(
             saver = Saver(
                 save = { it.value?.mapTo(ArrayList()) { it.toLanguageTag() } },
@@ -106,7 +106,7 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                     langs.sortedWith(comparator) to appLanguage
                 }
                 .distinctUntilChanged()
-                .combine(snapshotFlow { query.value }) { (langs, appLang), q ->
+                .combine(snapshotFlow(query)) { (langs, appLang), q ->
                     langs.filterByDisplayAndNativeName(q, context, appLang)
                 }
                 .flowOn(ioDispatcher)
