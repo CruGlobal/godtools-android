@@ -26,12 +26,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Verify Paparazzi snapshot tests (requires Git LFS)
 ./gradlew verifyPaparazzi
-
-# Record new Paparazzi snapshots
-./gradlew recordPaparazzi
 ```
 
 **Requirements:** JDK 21 (Temurin), specified in `.tool-versions`. Git LFS is required for Paparazzi snapshot files.
+
+**Paparazzi Snapshots:** Do not record snapshots locally. Instead, trigger the manual GitHub Actions workflow on the feature branch to generate and commit updated screenshots.
 
 ## Project Architecture
 
