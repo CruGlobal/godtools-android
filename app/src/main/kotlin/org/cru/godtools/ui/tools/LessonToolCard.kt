@@ -41,7 +41,7 @@ fun LessonToolCard(
         elevation = toolCardElevation,
         modifier = modifier.fillMaxWidth()
     ) {
-        ToolBanner(state, modifier = Modifier.aspectRatio(335f / 80f))
+        ToolBanner(state, modifier = Modifier.aspectRatio(335f / 87f))
 
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),
