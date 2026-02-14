@@ -17,6 +17,8 @@ import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.createCircuitActivityIntent
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.dashboard.Page
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SHOW_TIPS"
@@ -33,13 +35,7 @@ fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACT
 // endregion DashboardActivity
 
 // region AppLanguageActivity
-private const val ACTIVITY_CLASS_APP_LANGUAGE = "org.cru.godtools.ui.languages.app.AppLanguageActivity"
-
-fun Context.startAppLanguageActivity() = startActivity(
-    Intent()
-        .setClassName(this, ACTIVITY_CLASS_APP_LANGUAGE)
-        .putExtras(BaseActivity.buildExtras(this))
-)
+fun Context.startAppLanguageActivity() = startActivity(createCircuitActivityIntent(AppLanguageScreen))
 // endregion AppLanguageActivity
 
 // region ArticlesActivity
