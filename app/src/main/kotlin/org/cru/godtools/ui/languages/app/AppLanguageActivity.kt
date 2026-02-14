@@ -11,6 +11,7 @@ import com.slack.circuit.foundation.rememberCircuitNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 @AndroidEntryPoint

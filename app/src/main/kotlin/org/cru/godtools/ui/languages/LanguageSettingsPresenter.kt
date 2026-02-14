@@ -19,12 +19,12 @@ import kotlinx.coroutines.flow.combine
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
-import org.cru.godtools.ui.languages.app.AppLanguageScreen
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
