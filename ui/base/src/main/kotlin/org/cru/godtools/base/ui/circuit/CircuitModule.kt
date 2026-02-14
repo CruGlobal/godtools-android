@@ -1,4 +1,4 @@
-package org.cru.godtools.dagger
+package org.cru.godtools.base.ui.circuit
 
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.runtime.presenter.Presenter

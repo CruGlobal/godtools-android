@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.ui"
 
-    configureCompose(project)
+    configureCompose(project, enableCircuit = true)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
