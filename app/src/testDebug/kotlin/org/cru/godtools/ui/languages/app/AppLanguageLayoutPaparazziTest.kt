@@ -11,6 +11,7 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -19,7 +20,7 @@ class AppLanguageLayoutPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
-    private val state = AppLanguageScreen.State(
+    private val state = UiState(
         languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN, Locale("es"))
     )
 

@@ -15,6 +15,8 @@ import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -25,19 +27,19 @@ class AppLanguageLayoutTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<AppLanguageScreen.Event>()
+    private val events = TestEventSink<UiEvent>()
 
     @Test
     fun `Action - AppBar Navigate Back`() {
         composeTestRule.run {
-            setContent { AppLanguageLayout(AppLanguageScreen.State(eventSink = events)) }
+            setContent { AppLanguageLayout(UiState(eventSink = events)) }
             onNodeWithTag(TEST_TAG_ACTION_BACK)
                 .assertIsEnabled()
                 .assertHasClickAction()
                 .performClick()
         }
 
-        events.assertEvent(AppLanguageScreen.Event.NavigateBack)
+        events.assertEvent(UiEvent.NavigateBack)
     }
 
     @Test
@@ -45,7 +47,7 @@ class AppLanguageLayoutTest {
         composeTestRule.run {
             setContent {
                 AppLanguageLayout(
-                    AppLanguageScreen.State(
+                    UiState(
                         languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH),
                         eventSink = events
                     )
@@ -56,7 +58,7 @@ class AppLanguageLayoutTest {
                 .performClick()
         }
 
-        events.assertEvent(AppLanguageScreen.Event.SelectLanguage(Locale.ENGLISH))
+        events.assertEvent(UiEvent.SelectLanguage(Locale.ENGLISH))
     }
 
     // region Search
@@ -64,7 +66,7 @@ class AppLanguageLayoutTest {
     fun `Search - Cancel Button not visible when not searching`() {
         composeTestRule.run {
             setContent {
-                AppLanguageLayout(state = AppLanguageScreen.State(eventSink = events))
+                AppLanguageLayout(state = UiState(eventSink = events))
             }
 
             onNodeWithTag(TEST_TAG_CANCEL_SEARCH).assertDoesNotExist()
@@ -76,7 +78,7 @@ class AppLanguageLayoutTest {
         composeTestRule.run {
             setContent {
                 AppLanguageLayout(
-                    state = AppLanguageScreen.State(
+                    state = UiState(
                         languageQuery = remember { mutableStateOf("query") },
                         eventSink = events,
                     )
@@ -94,7 +96,7 @@ class AppLanguageLayoutTest {
         composeTestRule.run {
             setContent {
                 AppLanguageLayout(
-                    AppLanguageScreen.State(
+                    UiState(
                         selectedLanguage = Locale.FRENCH,
                         eventSink = events
                     )
@@ -105,7 +107,7 @@ class AppLanguageLayoutTest {
             onNodeWithText("Change Language", substring = true, ignoreCase = true)
                 .assertExists()
                 .performClick()
-            events.assertEvent(AppLanguageScreen.Event.ConfirmLanguage(Locale.FRENCH))
+            events.assertEvent(UiEvent.ConfirmLanguage(Locale.FRENCH))
         }
     }
 
@@ -114,7 +116,7 @@ class AppLanguageLayoutTest {
         composeTestRule.run {
             setContent {
                 AppLanguageLayout(
-                    AppLanguageScreen.State(
+                    UiState(
                         selectedLanguage = Locale.FRENCH,
                         eventSink = events
                     )
@@ -123,7 +125,7 @@ class AppLanguageLayoutTest {
             events.assertNoEvents()
 
             Espresso.pressBack()
-            events.assertEvent(AppLanguageScreen.Event.DismissConfirmDialog)
+            events.assertEvent(UiEvent.DismissConfirmDialog)
         }
     }
 
@@ -132,7 +134,7 @@ class AppLanguageLayoutTest {
         composeTestRule.run {
             setContent {
                 AppLanguageLayout(
-                    AppLanguageScreen.State(
+                    UiState(
                         selectedLanguage = Locale.FRENCH,
                         eventSink = events
                     )
@@ -143,7 +145,7 @@ class AppLanguageLayoutTest {
             onNodeWithText("Nevermind", substring = true, ignoreCase = true)
                 .assertExists()
                 .performClick()
-            events.assertEvent(AppLanguageScreen.Event.DismissConfirmDialog)
+            events.assertEvent(UiEvent.DismissConfirmDialog)
         }
     }
     // endregion Confirm Dialog

@@ -25,6 +25,8 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -110,7 +112,7 @@ class AppLanguagePresenterTest {
     @Test
     fun `Event - NavigateBack`() = runTest {
         presenter.test {
-            awaitItem().eventSink(AppLanguageScreen.Event.NavigateBack)
+            awaitItem().eventSink(UiEvent.NavigateBack)
             navigator.awaitPop()
         }
     }
@@ -120,7 +122,7 @@ class AppLanguagePresenterTest {
     @Test
     fun `Event - SelectLanguage`() = runTest {
         presenter.test {
-            awaitItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.FRENCH))
+            awaitItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
 
             assertEquals(Locale.FRENCH, awaitItem().selectedLanguage)
         }
@@ -129,7 +131,7 @@ class AppLanguagePresenterTest {
     @Test
     fun `Event - SelectLanguage - Selected app language`() = runTest {
         presenter.test {
-            awaitItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.ENGLISH))
+            awaitItem().eventSink(UiEvent.SelectLanguage(Locale.ENGLISH))
             navigator.awaitPop()
         }
     }
@@ -139,12 +141,12 @@ class AppLanguagePresenterTest {
     @Test
     fun `Event - ConfirmLanguage`() = runTest {
         presenter.test {
-            expectMostRecentItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.FRENCH))
+            expectMostRecentItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
 
             with(expectMostRecentItem()) {
                 val selectedLanguage = assertNotNull(selectedLanguage)
                 navigator.assertPopIsEmpty()
-                eventSink(AppLanguageScreen.Event.ConfirmLanguage(selectedLanguage))
+                eventSink(UiEvent.ConfirmLanguage(selectedLanguage))
             }
 
             navigator.awaitPop()
@@ -158,11 +160,11 @@ class AppLanguagePresenterTest {
     @Test
     fun `Event - DismissConfirmDialog`() = runTest {
         presenter.test {
-            expectMostRecentItem().eventSink(AppLanguageScreen.Event.SelectLanguage(Locale.FRENCH))
+            expectMostRecentItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
 
             with(expectMostRecentItem()) {
                 assertNotNull(selectedLanguage)
-                eventSink(AppLanguageScreen.Event.DismissConfirmDialog)
+                eventSink(UiEvent.DismissConfirmDialog)
             }
 
             assertNull(expectMostRecentItem().selectedLanguage)

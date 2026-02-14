@@ -50,7 +50,8 @@ import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
-import org.cru.godtools.ui.languages.app.AppLanguageScreen.Event
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
@@ -58,7 +59,7 @@ internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(AppLanguageScreen::class, SingletonComponent::class)
-internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifier = Modifier) {
+internal fun AppLanguageLayout(state: UiState, modifier: Modifier = Modifier) {
     val eventSink by rememberUpdatedState(state.eventSink)
     var languageQuery by state.languageQuery
 
@@ -74,7 +75,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
                         onExpandedChange = {},
                         leadingIcon = {
                             IconButton(
-                                onClick = { eventSink(Event.NavigateBack) },
+                                onClick = { eventSink(UiEvent.NavigateBack) },
                                 modifier = Modifier.testTag(TEST_TAG_ACTION_BACK),
                             ) {
                                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
@@ -119,7 +120,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
 
                 ListItem(
                     headlineContent = { LanguageName(lang) },
-                    modifier = Modifier.clickable { eventSink(Event.SelectLanguage(lang)) }
+                    modifier = Modifier.clickable { eventSink(UiEvent.SelectLanguage(lang)) }
                 )
             }
         }
@@ -129,7 +130,7 @@ internal fun AppLanguageLayout(state: AppLanguageScreen.State, modifier: Modifie
 }
 
 @Composable
-private fun ConfirmAppLanguageDialog(state: AppLanguageScreen.State) {
+private fun ConfirmAppLanguageDialog(state: UiState) {
     val language = state.selectedLanguage
     val eventSink by rememberUpdatedState(state.eventSink)
 
@@ -153,15 +154,15 @@ private fun ConfirmAppLanguageDialog(state: AppLanguageScreen.State) {
             },
             confirmButton = {
                 TextButton(
-                    onClick = { eventSink(Event.ConfirmLanguage(language)) }
+                    onClick = { eventSink(UiEvent.ConfirmLanguage(language)) }
                 ) { Text(stringResource(R.string.language_settings_app_language_dialog_confirm)) }
             },
             dismissButton = {
-                TextButton(onClick = { eventSink(Event.DismissConfirmDialog) }) {
+                TextButton(onClick = { eventSink(UiEvent.DismissConfirmDialog) }) {
                     Text(stringResource(R.string.language_settings_app_language_dialog_dismiss))
                 }
             },
-            onDismissRequest = { eventSink(Event.DismissConfirmDialog) },
+            onDismissRequest = { eventSink(UiEvent.DismissConfirmDialog) },
         )
     }
 }
