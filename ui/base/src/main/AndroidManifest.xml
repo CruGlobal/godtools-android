@@ -13,5 +13,10 @@
                 <data android:host="godtools.page.link" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="org.cru.godtools.base.ui.circuit.CircuitActivity"
+            android:exported="false"
+            android:screenOrientation="@integer/default_screen_orientation" />
     </application>
 </manifest>

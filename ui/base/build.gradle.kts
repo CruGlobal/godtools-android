@@ -28,6 +28,7 @@ dependencies {
     api(libs.androidx.appcompat)
     compileOnly(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.compose.material3)
@@ -44,6 +45,7 @@ dependencies {
 
     api(libs.eventbus)
     api(libs.materialComponents)
+    implementation(libs.circuitx.android)
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.youtubePlayer)
