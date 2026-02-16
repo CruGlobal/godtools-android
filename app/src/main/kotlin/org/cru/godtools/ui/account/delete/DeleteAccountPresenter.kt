@@ -8,6 +8,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.retained.rememberRetained
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -16,23 +18,36 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.cru.godtools.account.GodToolsAccountManager
-import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
 
 class DeleteAccountPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
     private val accountManager: GodToolsAccountManager,
-) : Presenter<DeleteAccountScreen.State> {
+) : Presenter<DeleteAccountPresenter.UiState> {
+    sealed interface UiState : CircuitUiState {
+        data class Display(override val eventSink: (UiEvent) -> Unit = {}) : UiState
+        data class Deleting(override val eventSink: (UiEvent) -> Unit = {}) : UiState
+        data class Error(override val eventSink: (UiEvent) -> Unit = {}) : UiState
+
+        val eventSink: (UiEvent) -> Unit
+    }
+
+    sealed interface UiEvent : CircuitUiEvent {
+        data object DeleteAccount : UiEvent
+        data object ClearError : UiEvent
+        data object Close : UiEvent
+    }
+
     @Composable
-    override fun present(): DeleteAccountScreen.State {
+    override fun present(): UiState {
         val coroutineScope = rememberCoroutineScope()
 
         var deleting by remember { mutableStateOf(false) }
         var error by rememberRetained { mutableStateOf(false) }
 
-        val eventSink: (Event) -> Unit = remember {
+        val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    Event.DeleteAccount -> {
+                    UiEvent.DeleteAccount -> {
                         deleting = true
                         coroutineScope.launch {
                             if (accountManager.deleteAccount()) {
@@ -44,17 +59,17 @@ class DeleteAccountPresenter @AssistedInject constructor(
                         }
                     }
 
-                    Event.ClearError -> error = false
+                    UiEvent.ClearError -> error = false
 
-                    Event.Close -> navigator.pop()
+                    UiEvent.Close -> navigator.pop()
                 }
             }
         }
 
         return when {
-            error -> DeleteAccountScreen.State.Error(eventSink)
-            deleting -> DeleteAccountScreen.State.Deleting(eventSink)
-            else -> DeleteAccountScreen.State.Display(eventSink)
+            error -> UiState.Error(eventSink)
+            deleting -> UiState.Deleting(eventSink)
+            else -> UiState.Display(eventSink)
         }
     }
 

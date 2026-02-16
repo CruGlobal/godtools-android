@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.ui"
 
-    configureCompose(project)
+    configureCompose(project, enableCircuit = true)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
@@ -28,6 +28,7 @@ dependencies {
     api(libs.androidx.appcompat)
     compileOnly(libs.androidx.fragment.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.compose.material3)
@@ -44,6 +45,8 @@ dependencies {
 
     api(libs.eventbus)
     api(libs.materialComponents)
+    implementation(libs.circuitx.android)
+    implementation(libs.circuitx.gesture.navigation)
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.youtubePlayer)

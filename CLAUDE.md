@@ -74,6 +74,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Image loading:** Coil.
 - **Dependency versions:** Centralized in `gradle/libs.versions.toml` (Gradle version catalog).
 
+## Pre-Commit Checks
+
+Always run ktlintCheck before committing changes:
+```bash
+./gradlew :build-logic:ktlintCheck ktlintCheck
+```
+
 ## Code Style
 
 Enforced via ktlint with `android_studio` code style. Key settings from `.editorconfig`:

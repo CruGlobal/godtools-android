@@ -1,7 +1,7 @@
-package org.cru.godtools.ui.account.delete
+package org.cru.godtools.base.ui.circuit.screen
 
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object DeleteAccountScreen : Screen
+data object AppLanguageScreen : Screen

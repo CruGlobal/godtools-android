@@ -57,16 +57,17 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawe
 import org.cru.godtools.R
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.appLanguage
+import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
-import org.cru.godtools.ui.account.delete.startDeleteAccountActivity
+import org.cru.godtools.ui.account.delete.DeleteAccountScreen
 import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
-import org.cru.godtools.ui.languages.startLanguageSettingsActivity
+import org.cru.godtools.ui.languages.LanguageSettingsScreen
 import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
@@ -146,7 +147,7 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
                 label = { Text(stringResource(R.string.menu_language_settings)) },
                 selected = false,
                 onClick = {
-                    context.startLanguageSettingsActivity()
+                    context.startCircuitActivity(LanguageSettingsScreen)
                     eventSink(Event.DismissDrawer)
                 }
             )
@@ -196,7 +197,7 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
                         label = { Text(stringResource(R.string.menu_account_delete)) },
                         selected = false,
                         onClick = {
-                            context.startDeleteAccountActivity()
+                            context.startCircuitActivity(DeleteAccountScreen)
                             eventSink(Event.DismissDrawer)
                         },
                     )

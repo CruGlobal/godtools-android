@@ -2,12 +2,15 @@ package org.cru.godtools.ui.languages.app
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -17,32 +20,49 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.util.filterByDisplayAndNativeName
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.base.util.getPrimaryCollator
+import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
 
 class AppLanguagePresenter @AssistedInject constructor(
     @param:ApplicationContext
     private val context: Context,
     private val settings: Settings,
     @Assisted private val navigator: Navigator,
-) : Presenter<AppLanguageScreen.State> {
+) : Presenter<UiState> {
+    data class UiState(
+        val languages: ImmutableList<Locale> = persistentListOf(),
+        val languageQuery: MutableState<String> = mutableStateOf(""),
+        val selectedLanguage: Locale? = null,
+        val eventSink: (UiEvent) -> Unit = {}
+    ) : CircuitUiState
+
+    sealed interface UiEvent : CircuitUiEvent {
+        data object NavigateBack : UiEvent
+        data class SelectLanguage(val language: Locale) : UiEvent
+        data class ConfirmLanguage(val language: Locale) : UiEvent
+        data object DismissConfirmDialog : UiEvent
+    }
+
     @Composable
-    override fun present(): AppLanguageScreen.State {
+    override fun present(): UiState {
         val appLocale by settings.produceAppLocaleState()
         val languageQuery = remember { mutableStateOf("") }
         var confirmLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
 
-        val eventSink: (AppLanguageScreen.Event) -> Unit = remember {
+        val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    AppLanguageScreen.Event.NavigateBack -> navigator.pop()
+                    UiEvent.NavigateBack -> navigator.pop()
 
-                    is AppLanguageScreen.Event.SelectLanguage -> {
+                    is UiEvent.SelectLanguage -> {
                         if (it.language == appLocale) {
                             navigator.pop()
                         } else {
@@ -50,18 +70,18 @@ class AppLanguagePresenter @AssistedInject constructor(
                         }
                     }
 
-                    is AppLanguageScreen.Event.ConfirmLanguage -> {
+                    is UiEvent.ConfirmLanguage -> {
                         settings.appLanguage = it.language
                         confirmLanguage = null
                         navigator.pop()
                     }
 
-                    AppLanguageScreen.Event.DismissConfirmDialog -> confirmLanguage = null
+                    UiEvent.DismissConfirmDialog -> confirmLanguage = null
                 }
             }
         }
 
-        return AppLanguageScreen.State(
+        return UiState(
             languages = rememberLanguages(appLocale, languageQuery.value),
             languageQuery = languageQuery,
             selectedLanguage = confirmLanguage,

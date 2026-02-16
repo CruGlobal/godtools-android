@@ -19,8 +19,8 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.ui.drawer.putDrawerViewModel
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -32,8 +32,8 @@ class LanguageSettingsLayoutTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val events = TestEventSink<Event>()
-    private val state = State(appLanguage = Locale.ENGLISH, eventSink = events)
+    private val events = TestEventSink<UiEvent>()
+    private val state = UiState(appLanguage = Locale.ENGLISH, eventSink = events)
 
     @BeforeTest
     fun setup() {
@@ -55,7 +55,7 @@ class LanguageSettingsLayoutTest {
                 .performClick()
         }
 
-        events.assertEvent(Event.NavigateUp)
+        events.assertEvent(UiEvent.NavigateUp)
     }
 
     @Test
@@ -72,7 +72,7 @@ class LanguageSettingsLayoutTest {
                 .performClick()
         }
 
-        events.assertEvent(Event.AppLanguage)
+        events.assertEvent(UiEvent.AppLanguage)
     }
 
     @Test
@@ -89,6 +89,6 @@ class LanguageSettingsLayoutTest {
                 .performClick()
         }
 
-        events.assertEvent(Event.DownloadableLanguages)
+        events.assertEvent(UiEvent.DownloadableLanguages)
     }
 }
