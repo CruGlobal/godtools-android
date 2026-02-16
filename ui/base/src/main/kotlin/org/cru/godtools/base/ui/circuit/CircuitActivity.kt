@@ -23,6 +23,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private const val EXTRA_SCREEN = "screen"
 
+fun Context.startCircuitActivity(screen: Screen) = startActivity(createCircuitActivityIntent(screen))
 fun Context.createCircuitActivityIntent(screen: Screen) = Intent(this, CircuitActivity::class.java)
     .putExtra(EXTRA_SCREEN, screen as Parcelable)
 

@@ -131,13 +131,6 @@
         </activity>
 
         <activity
-            android:name=".ui.languages.LanguageSettingsActivity"
-            android:exported="false"
-            android:label="@string/title_language_settings"
-            android:parentActivityName=".ui.dashboard.DashboardActivity"
-            android:screenOrientation="@integer/default_screen_orientation" />
-
-        <activity
             android:name=".article.ui.ArticlesActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
