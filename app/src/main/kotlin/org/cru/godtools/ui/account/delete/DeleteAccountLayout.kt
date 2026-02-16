@@ -35,8 +35,8 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
-import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
-import org.cru.godtools.ui.account.delete.DeleteAccountScreen.State
+import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiEvent
+import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiState
 
 private val MARGIN_HORIZONTAL = 32.dp
 
@@ -49,7 +49,7 @@ internal const val TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM = "error_dialog_button_c
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(DeleteAccountScreen::class, SingletonComponent::class)
-fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
+fun DeleteAccountLayout(state: UiState, modifier: Modifier = Modifier) {
     DeleteAccountError(state)
 
     Scaffold(modifier = modifier) {
@@ -65,7 +65,7 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { state.eventSink(Event.Close) },
+                        onClick = { state.eventSink(UiEvent.Close) },
                         modifier = Modifier.testTag(TEST_TAG_ICON_CLOSE)
                     ) {
                         Icon(Icons.Default.Close, null)
@@ -97,10 +97,10 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
                     .align(Alignment.Start)
             )
 
-            val actionsEnabled = state !is State.Deleting && state !is State.Error
+            val actionsEnabled = state !is UiState.Deleting && state !is UiState.Error
             OutlinedButton(
                 enabled = actionsEnabled,
-                onClick = { state.eventSink(Event.DeleteAccount) },
+                onClick = { state.eventSink(UiEvent.DeleteAccount) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
@@ -110,7 +110,7 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
             }
             Button(
                 enabled = actionsEnabled,
-                onClick = { state.eventSink(Event.Close) },
+                onClick = { state.eventSink(UiEvent.Close) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
@@ -124,19 +124,19 @@ fun DeleteAccountLayout(state: State, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun DeleteAccountError(state: State) {
-    if (state is State.Error) {
+private fun DeleteAccountError(state: UiState) {
+    if (state is UiState.Error) {
         AlertDialog(
             text = { Text(stringResource(R.string.account_delete_error)) },
             confirmButton = {
                 TextButton(
-                    onClick = { state.eventSink(Event.ClearError) },
+                    onClick = { state.eventSink(UiEvent.ClearError) },
                     modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM),
                 ) {
                     Text(stringResource(R.string.account_delete_error_dismiss))
                 }
             },
-            onDismissRequest = { state.eventSink(Event.ClearError) },
+            onDismissRequest = { state.eventSink(UiEvent.ClearError) },
             modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG),
         )
     }

@@ -16,8 +16,8 @@ import kotlin.test.assertIs
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.account.GodToolsAccountManager
-import org.cru.godtools.ui.account.delete.DeleteAccountScreen.Event
-import org.cru.godtools.ui.account.delete.DeleteAccountScreen.State
+import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiEvent
+import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiState
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -39,10 +39,10 @@ class DeleteAccountPresenterTest {
     @Test
     fun `Delete Account - succeeds`() = runTest {
         presenter.test {
-            assertIs<State.Display>(awaitItem())
-                .eventSink(Event.DeleteAccount)
+            assertIs<UiState.Display>(awaitItem())
+                .eventSink(UiEvent.DeleteAccount)
 
-            assertIs<State.Deleting>(awaitItem())
+            assertIs<UiState.Deleting>(awaitItem())
             deleteAccountResponse.add(true)
             coVerify { accountManager.deleteAccount() }
             navigator.awaitPop()
@@ -56,17 +56,17 @@ class DeleteAccountPresenterTest {
     @Test
     fun `Delete Account - fails`() = runTest {
         presenter.test {
-            assertIs<State.Display>(awaitItem())
-                .eventSink(Event.DeleteAccount)
+            assertIs<UiState.Display>(awaitItem())
+                .eventSink(UiEvent.DeleteAccount)
 
-            assertIs<State.Deleting>(awaitItem())
+            assertIs<UiState.Deleting>(awaitItem())
             deleteAccountResponse.add(false)
             coVerify { accountManager.deleteAccount() }
 
-            assertIs<State.Error>(expectMostRecentItem())
-                .eventSink(Event.ClearError)
+            assertIs<UiState.Error>(expectMostRecentItem())
+                .eventSink(UiEvent.ClearError)
 
-            assertIs<State.Display>(awaitItem())
+            assertIs<UiState.Display>(awaitItem())
         }
 
         confirmVerified(accountManager)
@@ -77,8 +77,8 @@ class DeleteAccountPresenterTest {
         coEvery { accountManager.deleteAccount() } returns true
 
         presenter.test {
-            assertIs<State.Display>(awaitItem())
-                .eventSink(Event.Close)
+            assertIs<UiState.Display>(awaitItem())
+                .eventSink(UiEvent.Close)
             navigator.awaitPop()
             coVerify { accountManager wasNot Called }
         }
@@ -89,11 +89,11 @@ class DeleteAccountPresenterTest {
     @Test
     fun `Cancel Delete Account - While Deleting`() = runTest {
         presenter.test {
-            assertIs<State.Display>(awaitItem())
-                .eventSink(Event.DeleteAccount)
+            assertIs<UiState.Display>(awaitItem())
+                .eventSink(UiEvent.DeleteAccount)
 
-            assertIs<State.Deleting>(awaitItem())
-                .eventSink(Event.Close)
+            assertIs<UiState.Deleting>(awaitItem())
+                .eventSink(UiEvent.Close)
             coVerify { accountManager.deleteAccount() }
             navigator.awaitPop()
 
