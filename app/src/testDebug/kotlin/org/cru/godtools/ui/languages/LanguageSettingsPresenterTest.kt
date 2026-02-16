@@ -26,8 +26,6 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.drawer.DrawerMenuPresenter
-import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 import org.junit.runner.RunWith
@@ -44,9 +42,6 @@ class LanguageSettingsPresenterTest {
     private val navigator = FakeNavigator(LanguageSettingsScreen)
     private val languagesRepository: LanguagesRepository = mockk {
         every { getPinnedLanguagesFlow() } returns pinnedLanguages
-    }
-    private val drawerMenuPresenter: DrawerMenuPresenter = mockk {
-        everyComposable { present() } returns DrawerMenuScreen.State()
     }
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns this@LanguageSettingsPresenterTest.appLanguage
@@ -65,7 +60,6 @@ class LanguageSettingsPresenterTest {
             context = context,
             settings = settings,
             languagesRepository = languagesRepository,
-            drawerMenuPresenter = drawerMenuPresenter,
             navigator = navigator
         )
     }
