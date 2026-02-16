@@ -43,8 +43,8 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 
@@ -55,7 +55,7 @@ private const val SECTION_OFFLINE_LANGUAGES_BOTTOM = "offline_languages_bottom"
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @CircuitInject(LanguageSettingsScreen::class, SingletonComponent::class)
-internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier) {
+internal fun LanguageSettingsLayout(state: UiState, modifier: Modifier = Modifier) {
     RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.SETTINGS_LANGUAGES))
 
     val appLanguage by rememberUpdatedState(state.appLanguage)
@@ -70,7 +70,7 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
                 colors = GodToolsTheme.topAppBarColors,
                 navigationIcon = {
                     IconButton(
-                        onClick = { eventSink(Event.NavigateUp) },
+                        onClick = { eventSink(UiEvent.NavigateUp) },
                         modifier = Modifier.testTag(TEST_TAG_ACTION_BACK)
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
@@ -108,7 +108,7 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
                     modifier = Modifier.padding(top = 4.dp),
                 )
                 FilledTonalButton(
-                    onClick = { eventSink(Event.AppLanguage) },
+                    onClick = { eventSink(UiEvent.AppLanguage) },
                     colors = when {
                         GodToolsTheme.isLightColorSchemeActive -> ButtonDefaults.filledTonalButtonColors(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -165,7 +165,7 @@ internal fun LanguageSettingsLayout(state: State, modifier: Modifier = Modifier)
             }
             item(SECTION_OFFLINE_LANGUAGES_BOTTOM) {
                 Button(
-                    onClick = { eventSink(Event.DownloadableLanguages) },
+                    onClick = { eventSink(UiEvent.DownloadableLanguages) },
                     modifier = Modifier
                         .animateItem()
                         .padding(top = 24.dp)

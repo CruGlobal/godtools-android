@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.effects.ImpressionEffect
@@ -13,6 +15,8 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.util.Locale
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
@@ -22,8 +26,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.State
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
@@ -32,20 +35,33 @@ class LanguageSettingsPresenter @AssistedInject constructor(
     private val settings: Settings,
     private val languagesRepository: LanguagesRepository,
     @Assisted private val navigator: Navigator,
-) : Presenter<State> {
+) : Presenter<UiState> {
+    data class UiState(
+        val appLanguage: Locale,
+        val appLanguages: Int = 0,
+        val downloadedLanguages: ImmutableList<Language> = persistentListOf(),
+        val eventSink: (UiEvent) -> Unit = {},
+    ) : CircuitUiState
+
+    interface UiEvent : CircuitUiEvent {
+        data object NavigateUp : UiEvent
+        data object AppLanguage : UiEvent
+        data object DownloadableLanguages : UiEvent
+    }
+
     @Composable
-    override fun present(): State {
+    override fun present(): UiState {
         ImpressionEffect { settings.setFeatureDiscovered(Settings.FEATURE_LANGUAGE_SETTINGS) }
 
-        return State(
+        return UiState(
             appLanguage = settings.produceAppLocaleState().value,
             appLanguages = rememberAppLanguages(),
             downloadedLanguages = produceDownloadedLanguagesState().value,
             eventSink = {
                 when (it) {
-                    Event.NavigateUp -> navigator.pop()
-                    Event.AppLanguage -> navigator.goTo(AppLanguageScreen)
-                    Event.DownloadableLanguages -> navigator.goTo(DownloadableLanguagesScreen)
+                    UiEvent.NavigateUp -> navigator.pop()
+                    UiEvent.AppLanguage -> navigator.goTo(AppLanguageScreen)
+                    UiEvent.DownloadableLanguages -> navigator.goTo(DownloadableLanguagesScreen)
                 }
             }
         )

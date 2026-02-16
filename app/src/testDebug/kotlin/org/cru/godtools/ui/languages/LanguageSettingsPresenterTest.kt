@@ -26,7 +26,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.languages.LanguageSettingsScreen.Event
+import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -120,7 +120,7 @@ class LanguageSettingsPresenterTest {
     @Test
     fun `Event - AppLanguage`() = runTest {
         presenter.test {
-            expectMostRecentItem().eventSink(Event.AppLanguage)
+            expectMostRecentItem().eventSink(UiEvent.AppLanguage)
             assertEquals(AppLanguageScreen, navigator.awaitNextScreen())
         }
     }
@@ -130,7 +130,7 @@ class LanguageSettingsPresenterTest {
     @Test
     fun `Event - DownloadableLanguages`() = runTest {
         presenter.test {
-            expectMostRecentItem().eventSink(Event.DownloadableLanguages)
+            expectMostRecentItem().eventSink(UiEvent.DownloadableLanguages)
             assertEquals(DownloadableLanguagesScreen, navigator.awaitNextScreen())
         }
     }
