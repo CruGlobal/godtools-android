@@ -16,7 +16,7 @@
 
         <activity
             android:name="org.cru.godtools.base.ui.circuit.CircuitActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="@integer/default_screen_orientation" />
     </application>
 </manifest>

@@ -31,16 +31,19 @@ class CircuitActivity : BaseActivity() {
     @Inject
     internal lateinit var circuit: Circuit
 
+    @Inject
+    internal lateinit var deepLinkParsers: Set<@JvmSuppressWildcards CircuitDeepLinkParser>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val screen = intent.getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java) ?: return finish()
+        val initialScreens = intent.resolveInitialScreen()
 
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack(screen)
+                    val backStack = rememberSaveableBackStack(initialScreens)
                     val navigator = rememberAndroidScreenAwareNavigator(rememberCircuitNavigator(backStack), this)
                     NavigableCircuitContent(
                         navigator = navigator,
@@ -54,5 +57,13 @@ class CircuitActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun Intent.resolveInitialScreen(): List<Screen> {
+        val uri = data
+
+        return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
+            ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
+            ?: TODO("Show the DashboardScreen once it uses Circuit")
     }
 }

@@ -14,6 +14,9 @@ import dagger.multibindings.Multibinds
 @InstallIn(SingletonComponent::class)
 abstract class CircuitModule {
     @Multibinds
+    abstract fun circuitDeepLinkParsers(): Set<CircuitDeepLinkParser>
+
+    @Multibinds
     abstract fun presenterFactories(): Set<Presenter.Factory>
 
     @Multibinds
