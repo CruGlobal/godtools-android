@@ -63,7 +63,7 @@ import org.cru.godtools.shared.analytics.AnalyticsActionNames
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.startTutorialActivity
-import org.cru.godtools.ui.account.delete.startDeleteAccountActivity
+import org.cru.godtools.ui.account.delete.DeleteAccountScreen
 import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
@@ -197,7 +197,7 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
                         label = { Text(stringResource(R.string.menu_account_delete)) },
                         selected = false,
                         onClick = {
-                            context.startDeleteAccountActivity()
+                            context.startCircuitActivity(DeleteAccountScreen)
                             eventSink(Event.DismissDrawer)
                         },
                     )
