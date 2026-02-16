@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.remember
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -13,6 +14,7 @@ import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
+import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
@@ -40,7 +42,15 @@ class CircuitActivity : BaseActivity() {
                 GodToolsTheme {
                     val backStack = rememberSaveableBackStack(screen)
                     val navigator = rememberAndroidScreenAwareNavigator(rememberCircuitNavigator(backStack), this)
-                    NavigableCircuitContent(navigator, backStack)
+                    NavigableCircuitContent(
+                        navigator = navigator,
+                        backStack = backStack,
+                        decoratorFactory = remember(navigator) {
+                            GestureNavigationDecorationFactory(
+                                onBackInvoked = navigator::pop
+                            )
+                        }
+                    )
                 }
             }
         }

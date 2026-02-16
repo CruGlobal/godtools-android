@@ -46,6 +46,7 @@ dependencies {
     api(libs.eventbus)
     api(libs.materialComponents)
     implementation(libs.circuitx.android)
+    implementation(libs.circuitx.gesture.navigation)
     implementation(libs.dagger)
     implementation(libs.hilt)
     implementation(libs.youtubePlayer)
