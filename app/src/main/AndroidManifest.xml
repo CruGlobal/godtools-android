@@ -103,11 +103,9 @@
             android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
-            android:name=".ui.languages.LanguageSettingsActivity"
-            android:exported="true"
-            android:label="@string/title_language_settings"
-            android:parentActivityName=".ui.dashboard.DashboardActivity"
-            android:screenOrientation="@integer/default_screen_orientation">
+            android:name=".base.ui.circuit.CircuitActivity"
+            android:exported="true">
+            <!-- region Language Settings Deep Links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -129,7 +127,15 @@
                 <data android:host="${hostGodtoolsCustomUri}" />
                 <data android:path="/settings/language" />
             </intent-filter>
+            <!-- endregion Language Settings Deep Links -->
         </activity>
+
+        <activity
+            android:name=".ui.languages.LanguageSettingsActivity"
+            android:exported="false"
+            android:label="@string/title_language_settings"
+            android:parentActivityName=".ui.dashboard.DashboardActivity"
+            android:screenOrientation="@integer/default_screen_orientation" />
 
         <activity
             android:name=".article.ui.ArticlesActivity"
