@@ -47,7 +47,7 @@ private val tutorialBackgroundColor
     get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 @Composable
-internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
+internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
     val pages = remember { pageSet.pagesFor(locale) }
@@ -79,7 +79,8 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
             }
         },
         containerColor = tutorialBackgroundColor,
-        contentColor = MaterialTheme.colorScheme.onBackground
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        modifier = modifier,
     ) { insets ->
         HorizontalPager(
             key = { pages[it] },

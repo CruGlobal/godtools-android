@@ -125,5 +125,5 @@ fun Context.createQrCodeActivityPendingIntent(data: String): PendingIntent = Pen
         .toBundle()
 )
 
-fun Context.startQrCodeActivity(data: String) = startActivity(createQrCodeActivityIntent(data))
+fun Activity.startQrCodeActivity(data: String) = startActivity(createQrCodeActivityIntent(data))
 // endregion QRCodeActivity
