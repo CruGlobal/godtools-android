@@ -72,8 +72,6 @@ class TutorialPresenter @AssistedInject constructor(
             Action.ONBOARDING_CHANGE_LANGUAGE ->
                 navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
 
-            Action.ONBOARDING_WATCH_VIDEO -> navigator.goTo(YoutubePlayerScreen("RvhZ_wuxAgE"))
-
             Action.ONBOARDING_LAUNCH_ARTICLES -> {
                 eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
                 val locale = sequenceOf(context.appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()

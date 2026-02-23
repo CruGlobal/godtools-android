@@ -3,19 +3,22 @@ package org.cru.godtools.tutorial
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.slack.circuit.backstack.isEmpty
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
-import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
-import com.slack.circuitx.android.IntentScreen
+import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
+import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 private const val ARG_PAGE_SET = "pageSet"
 
@@ -38,33 +41,31 @@ class TutorialActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
-            CircuitCompositionLocals(circuit) {
-                val backStack = rememberSaveableBackStack(TutorialScreen(pageSet))
-                val navigator = rememberAndroidScreenAwareNavigator(
-                    rememberCircuitNavigator(backStack) { result ->
-                        setResult(
-                            when (result) {
-                                null -> RESULT_CANCELED
-                                is TutorialScreen.Result -> result.resultCode
-                                else -> RESULT_OK
-                            }
+            GodToolsTheme {
+                ContentWithOverlays {
+                    CircuitCompositionLocals(circuit) {
+                        val backStack = rememberSaveableBackStack(TutorialScreen(pageSet))
+                        val navigator = rememberAndroidScreenAwareNavigator(
+                            rememberCircuitNavigator(backStack) { result ->
+                                setResult(
+                                    when (result) {
+                                        null -> RESULT_CANCELED
+                                        is TutorialScreen.Result -> result.resultCode
+                                        else -> RESULT_OK
+                                    }
+                                )
+                                finish()
+                            },
+                            this
                         )
-                        finish()
-                    },
-                ) { screen ->
-                    when (screen) {
-                        is IntentScreen -> screen.startWith(this)
 
-                        is YoutubePlayerScreen -> {
-                            startYoutubePlayerActivity(screen.videoId)
-                            true
-                        }
+                        BackHandler(!backStack.isEmpty) { navigator.pop() }
 
-                        else -> false
+                        NavigableCircuitContent(navigator, backStack)
                     }
                 }
-                CircuitContent(TutorialScreen(pageSet), navigator)
             }
         }
     }

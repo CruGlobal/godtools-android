@@ -2,12 +2,8 @@
     <application>
         <activity
             android:name=".TutorialActivity"
-            android:screenOrientation="@integer/default_screen_orientation"
-            android:exported="false" />
-        <activity
-            android:name=".YoutubePlayerActivity"
-            android:exported="false"
             android:configChanges="orientation|screenLayout|screenSize"
-            android:theme="@style/Theme.GodTools.Modal" />
+            android:exported="false"
+            android:screenOrientation="@integer/default_screen_orientation" />
     </application>
 </manifest>
