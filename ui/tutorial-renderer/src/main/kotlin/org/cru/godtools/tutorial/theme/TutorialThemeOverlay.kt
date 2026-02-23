@@ -5,8 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.LineBreak
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
+/**
+ * Overlay the current Material 3 theme changing the lineBreak behavior to Heading
+ */
 @Composable
-internal fun GodToolsTutorialTheme(content: @Composable () -> Unit) = GodToolsTheme {
+internal fun TutorialThemeOverlay(content: @Composable () -> Unit) {
     val typography = MaterialTheme.typography
     MaterialTheme(
         typography = typography.copy(

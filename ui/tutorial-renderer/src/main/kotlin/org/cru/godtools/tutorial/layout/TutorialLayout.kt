@@ -43,7 +43,7 @@ import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
-import org.cru.godtools.tutorial.theme.GodToolsTutorialTheme
+import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
 
 // HACK: we are overriding the background color to be pure white because the animations assume the background is white
 private val tutorialBackgroundColor
@@ -64,7 +64,7 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
 
     RecordAnalyticsScreen(TutorialAnalyticsScreenEvent(pageSet, currentPage, pagerState.currentPage, locale))
 
-    GodToolsTutorialTheme {
+    TutorialThemeOverlay {
         Scaffold(
             topBar = {
                 TutorialAppBar(
