@@ -23,10 +23,8 @@ import org.cru.godtools.tutorial.layout.TutorialScreen
 
 private const val ARG_PAGE_SET = "pageSet"
 
-fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, TutorialActivity::class.java)
+internal fun Context.buildTutorialActivityIntent(pageSet: PageSet) = Intent(this, TutorialActivity::class.java)
     .putExtra(ARG_PAGE_SET, pageSet)
-
-fun Context.startTutorialActivity(pageSet: PageSet) = startActivity(buildTutorialActivityIntent(pageSet))
 
 @AndroidEntryPoint
 class TutorialActivity : AppCompatActivity() {

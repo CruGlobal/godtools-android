@@ -12,6 +12,7 @@ import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
+import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
@@ -44,17 +45,19 @@ class CircuitActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack(initialScreens)
-                    val navigator = rememberAndroidScreenAwareNavigator(rememberCircuitNavigator(backStack), this)
-                    NavigableCircuitContent(
-                        navigator = navigator,
-                        backStack = backStack,
-                        decoratorFactory = remember(navigator) {
-                            GestureNavigationDecorationFactory(
-                                onBackInvoked = navigator::pop
-                            )
-                        }
-                    )
+                    ContentWithOverlays {
+                        val backStack = rememberSaveableBackStack(initialScreens)
+                        val navigator = rememberAndroidScreenAwareNavigator(rememberCircuitNavigator(backStack), this)
+                        NavigableCircuitContent(
+                            navigator = navigator,
+                            backStack = backStack,
+                            decoratorFactory = remember(navigator) {
+                                GestureNavigationDecorationFactory(
+                                    onBackInvoked = navigator::pop
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -9,11 +9,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.tutorial.startTutorialActivity
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.greenrobot.eventbus.EventBus
 
 @Composable
@@ -26,7 +27,7 @@ internal fun TutorialFeaturesBanner(
     Banner(
         text = stringResource(R.string.tutorial_features_banner_text),
         primaryButton = stringResource(R.string.tutorial_features_banner_action_open),
-        primaryAction = { context.startTutorialActivity(PageSet.FEATURES) },
+        primaryAction = { context.startCircuitActivity(TutorialScreen(PageSet.FEATURES)) },
         secondaryButton = stringResource(R.string.tutorial_features_banner_action_dismiss),
         secondaryAction = { viewModel.dismiss() },
         modifier = modifier
