@@ -30,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -40,6 +42,8 @@ import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
+import org.cru.godtools.tutorial.theme.GodToolsTutorialTheme
 
 // HACK: we are overriding the background color to be pure white because the animations assume the background is white
 private val tutorialBackgroundColor
@@ -47,61 +51,67 @@ private val tutorialBackgroundColor
     get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 @Composable
-internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}, modifier: Modifier = Modifier) {
+@CircuitInject(TutorialScreen::class, SingletonComponent::class)
+fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
+    val pageSet = state.pageSet
+    val onTutorialAction: (Action) -> Unit = { state.eventSink(TutorialPresenter.UiEvent.TutorialAction(it)) }
+
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
-    val pages = remember { pageSet.pagesFor(locale) }
+    val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
     val pagerState = rememberPagerState { pages.size }
     val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }
 
     RecordAnalyticsScreen(TutorialAnalyticsScreenEvent(pageSet, currentPage, pagerState.currentPage, locale))
 
-    Scaffold(
-        topBar = {
-            TutorialAppBar(
-                pageSet,
-                currentPage = { currentPage },
-                onTutorialAction = onTutorialAction
-            )
-        },
-        bottomBar = {
-            if (pageSet.showPageIndicator) {
-                HorizontalPagerIndicator(
-                    pagerState = pagerState,
-                    pageCount = pagerState.pageCount,
-                    activeColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .fillMaxWidth()
-                        .height(dimensionResource(R.dimen.tutorial_indicator_height))
-                        .wrapContentSize()
+    GodToolsTutorialTheme {
+        Scaffold(
+            topBar = {
+                TutorialAppBar(
+                    pageSet,
+                    currentPage = { currentPage },
+                    onTutorialAction = onTutorialAction
+                )
+            },
+            bottomBar = {
+                if (pageSet.showPageIndicator) {
+                    HorizontalPagerIndicator(
+                        pagerState = pagerState,
+                        pageCount = pagerState.pageCount,
+                        activeColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .navigationBarsPadding()
+                            .fillMaxWidth()
+                            .height(dimensionResource(R.dimen.tutorial_indicator_height))
+                            .wrapContentSize()
+                    )
+                }
+            },
+            containerColor = tutorialBackgroundColor,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier,
+        ) { insets ->
+            HorizontalPager(
+                key = { pages[it] },
+                state = pagerState,
+                modifier = Modifier
+                    .padding(insets)
+                    .consumeWindowInsets(insets)
+                    .fillMaxSize()
+            ) { i ->
+                TutorialPageLayout(
+                    pages[i],
+                    nextPage = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(
+                                i + 1,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+                        }
+                    },
+                    onTutorialAction = onTutorialAction
                 )
             }
-        },
-        containerColor = tutorialBackgroundColor,
-        contentColor = MaterialTheme.colorScheme.onBackground,
-        modifier = modifier,
-    ) { insets ->
-        HorizontalPager(
-            key = { pages[it] },
-            state = pagerState,
-            modifier = Modifier
-                .padding(insets)
-                .consumeWindowInsets(insets)
-                .fillMaxSize()
-        ) { i ->
-            TutorialPageLayout(
-                pages[i],
-                nextPage = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(
-                            i + 1,
-                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                        )
-                    }
-                },
-                onTutorialAction = onTutorialAction
-            )
         }
     }
 }

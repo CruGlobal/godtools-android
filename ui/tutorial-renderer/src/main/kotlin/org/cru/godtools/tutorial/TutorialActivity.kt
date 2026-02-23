@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.tutorial.layout.TutorialScreen
 
 private const val ARG_PAGE_SET = "pageSet"
 

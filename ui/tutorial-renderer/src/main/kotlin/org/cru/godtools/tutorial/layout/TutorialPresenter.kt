@@ -1,4 +1,4 @@
-package org.cru.godtools.tutorial
+package org.cru.godtools.tutorial.layout
 
 import android.app.Activity
 import android.content.Context
@@ -24,6 +24,9 @@ import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
+import org.cru.godtools.tutorial.Action
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.TutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.greenrobot.eventbus.EventBus
 import org.cru.godtools.base.ui.dashboard.Page as DashboardPage

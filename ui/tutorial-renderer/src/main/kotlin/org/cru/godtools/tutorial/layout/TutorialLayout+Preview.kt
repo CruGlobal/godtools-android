@@ -2,21 +2,21 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 
 @Composable
 @Preview(showBackground = true)
-private fun OnboardingTutorial() = GodToolsTheme { TutorialLayout(PageSet.ONBOARDING) }
+private fun OnboardingTutorial() = TutorialLayout(UiState(PageSet.ONBOARDING))
 
 @Composable
 @Preview(showBackground = true)
-private fun FeaturesTutorial() = GodToolsTheme { TutorialLayout(PageSet.FEATURES) }
+private fun FeaturesTutorial() = TutorialLayout(UiState(PageSet.FEATURES))
 
 @Composable
 @Preview(showBackground = true)
-private fun TipsTutorial() = GodToolsTheme { TutorialLayout(PageSet.TIPS) }
+private fun TipsTutorial() = TutorialLayout(UiState(PageSet.TIPS))
 
 @Composable
 @Preview(showBackground = true)
-private fun LiveShareTutorial() = GodToolsTheme { TutorialLayout(PageSet.LIVE_SHARE) }
+private fun LiveShareTutorial() = TutorialLayout(UiState(PageSet.LIVE_SHARE))
