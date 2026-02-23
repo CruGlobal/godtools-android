@@ -3,11 +3,12 @@ package org.cru.godtools.tutorial
 import java.util.Locale
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAction
 import org.cru.godtools.base.Settings
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 
 enum class PageSet(
     internal val feature: String? = null,
     private val pages: List<Page>,
-    internal val menu: List<Pair<AppBarAction, Action>> = emptyList(),
+    internal val menu: List<Pair<AppBarAction, UiEvent>> = emptyList(),
     internal val showUpNavigation: Boolean = true,
     internal val showPageIndicator: Boolean = true,
     internal val analyticsBaseScreenName: String,
@@ -15,7 +16,7 @@ enum class PageSet(
     ONBOARDING(
         feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
         showUpNavigation = false,
-        menu = listOf(AppBarAction(titleRes = R.string.tutorial_onboarding_action_skip) to Action.ONBOARDING_SKIP),
+        menu = listOf(AppBarAction(titleRes = R.string.tutorial_onboarding_action_skip) to UiEvent.Onboarding.Skip),
         analyticsBaseScreenName = "onboarding",
         pages = listOf(
             Page.ONBOARDING_WELCOME,
@@ -36,7 +37,7 @@ enum class PageSet(
         ),
     ),
     LIVE_SHARE(
-        menu = listOf(AppBarAction(titleRes = R.string.tutorial_live_share_action_skip) to Action.LIVE_SHARE_SKIP),
+        menu = listOf(AppBarAction(titleRes = R.string.tutorial_live_share_action_skip) to UiEvent.LiveShare.Skip),
         // TODO: we probably need a better analytics base screen name
         analyticsBaseScreenName = "tutorial-live-share",
         pages = listOf(
@@ -53,7 +54,7 @@ enum class PageSet(
         showPageIndicator = false,
     ),
     TIPS(
-        menu = listOf(AppBarAction(titleRes = R.string.tutorial_tips_action_skip) to Action.TIPS_SKIP),
+        menu = listOf(AppBarAction(titleRes = R.string.tutorial_tips_action_skip) to UiEvent.Tips.Skip),
         analyticsBaseScreenName = "tutorial-tips",
         pages = listOf(
             Page.TIPS_LEARN,

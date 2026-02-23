@@ -43,9 +43,9 @@ import com.slack.circuit.overlay.LocalOverlayHost
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
 
 @Composable
@@ -53,7 +53,7 @@ import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
 internal fun TutorialOnboardingWelcomeLayout(
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Action) -> Unit = {},
+    eventSink: (UiEvent) -> Unit = {},
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = modifier
@@ -79,7 +79,7 @@ internal fun TutorialOnboardingWelcomeLayout(
     // endregion Welcome animation (Transition model)
 
     FilledTonalButton(
-        onClick = { onTutorialAction(Action.ONBOARDING_CHANGE_LANGUAGE) },
+        onClick = { eventSink(UiEvent.Onboarding.ChangeLanguage) },
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,

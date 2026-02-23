@@ -3,8 +3,8 @@ package org.cru.godtools.tutorial.layout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.features.TutorialFeaturesLayout
 import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
 import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
@@ -18,7 +18,7 @@ internal fun TutorialPageLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Action) -> Unit = {},
+    eventSink: (UiEvent) -> Unit = {},
 ) = when (page) {
     Page.FEATURES_LESSONS,
     Page.FEATURES_TOOLS,
@@ -27,7 +27,7 @@ internal fun TutorialPageLayout(
     Page.FEATURES_FINAL -> TutorialFeaturesLayout(
         page,
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
+        eventSink = eventSink,
         modifier = modifier,
     )
 
@@ -36,13 +36,13 @@ internal fun TutorialPageLayout(
     Page.LIVE_SHARE_START -> TutorialLiveShareLayout(
         page,
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
+        eventSink = eventSink,
         modifier = modifier,
     )
 
     Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
+        eventSink = eventSink,
         modifier = modifier,
     )
 
@@ -51,7 +51,7 @@ internal fun TutorialPageLayout(
     Page.ONBOARDING_SHARE -> TutorialOnboardingLayout(
         page,
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
+        eventSink = eventSink,
         modifier = modifier,
     )
 
@@ -60,7 +60,7 @@ internal fun TutorialPageLayout(
     Page.TIPS_START -> TutorialTipsLayout(
         page,
         nextPage = nextPage,
-        onTutorialAction = onTutorialAction,
+        eventSink = eventSink,
         modifier = modifier,
     )
 }

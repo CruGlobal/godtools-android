@@ -26,6 +26,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
@@ -37,11 +38,11 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAc
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
 
@@ -54,7 +55,7 @@ private val tutorialBackgroundColor
 @CircuitInject(TutorialScreen::class, SingletonComponent::class)
 fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
     val pageSet = state.pageSet
-    val onTutorialAction: (Action) -> Unit = { state.eventSink(TutorialPresenter.UiEvent.TutorialAction(it)) }
+    val eventSink by rememberUpdatedState(state.eventSink)
 
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
@@ -70,7 +71,7 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
                 TutorialAppBar(
                     pageSet,
                     currentPage = { currentPage },
-                    onTutorialAction = onTutorialAction
+                    eventSink = eventSink,
                 )
             },
             bottomBar = {
@@ -109,7 +110,7 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
                             )
                         }
                     },
-                    onTutorialAction = onTutorialAction
+                    eventSink = eventSink,
                 )
             }
         }
@@ -121,12 +122,12 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
 private inline fun TutorialAppBar(
     pageSet: PageSet,
     crossinline currentPage: @DisallowComposableCalls () -> Page,
-    crossinline onTutorialAction: (Action) -> Unit,
+    crossinline eventSink: (UiEvent) -> Unit,
 ) = TopAppBar(
     title = {},
     navigationIcon = {
         if (pageSet.showUpNavigation) {
-            IconButton(onClick = { onTutorialAction(Action.BACK) }) {
+            IconButton(onClick = { eventSink(UiEvent.Back) }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
             }
         }
@@ -134,8 +135,8 @@ private inline fun TutorialAppBar(
     actions = {
         val showMenu by remember { derivedStateOf { currentPage().showMenu } }
         if (showMenu) {
-            pageSet.menu.forEach { (item, action) ->
-                AppBarActionButton(item, onClick = { onTutorialAction(action) })
+            pageSet.menu.forEach { (item, event) ->
+                AppBarActionButton(item, onClick = { eventSink(event) })
             }
         }
     },

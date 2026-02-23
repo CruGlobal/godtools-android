@@ -24,7 +24,6 @@ import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
@@ -52,7 +51,31 @@ class TutorialPresenter @AssistedInject constructor(
     data class UiState(val pageSet: PageSet, val eventSink: (UiEvent) -> Unit = {}) : CircuitUiState
 
     sealed interface UiEvent : CircuitUiEvent {
-        data class TutorialAction(val action: Action) : UiEvent
+        data object Back : UiEvent
+
+        sealed interface Features : UiEvent {
+            data object Finish : Features
+        }
+
+        sealed interface LiveShare : UiEvent {
+            data object Skip : LiveShare
+            data object QrCode : LiveShare
+            data object Finish : LiveShare
+        }
+
+        sealed interface Onboarding : UiEvent {
+            data object ChangeLanguage : Onboarding
+            data object Skip : Onboarding
+            data object LaunchArticles : Onboarding
+            data object LaunchLessons : Onboarding
+            data object LaunchTools : Onboarding
+            data object Finish : Onboarding
+        }
+
+        sealed interface Tips : UiEvent {
+            data object Skip : Tips
+            data object Finish : Tips
+        }
     }
 
     @Composable
@@ -61,57 +84,51 @@ class TutorialPresenter @AssistedInject constructor(
             screen.pageSet.feature?.let { settings.setFeatureDiscovered(it) }
         }
 
-        return UiState(screen.pageSet) {
-            when (it) {
-                is UiEvent.TutorialAction -> handleAction(it.action)
+        return UiState(screen.pageSet) { event ->
+            when (event) {
+                UiEvent.Back -> navigator.pop(TutorialScreen.Result(Activity.RESULT_CANCELED))
+
+                UiEvent.Onboarding.ChangeLanguage ->
+                    navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
+
+                UiEvent.Onboarding.LaunchArticles -> {
+                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
+                    val locale = sequenceOf(context.appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
+                        .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
+                    navigator.goTo(IntentScreen(context.createArticlesIntent("es", locale)))
+                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                }
+
+                UiEvent.Onboarding.LaunchLessons -> {
+                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
+                    navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.LESSONS)))
+                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                }
+
+                UiEvent.Onboarding.LaunchTools -> {
+                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
+                    navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.ALL_TOOLS)))
+                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                }
+
+                UiEvent.Onboarding.Skip -> {
+                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
+                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                }
+
+                UiEvent.Onboarding.Finish -> {
+                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
+                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                }
+
+                UiEvent.LiveShare.QrCode -> navigator.pop(TutorialScreen.Result(TutorialActivity.RESULT_SHOW_QR_CODE))
+
+                UiEvent.Features.Finish,
+                UiEvent.LiveShare.Skip,
+                UiEvent.LiveShare.Finish,
+                UiEvent.Tips.Skip,
+                UiEvent.Tips.Finish -> navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
             }
-        }
-    }
-
-    private fun handleAction(action: Action) {
-        when (action) {
-            Action.BACK -> navigator.pop(TutorialScreen.Result(Activity.RESULT_CANCELED))
-
-            Action.ONBOARDING_CHANGE_LANGUAGE ->
-                navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
-
-            Action.ONBOARDING_LAUNCH_ARTICLES -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
-                val locale = sequenceOf(context.appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
-                    .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
-                navigator.goTo(IntentScreen(context.createArticlesIntent("es", locale)))
-                navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
-            }
-
-            Action.ONBOARDING_LAUNCH_LESSONS -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
-                navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.LESSONS)))
-                navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
-            }
-
-            Action.ONBOARDING_LAUNCH_TOOLS -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
-                navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.ALL_TOOLS)))
-                navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
-            }
-
-            Action.ONBOARDING_SKIP -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
-                navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
-            }
-
-            Action.ONBOARDING_FINISH -> {
-                eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
-                navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
-            }
-
-            Action.LIVE_SHARE_QR_CODE -> navigator.pop(TutorialScreen.Result(TutorialActivity.RESULT_SHOW_QR_CODE))
-
-            Action.FEATURES_FINISH,
-            Action.LIVE_SHARE_SKIP,
-            Action.LIVE_SHARE_FINISH,
-            Action.TIPS_SKIP,
-            Action.TIPS_FINISH -> navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
         }
     }
 
