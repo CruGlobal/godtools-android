@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial.layout
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +24,6 @@ import org.cru.godtools.base.ui.createArticlesIntent
 import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.TutorialActivity
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.greenrobot.eventbus.EventBus
 import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
@@ -86,7 +84,7 @@ class TutorialPresenter @AssistedInject constructor(
 
         return UiState(screen.pageSet) { event ->
             when (event) {
-                UiEvent.Back -> navigator.pop(TutorialScreen.Result(Activity.RESULT_CANCELED))
+                UiEvent.Back -> navigator.pop(TutorialScreen.Result.Canceled)
 
                 UiEvent.Onboarding.ChangeLanguage ->
                     navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
@@ -96,38 +94,38 @@ class TutorialPresenter @AssistedInject constructor(
                     val locale = sequenceOf(context.appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
                         .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
                     navigator.goTo(IntentScreen(context.createArticlesIntent("es", locale)))
-                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                    navigator.pop(TutorialScreen.Result.Finished)
                 }
 
                 UiEvent.Onboarding.LaunchLessons -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
                     navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.LESSONS)))
-                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                    navigator.pop(TutorialScreen.Result.Finished)
                 }
 
                 UiEvent.Onboarding.LaunchTools -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
                     navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.ALL_TOOLS)))
-                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                    navigator.pop(TutorialScreen.Result.Finished)
                 }
 
                 UiEvent.Onboarding.Skip -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
-                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                    navigator.pop(TutorialScreen.Result.Finished)
                 }
 
                 UiEvent.Onboarding.Finish -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
-                    navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                    navigator.pop(TutorialScreen.Result.Finished)
                 }
 
-                UiEvent.LiveShare.QrCode -> navigator.pop(TutorialScreen.Result(TutorialActivity.RESULT_SHOW_QR_CODE))
+                UiEvent.LiveShare.QrCode -> navigator.pop(TutorialScreen.Result.ShowQrCode)
 
                 UiEvent.Features.Finish,
                 UiEvent.LiveShare.Skip,
                 UiEvent.LiveShare.Finish,
                 UiEvent.Tips.Skip,
-                UiEvent.Tips.Finish -> navigator.pop(TutorialScreen.Result(Activity.RESULT_OK))
+                UiEvent.Tips.Finish -> navigator.pop(TutorialScreen.Result.Finished)
             }
         }
     }

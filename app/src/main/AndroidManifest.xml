@@ -147,10 +147,6 @@
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
         <activity
-            android:name=".tutorial.TutorialActivity"
-            android:parentActivityName=".ui.dashboard.DashboardActivity" />
-
-        <activity
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 

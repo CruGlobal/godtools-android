@@ -7,6 +7,9 @@ import org.cru.godtools.tutorial.PageSet
 
 @Parcelize
 data class TutorialScreen(val pageSet: PageSet) : Screen {
-    @Parcelize
-    data class Result(val resultCode: Int) : PopResult
+    sealed interface Result : PopResult {
+        @Parcelize data object Canceled : Result
+        @Parcelize data object Finished : Result
+        @Parcelize data object ShowQrCode : Result
+    }
 }

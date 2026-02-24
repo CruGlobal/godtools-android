@@ -1,9 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application>
-        <activity
-            android:name=".TutorialActivity"
-            android:configChanges="orientation|screenLayout|screenSize"
-            android:exported="false"
-            android:screenOrientation="@integer/default_screen_orientation" />
-    </application>
-</manifest>
