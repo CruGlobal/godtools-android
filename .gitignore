@@ -17,6 +17,9 @@ local.properties
 # Kotlin project ignores
 .kotlin/
 
+# Local Claude Code settings
+.claude/
+
 # Fabric/Crashlytics ignores
 com_crashlytics_export_strings.xml
 crashlytics-build.properties
