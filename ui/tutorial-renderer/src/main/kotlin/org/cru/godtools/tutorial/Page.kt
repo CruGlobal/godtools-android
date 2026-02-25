@@ -17,26 +17,6 @@ internal enum class Page(
     private val disabledLocales: Set<Locale> = emptySet(),
     val showMenu: Boolean = true,
 ) {
-    ONBOARDING_WELCOME(showMenu = false),
-    ONBOARDING_CONVERSATIONS(
-        title = R.string.tutorial_onboarding_conversations_headline,
-        content = R.string.tutorial_onboarding_conversations_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_guys
-    ),
-    ONBOARDING_PREPARE(
-        title = R.string.tutorial_onboarding_prepare_headline,
-        content = R.string.tutorial_onboarding_prepare_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_dog
-    ),
-    ONBOARDING_SHARE(
-        title = R.string.tutorial_onboarding_share_headline,
-        content = R.string.tutorial_onboarding_share_subhead,
-        action = R.string.tutorial_onboarding_action_start,
-        animation = R.raw.anim_tutorial_onboarding_distance,
-        showMenu = false
-    ),
     FEATURES_TOOLS(
         title = R.string.tutorial_features_tools_headline,
         content = R.string.tutorial_features_tools_subhead,

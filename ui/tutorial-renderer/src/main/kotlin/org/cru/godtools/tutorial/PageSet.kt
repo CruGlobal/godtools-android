@@ -13,18 +13,6 @@ enum class PageSet(
     internal val showPageIndicator: Boolean = true,
     internal val analyticsBaseScreenName: String,
 ) {
-    ONBOARDING(
-        feature = Settings.FEATURE_TUTORIAL_ONBOARDING,
-        showUpNavigation = false,
-        menu = listOf(AppBarAction(titleRes = R.string.tutorial_onboarding_action_skip) to UiEvent.Onboarding.Skip),
-        analyticsBaseScreenName = "onboarding",
-        pages = listOf(
-            Page.ONBOARDING_WELCOME,
-            Page.ONBOARDING_CONVERSATIONS,
-            Page.ONBOARDING_PREPARE,
-            Page.ONBOARDING_SHARE,
-        )
-    ),
     FEATURES(
         feature = Settings.FEATURE_TUTORIAL_FEATURES,
         analyticsBaseScreenName = "tutorial",
@@ -64,8 +52,4 @@ enum class PageSet(
     );
 
     internal fun pagesFor(locale: Locale) = pages.filter { it.supportsLocale(locale) }
-
-    companion object {
-        val DEFAULT = ONBOARDING
-    }
 }

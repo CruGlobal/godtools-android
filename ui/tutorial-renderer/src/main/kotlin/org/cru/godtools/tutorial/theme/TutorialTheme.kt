@@ -24,7 +24,7 @@ internal val GodToolsTheme.tutorialAppBarColors
  * Overlay the current Material 3 theme changing the lineBreak behavior to Heading
  */
 @Composable
-internal fun TutorialThemeOverlay(content: @Composable () -> Unit) {
+fun TutorialThemeOverlay(content: @Composable () -> Unit) {
     val typography = MaterialTheme.typography
     MaterialTheme(
         typography = typography.copy(

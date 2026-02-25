@@ -8,10 +8,6 @@ import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 
 @Composable
 @Preview(showBackground = true)
-private fun OnboardingTutorial() = GodToolsTheme { TutorialLayout(UiState(PageSet.ONBOARDING)) }
-
-@Composable
-@Preview(showBackground = true)
 private fun FeaturesTutorial() = GodToolsTheme { TutorialLayout(UiState(PageSet.FEATURES)) }
 
 @Composable

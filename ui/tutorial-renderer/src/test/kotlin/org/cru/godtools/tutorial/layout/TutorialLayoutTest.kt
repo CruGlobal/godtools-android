@@ -47,12 +47,6 @@ class TutorialLayoutTest {
 
     // region AppBar - Navigate Up
     @Test
-    fun `AppBar - ONBOARDING - Navigate Up`() = runComposeUiTest {
-        setTutorialLayoutContent(PageSet.ONBOARDING)
-        onNodeWithTag(TEST_TAG_NAVIGATE_UP).assertDoesNotExist()
-    }
-
-    @Test
     fun `AppBar - FEATURES - Navigate Up - click sends UiEvent Back`() = runComposeUiTest {
         setTutorialLayoutContent(PageSet.FEATURES)
         events.assertNoEvents()
@@ -63,14 +57,6 @@ class TutorialLayoutTest {
     // endregion AppBar - Navigate Up
 
     // region AppBar - Skip Menu
-    @Test
-    fun `AppBar - ONBOARDING - Skip - not visible when first page has showMenu=false`() = runComposeUiTest {
-        setTutorialLayoutContent(PageSet.ONBOARDING)
-
-        // ONBOARDING first page is ONBOARDING_WELCOME which has showMenu=false
-        onNodeWithText(getString(R.string.tutorial_onboarding_action_skip)).assertDoesNotExist()
-    }
-
     @Test
     fun `AppBar - TIPS - Skip - click sends Tips Skip event`() = runComposeUiTest {
         setTutorialLayoutContent(PageSet.TIPS)

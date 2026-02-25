@@ -1,4 +1,4 @@
-package org.cru.godtools.tutorial.layout.onboarding
+package org.cru.godtools.ui.onboarding
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -8,12 +8,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
+import androidx.constraintlayout.compose.VerticalChainReference
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
-import org.cru.godtools.tutorial.layout.TutorialPositionReferences
+
+internal val ONBOARDING_MEDIA_HEIGHT = 268.dp
+
+internal data class OnboardingPositionReferences(
+    val title: ConstrainedLayoutReference,
+    val content: ConstrainedLayoutReference,
+    val media: ConstrainedLayoutReference,
+    val chain: VerticalChainReference,
+)
 
 @Composable
-internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): TutorialPositionReferences {
+internal fun ConstraintLayoutScope.createOnboardingPositioning(): OnboardingPositionReferences {
     val (title, content, media) = createRefs()
     val chain = createVerticalChain(title, content, media, chainStyle = ChainStyle.Packed)
 
@@ -40,8 +50,8 @@ internal fun ConstraintLayoutScope.createTutorialOnboardingPositioning(): Tutori
                 top.linkTo(content.bottom)
                 bottom.linkTo(parent.bottom)
             }
-            .height(TUTORIAL_ONBOARDING_MEDIA_HEIGHT)
+            .height(ONBOARDING_MEDIA_HEIGHT)
     )
 
-    return TutorialPositionReferences(title, content, media, chain)
+    return OnboardingPositionReferences(title, content, media, chain)
 }

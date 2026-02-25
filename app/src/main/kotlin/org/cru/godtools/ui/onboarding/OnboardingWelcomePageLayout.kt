@@ -1,4 +1,4 @@
-package org.cru.godtools.tutorial.layout.onboarding
+package org.cru.godtools.ui.onboarding
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
@@ -37,20 +37,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.overlay.LocalOverlayHost
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.tutorial.R
-import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
-import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
+import org.cru.godtools.ui.onboarding.OnboardingPresenter.UiEvent
+
+private enum class WelcomeState { WELCOME, READY }
 
 @Composable
-@Preview(showBackground = true, heightDp = 800)
-internal fun TutorialOnboardingWelcomeLayout(
+internal fun OnboardingWelcomePageLayout(
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
     eventSink: (UiEvent) -> Unit = {},
@@ -79,7 +78,7 @@ internal fun TutorialOnboardingWelcomeLayout(
     // endregion Welcome animation (Transition model)
 
     FilledTonalButton(
-        onClick = { eventSink(UiEvent.Onboarding.ChangeLanguage) },
+        onClick = { eventSink(UiEvent.ChangeLanguage) },
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -102,7 +101,7 @@ internal fun TutorialOnboardingWelcomeLayout(
         modifier = Modifier.wrapContentSize()
     )
 
-    Box(modifier = Modifier.padding(top = 24.dp, horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)) {
+    Box(modifier = Modifier.padding(top = 24.dp, horizontal = ONBOARDING_PAGE_HORIZONTAL_MARGIN)) {
         Text(
             text = stringResource(R.string.tutorial_onboarding_welcome),
             style = MaterialTheme.typography.headlineLarge,
@@ -131,7 +130,7 @@ internal fun TutorialOnboardingWelcomeLayout(
         onClick = { coroutineScope.launch { overlayHost.show(YoutubePlayerOverlay("RvhZ_wuxAgE")) } },
         enabled = readyAlpha > 0f,
         modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
+            .padding(horizontal = ONBOARDING_PAGE_HORIZONTAL_MARGIN)
             .alpha(readyAlpha)
     ) {
         Text(
@@ -150,10 +149,8 @@ internal fun TutorialOnboardingWelcomeLayout(
     Button(
         onClick = nextPage,
         modifier = Modifier
-            .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)
+            .padding(horizontal = ONBOARDING_PAGE_HORIZONTAL_MARGIN)
             .fillMaxWidth(0.8f)
             .align(Alignment.CenterHorizontally)
     ) { Text(stringResource(R.string.tutorial_onboarding_action_begin)) }
 }
-
-private enum class WelcomeState { WELCOME, READY }

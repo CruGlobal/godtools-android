@@ -146,6 +146,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.windowsizeclass)
+    implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
