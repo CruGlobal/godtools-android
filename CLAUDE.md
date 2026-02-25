@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Default Branch
+
+The default branch for this repository is **`develop`**. Use `develop` as the base branch when creating pull requests.
+
 ## Build & Development Commands
 
 ```bash
