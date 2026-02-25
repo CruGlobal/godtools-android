@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,18 +39,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.slack.circuit.overlay.LocalOverlayHost
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
+import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
 
 @Composable
 @Preview(showBackground = true, heightDp = 800)
 internal fun TutorialOnboardingWelcomeLayout(
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Action) -> Unit = {},
+    eventSink: (UiEvent) -> Unit = {},
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     modifier = modifier
@@ -75,7 +79,7 @@ internal fun TutorialOnboardingWelcomeLayout(
     // endregion Welcome animation (Transition model)
 
     FilledTonalButton(
-        onClick = { onTutorialAction(Action.ONBOARDING_CHANGE_LANGUAGE) },
+        onClick = { eventSink(UiEvent.Onboarding.ChangeLanguage) },
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -121,8 +125,10 @@ internal fun TutorialOnboardingWelcomeLayout(
 
     Spacer(modifier = Modifier.weight(1f))
 
+    val coroutineScope = rememberCoroutineScope()
+    val overlayHost = LocalOverlayHost.current
     TextButton(
-        onClick = { onTutorialAction(Action.ONBOARDING_WATCH_VIDEO) },
+        onClick = { coroutineScope.launch { overlayHost.show(YoutubePlayerOverlay("RvhZ_wuxAgE")) } },
         enabled = readyAlpha > 0f,
         modifier = Modifier
             .padding(horizontal = TUTORIAL_PAGE_HORIZONTAL_MARGIN)

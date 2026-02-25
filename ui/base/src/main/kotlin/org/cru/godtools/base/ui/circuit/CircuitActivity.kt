@@ -12,6 +12,7 @@ import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
+import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
@@ -19,9 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.CircuitActivity.Companion.EXTRA_SCREEN
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-
-private const val EXTRA_SCREEN = "screen"
 
 fun Context.startCircuitActivity(screen: Screen) = startActivity(createCircuitActivityIntent(screen))
 fun Context.createCircuitActivityIntent(screen: Screen) = Intent(this, CircuitActivity::class.java)
@@ -29,6 +29,12 @@ fun Context.createCircuitActivityIntent(screen: Screen) = Intent(this, CircuitAc
 
 @AndroidEntryPoint
 class CircuitActivity : BaseActivity() {
+    companion object {
+        internal const val EXTRA_SCREEN = "screen"
+
+        const val EXTRA_RESULT = "CircuitActivity.result"
+    }
+
     @Inject
     internal lateinit var circuit: Circuit
 
@@ -44,17 +50,25 @@ class CircuitActivity : BaseActivity() {
         setContent {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
-                    val backStack = rememberSaveableBackStack(initialScreens)
-                    val navigator = rememberAndroidScreenAwareNavigator(rememberCircuitNavigator(backStack), this)
-                    NavigableCircuitContent(
-                        navigator = navigator,
-                        backStack = backStack,
-                        decoratorFactory = remember(navigator) {
-                            GestureNavigationDecorationFactory(
-                                onBackInvoked = navigator::pop
-                            )
-                        }
-                    )
+                    ContentWithOverlays {
+                        val backStack = rememberSaveableBackStack(initialScreens)
+                        val navigator = rememberAndroidScreenAwareNavigator(
+                            rememberCircuitNavigator(backStack) { result ->
+                                setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, result))
+                                finish()
+                            },
+                            this
+                        )
+                        NavigableCircuitContent(
+                            navigator = navigator,
+                            backStack = backStack,
+                            decoratorFactory = remember(navigator) {
+                                GestureNavigationDecorationFactory(
+                                    onBackInvoked = navigator::pop
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }

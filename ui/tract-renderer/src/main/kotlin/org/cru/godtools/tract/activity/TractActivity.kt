@@ -79,8 +79,8 @@ import org.cru.godtools.tract.ui.settings.LiveShareSettingsAction
 import org.cru.godtools.tract.util.isTractLegacyDeepLink
 import org.cru.godtools.tract.util.loadAnimation
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.TutorialActivity
-import org.cru.godtools.tutorial.TutorialActivityResultContract
+import org.cru.godtools.tutorial.TutorialScreenResultContract
+import org.cru.godtools.tutorial.layout.TutorialScreen
 
 private const val EXTRA_INITIAL_PAGE = "org.cru.godtools.tract.activity.TractActivity.INITIAL_PAGE"
 
@@ -436,14 +436,16 @@ class TractActivity :
     // region Live Share Logic
     private val publisherController: TractPublisherController by viewModels()
     private val subscriberController: TractSubscriberController by viewModels()
-    private val liveShareTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
+    private val liveShareTutorialLauncher = registerForActivityResult(TutorialScreenResultContract()) {
         when (it) {
-            RESULT_CANCELED -> publisherController.started = false
+            null,
+            TutorialScreen.Result.Canceled -> publisherController.started = false
 
-            else -> {
+            TutorialScreen.Result.Finished,
+            TutorialScreen.Result.ShowQrCode -> {
                 savedState.liveShareTutorialShown = true
                 settings.setFeatureDiscovered("$FEATURE_TUTORIAL_LIVE_SHARE${dataModel.toolCode.value}")
-                shareLiveShareLink(it == TutorialActivity.RESULT_SHOW_QR_CODE)
+                shareLiveShareLink(it == TutorialScreen.Result.ShowQrCode)
             }
         }
     }

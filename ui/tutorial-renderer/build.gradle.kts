@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "org.cru.godtools.tutorial"
 
-    configureCompose(project)
+    configureCompose(project, enableCircuit = true)
 
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
@@ -30,12 +30,15 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout.compose)
 
+    implementation(libs.gtoSupport.androidx.activity)
     implementation(libs.gtoSupport.androidx.compose)
     implementation(libs.gtoSupport.androidx.compose.material3)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.accompanist.pager.indicators)
+    implementation(libs.circuit.overlay)
+    implementation(libs.circuitx.android)
     implementation(libs.hilt)
     implementation(libs.lottie.compose)
     implementation(libs.splitties.intents)
@@ -43,4 +46,6 @@ dependencies {
 
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
+
+    testImplementation(testFixtures(libs.gtoSupport.androidx.compose))
 }

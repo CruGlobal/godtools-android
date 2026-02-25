@@ -22,7 +22,8 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.TutorialActivityResultContract
+import org.cru.godtools.tutorial.TutorialScreenResultContract
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
 import org.cru.godtools.util.openToolActivity
 import org.cru.godtools.util.rememberInterceptingNavigator
@@ -93,8 +94,8 @@ class ToolDetailsActivity : BaseActivity() {
 
     // region Training Tips
     private val selectedTool by viewModels<SelectedToolSavedState>()
-    private val tipsTutorialLauncher = registerForActivityResult(TutorialActivityResultContract()) {
-        if (it == RESULT_OK) launchTrainingTips(skipTutorial = true)
+    private val tipsTutorialLauncher = registerForActivityResult(TutorialScreenResultContract()) {
+        if (it == TutorialScreen.Result.Finished) launchTrainingTips(skipTutorial = true)
     }
 
     private fun launchTrainingTips(

@@ -26,20 +26,29 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
+import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
+
+internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
+internal const val TEST_TAG_PAGE_INDICATOR = "page_indicator"
 
 // HACK: we are overriding the background color to be pure white because the animations assume the background is white
 private val tutorialBackgroundColor
@@ -47,60 +56,68 @@ private val tutorialBackgroundColor
     get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 @Composable
-internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit = {}) {
+@CircuitInject(TutorialScreen::class, SingletonComponent::class)
+fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
+    val pageSet = state.pageSet
+    val eventSink by rememberUpdatedState(state.eventSink)
+
     val coroutineScope = rememberCoroutineScope()
     val locale = LocalAppLanguage.current
-    val pages = remember { pageSet.pagesFor(locale) }
+    val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
     val pagerState = rememberPagerState { pages.size }
     val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }
 
     RecordAnalyticsScreen(TutorialAnalyticsScreenEvent(pageSet, currentPage, pagerState.currentPage, locale))
 
-    Scaffold(
-        topBar = {
-            TutorialAppBar(
-                pageSet,
-                currentPage = { currentPage },
-                onTutorialAction = onTutorialAction
-            )
-        },
-        bottomBar = {
-            if (pageSet.showPageIndicator) {
-                HorizontalPagerIndicator(
-                    pagerState = pagerState,
-                    pageCount = pagerState.pageCount,
-                    activeColor = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .fillMaxWidth()
-                        .height(dimensionResource(R.dimen.tutorial_indicator_height))
-                        .wrapContentSize()
+    TutorialThemeOverlay {
+        Scaffold(
+            topBar = {
+                TutorialAppBar(
+                    pageSet,
+                    currentPage = { currentPage },
+                    eventSink = eventSink,
+                )
+            },
+            bottomBar = {
+                if (pageSet.showPageIndicator) {
+                    HorizontalPagerIndicator(
+                        pagerState = pagerState,
+                        pageCount = pagerState.pageCount,
+                        activeColor = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .testTag(TEST_TAG_PAGE_INDICATOR)
+                            .navigationBarsPadding()
+                            .fillMaxWidth()
+                            .height(dimensionResource(R.dimen.tutorial_indicator_height))
+                            .wrapContentSize()
+                    )
+                }
+            },
+            containerColor = tutorialBackgroundColor,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier,
+        ) { insets ->
+            HorizontalPager(
+                key = { pages[it] },
+                state = pagerState,
+                modifier = Modifier
+                    .padding(insets)
+                    .consumeWindowInsets(insets)
+                    .fillMaxSize()
+            ) { i ->
+                TutorialPageLayout(
+                    pages[i],
+                    nextPage = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(
+                                i + 1,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+                        }
+                    },
+                    eventSink = eventSink,
                 )
             }
-        },
-        containerColor = tutorialBackgroundColor,
-        contentColor = MaterialTheme.colorScheme.onBackground
-    ) { insets ->
-        HorizontalPager(
-            key = { pages[it] },
-            state = pagerState,
-            modifier = Modifier
-                .padding(insets)
-                .consumeWindowInsets(insets)
-                .fillMaxSize()
-        ) { i ->
-            TutorialPageLayout(
-                pages[i],
-                nextPage = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(
-                            i + 1,
-                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                        )
-                    }
-                },
-                onTutorialAction = onTutorialAction
-            )
         }
     }
 }
@@ -110,12 +127,15 @@ internal fun TutorialLayout(pageSet: PageSet, onTutorialAction: (Action) -> Unit
 private inline fun TutorialAppBar(
     pageSet: PageSet,
     crossinline currentPage: @DisallowComposableCalls () -> Page,
-    crossinline onTutorialAction: (Action) -> Unit,
+    crossinline eventSink: (UiEvent) -> Unit,
 ) = TopAppBar(
     title = {},
     navigationIcon = {
         if (pageSet.showUpNavigation) {
-            IconButton(onClick = { onTutorialAction(Action.BACK) }) {
+            IconButton(
+                onClick = { eventSink(UiEvent.Back) },
+                modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
+            ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
             }
         }
@@ -123,8 +143,8 @@ private inline fun TutorialAppBar(
     actions = {
         val showMenu by remember { derivedStateOf { currentPage().showMenu } }
         if (showMenu) {
-            pageSet.menu.forEach { (item, action) ->
-                AppBarActionButton(item, onClick = { onTutorialAction(action) })
+            pageSet.menu.forEach { (item, event) ->
+                AppBarActionButton(item, onClick = { eventSink(event) })
             }
         }
     },

@@ -1,8 +1,6 @@
 package org.cru.godtools.tutorial.layout.liveshare
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,18 +20,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
-import org.cru.godtools.tutorial.Action
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia
+import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 
 @Composable
 internal fun TutorialLiveShareLayout(
     page: Page,
     modifier: Modifier = Modifier,
     nextPage: () -> Unit = {},
-    onTutorialAction: (Action) -> Unit = {},
+    eventSink: (UiEvent) -> Unit = {},
 ) = Column(
     modifier = modifier
         .fillMaxSize()
@@ -89,7 +87,7 @@ internal fun TutorialLiveShareLayout(
     ) {
         if (page == Page.LIVE_SHARE_START) {
             OutlinedButton(
-                onClick = { onTutorialAction(Action.LIVE_SHARE_QR_CODE) },
+                onClick = { eventSink(UiEvent.LiveShare.QrCode) },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .align(Alignment.CenterHorizontally)
@@ -103,7 +101,7 @@ internal fun TutorialLiveShareLayout(
         Button(
             onClick = {
                 when (page) {
-                    Page.LIVE_SHARE_START -> onTutorialAction(Action.LIVE_SHARE_FINISH)
+                    Page.LIVE_SHARE_START -> eventSink(UiEvent.LiveShare.Finish)
                     else -> nextPage()
                 }
             },

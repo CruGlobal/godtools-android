@@ -45,6 +45,7 @@ dependencies {
 
     api(libs.eventbus)
     api(libs.materialComponents)
+    implementation(libs.circuit.overlay)
     implementation(libs.circuitx.android)
     implementation(libs.circuitx.gesture.navigation)
     implementation(libs.dagger)

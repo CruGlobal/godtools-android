@@ -23,11 +23,12 @@ import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.startTutorialActivity
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
 import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
 import org.cru.godtools.util.openToolActivity
@@ -131,7 +132,7 @@ class DashboardActivity : BaseActivity() {
     private fun triggerOnboardingIfNecessary() {
         if (settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING)) return
         optInNotificationController.isOnboardingLaunch = true
-        startTutorialActivity(PageSet.ONBOARDING)
+        startCircuitActivity(TutorialScreen(PageSet.ONBOARDING))
     }
 
     // region ToolsAdapterCallbacks
