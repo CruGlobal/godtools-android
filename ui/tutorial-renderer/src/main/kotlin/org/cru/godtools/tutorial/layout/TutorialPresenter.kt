@@ -1,6 +1,5 @@
 package org.cru.godtools.tutorial.layout
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -11,7 +10,6 @@ import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
@@ -21,7 +19,6 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.greenrobot.eventbus.EventBus
 
 class TutorialPresenter @AssistedInject constructor(
-    @param:ApplicationContext private val context: Context,
     private val eventBus: EventBus,
     private val settings: Settings,
     @Assisted private val navigator: Navigator,

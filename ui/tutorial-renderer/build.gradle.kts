@@ -46,4 +46,6 @@ dependencies {
 
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
+
+    testImplementation(testFixtures(libs.gtoSupport.androidx.compose))
 }
