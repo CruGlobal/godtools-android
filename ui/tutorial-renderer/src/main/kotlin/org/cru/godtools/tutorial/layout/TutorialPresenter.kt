@@ -8,14 +8,12 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
-import com.slack.circuitx.android.IntentScreen
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.circuit.createCircuitActivityIntent
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
@@ -66,8 +64,7 @@ class TutorialPresenter @AssistedInject constructor(
             when (event) {
                 UiEvent.Back -> navigator.pop(TutorialScreen.Result.Canceled)
 
-                UiEvent.Onboarding.ChangeLanguage ->
-                    navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
+                UiEvent.Onboarding.ChangeLanguage -> navigator.goTo(AppLanguageScreen)
 
                 UiEvent.Onboarding.Skip -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
