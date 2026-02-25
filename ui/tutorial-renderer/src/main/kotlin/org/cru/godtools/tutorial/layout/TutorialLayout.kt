@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -45,6 +46,9 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
+
+internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
+internal const val TEST_TAG_PAGE_INDICATOR = "page_indicator"
 
 // HACK: we are overriding the background color to be pure white because the animations assume the background is white
 private val tutorialBackgroundColor
@@ -81,6 +85,7 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
                         pageCount = pagerState.pageCount,
                         activeColor = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
+                            .testTag(TEST_TAG_PAGE_INDICATOR)
                             .navigationBarsPadding()
                             .fillMaxWidth()
                             .height(dimensionResource(R.dimen.tutorial_indicator_height))
@@ -127,7 +132,10 @@ private inline fun TutorialAppBar(
     title = {},
     navigationIcon = {
         if (pageSet.showUpNavigation) {
-            IconButton(onClick = { eventSink(UiEvent.Back) }) {
+            IconButton(
+                onClick = { eventSink(UiEvent.Back) },
+                modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
+            ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
             }
         }
