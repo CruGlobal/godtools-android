@@ -14,30 +14,13 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.util.Locale
-import org.ccci.gto.android.common.util.includeFallbacks
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.appLanguage
 import org.cru.godtools.base.ui.circuit.createCircuitActivityIntent
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
-import org.cru.godtools.base.ui.createArticlesIntent
-import org.cru.godtools.base.ui.createDashboardIntent
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
 import org.greenrobot.eventbus.EventBus
-import org.cru.godtools.base.ui.dashboard.Page as DashboardPage
-
-// TODO: this should be dynamic based upon the available languages in the database
-private val ARTICLES_SUPPORTED_LANGUAGES = setOf(
-    Locale.forLanguageTag("bg"),
-    Locale.ENGLISH,
-    Locale.forLanguageTag("es"),
-    Locale.FRENCH,
-    Locale.forLanguageTag("lv"),
-    Locale.forLanguageTag("ru"),
-    Locale.forLanguageTag("vi")
-)
 
 class TutorialPresenter @AssistedInject constructor(
     @param:ApplicationContext private val context: Context,
@@ -64,9 +47,6 @@ class TutorialPresenter @AssistedInject constructor(
         sealed interface Onboarding : UiEvent {
             data object ChangeLanguage : Onboarding
             data object Skip : Onboarding
-            data object LaunchArticles : Onboarding
-            data object LaunchLessons : Onboarding
-            data object LaunchTools : Onboarding
             data object Finish : Onboarding
         }
 
@@ -88,26 +68,6 @@ class TutorialPresenter @AssistedInject constructor(
 
                 UiEvent.Onboarding.ChangeLanguage ->
                     navigator.goTo(IntentScreen(context.createCircuitActivityIntent(AppLanguageScreen)))
-
-                UiEvent.Onboarding.LaunchArticles -> {
-                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_ARTICLES))
-                    val locale = sequenceOf(context.appLanguage, Locale.ENGLISH).filterNotNull().includeFallbacks()
-                        .firstOrNull { ARTICLES_SUPPORTED_LANGUAGES.contains(it) } ?: Locale.ENGLISH
-                    navigator.goTo(IntentScreen(context.createArticlesIntent("es", locale)))
-                    navigator.pop(TutorialScreen.Result.Finished)
-                }
-
-                UiEvent.Onboarding.LaunchLessons -> {
-                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_LESSONS))
-                    navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.LESSONS)))
-                    navigator.pop(TutorialScreen.Result.Finished)
-                }
-
-                UiEvent.Onboarding.LaunchTools -> {
-                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_LINK_TOOLS))
-                    navigator.goTo(IntentScreen(context.createDashboardIntent(DashboardPage.ALL_TOOLS)))
-                    navigator.pop(TutorialScreen.Result.Finished)
-                }
 
                 UiEvent.Onboarding.Skip -> {
                     eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
