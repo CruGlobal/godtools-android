@@ -24,8 +24,9 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.cru.godtools.tutorial.R
+import org.cru.godtools.R
 import org.cru.godtools.ui.onboarding.OnboardingPresenter.UiEvent
+import org.cru.godtools.tutorial.R as TutorialR
 
 internal val ONBOARDING_PAGE_HORIZONTAL_MARGIN = 32.dp
 
@@ -36,22 +37,22 @@ internal enum class OnboardingPage(
     @RawRes val animation: Int,
 ) {
     CONVERSATIONS(
-        title = R.string.tutorial_onboarding_conversations_headline,
-        content = R.string.tutorial_onboarding_conversations_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_guys,
+        title = TutorialR.string.tutorial_onboarding_conversations_headline,
+        content = TutorialR.string.tutorial_onboarding_conversations_subhead,
+        action = TutorialR.string.tutorial_onboarding_action_next,
+        animation = R.raw.anim_onboarding_guys,
     ),
     PREPARE(
-        title = R.string.tutorial_onboarding_prepare_headline,
-        content = R.string.tutorial_onboarding_prepare_subhead,
-        action = R.string.tutorial_onboarding_action_next,
-        animation = R.raw.anim_tutorial_onboarding_dog,
+        title = TutorialR.string.tutorial_onboarding_prepare_headline,
+        content = TutorialR.string.tutorial_onboarding_prepare_subhead,
+        action = TutorialR.string.tutorial_onboarding_action_next,
+        animation = R.raw.anim_onboarding_dog,
     ),
     SHARE(
-        title = R.string.tutorial_onboarding_share_headline,
-        content = R.string.tutorial_onboarding_share_subhead,
-        action = R.string.tutorial_onboarding_action_start,
-        animation = R.raw.anim_tutorial_onboarding_distance,
+        title = TutorialR.string.tutorial_onboarding_share_headline,
+        content = TutorialR.string.tutorial_onboarding_share_subhead,
+        action = TutorialR.string.tutorial_onboarding_action_start,
+        animation = R.raw.anim_onboarding_distance,
     ),
 }
 
