@@ -34,7 +34,7 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         val availableLanguages: ImmutableList<String> = persistentListOf(),
         val variants: ImmutableList<ToolCard.State> = persistentListOf(),
         val drawerState: DrawerMenuScreen.State = DrawerMenuScreen.State(),
-        val eventSink: (Event) -> Unit = {},
+        val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
     enum class Page(@StringRes val tabLabel: Int) {
@@ -42,13 +42,13 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         VARIANTS(R.string.tool_details_section_variants_label)
     }
 
-    sealed interface Event : CircuitUiEvent {
-        data object NavigateUp : Event
-        data object OpenTool : Event
-        data object OpenToolTraining : Event
-        data object PinTool : Event
-        data object UnpinTool : Event
-        data class SwitchVariant(val variant: String) : Event
-        data object PinShortcut : Event
+    sealed interface UiEvent : CircuitUiEvent {
+        data object NavigateUp : UiEvent
+        data object OpenTool : UiEvent
+        data object OpenToolTraining : UiEvent
+        data object PinTool : UiEvent
+        data object UnpinTool : UiEvent
+        data class SwitchVariant(val variant: String) : UiEvent
+        data object PinShortcut : UiEvent
     }
 }

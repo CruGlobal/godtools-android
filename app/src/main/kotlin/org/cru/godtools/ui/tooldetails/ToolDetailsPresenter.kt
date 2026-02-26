@@ -63,8 +63,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -114,12 +114,12 @@ class ToolDetailsPresenter @AssistedInject constructor(
         val manifest by manifestManager.produceManifestState(translation)
         val secondManifest by manifestManager.produceManifestState(secondTranslation)
 
-        val eventSink: (Event) -> Unit = remember {
+        val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    Event.NavigateUp -> navigator.pop()
+                    UiEvent.NavigateUp -> navigator.pop()
 
-                    Event.OpenTool -> tool?.let { tool ->
+                    UiEvent.OpenTool -> tool?.let { tool ->
                         val intent = tool.createToolIntent(
                             context = context,
                             languages = when (tool.type) {
@@ -138,7 +138,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         }
                     }
 
-                    Event.OpenToolTraining -> tool?.let {
+                    UiEvent.OpenToolTraining -> tool?.let {
                         // TODO: handle opening training tips and optionally showing the tutorial locally once the
                         //       tutorial uses Circuit.
                         navigator.goTo(
@@ -151,20 +151,20 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         )
                     }
 
-                    Event.PinTool -> coroutineScope.launch {
+                    UiEvent.PinTool -> coroutineScope.launch {
                         settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
                         toolsRepository.pinTool(toolCode)
                         syncService.syncDirtyFavoriteTools()
                     }
 
-                    Event.UnpinTool -> coroutineScope.launch {
+                    UiEvent.UnpinTool -> coroutineScope.launch {
                         toolsRepository.unpinTool(toolCode)
                         syncService.syncDirtyFavoriteTools()
                     }
 
-                    is Event.SwitchVariant -> toolCode = it.variant
+                    is UiEvent.SwitchVariant -> toolCode = it.variant
 
-                    Event.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
+                    UiEvent.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
                 }
             }
         }
@@ -210,7 +210,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private fun rememberVariants(
         metaToolCode: String?,
         secondLanguage: Language?,
-        eventSink: (Event) -> Unit,
+        eventSink: (UiEvent) -> Unit,
     ): ImmutableList<ToolCard.State> {
         if (metaToolCode == null) return persistentListOf()
 
@@ -227,7 +227,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         loadAvailableLanguages = true,
                         eventSink = {
                             when (it) {
-                                ToolCard.Event.Click -> tool.code?.let { eventSink(Event.SwitchVariant(it)) }
+                                ToolCard.Event.Click -> tool.code?.let { eventSink(UiEvent.SwitchVariant(it)) }
                                 else -> Unit
                             }
                         }

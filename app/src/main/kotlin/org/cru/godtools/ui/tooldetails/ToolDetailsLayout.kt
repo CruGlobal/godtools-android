@@ -69,8 +69,8 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.youtubeplayer.YouTubePlayer
 import org.cru.godtools.model.getName
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
@@ -97,7 +97,7 @@ fun ToolDetailsLayout(state: UiState, modifier: Modifier = Modifier) = DrawerMen
                 title = {},
                 navigationIcon = {
                     IconButton(
-                        onClick = { eventSink(Event.NavigateUp) },
+                        onClick = { eventSink(UiEvent.NavigateUp) },
                         modifier = Modifier.testTag(TEST_TAG_ACTION_NAVIGATE_UP),
                     ) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
@@ -116,7 +116,7 @@ fun ToolDetailsLayout(state: UiState, modifier: Modifier = Modifier) = DrawerMen
                         DropdownMenu(expanded = showOverflow, onDismissRequest = { showOverflow = false }) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.menu_add_to_home)) },
-                                onClick = { eventSink(Event.PinShortcut) },
+                                onClick = { eventSink(UiEvent.PinShortcut) },
                                 modifier = Modifier.testTag(TEST_TAG_ACTION_PIN_SHORTCUT),
                             )
                         }
@@ -273,13 +273,13 @@ internal fun ToolDetailsActions(state: UiState, modifier: Modifier = Modifier) =
     val eventSink by rememberUpdatedState(state.eventSink)
 
     Button(
-        onClick = { eventSink(Event.OpenTool) },
+        onClick = { eventSink(UiEvent.OpenTool) },
         modifier = Modifier.fillMaxWidth()
     ) { Text(stringResource(R.string.action_tools_open_tool)) }
 
     if (state.hasTips) {
         Button(
-            onClick = { eventSink(Event.OpenToolTraining) },
+            onClick = { eventSink(UiEvent.OpenToolTraining) },
             modifier = Modifier
                 .testTag(TEST_TAG_ACTION_TOOL_TRAINING)
                 .fillMaxWidth()
@@ -288,7 +288,7 @@ internal fun ToolDetailsActions(state: UiState, modifier: Modifier = Modifier) =
 
     val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     OutlinedButton(
-        onClick = { eventSink(if (isFavorite) Event.UnpinTool else Event.PinTool) },
+        onClick = { eventSink(if (isFavorite) UiEvent.UnpinTool else UiEvent.PinTool) },
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = if (isFavorite) GodToolsTheme.GT_RED else MaterialTheme.colorScheme.primary
         ),

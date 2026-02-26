@@ -59,7 +59,6 @@ import org.cru.godtools.downloadmanager.compose.DownloadLatestTranslation
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -68,7 +67,7 @@ import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
@@ -387,7 +386,7 @@ class ToolDetailsPresenterTest {
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
 
         createPresenter().test {
-            expectMostRecentItem().eventSink(Event.OpenTool)
+            expectMostRecentItem().eventSink(UiEvent.OpenTool)
         }
 
         with(navigator.awaitNextScreen()) {
@@ -411,7 +410,7 @@ class ToolDetailsPresenterTest {
             .returns(flowOf(randomTranslation(TOOL, Locale.FRENCH)))
 
         createPresenter(ToolDetailsScreen(TOOL, secondLanguage = Locale.FRENCH)).test {
-            expectMostRecentItem().eventSink(Event.OpenTool)
+            expectMostRecentItem().eventSink(UiEvent.OpenTool)
         }
 
         with(navigator.awaitNextScreen()) {
@@ -440,7 +439,7 @@ class ToolDetailsPresenterTest {
         } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
 
         createPresenter().test {
-            expectMostRecentItem().eventSink(Event.OpenToolTraining)
+            expectMostRecentItem().eventSink(UiEvent.OpenToolTraining)
         }
 
         with(navigator.awaitNextScreen()) {
@@ -461,7 +460,7 @@ class ToolDetailsPresenterTest {
         every { shortcutManager.pinShortcut(pendingShortcut) } just Runs
 
         createPresenter().test {
-            expectMostRecentItem().eventSink(Event.PinShortcut)
+            expectMostRecentItem().eventSink(UiEvent.PinShortcut)
         }
 
         verify {
@@ -478,7 +477,7 @@ class ToolDetailsPresenterTest {
         coEvery { syncService.syncDirtyFavoriteTools() } returns true
 
         createPresenter().test {
-            expectMostRecentItem().eventSink(Event.PinTool)
+            expectMostRecentItem().eventSink(UiEvent.PinTool)
         }
 
         coVerify {
@@ -496,7 +495,7 @@ class ToolDetailsPresenterTest {
         coEvery { syncService.syncDirtyFavoriteTools() } returns true
 
         createPresenter().test {
-            expectMostRecentItem().eventSink(Event.UnpinTool)
+            expectMostRecentItem().eventSink(UiEvent.UnpinTool)
         }
 
         coVerify {
@@ -514,7 +513,7 @@ class ToolDetailsPresenterTest {
             assertNotNull(expectMostRecentItem()) {
                 assertEquals("initial", it.toolCode)
 
-                it.eventSink(Event.SwitchVariant("new"))
+                it.eventSink(UiEvent.SwitchVariant("new"))
             }
 
             assertEquals("new", expectMostRecentItem().toolCode)
@@ -591,7 +590,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().eventSink(Event.SwitchVariant("variant"))
+            expectMostRecentItem().eventSink(UiEvent.SwitchVariant("variant"))
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)
