@@ -23,9 +23,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAction
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
+import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.layout.TutorialAppBar
 import org.cru.godtools.tutorial.layout.TutorialPagerIndicator
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay

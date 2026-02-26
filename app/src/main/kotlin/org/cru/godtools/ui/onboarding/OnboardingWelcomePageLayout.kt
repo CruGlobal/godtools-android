@@ -42,9 +42,10 @@ import com.slack.circuit.overlay.LocalOverlayHost
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
-import org.cru.godtools.tutorial.R
+import org.cru.godtools.R
 import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
 import org.cru.godtools.ui.onboarding.OnboardingPresenter.UiEvent
+import org.cru.godtools.tutorial.R as TutorialR
 
 private enum class WelcomeState { WELCOME, READY }
 
@@ -96,7 +97,7 @@ internal fun OnboardingWelcomePageLayout(
         modifier = Modifier.size(130.dp)
     )
     Image(
-        painterResource(R.drawable.ic_logo_title),
+        painterResource(TutorialR.drawable.ic_logo_title),
         contentDescription = null,
         modifier = Modifier.wrapContentSize()
     )
@@ -138,7 +139,7 @@ internal fun OnboardingWelcomePageLayout(
             fontWeight = FontWeight.Bold
         )
         Icon(
-            painterResource(R.drawable.ic_tutorial_onboarding_watch_video),
+            painterResource(TutorialR.drawable.ic_tutorial_onboarding_watch_video),
             contentDescription = null,
             modifier = Modifier.padding(start = 4.dp)
         )
