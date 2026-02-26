@@ -15,7 +15,7 @@ import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
@@ -28,7 +28,7 @@ class ToolDetailsLayoutTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val events = TestEventSink<Event>()
+    private val events = TestEventSink<UiEvent>()
 
     private fun renderToolDetailsLayout(state: UiState = UiState(eventSink = events)) = composeTestRule.setContent {
         CompositionLocalProvider(
@@ -44,7 +44,7 @@ class ToolDetailsLayoutTest {
         renderToolDetailsLayout()
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_NAVIGATE_UP).assertExists().performClick()
-        events.assertEvent(Event.NavigateUp)
+        events.assertEvent(UiEvent.NavigateUp)
     }
     // endregion Action - Navigate Up
 
@@ -58,7 +58,7 @@ class ToolDetailsLayoutTest {
         events.assertNoEvents()
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_PIN_SHORTCUT).assertExists().performClick()
-        events.assertEvent(Event.PinShortcut)
+        events.assertEvent(UiEvent.PinShortcut)
     }
 
     @Test
@@ -82,7 +82,7 @@ class ToolDetailsLayoutTest {
         )
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_TOOL_TRAINING).assertExists().performClick()
-        events.assertEvent(Event.OpenToolTraining)
+        events.assertEvent(UiEvent.OpenToolTraining)
     }
 
     @Test
