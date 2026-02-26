@@ -2,6 +2,7 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -19,16 +21,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -39,21 +38,16 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAc
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
+import org.cru.godtools.tutorial.theme.tutorialAppBarColors
+import org.cru.godtools.tutorial.theme.tutorialBackgroundColor
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
 internal const val TEST_TAG_PAGE_INDICATOR = "page_indicator"
-
-// HACK: we are overriding the background color to be pure white because the animations assume the background is white
-private val tutorialBackgroundColor
-    @Composable
-    get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 @Composable
 @CircuitInject(TutorialScreen::class, SingletonComponent::class)
@@ -73,27 +67,29 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
         Scaffold(
             topBar = {
                 TutorialAppBar(
-                    pageSet,
-                    currentPage = { currentPage },
-                    eventSink = eventSink,
+                    showUpNavigation = pageSet.showUpNavigation,
+                    onNavigateUp = { eventSink(UiEvent.Back) },
+                    actions = {
+                        val showMenu by remember { derivedStateOf { currentPage.showMenu } }
+                        if (showMenu) {
+                            pageSet.menu.forEach { (item, event) ->
+                                AppBarActionButton(item, onClick = { eventSink(event) })
+                            }
+                        }
+                    }
                 )
             },
             bottomBar = {
                 if (pageSet.showPageIndicator) {
-                    HorizontalPagerIndicator(
-                        pagerState = pagerState,
-                        pageCount = pagerState.pageCount,
-                        activeColor = MaterialTheme.colorScheme.primary,
+                    TutorialPagerIndicator(
+                        pagerState,
                         modifier = Modifier
-                            .testTag(TEST_TAG_PAGE_INDICATOR)
                             .navigationBarsPadding()
                             .fillMaxWidth()
-                            .height(dimensionResource(R.dimen.tutorial_indicator_height))
-                            .wrapContentSize()
                     )
                 }
             },
-            containerColor = tutorialBackgroundColor,
+            containerColor = GodToolsTheme.tutorialBackgroundColor,
             contentColor = MaterialTheme.colorScheme.onBackground,
             modifier = modifier,
         ) { insets ->
@@ -124,33 +120,35 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private inline fun TutorialAppBar(
-    pageSet: PageSet,
-    crossinline currentPage: @DisallowComposableCalls () -> Page,
-    crossinline eventSink: (UiEvent) -> Unit,
+fun TutorialAppBar(
+    modifier: Modifier = Modifier,
+    showUpNavigation: Boolean = true,
+    onNavigateUp: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
 ) = TopAppBar(
     title = {},
     navigationIcon = {
-        if (pageSet.showUpNavigation) {
+        if (showUpNavigation) {
             IconButton(
-                onClick = { eventSink(UiEvent.Back) },
+                onClick = onNavigateUp,
                 modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
             }
         }
     },
-    actions = {
-        val showMenu by remember { derivedStateOf { currentPage().showMenu } }
-        if (showMenu) {
-            pageSet.menu.forEach { (item, event) ->
-                AppBarActionButton(item, onClick = { eventSink(event) })
-            }
-        }
-    },
-    colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = tutorialBackgroundColor,
-        navigationIconContentColor = MaterialTheme.colorScheme.primary,
-        actionIconContentColor = MaterialTheme.colorScheme.primary
-    ),
+    actions = actions,
+    colors = GodToolsTheme.tutorialAppBarColors,
+    modifier = modifier
+)
+
+@Composable
+fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) = HorizontalPagerIndicator(
+    pagerState = state,
+    pageCount = state.pageCount,
+    activeColor = MaterialTheme.colorScheme.primary,
+    modifier = modifier
+        .testTag(TEST_TAG_PAGE_INDICATOR)
+        .height(dimensionResource(R.dimen.tutorial_indicator_height))
+        .wrapContentSize()
 )

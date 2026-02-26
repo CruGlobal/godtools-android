@@ -7,8 +7,6 @@ import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.features.TutorialFeaturesLayout
 import org.cru.godtools.tutorial.layout.liveshare.TutorialLiveShareLayout
-import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingLayout
-import org.cru.godtools.tutorial.layout.onboarding.TutorialOnboardingWelcomeLayout
 import org.cru.godtools.tutorial.layout.tips.TutorialTipsLayout
 
 internal val TUTORIAL_PAGE_HORIZONTAL_MARGIN = 32.dp
@@ -34,21 +32,6 @@ internal fun TutorialPageLayout(
     Page.LIVE_SHARE_DESCRIPTION,
     Page.LIVE_SHARE_MIRRORED,
     Page.LIVE_SHARE_START -> TutorialLiveShareLayout(
-        page,
-        nextPage = nextPage,
-        eventSink = eventSink,
-        modifier = modifier,
-    )
-
-    Page.ONBOARDING_WELCOME -> TutorialOnboardingWelcomeLayout(
-        nextPage = nextPage,
-        eventSink = eventSink,
-        modifier = modifier,
-    )
-
-    Page.ONBOARDING_CONVERSATIONS,
-    Page.ONBOARDING_PREPARE,
-    Page.ONBOARDING_SHARE -> TutorialOnboardingLayout(
         page,
         nextPage = nextPage,
         eventSink = eventSink,

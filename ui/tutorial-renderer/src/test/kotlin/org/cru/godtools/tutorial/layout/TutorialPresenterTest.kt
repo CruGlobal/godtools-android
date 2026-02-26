@@ -12,23 +12,17 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
-import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class TutorialPresenterTest {
-    private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val settings: Settings = mockk(relaxed = true)
-    private val navigator = FakeNavigator(TutorialScreen(PageSet.ONBOARDING))
+    private val navigator = FakeNavigator(TutorialScreen(PageSet.FEATURES))
 
-    private fun createPresenter(pageSet: PageSet = PageSet.ONBOARDING) = TutorialPresenter(
-        eventBus = eventBus,
+    private fun createPresenter(pageSet: PageSet = PageSet.FEATURES) = TutorialPresenter(
         settings = settings,
         navigator = navigator,
         screen = TutorialScreen(pageSet),
@@ -51,14 +45,6 @@ class TutorialPresenterTest {
     // endregion State
 
     // region Feature Discovery
-    @Test
-    fun `Feature Discovery - ONBOARDING - sets feature discovered`() = runTest {
-        createPresenter(PageSet.ONBOARDING).test {
-            awaitItem()
-            verify { settings.setFeatureDiscovered(Settings.FEATURE_TUTORIAL_ONBOARDING) }
-        }
-    }
-
     @Test
     fun `Feature Discovery - FEATURES - sets feature discovered`() = runTest {
         createPresenter(PageSet.FEATURES).test {
@@ -85,34 +71,6 @@ class TutorialPresenterTest {
         }
     }
     // endregion UiEvent.Back
-
-    // region UiEvent.Onboarding
-    @Test
-    fun `UiEvent - Onboarding - ChangeLanguage`() = runTest {
-        createPresenter(PageSet.ONBOARDING).test {
-            awaitItem().eventSink(TutorialPresenter.UiEvent.Onboarding.ChangeLanguage)
-            assertEquals(AppLanguageScreen, navigator.awaitNextScreen())
-        }
-    }
-
-    @Test
-    fun `UiEvent - Onboarding - Skip`() = runTest {
-        createPresenter(PageSet.ONBOARDING).test {
-            awaitItem().eventSink(TutorialPresenter.UiEvent.Onboarding.Skip)
-            verify { eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP)) }
-            assertEquals(TutorialScreen.Result.Finished, navigator.awaitPop().result)
-        }
-    }
-
-    @Test
-    fun `UiEvent - Onboarding - Finish`() = runTest {
-        createPresenter(PageSet.ONBOARDING).test {
-            awaitItem().eventSink(TutorialPresenter.UiEvent.Onboarding.Finish)
-            verify { eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH)) }
-            assertEquals(TutorialScreen.Result.Finished, navigator.awaitPop().result)
-        }
-    }
-    // endregion UiEvent.Onboarding
 
     // region UiEvent.LiveShare
     @Test

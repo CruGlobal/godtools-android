@@ -12,14 +12,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.base.Settings
-import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
-import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.greenrobot.eventbus.EventBus
 
 class TutorialPresenter @AssistedInject constructor(
-    private val eventBus: EventBus,
     private val settings: Settings,
     @Assisted private val navigator: Navigator,
     @Assisted private val screen: TutorialScreen,
@@ -39,12 +34,6 @@ class TutorialPresenter @AssistedInject constructor(
             data object Finish : LiveShare
         }
 
-        sealed interface Onboarding : UiEvent {
-            data object ChangeLanguage : Onboarding
-            data object Skip : Onboarding
-            data object Finish : Onboarding
-        }
-
         sealed interface Tips : UiEvent {
             data object Skip : Tips
             data object Finish : Tips
@@ -60,18 +49,6 @@ class TutorialPresenter @AssistedInject constructor(
         return UiState(screen.pageSet) { event ->
             when (event) {
                 UiEvent.Back -> navigator.pop(TutorialScreen.Result.Canceled)
-
-                UiEvent.Onboarding.ChangeLanguage -> navigator.goTo(AppLanguageScreen)
-
-                UiEvent.Onboarding.Skip -> {
-                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_SKIP))
-                    navigator.pop(TutorialScreen.Result.Finished)
-                }
-
-                UiEvent.Onboarding.Finish -> {
-                    eventBus.post(TutorialAnalyticsActionEvent(TutorialAnalyticsActionNames.ONBOARDING_FINISH))
-                    navigator.pop(TutorialScreen.Result.Finished)
-                }
 
                 UiEvent.LiveShare.QrCode -> navigator.pop(TutorialScreen.Result.ShowQrCode)
 
