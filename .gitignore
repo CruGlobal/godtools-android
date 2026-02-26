@@ -18,7 +18,8 @@ local.properties
 .kotlin/
 
 # Local Claude Code settings
-.claude/
+.claude/*
+!.claude/skills/
 
 # Fabric/Crashlytics ignores
 com_crashlytics_export_strings.xml
