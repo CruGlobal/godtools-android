@@ -2,6 +2,7 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,8 +37,6 @@ import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAc
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.tutorial.Page
-import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.R
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
@@ -68,9 +66,16 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
         Scaffold(
             topBar = {
                 TutorialAppBar(
-                    pageSet,
-                    currentPage = { currentPage },
-                    eventSink = eventSink,
+                    showUpNavigation = pageSet.showUpNavigation,
+                    onNavigateUp = { eventSink(UiEvent.Back) },
+                    actions = {
+                        val showMenu by remember { derivedStateOf { currentPage.showMenu } }
+                        if (showMenu) {
+                            pageSet.menu.forEach { (item, event) ->
+                                AppBarActionButton(item, onClick = { eventSink(event) })
+                            }
+                        }
+                    }
                 )
             },
             bottomBar = {
@@ -119,29 +124,24 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private inline fun TutorialAppBar(
-    pageSet: PageSet,
-    crossinline currentPage: @DisallowComposableCalls () -> Page,
-    crossinline eventSink: (UiEvent) -> Unit,
+fun TutorialAppBar(
+    modifier: Modifier = Modifier,
+    showUpNavigation: Boolean = true,
+    onNavigateUp: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
 ) = TopAppBar(
     title = {},
     navigationIcon = {
-        if (pageSet.showUpNavigation) {
+        if (showUpNavigation) {
             IconButton(
-                onClick = { eventSink(UiEvent.Back) },
+                onClick = onNavigateUp,
                 modifier = Modifier.testTag(TEST_TAG_NAVIGATE_UP),
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, null)
             }
         }
     },
-    actions = {
-        val showMenu by remember { derivedStateOf { currentPage().showMenu } }
-        if (showMenu) {
-            pageSet.menu.forEach { (item, event) ->
-                AppBarActionButton(item, onClick = { eventSink(event) })
-            }
-        }
-    },
+    actions = actions,
     colors = GodToolsTheme.tutorialAppBarColors,
+    modifier = modifier
 )
