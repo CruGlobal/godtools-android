@@ -14,13 +14,12 @@ import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
-import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tools.ToolCard
 
 @Parcelize
 data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
-    data class State(
+    data class UiState(
         val toolCode: String? = null,
         val tool: Tool? = null,
         val banner: File? = null,

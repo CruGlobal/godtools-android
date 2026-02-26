@@ -12,13 +12,11 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
-import io.mockk.every
-import io.mockk.mockk
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -32,7 +30,7 @@ class ToolDetailsLayoutTest {
 
     private val events = TestEventSink<Event>()
 
-    private fun renderToolDetailsLayout(state: State = State(eventSink = events)) = composeTestRule.setContent {
+    private fun renderToolDetailsLayout(state: UiState = UiState(eventSink = events)) = composeTestRule.setContent {
         CompositionLocalProvider(
             LocalEventBus provides EventBus()
         ) {
@@ -53,7 +51,7 @@ class ToolDetailsLayoutTest {
     // region Action - Pin Shortcut
     @Test
     fun `Action - Pin Shortcut`() {
-        renderToolDetailsLayout(State(hasShortcut = true, eventSink = events))
+        renderToolDetailsLayout(UiState(hasShortcut = true, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_PIN_SHORTCUT).assertDoesNotExist()
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_OVERFLOW).assertExists().performClick()
@@ -65,7 +63,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `Action - Pin Shortcut - hasShortcut=false`() {
-        renderToolDetailsLayout(State(hasShortcut = false, eventSink = events))
+        renderToolDetailsLayout(UiState(hasShortcut = false, eventSink = events))
 
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_PIN_SHORTCUT).assertDoesNotExist()
         composeTestRule.onNodeWithTag(TEST_TAG_ACTION_OVERFLOW).assertDoesNotExist()
@@ -77,7 +75,7 @@ class ToolDetailsLayoutTest {
     @Test
     fun `Action - Tool Training Button - visible when manifest has tips`() {
         renderToolDetailsLayout(
-            State(
+            UiState(
                 hasTips = true,
                 eventSink = events,
             )
@@ -90,7 +88,7 @@ class ToolDetailsLayoutTest {
     @Test
     fun `Action - Tool Training Button - gone when manifest does not have tips`() {
         renderToolDetailsLayout(
-            State(
+            UiState(
                 hasTips = false,
                 eventSink = events,
             )
@@ -104,7 +102,7 @@ class ToolDetailsLayoutTest {
     // region ToolDetailsLanguages()
     @Test
     fun `ToolDetailsLanguages() - No Languages`() {
-        val state = State(availableLanguages = persistentListOf())
+        val state = UiState(availableLanguages = persistentListOf())
         composeTestRule.setContent { ToolDetailsLanguages(state, true, {}) }
 
         // The entire ToolDetailsLanguages() composable should be gone if there are no languages
@@ -113,7 +111,7 @@ class ToolDetailsLayoutTest {
 
     @Test
     fun `ToolDetailsLanguages() - Sorted Languages`() {
-        val state = State(
+        val state = UiState(
             availableLanguages = persistentListOf("Language 1", "Language 2")
         )
         composeTestRule.setContent { ToolDetailsLanguages(state, true, {}) }

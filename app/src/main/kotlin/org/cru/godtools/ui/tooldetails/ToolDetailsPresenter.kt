@@ -65,7 +65,7 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
@@ -91,9 +91,9 @@ class ToolDetailsPresenter @AssistedInject constructor(
     @Named(IS_CONNECTED_STATE_FLOW) private val isConnected: StateFlow<Boolean>,
     @Assisted private val screen: ToolDetailsScreen,
     @Assisted private val navigator: Navigator,
-) : Presenter<State> {
+) : Presenter<UiState> {
     @Composable
-    override fun present(): State {
+    override fun present(): UiState {
         val coroutineScope = rememberCoroutineScope()
 
         var toolCode by rememberSaveable { mutableStateOf(screen.initialTool) }
@@ -176,7 +176,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
         DownloadLatestTranslation(downloadManager, toolCode, translation?.languageCode, isConnected)
         DownloadLatestTranslation(downloadManager, toolCode, secondTranslation?.languageCode, isConnected)
 
-        return State(
+        return UiState(
             toolCode = toolCode,
             tool = tool,
             banner = attachmentsRepository.rememberAttachmentFile(

@@ -44,11 +44,12 @@ import org.cru.godtools.R
 import org.cru.godtools.analytics.model.ExitLinkActionEvent
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.model.getDescription
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 
 internal const val TEST_TAG_LANGUAGES_AVAILABLE = "languages_available"
 
 @Composable
-internal fun ToolDetailsAbout(state: ToolDetailsScreen.State, modifier: Modifier = Modifier) {
+internal fun ToolDetailsAbout(state: UiState, modifier: Modifier = Modifier) {
     val tool by rememberUpdatedState(state.tool)
     val translation by rememberUpdatedState(state.translation)
 
@@ -123,7 +124,7 @@ private enum class ToolDetailsAboutAccordionSection { OUTLINE, BIBLE_REFERENCES,
 @Composable
 @VisibleForTesting
 internal fun ToolDetailsLanguages(
-    state: ToolDetailsScreen.State,
+    state: UiState,
     expanded: Boolean,
     onToggleLanguages: () -> Unit,
     modifier: Modifier = Modifier,
@@ -188,7 +189,7 @@ private fun ToolDetailsAboutAccordionSection(
 }
 
 @Composable
-private fun ToolDetailsLinkifiedText(text: String?, state: ToolDetailsScreen.State, modifier: Modifier = Modifier) {
+private fun ToolDetailsLinkifiedText(text: String?, state: UiState, modifier: Modifier = Modifier) {
     val eventBus = LocalEventBus.current
     val uriHandler = LocalUriHandler.current
     val tool by rememberUpdatedState(state.tool?.code)
