@@ -1,6 +1,7 @@
 package org.cru.godtools.tutorial.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.LineBreak
@@ -10,6 +11,14 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 val GodToolsTheme.tutorialBackgroundColor
     @Composable
     get() = if (isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
+
+internal val GodToolsTheme.tutorialAppBarColors
+    @Composable
+    get() = TopAppBarDefaults.topAppBarColors(
+        containerColor = tutorialBackgroundColor,
+        navigationIconContentColor = MaterialTheme.colorScheme.primary,
+        actionIconContentColor = MaterialTheme.colorScheme.primary
+    )
 
 /**
  * Overlay the current Material 3 theme changing the lineBreak behavior to Heading

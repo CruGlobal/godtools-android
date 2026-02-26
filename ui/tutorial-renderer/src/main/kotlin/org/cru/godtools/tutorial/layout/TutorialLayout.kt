@@ -19,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls
 import androidx.compose.runtime.derivedStateOf
@@ -45,6 +44,7 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
+import org.cru.godtools.tutorial.theme.tutorialAppBarColors
 import org.cru.godtools.tutorial.theme.tutorialBackgroundColor
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
@@ -143,9 +143,5 @@ private inline fun TutorialAppBar(
             }
         }
     },
-    colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = GodToolsTheme.tutorialBackgroundColor,
-        navigationIconContentColor = MaterialTheme.colorScheme.primary,
-        actionIconContentColor = MaterialTheme.colorScheme.primary
-    ),
+    colors = GodToolsTheme.tutorialAppBarColors,
 )
