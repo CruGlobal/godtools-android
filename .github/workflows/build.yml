@@ -52,7 +52,7 @@ jobs:
         run: ./gradlew :build-logic:ktlintCheck ktlintCheck --scan
       - name: Archive ktlint results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ktlint-results
           path: "**/build/reports/ktlint/"
@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew lint --scan
       - name: Archive lint results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: lint-results
           path: "**/build/reports/lint-results*.*"
@@ -119,7 +119,7 @@ jobs:
           verbose: true
       - name: Archive Unit Test results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: unit-test-results-${{ matrix.testShard }}
           path: |
