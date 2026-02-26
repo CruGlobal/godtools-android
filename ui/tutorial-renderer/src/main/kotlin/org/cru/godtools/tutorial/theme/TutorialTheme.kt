@@ -2,7 +2,14 @@ package org.cru.godtools.tutorial.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.LineBreak
+import org.cru.godtools.base.ui.theme.GodToolsTheme
+
+// HACK: we are overriding the background color to be pure white because the animations assume the background is white
+val GodToolsTheme.tutorialBackgroundColor
+    @Composable
+    get() = if (isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 /**
  * Overlay the current Material 3 theme changing the lineBreak behavior to Heading

@@ -28,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -46,14 +45,10 @@ import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsScreenEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiEvent
 import org.cru.godtools.tutorial.layout.TutorialPresenter.UiState
 import org.cru.godtools.tutorial.theme.TutorialThemeOverlay
+import org.cru.godtools.tutorial.theme.tutorialBackgroundColor
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
 internal const val TEST_TAG_PAGE_INDICATOR = "page_indicator"
-
-// HACK: we are overriding the background color to be pure white because the animations assume the background is white
-private val tutorialBackgroundColor
-    @Composable
-    get() = if (GodToolsTheme.isLightColorSchemeActive) Color.White else MaterialTheme.colorScheme.background
 
 @Composable
 @CircuitInject(TutorialScreen::class, SingletonComponent::class)
@@ -93,7 +88,7 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
                     )
                 }
             },
-            containerColor = tutorialBackgroundColor,
+            containerColor = GodToolsTheme.tutorialBackgroundColor,
             contentColor = MaterialTheme.colorScheme.onBackground,
             modifier = modifier,
         ) { insets ->
@@ -149,7 +144,7 @@ private inline fun TutorialAppBar(
         }
     },
     colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = tutorialBackgroundColor,
+        containerColor = GodToolsTheme.tutorialBackgroundColor,
         navigationIconContentColor = MaterialTheme.colorScheme.primary,
         actionIconContentColor = MaterialTheme.colorScheme.primary
     ),
