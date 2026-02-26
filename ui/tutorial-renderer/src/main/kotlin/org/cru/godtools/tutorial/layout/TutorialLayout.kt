@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -80,16 +81,11 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
             },
             bottomBar = {
                 if (pageSet.showPageIndicator) {
-                    HorizontalPagerIndicator(
-                        pagerState = pagerState,
-                        pageCount = pagerState.pageCount,
-                        activeColor = MaterialTheme.colorScheme.primary,
+                    TutorialPagerIndicator(
+                        pagerState,
                         modifier = Modifier
-                            .testTag(TEST_TAG_PAGE_INDICATOR)
                             .navigationBarsPadding()
                             .fillMaxWidth()
-                            .height(dimensionResource(R.dimen.tutorial_indicator_height))
-                            .wrapContentSize()
                     )
                 }
             },
@@ -144,4 +140,15 @@ fun TutorialAppBar(
     actions = actions,
     colors = GodToolsTheme.tutorialAppBarColors,
     modifier = modifier
+)
+
+@Composable
+fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) = HorizontalPagerIndicator(
+    pagerState = state,
+    pageCount = state.pageCount,
+    activeColor = MaterialTheme.colorScheme.primary,
+    modifier = modifier
+        .testTag(TEST_TAG_PAGE_INDICATOR)
+        .height(dimensionResource(R.dimen.tutorial_indicator_height))
+        .wrapContentSize()
 )
