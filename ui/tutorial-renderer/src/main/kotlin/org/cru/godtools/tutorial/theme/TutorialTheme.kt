@@ -3,7 +3,6 @@ package org.cru.godtools.tutorial.theme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.LineBreak
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 /**
  * Overlay the current Material 3 theme changing the lineBreak behavior to Heading
