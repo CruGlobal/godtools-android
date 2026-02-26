@@ -26,7 +26,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.drawer.DrawerMenuScreenStateTestData
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.runner.RunWith
@@ -43,7 +43,7 @@ class ToolDetailsLayoutPaparazziTest(
         ToolCardStateTestData.tool.copy(secondLanguage = null)
     )
 
-    private val state = State(
+    private val state = UiState(
         tool = randomTool(
             detailsBannerYoutubeVideoId = null,
             shares = 123355,

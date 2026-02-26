@@ -71,7 +71,7 @@ import org.cru.godtools.model.getName
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Event
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.State
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
@@ -87,7 +87,7 @@ internal const val TEST_TAG_ACTION_TOOL_TRAINING = "action_tool_training"
 @Composable
 @CircuitInject(ToolDetailsScreen::class, SingletonComponent::class)
 @OptIn(ExperimentalMaterial3Api::class)
-fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuLayout(state.drawerState, modifier) {
+fun ToolDetailsLayout(state: UiState, modifier: Modifier = Modifier) = DrawerMenuLayout(state.drawerState, modifier) {
     val hasShortcut by rememberUpdatedState(state.hasShortcut)
     val eventSink by rememberUpdatedState(state.eventSink)
 
@@ -132,7 +132,7 @@ fun ToolDetailsLayout(state: State, modifier: Modifier = Modifier) = DrawerMenuL
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
+private fun ToolDetailsContent(state: UiState, modifier: Modifier = Modifier) {
     val tool by rememberUpdatedState(state.tool)
     val translation by rememberUpdatedState(state.translation)
     val secondLanguage by rememberUpdatedState(state.secondLanguage)
@@ -231,7 +231,7 @@ private fun ToolDetailsContent(state: State, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
+private fun ToolDetailsBanner(state: UiState, modifier: Modifier = Modifier) {
     val youtubeVideo = state.tool?.detailsBannerYoutubeVideoId
 
     when {
@@ -268,7 +268,7 @@ private fun ToolDetailsBanner(state: State, modifier: Modifier = Modifier) {
 
 @Composable
 @VisibleForTesting
-internal fun ToolDetailsActions(state: State, modifier: Modifier = Modifier) = Column(modifier = modifier) {
+internal fun ToolDetailsActions(state: UiState, modifier: Modifier = Modifier) = Column(modifier = modifier) {
     val tool by rememberUpdatedState(state.tool)
     val eventSink by rememberUpdatedState(state.eventSink)
 
@@ -308,7 +308,7 @@ internal fun ToolDetailsActions(state: State, modifier: Modifier = Modifier) = C
 }
 
 @Composable
-private fun ToolDetailsVariants(state: State, modifier: Modifier = Modifier) {
+private fun ToolDetailsVariants(state: UiState, modifier: Modifier = Modifier) {
     val currentTool by rememberUpdatedState(state.toolCode)
     val variants by rememberUpdatedState(state.variants)
 
