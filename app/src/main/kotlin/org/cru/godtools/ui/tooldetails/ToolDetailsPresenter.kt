@@ -119,24 +119,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
 
-                    UiEvent.OpenTool -> tool?.let { tool ->
-                        val intent = tool.createToolIntent(
-                            context = context,
-                            languages = when (tool.type) {
-                                Tool.Type.ARTICLE -> listOfNotNull(
-                                    secondTranslation?.languageCode ?: translation?.languageCode
-                                )
-
-                                else -> listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
-                            },
-                            activeLocale = secondTranslation?.languageCode
-                        )
-
-                        if (intent != null) {
-                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_TOOL_DETAILS))
-                            navigator.goTo(IntentScreen(intent))
-                        }
-                    }
+                    UiEvent.OpenTool -> openTool(tool, translation, secondTranslation)
 
                     UiEvent.OpenToolTraining -> tool?.let {
                         // TODO: handle opening training tips and optionally showing the tutorial locally once the
@@ -261,6 +244,33 @@ class ToolDetailsPresenter @AssistedInject constructor(
                 }
                 .flowOn(ioDispatcher)
         }.collectAsState(persistentListOf()).value
+    }
+
+    private fun openTool(
+        tool: Tool?,
+        translation: Translation?,
+        secondTranslation: Translation?,
+        showTips: Boolean = false,
+    ) {
+        tool?.let { tool ->
+            val intent = tool.createToolIntent(
+                context = context,
+                languages = when (tool.type) {
+                    Tool.Type.ARTICLE -> listOfNotNull(
+                        secondTranslation?.languageCode ?: translation?.languageCode
+                    )
+
+                    else -> listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
+                },
+                activeLocale = secondTranslation?.languageCode,
+                showTips = showTips
+            )
+
+            if (intent != null) {
+                eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_TOOL_DETAILS))
+                navigator.goTo(IntentScreen(intent))
+            }
+        }
     }
 
     @AssistedFactory
