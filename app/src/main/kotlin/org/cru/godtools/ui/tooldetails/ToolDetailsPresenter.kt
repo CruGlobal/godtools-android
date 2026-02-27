@@ -114,42 +114,6 @@ class ToolDetailsPresenter @AssistedInject constructor(
         val manifest by manifestManager.produceManifestState(translation)
         val secondManifest by manifestManager.produceManifestState(secondTranslation)
 
-        val eventSink: (UiEvent) -> Unit = remember {
-            {
-                when (it) {
-                    UiEvent.NavigateUp -> navigator.pop()
-
-                    UiEvent.OpenTool -> openTool(tool, translation, secondTranslation)
-
-                    UiEvent.OpenToolTraining -> tool?.let {
-                        // TODO: handle opening training tips and optionally showing the tutorial locally once the
-                        //       tutorial uses Circuit.
-                        navigator.goTo(
-                            OpenToolTrainingScreen(
-                                it.code,
-                                it.type,
-                                translation?.languageCode,
-                                secondTranslation?.languageCode
-                            )
-                        )
-                    }
-
-                    UiEvent.PinTool -> coroutineScope.launch {
-                        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-                        toolsRepository.pinTool(toolCode)
-                        syncService.syncDirtyFavoriteTools()
-                    }
-
-                    UiEvent.UnpinTool -> coroutineScope.launch {
-                        toolsRepository.unpinTool(toolCode)
-                        syncService.syncDirtyFavoriteTools()
-                    }
-
-                    UiEvent.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
-                }
-            }
-        }
-
         val secondLanguage = languagesRepository.rememberLanguage(screen.secondLanguage)
         val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage) { toolCode = it }
 
@@ -175,8 +139,39 @@ class ToolDetailsPresenter @AssistedInject constructor(
             availableLanguages = rememberAvailableLanguages(toolCode),
             variants = variants,
             drawerState = drawerMenuPresenter.present(),
-            eventSink = eventSink
-        )
+        ) {
+            when (it) {
+                UiEvent.NavigateUp -> navigator.pop()
+
+                UiEvent.OpenTool -> openTool(tool, translation, secondTranslation)
+
+                UiEvent.OpenToolTraining -> tool?.let {
+                    // TODO: handle opening training tips and optionally showing the tutorial locally once the
+                    //       tutorial uses Circuit.
+                    navigator.goTo(
+                        OpenToolTrainingScreen(
+                            it.code,
+                            it.type,
+                            translation?.languageCode,
+                            secondTranslation?.languageCode
+                        )
+                    )
+                }
+
+                UiEvent.PinTool -> coroutineScope.launch {
+                    settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+                    toolsRepository.pinTool(toolCode)
+                    syncService.syncDirtyFavoriteTools()
+                }
+
+                UiEvent.UnpinTool -> coroutineScope.launch {
+                    toolsRepository.unpinTool(toolCode)
+                    syncService.syncDirtyFavoriteTools()
+                }
+
+                UiEvent.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
+            }
+        }
     }
 
     @Composable
