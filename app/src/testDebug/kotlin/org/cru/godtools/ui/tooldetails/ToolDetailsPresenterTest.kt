@@ -32,7 +32,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -313,6 +312,20 @@ class ToolDetailsPresenterTest {
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
+
+    @Test
+    fun `State - variants - UiEvent - Click - changes toolCode`() = testScope.runTest {
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant = randomTool("variant", Tool.Type.TRACT, metatoolCode = "meta")
+        toolFlow.value = tool
+        normalToolsFlow.value = listOf(tool, variant)
+
+        createPresenter().test {
+            val state = expectMostRecentItem()
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            assertEquals("variant", expectMostRecentItem().toolCode)
+        }
+    }
     // endregion State.variants
 
     // region State.drawerState
@@ -506,21 +519,6 @@ class ToolDetailsPresenterTest {
     }
     // endregion Event.UnpinTool
 
-    // region Event.SwitchVariant
-    @Test
-    fun `Event - SwitchVariant`() = testScope.runTest {
-        createPresenter(ToolDetailsScreen("initial")).test {
-            assertNotNull(expectMostRecentItem()) {
-                assertEquals("initial", it.toolCode)
-
-                it.eventSink(UiEvent.SwitchVariant("new"))
-            }
-
-            assertEquals("new", expectMostRecentItem().toolCode)
-        }
-    }
-    // endregion Event.SwitchVariant
-
     // region SideEffect - DownloadLatestTranslation
     @Test
     fun `SideEffect - DownloadLatestTranslation`() = testScope.runTest {
@@ -576,6 +574,11 @@ class ToolDetailsPresenterTest {
 
     @Test
     fun `SideEffect - DownloadLatestTranslation - Trigger on variant change`() = testScope.runTest {
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant = randomTool("variant", Tool.Type.TRACT, metatoolCode = "meta")
+        toolFlow.value = tool
+        normalToolsFlow.value = listOf(tool, variant)
+
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
@@ -590,7 +593,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().eventSink(UiEvent.SwitchVariant("variant"))
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)

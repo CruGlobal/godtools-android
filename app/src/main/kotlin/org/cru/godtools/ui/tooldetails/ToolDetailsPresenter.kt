@@ -145,15 +145,13 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         syncService.syncDirtyFavoriteTools()
                     }
 
-                    is UiEvent.SwitchVariant -> toolCode = it.variant
-
                     UiEvent.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
                 }
             }
         }
 
         val secondLanguage = languagesRepository.rememberLanguage(screen.secondLanguage)
-        val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage, eventSink = eventSink)
+        val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage) { toolCode = it }
 
         // Side Effects
         DownloadLatestTranslation(downloadManager, toolCode, translation?.languageCode, isConnected)
@@ -193,11 +191,11 @@ class ToolDetailsPresenter @AssistedInject constructor(
     private fun rememberVariants(
         metaToolCode: String?,
         secondLanguage: Language?,
-        eventSink: (UiEvent) -> Unit,
+        onVariantSelect: (String) -> Unit,
     ): ImmutableList<ToolCard.State> {
         if (metaToolCode == null) return persistentListOf()
 
-        val eventSink by rememberUpdatedState(eventSink)
+        val onVariantSelect by rememberUpdatedState(onVariantSelect)
 
         return remember { toolsRepository.getNormalToolsFlow() }.collectAsState(emptyList()).value
             .filter { it.metatoolCode == metaToolCode }
@@ -210,7 +208,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         loadAvailableLanguages = true,
                         eventSink = {
                             when (it) {
-                                ToolCard.Event.Click -> tool.code?.let { eventSink(UiEvent.SwitchVariant(it)) }
+                                ToolCard.Event.Click -> tool.code?.let { onVariantSelect(it) }
                                 else -> Unit
                             }
                         }
