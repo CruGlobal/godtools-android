@@ -2,7 +2,6 @@ package org.cru.godtools.ui.languages.downloadable
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -22,10 +21,12 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import javax.inject.Named
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
@@ -49,6 +50,7 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
     private val languagesRepository: LanguagesRepository,
     private val settings: Settings,
     private val toolsRepository: ToolsRepository,
+    @Named("STATE_FLOW_IS_CONNECTED") private val isConnected: StateFlow<Boolean>,
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
@@ -56,9 +58,12 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
     override fun present(): UiState {
         val coroutineScope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
+        val connected by isConnected.collectAsState()
+        var showOfflineDialog by remember { mutableStateOf(false) }
 
         return UiState(
             query = query,
+            showOfflineDialog = showOfflineDialog,
             languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
                 .map { lang ->
                     key(lang.code) {
@@ -74,9 +79,15 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
 
-                    is UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
-                        languagesRepository.pinLanguage(it.locale)
+                    is UiEvent.PinLanguage -> if (connected) {
+                        coroutineScope.launch(NonCancellable) {
+                            languagesRepository.pinLanguage(it.locale)
+                        }
+                    } else {
+                        showOfflineDialog = true
                     }
+
+                    is UiEvent.DismissOfflineDialog -> showOfflineDialog = false
 
                     is UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
                         languagesRepository.unpinLanguage(it.locale)
