@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,6 +69,19 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     }
 
     BackHandler(enabled = searchQuery.isNotEmpty()) { updateSearchQuery("") }
+
+    if (state.showOfflineDialog) {
+        AlertDialog(
+            onDismissRequest = { state.eventSink(UiEvent.DismissOfflineDialog) },
+            title = { Text(stringResource(R.string.account_error_not_connected_title)) },
+            text = { Text(stringResource(R.string.account_error_not_connected)) },
+            confirmButton = {
+                TextButton(onClick = { state.eventSink(UiEvent.DismissOfflineDialog) }) {
+                    Text(stringResource(android.R.string.ok))
+                }
+            },
+        )
+    }
 
     Scaffold(
         topBar = {
