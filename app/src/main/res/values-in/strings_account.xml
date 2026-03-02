@@ -64,7 +64,7 @@
     <string name="account_tab_global_activity">Aktifitas Global</string>
     <string name="profile_global_activity_heading">%1$s  Aktivitas Global</string>
     <string name="profile_activity_unique_users">Pengguna unik</string>
-    <string name="profile_activity_gospel_presentations">Presentasi Injil</string>
+    <string name="profile_activity_gospel_presentations">Penyajian Injil</string>
     <string name="profile_activity_sessions">Sesi-Sesi</string>
     <string name="profile_activity_countries">Negara-negara</string>
 </resources>
