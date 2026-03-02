@@ -16,12 +16,14 @@ object DownloadableLanguagesScreen : Screen {
     data class UiState(
         val query: MutableState<String> = mutableStateOf(""),
         val languages: ImmutableList<UiLanguage> = persistentListOf(),
+        val showOfflineDialog: Boolean = false,
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState {
         data class UiLanguage(val language: Language, val downloadedTools: Int = 0, val totalTools: Int = 0)
 
         sealed interface UiEvent : CircuitUiEvent {
             data object NavigateUp : UiEvent
+            data object DismissOfflineDialog : UiEvent
             data class PinLanguage(val locale: Locale) : UiEvent
             data class UnpinLanguage(val locale: Locale) : UiEvent
         }
