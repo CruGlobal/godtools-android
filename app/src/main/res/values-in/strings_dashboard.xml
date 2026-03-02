@@ -46,7 +46,7 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="dashboard_home_section_featured_lesson">Pelajaran-pelajaran</string>
     <string name="dashboard_home_section_favorites_title">Alat favorit Saudara</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Tidak ada alat favorit untuk ditampilkan</string>
-    <string name="dashboard_home_section_favorites_no_tools_description">Sentuh ikon untuk menjadikan alat favorit dan menyediakannya offline. </string>
+    <string name="dashboard_home_section_favorites_no_tools_description">Sentuh ikon untuk menjadikan alat favorit dan menyediakannya offline.</string>
     <string name="dashboard_home_section_favorites_action_view_all">Lihat semua &gt;</string>
     <string name="dashboard_home_section_favorites_action_all_tools">Ke Alat-alat</string>
     <string name="tools_list_favorites_banner_text">Jadikan alat tersedia offline dengan mengetuk ikon hati yang akan menambahkan sarana tersebut ke favorit.</string>
@@ -55,7 +55,7 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="nav_all_tools">Alat-alat</string>
     <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Kategori apapun</string>
-    <string name="dashboard_tools_section_filter_language_any">Bahasa apapun</string>
+    <string name="dashboard_tools_section_filter_language_any">Bahasa apa pun</string>
     <plurals name="dashboard_tools_section_filter_available_tools">
         <item quantity="other">%1$d Alat-alat yang tersedia</item>
     </plurals>
