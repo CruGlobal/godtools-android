@@ -149,7 +149,8 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 25: 2025-01-27
  */
 
-internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() = fallbackToDestructiveMigration()
+internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() =
+    fallbackToDestructiveMigration(dropAllTables = true)
 
 internal class ResetUserSyncMigration : AutoMigrationSpec {
     override fun onPostMigrate(db: SupportSQLiteDatabase) {
