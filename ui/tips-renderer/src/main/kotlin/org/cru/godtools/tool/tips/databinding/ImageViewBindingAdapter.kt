@@ -1,9 +1,9 @@
 package org.cru.godtools.tool.tips.databinding
 
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.InsetDrawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import org.ccci.gto.android.common.compat.graphics.drawable.InsetDrawableCompat
 
 @BindingAdapter("android:src", "srcInsetLeft", "srcInsetTop", "srcInsetRight", "srcInsetBottom")
 internal fun ImageView.setInsetImageDrawable(
@@ -21,7 +21,7 @@ internal fun ImageView.setInsetImageDrawable(
         when {
             drawable == null -> null
             left == 0 && top == 0 && right == 0 && bottom == 0 -> drawable
-            else -> InsetDrawableCompat(drawable, left, top, right, bottom)
+            else -> InsetDrawable(drawable, left, top, right, bottom)
         }
     )
 }
