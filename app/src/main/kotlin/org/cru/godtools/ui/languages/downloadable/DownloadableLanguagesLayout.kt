@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -22,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +37,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.overlay.LocalOverlayHost
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -69,19 +68,6 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     }
 
     BackHandler(enabled = searchQuery.isNotEmpty()) { updateSearchQuery("") }
-
-    if (state.showOfflineDialog) {
-        AlertDialog(
-            onDismissRequest = { state.eventSink(UiEvent.DismissOfflineDialog) },
-            title = { Text(stringResource(R.string.account_error_not_connected_title)) },
-            text = { Text(stringResource(R.string.account_error_not_connected)) },
-            confirmButton = {
-                TextButton(onClick = { state.eventSink(UiEvent.DismissOfflineDialog) }) {
-                    Text(stringResource(android.R.string.ok))
-                }
-            },
-        )
-    }
 
     Scaffold(
         topBar = {
@@ -134,7 +120,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
-                LanguageListItem(it, state.eventSink, Modifier.animateItem())
+                LanguageListItem(it, state.eventSink, state.isConnected.value, Modifier.animateItem())
                 if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
@@ -142,7 +128,12 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, modifier: Modifier = Modifier) = ListItem(
+private fun LanguageListItem(
+    state: UiLanguage,
+    eventSink: (UiEvent) -> Unit,
+    isConnected: Boolean,
+    modifier: Modifier = Modifier
+) = ListItem(
     headlineContent = { LanguageName(state.language) },
     supportingContent = {
         Text(
@@ -155,6 +146,9 @@ private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, mo
     },
     trailingContent = {
         var confirmRemoval by rememberSaveable { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+        val overlayHost = LocalOverlayHost.current
+
         LaunchedEffect(confirmRemoval) {
             delay(3_000)
             confirmRemoval = false
@@ -171,8 +165,15 @@ private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, mo
                     indication = ripple(bounded = false),
                 ) {
                     when {
-                        !state.language.isAdded -> eventSink(UiEvent.PinLanguage(state.language.code))
+                        !state.language.isAdded -> coroutineScope.launch {
+                            if (!isConnected) {
+                                overlayHost.show(OfflineDialogOverlay())
+                            }
+                            eventSink(UiEvent.PinLanguage(state.language.code))
+                        }
+
                         !confirmRemoval -> confirmRemoval = true
+
                         else -> eventSink(UiEvent.UnpinLanguage(state.language.code))
                     }
                 }
