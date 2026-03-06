@@ -20,6 +20,7 @@ class DownloadableLanguagesLayoutPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
+    private val isConnected = mutableStateOf(true)
     private val state = UiState(
         languages = persistentListOf(
             UiState.UiLanguage(
@@ -37,7 +38,8 @@ class DownloadableLanguagesLayoutPaparazziTest(
                 downloadedTools = 1,
                 totalTools = 2
             ),
-        )
+        ),
+        isConnected = isConnected,
     )
 
     @Test
