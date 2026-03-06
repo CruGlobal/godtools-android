@@ -24,8 +24,8 @@
     <!-- Downloadable Languages UI -->
     <eat-comment />
     <string name="language_settings_downloadable_languages_search">Search languages</string>
-    <string name="language_settings_offline_notification_title">No Internet Connection</string>
-    <string name="language_settings_offline_notification_message">Please check your internet connection and try again.</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">No Internet Connection</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Please check your internet connection and try again.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Tool available</item>
         <item quantity="other">%1$d Tools available</item>

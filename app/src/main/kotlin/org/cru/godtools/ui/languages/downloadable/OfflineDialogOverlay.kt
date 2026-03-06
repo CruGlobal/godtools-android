@@ -14,8 +14,16 @@ class OfflineDialogOverlay : Overlay<Unit> {
     override fun Content(navigator: OverlayNavigator<Unit>) {
         AlertDialog(
             onDismissRequest = { navigator.finish(Unit) },
-            title = { Text(stringResource(R.string.language_settings_offline_notification_title)) },
-            text = { Text(stringResource(R.string.language_settings_offline_notification_message)) },
+            title = {
+                Text(
+                    stringResource(R.string.language_settings_downloadable_languages_offline_notification_title)
+                )
+            },
+            text = {
+                Text(
+                    stringResource(R.string.language_settings_downloadable_languages_offline_notification_message)
+                )
+            },
             confirmButton = {
                 TextButton(onClick = { navigator.finish(Unit) }) {
                     Text(stringResource(android.R.string.ok))
