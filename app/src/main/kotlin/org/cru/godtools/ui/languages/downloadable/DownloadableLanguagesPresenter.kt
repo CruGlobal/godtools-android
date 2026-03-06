@@ -58,12 +58,11 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
     override fun present(): UiState {
         val coroutineScope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
-        val connected by isConnected.collectAsState()
-        var showOfflineDialog by remember { mutableStateOf(false) }
+        val connected = isConnected.collectAsState()
 
         return UiState(
             query = query,
-            showOfflineDialog = showOfflineDialog,
+            isConnected = connected,
             languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
                 .map { lang ->
                     key(lang.code) {
@@ -79,15 +78,9 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
 
-                    is UiEvent.PinLanguage -> if (connected) {
-                        coroutineScope.launch(NonCancellable) {
-                            languagesRepository.pinLanguage(it.locale)
-                        }
-                    } else {
-                        showOfflineDialog = true
+                    is UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
+                        languagesRepository.pinLanguage(it.locale)
                     }
-
-                    is UiEvent.DismissOfflineDialog -> showOfflineDialog = false
 
                     is UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
                         languagesRepository.unpinLanguage(it.locale)
