@@ -58,6 +58,7 @@ internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
 fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
+    val isConnected by state.isConnected
 
     var searchQuery by state.query
     val updateSearchQuery: (String) -> Unit = remember {
@@ -120,7 +121,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
-                LanguageListItem(it, state.eventSink, state.isConnected.value, Modifier.animateItem())
+                LanguageListItem(it, state.eventSink, isConnected = { isConnected }, Modifier.animateItem())
                 if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
@@ -131,7 +132,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
 private fun LanguageListItem(
     state: UiLanguage,
     eventSink: (UiEvent) -> Unit,
-    isConnected: Boolean,
+    isConnected: () -> Boolean,
     modifier: Modifier = Modifier
 ) = ListItem(
     headlineContent = { LanguageName(state.language) },
@@ -166,7 +167,7 @@ private fun LanguageListItem(
                 ) {
                     when {
                         !state.language.isAdded -> coroutineScope.launch {
-                            if (!isConnected) {
+                            if (!isConnected()) {
                                 overlayHost.show(OfflineDialogOverlay())
                             }
                             eventSink(UiEvent.PinLanguage(state.language.code))
