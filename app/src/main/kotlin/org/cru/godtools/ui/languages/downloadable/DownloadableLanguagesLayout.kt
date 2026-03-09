@@ -121,7 +121,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
-                LanguageListItem(it, state.eventSink, isConnected = { isConnected }, Modifier.animateItem())
+                LanguageListItem(it, state.eventSink, { isConnected }, Modifier.animateItem())
                 if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
