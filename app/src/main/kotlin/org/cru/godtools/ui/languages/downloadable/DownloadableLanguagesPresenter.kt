@@ -58,11 +58,10 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
     override fun present(): UiState {
         val coroutineScope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
-        val connected = isConnected.collectAsState()
 
         return UiState(
             query = query,
-            isConnected = connected,
+            isConnected = isConnected.collectAsState(),
             languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
                 .map { lang ->
                     key(lang.code) {
