@@ -6,7 +6,6 @@ import app.cash.paparazzi.DeviceConfig
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
-import com.slack.circuit.overlay.ContentWithOverlays
 import java.util.Locale
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
@@ -45,17 +44,15 @@ class DownloadableLanguagesLayoutPaparazziTest(
 
     @Test
     fun `DownloadableLanguagesLayout()`() {
-        snapshot { ContentWithOverlays { DownloadableLanguagesLayout(state) } }
+        snapshot { DownloadableLanguagesLayout(state) }
     }
 
     @Test
     fun `DownloadableLanguagesLayout() - Searching`() {
         snapshot {
-            ContentWithOverlays {
-                DownloadableLanguagesLayout(
-                    state.copy(query = remember { mutableStateOf("en") }),
-                )
-            }
+            DownloadableLanguagesLayout(
+                state.copy(query = remember { mutableStateOf("en") }),
+            )
         }
     }
 }
