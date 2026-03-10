@@ -37,6 +37,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.overlay.LocalOverlayHost
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,6 +58,7 @@ internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"
 fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()
+    val isConnected by state.isConnected
 
     var searchQuery by state.query
     val updateSearchQuery: (String) -> Unit = remember {
@@ -119,7 +121,7 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(contentPadding)
         ) {
             itemsIndexed(state.languages, key = { _, it -> it.language.code }) { i, it ->
-                LanguageListItem(it, state.eventSink, Modifier.animateItem())
+                LanguageListItem(it, state.eventSink, { isConnected }, Modifier.animateItem())
                 if (i < state.languages.lastIndex) HorizontalDivider(Modifier.animateItem())
             }
         }
@@ -127,7 +129,12 @@ fun DownloadableLanguagesLayout(state: UiState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, modifier: Modifier = Modifier) = ListItem(
+private fun LanguageListItem(
+    state: UiLanguage,
+    eventSink: (UiEvent) -> Unit,
+    isConnected: () -> Boolean,
+    modifier: Modifier = Modifier
+) = ListItem(
     headlineContent = { LanguageName(state.language) },
     supportingContent = {
         Text(
@@ -140,6 +147,9 @@ private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, mo
     },
     trailingContent = {
         var confirmRemoval by rememberSaveable { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+        val overlayHost = LocalOverlayHost.current
+
         LaunchedEffect(confirmRemoval) {
             delay(3_000)
             confirmRemoval = false
@@ -156,8 +166,15 @@ private fun LanguageListItem(state: UiLanguage, eventSink: (UiEvent) -> Unit, mo
                     indication = ripple(bounded = false),
                 ) {
                     when {
-                        !state.language.isAdded -> eventSink(UiEvent.PinLanguage(state.language.code))
+                        !state.language.isAdded -> coroutineScope.launch {
+                            if (!isConnected()) {
+                                overlayHost.show(OfflineDialogOverlay())
+                            }
+                            eventSink(UiEvent.PinLanguage(state.language.code))
+                        }
+
                         !confirmRemoval -> confirmRemoval = true
+
                         else -> eventSink(UiEvent.UnpinLanguage(state.language.code))
                     }
                 }

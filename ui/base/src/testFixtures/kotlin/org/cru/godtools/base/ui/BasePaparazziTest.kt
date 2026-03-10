@@ -18,6 +18,7 @@ import app.cash.paparazzi.accessibility.AccessibilityRenderExtension
 import com.android.ide.common.rendering.api.SessionParams.RenderingMode
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider
+import com.slack.circuit.overlay.ContentWithOverlays
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.greenrobot.eventbus.EventBus
@@ -86,7 +87,7 @@ abstract class BasePaparazziTest(
                 LocalEventBus provides eventBus,
                 LocalOnBackPressedDispatcherOwner provides backPressDispatcher,
             ) {
-                GodToolsTheme(content = content)
+                GodToolsTheme { ContentWithOverlays(content = content) }
             }
         }
     }

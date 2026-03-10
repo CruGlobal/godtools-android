@@ -54,6 +54,7 @@ class DownloadableLanguagesPresenterTest {
         languagesRepository = languagesRepository,
         settings = settings,
         toolsRepository = toolsRepository,
+        isConnected = MutableStateFlow(true),
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
         navigator = navigator
     )

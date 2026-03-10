@@ -1,5 +1,6 @@
 package org.cru.godtools.qrcode.activity
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import app.cash.paparazzi.DeviceConfig
 import com.android.resources.NightMode
@@ -20,7 +21,7 @@ class QRCodeComposablePaparazziTest(
     fun `QRCode Composable`() = snapshot {
         QRCodeScreen(
             url = "https://example.com",
-            modifier = Modifier
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
