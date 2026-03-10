@@ -58,12 +58,12 @@ dependencies {
     testImplementation(projects.ui.tractRenderer)
 
     testFixturesApi(libs.testparameterinjector)
-    testFixturesImplementation(libs.circuit.overlay)
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.compose.foundation)
     testFixturesImplementation(libs.androidx.compose.material3)
     testFixturesImplementation(libs.androidx.compose.ui)
     testFixturesImplementation(libs.androidx.lifecycle.runtime.testing)
+    testFixturesImplementation(libs.circuit.overlay)
     testFixturesImplementation(libs.junit)
     testFixturesImplementation(libs.paparazzi)
 }
