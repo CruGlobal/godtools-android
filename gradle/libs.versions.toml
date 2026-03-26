@@ -95,6 +95,7 @@ circuitx-gesture-navigation = { module = "com.slack.circuit:circuitx-gesture-nav
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 colormath-android-colorint = { module = "com.github.ajalt.colormath:colormath-ext-android-colorint", version.ref = "colormath" }
+colormath-jetpack-compose = { module = "com.github.ajalt.colormath:colormath-ext-jetpack-compose", version.ref = "colormath" }
 compose-reorderable = "org.burnoutcrew.composereorderable:reorderable:0.9.6"
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
@@ -160,6 +161,7 @@ gtoSupport-play-auth = { module = "org.ccci.gto.android:gto-support-play-auth", 
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
+gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.ref = "gtoSupport" }
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
