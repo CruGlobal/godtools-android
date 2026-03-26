@@ -141,17 +141,18 @@ internal fun LocalizationSettingsLayout(state: UiState, modifier: Modifier = Mod
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .padding(32.dp),
                 ) {
-                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.scrim) {                        Column {
-                        Text(
-                            text = stringResource(R.string.localization_settings_subtitle_header),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.localization_settings_subtitle_body),
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
+                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.scrim) {
+                        Column {
+                            Text(
+                                text = stringResource(R.string.localization_settings_subtitle_header),
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = stringResource(R.string.localization_settings_subtitle_body),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                     }
                 }
             }
