@@ -154,12 +154,12 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
                 }
             )
             NavigationDrawerItem(
-                icon = { Icon(Icons.Outlined.Public, null) },  // globe icon
+                icon = { Icon(Icons.Outlined.Public, null) },
                 label = { Text(stringResource(R.string.menu_localization_settings)) },
                 selected = false,
                 onClick = {
                     context.startCircuitActivity(LocalizationSettingsScreen)
-                        eventSink(Event.DismissDrawer)
+                    eventSink(Event.DismissDrawer)
                 }
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
