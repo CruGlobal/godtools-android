@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="country_native_name_AF" translatable="false">افغانستان</string>
+    <string name="country_native_name_AL" translatable="false">Shqipëri</string>
+    <string name="country_native_name_DZ" translatable="false">الجزائر</string>
+    <string name="country_native_name_AS" translatable="false">American Samoa</string>
+    <string name="country_native_name_AD" translatable="false">Andorra</string>
+    <string name="country_native_name_AO" translatable="false">Angola</string>
+    <string name="country_native_name_AI" translatable="false">Anguilla</string>
+    <string name="country_native_name_AQ" translatable="false">Antarctica</string>
+    <string name="country_native_name_AG" translatable="false">Antigua &amp; Barbuda</string>
+    <string name="country_native_name_AR" translatable="false">Argentina</string>
+    <string name="country_native_name_AM" translatable="false">Հայաստան</string>
+    <string name="country_native_name_AW" translatable="false">Aruba</string>
+    <string name="country_native_name_AC" translatable="false">Ascension Island</string>
+    <string name="country_native_name_AU" translatable="false">Australia</string>
+    <string name="country_native_name_AT" translatable="false">Österreich</string>
+    <string name="country_native_name_AZ" translatable="false">Azərbaycan</string>
+    <string name="country_native_name_BS" translatable="false">Bahamas</string>
+    <string name="country_native_name_BH" translatable="false">البحرين</string>
+    <string name="country_native_name_BD" translatable="false">বাংলাদেশ</string>
+    <string name="country_native_name_BB" translatable="false">Barbados</string>
+    <string name="country_native_name_BY" translatable="false">Беларусь</string>
+    <string name="country_native_name_BE" translatable="false">Belgium</string>
+    <string name="country_native_name_BZ" translatable="false">Belize</string>
+    <string name="country_native_name_BJ" translatable="false">Bénin</string>
+    <string name="country_native_name_BM" translatable="false">Bermuda</string>
+    <string name="country_native_name_BT" translatable="false">འབྲུག</string>
+    <string name="country_native_name_BO" translatable="false">Bolivia</string>
+    <string name="country_native_name_BA" translatable="false">Bosna i Hercegovina</string>
+    <string name="country_native_name_BW" translatable="false">Botswana</string>
+    <string name="country_native_name_BV" translatable="false">Bouvetøya</string>
+    <string name="country_native_name_BR" translatable="false">Brasil</string>
+    <string name="country_native_name_IO" translatable="false">British Indian Ocean Territory</string>
+    <string name="country_native_name_VG" translatable="false">British Virgin Islands</string>
+    <string name="country_native_name_BN" translatable="false">Brunei</string>
+    <string name="country_native_name_BG" translatable="false">България</string>
+    <string name="country_native_name_BF" translatable="false">Burkina Faso</string>
+    <string name="country_native_name_BI" translatable="false">Uburundi</string>
+    <string name="country_native_name_KH" translatable="false">កម្ពុជា</string>
+    <string name="country_native_name_CM" translatable="false">Cameroun</string>
+    <string name="country_native_name_CA" translatable="false">Canada</string>
+    <string name="country_native_name_IC" translatable="false">Canarias</string>
+    <string name="country_native_name_CV" translatable="false">Cabo Verde</string>
+    <string name="country_native_name_BQ" translatable="false">Caribisch Nederland</string>
+    <string name="country_native_name_KY" translatable="false">Cayman Islands</string>
+    <string name="country_native_name_CF" translatable="false">Ködörösêse tî Bêafrîka</string>
+    <string name="country_native_name_EA" translatable="false">Ceuta y Melilla</string>
+    <string name="country_native_name_TD" translatable="false">تشاد</string>
+    <string name="country_native_name_CL" translatable="false">Chile</string>
+    <string name="country_native_name_CN" translatable="false">中国</string>
+    <string name="country_native_name_CX" translatable="false">Christmas Island</string>
+    <string name="country_native_name_CP" translatable="false">Clipperton Island</string>
+    <string name="country_native_name_CC" translatable="false">Cocos (Keeling) Islands</string>
+    <string name="country_native_name_CO" translatable="false">Colombia</string>
+    <string name="country_native_name_KM" translatable="false">جزر القمر</string>
+    <string name="country_native_name_CG" translatable="false">Congo-Brazzaville</string>
+    <string name="country_native_name_CD" translatable="false">Congo-Kinshasa</string>
+    <string name="country_native_name_CK" translatable="false">Cook Islands</string>
+    <string name="country_native_name_CR" translatable="false">Costa Rica</string>
+    <string name="country_native_name_HR" translatable="false">Hrvatska</string>
+    <string name="country_native_name_CU" translatable="false">Cuba</string>
+    <string name="country_native_name_CW" translatable="false">Curaçao</string>
+    <string name="country_native_name_CY" translatable="false">Κύπρος</string>
+    <string name="country_native_name_CZ" translatable="false">Česko</string>
+    <string name="country_native_name_CI" translatable="false">Côte d\'Ivoire</string>
+    <string name="country_native_name_DK" translatable="false">Danmark</string>
+    <string name="country_native_name_DG" translatable="false">Diego Garcia</string>
+    <string name="country_native_name_DJ" translatable="false">Djibouti</string>
+    <string name="country_native_name_DM" translatable="false">Dominica</string>
+    <string name="country_native_name_DO" translatable="false">República Dominicana</string>
+    <string name="country_native_name_EC" translatable="false">Ecuador</string>
+    <string name="country_native_name_EG" translatable="false">مصر</string>
+    <string name="country_native_name_SV" translatable="false">El Salvador</string>
+    <string name="country_native_name_GQ" translatable="false">Guinea Ecuatorial</string>
+    <string name="country_native_name_ER" translatable="false">Eritrea</string>
+    <string name="country_native_name_EE" translatable="false">Eesti</string>
+    <string name="country_native_name_SZ" translatable="false">Eswatini</string>
+    <string name="country_native_name_ET" translatable="false">ኢትዮጵያ</string>
+    <string name="country_native_name_FK" translatable="false">Falkland Islands</string>
+    <string name="country_native_name_FO" translatable="false">Føroyar</string>
+    <string name="country_native_name_FJ" translatable="false">Fiji</string>
+    <string name="country_native_name_FI" translatable="false">Suomi</string>
+    <string name="country_native_name_FR" translatable="false">France</string>
+    <string name="country_native_name_GF" translatable="false">Guyane française</string>
+    <string name="country_native_name_PF" translatable="false">Polynésie française</string>
+    <string name="country_native_name_TF" translatable="false">Terres australes françaises</string>
+    <string name="country_native_name_GA" translatable="false">Gabon</string>
+    <string name="country_native_name_GM" translatable="false">Gambia</string>
+    <string name="country_native_name_GE" translatable="false">საქართველო</string>
+    <string name="country_native_name_DE" translatable="false">Deutschland</string>
+    <string name="country_native_name_GH" translatable="false">Ghana</string>
+    <string name="country_native_name_GI" translatable="false">Gibraltar</string>
+    <string name="country_native_name_GR" translatable="false">Ελλάδα</string>
+    <string name="country_native_name_GL" translatable="false">Kalaallit Nunaat</string>
+    <string name="country_native_name_GD" translatable="false">Grenada</string>
+    <string name="country_native_name_GP" translatable="false">Guadeloupe</string>
+    <string name="country_native_name_GU" translatable="false">Guam</string>
+    <string name="country_native_name_GT" translatable="false">Guatemala</string>
+    <string name="country_native_name_GG" translatable="false">Guernsey</string>
+    <string name="country_native_name_GN" translatable="false">Guinée</string>
+    <string name="country_native_name_GW" translatable="false">Guiné-Bissau</string>
+    <string name="country_native_name_GY" translatable="false">Guyana</string>
+    <string name="country_native_name_HT" translatable="false">Haïti</string>
+    <string name="country_native_name_HM" translatable="false">Heard &amp; McDonald Islands</string>
+    <string name="country_native_name_HN" translatable="false">Honduras</string>
+    <string name="country_native_name_HK" translatable="false">香港</string>
+    <string name="country_native_name_HU" translatable="false">Magyarország</string>
+    <string name="country_native_name_IS" translatable="false">Ísland</string>
+    <string name="country_native_name_IN" translatable="false">भारत</string>
+    <string name="country_native_name_ID" translatable="false">Indonesia</string>
+    <string name="country_native_name_IR" translatable="false">ایران</string>
+    <string name="country_native_name_IQ" translatable="false">العراق</string>
+    <string name="country_native_name_IE" translatable="false">Ireland</string>
+    <string name="country_native_name_IM" translatable="false">Isle of Man</string>
+    <string name="country_native_name_IL" translatable="false">ישראל</string>
+    <string name="country_native_name_IT" translatable="false">Italia</string>
+    <string name="country_native_name_JM" translatable="false">Jamaica</string>
+    <string name="country_native_name_JP" translatable="false">日本</string>
+    <string name="country_native_name_JE" translatable="false">Jersey</string>
+    <string name="country_native_name_JO" translatable="false">الأردن</string>
+    <string name="country_native_name_KZ" translatable="false">Казахстан</string>
+    <string name="country_native_name_KE" translatable="false">Kenya</string>
+    <string name="country_native_name_KI" translatable="false">Kiribati</string>
+    <string name="country_native_name_XK" translatable="false">Kosovë</string>
+    <string name="country_native_name_KW" translatable="false">الكويت</string>
+    <string name="country_native_name_KG" translatable="false">Кыргызстан</string>
+    <string name="country_native_name_LA" translatable="false">ລາວ</string>
+    <string name="country_native_name_LV" translatable="false">Latvija</string>
+    <string name="country_native_name_LB" translatable="false">لبنان</string>
+    <string name="country_native_name_LS" translatable="false">Lesotho</string>
+    <string name="country_native_name_LR" translatable="false">Liberia</string>
+    <string name="country_native_name_LY" translatable="false">ليبيا</string>
+    <string name="country_native_name_LI" translatable="false">Liechtenstein</string>
+    <string name="country_native_name_LT" translatable="false">Lietuva</string>
+    <string name="country_native_name_LU" translatable="false">Luxembourg</string>
+    <string name="country_native_name_MO" translatable="false">澳門</string>
+    <string name="country_native_name_MG" translatable="false">Madagasikara</string>
+    <string name="country_native_name_MW" translatable="false">Malawi</string>
+    <string name="country_native_name_MY" translatable="false">Malaysia</string>
+    <string name="country_native_name_MV" translatable="false">ދިވެހި ރާއްޖެ</string>
+    <string name="country_native_name_ML" translatable="false">Mali</string>
+    <string name="country_native_name_MT" translatable="false">Malta</string>
+    <string name="country_native_name_MH" translatable="false">Marshall Islands</string>
+    <string name="country_native_name_MQ" translatable="false">Martinique</string>
+    <string name="country_native_name_MR" translatable="false">موريتانيا</string>
+    <string name="country_native_name_MU" translatable="false">Maurice</string>
+    <string name="country_native_name_YT" translatable="false">Mayotte</string>
+    <string name="country_native_name_MX" translatable="false">México</string>
+    <string name="country_native_name_FM" translatable="false">Micronesia</string>
+    <string name="country_native_name_MD" translatable="false">Republica Moldova</string>
+    <string name="country_native_name_MC" translatable="false">Monaco</string>
+    <string name="country_native_name_MN" translatable="false">Монгол</string>
+    <string name="country_native_name_ME" translatable="false">Crna Gora</string>
+    <string name="country_native_name_MS" translatable="false">Montserrat</string>
+    <string name="country_native_name_MA" translatable="false">المغرب</string>
+    <string name="country_native_name_MZ" translatable="false">Moçambique</string>
+    <string name="country_native_name_MM" translatable="false">မြန်မာ</string>
+    <string name="country_native_name_NA" translatable="false">Namibia</string>
+    <string name="country_native_name_NR" translatable="false">Nauru</string>
+    <string name="country_native_name_NP" translatable="false">नेपाल</string>
+    <string name="country_native_name_NL" translatable="false">Nederland</string>
+    <string name="country_native_name_NC" translatable="false">Nouvelle-Calédonie</string>
+    <string name="country_native_name_NZ" translatable="false">Aotearoa</string>
+    <string name="country_native_name_NI" translatable="false">Nicaragua</string>
+    <string name="country_native_name_NE" translatable="false">Niger</string>
+    <string name="country_native_name_NG" translatable="false">Nigeria</string>
+    <string name="country_native_name_NU" translatable="false">Niue</string>
+    <string name="country_native_name_NF" translatable="false">Norfolk Island</string>
+    <string name="country_native_name_KP" translatable="false">북한</string>
+    <string name="country_native_name_MK" translatable="false">Северна Македонија</string>
+    <string name="country_native_name_MP" translatable="false">Northern Mariana Islands</string>
+    <string name="country_native_name_NO" translatable="false">Norge</string>
+    <string name="country_native_name_OM" translatable="false">عُمان</string>
+    <string name="country_native_name_PK" translatable="false">پاکستان</string>
+    <string name="country_native_name_PW" translatable="false">Palau</string>
+    <string name="country_native_name_PS" translatable="false">فلسطين</string>
+    <string name="country_native_name_PA" translatable="false">Panamá</string>
+    <string name="country_native_name_PG" translatable="false">Papua Niugini</string>
+    <string name="country_native_name_PY" translatable="false">Paraguai</string>
+    <string name="country_native_name_PE" translatable="false">Perú</string>
+    <string name="country_native_name_PH" translatable="false">Philippines</string>
+    <string name="country_native_name_PN" translatable="false">Pitcairn Islands</string>
+    <string name="country_native_name_PL" translatable="false">Polska</string>
+    <string name="country_native_name_PT" translatable="false">Portugal</string>
+    <string name="country_native_name_PR" translatable="false">Puerto Rico</string>
+    <string name="country_native_name_QA" translatable="false">قطر</string>
+    <string name="country_native_name_RO" translatable="false">România</string>
+    <string name="country_native_name_RU" translatable="false">Россия</string>
+    <string name="country_native_name_RW" translatable="false">U Rwanda</string>
+    <string name="country_native_name_RE" translatable="false">La Réunion</string>
+    <string name="country_native_name_WS" translatable="false">Samoa</string>
+    <string name="country_native_name_SM" translatable="false">San Marino</string>
+    <string name="country_native_name_SA" translatable="false">المملكة العربية السعودية</string>
+    <string name="country_native_name_SN" translatable="false">Sénégal</string>
+    <string name="country_native_name_RS" translatable="false">Србија</string>
+    <string name="country_native_name_SC" translatable="false">Seychelles</string>
+    <string name="country_native_name_SL" translatable="false">Sierra Leone</string>
+    <string name="country_native_name_SG" translatable="false">Singapore</string>
+    <string name="country_native_name_SX" translatable="false">Sint Maarten</string>
+    <string name="country_native_name_SK" translatable="false">Slovensko</string>
+    <string name="country_native_name_SI" translatable="false">Slovenija</string>
+    <string name="country_native_name_SB" translatable="false">Solomon Islands</string>
+    <string name="country_native_name_SO" translatable="false">Soomaaliya</string>
+    <string name="country_native_name_ZA" translatable="false">South Africa</string>
+    <string name="country_native_name_GS" translatable="false">South Georgia &amp; South Sandwich Islands</string>
+    <string name="country_native_name_KR" translatable="false">대한민국</string>
+    <string name="country_native_name_SS" translatable="false">South Sudan</string>
+    <string name="country_native_name_ES" translatable="false">España</string>
+    <string name="country_native_name_LK" translatable="false">ශ්‍රී ලංකා</string>
+    <string name="country_native_name_BL" translatable="false">Saint-Barthélemy</string>
+    <string name="country_native_name_SH" translatable="false">St. Helena</string>
+    <string name="country_native_name_KN" translatable="false">St. Kitts &amp; Nevis</string>
+    <string name="country_native_name_LC" translatable="false">St. Lucia</string>
+    <string name="country_native_name_MF" translatable="false">Saint-Martin</string>
+    <string name="country_native_name_PM" translatable="false">Saint-Pierre-et-Miquelon</string>
+    <string name="country_native_name_VC" translatable="false">St. Vincent &amp; Grenadines</string>
+    <string name="country_native_name_SD" translatable="false">السودان</string>
+    <string name="country_native_name_SR" translatable="false">Suriname</string>
+    <string name="country_native_name_SJ" translatable="false">Svalbard og Jan Mayen</string>
+    <string name="country_native_name_SE" translatable="false">Sverige</string>
+    <string name="country_native_name_CH" translatable="false">Schweiz</string>
+    <string name="country_native_name_SY" translatable="false">سوريا</string>
+    <string name="country_native_name_ST" translatable="false">São Tomé e Príncipe</string>
+    <string name="country_native_name_TW" translatable="false">台灣</string>
+    <string name="country_native_name_TJ" translatable="false">Тоҷикистон</string>
+    <string name="country_native_name_TZ" translatable="false">Tanzania</string>
+    <string name="country_native_name_TH" translatable="false">ราชอาณาจักรไทย</string>
+    <string name="country_native_name_TL" translatable="false">Timor-Leste</string>
+    <string name="country_native_name_TG" translatable="false">Togo</string>
+    <string name="country_native_name_TK" translatable="false">Tokelau</string>
+    <string name="country_native_name_TO" translatable="false">Tonga</string>
+    <string name="country_native_name_TT" translatable="false">Trinidad &amp; Tobago</string>
+    <string name="country_native_name_TA" translatable="false">Tristan da Cunha</string>
+    <string name="country_native_name_TN" translatable="false">تونس</string>
+    <string name="country_native_name_TM" translatable="false">Türkmenistan</string>
+    <string name="country_native_name_TC" translatable="false">Turks &amp; Caicos Islands</string>
+    <string name="country_native_name_TV" translatable="false">Tuvalu</string>
+    <string name="country_native_name_TR" translatable="false">Türkiye</string>
+    <string name="country_native_name_UM" translatable="false">U.S. Outlying Islands</string>
+    <string name="country_native_name_VI" translatable="false">U.S. Virgin Islands</string>
+    <string name="country_native_name_UG" translatable="false">Uganda</string>
+    <string name="country_native_name_UA" translatable="false">Україна</string>
+    <string name="country_native_name_AE" translatable="false">الإمارات العربية المتحدة</string>
+    <string name="country_native_name_GB" translatable="false">United Kingdom</string>
+    <string name="country_native_name_US" translatable="false">United States</string>
+    <string name="country_native_name_UY" translatable="false">Uruguay</string>
+    <string name="country_native_name_UZ" translatable="false">Oʻzbekiston</string>
+    <string name="country_native_name_VU" translatable="false">Vanuatu</string>
+    <string name="country_native_name_VA" translatable="false">Città del Vaticano</string>
+    <string name="country_native_name_VE" translatable="false">Venezuela</string>
+    <string name="country_native_name_VN" translatable="false">Việt Nam</string>
+    <string name="country_native_name_WF" translatable="false">Wallis-et-Futuna</string>
+    <string name="country_native_name_EH" translatable="false">الصحراء الغربية</string>
+    <string name="country_native_name_YE" translatable="false">اليمن</string>
+    <string name="country_native_name_ZM" translatable="false">Zambia</string>
+    <string name="country_native_name_ZW" translatable="false">Zimbabwe</string>
+    <string name="country_native_name_AX" translatable="false">Åland</string>
+</resources>

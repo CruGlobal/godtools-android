@@ -21,6 +21,13 @@
     <string name="language_settings_section_offline_description">Download all the tools in a language to make them available even if you’re out of WiFi or cell service. Set the tool language via the options button within a tool.</string>
     <string name="language_settings_section_offline_action_edit">Edit downloaded languages</string>
 
+    <!-- Localization Settings UI -->
+    <eat-comment />
+    <string name="menu_localization_settings">Localization settings</string>
+    <string name="localization_settings_title">Select a country</string>
+    <string name="localization_settings_subtitle_header">Select your localization</string>
+    <string name="localization_settings_subtitle_body">Choose a country below to set your localization and get prioritized content and recommendations based on your location.</string>
+
     <!-- Downloadable Languages UI -->
     <eat-comment />
     <string name="language_settings_downloadable_languages_search">Search languages</string>
