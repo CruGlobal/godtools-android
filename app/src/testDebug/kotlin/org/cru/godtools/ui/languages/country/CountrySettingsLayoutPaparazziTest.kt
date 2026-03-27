@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.localization
+package org.cru.godtools.ui.languages.country
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,12 +9,12 @@ import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.CountryItem
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.UiState
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.CountryItem
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
-class LocalizationSettingsLayoutPaparazziTest(
+class CountrySettingsLayoutPaparazziTest(
     @TestParameter(valuesProvider = DeviceConfigProvider::class) deviceConfig: DeviceConfig,
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
@@ -34,19 +34,19 @@ class LocalizationSettingsLayoutPaparazziTest(
     private val state = UiState(countries = countries)
 
     @Test
-    fun `LocalizationSettingsLayout()`() {
-        snapshot { LocalizationSettingsLayout(state) }
+    fun `CountrySettingsLayout()`() {
+        snapshot { CountrySettingsLayout(state) }
     }
 
     @Test
-    fun `LocalizationSettingsLayout() - Selected Country`() {
-        snapshot { LocalizationSettingsLayout(state.copy(localizationCountryCode = "EC")) }
+    fun `CountrySettingsLayout() - Selected Country`() {
+        snapshot { CountrySettingsLayout(state.copy(countryCode = "EC")) }
     }
 
     @Test
-    fun `LocalizationSettingsLayout() - Searching`() {
+    fun `CountrySettingsLayout() - Searching`() {
         snapshot {
-            LocalizationSettingsLayout(
+            CountrySettingsLayout(
                 state.copy(
                     query = remember { mutableStateOf("india") },
                     countries = persistentListOf(

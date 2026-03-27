@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.localization
+package org.cru.godtools.ui.languages.country
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,9 +50,9 @@ import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.CountryItem
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.UiEvent
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.UiState
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.CountryItem
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiEvent
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
@@ -77,8 +77,8 @@ private fun CountryName(country: CountryItem, modifier: Modifier = Modifier) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-@CircuitInject(LocalizationSettingsScreen::class, SingletonComponent::class)
-internal fun LocalizationSettingsLayout(state: UiState, modifier: Modifier = Modifier) {
+@CircuitInject(CountrySettingsScreen::class, SingletonComponent::class)
+internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier) {
     val eventSink by rememberUpdatedState(state.eventSink)
     var query by state.query
 
@@ -112,7 +112,7 @@ internal fun LocalizationSettingsLayout(state: UiState, modifier: Modifier = Mod
                                 Icon(Icons.Filled.Search, null)
                             }
                         },
-                        placeholder = { Text(stringResource(R.string.localization_settings_title)) },
+                        placeholder = { Text(stringResource(R.string.country_settings_title)) },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 },
@@ -144,12 +144,12 @@ internal fun LocalizationSettingsLayout(state: UiState, modifier: Modifier = Mod
                     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.scrim) {
                         Column {
                             Text(
-                                text = stringResource(R.string.localization_settings_subtitle_header),
+                                text = stringResource(R.string.country_settings_subtitle_header),
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = stringResource(R.string.localization_settings_subtitle_body),
+                                text = stringResource(R.string.country_settings_subtitle_body),
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -162,7 +162,7 @@ internal fun LocalizationSettingsLayout(state: UiState, modifier: Modifier = Mod
                 ListItem(
                     headlineContent = { CountryName(country) },
                     trailingContent = {
-                        if (country.isoCode == state.localizationCountryCode) {
+                        if (country.isoCode == state.countryCode) {
                             Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
                         }
                     },

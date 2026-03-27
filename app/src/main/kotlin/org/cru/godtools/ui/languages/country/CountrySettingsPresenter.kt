@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.localization
+package org.cru.godtools.ui.languages.country
 
 import android.content.Context
 import android.icu.text.LocaleDisplayNames
@@ -28,9 +28,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.getPrimaryCollator
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsPresenter.UiState
+import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
 
-class LocalizationSettingsPresenter @AssistedInject constructor(
+class CountrySettingsPresenter @AssistedInject constructor(
     @param:ApplicationContext private val context: Context,
     private val settings: Settings,
     @Assisted private val navigator: Navigator,
@@ -39,7 +39,7 @@ class LocalizationSettingsPresenter @AssistedInject constructor(
     data class UiState(
         val countries: ImmutableList<CountryItem> = persistentListOf(),
         val query: MutableState<String> = mutableStateOf(""),
-        val localizationCountryCode: String? = null,
+        val countryCode: String? = null,
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -55,7 +55,7 @@ class LocalizationSettingsPresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
         val appLocale by settings.produceAppLocaleState()
         val query = rememberSaveable { mutableStateOf("") }
-        val localizationCountryCode by settings.getLocalizationCountryFlow().collectAsState(initial = null)
+        val settingCountryCode by settings.getCountrySettingFlow().collectAsState(initial = null)
         val sortedCountries = rememberSortedCountries(appLocale)
         val filteredCountries = remember(sortedCountries, query.value) {
             sortedCountries.filter { country ->
@@ -68,14 +68,14 @@ class LocalizationSettingsPresenter @AssistedInject constructor(
         return UiState(
             countries = filteredCountries,
             query = query,
-            localizationCountryCode = localizationCountryCode,
+            countryCode = settingCountryCode,
             eventSink = { event ->
                 when (event) {
                     UiEvent.NavigateBack -> navigator.pop()
 
                     is UiEvent.SelectCountry -> {
                         scope.launch {
-                            settings.updateLocalizationCountry(isoCode = event.isoCode)
+                            settings.updateCountrySetting(isoCode = event.isoCode)
                         }
                         navigator.pop()
                     }
@@ -106,8 +106,8 @@ class LocalizationSettingsPresenter @AssistedInject constructor(
     }
 
     @AssistedFactory
-    @CircuitInject(LocalizationSettingsScreen::class, SingletonComponent::class)
+    @CircuitInject(CountrySettingsScreen::class, SingletonComponent::class)
     interface Factory {
-        fun create(navigator: Navigator): LocalizationSettingsPresenter
+        fun create(navigator: Navigator): CountrySettingsPresenter
     }
 }

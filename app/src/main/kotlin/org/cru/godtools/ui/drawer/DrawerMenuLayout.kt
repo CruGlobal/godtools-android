@@ -69,7 +69,7 @@ import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
 import org.cru.godtools.ui.languages.LanguageSettingsScreen
-import org.cru.godtools.ui.languages.localization.LocalizationSettingsScreen
+import org.cru.godtools.ui.languages.country.CountrySettingsScreen
 import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
@@ -155,10 +155,10 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
             )
             NavigationDrawerItem(
                 icon = { Icon(Icons.Outlined.Public, null) },
-                label = { Text(stringResource(R.string.menu_localization_settings)) },
+                label = { Text(stringResource(R.string.menu_country_settings)) },
                 selected = false,
                 onClick = {
-                    context.startCircuitActivity(LocalizationSettingsScreen)
+                    context.startCircuitActivity(CountrySettingsScreen)
                     eventSink(Event.DismissDrawer)
                 }
             )
