@@ -37,7 +37,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
 ) : Presenter<UiState> {
     // what the screen needs to know
     data class UiState(
-        val countries: ImmutableList<CountryItem> = persistentListOf(),
+        val countries: List<CountryItem> = persistentListOf(),
         val query: MutableState<String> = mutableStateOf(""),
         val countryCode: String? = null,
         val eventSink: (UiEvent) -> Unit = {},
@@ -45,7 +45,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
 
     data class CountryItem(val isoCode: String, val displayName: String, val nativeName: String)
 
-    sealed interface UiEvent : CircuitUiEvent {
+    internal sealed interface UiEvent : CircuitUiEvent {
         data object NavigateBack : UiEvent
         data class SelectCountry(val isoCode: String) : UiEvent
     }
@@ -76,8 +76,8 @@ class CountrySettingsPresenter @AssistedInject constructor(
                     is UiEvent.SelectCountry -> {
                         scope.launch {
                             settings.updateCountrySetting(isoCode = event.isoCode)
+                            navigator.pop()
                         }
-                        navigator.pop()
                     }
                 }
             }
