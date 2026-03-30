@@ -69,7 +69,7 @@ class Settings internal constructor(private val context: Context, coroutineScope
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
 
         // Country Settings
-        private val KEY_COUNTRY_SETTING = stringPreferencesKey("localizationCountry")
+        private val KEY_COUNTRY_SETTING = stringPreferencesKey("CountrySetting")
 
         // optInNotification
         const val LAST_PROMPTED_OPT_IN_NOTIFICATION = "lastPromptedOptInNotification"
