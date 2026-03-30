@@ -23,11 +23,11 @@ import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.model.Language
 
 @Composable
-internal fun LanguageName(locale: Locale, modifier: Modifier = Modifier) {
+internal fun LocalizedName(locale: Locale, modifier: Modifier = Modifier) {
     val appLanguage = LocalAppLanguage.current
     val context = LocalContext.current
 
-    LanguageName(
+    LocalizedName(
         name = remember(context, locale, appLanguage) { locale.getDisplayName(context, inLocale = locale) },
         secondName = remember(context, locale) { locale.getDisplayName(context, inLocale = appLanguage) },
         modifier = modifier,
@@ -35,11 +35,11 @@ internal fun LanguageName(locale: Locale, modifier: Modifier = Modifier) {
 }
 
 @Composable
-internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
+internal fun LocalizedName(language: Language, modifier: Modifier = Modifier) {
     val appLanguage = LocalAppLanguage.current
     val context = LocalContext.current
 
-    LanguageName(
+    LocalizedName(
         name = remember(context, language) { language.getDisplayName(context, language.code) },
         secondName = remember(context, language, appLanguage) { language.getDisplayName(context, appLanguage) },
         modifier = modifier,
@@ -49,7 +49,7 @@ internal fun LanguageName(language: Language, modifier: Modifier = Modifier) {
 private const val LANGUAGE_NAME_GAP = "[gap]"
 
 @Composable
-private fun LanguageName(name: String, secondName: String, modifier: Modifier = Modifier) {
+internal fun LocalizedName(name: String, secondName: String, modifier: Modifier = Modifier) {
     val color = LocalTextStyle.current.color.takeOrElse { LocalContentColor.current }
     val secondNameColor = color.let { it.copy(alpha = it.alpha * 0.60f) }
 

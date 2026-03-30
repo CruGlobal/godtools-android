@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
-import org.cru.godtools.ui.languages.LanguageName
+import org.cru.godtools.ui.languages.LocalizedName
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -31,7 +31,7 @@ internal fun LessonFilters(state: LessonsScreen.UiState, modifier: Modifier = Mo
             buttonLabelText = state.languageFilter.selectedItem
                 ?.getDisplayName(LocalContext.current, LocalAppLanguage.current).orEmpty(),
             itemKey = { (it) -> it.code },
-            itemLabel = { LanguageName(it.item) },
+            itemLabel = { LocalizedName(it.item) },
             itemSupportingText = { (_, count) ->
                 pluralStringResource(R.plurals.dashboard_lessons_section_filter_available_lessons, count, count)
             },

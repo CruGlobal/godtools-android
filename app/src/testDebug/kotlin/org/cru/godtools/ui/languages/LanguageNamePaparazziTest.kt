@@ -27,13 +27,13 @@ class LanguageNamePaparazziTest(@TestParameter nightMode: NightMode) :
     @Test
     fun `LanguageNames()`() = centerInSnapshot {
         Column(Modifier.padding(16.dp)) {
-            LanguageName(Locale("ar"))
+            LocalizedName(Locale("ar"))
             HorizontalDivider()
-            LanguageName(Locale.forLanguageTag("bs-BA"))
+            LocalizedName(Locale.forLanguageTag("bs-BA"))
             HorizontalDivider()
-            LanguageName(Locale.ENGLISH)
+            LocalizedName(Locale.ENGLISH)
             HorizontalDivider()
-            LanguageName(language = forcedNameLanguage)
+            LocalizedName(language = forcedNameLanguage)
         }
     }
 }

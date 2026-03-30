@@ -10,29 +10,29 @@ import org.cru.godtools.model.Language
 @Composable
 @Preview(locale = "en", showBackground = true)
 private fun LeftToRightLanguageNames() = Column {
-    LanguageName(Locale("ar"))
+    LocalizedName(Locale("ar"))
     HorizontalDivider()
-    LanguageName(Locale.forLanguageTag("bs-BA"))
+    LocalizedName(Locale.forLanguageTag("bs-BA"))
     HorizontalDivider()
-    LanguageName(Locale.ENGLISH)
+    LocalizedName(Locale.ENGLISH)
     HorizontalDivider()
-    LanguageName(language = nameLanguage)
+    LocalizedName(language = nameLanguage)
     HorizontalDivider()
-    LanguageName(language = forcedNameLanguage)
+    LocalizedName(language = forcedNameLanguage)
 }
 
 @Composable
 @Preview(locale = "ar", showBackground = true)
 private fun RightToLeftLanguageNames() = Column {
-    LanguageName(Locale("ar"))
+    LocalizedName(Locale("ar"))
     HorizontalDivider()
-    LanguageName(Locale.forLanguageTag("bs-BA"))
+    LocalizedName(Locale.forLanguageTag("bs-BA"))
     HorizontalDivider()
-    LanguageName(Locale.ENGLISH)
+    LocalizedName(Locale.ENGLISH)
     HorizontalDivider()
-    LanguageName(language = nameLanguage)
+    LocalizedName(language = nameLanguage)
     HorizontalDivider()
-    LanguageName(language = forcedNameLanguage)
+    LocalizedName(language = forcedNameLanguage)
 }
 
 private val forcedNameLanguage = Language(

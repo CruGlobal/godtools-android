@@ -35,7 +35,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
-import org.cru.godtools.ui.languages.LanguageName
+import org.cru.godtools.ui.languages.LocalizedName
 import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp
@@ -138,7 +138,7 @@ internal fun LanguageFilter(state: FilterMenu.UiState<Language?>, modifier: Modi
     itemLabel = { (lang) ->
         when (lang) {
             null -> Text(stringResource(R.string.dashboard_tools_section_filter_language_any))
-            else -> LanguageName(lang)
+            else -> LocalizedName(lang)
         }
     },
     itemSupportingText = { (lang, count) ->
