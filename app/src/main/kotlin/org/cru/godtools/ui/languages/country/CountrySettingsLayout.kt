@@ -2,7 +2,6 @@ package org.cru.godtools.ui.languages.country
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,59 +20,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.CountryItem
+import org.cru.godtools.ui.languages.LocalizedName
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiEvent
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
-
-@Composable
-private fun CountryName(country: CountryItem, modifier: Modifier = Modifier) {
-    val color = LocalTextStyle.current.color.takeOrElse { LocalContentColor.current }
-    Text(
-        remember(country, color) {
-            buildAnnotatedString {
-                withStyle(SpanStyle(color = color)) { append(country.nativeName) }
-                withStyle(SpanStyle(color = color.copy(alpha = color.alpha * 0.60f))) {
-                    append("  ${country.displayName}")
-                }
-            }
-        },
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier,
-    )
-}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,24 +108,23 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                 .background(ListItemDefaults.containerColor),
         ) {
             item {
-                Box(
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .padding(32.dp),
                 ) {
-                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.scrim) {
-                        Column {
-                            Text(
-                                text = stringResource(R.string.country_settings_subtitle_header),
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Text(
-                                text = stringResource(R.string.country_settings_subtitle_body),
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.country_settings_subtitle_header),
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Text(
+                            text = stringResource(R.string.country_settings_subtitle_body),
+                            style = MaterialTheme.typography.bodySmall
+                        )
                     }
                 }
             }
@@ -160,7 +132,7 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp))
 
                 ListItem(
-                    headlineContent = { CountryName(country) },
+                    headlineContent = { LocalizedName(name = country.nativeName, secondName = country.displayName) },
                     trailingContent = {
                         if (country.isoCode == state.countryCode) {
                             Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
