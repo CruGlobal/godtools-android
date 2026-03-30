@@ -8,6 +8,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import java.util.Locale
+import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.article.aem.model.Article
 
 private const val GET_ARTICLES_FROM = """
@@ -38,7 +39,7 @@ interface ArticleDao {
         ORDER BY a.title
         """
     )
-    fun getArticles(tool: String, locale: Locale): LiveData<List<Article>>
+    fun getArticlesFlow(tool: String, locale: Locale): Flow<List<Article>>
     @AnyThread
     @Query(
         """
@@ -50,7 +51,7 @@ interface ArticleDao {
         ORDER BY a.title
         """
     )
-    fun getArticles(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): LiveData<List<Article>>
+    fun getArticlesFlow(tool: String, locale: Locale, tags: List<@JvmSuppressWildcards String>): Flow<List<Article>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertOrIgnore(article: Article)

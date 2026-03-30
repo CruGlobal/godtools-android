@@ -159,7 +159,7 @@ internal class TipBottomSheetDialogFragmentDataModel @Inject constructor(
 ) : LatestPublishedManifestDataModel(manifestManager) {
     val tipId = MutableStateFlow<String?>(null)
 
-    val tip = manifest.asFlow().combine(tipId) { m, t -> m?.findTip(t) }
+    val tip = manifestFlow.combine(tipId) { m, t -> m?.findTip(t) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
     val isCompleted = combineTransformLatest(toolCode.asFlow(), locale.asFlow(), tipId) { tool, locale, tipId ->
         when {
