@@ -45,7 +45,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
 
     data class CountryItem(val isoCode: String, val displayName: String, val nativeName: String)
 
-    internal sealed interface UiEvent : CircuitUiEvent {
+    sealed interface UiEvent : CircuitUiEvent {
         data object NavigateBack : UiEvent
         data class SelectCountry(val isoCode: String) : UiEvent
     }
