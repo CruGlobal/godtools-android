@@ -8,6 +8,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,7 +26,9 @@ import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.getPrimaryCollator
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
@@ -85,24 +88,26 @@ class CountrySettingsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberSortedCountries(appLocale: Locale): ImmutableList<CountryItem> {
+    private fun rememberSortedCountries(appLocale: Locale): List<CountryItem> {
         val isoCodes = remember { Locale.getISOCountries() }
 
-        return remember(appLocale) {
-            val appDisplayNames = LocaleDisplayNames.getInstance(ULocale.forLocale(appLocale))
-            isoCodes.map { isoCode ->
-                val displayName = appDisplayNames.regionDisplayName(isoCode)
-                val resourceId = context.resources.getIdentifier(
-                    "country_native_name_$isoCode",
-                    "string",
-                    context.packageName,
-                )
-                val nativeName = if (resourceId != 0) context.getString(resourceId) else displayName
-                CountryItem(isoCode, displayName, nativeName)
-            }.sortedWith(
-                compareBy(appLocale.getPrimaryCollator()) { it.displayName }
-            ).toImmutableList()
-        }
+        return produceState(key1 = appLocale, initialValue = emptyList()) {
+            value = withContext(Dispatchers.IO) {
+                val appDisplayNames = LocaleDisplayNames.getInstance(ULocale.forLocale(appLocale))
+                isoCodes.map { isoCode ->
+                    val displayName = appDisplayNames.regionDisplayName(isoCode)
+                    val resourceId = context.resources.getIdentifier(
+                        "country_native_name_$isoCode",
+                        "string",
+                        context.packageName,
+                    )
+                    val nativeName = if (resourceId != 0) context.getString(resourceId) else displayName
+                    CountryItem(isoCode, displayName, nativeName)
+                }.sortedWith(
+                    compareBy(appLocale.getPrimaryCollator()) { it.displayName }
+                ).toImmutableList()
+            }
+        }.value
     }
 
     @AssistedFactory
