@@ -23,13 +23,16 @@ class CountrySettingsLayoutPaparazziTest(
         CountryItem("BR", "Brazil", "Brasil"),
         CountryItem("EC", "Ecuador", "Ecuador"),
         CountryItem("FR", "France", "France"),
+        CountryItem("BH", "Bahrain", "البحرين"),
         CountryItem("DE", "Germany", "Deutschland"),
         CountryItem("IN", "India", "भारत"),
         CountryItem("JP", "Japan", "日本"),
+        CountryItem("SA", "Saudi Arabia", "المملكة العربية السعودية"),
         CountryItem("MX", "Mexico", "México"),
         CountryItem("ES", "Spain", "España"),
         CountryItem("GB", "United Kingdom", "United Kingdom"),
         CountryItem("US", "United States", "United States"),
+
     )
     private val state = UiState(countries = countries)
 
