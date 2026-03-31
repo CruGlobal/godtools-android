@@ -49,6 +49,11 @@ internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
 
 @Composable
+private fun CountryName(country: CountrySettingsPresenter.CountryItem, modifier: Modifier = Modifier) {
+    LocalizedName(name = country.nativeName, secondName = country.displayName, modifier = modifier)
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(CountrySettingsScreen::class, SingletonComponent::class)
 internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier) {
@@ -132,7 +137,7 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp))
 
                 ListItem(
-                    headlineContent = { LocalizedName(name = country.nativeName, secondName = country.displayName) },
+                    headlineContent = { CountryName(country) },
                     trailingContent = {
                         if (country.isoCode == state.countryCode) {
                             Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
