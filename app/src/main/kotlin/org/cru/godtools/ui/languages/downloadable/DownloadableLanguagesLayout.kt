@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.languages.LocalizedName
+import org.cru.godtools.ui.languages.LanguageName
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
 import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
@@ -135,7 +135,7 @@ private fun LanguageListItem(
     isConnected: () -> Boolean,
     modifier: Modifier = Modifier
 ) = ListItem(
-    headlineContent = { LocalizedName(state.language) },
+    headlineContent = { LanguageName(state.language) },
     supportingContent = {
         Text(
             pluralStringResource(

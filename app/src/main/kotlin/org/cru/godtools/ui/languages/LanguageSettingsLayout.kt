@@ -153,7 +153,7 @@ internal fun LanguageSettingsLayout(state: UiState, modifier: Modifier = Modifie
 
             itemsIndexed(pinnedLanguages, key = { _, it -> it.code }) { i, it ->
                 if (i == 0) HorizontalDivider(modifier = Modifier.animateItem())
-                LocalizedName(
+                LanguageName(
                     it,
                     modifier = Modifier
                         .animateItem()
