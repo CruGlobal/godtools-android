@@ -105,7 +105,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
                     CountryItem(isoCode, displayName, nativeName)
                 }.sortedWith(
                     compareBy(appLocale.getPrimaryCollator()) { it.displayName }
-                ).toImmutableList()
+                )
             }
         }.value
     }
