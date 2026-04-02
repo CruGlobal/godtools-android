@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material.icons.outlined.Policy
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Share
@@ -68,6 +69,7 @@ import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
 import org.cru.godtools.ui.languages.LanguageSettingsScreen
+import org.cru.godtools.ui.languages.country.CountrySettingsScreen
 import org.cru.godtools.ui.login.startLoginActivity
 
 @Composable
@@ -148,6 +150,15 @@ private fun DrawerContentLayout(state: State) = ModalDrawerSheet {
                 selected = false,
                 onClick = {
                     context.startCircuitActivity(LanguageSettingsScreen)
+                    eventSink(Event.DismissDrawer)
+                }
+            )
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Outlined.Public, null) },
+                label = { Text(stringResource(R.string.menu_country_settings)) },
+                selected = false,
+                onClick = {
+                    context.startCircuitActivity(CountrySettingsScreen)
                     eventSink(Event.DismissDrawer)
                 }
             )
