@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Harsunan kayan aiki suna samuwa a layi</string>
     <string name="language_settings_section_offline_description">Zazzage duk kayan aikin da ke cikin yare don samar da su ko da ba ku da WiFi ko sabis na salula. Saita yaren kayan aiki ta maɓallin Zaɓuɓɓuka a cikin kayan aiki.</string>
     <string name="language_settings_section_offline_action_edit">Gyara harsunan da aka sauke</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">bincika harsuna</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Babu haɗin intanet</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Da fatan za a duba haɗin intanet ɗin ku kuma a sake gwadawa.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d akwai kayan aikin</item>
         <item quantity="other">%1$d akwai kayan aikin</item>

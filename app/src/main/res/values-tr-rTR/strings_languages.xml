@@ -2,5 +2,7 @@
 <resources>
     <!-- App Language UI -->
     <!-- Language Settings UI -->
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
+    <string name="language_settings_downloadable_languages_offline_notification_message">Lütfen internet bağlantınızı kontrol edip yeniden deneyin.</string>
 </resources>

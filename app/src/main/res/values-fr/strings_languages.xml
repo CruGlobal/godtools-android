@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Langues de l\'outil disponibles hors ligne</string>
     <string name="language_settings_section_offline_description">Téléchargez tous les outils dans une langue donnée pour qu\'ils soient disponibles même si vous n\'avez pas de connexion WiFi ou de réseau cellulaire. Définissez la langue de l\'outil à l\'aide du bouton d\'options de l\'outil.</string>
     <string name="language_settings_section_offline_action_edit">Modifier les langues téléchargées</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Recherche de langues</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Aucune connexion Internet</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Veuillez vérifier votre connexion Internet et réessayer.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Outil disponible</item>
         <item quantity="other">%1$d Outils disponibles</item>

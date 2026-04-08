@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Offline verfügbare Sprachen des Tools</string>
     <string name="language_settings_section_offline_description">Lade alle Tools in einer Sprache herunter, damit sie auch dann verfügbar sind, wenn du kein WLAN und keinen Mobilfunk hast. Stelle die Tool-Sprache in der Schaltfläche „Optionen“ innerhalb eines Tools ein.</string>
     <string name="language_settings_section_offline_action_edit">Heruntergeladene Sprachen bearbeiten</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Sprachen suchen</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Keine Internetverbindung</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Tools verfügbar</item>
         <item quantity="other">%1$d Tools verfügbar</item>

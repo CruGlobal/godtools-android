@@ -16,8 +16,11 @@
     <string name="language_settings_section_offline_heading">オフラインで使用可能なツール言語</string>
     <string name="language_settings_section_offline_description">すべてのツールを一つの言語でダウンロードしておくと、WiFiや携帯電話サービスが使えない場合でも、アプリを利用することができます。ツールの中のオプションボタンでツールの言語を設定してください。</string>
     <string name="language_settings_section_offline_action_edit">ダウンロードされた言語を編集する</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">言語を検索する</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">インターネット接続がありません</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">インターネット接続を確認してからもう一度お試しください。</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="other">%1$d 個のツールがあります</item>
     </plurals>

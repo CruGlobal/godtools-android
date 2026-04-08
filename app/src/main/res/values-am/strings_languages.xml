@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">የመተግበሪያ ቋንቋዎች ያለኢንተርኔት የሚሰሩ</string>
     <string name="language_settings_section_offline_description">ከዋይፋይ ወይም ከአገልግሎት መስጫ ክልል ውጪ ቢሆኑም እንኳ መጠቀም እንዲችሉ በመረጡት ቋንቋ ቡክሌቶቹን ያውርዱ። የመተግበሪያ ቋንቋ የአማራጮች ቁልፍን በመጫን ይምረጡ።</string>
     <string name="language_settings_section_offline_action_edit">የወረዱ ቋንቋዎችን ያስተካክሉ</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">ቋንቋዎችን ይፈልጉ</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">ምንም የበይነመረብ ግንኙነት የለም።</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">እባክዎ የበይነመረብ ግንኙነትዎን ያረጋግጡ እና እንደገና ይሞክሩ።</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d ቡክሌት አለ</item>
         <item quantity="other">%1$d ቡክሌቶች አሉ</item>

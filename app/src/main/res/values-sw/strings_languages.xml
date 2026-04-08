@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Lugha za kifaa zinazopatikana bila ya mtandao</string>
     <string name="language_settings_section_offline_description">Pakua vifaa vyote kwa lugha moja ili viweze kupatikana hata kama huna huduma ya WiFi au mtandao wa kwenye simu. Weka lugha ya kifaa kupitia kitufe cha chaguo ndani ya kifaa hicho. </string>
     <string name="language_settings_section_offline_action_edit">Hariri lugha zilizopakuliwa</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Tafuta lugha</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Hakuna muunganisho wa mtandao</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Tafadhali angalia muunganisho wako wa mtandao na ujaribu tena.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Vifaa vinavyopatikana</item>
         <item quantity="other">%1$d Vifaa vinavyopatikana</item>
