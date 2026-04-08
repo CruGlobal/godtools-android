@@ -8,6 +8,9 @@
 files: [
   {
     "source": "/app/src/main/res/values/strings*.xml",
+    "ignore": [
+      "/app/src/main/res/values/strings_country_native_names.xml"
+    ],
     "translation": "/app/src/main/res/values-%android_code%/%original_file_name%",
     "update_option": "update_as_unapproved"
   },
