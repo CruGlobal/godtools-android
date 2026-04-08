@@ -341,7 +341,7 @@ class LessonActivity :
     // region Resume Progress
     private fun LessonScreen.UiState.Loaded.indexOfResumePage(pageId: String?) = manifest.findPage(pageId)
         ?.let { generateSequence(it) { it.previousPage }.firstOrNull { !it.isHidden } }
-        ?.let { return lessonPager.pages.indexOf(it) } ?: -1
+        ?.let { lessonPager.pages.indexOf(it) } ?: -1
     // endregion Resume Progress
 
     // region Share Menu Logic
