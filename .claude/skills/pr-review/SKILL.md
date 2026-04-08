@@ -12,11 +12,17 @@ Review pull request $ARGUMENTS against the GodTools Android project conventions.
 1. Check for dismissed issues by reading `.claude/skills/pr-review/dismissed-issues.md` if it exists.
    Load all dismissed entries — each has a **Pattern** and **Reason**. You will use these to suppress matching findings later.
 
-2. Fetch the PR diff and metadata:
+2. Fetch the PR diff and metadata. If `$ARGUMENTS` is provided, use it as the PR number:
 ```
 gh pr diff $ARGUMENTS
 gh pr view $ARGUMENTS
 ```
+If no PR number is given (or the above fails because no upstream PR exists), fall back to reviewing the current branch against `develop`:
+```
+git diff develop...HEAD
+git log develop...HEAD --oneline
+```
+Use the branch name and commit log as the "title" in the review header.
 
 3. Identify all changed files and categorize them (Kotlin, build scripts, resources, manifests, tests).
 
