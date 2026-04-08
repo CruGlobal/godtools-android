@@ -16,8 +16,11 @@
     <string name="language_settings_section_offline_heading">离线可用的工具语言</string>
     <string name="language_settings_section_offline_description">将某种语言的所有工具下载下来，这样，即使您没有WiFi或移动网络，也可以使用这些工具。请通过工具中的选项按钮设置工具语言。</string>
     <string name="language_settings_section_offline_action_edit">编辑下载的语言</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">搜索语言</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">没有网络连接</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">请检查你的互联网连接，然后重试。</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="other">%1$d个工具可用</item>
     </plurals>

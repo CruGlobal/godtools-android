@@ -18,8 +18,11 @@
     <string name="language_settings_section_offline_heading">Limbi pentru instrumente disponibile offline</string>
     <string name="language_settings_section_offline_description">Descărcați toate instrumentele într-o limbă pentru a le face disponibile chiar dacă nu aveți acces WiFi sau serviciul celular. Setați limba instrumentului prin intermediul butonului de opțiuni din cadrul unui instrument.</string>
     <string name="language_settings_section_offline_action_edit">Editează limbile descărcate</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Căută limba preferată</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Nu există conexiune la internet</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Verifică conexiunea la internet și încearcă din nou.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Instrument disponibile</item>
         <item quantity="few">%1$d Instrumente disponibile</item>

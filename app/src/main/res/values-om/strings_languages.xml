@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Afaanota barruu buufamanii jiran</string>
     <string name="language_settings_section_offline_description">Barruuwwan afaan kanaan jiran yeroo networkii ykn WiFi hin qabnettis argachuuf buufadhu. Afaan barruu sanaa filannoowwan baruu sanaa keessa galii sirreessi.</string>
     <string name="language_settings_section_offline_action_edit">Afaanota buufamanii jiran sirreessi</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Afaanota barbaadi</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Qunnamtiin interneetii hin jiru</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Maaloo tajaajila interneetii qabaachuu kee mirkaneeffadhuutii, irra deebi\'i yaali.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">Barruuwwan %1$d \'tu jira</item>
         <item quantity="other">Barruuwwan %1$d \'tu jira</item>

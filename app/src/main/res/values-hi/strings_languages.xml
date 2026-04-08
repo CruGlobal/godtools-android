@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">ऑफ़लाइन उपलब्ध टूल भाषाएँ</string>
     <string name="language_settings_section_offline_description">भले ही आप वाईफाई या सेल सेवा क्षेत्र से बाहर हों, आप सभी टूल्स को उपलब्ध कराने के लिए उन सभी को एक भाषा में डाउनलोड करें। टूल के भीतर विकल्प बटन के माध्यम से टूल भाषा को सेट करें।</string>
     <string name="language_settings_section_offline_action_edit">डाउनलोड की गई भाषाओं को एडिट करें</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">भाषाएँ खोजें</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">कोई इंटरनेट कनेक्शन नहीं</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">कृपया अपना इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d टूल उपलब्ध है</item>
         <item quantity="other">%1$d टूल्स उपलब्ध हैं</item>

@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Idiomas da ferramenta disponíveis offline</string>
     <string name="language_settings_section_offline_description">Baixar todas as ferramentas em um idioma para disponibilizá-las mesmo quando você estiver sem WiFi ou serviço de celular. Definir o idioma da ferramenta via botão de opções dentro da ferramenta.</string>
     <string name="language_settings_section_offline_action_edit">Editar idiomas baixados</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Procurar idiomas</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Sem ligação à Internet</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Verifique sua ligação à Internet e tente novamente.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">Ferramenta %1$d disponível</item>
         <item quantity="other">Ferramenta %1$d disponível</item>

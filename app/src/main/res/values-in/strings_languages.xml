@@ -16,8 +16,11 @@
     <string name="language_settings_section_offline_heading">Bahasa alat tersedia secara offline</string>
     <string name="language_settings_section_offline_description">Unduh semua alat dalam satu bahasa agar dapat dibuka meskipun Saudara tidak terhubung WiFi atau layanan seluler. Atur bahasa alat melalui tombol opsi di dalam alat.</string>
     <string name="language_settings_section_offline_action_edit">Edit bahasa yang telah diunduh</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Cari bahasa</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Tidak ada koneksi internet</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Silakan periksa koneksi internet dan coba lagi.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="other">%1$d Alat tersedia</item>
     </plurals>

@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">অফলাইনে প্রাপ্ত সাধনের ভাষা</string>
     <string name="language_settings_section_offline_description">একটি ভাষায় সব কটি সাধন ডাউনলোড করুন যাতে আপনি ওয়াই-ফাই অথবা ইন্টারনেট পরিষেবার বাইরে থাকলেও সেগুলি দেখতে পারেন। সাধনের মধ্যে দেওয়া পছন্দের বোতাম টিপে সাধনের ভাষা নির্দিষ্ট করুন।</string>
     <string name="language_settings_section_offline_action_edit">ডাউনলোড করা ভাষাগুলির সম্পাদনা</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">ভাষা সন্ধান</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">ইন্টারনেট সংযোগ নেই</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন এবং আবার চেষ্টা করুন.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d সাধনী উপলভ্য</item>
         <item quantity="other">%1$d সাধনীসমূহ উপলভ্য</item>

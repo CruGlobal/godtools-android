@@ -18,8 +18,11 @@
     <string name="language_settings_section_offline_heading">ٹول کی زبانیں جو آف لائن دستیاب ہیں</string>
     <string name="language_settings_section_offline_description">تمام ٹول کو ڈاؤن لوڈ کریں تاکہ وہ تب بھی دستیاب ہوں جب آپ وائی فائی سیل سروس سے دور ہوں ۔ ٹول کے اندر آپشن بٹن کے ذریعے ٹول کی زبان سیٹ کریں۔</string>
     <string name="language_settings_section_offline_action_edit">ڈاؤن لوڈ کی ہُوئی زبان کو ایڈٹ کریں</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">زبانیں تلاش کریں</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">کوئی انٹرنیٹ کنیکشن نہیں ہے</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Vui lòng kiểm tra kết nối internet của bạn và thử lại.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d ٹول دستیاب ہے۔</item>
         <item quantity="other">%1$d ٹولز دستیاب ہیں۔</item>

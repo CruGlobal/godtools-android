@@ -17,8 +17,11 @@
     <string name="language_settings_section_offline_heading">Hulpmiddel  tale beskikbaar vanlyn\"</string>
     <string name="language_settings_section_offline_description">Laai al die hulpmiddel in \'n taal af om dit beskikbaar te maak, selfs al is jy buite WiFi of selfoondiens. Stel die hulpmiddeltaal in via die opsieknoppie binne \'n gereedskap.</string>
     <string name="language_settings_section_offline_action_edit">Wysig afgelaaide tale</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Soek tale</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Geen Internetverbinding</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Kontroleer asseblief u internetverbinding en probeer weer.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="one">%1$d Hulpmiddel beskikbaar</item>
         <item quantity="other">%1$d Hulpmiddels beskikbaar</item>

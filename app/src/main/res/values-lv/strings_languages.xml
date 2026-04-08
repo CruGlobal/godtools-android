@@ -18,8 +18,11 @@
     <string name="language_settings_section_offline_heading">Rīka valodas pieejamas bezsaistē</string>
     <string name="language_settings_section_offline_description">Lejupielādē visus rīkus izvēlētā valodā, lai tie būtu pieejami bezsaistē. Rīka valodas izvēlei izmanto rīka iestatījumu pogu.</string>
     <string name="language_settings_section_offline_action_edit">Labot lejupielādēto valodu pieejamību</string>
+    <!-- Country Settings UI -->
     <!-- Downloadable Languages UI -->
     <string name="language_settings_downloadable_languages_search">Meklēt valodu</string>
+    <string name="language_settings_downloadable_languages_offline_notification_title">Nav savienojuma ar internetu</string>
+    <string name="language_settings_downloadable_languages_offline_notification_message">Lūdzu, pārbaudi savienojumu ar internetu un mēģini vēlreiz.</string>
     <plurals name="language_settings_downloadable_languages_available_tools">
         <item quantity="zero">Pieejamo rīku skaits: %1$d</item>
         <item quantity="one">Pieejamo rīku skaits: %1$d</item>
