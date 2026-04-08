@@ -33,7 +33,7 @@ import com.slack.circuit.overlay.Overlay
 import com.slack.circuit.overlay.OverlayNavigator
 import org.cru.godtools.R
 
-class CountrySettingsConfirmationOverlay(val countryName: String) : Overlay<Boolean> {
+class CountrySettingsConfirmationOverlay(val countryName: String?) : Overlay<Boolean> {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content(navigator: OverlayNavigator<Boolean>) {
