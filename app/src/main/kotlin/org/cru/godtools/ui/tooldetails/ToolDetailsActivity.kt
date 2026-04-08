@@ -24,9 +24,10 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.tutorial.PageSet
 import org.cru.godtools.tutorial.TutorialScreenResultContract
 import org.cru.godtools.tutorial.layout.TutorialScreen
-import org.cru.godtools.ui.tools.EXTRA_ADDITIONAL_LANGUAGE
 import org.cru.godtools.util.openToolActivity
 import org.cru.godtools.util.rememberInterceptingNavigator
+
+private const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
 
 fun Activity.startToolDetailsActivity(toolCode: String, additionalLanguage: Locale? = null) = startActivity(
     Intent(this, ToolDetailsActivity::class.java)
