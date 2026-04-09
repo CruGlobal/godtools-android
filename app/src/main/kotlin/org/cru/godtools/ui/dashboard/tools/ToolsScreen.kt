@@ -5,7 +5,6 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.ToolCard
@@ -17,7 +16,7 @@ data object ToolsScreen : Screen {
         val dataLoaded: Boolean = true,
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
-        val tools: List<Tool> = emptyList(),
+        val tools: List<ToolCard.State> = emptyList(),
         val eventSink: (Event) -> Unit = {},
     ) : CircuitUiState
 

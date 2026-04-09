@@ -416,7 +416,7 @@ class ToolsPresenterTest {
 
             metatoolsFlow.value = listOf(meta)
             toolsFlow.value = listOf(variant1, variant2)
-            assertEquals(listOf(variant2), expectMostRecentItem().tools)
+            assertEquals(listOf(variant2), expectMostRecentItem().tools.map { it.tool })
         }
     }
 
@@ -429,7 +429,7 @@ class ToolsPresenterTest {
             assertEquals(emptyList(), awaitItem().tools)
 
             toolsFlow.value = listOf(hidden, visible)
-            assertEquals(listOf(visible), expectMostRecentItem().tools)
+            assertEquals(listOf(visible), expectMostRecentItem().tools.map { it.tool })
         }
     }
     // endregion State.tools

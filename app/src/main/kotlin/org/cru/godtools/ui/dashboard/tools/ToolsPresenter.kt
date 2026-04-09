@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +37,7 @@ import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -86,8 +88,11 @@ class ToolsPresenter @AssistedInject constructor(
             secondLanguage = filters.languageFilter.selectedItem,
             eventSink = eventSink
         )
-        val tools by rememberFilteredToolsFlow(filters.categoryFilter.selectedItem, selectedLocale)
-            .collectAsState(null)
+        val tools = rememberTools(
+            category = filters.categoryFilter.selectedItem,
+            language = filters.languageFilter.selectedItem,
+            eventSink = eventSink,
+        )
 
         return ToolsScreen.State(
             banner = rememberBanner(),
@@ -238,6 +243,37 @@ class ToolsPresenter @AssistedInject constructor(
                     }
                 }
             )
+        }
+    }
+
+    @Composable
+    private fun rememberTools(
+        category: String?,
+        language: Language?,
+        eventSink: (ToolsScreen.Event) -> Unit,
+    ): List<ToolCard.State>? {
+        val tools by rememberFilteredToolsFlow(category, language?.code).collectAsState(null)
+        val eventSink by rememberUpdatedState(eventSink)
+
+        return tools?.map { tool ->
+            key(tool.code) {
+                val toolCode by rememberUpdatedState(tool.code)
+                toolCardPresenter.present(
+                    tool = tool,
+                    secondLanguage = language,
+                    eventSink = {
+                        when (it) {
+                            ToolCard.Event.Click,
+                            ToolCard.Event.OpenTool,
+                            ToolCard.Event.OpenToolDetails ->
+                                toolCode?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+
+                            ToolCard.Event.PinTool,
+                            ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
+                        }
+                    }
+                )
+            }
         }
     }
 
