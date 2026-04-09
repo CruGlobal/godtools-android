@@ -27,7 +27,7 @@ class CountrySettingsConfirmationOverlay(val countryName: String) : Overlay<Bool
             iconContentColor = MaterialTheme.colorScheme.primary,
             icon = {
                 Icon(
-                    painter = painterResource(R.drawable.country_setting_overlay_icon),
+                    painter = painterResource(R.drawable.ic_settings_country_globe),
                     contentDescription = null,
                 )
             },
