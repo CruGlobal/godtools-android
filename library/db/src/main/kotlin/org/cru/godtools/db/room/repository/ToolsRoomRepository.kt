@@ -8,9 +8,12 @@ import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.room.changeFlow
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.PersonalizedToolOrderEntity
 import org.cru.godtools.db.room.entity.ToolEntity
+import org.cru.godtools.db.room.entity.partial.SyncPersonalizedTool
 import org.cru.godtools.db.room.entity.partial.SyncTool
 import org.cru.godtools.model.Tool
+import org.cru.godtools.model.Tool.Type.Companion.NORMAL_TYPES
 import org.cru.godtools.model.trackChanges
 
 @Dao
@@ -31,6 +34,12 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
         dao.getDownloadedToolsFlowByTypeAndLanguage(types, locale).map { it.map { it.toModel() } }
     override fun getLessonsFlowByLanguage(locale: Locale) =
         dao.getToolsFlowByTypeAndLanguage(listOf(Tool.Type.LESSON), locale).map { it.map { it.toModel() } }
+
+    override fun getPersonalizedLessonsFlow(locale: Locale, country: String?) =
+        dao.getPersonalizedToolsFlow(locale, country.orEmpty(), Tool.Type.LESSON).map { it.map { it.toModel() } }
+    override fun getPersonalizedToolsFlow(locale: Locale, country: String?) =
+        dao.getPersonalizedToolsFlow(locale, country.orEmpty(), *NORMAL_TYPES.toTypedArray())
+            .map { it.map { it.toModel() } }
 
     override fun toolsChangeFlow(): Flow<Any?> = db.changeFlow("tools")
 
@@ -85,6 +94,22 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
             if (!it.isFieldChanged(Tool.ATTR_IS_FAVORITE)) it.isFavorite = isFavorite
         }
         dao.updateToolFavorites(toolFavorites)
+    }
+
+    @Transaction
+    override suspend fun storePersonalizedToolOrderFromSync(locale: Locale, country: String?, tools: List<Tool>) {
+        dao.upsertToolsPersonalized(tools.map { SyncPersonalizedTool(it) })
+        dao.resetPersonalizedToolOrder(locale, country.orEmpty())
+        dao.upsertPersonalizedToolOrder(
+            tools.mapIndexed { i, tool ->
+                PersonalizedToolOrderEntity(
+                    locale = locale,
+                    country = country.orEmpty(),
+                    tool = tool.code.orEmpty(),
+                    order = i
+                )
+            }
+        )
     }
 
     @Transaction

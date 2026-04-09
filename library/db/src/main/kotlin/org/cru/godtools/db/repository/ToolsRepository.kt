@@ -29,6 +29,9 @@ interface ToolsRepository {
     fun getFavoriteToolsFlow() = getNormalToolsFlow()
         .map { it.filter { it.isFavorite }.sortedWith(Tool.COMPARATOR_FAVORITE_ORDER) }
 
+    fun getPersonalizedLessonsFlow(locale: Locale, country: String?): Flow<List<Tool>>
+    fun getPersonalizedToolsFlow(locale: Locale, country: String?): Flow<List<Tool>>
+
     fun toolsChangeFlow(): Flow<Any?>
 
     suspend fun pinTool(code: String, trackChanges: Boolean = true)
@@ -46,6 +49,7 @@ interface ToolsRepository {
     // region Sync Methods
     suspend fun storeToolsFromSync(tools: Collection<Tool>)
     suspend fun storeFavoriteToolsFromSync(tools: Collection<Tool>)
+    suspend fun storePersonalizedToolOrderFromSync(locale: Locale, country: String?, tools: List<Tool>)
     suspend fun deleteIfNotFavorite(code: String)
     // endregion Sync Methods
 }

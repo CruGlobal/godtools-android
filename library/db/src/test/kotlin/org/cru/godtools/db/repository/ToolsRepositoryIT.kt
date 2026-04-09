@@ -251,6 +251,108 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getLessonsFlowByLanguage()
 
+    // region getPersonalizedToolsFlow()
+    @Test
+    fun `getPersonalizedToolsFlow() - empty when no order stored`() = testScope.runTest {
+        repository.storeInitialTools(listOf(randomTool("tool", Tool.Type.TRACT)))
+        assertTrue(repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).first().isEmpty())
+    }
+
+    @Test
+    fun `getPersonalizedToolsFlow() - returns tools in personalized order`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.CYOA)
+        val tool3 = randomTool("tool3", Tool.Type.ARTICLE)
+        repository.storeInitialTools(listOf(tool1, tool2, tool3))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, "US", listOf(tool2, tool3, tool1))
+        assertEquals(
+            listOf("tool2", "tool3", "tool1"),
+            repository.getPersonalizedToolsFlow(Locale.ENGLISH, "US").first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getPersonalizedToolsFlow() - filters to NORMAL_TYPES only`() = testScope.runTest {
+        val tract = randomTool("tract", Tool.Type.TRACT)
+        val lesson = randomTool("lesson", Tool.Type.LESSON)
+        val meta = randomTool("meta", Tool.Type.META)
+        repository.storeInitialTools(listOf(tract, lesson, meta))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(lesson, meta, tract))
+        assertEquals(
+            listOf("tract"),
+            repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getPersonalizedToolsFlow() - scoped to locale and country`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, "US", listOf(tool))
+        assertTrue(repository.getPersonalizedToolsFlow(Locale.FRENCH, "US").first().isEmpty())
+        assertTrue(repository.getPersonalizedToolsFlow(Locale.ENGLISH, "CA").first().isEmpty())
+    }
+
+    @Test
+    fun `getPersonalizedToolsFlow() - null country`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool))
+        assertEquals(listOf("tool"), repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).first().map { it.code })
+    }
+
+    @Test
+    fun `getPersonalizedToolsFlow() - updates when order changes`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool1, tool2))
+
+        repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).test {
+            assertTrue(awaitItem().isEmpty())
+
+            repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool1, tool2))
+            runCurrent()
+            assertEquals(listOf("tool1", "tool2"), expectMostRecentItem().map { it.code })
+
+            repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool2, tool1))
+            runCurrent()
+            assertEquals(listOf("tool2", "tool1"), expectMostRecentItem().map { it.code })
+        }
+    }
+    // endregion getPersonalizedToolsFlow()
+
+    // region getPersonalizedLessonsFlow()
+    @Test
+    fun `getPersonalizedLessonsFlow() - returns lessons in personalized order`() = testScope.runTest {
+        val lesson1 = randomTool("lesson1", Tool.Type.LESSON)
+        val lesson2 = randomTool("lesson2", Tool.Type.LESSON)
+        repository.storeInitialTools(listOf(lesson1, lesson2))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(lesson2, lesson1))
+        assertEquals(
+            listOf("lesson2", "lesson1"),
+            repository.getPersonalizedLessonsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getPersonalizedLessonsFlow() - filters to LESSON type only`() = testScope.runTest {
+        val lesson = randomTool("lesson", Tool.Type.LESSON)
+        val tract = randomTool("tract", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(lesson, tract))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tract, lesson))
+        assertEquals(
+            listOf("lesson"),
+            repository.getPersonalizedLessonsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+    // endregion getPersonalizedLessonsFlow()
+
     // region toolsChangeFlow()
     @Test
     fun `toolsChangeFlow()`() = testScope.runTest {
@@ -609,6 +711,49 @@ abstract class ToolsRepositoryIT {
         }
     }
     // endregion storeFavoriteToolsFromSync()
+
+    // region storePersonalizedToolOrderFromSync()
+    @Test
+    fun `storePersonalizedToolOrderFromSync() - doesn't pave over existing tool data`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool))
+        assertEquals(tool, repository.findTool("tool"))
+    }
+
+    @Test
+    fun `storePersonalizedToolOrderFromSync() - order is preserved when tools are stored after`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        val tool3 = randomTool("tool3", Tool.Type.TRACT)
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool2, tool3, tool1))
+        repository.storeToolsFromSync(listOf(tool1, tool2, tool3))
+        assertEquals(
+            listOf("tool2", "tool3", "tool1"),
+            repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `storePersonalizedToolOrderFromSync() - different locales are independent`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool1, tool2))
+
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool1, tool2))
+        repository.storePersonalizedToolOrderFromSync(Locale.FRENCH, null, listOf(tool2, tool1))
+        assertEquals(
+            listOf("tool1", "tool2"),
+            repository.getPersonalizedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+        assertEquals(
+            listOf("tool2", "tool1"),
+            repository.getPersonalizedToolsFlow(Locale.FRENCH, null).first().map { it.code }
+        )
+    }
+    // endregion storePersonalizedToolOrderFromSync()
 
     // region deleteIfNotFavorite()
     @Test

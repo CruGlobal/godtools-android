@@ -10,6 +10,7 @@ import org.cru.godtools.model.Tool
 internal class ToolEntity(
     @PrimaryKey
     val code: String,
+    @ColumnInfo(defaultValue = "UNKNOWN")
     val type: Tool.Type,
     val name: String? = null,
     val category: String? = null,
