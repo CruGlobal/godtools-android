@@ -28,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,7 +38,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.overlay.LocalOverlayHost
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -58,6 +61,8 @@ private fun CountryName(country: CountrySettingsPresenter.CountryItem, modifier:
 @CircuitInject(CountrySettingsScreen::class, SingletonComponent::class)
 internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier) {
     val eventSink by rememberUpdatedState(state.eventSink)
+    val overlayHost = LocalOverlayHost.current
+    val coroutineScope = rememberCoroutineScope()
     var query by state.query
 
     Scaffold(
@@ -143,7 +148,18 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                             Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
                         }
                     },
-                    modifier = Modifier.clickable { eventSink(UiEvent.SelectCountry(country.isoCode)) },
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            val confirmCountrySelection = overlayHost.show(
+                                CountrySettingsConfirmationOverlay(
+                                    country.displayName ?: country.isoCode,
+                                ),
+                            )
+                            if (confirmCountrySelection) {
+                                eventSink(UiEvent.SelectCountry(country.isoCode))
+                            }
+                        }
+                    },
                 )
             }
         }

@@ -27,6 +27,9 @@
     <string name="country_settings_title">Select a country</string>
     <string name="country_settings_subtitle_header">Select your localization</string>
     <string name="country_settings_subtitle_body">Choose a country below to set your localization and get prioritized content and recommendations based on your location.</string>
+    <string name="country_settings_confirm_description">You have selected %1$s as your localization.\nWould you like to continue?</string>
+    <string name="country_settings_confirm_action_continue">Continue</string>
+    <string name="country_settings_confirm_action_dismiss">Edit Localization</string>
 
     <!-- Downloadable Languages UI -->
     <eat-comment />
