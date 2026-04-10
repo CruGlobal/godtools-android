@@ -138,6 +138,22 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                     }
                 }
             }
+            item {
+                ListItem(
+                    headlineContent = {
+                        Text(text = stringResource(R.string.country_settings_option_prefer_not_to_say))
+                    },
+                    trailingContent = {
+                        if (state.countryCode == null) {
+                            Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
+                        }
+                    },
+                    modifier = Modifier.clickable {
+                        eventSink(UiEvent.SelectCountry(null))
+                    },
+                )
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp))
+            }
             itemsIndexed(state.countries, { _, it -> it.isoCode }) { i, country ->
                 if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp))
 
