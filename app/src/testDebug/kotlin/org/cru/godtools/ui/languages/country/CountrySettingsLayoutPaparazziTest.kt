@@ -6,6 +6,7 @@ import app.cash.paparazzi.DeviceConfig
 import com.android.resources.NightMode
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import com.slack.circuit.overlay.OverlayEffect
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
@@ -57,6 +58,17 @@ class CountrySettingsLayoutPaparazziTest(
                     ),
                 )
             )
+        }
+    }
+
+    @Test
+    fun `CountrySettingsLayout() - ConfirmationOverlay`() {
+        val overlay = CountrySettingsConfirmationOverlay("Uganda")
+        snapshot {
+            CountrySettingsLayout(state)
+            OverlayEffect {
+                show(overlay)
+            }
         }
     }
 }
