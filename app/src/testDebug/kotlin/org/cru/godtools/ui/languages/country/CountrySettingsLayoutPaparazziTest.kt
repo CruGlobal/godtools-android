@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.CountryItem
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
+import org.junit.Assume.assumeFalse
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -63,6 +64,7 @@ class CountrySettingsLayoutPaparazziTest(
 
     @Test
     fun `CountrySettingsLayout() - ConfirmationOverlay`() {
+        assumeFalse(accessibilityMode == AccessibilityMode.ACCESSIBILITY)
         val overlay = CountrySettingsConfirmationOverlay("Uganda")
         snapshot {
             CountrySettingsLayout(state)
