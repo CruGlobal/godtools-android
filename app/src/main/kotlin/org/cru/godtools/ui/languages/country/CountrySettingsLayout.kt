@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -141,7 +141,7 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
             item {
                 ListItem(
                     headlineContent = {
-                        Text(text = stringResource(R.string.country_settings_option_prefer_not_to_say))
+                        Text(text = stringResource(R.string.country_settings_option_none))
                     },
                     trailingContent = {
                         if (state.countryCode == null) {
@@ -152,11 +152,9 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                         eventSink(UiEvent.SelectCountry(null))
                     },
                 )
-                HorizontalDivider(Modifier.padding(horizontal = 16.dp))
             }
-            itemsIndexed(state.countries, { _, it -> it.isoCode }) { i, country ->
-                if (i > 0) HorizontalDivider(Modifier.padding(horizontal = 16.dp))
-
+            items(state.countries, { it.isoCode }) { country ->
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp))
                 ListItem(
                     headlineContent = { CountryName(country) },
                     trailingContent = {
