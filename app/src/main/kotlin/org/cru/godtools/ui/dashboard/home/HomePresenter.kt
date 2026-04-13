@@ -7,6 +7,8 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.android.IntentScreen
@@ -28,8 +30,7 @@ import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.ui.banner.BannerType
-import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
-import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
+import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
@@ -48,6 +49,21 @@ class HomePresenter @AssistedInject constructor(
     @Assisted
     private val navigator: Navigator,
 ) : Presenter<UiState> {
+    // region UiState / UiEvent
+    data class UiState(
+        val dataLoaded: Boolean = true,
+        val banner: BannerType? = null,
+        val spotlightLessons: List<ToolCard.State> = emptyList(),
+        val favoriteTools: List<ToolCard.State> = emptyList(),
+        val eventSink: (UiEvent) -> Unit = {},
+    ) : CircuitUiState
+
+    sealed interface UiEvent : CircuitUiEvent {
+        data object ViewAllFavorites : UiEvent
+        data object ViewAllTools : UiEvent
+    }
+    // endregion UiState / UiEvent
+
     @Composable
     override fun present(): UiState {
         val spotlightLessons = rememberSpotlightLessons()
