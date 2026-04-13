@@ -24,6 +24,7 @@ import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
 
@@ -31,7 +32,7 @@ internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
 @Composable
 @CircuitInject(ToolsScreen::class, SingletonComponent::class)
-internal fun ToolsLayout(state: ToolsScreen.State, modifier: Modifier = Modifier) {
+internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
     val banner by rememberUpdatedState(state.banner)
     val spotlightTools by rememberUpdatedState(state.spotlightTools)
     val filters by rememberUpdatedState(state.filters)

@@ -12,6 +12,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import dagger.assisted.Assisted
@@ -49,6 +51,7 @@ import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.BannerType
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -65,16 +68,36 @@ class ToolsPresenter @AssistedInject constructor(
     private val translationsRepository: TranslationsRepository,
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
-) : Presenter<ToolsScreen.State> {
+) : Presenter<UiState> {
+    // region UiState / UiEvent
+    data class UiState(
+        val banner: BannerType? = null,
+        val dataLoaded: Boolean = true,
+        val spotlightTools: List<ToolCard.State> = emptyList(),
+        val filters: Filters = Filters(),
+        val tools: List<ToolCard.State> = emptyList(),
+        val eventSink: (ToolsPresenter.UiEvent) -> Unit = {},
+    ) : CircuitUiState {
+        data class Filters(
+            val categoryFilter: FilterMenu.UiState<String?> = FilterMenu.UiState(),
+            val languageFilter: FilterMenu.UiState<Language?> = FilterMenu.UiState(),
+        ) : CircuitUiState
+    }
+
+    sealed interface UiEvent : CircuitUiEvent {
+        data class OpenToolDetails(val tool: String, val source: String? = null) : UiEvent
+    }
+    // endregion UiState / UiEvent
+
     @Composable
-    override fun present(): ToolsScreen.State {
+    override fun present(): UiState {
         val filters = rememberFilters()
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
-        val eventSink: (ToolsScreen.Event) -> Unit = remember {
+        val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    is ToolsScreen.Event.OpenToolDetails -> {
+                    is UiEvent.OpenToolDetails -> {
                         if (it.source != null) {
                             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, it.tool, it.source))
                         }
@@ -94,7 +117,7 @@ class ToolsPresenter @AssistedInject constructor(
             eventSink = eventSink,
         )
 
-        return ToolsScreen.State(
+        return UiState(
             banner = rememberBanner(),
             dataLoaded = spotlightTools != null && tools != null,
             spotlightTools = spotlightTools.orEmpty(),
@@ -111,7 +134,7 @@ class ToolsPresenter @AssistedInject constructor(
     }.collectAsState(null).value
 
     @Composable
-    private fun rememberFilters(): ToolsScreen.Filters {
+    private fun rememberFilters(): UiState.Filters {
         val scope = rememberCoroutineScope()
 
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
@@ -123,7 +146,7 @@ class ToolsPresenter @AssistedInject constructor(
             if (!languageMenuExpanded.value) languageQuery.value = ""
         }
 
-        return ToolsScreen.Filters(
+        return UiState.Filters(
             categoryFilter = FilterMenu.UiState(
                 menuExpanded = rememberSaveable { mutableStateOf(false) },
                 items = rememberFilterCategories(selectedLocale),
@@ -217,7 +240,7 @@ class ToolsPresenter @AssistedInject constructor(
     @Composable
     private fun rememberSpotlightTools(
         secondLanguage: Language?,
-        eventSink: (ToolsScreen.Event) -> Unit,
+        eventSink: (UiEvent) -> Unit,
     ): List<ToolCard.State>? {
         val tools by remember {
             toolsRepository.getNormalToolsFlow()
@@ -236,7 +259,7 @@ class ToolsPresenter @AssistedInject constructor(
                         ToolCard.Event.Click,
                         ToolCard.Event.OpenTool,
                         ToolCard.Event.OpenToolDetails ->
-                            toolCode?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
+                            toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
 
                         ToolCard.Event.PinTool,
                         ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
@@ -250,7 +273,7 @@ class ToolsPresenter @AssistedInject constructor(
     private fun rememberTools(
         category: String?,
         language: Language?,
-        eventSink: (ToolsScreen.Event) -> Unit,
+        eventSink: (UiEvent) -> Unit,
     ): List<ToolCard.State>? {
         val tools by rememberFilteredToolsFlow(category, language?.code).collectAsState(null)
         val eventSink by rememberUpdatedState(eventSink)
@@ -266,7 +289,7 @@ class ToolsPresenter @AssistedInject constructor(
                             ToolCard.Event.Click,
                             ToolCard.Event.OpenTool,
                             ToolCard.Event.OpenToolDetails ->
-                                toolCode?.let { eventSink(ToolsScreen.Event.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+                                toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
 
                             ToolCard.Event.PinTool,
                             ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")

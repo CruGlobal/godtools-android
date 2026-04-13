@@ -35,6 +35,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Filters
 import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -43,7 +44,7 @@ private val DROPDOWN_MAX_HEIGHT = 700.dp
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
 @Composable
-internal fun ToolFilters(filters: ToolsScreen.Filters, modifier: Modifier = Modifier) {
+internal fun ToolFilters(filters: Filters, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth()) {
         Text(
             stringResource(R.string.dashboard_tools_section_filter_label),
