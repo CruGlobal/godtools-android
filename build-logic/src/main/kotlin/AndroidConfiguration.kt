@@ -119,6 +119,10 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
         addProvider("implementation", project.libs.findBundle("androidx-compose").get())
         addProvider("debugImplementation", project.libs.findBundle("androidx-compose-debug").get())
         addProvider("testDebugImplementation", project.libs.findBundle("androidx-compose-testing").get())
+
+        // enabling compose for a module requires the compose runtime for all targets,
+        // including test fixtures if they are enabled
+        addProvider("testFixturesImplementation", project.libs.findLibrary("androidx-compose-runtime").get())
     }
 
     // configure circuit
