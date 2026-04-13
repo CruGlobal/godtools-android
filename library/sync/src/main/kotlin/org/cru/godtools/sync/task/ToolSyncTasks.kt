@@ -25,7 +25,6 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.sync.repository.SyncRepository
 
-private const val SYNC_TIME_TOOLS = "last_synced.tools"
 private const val SYNC_TIME_TOOL = "last_synced.tool."
 private const val STALE_DURATION_TOOLS = TimeConstants.DAY_IN_MS
 
@@ -37,7 +36,9 @@ internal class ToolSyncTasks @Inject internal constructor(
     private val toolsRepository: ToolsRepository,
     private val lastSyncTimeRepository: LastSyncTimeRepository,
 ) : BaseSyncTasks() {
-    private companion object {
+    internal companion object {
+        const val SYNC_TIME_TOOLS = "last_synced.tools"
+
         private val INCLUDES_GET_TOOL = Includes(
             Tool.JSON_ATTACHMENTS,
             "${Tool.JSON_METATOOL}.${Tool.JSON_DEFAULT_VARIANT}",
