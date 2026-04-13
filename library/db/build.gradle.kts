@@ -8,6 +8,8 @@ android {
 
     configureCompose(project)
 
+    testFixtures.enable = true
+
     sourceSets {
         named("test") { assets.srcDirs(file("room-schemas")) }
     }
