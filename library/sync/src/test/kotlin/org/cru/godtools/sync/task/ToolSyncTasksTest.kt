@@ -8,11 +8,12 @@ import io.mockk.coVerifySequence
 import io.mockk.just
 import io.mockk.mockk
 import kotlin.test.Test
+import kotlin.test.assertFalse
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.api.ToolsApi
 import org.cru.godtools.api.ViewsApi
-import org.cru.godtools.db.repository.LastSyncTimeRepository
+import org.cru.godtools.db.repository.InMemoryLastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.sync.repository.SyncRepository
@@ -32,10 +33,7 @@ class ToolSyncTasksTest {
     private val toolsRepository: ToolsRepository = mockk {
         coEvery { getAllTools() } returns existingTools
     }
-    private val lastSyncTimeRepository: LastSyncTimeRepository = mockk {
-        coEvery { isLastSyncStale(*anyVararg(), staleAfter = any()) } returns true
-        coEvery { updateLastSyncTime(*anyVararg()) } just Runs
-    }
+    private val lastSyncTimeRepository = InMemoryLastSyncTimeRepository()
 
     private val tasks = ToolSyncTasks(
         toolsApi = toolsApi,
@@ -50,8 +48,6 @@ class ToolSyncTasksTest {
     fun `syncTools()`() = runTest {
         tasks.syncTools()
         coVerifySequence {
-            lastSyncTimeRepository.isLastSyncStale(*anyVararg(), staleAfter = any())
-
             toolsApi.list(any())
             toolsRepository.getAllTools()
 
@@ -60,19 +56,16 @@ class ToolSyncTasksTest {
                 existingTools = existingTools.mapNotNullTo(mutableSetOf()) { it.code },
                 includes = any()
             )
-
-            lastSyncTimeRepository.updateLastSyncTime(*anyVararg())
         }
+        assertFalse(lastSyncTimeRepository.isLastSyncStale(ToolSyncTasks.SYNC_TIME_TOOLS, staleAfter = 60_000))
     }
 
     @Test
     fun `syncTools(force = false) - already synced`() = runTest {
-        coEvery { lastSyncTimeRepository.isLastSyncStale(*anyVararg(), staleAfter = any()) } returns false
+        lastSyncTimeRepository.setLastSyncTime(ToolSyncTasks.SYNC_TIME_TOOLS, time = System.currentTimeMillis())
 
         tasks.syncTools(force = false)
         coVerifyAll {
-            lastSyncTimeRepository.isLastSyncStale(*anyVararg(), staleAfter = any())
-
             toolsApi wasNot Called
             syncRepository wasNot Called
             viewsApi wasNot Called
@@ -81,7 +74,7 @@ class ToolSyncTasksTest {
 
     @Test
     fun `syncTools(force = true) - already synced`() = runTest {
-        coEvery { lastSyncTimeRepository.isLastSyncStale(*anyVararg(), staleAfter = any()) } returns false
+        lastSyncTimeRepository.setLastSyncTime(ToolSyncTasks.SYNC_TIME_TOOLS, time = System.currentTimeMillis())
 
         tasks.syncTools(force = true)
         coVerifySequence {
@@ -93,8 +86,6 @@ class ToolSyncTasksTest {
                 existingTools = existingTools.mapNotNullTo(mutableSetOf()) { it.code },
                 includes = any()
             )
-
-            lastSyncTimeRepository.updateLastSyncTime(*anyVararg())
         }
     }
     // endregion syncTools()
