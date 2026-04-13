@@ -1,7 +1,5 @@
 package org.cru.godtools.db.repository
 
-// TODO: this should be a testFixture in :library:db once Kotlin Android Test Fixtures are supported
-//       see: https://youtrack.jetbrains.com/issue/KT-50667
 class InMemoryLastSyncTimeRepository : LastSyncTimeRepository {
     val entries = mutableMapOf<List<Any>, Long>()
 

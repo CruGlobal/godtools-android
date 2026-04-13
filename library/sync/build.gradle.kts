@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
 
+    testImplementation(testFixtures(projects.library.db))
     testImplementation(libs.kotlin.coroutines.test)
 
     ksp(libs.androidx.hilt.compiler)
