@@ -15,7 +15,6 @@ import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -24,7 +23,7 @@ import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
-import org.cru.godtools.ui.dashboard.lessons.LessonsScreen.UiState
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.runner.RunWith
 
@@ -44,7 +43,7 @@ class LessonsLayoutPaparazziTest(
         languageFilter = FilterMenu.UiState(
             selectedItem = Language(Locale.ENGLISH)
         ),
-        lessons = persistentListOf(
+        lessons = listOf(
             ToolCardStateTestData.tool.copy(toolCode = "lesson1", translation = null),
             ToolCardStateTestData.tool.copy(toolCode = "lesson2", translation = null),
             ToolCardStateTestData.tool.copy(toolCode = "lesson3", translation = null),

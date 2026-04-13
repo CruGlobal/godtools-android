@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
-internal fun LessonsLayout(state: LessonsScreen.UiState, modifier: Modifier = Modifier) {
+internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
     LazyColumn(contentPadding = PaddingValues(16.dp), modifier = modifier) {
         item("header", "header") {
             LessonsHeader()

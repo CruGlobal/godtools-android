@@ -18,7 +18,7 @@ import org.cru.godtools.ui.languages.LanguageName
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-internal fun LessonFilters(state: LessonsScreen.UiState, modifier: Modifier = Modifier) {
+internal fun LessonFilters(state: LessonsPresenter.UiState, modifier: Modifier = Modifier) {
     FlowRow(modifier = modifier) {
         Text(
             stringResource(R.string.dashboard_lessons_section_filter_label),
