@@ -64,7 +64,7 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
     val overlayHost = LocalOverlayHost.current
     val coroutineScope = rememberCoroutineScope()
     var query by state.query
-    val selectedCountry = state.countries.firstOrNull() {
+    val selectedCountry = state.countries.firstOrNull {
         it.isoCode == state.countryCode
     }
 
