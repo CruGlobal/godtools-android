@@ -50,7 +50,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
 
     sealed interface UiEvent : CircuitUiEvent {
         data object NavigateBack : UiEvent
-        data class SelectCountry(val isoCode: String) : UiEvent
+        data class SelectCountry(val isoCode: String?) : UiEvent
     }
 
     @Composable
