@@ -165,7 +165,7 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                     modifier = Modifier.clickable {
                         coroutineScope.launch {
                             if (state.countryCode == country.isoCode) {
-                                eventSink(UiEvent.NavigateBack)
+                                eventSink(UiEvent.SelectCountry(country.isoCode))
                             } else {
                                 val confirmCountrySelection = overlayHost.show(
                                     CountrySettingsConfirmationOverlay(
