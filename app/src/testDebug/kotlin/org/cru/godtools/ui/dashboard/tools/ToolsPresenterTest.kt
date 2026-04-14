@@ -43,12 +43,13 @@ import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
+@Suppress("UnusedFlow")
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsPresenterTest {
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
     private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
-    private val metatoolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
+    private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val gospelLanguagesFlow = MutableStateFlow(emptyList<Language>())
     private val selectedCategory = MutableStateFlow<String?>(null)
@@ -56,6 +57,9 @@ class ToolsPresenterTest {
 
     private val testScope = TestScope()
 
+    private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
+        every { getFlow(any(), any()) } returns filteredToolsFlow
+    }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
         every { getLanguagesFlow() } returns languagesFlow
@@ -75,8 +79,6 @@ class ToolsPresenterTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
-        every { getNormalToolsFlowByLanguage(any()) } returns flowOf(emptyList())
-        every { getMetaToolsFlow() } returns metatoolsFlow
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns flowOf(emptyList())
@@ -99,6 +101,7 @@ class ToolsPresenterTest {
             languagesRepository = languagesRepository,
             toolsRepository = toolsRepository,
             translationsRepository = translationsRepository,
+            filteredToolsFlowProducer = filteredToolsFlowProducer,
             ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
             navigator = navigator,
         )
@@ -163,49 +166,17 @@ class ToolsPresenterTest {
 
     // region State.filters.categoryFilter.items
     @Test
-    fun `State - filters - categoryFilter - items - no language`() = testScope.runTest {
-        toolsFlow.value = listOf(
-            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false, defaultOrder = 0),
-            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = false, defaultOrder = 1),
+    fun `State - filters - categoryFilter - items - distinct & ordered by tool order`() = testScope.runTest {
+        filteredToolsFlow.value = listOf(
+            randomTool(category = Tool.CATEGORY_ARTICLES),
+            randomTool(category = Tool.CATEGORY_GOSPEL),
+            randomTool(category = Tool.CATEGORY_ARTICLES),
         )
 
         presenter.test {
             assertEquals(
                 listOf(
-                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1),
-                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 1)
-                ),
-                expectMostRecentItem().filters.categoryFilter.items
-            )
-        }
-    }
-
-    @Test
-    fun `State - filters - categoryFilter - items - distinct categories`() = testScope.runTest {
-        toolsFlow.value = listOf(
-            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
-            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
-        )
-
-        presenter.test {
-            assertEquals(
-                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 2)),
-                expectMostRecentItem().filters.categoryFilter.items
-            )
-        }
-    }
-
-    @Test
-    fun `State - filters - categoryFilter - items - ordered by tool default order`() = testScope.runTest {
-        toolsFlow.value = listOf(
-            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false, defaultOrder = 1),
-            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = false, defaultOrder = 0),
-        )
-
-        presenter.test {
-            assertEquals(
-                listOf(
-                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 1),
+                    FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 2),
                     FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)
                 ),
                 expectMostRecentItem().filters.categoryFilter.items
@@ -214,34 +185,12 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `State - filters - categoryFilter - items - exclude non-default variants`() = testScope.runTest {
-        val meta = randomTool("meta", defaultVariantCode = "tool")
-        toolsFlow.value = listOf(
-            randomTool("tool", category = Tool.CATEGORY_GOSPEL, metatoolCode = "meta", isHidden = false),
-            randomTool("other", category = Tool.CATEGORY_ARTICLES, metatoolCode = "meta", isHidden = false),
-        )
-
+    fun `State - filters - categoryFilter - items - uses selected language`() = testScope.runTest {
         presenter.test {
-            metatoolsFlow.value = listOf(meta)
-            assertEquals(
-                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
-                expectMostRecentItem().filters.categoryFilter.items
-            )
-        }
-    }
+            awaitItem().filters.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            expectMostRecentItem()
 
-    @Test
-    fun `State - filters - categoryFilter - items - exclude hidden tools`() = testScope.runTest {
-        toolsFlow.value = listOf(
-            randomTool(category = Tool.CATEGORY_GOSPEL, metatoolCode = null, isHidden = false),
-            randomTool(category = Tool.CATEGORY_ARTICLES, metatoolCode = null, isHidden = true),
-        )
-
-        presenter.test {
-            assertEquals(
-                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
-                expectMostRecentItem().filters.categoryFilter.items
-            )
+            verify { filteredToolsFlowProducer.getFlow(language = Locale.FRENCH) }
         }
     }
     // endregion State.filters.categoryFilter.items
@@ -293,9 +242,9 @@ class ToolsPresenterTest {
         every { translationsRepository.getTranslationsFlowForTools(setOf("tool1", "tool2")) } returns translationsFlow
 
         presenter.test {
-            toolsFlow.value = listOf(
-                randomTool("tool1", metatoolCode = null, isHidden = false),
-                randomTool("tool2", metatoolCode = null, isHidden = false),
+            filteredToolsFlow.value = listOf(
+                randomTool("tool1", isHidden = false),
+                randomTool("tool2", isHidden = false),
             )
             translationsFlow.value = listOf(
                 randomTranslation("tool1", Locale.ENGLISH),
@@ -403,34 +352,4 @@ class ToolsPresenterTest {
         }
     }
     // endregion FiltersEvent.ToggleLanguagesMenu
-
-    // region State.tools
-    @Test
-    fun `State - tools - return only default variants`() = testScope.runTest {
-        val meta = Tool("meta", Tool.Type.META, defaultVariantCode = "variant2")
-        val variant1 = Tool("variant1", metatoolCode = "meta")
-        val variant2 = Tool("variant2", metatoolCode = "meta")
-
-        presenter.test {
-            assertEquals(emptyList(), awaitItem().tools)
-
-            metatoolsFlow.value = listOf(meta)
-            toolsFlow.value = listOf(variant1, variant2)
-            assertEquals(listOf(variant2), expectMostRecentItem().tools.map { it.tool })
-        }
-    }
-
-    @Test
-    fun `State - tools - Don't return hidden tools`() = testScope.runTest {
-        val hidden = randomTool("hidden", isHidden = true, metatoolCode = null)
-        val visible = randomTool("visible", isHidden = false, metatoolCode = null)
-
-        presenter.test {
-            assertEquals(emptyList(), awaitItem().tools)
-
-            toolsFlow.value = listOf(hidden, visible)
-            assertEquals(listOf(visible), expectMostRecentItem().tools.map { it.tool })
-        }
-    }
-    // endregion State.tools
 }

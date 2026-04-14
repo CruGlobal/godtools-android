@@ -27,13 +27,14 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
@@ -57,7 +58,7 @@ import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.greenrobot.eventbus.EventBus
 
-class ToolsPresenter @AssistedInject constructor(
+class ToolsPresenter @AssistedInject internal constructor(
     @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
@@ -66,6 +67,7 @@ class ToolsPresenter @AssistedInject constructor(
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
+    private val filteredToolsFlowProducer: FilteredToolsFlowProducer,
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
@@ -178,10 +180,8 @@ class ToolsPresenter @AssistedInject constructor(
 
     @Composable
     private fun rememberFilterCategories(selectedLanguage: Locale?): ImmutableList<FilterMenu.UiState.Item<String?>> {
-        val filteredToolsFlow = rememberFilteredToolsFlow(language = selectedLanguage)
-
-        return remember(filteredToolsFlow) {
-            filteredToolsFlow.map {
+        return remember(selectedLanguage) {
+            filteredToolsFlowProducer.getFlow(language = selectedLanguage).map {
                 it.groupBy { it.category }
                     .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
                     .toImmutableList()
@@ -195,12 +195,13 @@ class ToolsPresenter @AssistedInject constructor(
         category: String?,
         query: String,
     ): ImmutableList<FilterMenu.UiState.Item<Language?>> {
+        val scope = rememberCoroutineScope()
+
         val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
         val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
-        val toolsFlow = rememberFilteredToolsFlow(category = category)
 
-        return remember {
-            val languagesFlow = categoryFlow
+        val languagesFlow = remember {
+            categoryFlow
                 .flatMapLatest {
                     when (it) {
                         null -> languagesRepository.getLanguagesFlow()
@@ -211,8 +212,11 @@ class ToolsPresenter @AssistedInject constructor(
                     languages.sortedWith(Language.displayNameComparator(context, appLang))
                 }
                 .flowOn(ioDispatcher)
+                .shareIn(scope, started = SharingStarted.WhileSubscribed(5_000), replay = 1)
+        }
 
-            val toolCountsFlow = toolsFlow
+        return remember(category) {
+            val toolCountsFlow = filteredToolsFlowProducer.getFlow(category = category)
                 .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
                 .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
@@ -275,7 +279,9 @@ class ToolsPresenter @AssistedInject constructor(
         language: Language?,
         eventSink: (UiEvent) -> Unit,
     ): List<ToolCard.State>? {
-        val tools by rememberFilteredToolsFlow(category, language?.code).collectAsState(null)
+        val locale = language?.code
+        val tools by remember(category, locale) { filteredToolsFlowProducer.getFlow(category, locale) }
+            .collectAsState(null)
         val eventSink by rememberUpdatedState(eventSink)
 
         return tools?.map { tool ->
@@ -297,33 +303,6 @@ class ToolsPresenter @AssistedInject constructor(
                     }
                 )
             }
-        }
-    }
-
-    @Composable
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun rememberFilteredToolsFlow(category: String? = null, language: Locale? = null): Flow<List<Tool>> {
-        val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
-        val languageFlow = remember { MutableStateFlow(language) }.apply { value = language }
-
-        return remember {
-            val defaultVariantsFlow = toolsRepository.getMetaToolsFlow()
-                .map { it.associateBy({ it.code }, { it.defaultVariantCode }) }
-
-            languageFlow
-                .flatMapLatest {
-                    when (it) {
-                        null -> toolsRepository.getNormalToolsFlow()
-                        else -> toolsRepository.getNormalToolsFlowByLanguage(it)
-                    }
-                }
-                .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
-                .combine(defaultVariantsFlow) { tools, defaultVariants ->
-                    tools.filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
-                }
-                .combine(categoryFlow) { tools, category ->
-                    if (category == null) tools else tools.filter { it.category == category }
-                }
         }
     }
 
