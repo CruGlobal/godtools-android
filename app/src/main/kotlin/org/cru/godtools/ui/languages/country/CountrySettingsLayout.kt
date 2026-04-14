@@ -64,9 +64,6 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
     val overlayHost = LocalOverlayHost.current
     val coroutineScope = rememberCoroutineScope()
     var query by state.query
-    val selectedCountry = state.countries.firstOrNull {
-        it.isoCode == state.countryCode
-    }
 
     Scaffold(
         topBar = {
@@ -156,34 +153,20 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                     },
                 )
             }
-            if (selectedCountry != null) {
-                item {
-                    HorizontalDivider(Modifier.padding(horizontal = 16.dp))
-                    ListItem(
-                        headlineContent = {
-                            CountryName(selectedCountry)
-                        },
-                        trailingContent = {
-                            Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
-                        },
-                        modifier = Modifier.clickable {
-                            eventSink(UiEvent.NavigateBack)
-                        },
-                    )
-                }
-            }
             items(state.countries, { it.isoCode }) { country ->
-                if (state.countryCode != country.isoCode) {
-                    HorizontalDivider(Modifier.padding(horizontal = 16.dp))
-                    ListItem(
-                        headlineContent = { CountryName(country) },
-                        trailingContent = {
-                            if (country.isoCode == state.countryCode) {
-                                Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
-                            }
-                        },
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
+                HorizontalDivider(Modifier.padding(horizontal = 16.dp))
+                ListItem(
+                    headlineContent = { CountryName(country) },
+                    trailingContent = {
+                        if (country.isoCode == state.countryCode) {
+                            Icon(Icons.Filled.Check, null, tint = MaterialTheme.colorScheme.primary)
+                        }
+                    },
+                    modifier = Modifier.clickable {
+                        coroutineScope.launch {
+                            if (state.countryCode == country.isoCode) {
+                                eventSink(UiEvent.NavigateBack)
+                            } else {
                                 val confirmCountrySelection = overlayHost.show(
                                     CountrySettingsConfirmationOverlay(
                                         country.displayName ?: country.isoCode,
@@ -193,9 +176,9 @@ internal fun CountrySettingsLayout(state: UiState, modifier: Modifier = Modifier
                                     eventSink(UiEvent.SelectCountry(country.isoCode))
                                 }
                             }
-                        },
-                    )
-                }
+                        }
+                    },
+                )
             }
         }
     }
