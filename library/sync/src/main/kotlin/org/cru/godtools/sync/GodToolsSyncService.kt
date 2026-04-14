@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.work.WorkManager
 import dagger.Lazy
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -84,6 +85,9 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
 
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
+
+    suspend fun syncPersonalizedTools(locale: Locale, country: String?, force: Boolean = false) =
+        executeSync<ToolSyncTasks> { syncPersonalizedTools(locale, country, force) }
 
     suspend fun syncGlobalActivity(force: Boolean = false) =
         executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }

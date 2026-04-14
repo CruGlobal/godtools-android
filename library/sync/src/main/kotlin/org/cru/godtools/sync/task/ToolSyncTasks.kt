@@ -3,6 +3,7 @@ package org.cru.godtools.sync.task
 import androidx.annotation.AnyThread
 import java.io.IOException
 import java.net.HttpURLConnection.HTTP_OK
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.async
@@ -38,6 +39,7 @@ internal class ToolSyncTasks @Inject internal constructor(
 ) : BaseSyncTasks() {
     internal companion object {
         const val SYNC_TIME_TOOLS = "last_synced.tools"
+        const val SYNC_TIME_PERSONALIZED_TOOLS = "last_synced.personalized_tools."
 
         private val INCLUDES_GET_TOOL = Includes(
             Tool.JSON_ATTACHMENTS,
@@ -49,6 +51,9 @@ internal class ToolSyncTasks @Inject internal constructor(
             .includes(INCLUDES_GET_TOOL)
             .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
+
+        private fun buildPersonalizedToolsApiParams() = JsonApiParams()
+            .fields(Tool.JSONAPI_TYPE, Tool.JSON_CODE)
     }
 
     private val toolsMutex = Mutex()
@@ -80,7 +85,7 @@ internal class ToolSyncTasks @Inject internal constructor(
         if (!force &&
             !lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOL, toolCode, staleAfter = STALE_DURATION_TOOLS)
         ) {
-            return true
+            return@withLock true
         }
 
         // fetch tools from the API, short-circuit if this response is invalid
@@ -96,6 +101,58 @@ internal class ToolSyncTasks @Inject internal constructor(
 
         true
     }
+
+    // region Personalized Tools
+    private val personalizedToolsMutex = MutexMap()
+
+    internal suspend fun syncPersonalizedTools(locale: Locale, country: String?, force: Boolean = false) =
+        coroutineScope {
+            val order = async { country?.let { syncPersonalizedToolOrder(locale, it.uppercase(), force) } ?: true }
+            val defaultOrder = async { syncDefaultPersonalizedToolOrder(locale, force) }
+            order.await() && defaultOrder.await()
+        }
+
+    private suspend fun syncPersonalizedToolOrder(locale: Locale, country: String, force: Boolean) =
+        personalizedToolsMutex.withLock(locale to country) {
+            if (!force &&
+                !lastSyncTimeRepository.isLastSyncStale(
+                    SYNC_TIME_PERSONALIZED_TOOLS,
+                    locale,
+                    country,
+                    staleAfter = STALE_DURATION_TOOLS,
+                )
+            ) {
+                return@withLock true
+            }
+
+            val tools = toolsApi.getToolOrder(locale, country, buildPersonalizedToolsApiParams())
+                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return@withLock false
+
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, tools)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_PERSONALIZED_TOOLS, locale, country)
+            true
+        }
+
+    private suspend fun syncDefaultPersonalizedToolOrder(locale: Locale, force: Boolean) =
+        personalizedToolsMutex.withLock(locale) {
+            if (!force &&
+                !lastSyncTimeRepository.isLastSyncStale(
+                    SYNC_TIME_PERSONALIZED_TOOLS,
+                    locale,
+                    staleAfter = STALE_DURATION_TOOLS
+                )
+            ) {
+                return@withLock true
+            }
+
+            val tools = toolsApi.getDefaultToolOrder(locale, buildPersonalizedToolsApiParams())
+                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return@withLock false
+
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, tools)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_PERSONALIZED_TOOLS, locale)
+            true
+        }
+    // endregion Personalized Tools
 
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.

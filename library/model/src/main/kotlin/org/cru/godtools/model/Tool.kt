@@ -24,7 +24,6 @@ private const val JSON_TYPE_ARTICLE = "article"
 private const val JSON_TYPE_CYOA = "cyoa"
 private const val JSON_TYPE_LESSON = "lesson"
 private const val JSON_TYPE_META = "metatool"
-private const val JSON_ABBREVIATION = "abbreviation"
 private const val JSON_NAME = "name"
 private const val JSON_CATEGORY = "attr-category"
 private const val JSON_HIDDEN = "attr-hidden"
@@ -42,7 +41,7 @@ private const val JSON_SCREEN_SHARE_DISABLED = "attr-screen-share-disabled"
 
 @JsonApiType(Tool.JSONAPI_TYPE)
 class Tool(
-    @JsonApiAttribute(JSON_ABBREVIATION)
+    @JsonApiAttribute(JSON_CODE)
     val code: String?,
     @JsonApiAttribute(JSON_TYPE)
     val type: Type = Type.UNKNOWN,
@@ -101,6 +100,7 @@ class Tool(
     companion object {
         const val JSONAPI_TYPE = "resource"
 
+        const val JSON_CODE = "abbreviation"
         const val JSON_ATTACHMENTS = "attachments"
         const val JSON_LATEST_TRANSLATIONS = "latest-translations"
         const val JSON_METATOOL = "metatool"
@@ -110,7 +110,7 @@ class Tool(
 
         val JSONAPI_FIELDS = arrayOf(
             JSON_TYPE,
-            JSON_ABBREVIATION,
+            JSON_CODE,
             JSON_NAME,
             JSON_DESCRIPTION,
             JSON_CATEGORY,
