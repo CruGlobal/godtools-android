@@ -59,7 +59,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
         val appLocale by settings.produceAppLocaleState()
         val query = rememberSaveable { mutableStateOf("") }
         val settingCountryCode by settings.getCountrySettingFlow().collectAsState(initial = null)
-        val sortedCountries = rememberSortedCountries(appLocale)
+        val sortedCountries = rememberSortedCountries(appLocale, settingCountryCode)
         val filteredCountries = remember(sortedCountries, query.value) {
             sortedCountries.filter { country ->
                 query.value.isEmpty() ||
@@ -88,10 +88,10 @@ class CountrySettingsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberSortedCountries(appLocale: Locale): List<CountryItem> {
+    private fun rememberSortedCountries(appLocale: Locale, settingsCountryCode: String?): List<CountryItem> {
         val isoCodes = remember { Locale.getISOCountries() }
 
-        return produceState(key1 = appLocale, initialValue = emptyList()) {
+        return produceState(key1 = appLocale, key2 = settingsCountryCode, initialValue = emptyList()) {
             value = withContext(Dispatchers.IO) {
                 val appDisplayNames = LocaleDisplayNames.getInstance(ULocale.forLocale(appLocale))
                 isoCodes.map { isoCode ->
@@ -104,7 +104,8 @@ class CountrySettingsPresenter @AssistedInject constructor(
                     val nativeName = if (resourceId != 0) context.getString(resourceId) else displayName
                     CountryItem(isoCode, displayName, nativeName)
                 }.sortedWith(
-                    compareBy(appLocale.getPrimaryCollator()) { it.displayName }
+                    compareBy<CountryItem> { it.isoCode != settingsCountryCode }
+                        .then(compareBy(appLocale.getPrimaryCollator()) { it.displayName })
                 )
             }
         }.value
