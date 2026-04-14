@@ -35,7 +35,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
-import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Filters
+import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
