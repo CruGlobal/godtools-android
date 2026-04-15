@@ -29,6 +29,8 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith
@@ -50,7 +52,7 @@ class ToolsLayoutPaparazziTest(
         ToolCardStateTestData.tool.copy(toolCode = "spotlight3", tool = randomTool("spotlight3", isFavorite = false)),
     )
 
-    private val state = ToolsScreen.State(
+    private val state = UiState(
         dataLoaded = true,
         spotlightTools = spotlightTools,
         tools = tools,
@@ -103,7 +105,7 @@ class ToolsLayoutPaparazziTest(
     @Test
     fun `ToolsLayout() - Filters Selected`() = snapshotToolsLayout(
         state.copy(
-            filters = ToolsScreen.Filters(
+            filters = Filters(
                 categoryFilter = FilterMenu.UiState(selectedItem = Tool.CATEGORY_GOSPEL),
                 languageFilter = FilterMenu.UiState(
                     selectedItem = Language(Locale.ENGLISH),
@@ -117,7 +119,7 @@ class ToolsLayoutPaparazziTest(
     @Ignore("LayoutLib does not correctly support Popups/Windows currently")
     fun `ToolsLayout() - Language Filter Expanded`() = snapshotToolsLayout(
         state.copy(
-            filters = ToolsScreen.Filters(
+            filters = Filters(
                 languageFilter = FilterMenu.UiState(
                     selectedItem = Language(Locale.ENGLISH),
                     menuExpanded = mutableStateOf(true),
@@ -132,7 +134,7 @@ class ToolsLayoutPaparazziTest(
         )
     )
 
-    private fun snapshotToolsLayout(state: ToolsScreen.State) = snapshot {
+    private fun snapshotToolsLayout(state: UiState) = snapshot {
         ToolsLayout(
             state,
             modifier = Modifier

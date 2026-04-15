@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.ui.banner.BannerType
-import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
+import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith

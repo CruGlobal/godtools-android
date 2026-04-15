@@ -46,7 +46,7 @@ object FilterMenu {
     data class UiState<T>(
         val menuExpanded: MutableState<Boolean> = mutableStateOf(false),
         val query: MutableState<String> = mutableStateOf(""),
-        val items: ImmutableList<Item<T>> = persistentListOf(),
+        val items: List<Item<T>> = persistentListOf(),
         val selectedItem: T? = null,
         val eventSink: (Event<T>) -> Unit = {},
     ) : CircuitUiState {

@@ -122,12 +122,12 @@ class LessonsPresenterTest {
 
     // This logic is based on the Sample AnsweringNavigatorTest in the circuit library.
     // see: https://github.com/slackhq/circuit/blob/main/circuit-foundation/src/jvmTest/kotlin/com/slack/circuit/foundation/AnsweringNavigatorTest.kt
-    private fun testPresenterWithStateRestoration(): ReceiveTurbine<LessonsScreen.UiState> {
-        val presenterState = Turbine<LessonsScreen.UiState>()
+    private fun testPresenterWithStateRestoration(): ReceiveTurbine<LessonsPresenter.UiState> {
+        val presenterState = Turbine<LessonsPresenter.UiState>()
 
         val circuit = Circuit.Builder()
-            .addPresenter<LessonsScreen, LessonsScreen.UiState> { s, n, _ -> presenter }
-            .addUi<LessonsScreen, LessonsScreen.UiState> { state, _ -> SideEffect { presenterState.add(state) } }
+            .addPresenter<LessonsScreen, LessonsPresenter.UiState> { s, n, _ -> presenter }
+            .addUi<LessonsScreen, LessonsPresenter.UiState> { state, _ -> SideEffect { presenterState.add(state) } }
             .build()
 
         stateRestorationTester.setContent {

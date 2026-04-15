@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.android.IntentScreen
@@ -21,7 +22,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
@@ -43,6 +43,7 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
@@ -59,13 +60,20 @@ class LessonsPresenter @AssistedInject constructor(
     private val translationsRepository: TranslationsRepository,
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
-) : Presenter<LessonsScreen.UiState> {
+) : Presenter<UiState> {
+    // region UiState
+    data class UiState(
+        val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
+        val lessons: List<ToolCard.State> = emptyList(),
+    ) : CircuitUiState
+    // endregion UiState
+
     @Composable
-    override fun present(): LessonsScreen.UiState {
+    override fun present(): UiState {
         val appLanguage by settings.appLanguageFlow.collectAsState()
         val languageFilter = rememberLanguagesFilter()
 
-        return LessonsScreen.UiState(
+        return UiState(
             languageFilter = languageFilter,
             lessons = rememberLessons(languageFilter.selectedItem?.code ?: appLanguage),
         )
@@ -131,13 +139,13 @@ class LessonsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLessons(locale: Locale): ImmutableList<ToolCard.State> {
+    private fun rememberLessons(locale: Locale): List<ToolCard.State> {
         val lessons by remember(locale) {
             toolsRepository.getLessonsFlowByLanguage(locale)
                 .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
         }.collectAsState(emptyList())
 
-        return lessons.mapTo(persistentListOf<ToolCard.State>().builder()) { tool ->
+        return lessons.map { tool ->
             key(tool.code) {
                 lateinit var toolState: ToolCard.State
                 toolState = toolCardPresenter.present(
@@ -167,7 +175,7 @@ class LessonsPresenter @AssistedInject constructor(
                 )
                 toolState
             }
-        }.build()
+        }
     }
 
     @AssistedFactory

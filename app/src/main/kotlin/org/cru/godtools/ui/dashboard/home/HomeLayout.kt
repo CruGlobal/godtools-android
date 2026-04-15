@@ -33,8 +33,8 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
 import org.cru.godtools.ui.banner.Banners
-import org.cru.godtools.ui.dashboard.home.HomeScreen.UiEvent
-import org.cru.godtools.ui.dashboard.home.HomeScreen.UiState
+import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
+import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 import org.cru.godtools.ui.tools.SquareToolCard
 
