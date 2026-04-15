@@ -56,7 +56,6 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
@@ -91,7 +90,6 @@ internal fun DashboardLayout(state: UiState, modifier: Modifier = Modifier) {
                             }
                         }
                     },
-                    colors = GodToolsTheme.topAppBarColors,
                 )
             },
             bottomBar = {
