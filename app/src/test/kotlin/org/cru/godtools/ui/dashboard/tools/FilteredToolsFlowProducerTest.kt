@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,13 +16,11 @@ import org.cru.godtools.model.randomTool
 
 @Suppress("UnusedFlow")
 class FilteredToolsFlowProducerTest {
-    private val metatoolsFlow = MutableStateFlow(emptyList<Tool>())
     private val normalToolsFlow = MutableStateFlow(emptyList<Tool>())
 
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns normalToolsFlow
         every { getNormalToolsFlowByLanguage(any()) } returns flowOf(emptyList())
-        every { getMetaToolsFlow() } returns metatoolsFlow
     }
 
     private val producer = FilteredToolsFlowProducer(toolsRepository)
@@ -73,61 +70,6 @@ class FilteredToolsFlowProducerTest {
     }
     // endregion sort order
 
-    // region default variant filtering
-    @Test
-    fun `getFlow - non-variant tools always included`() = runTest {
-        val tool = createTool(metatoolCode = null)
-
-        normalToolsFlow.value = listOf(tool)
-        assertEquals(listOf(tool), producer.getFlow().first())
-    }
-
-    @Test
-    fun `getFlow - default variant is included`() = runTest {
-        val meta = randomTool("meta", type = Tool.Type.META, defaultVariantCode = "default")
-        val defaultVariant = randomTool("default", metatoolCode = "meta", isHidden = false)
-
-        metatoolsFlow.value = listOf(meta)
-        normalToolsFlow.value = listOf(defaultVariant)
-        assertEquals(listOf(defaultVariant), producer.getFlow().first())
-    }
-
-    @Test
-    fun `getFlow - non-default variant is excluded`() = runTest {
-        val meta = randomTool("meta", type = Tool.Type.META, defaultVariantCode = "default")
-        val nonDefault = randomTool("other", metatoolCode = "meta", isHidden = false)
-
-        metatoolsFlow.value = listOf(meta)
-        normalToolsFlow.value = listOf(nonDefault)
-        assertEquals(emptyList(), producer.getFlow().first())
-    }
-
-    @Test
-    fun `getFlow - variant with no matching metatool is excluded`() = runTest {
-        val orphan = randomTool("orphan", metatoolCode = "missing-meta", isHidden = false)
-
-        normalToolsFlow.value = listOf(orphan)
-        assertEquals(emptyList(), producer.getFlow().first())
-    }
-
-    @Test
-    fun `getFlow - default variant updates when metatool changes`() = runTest {
-        val metaV1 = randomTool("meta", type = Tool.Type.META, defaultVariantCode = "v1")
-        val metaV2 = randomTool("meta", type = Tool.Type.META, defaultVariantCode = "v2")
-        val v1 = randomTool("v1", metatoolCode = "meta", isHidden = false)
-        val v2 = randomTool("v2", metatoolCode = "meta", isHidden = false)
-
-        producer.getFlow().test {
-            normalToolsFlow.value = listOf(v1, v2)
-            metatoolsFlow.value = listOf(metaV1)
-            assertEquals(listOf(v1), expectMostRecentItem())
-
-            metatoolsFlow.value = listOf(metaV2)
-            assertEquals(listOf(v2), expectMostRecentItem())
-        }
-    }
-    // endregion default variant filtering
-
     // region category filter
     @Test
     fun `getFlow - null category includes all tools`() = runTest {
@@ -173,15 +115,9 @@ class FilteredToolsFlowProducerTest {
     }
     // endregion combined filters
 
-    private fun createTool(
-        category: String? = null,
-        defaultOrder: Int = 0,
-        isHidden: Boolean = false,
-        metatoolCode: String? = null,
-    ) = randomTool(
+    private fun createTool(category: String? = null, defaultOrder: Int = 0, isHidden: Boolean = false) = randomTool(
         category = category,
         defaultOrder = defaultOrder,
         isHidden = isHidden,
-        metatoolCode = metatoolCode
     )
 }

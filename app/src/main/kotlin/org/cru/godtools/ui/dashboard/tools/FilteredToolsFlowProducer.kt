@@ -3,7 +3,6 @@ package org.cru.godtools.ui.dashboard.tools
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
@@ -15,14 +14,11 @@ internal class FilteredToolsFlowProducer @Inject constructor(private val toolsRe
             else -> toolsRepository.getNormalToolsFlowByLanguage(language)
         }
 
-        val defaultVariantsFlow = toolsRepository.getMetaToolsFlow()
-            .map { it.associateBy({ it.code }, { it.defaultVariantCode }) }
-
-        return baseFlow
-            .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
-            .combine(defaultVariantsFlow) { tools, defaultVariants ->
-                tools.filter { it.metatoolCode == null || it.code == defaultVariants[it.metatoolCode] }
-            }
-            .map { tools -> if (category == null) tools else tools.filter { it.category == category } }
+        return baseFlow.map {
+            it
+                .filterNot { it.isHidden }
+                .filter { category == null || it.category == category }
+                .sortedBy { it.defaultOrder }
+        }
     }
 }
