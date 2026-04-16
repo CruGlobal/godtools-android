@@ -50,7 +50,7 @@ class ToolsPresenterTest {
 
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
-        every { getFlow(any(), any()) } returns filteredToolsFlow
+        every { getFlow(any(), any(), any()) } returns filteredToolsFlow
     }
     private val navigator = FakeNavigator(ToolsScreen)
     private val remoteConfig: FirebaseRemoteConfig = mockk {

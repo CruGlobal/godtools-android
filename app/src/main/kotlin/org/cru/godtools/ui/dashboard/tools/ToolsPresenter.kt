@@ -162,7 +162,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         eventSink: (UiEvent) -> Unit,
     ): List<ToolCard.State>? {
         val locale = language?.code
-        val tools by remember(category, locale) { filteredToolsFlowProducer.getFlow(category, locale) }
+        val tools by remember(category, locale) { filteredToolsFlowProducer.getFlow(Mode.ALL_TOOLS, category, locale) }
             .collectAsState(null)
         val eventSink by rememberUpdatedState(eventSink)
 

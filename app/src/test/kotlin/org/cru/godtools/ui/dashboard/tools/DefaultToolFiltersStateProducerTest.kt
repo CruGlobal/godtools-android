@@ -32,6 +32,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
@@ -50,7 +51,7 @@ class DefaultToolFiltersStateProducerTest {
     private val testScope = TestScope()
 
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
-        every { getFlow(any(), any()) } returns filteredToolsFlow
+        every { getFlow(any(), any(), any()) } returns filteredToolsFlow
     }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
@@ -114,7 +115,7 @@ class DefaultToolFiltersStateProducerTest {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             expectMostRecentItem()
 
-            verify { filteredToolsFlowProducer.getFlow(language = Locale.FRENCH) }
+            verify { filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, language = Locale.FRENCH) }
         }
     }
     // endregion Filters.categoryFilter.items

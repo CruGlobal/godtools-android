@@ -34,6 +34,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 
 interface ToolFiltersStateProducer {
     data class Filters(
@@ -98,7 +99,7 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
 
     @Composable
     private fun rememberFilterCategories(selectedLanguage: Locale?) = remember(selectedLanguage) {
-        filteredToolsFlowProducer.getFlow(language = selectedLanguage).map {
+        filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, language = selectedLanguage).map {
             it.groupBy { it.category }
                 .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
         }
@@ -128,7 +129,7 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
         }
 
         return remember(category) {
-            val toolCountsFlow = filteredToolsFlowProducer.getFlow(category = category)
+            val toolCountsFlow = filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, category = category)
                 .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
                 .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
