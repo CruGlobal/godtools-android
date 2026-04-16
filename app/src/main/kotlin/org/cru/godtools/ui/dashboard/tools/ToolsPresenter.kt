@@ -4,8 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -20,6 +24,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
@@ -29,6 +34,7 @@ import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -36,6 +42,7 @@ import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
+    private val remoteConfig: FirebaseRemoteConfig,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
     private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
@@ -45,27 +52,42 @@ class ToolsPresenter @AssistedInject internal constructor(
 ) : Presenter<UiState> {
     // region UiState / UiEvent
     data class UiState(
+        val mode: Mode = Mode.ALL_TOOLS,
         val banner: Banner.UiState? = null,
         val dataLoaded: Boolean = true,
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
         val tools: List<ToolCard.State> = emptyList(),
+        // TODO: temporary until personalization is rolled out to everyone,
+        //       then this can be removed and the mode logic simplified
+        val isPersonalizationEnabled: Boolean = false,
         val eventSink: (UiEvent) -> Unit = {},
-    ) : CircuitUiState
+    ) : CircuitUiState {
+        enum class Mode { PERSONALIZATION, ALL_TOOLS }
+    }
 
     sealed interface UiEvent : CircuitUiEvent {
+        data class ChangeMode(val mode: Mode) : UiEvent
         data class OpenToolDetails(val tool: String, val source: String? = null) : UiEvent
     }
     // endregion UiState / UiEvent
 
     @Composable
     override fun present(): UiState {
+        val isPersonalizationEnabled = rememberSaveable {
+            remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
+        }
+        var mode by rememberSaveable {
+            mutableStateOf(if (isPersonalizationEnabled) Mode.PERSONALIZATION else Mode.ALL_TOOLS)
+        }
         val filters = toolFiltersStateProducer.produce()
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
         val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
+                    is UiEvent.ChangeMode -> mode = it.mode
+
                     is UiEvent.OpenToolDetails -> {
                         if (it.source != null) {
                             eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, it.tool, it.source))
@@ -87,11 +109,16 @@ class ToolsPresenter @AssistedInject internal constructor(
         )
 
         return UiState(
+            mode = mode,
             banner = favoriteToolsBannerPresenter.present(),
             dataLoaded = spotlightTools != null && tools != null,
-            spotlightTools = spotlightTools.orEmpty(),
+            spotlightTools = when {
+                isPersonalizationEnabled && mode == Mode.ALL_TOOLS -> emptyList()
+                else -> spotlightTools.orEmpty()
+            },
             filters = filters,
             tools = tools.orEmpty(),
+            isPersonalizationEnabled = isPersonalizationEnabled,
             eventSink = eventSink,
         )
     }
