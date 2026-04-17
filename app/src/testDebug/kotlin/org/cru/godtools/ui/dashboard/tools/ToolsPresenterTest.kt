@@ -40,6 +40,7 @@ import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
+@Suppress("UnusedFlow")
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,6 +114,49 @@ class ToolsPresenterTest {
         }
     }
     // endregion State.mode
+
+    // region State.tools
+    @Test
+    fun `State - tools - shows tools from filteredToolsFlowProducer`() = runTest {
+        val tool = randomTool(isHidden = false)
+        filteredToolsFlow.value = listOf(tool)
+
+        presenter.test {
+            assertEquals(listOf(tool), awaitInitialItem().tools.map { it.tool })
+        }
+    }
+
+    @Test
+    fun `State - tools - updates when filtered tools change`() = runTest {
+        val tool = randomTool(isHidden = false)
+
+        presenter.test {
+            assertEquals(emptyList(), awaitInitialItem().tools)
+
+            filteredToolsFlow.value = listOf(tool)
+            assertEquals(listOf(tool), awaitItem().tools.map { it.tool })
+        }
+    }
+
+    @Test
+    fun `State - tools - shows tools from correct mode flow`() = runTest {
+        isPersonalizationEnabled = true
+        val personalizationTools = List(2) { randomTool(isHidden = false) }
+        val allToolsList = List(3) { randomTool(isHidden = false) }
+        val personalizationFlow = MutableStateFlow(personalizationTools)
+        val allToolsFlow = MutableStateFlow(allToolsList)
+        every { filteredToolsFlowProducer.getFlow(Mode.PERSONALIZATION, any(), any()) } returns personalizationFlow
+        every { filteredToolsFlowProducer.getFlow(Mode.ALL_TOOLS, any(), any()) } returns allToolsFlow
+
+        presenter.test {
+            val initial = awaitInitialItem()
+            assertEquals(personalizationTools, initial.tools.map { it.tool })
+
+            initial.eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
+            assertEquals(allToolsList, awaitItemMatching { it.tools.size == allToolsList.size }.tools.map { it.tool })
+        }
+    }
+    // endregion State.tools
 
     // region State.spotlightTools
     @Test

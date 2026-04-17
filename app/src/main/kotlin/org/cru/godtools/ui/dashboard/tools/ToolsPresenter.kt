@@ -103,6 +103,7 @@ class ToolsPresenter @AssistedInject internal constructor(
             eventSink = eventSink
         )
         val tools = rememberTools(
+            mode = mode,
             category = filters.categoryFilter.selectedItem,
             language = filters.languageFilter.selectedItem,
             eventSink = eventSink,
@@ -157,12 +158,13 @@ class ToolsPresenter @AssistedInject internal constructor(
 
     @Composable
     private fun rememberTools(
+        mode: Mode,
         category: String?,
         language: Language?,
         eventSink: (UiEvent) -> Unit,
     ): List<ToolCard.State>? {
         val locale = language?.code
-        val tools by remember(category, locale) { filteredToolsFlowProducer.getFlow(Mode.ALL_TOOLS, category, locale) }
+        val tools by remember(mode, category, locale) { filteredToolsFlowProducer.getFlow(mode, category, locale) }
             .collectAsState(null)
         val eventSink by rememberUpdatedState(eventSink)
 
