@@ -80,7 +80,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         var mode by rememberSaveable {
             mutableStateOf(if (isPersonalizationEnabled) Mode.PERSONALIZATION else Mode.ALL_TOOLS)
         }
-        val filters = toolFiltersStateProducer.produce()
+        val filters = toolFiltersStateProducer.produce(mode)
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
         val eventSink: (UiEvent) -> Unit = remember {

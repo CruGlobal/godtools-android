@@ -43,7 +43,7 @@ interface ToolFiltersStateProducer {
     ) : CircuitUiState
 
     @Composable
-    fun produce(): Filters
+    fun produce(mode: Mode): Filters
 }
 
 internal class DefaultToolFiltersStateProducer @Inject constructor(
@@ -55,7 +55,7 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
 ) : ToolFiltersStateProducer {
     @Composable
-    override fun produce(): Filters {
+    override fun produce(mode: Mode): Filters {
         val scope = rememberCoroutineScope()
 
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
@@ -70,7 +70,7 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
         return Filters(
             categoryFilter = FilterMenu.UiState(
                 menuExpanded = rememberSaveable { mutableStateOf(false) },
-                items = rememberFilterCategories(selectedLocale),
+                items = rememberFilterCategories(mode, selectedLocale),
                 query = remember { mutableStateOf("") },
                 selectedItem = selectedCategory,
                 eventSink = {
@@ -83,7 +83,7 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
             ),
             languageFilter = FilterMenu.UiState(
                 menuExpanded = languageMenuExpanded,
-                items = rememberFilterLanguages(selectedCategory, languageQuery.value),
+                items = rememberFilterLanguages(mode, selectedCategory, languageQuery.value),
                 selectedItem = languagesRepository.rememberLanguage(selectedLocale),
                 query = languageQuery,
                 eventSink = {
@@ -98,8 +98,8 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
     }
 
     @Composable
-    private fun rememberFilterCategories(selectedLanguage: Locale?) = remember(selectedLanguage) {
-        filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, language = selectedLanguage).map {
+    private fun rememberFilterCategories(mode: Mode, selectedLanguage: Locale?) = remember(mode, selectedLanguage) {
+        filteredToolsFlowProducer.getFlow(mode, language = selectedLanguage).map {
             it.groupBy { it.category }
                 .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
         }
@@ -107,7 +107,11 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
 
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun rememberFilterLanguages(category: String?, query: String): List<FilterMenu.UiState.Item<Language?>> {
+    private fun rememberFilterLanguages(
+        mode: Mode,
+        category: String?,
+        query: String,
+    ): List<FilterMenu.UiState.Item<Language?>> {
         val scope = rememberCoroutineScope()
 
         val categoryFlow = rememberStateFlow(category)
@@ -128,8 +132,8 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 .shareIn(scope, started = SharingStarted.WhileSubscribed(5_000), replay = 1)
         }
 
-        return remember(category) {
-            val toolCountsFlow = filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, category = category)
+        return remember(mode, category) {
+            val toolCountsFlow = filteredToolsFlowProducer.getFlow(mode, category = category)
                 .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
                 .distinctUntilChanged()
                 .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }

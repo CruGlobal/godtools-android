@@ -41,6 +41,7 @@ import org.robolectric.annotation.Config
 @Suppress("UnusedFlow")
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultToolFiltersStateProducerTest {
+    private val mode = Mode.ALL_TOOLS
     private val appLanguage = MutableStateFlow(Locale.ENGLISH)
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
@@ -51,7 +52,7 @@ class DefaultToolFiltersStateProducerTest {
     private val testScope = TestScope()
 
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
-        every { getFlow(any(), any(), any()) } returns filteredToolsFlow
+        every { getFlow(mode = any(), category = any(), language = any()) } returns filteredToolsFlow
     }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } returns flowOf(null)
@@ -98,7 +99,7 @@ class DefaultToolFiltersStateProducerTest {
             randomTool(category = Tool.CATEGORY_ARTICLES),
         )
 
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             assertEquals(
                 listOf(
                     FilterMenu.UiState.Item<String?>(Tool.CATEGORY_ARTICLES, 2),
@@ -110,20 +111,38 @@ class DefaultToolFiltersStateProducerTest {
     }
 
     @Test
+    fun `Filters - categoryFilter - items - uses mode`() = testScope.runTest {
+        presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
+            expectMostRecentItem()
+            verify { filteredToolsFlowProducer.getFlow(mode = Mode.PERSONALIZATION, language = null) }
+            verify(inverse = true) { filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, language = any()) }
+        }
+    }
+
+    @Test
     fun `Filters - categoryFilter - items - uses selected language`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             expectMostRecentItem()
 
-            verify { filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, language = Locale.FRENCH) }
+            verify { filteredToolsFlowProducer.getFlow(mode = mode, language = Locale.FRENCH) }
         }
     }
     // endregion Filters.categoryFilter.items
 
     // region Filters.languageFilter.items
     @Test
+    fun `Filters - languageFilter - items - uses mode`() = testScope.runTest {
+        presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
+            expectMostRecentItem()
+            verify { filteredToolsFlowProducer.getFlow(mode = Mode.PERSONALIZATION, category = null) }
+            verify(inverse = true) { filteredToolsFlowProducer.getFlow(mode = Mode.ALL_TOOLS, category = any()) }
+        }
+    }
+
+    @Test
     fun `Filters - languageFilter - items - no category`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             languagesFlow.value = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
             assertEquals(
                 listOf(
@@ -140,7 +159,7 @@ class DefaultToolFiltersStateProducerTest {
 
     @Test
     fun `Filters - languageFilter - items - for category`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().categoryFilter.eventSink(FilterMenu.Event.SelectItem(Tool.CATEGORY_GOSPEL))
 
             gospelLanguagesFlow.value = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
@@ -160,7 +179,7 @@ class DefaultToolFiltersStateProducerTest {
         val translationsFlow = MutableStateFlow(emptyList<Translation>())
         every { translationsRepository.getTranslationsFlowForTools(setOf("tool1", "tool2")) } returns translationsFlow
 
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             filteredToolsFlow.value = listOf(
                 randomTool("tool1", isHidden = false),
                 randomTool("tool2", isHidden = false),
@@ -188,7 +207,7 @@ class DefaultToolFiltersStateProducerTest {
     fun `Filters - languageFilter - items - filtered by query`() = testScope.runTest {
         languagesFlow.value = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
 
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             expectMostRecentItem().languageFilter.let {
                 it.menuExpanded.value = true
                 assertEquals(
@@ -218,7 +237,7 @@ class DefaultToolFiltersStateProducerTest {
     // region Filters.languageFilter.selectedItem
     @Test
     fun `Filters - languageFilter - selectedItem - no language selected`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             assertNull(expectMostRecentItem().languageFilter.selectedItem)
         }
 
@@ -227,7 +246,7 @@ class DefaultToolFiltersStateProducerTest {
 
     @Test
     fun `Filters - languageFilter - selectedItem - language not found`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.ENGLISH)))
 
             assertNull(expectMostRecentItem().languageFilter.selectedItem)
@@ -241,7 +260,7 @@ class DefaultToolFiltersStateProducerTest {
         val language = Language(Locale.ENGLISH)
         every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
 
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(language))
 
             assertEquals(language, expectMostRecentItem().languageFilter.selectedItem)
@@ -254,7 +273,7 @@ class DefaultToolFiltersStateProducerTest {
     // region Filters.languageFilter.menuExpanded
     @Test
     fun `Filters - languageFilter - menuExpanded - resets query when set to false`() = testScope.runTest {
-        presenterTestOf(presentFunction = { producer.produce() }) {
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
             val state = expectMostRecentItem().languageFilter
 
             state.menuExpanded.value = true

@@ -212,6 +212,19 @@ class ToolsPresenterTest {
 
     // region State.filters
     @Test
+    fun `State - filters - uses current mode`() = runTest {
+        isPersonalizationEnabled = true
+
+        presenter.test {
+            assertEquals(Mode.PERSONALIZATION, toolFiltersStateProducer.lastMode)
+
+            awaitInitialItem().eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
+            awaitItem()
+            assertEquals(Mode.ALL_TOOLS, toolFiltersStateProducer.lastMode)
+        }
+    }
+
+    @Test
     @OptIn(ExperimentalUuidApi::class)
     fun `State - filters`() = runTest {
         val filters = ToolFiltersStateProducer.Filters(
