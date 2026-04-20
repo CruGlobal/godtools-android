@@ -52,17 +52,16 @@ import org.cru.godtools.analytics.firebase.model.ACTION_IAM_HOME
 import org.cru.godtools.analytics.firebase.model.ACTION_IAM_LESSONS
 import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
-import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen
-import org.cru.godtools.ui.dashboard.home.HomeScreen
-import org.cru.godtools.ui.dashboard.lessons.LessonsScreen
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 
@@ -142,12 +141,7 @@ internal fun DashboardLayout(
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
                         CircuitContent(
-                            screen = when (page) {
-                                Page.LESSONS -> LessonsScreen
-                                Page.HOME -> HomeScreen
-                                Page.FAVORITE_TOOLS -> AllFavoritesScreen
-                                Page.ALL_TOOLS -> ToolsScreen
-                            },
+                            screen = DashboardPage.forPage(page),
                             onNavEvent = {
                                 when (it) {
                                     is NavEvent.GoTo -> when (val screen = it.screen) {

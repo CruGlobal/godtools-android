@@ -27,6 +27,9 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
@@ -34,7 +37,6 @@ import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
