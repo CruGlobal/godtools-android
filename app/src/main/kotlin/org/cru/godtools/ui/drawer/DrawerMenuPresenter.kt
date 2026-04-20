@@ -11,6 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
@@ -28,7 +29,7 @@ class DrawerMenuPresenter @Inject constructor(private val accountManager: GodToo
             eventSink = {
                 when (it) {
                     Event.Logout -> scope.launch {
-                        launch(NonCancellable) { accountManager.logout() }
+                        launch { withContext(NonCancellable) { accountManager.logout() } }
                         drawerState.close()
                     }
 
