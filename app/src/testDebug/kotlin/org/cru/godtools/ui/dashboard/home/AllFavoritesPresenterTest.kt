@@ -33,7 +33,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen.UiEvent
+import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
