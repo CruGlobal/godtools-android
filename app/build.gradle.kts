@@ -166,6 +166,7 @@ dependencies {
     implementation(libs.gtoSupport.kermit)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
+    implementation(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)

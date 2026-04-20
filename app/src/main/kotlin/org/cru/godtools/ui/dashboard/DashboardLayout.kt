@@ -3,12 +3,10 @@ package org.cru.godtools.ui.dashboard
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,17 +17,13 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
-import androidx.compose.material3.pulltorefresh.pullToRefresh
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -60,9 +54,11 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
+import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
+import org.cru.godtools.ui.drawer.DrawerViewModel
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 
 internal sealed interface DashboardEvent {
@@ -80,19 +76,12 @@ internal fun DashboardLayout(
     viewModel: DashboardViewModel = viewModel()
 ) {
     val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     val currentPage by viewModel.currentPage.collectAsState()
     DashboardLayoutAnalytics(currentPage)
 
     val hasBackStack by viewModel.hasBackStack.collectAsState()
     BackHandler(hasBackStack) { viewModel.popPageStack() }
-
-    val refreshing by viewModel.isSyncRunning.collectAsState()
-    val refreshState = rememberPullToRefreshState()
-
-    val snackbarHostState = remember { SnackbarHostState() }
-    AppUpdateSnackbar(snackbarHostState)
 
     // region optInNotification
     val showOverlay by viewModel.showOptInNotification.collectAsState()
@@ -110,7 +99,19 @@ internal fun DashboardLayout(
     }
     // endregion optInNotification
 
-    DrawerMenuLayout(drawerState = drawerState) {
+    val state = DashboardPresenter.UiState(
+        drawerState = viewModel<DrawerViewModel>().toState(),
+        isSyncing = viewModel.isSyncRunning.collectAsState().value,
+        snackbarState = remember { SnackbarHostState() },
+    ) {
+        when (it) {
+            UiEvent.TriggerSync -> viewModel.triggerSync(true)
+        }
+    }
+
+    AppUpdateSnackbar(state.snackbarState)
+
+    DrawerMenuLayout(state.drawerState) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -121,7 +122,7 @@ internal fun DashboardLayout(
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
 
-                            else -> IconButton(onClick = { scope.launch { drawerState.toggle() } }) {
+                            else -> IconButton(onClick = { scope.launch { state.drawerState.drawerState.toggle() } }) {
                                 Icon(Icons.Default.Menu, null)
                             }
                         }
@@ -130,13 +131,13 @@ internal fun DashboardLayout(
                 )
             },
             bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = { SnackbarHost(state.snackbarState) }
         ) {
             val saveableStateHolder = rememberSaveableStateHolder()
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .pullToRefresh(refreshing, state = refreshState, onRefresh = { viewModel.triggerSync(true) })
+            PullToRefreshBox(
+                state.isSyncing,
+                onRefresh = { state.eventSink(UiEvent.TriggerSync) },
+                modifier = Modifier.padding(it)
             ) {
                 Crossfade(currentPage, label = "Main Content Crossfade") { page ->
                     saveableStateHolder.SaveableStateProvider(page) {
@@ -167,12 +168,6 @@ internal fun DashboardLayout(
                         )
                     }
                 }
-
-                PullToRefreshDefaults.Indicator(
-                    state = refreshState,
-                    isRefreshing = refreshing,
-                    modifier = Modifier.align(Alignment.TopCenter)
-                )
             }
         }
     }
