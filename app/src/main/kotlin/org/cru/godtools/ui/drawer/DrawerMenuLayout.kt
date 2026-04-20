@@ -39,7 +39,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -78,28 +77,11 @@ fun DrawerMenuLayout(
     drawerState: DrawerState = rememberDrawerState(DrawerValue.Closed),
     viewModel: DrawerViewModel = viewModel(),
     content: @Composable () -> Unit,
-) {
-    val scope = rememberCoroutineScope()
-
-    DrawerMenuLayout(
-        state = State(
-            drawerState = drawerState,
-            isLoggedIn = viewModel.isAuthenticatedFlow.collectAsState().value,
-            eventSink = {
-                when (it) {
-                    Event.Logout -> {
-                        viewModel.logout()
-                        scope.launch { drawerState.close() }
-                    }
-
-                    Event.DismissDrawer -> scope.launch { drawerState.close() }
-                }
-            }
-        ),
-        modifier = modifier,
-        content = content
-    )
-}
+) = DrawerMenuLayout(
+    state = viewModel.toState(drawerState),
+    modifier = modifier,
+    content = content
+)
 
 @Composable
 fun DrawerMenuLayout(state: State, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
