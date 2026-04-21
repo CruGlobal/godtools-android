@@ -113,7 +113,7 @@ class AppLanguagePresenterTest {
     fun `Event - NavigateBack`() = runTest {
         presenter.test {
             awaitItem().eventSink(UiEvent.NavigateBack)
-            navigator.awaitPop()
+            assertEquals(AppLanguageScreen.Result.Dismiss, navigator.awaitPop().result)
         }
     }
     // endregion Event.NavigateBack
@@ -132,7 +132,7 @@ class AppLanguagePresenterTest {
     fun `Event - SelectLanguage - Selected app language`() = runTest {
         presenter.test {
             awaitItem().eventSink(UiEvent.SelectLanguage(Locale.ENGLISH))
-            navigator.awaitPop()
+            assertEquals(AppLanguageScreen.Result.Dismiss, navigator.awaitPop().result)
         }
     }
     // endregion Event.SelectLanguage
@@ -149,7 +149,7 @@ class AppLanguagePresenterTest {
                 eventSink(UiEvent.ConfirmLanguage(selectedLanguage))
             }
 
-            navigator.awaitPop()
+            assertEquals(AppLanguageScreen.Result.LanguageSelected, navigator.awaitPop().result)
             assertNull(expectMostRecentItem().selectedLanguage)
             assertEquals(Locale.FRENCH, appLocaleState.value)
         }
