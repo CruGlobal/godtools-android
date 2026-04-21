@@ -57,11 +57,11 @@ class AppLanguagePresenter @AssistedInject constructor(
         val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    UiEvent.NavigateBack -> navigator.pop()
+                    UiEvent.NavigateBack -> navigator.pop(AppLanguageScreen.Result.Dismiss)
 
                     is UiEvent.SelectLanguage -> {
                         if (it.language == appLocale) {
-                            navigator.pop()
+                            navigator.pop(AppLanguageScreen.Result.Dismiss)
                         } else {
                             confirmLanguage = it.language
                         }
@@ -70,7 +70,7 @@ class AppLanguagePresenter @AssistedInject constructor(
                     is UiEvent.ConfirmLanguage -> {
                         settings.appLanguage = it.language
                         confirmLanguage = null
-                        navigator.pop()
+                        navigator.pop(AppLanguageScreen.Result.LanguageSelected)
                     }
 
                     UiEvent.DismissConfirmDialog -> confirmLanguage = null
