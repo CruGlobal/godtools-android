@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun Banners(banner: () -> BannerType?, modifier: Modifier = Modifier) = Box(modifier.heightIn(min = 1.dp)) {
+internal fun Banners(banner: () -> Banner.Type?, modifier: Modifier = Modifier) = Box(modifier.heightIn(min = 1.dp)) {
     AnimatedContent(
         targetState = banner(),
         transitionSpec = {
@@ -20,8 +20,8 @@ internal fun Banners(banner: () -> BannerType?, modifier: Modifier = Modifier) =
         label = "Banner Visibility",
     ) {
         when (it) {
-            BannerType.TOOL_LIST_FAVORITES -> FavoriteToolsBanner()
-            BannerType.TUTORIAL_FEATURES -> TutorialFeaturesBanner()
+            Banner.Type.TOOL_LIST_FAVORITES -> FavoriteToolsBanner()
+            Banner.Type.TUTORIAL_FEATURES -> TutorialFeaturesBanner()
             else -> Unit
         }
     }

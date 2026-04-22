@@ -25,7 +25,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -83,7 +83,7 @@ class ToolsPresenterTest {
     fun `State - banner - favorites`() = runTest {
         presenter.test {
             isFavoritesFeatureDiscovered.value = false
-            assertEquals(BannerType.TOOL_LIST_FAVORITES, expectMostRecentItem().banner)
+            assertEquals(Banner.Type.TOOL_LIST_FAVORITES, expectMostRecentItem().banner)
         }
     }
     // endregion State.banner

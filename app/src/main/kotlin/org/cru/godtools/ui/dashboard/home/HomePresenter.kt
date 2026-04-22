@@ -29,7 +29,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
 import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -52,7 +52,7 @@ class HomePresenter @AssistedInject constructor(
     // region UiState / UiEvent
     data class UiState(
         val dataLoaded: Boolean = true,
-        val banner: BannerType? = null,
+        val banner: Banner.Type? = null,
         val spotlightLessons: List<ToolCard.State> = emptyList(),
         val favoriteTools: List<ToolCard.State> = emptyList(),
         val eventSink: (UiEvent) -> Unit = {},
@@ -87,7 +87,7 @@ class HomePresenter @AssistedInject constructor(
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
             .combine(settings.appLanguageFlow) { discovered, language ->
                 when {
-                    !discovered -> BannerType.TUTORIAL_FEATURES
+                    !discovered -> Banner.Type.TUTORIAL_FEATURES
                     else -> null
                 }
             }

@@ -22,7 +22,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.Assume.assumeTrue
@@ -80,7 +80,7 @@ class HomeLayoutPaparazziTest(
     @Test
     @Ignore("The Banner currently uses a ViewModel, which doesn't support Paparazzi")
     fun `HomeLayout() - Banner - Tutorial`() {
-        snapshotHomeLayout(state.copy(banner = BannerType.TUTORIAL_FEATURES))
+        snapshotHomeLayout(state.copy(banner = Banner.Type.TUTORIAL_FEATURES))
     }
 
     @Test

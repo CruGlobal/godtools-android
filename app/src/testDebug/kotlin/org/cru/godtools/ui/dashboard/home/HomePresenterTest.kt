@@ -35,7 +35,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -131,7 +131,7 @@ class HomePresenterTest {
             assertNull(expectMostRecentItem().banner)
 
             featuresTutorialDiscovered.value = false
-            assertEquals(BannerType.TUTORIAL_FEATURES, awaitItem().banner)
+            assertEquals(Banner.Type.TUTORIAL_FEATURES, awaitItem().banner)
 
             featuresTutorialDiscovered.value = true
             assertNull(awaitItem().banner)

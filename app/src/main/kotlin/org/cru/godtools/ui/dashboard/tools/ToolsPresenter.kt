@@ -24,7 +24,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -43,7 +43,7 @@ class ToolsPresenter @AssistedInject internal constructor(
 ) : Presenter<UiState> {
     // region UiState / UiEvent
     data class UiState(
-        val banner: BannerType? = null,
+        val banner: Banner.Type? = null,
         val dataLoaded: Boolean = true,
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
@@ -97,7 +97,7 @@ class ToolsPresenter @AssistedInject internal constructor(
     @Composable
     private fun rememberBanner() = remember {
         settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
-            .map { if (!it) BannerType.TOOL_LIST_FAVORITES else null }
+            .map { if (!it) Banner.Type.TOOL_LIST_FAVORITES else null }
     }.collectAsState(null).value
 
     @Composable
