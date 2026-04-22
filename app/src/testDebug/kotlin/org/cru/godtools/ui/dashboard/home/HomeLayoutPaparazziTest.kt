@@ -14,7 +14,6 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +21,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.ui.banner.Banner
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.Assume.assumeTrue
@@ -78,9 +77,8 @@ class HomeLayoutPaparazziTest(
     }
 
     @Test
-    @Ignore("The Banner currently uses a ViewModel, which doesn't support Paparazzi")
     fun `HomeLayout() - Banner - Tutorial`() {
-        snapshotHomeLayout(state.copy(banner = Banner.Type.TUTORIAL_FEATURES))
+        snapshotHomeLayout(state.copy(banner = TutorialFeaturesBannerPresenter.UiState()))
     }
 
     @Test

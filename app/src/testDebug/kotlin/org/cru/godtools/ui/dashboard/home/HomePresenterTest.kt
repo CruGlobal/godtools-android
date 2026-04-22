@@ -23,19 +23,16 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
-import org.cru.godtools.base.Settings
-import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_FEATURES
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
-import org.cru.godtools.ui.banner.Banner
+import org.cru.godtools.ui.banner.FakeBannerPresenter
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -49,7 +46,6 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 class HomePresenterTest {
-    private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
     private val lessonsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
     private val toolsFlow = MutableSharedFlow<List<Tool>>(replay = 1)
 
@@ -57,10 +53,6 @@ class HomePresenterTest {
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val remoteConfig: FirebaseRemoteConfig = mockk {
         every { getLong(CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS) } returns 5
-    }
-    private val settings: Settings = mockk {
-        every { appLanguageFlow } returns this@HomePresenterTest.appLanguageFlow
-        every { isFeatureDiscoveredFlow(any()) } returns flowOf(true)
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
@@ -75,6 +67,7 @@ class HomePresenterTest {
             )
         }
     }
+    private val tutorialFeaturesBannerPresenter = FakeBannerPresenter<TutorialFeaturesBannerPresenter.UiState>()
 
     private val navigator = FakeNavigator(HomeScreen)
 
@@ -82,9 +75,9 @@ class HomePresenterTest {
         context = context,
         eventBus = eventBus,
         remoteConfig = remoteConfig,
-        settings = settings,
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
+        tutorialFeaturesBannerPresenter = tutorialFeaturesBannerPresenter,
         navigator = navigator,
     )
 
@@ -124,16 +117,15 @@ class HomePresenterTest {
     // region State.banner
     @Test
     fun `State - banner - Features Tutorial`() = runTest {
-        val featuresTutorialDiscovered = MutableStateFlow(true)
-        every { settings.isFeatureDiscoveredFlow(FEATURE_TUTORIAL_FEATURES) } returns featuresTutorialDiscovered
+        val bannerState = TutorialFeaturesBannerPresenter.UiState()
 
         presenter.test {
             assertNull(expectMostRecentItem().banner)
 
-            featuresTutorialDiscovered.value = false
-            assertEquals(Banner.Type.TUTORIAL_FEATURES, awaitItem().banner)
+            tutorialFeaturesBannerPresenter.updateState(bannerState)
+            assertEquals(bannerState, awaitItem().banner)
 
-            featuresTutorialDiscovered.value = true
+            tutorialFeaturesBannerPresenter.updateState(null)
             assertNull(awaitItem().banner)
         }
     }

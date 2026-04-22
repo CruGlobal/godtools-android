@@ -45,15 +45,14 @@ private val PADDING_HORIZONTAL = 16.dp
 internal fun HomeLayout(state: UiState, modifier: Modifier = Modifier) {
     val columnState = rememberLazyListState()
 
-    val banner by rememberUpdatedState(state.banner)
-    LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
+    LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, contentPadding = PaddingValues(bottom = 16.dp), modifier = modifier) {
         if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {
             Banners(
-                { banner },
+                state.banner,
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()

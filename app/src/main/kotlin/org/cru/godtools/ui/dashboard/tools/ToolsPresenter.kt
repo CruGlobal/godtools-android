@@ -20,11 +20,12 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
-import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.banner.Banner
+import org.cru.godtools.ui.banner.BannerPresenter
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -34,16 +35,16 @@ import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
-    private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
+    private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer,
     private val toolFiltersStateProducer: ToolFiltersStateProducer,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     // region UiState / UiEvent
     data class UiState(
-        val banner: Banner.Type? = null,
+        val banner: Banner.UiState? = null,
         val dataLoaded: Boolean = true,
         val spotlightTools: List<ToolCard.State> = emptyList(),
         val filters: Filters = Filters(),
@@ -85,7 +86,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         )
 
         return UiState(
-            banner = rememberBanner(),
+            banner = favoriteToolsBannerPresenter.present(),
             dataLoaded = spotlightTools != null && tools != null,
             spotlightTools = spotlightTools.orEmpty(),
             filters = filters,
@@ -93,12 +94,6 @@ class ToolsPresenter @AssistedInject internal constructor(
             eventSink = eventSink,
         )
     }
-
-    @Composable
-    private fun rememberBanner() = remember {
-        settings.isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE)
-            .map { if (!it) Banner.Type.TOOL_LIST_FAVORITES else null }
-    }.collectAsState(null).value
 
     @Composable
     private fun rememberSpotlightTools(

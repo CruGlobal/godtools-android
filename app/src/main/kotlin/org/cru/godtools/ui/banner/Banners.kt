@@ -9,19 +9,24 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerLayout
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerLayout
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 
 @Composable
-internal fun Banners(banner: () -> Banner.Type?, modifier: Modifier = Modifier) = Box(modifier.heightIn(min = 1.dp)) {
+internal fun Banners(state: Banner.UiState?, modifier: Modifier = Modifier) = Box(modifier.heightIn(min = 1.dp)) {
     AnimatedContent(
-        targetState = banner(),
+        targetState = state,
         transitionSpec = {
             slideInVertically(initialOffsetY = { -it }) togetherWith slideOutVertically(targetOffsetY = { -it })
         },
         label = "Banner Visibility",
+        contentKey = { it?.type },
     ) {
         when (it) {
-            Banner.Type.TOOL_LIST_FAVORITES -> FavoriteToolsBanner()
-            Banner.Type.TUTORIAL_FEATURES -> TutorialFeaturesBanner()
+            is FavoriteToolsBannerPresenter.UiState -> FavoriteToolsBannerLayout(it)
+            is TutorialFeaturesBannerPresenter.UiState -> TutorialFeaturesBannerLayout(it)
             else -> Unit
         }
     }

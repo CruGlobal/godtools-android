@@ -20,12 +20,12 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
-import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.ui.banner.Banner
+import org.cru.godtools.ui.banner.FakeBannerPresenter
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -36,17 +36,14 @@ import org.robolectric.annotation.Config
 @Config(application = Application::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsPresenterTest {
-    private val isFavoritesFeatureDiscovered = MutableStateFlow(true)
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
 
+    private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any()) } returns filteredToolsFlow
     }
     private val navigator = FakeNavigator(ToolsScreen)
-    private val settings: Settings = mockk {
-        every { isFeatureDiscoveredFlow(Settings.FEATURE_TOOL_FAVORITE) } returns isFavoritesFeatureDiscovered
-    }
     private val toolsRepository: ToolsRepository = mockk {
         every { getNormalToolsFlow() } returns toolsFlow
     }
@@ -59,9 +56,9 @@ class ToolsPresenterTest {
 
     private val presenter = ToolsPresenter(
         eventBus = mockk(),
-        settings = settings,
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
+        favoriteToolsBannerPresenter = favoriteToolsBannerPresenter,
         filteredToolsFlowProducer = filteredToolsFlowProducer,
         toolFiltersStateProducer = toolFiltersStateProducer,
         navigator = navigator,
@@ -73,17 +70,18 @@ class ToolsPresenterTest {
     // region State.banner
     @Test
     fun `State - banner - none`() = runTest {
+        favoriteToolsBannerPresenter.updateState(null)
         presenter.test {
-            isFavoritesFeatureDiscovered.value = true
             assertNull(expectMostRecentItem().banner)
         }
     }
 
     @Test
     fun `State - banner - favorites`() = runTest {
+        val bannerState = FavoriteToolsBannerPresenter.UiState()
+        favoriteToolsBannerPresenter.updateState(bannerState)
         presenter.test {
-            isFavoritesFeatureDiscovered.value = false
-            assertEquals(Banner.Type.TOOL_LIST_FAVORITES, expectMostRecentItem().banner)
+            assertEquals(bannerState, expectMostRecentItem().banner)
         }
     }
     // endregion State.banner
