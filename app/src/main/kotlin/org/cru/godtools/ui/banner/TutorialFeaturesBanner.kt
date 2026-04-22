@@ -24,7 +24,7 @@ internal fun TutorialFeaturesBanner(
 ) {
     val context = LocalContext.current
 
-    Banner(
+    MaterialBanner(
         text = stringResource(R.string.tutorial_features_banner_text),
         primaryButton = stringResource(R.string.tutorial_features_banner_action_open),
         primaryAction = { context.startCircuitActivity(TutorialScreen(PageSet.FEATURES)) },

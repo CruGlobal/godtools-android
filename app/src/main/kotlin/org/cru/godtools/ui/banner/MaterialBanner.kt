@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 
 @Composable
-internal fun Banner(
+internal fun MaterialBanner(
     text: String,
     primaryButton: String,
     modifier: Modifier = Modifier,
@@ -35,7 +35,7 @@ internal fun Banner(
     secondaryButton: String? = null,
     secondaryAction: () -> Unit = {},
     icon: Painter? = null,
-    iconTint: Color = if (icon != null) LocalContentColor.current else Color.Unspecified,
+    iconTint: Color = LocalContentColor.current,
 ) = Surface(modifier = modifier.fillMaxWidth()) {
     Column {
         CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
@@ -164,6 +164,6 @@ internal fun Banner(
                 }
             }
         }
-        HorizontalDivider(modifier = Modifier.alpha(0.12f))
+        HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
     }
 }
