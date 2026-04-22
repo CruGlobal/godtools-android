@@ -1,25 +1,20 @@
 package org.cru.godtools.ui.banner
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import org.cru.godtools.R
 import org.cru.godtools.base.Settings
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerLayout
+import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter.UiState
 
 @Composable
+@Deprecated("Switch to the state version of this banner")
 internal fun FavoriteToolsBanner(modifier: Modifier = Modifier, viewModel: FavoriteToolsBannerViewModel = viewModel()) {
-    MaterialBanner(
-        text = stringResource(R.string.tools_list_favorites_banner_text),
-        primaryButton = stringResource(R.string.tools_list_favorites_banner_action_dismiss),
-        primaryAction = { viewModel.dismiss() },
-        icon = painterResource(R.drawable.ic_favorite_24dp),
-        iconTint = MaterialTheme.colorScheme.primary,
+    FavoriteToolsBannerLayout(
+        state = UiState { viewModel.dismiss() },
         modifier = modifier
     )
 }
