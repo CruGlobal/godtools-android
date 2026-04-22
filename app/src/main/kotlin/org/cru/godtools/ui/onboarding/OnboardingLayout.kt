@@ -12,6 +12,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,6 +41,14 @@ fun OnboardingLayout(state: OnboardingPresenter.UiState, modifier: Modifier = Mo
 
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
+    LaunchedEffect(state.currentPage) {
+        if (pagerState.currentPage != state.currentPage) {
+            pagerState.animateScrollToPage(
+                state.currentPage,
+                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+            )
+        }
+    }
 
     RecordAnalyticsScreen(OnboardingAnalyticsScreenEvent(pagerState.currentPage))
 
@@ -74,6 +83,7 @@ fun OnboardingLayout(state: OnboardingPresenter.UiState, modifier: Modifier = Mo
             HorizontalPager(
                 key = { it },
                 state = pagerState,
+                userScrollEnabled = state.userScrollEnabled,
                 modifier = Modifier
                     .padding(insets)
                     .consumeWindowInsets(insets)
@@ -90,7 +100,7 @@ fun OnboardingLayout(state: OnboardingPresenter.UiState, modifier: Modifier = Mo
 
                 when (it) {
                     0 -> OnboardingWelcomePageLayout(
-                        nextPage = nextPage,
+                        nextPage = { eventSink(UiEvent.Next) },
                         eventSink = eventSink,
                     )
 
