@@ -33,20 +33,19 @@ internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(ToolsScreen::class, SingletonComponent::class)
 internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
-    val banner by rememberUpdatedState(state.banner)
     val spotlightTools by rememberUpdatedState(state.spotlightTools)
     val filters by rememberUpdatedState(state.filters)
     val tools by rememberUpdatedState(state.tools)
 
     val columnState = rememberLazyListState()
-    LaunchedEffect(banner) { if (banner != null) columnState.animateScrollToItem(0) }
+    LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
     LazyColumn(state = columnState, modifier = modifier) {
         if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {
             Banners(
-                { banner },
+                state.banner,
                 modifier = Modifier
                     .animateItem()
                     .fillMaxWidth()

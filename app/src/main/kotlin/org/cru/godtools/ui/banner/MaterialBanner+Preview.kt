@@ -9,11 +9,15 @@ import org.cru.godtools.R
 
 @Composable
 @Preview(showBackground = true)
-private fun SingleLineBanner() = Banner("Single Line", primaryButton = "Confirm", secondaryButton = "Dismiss")
+private fun SingleLineMaterialBanner() = MaterialBanner(
+    "Single Line",
+    primaryButton = "Confirm",
+    secondaryButton = "Dismiss"
+)
 
 @Composable
 @Preview(showBackground = true)
-private fun DefaultBanner() = Banner(
+private fun DefaultMaterialBanner() = MaterialBanner(
     LoremIpsum(20).values.first().replace("\n", " "),
     primaryButton = "Confirm",
     secondaryButton = "Dismiss",
@@ -21,7 +25,7 @@ private fun DefaultBanner() = Banner(
 
 @Composable
 @Preview(showBackground = true)
-private fun BannerWithActionsOnSeparateLines() = Banner(
+private fun MaterialBannerWithActionsOnSeparateLines() = MaterialBanner(
     "Short Message",
     primaryButton = "Confirm Primary Action",
     secondaryButton = LoremIpsum(7).values.first(),
@@ -29,7 +33,7 @@ private fun BannerWithActionsOnSeparateLines() = Banner(
 
 @Composable
 @Preview(showBackground = true)
-private fun BannerIcon() = Banner(
+private fun MaterialBannerIcon() = MaterialBanner(
     LoremIpsum(20).values.first().replace("\n", " "),
     primaryButton = "Confirm",
     secondaryButton = "Dismiss",
@@ -39,7 +43,7 @@ private fun BannerIcon() = Banner(
 
 @Composable
 @Preview(showBackground = true)
-private fun BannerIconShortText() = Banner(
+private fun MaterialBannerIconShortText() = MaterialBanner(
     "Single Line",
     primaryButton = "Confirm",
     secondaryButton = "Dismiss",
@@ -49,7 +53,7 @@ private fun BannerIconShortText() = Banner(
 
 @Composable
 @Preview(showBackground = true)
-private fun BannerIconShortTextLongActions() = Banner(
+private fun MaterialBannerIconShortTextLongActions() = MaterialBanner(
     "Single Line",
     primaryButton = "Confirm Primary Action",
     secondaryButton = "Dismiss Secondary Action",

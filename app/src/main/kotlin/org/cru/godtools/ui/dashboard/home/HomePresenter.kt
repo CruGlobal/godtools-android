@@ -17,7 +17,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import org.cru.godtools.BuildConfig
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
@@ -27,9 +26,10 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
-import org.cru.godtools.base.Settings
 import org.cru.godtools.db.repository.ToolsRepository
-import org.cru.godtools.ui.banner.BannerType
+import org.cru.godtools.ui.banner.Banner
+import org.cru.godtools.ui.banner.BannerPresenter
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -43,16 +43,15 @@ class HomePresenter @AssistedInject constructor(
     private val context: Context,
     private val eventBus: EventBus,
     private val remoteConfig: FirebaseRemoteConfig,
-    private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
-    @Assisted
-    private val navigator: Navigator,
+    private val tutorialFeaturesBannerPresenter: BannerPresenter<TutorialFeaturesBannerPresenter.UiState>,
+    @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     // region UiState / UiEvent
     data class UiState(
         val dataLoaded: Boolean = true,
-        val banner: BannerType? = null,
+        val banner: Banner.UiState? = null,
         val spotlightLessons: List<ToolCard.State> = emptyList(),
         val favoriteTools: List<ToolCard.State> = emptyList(),
         val eventSink: (UiEvent) -> Unit = {},
@@ -71,7 +70,7 @@ class HomePresenter @AssistedInject constructor(
 
         return UiState(
             dataLoaded = spotlightLessons != null && favoriteTools != null,
-            banner = rememberBanner(),
+            banner = tutorialFeaturesBannerPresenter.present(),
             spotlightLessons = spotlightLessons.orEmpty(),
             favoriteTools = favoriteTools.orEmpty(),
         ) {
@@ -81,17 +80,6 @@ class HomePresenter @AssistedInject constructor(
             }
         }
     }
-
-    @Composable
-    private fun rememberBanner() = remember {
-        settings.isFeatureDiscoveredFlow(Settings.FEATURE_TUTORIAL_FEATURES)
-            .combine(settings.appLanguageFlow) { discovered, language ->
-                when {
-                    !discovered -> BannerType.TUTORIAL_FEATURES
-                    else -> null
-                }
-            }
-    }.collectAsState(null).value
 
     @Composable
     private fun rememberSpotlightLessons() =
