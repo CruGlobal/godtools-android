@@ -189,7 +189,7 @@ class HomePresenterTest {
             expectMostRecentItem().spotlightLessons[0].eventSink(ToolCard.Event.Click)
 
             assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
-                val expected = lesson.createToolIntent(context, listOf(translation.languageCode), resumeProgress = true)
+                val expected = context.createToolIntent(lesson, listOf(translation.languageCode), resumeProgress = true)
                 assertTrue(expected equalsIntent it.intent)
             }
         }
@@ -231,8 +231,8 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.Click)
 
-                val expected = tool.createToolIntent(
-                    context,
+                val expected = context.createToolIntent(
+                    tool,
                     listOf(toolState.translation!!.languageCode),
                     saveLanguageSettings = true
                 )
@@ -250,8 +250,8 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.OpenTool)
 
-                val expected = tool.createToolIntent(
-                    context,
+                val expected = context.createToolIntent(
+                    tool,
                     listOf(toolState.translation!!.languageCode),
                     saveLanguageSettings = true
                 )
@@ -269,8 +269,8 @@ class HomePresenterTest {
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
                 toolState.eventSink(ToolCard.Event.OpenTool)
 
-                val expected = tool.createToolIntent(
-                    context,
+                val expected = context.createToolIntent(
+                    tool,
                     listOf(Locale.GERMAN, Locale.FRENCH),
                     saveLanguageSettings = true
                 )

@@ -24,34 +24,54 @@ fun Activity.openToolActivity(code: String, type: Type, vararg languages: Locale
         Type.META, Type.UNKNOWN -> Unit
     }
 
-fun Tool.createToolIntent(
-    context: Context,
+fun Context.createToolIntent(
+    tool: Tool,
     languages: List<Locale>,
     activeLocale: Locale? = null,
     showTips: Boolean = false,
     saveLanguageSettings: Boolean = false,
-    resumeProgress: Boolean = false
+    resumeProgress: Boolean = false,
+) = createToolIntent(
+    type = tool.type,
+    toolCode = tool.code,
+    languages = languages,
+    activeLocale = activeLocale,
+    showTips = showTips,
+    saveLanguageSettings = saveLanguageSettings,
+    resumeProgress = resumeProgress,
+    progressLastPageId = tool.progressLastPageId,
+)
+
+fun Context.createToolIntent(
+    type: Type,
+    toolCode: String?,
+    languages: List<Locale>,
+    activeLocale: Locale? = null,
+    showTips: Boolean = false,
+    saveLanguageSettings: Boolean = false,
+    resumeProgress: Boolean = false,
+    progressLastPageId: String? = null,
 ): Intent? {
-    val code = code ?: return null
+    val toolCode = toolCode ?: return null
     if (languages.isEmpty()) return null
 
     return when (type) {
-        Type.ARTICLE -> context.createArticlesIntent(code, languages[0])
+        Type.ARTICLE -> createArticlesIntent(toolCode, languages[0])
 
-        Type.CYOA -> context.createCyoaActivityIntent(
-            code,
+        Type.CYOA -> createCyoaActivityIntent(
+            toolCode,
             *languages.toTypedArray(),
             saveLanguageSettings = saveLanguageSettings
         )
 
-        Type.LESSON -> context.createLessonActivityIntent(
-            code,
+        Type.LESSON -> createLessonActivityIntent(
+            toolCode,
             languages[0],
             resumePageId = progressLastPageId.takeIf { resumeProgress }
         )
 
-        Type.TRACT -> context.createTractActivityIntent(
-            code,
+        Type.TRACT -> createTractActivityIntent(
+            toolCode,
             *languages.toTypedArray(),
             activeLocale = activeLocale,
             showTips = showTips,

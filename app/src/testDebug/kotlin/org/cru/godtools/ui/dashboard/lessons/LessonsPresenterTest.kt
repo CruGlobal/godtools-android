@@ -384,8 +384,8 @@ class LessonsPresenterTest {
         presenter.test {
             expectMostRecentItem().lessons[1].eventSink(ToolCard.Event.Click)
 
-            val expectedIntent = enLessonsFlow.value[1].createToolIntent(
-                context,
+            val expectedIntent = context.createToolIntent(
+                enLessonsFlow.value[1],
                 languages = listOf(Locale.ENGLISH),
                 resumeProgress = true
             )

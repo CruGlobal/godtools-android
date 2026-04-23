@@ -21,6 +21,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.util.Locale
 import javax.inject.Named
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -143,7 +144,12 @@ class ToolDetailsPresenter @AssistedInject constructor(
             when (it) {
                 UiEvent.NavigateUp -> navigator.pop()
 
-                UiEvent.OpenTool -> openTool(tool, translation, secondTranslation)
+                UiEvent.OpenTool -> openTool(
+                    toolCode = toolCode,
+                    toolType = tool?.type ?: Tool.Type.UNKNOWN,
+                    firstLanguage = translation?.languageCode,
+                    secondLanguage = secondTranslation?.languageCode
+                )
 
                 UiEvent.OpenToolTraining -> tool?.let {
                     // TODO: handle opening training tips and optionally showing the tutorial locally once the
@@ -240,30 +246,25 @@ class ToolDetailsPresenter @AssistedInject constructor(
     }
 
     private fun openTool(
-        tool: Tool?,
-        translation: Translation?,
-        secondTranslation: Translation?,
+        toolCode: String,
+        toolType: Tool.Type,
+        firstLanguage: Locale?,
+        secondLanguage: Locale?,
         showTips: Boolean = false,
     ) {
-        tool?.let { tool ->
-            val intent = tool.createToolIntent(
-                context = context,
-                languages = when (tool.type) {
-                    Tool.Type.ARTICLE -> listOfNotNull(
-                        secondTranslation?.languageCode ?: translation?.languageCode
-                    )
+        val intent = context.createToolIntent(
+            type = toolType,
+            toolCode = toolCode,
+            languages = when (toolType) {
+                Tool.Type.ARTICLE -> listOfNotNull(secondLanguage ?: firstLanguage)
+                else -> listOfNotNull(firstLanguage, secondLanguage)
+            },
+            activeLocale = secondLanguage,
+            showTips = showTips
+        ) ?: return
 
-                    else -> listOfNotNull(translation?.languageCode, secondTranslation?.languageCode)
-                },
-                activeLocale = secondTranslation?.languageCode,
-                showTips = showTips
-            )
-
-            if (intent != null) {
-                eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_TOOL_DETAILS))
-                navigator.goTo(IntentScreen(intent))
-            }
-        }
+        eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, toolCode, SOURCE_TOOL_DETAILS))
+        navigator.goTo(IntentScreen(intent))
     }
 
     @AssistedFactory

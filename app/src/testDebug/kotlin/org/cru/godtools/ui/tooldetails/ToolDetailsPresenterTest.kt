@@ -404,7 +404,7 @@ class ToolDetailsPresenterTest {
 
         with(navigator.awaitNextScreen()) {
             assertTrue(this is IntentScreen)
-            val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), showTips = false)!!
+            val expected = context.createToolIntent(toolFlow.value!!, listOf(Locale.ENGLISH), showTips = false)!!
             assertTrue(expected equalsIntent intent)
         }
 
@@ -428,8 +428,8 @@ class ToolDetailsPresenterTest {
 
         with(navigator.awaitNextScreen()) {
             assertIs<IntentScreen>(this)
-            val expected = toolFlow.value?.createToolIntent(
-                context,
+            val expected = context.createToolIntent(
+                toolFlow.value!!,
                 listOf(Locale.ENGLISH, Locale.FRENCH),
                 activeLocale = Locale.FRENCH,
                 showTips = false
