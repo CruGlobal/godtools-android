@@ -27,7 +27,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -35,6 +34,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
@@ -248,9 +248,8 @@ class ToolDetailsPresenter @AssistedInject constructor(
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun rememberAvailableLanguages(code: String): ImmutableList<String> {
-        val codeFlow = remember { MutableStateFlow(code) }.apply { value = code }
-
-        return remember {
+        val codeFlow = rememberStateFlow(code)
+        return remember(codeFlow) {
             codeFlow
                 .flatMapLatest { translationsRepository.getTranslationsFlowForTool(it) }
                 .map { it.mapTo(mutableSetOf()) { it.languageCode } }

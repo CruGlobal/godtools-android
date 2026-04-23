@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard.tools
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -195,7 +196,7 @@ class ToolFiltersTest {
         composeTestRule.setContent {
             LanguageFilter(
                 UiState(
-                    menuExpanded = mutableStateOf(true),
+                    menuExpanded = remember { mutableStateOf(true) },
                     items = persistentListOf(
                         Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
@@ -217,7 +218,7 @@ class ToolFiltersTest {
         composeTestRule.setContent {
             LanguageFilter(
                 UiState(
-                    menuExpanded = mutableStateOf(true),
+                    menuExpanded = remember { mutableStateOf(true) },
                     items = persistentListOf(
                         Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
@@ -238,7 +239,7 @@ class ToolFiltersTest {
         composeTestRule.setContent {
             LanguageFilter(
                 UiState(
-                    menuExpanded = mutableStateOf(true),
+                    menuExpanded = remember { mutableStateOf(true) },
                     items = persistentListOf(
                         Item(null, 0),
                         Item(Language(Locale.FRENCH), 1),
