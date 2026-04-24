@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -17,15 +16,8 @@ import java.util.Locale
 import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
 import org.cru.godtools.base.EXTRA_TOOL
-import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.model.Tool
-import org.cru.godtools.tutorial.PageSet
-import org.cru.godtools.tutorial.TutorialScreenResultContract
-import org.cru.godtools.tutorial.layout.TutorialScreen
-import org.cru.godtools.util.openToolActivity
-import org.cru.godtools.util.rememberInterceptingNavigator
 
 private const val EXTRA_ADDITIONAL_LANGUAGE = "additionalLanguage"
 
@@ -63,25 +55,7 @@ class ToolDetailsActivity : BaseActivity() {
                 GodToolsTheme {
                     val backStack = rememberSaveableBackStack(screen)
                     val navigator = rememberAndroidScreenAwareNavigator(
-                        rememberInterceptingNavigator(
-                            rememberCircuitNavigator(backStack),
-                            goTo = { screen, delegate ->
-                                when (screen) {
-                                    // TODO: move this logic into the ToolDetailsPresenter once tutorials use Circuit
-                                    is OpenToolTrainingScreen -> {
-                                        launchTrainingTips(
-                                            screen.tool,
-                                            screen.type,
-                                            screen.locale,
-                                            screen.secondaryLocale
-                                        )
-                                        true
-                                    }
-
-                                    else -> delegate.goTo(screen)
-                                }
-                            }
-                        ),
+                        rememberCircuitNavigator(backStack),
                         this
                     )
                     NavigableCircuitContent(
@@ -95,35 +69,4 @@ class ToolDetailsActivity : BaseActivity() {
     // endregion Lifecycle
 
     private val isValidStartState get() = initialTool != null
-
-    // region Training Tips
-    private val selectedTool by viewModels<SelectedToolSavedState>()
-    private val tipsTutorialLauncher = registerForActivityResult(TutorialScreenResultContract()) {
-        if (it == TutorialScreen.Result.Finished) launchTrainingTips(skipTutorial = true)
-    }
-
-    private fun launchTrainingTips(
-        code: String? = selectedTool.tool,
-        type: Tool.Type? = selectedTool.type,
-        locale: Locale? = selectedTool.language,
-        secondaryLocale: Locale? = selectedTool.secondaryLanguage,
-        skipTutorial: Boolean = false,
-    ): Unit = when {
-        code == null || type == null || locale == null -> Unit
-
-        skipTutorial || settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code") -> {
-            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$code")
-            val locales = listOfNotNull(locale, secondaryLocale)
-            openToolActivity(code, type, *locales.toTypedArray(), showTips = true)
-        }
-
-        else -> {
-            selectedTool.tool = code
-            selectedTool.type = type
-            selectedTool.language = locale
-            selectedTool.secondaryLanguage = secondaryLocale
-            tipsTutorialLauncher.launch(PageSet.TIPS)
-        }
-    }
-    // endregion Training Tips
 }
