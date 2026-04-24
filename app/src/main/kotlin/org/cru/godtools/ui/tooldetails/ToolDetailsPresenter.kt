@@ -13,6 +13,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.foundation.rememberAnsweringNavigator
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.android.IntentScreen
@@ -43,6 +44,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.BaseModule.IS_CONNECTED_STATE_FLOW
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.tool.service.produceManifestState
@@ -63,6 +65,8 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
@@ -73,8 +77,7 @@ import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
 class ToolDetailsPresenter @AssistedInject constructor(
-    @ApplicationContext
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val attachmentsRepository: AttachmentsRepository,
     private val languagesRepository: LanguagesRepository,
     private val toolsRepository: ToolsRepository,
@@ -118,6 +121,25 @@ class ToolDetailsPresenter @AssistedInject constructor(
         val secondLanguage = languagesRepository.rememberLanguage(screen.secondLanguage)
         val variants = rememberVariants(tool?.metatoolCode, secondLanguage = secondLanguage) { toolCode = it }
 
+        // region Tips Tutorial Navigation
+        var tipsToolType by rememberSaveable { mutableStateOf(Tool.Type.UNKNOWN) }
+        var tipsFirstLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
+        var tipsSecondLanguage: Locale? by rememberSaveable { mutableStateOf(null) }
+        val tipsTutorialNavigator = rememberAnsweringNavigator<TutorialScreen.Result>(navigator) {
+            when (it) {
+                TutorialScreen.Result.Finished -> openTool(
+                    toolCode = toolCode,
+                    toolType = tipsToolType,
+                    firstLanguage = tipsFirstLanguage,
+                    secondLanguage = tipsSecondLanguage,
+                    showTips = true
+                )
+
+                else -> Unit
+            }
+        }
+        // endregion Tips Tutorial Navigation
+
         // Side Effects
         DownloadLatestTranslation(downloadManager, toolCode, translation?.languageCode, isConnected)
         DownloadLatestTranslation(downloadManager, toolCode, secondTranslation?.languageCode, isConnected)
@@ -151,17 +173,23 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     secondLanguage = secondTranslation?.languageCode
                 )
 
-                UiEvent.OpenToolTraining -> tool?.let {
-                    // TODO: handle opening training tips and optionally showing the tutorial locally once the
-                    //       tutorial uses Circuit.
-                    navigator.goTo(
-                        OpenToolTrainingScreen(
-                            it.code,
-                            it.type,
-                            translation?.languageCode,
-                            secondTranslation?.languageCode
+                UiEvent.OpenToolTraining -> {
+                    val tool = tool ?: return@UiState
+
+                    if (!settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$toolCode")) {
+                        tipsToolType = tool.type
+                        tipsFirstLanguage = translation?.languageCode
+                        tipsSecondLanguage = secondTranslation?.languageCode
+                        tipsTutorialNavigator.goTo(TutorialScreen(PageSet.TIPS))
+                    } else {
+                        openTool(
+                            toolCode = toolCode,
+                            toolType = tool.type,
+                            firstLanguage = translation?.languageCode,
+                            secondLanguage = secondTranslation?.languageCode,
+                            showTips = true
                         )
-                    )
+                    }
                 }
 
                 UiEvent.PinTool -> coroutineScope.launch {
@@ -262,6 +290,10 @@ class ToolDetailsPresenter @AssistedInject constructor(
             activeLocale = secondLanguage,
             showTips = showTips
         ) ?: return
+
+        if (showTips) {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$toolCode")
+        }
 
         eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, toolCode, SOURCE_TOOL_DETAILS))
         navigator.goTo(IntentScreen(intent))

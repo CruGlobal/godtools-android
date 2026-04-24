@@ -46,6 +46,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -64,6 +65,8 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
@@ -123,6 +126,7 @@ class ToolDetailsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLocaleFlow
         everyComposable { produceAppLocaleState() } returns appLocaleState
+        every { setFeatureDiscovered(any()) } just Runs
     }
     private val shortcutManager: GodToolsShortcutManager = mockk {
         every { canPinToolShortcut(any()) } returns false
@@ -445,22 +449,39 @@ class ToolDetailsPresenterTest {
 
     // region Event.OpenToolTraining
     @Test
-    fun `Event - OpenToolTraining - Tract Tool`() = testScope.runTest {
+    fun `Event - OpenToolTraining - tutorial already discovered - opens tool with tips`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
-        every {
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
-        } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL") } returns true
 
         createPresenter().test {
             expectMostRecentItem().eventSink(UiEvent.OpenToolTraining)
         }
 
-        with(navigator.awaitNextScreen()) {
-            assertTrue(this is OpenToolTrainingScreen)
-            assertEquals(TOOL, tool)
-            assertEquals(Tool.Type.TRACT, type)
-            assertEquals(Locale.ENGLISH, locale)
+        with(assertIs<IntentScreen>(navigator.awaitNextScreen())) {
+            val expected = context.createToolIntent(toolFlow.value!!, listOf(Locale.ENGLISH), showTips = true)
+            assertTrue(expected equalsIntent intent)
         }
+
+        verify {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL")
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
+        }
+    }
+
+    @Test
+    fun `Event - OpenToolTraining - tutorial not yet discovered - shows tutorial`() = testScope.runTest {
+        toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL") } returns false
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(UiEvent.OpenToolTraining)
+        }
+
+        assertEquals(TutorialScreen(PageSet.TIPS), navigator.awaitNextScreen())
     }
     // endregion Event.OpenToolTraining
 

@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
-import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +84,10 @@ class ToolDetailsActivity : BaseActivity() {
                         ),
                         this
                     )
-                    CircuitContent(screen, navigator)
+                    NavigableCircuitContent(
+                        navigator = navigator,
+                        backStack = backStack,
+                    )
                 }
             }
         }
