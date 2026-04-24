@@ -25,6 +25,5 @@ class ShareShareableAnalyticsActionEvent(private val shareable: Shareable) :
 
     override val userCounterName = when (shareable) {
         is ShareableImage -> UserCounterNames.IMAGE_SHARED
-        else -> null
     }
 }
