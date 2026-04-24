@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import android.app.Application
 import android.content.Context
@@ -26,7 +26,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiEvent
 import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config

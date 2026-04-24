@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import android.app.Application
 import androidx.activity.ComponentActivity
@@ -19,8 +19,8 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.ui.drawer.putDrawerViewModel
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiEvent
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiState
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -44,8 +44,8 @@ import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.common.LanguageName
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiEvent
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 

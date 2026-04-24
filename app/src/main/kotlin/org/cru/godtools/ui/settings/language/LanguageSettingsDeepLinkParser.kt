@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import android.net.Uri
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI

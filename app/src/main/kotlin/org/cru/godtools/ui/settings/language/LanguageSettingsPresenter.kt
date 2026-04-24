@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -16,9 +16,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
@@ -26,7 +23,7 @@ import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
+import org.cru.godtools.ui.settings.language.LanguageSettingsPresenter.UiState
 import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
@@ -39,11 +36,11 @@ class LanguageSettingsPresenter @AssistedInject constructor(
     data class UiState(
         val appLanguage: Locale,
         val appLanguages: Int = 0,
-        val downloadedLanguages: ImmutableList<Language> = persistentListOf(),
+        val downloadedLanguages: List<Language> = emptyList(),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
-    interface UiEvent : CircuitUiEvent {
+    sealed interface UiEvent : CircuitUiEvent {
         data object NavigateUp : UiEvent
         data object AppLanguage : UiEvent
         data object DownloadableLanguages : UiEvent
@@ -75,9 +72,8 @@ class LanguageSettingsPresenter @AssistedInject constructor(
     private fun produceDownloadedLanguagesState() = remember {
         combine(languagesRepository.getPinnedLanguagesFlow(), settings.appLanguageFlow) { pinned, app ->
             pinned.sortedWith(Language.displayNameComparator(context, app))
-                .toImmutableList()
         }
-    }.collectAsState(persistentListOf())
+    }.collectAsState(emptyList())
 
     @AssistedFactory
     @CircuitInject(LanguageSettingsScreen::class, SingletonComponent::class)

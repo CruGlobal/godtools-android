@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.settings.language
 
 import android.app.Application
 import android.net.Uri
@@ -8,8 +8,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import org.cru.godtools.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
-import org.cru.godtools.ui.languages.LanguageSettingsDeepLinkParser.isDeepLinkSupported
-import org.cru.godtools.ui.languages.LanguageSettingsDeepLinkParser.parseDeepLink
+import org.cru.godtools.ui.settings.language.LanguageSettingsDeepLinkParser.isDeepLinkSupported
+import org.cru.godtools.ui.settings.language.LanguageSettingsDeepLinkParser.parseDeepLink
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
