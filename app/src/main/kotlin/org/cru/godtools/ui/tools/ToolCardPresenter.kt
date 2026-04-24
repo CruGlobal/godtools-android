@@ -15,7 +15,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,6 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -77,9 +77,9 @@ class ToolCardPresenter @Inject constructor(
         val appLanguage = if (loadAppLanguage) languagesRepository.rememberLanguage(appLocale) else null
 
         // Custom Translation
-        val customLocaleFlow = remember { MutableStateFlow(customLocale) }.apply { value = customLocale }
+        val customLocaleFlow = rememberStateFlow(customLocale)
         val customLanguage = languagesRepository.rememberLanguage(customLocale)
-        val customTranslationFlow = remember {
+        val customTranslationFlow = remember(customLocaleFlow) {
             combine(
                 snapshotFlow { toolCode },
                 customLocaleFlow

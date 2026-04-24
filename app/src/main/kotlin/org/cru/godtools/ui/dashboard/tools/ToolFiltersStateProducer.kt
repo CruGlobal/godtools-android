@@ -15,7 +15,6 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -24,6 +23,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.base.Settings
@@ -109,10 +109,10 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
     private fun rememberFilterLanguages(category: String?, query: String): List<FilterMenu.UiState.Item<Language?>> {
         val scope = rememberCoroutineScope()
 
-        val categoryFlow = remember { MutableStateFlow(category) }.apply { value = category }
-        val queryFlow = remember { MutableStateFlow(query) }.apply { value = query }
+        val categoryFlow = rememberStateFlow(category)
+        val queryFlow = rememberStateFlow(query)
 
-        val languagesFlow = remember {
+        val languagesFlow = remember(categoryFlow, queryFlow) {
             categoryFlow
                 .flatMapLatest {
                     when (it) {

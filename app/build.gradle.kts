@@ -159,6 +159,7 @@ dependencies {
     implementation(libs.gtoSupport.appcompat)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
+    implementation(libs.gtoSupport.compose)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.eventbus)
     implementation(libs.gtoSupport.firebase.crashlytics)

@@ -4,7 +4,7 @@ android-gradle-plugin = "8.13.2"
 androidx-activity = "1.13.0"
 androidx-compose-foundation = "1.10.6"
 androidx-compose-material3 = "1.4.0"
-androidx-compose-runtime = "1.10.6"
+androidx-compose-runtime = "1.11.0"
 androidx-compose-ui = "1.10.6"
 androidx-core = "1.18.0"
 androidx-datastore = "1.2.1"
@@ -139,6 +139,7 @@ gtoSupport-appcompat = { module = "org.ccci.gto.android:gto-support-appcompat", 
 gtoSupport-base = { module = "org.ccci.gto.android:gto-support-base", version.ref = "gtoSupport" }
 gtoSupport-circuit = { module = "org.ccci.gto.android:gto-support-circuit", version.ref = "gtoSupport" }
 gtoSupport-compat = { module = "org.ccci.gto.android:gto-support-compat", version.ref = "gtoSupport" }
+gtoSupport-compose = { module = "org.ccci.gto.android:gto-support-compose", version.ref = "gtoSupport" }
 gtoSupport-core = { module = "org.ccci.gto.android:gto-support-core", version.ref = "gtoSupport" }
 gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-db = { module = "org.ccci.gto.android:gto-support-db", version.ref = "gtoSupport" }
