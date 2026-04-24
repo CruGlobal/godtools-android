@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.app
+package org.cru.godtools.ui.settings.language.app
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -9,9 +9,8 @@ import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.util.Locale
 import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiState
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -21,7 +20,7 @@ class AppLanguageLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val state = UiState(
-        languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN, Locale("es"))
+        languages = listOf(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN, Locale("es"))
     )
 
     @Test
@@ -35,7 +34,7 @@ class AppLanguageLayoutPaparazziTest(
             AppLanguageLayout(
                 state.copy(
                     languageQuery = remember { mutableStateOf("en") },
-                    languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH)
+                    languages = listOf(Locale.ENGLISH, Locale.FRENCH)
                 )
             )
         }

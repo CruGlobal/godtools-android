@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.app
+package org.cru.godtools.ui.settings.language.app
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +26,7 @@ import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatc
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiEvent
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 

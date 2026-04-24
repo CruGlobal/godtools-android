@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.app
+package org.cru.godtools.ui.settings.language.app
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -19,9 +19,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
 import org.ccci.gto.android.common.androidx.core.os.asIterable
 import org.cru.godtools.base.Settings
@@ -29,7 +26,7 @@ import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.util.filterByDisplayAndNativeName
 import org.cru.godtools.base.util.getDisplayName
 import org.cru.godtools.base.util.getPrimaryCollator
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiState
 
 class AppLanguagePresenter @AssistedInject constructor(
     @param:ApplicationContext
@@ -38,7 +35,7 @@ class AppLanguagePresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     data class UiState(
-        val languages: ImmutableList<Locale> = persistentListOf(),
+        val languages: List<Locale> = emptyList(),
         val languageQuery: MutableState<String> = mutableStateOf(""),
         val selectedLanguage: Locale? = null,
         val eventSink: (UiEvent) -> Unit = {}
@@ -90,7 +87,7 @@ class AppLanguagePresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLanguages(appLanguage: Locale, query: String): ImmutableList<Locale> {
+    private fun rememberLanguages(appLanguage: Locale, query: String): List<Locale> {
         val languages = remember { LocaleConfigCompat.getSupportedLocales(context)?.asIterable() ?: emptyList() }
         val sortedLanguages = remember(appLanguage) {
             languages.sortedWith(
@@ -99,9 +96,7 @@ class AppLanguagePresenter @AssistedInject constructor(
         }
 
         return remember(sortedLanguages, appLanguage, query) {
-            sortedLanguages
-                .filterByDisplayAndNativeName(query, context, inLocale = appLanguage)
-                .toImmutableList()
+            sortedLanguages.filterByDisplayAndNativeName(query, context, inLocale = appLanguage)
         }
     }
 

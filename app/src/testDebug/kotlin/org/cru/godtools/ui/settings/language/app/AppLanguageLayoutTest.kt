@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.app
+package org.cru.godtools.ui.settings.language.app
 
 import android.app.Application
 import androidx.compose.runtime.mutableStateOf
@@ -14,9 +14,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import java.util.Locale
 import kotlin.test.Test
-import kotlinx.collections.immutable.persistentListOf
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiEvent
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -48,7 +47,7 @@ class AppLanguageLayoutTest {
             setContent {
                 AppLanguageLayout(
                     UiState(
-                        languages = persistentListOf(Locale.ENGLISH, Locale.FRENCH),
+                        languages = listOf(Locale.ENGLISH, Locale.FRENCH),
                         eventSink = events
                     )
                 )

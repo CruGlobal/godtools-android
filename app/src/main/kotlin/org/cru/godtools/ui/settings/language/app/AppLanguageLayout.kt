@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.app
+package org.cru.godtools.ui.settings.language.app
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,8 +51,8 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.common.LanguageName
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
-import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiEvent
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"
