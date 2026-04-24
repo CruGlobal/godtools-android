@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.country
+package org.cru.godtools.ui.settings.country
 
 import android.content.Context
 import android.icu.text.LocaleDisplayNames
@@ -23,15 +23,13 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.util.getPrimaryCollator
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
+import org.cru.godtools.ui.settings.country.CountrySettingsPresenter.UiState
 
 class CountrySettingsPresenter @AssistedInject constructor(
     @param:ApplicationContext private val context: Context,
@@ -40,7 +38,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
 ) : Presenter<UiState> {
     // what the screen needs to know
     data class UiState(
-        val countries: List<CountryItem> = persistentListOf(),
+        val countries: List<CountryItem> = emptyList(),
         val query: MutableState<String> = mutableStateOf(""),
         val countryCode: String? = null,
         val eventSink: (UiEvent) -> Unit = {},

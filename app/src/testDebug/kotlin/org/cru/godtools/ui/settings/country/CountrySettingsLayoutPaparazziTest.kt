@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.country
+package org.cru.godtools.ui.settings.country
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -10,8 +10,8 @@ import com.slack.circuit.overlay.OverlayEffect
 import kotlin.test.Test
 import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.CountryItem
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
+import org.cru.godtools.ui.settings.country.CountrySettingsPresenter.CountryItem
+import org.cru.godtools.ui.settings.country.CountrySettingsPresenter.UiState
 import org.junit.Assume.assumeFalse
 import org.junit.runner.RunWith
 
@@ -21,7 +21,7 @@ class CountrySettingsLayoutPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
-    private val countries = persistentListOf(
+    private val countries = listOf(
         CountryItem("BR", "Brazil", "Brasil"),
         CountryItem("EC", "Ecuador", "Ecuador"),
         CountryItem("FR", "France", "France"),
@@ -34,7 +34,6 @@ class CountrySettingsLayoutPaparazziTest(
         CountryItem("ES", "Spain", "España"),
         CountryItem("GB", "United Kingdom", "United Kingdom"),
         CountryItem("US", "United States", "United States"),
-
     )
     private val state = UiState(countries = countries)
 

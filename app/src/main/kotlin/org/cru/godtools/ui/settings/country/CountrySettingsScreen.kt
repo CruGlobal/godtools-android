@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.country
+package org.cru.godtools.ui.settings.country
 
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize

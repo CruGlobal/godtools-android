@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.country
+package org.cru.godtools.ui.settings.country
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,8 +45,8 @@ import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.common.LocalizedName
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiEvent
-import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
+import org.cru.godtools.ui.settings.country.CountrySettingsPresenter.UiEvent
+import org.cru.godtools.ui.settings.country.CountrySettingsPresenter.UiState
 
 internal const val TEST_TAG_ACTION_BACK = "action_navigate_back"
 internal const val TEST_TAG_CANCEL_SEARCH = "action_cancel_search"

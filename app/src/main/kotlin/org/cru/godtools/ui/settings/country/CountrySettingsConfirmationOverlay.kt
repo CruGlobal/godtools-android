@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.country
+package org.cru.godtools.ui.settings.country
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
