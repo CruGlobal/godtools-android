@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.isLight
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
 import org.cru.godtools.shared.common.model.ThemeType

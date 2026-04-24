@@ -41,7 +41,7 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.overlay.LocalOverlayHost
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LocalizedName

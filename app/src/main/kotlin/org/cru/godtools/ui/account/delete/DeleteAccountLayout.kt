@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiEvent
 import org.cru.godtools.ui.account.delete.DeleteAccountPresenter.UiState

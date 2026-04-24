@@ -44,8 +44,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen

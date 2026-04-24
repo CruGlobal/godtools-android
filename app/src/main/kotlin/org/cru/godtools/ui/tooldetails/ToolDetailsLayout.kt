@@ -61,8 +61,8 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme

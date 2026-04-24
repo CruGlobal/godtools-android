@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.overlay.LocalOverlayHost
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.tutorial.ui.youtubeplayer.YoutubePlayerOverlay
 import org.cru.godtools.ui.onboarding.OnboardingPresenter.UiEvent

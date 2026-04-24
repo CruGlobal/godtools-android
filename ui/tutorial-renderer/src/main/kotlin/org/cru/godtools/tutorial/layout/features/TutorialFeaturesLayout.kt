@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintLayoutScope
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.foundation.text.minLinesHeight
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.tutorial.Page
 import org.cru.godtools.tutorial.layout.TUTORIAL_PAGE_HORIZONTAL_MARGIN
 import org.cru.godtools.tutorial.layout.TutorialMedia

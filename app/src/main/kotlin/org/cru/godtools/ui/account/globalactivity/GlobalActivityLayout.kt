@@ -21,10 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.time.Year
-import org.ccci.gto.android.common.androidx.compose.foundation.layout.padding
 import org.ccci.gto.android.common.androidx.compose.material3.ui.card.ElevatedCard
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
 
