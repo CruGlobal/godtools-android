@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview

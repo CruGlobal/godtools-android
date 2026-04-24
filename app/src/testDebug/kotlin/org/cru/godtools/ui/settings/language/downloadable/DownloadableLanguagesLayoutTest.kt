@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import android.app.Application
 import androidx.activity.ComponentActivity
@@ -15,7 +15,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config

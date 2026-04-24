@@ -27,7 +27,7 @@ import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen
 
 class LanguageSettingsPresenter @AssistedInject constructor(
     @param:ApplicationContext

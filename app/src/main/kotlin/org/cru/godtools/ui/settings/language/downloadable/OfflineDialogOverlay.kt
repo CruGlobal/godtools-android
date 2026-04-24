@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text

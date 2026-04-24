@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -8,10 +8,9 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import java.util.Locale
 import kotlin.test.Test
-import kotlinx.collections.immutable.persistentListOf
 import org.cru.godtools.base.ui.BasePaparazziTest
 import org.cru.godtools.model.Language
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState
 import org.junit.runner.RunWith
 
 @RunWith(TestParameterInjector::class)
@@ -22,7 +21,7 @@ class DownloadableLanguagesLayoutPaparazziTest(
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val isConnected = mutableStateOf(true)
     private val state = UiState(
-        languages = persistentListOf(
+        languages = listOf(
             UiState.UiLanguage(
                 Language(Locale.ENGLISH, isAdded = true),
                 downloadedTools = 2,

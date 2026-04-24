@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
@@ -25,7 +25,7 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomLanguage
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 

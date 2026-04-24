@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
@@ -45,9 +45,9 @@ import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.languages.LanguageName
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigateUp"
 internal const val TEST_TAG_CANCEL_SEARCH = "cancelSearch"

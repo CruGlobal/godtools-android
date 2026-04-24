@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -7,8 +7,6 @@ import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import java.util.Locale
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
 
@@ -16,7 +14,7 @@ import org.cru.godtools.model.Language
 object DownloadableLanguagesScreen : Screen {
     data class UiState(
         val query: MutableState<String> = mutableStateOf(""),
-        val languages: ImmutableList<UiLanguage> = persistentListOf(),
+        val languages: List<UiLanguage> = emptyList(),
         val isConnected: State<Boolean> = mutableStateOf(true),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState {

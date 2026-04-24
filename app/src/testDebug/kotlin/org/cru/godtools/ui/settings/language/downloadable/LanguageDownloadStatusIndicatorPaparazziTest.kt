@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import androidx.compose.foundation.layout.Row
 import com.android.ide.common.rendering.api.SessionParams.RenderingMode

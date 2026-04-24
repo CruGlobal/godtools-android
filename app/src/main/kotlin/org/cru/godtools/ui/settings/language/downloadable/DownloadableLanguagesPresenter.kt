@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages.downloadable
+package org.cru.godtools.ui.settings.language.downloadable
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -22,7 +22,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import javax.inject.Named
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -40,9 +39,9 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
-import org.cru.godtools.ui.languages.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState.UiEvent
+import org.cru.godtools.ui.settings.language.downloadable.DownloadableLanguagesScreen.UiState.UiLanguage
 
 class DownloadableLanguagesPresenter @AssistedInject constructor(
     @param:ApplicationContext
@@ -71,8 +70,7 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                             totalTools = rememberTotalTools(lang.code),
                         )
                     }
-                }
-                .toImmutableList(),
+                },
             eventSink = {
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
