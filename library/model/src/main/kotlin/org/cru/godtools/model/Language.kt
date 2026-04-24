@@ -34,7 +34,7 @@ data class Language(
 
         val JSONAPI_FIELDS = arrayOf(JSON_CODE, JSON_NAME, JSON_FORCE_LANGUAGE_NAME)
 
-        val INVALID_CODE = Locale("x", "inv")
+        val INVALID_CODE = Locale.forLanguageTag("x-inv")
 
         fun displayNameComparator(context: Context, displayLocale: Locale = context.appLanguage): Comparator<Language> =
             compareBy(displayLocale.getPrimaryCollator()) { it.getDisplayName(context, displayLocale) }
