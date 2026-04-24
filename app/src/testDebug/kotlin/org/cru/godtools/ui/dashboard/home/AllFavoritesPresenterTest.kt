@@ -157,8 +157,8 @@ class AllFavoritesPresenterTest {
         presenter.test {
             expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
 
-            val expected = tool.createToolIntent(
-                context,
+            val expected = context.createToolIntent(
+                tool,
                 languages = listOf(Locale.ENGLISH),
                 saveLanguageSettings = true
             )
@@ -183,8 +183,8 @@ class AllFavoritesPresenterTest {
         presenter.test {
             expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
 
-            val expected = tool.createToolIntent(
-                context,
+            val expected = context.createToolIntent(
+                tool,
                 languages = listOf(Locale.FRENCH, Locale.GERMAN),
                 saveLanguageSettings = true
             )

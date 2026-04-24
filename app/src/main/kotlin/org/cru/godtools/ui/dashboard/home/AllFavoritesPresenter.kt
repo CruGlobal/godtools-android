@@ -58,8 +58,8 @@ class AllFavoritesPresenter @AssistedInject constructor(
                         when (it) {
                             ToolCard.Event.Click,
                             ToolCard.Event.OpenTool -> {
-                                val intent = tool.createToolIntent(
-                                    context = context,
+                                val intent = context.createToolIntent(
+                                    tool = tool,
                                     languages = listOfNotNull(
                                         tool.primaryLocale ?: state.translation?.languageCode,
                                         tool.parallelLocale

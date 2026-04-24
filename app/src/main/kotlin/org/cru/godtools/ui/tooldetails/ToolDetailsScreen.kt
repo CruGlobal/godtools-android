@@ -48,7 +48,6 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         data object OpenToolTraining : UiEvent
         data object PinTool : UiEvent
         data object UnpinTool : UiEvent
-        data class SwitchVariant(val variant: String) : UiEvent
         data object PinShortcut : UiEvent
     }
 }

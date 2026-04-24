@@ -93,8 +93,8 @@ class HomePresenter @AssistedInject constructor(
                     lessonState = toolCardPresenter.present(lesson) {
                         when (it) {
                             ToolCard.Event.Click -> {
-                                val intent = lesson.createToolIntent(
-                                    context = context,
+                                val intent = context.createToolIntent(
+                                    tool = lesson,
                                     languages = listOfNotNull(lessonState.translation?.languageCode),
                                     resumeProgress = true,
                                 )
@@ -133,8 +133,8 @@ class HomePresenter @AssistedInject constructor(
                     when (it) {
                         ToolCard.Event.Click,
                         ToolCard.Event.OpenTool -> {
-                            val intent = tool.createToolIntent(
-                                context = context,
+                            val intent = context.createToolIntent(
+                                tool = tool,
                                 languages = listOfNotNull(
                                     tool.primaryLocale ?: state.translation?.languageCode,
                                     tool.parallelLocale

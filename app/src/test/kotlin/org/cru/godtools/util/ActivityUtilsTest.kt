@@ -19,11 +19,11 @@ class ActivityUtilsTest {
 
     @Test
     fun `createToolIntent() - Invalid - code=null`() {
-        assertNull(Tool(code = null).createToolIntent(context, listOf(Locale.ENGLISH)))
+        assertNull(context.createToolIntent(Tool(code = null), listOf(Locale.ENGLISH)))
     }
 
     @Test
     fun `createToolIntent() - Invalid - no languages`() {
-        assertNull(randomTool().createToolIntent(context, emptyList()))
+        assertNull(context.createToolIntent(randomTool(), emptyList()))
     }
 }

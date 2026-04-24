@@ -32,7 +32,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -47,6 +46,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_TOOL_DETAILS
 import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_TIPS
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -65,6 +65,8 @@ import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shortcuts.GodToolsShortcutManager
 import org.cru.godtools.shortcuts.PendingShortcut
 import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tutorial.PageSet
+import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
@@ -124,6 +126,7 @@ class ToolDetailsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLocaleFlow
         everyComposable { produceAppLocaleState() } returns appLocaleState
+        every { setFeatureDiscovered(any()) } just Runs
     }
     private val shortcutManager: GodToolsShortcutManager = mockk {
         every { canPinToolShortcut(any()) } returns false
@@ -313,6 +316,20 @@ class ToolDetailsPresenterTest {
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
+
+    @Test
+    fun `State - variants - UiEvent - Click - changes toolCode`() = testScope.runTest {
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant = randomTool("variant", Tool.Type.TRACT, metatoolCode = "meta")
+        toolFlow.value = tool
+        normalToolsFlow.value = listOf(tool, variant)
+
+        createPresenter().test {
+            val state = expectMostRecentItem()
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            assertEquals("variant", expectMostRecentItem().toolCode)
+        }
+    }
     // endregion State.variants
 
     // region State.drawerState
@@ -391,7 +408,7 @@ class ToolDetailsPresenterTest {
 
         with(navigator.awaitNextScreen()) {
             assertTrue(this is IntentScreen)
-            val expected = toolFlow.value?.createToolIntent(context, listOf(Locale.ENGLISH), showTips = false)!!
+            val expected = context.createToolIntent(toolFlow.value!!, listOf(Locale.ENGLISH), showTips = false)!!
             assertTrue(expected equalsIntent intent)
         }
 
@@ -415,8 +432,8 @@ class ToolDetailsPresenterTest {
 
         with(navigator.awaitNextScreen()) {
             assertIs<IntentScreen>(this)
-            val expected = toolFlow.value?.createToolIntent(
-                context,
+            val expected = context.createToolIntent(
+                toolFlow.value!!,
                 listOf(Locale.ENGLISH, Locale.FRENCH),
                 activeLocale = Locale.FRENCH,
                 showTips = false
@@ -432,22 +449,39 @@ class ToolDetailsPresenterTest {
 
     // region Event.OpenToolTraining
     @Test
-    fun `Event - OpenToolTraining - Tract Tool`() = testScope.runTest {
+    fun `Event - OpenToolTraining - tutorial already discovered - opens tool with tips`() = testScope.runTest {
         toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
-        every {
-            translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH)
-        } returns flowOf(randomTranslation(TOOL, Locale.ENGLISH))
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL") } returns true
 
         createPresenter().test {
             expectMostRecentItem().eventSink(UiEvent.OpenToolTraining)
         }
 
-        with(navigator.awaitNextScreen()) {
-            assertTrue(this is OpenToolTrainingScreen)
-            assertEquals(TOOL, tool)
-            assertEquals(Tool.Type.TRACT, type)
-            assertEquals(Locale.ENGLISH, locale)
+        with(assertIs<IntentScreen>(navigator.awaitNextScreen())) {
+            val expected = context.createToolIntent(toolFlow.value!!, listOf(Locale.ENGLISH), showTips = true)
+            assertTrue(expected equalsIntent intent)
         }
+
+        verify {
+            settings.setFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL")
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, TOOL, SOURCE_TOOL_DETAILS))
+        }
+    }
+
+    @Test
+    fun `Event - OpenToolTraining - tutorial not yet discovered - shows tutorial`() = testScope.runTest {
+        toolFlow.value = randomTool(TOOL, Tool.Type.TRACT)
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
+            .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
+        every { settings.isFeatureDiscovered("$FEATURE_TUTORIAL_TIPS$TOOL") } returns false
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(UiEvent.OpenToolTraining)
+        }
+
+        assertEquals(TutorialScreen(PageSet.TIPS), navigator.awaitNextScreen())
     }
     // endregion Event.OpenToolTraining
 
@@ -506,21 +540,6 @@ class ToolDetailsPresenterTest {
     }
     // endregion Event.UnpinTool
 
-    // region Event.SwitchVariant
-    @Test
-    fun `Event - SwitchVariant`() = testScope.runTest {
-        createPresenter(ToolDetailsScreen("initial")).test {
-            assertNotNull(expectMostRecentItem()) {
-                assertEquals("initial", it.toolCode)
-
-                it.eventSink(UiEvent.SwitchVariant("new"))
-            }
-
-            assertEquals("new", expectMostRecentItem().toolCode)
-        }
-    }
-    // endregion Event.SwitchVariant
-
     // region SideEffect - DownloadLatestTranslation
     @Test
     fun `SideEffect - DownloadLatestTranslation`() = testScope.runTest {
@@ -576,6 +595,11 @@ class ToolDetailsPresenterTest {
 
     @Test
     fun `SideEffect - DownloadLatestTranslation - Trigger on variant change`() = testScope.runTest {
+        val tool = randomTool(TOOL, Tool.Type.TRACT, metatoolCode = "meta")
+        val variant = randomTool("variant", Tool.Type.TRACT, metatoolCode = "meta")
+        toolFlow.value = tool
+        normalToolsFlow.value = listOf(tool, variant)
+
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) }
             .returns(flowOf(randomTranslation(TOOL, Locale.ENGLISH)))
         every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.FRENCH) }
@@ -590,7 +614,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().eventSink(UiEvent.SwitchVariant("variant"))
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)

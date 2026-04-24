@@ -157,8 +157,8 @@ class LessonsPresenter @AssistedInject constructor(
                                 eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, SOURCE_LESSONS))
                                 navigator.goTo(
                                     IntentScreen(
-                                        tool.createToolIntent(
-                                            context = context,
+                                        context.createToolIntent(
+                                            tool = tool,
                                             languages = listOfNotNull(toolState.translation?.languageCode),
                                             resumeProgress = true
                                         ) ?: return@present
