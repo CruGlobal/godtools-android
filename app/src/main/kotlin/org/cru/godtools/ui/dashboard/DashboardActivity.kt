@@ -29,7 +29,7 @@ import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
 import org.cru.godtools.ui.onboarding.OnboardingScreen
-import org.cru.godtools.ui.tooldetails.startToolDetailsActivity
+import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
@@ -82,7 +82,7 @@ class DashboardActivity : BaseActivity() {
                                     is DashboardEvent.OpenTool ->
                                         openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
                                     is DashboardEvent.OpenToolDetails ->
-                                        e.tool?.let { startToolDetailsActivity(it, e.lang) }
+                                        e.tool?.let { startCircuitActivity(ToolDetailsScreen(it, e.lang)) }
                                 }
                             },
                         )
