@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

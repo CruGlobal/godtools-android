@@ -43,6 +43,7 @@ import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
+import org.cru.godtools.ui.common.LanguageName
 import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiEvent
 import org.cru.godtools.ui.languages.LanguageSettingsPresenter.UiState
 

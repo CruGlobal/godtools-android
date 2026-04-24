@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.languages.LocalizedName
+import org.cru.godtools.ui.common.LocalizedName
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiEvent
 import org.cru.godtools.ui.languages.country.CountrySettingsPresenter.UiState
 

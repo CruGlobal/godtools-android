@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
+import org.cru.godtools.ui.common.LanguageName
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
-import org.cru.godtools.ui.languages.LanguageName
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)

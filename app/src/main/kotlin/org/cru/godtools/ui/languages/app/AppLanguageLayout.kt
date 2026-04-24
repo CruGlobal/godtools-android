@@ -50,7 +50,7 @@ import org.ccci.gto.android.common.util.content.localize
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.ui.languages.LanguageName
+import org.cru.godtools.ui.common.LanguageName
 import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiEvent
 import org.cru.godtools.ui.languages.app.AppLanguagePresenter.UiState
 

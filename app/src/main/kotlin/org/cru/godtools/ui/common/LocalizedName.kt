@@ -1,4 +1,4 @@
-package org.cru.godtools.ui.languages
+package org.cru.godtools.ui.common
 
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
 
-private const val LANGUAGE_NAME_GAP = "[gap]"
+private const val NAME_GAP = "[gap]"
 
 @Composable
 internal fun LocalizedName(name: String, secondName: String, modifier: Modifier = Modifier) {
@@ -28,7 +28,7 @@ internal fun LocalizedName(name: String, secondName: String, modifier: Modifier 
         remember(name, secondName, color, secondNameColor) {
             buildAnnotatedString {
                 withStyle(SpanStyle(color = color)) { append(name) }
-                appendInlineContent(LANGUAGE_NAME_GAP, " ")
+                appendInlineContent(NAME_GAP, " ")
                 withStyle(SpanStyle(color = secondNameColor)) { append(secondName) }
             }
         },
@@ -36,7 +36,7 @@ internal fun LocalizedName(name: String, secondName: String, modifier: Modifier 
         overflow = TextOverflow.Ellipsis,
         inlineContent = remember {
             mapOf(
-                LANGUAGE_NAME_GAP to InlineTextContent(
+                NAME_GAP to InlineTextContent(
                     Placeholder(
                         width = 8.sp,
                         height = 1.sp,
