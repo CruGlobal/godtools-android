@@ -69,12 +69,12 @@ abstract class BaseController<T : Base> protected constructor(
     protected fun triggerAnalyticsEvents(events: List<AnalyticsEvent>?) =
         events.orEmpty().mapNotNull { sendAnalyticsEvent(it) }
 
-    private fun sendAnalyticsEvent(event: AnalyticsEvent) = lifecycleOwner?.lifecycleScope?.launch {
+    private fun sendAnalyticsEvent(event: AnalyticsEvent) = lifecycleOwner.lifecycleScope.launch {
         if (event.delay > 0) delay(event.delay * 1000L)
         if (!event.shouldTrigger(toolState)) return@launch
         eventBus.post(ContentAnalyticsEventAnalyticsActionEvent(event, model?.manifest))
         event.recordTriggered(toolState)
-    }?.takeUnless { it.isCompleted }
+    }.takeUnless { it.isCompleted }
 
     protected fun List<Job>.cancelPendingAnalyticsEvents() = forEach { it.cancel() }
     // endregion AnalyticsEvents

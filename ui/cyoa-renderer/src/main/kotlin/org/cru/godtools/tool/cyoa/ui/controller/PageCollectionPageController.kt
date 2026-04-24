@@ -120,8 +120,10 @@ class PageCollectionPageController @AssistedInject constructor(
         override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ViewDataBinding =
             DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false)
                 .also {
-                    it.lifecycleOwner = this@PageCollectionPageController.lifecycleOwner
-                        ?.let { ConstrainedStateLifecycleOwner(it, Lifecycle.State.CREATED) }
+                    it.lifecycleOwner = ConstrainedStateLifecycleOwner(
+                        this@PageCollectionPageController.lifecycleOwner,
+                        Lifecycle.State.CREATED
+                    )
 
                     when (it) {
                         is CyoaPageContentBinding -> it.bindController(
