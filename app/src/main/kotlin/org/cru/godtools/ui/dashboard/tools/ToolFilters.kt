@@ -32,11 +32,11 @@ import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.base.ui.util.getToolCategoryName
 import org.cru.godtools.model.Language
+import org.cru.godtools.ui.common.LanguageName
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
-import org.cru.godtools.ui.languages.LanguageName
 import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp

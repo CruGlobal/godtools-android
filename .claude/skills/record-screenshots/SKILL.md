@@ -97,15 +97,25 @@ If there are multiple candidates at any step, show them and ask the user which c
 
 ### 7. Apply the snapshot changes locally
 
-Stage the snapshot files from the remote commit:
+The CI commit may add new snapshots, delete old ones (e.g. when a package was renamed), or both. Handle all cases:
 
 ```bash
-# Get the list of files changed by the screenshot commit
+# Get the full diff between local HEAD and the remote screenshot commit
 git diff --name-only HEAD origin/<branch>
-
-# Stage those files at the remote version
-git checkout origin/<branch> -- $(git diff --name-only HEAD origin/<branch>)
+git diff --name-status HEAD origin/<branch>
 ```
+
+For files marked **A** (added) or **M** (modified) — stage them at the remote version:
+```bash
+git checkout origin/<branch> -- <file> [<file> ...]
+```
+
+For files marked **D** (deleted) — remove them:
+```bash
+git rm <file> [<file> ...]
+```
+
+Do not use a single `git checkout origin/<branch> -- $(git diff --name-only ...)` shortcut, as it cannot handle deletions (checking out a deleted file would re-create it instead of removing it).
 
 ### 8. Create a fixup commit
 

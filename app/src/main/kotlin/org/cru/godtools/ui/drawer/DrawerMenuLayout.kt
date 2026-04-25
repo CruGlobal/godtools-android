@@ -68,9 +68,9 @@ import org.cru.godtools.ui.account.delete.DeleteAccountScreen
 import org.cru.godtools.ui.account.startAccountActivity
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.Event
 import org.cru.godtools.ui.drawer.DrawerMenuScreen.State
-import org.cru.godtools.ui.languages.LanguageSettingsScreen
-import org.cru.godtools.ui.languages.country.CountrySettingsScreen
 import org.cru.godtools.ui.login.startLoginActivity
+import org.cru.godtools.ui.settings.country.CountrySettingsScreen
+import org.cru.godtools.ui.settings.language.LanguageSettingsScreen
 
 @Composable
 fun DrawerMenuLayout(

@@ -1,0 +1,177 @@
+package org.cru.godtools.ui.settings.language.app
+
+import android.app.Application
+import androidx.compose.runtime.mutableStateOf
+import androidx.core.os.LocaleListCompat
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.jeppeman.mockposable.mockk.everyComposable
+import com.slack.circuit.test.FakeNavigator
+import com.slack.circuit.test.test
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
+import io.mockk.verifyAll
+import java.util.Locale
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlinx.coroutines.test.runTest
+import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.androidx.core.app.LocaleConfigCompat
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
+import org.cru.godtools.ui.settings.language.app.AppLanguagePresenter.UiEvent
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+
+@RunWith(AndroidJUnit4::class)
+@Config(application = Application::class)
+class AppLanguagePresenterTest {
+    private val appLocaleState = mutableStateOf(Locale.ENGLISH)
+
+    private val navigator = FakeNavigator(AppLanguageScreen)
+    private val settings: Settings = mockk {
+        every { appLanguage = any() } answers { appLocaleState.value = firstArg() }
+        everyComposable { produceAppLocaleState() } returns appLocaleState
+    }
+
+    private lateinit var presenter: AppLanguagePresenter
+
+    @BeforeTest
+    fun setup() {
+        mockkObject(LocaleConfigCompat)
+        every { LocaleConfigCompat.getSupportedLocales(any()) } returns LocaleListCompat.getEmptyLocaleList()
+
+        presenter = AppLanguagePresenter(
+            context = ApplicationProvider.getApplicationContext(),
+            settings = settings,
+            navigator = navigator
+        )
+    }
+
+    @AfterTest
+    fun cleanup() {
+        AndroidUiDispatcherUtil.runScheduledDispatches()
+        unmockkObject(LocaleConfigCompat)
+
+        navigator.assertGoToIsEmpty()
+        navigator.assertPopIsEmpty()
+        navigator.assertResetRootIsEmpty()
+    }
+
+    // region State.languages
+    @Test
+    fun `State - languages`() = runTest {
+        every { LocaleConfigCompat.getSupportedLocales(any()) } returns LocaleListCompat.create(Locale.ENGLISH)
+
+        presenter.test {
+            assertEquals(listOf(Locale.ENGLISH), awaitItem().languages)
+        }
+        verifyAll { LocaleConfigCompat.getSupportedLocales(any()) }
+    }
+
+    @Test
+    fun `State - languages - sorted by app language`() = runTest {
+        every { LocaleConfigCompat.getSupportedLocales(any()) }
+            .returns(LocaleListCompat.create(Locale.FRENCH, Locale("es")))
+
+        presenter.test {
+            appLocaleState.value = Locale.ENGLISH
+            assertEquals(listOf(Locale.FRENCH, Locale("es")), expectMostRecentItem().languages)
+
+            appLocaleState.value = Locale("es")
+            assertEquals(listOf(Locale("es"), Locale.FRENCH), expectMostRecentItem().languages)
+        }
+    }
+
+    @Test
+    fun `State - languages - filtered by language query`() = runTest {
+        appLocaleState.value = Locale.ENGLISH
+        every { LocaleConfigCompat.getSupportedLocales(any()) }
+            .returns(LocaleListCompat.create(Locale.ENGLISH, Locale.forLanguageTag("es")))
+
+        presenter.test {
+            val query = expectMostRecentItem().languageQuery
+
+            query.value = "Spanish"
+            assertEquals(listOf(Locale.forLanguageTag("es")), expectMostRecentItem().languages)
+
+            query.value = ""
+            assertEquals(listOf(Locale.ENGLISH, Locale.forLanguageTag("es")), expectMostRecentItem().languages)
+        }
+    }
+    // endregion State.languages
+
+    // region Event.NavigateBack
+    @Test
+    fun `Event - NavigateBack`() = runTest {
+        presenter.test {
+            awaitItem().eventSink(UiEvent.NavigateBack)
+            navigator.awaitPop()
+        }
+    }
+    // endregion Event.NavigateBack
+
+    // region Event.SelectLanguage
+    @Test
+    fun `Event - SelectLanguage`() = runTest {
+        presenter.test {
+            awaitItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
+
+            assertEquals(Locale.FRENCH, awaitItem().selectedLanguage)
+        }
+    }
+
+    @Test
+    fun `Event - SelectLanguage - Selected app language`() = runTest {
+        presenter.test {
+            awaitItem().eventSink(UiEvent.SelectLanguage(Locale.ENGLISH))
+            navigator.awaitPop()
+        }
+    }
+    // endregion Event.SelectLanguage
+
+    // region Event.ConfirmLanguage
+    @Test
+    fun `Event - ConfirmLanguage`() = runTest {
+        presenter.test {
+            expectMostRecentItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
+
+            with(expectMostRecentItem()) {
+                val selectedLanguage = assertNotNull(selectedLanguage)
+                navigator.assertPopIsEmpty()
+                eventSink(UiEvent.ConfirmLanguage(selectedLanguage))
+            }
+
+            navigator.awaitPop()
+            assertNull(expectMostRecentItem().selectedLanguage)
+            assertEquals(Locale.FRENCH, appLocaleState.value)
+        }
+    }
+    // endregion Event.ConfirmLanguage
+
+    // region Event.DismissConfirmDialog
+    @Test
+    fun `Event - DismissConfirmDialog`() = runTest {
+        presenter.test {
+            expectMostRecentItem().eventSink(UiEvent.SelectLanguage(Locale.FRENCH))
+
+            with(expectMostRecentItem()) {
+                assertNotNull(selectedLanguage)
+                eventSink(UiEvent.DismissConfirmDialog)
+            }
+
+            assertNull(expectMostRecentItem().selectedLanguage)
+        }
+
+        assertNotEquals(Locale.FRENCH, appLocaleState.value)
+        navigator.assertPopIsEmpty()
+    }
+    // endregion Event.DismissConfirmDialog
+}
