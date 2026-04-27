@@ -132,7 +132,7 @@ class AppLanguagePresenterTest {
     fun `Event - SelectLanguage - Selected app language`() = runTest {
         presenter.test {
             awaitItem().eventSink(UiEvent.SelectLanguage(Locale.ENGLISH))
-            assertEquals(AppLanguageScreen.Result.Dismiss, navigator.awaitPop().result)
+            assertEquals(AppLanguageScreen.Result.LanguageSelected, navigator.awaitPop().result)
         }
     }
     // endregion Event.SelectLanguage
