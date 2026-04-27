@@ -61,7 +61,7 @@ class AppLanguagePresenter @AssistedInject constructor(
 
                     is UiEvent.SelectLanguage -> {
                         if (it.language == appLocale) {
-                            navigator.pop(AppLanguageScreen.Result.Dismiss)
+                            navigator.pop(AppLanguageScreen.Result.LanguageSelected)
                         } else {
                             confirmLanguage = it.language
                         }
