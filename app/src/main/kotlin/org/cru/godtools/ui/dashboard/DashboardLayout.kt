@@ -18,7 +18,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -33,7 +32,6 @@ import com.slack.circuit.backstack.isAtRoot
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
-import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuit.runtime.navigation.currentScreen
 import com.slack.circuit.runtime.resetRoot
 import com.slack.circuit.runtime.screen.Screen
@@ -62,8 +60,6 @@ import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
-import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
-import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.drawer.DrawerViewModel
 
@@ -74,27 +70,7 @@ internal sealed interface DashboardEvent {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun DashboardLayout(
-    requestPermission: suspend () -> Unit,
-    onEvent: (DashboardEvent) -> Unit,
-    viewModel: DashboardViewModel = viewModel()
-) {
-    // region optInNotification
-    val showOverlay by viewModel.showOptInNotification.collectAsState()
-
-    if (showOverlay) {
-        OverlayEffect {
-            show(
-                OptInNotificationModalOverlay(
-                    requestPermission = requestPermission,
-                    isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
-                )
-            )
-            viewModel.setShowOptInNotification(false)
-        }
-    }
-    // endregion optInNotification
-
+internal fun DashboardLayout(onEvent: (DashboardEvent) -> Unit, viewModel: DashboardViewModel = viewModel()) {
     val backStack = rememberSaveableBackStack(HomeScreen)
     val pageNavigator = rememberInterceptingNavigator(
         rememberCircuitNavigator(backStack),

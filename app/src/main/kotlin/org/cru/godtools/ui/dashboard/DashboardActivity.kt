@@ -7,10 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.overlay.ContentWithOverlays
+import com.slack.circuit.overlay.OverlayEffect
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -28,8 +31,9 @@ import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
+import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.onboarding.OnboardingScreen
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
@@ -73,8 +77,22 @@ class DashboardActivity : BaseActivity() {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
                     ContentWithOverlays {
+                        // region optInNotification
+                        val showOverlay by viewModel.showOptInNotification.collectAsState()
+
+                        if (showOverlay) {
+                            OverlayEffect {
+                                val overlay = OptInNotificationModalOverlay(
+                                    requestPermission = { optInNotificationController.requestNotificationPermission() },
+                                    isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
+                                )
+                                show(overlay)
+                                viewModel.setShowOptInNotification(false)
+                            }
+                        }
+                        // endregion optInNotification
+
                         DashboardLayout(
-                            requestPermission = { optInNotificationController.requestNotificationPermission() },
                             onEvent = { e ->
                                 when (e) {
                                     is DashboardEvent.OpenIntent -> startActivity(e.intent)
