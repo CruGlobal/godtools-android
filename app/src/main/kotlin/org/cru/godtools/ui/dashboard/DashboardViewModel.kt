@@ -29,20 +29,12 @@ class DashboardViewModel @Inject constructor(
         set(value) = savedState.set(KEY_PAGE_STACK, ArrayList(value))
     private val pageStackFlow = savedState.getStateFlow(KEY_PAGE_STACK, listOf(Page.DEFAULT))
 
-    val hasBackStack = pageStackFlow
-        .map { it.size > 1 }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
     val currentPage = pageStackFlow
         .map { it.lastOrNull() ?: Page.DEFAULT }
         .stateIn(viewModelScope, SharingStarted.Eagerly, Page.DEFAULT)
 
     fun updateCurrentPage(page: Page, clearStack: Boolean = true) {
         pageStack = if (clearStack) listOf(page) else pageStack + page
-    }
-
-    fun popPageStack() {
-        pageStack = pageStack.dropLast(1)
     }
     // endregion Page Stack
 

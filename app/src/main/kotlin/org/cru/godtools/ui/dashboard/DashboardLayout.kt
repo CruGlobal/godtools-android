@@ -1,8 +1,6 @@
 package org.cru.godtools.ui.dashboard
 
 import android.content.Intent
-import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -23,7 +21,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -32,11 +29,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.slack.circuit.foundation.CircuitContent
-import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.backstack.isAtRoot
+import com.slack.circuit.backstack.rememberSaveableBackStack
+import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuit.runtime.navigation.currentScreen
+import com.slack.circuit.runtime.resetRoot
+import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.IntentScreen
-import java.util.Locale
+import com.slack.circuitx.navigation.intercepting.InterceptedResult
+import com.slack.circuitx.navigation.intercepting.NavigationContext
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.Skipped
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.SuccessConsumed
+import com.slack.circuitx.navigation.intercepting.rememberInterceptingNavigator
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
 import org.cru.godtools.R
@@ -48,24 +55,21 @@ import org.cru.godtools.analytics.firebase.model.FirebaseIamActionEvent
 import org.cru.godtools.analytics.model.AnalyticsScreenEvent
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.base.ui.compose.LocalEventBus
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 import org.cru.godtools.ui.drawer.DrawerViewModel
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 
 internal sealed interface DashboardEvent {
     class OpenIntent(val intent: Intent) : DashboardEvent
-    open class OpenTool(val tool: String?, val type: Tool.Type?, val lang1: Locale?, val lang2: Locale? = null) :
-        DashboardEvent
-    class OpenToolDetails(val tool: String?, val lang: Locale? = null) : DashboardEvent
+    class OpenScreen(val screen: Screen) : DashboardEvent
 }
 
 @Composable
@@ -75,14 +79,6 @@ internal fun DashboardLayout(
     onEvent: (DashboardEvent) -> Unit,
     viewModel: DashboardViewModel = viewModel()
 ) {
-    val scope = rememberCoroutineScope()
-
-    val currentPage by viewModel.currentPage.collectAsState()
-    DashboardLayoutAnalytics(currentPage)
-
-    val hasBackStack by viewModel.hasBackStack.collectAsState()
-    BackHandler(hasBackStack) { viewModel.popPageStack() }
-
     // region optInNotification
     val showOverlay by viewModel.showOptInNotification.collectAsState()
 
@@ -99,9 +95,32 @@ internal fun DashboardLayout(
     }
     // endregion optInNotification
 
+    val backStack = rememberSaveableBackStack(HomeScreen)
+    val pageNavigator = rememberInterceptingNavigator(
+        rememberCircuitNavigator(backStack),
+        interceptors = remember(onEvent) {
+            listOf(
+                object : NavigationInterceptor {
+                    override fun goTo(screen: Screen, navigationContext: NavigationContext): InterceptedResult {
+                        if (screen is DashboardPage) return Skipped
+
+                        when (screen) {
+                            is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
+                            else -> onEvent(DashboardEvent.OpenScreen(screen))
+                        }
+
+                        return SuccessConsumed
+                    }
+                }
+            )
+        }
+    )
+
     val state = DashboardPresenter.UiState(
         drawerState = viewModel<DrawerViewModel>().toState(),
         isSyncing = viewModel.isSyncRunning.collectAsState().value,
+        pageBackStack = backStack,
+        pageNavigator = pageNavigator,
         snackbarState = remember { SnackbarHostState() },
     ) {
         when (it) {
@@ -109,16 +128,27 @@ internal fun DashboardLayout(
         }
     }
 
-    AppUpdateSnackbar(state.snackbarState)
+    DashboardLayout(state)
+}
 
-    DrawerMenuLayout(state.drawerState) {
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+internal fun DashboardLayout(state: DashboardPresenter.UiState, modifier: Modifier = Modifier) {
+    val scope = rememberCoroutineScope()
+
+    val currentScreen = state.pageBackStack.currentScreen ?: HomeScreen
+
+    AppUpdateSnackbar(state.snackbarState)
+    DashboardLayoutAnalytics(state.pageBackStack.currentScreen ?: HomeScreen)
+
+    DrawerMenuLayout(state.drawerState, modifier = modifier) {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {},
                     navigationIcon = {
                         when {
-                            hasBackStack -> IconButton(onClick = { viewModel.popPageStack() }) {
+                            !state.pageBackStack.isAtRoot -> IconButton(onClick = { state.pageNavigator.pop() }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
 
@@ -130,68 +160,49 @@ internal fun DashboardLayout(
                     colors = GodToolsTheme.topAppBarColors,
                 )
             },
-            bottomBar = { DashboardBottomNavBar(currentPage, onSelectPage = { viewModel.updateCurrentPage(it) }) },
+            bottomBar = {
+                DashboardBottomNavBar(
+                    currentScreen,
+                    onSelectPage = {
+                        state.pageNavigator.resetRoot(it, saveState = true, restoreState = it != HomeScreen)
+                    }
+                )
+            },
             snackbarHost = { SnackbarHost(state.snackbarState) }
         ) {
-            val saveableStateHolder = rememberSaveableStateHolder()
             PullToRefreshBox(
                 state.isSyncing,
                 onRefresh = { state.eventSink(UiEvent.TriggerSync) },
                 modifier = Modifier.padding(it)
             ) {
-                Crossfade(currentPage, label = "Main Content Crossfade") { page ->
-                    saveableStateHolder.SaveableStateProvider(page) {
-                        CircuitContent(
-                            screen = DashboardPage.forPage(page),
-                            onNavEvent = {
-                                when (it) {
-                                    is NavEvent.GoTo -> when (val screen = it.screen) {
-                                        AllFavoritesScreen -> {
-                                            saveableStateHolder.removeState(Page.FAVORITE_TOOLS)
-                                            viewModel.updateCurrentPage(Page.FAVORITE_TOOLS, false)
-                                        }
-
-                                        is IntentScreen -> onEvent(DashboardEvent.OpenIntent(screen.intent))
-
-                                        is ToolDetailsScreen -> onEvent(
-                                            DashboardEvent.OpenToolDetails(screen.initialTool, screen.secondLanguage)
-                                        )
-                                    }
-
-                                    is NavEvent.ResetRoot -> when (it.newRoot) {
-                                        ToolsScreen -> viewModel.updateCurrentPage(Page.ALL_TOOLS)
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                }
+                NavigableCircuitContent(
+                    navigator = state.pageNavigator,
+                    backStack = state.pageBackStack,
+                )
             }
         }
     }
 }
 
 @Composable
-private fun DashboardLayoutAnalytics(page: Page) {
+private fun DashboardLayoutAnalytics(screen: Screen) {
     val eventBus = LocalEventBus.current
-    when (page) {
-        Page.LESSONS -> {
+    when (screen) {
+        is LessonsScreen -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_LESSONS))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_LESSONS))
             }
         }
 
-        Page.HOME, Page.FAVORITE_TOOLS -> {
+        is HomeScreen, is AllFavoritesScreen -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_HOME))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_HOME))
             }
         }
 
-        Page.ALL_TOOLS -> {
+        is ToolsScreen -> {
             RecordAnalyticsScreen(AnalyticsScreenEvent(AnalyticsScreenNames.DASHBOARD_ALL_TOOLS))
             LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
                 eventBus.post(FirebaseIamActionEvent(ACTION_IAM_ALL_TOOLS))
@@ -201,27 +212,27 @@ private fun DashboardLayoutAnalytics(page: Page) {
 }
 
 @Composable
-private fun DashboardBottomNavBar(currentPage: Page, onSelectPage: (Page) -> Unit) {
+private fun DashboardBottomNavBar(currentScreen: Screen, onSelectPage: (DashboardPage) -> Unit) {
     NavigationBar(modifier = Modifier.shadow(8.dp, clip = false)) {
         NavigationBarItem(
             icon = { Icon(painterResource(R.drawable.ic_lessons), stringResource(R.string.nav_lessons)) },
             label = { Text(stringResource(R.string.nav_lessons)) },
-            selected = currentPage == Page.LESSONS,
-            onClick = { onSelectPage(Page.LESSONS) },
+            selected = currentScreen == LessonsScreen,
+            onClick = { onSelectPage(LessonsScreen) },
         )
 
         NavigationBarItem(
             icon = { Icon(painterResource(R.drawable.ic_favorite_24dp), stringResource(R.string.nav_favorite_tools)) },
             label = { Text(stringResource(R.string.nav_favorite_tools)) },
-            selected = currentPage == Page.HOME || currentPage == Page.FAVORITE_TOOLS,
-            onClick = { onSelectPage(Page.HOME) },
+            selected = currentScreen == HomeScreen || currentScreen == AllFavoritesScreen,
+            onClick = { onSelectPage(HomeScreen) },
         )
 
         NavigationBarItem(
             icon = { Icon(painterResource(R.drawable.ic_all_tools), stringResource(R.string.nav_all_tools)) },
             label = { Text(stringResource(R.string.nav_all_tools)) },
-            selected = currentPage == Page.ALL_TOOLS,
-            onClick = { onSelectPage(Page.ALL_TOOLS) },
+            selected = currentScreen == ToolsScreen,
+            onClick = { onSelectPage(ToolsScreen) },
         )
     }
 }

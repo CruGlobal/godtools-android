@@ -181,9 +181,10 @@ dependencies {
     implementation(libs.godtoolsShared.common)
 
     api(libs.eventbus)
+    implementation(libs.circuit.overlay)
     implementation(libs.circuitx.android)
     implementation(libs.circuitx.effects)
-    implementation(libs.circuit.overlay)
+    implementation(libs.circuitx.navigation)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)

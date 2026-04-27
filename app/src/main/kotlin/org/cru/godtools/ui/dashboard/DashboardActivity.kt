@@ -76,13 +76,9 @@ class DashboardActivity : BaseActivity() {
                         DashboardLayout(
                             requestPermission = { optInNotificationController.requestNotificationPermission() },
                             onEvent = { e ->
-                                @Suppress("ktlint:standard:blank-line-between-when-conditions")
                                 when (e) {
                                     is DashboardEvent.OpenIntent -> startActivity(e.intent)
-                                    is DashboardEvent.OpenTool ->
-                                        openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                                    is DashboardEvent.OpenToolDetails ->
-                                        e.tool?.let { startCircuitActivity(ToolDetailsScreen(it, e.lang)) }
+                                    is DashboardEvent.OpenScreen -> startCircuitActivity(e.screen)
                                 }
                             },
                         )
