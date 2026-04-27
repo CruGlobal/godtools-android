@@ -10,18 +10,15 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
-import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.overlay.OverlayEffect
 import com.slack.circuitx.android.IntentScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -35,12 +32,10 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.onboarding.OnboardingScreen
-import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
@@ -156,19 +151,5 @@ class DashboardActivity : BaseActivity() {
         optInNotificationController.isOnboardingLaunch = true
         startCircuitActivity(OnboardingScreen)
     }
-
-    // region ToolsAdapterCallbacks
-    @Inject
-    internal lateinit var lazyManifestManager: Lazy<ManifestManager>
-    private val manifestManager get() = lazyManifestManager.get()
-
-    private fun openTool(tool: String?, type: Tool.Type?, vararg languages: Locale) {
-        if (tool == null || type == null) return
-        if (languages.isEmpty()) return
-
-        languages.forEach { manifestManager.preloadLatestPublishedManifest(tool, it) }
-        openToolActivity(tool, type, *languages)
-    }
-    // endregion ToolsAdapterCallbacks
     // endregion UI
 }
