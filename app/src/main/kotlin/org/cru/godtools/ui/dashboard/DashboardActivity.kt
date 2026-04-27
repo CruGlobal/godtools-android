@@ -10,10 +10,15 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuitx.android.IntentScreen
 import dagger.Lazy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -26,6 +31,7 @@ import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
@@ -92,13 +98,16 @@ class DashboardActivity : BaseActivity() {
                         }
                         // endregion optInNotification
 
-                        DashboardLayout(
-                            onEvent = { e ->
-                                when (e) {
-                                    is DashboardEvent.OpenIntent -> startActivity(e.intent)
-                                    is DashboardEvent.OpenScreen -> startCircuitActivity(e.screen)
+                        CircuitContent(
+                            DashboardScreen(),
+                            onNavEvent = {
+                                if (it !is NavEvent.GoTo) return@CircuitContent
+
+                                when (val screen = it.screen) {
+                                    is IntentScreen -> screen.startWith(this)
+                                    else -> startCircuitActivity(screen)
                                 }
-                            },
+                            }
                         )
                     }
                 }

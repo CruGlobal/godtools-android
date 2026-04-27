@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import com.slack.circuit.backstack.BackStack
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.backstack.rememberSaveableBackStack
+import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.foundation.Navigator
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -17,6 +18,7 @@ import com.slack.circuitx.navigation.intercepting.rememberInterceptingNavigator
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncTracker
@@ -86,6 +88,7 @@ class DashboardPresenter @AssistedInject internal constructor(
     }
 
     @AssistedFactory
+    @CircuitInject(DashboardScreen::class, SingletonComponent::class)
     interface Factory {
         fun create(navigator: Navigator, screen: DashboardScreen): DashboardPresenter
     }
