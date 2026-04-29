@@ -31,10 +31,6 @@ fun Activity.startDashboardActivity() = startActivity(createDashboardIntent())
 private fun Context.createDashboardIntent() = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
 // endregion DashboardActivity
 
-// region AppLanguageActivity
-fun Context.startAppLanguageActivity() = startActivity(createCircuitActivityIntent(AppLanguageScreen))
-// endregion AppLanguageActivity
-
 // region ArticlesActivity
 private const val ACTIVITY_CLASS_ARTICLES = "org.cru.godtools.article.ui.ArticlesActivity"
 
