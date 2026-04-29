@@ -45,7 +45,7 @@ class OnboardingPresenterTest {
     fun `Initial State - currentPage is 0`() = runTest {
         createPresenter().test {
             val state = awaitItem()
-            assertEquals(0, state.currentPage)
+            assertEquals(0, state.pagerState.currentPage)
         }
     }
 
