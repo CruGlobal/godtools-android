@@ -27,7 +27,7 @@ import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
 import org.cru.godtools.shared.analytics.TutorialAnalyticsActionNames
 import org.cru.godtools.tutorial.analytics.model.TutorialAnalyticsActionEvent
-import org.cru.godtools.ui.languages.country.CountrySettingsScreen
+import org.cru.godtools.ui.settings.country.CountrySettingsScreen
 import org.cru.godtools.ui.onboarding.OnboardingPresenter.UiState
 import org.greenrobot.eventbus.EventBus
 
