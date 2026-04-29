@@ -113,7 +113,7 @@ class AppLanguagePresenterTest {
     fun `Event - NavigateBack`() = runTest {
         presenter.test {
             awaitItem().eventSink(UiEvent.NavigateBack)
-            assertEquals(AppLanguageScreen.Result.Dismiss, navigator.awaitPop().result)
+            assertEquals(AppLanguageScreen.Result.Dismissed, navigator.awaitPop().result)
         }
     }
     // endregion Event.NavigateBack

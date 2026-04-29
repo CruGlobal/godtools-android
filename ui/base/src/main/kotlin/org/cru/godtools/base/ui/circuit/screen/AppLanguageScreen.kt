@@ -8,6 +8,6 @@ import kotlinx.parcelize.Parcelize
 data object AppLanguageScreen : Screen {
     sealed interface Result : PopResult {
         @Parcelize data object LanguageSelected : Result
-        @Parcelize data object Dismiss : Result
+        @Parcelize data object Dismissed : Result
     }
 }

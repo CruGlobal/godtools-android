@@ -72,7 +72,7 @@ class CountrySettingsPresenter @AssistedInject constructor(
             countryCode = settingCountryCode,
             eventSink = { event ->
                 when (event) {
-                    UiEvent.NavigateBack -> navigator.pop(CountrySettingsScreen.Result.Dismiss)
+                    UiEvent.NavigateBack -> navigator.pop(CountrySettingsScreen.Result.Dismissed)
 
                     is UiEvent.SelectCountry -> {
                         scope.launch {

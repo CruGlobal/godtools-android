@@ -57,7 +57,7 @@ class AppLanguagePresenter @AssistedInject constructor(
         val eventSink: (UiEvent) -> Unit = remember {
             {
                 when (it) {
-                    UiEvent.NavigateBack -> navigator.pop(AppLanguageScreen.Result.Dismiss)
+                    UiEvent.NavigateBack -> navigator.pop(AppLanguageScreen.Result.Dismissed)
 
                     is UiEvent.SelectLanguage -> {
                         if (it.language == appLocale) {
