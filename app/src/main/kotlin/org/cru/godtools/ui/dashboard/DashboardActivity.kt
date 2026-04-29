@@ -34,13 +34,10 @@ import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
-import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.analytics.LaunchTrackingViewModel
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
-import org.cru.godtools.base.ui.EXTRA_DASHBOARD_PAGE
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
-import org.cru.godtools.base.ui.circuit.screen.dashboard.page.DashboardPage
 import org.cru.godtools.base.ui.circuit.startCircuitActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
@@ -154,23 +151,14 @@ class DashboardActivity : BaseActivity() {
 
     // region Intent processing
     private fun processIntent(intent: Intent): DashboardScreen? {
-        val dashboardPage = intent.getParcelableExtraCompat(EXTRA_DASHBOARD_PAGE, DashboardPage::class.java)
-
-        return when {
-            dashboardPage != null -> DashboardScreen(dashboardPage)
-
-            intent.action == Intent.ACTION_VIEW -> {
-                val uri = intent.data
-                val screens = when {
-                    uri == null -> emptyList()
-                    DashboardDeepLinkParser.isDeepLinkSupported(uri) -> DashboardDeepLinkParser.parseDeepLink(uri)
-                    else -> emptyList()
-                }
-                screens.filterIsInstance<DashboardScreen>().firstOrNull()
-            }
-
-            else -> null
+        val uri = intent.data
+        if (intent.action == Intent.ACTION_VIEW && uri != null && DashboardDeepLinkParser.isDeepLinkSupported(uri)) {
+            return DashboardDeepLinkParser.parseDeepLink(uri)
+                .filterIsInstance<DashboardScreen>()
+                .firstOrNull()
         }
+
+        return null
     }
     // endregion Intent processing
 

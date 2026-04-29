@@ -1,7 +1,6 @@
 package org.cru.godtools.base.ui.circuit.screen.dashboard.page
 
 import kotlinx.parcelize.Parcelize
-import org.cru.godtools.base.ui.dashboard.Page
 
 @Parcelize
-data object ToolsScreen : DashboardPage(Page.ALL_TOOLS)
+data object ToolsScreen : DashboardPage()
