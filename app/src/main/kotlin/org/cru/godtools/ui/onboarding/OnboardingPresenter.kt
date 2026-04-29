@@ -1,10 +1,14 @@
 package org.cru.godtools.ui.onboarding
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -17,6 +21,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.launch
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
@@ -32,7 +37,7 @@ class OnboardingPresenter @AssistedInject constructor(
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     data class UiState(
-        val currentPage: Int = 0,
+        val pagerState: PagerState,
         val userScrollEnabled: Boolean = false,
         val eventSink: (UiEvent) -> Unit = {}
     ) : CircuitUiState
@@ -47,9 +52,15 @@ class OnboardingPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UiState {
         var languageWasSet by rememberSaveable { mutableStateOf(false) }
-        var currentPage by rememberSaveable { mutableIntStateOf(0) }
+        val pagerState = rememberPagerState(pageCount = { 4 })
+        val scope = rememberCoroutineScope()
         val countrySettingsNavigator = rememberAnsweringNavigator<CountrySettingsScreen.Result>(navigator) {
-            currentPage = 1
+            scope.launch {
+                pagerState.animateScrollToPage(
+                    1,
+                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                )
+            }
         }
         val languageButtonNavigator = rememberAnsweringNavigator<AppLanguageScreen.Result>(navigator) { result ->
             if (result is AppLanguageScreen.Result.LanguageSelected) {
@@ -63,8 +74,10 @@ class OnboardingPresenter @AssistedInject constructor(
             }
         }
         LaunchedEffect(Unit) { settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING) }
-
-        val eventSink: (UiEvent) -> Unit = { event ->
+        return UiState(
+            pagerState = pagerState,
+            userScrollEnabled = pagerState.currentPage > 0
+        ) { event ->
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
@@ -87,12 +100,6 @@ class OnboardingPresenter @AssistedInject constructor(
                 }
             }
         }
-
-        return UiState(
-            currentPage = currentPage,
-            userScrollEnabled = currentPage > 0,
-            eventSink = eventSink
-        )
     }
 
     @AssistedFactory
