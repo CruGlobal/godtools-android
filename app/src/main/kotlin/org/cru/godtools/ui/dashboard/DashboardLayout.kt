@@ -23,12 +23,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import com.slack.circuit.backstack.BackStack
 import com.slack.circuit.backstack.isAtRoot
+import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.foundation.NavEvent
 import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.rememberCircuitNavigator
+import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.navigation.currentScreen
 import com.slack.circuit.runtime.resetRoot
 import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuitx.navigation.intercepting.InterceptedResult
+import com.slack.circuitx.navigation.intercepting.NavigationContext
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.SuccessConsumed
+import com.slack.circuitx.navigation.intercepting.rememberInterceptingNavigator
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.navigationdrawer.toggle
@@ -49,18 +59,21 @@ import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
+import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 @CircuitInject(DashboardScreen::class, SingletonComponent::class)
-internal fun DashboardLayout(state: DashboardPresenter.UiState, modifier: Modifier = Modifier) {
+internal fun DashboardLayout(state: UiState, modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
-    val currentScreen = state.pageBackStack.currentScreen ?: HomeScreen
+    val backStack = rememberSaveableBackStack(state.initialPage)
+    val navigator = rememberDashboardPageNavigator(backStack, state.eventSink)
+    val currentScreen = backStack.currentScreen ?: HomeScreen
 
     AppUpdateSnackbar(state.snackbarState)
-    DashboardLayoutAnalytics(state.pageBackStack.currentScreen ?: HomeScreen)
+    DashboardLayoutAnalytics(currentScreen)
 
     DrawerMenuLayout(state.drawerState, modifier = modifier) {
         Scaffold(
@@ -69,7 +82,7 @@ internal fun DashboardLayout(state: DashboardPresenter.UiState, modifier: Modifi
                     title = {},
                     navigationIcon = {
                         when {
-                            !state.pageBackStack.isAtRoot -> IconButton(onClick = { state.pageNavigator.pop() }) {
+                            !backStack.isAtRoot -> IconButton(onClick = { navigator.pop() }) {
                                 Icon(Icons.AutoMirrored.Default.ArrowBack, null)
                             }
 
@@ -84,9 +97,7 @@ internal fun DashboardLayout(state: DashboardPresenter.UiState, modifier: Modifi
             bottomBar = {
                 DashboardBottomNavBar(
                     currentScreen,
-                    onSelectPage = {
-                        state.pageNavigator.resetRoot(it, saveState = true, restoreState = it != HomeScreen)
-                    }
+                    onSelectPage = { navigator.resetRoot(it, saveState = true, restoreState = it != HomeScreen) }
                 )
             },
             snackbarHost = { SnackbarHost(state.snackbarState) }
@@ -97,13 +108,48 @@ internal fun DashboardLayout(state: DashboardPresenter.UiState, modifier: Modifi
                 modifier = Modifier.padding(it)
             ) {
                 NavigableCircuitContent(
-                    navigator = state.pageNavigator,
-                    backStack = state.pageBackStack,
+                    navigator = navigator,
+                    backStack = backStack,
                 )
             }
         }
     }
 }
+
+@Composable
+private fun rememberDashboardPageNavigator(
+    backStack: BackStack<out BackStack.Record>,
+    eventSink: (UiEvent) -> Unit,
+): Navigator = rememberInterceptingNavigator(
+    rememberCircuitNavigator(backStack) { result ->
+        eventSink(UiEvent.NestedNavEvent(NavEvent.Pop(result)))
+    },
+    interceptors = listOf(
+        object : NavigationInterceptor {
+            override fun goTo(screen: Screen, navigationContext: NavigationContext) = when (screen) {
+                is DashboardPage -> InterceptedResult.Skipped
+
+                else -> {
+                    eventSink(UiEvent.NestedNavEvent(NavEvent.GoTo(screen)))
+                    SuccessConsumed
+                }
+            }
+
+            override fun resetRoot(
+                newRoot: Screen,
+                options: Navigator.StateOptions,
+                navigationContext: NavigationContext,
+            ) = when (newRoot) {
+                is DashboardPage -> InterceptedResult.Skipped
+
+                else -> {
+                    eventSink(UiEvent.NestedNavEvent(NavEvent.ResetRoot(newRoot, options)))
+                    SuccessConsumed
+                }
+            }
+        }
+    )
+)
 
 @Composable
 private fun DashboardLayoutAnalytics(screen: Screen) {
