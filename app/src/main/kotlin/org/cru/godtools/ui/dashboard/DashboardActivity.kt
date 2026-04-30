@@ -7,30 +7,43 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
+import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.foundation.onNavEvent
+import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
-import dagger.Lazy
+import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuitx.android.IntentScreen
+import com.slack.circuitx.navigation.intercepting.InterceptedResult
+import com.slack.circuitx.navigation.intercepting.NavigationContext
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.SuccessConsumed
+import com.slack.circuitx.navigation.intercepting.rememberInterceptingNavigator
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import org.ccci.gto.android.common.compat.content.getSerializableExtraCompat
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import org.cru.godtools.analytics.LaunchTrackingViewModel
-import org.cru.godtools.base.EXTRA_PAGE
 import org.cru.godtools.base.Settings.Companion.FEATURE_TUTORIAL_ONBOARDING
-import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.activity.BaseActivity
+import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.startCircuitActivity
-import org.cru.godtools.base.ui.dashboard.Page
 import org.cru.godtools.base.ui.theme.GodToolsTheme
-import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationController
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
+import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.onboarding.OnboardingScreen
-import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.util.openToolActivity
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
@@ -46,13 +59,26 @@ class DashboardActivity : BaseActivity() {
     lateinit var permissionLauncher: ActivityResultLauncher<String>
     var permissionContinuation: Continuation<Boolean>? = null
 
+    // region Circuit
     @Inject
     lateinit var circuit: Circuit
+    private val deepLinkNavEvents = Channel<NavEvent>(Channel.UNLIMITED)
+
+    private val navigationInterceptor = object : NavigationInterceptor {
+        override fun goTo(screen: Screen, navigationContext: NavigationContext): InterceptedResult {
+            when (screen) {
+                is IntentScreen -> screen.startWith(this@DashboardActivity)
+                else -> startCircuitActivity(screen)
+            }
+            return SuccessConsumed
+        }
+    }
+    // endregion Circuit
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) intent?.let { processIntent(it) }
+        val initialScreen = intent?.let { processIntent(it) } ?: DashboardScreen()
         triggerOnboardingIfNecessary()
 
         // region optInNotification
@@ -73,18 +99,34 @@ class DashboardActivity : BaseActivity() {
             CircuitCompositionLocals(circuit) {
                 GodToolsTheme {
                     ContentWithOverlays {
-                        DashboardLayout(
-                            requestPermission = { optInNotificationController.requestNotificationPermission() },
-                            onEvent = { e ->
-                                @Suppress("ktlint:standard:blank-line-between-when-conditions")
-                                when (e) {
-                                    is DashboardEvent.OpenIntent -> startActivity(e.intent)
-                                    is DashboardEvent.OpenTool ->
-                                        openTool(e.tool, e.type, *listOfNotNull(e.lang1, e.lang2).toTypedArray())
-                                    is DashboardEvent.OpenToolDetails ->
-                                        e.tool?.let { startCircuitActivity(ToolDetailsScreen(it, e.lang)) }
-                                }
-                            },
+                        // region optInNotification
+                        val showOverlay by viewModel.showOptInNotification.collectAsState()
+
+                        if (showOverlay) {
+                            OverlayEffect {
+                                val overlay = OptInNotificationModalOverlay(
+                                    requestPermission = { optInNotificationController.requestNotificationPermission() },
+                                    isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
+                                )
+                                show(overlay)
+                                viewModel.setShowOptInNotification(false)
+                            }
+                        }
+                        // endregion optInNotification
+
+                        val backStack = rememberSaveableBackStack(initialScreen)
+                        val navigator = rememberInterceptingNavigator(
+                            rememberCircuitNavigator(backStack),
+                            interceptors = remember { listOf(navigationInterceptor) }
+                        )
+
+                        LaunchedEffect(deepLinkNavEvents) {
+                            deepLinkNavEvents.consumeEach { navigator.onNavEvent(it) }
+                        }
+
+                        NavigableCircuitContent(
+                            navigator,
+                            backStack,
                         )
                     }
                 }
@@ -94,7 +136,10 @@ class DashboardActivity : BaseActivity() {
 
     override fun onNewIntent(newIntent: Intent) {
         super.onNewIntent(newIntent)
-        processIntent(newIntent)
+        val screen = processIntent(newIntent)
+        if (screen != null) {
+            deepLinkNavEvents.trySend(NavEvent.ResetRoot(screen))
+        }
     }
 
     override fun onResume() {
@@ -105,26 +150,15 @@ class DashboardActivity : BaseActivity() {
     // endregion Lifecycle
 
     // region Intent processing
-    private fun processIntent(intent: Intent) {
-        val page = intent.getSerializableExtraCompat(EXTRA_PAGE, Page::class.java)
-        when {
-            page != null -> viewModel.updateCurrentPage(page)
-
-            intent.action == Intent.ACTION_VIEW -> {
-                val data = intent.data
-                when {
-                    data == null -> Unit
-
-                    data.isDashboardCustomUriSchemeDeepLink() ->
-                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(1)))
-
-                    data.isDashboardDynalinksDeepLink() || data.isDashboardGodToolsDeepLink() ->
-                        viewModel.updateCurrentPage(findPageByUriPathSegment(data.pathSegments.getOrNull(2)))
-
-                    data.isDashboardLessonsDeepLink() -> viewModel.updateCurrentPage(Page.LESSONS)
-                }
-            }
+    private fun processIntent(intent: Intent): DashboardScreen? {
+        val uri = intent.data
+        if (intent.action == Intent.ACTION_VIEW && uri != null && DashboardDeepLinkParser.isDeepLinkSupported(uri)) {
+            return DashboardDeepLinkParser.parseDeepLink(uri)
+                .filterIsInstance<DashboardScreen>()
+                .firstOrNull()
         }
+
+        return null
     }
     // endregion Intent processing
 
@@ -133,19 +167,4 @@ class DashboardActivity : BaseActivity() {
         optInNotificationController.isOnboardingLaunch = true
         startCircuitActivity(OnboardingScreen)
     }
-
-    // region ToolsAdapterCallbacks
-    @Inject
-    internal lateinit var lazyManifestManager: Lazy<ManifestManager>
-    private val manifestManager get() = lazyManifestManager.get()
-
-    private fun openTool(tool: String?, type: Tool.Type?, vararg languages: Locale) {
-        if (tool == null || type == null) return
-        if (languages.isEmpty()) return
-
-        languages.forEach { manifestManager.preloadLatestPublishedManifest(tool, it) }
-        openToolActivity(tool, type, *languages)
-    }
-    // endregion ToolsAdapterCallbacks
-    // endregion UI
 }

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import org.cru.godtools.R
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState

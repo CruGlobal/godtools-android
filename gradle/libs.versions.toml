@@ -92,6 +92,7 @@ circuit-test = { module = "com.slack.circuit:circuit-test", version.ref = "circu
 circuitx-android = { module = "com.slack.circuit:circuitx-android", version.ref = "circuit" }
 circuitx-effects = { module = "com.slack.circuit:circuitx-effects", version.ref = "circuit" }
 circuitx-gesture-navigation = { module = "com.slack.circuit:circuitx-gesture-navigation", version.ref = "circuit" }
+circuitx-navigation = { module = "com.slack.circuit:circuitx-navigation", version.ref = "circuit" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil" }
 colormath-android-colorint = { module = "com.github.ajalt.colormath:colormath-ext-android-colorint", version.ref = "colormath" }
@@ -166,6 +167,7 @@ gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.re
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
+gtoSupport-turbine = { module = "org.ccci.gto.android:gto-support-turbine", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 gtoSupport-viewpager = { module = "org.ccci.gto.android:gto-support-viewpager", version.ref = "gtoSupport" }
 guava = "com.google.guava:guava:33.6.0-android"

@@ -26,12 +26,14 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTIO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_HOME_FAVORITE_TOOLS
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
-import org.cru.godtools.ui.dashboard.tools.ToolsScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter

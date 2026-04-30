@@ -11,6 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuitx.android.IntentScreen
@@ -25,10 +27,10 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FAVORITE
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
-import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen.UiEvent
-import org.cru.godtools.ui.dashboard.home.AllFavoritesScreen.UiState
+import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -44,6 +46,17 @@ class AllFavoritesPresenter @AssistedInject constructor(
     @Assisted
     private val navigator: Navigator,
 ) : Presenter<UiState> {
+    @ConsistentCopyVisibility
+    data class UiState internal constructor(
+        val tools: List<ToolCard.State> = emptyList(),
+        internal val eventSink: (UiEvent) -> Unit = {},
+    ) : CircuitUiState
+
+    internal sealed interface UiEvent : CircuitUiEvent {
+        data class MoveTool(val from: Int, val to: Int) : UiEvent
+        data object CommitToolOrder : UiEvent
+    }
+
     @Composable
     override fun present(): UiState {
         val scope = rememberCoroutineScope()

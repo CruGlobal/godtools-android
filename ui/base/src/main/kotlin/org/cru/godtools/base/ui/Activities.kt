@@ -19,7 +19,6 @@ import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.circuit.createCircuitActivityIntent
 import org.cru.godtools.base.ui.circuit.screen.AppLanguageScreen
-import org.cru.godtools.base.ui.dashboard.Page
 
 const val EXTRA_SHOW_TIPS = "org.cru.godtools.base.tool.activity.MultiLanguageToolActivity.SHOW_TIPS"
 const val EXTRA_SAVE_LANGUAGE_SETTINGS =
@@ -28,10 +27,8 @@ const val EXTRA_SAVE_LANGUAGE_SETTINGS =
 // region DashboardActivity
 private const val ACTIVITY_CLASS_DASHBOARD = "org.cru.godtools.ui.dashboard.DashboardActivity"
 
-fun Activity.startDashboardActivity(page: Page? = null) = startActivity(createDashboardIntent(page))
-
-fun Context.createDashboardIntent(page: Page?) = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
-    .putExtra(EXTRA_PAGE, page)
+fun Activity.startDashboardActivity() = startActivity(createDashboardIntent())
+private fun Context.createDashboardIntent() = Intent().setClassName(this, ACTIVITY_CLASS_DASHBOARD)
 // endregion DashboardActivity
 
 // region AppLanguageActivity

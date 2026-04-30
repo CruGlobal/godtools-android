@@ -166,6 +166,7 @@ dependencies {
     implementation(libs.gtoSupport.kermit)
     implementation(libs.gtoSupport.kotlin.coroutines)
     implementation(libs.gtoSupport.lottie)
+    implementation(libs.gtoSupport.sync)
     implementation(libs.gtoSupport.util)
 
     implementation(libs.firebase.crashlytics)
@@ -180,9 +181,10 @@ dependencies {
     implementation(libs.godtoolsShared.common)
 
     api(libs.eventbus)
+    implementation(libs.circuit.overlay)
     implementation(libs.circuitx.android)
     implementation(libs.circuitx.effects)
-    implementation(libs.circuit.overlay)
+    implementation(libs.circuitx.navigation)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
     implementation(libs.hilt)
@@ -213,6 +215,7 @@ dependencies {
     testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.coil.test)
     testImplementation(libs.gtoSupport.testing.dagger)
+    testImplementation(libs.gtoSupport.turbine)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.testparameterinjector)
