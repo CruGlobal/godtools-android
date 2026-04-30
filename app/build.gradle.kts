@@ -215,6 +215,7 @@ dependencies {
     testImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.coil.test)
     testImplementation(libs.gtoSupport.testing.dagger)
+    testImplementation(libs.gtoSupport.turbine)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.testparameterinjector)

@@ -167,6 +167,7 @@ gtoSupport-sync = { module = "org.ccci.gto.android:gto-support-sync", version.re
 gtoSupport-testing-dagger = { module = "org.ccci.gto.android.testing:gto-support-dagger", version.ref = "gtoSupport" }
 gtoSupport-testing-picasso = { module = "org.ccci.gto.android.testing:gto-support-picasso", version.ref = "gtoSupport" }
 gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support-timber", version.ref = "gtoSupport" }
+gtoSupport-turbine = { module = "org.ccci.gto.android:gto-support-turbine", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 gtoSupport-viewpager = { module = "org.ccci.gto.android:gto-support-viewpager", version.ref = "gtoSupport" }
 guava = "com.google.guava:guava:33.6.0-android"
