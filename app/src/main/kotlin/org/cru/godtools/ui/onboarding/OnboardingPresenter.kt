@@ -52,9 +52,11 @@ class OnboardingPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UiState {
         var languageWasSet by rememberSaveable { mutableStateOf(false) }
+        var hasSeenCountrySettings by rememberSaveable { mutableStateOf(false) }
         val pagerState = rememberPagerState(pageCount = { 4 })
         val scope = rememberCoroutineScope()
         val countrySettingsNavigator = rememberAnsweringNavigator<CountrySettingsScreen.Result>(navigator) {
+            hasSeenCountrySettings = true
             scope.launch {
                 pagerState.animateScrollToPage(
                     1,
@@ -76,14 +78,21 @@ class OnboardingPresenter @AssistedInject constructor(
         LaunchedEffect(Unit) { settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING) }
         return UiState(
             pagerState = pagerState,
-            userScrollEnabled = pagerState.currentPage > 0
+            userScrollEnabled = pagerState.currentPage > 0 || languageWasSet
         ) { event ->
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
                 UiEvent.Next -> {
-                    if (languageWasSet) {
+                    if (languageWasSet && !hasSeenCountrySettings) {
                         countrySettingsNavigator.goTo(CountrySettingsScreen)
+                    } else if (hasSeenCountrySettings) {
+                        scope.launch {
+                            pagerState.animateScrollToPage(
+                                1,
+                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                            )
+                        }
                     } else {
                         nextButtonNavigator.goTo(AppLanguageScreen)
                     }
