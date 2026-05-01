@@ -6,8 +6,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jeppeman.mockposable.mockk.everyComposable
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.InternalCircuitApi
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import java.util.Locale
@@ -19,18 +24,25 @@ import kotlin.test.assertNull
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
@@ -46,9 +58,23 @@ import org.robolectric.annotation.Config
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsPresenterTest {
     private var isPersonalizationEnabled = false
+    private val countryFlow = MutableStateFlow<String?>("US")
     private val toolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
+    private val toolOrderSync = Channel<Boolean>()
 
+    private val testScope = TestScope()
+    @OptIn(InternalCircuitApi::class)
+    private val circuitContext = CircuitContext(null).apply {
+        syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
+    }
+    private val settings: Settings = mockk {
+        every { appLanguage } returns Locale.ENGLISH
+        every { getCountrySettingFlow() } returns countryFlow
+    }
+    private val syncService: GodToolsSyncService = mockk {
+        coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
+    }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any(), any()) } returns filteredToolsFlow
@@ -70,11 +96,14 @@ class ToolsPresenterTest {
     private val presenter = ToolsPresenter(
         eventBus = mockk(),
         remoteConfig = remoteConfig,
+        settings = settings,
         toolCardPresenter = toolCardPresenter,
         toolsRepository = toolsRepository,
         favoriteToolsBannerPresenter = favoriteToolsBannerPresenter,
         filteredToolsFlowProducer = filteredToolsFlowProducer,
         toolFiltersStateProducer = toolFiltersStateProducer,
+        syncService = syncService,
+        circuitContext = circuitContext,
         navigator = navigator,
     )
 
@@ -83,7 +112,7 @@ class ToolsPresenterTest {
 
     // region State.banner
     @Test
-    fun `State - banner - none`() = runTest {
+    fun `State - banner - none`() = testScope.runTest {
         favoriteToolsBannerPresenter.updateState(null)
         presenter.test {
             assertNull(expectMostRecentItem().banner)
@@ -91,7 +120,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `State - banner - favorites`() = runTest {
+    fun `State - banner - favorites`() = testScope.runTest {
         val bannerState = FavoriteToolsBannerPresenter.UiState()
         favoriteToolsBannerPresenter.updateState(bannerState)
         presenter.test {
@@ -102,7 +131,7 @@ class ToolsPresenterTest {
 
     // region State.mode
     @Test
-    fun `State - mode - personalization enabled`() = runTest {
+    fun `State - mode - personalization enabled`() = testScope.runTest {
         isPersonalizationEnabled = true
 
         presenter.test {
@@ -117,7 +146,7 @@ class ToolsPresenterTest {
 
     // region State.tools
     @Test
-    fun `State - tools - shows tools from filteredToolsFlowProducer`() = runTest {
+    fun `State - tools - shows tools from filteredToolsFlowProducer`() = testScope.runTest {
         val tool = randomTool(isHidden = false)
         filteredToolsFlow.value = listOf(tool)
 
@@ -127,7 +156,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `State - tools - updates when filtered tools change`() = runTest {
+    fun `State - tools - updates when filtered tools change`() = testScope.runTest {
         val tool = randomTool(isHidden = false)
 
         presenter.test {
@@ -139,7 +168,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `State - tools - shows tools from correct mode flow`() = runTest {
+    fun `State - tools - shows tools from correct mode flow`() = testScope.runTest {
         isPersonalizationEnabled = true
         val personalizationTools = List(2) { randomTool(isHidden = false) }
         val allToolsList = List(3) { randomTool(isHidden = false) }
@@ -160,7 +189,7 @@ class ToolsPresenterTest {
 
     // region State.spotlightTools
     @Test
-    fun `Property spotlightTools`() = runTest {
+    fun `Property spotlightTools`() = testScope.runTest {
         val normalTool = randomTool("normal", isHidden = false, isSpotlight = false)
         val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
 
@@ -171,7 +200,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `Property spotlightTools - Don't show hidden tools`() = runTest {
+    fun `Property spotlightTools - Don't show hidden tools`() = testScope.runTest {
         val hiddenTool = randomTool("normal", isHidden = true, isSpotlight = true)
         val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
 
@@ -182,7 +211,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `Property spotlightTools - Sorted by default order`() = runTest {
+    fun `Property spotlightTools - Sorted by default order`() = testScope.runTest {
         val tools = List(10) {
             randomTool("tool$it", Tool.Type.TRACT, defaultOrder = it, isHidden = false, isSpotlight = true)
         }
@@ -194,7 +223,7 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `Property spotlightTools - Don't show spotlight tools for ALL_TOOLS`() = runTest {
+    fun `Property spotlightTools - Don't show spotlight tools for ALL_TOOLS`() = testScope.runTest {
         isPersonalizationEnabled = true
         val normalTool = randomTool("normal", isHidden = false, isSpotlight = false)
         val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
@@ -212,7 +241,7 @@ class ToolsPresenterTest {
 
     // region State.filters
     @Test
-    fun `State - filters - uses current mode`() = runTest {
+    fun `State - filters - uses current mode`() = testScope.runTest {
         isPersonalizationEnabled = true
 
         presenter.test {
@@ -226,7 +255,7 @@ class ToolsPresenterTest {
 
     @Test
     @OptIn(ExperimentalUuidApi::class)
-    fun `State - filters`() = runTest {
+    fun `State - filters`() = testScope.runTest {
         val filters = ToolFiltersStateProducer.Filters(
             categoryFilter = FilterMenu.UiState(
                 menuExpanded = mutableStateOf(Random.nextBoolean()),
@@ -258,6 +287,60 @@ class ToolsPresenterTest {
         }
     }
     // endregion State.filters
+
+    // region SideEffect - RegisterSyncTask
+    @Test
+    fun `SideEffect - RegisterSyncTask - Triggers initial sync`() = testScope.runTest {
+        presenter.test {
+            awaitInitialItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
+        toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
+            languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
+        )
+
+        presenter.test {
+            awaitInitialItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - re-syncs when locale changes`() = testScope.runTest {
+        presenter.test {
+            awaitInitialItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
+                languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
+            )
+            awaitItemMatching { it.filters.languageFilter.selectedItem?.code == Locale.FRENCH }
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - passes force on triggered sync`() = testScope.runTest {
+        presenter.test {
+            awaitInitialItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            circuitContext.syncTaskRegistry!!.triggerSyncTasks(force = true)
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", true) }
+        }
+    }
+    // endregion SideEffect - RegisterSyncTask
 
     private suspend fun ReceiveTurbine<UiState>.awaitInitialItem() = awaitItemMatching { it.dataLoaded }
 }

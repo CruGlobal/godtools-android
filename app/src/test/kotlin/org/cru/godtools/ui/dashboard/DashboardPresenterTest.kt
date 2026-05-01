@@ -5,6 +5,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.foundation.NavEvent
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.InternalCircuitApi
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.coEvery
@@ -14,6 +16,8 @@ import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
@@ -27,6 +31,7 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -36,9 +41,11 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 @Suppress("DeferredResultUnused")
+@OptIn(InternalCircuitApi::class)
 class DashboardPresenterTest {
     private val screen = DashboardScreen(HomeScreen)
     private val syncLock = Mutex(true)
+    private val circuitContext = CircuitContext(null)
 
     private val drawerMenuPresenter: DrawerMenuPresenter = mockk {
         everyComposable { present() } returns DrawerMenuScreen.State()
@@ -55,6 +62,7 @@ class DashboardPresenterTest {
     private val presenter = DashboardPresenter(
         drawerMenuPresenter = drawerMenuPresenter,
         syncService = syncService,
+        circuitContext = circuitContext,
         navigator = navigator,
         screen = screen,
     )
@@ -72,6 +80,7 @@ class DashboardPresenterTest {
         val presenter = DashboardPresenter(
             drawerMenuPresenter = drawerMenuPresenter,
             syncService = syncService,
+            circuitContext = circuitContext,
             navigator = navigator,
             screen = DashboardScreen(LessonsScreen),
         )
@@ -139,6 +148,18 @@ class DashboardPresenterTest {
         }
     }
     // endregion UiEvent.TriggerSync
+
+    // region SideEffect - SyncTaskRegistry
+    @Test
+    fun `SideEffect - SyncTaskRegistry - set on CircuitContext while presenter is active`() = runTest {
+        assertNull(circuitContext.syncTaskRegistry)
+        presenter.test {
+            awaitInitialState()
+            assertNotNull(circuitContext.syncTaskRegistry)
+        }
+        assertNull(circuitContext.syncTaskRegistry)
+    }
+    // endregion SideEffect - SyncTaskRegistry
 
     private suspend fun ReceiveTurbine<UiState>.awaitInitialState() = awaitItemMatching { it.isSyncing }
 }

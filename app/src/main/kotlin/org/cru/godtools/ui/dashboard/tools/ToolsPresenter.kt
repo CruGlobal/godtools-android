@@ -1,6 +1,7 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -11,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
@@ -19,19 +21,25 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import java.util.Locale
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import org.ccci.gto.android.common.sync.SyncTracker
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_SPOTLIGHT
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
+import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
+import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
@@ -43,11 +51,14 @@ import org.greenrobot.eventbus.EventBus
 class ToolsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
     private val remoteConfig: FirebaseRemoteConfig,
+    private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
     private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer,
     private val toolFiltersStateProducer: ToolFiltersStateProducer,
+    private val syncService: GodToolsSyncService,
+    @Assisted private val circuitContext: CircuitContext,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
     // region UiState / UiEvent
@@ -82,6 +93,8 @@ class ToolsPresenter @AssistedInject internal constructor(
         }
         val filters = toolFiltersStateProducer.produce(mode)
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
+
+        RegisterSyncTask(selectedLocale)
 
         val eventSink: (UiEvent) -> Unit = remember {
             {
@@ -122,6 +135,16 @@ class ToolsPresenter @AssistedInject internal constructor(
             isPersonalizationEnabled = isPersonalizationEnabled,
             eventSink = eventSink,
         )
+    }
+
+    @Composable
+    private fun RegisterSyncTask(selectedLocale: Locale?) {
+        val syncRegistry = circuitContext.syncTaskRegistry
+        DisposableEffect(syncRegistry, selectedLocale) {
+            if (syncRegistry == null) return@DisposableEffect onDispose { }
+            val id = syncRegistry.registerSyncTask { force -> syncData(selectedLocale ?: settings.appLanguage, force) }
+            onDispose { syncRegistry.unregisterSyncTask(id) }
+        }
     }
 
     @Composable
@@ -190,9 +213,14 @@ class ToolsPresenter @AssistedInject internal constructor(
         }
     }
 
+    private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
+        val country = settings.getCountrySettingFlow().first()
+        syncService.syncToolOrder(locale, country, force)
+    }
+
     @AssistedFactory
     @CircuitInject(ToolsScreen::class, SingletonComponent::class)
     interface Factory {
-        fun create(navigator: Navigator): ToolsPresenter
+        fun create(circuitContext: CircuitContext, navigator: Navigator): ToolsPresenter
     }
 }
