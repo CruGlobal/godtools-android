@@ -64,8 +64,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
     ],
     autoMigrations = [
         AutoMigration(from = 7, to = 8),
-        AutoMigration(from = 8, to = 10),
-        AutoMigration(from = 10, to = 11),
+        AutoMigration(from = 8, to = 11),
         AutoMigration(from = 11, to = 12),
         AutoMigration(from = 12, to = 13),
         AutoMigration(from = 13, to = 14, spec = Migration14::class),
@@ -126,7 +125,6 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 7: 2023-03-27
  * v6.2.0
  * 8: 2023-01-24
- * 10: 2023-05-08
  * 11: 2023-05-15
  * 12: 2023-06-08
  * 13: 2023-09-18
