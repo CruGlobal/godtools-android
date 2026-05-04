@@ -85,22 +85,7 @@ internal object Contract : BaseContract() {
             COLUMN_SPOTLIGHT
         )
 
-        private const val SQL_COLUMN_DETAILS_BANNER_ANIMATION = "$COLUMN_DETAILS_BANNER_ANIMATION INTEGER"
-        private const val SQL_COLUMN_META_TOOL = "$COLUMN_META_TOOL TEXT"
-        private const val SQL_COLUMN_DEFAULT_VARIANT = "$COLUMN_DEFAULT_VARIANT TEXT"
-        private const val SQL_COLUMN_SPOTLIGHT = "$COLUMN_SPOTLIGHT INTEGER"
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB migrations
-        internal const val SQL_V48_CREATE_SPOTLIGHT = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_SPOTLIGHT"
-        internal const val SQL_V48_POPULATE_SPOTLIGHT = "UPDATE $TABLE_NAME SET $COLUMN_SPOTLIGHT = 0"
-        internal const val SQL_V49_ALTER_DETAILS_BANNER_ANIMATION =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BANNER_ANIMATION"
-        internal const val SQL_V50_ALTER_META_TOOL = "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_META_TOOL"
-        internal const val SQL_V51_ALTER_DEFAULT_VARIANT =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DEFAULT_VARIANT"
-        // endregion DB migrations
     }
 
     internal object TranslationTable : BaseTable() {
