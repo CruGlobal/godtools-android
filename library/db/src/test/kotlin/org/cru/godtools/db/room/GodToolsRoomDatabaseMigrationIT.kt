@@ -30,37 +30,17 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To8() {
+    fun testMigrate7To15() {
         val filesQuery = "SELECT * FROM downloadedFiles"
-
-        // create v7 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 7).use { db ->
-            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
-            assertFailsWith<SQLException> { db.query(filesQuery) }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 8, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, time FROM last_sync_times").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("sync_time", it.getStringOrNull(0))
-                assertEquals(1234, it.getIntOrNull(1))
-            }
-            db.query(filesQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate8To15() {
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
         val translationsQuery = "SELECT * FROM translations"
 
-        // create v8 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 8).use { db ->
+        // create v7 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 7).use { db ->
             db.execSQL("INSERT INTO languages (id, code) VALUES (1, ?)", arrayOf("en"))
             db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
+            assertFailsWith<SQLException> { db.query(filesQuery) }
             assertFailsWith<SQLException> { db.query(toolsQuery) }
             assertFailsWith<SQLException> { db.query(attachmentsQuery) }
             assertFailsWith<SQLException> { db.query(translationsQuery) }
@@ -90,6 +70,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(0, it.getIntOrNull(2))
                 assertEquals("", it.getStringOrNull(3))
             }
+            db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
         }
