@@ -32,7 +32,7 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To16() {
+    fun testMigrate7To17() {
         val name = Uuid.random().toString()
         val filesQuery = "SELECT * FROM downloadedFiles"
         val toolsQuery = "SELECT * FROM tools"
@@ -52,7 +52,7 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 16, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 17, true, *MIGRATIONS).use { db ->
             db.query("SELECT id, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
@@ -60,7 +60,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("en", it.getStringOrNull(1))
                 assertEquals(0, it.getIntOrNull(2))
             }
-            db.query("SELECT id, name, givenName, familyName, email FROM users").use {
+            db.query("SELECT id, name, givenName, familyName, email, isInitialFavoriteToolsSynced FROM users").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
@@ -68,6 +68,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertNull(it.getStringOrNull(2))
                 assertNull(it.getStringOrNull(3))
                 assertNull(it.getStringOrNull(4))
+                assertEquals(0, it.getIntOrNull(5))
             }
             db.query("SELECT id, time FROM last_sync_times").use {
                 assertEquals(1, it.count)
@@ -87,24 +88,6 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate16To17() {
-        // create v16 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 16).use { db ->
-            db.execSQL("""INSERT INTO users (id) VALUES (1)""")
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 17, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, isInitialFavoriteToolsSynced FROM users").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals(1, it.getIntOrNull(0))
-                assertEquals(0, it.getIntOrNull(1))
-            }
         }
     }
 
