@@ -8,18 +8,20 @@ import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.model.Tool
 import org.junit.Rule
 import org.junit.runner.RunWith
 
+@OptIn(ExperimentalUuidApi::class)
 @RunWith(AndroidJUnit4::class)
 class GodToolsRoomDatabaseMigrationIT {
     companion object {
@@ -30,7 +32,8 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To15() {
+    fun testMigrate7To16() {
+        val name = Uuid.random().toString()
         val filesQuery = "SELECT * FROM downloadedFiles"
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
@@ -39,6 +42,8 @@ class GodToolsRoomDatabaseMigrationIT {
         // create v7 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 7).use { db ->
             db.execSQL("INSERT INTO languages (id, code) VALUES (1, ?)", arrayOf("en"))
+            db.execSQL("INSERT INTO users (id, name) VALUES (1, ?)", arrayOf(name))
+            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("last_synced.user:1", "1234"))
             db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
             assertFailsWith<SQLException> { db.query(filesQuery) }
             assertFailsWith<SQLException> { db.query(toolsQuery) }
@@ -47,13 +52,22 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 15, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 16, true, *MIGRATIONS).use { db ->
             db.query("SELECT id, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
                 assertEquals("en", it.getStringOrNull(1))
                 assertEquals(0, it.getIntOrNull(2))
+            }
+            db.query("SELECT id, name, givenName, familyName, email FROM users").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals(1, it.getIntOrNull(0))
+                assertEquals(name, it.getStringOrNull(1))
+                assertNull(it.getStringOrNull(2))
+                assertNull(it.getStringOrNull(3))
+                assertNull(it.getStringOrNull(4))
             }
             db.query("SELECT id, time FROM last_sync_times").use {
                 assertEquals(1, it.count)
@@ -73,38 +87,6 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate15To16() {
-        val name = UUID.randomUUID().toString()
-
-        // create v15 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 15).use { db ->
-            db.execSQL("INSERT INTO users (id, name) VALUES (1, ?)", arrayOf(name))
-            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("last_synced.user:1", "1234"))
-            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 16, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, name, givenName, familyName, email FROM users").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals(1, it.getIntOrNull(0))
-                assertEquals(name, it.getStringOrNull(1))
-                assertNull(it.getStringOrNull(2))
-                assertNull(it.getStringOrNull(3))
-                assertNull(it.getStringOrNull(4))
-            }
-
-            db.query("SELECT id, time FROM last_sync_times").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("sync_time", it.getStringOrNull(0))
-                assertEquals(1234, it.getIntOrNull(1))
-            }
         }
     }
 
