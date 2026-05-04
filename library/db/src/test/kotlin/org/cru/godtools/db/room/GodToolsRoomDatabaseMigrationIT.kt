@@ -52,38 +52,18 @@ class GodToolsRoomDatabaseMigrationIT {
     }
 
     @Test
-    fun testMigrate8To11() {
+    fun testMigrate8To12() {
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
         val translationsQuery = "SELECT * FROM translations"
 
         // create v8 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 8).use { db ->
+            db.execSQL("INSERT INTO languages (id, code) VALUES (1, ?)", arrayOf("en"))
             db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
             assertFailsWith<SQLException> { db.query(toolsQuery) }
             assertFailsWith<SQLException> { db.query(attachmentsQuery) }
             assertFailsWith<SQLException> { db.query(translationsQuery) }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 11, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, time FROM last_sync_times").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("sync_time", it.getStringOrNull(0))
-                assertEquals(1234, it.getIntOrNull(1))
-            }
-            db.query(toolsQuery).close()
-            db.query(attachmentsQuery).close()
-            db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate11To12() {
-        // create v11 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 11).use { db ->
-            db.execSQL("INSERT INTO languages (id, code) VALUES (1, ?)", arrayOf("en"))
         }
 
         // run migration
@@ -95,6 +75,15 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("en", it.getStringOrNull(1))
                 assertEquals(0, it.getIntOrNull(2))
             }
+            db.query("SELECT id, time FROM last_sync_times").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("sync_time", it.getStringOrNull(0))
+                assertEquals(1234, it.getIntOrNull(1))
+            }
+            db.query(toolsQuery).close()
+            db.query(attachmentsQuery).close()
+            db.query(translationsQuery).close()
         }
     }
 
