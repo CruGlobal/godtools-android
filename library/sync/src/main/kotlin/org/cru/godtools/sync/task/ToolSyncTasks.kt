@@ -39,7 +39,7 @@ internal class ToolSyncTasks @Inject internal constructor(
 ) : BaseSyncTasks() {
     internal companion object {
         const val SYNC_TIME_TOOLS = "last_synced.tools"
-        const val SYNC_TIME_PERSONALIZED_TOOLS = "last_synced.personalized_tools."
+        const val SYNC_TIME_TOOL_ORDER = "last_synced.tool_order."
 
         private val INCLUDES_GET_TOOL = Includes(
             Tool.JSON_ATTACHMENTS,
@@ -52,7 +52,7 @@ internal class ToolSyncTasks @Inject internal constructor(
             .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
 
-        private fun buildPersonalizedToolsApiParams() = JsonApiParams()
+        private fun buildToolOrderApiParams() = JsonApiParams()
             .fields(Tool.JSONAPI_TYPE, Tool.JSON_CODE)
     }
 
@@ -102,57 +102,34 @@ internal class ToolSyncTasks @Inject internal constructor(
         true
     }
 
-    // region Personalized Tools
-    private val personalizedToolsMutex = MutexMap()
+    // region Tool Order
+    private val toolOrderMutex = MutexMap()
 
-    internal suspend fun syncPersonalizedTools(locale: Locale, country: String?, force: Boolean = false) =
-        coroutineScope {
-            val order = async { country?.let { syncPersonalizedToolOrder(locale, it.uppercase(), force) } ?: true }
-            val defaultOrder = async { syncDefaultPersonalizedToolOrder(locale, force) }
-            order.await() && defaultOrder.await()
-        }
+    internal suspend fun syncToolOrder(locale: Locale, country: String?, force: Boolean = false): Boolean {
+        val normalizedCountry = country?.uppercase()
 
-    private suspend fun syncPersonalizedToolOrder(locale: Locale, country: String, force: Boolean) =
-        personalizedToolsMutex.withLock(locale to country) {
+        toolOrderMutex.withLock(locale to normalizedCountry) {
             if (!force &&
                 !lastSyncTimeRepository.isLastSyncStale(
-                    SYNC_TIME_PERSONALIZED_TOOLS,
+                    SYNC_TIME_TOOL_ORDER,
                     locale,
-                    country,
+                    normalizedCountry.orEmpty(),
                     staleAfter = STALE_DURATION_TOOLS,
                 )
             ) {
-                return@withLock true
+                return true
             }
 
-            val tools = toolsApi.getToolOrder(locale, country, buildPersonalizedToolsApiParams())
-                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return@withLock false
+            val tools = toolsApi.getToolOrder(locale, country, buildToolOrderApiParams())
+                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
 
             toolsRepository.storePersonalizedToolOrderFromSync(locale, country, tools)
-            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_PERSONALIZED_TOOLS, locale, country)
-            true
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOL_ORDER, locale, normalizedCountry.orEmpty())
+
+            return true
         }
-
-    private suspend fun syncDefaultPersonalizedToolOrder(locale: Locale, force: Boolean) =
-        personalizedToolsMutex.withLock(locale) {
-            if (!force &&
-                !lastSyncTimeRepository.isLastSyncStale(
-                    SYNC_TIME_PERSONALIZED_TOOLS,
-                    locale,
-                    staleAfter = STALE_DURATION_TOOLS
-                )
-            ) {
-                return@withLock true
-            }
-
-            val tools = toolsApi.getDefaultToolOrder(locale, buildPersonalizedToolsApiParams())
-                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return@withLock false
-
-            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, tools)
-            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_PERSONALIZED_TOOLS, locale)
-            true
-        }
-    // endregion Personalized Tools
+    }
+    // endregion Tool Order
 
     /**
      * @return true if all pending share counts were successfully synced. false if any failed to sync.

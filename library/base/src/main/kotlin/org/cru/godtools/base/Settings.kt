@@ -68,8 +68,8 @@ class Settings internal constructor(private val context: Context, coroutineScope
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
 
-        // Country Settings
-        private val KEY_COUNTRY_SETTING = stringPreferencesKey("CountrySetting")
+        // Personalization Settings
+        private val KEY_PERSONALIZATION_COUNTRY = stringPreferencesKey("personalizationCountry")
 
         // optInNotification
         const val LAST_PROMPTED_OPT_IN_NOTIFICATION = "lastPromptedOptInNotification"
@@ -168,22 +168,24 @@ class Settings internal constructor(private val context: Context, coroutineScope
     }
     // endregion Dashboard Settings
 
-    // region Country Settings
-    fun getCountrySettingFlow() = dataStorePreferences.data
-        .map { it[KEY_COUNTRY_SETTING] }
+    // region Personalization Settings
+    fun getCountrySettingFlow() = getPersonalizationCountryFlow()
+
+    fun getPersonalizationCountryFlow() = dataStorePreferences.data
+        .map { it[KEY_PERSONALIZATION_COUNTRY] }
         .distinctUntilChanged()
 
     suspend fun updateCountrySetting(isoCode: String?) {
         dataStorePreferences.updateData {
             it.toMutablePreferences().apply {
                 when (isoCode) {
-                    null -> remove(KEY_COUNTRY_SETTING)
-                    else -> set(KEY_COUNTRY_SETTING, isoCode)
+                    null -> remove(KEY_PERSONALIZATION_COUNTRY)
+                    else -> set(KEY_PERSONALIZATION_COUNTRY, isoCode)
                 }
             }
         }
     }
-    // endregion Country Settings
+    // endregion Personalization Settings
 
     // region optInNotification
     fun getLastPromptedOptInNotification(): LocalDate =
