@@ -32,7 +32,7 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To17() {
+    fun testMigrate7To18() {
         val name = Uuid.random().toString()
         val filesQuery = "SELECT * FROM downloadedFiles"
         val toolsQuery = "SELECT * FROM tools"
@@ -52,8 +52,8 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 17, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, code, isAdded FROM languages").use {
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 18, true, *MIGRATIONS).use { db ->
+            db.query("SELECT apiId, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
@@ -88,24 +88,6 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate17To18() {
-        // create v17 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 17).use { db ->
-            db.execSQL("""INSERT INTO languages (id, code) VALUES (1, "en")""")
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 18, true, *MIGRATIONS).use { db ->
-            db.query("SELECT apiId, code FROM languages").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals(1, it.getIntOrNull(0))
-                assertEquals("en", it.getStringOrNull(1))
-            }
         }
     }
 
