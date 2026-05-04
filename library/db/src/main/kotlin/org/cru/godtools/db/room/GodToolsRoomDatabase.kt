@@ -64,8 +64,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
     ],
     autoMigrations = [
         AutoMigration(from = 7, to = 8),
-        AutoMigration(from = 8, to = 13),
-        AutoMigration(from = 13, to = 14, spec = Migration14::class),
+        AutoMigration(from = 8, to = 14),
         AutoMigration(from = 14, to = 15),
         AutoMigration(from = 15, to = 16, spec = ResetUserSyncMigration::class),
         AutoMigration(from = 16, to = 17),
@@ -123,7 +122,6 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * 7: 2023-03-27
  * v6.2.0
  * 8: 2023-01-24
- * 13: 2023-09-18
  * 14: 2023-09-18
  * 15: 2023-09-18
  * 16: 2023-09-19
@@ -151,9 +149,6 @@ internal class ResetUserSyncMigration : AutoMigrationSpec {
         db.execSQL("DELETE FROM last_sync_times WHERE id LIKE ?", arrayOf("last_synced.user%"))
     }
 }
-
-@RenameColumn(tableName = "tools", fromColumnName = "isAdded", toColumnName = "isFavorite")
-internal class Migration14 : AutoMigrationSpec
 
 @RenameColumn(tableName = "languages", fromColumnName = "id", toColumnName = "apiId")
 internal class Migration18 : AutoMigrationSpec
