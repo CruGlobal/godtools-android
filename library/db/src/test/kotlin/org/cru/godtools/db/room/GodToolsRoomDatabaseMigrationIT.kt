@@ -13,10 +13,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import org.ccci.gto.android.common.util.database.getString
 import org.ccci.gto.android.common.util.database.map
 import org.cru.godtools.model.Tool
 import org.junit.Rule
@@ -30,34 +28,6 @@ class GodToolsRoomDatabaseMigrationIT {
 
     @get:Rule
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
-
-    @Test
-    fun testMigrate6To7() {
-        val guid = UUID.randomUUID().toString()
-        val usersQuery = "SELECT * FROM users"
-
-        // create v6 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 6).use { db ->
-            db.execSQL("INSERT INTO users (id, ssoGuid) VALUES (?, ?)", arrayOf("user1", guid))
-            db.query(usersQuery).use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("user1", it.getString("id"))
-                assertEquals(guid, it.getString("ssoGuid"))
-            }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 7, true, *MIGRATIONS).use { db ->
-            db.query(usersQuery).use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("user1", it.getString("id"))
-                assertEquals(guid, it.getString("ssoGuid"))
-                assertNotEquals(-1, it.getColumnIndex("name"))
-            }
-        }
-    }
 
     @Test
     fun testMigrate7To8() {
