@@ -52,7 +52,7 @@ class GodToolsRoomDatabaseMigrationIT {
     }
 
     @Test
-    fun testMigrate8To14() {
+    fun testMigrate8To15() {
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
         val translationsQuery = "SELECT * FROM translations"
@@ -67,7 +67,7 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 14, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 15, true, *MIGRATIONS).use { db ->
             db.query("SELECT id, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
@@ -81,28 +81,17 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.query("SELECT code, isFavorite FROM tools").use { assertEquals(0, it.count) }
-            db.query(attachmentsQuery).close()
-            db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate14To15() {
-        // create v14 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 14).use { db ->
             db.execSQL("""INSERT INTO tools (id, code, type) VALUES (1, "a", "TRACT")""")
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 15, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, code, changedFields FROM tools").use {
+            db.query("SELECT id, code, isFavorite, changedFields FROM tools").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
                 assertEquals("a", it.getStringOrNull(1))
-                assertEquals("", it.getStringOrNull(2))
+                assertEquals(0, it.getIntOrNull(2))
+                assertEquals("", it.getStringOrNull(3))
             }
+            db.query(attachmentsQuery).close()
+            db.query(translationsQuery).close()
         }
     }
 
