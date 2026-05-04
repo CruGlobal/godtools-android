@@ -52,7 +52,7 @@ class GodToolsRoomDatabaseMigrationIT {
     }
 
     @Test
-    fun testMigrate8To12() {
+    fun testMigrate8To13() {
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
         val translationsQuery = "SELECT * FROM translations"
@@ -67,7 +67,7 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 12, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 13, true, *MIGRATIONS).use { db ->
             db.query("SELECT id, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
@@ -85,15 +85,6 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
         }
-    }
-
-    @Test
-    fun testMigrate12To13() {
-        // create v12 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 12).use {}
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 13, true, *MIGRATIONS).use {}
     }
 
     @Test
