@@ -49,6 +49,10 @@ class OnboardingPresenter @AssistedInject constructor(
         data object Finish : UiEvent
     }
 
+    private suspend fun PagerState.navigateToPage(page: Int = currentPage + 1) {
+        animateScrollToPage(page, animationSpec = spring(stiffness = Spring.StiffnessMediumLow))
+    }
+
     @Composable
     override fun present(): UiState {
         var languageWasSet by rememberSaveable { mutableStateOf(false) }
@@ -58,10 +62,7 @@ class OnboardingPresenter @AssistedInject constructor(
         val countrySettingsNavigator = rememberAnsweringNavigator<CountrySettingsScreen.Result>(navigator) {
             hasSeenCountrySettings = true
             scope.launch {
-                pagerState.animateScrollToPage(
-                    1,
-                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                )
+                pagerState.navigateToPage(1)
             }
         }
         val languageButtonNavigator = rememberAnsweringNavigator<AppLanguageScreen.Result>(navigator) { result ->
@@ -78,23 +79,20 @@ class OnboardingPresenter @AssistedInject constructor(
         LaunchedEffect(Unit) { settings.setFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING) }
         return UiState(
             pagerState = pagerState,
-            userScrollEnabled = pagerState.currentPage > 0 || languageWasSet
+            userScrollEnabled = (languageWasSet && hasSeenCountrySettings) || pagerState.currentPage > 0
         ) { event ->
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
                 UiEvent.Next -> {
-                    if (languageWasSet && !hasSeenCountrySettings) {
-                        countrySettingsNavigator.goTo(CountrySettingsScreen)
-                    } else if (hasSeenCountrySettings) {
-                        scope.launch {
-                            pagerState.animateScrollToPage(
-                                1,
-                                animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                            )
+                    when {
+                        !languageWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
+
+                        !hasSeenCountrySettings -> countrySettingsNavigator.goTo(CountrySettingsScreen)
+
+                        else -> scope.launch {
+                            pagerState.navigateToPage()
                         }
-                    } else {
-                        nextButtonNavigator.goTo(AppLanguageScreen)
                     }
                 }
 
