@@ -52,34 +52,14 @@ class GodToolsRoomDatabaseMigrationIT {
     }
 
     @Test
-    fun testMigrate8To9() {
+    fun testMigrate8To10() {
         val toolsQuery = "SELECT * FROM tools"
+        val attachmentsQuery = "SELECT * FROM attachments"
 
         // create v8 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 8).use { db ->
             db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
             assertFailsWith<SQLException> { db.query(toolsQuery) }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 9, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, time FROM last_sync_times").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("sync_time", it.getStringOrNull(0))
-                assertEquals(1234, it.getIntOrNull(1))
-            }
-            db.query(toolsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate9To10() {
-        val attachmentsQuery = "SELECT * FROM attachments"
-
-        // create v9 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 9).use { db ->
-            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
             assertFailsWith<SQLException> { db.query(attachmentsQuery) }
         }
 
@@ -91,6 +71,7 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
+            db.query(toolsQuery).close()
             db.query(attachmentsQuery).close()
         }
     }
