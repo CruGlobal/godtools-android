@@ -63,8 +63,7 @@ import org.cru.godtools.db.room.repository.UserRoomRepository
         LastSyncTimeEntity::class,
     ],
     autoMigrations = [
-        AutoMigration(from = 7, to = 18, spec = Migration7To18::class),
-        AutoMigration(from = 18, to = 19, spec = Migration19::class),
+        AutoMigration(from = 7, to = 19, spec = Migration7To19::class),
         AutoMigration(from = 19, to = 20),
         AutoMigration(from = 20, to = 21),
         AutoMigration(from = 21, to = 22),
@@ -116,7 +115,6 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
  * v6.1.0-v6.1.1
  * 7: 2023-03-27
  * v6.2.0
- * 18: 2023-11-21
  * 19: 2023-12-07
  * 20: 2024-01-17
  * 21: 2024-01-26
@@ -135,12 +133,9 @@ internal fun RoomDatabase.Builder<GodToolsRoomDatabase>.enableMigrations() =
     fallbackToDestructiveMigration(dropAllTables = true)
 
 @RenameColumn(tableName = "languages", fromColumnName = "id", toColumnName = "apiId")
-internal class Migration7To18 : AutoMigrationSpec {
+internal class Migration7To19 : AutoMigrationSpec {
     override fun onPostMigrate(db: SupportSQLiteDatabase) {
         db.execSQL("DELETE FROM last_sync_times WHERE id LIKE ?", arrayOf("last_synced.user%"))
     }
 }
-
-@RenameColumn(tableName = "tools", fromColumnName = "id", toColumnName = "apiId")
-internal class Migration19 : AutoMigrationSpec
 // endregion Migrations

@@ -32,7 +32,7 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To18() {
+    fun testMigrate7To19() {
         val name = Uuid.random().toString()
         val filesQuery = "SELECT * FROM downloadedFiles"
         val toolsQuery = "SELECT * FROM tools"
@@ -52,7 +52,7 @@ class GodToolsRoomDatabaseMigrationIT {
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 18, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 19, true, *MIGRATIONS).use { db ->
             db.query("SELECT apiId, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
@@ -76,8 +76,8 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals("sync_time", it.getStringOrNull(0))
                 assertEquals(1234, it.getIntOrNull(1))
             }
-            db.execSQL("""INSERT INTO tools (id, code, type) VALUES (1, "a", "TRACT")""")
-            db.query("SELECT id, code, isFavorite, changedFields FROM tools").use {
+            db.execSQL("""INSERT INTO tools (apiId, code, type) VALUES (1, "a", "TRACT")""")
+            db.query("SELECT apiId, code, isFavorite, changedFields FROM tools").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
@@ -88,25 +88,6 @@ class GodToolsRoomDatabaseMigrationIT {
             db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate18To19() {
-        // create v18 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 18).use { db ->
-            db.execSQL("""INSERT INTO tools (id, code, type) VALUES (1, "a", "TRACT")""")
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 19, true, *MIGRATIONS).use { db ->
-            db.query("SELECT apiId, code, type FROM tools").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals(1, it.getIntOrNull(0))
-                assertEquals("a", it.getStringOrNull(1))
-                assertEquals("TRACT", it.getStringOrNull(2))
-            }
         }
     }
 
