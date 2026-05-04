@@ -1,7 +1,5 @@
 package org.cru.godtools.ui.onboarding
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +17,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarAction
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
 import org.cru.godtools.R
@@ -79,15 +76,6 @@ fun OnboardingLayout(state: OnboardingPresenter.UiState, modifier: Modifier = Mo
                     .consumeWindowInsets(insets)
                     .fillMaxSize()
             ) {
-                val nextPage: () -> Unit = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(
-                            it + 1,
-                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
-                        )
-                    }
-                }
-
                 when (it) {
                     0 -> OnboardingWelcomePageLayout(
                         nextPage = { eventSink(UiEvent.Next) },
@@ -96,13 +84,13 @@ fun OnboardingLayout(state: OnboardingPresenter.UiState, modifier: Modifier = Mo
 
                     1 -> OnboardingPageLayout(
                         OnboardingPage.CONVERSATIONS,
-                        nextPage = nextPage,
+                        nextPage = { eventSink(UiEvent.Next) },
                         eventSink = eventSink,
                     )
 
                     2 -> OnboardingPageLayout(
                         OnboardingPage.PREPARE,
-                        nextPage = nextPage,
+                        nextPage = { eventSink(UiEvent.Next) },
                         eventSink = eventSink,
                     )
 
