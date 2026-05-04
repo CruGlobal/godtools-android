@@ -10,8 +10,8 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.cru.godtools.db.room.entity.PersonalizedToolOrderEntity
 import org.cru.godtools.db.room.entity.ToolEntity
-import org.cru.godtools.db.room.entity.partial.SyncPersonalizedTool
 import org.cru.godtools.db.room.entity.partial.SyncTool
+import org.cru.godtools.db.room.entity.partial.SyncToolPlaceholder
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Tool.Type.Companion.NORMAL_TYPES
 import org.cru.godtools.model.trackChanges
@@ -98,7 +98,7 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
 
     @Transaction
     override suspend fun storePersonalizedToolOrderFromSync(locale: Locale, country: String?, tools: List<Tool>) {
-        dao.upsertToolsPersonalized(tools.map { SyncPersonalizedTool(it) })
+        dao.upsertToolPlaceholders(tools.map { SyncToolPlaceholder(it) })
         dao.resetPersonalizedToolOrder(locale, country.orEmpty())
         dao.upsertPersonalizedToolOrder(
             tools.mapIndexed { i, tool ->

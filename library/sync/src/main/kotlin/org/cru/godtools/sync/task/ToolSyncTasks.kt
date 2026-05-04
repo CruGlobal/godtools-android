@@ -52,7 +52,7 @@ internal class ToolSyncTasks @Inject internal constructor(
             .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
 
-        private fun buildToolOrderApiParams() = JsonApiParams()
+        private fun buildToolPlaceholderParams() = JsonApiParams()
             .fields(Tool.JSONAPI_TYPE, Tool.JSON_CODE)
     }
 
@@ -120,7 +120,7 @@ internal class ToolSyncTasks @Inject internal constructor(
                 return true
             }
 
-            val tools = toolsApi.getToolOrder(locale, country, buildToolOrderApiParams())
+            val tools = toolsApi.getToolOrder(locale, country, buildToolPlaceholderParams())
                 .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
 
             toolsRepository.storePersonalizedToolOrderFromSync(locale, country, tools)

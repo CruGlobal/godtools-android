@@ -12,8 +12,8 @@ import java.util.Locale
 import kotlinx.coroutines.flow.Flow
 import org.cru.godtools.db.room.entity.PersonalizedToolOrderEntity
 import org.cru.godtools.db.room.entity.ToolEntity
-import org.cru.godtools.db.room.entity.partial.SyncPersonalizedTool
 import org.cru.godtools.db.room.entity.partial.SyncTool
+import org.cru.godtools.db.room.entity.partial.SyncToolPlaceholder
 import org.cru.godtools.db.room.entity.partial.ToolFavorite
 import org.cru.godtools.model.Tool
 
@@ -58,6 +58,8 @@ internal interface ToolsDao {
     fun insertOrIgnoreTools(tools: Collection<ToolEntity>)
     @Upsert(entity = ToolEntity::class)
     suspend fun upsertSyncTools(tools: Collection<SyncTool>)
+    @Upsert(entity = ToolEntity::class)
+    suspend fun upsertToolPlaceholders(placeholders: Collection<SyncToolPlaceholder>)
     @Update(entity = ToolEntity::class)
     suspend fun update(tool: ToolFavorite)
     @Update(entity = ToolEntity::class)
@@ -86,11 +88,8 @@ internal interface ToolsDao {
     )
     fun getPersonalizedToolsFlow(locale: Locale, country: String, vararg type: Tool.Type): Flow<List<ToolEntity>>
 
-    @Upsert(entity = ToolEntity::class)
-    suspend fun upsertToolsPersonalized(tools: Collection<SyncPersonalizedTool>)
     @Upsert
     suspend fun upsertPersonalizedToolOrder(order: Collection<PersonalizedToolOrderEntity>)
-
     @Query("DELETE FROM personalized_tool_order WHERE locale = :locale AND country = :country")
     suspend fun resetPersonalizedToolOrder(locale: Locale, country: String)
     // endregion Personalized Tools
