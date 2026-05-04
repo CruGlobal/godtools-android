@@ -11,7 +11,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.ExperimentalUuidApi
@@ -32,12 +31,13 @@ class GodToolsRoomDatabaseMigrationIT {
     val helper = MigrationTestHelper(InstrumentationRegistry.getInstrumentation(), GodToolsRoomDatabase::class.java)
 
     @Test
-    fun testMigrate7To19() {
+    fun testMigrate7To22() {
         val name = Uuid.random().toString()
         val filesQuery = "SELECT * FROM downloadedFiles"
         val toolsQuery = "SELECT * FROM tools"
         val attachmentsQuery = "SELECT * FROM attachments"
         val translationsQuery = "SELECT * FROM translations"
+        val translationFilesQuery = "SELECT * FROM downloadedTranslationFiles"
 
         // create v7 database
         helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 7).use { db ->
@@ -49,10 +49,11 @@ class GodToolsRoomDatabaseMigrationIT {
             assertFailsWith<SQLException> { db.query(toolsQuery) }
             assertFailsWith<SQLException> { db.query(attachmentsQuery) }
             assertFailsWith<SQLException> { db.query(translationsQuery) }
+            assertFailsWith<SQLException> { db.query(translationFilesQuery) }
         }
 
         // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 19, true, *MIGRATIONS).use { db ->
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 22, true, *MIGRATIONS).use { db ->
             db.query("SELECT apiId, code, isAdded FROM languages").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
@@ -77,73 +78,20 @@ class GodToolsRoomDatabaseMigrationIT {
                 assertEquals(1234, it.getIntOrNull(1))
             }
             db.execSQL("""INSERT INTO tools (apiId, code, type) VALUES (1, "a", "TRACT")""")
-            db.query("SELECT apiId, code, isFavorite, changedFields FROM tools").use {
+            db.query("SELECT apiId, code, isFavorite, changedFields, defaultLocale FROM tools").use {
                 assertEquals(1, it.count)
                 it.moveToFirst()
                 assertEquals(1, it.getIntOrNull(0))
                 assertEquals("a", it.getStringOrNull(1))
                 assertEquals(0, it.getIntOrNull(2))
                 assertEquals("", it.getStringOrNull(3))
+                assertEquals("en", it.getStringOrNull(4))
             }
+            assertTrue(db.dumpIndices("translations").values.any { it == setOf("locale") })
             db.query(filesQuery).close()
             db.query(attachmentsQuery).close()
             db.query(translationsQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate19To20() {
-        val filesQuery = "SELECT * FROM downloadedTranslationFiles"
-
-        // create v19 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 19).use { db ->
-            db.execSQL("INSERT INTO last_sync_times (id, time) VALUES (?, ?)", arrayOf("sync_time", "1234"))
-            assertFailsWith<SQLException> { db.query(filesQuery) }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 20, true, *MIGRATIONS).use { db ->
-            db.query("SELECT id, time FROM last_sync_times").use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("sync_time", it.getStringOrNull(0))
-                assertEquals(1234, it.getIntOrNull(1))
-            }
-            db.query(filesQuery).close()
-        }
-    }
-
-    @Test
-    fun testMigrate20To21() {
-        val defaultLocaleQuery = "SELECT code, defaultLocale FROM tools WHERE code = 'kgp'"
-
-        // create v20 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 20).use { db ->
-            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf<Any>("kgp", Tool.Type.TRACT))
-            assertFailsWith<SQLException> { db.query(defaultLocaleQuery) }
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 21, true, *MIGRATIONS).use { db ->
-            db.query(defaultLocaleQuery).use {
-                assertEquals(1, it.count)
-                it.moveToFirst()
-                assertEquals("kgp", it.getStringOrNull(0))
-                assertEquals("en", it.getStringOrNull(1))
-            }
-        }
-    }
-
-    @Test
-    fun testMigrate21To22() {
-        // create v21 database
-        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 21).use { db ->
-            assertFalse(db.dumpIndices("translations").values.any { it == setOf("locale") })
-        }
-
-        // run migration
-        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 22, true, *MIGRATIONS).use { db ->
-            assertTrue(db.dumpIndices("translations").values.any { it == setOf("locale") })
+            db.query(translationFilesQuery).close()
         }
     }
 
