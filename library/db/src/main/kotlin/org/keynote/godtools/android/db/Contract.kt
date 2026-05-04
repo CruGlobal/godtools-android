@@ -32,10 +32,6 @@ internal object Contract : BaseContract() {
     internal object LanguageTable : BaseTable() {
         internal const val TABLE_NAME = "languages"
 
-        const val COLUMN_ID = BaseTable.COLUMN_ID
-        const val COLUMN_CODE = "code"
-        const val COLUMN_NAME = "name"
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
@@ -120,20 +116,7 @@ internal object Contract : BaseContract() {
             COLUMN_DOWNLOADED,
         )
 
-        private const val SQL_COLUMN_DETAILS_OUTLINE = "$COLUMN_DETAILS_OUTLINE TEXT"
-        private const val SQL_COLUMN_DETAILS_BIBLE_REFERENCES = "$COLUMN_DETAILS_BIBLE_REFERENCES TEXT"
-        private const val SQL_COLUMN_DETAILS_CONVERSATION_STARTERS = "$COLUMN_DETAILS_CONVERSATION_STARTERS TEXT"
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
-
-        // region DB migrations
-        internal const val SQL_V57_ALTER_DETAILS_OUTLINE =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_OUTLINE"
-        internal const val SQL_V57_ALTER_DETAILS_BIBLE_REFERENCES =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_BIBLE_REFERENCES"
-        internal const val SQL_V57_ALTER_DETAILS_CONVERSATION_STARTERS =
-            "ALTER TABLE $TABLE_NAME ADD COLUMN $SQL_COLUMN_DETAILS_CONVERSATION_STARTERS"
-        // endregion DB migrations
     }
 
     internal object AttachmentTable : BaseTable() {
@@ -170,22 +153,11 @@ internal object Contract : BaseContract() {
     internal object FollowupTable : BaseTable() {
         const val TABLE_NAME = "followups"
 
-        const val COLUMN_NAME = "name"
-        const val COLUMN_EMAIL = "email"
-        const val COLUMN_DESTINATION = "destination"
-        const val COLUMN_LANGUAGE = "language"
-        const val COLUMN_CREATE_TIME = "created_at"
-
         val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
     internal object GlobalActivityAnalyticsTable : BaseTable() {
         internal const val TABLE_NAME = "global_activity_analytics"
-
-        internal const val COLUMN_USERS = "users"
-        internal const val COLUMN_COUNTRIES = "countries"
-        internal const val COLUMN_LAUNCHES = "launches"
-        internal const val COLUMN_GOSPEL_PRESENTATIONS = "gospel_presentations"
 
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
@@ -193,21 +165,11 @@ internal object Contract : BaseContract() {
     internal object TrainingTipTable : Base {
         internal const val TABLE_NAME = "training_tips"
 
-        internal const val COLUMN_TOOL = ToolCode.COLUMN_TOOL
-        internal const val COLUMN_LANGUAGE = LanguageCode.COLUMN_LANGUAGE
-        internal const val COLUMN_TIP_ID = "tipId"
-        const val COLUMN_IS_COMPLETED = "isCompleted"
-
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
 
     internal object UserCounterTable : Base {
         internal const val TABLE_NAME = "user_counters"
-
-        internal const val COLUMN_COUNTER_ID = "counter_id"
-        const val COLUMN_COUNT = "count"
-        const val COLUMN_DECAYED_COUNT = "decayed_count"
-        internal const val COLUMN_DELTA = "delta"
 
         internal val SQL_DELETE_TABLE = drop(TABLE_NAME)
     }
