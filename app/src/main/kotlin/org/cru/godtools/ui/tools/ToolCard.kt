@@ -17,55 +17,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.slack.circuit.runtime.CircuitUiEvent
-import com.slack.circuit.runtime.CircuitUiState
-import java.io.File
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.downloadmanager.DownloadProgress
-import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
-import org.cru.godtools.model.Translation
-import org.cru.godtools.ui.tools.ToolCard.UiEvent
-import org.cru.godtools.ui.tools.ToolCard.UiState
-
-object ToolCard {
-    data class UiState(
-        val toolCode: String? = null,
-        val tool: Tool? = null,
-        val isLoaded: Boolean = true,
-        val banner: File? = null,
-        val language: Language? = null,
-        val languageAvailable: Boolean = false,
-        val translation: Translation? = null,
-        val appLanguage: Language? = null,
-        val appLanguageAvailable: Boolean = false,
-        val secondLanguage: Language? = null,
-        val secondLanguageAvailable: Boolean = false,
-        val progress: Progress? = null,
-        val availableLanguages: Int = 0,
-        val downloadProgress: DownloadProgress? = null,
-        val eventSink: (UiEvent) -> Unit = {},
-    ) : CircuitUiState {
-        sealed interface Progress {
-            val progress: Double
-
-            @JvmInline
-            value class InProgress(override val progress: Double) : Progress
-            data object Completed : Progress {
-                override val progress = 1.0
-            }
-        }
-    }
-
-    sealed interface UiEvent : CircuitUiEvent {
-        data object Click : UiEvent
-        data object OpenTool : UiEvent
-        data object OpenToolDetails : UiEvent
-        data object PinTool : UiEvent
-        data object UnpinTool : UiEvent
-    }
-}
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Composable
 fun ToolCard(

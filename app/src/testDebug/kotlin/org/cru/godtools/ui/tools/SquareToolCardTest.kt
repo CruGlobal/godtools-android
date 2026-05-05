@@ -15,6 +15,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -25,13 +27,13 @@ class SquareToolCardTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<ToolCard.UiEvent>()
+    private val events = TestEventSink<UiEvent>()
 
     @Test
     fun `SquareToolCard()`() {
         val tool = randomTool(name = UUID.randomUUID().toString())
 
-        composeTestRule.setContent { SquareToolCard(ToolCard.UiState(tool = tool)) }
+        composeTestRule.setContent { SquareToolCard(UiState(tool = tool)) }
 
         composeTestRule.onNodeWithText(tool.name!!).assertExists()
         composeTestRule.onNodeWithTag(TEST_TAG_FAVORITE_ACTION).assertExists()
@@ -39,10 +41,10 @@ class SquareToolCardTest {
 
     @Test
     fun `SquareToolCard() - Event - Click`() {
-        composeTestRule.setContent { SquareToolCard(ToolCard.UiState(eventSink = events)) }
+        composeTestRule.setContent { SquareToolCard(UiState(eventSink = events)) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(ToolCard.UiEvent.Click)
+        events.assertEvent(UiEvent.Click)
     }
 
     // region SquareToolCard - Category
@@ -50,7 +52,7 @@ class SquareToolCardTest {
     fun `SquareToolCard(showCategory=true)`() {
         composeTestRule.setContent {
             SquareToolCard(
-                state = ToolCard.UiState(tool = randomTool(category = "gospel")),
+                state = UiState(tool = randomTool(category = "gospel")),
                 showCategory = true
             )
         }
@@ -62,7 +64,7 @@ class SquareToolCardTest {
     fun `SquareToolCard(showCategory=false)`() {
         composeTestRule.setContent {
             SquareToolCard(
-                state = ToolCard.UiState(tool = randomTool(category = "gospel")),
+                state = UiState(tool = randomTool(category = "gospel")),
                 showCategory = false
             )
         }
@@ -75,7 +77,7 @@ class SquareToolCardTest {
     @Test
     fun `SquareToolCard() - Download Progress - Hidden when not downloading`() {
         composeTestRule.setContent {
-            SquareToolCard(state = ToolCard.UiState(tool = randomTool(), downloadProgress = null))
+            SquareToolCard(UiState(tool = randomTool(), downloadProgress = null))
         }
 
         composeTestRule
@@ -86,7 +88,7 @@ class SquareToolCardTest {
     @Test
     fun `SquareToolCard() - Download Progress - Visible when downloading`() {
         composeTestRule.setContent {
-            SquareToolCard(state = ToolCard.UiState(tool = randomTool(), downloadProgress = DownloadProgress(1, 4)))
+            SquareToolCard(UiState(tool = randomTool(), downloadProgress = DownloadProgress(1, 4)))
         }
 
         val progressRangeInfo = composeTestRule

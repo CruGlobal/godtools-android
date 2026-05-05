@@ -34,6 +34,7 @@ import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.SquareToolCard
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 
 internal val MARGIN_TOOLS_LAYOUT_HORIZONTAL = 16.dp
 
@@ -163,7 +164,7 @@ private fun ToolsHeader(mode: UiState.Mode, modifier: Modifier = Modifier) = Col
 }
 
 @Composable
-private fun ToolSpotlight(tools: List<ToolCard.UiState>, modifier: Modifier = Modifier) {
+private fun ToolSpotlight(tools: List<ToolCardPresenter.UiState>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             stringResource(R.string.dashboard_tools_section_spotlight_label),

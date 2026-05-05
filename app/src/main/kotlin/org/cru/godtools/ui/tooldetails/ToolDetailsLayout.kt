@@ -75,6 +75,7 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tooldetails.analytics.model.ToolDetailsScreenEvent
 import org.cru.godtools.ui.tools.AvailableInLanguage
 import org.cru.godtools.ui.tools.DownloadProgressIndicator
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.ui.tools.VariantToolCard
 
 private val TOOL_DETAILS_HORIZONTAL_MARGIN = 32.dp

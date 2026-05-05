@@ -298,11 +298,11 @@ class ToolDetailsPresenterTest {
             assertEquals(2, state.variants.size)
 
             assertEquals(TOOL, state.variants[0].toolCode)
-            state.variants[0].eventSink(ToolCard.UiEvent.Click)
+            state.variants[0].eventSink(ToolCardPresenter.UiEvent.Click)
             expectNoEvents()
 
             assertEquals("variant1", state.variants[1].toolCode)
-            state.variants[1].eventSink(ToolCard.UiEvent.Click)
+            state.variants[1].eventSink(ToolCardPresenter.UiEvent.Click)
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
@@ -316,7 +316,7 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             val state = expectMostRecentItem()
-            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.UiEvent.Click)
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCardPresenter.UiEvent.Click)
             assertEquals("variant", expectMostRecentItem().toolCode)
         }
     }
@@ -604,7 +604,8 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.UiEvent.Click)
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }
+                .eventSink(ToolCardPresenter.UiEvent.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)

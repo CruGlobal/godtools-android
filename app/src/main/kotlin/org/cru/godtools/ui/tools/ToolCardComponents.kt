@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.model.getName
-import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
 

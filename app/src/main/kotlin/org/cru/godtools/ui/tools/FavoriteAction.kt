@@ -24,11 +24,13 @@ import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.model.getName
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 internal const val TEST_TAG_FAVORITE_ACTION = "favorite_action"
 
 @Composable
-internal fun FavoriteAction(state: ToolCard.UiState, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {
+internal fun FavoriteAction(state: UiState, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {
     val tool by rememberUpdatedState(state.tool)
     val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     val eventSink by rememberUpdatedState(state.eventSink)
@@ -38,9 +40,9 @@ internal fun FavoriteAction(state: ToolCard.UiState, modifier: Modifier = Modifi
     Surface(
         onClick = {
             when {
-                !isFavorite -> eventSink(ToolCard.UiEvent.PinTool)
+                !isFavorite -> eventSink(UiEvent.PinTool)
                 confirmRemoval -> showRemovalConfirmation = true
-                else -> eventSink(ToolCard.UiEvent.UnpinTool)
+                else -> eventSink(UiEvent.UnpinTool)
             }
         },
         shape = CircleShape,
@@ -75,7 +77,7 @@ internal fun FavoriteAction(state: ToolCard.UiState, modifier: Modifier = Modifi
             confirmButton = {
                 TextButton(
                     onClick = {
-                        eventSink(ToolCard.UiEvent.UnpinTool)
+                        eventSink(UiEvent.UnpinTool)
                         showRemovalConfirmation = false
                     }
                 ) { Text(stringResource(R.string.tools_list_remove_favorite_dialog_confirm)) }

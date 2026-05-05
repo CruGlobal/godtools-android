@@ -24,6 +24,8 @@ import org.cru.godtools.R
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -36,14 +38,14 @@ class VariantToolCardTest {
 
     private fun stringRes(@StringRes id: Int) = composeTestRule.activity.getString(id)
 
-    private val events = TestEventSink<ToolCard.UiEvent>()
+    private val events = TestEventSink<UiEvent>()
 
     @Test
     fun `VariantToolCard()`() {
         val tool = randomTool(name = UUID.randomUUID().toString())
         val translation = randomTranslation(tool.code, tagline = UUID.randomUUID().toString())
 
-        composeTestRule.setContent { VariantToolCard(ToolCard.UiState(tool = tool, translation = translation)) }
+        composeTestRule.setContent { VariantToolCard(UiState(tool = tool, translation = translation)) }
 
         composeTestRule.onNodeWithText(translation.name!!).assertExists()
         composeTestRule.onNodeWithText(translation.tagline!!).assertExists()
@@ -51,10 +53,10 @@ class VariantToolCardTest {
 
     @Test
     fun `VariantToolCard() - Event - Click`() {
-        composeTestRule.setContent { VariantToolCard(ToolCard.UiState(eventSink = events)) }
+        composeTestRule.setContent { VariantToolCard(UiState(eventSink = events)) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(ToolCard.UiEvent.Click)
+        events.assertEvent(UiEvent.Click)
     }
 
     // region VariantToolCard - isSelected
@@ -62,7 +64,7 @@ class VariantToolCardTest {
     fun `VariantToolCard(isSelected=true)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(tool = randomTool(), eventSink = events),
+                state = UiState(tool = randomTool(), eventSink = events),
                 isSelected = true,
             )
         }
@@ -71,14 +73,14 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsSelected()
             .performClick()
-        events.assertEvent(ToolCard.UiEvent.Click)
+        events.assertEvent(UiEvent.Click)
     }
 
     @Test
     fun `VariantToolCard(isSelected=false)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(tool = randomTool(), eventSink = events),
+                state = UiState(tool = randomTool(), eventSink = events),
                 isSelected = false,
             )
         }
@@ -87,7 +89,7 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsNotSelected()
             .performClick()
-        events.assertEvent(ToolCard.UiEvent.Click)
+        events.assertEvent(UiEvent.Click)
     }
     // endregion VariantToolCard - isSelected
 
@@ -96,7 +98,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - App Language - Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(
+                state = UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = true,
@@ -114,7 +116,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - App Language - Not Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(
+                state = UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = false,
@@ -134,7 +136,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - Second Language - Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(
+                state = UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = false,
@@ -154,7 +156,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - Second Language - Not Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.UiState(
+                state = UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = true,

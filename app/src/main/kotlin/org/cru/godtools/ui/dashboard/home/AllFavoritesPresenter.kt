@@ -48,7 +48,7 @@ class AllFavoritesPresenter @AssistedInject constructor(
 ) : Presenter<UiState> {
     @ConsistentCopyVisibility
     data class UiState internal constructor(
-        val tools: List<ToolCard.UiState> = emptyList(),
+        val tools: List<ToolCardPresenter.UiState> = emptyList(),
         internal val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -66,11 +66,11 @@ class AllFavoritesPresenter @AssistedInject constructor(
             tools = tools.mapNotNull { tool ->
                 val toolCode = tool.code ?: return@mapNotNull null
                 key(toolCode) {
-                    lateinit var state: ToolCard.UiState
+                    lateinit var state: ToolCardPresenter.UiState
                     state = toolCardPresenter.present(tool) {
                         when (it) {
-                            ToolCard.UiEvent.Click,
-                            ToolCard.UiEvent.OpenTool -> {
+                            ToolCardPresenter.UiEvent.Click,
+                            ToolCardPresenter.UiEvent.OpenTool -> {
                                 val intent = context.createToolIntent(
                                     tool = tool,
                                     languages = listOfNotNull(
@@ -88,15 +88,16 @@ class AllFavoritesPresenter @AssistedInject constructor(
                                 }
                             }
 
-                            ToolCard.UiEvent.OpenToolDetails -> {
+                            ToolCardPresenter.UiEvent.OpenToolDetails -> {
                                 eventBus.post(
                                     OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                                 )
                                 navigator.goTo(ToolDetailsScreen(toolCode))
                             }
 
-                            ToolCard.UiEvent.PinTool,
-                            ToolCard.UiEvent.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
+                            ToolCardPresenter.UiEvent.PinTool,
+                            ToolCardPresenter.UiEvent.UnpinTool ->
+                                error("$it should be handled by the ToolCardPresenter")
                         }
                     }
                     state

@@ -19,8 +19,8 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.ui.tools.ToolCard.UiEvent
-import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Composable
 fun SquareToolCard(

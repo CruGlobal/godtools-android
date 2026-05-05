@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
-import org.cru.godtools.ui.tools.ToolCard.UiEvent
-import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Composable
 internal fun ToolCardActions(

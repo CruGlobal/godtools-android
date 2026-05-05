@@ -39,7 +39,7 @@ import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
-import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Singleton
 internal class DefaultToolCardPresenter @Inject constructor(
@@ -59,7 +59,7 @@ internal class DefaultToolCardPresenter @Inject constructor(
         loadAppLanguage: Boolean,
         secondLanguage: Language?,
         loadAvailableLanguages: Boolean,
-        eventSink: (ToolCard.UiEvent) -> Unit,
+        eventSink: (ToolCardPresenter.UiEvent) -> Unit,
     ): UiState {
         val coroutineScope = rememberCoroutineScope()
         val toolCode by rememberUpdatedState(tool.code)
@@ -116,14 +116,14 @@ internal class DefaultToolCardPresenter @Inject constructor(
         val secondLanguageAvailable by remember { derivedStateOf { secondTranslation != null } }
 
         // eventSink
-        val interceptingEventSink: (ToolCard.UiEvent) -> Unit = remember(eventSink) {
+        val interceptingEventSink: (ToolCardPresenter.UiEvent) -> Unit = remember(eventSink) {
             {
                 when (it) {
-                    ToolCard.UiEvent.PinTool -> coroutineScope.launch(NonCancellable) {
+                    ToolCardPresenter.UiEvent.PinTool -> coroutineScope.launch(NonCancellable) {
                         toolCode?.let { toolsRepository.pinTool(it) }
                     }
 
-                    ToolCard.UiEvent.UnpinTool -> coroutineScope.launch(NonCancellable) {
+                    ToolCardPresenter.UiEvent.UnpinTool -> coroutineScope.launch(NonCancellable) {
                         toolCode?.let { toolsRepository.unpinTool(it) }
                     }
 

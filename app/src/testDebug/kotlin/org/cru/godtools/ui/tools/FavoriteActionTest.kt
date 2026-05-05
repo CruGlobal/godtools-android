@@ -13,8 +13,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.ui.tools.ToolCard.UiEvent
-import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config

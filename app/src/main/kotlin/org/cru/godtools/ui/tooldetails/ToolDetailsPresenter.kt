@@ -71,7 +71,6 @@ import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
@@ -221,7 +220,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
         metaToolCode: String?,
         secondLanguage: Language?,
         onVariantSelect: (String) -> Unit,
-    ): ImmutableList<ToolCard.UiState> {
+    ): List<ToolCardPresenter.UiState> {
         if (metaToolCode == null) return persistentListOf()
 
         val onVariantSelect by rememberUpdatedState(onVariantSelect)
@@ -237,14 +236,13 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         loadAvailableLanguages = true,
                         eventSink = {
                             when (it) {
-                                ToolCard.UiEvent.Click -> tool.code?.let { onVariantSelect(it) }
+                                ToolCardPresenter.UiEvent.Click -> tool.code?.let { onVariantSelect(it) }
                                 else -> Unit
                             }
                         }
                     )
                 }
             }
-            .toImmutableList()
     }
 
     @Composable

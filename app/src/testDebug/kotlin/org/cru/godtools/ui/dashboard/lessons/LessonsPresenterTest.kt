@@ -50,6 +50,7 @@ import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
@@ -370,7 +371,7 @@ class LessonsPresenterTest {
         )
 
         presenter.test {
-            expectMostRecentItem().lessons[1].eventSink(ToolCard.UiEvent.Click)
+            expectMostRecentItem().lessons[1].eventSink(ToolCardPresenter.UiEvent.Click)
 
             val expectedIntent = context.createToolIntent(
                 enLessonsFlow.value[1],

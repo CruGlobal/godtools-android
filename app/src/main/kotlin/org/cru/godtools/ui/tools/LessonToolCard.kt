@@ -22,9 +22,9 @@ import kotlin.math.roundToInt
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.ui.tools.ToolCard.UiEvent
-import org.cru.godtools.ui.tools.ToolCard.UiState
-import org.cru.godtools.ui.tools.ToolCard.UiState.Progress
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState.Progress
 
 @Composable
 fun LessonToolCard(

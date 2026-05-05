@@ -15,7 +15,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
-import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.ToolCardPresenter
 
 @Parcelize
 data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
@@ -32,7 +32,7 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         val secondLanguage: Language? = null,
         val pages: ImmutableList<Page> = persistentListOf(Page.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
-        val variants: ImmutableList<ToolCard.UiState> = persistentListOf(),
+        val variants: List<ToolCardPresenter.UiState> = listOf(),
         val drawerState: DrawerMenuScreen.State = DrawerMenuScreen.State(),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState

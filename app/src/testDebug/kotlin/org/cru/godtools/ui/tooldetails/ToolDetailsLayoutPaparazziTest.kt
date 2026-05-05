@@ -13,7 +13,6 @@ import java.util.Locale
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,7 +26,6 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.drawer.DrawerMenuScreenStateTestData
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.runner.RunWith
 
@@ -38,7 +36,7 @@ class ToolDetailsLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val banner = ToolCardStateTestData.banner
-    private val variants: ImmutableList<ToolCard.UiState> = persistentListOf(
+    private val variants = listOf(
         ToolCardStateTestData.tool.copy(secondLanguage = null),
         ToolCardStateTestData.tool.copy(secondLanguage = null)
     )
