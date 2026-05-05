@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
@@ -38,8 +37,9 @@ import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -60,15 +60,7 @@ class HomePresenterTest {
         every { getLessonsFlow() } returns lessonsFlow
         every { getFavoriteToolsFlow() } returns toolsFlow
     }
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable { present(tool = any(), eventSink = any()) }.answers {
-            ToolCard.State(
-                toolCode = firstArg<Tool>().code,
-                translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(5)
-            )
-        }
-    }
+    private val toolCardPresenter = FakeToolCardPresenter()
     private val tutorialFeaturesBannerPresenter = FakeBannerPresenter<TutorialFeaturesBannerPresenter.UiState>()
 
     private val navigator = FakeNavigator(HomeScreen)
@@ -182,13 +174,13 @@ class HomePresenterTest {
     fun `State - spotlightLessons - Event - Click`() = runTest {
         val lesson = randomTool(type = Tool.Type.LESSON, isHidden = false, isSpotlight = true)
         val translation = randomTranslation(lesson.code, languageCode = Locale.FRENCH)
-        everyComposable { toolCardPresenter.present(tool = lesson, eventSink = any()) }.answers {
-            ToolCard.State(toolCode = lesson.code, translation = translation, eventSink = arg(5))
+        toolCardPresenter.buildUiState = { t, _, es ->
+            ToolCardPresenter.UiState(toolCode = t.code, translation = translation, eventSink = es)
         }
         lessonsFlow.emit(listOf(lesson))
 
         presenter.test {
-            expectMostRecentItem().spotlightLessons[0].eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().spotlightLessons[0].eventSink(ToolCardEvent.Click)
 
             assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
                 val expected = context.createToolIntent(lesson, listOf(translation.languageCode), resumeProgress = true)
@@ -231,7 +223,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCard.Event.Click)
+                toolState.eventSink(ToolCardEvent.Click)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -250,7 +242,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCard.Event.OpenTool)
+                toolState.eventSink(ToolCardEvent.OpenTool)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -269,7 +261,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCard.Event.OpenTool)
+                toolState.eventSink(ToolCardEvent.OpenTool)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -287,7 +279,7 @@ class HomePresenterTest {
 
         presenter.test {
             toolsFlow.emit(listOf(tool))
-            expectMostRecentItem().favoriteTools[0].eventSink(ToolCard.Event.OpenToolDetails)
+            expectMostRecentItem().favoriteTools[0].eventSink(ToolCardEvent.OpenToolDetails)
 
             assertEquals(ToolDetailsScreen(tool.code!!), navigator.awaitNextScreen())
         }

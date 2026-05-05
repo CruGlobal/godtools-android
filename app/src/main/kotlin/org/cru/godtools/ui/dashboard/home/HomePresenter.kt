@@ -35,8 +35,8 @@ import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
@@ -54,8 +54,8 @@ class HomePresenter @AssistedInject constructor(
     data class UiState(
         val dataLoaded: Boolean = true,
         val banner: Banner.UiState? = null,
-        val spotlightLessons: List<ToolCard.State> = emptyList(),
-        val favoriteTools: List<ToolCard.State> = emptyList(),
+        val spotlightLessons: List<ToolCardPresenter.UiState> = emptyList(),
+        val favoriteTools: List<ToolCardPresenter.UiState> = emptyList(),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -91,10 +91,10 @@ class HomePresenter @AssistedInject constructor(
                 val lessonCode = lesson.code ?: return@mapNotNull null
 
                 key(lessonCode) {
-                    lateinit var lessonState: ToolCard.State
+                    lateinit var lessonState: ToolCardPresenter.UiState
                     lessonState = toolCardPresenter.present(lesson) {
                         when (it) {
-                            ToolCard.Event.Click -> {
+                            ToolCardEvent.Click -> {
                                 val intent = context.createToolIntent(
                                     tool = lesson,
                                     languages = listOfNotNull(lessonState.translation?.languageCode),
@@ -130,11 +130,11 @@ class HomePresenter @AssistedInject constructor(
             val toolCode = tool.code ?: return@mapNotNull null
 
             key(toolCode) {
-                lateinit var state: ToolCard.State
+                lateinit var state: ToolCardPresenter.UiState
                 state = toolCardPresenter.present(tool) {
                     when (it) {
-                        ToolCard.Event.Click,
-                        ToolCard.Event.OpenTool -> {
+                        ToolCardEvent.Click,
+                        ToolCardEvent.OpenTool -> {
                             val intent = context.createToolIntent(
                                 tool = tool,
                                 languages = listOfNotNull(
@@ -152,15 +152,12 @@ class HomePresenter @AssistedInject constructor(
                             }
                         }
 
-                        ToolCard.Event.OpenToolDetails -> {
+                        ToolCardEvent.OpenToolDetails -> {
                             eventBus.post(
                                 OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                             )
                             navigator.goTo(ToolDetailsScreen(toolCode))
                         }
-
-                        ToolCard.Event.PinTool,
-                        ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
                 }
                 state

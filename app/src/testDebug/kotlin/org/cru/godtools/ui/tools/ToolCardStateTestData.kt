@@ -7,6 +7,7 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 object ToolCardStateTestData {
     val banner: File = File.createTempFile("tool", "png")
@@ -14,7 +15,7 @@ object ToolCardStateTestData {
         Drawable.createFromStream(this.javaClass.getResourceAsStream("banner.jpg"), "banner.jpg")!!
     }
 
-    val tool = ToolCard.State(
+    val tool = UiState(
         tool = randomTool(
             code = "tool",
             name = "Tool Title",
@@ -34,7 +35,7 @@ object ToolCardStateTestData {
         appLanguageAvailable = true,
         secondLanguage = Language(Locale.FRENCH),
         secondLanguageAvailable = true,
-        progress = ToolCard.State.Progress.InProgress(0.6),
+        progress = UiState.Progress.InProgress(0.6),
     )
 
     val toolFavorite = tool.copy(

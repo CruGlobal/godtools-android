@@ -32,8 +32,8 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
@@ -48,7 +48,7 @@ class AllFavoritesPresenter @AssistedInject constructor(
 ) : Presenter<UiState> {
     @ConsistentCopyVisibility
     data class UiState internal constructor(
-        val tools: List<ToolCard.State> = emptyList(),
+        val tools: List<ToolCardPresenter.UiState> = emptyList(),
         internal val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -66,11 +66,11 @@ class AllFavoritesPresenter @AssistedInject constructor(
             tools = tools.mapNotNull { tool ->
                 val toolCode = tool.code ?: return@mapNotNull null
                 key(toolCode) {
-                    lateinit var state: ToolCard.State
+                    lateinit var state: ToolCardPresenter.UiState
                     state = toolCardPresenter.present(tool) {
                         when (it) {
-                            ToolCard.Event.Click,
-                            ToolCard.Event.OpenTool -> {
+                            ToolCardEvent.Click,
+                            ToolCardEvent.OpenTool -> {
                                 val intent = context.createToolIntent(
                                     tool = tool,
                                     languages = listOfNotNull(
@@ -88,15 +88,12 @@ class AllFavoritesPresenter @AssistedInject constructor(
                                 }
                             }
 
-                            ToolCard.Event.OpenToolDetails -> {
+                            ToolCardEvent.OpenToolDetails -> {
                                 eventBus.post(
                                     OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                                 )
                                 navigator.goTo(ToolDetailsScreen(toolCode))
                             }
-
-                            ToolCard.Event.PinTool,
-                            ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                         }
                     }
                     state

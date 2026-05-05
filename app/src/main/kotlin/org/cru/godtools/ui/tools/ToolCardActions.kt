@@ -12,28 +12,26 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Composable
 internal fun ToolCardActions(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     buttonModifier: Modifier = Modifier,
     buttonWeightFill: Boolean = true,
 ) = Row(modifier = modifier) {
-    val eventSink by rememberUpdatedState(state.eventSink)
-
     val buttonContentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
     val buttonMinHeight = 30.dp
 
     CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides buttonMinHeight) {
         OutlinedButton(
-            onClick = { eventSink(ToolCard.Event.OpenToolDetails) },
+            onClick = { state.eventSink(ToolCardEvent.OpenToolDetails) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()
@@ -45,9 +43,11 @@ internal fun ToolCardActions(
                 style = MaterialTheme.typography.labelMedium
             )
         }
+
         Spacer(Modifier.width(8.dp))
+
         Button(
-            onClick = { eventSink(ToolCard.Event.OpenTool) },
+            onClick = { state.eventSink(ToolCardEvent.OpenTool) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()

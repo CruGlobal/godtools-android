@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
@@ -33,11 +32,12 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.AllFavoritesScreen
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
-import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -55,18 +55,13 @@ class AllFavoritesPresenterTest {
 
         coEvery { storeToolOrder(any()) } just Runs
     }
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable {
-            present(tool = any(), eventSink = any())
-        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
-    }
 
     private val navigator = FakeNavigator(AllFavoritesScreen)
 
     private val presenter = AllFavoritesPresenter(
         context = context,
         eventBus = eventBus,
-        toolCardPresenter = toolCardPresenter,
+        toolCardPresenter = FakeToolCardPresenter(),
         toolsRepository = toolsRepository,
         navigator = navigator,
     )
@@ -142,21 +137,14 @@ class AllFavoritesPresenterTest {
         coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
 
-    // region ToolCard.Event.Click
+    // region ToolCardEvent.Click
     @Test
     fun `ToolCard - Event - Click`() = runTest {
         val tool = randomTool("tool", Tool.Type.TRACT, primaryLocale = null, parallelLocale = null)
         toolsFlow.value = listOf(tool)
-        everyComposable { toolCardPresenter.present(tool = tool, eventSink = any()) }.answers {
-            ToolCard.State(
-                toolCode = firstArg<Tool>().code,
-                translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(5)
-            )
-        }
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.Click)
 
             val expected = context.createToolIntent(
                 tool,
@@ -173,16 +161,9 @@ class AllFavoritesPresenterTest {
     fun `ToolCard - Event - Click - Saved Languages`() = runTest {
         val tool = randomTool("tool", Tool.Type.TRACT, primaryLocale = Locale.FRENCH, parallelLocale = Locale.GERMAN)
         toolsFlow.value = listOf(tool)
-        everyComposable { toolCardPresenter.present(tool = tool, eventSink = any()) }.answers {
-            ToolCard.State(
-                toolCode = firstArg<Tool>().code,
-                translation = randomTranslation(languageCode = Locale.ENGLISH),
-                eventSink = arg(5)
-            )
-        }
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.Click)
 
             val expected = context.createToolIntent(
                 tool,
@@ -194,7 +175,7 @@ class AllFavoritesPresenterTest {
 
         verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
     }
-    // endregion ToolCard.Event.Click
+    // endregion ToolCardEvent.Click
 
     @Test
     fun `ToolCard - Event - OpenToolDetails`() = runTest {
@@ -202,7 +183,7 @@ class AllFavoritesPresenterTest {
         toolsFlow.value = listOf(tool)
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCard.Event.OpenToolDetails)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.OpenToolDetails)
 
             assertEquals(ToolDetailsScreen(tool.code!!), navigator.awaitNextScreen())
         }

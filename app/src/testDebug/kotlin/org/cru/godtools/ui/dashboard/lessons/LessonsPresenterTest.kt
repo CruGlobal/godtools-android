@@ -9,7 +9,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.Turbine
-import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -49,11 +48,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
-import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardPresenter
-import org.cru.godtools.ui.tools.customLocaleArg
-import org.cru.godtools.ui.tools.eventSinkArg
-import org.cru.godtools.ui.tools.toolArg
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.Rule
@@ -81,15 +77,6 @@ class LessonsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLangFlow
     }
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable { present(tool = any(), customLocale = any(), eventSink = any()) }.answers {
-            ToolCard.State(
-                toolCode = toolArg().code,
-                translation = randomTranslation(languageCode = customLocaleArg()!!),
-                eventSink = eventSinkArg()
-            )
-        }
-    }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
 
@@ -108,7 +95,7 @@ class LessonsPresenterTest {
         eventBus = eventBus,
         languagesRepository = languagesRepository,
         settings = settings,
-        toolCardPresenter = toolCardPresenter,
+        toolCardPresenter = FakeToolCardPresenter(),
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
@@ -383,7 +370,7 @@ class LessonsPresenterTest {
         )
 
         presenter.test {
-            expectMostRecentItem().lessons[1].eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().lessons[1].eventSink(ToolCardEvent.Click)
 
             val expectedIntent = context.createToolIntent(
                 enLessonsFlow.value[1],

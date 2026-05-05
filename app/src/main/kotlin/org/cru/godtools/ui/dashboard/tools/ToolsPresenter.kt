@@ -44,8 +44,8 @@ import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject internal constructor(
@@ -66,9 +66,9 @@ class ToolsPresenter @AssistedInject internal constructor(
         val mode: Mode = Mode.ALL_TOOLS,
         val banner: Banner.UiState? = null,
         val dataLoaded: Boolean = true,
-        val spotlightTools: List<ToolCard.State> = emptyList(),
+        val spotlightTools: List<ToolCardPresenter.UiState> = emptyList(),
         val filters: Filters = Filters(),
-        val tools: List<ToolCard.State> = emptyList(),
+        val tools: List<ToolCardPresenter.UiState> = emptyList(),
         // TODO: temporary until personalization is rolled out to everyone,
         //       then this can be removed and the mode logic simplified
         val isPersonalizationEnabled: Boolean = false,
@@ -151,7 +151,7 @@ class ToolsPresenter @AssistedInject internal constructor(
     private fun rememberSpotlightTools(
         secondLanguage: Language?,
         eventSink: (UiEvent) -> Unit,
-    ): List<ToolCard.State>? {
+    ): List<ToolCardPresenter.UiState>? {
         val tools by remember {
             toolsRepository.getNormalToolsFlow()
                 .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
@@ -166,13 +166,10 @@ class ToolsPresenter @AssistedInject internal constructor(
                 secondLanguage = secondLanguage,
                 eventSink = {
                     when (it) {
-                        ToolCard.Event.Click,
-                        ToolCard.Event.OpenTool,
-                        ToolCard.Event.OpenToolDetails ->
+                        ToolCardEvent.Click,
+                        ToolCardEvent.OpenTool,
+                        ToolCardEvent.OpenToolDetails ->
                             toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
-
-                        ToolCard.Event.PinTool,
-                        ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
                 }
             )
@@ -185,7 +182,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         category: String?,
         language: Language?,
         eventSink: (UiEvent) -> Unit,
-    ): List<ToolCard.State>? {
+    ): List<ToolCardPresenter.UiState>? {
         val locale = language?.code
         val tools by remember(mode, category, locale) { filteredToolsFlowProducer.getFlow(mode, category, locale) }
             .collectAsState(null)
@@ -199,13 +196,10 @@ class ToolsPresenter @AssistedInject internal constructor(
                     secondLanguage = language,
                     eventSink = {
                         when (it) {
-                            ToolCard.Event.Click,
-                            ToolCard.Event.OpenTool,
-                            ToolCard.Event.OpenToolDetails ->
+                            ToolCardEvent.Click,
+                            ToolCardEvent.OpenTool,
+                            ToolCardEvent.OpenToolDetails ->
                                 toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
-
-                            ToolCard.Event.PinTool,
-                            ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                         }
                     }
                 )

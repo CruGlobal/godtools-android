@@ -70,8 +70,8 @@ import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
-import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -132,17 +132,6 @@ class ToolDetailsPresenterTest {
         every { canPinToolShortcut(any()) } returns false
     }
     private val syncService: GodToolsSyncService = mockk()
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable {
-            present(
-                tool = any(),
-                loadAppLanguage = true,
-                secondLanguage = null,
-                loadAvailableLanguages = true,
-                eventSink = any()
-            )
-        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
-    }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
         context = context,
@@ -159,7 +148,7 @@ class ToolDetailsPresenterTest {
         syncService = syncService,
         isConnected = isConnected,
         drawerMenuPresenter = drawerMenuPresenter,
-        toolCardPresenter = toolCardPresenter,
+        toolCardPresenter = FakeToolCardPresenter(),
         screen = screen,
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
         navigator = navigator,
@@ -308,11 +297,11 @@ class ToolDetailsPresenterTest {
             assertEquals(2, state.variants.size)
 
             assertEquals(TOOL, state.variants[0].toolCode)
-            state.variants[0].eventSink(ToolCard.Event.Click)
+            state.variants[0].eventSink(ToolCardEvent.Click)
             expectNoEvents()
 
             assertEquals("variant1", state.variants[1].toolCode)
-            state.variants[1].eventSink(ToolCard.Event.Click)
+            state.variants[1].eventSink(ToolCardEvent.Click)
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
@@ -326,7 +315,7 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             val state = expectMostRecentItem()
-            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCardEvent.Click)
             assertEquals("variant", expectMostRecentItem().toolCode)
         }
     }
@@ -614,7 +603,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCardEvent.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)
