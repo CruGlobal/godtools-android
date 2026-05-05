@@ -79,7 +79,6 @@ class ToolsPresenter @AssistedInject internal constructor(
 
     sealed interface UiEvent : CircuitUiEvent {
         data class ChangeMode(val mode: Mode) : UiEvent
-        data class OpenToolDetails(val tool: String, val source: String? = null) : UiEvent
     }
     // endregion UiState / UiEvent
 
@@ -96,31 +95,15 @@ class ToolsPresenter @AssistedInject internal constructor(
 
         RegisterSyncTask(selectedLocale)
 
-        val eventSink: (UiEvent) -> Unit = remember {
-            {
-                when (it) {
-                    is UiEvent.ChangeMode -> mode = it.mode
-
-                    is UiEvent.OpenToolDetails -> {
-                        if (it.source != null) {
-                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, it.tool, it.source))
-                        }
-                        navigator.goTo(ToolDetailsScreen(it.tool, selectedLocale))
-                    }
-                }
-            }
-        }
-
         val spotlightTools = rememberSpotlightTools(
-            secondLanguage = filters.languageFilter.selectedItem,
-            eventSink = eventSink
-        )
+            secondLanguage = filters.languageFilter.selectedItem
+        ) { openToolDetails(it, selectedLocale, SOURCE_SPOTLIGHT) }
+
         val tools = rememberTools(
             mode = mode,
             category = filters.categoryFilter.selectedItem,
             language = filters.languageFilter.selectedItem,
-            eventSink = eventSink,
-        )
+        ) { openToolDetails(it, selectedLocale, SOURCE_ALL_TOOLS) }
 
         return UiState(
             mode = mode,
@@ -133,8 +116,11 @@ class ToolsPresenter @AssistedInject internal constructor(
             filters = filters,
             tools = tools.orEmpty(),
             isPersonalizationEnabled = isPersonalizationEnabled,
-            eventSink = eventSink,
-        )
+        ) {
+            when (it) {
+                is UiEvent.ChangeMode -> mode = it.mode
+            }
+        }
     }
 
     @Composable
@@ -150,13 +136,12 @@ class ToolsPresenter @AssistedInject internal constructor(
     @Composable
     private fun rememberSpotlightTools(
         secondLanguage: Language?,
-        eventSink: (UiEvent) -> Unit,
+        onOpenToolDetails: (String) -> Unit,
     ): List<ToolCardPresenter.UiState>? {
         val tools by remember {
             toolsRepository.getNormalToolsFlow()
                 .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
         }.collectAsState(null)
-        val eventSink by rememberUpdatedState(eventSink)
 
         return tools?.map { tool ->
             val toolCode by rememberUpdatedState(tool.code)
@@ -168,8 +153,7 @@ class ToolsPresenter @AssistedInject internal constructor(
                     when (it) {
                         ToolCardEvent.Click,
                         ToolCardEvent.OpenTool,
-                        ToolCardEvent.OpenToolDetails ->
-                            toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
+                        ToolCardEvent.OpenToolDetails -> toolCode?.let { onOpenToolDetails(it) }
                     }
                 }
             )
@@ -181,12 +165,11 @@ class ToolsPresenter @AssistedInject internal constructor(
         mode: Mode,
         category: String?,
         language: Language?,
-        eventSink: (UiEvent) -> Unit,
+        onOpenToolDetails: (String) -> Unit,
     ): List<ToolCardPresenter.UiState>? {
         val locale = language?.code
         val tools by remember(mode, category, locale) { filteredToolsFlowProducer.getFlow(mode, category, locale) }
             .collectAsState(null)
-        val eventSink by rememberUpdatedState(eventSink)
 
         return tools?.map { tool ->
             key(tool.code) {
@@ -198,13 +181,19 @@ class ToolsPresenter @AssistedInject internal constructor(
                         when (it) {
                             ToolCardEvent.Click,
                             ToolCardEvent.OpenTool,
-                            ToolCardEvent.OpenToolDetails ->
-                                toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
+                            ToolCardEvent.OpenToolDetails -> toolCode?.let { onOpenToolDetails(it) }
                         }
                     }
                 )
             }
         }
+    }
+
+    private fun openToolDetails(tool: String, selectedLocale: Locale?, source: String?) {
+        if (source != null) {
+            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, tool, source))
+        }
+        navigator.goTo(ToolDetailsScreen(tool, selectedLocale))
     }
 
     private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
