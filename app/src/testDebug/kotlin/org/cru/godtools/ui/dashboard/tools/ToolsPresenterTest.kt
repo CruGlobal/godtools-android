@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.InternalCircuitApi
 import com.slack.circuit.test.FakeNavigator
@@ -47,6 +46,7 @@ import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.junit.runner.RunWith
@@ -87,11 +87,7 @@ class ToolsPresenterTest {
         every { getNormalToolsFlow() } returns toolsFlow
     }
     private val toolFiltersStateProducer = FakeToolFiltersStateProducer()
-
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable { present(tool = any(), secondLanguage = any(), eventSink = any()) }
-            .answers { ToolCard.UiState(tool = firstArg()) }
-    }
+    private val toolCardPresenter = FakeToolCardPresenter()
 
     private val presenter = ToolsPresenter(
         eventBus = mockk(),

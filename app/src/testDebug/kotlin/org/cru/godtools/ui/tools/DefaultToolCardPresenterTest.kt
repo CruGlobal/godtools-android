@@ -53,7 +53,7 @@ private const val BANNER_ID = 1L
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
-class ToolCardPresenterTest {
+class DefaultToolCardPresenterTest {
     private val appLocaleState = mutableStateOf(Locale.ENGLISH)
     private val toolFlow = MutableStateFlow(randomTool(TOOL, bannerId = BANNER_ID))
     private val bannerFlow = MutableSharedFlow<Attachment?>(extraBufferCapacity = 1)
@@ -85,7 +85,7 @@ class ToolCardPresenterTest {
     }
     private val events = TestEventSink<ToolCard.UiEvent>()
 
-    private val presenter = ToolCardPresenter(
+    private val presenter = DefaultToolCardPresenter(
         fileSystem = fileSystem,
         settings = settings,
         attachmentsRepository = attachmentsRepository,

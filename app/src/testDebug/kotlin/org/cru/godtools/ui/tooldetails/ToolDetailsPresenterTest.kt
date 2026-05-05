@@ -70,6 +70,7 @@ import org.cru.godtools.tutorial.layout.TutorialScreen
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
+import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.util.createToolIntent
@@ -132,17 +133,6 @@ class ToolDetailsPresenterTest {
         every { canPinToolShortcut(any()) } returns false
     }
     private val syncService: GodToolsSyncService = mockk()
-    private val toolCardPresenter: ToolCardPresenter = mockk {
-        everyComposable {
-            present(
-                tool = any(),
-                loadAppLanguage = true,
-                secondLanguage = null,
-                loadAvailableLanguages = true,
-                eventSink = any()
-            )
-        }.answers { ToolCard.UiState(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
-    }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
         context = context,
@@ -159,7 +149,7 @@ class ToolDetailsPresenterTest {
         syncService = syncService,
         isConnected = isConnected,
         drawerMenuPresenter = drawerMenuPresenter,
-        toolCardPresenter = toolCardPresenter,
+        toolCardPresenter = FakeToolCardPresenter(),
         screen = screen,
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
         navigator = navigator,
