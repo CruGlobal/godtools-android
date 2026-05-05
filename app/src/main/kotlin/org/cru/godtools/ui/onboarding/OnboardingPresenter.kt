@@ -84,16 +84,10 @@ class OnboardingPresenter @AssistedInject constructor(
             when (event) {
                 UiEvent.ChangeLanguage -> languageButtonNavigator.goTo(AppLanguageScreen)
 
-                UiEvent.Next -> {
-                    when {
-                        !languageWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
-
-                        !hasSeenCountrySettings -> countrySettingsNavigator.goTo(CountrySettingsScreen)
-
-                        else -> scope.launch {
-                            pagerState.navigateToPage()
-                        }
-                    }
+                UiEvent.Next -> when {
+                    !languageWasSet -> nextButtonNavigator.goTo(AppLanguageScreen)
+                    !hasSeenCountrySettings -> countrySettingsNavigator.goTo(CountrySettingsScreen)
+                    else -> scope.launch { pagerState.navigateToPage() }
                 }
 
                 UiEvent.Skip -> {
