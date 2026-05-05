@@ -37,6 +37,7 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -136,14 +137,14 @@ class AllFavoritesPresenterTest {
         coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
 
-    // region ToolCardPresenter.UiEvent.Click
+    // region ToolCardEvent.Click
     @Test
     fun `ToolCard - Event - Click`() = runTest {
         val tool = randomTool("tool", Tool.Type.TRACT, primaryLocale = null, parallelLocale = null)
         toolsFlow.value = listOf(tool)
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCardPresenter.UiEvent.Click)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.Click)
 
             val expected = context.createToolIntent(
                 tool,
@@ -162,7 +163,7 @@ class AllFavoritesPresenterTest {
         toolsFlow.value = listOf(tool)
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCardPresenter.UiEvent.Click)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.Click)
 
             val expected = context.createToolIntent(
                 tool,
@@ -174,7 +175,7 @@ class AllFavoritesPresenterTest {
 
         verifyAll { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_TOOL, tool.code, SOURCE_FAVORITE)) }
     }
-    // endregion ToolCardPresenter.UiEvent.Click
+    // endregion ToolCardEvent.Click
 
     @Test
     fun `ToolCard - Event - OpenToolDetails`() = runTest {
@@ -182,7 +183,7 @@ class AllFavoritesPresenterTest {
         toolsFlow.value = listOf(tool)
 
         presenter.test {
-            expectMostRecentItem().tools[0].eventSink(ToolCardPresenter.UiEvent.OpenToolDetails)
+            expectMostRecentItem().tools[0].eventSink(ToolCardEvent.OpenToolDetails)
 
             assertEquals(ToolDetailsScreen(tool.code!!), navigator.awaitNextScreen())
         }

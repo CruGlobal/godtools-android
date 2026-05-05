@@ -15,6 +15,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
@@ -44,7 +45,7 @@ class SquareToolCardTest {
         composeTestRule.setContent { SquareToolCard(UiState(eventSink = events)) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(UiEvent.Click)
+        events.assertEvent(ToolCardEvent.Click)
     }
 
     // region SquareToolCard - Category

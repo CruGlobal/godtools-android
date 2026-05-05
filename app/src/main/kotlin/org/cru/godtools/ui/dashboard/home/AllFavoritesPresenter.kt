@@ -32,8 +32,8 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.home.AllFavoritesPresenter.UiState
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
@@ -69,8 +69,8 @@ class AllFavoritesPresenter @AssistedInject constructor(
                     lateinit var state: ToolCardPresenter.UiState
                     state = toolCardPresenter.present(tool) {
                         when (it) {
-                            ToolCardPresenter.UiEvent.Click,
-                            ToolCardPresenter.UiEvent.OpenTool -> {
+                            ToolCardEvent.Click,
+                            ToolCardEvent.OpenTool -> {
                                 val intent = context.createToolIntent(
                                     tool = tool,
                                     languages = listOfNotNull(
@@ -88,16 +88,12 @@ class AllFavoritesPresenter @AssistedInject constructor(
                                 }
                             }
 
-                            ToolCardPresenter.UiEvent.OpenToolDetails -> {
+                            ToolCardEvent.OpenToolDetails -> {
                                 eventBus.post(
                                     OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                                 )
                                 navigator.goTo(ToolDetailsScreen(toolCode))
                             }
-
-                            ToolCardPresenter.UiEvent.PinTool,
-                            ToolCardPresenter.UiEvent.UnpinTool ->
-                                error("$it should be handled by the ToolCardPresenter")
                         }
                     }
                     state

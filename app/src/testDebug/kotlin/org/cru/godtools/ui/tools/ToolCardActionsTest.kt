@@ -10,6 +10,7 @@ import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
@@ -30,7 +31,7 @@ class ToolCardActionsTest {
         composeTestRule.setContent { ToolCardActions(state) }
 
         composeTestRule.onNodeWithText("Open", substring = true, ignoreCase = true).performClick()
-        events.assertEvent(UiEvent.OpenTool)
+        events.assertEvent(ToolCardEvent.OpenTool)
     }
 
     @Test
@@ -39,7 +40,7 @@ class ToolCardActionsTest {
         composeTestRule.setContent { ToolCardActions(state) }
 
         composeTestRule.onNodeWithText("Details", substring = true, ignoreCase = true).performClick()
-        events.assertEvent(UiEvent.OpenToolDetails)
+        events.assertEvent(ToolCardEvent.OpenToolDetails)
     }
 
     @Test
@@ -55,8 +56,8 @@ class ToolCardActionsTest {
         composeTestRule.onNodeWithText("Open", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithText("Details", substring = true, ignoreCase = true).performClick()
         events.assertEvents(
-            UiEvent.OpenTool,
-            UiEvent.OpenToolDetails
+            ToolCardEvent.OpenTool,
+            ToolCardEvent.OpenToolDetails
         )
     }
 }

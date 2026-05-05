@@ -45,8 +45,8 @@ import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
@@ -154,7 +154,7 @@ class LessonsPresenter @AssistedInject constructor(
                     customLocale = locale,
                     eventSink = {
                         when (it) {
-                            ToolCardPresenter.UiEvent.Click -> {
+                            ToolCardEvent.Click, ToolCardEvent.OpenTool -> {
                                 eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, SOURCE_LESSONS))
                                 navigator.goTo(
                                     IntentScreen(
@@ -167,10 +167,7 @@ class LessonsPresenter @AssistedInject constructor(
                                 )
                             }
 
-                            ToolCardPresenter.UiEvent.OpenTool,
-                            ToolCardPresenter.UiEvent.OpenToolDetails,
-                            ToolCardPresenter.UiEvent.PinTool,
-                            ToolCardPresenter.UiEvent.UnpinTool -> Unit
+                            ToolCardEvent.OpenToolDetails -> Unit
                         }
                     }
                 )

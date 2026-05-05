@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState.Progress
 
@@ -39,7 +39,7 @@ fun LessonToolCard(
     val eventSink by rememberUpdatedState(state.eventSink)
 
     ElevatedCard(
-        onClick = { eventSink(UiEvent.Click) },
+        onClick = { eventSink(ToolCardEvent.Click) },
         elevation = toolCardElevation,
         modifier = modifier.fillMaxWidth()
     ) {

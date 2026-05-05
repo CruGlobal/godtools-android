@@ -44,8 +44,8 @@ import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.greenrobot.eventbus.EventBus
 
 class ToolsPresenter @AssistedInject internal constructor(
@@ -166,13 +166,10 @@ class ToolsPresenter @AssistedInject internal constructor(
                 secondLanguage = secondLanguage,
                 eventSink = {
                     when (it) {
-                        ToolCardPresenter.UiEvent.Click,
-                        ToolCardPresenter.UiEvent.OpenTool,
-                        ToolCardPresenter.UiEvent.OpenToolDetails ->
+                        ToolCardEvent.Click,
+                        ToolCardEvent.OpenTool,
+                        ToolCardEvent.OpenToolDetails ->
                             toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_SPOTLIGHT)) }
-
-                        ToolCardPresenter.UiEvent.PinTool,
-                        ToolCardPresenter.UiEvent.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
                 }
             )
@@ -199,14 +196,10 @@ class ToolsPresenter @AssistedInject internal constructor(
                     secondLanguage = language,
                     eventSink = {
                         when (it) {
-                            ToolCardPresenter.UiEvent.Click,
-                            ToolCardPresenter.UiEvent.OpenTool,
-                            ToolCardPresenter.UiEvent.OpenToolDetails ->
+                            ToolCardEvent.Click,
+                            ToolCardEvent.OpenTool,
+                            ToolCardEvent.OpenToolDetails ->
                                 toolCode?.let { eventSink(UiEvent.OpenToolDetails(it, SOURCE_ALL_TOOLS)) }
-
-                            ToolCardPresenter.UiEvent.PinTool,
-                            ToolCardPresenter.UiEvent.UnpinTool ->
-                                error("$it should be handled by the ToolCardPresenter")
                         }
                     }
                 )

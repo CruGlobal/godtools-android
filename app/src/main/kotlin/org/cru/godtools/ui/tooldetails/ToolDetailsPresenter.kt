@@ -72,6 +72,7 @@ import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.Page
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiState
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
@@ -236,7 +237,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         loadAvailableLanguages = true,
                         eventSink = {
                             when (it) {
-                                ToolCardPresenter.UiEvent.Click -> tool.code?.let { onVariantSelect(it) }
+                                ToolCardEvent.Click -> tool.code?.let { onVariantSelect(it) }
                                 else -> Unit
                             }
                         }

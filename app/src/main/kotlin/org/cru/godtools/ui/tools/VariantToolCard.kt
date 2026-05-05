@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.model.getTagline
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
@@ -41,7 +42,7 @@ internal fun VariantToolCard(state: UiState, modifier: Modifier = Modifier, isSe
     ProvideLayoutDirectionFromLocale(locale = translation?.languageCode) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { eventSink(UiEvent.Click) },
+            onClick = { eventSink(ToolCardEvent.Click) },
             modifier = modifier
         ) {
             ToolBanner(
@@ -51,7 +52,7 @@ internal fun VariantToolCard(state: UiState, modifier: Modifier = Modifier, isSe
                     .aspectRatio(335f / 87f)
             )
             Row(modifier = Modifier.padding(16.dp)) {
-                RadioButton(selected = isSelected, onClick = { eventSink(UiEvent.Click) })
+                RadioButton(selected = isSelected, onClick = { eventSink(ToolCardEvent.Click) })
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     ToolName(state)

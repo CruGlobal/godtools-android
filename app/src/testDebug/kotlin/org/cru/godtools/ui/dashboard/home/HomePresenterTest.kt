@@ -38,8 +38,8 @@ import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.home.HomePresenter.UiEvent
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
-import org.cru.godtools.ui.tools.ToolCard
 import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -174,13 +174,13 @@ class HomePresenterTest {
     fun `State - spotlightLessons - Event - Click`() = runTest {
         val lesson = randomTool(type = Tool.Type.LESSON, isHidden = false, isSpotlight = true)
         val translation = randomTranslation(lesson.code, languageCode = Locale.FRENCH)
-        toolCardPresenter.onPresent = { t, _, es ->
+        toolCardPresenter.buildUiState = { t, _, es ->
             ToolCardPresenter.UiState(toolCode = t.code, translation = translation, eventSink = es)
         }
         lessonsFlow.emit(listOf(lesson))
 
         presenter.test {
-            expectMostRecentItem().spotlightLessons[0].eventSink(ToolCardPresenter.UiEvent.Click)
+            expectMostRecentItem().spotlightLessons[0].eventSink(ToolCardEvent.Click)
 
             assertIs<IntentScreen>(navigator.awaitNextScreen()).let {
                 val expected = context.createToolIntent(lesson, listOf(translation.languageCode), resumeProgress = true)
@@ -223,7 +223,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCardPresenter.UiEvent.Click)
+                toolState.eventSink(ToolCardEvent.Click)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -242,7 +242,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCardPresenter.UiEvent.OpenTool)
+                toolState.eventSink(ToolCardEvent.OpenTool)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -261,7 +261,7 @@ class HomePresenterTest {
         presenter.test {
             toolsFlow.emit(listOf(tool))
             assertNotNull(expectMostRecentItem().favoriteTools[0]) { toolState ->
-                toolState.eventSink(ToolCardPresenter.UiEvent.OpenTool)
+                toolState.eventSink(ToolCardEvent.OpenTool)
 
                 val expected = context.createToolIntent(
                     tool,
@@ -279,7 +279,7 @@ class HomePresenterTest {
 
         presenter.test {
             toolsFlow.emit(listOf(tool))
-            expectMostRecentItem().favoriteTools[0].eventSink(ToolCardPresenter.UiEvent.OpenToolDetails)
+            expectMostRecentItem().favoriteTools[0].eventSink(ToolCardEvent.OpenToolDetails)
 
             assertEquals(ToolDetailsScreen(tool.code!!), navigator.awaitNextScreen())
         }

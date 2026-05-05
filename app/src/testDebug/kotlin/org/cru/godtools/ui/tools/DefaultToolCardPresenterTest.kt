@@ -45,6 +45,7 @@ import org.cru.godtools.model.UserCounter
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.runner.RunWith
@@ -513,44 +514,44 @@ class DefaultToolCardPresenterTest {
     }
     // endregion UiState
 
-    // region UiEvent.Click
+    // region ToolCardEvent.Click
     @Test
-    fun `UiEvent - Click`() = runTest {
+    fun `ToolCardEvent - Click`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(UiEvent.Click)
+            expectMostRecentItem().eventSink(ToolCardEvent.Click)
         }
 
-        events.assertEvent(UiEvent.Click)
+        events.assertEvent(ToolCardEvent.Click)
     }
-    // endregion UiEvent.Click
+    // endregion ToolCardEvent.Click
 
-    // region UiEvent.OpenTool
+    // region ToolCardEvent.OpenTool
     @Test
-    fun `UiEvent - OpenTool`() = runTest {
+    fun `ToolCardEvent - OpenTool`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(UiEvent.OpenTool)
+            expectMostRecentItem().eventSink(ToolCardEvent.OpenTool)
         }
 
-        events.assertEvent(UiEvent.OpenTool)
+        events.assertEvent(ToolCardEvent.OpenTool)
     }
-    // endregion UiEvent.OpenTool
+    // endregion ToolCardEvent.OpenTool
 
-    // region UiEvent.OpenToolDetails
+    // region ToolCardEvent.OpenToolDetails
     @Test
-    fun `UiEvent - OpenToolDetails`() = runTest {
+    fun `ToolCardEvent - OpenToolDetails`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(UiEvent.OpenToolDetails)
+            expectMostRecentItem().eventSink(ToolCardEvent.OpenToolDetails)
         }
 
-        events.assertEvent(UiEvent.OpenToolDetails)
+        events.assertEvent(ToolCardEvent.OpenToolDetails)
     }
-    // endregion UiEvent.OpenToolDetails
+    // endregion ToolCardEvent.OpenToolDetails
 
     // region UiEvent.PinTool
     @Test

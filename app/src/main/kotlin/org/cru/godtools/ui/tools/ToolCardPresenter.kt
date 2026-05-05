@@ -18,7 +18,7 @@ interface ToolCardPresenter {
         loadAppLanguage: Boolean = false,
         secondLanguage: Language? = null,
         loadAvailableLanguages: Boolean = false,
-        eventSink: (UiEvent) -> Unit = {},
+        eventSink: (ToolCardEvent) -> Unit = {},
     ): UiState
 
     data class UiState(
@@ -50,10 +50,13 @@ interface ToolCardPresenter {
     }
 
     sealed interface UiEvent : CircuitUiEvent {
-        data object Click : UiEvent
-        data object OpenTool : UiEvent
-        data object OpenToolDetails : UiEvent
         data object PinTool : UiEvent
         data object UnpinTool : UiEvent
+    }
+
+    sealed interface ToolCardEvent : UiEvent {
+        data object Click : ToolCardEvent
+        data object OpenTool : ToolCardEvent
+        data object OpenToolDetails : ToolCardEvent
     }
 }

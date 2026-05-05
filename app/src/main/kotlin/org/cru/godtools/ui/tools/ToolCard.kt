@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.androidx.compose.foundation.layout.widthIn
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Composable
@@ -36,7 +36,7 @@ fun ToolCard(
 
     ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
-            onClick = { eventSink(UiEvent.Click) },
+            onClick = { eventSink(ToolCardEvent.Click) },
             elevation = toolCardElevation,
             interactionSource = interactionSource,
             modifier = modifier

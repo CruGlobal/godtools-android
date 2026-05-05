@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
@@ -39,6 +40,8 @@ import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
+import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 @Singleton
@@ -59,7 +62,7 @@ internal class DefaultToolCardPresenter @Inject constructor(
         loadAppLanguage: Boolean,
         secondLanguage: Language?,
         loadAvailableLanguages: Boolean,
-        eventSink: (ToolCardPresenter.UiEvent) -> Unit,
+        eventSink: (ToolCardEvent) -> Unit,
     ): UiState {
         val coroutineScope = rememberCoroutineScope()
         val toolCode by rememberUpdatedState(tool.code)
@@ -115,23 +118,6 @@ internal class DefaultToolCardPresenter @Inject constructor(
         val secondTranslation by translationsRepository.produceLatestTranslationState(toolCode, secondLanguage?.code)
         val secondLanguageAvailable by remember { derivedStateOf { secondTranslation != null } }
 
-        // eventSink
-        val interceptingEventSink: (ToolCardPresenter.UiEvent) -> Unit = remember(eventSink) {
-            {
-                when (it) {
-                    ToolCardPresenter.UiEvent.PinTool -> coroutineScope.launch(NonCancellable) {
-                        toolCode?.let { toolsRepository.pinTool(it) }
-                    }
-
-                    ToolCardPresenter.UiEvent.UnpinTool -> coroutineScope.launch(NonCancellable) {
-                        toolCode?.let { toolsRepository.unpinTool(it) }
-                    }
-
-                    else -> eventSink(it)
-                }
-            }
-        }
-
         return UiState(
             toolCode = toolCode,
             tool = tool,
@@ -155,8 +141,19 @@ internal class DefaultToolCardPresenter @Inject constructor(
                 !loadAvailableLanguages -> 0
                 else -> toolCode?.let { rememberAvailableLanguages(it) } ?: 0
             },
-            eventSink = interceptingEventSink,
-        )
+        ) {
+            when (it) {
+                UiEvent.PinTool -> coroutineScope.launch {
+                    withContext(NonCancellable) { toolCode?.let { toolsRepository.pinTool(it) } }
+                }
+
+                UiEvent.UnpinTool -> coroutineScope.launch {
+                    withContext(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(it) } }
+                }
+
+                is ToolCardEvent -> eventSink(it)
+            }
+        }
     }
 
     @Composable

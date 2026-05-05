@@ -71,8 +71,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen.UiEvent
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
-import org.cru.godtools.ui.tools.ToolCard
-import org.cru.godtools.ui.tools.ToolCardPresenter
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 import org.junit.runner.RunWith
@@ -298,11 +297,11 @@ class ToolDetailsPresenterTest {
             assertEquals(2, state.variants.size)
 
             assertEquals(TOOL, state.variants[0].toolCode)
-            state.variants[0].eventSink(ToolCardPresenter.UiEvent.Click)
+            state.variants[0].eventSink(ToolCardEvent.Click)
             expectNoEvents()
 
             assertEquals("variant1", state.variants[1].toolCode)
-            state.variants[1].eventSink(ToolCardPresenter.UiEvent.Click)
+            state.variants[1].eventSink(ToolCardEvent.Click)
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
@@ -316,7 +315,7 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             val state = expectMostRecentItem()
-            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCardPresenter.UiEvent.Click)
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCardEvent.Click)
             assertEquals("variant", expectMostRecentItem().toolCode)
         }
     }
@@ -604,8 +603,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().variants.single { it.toolCode == "variant" }
-                .eventSink(ToolCardPresenter.UiEvent.Click)
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCardEvent.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)

@@ -19,6 +19,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
@@ -37,7 +38,7 @@ fun SquareToolCard(
 
     ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
-            onClick = { eventSink(UiEvent.Click) },
+            onClick = { eventSink(ToolCardEvent.Click) },
             elevation = toolCardElevation,
             modifier = modifier.width(189.dp)
         ) {

@@ -24,6 +24,7 @@ import org.cru.godtools.R
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 import org.junit.Rule
@@ -56,7 +57,7 @@ class VariantToolCardTest {
         composeTestRule.setContent { VariantToolCard(UiState(eventSink = events)) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(UiEvent.Click)
+        events.assertEvent(ToolCardEvent.Click)
     }
 
     // region VariantToolCard - isSelected
@@ -73,7 +74,7 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsSelected()
             .performClick()
-        events.assertEvent(UiEvent.Click)
+        events.assertEvent(ToolCardEvent.Click)
     }
 
     @Test
@@ -89,7 +90,7 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsNotSelected()
             .performClick()
-        events.assertEvent(UiEvent.Click)
+        events.assertEvent(ToolCardEvent.Click)
     }
     // endregion VariantToolCard - isSelected
 

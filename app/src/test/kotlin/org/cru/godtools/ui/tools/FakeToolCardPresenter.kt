@@ -5,11 +5,12 @@ import java.util.Locale
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiEvent
 import org.cru.godtools.ui.tools.ToolCardPresenter.UiState
 
 class FakeToolCardPresenter(
-    var onPresent: (Tool, Locale?, (UiEvent) -> Unit) -> UiState = { tool, customLocale, eventSink ->
+    var buildUiState: (Tool, Locale?, (UiEvent) -> Unit) -> UiState = { tool, customLocale, eventSink ->
         UiState(
             tool = tool,
             toolCode = tool.code,
@@ -25,6 +26,11 @@ class FakeToolCardPresenter(
         loadAppLanguage: Boolean,
         secondLanguage: Language?,
         loadAvailableLanguages: Boolean,
-        eventSink: (UiEvent) -> Unit,
-    ) = onPresent(tool, customLocale, eventSink)
+        eventSink: (ToolCardEvent) -> Unit
+    ): UiState = buildUiState(tool, customLocale) {
+        when (it) {
+            is ToolCardEvent -> eventSink(it)
+            else -> Unit
+        }
+    }
 }
