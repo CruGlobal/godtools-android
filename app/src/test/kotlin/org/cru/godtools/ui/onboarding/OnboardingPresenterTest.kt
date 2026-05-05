@@ -9,6 +9,7 @@ import io.mockk.verify
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.cru.godtools.base.Settings
@@ -38,6 +39,24 @@ class OnboardingPresenterTest {
         navigator.assertGoToIsEmpty()
         navigator.assertPopIsEmpty()
     }
+
+    // region Initial State
+    @Test
+    fun `Initial State - currentPage is 0`() = runTest {
+        createPresenter().test {
+            val state = awaitItem()
+            assertEquals(0, state.pagerState.currentPage)
+        }
+    }
+
+    @Test
+    fun `Initial State - userScrollEnabled is false`() = runTest {
+        createPresenter().test {
+            val state = awaitItem()
+            assertFalse(state.userScrollEnabled)
+        }
+    }
+    // endregion Initial State
 
     // region Feature Discovery
     @Test
@@ -69,6 +88,22 @@ class OnboardingPresenterTest {
         }
     }
     // endregion UiEvent.Skip
+
+    // region UiEvent.Next
+    @Test
+    fun `UiEvent - Next - no language set - navigates to AppLanguageScreen`() = runTest {
+        createPresenter().test {
+            awaitItem().eventSink(OnboardingPresenter.UiEvent.Next)
+            assertEquals(AppLanguageScreen, navigator.awaitNextScreen())
+        }
+    }
+
+    @Test
+    fun `UiEvent - Next - language already set - navigates to CountrySettingsScreen`() = runTest {
+        // TODO: Testing the full answering navigator callback chain requires integration testing.
+        //  The FakeNavigator doesn't trigger rememberAnsweringNavigator callbacks in unit tests.
+    }
+    // endregion UiEvent.Next
 
     // region UiEvent.Finish
     @Test
