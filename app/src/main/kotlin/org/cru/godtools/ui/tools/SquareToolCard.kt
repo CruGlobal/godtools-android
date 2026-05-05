@@ -19,10 +19,12 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.dp
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
+import org.cru.godtools.ui.tools.ToolCard.UiEvent
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 @Composable
 fun SquareToolCard(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     showCategory: Boolean = true,
     showSecondLanguage: Boolean = false,
@@ -35,7 +37,7 @@ fun SquareToolCard(
 
     ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
-            onClick = { eventSink(ToolCard.Event.Click) },
+            onClick = { eventSink(UiEvent.Click) },
             elevation = toolCardElevation,
             modifier = modifier.width(189.dp)
         ) {
@@ -78,7 +80,7 @@ fun SquareToolCard(
                         Text(
                             "",
                             minLines = 2,
-                            style = state.toolNameStyle,
+                            style = toolNameStyle,
                             modifier = Modifier.clearAndSetSemantics { hideFromAccessibility() }
                         )
                         if (showCategory) {
@@ -108,7 +110,7 @@ fun SquareToolCard(
 }
 
 @Composable
-private fun SquareToolCardSecondLanguage(state: ToolCard.State) = ToolCardInfoContent {
+private fun SquareToolCardSecondLanguage(state: UiState) = ToolCardInfoContent {
     val available by rememberUpdatedState(state.secondLanguageAvailable)
 
     AvailableInLanguage(

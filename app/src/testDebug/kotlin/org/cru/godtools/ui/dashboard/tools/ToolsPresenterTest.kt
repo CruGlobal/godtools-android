@@ -90,7 +90,7 @@ class ToolsPresenterTest {
 
     private val toolCardPresenter: ToolCardPresenter = mockk {
         everyComposable { present(tool = any(), secondLanguage = any(), eventSink = any()) }
-            .answers { ToolCard.State(tool = firstArg()) }
+            .answers { ToolCard.UiState(tool = firstArg()) }
     }
 
     private val presenter = ToolsPresenter(

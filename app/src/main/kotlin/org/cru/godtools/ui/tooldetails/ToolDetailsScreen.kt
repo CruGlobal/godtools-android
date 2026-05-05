@@ -32,7 +32,7 @@ data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale
         val secondLanguage: Language? = null,
         val pages: ImmutableList<Page> = persistentListOf(Page.DESCRIPTION),
         val availableLanguages: ImmutableList<String> = persistentListOf(),
-        val variants: ImmutableList<ToolCard.State> = persistentListOf(),
+        val variants: ImmutableList<ToolCard.UiState> = persistentListOf(),
         val drawerState: DrawerMenuScreen.State = DrawerMenuScreen.State(),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState

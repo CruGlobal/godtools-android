@@ -38,7 +38,7 @@ class ToolDetailsLayoutPaparazziTest(
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
     private val banner = ToolCardStateTestData.banner
-    private val variants: ImmutableList<ToolCard.State> = persistentListOf(
+    private val variants: ImmutableList<ToolCard.UiState> = persistentListOf(
         ToolCardStateTestData.tool.copy(secondLanguage = null),
         ToolCardStateTestData.tool.copy(secondLanguage = null)
     )

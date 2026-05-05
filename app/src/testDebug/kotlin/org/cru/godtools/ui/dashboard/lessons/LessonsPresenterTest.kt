@@ -83,7 +83,7 @@ class LessonsPresenterTest {
     }
     private val toolCardPresenter: ToolCardPresenter = mockk {
         everyComposable { present(tool = any(), customLocale = any(), eventSink = any()) }.answers {
-            ToolCard.State(
+            ToolCard.UiState(
                 toolCode = toolArg().code,
                 translation = randomTranslation(languageCode = customLocaleArg()!!),
                 eventSink = eventSinkArg()
@@ -383,7 +383,7 @@ class LessonsPresenterTest {
         )
 
         presenter.test {
-            expectMostRecentItem().lessons[1].eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().lessons[1].eventSink(ToolCard.UiEvent.Click)
 
             val expectedIntent = context.createToolIntent(
                 enLessonsFlow.value[1],

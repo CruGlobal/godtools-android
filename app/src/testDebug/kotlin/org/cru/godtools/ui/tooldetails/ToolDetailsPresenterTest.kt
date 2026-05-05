@@ -141,7 +141,7 @@ class ToolDetailsPresenterTest {
                 loadAvailableLanguages = true,
                 eventSink = any()
             )
-        }.answers { ToolCard.State(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
+        }.answers { ToolCard.UiState(toolCode = firstArg<Tool>().code, eventSink = arg(5)) }
     }
 
     private fun createPresenter(screen: ToolDetailsScreen = ToolDetailsScreen(TOOL)) = ToolDetailsPresenter(
@@ -308,11 +308,11 @@ class ToolDetailsPresenterTest {
             assertEquals(2, state.variants.size)
 
             assertEquals(TOOL, state.variants[0].toolCode)
-            state.variants[0].eventSink(ToolCard.Event.Click)
+            state.variants[0].eventSink(ToolCard.UiEvent.Click)
             expectNoEvents()
 
             assertEquals("variant1", state.variants[1].toolCode)
-            state.variants[1].eventSink(ToolCard.Event.Click)
+            state.variants[1].eventSink(ToolCard.UiEvent.Click)
             assertEquals("variant1", expectMostRecentItem().toolCode)
         }
     }
@@ -326,7 +326,7 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             val state = expectMostRecentItem()
-            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            state.variants.single { it.toolCode == "variant" }.eventSink(ToolCard.UiEvent.Click)
             assertEquals("variant", expectMostRecentItem().toolCode)
         }
     }
@@ -614,7 +614,7 @@ class ToolDetailsPresenterTest {
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.ENGLISH, true)
                 DownloadLatestTranslation(downloadManager, TOOL, Locale.FRENCH, true)
             }
-            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().variants.single { it.toolCode == "variant" }.eventSink(ToolCard.UiEvent.Click)
 
             verifyComposable {
                 DownloadLatestTranslation(downloadManager, "variant", Locale.ENGLISH, true)

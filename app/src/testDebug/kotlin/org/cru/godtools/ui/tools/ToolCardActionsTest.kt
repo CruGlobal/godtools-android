@@ -20,41 +20,41 @@ class ToolCardActionsTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<ToolCard.Event>()
+    private val events = TestEventSink<ToolCard.UiEvent>()
 
     @Test
     fun `Button - Open Tool`() {
-        val state = ToolCard.State(eventSink = events)
+        val state = ToolCard.UiState(eventSink = events)
         composeTestRule.setContent { ToolCardActions(state) }
 
         composeTestRule.onNodeWithText("Open", substring = true, ignoreCase = true).performClick()
-        events.assertEvent(ToolCard.Event.OpenTool)
+        events.assertEvent(ToolCard.UiEvent.OpenTool)
     }
 
     @Test
     fun `Button - Tool Details`() {
-        val state = ToolCard.State(eventSink = events)
+        val state = ToolCard.UiState(eventSink = events)
         composeTestRule.setContent { ToolCardActions(state) }
 
         composeTestRule.onNodeWithText("Details", substring = true, ignoreCase = true).performClick()
-        events.assertEvent(ToolCard.Event.OpenToolDetails)
+        events.assertEvent(ToolCard.UiEvent.OpenToolDetails)
     }
 
     @Test
     fun `Recompose - eventSink updates`() = runTest {
-        val stateFlow = MutableStateFlow(ToolCard.State())
+        val stateFlow = MutableStateFlow(ToolCard.UiState())
         composeTestRule.setContent { ToolCardActions(stateFlow.collectAsState().value) }
 
         composeTestRule.onNodeWithText("Open", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithText("Details", substring = true, ignoreCase = true).performClick()
         events.assertNoEvents()
 
-        stateFlow.value = ToolCard.State(eventSink = events)
+        stateFlow.value = ToolCard.UiState(eventSink = events)
         composeTestRule.onNodeWithText("Open", substring = true, ignoreCase = true).performClick()
         composeTestRule.onNodeWithText("Details", substring = true, ignoreCase = true).performClick()
         events.assertEvents(
-            ToolCard.Event.OpenTool,
-            ToolCard.Event.OpenToolDetails
+            ToolCard.UiEvent.OpenTool,
+            ToolCard.UiEvent.OpenToolDetails
         )
     }
 }

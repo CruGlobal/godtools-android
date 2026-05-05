@@ -65,7 +65,7 @@ class LessonsPresenter @AssistedInject constructor(
     // region UiState
     data class UiState(
         val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
-        val lessons: List<ToolCard.State> = emptyList(),
+        val lessons: List<ToolCard.UiState> = emptyList(),
     ) : CircuitUiState
     // endregion UiState
 
@@ -140,7 +140,7 @@ class LessonsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLessons(locale: Locale): List<ToolCard.State> {
+    private fun rememberLessons(locale: Locale): List<ToolCard.UiState> {
         val lessons by remember(locale) {
             toolsRepository.getLessonsFlowByLanguage(locale)
                 .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
@@ -148,13 +148,13 @@ class LessonsPresenter @AssistedInject constructor(
 
         return lessons.map { tool ->
             key(tool.code) {
-                lateinit var toolState: ToolCard.State
+                lateinit var toolState: ToolCard.UiState
                 toolState = toolCardPresenter.present(
                     tool = tool,
                     customLocale = locale,
                     eventSink = {
                         when (it) {
-                            ToolCard.Event.Click -> {
+                            ToolCard.UiEvent.Click -> {
                                 eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, SOURCE_LESSONS))
                                 navigator.goTo(
                                     IntentScreen(
@@ -167,10 +167,10 @@ class LessonsPresenter @AssistedInject constructor(
                                 )
                             }
 
-                            ToolCard.Event.OpenTool,
-                            ToolCard.Event.OpenToolDetails,
-                            ToolCard.Event.PinTool,
-                            ToolCard.Event.UnpinTool -> Unit
+                            ToolCard.UiEvent.OpenTool,
+                            ToolCard.UiEvent.OpenToolDetails,
+                            ToolCard.UiEvent.PinTool,
+                            ToolCard.UiEvent.UnpinTool -> Unit
                         }
                     }
                 )

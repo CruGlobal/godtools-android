@@ -18,10 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
+import org.cru.godtools.ui.tools.ToolCard.UiEvent
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 @Composable
 internal fun ToolCardActions(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     buttonModifier: Modifier = Modifier,
     buttonWeightFill: Boolean = true,
@@ -33,7 +35,7 @@ internal fun ToolCardActions(
 
     CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides buttonMinHeight) {
         OutlinedButton(
-            onClick = { eventSink(ToolCard.Event.OpenToolDetails) },
+            onClick = { eventSink(UiEvent.OpenToolDetails) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()
@@ -47,7 +49,7 @@ internal fun ToolCardActions(
         }
         Spacer(Modifier.width(8.dp))
         Button(
-            onClick = { eventSink(ToolCard.Event.OpenTool) },
+            onClick = { eventSink(UiEvent.OpenTool) },
             contentPadding = buttonContentPadding,
             modifier = buttonModifier
                 .alignByBaseline()

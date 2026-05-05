@@ -39,6 +39,7 @@ import org.cru.godtools.db.repository.rememberLanguage
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.shared.user.activity.UserCounterNames.LESSON_COMPLETION
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 @Singleton
 class ToolCardPresenter @Inject constructor(
@@ -58,8 +59,8 @@ class ToolCardPresenter @Inject constructor(
         loadAppLanguage: Boolean = false,
         secondLanguage: Language? = null,
         loadAvailableLanguages: Boolean = false,
-        eventSink: (ToolCard.Event) -> Unit = {},
-    ): ToolCard.State {
+        eventSink: (ToolCard.UiEvent) -> Unit = {},
+    ): UiState {
         val coroutineScope = rememberCoroutineScope()
         val toolCode by rememberUpdatedState(tool.code)
 
@@ -115,14 +116,14 @@ class ToolCardPresenter @Inject constructor(
         val secondLanguageAvailable by remember { derivedStateOf { secondTranslation != null } }
 
         // eventSink
-        val interceptingEventSink: (ToolCard.Event) -> Unit = remember(eventSink) {
+        val interceptingEventSink: (ToolCard.UiEvent) -> Unit = remember(eventSink) {
             {
                 when (it) {
-                    ToolCard.Event.PinTool -> coroutineScope.launch(NonCancellable) {
+                    ToolCard.UiEvent.PinTool -> coroutineScope.launch(NonCancellable) {
                         toolCode?.let { toolsRepository.pinTool(it) }
                     }
 
-                    ToolCard.Event.UnpinTool -> coroutineScope.launch(NonCancellable) {
+                    ToolCard.UiEvent.UnpinTool -> coroutineScope.launch(NonCancellable) {
                         toolCode?.let { toolsRepository.unpinTool(it) }
                     }
 
@@ -131,7 +132,7 @@ class ToolCardPresenter @Inject constructor(
             }
         }
 
-        return ToolCard.State(
+        return UiState(
             toolCode = toolCode,
             tool = tool,
             isLoaded = isLoaded,
@@ -159,7 +160,7 @@ class ToolCardPresenter @Inject constructor(
     }
 
     @Composable
-    private fun rememberProgress(toolCode: String?, progress: Double?): ToolCard.State.Progress? {
+    private fun rememberProgress(toolCode: String?, progress: Double?): UiState.Progress? {
         val completed by remember(toolCode) {
             when {
                 toolCode == null -> flowOf(false)
@@ -168,8 +169,8 @@ class ToolCardPresenter @Inject constructor(
         }.collectAsState(false)
 
         return when {
-            completed -> ToolCard.State.Progress.Completed
-            progress != null -> ToolCard.State.Progress.InProgress(progress)
+            completed -> UiState.Progress.Completed
+            progress != null -> UiState.Progress.InProgress(progress)
             else -> null
         }
     }

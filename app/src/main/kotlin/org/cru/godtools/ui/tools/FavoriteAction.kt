@@ -28,7 +28,7 @@ import org.cru.godtools.model.getName
 internal const val TEST_TAG_FAVORITE_ACTION = "favorite_action"
 
 @Composable
-internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {
+internal fun FavoriteAction(state: ToolCard.UiState, modifier: Modifier = Modifier, confirmRemoval: Boolean = true) {
     val tool by rememberUpdatedState(state.tool)
     val isFavorite by remember { derivedStateOf { tool?.isFavorite == true } }
     val eventSink by rememberUpdatedState(state.eventSink)
@@ -38,9 +38,9 @@ internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier
     Surface(
         onClick = {
             when {
-                !isFavorite -> eventSink(ToolCard.Event.PinTool)
+                !isFavorite -> eventSink(ToolCard.UiEvent.PinTool)
                 confirmRemoval -> showRemovalConfirmation = true
-                else -> eventSink(ToolCard.Event.UnpinTool)
+                else -> eventSink(ToolCard.UiEvent.UnpinTool)
             }
         },
         shape = CircleShape,
@@ -75,7 +75,7 @@ internal fun FavoriteAction(state: ToolCard.State, modifier: Modifier = Modifier
             confirmButton = {
                 TextButton(
                     onClick = {
-                        eventSink(ToolCard.Event.UnpinTool)
+                        eventSink(ToolCard.UiEvent.UnpinTool)
                         showRemovalConfirmation = false
                     }
                 ) { Text(stringResource(R.string.tools_list_remove_favorite_dialog_confirm)) }

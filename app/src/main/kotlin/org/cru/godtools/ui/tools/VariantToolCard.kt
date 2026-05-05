@@ -21,11 +21,12 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
 import org.cru.godtools.model.getTagline
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 internal const val TEST_TAG_SECOND_LANGUAGE_AVAILABILITY = "second_language_availability"
 
 @Composable
-internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifier, isSelected: Boolean = false) {
+internal fun VariantToolCard(state: UiState, modifier: Modifier = Modifier, isSelected: Boolean = false) {
     val tool by rememberUpdatedState(state.tool)
     val translation by rememberUpdatedState(state.translation)
     val appLanguage by rememberUpdatedState(state.appLanguage)
@@ -39,7 +40,7 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
     ProvideLayoutDirectionFromLocale(locale = translation?.languageCode) {
         ElevatedCard(
             elevation = toolCardElevation,
-            onClick = { eventSink(ToolCard.Event.Click) },
+            onClick = { eventSink(ToolCard.UiEvent.Click) },
             modifier = modifier
         ) {
             ToolBanner(
@@ -49,7 +50,7 @@ internal fun VariantToolCard(state: ToolCard.State, modifier: Modifier = Modifie
                     .aspectRatio(335f / 87f)
             )
             Row(modifier = Modifier.padding(16.dp)) {
-                RadioButton(selected = isSelected, onClick = { eventSink(ToolCard.Event.Click) })
+                RadioButton(selected = isSelected, onClick = { eventSink(ToolCard.UiEvent.Click) })
 
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     ToolName(state)

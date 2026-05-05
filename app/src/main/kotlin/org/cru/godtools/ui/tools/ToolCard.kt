@@ -26,9 +26,11 @@ import org.cru.godtools.downloadmanager.DownloadProgress
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
+import org.cru.godtools.ui.tools.ToolCard.UiEvent
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 object ToolCard {
-    data class State(
+    data class UiState(
         val toolCode: String? = null,
         val tool: Tool? = null,
         val isLoaded: Boolean = true,
@@ -43,7 +45,7 @@ object ToolCard {
         val progress: Progress? = null,
         val availableLanguages: Int = 0,
         val downloadProgress: DownloadProgress? = null,
-        val eventSink: (Event) -> Unit = {},
+        val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState {
         sealed interface Progress {
             val progress: Double
@@ -56,18 +58,18 @@ object ToolCard {
         }
     }
 
-    sealed interface Event : CircuitUiEvent {
-        data object Click : Event
-        data object OpenTool : Event
-        data object OpenToolDetails : Event
-        data object PinTool : Event
-        data object UnpinTool : Event
+    sealed interface UiEvent : CircuitUiEvent {
+        data object Click : UiEvent
+        data object OpenTool : UiEvent
+        data object OpenToolDetails : UiEvent
+        data object PinTool : UiEvent
+        data object UnpinTool : UiEvent
     }
 }
 
 @Composable
 fun ToolCard(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     confirmRemovalFromFavorites: Boolean = false,
     showActions: Boolean = true,
@@ -79,7 +81,7 @@ fun ToolCard(
 
     ProvideLayoutDirectionFromLocale(locale = state.translation?.languageCode) {
         ElevatedCard(
-            onClick = { eventSink(ToolCard.Event.Click) },
+            onClick = { eventSink(UiEvent.Click) },
             elevation = toolCardElevation,
             interactionSource = interactionSource,
             modifier = modifier

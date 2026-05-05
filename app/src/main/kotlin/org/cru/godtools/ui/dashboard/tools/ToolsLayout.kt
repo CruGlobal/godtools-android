@@ -163,7 +163,7 @@ private fun ToolsHeader(mode: UiState.Mode, modifier: Modifier = Modifier) = Col
 }
 
 @Composable
-private fun ToolSpotlight(tools: List<ToolCard.State>, modifier: Modifier = Modifier) {
+private fun ToolSpotlight(tools: List<ToolCard.UiState>, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             stringResource(R.string.dashboard_tools_section_spotlight_label),

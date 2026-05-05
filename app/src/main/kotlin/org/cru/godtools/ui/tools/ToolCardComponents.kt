@@ -22,12 +22,13 @@ import coil.compose.AsyncImage
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.base.ui.util.getCategory
 import org.cru.godtools.model.getName
+import org.cru.godtools.ui.tools.ToolCard.UiState
 
 internal const val TEST_TAG_TOOL_CATEGORY = "tool_category"
 
 internal val toolCardElevation @Composable get() = elevatedCardElevation(defaultElevation = 4.dp)
 
-internal val ToolCard.State.toolNameStyle: TextStyle
+internal val toolNameStyle: TextStyle
     @Composable
     get() {
         val baseStyle = MaterialTheme.typography.titleMedium
@@ -42,7 +43,7 @@ private val toolCardInfoLabelColor: Color @Composable get() {
 private val toolCardInfoLabelStyle @Composable get() = MaterialTheme.typography.labelSmall
 
 @Composable
-internal fun ToolBanner(state: ToolCard.State, modifier: Modifier = Modifier) = AsyncImage(
+internal fun ToolBanner(state: UiState, modifier: Modifier = Modifier) = AsyncImage(
     model = state.banner,
     contentDescription = null,
     contentScale = ContentScale.Crop,
@@ -51,16 +52,14 @@ internal fun ToolBanner(state: ToolCard.State, modifier: Modifier = Modifier) = 
 
 @Composable
 internal fun ToolName(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     minLines: Int = 1,
     maxLines: Int = Int.MAX_VALUE,
 ) {
-    val style = state.toolNameStyle
-
     Text(
         state.translation.getName(state.tool).orEmpty(),
-        style = style,
+        style = toolNameStyle,
         maxLines = maxLines,
         minLines = minLines,
         overflow = TextOverflow.Ellipsis,
@@ -69,7 +68,7 @@ internal fun ToolName(
 }
 
 @Composable
-internal fun ToolCategory(state: ToolCard.State, modifier: Modifier = Modifier) = Text(
+internal fun ToolCategory(state: UiState, modifier: Modifier = Modifier) = Text(
     state.tool.getCategory(LocalContext.current),
     style = toolCategoryStyle,
     maxLines = 1,

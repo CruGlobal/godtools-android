@@ -36,14 +36,14 @@ class VariantToolCardTest {
 
     private fun stringRes(@StringRes id: Int) = composeTestRule.activity.getString(id)
 
-    private val events = TestEventSink<ToolCard.Event>()
+    private val events = TestEventSink<ToolCard.UiEvent>()
 
     @Test
     fun `VariantToolCard()`() {
         val tool = randomTool(name = UUID.randomUUID().toString())
         val translation = randomTranslation(tool.code, tagline = UUID.randomUUID().toString())
 
-        composeTestRule.setContent { VariantToolCard(ToolCard.State(tool = tool, translation = translation)) }
+        composeTestRule.setContent { VariantToolCard(ToolCard.UiState(tool = tool, translation = translation)) }
 
         composeTestRule.onNodeWithText(translation.name!!).assertExists()
         composeTestRule.onNodeWithText(translation.tagline!!).assertExists()
@@ -51,10 +51,10 @@ class VariantToolCardTest {
 
     @Test
     fun `VariantToolCard() - Event - Click`() {
-        composeTestRule.setContent { VariantToolCard(ToolCard.State(eventSink = events)) }
+        composeTestRule.setContent { VariantToolCard(ToolCard.UiState(eventSink = events)) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(ToolCard.Event.Click)
+        events.assertEvent(ToolCard.UiEvent.Click)
     }
 
     // region VariantToolCard - isSelected
@@ -62,7 +62,7 @@ class VariantToolCardTest {
     fun `VariantToolCard(isSelected=true)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(tool = randomTool(), eventSink = events),
+                state = ToolCard.UiState(tool = randomTool(), eventSink = events),
                 isSelected = true,
             )
         }
@@ -71,14 +71,14 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsSelected()
             .performClick()
-        events.assertEvent(ToolCard.Event.Click)
+        events.assertEvent(ToolCard.UiEvent.Click)
     }
 
     @Test
     fun `VariantToolCard(isSelected=false)`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(tool = randomTool(), eventSink = events),
+                state = ToolCard.UiState(tool = randomTool(), eventSink = events),
                 isSelected = false,
             )
         }
@@ -87,7 +87,7 @@ class VariantToolCardTest {
             .assertExists()
             .assertIsNotSelected()
             .performClick()
-        events.assertEvent(ToolCard.Event.Click)
+        events.assertEvent(ToolCard.UiEvent.Click)
     }
     // endregion VariantToolCard - isSelected
 
@@ -96,7 +96,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - App Language - Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(
+                state = ToolCard.UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = true,
@@ -114,7 +114,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - App Language - Not Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(
+                state = ToolCard.UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = false,
@@ -134,7 +134,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - Second Language - Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(
+                state = ToolCard.UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = false,
@@ -154,7 +154,7 @@ class VariantToolCardTest {
     fun `VariantToolCard - Second Language - Not Available`() {
         composeTestRule.setContent {
             VariantToolCard(
-                state = ToolCard.State(
+                state = ToolCard.UiState(
                     tool = randomTool(),
                     appLanguage = Language(Locale.ENGLISH),
                     appLanguageAvailable = true,

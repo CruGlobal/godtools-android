@@ -22,11 +22,13 @@ import kotlin.math.roundToInt
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.util.ProvideLayoutDirectionFromLocale
-import org.cru.godtools.ui.tools.ToolCard.State.Progress
+import org.cru.godtools.ui.tools.ToolCard.UiEvent
+import org.cru.godtools.ui.tools.ToolCard.UiState
+import org.cru.godtools.ui.tools.ToolCard.UiState.Progress
 
 @Composable
 fun LessonToolCard(
-    state: ToolCard.State,
+    state: UiState,
     modifier: Modifier = Modifier,
     showLanguage: Boolean = false,
     showProgress: Boolean = false,
@@ -37,7 +39,7 @@ fun LessonToolCard(
     val eventSink by rememberUpdatedState(state.eventSink)
 
     ElevatedCard(
-        onClick = { eventSink(ToolCard.Event.Click) },
+        onClick = { eventSink(UiEvent.Click) },
         elevation = toolCardElevation,
         modifier = modifier.fillMaxWidth()
     ) {
@@ -78,9 +80,7 @@ fun LessonToolCard(
                                         (state.progress.progress * 100).roundToInt().coerceIn(0, 100)
                                     )
 
-                                    Progress.Completed -> stringResource(
-                                        R.string.dashboard_lessons_progress_completed
-                                    )
+                                    Progress.Completed -> stringResource(R.string.dashboard_lessons_progress_completed)
                                 },
                                 color = MaterialTheme.colorScheme.primary,
                             )

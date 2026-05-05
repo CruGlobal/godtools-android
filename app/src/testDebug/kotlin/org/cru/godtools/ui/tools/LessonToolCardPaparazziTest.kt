@@ -91,7 +91,7 @@ class LessonToolCardPaparazziTest(
 
     @Test
     fun `LessonToolCard() - Progress - Completed`() = centerInSnapshot(Modifier.fillMaxSize()) {
-        LessonToolCard(toolState.copy(progress = ToolCard.State.Progress.Completed), showProgress = true)
+        LessonToolCard(toolState.copy(progress = ToolCard.UiState.Progress.Completed), showProgress = true)
     }
 
     @Test

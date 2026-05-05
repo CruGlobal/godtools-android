@@ -54,8 +54,8 @@ class HomePresenter @AssistedInject constructor(
     data class UiState(
         val dataLoaded: Boolean = true,
         val banner: Banner.UiState? = null,
-        val spotlightLessons: List<ToolCard.State> = emptyList(),
-        val favoriteTools: List<ToolCard.State> = emptyList(),
+        val spotlightLessons: List<ToolCard.UiState> = emptyList(),
+        val favoriteTools: List<ToolCard.UiState> = emptyList(),
         val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState
 
@@ -91,10 +91,10 @@ class HomePresenter @AssistedInject constructor(
                 val lessonCode = lesson.code ?: return@mapNotNull null
 
                 key(lessonCode) {
-                    lateinit var lessonState: ToolCard.State
+                    lateinit var lessonState: ToolCard.UiState
                     lessonState = toolCardPresenter.present(lesson) {
                         when (it) {
-                            ToolCard.Event.Click -> {
+                            ToolCard.UiEvent.Click -> {
                                 val intent = context.createToolIntent(
                                     tool = lesson,
                                     languages = listOfNotNull(lessonState.translation?.languageCode),
@@ -130,11 +130,11 @@ class HomePresenter @AssistedInject constructor(
             val toolCode = tool.code ?: return@mapNotNull null
 
             key(toolCode) {
-                lateinit var state: ToolCard.State
+                lateinit var state: ToolCard.UiState
                 state = toolCardPresenter.present(tool) {
                     when (it) {
-                        ToolCard.Event.Click,
-                        ToolCard.Event.OpenTool -> {
+                        ToolCard.UiEvent.Click,
+                        ToolCard.UiEvent.OpenTool -> {
                             val intent = context.createToolIntent(
                                 tool = tool,
                                 languages = listOfNotNull(
@@ -152,15 +152,15 @@ class HomePresenter @AssistedInject constructor(
                             }
                         }
 
-                        ToolCard.Event.OpenToolDetails -> {
+                        ToolCard.UiEvent.OpenToolDetails -> {
                             eventBus.post(
                                 OpenAnalyticsActionEvent(ACTION_OPEN_TOOL_DETAILS, toolCode, SOURCE_FAVORITE)
                             )
                             navigator.goTo(ToolDetailsScreen(toolCode))
                         }
 
-                        ToolCard.Event.PinTool,
-                        ToolCard.Event.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
+                        ToolCard.UiEvent.PinTool,
+                        ToolCard.UiEvent.UnpinTool -> error("$it should be handled by the ToolCardPresenter")
                     }
                 }
                 state

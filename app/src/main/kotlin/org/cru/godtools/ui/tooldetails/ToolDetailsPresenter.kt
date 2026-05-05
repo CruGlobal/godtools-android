@@ -221,7 +221,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
         metaToolCode: String?,
         secondLanguage: Language?,
         onVariantSelect: (String) -> Unit,
-    ): ImmutableList<ToolCard.State> {
+    ): ImmutableList<ToolCard.UiState> {
         if (metaToolCode == null) return persistentListOf()
 
         val onVariantSelect by rememberUpdatedState(onVariantSelect)
@@ -237,7 +237,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
                         loadAvailableLanguages = true,
                         eventSink = {
                             when (it) {
-                                ToolCard.Event.Click -> tool.code?.let { onVariantSelect(it) }
+                                ToolCard.UiEvent.Click -> tool.code?.let { onVariantSelect(it) }
                                 else -> Unit
                             }
                         }

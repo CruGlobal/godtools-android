@@ -13,6 +13,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.TestEventSink
 import kotlin.test.Test
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.ui.tools.ToolCard.UiEvent
+import org.cru.godtools.ui.tools.ToolCard.UiState
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -23,24 +25,24 @@ class FavoriteActionTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val events = TestEventSink<ToolCard.Event>()
+    private val events = TestEventSink<UiEvent>()
 
     // region FavoriteAction()
     @Test
     fun `FavoriteAction() - add to favorites`() {
-        val state = ToolCard.State(
+        val state = UiState(
             tool = randomTool(isFavorite = false),
             eventSink = events,
         )
         composeTestRule.setContent { FavoriteAction(state) }
 
         composeTestRule.onRoot().performClick()
-        events.assertEvent(ToolCard.Event.PinTool)
+        events.assertEvent(UiEvent.PinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites`() {
-        val state = ToolCard.State(
+        val state = UiState(
             tool = randomTool(isFavorite = true),
             eventSink = events,
         )
@@ -48,12 +50,12 @@ class FavoriteActionTest {
 
         composeTestRule.onRoot().performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        events.assertEvent(ToolCard.Event.UnpinTool)
+        events.assertEvent(UiEvent.UnpinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - confirm`() {
-        val state = ToolCard.State(
+        val state = UiState(
             tool = randomTool(isFavorite = true),
             eventSink = events,
         )
@@ -65,12 +67,12 @@ class FavoriteActionTest {
 
         composeTestRule.onNode(hasAnyAncestor(isDialog()) and hasClickAction() and hasText("Remove")).performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        events.assertEvent(ToolCard.Event.UnpinTool)
+        events.assertEvent(UiEvent.UnpinTool)
     }
 
     @Test
     fun `FavoriteAction() - remove from favorites - confirmRemoval - cancel`() {
-        val state = ToolCard.State(
+        val state = UiState(
             tool = randomTool(isFavorite = true),
             eventSink = events,
         )

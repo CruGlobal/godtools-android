@@ -83,7 +83,7 @@ class ToolCardPresenterTest {
     private val userCountersRepository: UserCountersRepository = mockk {
         every { findCounterFlow(any()) } returns flowOf(null)
     }
-    private val events = TestEventSink<ToolCard.Event>()
+    private val events = TestEventSink<ToolCard.UiEvent>()
 
     private val presenter = ToolCardPresenter(
         fileSystem = fileSystem,
@@ -98,7 +98,7 @@ class ToolCardPresenterTest {
     @AfterTest
     fun cleanup() = AndroidUiDispatcherUtil.runScheduledDispatches()
 
-    // region ToolCard.State.tool
+    // region ToolCard.UiState.tool
     @Test
     fun `ToolCardState - tool`() = runTest {
         presenterTestOf(
@@ -119,9 +119,9 @@ class ToolCardPresenterTest {
             assertEquals(toolFlow.value, expectMostRecentItem().tool)
         }
     }
-    // endregion ToolCard.State.tool
+    // endregion ToolCard.UiState.tool
 
-    // region ToolCard.State.banner
+    // region ToolCard.UiState.banner
     @Test
     fun `ToolCardState - banner`() = runTest {
         val banner = Attachment(BANNER_ID) {
@@ -180,9 +180,9 @@ class ToolCardPresenterTest {
             assertEquals(file, expectMostRecentItem().banner)
         }
     }
-    // endregion ToolCard.State.banner
+    // endregion ToolCard.UiState.banner
 
-    // region ToolCard.State.isLoaded
+    // region ToolCard.UiState.isLoaded
     @Test
     fun `ToolCardState - isLoaded`() = runTest {
         toolFlow.value = randomTool(TOOL, defaultLocale = Locale.FRENCH)
@@ -201,9 +201,9 @@ class ToolCardPresenterTest {
             assertTrue(expectMostRecentItem().isLoaded)
         }
     }
-    // endregion ToolCard.State.isLoaded
+    // endregion ToolCard.UiState.isLoaded
 
-    // region ToolCard.State.translation
+    // region ToolCard.UiState.translation
     @Test
     fun `ToolCardState - translation`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -300,9 +300,9 @@ class ToolCardPresenterTest {
             }
         }
     }
-    // endregion ToolCard.State.translation
+    // endregion ToolCard.UiState.translation
 
-    // region ToolCard.State.appLanguage
+    // region ToolCard.UiState.appLanguage
     @Test
     fun `ToolCardState - appLanguage`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -330,9 +330,9 @@ class ToolCardPresenterTest {
 
         verifyAll { languagesRepository wasNot Called }
     }
-    // endregion ToolCard.State.appLanguage
+    // endregion ToolCard.UiState.appLanguage
 
-    // region ToolCard.State.appLanguageAvailable
+    // region ToolCard.UiState.appLanguageAvailable
     @Test
     fun `ToolCardState - appLanguageAvailable`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -348,9 +348,9 @@ class ToolCardPresenterTest {
             assertTrue(expectMostRecentItem().appLanguageAvailable)
         }
     }
-    // endregion ToolCard.State.appLanguageAvailable
+    // endregion ToolCard.UiState.appLanguageAvailable
 
-    // region ToolCard.State.secondLanguage
+    // region ToolCard.UiState.secondLanguage
     @Test
     fun `ToolCardState - secondLanguage`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -362,9 +362,9 @@ class ToolCardPresenterTest {
             assertEquals(language, expectMostRecentItem().secondLanguage)
         }
     }
-    // endregion ToolCard.State.secondLanguage
+    // endregion ToolCard.UiState.secondLanguage
 
-    // region ToolCard.State.secondLanguageAvailable
+    // region ToolCard.UiState.secondLanguageAvailable
     @Test
     fun `ToolCardState - secondLanguageAvailable`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -378,9 +378,9 @@ class ToolCardPresenterTest {
             assertTrue(expectMostRecentItem().secondLanguageAvailable)
         }
     }
-    // endregion ToolCard.State.secondLanguageAvailable
+    // endregion ToolCard.UiState.secondLanguageAvailable
 
-    // region ToolCard.State.progress
+    // region ToolCard.UiState.progress
     @Test
     fun `ToolCardState - progress - not started`() = runTest {
         val tool = randomTool(TOOL, Tool.Type.LESSON, progress = null)
@@ -397,7 +397,7 @@ class ToolCardPresenterTest {
         presenterTestOf(presentFunction = { presenter.present(tool) }) {
             assertEquals(
                 tool.progress!!,
-                assertIs<ToolCard.State.Progress.InProgress>(expectMostRecentItem().progress).progress,
+                assertIs<ToolCard.UiState.Progress.InProgress>(expectMostRecentItem().progress).progress,
                 0.0001
             )
         }
@@ -411,12 +411,12 @@ class ToolCardPresenterTest {
         } returns flowOf(UserCounter(apiCount = 1))
 
         presenterTestOf(presentFunction = { presenter.present(tool) }) {
-            assertEquals(ToolCard.State.Progress.Completed, expectMostRecentItem().progress)
+            assertEquals(ToolCard.UiState.Progress.Completed, expectMostRecentItem().progress)
         }
     }
-    // endregion ToolCard.State.progress
+    // endregion ToolCard.UiState.progress
 
-    // region ToolCard.State.availableLanguages
+    // region ToolCard.UiState.availableLanguages
     @Test
     fun `ToolCardState - availableLanguages`() = runTest {
         toolFlow.value = randomTool(TOOL)
@@ -479,9 +479,9 @@ class ToolCardPresenterTest {
 
         verify { translationsRepository.getTranslationsFlowForTool(TOOL) }
     }
-    // endregion ToolCard.State.availableLanguages
+    // endregion ToolCard.UiState.availableLanguages
 
-    // region ToolCard.State
+    // region ToolCard.UiState
     @Test
     fun `ToolCardState - GT-2364 - App Language Not Available, Second language matches Default language`() = runTest {
         appLocaleState.value = Locale.FRENCH
@@ -509,72 +509,72 @@ class ToolCardPresenterTest {
             }
         }
     }
-    // endregion ToolCard.State
+    // endregion ToolCard.UiState
 
-    // region ToolCard.Event.Click
+    // region ToolCard.UiEvent.Click
     @Test
     fun `ToolCardEvent - Click`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(ToolCard.Event.Click)
+            expectMostRecentItem().eventSink(ToolCard.UiEvent.Click)
         }
 
-        events.assertEvent(ToolCard.Event.Click)
+        events.assertEvent(ToolCard.UiEvent.Click)
     }
-    // endregion ToolCard.Event.Click
+    // endregion ToolCard.UiEvent.Click
 
-    // region ToolCard.Event.OpenTool
+    // region ToolCard.UiEvent.OpenTool
     @Test
     fun `ToolCardEvent - OpenTool`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(ToolCard.Event.OpenTool)
+            expectMostRecentItem().eventSink(ToolCard.UiEvent.OpenTool)
         }
 
-        events.assertEvent(ToolCard.Event.OpenTool)
+        events.assertEvent(ToolCard.UiEvent.OpenTool)
     }
-    // endregion ToolCard.Event.OpenTool
+    // endregion ToolCard.UiEvent.OpenTool
 
-    // region ToolCard.Event.OpenToolDetails
+    // region ToolCard.UiEvent.OpenToolDetails
     @Test
     fun `ToolCardEvent - OpenToolDetails`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(ToolCard.Event.OpenToolDetails)
+            expectMostRecentItem().eventSink(ToolCard.UiEvent.OpenToolDetails)
         }
 
-        events.assertEvent(ToolCard.Event.OpenToolDetails)
+        events.assertEvent(ToolCard.UiEvent.OpenToolDetails)
     }
-    // endregion ToolCard.Event.OpenToolDetails
+    // endregion ToolCard.UiEvent.OpenToolDetails
 
-    // region ToolCard.Event.PinTool
+    // region ToolCard.UiEvent.PinTool
     @Test
     fun `ToolCardEvent - PinTool`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(ToolCard.Event.PinTool)
+            expectMostRecentItem().eventSink(ToolCard.UiEvent.PinTool)
         }
 
         coVerifyAll { toolsRepository.pinTool(TOOL) }
         events.assertNoEvents()
     }
-    // endregion ToolCard.Event.PinTool
+    // endregion ToolCard.UiEvent.PinTool
 
-    // region ToolCard.Event.UnpinTool
+    // region ToolCard.UiEvent.UnpinTool
     @Test
     fun `ToolCardEvent - UnpinTool`() = runTest {
         presenterTestOf(
             presentFunction = { presenter.present(tool = toolFlow.collectAsState().value, eventSink = events) }
         ) {
-            expectMostRecentItem().eventSink(ToolCard.Event.UnpinTool)
+            expectMostRecentItem().eventSink(ToolCard.UiEvent.UnpinTool)
         }
 
         coVerifyAll { toolsRepository.unpinTool(TOOL) }
         events.assertNoEvents()
     }
-    // endregion ToolCard.Event.UnpinTool
+    // endregion ToolCard.UiEvent.UnpinTool
 }
