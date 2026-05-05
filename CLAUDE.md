@@ -23,10 +23,10 @@ The default branch for this repository is **`develop`**. Use `develop` as the ba
 
 # Run tests for a specific module
 ./gradlew :library:model:test
-./gradlew :app:testProductionDebugUnitTest
+./gradlew :app:test
 
 # Run a single test class
-./gradlew :library:model:testProductionDebugUnitTest --tests "org.cru.godtools.model.ToolTest"
+./gradlew :library:model:test --tests "org.cru.godtools.model.ToolTest"
 
 # Verify Paparazzi snapshot tests (requires Git LFS)
 ./gradlew verifyPaparazzi
@@ -65,7 +65,7 @@ The default branch for this repository is **`develop`**. Use `develop` as the ba
 - **Product flavors** (dimension `env`): `stage` (staging API), `production` (production API)
 - **Build types**: `debug`, `qa` (inherits from debug), `release`
 - **Stage flavor** is only enabled for debug and QA build types
-- **Unit tests only run** on `productionDebug` variant
+- **Unit test variants**: some modules have product flavors and expose `testProductionDebugUnitTest`; others only expose `testDebugUnitTest`. Use the `test` task to run all variants without needing to know which applies.
 
 ### Key Frameworks & Patterns
 
