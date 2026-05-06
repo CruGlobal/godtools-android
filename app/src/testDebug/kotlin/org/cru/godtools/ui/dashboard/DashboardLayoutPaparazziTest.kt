@@ -27,12 +27,15 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
@@ -43,9 +46,15 @@ import org.junit.runner.RunWith
 @RunWith(TestParameterInjector::class)
 class DashboardLayoutPaparazziTest(
     @TestParameter(valuesProvider = DeviceConfigProvider::class) deviceConfig: DeviceConfig,
+    @TestParameter("null", "in") locale: String?,
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
-) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
+) : BasePaparazziTest(
+    deviceConfig = deviceConfig,
+    locale = locale,
+    nightMode = nightMode,
+    accessibilityMode = accessibilityMode
+) {
     private val state = UiState()
 
     @BeforeTest
@@ -103,18 +112,21 @@ class DashboardLayoutPaparazziTest(
             "Disable Accessibility screenshots since this doesn't have any addition",
             accessibilityMode == AccessibilityMode.NO_ACCESSIBILITY
         )
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(dataLoaded = false, tools = emptyList())
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
 
     @Test
     fun `ToolsLayout() - Personalization`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(mode = ToolsPresenter.UiState.Mode.PERSONALIZATION)
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
 
     @Test
     fun `ToolsLayout() - Personalization - No Tools`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
             tools = emptyList()
@@ -124,6 +136,7 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - All Tools`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.ALL_TOOLS,
             spotlightTools = emptyList(),
@@ -133,6 +146,7 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - All Tools - Filters Selected`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.ALL_TOOLS,
             filters = Filters(
@@ -150,6 +164,7 @@ class DashboardLayoutPaparazziTest(
     @Test
     @Ignore("LayoutLib does not correctly support Popups/Windows currently")
     fun `ToolsLayout() - All Tools - Language Filter Expanded`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(
             filters = Filters(
                 languageFilter = FilterMenu.UiState(
@@ -169,14 +184,37 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - No Personalization`() {
+        assumeTrue(locale == null)
         toolsState = toolsState.copy(isPersonalizationEnabled = false)
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
     // endregion ToolsLayout
 
+    // region LessonsLayout
+    private val lessonsState = LessonsPresenter.UiState(
+        languageFilter = FilterMenu.UiState(
+            selectedItem = Language(Locale.ENGLISH)
+        ),
+        lessons = listOf(
+            ToolCardStateTestData.tool.copy(toolCode = "lesson1", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "lesson2", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "lesson3", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "lesson4", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "lesson5", translation = null),
+        )
+    )
+
+    @Test
+    fun `LessonsLayout()`() {
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+    // endregion LessonsLayout
+
     private val circuit = Circuit.Builder()
         .addPresenter<ToolsScreen, ToolsPresenter.UiState> { _, _, _ -> presenterOf { toolsState } }
         .addUi<ToolsScreen, ToolsPresenter.UiState> { state, modifier -> ToolsLayout(state, modifier) }
+        .addPresenter<LessonsScreen, LessonsPresenter.UiState> { _, _, _ -> presenterOf { lessonsState } }
+        .addUi<LessonsScreen, LessonsPresenter.UiState> { state, modifier -> LessonsLayout(state, modifier) }
         .build()
 
     private fun snapshotDashboardLayout(state: UiState = this.state) = snapshot {
