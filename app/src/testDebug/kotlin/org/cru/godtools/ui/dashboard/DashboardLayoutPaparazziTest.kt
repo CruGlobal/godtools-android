@@ -46,6 +46,7 @@ import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
+import org.cru.godtools.ui.drawer.DrawerMenuScreenStateTestData
 import org.cru.godtools.ui.tools.ToolCardStateTestData
 import org.junit.Assume.assumeTrue
 import org.junit.runner.RunWith
@@ -86,6 +87,12 @@ class DashboardLayoutPaparazziTest(
     fun cleanup() {
         Coil.reset()
         Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `DashboardLayout() - Drawer Open`() {
+        assumeTrue(locale == null)
+        snapshotDashboardLayout(state.copy(drawerState = DrawerMenuScreenStateTestData.open))
     }
 
     // region ToolsLayout
