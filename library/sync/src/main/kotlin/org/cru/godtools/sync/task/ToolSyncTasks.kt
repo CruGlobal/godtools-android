@@ -175,7 +175,7 @@ internal class ToolSyncTasks @Inject internal constructor(
                         try {
                             viewsApi.submitViews(views).isSuccessful
                                 .also { if (it) toolsRepository.updateToolViews(code, 0 - views.quantity) }
-                        } catch (ignored: IOException) {
+                        } catch (_: IOException) {
                             false
                         }
                     }
