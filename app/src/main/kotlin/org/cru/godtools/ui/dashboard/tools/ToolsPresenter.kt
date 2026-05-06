@@ -34,6 +34,7 @@ import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.model.Language
+import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
@@ -143,22 +144,7 @@ class ToolsPresenter @AssistedInject internal constructor(
         val tools by remember(mode, locale) {
             featuredToolsFlowProducer.getFlow(mode, locale)
         }.collectAsState(null)
-
-        return tools?.map { tool ->
-            val toolCode by rememberUpdatedState(tool.code)
-
-            toolCardPresenter.present(
-                tool = tool,
-                secondLanguage = language,
-                eventSink = {
-                    when (it) {
-                        ToolCardEvent.Click,
-                        ToolCardEvent.OpenTool,
-                        ToolCardEvent.OpenToolDetails -> toolCode?.let { onOpenToolDetails(it) }
-                    }
-                }
-            )
-        }
+        return tools?.toToolCardState(language, onOpenToolDetails)
     }
 
     @Composable
@@ -171,22 +157,24 @@ class ToolsPresenter @AssistedInject internal constructor(
         val locale = language?.code
         val tools by remember(mode, category, locale) { filteredToolsFlowProducer.getFlow(mode, category, locale) }
             .collectAsState(null)
+        return tools?.toToolCardState(language, onOpenToolDetails)
+    }
 
-        return tools?.map { tool ->
-            key(tool.code) {
-                val toolCode by rememberUpdatedState(tool.code)
-                toolCardPresenter.present(
-                    tool = tool,
-                    secondLanguage = language,
-                    eventSink = {
-                        when (it) {
-                            ToolCardEvent.Click,
-                            ToolCardEvent.OpenTool,
-                            ToolCardEvent.OpenToolDetails -> toolCode?.let { onOpenToolDetails(it) }
-                        }
+    @Composable
+    private fun List<Tool>.toToolCardState(language: Language?, onOpenToolDetails: (String) -> Unit) = map { tool ->
+        key(tool.code) {
+            val toolCode by rememberUpdatedState(tool.code)
+            toolCardPresenter.present(
+                tool = tool,
+                secondLanguage = language,
+                eventSink = {
+                    when (it) {
+                        ToolCardEvent.Click,
+                        ToolCardEvent.OpenTool,
+                        ToolCardEvent.OpenToolDetails -> toolCode?.let { onOpenToolDetails(it) }
                     }
-                )
-            }
+                }
+            )
         }
     }
 
