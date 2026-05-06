@@ -10,6 +10,7 @@ import androidx.room.Update
 import androidx.room.Upsert
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
+import org.cru.godtools.db.room.entity.PersonalizedFeaturedToolOrderEntity
 import org.cru.godtools.db.room.entity.PersonalizedToolOrderEntity
 import org.cru.godtools.db.room.entity.ToolEntity
 import org.cru.godtools.db.room.entity.partial.SyncTool
@@ -76,6 +77,23 @@ internal interface ToolsDao {
     suspend fun updateToolViews(code: String, views: Int)
     @Delete
     suspend fun delete(tool: ToolEntity)
+
+    // region Featured Tools
+    @Query(
+        """
+            SELECT t.*
+            FROM personalized_featured_tool_order AS o JOIN tools AS t ON t.code = o.tool
+            WHERE o.locale = :locale AND o.country = :country AND t.type IN (:type)
+            ORDER BY o.`order` ASC
+        """
+    )
+    fun getFeaturedToolsFlow(locale: Locale, country: String, vararg type: Tool.Type): Flow<List<ToolEntity>>
+
+    @Upsert
+    suspend fun upsertFeaturedToolOrder(order: Collection<PersonalizedFeaturedToolOrderEntity>)
+    @Query("DELETE FROM personalized_featured_tool_order WHERE locale = :locale AND country = :country")
+    suspend fun resetFeaturedToolOrder(locale: Locale, country: String)
+    // endregion Featured Tools
 
     // region Personalized Tools
     @Query(
