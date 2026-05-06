@@ -27,13 +27,17 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.cru.godtools.base.ui.BasePaparazziTest
+import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
+import org.cru.godtools.ui.banner.tutorial.TutorialFeaturesBannerPresenter
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.home.HomeLayout
+import org.cru.godtools.ui.dashboard.home.HomePresenter
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
@@ -188,6 +192,62 @@ class DashboardLayoutPaparazziTest(
     }
     // endregion ToolsLayout
 
+    // region HomeLayout
+    private var homeState = HomePresenter.UiState(
+        dataLoaded = true,
+        spotlightLessons = listOf(
+            ToolCardStateTestData.tool.copy(toolCode = "lesson", translation = null)
+        ),
+        favoriteTools = listOf(
+            ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool3", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool4", translation = null),
+            ToolCardStateTestData.tool.copy(toolCode = "tool5", translation = null),
+        ),
+    )
+
+    @Test
+    fun `HomeLayout()`() {
+        assumeTrue(locale == null)
+        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
+    }
+
+    @Test
+    fun `HomeLayout() - Banner - Tutorial`() {
+        assumeTrue(locale == null)
+        homeState = homeState.copy(banner = TutorialFeaturesBannerPresenter.UiState())
+        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
+    }
+
+    @Test
+    fun `HomeLayout() - Data Not Loaded`() {
+        assumeTrue(
+            "Only do a single screenshot since this is currently a blank screen",
+            deviceConfig == DeviceConfig.NEXUS_5 &&
+                locale == null &&
+                nightMode == NightMode.NOTNIGHT &&
+                accessibilityMode == AccessibilityMode.NO_ACCESSIBILITY
+        )
+        homeState = homeState.copy(dataLoaded = false, favoriteTools = emptyList())
+        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
+    }
+
+    @Test
+    fun `HomeLayout() - No Spotlight Lessons`() {
+        assumeTrue(locale == null)
+        homeState = homeState.copy(spotlightLessons = emptyList())
+        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
+    }
+
+    @Test
+    fun `HomeLayout() - No Favorites`() {
+        assumeTrue(locale == null)
+        homeState = homeState.copy(favoriteTools = emptyList())
+        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
+    }
+    // endregion HomeLayout
+
     // region LessonsLayout
     private val lessonsState = LessonsPresenter.UiState(
         languageFilter = FilterMenu.UiState(
@@ -209,6 +269,8 @@ class DashboardLayoutPaparazziTest(
     // endregion LessonsLayout
 
     private val circuit = Circuit.Builder()
+        .addPresenter<HomeScreen, HomePresenter.UiState> { _, _, _ -> presenterOf { homeState } }
+        .addUi<HomeScreen, HomePresenter.UiState> { state, modifier -> HomeLayout(state, modifier) }
         .addPresenter<ToolsScreen, ToolsPresenter.UiState> { _, _, _ -> presenterOf { toolsState } }
         .addUi<ToolsScreen, ToolsPresenter.UiState> { state, modifier -> ToolsLayout(state, modifier) }
         .addPresenter<LessonsScreen, LessonsPresenter.UiState> { _, _, _ -> presenterOf { lessonsState } }
