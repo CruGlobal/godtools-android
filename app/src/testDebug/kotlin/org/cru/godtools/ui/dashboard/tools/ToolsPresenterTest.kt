@@ -73,6 +73,7 @@ class ToolsPresenterTest {
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
+        coEvery { syncFeaturedTools(any(), any(), any()) } returns true
     }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val featuredToolsFlowProducer: FeaturedToolsFlowProducer = mockk {
@@ -265,7 +266,10 @@ class ToolsPresenterTest {
         presenter.test {
             awaitInitialItem()
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.ENGLISH, "US", false)
+                syncService.syncFeaturedTools(Locale.ENGLISH, "US", false)
+            }
         }
     }
 
@@ -278,7 +282,10 @@ class ToolsPresenterTest {
         presenter.test {
             awaitInitialItem()
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.FRENCH, "US", false)
+                syncService.syncFeaturedTools(Locale.FRENCH, "US", false)
+            }
         }
     }
 

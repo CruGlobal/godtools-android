@@ -22,7 +22,9 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -197,7 +199,10 @@ class ToolsPresenter @AssistedInject internal constructor(
 
     private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
         val country = settings.getCountrySettingFlow().first()
-        syncService.syncToolOrder(locale, country, force)
+        coroutineScope {
+            launch { syncService.syncFeaturedTools(locale, country, force) }
+            launch { syncService.syncToolOrder(locale, country, force) }
+        }
     }
 
     @AssistedFactory
