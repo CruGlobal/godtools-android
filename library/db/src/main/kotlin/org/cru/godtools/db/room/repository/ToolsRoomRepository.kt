@@ -8,10 +8,11 @@ import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.androidx.room.changeFlow
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.room.GodToolsRoomDatabase
+import org.cru.godtools.db.room.entity.PersonalizedFeaturedToolOrderEntity
 import org.cru.godtools.db.room.entity.PersonalizedToolOrderEntity
 import org.cru.godtools.db.room.entity.ToolEntity
-import org.cru.godtools.db.room.entity.partial.SyncPersonalizedTool
 import org.cru.godtools.db.room.entity.partial.SyncTool
+import org.cru.godtools.db.room.entity.partial.SyncToolPlaceholder
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Tool.Type.Companion.NORMAL_TYPES
 import org.cru.godtools.model.trackChanges
@@ -35,6 +36,9 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     override fun getLessonsFlowByLanguage(locale: Locale) =
         dao.getToolsFlowByTypeAndLanguage(listOf(Tool.Type.LESSON), locale).map { it.map { it.toModel() } }
 
+    override fun getFeaturedToolsFlow(locale: Locale, country: String?) =
+        dao.getFeaturedToolsFlow(locale, country.orEmpty(), *NORMAL_TYPES.toTypedArray())
+            .map { it.map { it.toModel() } }
     override fun getPersonalizedLessonsFlow(locale: Locale, country: String?) =
         dao.getPersonalizedToolsFlow(locale, country.orEmpty(), Tool.Type.LESSON).map { it.map { it.toModel() } }
     override fun getPersonalizedToolsFlow(locale: Locale, country: String?) =
@@ -97,8 +101,24 @@ internal abstract class ToolsRoomRepository(private val db: GodToolsRoomDatabase
     }
 
     @Transaction
+    override suspend fun storeFeaturedToolsFromSync(locale: Locale, country: String?, tools: List<Tool>) {
+        dao.upsertToolPlaceholders(tools.map { SyncToolPlaceholder(it) })
+        dao.resetFeaturedToolOrder(locale, country.orEmpty())
+        dao.upsertFeaturedToolOrder(
+            tools.mapIndexed { i, tool ->
+                PersonalizedFeaturedToolOrderEntity(
+                    locale = locale,
+                    country = country.orEmpty(),
+                    tool = tool.code.orEmpty(),
+                    order = i
+                )
+            }
+        )
+    }
+
+    @Transaction
     override suspend fun storePersonalizedToolOrderFromSync(locale: Locale, country: String?, tools: List<Tool>) {
-        dao.upsertToolsPersonalized(tools.map { SyncPersonalizedTool(it) })
+        dao.upsertToolPlaceholders(tools.map { SyncToolPlaceholder(it) })
         dao.resetPersonalizedToolOrder(locale, country.orEmpty())
         dao.upsertPersonalizedToolOrder(
             tools.mapIndexed { i, tool ->

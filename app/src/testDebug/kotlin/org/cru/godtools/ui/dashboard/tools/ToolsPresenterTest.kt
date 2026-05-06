@@ -33,7 +33,6 @@ import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
-import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Tool
 import org.cru.godtools.model.randomTool
@@ -59,7 +58,7 @@ import org.robolectric.annotation.Config
 class ToolsPresenterTest {
     private var isPersonalizationEnabled = false
     private val countryFlow = MutableStateFlow<String?>("US")
-    private val toolsFlow = MutableStateFlow(emptyList<Tool>())
+    private val featuredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolOrderSync = Channel<Boolean>()
 
@@ -74,17 +73,18 @@ class ToolsPresenterTest {
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
+        coEvery { syncFeaturedTools(any(), any(), any()) } returns true
     }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
+    private val featuredToolsFlowProducer: FeaturedToolsFlowProducer = mockk {
+        every { getFlow(any(), any()) } returns featuredToolsFlow
+    }
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any(), any()) } returns filteredToolsFlow
     }
     private val navigator = FakeNavigator(ToolsScreen)
     private val remoteConfig: FirebaseRemoteConfig = mockk {
         every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } answers { isPersonalizationEnabled }
-    }
-    private val toolsRepository: ToolsRepository = mockk {
-        every { getNormalToolsFlow() } returns toolsFlow
     }
     private val toolFiltersStateProducer = FakeToolFiltersStateProducer()
     private val toolCardPresenter = FakeToolCardPresenter()
@@ -94,8 +94,8 @@ class ToolsPresenterTest {
         remoteConfig = remoteConfig,
         settings = settings,
         toolCardPresenter = toolCardPresenter,
-        toolsRepository = toolsRepository,
         favoriteToolsBannerPresenter = favoriteToolsBannerPresenter,
+        featuredToolsFlowProducer = featuredToolsFlowProducer,
         filteredToolsFlowProducer = filteredToolsFlowProducer,
         toolFiltersStateProducer = toolFiltersStateProducer,
         syncService = syncService,
@@ -185,54 +185,30 @@ class ToolsPresenterTest {
 
     // region State.spotlightTools
     @Test
-    fun `Property spotlightTools`() = testScope.runTest {
-        val normalTool = randomTool("normal", isHidden = false, isSpotlight = false)
-        val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
+    fun `State - spotlightTools - shows tools from featuredToolsFlowProducer`() = testScope.runTest {
+        val tool = randomTool(isHidden = false, isSpotlight = true)
 
         presenter.test {
-            toolsFlow.value = listOf(normalTool, spotlightTool)
-            assertEquals(listOf(spotlightTool), expectMostRecentItem().spotlightTools.map { it.tool })
+            featuredToolsFlow.value = listOf(tool)
+            assertEquals(listOf(tool), expectMostRecentItem().spotlightTools.map { it.tool })
         }
     }
 
     @Test
-    fun `Property spotlightTools - Don't show hidden tools`() = testScope.runTest {
-        val hiddenTool = randomTool("normal", isHidden = true, isSpotlight = true)
-        val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
+    fun `State - spotlightTools - Don't show spotlight tools for ALL_TOOLS when personalization enabled`() =
+        testScope.runTest {
+            isPersonalizationEnabled = true
+            val spotlightTool = randomTool(isHidden = false, isSpotlight = true)
+            featuredToolsFlow.value = listOf(spotlightTool)
 
-        presenter.test {
-            toolsFlow.value = listOf(hiddenTool, spotlightTool)
-            assertEquals(listOf(spotlightTool), expectMostRecentItem().spotlightTools.map { it.tool })
+            presenter.test {
+                val initialState = awaitInitialItem()
+                assertEquals(listOf(spotlightTool), initialState.spotlightTools.map { it.tool })
+
+                initialState.eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
+                assertEquals(emptyList(), expectMostRecentItem().spotlightTools)
+            }
         }
-    }
-
-    @Test
-    fun `Property spotlightTools - Sorted by default order`() = testScope.runTest {
-        val tools = List(10) {
-            randomTool("tool$it", Tool.Type.TRACT, defaultOrder = it, isHidden = false, isSpotlight = true)
-        }
-
-        presenter.test {
-            toolsFlow.value = tools.shuffled()
-            assertEquals(tools, expectMostRecentItem().spotlightTools.map { it.tool })
-        }
-    }
-
-    @Test
-    fun `Property spotlightTools - Don't show spotlight tools for ALL_TOOLS`() = testScope.runTest {
-        isPersonalizationEnabled = true
-        val normalTool = randomTool("normal", isHidden = false, isSpotlight = false)
-        val spotlightTool = randomTool("spotlight", isHidden = false, isSpotlight = true)
-        toolsFlow.value = listOf(normalTool, spotlightTool)
-
-        presenter.test {
-            val initialState = awaitInitialItem()
-            assertEquals(listOf(spotlightTool), initialState.spotlightTools.map { it.tool })
-
-            initialState.eventSink(UiEvent.ChangeMode(Mode.ALL_TOOLS))
-            assertEquals(emptyList(), expectMostRecentItem().spotlightTools)
-        }
-    }
     // endregion State.spotlightTools
 
     // region State.filters
@@ -290,7 +266,10 @@ class ToolsPresenterTest {
         presenter.test {
             awaitInitialItem()
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.ENGLISH, "US", false)
+                syncService.syncFeaturedTools(Locale.ENGLISH, "US", false)
+            }
         }
     }
 
@@ -303,7 +282,10 @@ class ToolsPresenterTest {
         presenter.test {
             awaitInitialItem()
             toolOrderSync.send(true)
-            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            coVerifyAll {
+                syncService.syncToolOrder(Locale.FRENCH, "US", false)
+                syncService.syncFeaturedTools(Locale.FRENCH, "US", false)
+            }
         }
     }
 

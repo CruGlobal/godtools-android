@@ -39,6 +39,7 @@ internal class ToolSyncTasks @Inject internal constructor(
 ) : BaseSyncTasks() {
     internal companion object {
         const val SYNC_TIME_TOOLS = "last_synced.tools"
+        const val SYNC_TIME_FEATURED_TOOLS = "last_synced.featured_tools."
         const val SYNC_TIME_TOOL_ORDER = "last_synced.tool_order."
 
         private val INCLUDES_GET_TOOL = Includes(
@@ -52,7 +53,7 @@ internal class ToolSyncTasks @Inject internal constructor(
             .fields(Tool.JSONAPI_TYPE, *Tool.JSONAPI_FIELDS)
             .fields(Language.JSONAPI_TYPE, *Language.JSONAPI_FIELDS)
 
-        private fun buildToolOrderApiParams() = JsonApiParams()
+        private fun buildToolPlaceholderParams() = JsonApiParams()
             .fields(Tool.JSONAPI_TYPE, Tool.JSON_CODE)
     }
 
@@ -102,6 +103,35 @@ internal class ToolSyncTasks @Inject internal constructor(
         true
     }
 
+    // region Featured Tools
+    private val featuredToolsMutex = MutexMap()
+
+    internal suspend fun syncFeaturedTools(locale: Locale, country: String?, force: Boolean = false): Boolean {
+        val normalizedCountry = country?.uppercase()
+
+        featuredToolsMutex.withLock(locale to normalizedCountry) {
+            if (!force &&
+                !lastSyncTimeRepository.isLastSyncStale(
+                    SYNC_TIME_FEATURED_TOOLS,
+                    locale,
+                    normalizedCountry.orEmpty(),
+                    staleAfter = STALE_DURATION_TOOLS,
+                )
+            ) {
+                return true
+            }
+
+            val tools = toolsApi.getFeaturedTools(locale, normalizedCountry, buildToolPlaceholderParams())
+                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
+
+            toolsRepository.storeFeaturedToolsFromSync(locale, normalizedCountry, tools)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, normalizedCountry.orEmpty())
+
+            return true
+        }
+    }
+    // endregion Featured Tools
+
     // region Tool Order
     private val toolOrderMutex = MutexMap()
 
@@ -120,10 +150,10 @@ internal class ToolSyncTasks @Inject internal constructor(
                 return true
             }
 
-            val tools = toolsApi.getToolOrder(locale, country, buildToolOrderApiParams())
+            val tools = toolsApi.getToolOrder(locale, normalizedCountry, buildToolPlaceholderParams())
                 .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
 
-            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, tools)
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, normalizedCountry, tools)
             lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOL_ORDER, locale, normalizedCountry.orEmpty())
 
             return true

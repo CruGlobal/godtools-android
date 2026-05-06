@@ -193,6 +193,40 @@ class GodToolsRoomDatabaseMigrationIT {
         }
     }
 
+    @Test
+    fun testMigrate26To27() {
+        val featuredOrderQuery = "SELECT * FROM personalized_featured_tool_order"
+
+        // create v26 database
+        helper.createDatabase(GodToolsRoomDatabase.DATABASE_NAME, 26).use { db ->
+            db.execSQL("INSERT INTO tools (code, type) VALUES (?, ?)", arrayOf<Any>("kgp", Tool.Type.TRACT))
+            assertFailsWith<SQLException> { db.query(featuredOrderQuery) }
+        }
+
+        // run migration
+        helper.runMigrationsAndValidate(GodToolsRoomDatabase.DATABASE_NAME, 27, true, *MIGRATIONS).use { db ->
+            db.query("SELECT code, type FROM tools WHERE code = 'kgp'").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("kgp", it.getStringOrNull(0))
+                assertEquals("TRACT", it.getStringOrNull(1))
+            }
+            db.query(featuredOrderQuery).close()
+            db.execSQL(
+                "INSERT INTO personalized_featured_tool_order (locale, country, tool, `order`) VALUES (?, ?, ?, ?)",
+                arrayOf<Any>("en", "US", "kgp", 0)
+            )
+            db.query("SELECT locale, country, tool, `order` FROM personalized_featured_tool_order").use {
+                assertEquals(1, it.count)
+                it.moveToFirst()
+                assertEquals("en", it.getStringOrNull(0))
+                assertEquals("US", it.getStringOrNull(1))
+                assertEquals("kgp", it.getStringOrNull(2))
+                assertEquals(0, it.getIntOrNull(3))
+            }
+        }
+    }
+
     private fun SupportSQLiteDatabase.dumpIndices(table: String) = query("PRAGMA index_list($table)").use { it ->
         it.map { it.getString(1) }.associateWith { name ->
             query("PRAGMA index_info($name)").use { it.map { it.getString(2) }.toSet() }

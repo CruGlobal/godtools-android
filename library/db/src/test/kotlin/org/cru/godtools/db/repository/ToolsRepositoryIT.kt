@@ -251,6 +251,78 @@ abstract class ToolsRepositoryIT {
     }
     // endregion getLessonsFlowByLanguage()
 
+    // region getFeaturedToolsFlow()
+    @Test
+    fun `getFeaturedToolsFlow() - empty when no order stored`() = testScope.runTest {
+        repository.storeInitialTools(listOf(randomTool("tool", Tool.Type.TRACT)))
+        assertTrue(repository.getFeaturedToolsFlow(Locale.ENGLISH, null).first().isEmpty())
+    }
+
+    @Test
+    fun `getFeaturedToolsFlow() - returns tools in featured order`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.CYOA)
+        val tool3 = randomTool("tool3", Tool.Type.ARTICLE)
+        repository.storeInitialTools(listOf(tool1, tool2, tool3))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, "US", listOf(tool2, tool3, tool1))
+        assertEquals(
+            listOf("tool2", "tool3", "tool1"),
+            repository.getFeaturedToolsFlow(Locale.ENGLISH, "US").first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getFeaturedToolsFlow() - filters to NORMAL_TYPES only`() = testScope.runTest {
+        val tract = randomTool("tract", Tool.Type.TRACT)
+        val lesson = randomTool("lesson", Tool.Type.LESSON)
+        val meta = randomTool("meta", Tool.Type.META)
+        repository.storeInitialTools(listOf(tract, lesson, meta))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(lesson, meta, tract))
+        assertEquals(
+            listOf("tract"),
+            repository.getFeaturedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `getFeaturedToolsFlow() - scoped to locale and country`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, "US", listOf(tool))
+        assertTrue(repository.getFeaturedToolsFlow(Locale.FRENCH, "US").first().isEmpty())
+        assertTrue(repository.getFeaturedToolsFlow(Locale.ENGLISH, "CA").first().isEmpty())
+    }
+
+    @Test
+    fun `getFeaturedToolsFlow() - null country`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(tool))
+        assertEquals(listOf("tool"), repository.getFeaturedToolsFlow(Locale.ENGLISH, null).first().map { it.code })
+    }
+
+    @Test
+    fun `getFeaturedToolsFlow() - updates when order changes`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool1, tool2))
+
+        repository.getFeaturedToolsFlow(Locale.ENGLISH, null).test {
+            assertTrue(awaitItem().isEmpty())
+
+            repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(tool1, tool2))
+            assertEquals(listOf("tool1", "tool2"), awaitItem().map { it.code })
+
+            repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(tool2, tool1))
+            assertEquals(listOf("tool2", "tool1"), awaitItem().map { it.code })
+        }
+    }
+    // endregion getFeaturedToolsFlow()
+
     // region getPersonalizedToolsFlow()
     @Test
     fun `getPersonalizedToolsFlow() - empty when no order stored`() = testScope.runTest {
@@ -712,13 +784,57 @@ abstract class ToolsRepositoryIT {
     }
     // endregion storeFavoriteToolsFromSync()
 
+    // region storeFeaturedToolsFromSync()
+    @Test
+    fun `storeFeaturedToolsFromSync() - doesn't pave over existing tool data`() = testScope.runTest {
+        val tool = randomTool("tool", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(randomTool("tool", apiId = tool.apiId)))
+        assertEquals(tool, repository.findTool("tool"))
+    }
+
+    @Test
+    fun `storeFeaturedToolsFromSync() - order is preserved when tools are stored after`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        val tool3 = randomTool("tool3", Tool.Type.TRACT)
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(tool2, tool3, tool1))
+        repository.storeToolsFromSync(listOf(tool1, tool2, tool3))
+        assertEquals(
+            listOf("tool2", "tool3", "tool1"),
+            repository.getFeaturedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+    }
+
+    @Test
+    fun `storeFeaturedToolsFromSync() - different locales are independent`() = testScope.runTest {
+        val tool1 = randomTool("tool1", Tool.Type.TRACT)
+        val tool2 = randomTool("tool2", Tool.Type.TRACT)
+        repository.storeInitialTools(listOf(tool1, tool2))
+
+        repository.storeFeaturedToolsFromSync(Locale.ENGLISH, null, listOf(tool1, tool2))
+        repository.storeFeaturedToolsFromSync(Locale.FRENCH, null, listOf(tool2, tool1))
+        assertEquals(
+            listOf("tool1", "tool2"),
+            repository.getFeaturedToolsFlow(Locale.ENGLISH, null).first().map { it.code }
+        )
+        assertEquals(
+            listOf("tool2", "tool1"),
+            repository.getFeaturedToolsFlow(Locale.FRENCH, null).first().map { it.code }
+        )
+    }
+    // endregion storeFeaturedToolsFromSync()
+
     // region storePersonalizedToolOrderFromSync()
     @Test
     fun `storePersonalizedToolOrderFromSync() - doesn't pave over existing tool data`() = testScope.runTest {
         val tool = randomTool("tool", Tool.Type.TRACT)
         repository.storeInitialTools(listOf(tool))
 
-        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, listOf(tool))
+        val order = listOf(randomTool(code = "tool", apiId = tool.apiId))
+        repository.storePersonalizedToolOrderFromSync(Locale.ENGLISH, null, order)
         assertEquals(tool, repository.findTool("tool"))
     }
 
