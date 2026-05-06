@@ -18,6 +18,7 @@ import org.cru.godtools.db.repository.InMemoryLastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.sync.repository.SyncRepository
+import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_FEATURED_TOOLS
 import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_TOOL_ORDER
 import retrofit2.Response
 
@@ -27,10 +28,13 @@ class ToolSyncTasksTest {
 
     private val tool = randomTool()
     private val existingTools = listOf(randomTool())
+    private val apiFeaturedTools = listOf(randomTool(), randomTool())
     private val apiToolOrder = listOf(randomTool(), randomTool())
 
     private val toolsApi: ToolsApi = mockk {
         coEvery { list(any()) } returns Response.success(JsonApiObject.single(tool))
+        coEvery { getFeaturedTools(any(), any(), any()) } returns
+            Response.success(JsonApiObject.of(*apiFeaturedTools.toTypedArray()))
         coEvery { getToolOrder(any(), any(), any()) } returns
             Response.success(JsonApiObject.of(*apiToolOrder.toTypedArray()))
     }
@@ -40,6 +44,7 @@ class ToolSyncTasksTest {
     }
     private val toolsRepository: ToolsRepository = mockk {
         coEvery { getAllTools() } returns existingTools
+        coEvery { storeFeaturedToolsFromSync(any(), any(), any()) } just Runs
         coEvery { storePersonalizedToolOrderFromSync(any(), any(), any()) } just Runs
     }
     private val lastSyncTimeRepository = InMemoryLastSyncTimeRepository()
@@ -98,6 +103,61 @@ class ToolSyncTasksTest {
         }
     }
     // endregion syncTools()
+
+    // region syncFeaturedTools()
+    @Test
+    fun `syncFeaturedTools()`() = runTest {
+        tasks.syncFeaturedTools(locale, country)
+        coVerifyAll {
+            toolsApi.getFeaturedTools(locale, country, any())
+            toolsRepository.storeFeaturedToolsFromSync(locale, country, apiFeaturedTools)
+        }
+        assertFalse(
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FEATURED_TOOLS, locale, country, staleAfter = 60_000)
+        )
+    }
+
+    @Test
+    fun `syncFeaturedTools(country = null)`() = runTest {
+        tasks.syncFeaturedTools(locale, null)
+        coVerifyAll {
+            toolsApi.getFeaturedTools(locale, null, any())
+            toolsRepository.storeFeaturedToolsFromSync(locale, null, apiFeaturedTools)
+        }
+        assertFalse(
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FEATURED_TOOLS, locale, "", staleAfter = 60_000)
+        )
+    }
+
+    @Test
+    fun `syncFeaturedTools(force = false) - already synced`() = runTest {
+        with(lastSyncTimeRepository) {
+            setLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, country, time = System.currentTimeMillis())
+        }
+
+        tasks.syncFeaturedTools(locale, country, force = false)
+        coVerifyAll {
+            toolsApi wasNot Called
+            toolsRepository wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncFeaturedTools(force = true) - already synced`() = runTest {
+        with(lastSyncTimeRepository) {
+            setLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, country, time = System.currentTimeMillis())
+        }
+
+        tasks.syncFeaturedTools(locale, country, force = true)
+        coVerifyAll {
+            toolsApi.getFeaturedTools(locale, country, any())
+            toolsRepository.storeFeaturedToolsFromSync(locale, country, apiFeaturedTools)
+        }
+        assertFalse(
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FEATURED_TOOLS, locale, country, staleAfter = 60_000)
+        )
+    }
+    // endregion syncFeaturedTools()
 
     // region syncToolOrder()
     @Test
