@@ -23,7 +23,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -32,9 +31,7 @@ import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURC
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
-import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.Language
-import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
@@ -53,8 +50,8 @@ class ToolsPresenter @AssistedInject internal constructor(
     private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
-    private val toolsRepository: ToolsRepository,
     private val favoriteToolsBannerPresenter: BannerPresenter<FavoriteToolsBannerPresenter.UiState>,
+    private val featuredToolsFlowProducer: FeaturedToolsFlowProducer,
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer,
     private val toolFiltersStateProducer: ToolFiltersStateProducer,
     private val syncService: GodToolsSyncService,
@@ -95,8 +92,9 @@ class ToolsPresenter @AssistedInject internal constructor(
 
         RegisterSyncTask(selectedLocale)
 
-        val spotlightTools = rememberSpotlightTools(
-            secondLanguage = filters.languageFilter.selectedItem
+        val featuredTools = rememberFeaturedTools(
+            mode = mode,
+            language = filters.languageFilter.selectedItem
         ) { openToolDetails(it, selectedLocale, SOURCE_SPOTLIGHT) }
 
         val tools = rememberTools(
@@ -108,10 +106,10 @@ class ToolsPresenter @AssistedInject internal constructor(
         return UiState(
             mode = mode,
             banner = favoriteToolsBannerPresenter.present(),
-            dataLoaded = spotlightTools != null && tools != null,
+            dataLoaded = featuredTools != null && tools != null,
             spotlightTools = when {
                 isPersonalizationEnabled && mode == Mode.ALL_TOOLS -> emptyList()
-                else -> spotlightTools.orEmpty()
+                else -> featuredTools.orEmpty()
             },
             filters = filters,
             tools = tools.orEmpty(),
@@ -134,13 +132,14 @@ class ToolsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun rememberSpotlightTools(
-        secondLanguage: Language?,
+    private fun rememberFeaturedTools(
+        mode: Mode,
+        language: Language?,
         onOpenToolDetails: (String) -> Unit,
     ): List<ToolCardPresenter.UiState>? {
-        val tools by remember {
-            toolsRepository.getNormalToolsFlow()
-                .map { it.filter { !it.isHidden && it.isSpotlight }.sortedWith(Tool.COMPARATOR_DEFAULT_ORDER) }
+        val locale = language?.code
+        val tools by remember(mode, locale) {
+            featuredToolsFlowProducer.getFlow(mode, locale)
         }.collectAsState(null)
 
         return tools?.map { tool ->
@@ -148,7 +147,7 @@ class ToolsPresenter @AssistedInject internal constructor(
 
             toolCardPresenter.present(
                 tool = tool,
-                secondLanguage = secondLanguage,
+                secondLanguage = language,
                 eventSink = {
                     when (it) {
                         ToolCardEvent.Click,
