@@ -11,7 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -36,6 +38,7 @@ import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -55,6 +58,7 @@ class LessonsPresenter @AssistedInject constructor(
     private val context: Context,
     private val eventBus: EventBus,
     private val languagesRepository: LanguagesRepository,
+    private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
@@ -62,22 +66,45 @@ class LessonsPresenter @AssistedInject constructor(
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
-    // region UiState
-    data class UiState(
+    // region UiState / UiEvent
+    @ConsistentCopyVisibility
+    data class UiState internal constructor(
+        val mode: Mode = Mode.ALL_LESSONS,
+        val isPersonalizationEnabled: Boolean = false,
         val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
         val lessons: List<ToolCardPresenter.UiState> = emptyList(),
-    ) : CircuitUiState
-    // endregion UiState
+        internal val eventSink: (UiEvent) -> Unit = {},
+    ) : CircuitUiState {
+        enum class Mode { PERSONALIZATION, ALL_LESSONS }
+    }
+
+    internal sealed interface UiEvent : CircuitUiEvent {
+        data class ChangeMode(val mode: UiState.Mode) : UiEvent
+    }
+    // endregion UiState / UiEvent
 
     @Composable
     override fun present(): UiState {
+        val isPersonalizationEnabled = rememberSaveable {
+            remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
+        }
+        var mode by rememberSaveable {
+            mutableStateOf(if (isPersonalizationEnabled) UiState.Mode.PERSONALIZATION else UiState.Mode.ALL_LESSONS)
+        }
+
         val appLanguage by settings.appLanguageFlow.collectAsState()
         val languageFilter = rememberLanguagesFilter()
 
         return UiState(
+            mode = mode,
+            isPersonalizationEnabled = isPersonalizationEnabled,
             languageFilter = languageFilter,
             lessons = rememberLessons(languageFilter.selectedItem?.code ?: appLanguage),
-        )
+        ) {
+            when (it) {
+                is UiEvent.ChangeMode -> mode = it.mode
+            }
+        }
     }
 
     @Composable

@@ -9,6 +9,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.Turbine
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -37,6 +38,7 @@ import org.ccci.gto.android.common.util.content.equalsIntent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -48,6 +50,8 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
@@ -65,11 +69,14 @@ class LessonsPresenterTest {
     private val enLessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
+    private var isPersonalizationEnabled = true
 
     private val testScope = TestScope()
-
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
+    private val remoteConfig: FirebaseRemoteConfig = mockk {
+        every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } answers { isPersonalizationEnabled }
+    }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
         every { getLanguagesFlow() } returns languagesFlow
@@ -94,6 +101,7 @@ class LessonsPresenterTest {
         context = context,
         eventBus = eventBus,
         languagesRepository = languagesRepository,
+        remoteConfig = remoteConfig,
         settings = settings,
         toolCardPresenter = FakeToolCardPresenter(),
         toolsRepository = toolsRepository,
@@ -110,12 +118,12 @@ class LessonsPresenterTest {
 
     // This logic is based on the Sample AnsweringNavigatorTest in the circuit library.
     // see: https://github.com/slackhq/circuit/blob/main/circuit-foundation/src/jvmTest/kotlin/com/slack/circuit/foundation/AnsweringNavigatorTest.kt
-    private fun testPresenterWithStateRestoration(): ReceiveTurbine<LessonsPresenter.UiState> {
-        val presenterState = Turbine<LessonsPresenter.UiState>()
+    private fun testPresenterWithStateRestoration(): ReceiveTurbine<UiState> {
+        val presenterState = Turbine<UiState>()
 
         val circuit = Circuit.Builder()
-            .addPresenter<LessonsScreen, LessonsPresenter.UiState> { s, n, _ -> presenter }
-            .addUi<LessonsScreen, LessonsPresenter.UiState> { state, _ -> SideEffect { presenterState.add(state) } }
+            .addPresenter<LessonsScreen, UiState> { _, _, _ -> presenter }
+            .addUi<LessonsScreen, UiState> { state, _ -> SideEffect { presenterState.add(state) } }
             .build()
 
         stateRestorationTester.setContent {
@@ -139,6 +147,41 @@ class LessonsPresenterTest {
         navigator.assertPopIsEmpty()
         navigator.assertResetRootIsEmpty()
     }
+
+    // region State.mode
+    @Test
+    fun `State - mode - personalization disabled`() = testScope.runTest {
+        isPersonalizationEnabled = false
+        presenter.test {
+            assertEquals(UiState.Mode.ALL_LESSONS, expectMostRecentItem().mode)
+        }
+    }
+
+    @Test
+    fun `State - mode - personalization enabled`() = testScope.runTest {
+        presenter.test {
+            val state = awaitItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            assertEquals(UiState.Mode.ALL_LESSONS, awaitItem().mode)
+        }
+    }
+
+    @Test
+    fun `State - mode - persisted through state save & restore`() = testScope.runTest {
+        testPresenterWithStateRestoration().test {
+            val state = expectMostRecentItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            composeTestRule.waitForIdle()
+            assertEquals(UiState.Mode.ALL_LESSONS, expectMostRecentItem().mode)
+
+            stateRestorationTester.emulateSavedInstanceStateRestore()
+            assertEquals(UiState.Mode.ALL_LESSONS, awaitItem().mode)
+        }
+    }
+    // endregion State.mode
 
     // region State.languageFilter.selectedItem
     @Test
