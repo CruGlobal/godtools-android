@@ -119,7 +119,6 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - Personalization`() {
-        assumeTrue(locale == null)
         toolsState = toolsState.copy(mode = ToolsPresenter.UiState.Mode.PERSONALIZATION)
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
@@ -136,7 +135,6 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - All Tools`() {
-        assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.ALL_TOOLS,
             spotlightTools = emptyList(),
