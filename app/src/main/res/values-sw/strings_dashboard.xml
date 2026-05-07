@@ -32,7 +32,7 @@ Toleo la mtandao linaweza kupatikana kwenye https://knowgod.com/</string>
     <string name="menu_version">Matoleo: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Masomo</string>
-    <string name="dashboard_lessons_header_title">Masomo kwa ajili yako</string>
+    <string name="dashboard_lessons_header_title_personalized">Masomo kwa ajili yako</string>
     <string name="dashboard_lessons_header_description">Mikakati ya kivitendo ya kujenga mahusiano na kuanzisha mazungumzo yenye maana.</string>
     <string name="dashboard_lessons_section_filter_label">Masomo yaliyopo:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

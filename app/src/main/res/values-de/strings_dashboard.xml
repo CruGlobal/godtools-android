@@ -32,7 +32,7 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lektionen</string>
-    <string name="dashboard_lessons_header_title">Für dich gemachte Lektionen</string>
+    <string name="dashboard_lessons_header_title_personalized">Für dich gemachte Lektionen</string>
     <string name="dashboard_lessons_header_description">Praktische Ideen zum Aufbau von Beziehungen und zum Beginn bedeutungsvoller Unterhaltungen.</string>
     <string name="dashboard_lessons_section_filter_label">Lektionen in:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

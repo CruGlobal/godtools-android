@@ -39,7 +39,8 @@ An online version can be found at https://knowgod.com/</string>
     <string name="nav_lessons">Lessons</string>
     <string name="dashboard_lessons_toggle_personalized">Personalized</string>
     <string name="dashboard_lessons_toggle_all">All Lessons</string>
-    <string name="dashboard_lessons_header_title">Lessons made for you</string>
+    <string name="dashboard_lessons_header_title_all">Lessons</string>
+    <string name="dashboard_lessons_header_title_personalized">Lessons made for you</string>
     <string name="dashboard_lessons_header_description">Practical ideas to build relationships and start meaningful conversations.</string>
     <string name="dashboard_lessons_section_filter_label">Lessons in:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

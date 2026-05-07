@@ -32,7 +32,7 @@ https://knowgod.com/-তে একটি অনলাইন সংস্কর�
     <string name="menu_version">সংস্করণ: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">পাঠগুলি</string>
-    <string name="dashboard_lessons_header_title">আপনার জন্য তৈরি পাঠগুলি</string>
+    <string name="dashboard_lessons_header_title_personalized">আপনার জন্য তৈরি পাঠগুলি</string>
     <string name="dashboard_lessons_header_description">সম্পর্ক তৈরি করার এবং অর্থপূর্ণ কথাবার্তা শুরু করার ব্যবহারিক ধারণা</string>
     <string name="dashboard_lessons_section_filter_label">এগুলিতে পাঠসমূহ:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
