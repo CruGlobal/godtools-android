@@ -14,9 +14,14 @@ import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.InternalCircuitApi
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -28,13 +33,16 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.util.content.equalsIntent
+import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
@@ -49,6 +57,9 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
@@ -65,13 +76,19 @@ import org.robolectric.annotation.Config
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsPresenterTest {
     private val appLangFlow = MutableStateFlow(Locale.ENGLISH)
+    private val countryFlow = MutableStateFlow<String?>("US")
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val enLessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
+    private val toolOrderSync = Channel<Boolean>()
     private var isPersonalizationEnabled = true
 
     private val testScope = TestScope()
+    @OptIn(InternalCircuitApi::class)
+    private val circuitContext = CircuitContext(null).apply {
+        syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
+    }
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val remoteConfig: FirebaseRemoteConfig = mockk {
@@ -83,6 +100,10 @@ class LessonsPresenterTest {
     }
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLangFlow
+        every { getCountrySettingFlow() } returns countryFlow
+    }
+    private val syncService: GodToolsSyncService = mockk {
+        coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
     }
     private val lessonsFlowProducer: LessonsFlowProducer = mockk {
         every { getFlow(any(), any()) } returns flowOf(emptyList())
@@ -105,10 +126,12 @@ class LessonsPresenterTest {
         lessonsFlowProducer = lessonsFlowProducer,
         remoteConfig = remoteConfig,
         settings = settings,
+        syncService = syncService,
         toolCardPresenter = FakeToolCardPresenter(),
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
+        circuitContext = circuitContext,
         navigator = navigator,
     )
 
@@ -409,4 +432,53 @@ class LessonsPresenterTest {
         verify { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, "lesson2", SOURCE_LESSONS)) }
     }
     // endregion State.lessons
+
+    // region SideEffect - RegisterSyncTask
+    @Test
+    fun `SideEffect - RegisterSyncTask - Triggers initial sync`() = testScope.runTest {
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
+        appLangFlow.value = Locale.FRENCH
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - re-syncs when locale changes`() = testScope.runTest {
+        presenter.test {
+            val initialState = awaitItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            initialState.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            awaitItemMatching { it.languageFilter.selectedItem?.code == Locale.FRENCH }
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - passes force on triggered sync`() = testScope.runTest {
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            circuitContext.syncTaskRegistry!!.triggerSyncTasks(force = true)
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", true) }
+        }
+    }
+    // endregion SideEffect - RegisterSyncTask
 }
