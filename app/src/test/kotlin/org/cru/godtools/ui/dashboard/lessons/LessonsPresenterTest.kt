@@ -84,11 +84,12 @@ class LessonsPresenterTest {
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLangFlow
     }
+    private val lessonsFlowProducer: LessonsFlowProducer = mockk {
+        every { getFlow(any(), any()) } returns flowOf(emptyList())
+        every { getFlow(any(), Locale.ENGLISH) } returns enLessonsFlow
+    }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
-
-        every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
-        every { getLessonsFlowByLanguage(Locale.ENGLISH) } returns enLessonsFlow
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns translationsFlow
@@ -101,6 +102,7 @@ class LessonsPresenterTest {
         context = context,
         eventBus = eventBus,
         languagesRepository = languagesRepository,
+        lessonsFlowProducer = lessonsFlowProducer,
         remoteConfig = remoteConfig,
         settings = settings,
         toolCardPresenter = FakeToolCardPresenter(),
@@ -337,8 +339,6 @@ class LessonsPresenterTest {
     // region State.languageFilter Event.SelectItem
     @Test
     fun `State - languageFilter - Event - SelectItem`() = testScope.runTest {
-        every { toolsRepository.getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
-
         presenter.test {
             expectMostRecentItem().languageFilter
                 .also { assertEquals(appLangFlow.value, it.selectedItem?.code) }
@@ -352,35 +352,7 @@ class LessonsPresenterTest {
     // region State.lessons
     @Test
     fun `State - lessons`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", isHidden = false, defaultOrder = 1),
-        )
-
-        presenter.test {
-            assertEquals(listOf("lesson1", "lesson2"), expectMostRecentItem().lessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - lessons - hide hidden lessons`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", isHidden = true, defaultOrder = 1),
-            randomTool("lesson3", isHidden = false, defaultOrder = 2),
-        )
-
-        presenter.test {
-            assertEquals(listOf("lesson1", "lesson3"), expectMostRecentItem().lessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - lessons - sorted by defaultOrder`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson2", isHidden = false, defaultOrder = 1),
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-        )
+        enLessonsFlow.value = listOf(randomTool("lesson1"), randomTool("lesson2"))
 
         presenter.test {
             assertEquals(listOf("lesson1", "lesson2"), expectMostRecentItem().lessons.map { it.toolCode })
@@ -389,27 +361,39 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - lessons - Filtered by selected language`() = testScope.runTest {
-        every { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
-            .returns(flowOf(listOf(randomTool("lesson", isHidden = false))))
+        every { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) } returns flowOf(listOf(randomTool("lesson")))
 
         presenter.test {
             with(expectMostRecentItem()) {
                 assertEquals(emptyList(), lessons)
-                verify(exactly = 0) { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
+                verify(exactly = 0) { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) }
 
                 languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             }
 
             assertEquals(listOf("lesson"), expectMostRecentItem().lessons.map { it.toolCode })
-            verify { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
+            verify { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) }
+        }
+    }
+
+    @Test
+    fun `State - lessons - passes mode to lessonsFlowProducer`() = testScope.runTest {
+        presenter.test {
+            val state = expectMostRecentItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+            verify { lessonsFlowProducer.getFlow(UiState.Mode.PERSONALIZATION, any()) }
+
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            awaitItem()
+            verify { lessonsFlowProducer.getFlow(UiState.Mode.ALL_LESSONS, any()) }
         }
     }
 
     @Test
     fun `State - lessons - Event - Click`() = testScope.runTest {
         enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", type = Tool.Type.LESSON, isHidden = false, defaultOrder = 1),
+            randomTool("lesson1"),
+            randomTool("lesson2", type = Tool.Type.LESSON),
         )
 
         presenter.test {

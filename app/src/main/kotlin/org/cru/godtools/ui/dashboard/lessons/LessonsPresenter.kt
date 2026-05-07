@@ -53,11 +53,12 @@ import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
-class LessonsPresenter @AssistedInject constructor(
+class LessonsPresenter @AssistedInject internal constructor(
     @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
     private val languagesRepository: LanguagesRepository,
+    private val lessonsFlowProducer: LessonsFlowProducer,
     private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val toolCardPresenter: ToolCardPresenter,
@@ -99,7 +100,7 @@ class LessonsPresenter @AssistedInject constructor(
             mode = mode,
             isPersonalizationEnabled = isPersonalizationEnabled,
             languageFilter = languageFilter,
-            lessons = rememberLessons(languageFilter.selectedItem?.code ?: appLanguage),
+            lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage),
         ) {
             when (it) {
                 is UiEvent.ChangeMode -> mode = it.mode
@@ -167,12 +168,8 @@ class LessonsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLessons(locale: Locale): List<ToolCardPresenter.UiState> {
-        val lessons by remember(locale) {
-            toolsRepository.getLessonsFlowByLanguage(locale)
-                .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
-        }.collectAsState(emptyList())
-
+    private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState> {
+        val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(emptyList())
         return lessons.map { tool ->
             key(tool.code) {
                 lateinit var toolState: ToolCardPresenter.UiState
