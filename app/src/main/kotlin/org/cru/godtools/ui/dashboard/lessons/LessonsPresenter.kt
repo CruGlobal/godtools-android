@@ -54,6 +54,8 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
+import org.cru.godtools.ui.settings.country.CountrySettingsScreen
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
@@ -89,6 +91,7 @@ class LessonsPresenter @AssistedInject internal constructor(
 
     internal sealed interface UiEvent : CircuitUiEvent {
         data class ChangeMode(val mode: UiState.Mode) : UiEvent
+        data object OpenLocalizationSettings : UiEvent
     }
     // endregion UiState / UiEvent
 
@@ -114,6 +117,7 @@ class LessonsPresenter @AssistedInject internal constructor(
         ) {
             when (it) {
                 is UiEvent.ChangeMode -> mode = it.mode
+                is UiEvent.OpenLocalizationSettings -> navigator.goTo(CountrySettingsScreen)
             }
         }
     }
