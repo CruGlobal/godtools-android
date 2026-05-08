@@ -64,12 +64,14 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
             )
         }
 
-        item("localization-settings-box", "localization-settings-box") {
-            LocalizationSettingsBox(
-                title = R.string.dashboard_lessons_section_personalized_localization_title,
-                description = R.string.dashboard_lessons_section_personalized_localization_text,
-                onClickSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) }
-            )
+        if (state.isPersonalizationEnabled) {
+            item("localization-settings-box", "localization-settings-box") {
+                LocalizationSettingsBox(
+                    title = R.string.dashboard_lessons_section_personalized_localization_title,
+                    description = R.string.dashboard_lessons_section_personalized_localization_text,
+                    onClickSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) }
+                )
+            }
         }
     }
 }
