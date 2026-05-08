@@ -9,13 +9,19 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.Turbine
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.backstack.SaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.InternalCircuitApi
 import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import com.slack.circuitx.android.IntentScreen
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.coVerifyAll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -27,16 +33,20 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.util.content.equalsIntent
+import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -47,7 +57,12 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
+import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.FakeToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
@@ -61,27 +76,41 @@ import org.robolectric.annotation.Config
 @OptIn(ExperimentalCoroutinesApi::class)
 class LessonsPresenterTest {
     private val appLangFlow = MutableStateFlow(Locale.ENGLISH)
+    private val countryFlow = MutableStateFlow<String?>("US")
     private val lessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val enLessonsFlow = MutableStateFlow(emptyList<Tool>())
     private val languagesFlow = MutableStateFlow(emptyList<Language>())
     private val translationsFlow = MutableStateFlow(emptyList<Translation>())
+    private val toolOrderSync = Channel<Boolean>()
+    private var isPersonalizationEnabled = true
 
     private val testScope = TestScope()
-
+    @OptIn(InternalCircuitApi::class)
+    private val circuitContext = CircuitContext(null).apply {
+        syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
+    }
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
+    private val remoteConfig: FirebaseRemoteConfig = mockk {
+        every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } answers { isPersonalizationEnabled }
+    }
     private val languagesRepository: LanguagesRepository = mockk {
         every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
         every { getLanguagesFlow() } returns languagesFlow
     }
     private val settings: Settings = mockk {
         every { appLanguageFlow } returns appLangFlow
+        every { getCountrySettingFlow() } returns countryFlow
+    }
+    private val syncService: GodToolsSyncService = mockk {
+        coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
+    }
+    private val lessonsFlowProducer: LessonsFlowProducer = mockk {
+        every { getFlow(any(), any()) } returns flowOf(emptyList())
+        every { getFlow(any(), Locale.ENGLISH) } returns enLessonsFlow
     }
     private val toolsRepository: ToolsRepository = mockk {
         every { getLessonsFlow() } returns lessonsFlow
-
-        every { getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
-        every { getLessonsFlowByLanguage(Locale.ENGLISH) } returns enLessonsFlow
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns translationsFlow
@@ -94,11 +123,15 @@ class LessonsPresenterTest {
         context = context,
         eventBus = eventBus,
         languagesRepository = languagesRepository,
+        lessonsFlowProducer = lessonsFlowProducer,
+        remoteConfig = remoteConfig,
         settings = settings,
+        syncService = syncService,
         toolCardPresenter = FakeToolCardPresenter(),
         toolsRepository = toolsRepository,
         translationsRepository = translationsRepository,
         ioDispatcher = UnconfinedTestDispatcher(testScope.testScheduler),
+        circuitContext = circuitContext,
         navigator = navigator,
     )
 
@@ -110,12 +143,12 @@ class LessonsPresenterTest {
 
     // This logic is based on the Sample AnsweringNavigatorTest in the circuit library.
     // see: https://github.com/slackhq/circuit/blob/main/circuit-foundation/src/jvmTest/kotlin/com/slack/circuit/foundation/AnsweringNavigatorTest.kt
-    private fun testPresenterWithStateRestoration(): ReceiveTurbine<LessonsPresenter.UiState> {
-        val presenterState = Turbine<LessonsPresenter.UiState>()
+    private fun testPresenterWithStateRestoration(): ReceiveTurbine<UiState> {
+        val presenterState = Turbine<UiState>()
 
         val circuit = Circuit.Builder()
-            .addPresenter<LessonsScreen, LessonsPresenter.UiState> { s, n, _ -> presenter }
-            .addUi<LessonsScreen, LessonsPresenter.UiState> { state, _ -> SideEffect { presenterState.add(state) } }
+            .addPresenter<LessonsScreen, UiState> { _, _, _ -> presenter }
+            .addUi<LessonsScreen, UiState> { state, _ -> SideEffect { presenterState.add(state) } }
             .build()
 
         stateRestorationTester.setContent {
@@ -139,6 +172,41 @@ class LessonsPresenterTest {
         navigator.assertPopIsEmpty()
         navigator.assertResetRootIsEmpty()
     }
+
+    // region State.mode
+    @Test
+    fun `State - mode - personalization disabled`() = testScope.runTest {
+        isPersonalizationEnabled = false
+        presenter.test {
+            assertEquals(UiState.Mode.ALL_LESSONS, expectMostRecentItem().mode)
+        }
+    }
+
+    @Test
+    fun `State - mode - personalization enabled`() = testScope.runTest {
+        presenter.test {
+            val state = awaitItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            assertEquals(UiState.Mode.ALL_LESSONS, awaitItem().mode)
+        }
+    }
+
+    @Test
+    fun `State - mode - persisted through state save & restore`() = testScope.runTest {
+        testPresenterWithStateRestoration().test {
+            val state = expectMostRecentItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            composeTestRule.waitForIdle()
+            assertEquals(UiState.Mode.ALL_LESSONS, expectMostRecentItem().mode)
+
+            stateRestorationTester.emulateSavedInstanceStateRestore()
+            assertEquals(UiState.Mode.ALL_LESSONS, awaitItem().mode)
+        }
+    }
+    // endregion State.mode
 
     // region State.languageFilter.selectedItem
     @Test
@@ -294,8 +362,6 @@ class LessonsPresenterTest {
     // region State.languageFilter Event.SelectItem
     @Test
     fun `State - languageFilter - Event - SelectItem`() = testScope.runTest {
-        every { toolsRepository.getLessonsFlowByLanguage(any()) } returns flowOf(emptyList())
-
         presenter.test {
             expectMostRecentItem().languageFilter
                 .also { assertEquals(appLangFlow.value, it.selectedItem?.code) }
@@ -309,35 +375,7 @@ class LessonsPresenterTest {
     // region State.lessons
     @Test
     fun `State - lessons`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", isHidden = false, defaultOrder = 1),
-        )
-
-        presenter.test {
-            assertEquals(listOf("lesson1", "lesson2"), expectMostRecentItem().lessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - lessons - hide hidden lessons`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", isHidden = true, defaultOrder = 1),
-            randomTool("lesson3", isHidden = false, defaultOrder = 2),
-        )
-
-        presenter.test {
-            assertEquals(listOf("lesson1", "lesson3"), expectMostRecentItem().lessons.map { it.toolCode })
-        }
-    }
-
-    @Test
-    fun `State - lessons - sorted by defaultOrder`() = testScope.runTest {
-        enLessonsFlow.value = listOf(
-            randomTool("lesson2", isHidden = false, defaultOrder = 1),
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-        )
+        enLessonsFlow.value = listOf(randomTool("lesson1"), randomTool("lesson2"))
 
         presenter.test {
             assertEquals(listOf("lesson1", "lesson2"), expectMostRecentItem().lessons.map { it.toolCode })
@@ -346,27 +384,39 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - lessons - Filtered by selected language`() = testScope.runTest {
-        every { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
-            .returns(flowOf(listOf(randomTool("lesson", isHidden = false))))
+        every { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) } returns flowOf(listOf(randomTool("lesson")))
 
         presenter.test {
             with(expectMostRecentItem()) {
                 assertEquals(emptyList(), lessons)
-                verify(exactly = 0) { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
+                verify(exactly = 0) { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) }
 
                 languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             }
 
             assertEquals(listOf("lesson"), expectMostRecentItem().lessons.map { it.toolCode })
-            verify { toolsRepository.getLessonsFlowByLanguage(Locale.FRENCH) }
+            verify { lessonsFlowProducer.getFlow(any(), Locale.FRENCH) }
+        }
+    }
+
+    @Test
+    fun `State - lessons - passes mode to lessonsFlowProducer`() = testScope.runTest {
+        presenter.test {
+            val state = expectMostRecentItem()
+            assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
+            verify { lessonsFlowProducer.getFlow(UiState.Mode.PERSONALIZATION, any()) }
+
+            state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            awaitItem()
+            verify { lessonsFlowProducer.getFlow(UiState.Mode.ALL_LESSONS, any()) }
         }
     }
 
     @Test
     fun `State - lessons - Event - Click`() = testScope.runTest {
         enLessonsFlow.value = listOf(
-            randomTool("lesson1", isHidden = false, defaultOrder = 0),
-            randomTool("lesson2", type = Tool.Type.LESSON, isHidden = false, defaultOrder = 1),
+            randomTool("lesson1"),
+            randomTool("lesson2", type = Tool.Type.LESSON),
         )
 
         presenter.test {
@@ -382,4 +432,53 @@ class LessonsPresenterTest {
         verify { eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, "lesson2", SOURCE_LESSONS)) }
     }
     // endregion State.lessons
+
+    // region SideEffect - RegisterSyncTask
+    @Test
+    fun `SideEffect - RegisterSyncTask - Triggers initial sync`() = testScope.runTest {
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
+        appLangFlow.value = Locale.FRENCH
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - re-syncs when locale changes`() = testScope.runTest {
+        presenter.test {
+            val initialState = awaitItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            initialState.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            awaitItemMatching { it.languageFilter.selectedItem?.code == Locale.FRENCH }
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `SideEffect - RegisterSyncTask - passes force on triggered sync`() = testScope.runTest {
+        presenter.test {
+            awaitItem()
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
+
+            circuitContext.syncTaskRegistry!!.triggerSyncTasks(force = true)
+            toolOrderSync.send(true)
+            coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", true) }
+        }
+    }
+    // endregion SideEffect - RegisterSyncTask
 }

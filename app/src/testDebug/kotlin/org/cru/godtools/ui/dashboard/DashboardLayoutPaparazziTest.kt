@@ -277,7 +277,8 @@ class DashboardLayoutPaparazziTest(
     // endregion AllFavoritesLayout
 
     // region LessonsLayout
-    private val lessonsState = LessonsPresenter.UiState(
+    private var lessonsState = LessonsPresenter.UiState(
+        isPersonalizationEnabled = true,
         languageFilter = FilterMenu.UiState(
             selectedItem = Language(Locale.ENGLISH)
         ),
@@ -291,7 +292,20 @@ class DashboardLayoutPaparazziTest(
     )
 
     @Test
-    fun `LessonsLayout()`() {
+    fun `LessonsLayout() - Personalization`() {
+        lessonsState = lessonsState.copy(mode = LessonsPresenter.UiState.Mode.PERSONALIZATION)
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - All Lessons`() {
+        lessonsState = lessonsState.copy(mode = LessonsPresenter.UiState.Mode.ALL_LESSONS)
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - Personalization Disabled`() {
+        lessonsState = lessonsState.copy(isPersonalizationEnabled = false)
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
     // endregion LessonsLayout

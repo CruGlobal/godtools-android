@@ -32,7 +32,7 @@
     <string name="menu_version">Версия: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Уроки</string>
-    <string name="dashboard_lessons_header_title">Уроки для вас</string>
+    <string name="dashboard_lessons_header_title_personalized">Уроки для вас</string>
     <string name="dashboard_lessons_header_description">Практические идеи для построения отношений и начала содержательных бесед.</string>
     <string name="dashboard_lessons_section_filter_label">Язык уроков:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

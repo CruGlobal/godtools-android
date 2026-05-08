@@ -32,7 +32,7 @@
     <string name="menu_version">버전: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">수업</string>
-    <string name="dashboard_lessons_header_title">맞춤 수업</string>
+    <string name="dashboard_lessons_header_title_personalized">맞춤 수업</string>
     <string name="dashboard_lessons_header_description">관계를 형성하고 의미 있는 대화를 시작하기 위한 실용적인 아이디어입니다.</string>
     <string name="dashboard_lessons_section_filter_label">수업 언어:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

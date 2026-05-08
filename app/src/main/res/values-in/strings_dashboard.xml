@@ -32,7 +32,7 @@ Versi online dapat ditemukan di https://knowgod.com/id</string>
     <string name="menu_version">Versi: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Pelajaran</string>
-    <string name="dashboard_lessons_header_title">Pelajaran-pelajaran untuk Saudara</string>
+    <string name="dashboard_lessons_header_title_personalized">Pelajaran-pelajaran untuk Saudara</string>
     <string name="dashboard_lessons_header_description">Ide-ide praktis membangun hubungan dan memulai percakapan yang bermakna.</string>
     <string name="dashboard_lessons_section_filter_label">Pelajaran dalam bahasa:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">

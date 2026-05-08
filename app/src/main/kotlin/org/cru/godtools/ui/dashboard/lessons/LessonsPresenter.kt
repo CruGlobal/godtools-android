@@ -2,6 +2,7 @@ package org.cru.godtools.ui.dashboard.lessons
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,7 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -28,14 +32,17 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
+import org.ccci.gto.android.common.sync.SyncTracker
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -43,6 +50,8 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
+import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.ToolCardPresenter
@@ -50,34 +59,63 @@ import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
 import org.cru.godtools.util.createToolIntent
 import org.greenrobot.eventbus.EventBus
 
-class LessonsPresenter @AssistedInject constructor(
+class LessonsPresenter @AssistedInject internal constructor(
     @param:ApplicationContext
     private val context: Context,
     private val eventBus: EventBus,
     private val languagesRepository: LanguagesRepository,
+    private val lessonsFlowProducer: LessonsFlowProducer,
+    private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
+    private val syncService: GodToolsSyncService,
     private val toolCardPresenter: ToolCardPresenter,
     private val toolsRepository: ToolsRepository,
     private val translationsRepository: TranslationsRepository,
     @param:DispatcherType(IO) private val ioDispatcher: CoroutineDispatcher,
+    @Assisted private val circuitContext: CircuitContext,
     @Assisted private val navigator: Navigator,
 ) : Presenter<UiState> {
-    // region UiState
-    data class UiState(
+    // region UiState / UiEvent
+    @ConsistentCopyVisibility
+    data class UiState internal constructor(
+        val mode: Mode = Mode.ALL_LESSONS,
+        val isPersonalizationEnabled: Boolean = false,
         val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
         val lessons: List<ToolCardPresenter.UiState> = emptyList(),
-    ) : CircuitUiState
-    // endregion UiState
+        internal val eventSink: (UiEvent) -> Unit = {},
+    ) : CircuitUiState {
+        enum class Mode { PERSONALIZATION, ALL_LESSONS }
+    }
+
+    internal sealed interface UiEvent : CircuitUiEvent {
+        data class ChangeMode(val mode: UiState.Mode) : UiEvent
+    }
+    // endregion UiState / UiEvent
 
     @Composable
     override fun present(): UiState {
+        val isPersonalizationEnabled = rememberSaveable {
+            remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
+        }
+        var mode by rememberSaveable {
+            mutableStateOf(if (isPersonalizationEnabled) UiState.Mode.PERSONALIZATION else UiState.Mode.ALL_LESSONS)
+        }
+
         val appLanguage by settings.appLanguageFlow.collectAsState()
         val languageFilter = rememberLanguagesFilter()
 
+        RegisterSyncTask(languageFilter.selectedItem?.code ?: appLanguage)
+
         return UiState(
+            mode = mode,
+            isPersonalizationEnabled = isPersonalizationEnabled,
             languageFilter = languageFilter,
-            lessons = rememberLessons(languageFilter.selectedItem?.code ?: appLanguage),
-        )
+            lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage),
+        ) {
+            when (it) {
+                is UiEvent.ChangeMode -> mode = it.mode
+            }
+        }
     }
 
     @Composable
@@ -140,12 +178,8 @@ class LessonsPresenter @AssistedInject constructor(
     }
 
     @Composable
-    private fun rememberLessons(locale: Locale): List<ToolCardPresenter.UiState> {
-        val lessons by remember(locale) {
-            toolsRepository.getLessonsFlowByLanguage(locale)
-                .map { it.filterNot { it.isHidden }.sortedBy { it.defaultOrder } }
-        }.collectAsState(emptyList())
-
+    private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState> {
+        val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(emptyList())
         return lessons.map { tool ->
             key(tool.code) {
                 lateinit var toolState: ToolCardPresenter.UiState
@@ -176,9 +210,24 @@ class LessonsPresenter @AssistedInject constructor(
         }
     }
 
+    @Composable
+    private fun RegisterSyncTask(locale: Locale) {
+        val syncRegistry = circuitContext.syncTaskRegistry
+        DisposableEffect(syncRegistry, locale) {
+            if (syncRegistry == null) return@DisposableEffect onDispose { }
+            val id = syncRegistry.registerSyncTask { force -> syncData(locale, force) }
+            onDispose { syncRegistry.unregisterSyncTask(id) }
+        }
+    }
+
+    private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
+        val country = settings.getCountrySettingFlow().first()
+        syncService.syncToolOrder(locale, country, force)
+    }
+
     @AssistedFactory
     @CircuitInject(LessonsScreen::class, SingletonComponent::class)
     interface Factory {
-        fun create(navigator: Navigator): LessonsPresenter
+        fun create(circuitContext: CircuitContext, navigator: Navigator): LessonsPresenter
     }
 }

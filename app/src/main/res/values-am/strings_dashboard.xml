@@ -32,7 +32,7 @@
     <string name="menu_version">ሥሪት: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">ትምህርቶች</string>
-    <string name="dashboard_lessons_header_title">ለእርስዎ የተዘጋጁ ትምህርቶች</string>
+    <string name="dashboard_lessons_header_title_personalized">ለእርስዎ የተዘጋጁ ትምህርቶች</string>
     <string name="dashboard_lessons_header_description">ግንኙነቶችን ለመፍጠር እና ትርጉም ያለው ውይይት ለመጀመር ተግባራዊ ሀሳቦች።</string>
     <string name="dashboard_lessons_section_filter_label">ትምህርቶች በ</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
