@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 
 @Composable
-fun LocalizationSettingsBox(
+internal fun LocalizationSettingsBox(
     @StringRes title: Int,
     @StringRes description: Int,
     onClickSettings: () -> Unit,
