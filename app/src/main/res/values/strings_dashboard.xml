@@ -49,6 +49,8 @@ An online version can be found at https://knowgod.com/</string>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Completed</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Complete</string>
+    <string name="dashboard_lessons_section_personalized_localization_title">Displaying localized Lessons list</string>
+    <string name="dashboard_lessons_section_personalized_localization_text">The lessons shown on this page are based on your Localization setting. You can alter this at any time.</string>
 
     <!-- Home -->
     <eat-comment />
