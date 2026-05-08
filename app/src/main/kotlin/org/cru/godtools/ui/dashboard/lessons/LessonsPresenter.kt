@@ -54,7 +54,6 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
-import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
 import org.cru.godtools.ui.settings.country.CountrySettingsScreen
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
