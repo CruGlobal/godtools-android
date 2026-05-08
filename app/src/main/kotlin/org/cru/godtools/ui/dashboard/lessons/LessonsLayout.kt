@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard.lessons
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -20,16 +19,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
+import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
+import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.tools.LessonToolCard
 
+internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
+
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
 internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
-    LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp), modifier = modifier) {
+    LazyColumn(modifier = modifier) {
         if (state.isPersonalizationEnabled) {
             item("mode-toggle", "mode-toggle") {
                 PersonalizationToggle(
@@ -42,9 +45,12 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
         }
 
         item("header", "header") {
-            LessonsHeader(state.mode, modifier = Modifier.padding(top = 16.dp))
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
-            LessonFilters(state)
+            LessonsHeader(
+                state.mode,
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
+            )
+            HorizontalDivider(modifier = Modifier.padding(horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
+            LessonFilters(state, modifier.padding(vertical = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
         }
 
         items(state.lessons, { it.toolCode.orEmpty() }, { "lesson" }) { toolState ->
@@ -54,7 +60,15 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
                 showProgress = true,
                 modifier = Modifier
                     .animateItem()
-                    .padding(top = 16.dp)
+                    .padding(bottom = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
+            )
+        }
+
+        item("localization-settings-box", "localization-settings-box") {
+            LocalizationSettingsBox(
+                title = R.string.dashboard_lessons_section_personalized_localization_title,
+                description = R.string.dashboard_lessons_section_personalized_localization_text,
+                onClickSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) }
             )
         }
     }
