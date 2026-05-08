@@ -4,14 +4,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import org.cru.godtools.BuildConfig
-import org.cru.godtools.api.ApiModule
+import org.cru.godtools.api.ApiConfig
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ConfigModule {
     @get:Provides
-    @get:Named(ApiModule.MOBILE_CONTENT_API_URL)
-    val mobileContentApiBaseUrl = BuildConfig.MOBILE_CONTENT_API
+    val apiConfig = ApiConfig(
+        mobileContentApiUrl = BuildConfig.MOBILE_CONTENT_API
+    )
 }
