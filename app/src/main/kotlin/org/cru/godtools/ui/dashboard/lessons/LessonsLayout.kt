@@ -47,10 +47,13 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
         item("header", "header") {
             LessonsHeader(
                 state.mode,
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
+                Modifier.padding(top = 16.dp, bottom = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
-            LessonFilters(state, modifier.padding(vertical = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
+            LessonFilters(
+                state,
+                modifier = Modifier.padding(vertical = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
+            )
         }
 
         items(state.lessons, { it.toolCode.orEmpty() }, { "lesson" }) { toolState ->
