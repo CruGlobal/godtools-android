@@ -60,6 +60,8 @@ import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserConfig
 import org.cru.godtools.shared.tool.parser.ParserResult
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.Manifest.XmlFile
 import retrofit2.Response
 
 private const val TOOL = "tool"
@@ -318,8 +320,9 @@ class GodToolsDownloadManagerTest {
         } returns translation
         coEvery { translationsRepository.markTranslationDownloaded(any(), any()) } just Runs
         val config = slot<ParserConfig>()
-        coEvery { manifestParser.parseManifest(translation.manifestFileName!!, capture(config)) } returns
-            ParserResult.Data(mockk { every { relatedFiles } returns setOf("a.txt", "b.txt") })
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("a.txt", "a.txt"), XmlFile("b.txt", "b.txt")))
+        coEvery { manifestParser.parseManifest(translation.manifestFileName!!, capture(config)) }
+            .returns(ParserResult.Data(manifest))
         coEvery { translationsApi.downloadFile(translation.manifestFileName!!) } returns
             Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("manifest")))
         coEvery { translationsApi.downloadFile("a.txt") } returns

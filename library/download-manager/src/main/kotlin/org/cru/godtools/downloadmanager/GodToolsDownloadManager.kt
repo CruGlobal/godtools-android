@@ -43,6 +43,10 @@ import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import okio.ByteString.Companion.decodeHex
+import okio.HashingSource.Companion.sha256
+import okio.buffer
+import okio.sink
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.flow.EmptyStateFlow
@@ -294,9 +298,10 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         val relatedFiles = manifest.relatedFiles
         val completedFiles = AtomicLong(0)
         val successful = coroutineScope {
-            relatedFiles.map {
+            relatedFiles.map { file ->
                 async {
-                    downloadTranslationFileIfNecessary(it).also {
+                    val src = file.src ?: return@async true
+                    downloadTranslationFileIfNecessary(src, sha256 = file.checksumSha256, size = file.size).also {
                         do {
                             val completed = completedFiles.get()
                             updateProgress(key, completed + 1, relatedFiles.size.toLong())
@@ -309,22 +314,42 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         // record the translation as downloaded
         downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, manifestFileName))
-        relatedFiles.forEach { downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it)) }
+        relatedFiles.mapNotNull { it.src }.forEach {
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it))
+        }
         translationsRepository.markTranslationDownloaded(translation.id, true)
 
         return true
     }
 
-    private suspend fun downloadTranslationFileIfNecessary(fileName: String): Boolean = filesMutex.withLock(fileName) {
+    private suspend fun downloadTranslationFileIfNecessary(
+        fileName: String,
+        sha256: String? = null,
+        size: Long? = null,
+    ): Boolean = filesMutex.withLock(fileName) {
         if (downloadedFilesRepository.findDownloadedFile(fileName) != null) return true
-        try {
-            val body = translationsApi.downloadFile(fileName).takeIf { it.isSuccessful }?.body() ?: return false
-            val downloadedFile = DownloadedFile(fileName)
-            withContext(Dispatchers.IO) { body.byteStream().copyTo(downloadedFile) }
-            downloadedFilesRepository.insertOrIgnore(downloadedFile)
-            return true
-        } catch (e: IOException) {
-            return false
+
+        return withContext(Dispatchers.IO) {
+            try {
+                val body = translationsApi.downloadFile(fileName).takeIf { it.isSuccessful }?.body()
+                    ?: return@withContext false
+
+                val downloadedFile = DownloadedFile(fileName)
+                downloadedFile.bufferedSink().use { sink ->
+                    body.source().use { source ->
+                        val digest = sha256(source)
+                        val bytesWritten = sink.writeAll(digest)
+
+                        if (size != null && size != bytesWritten) return@withContext false
+                        if (sha256 != null && sha256.decodeHex() != digest.hash) return@withContext false
+                    }
+                }
+
+                downloadedFilesRepository.insertOrIgnore(downloadedFile)
+                true
+            } catch (_: IOException) {
+                false
+            }
         }
     }
 
@@ -449,6 +474,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Cleanup
+
+    private suspend fun DownloadedFile.bufferedSink() = withContext(Dispatchers.IO) { getFile(fs).sink().buffer() }
 
     private suspend fun InputStream.copyTo(file: DownloadedFile) = withContext(Dispatchers.IO) {
         file.getFile(fs).outputStream().use { copyTo(it) }
