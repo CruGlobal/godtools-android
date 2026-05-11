@@ -196,4 +196,13 @@ object ApiModule {
         .callFactory(okhttp)
         .build().create<CampaignFormsApi>()
     // endregion Adobe APIs
+
+    // region CDN APIs
+    @Provides
+    @Reusable
+    fun cdnApi(okhttp: OkHttpClient, apiConfig: ApiConfig): CdnApi = Retrofit.Builder().baseUrl(apiConfig.cdnUrl)
+        .callFactory(okhttp)
+        .build()
+        .create()
+    // endregion CDN APIs
 }

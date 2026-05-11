@@ -12,6 +12,7 @@ import org.cru.godtools.api.ApiConfig
 object ConfigModule {
     @get:Provides
     val apiConfig = ApiConfig(
-        mobileContentApiUrl = BuildConfig.MOBILE_CONTENT_API
+        mobileContentApiUrl = BuildConfig.MOBILE_CONTENT_API,
+        cdnUrl = BuildConfig.MOBILE_CONTENT_CDN
     )
 }
