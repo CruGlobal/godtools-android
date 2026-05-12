@@ -38,7 +38,34 @@ If it fails, report as **Must Fix** before reviewing anything else.
 
 7. Output a structured review (format below).
 
-8. After the review output, print:
+8. Post inline comments to the PR for every ⚠️ and ❌ finding that references a specific file and line number. Before posting, deduplicate against all existing comments (resolved or not) to avoid re-posting anything already raised:
+
+```bash
+# Get the head SHA, repo, and all existing review comments (resolved and unresolved)
+HEAD_SHA=$(gh pr view $ARGUMENTS --json headRefOid -q .headRefOid)
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+EXISTING=$(gh api repos/$REPO/pulls/$ARGUMENTS/comments --jq '[.[] | select(.in_reply_to_id == null) | {path:.path, line:.line, body:.body}]')
+```
+
+For each finding, check whether any existing comment (resolved or not) already covers the same file + line (or contains substantially the same text). Skip any finding that is already covered. Then bundle the remaining new comments into a single review submission:
+
+```bash
+gh api repos/$REPO/pulls/$ARGUMENTS/reviews \
+  --method POST \
+  --field commit_id="$HEAD_SHA" \
+  --field event="COMMENT" \
+  --field "comments[][path]=<file path>" \
+  --field "comments[][line]=<line number>" \
+  --field "comments[][side]=RIGHT" \
+  --field "comments[][body]=<finding text>
+
+🤖 Posted by [Claude Code](https://claude.ai/code)" \
+  # repeat --field "comments[]..." for each new finding
+```
+
+Use the exact file path from the diff and the line number in the current version of the file (RIGHT side). Each comment body should contain the full finding description. Always append the attribution footer `\n\n🤖 Posted by [Claude Code](https://claude.ai/code)` to each comment. If no new actionable findings exist (only ✅ items or all already commented), skip this step.
+
+9. After the review output, print:
 
 ```
 ---
@@ -190,4 +217,50 @@ When the user says `dismiss: <title> — <reason>` (in any form — "dismiss the
 **Dismissed by**: <git user.name>
 ```
 
-4. Confirm to the user what was added and that it will be suppressed in future reviews.
+4. If the current session reviewed a PR, find any open (unresolved) comment thread on that PR matching the dismissed issue. Use the GraphQL API to locate threads and resolve the matching one, replying with the dismissal reason first:
+
+```bash
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+OWNER=${REPO%%/*}
+REPONAME=${REPO##*/}
+
+# Find unresolved review threads
+gh api graphql -f query="
+{
+  repository(owner: \"$OWNER\", name: \"$REPONAME\") {
+    pullRequest(number: $PR_NUMBER) {
+      reviewThreads(first: 100) {
+        nodes {
+          id
+          isResolved
+          comments(first: 1) {
+            nodes { id body path line }
+          }
+        }
+      }
+    }
+  }
+}"
+```
+
+Match the thread by file path, line number, or substantial text overlap with the dismissed finding. Then reply to the thread and resolve it:
+
+```bash
+# Reply to the thread's first comment explaining the dismissal
+gh api repos/$REPO/pulls/$PR_NUMBER/comments \
+  --method POST \
+  --field in_reply_to=<comment_id> \
+  --field body="Dismissed: <reason given by user>
+
+🤖 [Claude Code](https://claude.ai/code)"
+
+# Resolve the thread via GraphQL
+gh api graphql -f query="
+mutation {
+  resolveReviewThread(input: { threadId: \"<thread_node_id>\" }) {
+    thread { id isResolved }
+  }
+}"
+```
+
+5. Confirm to the user what was added and that it will be suppressed in future reviews.
