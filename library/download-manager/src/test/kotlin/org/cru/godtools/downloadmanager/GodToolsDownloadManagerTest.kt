@@ -41,11 +41,14 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.internal.http.RealResponseBody
 import okio.Buffer
+import okio.ByteString.Companion.toByteString
 import okio.buffer
 import okio.source
 import org.cru.godtools.api.AttachmentsApi
+import org.cru.godtools.api.CdnApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -55,6 +58,7 @@ import org.cru.godtools.downloadmanager.work.WORK_NAME_DOWNLOAD_ATTACHMENT
 import org.cru.godtools.model.Attachment
 import org.cru.godtools.model.DownloadedFile
 import org.cru.godtools.model.DownloadedTranslationFile
+import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.shared.tool.parser.ManifestParser
@@ -75,6 +79,9 @@ class GodToolsDownloadManagerTest {
 
     private val attachmentsApi = mockk<AttachmentsApi>()
     private val attachmentsRepository: AttachmentsRepository = mockk(relaxUnitFun = true)
+    private val cdnApi: CdnApi = mockk {
+        coEvery { downloadPublishedFile(any()) } returns Response.error(404, "".toResponseBody())
+    }
     private val downloadedFilesRepository: DownloadedFilesRepository = mockk(relaxUnitFun = true) {
         coEvery { findDownloadedFile(any()) } returns null
         coEvery { getDownloadedFiles() } returns emptyList()
@@ -90,9 +97,13 @@ class GodToolsDownloadManagerTest {
         every { defaultConfig } returns ParserConfig()
         excludeRecords { defaultConfig }
     }
-    private val translationsApi = mockk<TranslationsApi>()
+    private val translationsApi: TranslationsApi = mockk {
+        coEvery { download(any()) } returns Response.error(404, "".toResponseBody())
+        coEvery { downloadFile(any()) } returns Response.error(404, "".toResponseBody())
+    }
     private val translationsRepository: TranslationsRepository = mockk {
         coEvery { markStaleTranslationsAsNotDownloaded() } returns false
+        coEvery { markTranslationDownloaded(any(), any()) } just Runs
     }
     private val workManager: WorkManager = mockk {
         every { enqueueUniqueWork(any(), any(), any<OneTimeWorkRequest>()) } returns mockk()
@@ -102,6 +113,7 @@ class GodToolsDownloadManagerTest {
     private val downloadManager = GodToolsDownloadManager(
         attachmentsApi,
         attachmentsRepository,
+        cdnApi = cdnApi,
         downloadedFilesRepository,
         fs,
         manifestParser,
@@ -433,6 +445,121 @@ class GodToolsDownloadManagerTest {
         }
     }
     // endregion downloadLatestPublishedTranslation()
+
+    // region downloadPublishedFileIfNecessary
+    private fun setupTranslationFilesDownload(translation: Translation, manifest: Manifest) {
+        coEvery { translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode) }
+            .returns(translation)
+        coEvery { manifestParser.parseManifest(translation.manifestFileName!!, any()) }
+            .returns(ParserResult.Data(manifest))
+        coEvery { translationsApi.downloadFile(translation.manifestFileName!!) }
+            .returns(Response.success(RealResponseBody(null, 0, Buffer().writeUtf8("manifest"))))
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - prefers CDN over API`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml")))
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { cdnApi.downloadPublishedFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        assertEquals(fileContent, files["file.xml"]!!.readText())
+        coVerify { cdnApi.downloadPublishedFile("file.xml") }
+        coVerify(exactly = 0) { translationsApi.downloadFile("file.xml") }
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - falls back to API on CDN 404`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml")))
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { translationsApi.downloadFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        assertEquals(fileContent, files["file.xml"]!!.readText())
+        coVerify { cdnApi.downloadPublishedFile("file.xml") }
+        coVerify { translationsApi.downloadFile("file.xml") }
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - falls back to API on CDN IOException`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml")))
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { cdnApi.downloadPublishedFile("file.xml") } throws IOException()
+        coEvery { translationsApi.downloadFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        assertEquals(fileContent, files["file.xml"]!!.readText())
+        coVerify { cdnApi.downloadPublishedFile("file.xml") }
+        coVerify { translationsApi.downloadFile("file.xml") }
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - returns false when both CDN and API fail`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml")))
+        setupTranslationFilesDownload(translation, manifest)
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify { cdnApi.downloadPublishedFile("file.xml") }
+        coVerify { translationsApi.downloadFile("file.xml") }
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - accepts file with matching sha256`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val sha256Hex = fileContent.toByteArray().toByteString().sha256().hex()
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml", checksumSha256 = sha256Hex)))
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { cdnApi.downloadPublishedFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify { downloadedFilesRepository.insertOrIgnore(DownloadedFile("file.xml")) }
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - rejects file with wrong sha256`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(
+            pageXmlFiles = listOf(XmlFile("file.xml", "file.xml", checksumSha256 = "00".repeat(32))),
+        )
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { cdnApi.downloadPublishedFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+        coEvery { translationsApi.downloadFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify(exactly = 0) { downloadedFilesRepository.insertOrIgnore(DownloadedFile("file.xml")) }
+        assertFalse(files["file.xml"]!!.exists())
+    }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - rejects file with wrong size`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val fileContent = "a".repeat(1024)
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("file.xml", "file.xml", size = 9999)))
+        setupTranslationFilesDownload(translation, manifest)
+        coEvery { cdnApi.downloadPublishedFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+        coEvery { translationsApi.downloadFile("file.xml") } returns Response.success(fileContent.toResponseBody())
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify(exactly = 0) { downloadedFilesRepository.insertOrIgnore(DownloadedFile("file.xml")) }
+        assertFalse(files["file.xml"]!!.exists())
+    }
+    // endregion downloadPublishedFileIfNecessary
 
     @Test
     fun verifyImportTranslation() = testScope.runTest {
