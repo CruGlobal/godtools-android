@@ -119,6 +119,15 @@ To dismiss a finding so it won't appear in future reviews, say:
 - [ ] `UiEvent` is a `sealed interface` implementing `CircuitUiEvent`, marked `internal`
 - [ ] `UiState` and `UiEvent` defined as nested types inside the Presenter
 - [ ] `UiState` exposes `val eventSink: (UiEvent) -> Unit`
+- [ ] `eventSink` lambda passed directly when constructing `UiState` — not extracted to a local variable first:
+  ```kotlin
+  // Correct
+  return UiState(items = items) { event -> when (event) { … } }
+  // Wrong
+  val eventSink: (UiEvent) -> Unit = { … }
+  return UiState(items = items, eventSink = eventSink)
+  ```
+- [ ] `navigator.pop()` (or any navigation call) placed *inside* the `launch { }` block when it follows an async operation — `rememberCoroutineScope()` is canceled on composition disposal and can cancel an in-flight write before it completes
 - [ ] Presenter contains no UI logic — pure state/event handling
 
 **UI Composable**
@@ -157,6 +166,7 @@ To dismiss a finding so it won't appear in future reviews, say:
 ### Testing
 
 - [ ] Presenter tests use `presenterTestOf { }` (Circuit test API)
+- [ ] Interfaces with `@Composable` functions use a hand-written `Fake*` class in tests, not `mockk<>()` — mockposable delays Kotlin version uptake and is incompatible with newer compiler versions
 - [ ] Paparazzi tests extend `BasePaparazziTest` from `:ui:base` testFixtures with `@TestParameter` night/accessibility matrix
 - [ ] Snapshots not recorded locally — triggered via GitHub Actions workflow on the feature branch
 
