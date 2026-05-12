@@ -123,7 +123,7 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
             )
         }
 
-        if (state.isPersonalizationEnabled) {
+        if (state.mode == UiState.Mode.PERSONALIZATION) {
             item("localization-settings-box", "localization-settings-box") {
                 LocalizationSettingsBox(
                     title = R.string.dashboard_tools_section_personalized_localization_title,
