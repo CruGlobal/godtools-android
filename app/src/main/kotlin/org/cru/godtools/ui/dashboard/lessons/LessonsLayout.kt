@@ -49,10 +49,7 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
         item("header", "header") {
             LessonsHeader(state.mode, Modifier.padding(top = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
             HorizontalDivider(
-                modifier = Modifier.padding(
-                    vertical = 12.dp,
-                    horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL
-                )
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
             )
             LessonFilters(state, modifier = Modifier.padding(horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL))
         }
