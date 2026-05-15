@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.tools
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -19,10 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
@@ -48,7 +51,25 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState, modifier = modifier) {
+    LazyColumn(
+        state = columnState,
+        verticalArrangement = remember {
+            object : Arrangement.Vertical {
+                override fun Density.arrange(totalSize: Int, sizes: IntArray, outPositions: IntArray) {
+                    var currentOffset = 0
+                    sizes.forEachIndexed { index, size ->
+                        if (index == sizes.lastIndex) {
+                            outPositions[index] = maxOf(currentOffset, totalSize - size)
+                        } else {
+                            outPositions[index] = currentOffset
+                            currentOffset += size
+                        }
+                    }
+                }
+            }
+        },
+        modifier = modifier.fillMaxHeight()
+    ) {
         if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {

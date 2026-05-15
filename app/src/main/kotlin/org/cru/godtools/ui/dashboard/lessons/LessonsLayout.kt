@@ -1,7 +1,9 @@
 package org.cru.godtools.ui.dashboard.lessons
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,9 +17,11 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
@@ -34,7 +38,24 @@ internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
 internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        verticalArrangement = remember {
+            object : Arrangement.Vertical {
+                override fun Density.arrange(totalSize: Int, sizes: IntArray, outPositions: IntArray) {
+                    var currentOffset = 0
+                    sizes.forEachIndexed { index, size ->
+                        if (index == sizes.lastIndex) {
+                            outPositions[index] = maxOf(currentOffset, totalSize - size)
+                        } else {
+                            outPositions[index] = currentOffset
+                            currentOffset += size
+                        }
+                    }
+                }
+            }
+        },
+        modifier = modifier.fillMaxHeight()
+    ) {
         if (state.isPersonalizationEnabled) {
             item("mode-toggle", "mode-toggle") {
                 PersonalizationToggle(
