@@ -20,12 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
@@ -34,6 +32,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
+import org.cru.godtools.ui.dashboard.rememberPinLastItemBottomArrangement
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -50,24 +49,15 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
 
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
+    val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
+        rememberPinLastItemBottomArrangement(state.tools.size)
+    } else {
+        Arrangement.Top
+    }
 
     LazyColumn(
         state = columnState,
-        verticalArrangement = remember {
-            object : Arrangement.Vertical {
-                override fun Density.arrange(totalSize: Int, sizes: IntArray, outPositions: IntArray) {
-                    var currentOffset = 0
-                    sizes.forEachIndexed { index, size ->
-                        if (index == sizes.lastIndex) {
-                            outPositions[index] = maxOf(currentOffset, totalSize - size)
-                        } else {
-                            outPositions[index] = currentOffset
-                            currentOffset += size
-                        }
-                    }
-                }
-            }
-        },
+        verticalArrangement = verticalArrangement,
         modifier = modifier.fillMaxHeight()
     ) {
         if (!state.dataLoaded) return@LazyColumn

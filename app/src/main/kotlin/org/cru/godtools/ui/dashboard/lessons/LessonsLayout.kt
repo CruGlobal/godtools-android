@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
@@ -31,6 +30,7 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
+import org.cru.godtools.ui.dashboard.rememberPinLastItemBottomArrangement
 import org.cru.godtools.ui.tools.LessonToolCard
 
 internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
@@ -38,22 +38,14 @@ internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
 internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
+    val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
+        rememberPinLastItemBottomArrangement(state.lessons.size)
+    } else {
+        Arrangement.Top
+    }
+
     LazyColumn(
-        verticalArrangement = remember {
-            object : Arrangement.Vertical {
-                override fun Density.arrange(totalSize: Int, sizes: IntArray, outPositions: IntArray) {
-                    var currentOffset = 0
-                    sizes.forEachIndexed { index, size ->
-                        if (index == sizes.lastIndex) {
-                            outPositions[index] = maxOf(currentOffset, totalSize - size)
-                        } else {
-                            outPositions[index] = currentOffset
-                            currentOffset += size
-                        }
-                    }
-                }
-            }
-        },
+        verticalArrangement = remember { verticalArrangement },
         modifier = modifier.fillMaxHeight()
     ) {
         if (state.isPersonalizationEnabled) {
