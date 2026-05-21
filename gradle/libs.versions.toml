@@ -2,7 +2,7 @@
 accompanist = "0.36.0"
 android-gradle-plugin = "8.13.2"
 androidx-activity = "1.13.0"
-androidx-compose-foundation = "1.11.1"
+androidx-compose-foundation = "1.11.2"
 androidx-compose-material3 = "1.4.0"
 androidx-compose-runtime = "1.11.1"
 androidx-compose-ui = "1.11.1"
