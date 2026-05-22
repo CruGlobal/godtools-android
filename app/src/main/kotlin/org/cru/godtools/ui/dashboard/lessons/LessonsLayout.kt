@@ -17,7 +17,6 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -38,14 +37,15 @@ internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
 internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
+    val pinLastItem = rememberPinLastItemBottomArrangement()
     val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
-        rememberPinLastItemBottomArrangement(state.lessons.size)
+        pinLastItem
     } else {
         Arrangement.Top
     }
 
     LazyColumn(
-        verticalArrangement = remember { verticalArrangement },
+        verticalArrangement = verticalArrangement,
         modifier = modifier.fillMaxHeight()
     ) {
         if (state.isPersonalizationEnabled) {

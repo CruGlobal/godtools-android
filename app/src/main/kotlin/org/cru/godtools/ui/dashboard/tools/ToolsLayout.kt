@@ -49,8 +49,9 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
 
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
+    val pinLastItem = rememberPinLastItemBottomArrangement()
     val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
-        rememberPinLastItemBottomArrangement(state.tools.size)
+        pinLastItem
     } else {
         Arrangement.Top
     }
