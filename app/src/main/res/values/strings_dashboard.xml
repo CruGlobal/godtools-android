@@ -51,6 +51,9 @@ An online version can be found at https://knowgod.com/</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Complete</string>
     <string name="dashboard_lessons_section_personalized_localization_title">Displaying localized Lessons list</string>
     <string name="dashboard_lessons_section_personalized_localization_text">The lessons shown on this page are based on your Localization setting. You can alter this at any time.</string>
+    <string name="dashboard_lessons_section_personalized_no_lessons_title">Personalization unavailable</string>
+    <string name="dashboard_lessons_section_personalized_no_lessons_description">The lessons shown on this page are based on your Language and Localization settings. Your current selection does not yet offer personalization.</string>
+    <string name="dashboard_lessons_section_personalized_no_lessons_button">Go to All Lessons</string>
 
     <!-- Home -->
     <eat-comment />

@@ -72,6 +72,15 @@ internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
             )
         }
 
+        if (state.mode == UiState.Mode.PERSONALIZATION && state.dataLoaded && state.lessons.isEmpty()) {
+            item("no-personalized-lessons", "no-personalized-lessons") {
+                NoPersonalizedLessons(
+                    onClick = { state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS)) },
+                    modifier = Modifier.padding(top = 16.dp, horizontal = MARGIN_LESSONS_LAYOUT_HORIZONTAL)
+                )
+            }
+        }
+
         item("spacer", "spacer") {
             Spacer(modifier = Modifier.height(16.dp))
         }
