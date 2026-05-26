@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard.tools
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -30,6 +31,8 @@ import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.ui.banner.Banners
+import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
+import org.cru.godtools.ui.dashboard.personalization.rememberFloatLastItemsToBottomArrangement
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -47,7 +50,13 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
 
-    LazyColumn(state = columnState, modifier = modifier) {
+    LazyColumn(
+        state = columnState,
+        verticalArrangement = rememberFloatLastItemsToBottomArrangement(
+            numToFloat = if (state.mode == UiState.Mode.PERSONALIZATION) 1 else 0
+        ),
+        modifier = modifier.fillMaxHeight()
+    ) {
         if (!state.dataLoaded) return@LazyColumn
 
         item("banners", "banners") {
@@ -120,6 +129,16 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
                     .animateItem()
                     .padding(bottom = 16.dp, horizontal = MARGIN_TOOLS_LAYOUT_HORIZONTAL)
             )
+        }
+
+        if (state.mode == UiState.Mode.PERSONALIZATION) {
+            item("localization-settings-box", "localization-settings-box") {
+                LocalizationSettingsBox(
+                    title = R.string.dashboard_tools_section_personalized_localization_title,
+                    description = R.string.dashboard_tools_section_personalized_localization_text,
+                    onClickSettings = { state.eventSink(UiEvent.OpenLocalizationSettings) }
+                )
+            }
         }
     }
 }

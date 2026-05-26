@@ -49,6 +49,8 @@ An online version can be found at https://knowgod.com/</string>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Completed</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Complete</string>
+    <string name="dashboard_lessons_section_personalized_localization_title">Displaying localized Lessons list</string>
+    <string name="dashboard_lessons_section_personalized_localization_text">The lessons shown on this page are based on your Localization setting. You can alter this at any time.</string>
 
     <!-- Home -->
     <eat-comment />
@@ -83,6 +85,9 @@ An online version can be found at https://knowgod.com/</string>
     <string name="dashboard_tools_section_categories_all">All Tools</string>
     <string name="dashboard_tools_section_spotlight_label">Featured</string>
     <string name="dashboard_tools_section_spotlight_description">Here are some tools we thought you might like</string>
+    <string name="dashboard_tools_section_personalized_localization_title">Displaying localized Tools list</string>
+    <string name="dashboard_tools_section_personalized_localization_text">The tools shown in your Personalized Tools page are selected based on your Language and Localization setting. You can alter this by editing your setting.</string>
+    <string name="dashboard_section_localization_box_button">Change Localization Settings</string>
 
     <!-- Tool Cards -->
     <eat-comment />

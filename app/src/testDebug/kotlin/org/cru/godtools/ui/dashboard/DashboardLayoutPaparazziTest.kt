@@ -195,6 +195,17 @@ class DashboardLayoutPaparazziTest(
     }
 
     @Test
+    fun `ToolsLayout() - Personalization - Localization Settings Box`() {
+        assumeTrue(locale == null)
+        toolsState = toolsState.copy(
+            mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
+            spotlightTools = emptyList(),
+            tools = emptyList(),
+        )
+        snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
+    }
+
+    @Test
     fun `ToolsLayout() - No Personalization`() {
         assumeTrue(locale == null)
         toolsState = toolsState.copy(isPersonalizationEnabled = false)
@@ -300,6 +311,16 @@ class DashboardLayoutPaparazziTest(
     @Test
     fun `LessonsLayout() - All Lessons`() {
         lessonsState = lessonsState.copy(mode = LessonsPresenter.UiState.Mode.ALL_LESSONS)
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - Personalization - Localization Settings Box`() {
+        assumeTrue(locale == null)
+        lessonsState = lessonsState.copy(
+            mode = LessonsPresenter.UiState.Mode.PERSONALIZATION,
+            lessons = emptyList(),
+        )
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
 
