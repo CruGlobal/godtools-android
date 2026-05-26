@@ -32,7 +32,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.ToolsScreen
 import org.cru.godtools.ui.banner.Banners
 import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
-import org.cru.godtools.ui.dashboard.rememberPinLastItemBottomArrangement
+import org.cru.godtools.ui.dashboard.personalization.rememberFloatLastItemsToBottomArrangement
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.tools.SquareToolCard
@@ -49,16 +49,12 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
 
     val columnState = rememberLazyListState()
     LaunchedEffect(state.banner?.type) { if (state.banner != null) columnState.animateScrollToItem(0) }
-    val pinLastItem = rememberPinLastItemBottomArrangement()
-    val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
-        pinLastItem
-    } else {
-        Arrangement.Top
-    }
 
     LazyColumn(
         state = columnState,
-        verticalArrangement = verticalArrangement,
+        verticalArrangement = rememberFloatLastItemsToBottomArrangement(
+            numToFloat = if (state.mode == UiState.Mode.PERSONALIZATION) 1 else 0
+        ),
         modifier = modifier.fillMaxHeight()
     ) {
         if (!state.dataLoaded) return@LazyColumn

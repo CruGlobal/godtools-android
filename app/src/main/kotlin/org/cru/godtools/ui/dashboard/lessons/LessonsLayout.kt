@@ -1,6 +1,5 @@
 package org.cru.godtools.ui.dashboard.lessons
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -29,7 +28,7 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.ui.dashboard.LocalizationSettingsBox
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
-import org.cru.godtools.ui.dashboard.rememberPinLastItemBottomArrangement
+import org.cru.godtools.ui.dashboard.personalization.rememberFloatLastItemsToBottomArrangement
 import org.cru.godtools.ui.tools.LessonToolCard
 
 internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
@@ -37,15 +36,10 @@ internal val MARGIN_LESSONS_LAYOUT_HORIZONTAL = 16.dp
 @Composable
 @CircuitInject(LessonsScreen::class, SingletonComponent::class)
 internal fun LessonsLayout(state: UiState, modifier: Modifier = Modifier) {
-    val pinLastItem = rememberPinLastItemBottomArrangement()
-    val verticalArrangement = if (state.mode == UiState.Mode.PERSONALIZATION) {
-        pinLastItem
-    } else {
-        Arrangement.Top
-    }
-
     LazyColumn(
-        verticalArrangement = verticalArrangement,
+        verticalArrangement = rememberFloatLastItemsToBottomArrangement(
+            numToFloat = if (state.mode == UiState.Mode.PERSONALIZATION) 1 else 0
+        ),
         modifier = modifier.fillMaxHeight()
     ) {
         if (state.isPersonalizationEnabled) {
