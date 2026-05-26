@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.PriorityHigh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -21,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import org.cru.godtools.R
 
 @Composable
-internal fun NoPersonalizedLessons(onClick: () -> Unit, modifier: Modifier = Modifier) {
+internal fun NoPersonalizedLessons(onGoToAllLessons: () -> Unit, modifier: Modifier = Modifier) {
     Surface(
         color = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier.fillMaxWidth(),
@@ -48,7 +47,7 @@ internal fun NoPersonalizedLessons(onClick: () -> Unit, modifier: Modifier = Mod
                 modifier = Modifier.padding(top = 8.dp),
             )
             Button(
-                onClick = onClick,
+                onClick = onGoToAllLessons,
                 modifier = Modifier.padding(top = 16.dp),
             ) {
                 Text(stringResource(R.string.dashboard_lessons_section_personalized_no_lessons_button))
