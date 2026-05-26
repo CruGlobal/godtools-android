@@ -46,6 +46,7 @@ android {
             applicationIdSuffix = ".stage"
 
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_STAGE\"")
+            buildConfigField("String", "MOBILE_CONTENT_CDN", "\"https://mobilecontent-stage.cru.org\"")
 
             // Facebook
             resValue("string", "facebook_app_id", "448969905944197")
@@ -61,6 +62,7 @@ android {
         }
         named("production") {
             buildConfigField("String", "MOBILE_CONTENT_API", "\"$URI_MOBILE_CONTENT_API_PRODUCTION\"")
+            buildConfigField("String", "MOBILE_CONTENT_CDN", "\"https://mobilecontent.cru.org\"")
 
             // Facebook
             resValue("string", "facebook_app_id", "2236701616451487")

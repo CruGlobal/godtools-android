@@ -43,12 +43,18 @@ import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
+import okio.ByteString.Companion.decodeHex
+import okio.HashingSource.Companion.sha256
+import okio.buffer
+import okio.sink
 import org.ccci.gto.android.common.kotlin.coroutines.MutexMap
 import org.ccci.gto.android.common.kotlin.coroutines.ReadWriteMutex
 import org.ccci.gto.android.common.kotlin.coroutines.flow.EmptyStateFlow
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.ccci.gto.android.common.kotlin.coroutines.withLock
 import org.cru.godtools.api.AttachmentsApi
+import org.cru.godtools.api.CdnApi
 import org.cru.godtools.api.TranslationsApi
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ToolFileSystem
@@ -66,6 +72,7 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.TranslationKey
 import org.cru.godtools.shared.tool.parser.ManifestParser
 import org.cru.godtools.shared.tool.parser.ParserResult
+import retrofit2.Response
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
@@ -74,6 +81,7 @@ internal const val CLEANUP_DELAY = 30_000L
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private val attachmentsApi: AttachmentsApi,
     private val attachmentsRepository: AttachmentsRepository,
+    private val cdnApi: CdnApi,
     private val downloadedFilesRepository: DownloadedFilesRepository,
     private val fs: ToolFileSystem,
     private val manifestParser: ManifestParser,
@@ -87,6 +95,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     internal constructor(
         attachmentsApi: AttachmentsApi,
         attachmentsRepository: AttachmentsRepository,
+        cdnApi: CdnApi,
         downloadedFilesRepository: DownloadedFilesRepository,
         fs: ToolFileSystem,
         manifestParser: ManifestParser,
@@ -96,6 +105,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     ) : this(
         attachmentsApi,
         attachmentsRepository,
+        cdnApi,
         downloadedFilesRepository,
         fs,
         manifestParser,
@@ -280,7 +290,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
     private suspend fun downloadTranslationFiles(translation: Translation): Boolean = filesystemMutex.read.withLock {
         // download manifest if necessary
         val manifestFileName = translation.manifestFileName ?: return false
-        if (!downloadTranslationFileIfNecessary(manifestFileName)) return false
+        if (!downloadPublishedFileIfNecessary(manifestFileName)) return false
 
         // parse manifest
         val parserResult = manifestParser.parseManifest(
@@ -294,9 +304,14 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         val relatedFiles = manifest.relatedFiles
         val completedFiles = AtomicLong(0)
         val successful = coroutineScope {
-            relatedFiles.map {
+            relatedFiles.map { file ->
                 async {
-                    downloadTranslationFileIfNecessary(it).also {
+                    val src = file.src ?: return@async true
+                    downloadPublishedFileIfNecessary(
+                        fileName = src,
+                        sha256 = file.checksumSha256,
+                        size = file.size?.toLong()
+                    ).also {
                         do {
                             val completed = completedFiles.get()
                             updateProgress(key, completed + 1, relatedFiles.size.toLong())
@@ -309,23 +324,61 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         // record the translation as downloaded
         downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, manifestFileName))
-        relatedFiles.forEach { downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it)) }
+        relatedFiles.mapNotNull { it.src }.forEach {
+            downloadedFilesRepository.insertOrIgnore(DownloadedTranslationFile(translation, it))
+        }
         translationsRepository.markTranslationDownloaded(translation.id, true)
 
         return true
     }
 
-    private suspend fun downloadTranslationFileIfNecessary(fileName: String): Boolean = filesMutex.withLock(fileName) {
+    private suspend fun downloadPublishedFileIfNecessary(
+        fileName: String,
+        sha256: String? = null,
+        size: Long? = null,
+    ): Boolean = filesMutex[fileName].withLock {
         if (downloadedFilesRepository.findDownloadedFile(fileName) != null) return true
-        try {
-            val body = translationsApi.downloadFile(fileName).takeIf { it.isSuccessful }?.body() ?: return false
-            val downloadedFile = DownloadedFile(fileName)
-            withContext(Dispatchers.IO) { body.byteStream().copyTo(downloadedFile) }
-            downloadedFilesRepository.insertOrIgnore(downloadedFile)
-            return true
-        } catch (e: IOException) {
+
+        withContext(ioDispatcher) {
+            downloadPublishedFileFromCdn(fileName, sha256, size) ||
+                downloadPublishedFileFromApi(fileName, sha256, size)
+        }
+    }
+
+    private suspend fun downloadPublishedFileFromCdn(fileName: String, sha256: String?, size: Long?) = try {
+        cdnApi.downloadPublishedFile(fileName).storeFile(fileName, sha256, size)
+    } catch (_: IOException) {
+        false
+    }
+
+    private suspend fun downloadPublishedFileFromApi(fileName: String, sha256: String?, size: Long?) = try {
+        translationsApi.downloadFile(fileName).storeFile(fileName, sha256, size)
+    } catch (_: IOException) {
+        false
+    }
+
+    private suspend fun Response<ResponseBody>.storeFile(fileName: String, sha256: String?, size: Long?): Boolean {
+        val body = body().takeIf { isSuccessful } ?: return false
+
+        val downloadedFile = DownloadedFile(fileName)
+        val valid = downloadedFile.bufferedSink().use { sink ->
+            body.source().use { source ->
+                val digest = sha256(source)
+                val bytesWritten = sink.writeAll(digest)
+                when {
+                    size != null && size != bytesWritten -> false
+                    sha256 != null && sha256.decodeHex() != digest.hash -> false
+                    else -> true
+                }
+            }
+        }
+        if (!valid) {
+            downloadedFile.getFile(fs).delete()
             return false
         }
+
+        downloadedFilesRepository.insertOrIgnore(downloadedFile)
+        return true
     }
 
     private suspend fun downloadTranslationZip(translation: Translation) = try {
@@ -449,6 +502,8 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         }
     }
     // endregion Cleanup
+
+    private suspend fun DownloadedFile.bufferedSink() = withContext(Dispatchers.IO) { getFile(fs).sink().buffer() }
 
     private suspend fun InputStream.copyTo(file: DownloadedFile) = withContext(Dispatchers.IO) {
         file.getFile(fs).outputStream().use { copyTo(it) }

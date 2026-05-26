@@ -79,7 +79,6 @@ object ApiModule {
         .build()
 
     // region mobile-content-api APIs
-    const val MOBILE_CONTENT_API_URL = "MOBILE_CONTENT_API_BASE_URL"
     private const val MOBILE_CONTENT_API = "MOBILE_CONTENT_API"
     private const val MOBILE_CONTENT_API_AUTHENTICATED = "MOBILE_CONTENT_API_AUTHENTICATED"
 
@@ -87,11 +86,11 @@ object ApiModule {
     @Reusable
     @Named(MOBILE_CONTENT_API)
     fun mobileContentApiRetrofit(
-        @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
+        apiConfig: ApiConfig,
         jsonApiConverter: JsonApiConverter,
         okhttp: OkHttpClient,
     ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(apiConfig.mobileContentApiUrl)
         .addConverterFactory(LocaleConverterFactory)
         .addConverterFactory(JsonApiConverterFactory(jsonApiConverter))
         .callFactory(okhttp)
@@ -165,14 +164,16 @@ object ApiModule {
     @Provides
     @Reusable
     fun actionCableScarlet(
-        @Named(MOBILE_CONTENT_API_URL) baseUrl: String,
+        apiConfig: ApiConfig,
         app: Application,
         jsonApi: JsonApiConverter,
         okhttp: OkHttpClient,
         referenceLifecycle: ReferenceLifecycle,
     ) = Scarlet.Builder()
         .forceDefaultPlatform()
-        .webSocketFactory(okhttp.newWebSocketFactory(ActionCableRequestFactory("${baseUrl}cable")))
+        .webSocketFactory(
+            okhttp.newWebSocketFactory(ActionCableRequestFactory("${apiConfig.mobileContentApiUrl}cable"))
+        )
         .addMessageAdapterFactory(
             ActionCableMessageAdapterFactory.Builder()
                 .addMessageAdapterFactory(JsonApiMessageAdapterFactory(jsonApi))
@@ -195,4 +196,13 @@ object ApiModule {
         .callFactory(okhttp)
         .build().create<CampaignFormsApi>()
     // endregion Adobe APIs
+
+    // region CDN APIs
+    @Provides
+    @Reusable
+    fun cdnApi(okhttp: OkHttpClient, apiConfig: ApiConfig): CdnApi = Retrofit.Builder().baseUrl(apiConfig.cdnUrl)
+        .callFactory(okhttp)
+        .build()
+        .create()
+    // endregion CDN APIs
 }
