@@ -3,8 +3,6 @@
     <string name="tool_not_found">Não é possível encontrar a ferramenta que você solicitou</string>
     <string name="tool_loading">A ferramenta que você solicitou está carregando…</string>
     <string name="tool_offline">A ferramenta que você solicitou requer uma conexão com a internet para poder abrir</string>
-    <string name="tract_content_input_error_required">Se requer %1$s</string>
-    <string name="tract_content_input_error_invalid_email">Por favor, digite um endereço de e-mail válido</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Compartilhar</string>
     <string name="tool_share_sheet_more_apps">Mais</string>

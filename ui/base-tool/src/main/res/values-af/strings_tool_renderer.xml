@@ -3,8 +3,6 @@
     <string name="tool_not_found">Die hulpmiddel wat jy gevra het kan nie gevind word nie</string>
     <string name="tool_loading">Die hulpmiddel wat jy aangevra het is besig om te laai…</string>
     <string name="tool_offline">Die hulpmiddel wat jy aangevra het, benodig \'n internetverbinding om oop te maak</string>
-    <string name="tract_content_input_error_required">%1$s word benodig</string>
-    <string name="tract_content_input_error_invalid_email">Voer asseblief \'n geldige e-posadres in</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Deel</string>
     <string name="tool_share_sheet_more_apps">Meer</string>

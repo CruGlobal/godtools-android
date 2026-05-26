@@ -3,8 +3,6 @@
     <string name="tool_not_found">リクエストしたツールが見つかりません</string>
     <string name="tool_loading">リクエストしたツールを読み込み中…</string>
     <string name="tool_offline">リクエストされたツールを開くためにはインターネット接続が必要です</string>
-    <string name="tract_content_input_error_required">%1$sが必要です</string>
-    <string name="tract_content_input_error_invalid_email">有効なメールアドレスを入力してください</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">シェア</string>
     <string name="tool_share_sheet_more_apps">その他</string>

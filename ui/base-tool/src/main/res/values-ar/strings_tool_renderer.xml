@@ -3,8 +3,6 @@
     <string name="tool_not_found">لا يمكن إيجاد الأداة التي طلبتها</string>
     <string name="tool_loading">جاري تحميل الأداة التي طلبتها…</string>
     <string name="tool_offline">الأداة التي طلبتها تستلزم فتح الاتصال بالإنترنت</string>
-    <string name="tract_content_input_error_required">%1$s مطلوب</string>
-    <string name="tract_content_input_error_invalid_email">يرجى إدخال عنوان إلكتروني صالح</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شارك</string>
     <string name="tool_share_sheet_more_apps">المزيد</string>
