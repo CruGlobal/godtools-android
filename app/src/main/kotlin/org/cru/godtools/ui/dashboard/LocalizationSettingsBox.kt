@@ -30,12 +30,11 @@ internal fun LocalizationSettingsBox(
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = stringResource(title),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = stringResource(description),
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.bodyMedium
             )
             Button(
                 onClick = onClickSettings,
