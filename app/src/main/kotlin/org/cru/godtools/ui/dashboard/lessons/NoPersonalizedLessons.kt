@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.outlined.PriorityHigh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +31,7 @@ internal fun NoPersonalizedLessons(onClick: () -> Unit, modifier: Modifier = Mod
             modifier = Modifier.padding(24.dp),
         ) {
             Icon(
-                imageVector = Icons.Outlined.ErrorOutline,
+                imageVector = Icons.Outlined.PriorityHigh,
                 contentDescription = null,
                 modifier = Modifier.size(48.dp),
             )
