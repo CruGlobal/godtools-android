@@ -137,7 +137,7 @@ class LessonActivity :
                         if (showFeedback) {
                             showFeedbackDialog = true
                         } else {
-                            finish()
+                            if (!onNavigateUp()) finish()
                         }
                     }
 
