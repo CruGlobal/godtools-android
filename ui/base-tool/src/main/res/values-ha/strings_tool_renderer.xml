@@ -3,8 +3,6 @@
     <string name="tool_not_found">Ba za a iya samun kayan aikin da kuka nema ba</string>
     <string name="tool_loading">Kayan aikin da kuka nema yana lodawa…</string>
     <string name="tool_offline">Kayan aikin da kuka nema yana buƙatar haɗin Intanet don buɗewa</string>
-    <string name="tract_content_input_error_required">%1$s ana buƙata</string>
-    <string name="tract_content_input_error_invalid_email">Da fatan za a shigar da ingantaccen adireshin imel</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Raba</string>
     <string name="tool_share_sheet_more_apps">Akwai kari</string>

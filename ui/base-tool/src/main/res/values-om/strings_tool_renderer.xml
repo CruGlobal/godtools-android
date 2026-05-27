@@ -3,8 +3,6 @@
     <string name="tool_not_found">Barruun ati barbaadde hin argamne</string>
     <string name="tool_loading">Barruun ati barbaadde banamaa jira...</string>
     <string name="tool_offline">Barruun ati barbaadde banuudhaaf tajaajila interneetii gaafata</string>
-    <string name="tract_content_input_error_required">%1$s galchuun dirqama.</string>
-    <string name="tract_content_input_error_invalid_email">Maaloo iimeelii sirrii galchaa</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Qoodi</string>
     <string name="tool_share_sheet_more_apps">Caalaa</string>

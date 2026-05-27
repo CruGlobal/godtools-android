@@ -3,8 +3,6 @@
     <string name="tool_not_found">तपाईले अनुरोध गर्नु भएको टूल भेटिएन</string>
     <string name="tool_loading">तपाईले अनुरोध गरेको टूल लोड हुँदैछ...</string>
     <string name="tool_offline">तपाईले अनुरोध गर्नुभएको टूल खोल्न इन्टरनेट चाहिन्छ</string>
-    <string name="tract_content_input_error_required">%1$s को आवश्यकता छ</string>
-    <string name="tract_content_input_error_invalid_email">कृपया मान्य हुने इमेल ठेगाना राख्नुहोस्</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">साझा गर्नुहोस </string>
     <string name="tool_share_sheet_more_apps">थप</string>

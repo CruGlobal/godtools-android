@@ -3,8 +3,6 @@
     <string name="tool_not_found">आपका अनुरोधित टूल नहीं मिला</string>
     <string name="tool_loading">आपका अनुरोधित टूल लोड हो रहा है…</string>
     <string name="tool_offline">आपके द्वारा अनुरोधित टूल को खोलने के लिए इंटरनेट कनेक्शन आवश्यक है</string>
-    <string name="tract_content_input_error_required">%1$s जरूरी है</string>
-    <string name="tract_content_input_error_invalid_email">कृपया एक मान्य ईमेल अड्रेस डालें</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">साझा करें</string>
     <string name="tool_share_sheet_more_apps">अधिक</string>

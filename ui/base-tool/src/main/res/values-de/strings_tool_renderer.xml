@@ -3,8 +3,6 @@
     <string name="tool_not_found">Das von Ihnen angeforderte Tool konnte nicht gefunden werden.</string>
     <string name="tool_loading">Das von Ihnen angeforderte Tool wird geladen…</string>
     <string name="tool_offline">Das von dir angeforderte Tool benötigt eine Internetverbindung, um zu öffnen</string>
-    <string name="tract_content_input_error_required">%1$s ist erforderlich</string>
-    <string name="tract_content_input_error_invalid_email">Bitte eine gültige E-Mail-Adresse eingeben.</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Teilen</string>
     <string name="tool_share_sheet_more_apps">Mehr</string>

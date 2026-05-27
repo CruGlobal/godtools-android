@@ -3,8 +3,6 @@
     <string name="tool_not_found">Не удалось найти инструмент</string>
     <string name="tool_loading">Загрузка требуемого инструмента…</string>
     <string name="tool_offline">Запрошенный вами инструмент требует подключение к Интернету</string>
-    <string name="tract_content_input_error_required">Необходимо ввести %1$s</string>
-    <string name="tract_content_input_error_invalid_email">Введите правильный адрес эл. почты</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Поделиться</string>
     <string name="tool_share_sheet_more_apps">Больше</string>

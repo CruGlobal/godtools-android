@@ -3,8 +3,6 @@
     <string name="tool_not_found">آپ کا مطلوبہ ٹول نہیں مل سکتا</string>
     <string name="tool_loading">آپ کا مطلوبہ ٹول لوڈ ہو رہا ہے۔۔۔</string>
     <string name="tool_offline">آپ کے مطلوبہ ٹول کو انٹر نیٹ کنکشن آن ہونے کی</string>
-    <string name="tract_content_input_error_required">%1$s  مطلوب ہے</string>
-    <string name="tract_content_input_error_invalid_email">مہربانی سے درست پتہ  لکھیں</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شئیر کریں</string>
     <string name="tool_share_sheet_more_apps">مزید</string>

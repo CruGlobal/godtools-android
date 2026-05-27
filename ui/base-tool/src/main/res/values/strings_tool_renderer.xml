@@ -4,9 +4,6 @@
     <string name="tool_loading">The tool you requested is loading…</string>
     <string name="tool_offline">The tool you requested requires an internet connection to open</string>
 
-    <string name="tract_content_input_error_required">%1$s is required</string>
-    <string name="tract_content_input_error_invalid_email">Please enter a valid email address</string>
-
     <!-- Share Tool Functionality -->
     <eat-comment />
     <string name="menu_share_tool">Share</string>

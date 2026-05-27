@@ -3,8 +3,6 @@
     <string name="tool_not_found">Không thể tìm thấy công cụ bạn yêu cầu</string>
     <string name="tool_loading">Công cụ bạn yêu cầu đang được tải...</string>
     <string name="tool_offline">Công cụ bạn yêu cầu cần kết nối Internet để mở</string>
-    <string name="tract_content_input_error_required">%1$s là bắt buộc</string>
-    <string name="tract_content_input_error_invalid_email">Vui lòng nhập địa chỉ email hợp lệ</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Chia sẻ</string>
     <string name="tool_share_sheet_more_apps">Xem thêm</string>
