@@ -9,6 +9,7 @@ import androidx.annotation.MainThread
 import androidx.core.net.toUri
 import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
@@ -65,6 +66,13 @@ class AemArticleActivity :
 
         syncData()
         setupDataModel()
+    }
+
+    override fun onBindingChanged() {
+        super.onBindingChanged()
+        binding.manifest = viewModel.manifest.asLiveData()
+        binding.loadingProgress = viewModel.downloadProgress.asLiveData()
+        binding.loadingState = activeToolLoadingStateLiveData
     }
 
     override fun onStart() {

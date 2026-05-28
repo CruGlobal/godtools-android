@@ -9,6 +9,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import kotlinx.coroutines.flow.combine
@@ -133,6 +134,9 @@ class CyoaActivity :
     // endregion Intent Processing
 
     private fun setupBinding() {
+        binding.manifest = viewModel.manifest.asLiveData()
+        binding.loadingProgress = viewModel.downloadProgress.asLiveData()
+        binding.loadingState = activeToolLoadingStateLiveData
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
     }
