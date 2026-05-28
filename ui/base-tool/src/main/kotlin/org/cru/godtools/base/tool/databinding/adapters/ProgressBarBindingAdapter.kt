@@ -1,4 +1,4 @@
-package org.cru.godtools.downloadmanager.databinding
+package org.cru.godtools.base.tool.databinding.adapters
 
 import android.view.View
 import android.widget.ProgressBar

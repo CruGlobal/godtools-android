@@ -1,6 +1,5 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     alias(libs.plugins.ksp)
 }
 
@@ -8,7 +7,6 @@ android {
     namespace = "org.cru.godtools.downloadmanager"
 
     configureCompose(project)
-    buildFeatures.dataBinding = true
 
     testOptions.unitTests.all {
         // enable spyk mocks for java.io.File
@@ -28,7 +26,6 @@ dependencies {
     api(libs.androidx.work.ktx)
 
     implementation(libs.gtoSupport.androidx.work)
-    implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.dagger)
     implementation(libs.gtoSupport.kotlin.coroutines)
 
