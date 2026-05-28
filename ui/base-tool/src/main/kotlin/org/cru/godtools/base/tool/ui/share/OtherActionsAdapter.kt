@@ -7,7 +7,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
-import org.cru.godtools.tool.BR
 
 class OtherActionsAdapter(
     lifecycleOwner: LifecycleOwner,
@@ -24,11 +23,9 @@ class OtherActionsAdapter(
     override fun getItemViewType(position: Int) = items[position].actionLayout!!
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): ViewDataBinding =
-        DataBindingUtil.inflate<ViewDataBinding?>(LayoutInflater.from(parent.context), viewType, parent, false).also {
-            it.setVariable(BR.callbacks, callbacks)
-        }
+        DataBindingUtil.inflate<ViewDataBinding?>(LayoutInflater.from(parent.context), viewType, parent, false)
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
-        binding.setVariable(BR.item, items[position])
+        items[position].bindTo(binding, callbacks)
     }
 }
