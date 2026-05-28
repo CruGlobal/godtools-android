@@ -39,6 +39,13 @@ class ArticlesActivity :
         setupFragments()
     }
 
+    override fun onBindingChanged() {
+        super.onBindingChanged()
+        binding.manifest = viewModel.manifest.asLiveData()
+        binding.loadingProgress = viewModel.downloadProgress.asLiveData()
+        binding.loadingState = activeToolLoadingStateLiveData
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home if (supportFragmentManager.backStackEntryCount > 0) -> {
             supportFragmentManager.popBackStack()

@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
-import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
@@ -68,7 +67,6 @@ import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
 import org.cru.godtools.tool.databinding.ToolGenericFragmentActivityBinding
 import org.greenrobot.eventbus.Subscribe
@@ -108,15 +106,6 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
         setupFeatureDiscovery()
         subscribeToRendererStateEvents()
         eventBus.register(this, this)
-    }
-
-    @CallSuper
-    override fun onBindingChanged() {
-        (binding as? ViewDataBinding)?.apply {
-            setVariable(BR.manifest, viewModel.manifest.asLiveData())
-            setVariable(BR.loadingProgress, viewModel.downloadProgress.asLiveData())
-            setVariable(BR.loadingState, activeToolLoadingStateLiveData)
-        }
     }
 
     override fun onSetupActionBar() {

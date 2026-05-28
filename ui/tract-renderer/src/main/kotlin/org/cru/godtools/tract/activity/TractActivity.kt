@@ -280,6 +280,9 @@ class TractActivity :
     override val languageToggle get() = binding.languageToggle
 
     private fun setupBinding() {
+        binding.manifest = viewModel.manifest.asLiveData()
+        binding.loadingProgress = viewModel.downloadProgress.asLiveData()
+        binding.loadingState = activeToolLoadingStateLiveData
         binding.activeLocale = dataModel.activeLocale
         binding.visibleLocales = dataModel.visibleLocales
     }
