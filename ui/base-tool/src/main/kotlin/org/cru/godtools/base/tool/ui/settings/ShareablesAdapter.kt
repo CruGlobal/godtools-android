@@ -9,8 +9,8 @@ import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindi
 import org.cru.godtools.base.tool.databinding.ToolSettingsSheetCallbacks
 import org.cru.godtools.shared.tool.parser.model.shareable.Shareable
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
-import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolSettingsItemShareableImageBinding
 
 class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: ToolSettingsSheetCallbacks) :
     SimpleDataBindingAdapter<ViewDataBinding>(lifecycleOwner) {
@@ -32,10 +32,14 @@ class ShareablesAdapter(lifecycleOwner: LifecycleOwner, private val callbacks: T
 
     override fun onViewDataBindingCreated(binding: ViewDataBinding, viewType: Int) {
         super.onViewDataBindingCreated(binding, viewType)
-        binding.setVariable(BR.callbacks, callbacks)
+        when (binding) {
+            is ToolSettingsItemShareableImageBinding -> binding.callbacks = callbacks
+        }
     }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
-        binding.setVariable(BR.item, getItem(position))
+        when (binding) {
+            is ToolSettingsItemShareableImageBinding -> binding.item = getItem(position) as? ShareableImage
+        }
     }
 }
