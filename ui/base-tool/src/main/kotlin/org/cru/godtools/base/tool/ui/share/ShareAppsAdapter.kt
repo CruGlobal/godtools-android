@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import org.ccci.gto.android.common.androidx.recyclerview.adapter.SimpleDataBindingAdapter
-import org.cru.godtools.tool.BR
 import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolShareItemAppBinding
+import org.cru.godtools.tool.databinding.ToolShareItemMoreBinding
 
 internal class ShareAppsAdapter(private val items: List<ResolveInfo>, private val callbacks: Callbacks) :
     SimpleDataBindingAdapter<ViewDataBinding>() {
@@ -24,14 +25,23 @@ internal class ShareAppsAdapter(private val items: List<ResolveInfo>, private va
 
     override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int) =
         DataBindingUtil.inflate<ViewDataBinding>(LayoutInflater.from(parent.context), viewType, parent, false).also {
-            it.setVariable(BR.callbacks, callbacks)
+            when (it) {
+                is ToolShareItemAppBinding -> it.callbacks = callbacks
+                is ToolShareItemMoreBinding -> it.callbacks = callbacks
+            }
         }
 
     override fun onBindViewDataBinding(binding: ViewDataBinding, position: Int) {
-        binding.setVariable(BR.info, items.getOrNull(position))
+        when (binding) {
+            is ToolShareItemAppBinding -> binding.info = items.getOrNull(position)
+            is ToolShareItemMoreBinding -> Unit
+        }
     }
 
     override fun onViewDataBindingRecycled(binding: ViewDataBinding) {
-        binding.setVariable(BR.info, null)
+        when (binding) {
+            is ToolShareItemAppBinding -> binding.info = null
+            is ToolShareItemMoreBinding -> Unit
+        }
     }
 }
