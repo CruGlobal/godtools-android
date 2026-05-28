@@ -3,6 +3,7 @@ package org.cru.godtools.base.tool.ui.shareable.model
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentActivity
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -16,10 +17,12 @@ import org.ccci.gto.android.common.base.Ordered
 import org.cru.godtools.base.ToolFileSystem
 import org.cru.godtools.base.tool.model.getFileBlocking
 import org.cru.godtools.base.tool.model.shareable.buildShareIntent
+import org.cru.godtools.base.tool.ui.share.OtherActionsAdapter
 import org.cru.godtools.base.tool.ui.share.model.ShareItem
 import org.cru.godtools.base.tool.ui.shareable.ShareableImageBottomSheetDialogFragment
 import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.tool.R
+import org.cru.godtools.tool.databinding.ToolShareItemShareableImageBinding
 
 @Parcelize
 class ShareableImageShareItem(
@@ -48,6 +51,11 @@ class ShareableImageShareItem(
     }
 
     override val actionLayout get() = R.layout.tool_share_item_shareable_image
+    override fun bindTo(binding: ViewDataBinding, callbacks: OtherActionsAdapter.Callbacks?) {
+        require(binding is ToolShareItemShareableImageBinding)
+        binding.callbacks = callbacks
+        binding.item = this
+    }
 
     override val order get() = Ordered.LOWEST_PRECEDENCE
 
