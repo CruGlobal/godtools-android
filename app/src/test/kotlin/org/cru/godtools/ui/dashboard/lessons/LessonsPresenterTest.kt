@@ -185,7 +185,7 @@ class LessonsPresenterTest {
     @Test
     fun `State - mode - personalization enabled`() = testScope.runTest {
         presenter.test {
-            val state = awaitItem()
+            val state = awaitItemMatching { it.dataLoaded }
             assertEquals(UiState.Mode.PERSONALIZATION, state.mode)
 
             state.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
@@ -437,7 +437,7 @@ class LessonsPresenterTest {
     @Test
     fun `SideEffect - RegisterSyncTask - Triggers initial sync`() = testScope.runTest {
         presenter.test {
-            awaitItem()
+            awaitItemMatching { it.dataLoaded }
             toolOrderSync.send(true)
             coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
         }
@@ -447,7 +447,7 @@ class LessonsPresenterTest {
     fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
         appLangFlow.value = Locale.FRENCH
         presenter.test {
-            awaitItem()
+            awaitItemMatching { it.dataLoaded }
             toolOrderSync.send(true)
             coVerifyAll { syncService.syncToolOrder(Locale.FRENCH, "US", false) }
         }
@@ -471,7 +471,7 @@ class LessonsPresenterTest {
     @Test
     fun `SideEffect - RegisterSyncTask - passes force on triggered sync`() = testScope.runTest {
         presenter.test {
-            awaitItem()
+            awaitItemMatching { it.dataLoaded }
             toolOrderSync.send(true)
             coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
 
