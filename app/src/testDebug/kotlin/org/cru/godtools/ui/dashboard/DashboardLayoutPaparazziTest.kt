@@ -319,6 +319,16 @@ class DashboardLayoutPaparazziTest(
         assumeTrue(locale == null)
         lessonsState = lessonsState.copy(
             mode = LessonsPresenter.UiState.Mode.PERSONALIZATION,
+            lessons = lessonsState.lessons.subList(0, 1)
+        )
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - Personalization - No Personalized Lessons`() {
+        assumeTrue(locale == null)
+        lessonsState = lessonsState.copy(
+            mode = LessonsPresenter.UiState.Mode.PERSONALIZATION,
             lessons = emptyList(),
         )
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
