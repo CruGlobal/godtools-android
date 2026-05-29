@@ -49,7 +49,7 @@ internal fun NoPersonalizedLessons(onGoToAllLessons: () -> Unit, modifier: Modif
                 onClick = onGoToAllLessons,
                 modifier = Modifier.padding(top = 16.dp),
             ) {
-                Text(stringResource(R.string.dashboard_lessons_section_personalized_no_lessons_button))
+                Text(stringResource(R.string.dashboard_lessons_section_personalized_no_lessons_action_all_lessons))
             }
         }
     }
