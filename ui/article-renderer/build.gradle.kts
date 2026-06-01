@@ -13,7 +13,6 @@ android {
 
     buildFeatures {
         dataBinding = true
-        viewBinding = true
     }
 }
 
@@ -25,20 +24,16 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
 
     implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
-    implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.core)
     implementation(libs.gtoSupport.kotlin.coroutines)
-    implementation(libs.gtoSupport.picasso)
     implementation(libs.gtoSupport.sync)
-    implementation(libs.gtoSupport.util)
 
     implementation(libs.colormath.jetpack.compose)
     implementation(libs.dagger)
+    implementation(libs.godtoolsShared.renderer)
     implementation(libs.hilt)
     implementation(libs.splitties.fragmentargs)
 
