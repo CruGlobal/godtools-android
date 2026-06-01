@@ -81,6 +81,7 @@ class LessonsPresenter @AssistedInject internal constructor(
     data class UiState internal constructor(
         val mode: Mode = Mode.ALL_LESSONS,
         val isPersonalizationEnabled: Boolean = false,
+        val dataLoaded: Boolean = true,
         val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
         val lessons: List<ToolCardPresenter.UiState> = emptyList(),
         internal val eventSink: (UiEvent) -> Unit = {},
@@ -108,11 +109,14 @@ class LessonsPresenter @AssistedInject internal constructor(
 
         RegisterSyncTask(languageFilter.selectedItem?.code ?: appLanguage)
 
+        val lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage)
+
         return UiState(
             mode = mode,
             isPersonalizationEnabled = isPersonalizationEnabled,
+            dataLoaded = lessons != null,
             languageFilter = languageFilter,
-            lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage),
+            lessons = lessons.orEmpty(),
         ) {
             when (it) {
                 is UiEvent.ChangeMode -> mode = it.mode
@@ -181,9 +185,9 @@ class LessonsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState> {
-        val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(emptyList())
-        return lessons.map { tool ->
+    private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState>? {
+        val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(null)
+        return lessons?.map { tool ->
             key(tool.code) {
                 lateinit var toolState: ToolCardPresenter.UiState
                 toolState = toolCardPresenter.present(
