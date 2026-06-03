@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTaskRegistry
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
@@ -39,8 +40,6 @@ import org.cru.godtools.model.randomTool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.FakeBannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
@@ -51,24 +50,23 @@ import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@Suppress("UnusedFlow")
 @RunWith(AndroidJUnit4::class)
 @Config(application = Application::class)
 @OptIn(ExperimentalCoroutinesApi::class)
 class ToolsPresenterTest {
     private var isPersonalizationEnabled = false
+    private val appLocaleFlow = MutableStateFlow(Locale.ENGLISH)
     private val countryFlow = MutableStateFlow<String?>("US")
     private val featuredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val filteredToolsFlow = MutableStateFlow(emptyList<Tool>())
     private val toolOrderSync = Channel<Boolean>()
 
     private val testScope = TestScope()
+    private val syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
     @OptIn(InternalCircuitApi::class)
-    private val circuitContext = CircuitContext(null).apply {
-        syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
-    }
+    private val circuitContext = CircuitContext(null).apply { putTag(syncTaskRegistry) }
     private val settings: Settings = mockk {
-        every { appLanguage } returns Locale.ENGLISH
+        every { appLanguageFlow } returns appLocaleFlow
         every { getCountrySettingFlow() } returns countryFlow
     }
     private val syncService: GodToolsSyncService = mockk {
@@ -313,7 +311,7 @@ class ToolsPresenterTest {
             toolOrderSync.send(true)
             coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
 
-            circuitContext.syncTaskRegistry!!.triggerSyncTasks(force = true)
+            syncTaskRegistry.triggerSyncTasks(force = true)
             toolOrderSync.send(true)
             coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", true) }
         }

@@ -2,7 +2,6 @@ package org.cru.godtools.ui.dashboard.lessons
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.ccci.gto.android.common.sync.SyncTracker
+import org.ccci.gto.android.common.sync.rememberSyncTask
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
@@ -51,7 +51,6 @@ import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
 import org.cru.godtools.ui.settings.country.CountrySettingsScreen
@@ -219,12 +218,7 @@ class LessonsPresenter @AssistedInject internal constructor(
 
     @Composable
     private fun RegisterSyncTask(locale: Locale) {
-        val syncRegistry = circuitContext.syncTaskRegistry
-        DisposableEffect(syncRegistry, locale) {
-            if (syncRegistry == null) return@DisposableEffect onDispose { }
-            val id = syncRegistry.registerSyncTask { force -> syncData(locale, force) }
-            onDispose { syncRegistry.unregisterSyncTask(id) }
-        }
+        circuitContext.rememberSyncTask(locale) { syncData(locale, it) }
     }
 
     private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {

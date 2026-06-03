@@ -40,6 +40,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTaskRegistry
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.util.content.equalsIntent
 import org.ccci.gto.support.turbine.awaitItemMatching
@@ -58,8 +59,6 @@ import org.cru.godtools.model.Translation
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.model.randomTranslation
 import org.cru.godtools.sync.GodToolsSyncService
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
@@ -85,10 +84,6 @@ class LessonsPresenterTest {
     private var isPersonalizationEnabled = true
 
     private val testScope = TestScope()
-    @OptIn(InternalCircuitApi::class)
-    private val circuitContext = CircuitContext(null).apply {
-        syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
-    }
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val eventBus: EventBus = mockk(relaxUnitFun = true)
     private val remoteConfig: FirebaseRemoteConfig = mockk {
@@ -105,6 +100,7 @@ class LessonsPresenterTest {
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
     }
+    private val syncTaskRegistry = SyncTaskRegistry(SyncTracker(testScope.backgroundScope))
     private val lessonsFlowProducer: LessonsFlowProducer = mockk {
         every { getFlow(any(), any()) } returns flowOf(emptyList())
         every { getFlow(any(), Locale.ENGLISH) } returns enLessonsFlow
@@ -117,6 +113,8 @@ class LessonsPresenterTest {
     }
 
     private val backStack = SaveableBackStack(LessonsScreen)
+    @OptIn(InternalCircuitApi::class)
+    private val circuitContext = CircuitContext(null).apply { putTag(syncTaskRegistry) }
     private val navigator = FakeNavigator(backStack)
 
     private val presenter = LessonsPresenter(
@@ -475,7 +473,7 @@ class LessonsPresenterTest {
             toolOrderSync.send(true)
             coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", false) }
 
-            circuitContext.syncTaskRegistry!!.triggerSyncTasks(force = true)
+            syncTaskRegistry.triggerSyncTasks(force = true)
             toolOrderSync.send(true)
             coVerify { syncService.syncToolOrder(Locale.ENGLISH, "US", true) }
         }

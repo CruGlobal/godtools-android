@@ -1,7 +1,6 @@
 package org.cru.godtools.ui.dashboard.tools
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -26,6 +25,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncTracker
+import org.ccci.gto.android.common.sync.rememberSyncTask
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_ALL_TOOLS
@@ -39,7 +39,6 @@ import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.banner.Banner
 import org.cru.godtools.ui.banner.BannerPresenter
 import org.cru.godtools.ui.banner.favoritetools.FavoriteToolsBannerPresenter
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
@@ -95,7 +94,8 @@ class ToolsPresenter @AssistedInject internal constructor(
         val filters = toolFiltersStateProducer.produce(mode)
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
-        RegisterSyncTask(selectedLocale)
+        val appLocale by settings.appLanguageFlow.collectAsState()
+        RegisterSyncTask(selectedLocale ?: appLocale)
 
         val featuredTools = rememberFeaturedTools(
             mode = mode,
@@ -128,13 +128,8 @@ class ToolsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun RegisterSyncTask(selectedLocale: Locale?) {
-        val syncRegistry = circuitContext.syncTaskRegistry
-        DisposableEffect(syncRegistry, selectedLocale) {
-            if (syncRegistry == null) return@DisposableEffect onDispose { }
-            val id = syncRegistry.registerSyncTask { force -> syncData(selectedLocale ?: settings.appLanguage, force) }
-            onDispose { syncRegistry.unregisterSyncTask(id) }
-        }
+    private fun RegisterSyncTask(locale: Locale) {
+        circuitContext.rememberSyncTask(locale) { syncData(locale, it) }
     }
 
     @Composable

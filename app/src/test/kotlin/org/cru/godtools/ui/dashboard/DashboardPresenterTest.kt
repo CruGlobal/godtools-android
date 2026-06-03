@@ -24,6 +24,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
+import org.ccci.gto.android.common.sync.SyncTaskRegistry
 import org.ccci.gto.support.turbine.awaitItemMatching
 import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
@@ -31,7 +32,6 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
-import org.cru.godtools.ui.dashboard.SyncTaskRegistry.Companion.syncTaskRegistry
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -152,12 +152,12 @@ class DashboardPresenterTest {
     // region SideEffect - SyncTaskRegistry
     @Test
     fun `SideEffect - SyncTaskRegistry - set on CircuitContext while presenter is active`() = runTest {
-        assertNull(circuitContext.syncTaskRegistry)
+        assertNull(circuitContext.tag<SyncTaskRegistry>())
         presenter.test {
             awaitInitialState()
-            assertNotNull(circuitContext.syncTaskRegistry)
+            assertNotNull(circuitContext.tag<SyncTaskRegistry>())
         }
-        assertNull(circuitContext.syncTaskRegistry)
+        assertNull(circuitContext.tag<SyncTaskRegistry>())
     }
     // endregion SideEffect - SyncTaskRegistry
 
