@@ -130,6 +130,7 @@ To dismiss a finding so it won't appear in future reviews, say:
   return UiState(items = items, eventSink = eventSink)
   ```
 - [ ] `navigator.pop()` (or any navigation call) placed *inside* the `launch { }` block when it follows an async operation — `rememberCoroutineScope()` is canceled on composition disposal and can cancel an in-flight write before it completes
+- [ ] Coroutine launches in `present()` use a Compose-aware mechanism (`LaunchedEffect`, inside an `eventSink` callback, etc.) — bare `scope.launch { }` at the top level of `present()` re-runs on every recomposition
 - [ ] Presenter contains no UI logic — pure state/event handling
 
 **UI Composable**
@@ -169,6 +170,9 @@ To dismiss a finding so it won't appear in future reviews, say:
 ### Testing
 
 - [ ] Presenter tests use `presenterTestOf { }` (Circuit test API)
+- [ ] Compose UI tests use `runComposeUiTest { }` — not `createComposeRule()` / `ComposeTestRule`
+- [ ] `runComposeUiTest` import is `androidx.compose.ui.test.v2.runComposeUiTest` — the `androidx.compose.ui.test.runComposeUiTest` (v1) is deprecated and is a **Must Fix**
+- [ ] Flow-based tests use Turbine (`flow.test { … }`) rather than manual `collect` + coroutine coordination
 - [ ] Interfaces with `@Composable` functions use a hand-written `Fake*` class in tests, not `mockk<>()` — mockposable delays Kotlin version uptake and is incompatible with newer compiler versions
 - [ ] Paparazzi tests extend `BasePaparazziTest` from `:ui:base` testFixtures with `@TestParameter` night/accessibility matrix
 - [ ] Snapshots not recorded locally — triggered via GitHub Actions workflow on the feature branch
