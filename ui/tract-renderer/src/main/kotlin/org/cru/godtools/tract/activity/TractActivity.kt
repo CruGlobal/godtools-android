@@ -44,7 +44,6 @@ import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.BaseToolRendererModule.Companion.TOOL_RESOURCE_FILE_SYSTEM
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
-import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.ui.startQrCodeActivity
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.shared.renderer.tips.TipsRepository
@@ -432,8 +431,6 @@ class TractActivity :
             .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
-
-    override fun getShareableShareItems() = emptyList<ShareableImageShareItem>()
     // endregion Share Menu Logic
 
     // region Live Share Logic
