@@ -21,8 +21,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_TOOL_DETAILS
@@ -103,8 +105,10 @@ class AllFavoritesPresenter @AssistedInject constructor(
             when (it) {
                 is UiEvent.MoveTool -> tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
 
-                UiEvent.CommitToolOrder -> scope.launch(NonCancellable) {
-                    toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
+                UiEvent.CommitToolOrder -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    withContext(NonCancellable) {
+                        toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
+                    }
                 }
             }
         }

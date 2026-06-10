@@ -9,6 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.slack.circuit.runtime.presenter.Presenter
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,7 +30,9 @@ class DrawerMenuPresenter @Inject constructor(private val accountManager: GodToo
             eventSink = {
                 when (it) {
                     Event.Logout -> scope.launch {
-                        launch { withContext(NonCancellable) { accountManager.logout() } }
+                        launch(start = CoroutineStart.UNDISPATCHED) {
+                            withContext(NonCancellable) { accountManager.logout() }
+                        }
                         drawerState.close()
                     }
 
