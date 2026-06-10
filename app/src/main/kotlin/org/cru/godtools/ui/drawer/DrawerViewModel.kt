@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -25,7 +26,9 @@ class DrawerViewModel @Inject constructor(private val accountManager: GodToolsAc
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     // region Actions
-    fun logout() = viewModelScope.launch { withContext(NonCancellable) { accountManager.logout() } }
+    fun logout() = viewModelScope.launch(start = CoroutineStart.UNDISPATCHED) {
+        withContext(NonCancellable) { accountManager.logout() }
+    }
     // endregion Actions
 
     @Composable

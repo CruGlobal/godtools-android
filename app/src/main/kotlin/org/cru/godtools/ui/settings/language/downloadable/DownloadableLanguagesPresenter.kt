@@ -23,6 +23,7 @@ import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import javax.inject.Named
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.base.Settings
@@ -75,12 +77,16 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
 
-                    is UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
-                        languagesRepository.pinLanguage(it.locale)
+                    is UiEvent.PinLanguage -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        withContext(NonCancellable) {
+                            languagesRepository.pinLanguage(it.locale)
+                        }
                     }
 
-                    is UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
-                        languagesRepository.unpinLanguage(it.locale)
+                    is UiEvent.UnpinLanguage -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        withContext(NonCancellable) {
+                            languagesRepository.unpinLanguage(it.locale)
+                        }
                     }
                 }
             }
