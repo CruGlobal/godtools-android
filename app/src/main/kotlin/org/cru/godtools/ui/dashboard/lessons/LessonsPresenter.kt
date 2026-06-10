@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.dashboard.lessons
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -186,6 +187,7 @@ class LessonsPresenter @AssistedInject internal constructor(
     @Composable
     private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState>? {
         val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(null)
+        @SuppressLint("FlowOperatorInvokedInComposition")
         return lessons?.map { tool ->
             key(tool.code) {
                 lateinit var toolState: ToolCardPresenter.UiState
