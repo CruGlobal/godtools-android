@@ -62,11 +62,7 @@ class CircuitActivity : BaseActivity() {
                         NavigableCircuitContent(
                             navigator = navigator,
                             backStack = backStack,
-                            decoratorFactory = remember(navigator) {
-                                GestureNavigationDecorationFactory(
-                                    onBackInvoked = navigator::pop
-                                )
-                            }
+                            decoratorFactory = remember { GestureNavigationDecorationFactory() }
                         )
                     }
                 }
