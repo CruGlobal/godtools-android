@@ -5,7 +5,6 @@
     <string name="tool_offline">Tava pieprasītā rīka atvēršanai ir nepieciešams interneta pieslēgums.</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Dalies</string>
-    <string name="tool_share_sheet_more_apps">Vairāk</string>
     <string name="share_tool_message_article">Izlasīju šo rakstu un iedomājos par tevi. Labprāt dzirdētu tavas domas par to.\n\n%1$s</string>
     <string name="share_action_qr_code">Kopīgot, izmantojot QR kodu</string>
     <string name="feature_discovery_title_share_tool">Kopīgo saiti</string>

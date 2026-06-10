@@ -7,14 +7,11 @@ import android.os.Build
 import android.service.chooser.ChooserAction
 import androidx.core.content.ContextCompat.getString
 import kotlinx.parcelize.Parcelize
-import org.ccci.gto.android.common.base.Ordered
 import org.cru.godtools.base.ui.createQrCodeActivityPendingIntent
 import org.cru.godtools.tool.R
 
 @Parcelize
 class DefaultShareItem(override val shareIntent: Intent, val urlStringForQrCode: String? = null) : ShareItem {
-    override val order get() = Ordered.HIGHEST_PRECEDENCE
-
     override fun triggerAction(activity: Activity) {
         val chooserIntent = Intent.createChooser(shareIntent, null)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && urlStringForQrCode != null) {

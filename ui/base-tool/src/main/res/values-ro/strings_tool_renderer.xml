@@ -5,7 +5,6 @@
     <string name="tool_offline">Instrumentul solicitat necesită conexiune la internet pentru a fi deschis</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Distribuie</string>
-    <string name="tool_share_sheet_more_apps">Mai multe</string>
     <string name="share_tool_message_article">Vreau să împărtășesc acest articol cu voi și să aflu opinia voastră.\n%1$s</string>
     <string name="share_action_qr_code">Distribuie prin cod QR</string>
     <string name="feature_discovery_title_share_tool">Partajează un link</string>

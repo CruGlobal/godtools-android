@@ -5,7 +5,6 @@
     <string name="tool_offline">요청한 도구는 인터넷 연결이 있어야 열립니다</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">공유</string>
-    <string name="tool_share_sheet_more_apps">더 보기</string>
     <string name="share_tool_message_article">저는 이 글을 당신과 공유하고 싶었고 그것에 대한 당신의 생각을 듣고 싶어요.\n%1$s</string>
     <string name="share_action_qr_code">QR 코드로 공유하기</string>
     <string name="feature_discovery_title_share_tool">링크 공유하기</string>

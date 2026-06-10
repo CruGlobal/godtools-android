@@ -53,7 +53,6 @@ import org.cru.godtools.base.tool.activity.BaseSingleToolActivity
 import org.cru.godtools.base.tool.activity.BaseSingleToolActivityDataModel
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.ManifestManager
-import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
@@ -361,8 +360,6 @@ class LessonActivity :
             .apply { if (page > 0) appendPath(page.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
-
-    override fun getShareableShareItems() = emptyList<ShareableImageShareItem>()
     // endregion Share Menu Logic
     // endregion UI
 

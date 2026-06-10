@@ -5,7 +5,6 @@
     <string name="tool_offline">Запрошенный вами инструмент требует подключение к Интернету</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Поделиться</string>
-    <string name="tool_share_sheet_more_apps">Больше</string>
     <string name="share_tool_message_article">Хочу поделиться с вами статьей и услышать ваше мнение о ней.\n%1$s</string>
     <string name="share_action_qr_code">Поделиться через QR-код</string>
     <string name="feature_discovery_title_share_tool">Поделитесь ссылкой</string>

@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.emptyLiveData
 import org.ccci.gto.android.common.androidx.lifecycle.observe
-import org.ccci.gto.android.common.base.Ordered
 import org.ccci.gto.android.common.eventbus.lifecycle.register
 import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_OPENED
@@ -50,10 +49,7 @@ import org.cru.godtools.base.tool.analytics.model.ToolOpenedAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolOpenedViaShortcutAnalyticsActionEvent
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.base.tool.service.FollowupService
-import org.cru.godtools.base.tool.ui.share.ShareBottomSheetDialogFragment
 import org.cru.godtools.base.tool.ui.share.model.DefaultShareItem
-import org.cru.godtools.base.tool.ui.share.model.ShareItem
-import org.cru.godtools.base.tool.ui.shareable.model.ShareableImageShareItem
 import org.cru.godtools.base.tool.viewmodel.ToolStateHolder
 import org.cru.godtools.base.ui.activity.BaseBindingActivity
 import org.cru.godtools.base.ui.util.openUrl
@@ -64,7 +60,6 @@ import org.cru.godtools.model.event.ToolUsedEvent
 import org.cru.godtools.shared.renderer.state.State
 import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.shared.tool.parser.model.navBarColor
-import org.cru.godtools.shared.tool.parser.model.shareable.ShareableImage
 import org.cru.godtools.shared.tool.parser.model.tips.Tip
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.tool.R
@@ -193,30 +188,16 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     fun shareCurrentTool() {
-        val shareItems = getShareItems().sortedWith(Ordered.COMPARATOR)
-        if (shareItems.isEmpty()) return
+        val shareItem = getShareItem() ?: return
 
         // track the share action
         eventBus.post(ShareActionEvent)
         settings.setFeatureDiscovered(FEATURE_TOOL_SHARE)
 
-        // launch the appropriate Share Dialog based on shareItems
-        when (shareItems.size) {
-            1 -> shareItems.first().triggerAction(this)
-            else -> ShareBottomSheetDialogFragment(shareItems).show(supportFragmentManager, null)
-        }
+        shareItem.triggerAction(this)
     }
 
-    private fun getShareItems(): Collection<ShareItem> = buildList {
-        buildShareIntent()?.let { add(DefaultShareItem(it, shareLinkUri)) }
-        addAll(getShareableShareItems())
-    }.filter { it.isValid }
-
-    @Inject
-    internal lateinit var shareableShareItemFactory: ShareableImageShareItem.Factory
-
-    protected open fun getShareableShareItems() = activeManifest?.shareables?.filterIsInstance<ShareableImage>()
-        ?.map { shareableShareItemFactory.create(it) }.orEmpty()
+    private fun getShareItem() = buildShareIntent()?.let { DefaultShareItem(it, shareLinkUri) }
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,

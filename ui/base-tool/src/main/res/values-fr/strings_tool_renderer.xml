@@ -5,7 +5,6 @@
     <string name="tool_offline">Une connexion Internet est nécessaire pour ouvrir la ressource que vous avez demandé</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Partager</string>
-    <string name="tool_share_sheet_more_apps">Plus</string>
     <string name="share_tool_message_article">Je voudrais partager cet article avec vous, et je voudrais savoir ce que vous en pensez. \n%1$s</string>
     <string name="share_action_qr_code">Partager par code QR</string>
     <string name="feature_discovery_title_share_tool">Partagez un lien</string>

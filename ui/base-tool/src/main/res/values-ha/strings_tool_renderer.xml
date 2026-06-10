@@ -5,7 +5,6 @@
     <string name="tool_offline">Kayan aikin da kuka nema yana buƙatar haɗin Intanet don buɗewa</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Raba</string>
-    <string name="tool_share_sheet_more_apps">Akwai kari</string>
     <string name="share_tool_message_article">Ina so in raba wannan labarin tare da ku kuma ina so in ji ra\'ayoyin ku game da shi. %1$s</string>
     <string name="share_action_qr_code">Raba ta Lambar QR</string>
     <string name="feature_discovery_title_share_tool">Raba hanyar haɗi</string>

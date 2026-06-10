@@ -5,7 +5,6 @@
     <string name="tool_offline">Kifaa ulichohitaji kinahitaji kuunganishwa na mtandao ili kifunguke</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Sambaza</string>
-    <string name="tool_share_sheet_more_apps">Mengine</string>
     <string name="share_tool_message_article">Nilitaka kukushirkisha nakala hii na ningependa kusikia maoni yako kuihusu.\n%1$s</string>
     <string name="share_action_qr_code">Shiriki kwa kutumia Msimbo wa QR</string>
     <string name="feature_discovery_title_share_tool">Sambaza kiungo kwa wengine</string>

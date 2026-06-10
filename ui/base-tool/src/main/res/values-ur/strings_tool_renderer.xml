@@ -5,7 +5,6 @@
     <string name="tool_offline">آپ کے مطلوبہ ٹول کو انٹر نیٹ کنکشن آن ہونے کی</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">شئیر کریں</string>
-    <string name="tool_share_sheet_more_apps">مزید</string>
     <string name="share_tool_message_article">میں آپ کے ساتھ اس مضمون کو ساجھا کرنا چاہتا ہوں اور اس کے بارے میں آپ کے افکا/ سننے کا خواہاں ہوں۔\n%1$s</string>
     <string name="share_action_qr_code">کیو آر کوڈ کے ذریعے شیئر کریں</string>
     <string name="feature_discovery_title_share_tool">لِنک شئیر کریں</string>

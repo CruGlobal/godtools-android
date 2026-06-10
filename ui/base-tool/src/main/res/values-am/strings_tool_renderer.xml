@@ -5,7 +5,6 @@
     <string name="tool_offline">የጠየቁት ገፅ ለመክፈት የበይነመረብ ግንኙነት ያስፈልገዋል</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">ያጋሩ</string>
-    <string name="tool_share_sheet_more_apps">ተጨማሪ</string>
     <string name="share_tool_message_article">ይህን ጽሑፍ ላካፍላችሁ ወደድኩ እና ስለሱ ያለዎትን አስተያየት መስማት እፈልጋለሁ።\n%1$s</string>
     <string name="share_action_qr_code">በQR ኮድ ያጋሩ</string>
     <string name="feature_discovery_title_share_tool">መስፈንጠሪያ አጋራ</string>
