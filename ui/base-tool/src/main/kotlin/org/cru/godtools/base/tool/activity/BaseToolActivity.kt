@@ -198,7 +198,6 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     private fun getShareItem() = buildShareIntent()?.let { DefaultShareItem(it, shareLinkUri) }
-        ?.takeIf { it.isValid }
 
     private fun buildShareIntent(
         title: String? = shareLinkTitle,
