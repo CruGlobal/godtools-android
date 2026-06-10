@@ -36,6 +36,8 @@ The default branch for this repository is **`develop`**. Use `develop` as the ba
 
 **Paparazzi Snapshots:** Do not record snapshots locally. Instead, trigger the manual GitHub Actions workflow on the feature branch to generate and commit updated screenshots.
 
+**Pre-commit:** Always run `./gradlew :build-logic:ktlintCheck ktlintCheck` before committing.
+
 ## Project Architecture
 
 ### Module Layout
@@ -70,20 +72,13 @@ The default branch for this repository is **`develop`**. Use `develop` as the ba
 ### Key Frameworks & Patterns
 
 - **DI:** Hilt (Dagger 2). Application class annotated with `@HiltAndroidApp`. Modules in `app/src/main/kotlin/org/cru/godtools/dagger/`.
-- **Navigation & UI state:** Slack Circuit library — uses `@CircuitInject` annotated Presenter/UI pairs with Hilt codegen. Presenters are `@Composable` functions that return state objects.
+- **Navigation & UI state:** Slack Circuit library (v0.34+) — uses `@CircuitInject` annotated Presenter/UI pairs with Hilt codegen. Presenters are `@Composable` functions that return state objects. Back navigation is handled internally by Circuit; `GestureNavigationDecorationFactory` does not accept an `onBackInvoked` parameter.
 - **UI:** Jetpack Compose with Material Design 3. Some legacy views use DataBinding/ViewBinding.
 - **Networking:** Retrofit for REST APIs, Scarlet for WebSocket, OkHttp as HTTP client. API base URLs configured per flavor in `build-logic/src/main/kotlin/Constants.kt`.
 - **Database:** Room with DAOs and type converters.
-- **Background work:** WorkManager with Hilt worker injection.
+- **Background work:** WorkManager with Hilt worker injection. When launching non-cancellable work from a Presenter (e.g., committing state on a user action), use `launch(start = CoroutineStart.UNDISPATCHED) { withContext(NonCancellable) { ... } }` — *not* `launch(NonCancellable) { ... }`. The latter doesn't guarantee the block runs if the scope is already cancelling when `launch` is called.
 - **Image loading:** Coil.
 - **Dependency versions:** Centralized in `gradle/libs.versions.toml` (Gradle version catalog).
-
-## Pre-Commit Checks
-
-Always run ktlintCheck before committing changes:
-```bash
-./gradlew :build-logic:ktlintCheck ktlintCheck
-```
 
 ## Code Style
 

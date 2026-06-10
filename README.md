@@ -107,7 +107,7 @@ Gradle convention plugins: `godtools.application-conventions`, `godtools.library
 | Dependency injection | Hilt (Dagger 2) |
 | UI | Jetpack Compose + Material Design 3 |
 | Navigation / UI state | [Slack Circuit](https://slackhq.github.io/circuit/) |
-| Networking | Retrofit (REST), Scarlet (WebSocket), OkHttp |
+| Networking | Retrofit (REST), Scarlet (WebSocket), OkHttp; CDN downloads via `CdnApi` with SHA-256 verification |
 | Database | Room |
 | Background work | WorkManager |
 | Image loading | Coil |
