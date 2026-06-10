@@ -105,6 +105,18 @@ sealed interface UiEvent : CircuitUiEvent {
 val url = intent.getStringExtra(EXTRA_URL) ?: run { finish(); return }
 ```
 
+### Non-Cancellable Work
+```kotlin
+// Correct — coroutine remains a child of the scope (structured concurrency intact);
+// withContext(NonCancellable) suppresses cancellation only for the critical section
+scope.launch(start = CoroutineStart.UNDISPATCHED) {
+    withContext(NonCancellable) { repository.storeOrder(items) }
+}
+
+// Wrong — NonCancellable replaces the parent Job, breaking structured concurrency entirely
+scope.launch(NonCancellable) { repository.storeOrder(items) }
+```
+
 ---
 
 ## Jetpack Compose
@@ -145,6 +157,29 @@ Bitmap generation, image processing, and other CPU-heavy work must happen off th
 val bitmap by produceState<Bitmap?>(null, url) {
     value = withContext(Dispatchers.IO) { generateBitmap(url) }
 }
+```
+
+### LazyColumn Key Safety
+Using `.orEmpty()` on a nullable ID as a `LazyColumn` item key collapses all `null` IDs to `""`, causing a crash:
+```kotlin
+// Wrong — crashes if any two items have null IDs
+items(categories, key = { it.id.orEmpty() }) { ... }
+
+// Safe option 1 — omit key (falls back to position)
+items(categories) { ... }
+
+// Safe option 2 — use the object itself as fallback
+items(categories, key = { it.id ?: it }) { ... }
+```
+
+### Vector Drawable Colors
+Vector drawables intended for use in `Icon {}` composables should use `@color/tintable` rather than hardcoded fill colors — project convention for consistency across vector assets:
+```xml
+<!-- Correct -->
+<path android:fillColor="@color/tintable" ... />
+
+<!-- Avoid -->
+<path android:fillColor="#FF0000" ... />
 ```
 
 ---

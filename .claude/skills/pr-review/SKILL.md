@@ -109,6 +109,8 @@ To dismiss a finding so it won't appear in future reviews, say:
 - [ ] Always uses `GodToolsTheme` from `:ui:base` — no per-module `MaterialTheme(colorScheme = …)` wrappers
 - [ ] Colors accessed via `MaterialTheme.colorScheme.*` or `GodToolsTheme.extendedColorScheme`
 - [ ] CPU-heavy work (bitmap generation, etc.) done off the main thread via `produceState { withContext(Dispatchers.IO) { … } }`
+- [ ] `LazyColumn`/`LazyRow` `key` lambdas handle nullable IDs safely — do not use `.orEmpty()` on a nullable key field; two `null` IDs both become `""` and crash with `IllegalArgumentException: Key "" was already used`. Either omit `key` (falls back to position) or use the object as fallback: `key = { it.id ?: it }`
+- [ ] Vector drawables intended for use inside `Icon {}` composables use `@color/tintable` in the XML rather than hardcoded colors — project convention for consistency across vector assets
 
 ### Circuit Presenter/UI Patterns
 
@@ -162,6 +164,7 @@ To dismiss a finding so it won't appear in future reviews, say:
 - [ ] Visibility is intentional: `internal` for module-scoped symbols, `private` where possible
 - [ ] Multi-branch conditionals use `when`, not chained `if/else`
 - [ ] `Bundle`/`Intent` extra keys are `const val` shared between producer and consumer
+- [ ] Non-cancellable critical sections use `launch(start = CoroutineStart.UNDISPATCHED) { withContext(NonCancellable) { … } }` — not `launch(NonCancellable) { … }` (passing `NonCancellable` to `launch` replaces the parent `Job`, breaking structured concurrency)
 
 ### Testing
 
@@ -169,6 +172,7 @@ To dismiss a finding so it won't appear in future reviews, say:
 - [ ] Interfaces with `@Composable` functions use a hand-written `Fake*` class in tests, not `mockk<>()` — mockposable delays Kotlin version uptake and is incompatible with newer compiler versions
 - [ ] Paparazzi tests extend `BasePaparazziTest` from `:ui:base` testFixtures with `@TestParameter` night/accessibility matrix
 - [ ] Snapshots not recorded locally — triggered via GitHub Actions workflow on the feature branch
+- [ ] Paparazzi tests include enough sample data to keep the feature under test visible in the snapshot — verify the target content isn't pushed off-screen by surrounding layout
 
 ### PR Hygiene
 
