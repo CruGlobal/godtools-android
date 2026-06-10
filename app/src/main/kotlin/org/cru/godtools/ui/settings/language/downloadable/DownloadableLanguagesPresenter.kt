@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.settings.language.downloadable
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +24,7 @@ import dagger.hilt.components.SingletonComponent
 import java.util.Locale
 import javax.inject.Named
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.cru.godtools.base.Settings
@@ -58,29 +61,36 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
 
+        @SuppressLint("FlowOperatorInvokedInComposition")
+        val languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
+            .map { lang ->
+                key(lang.code) {
+                    UiLanguage(
+                        language = lang,
+                        downloadedTools = rememberDownloadedTools(lang.code),
+                        totalTools = rememberTotalTools(lang.code),
+                    )
+                }
+            }
+
         return UiState(
             query = query,
             isConnected = isConnected.collectAsState(),
-            languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
-                .map { lang ->
-                    key(lang.code) {
-                        UiLanguage(
-                            language = lang,
-                            downloadedTools = rememberDownloadedTools(lang.code),
-                            totalTools = rememberTotalTools(lang.code),
-                        )
-                    }
-                },
+            languages = languages,
             eventSink = {
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()
 
-                    is UiEvent.PinLanguage -> coroutineScope.launch(NonCancellable) {
-                        languagesRepository.pinLanguage(it.locale)
+                    is UiEvent.PinLanguage -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        withContext(NonCancellable) {
+                            languagesRepository.pinLanguage(it.locale)
+                        }
                     }
 
-                    is UiEvent.UnpinLanguage -> coroutineScope.launch(NonCancellable) {
-                        languagesRepository.unpinLanguage(it.locale)
+                    is UiEvent.UnpinLanguage -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        withContext(NonCancellable) {
+                            languagesRepository.unpinLanguage(it.locale)
+                        }
                     }
                 }
             }

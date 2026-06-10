@@ -13,6 +13,7 @@ import androidx.compose.runtime.snapshotFlow
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
@@ -143,11 +144,11 @@ internal class DefaultToolCardPresenter @Inject constructor(
             },
         ) {
             when (it) {
-                UiEvent.PinTool -> coroutineScope.launch {
+                UiEvent.PinTool -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
                     withContext(NonCancellable) { toolCode?.let { toolsRepository.pinTool(it) } }
                 }
 
-                UiEvent.UnpinTool -> coroutineScope.launch {
+                UiEvent.UnpinTool -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
                     withContext(NonCancellable) { toolCode?.let { toolsRepository.unpinTool(it) } }
                 }
 
