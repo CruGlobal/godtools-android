@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.settings.language.downloadable
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -60,19 +61,22 @@ class DownloadableLanguagesPresenter @AssistedInject constructor(
         val coroutineScope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
 
+        @SuppressLint("FlowOperatorInvokedInComposition")
+        val languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
+            .map { lang ->
+                key(lang.code) {
+                    UiLanguage(
+                        language = lang,
+                        downloadedTools = rememberDownloadedTools(lang.code),
+                        totalTools = rememberTotalTools(lang.code),
+                    )
+                }
+            }
+
         return UiState(
             query = query,
             isConnected = isConnected.collectAsState(),
-            languages = rememberLanguagesFlow { query.value }.collectAsState(emptyList()).value
-                .map { lang ->
-                    key(lang.code) {
-                        UiLanguage(
-                            language = lang,
-                            downloadedTools = rememberDownloadedTools(lang.code),
-                            totalTools = rememberTotalTools(lang.code),
-                        )
-                    }
-                },
+            languages = languages,
             eventSink = {
                 when (it) {
                     UiEvent.NavigateUp -> navigator.pop()

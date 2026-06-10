@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.tooldetails
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -226,6 +227,7 @@ class ToolDetailsPresenter @AssistedInject constructor(
 
         val onVariantSelect by rememberUpdatedState(onVariantSelect)
 
+        @SuppressLint("FlowOperatorInvokedInComposition")
         return remember { toolsRepository.getNormalToolsFlow() }.collectAsState(emptyList()).value
             .filter { it.metatoolCode == metaToolCode }
             .map { tool ->
