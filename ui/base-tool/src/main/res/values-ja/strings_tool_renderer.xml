@@ -5,7 +5,6 @@
     <string name="tool_offline">リクエストされたツールを開くためにはインターネット接続が必要です</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">シェア</string>
-    <string name="tool_share_sheet_more_apps">その他</string>
     <string name="share_tool_message_article">あなたにぜひ読んでもらいたい記事があったので送ります。ぜひ、あなたの感想を聞かせてください。\n%1$s</string>
     <string name="share_action_qr_code">QRコードでシェア</string>
     <string name="feature_discovery_title_share_tool">リンクをシェア</string>

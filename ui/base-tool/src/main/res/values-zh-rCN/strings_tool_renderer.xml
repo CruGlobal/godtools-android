@@ -5,7 +5,6 @@
     <string name="tool_offline">你请求的工具需要有互联网连接才能打开</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">分享</string>
-    <string name="tool_share_sheet_more_apps">更多</string>
     <string name="share_tool_message_article">我想分享这篇文章给你并期待听到你对它的看法。%1$s</string>
     <string name="share_action_qr_code">通过二维码分享</string>
     <string name="feature_discovery_title_share_tool">分享链接</string>

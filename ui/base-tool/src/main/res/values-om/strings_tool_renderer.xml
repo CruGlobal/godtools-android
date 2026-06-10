@@ -5,7 +5,6 @@
     <string name="tool_offline">Barruun ati barbaadde banuudhaaf tajaajila interneetii gaafata</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Qoodi</string>
-    <string name="tool_share_sheet_more_apps">Caalaa</string>
     <string name="share_tool_message_article">Barruu kana siif qooduu fi waa\'ee isaa maal akka ati yaaddu baruun barbaade.\n%1$s</string>
     <string name="share_action_qr_code">Koodii QR tiin qoodaa</string>
     <string name="feature_discovery_title_share_tool">Liinkii qoodi</string>

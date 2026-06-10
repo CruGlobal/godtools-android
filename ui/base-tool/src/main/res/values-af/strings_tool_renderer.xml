@@ -5,7 +5,6 @@
     <string name="tool_offline">Die hulpmiddel wat jy aangevra het, benodig \'n internetverbinding om oop te maak</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Deel</string>
-    <string name="tool_share_sheet_more_apps">Meer</string>
     <string name="share_tool_message_article">Ek wou hierdie artikel met jou deel en wil graag jou gedagtes daaroor hoor.\n%1$s</string>
     <string name="share_action_qr_code">Deel per QR-kode</string>
     <string name="feature_discovery_title_share_tool">Deel \'n skakel</string>

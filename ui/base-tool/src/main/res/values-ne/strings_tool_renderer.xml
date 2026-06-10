@@ -5,7 +5,6 @@
     <string name="tool_offline">तपाईले अनुरोध गर्नुभएको टूल खोल्न इन्टरनेट चाहिन्छ</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">साझा गर्नुहोस </string>
-    <string name="tool_share_sheet_more_apps">थप</string>
     <string name="share_tool_message_article">म तपाईसँग यो लेख साझा गर्न चाहन्छु र यस बारे तपाईको विचार सुन्न चाहन्छु।\n%1$s</string>
     <string name="share_action_qr_code">QR कोडद्वारा सेयर गर्नुहोस्</string>
     <string name="feature_discovery_title_share_tool">लिङ्क साझा गर्नुहोस्</string>

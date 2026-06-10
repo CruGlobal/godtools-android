@@ -5,7 +5,6 @@
     <string name="tool_offline">Công cụ bạn yêu cầu cần kết nối Internet để mở</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Chia sẻ</string>
-    <string name="tool_share_sheet_more_apps">Xem thêm</string>
     <string name="share_tool_message_article">Tôi muốn chia sẻ bài viết này với bạn và cũng muốn lắng nghe suy nghĩ của bạn.\n%1$s</string>
     <string name="share_action_qr_code">Chia sẻ bằng mã QR</string>
     <string name="feature_discovery_title_share_tool">Chia sẻ một liên kết</string>

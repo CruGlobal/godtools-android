@@ -5,7 +5,6 @@
     <string name="tool_offline">Das von dir angeforderte Tool benötigt eine Internetverbindung, um zu öffnen</string>
     <!-- Share Tool Functionality -->
     <string name="menu_share_tool">Teilen</string>
-    <string name="tool_share_sheet_more_apps">Mehr</string>
     <string name="share_tool_message_article">Ich möchte diesen Artikel mit dir teilen und würde gerne deine Meinung darüber hören.\n%1$s</string>
     <string name="share_action_qr_code">Per QR-Code teilen</string>
     <string name="feature_discovery_title_share_tool">Einen Link teilen</string>
