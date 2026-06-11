@@ -228,6 +228,11 @@ dependencies {
     testDebugImplementation(testFixtures(projects.ui.base))
 }
 
+// configure mockposable
+mockposable {
+    plugins = listOf("mockk")
+}
+
 // region Firebase App Distribution
 if (project.hasProperty("firebaseAppDistributionBuild")) {
     firebaseAppDistribution {
@@ -267,11 +272,6 @@ if (project.hasProperty("firebaseAppDistributionBuild")) {
     }
 }
 
-// configure mockposable
-mockposable {
-    plugins = listOf("mockk")
-}
-
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
@@ -279,12 +279,9 @@ fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     }
 }
 
-afterEvaluate {
-    android.applicationVariants.all { variant ->
-        val packageUniversalApkTask = project.tasks.getByName("package${variant.name.capitalize()}UniversalApk")
-
-        val appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
-        appDistributionTask.dependsOn.add(packageUniversalApkTask)
-    }
+androidComponents.onVariants { variant ->
+    val variantName = variant.name.replaceFirstChar { it.uppercase() }
+    project.tasks.matching { it.name == "appDistributionUpload$variantName" }
+        .configureEach { dependsOn("package${variantName}UniversalApk") }
 }
 // endregion Firebase App Distribution
