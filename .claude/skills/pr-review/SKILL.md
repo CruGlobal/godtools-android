@@ -185,6 +185,8 @@ To dismiss a finding so it won't appear in future reviews, say:
 
 For detailed examples of each pattern, see `references/patterns.md`.
 
+When reviewing any Compose UI code, also load `.claude/rules/design_system_rules.md` — it defines the authoritative conventions for color tokens, typography, spacing, icons, components, and accessibility.
+
 ---
 
 ## Output Format
