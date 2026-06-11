@@ -19,6 +19,7 @@ local.properties
 
 # Local Claude Code settings
 .claude/*
+!.claude/rules/
 !.claude/skills/
 
 # Fabric/Crashlytics ignores
