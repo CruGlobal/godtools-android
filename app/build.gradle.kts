@@ -189,6 +189,7 @@ dependencies {
     implementation(libs.circuitx.navigation)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
+    implementation(libs.facebook.common)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable.collections)
