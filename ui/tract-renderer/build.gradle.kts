@@ -1,8 +1,8 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     id("kotlin-parcelize")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -68,11 +68,8 @@ dependencies {
     implementation(libs.tinder.statemachine)
     implementation(libs.weakdelegate)
 
-    // TODO: transition to KSP for dagger once Data Binding is no longer used
-    //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
-    //       see: https://issuetracker.google.com/issues/173030256#comment10
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(projects.library.account)
     testImplementation(libs.androidx.arch.core.testing)
@@ -81,6 +78,5 @@ dependencies {
     testImplementation(libs.gtoSupport.testing.picasso)
     testImplementation(libs.hilt.testing)
     testImplementation(libs.kotlin.coroutines.test)
-    kaptTest(libs.androidx.databinding.compiler)
-    kaptTest(libs.hilt.compiler)
+    kspTest(libs.hilt.compiler)
 }
