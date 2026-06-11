@@ -191,7 +191,7 @@ kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugi
 kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.0"
 kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
 ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.6.0"
@@ -246,7 +246,7 @@ androidx-compose-testing = ["androidx-compose-ui-test", "circuit-test"]
 circuit = ["circuit-foundation", "circuit-codegen-annotations"]
 common = ["kotlin-stdlib", "timber"]
 ktlint-rulesets = ["ktlint-rules-compose"]
-test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
+test-framework = ["junit", "kotlin-test-junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
