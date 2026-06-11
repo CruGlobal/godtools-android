@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.gtoSupport.okio)
     implementation(libs.gtoSupport.util)
 
+    api(libs.okio)
     api(libs.taptargetview)
     implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
