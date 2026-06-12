@@ -8,12 +8,12 @@ android {
     namespace = "org.cru.godtools.ui"
 
     configureCompose(project, enableCircuit = true)
+    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
 
     buildFeatures {
         buildConfig = true
-        dataBinding = true
         viewBinding = true
     }
 

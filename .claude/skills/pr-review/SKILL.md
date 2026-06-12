@@ -65,7 +65,13 @@ gh api repos/$REPO/pulls/$ARGUMENTS/reviews \
 
 Use the exact file path from the diff and the line number in the current version of the file (RIGHT side). Each comment body should contain the full finding description. Always append the attribution footer `\n\n🤖 Posted by [Claude Code](https://claude.ai/code)` to each comment. If no new actionable findings exist (only ✅ items or all already commented), skip this step.
 
-9. After the review output, print:
+9. If the review has **no ❌ or ⚠️ findings** (only ✅ and/or ⏭️ items), ask the user whether to post the full review. If they say yes:
+   - Check whether the PR author matches the current git user (`gh pr view $ARGUMENTS --json author -q .author.login` vs `gh api user -q .login`)
+   - If it is a **self-review**, post with `--comment` (GitHub does not allow self-approval)
+   - If it is **someone else's PR**, ask whether to approve or just comment, then post with `--approve` or `--comment` accordingly
+   - Always append `\n\n🤖 Posted by [Claude Code](https://claude.ai/code)` to the body
+
+10. After the review output, print:
 
 ```
 ---

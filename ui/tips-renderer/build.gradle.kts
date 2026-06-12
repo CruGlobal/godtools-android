@@ -1,6 +1,5 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
@@ -9,9 +8,9 @@ android {
     namespace = "org.cru.godtools.tool.tips"
 
     configureCompose(project)
+    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
-    buildFeatures.dataBinding = true
 }
 
 dependencies {

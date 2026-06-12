@@ -18,6 +18,7 @@ android {
 
     configureCompose(project, enableCircuit = true)
     configureGodToolsCustomUri()
+    enableDatabinding(project)
 
     defaultConfig {
         applicationId = "org.keynote.godtools.android"
@@ -36,7 +37,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
-        dataBinding = true
+        resValues = true
         viewBinding = true
     }
 

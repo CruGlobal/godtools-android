@@ -12,12 +12,10 @@ android {
     configureQaBuildType(project)
     configureGodToolsCustomUri()
     createEventBusIndex("org.cru.godtools.tract.TractEventBusIndex")
+    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
-    buildFeatures {
-        dataBinding = true
-        viewBinding = true
-    }
+    buildFeatures.viewBinding = true
 }
 
 dependencies {

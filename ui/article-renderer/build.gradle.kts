@@ -10,10 +10,7 @@ android {
     configureCompose(project)
     configureQaBuildType(project)
     configureGodToolsCustomUri()
-
-    buildFeatures {
-        dataBinding = true
-    }
+    enableDatabinding(project)
 }
 
 dependencies {
