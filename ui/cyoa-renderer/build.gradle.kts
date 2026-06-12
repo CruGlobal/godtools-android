@@ -8,11 +8,9 @@ android {
     namespace = "org.cru.godtools.tool.cyoa"
 
     configureCompose(project)
-
     configureQaBuildType(project)
     configureGodToolsCustomUri()
-
-    buildFeatures.dataBinding = true
+    enableDatabinding(project)
 }
 
 dependencies {

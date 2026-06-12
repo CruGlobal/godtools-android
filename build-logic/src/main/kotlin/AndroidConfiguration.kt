@@ -1,4 +1,6 @@
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
@@ -69,6 +71,15 @@ private fun Project.configureCompilerOptions() {
 private fun CommonExtension.enableCoreLibraryDesugaring(project: Project) {
     compileOptions.isCoreLibraryDesugaringEnabled = true
     project.dependencies.addProvider("coreLibraryDesugaring", project.libs.findLibrary("android-desugaring").get())
+}
+
+fun CommonExtension.enableDatabinding(project: Project) {
+    when (this) {
+        is LibraryExtension -> buildFeatures.dataBinding = true
+        is ApplicationExtension -> buildFeatures.dataBinding = true
+        else -> error("Unsupported CommonExtension ${this::class}")
+    }
+    project.pluginManager.apply("com.android.legacy-kapt")
 }
 
 // TODO: provide Project using the new multiple context receivers functionality.

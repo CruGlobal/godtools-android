@@ -10,11 +10,11 @@ android {
 
     configureCompose(project)
     createEventBusIndex("org.cru.godtools.base.tool.BaseToolEventBusIndex")
+    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
     buildFeatures {
         buildConfig = true
-        dataBinding = true
         viewBinding = true
     }
 }

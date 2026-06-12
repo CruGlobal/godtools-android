@@ -4,15 +4,13 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-pluginManager.apply("com.android.legacy-kapt")
-
 android {
     namespace = "org.cru.godtools.tool.tips"
 
     configureCompose(project)
+    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
-    buildFeatures.dataBinding = true
 }
 
 dependencies {
