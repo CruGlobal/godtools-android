@@ -2,7 +2,6 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.TestedExtension
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.kotlin.dsl.exclude
@@ -21,7 +20,7 @@ internal const val FLAVOR_ENV_PRODUCTION = "production"
 // context(Project)
 internal fun TestedExtension.configureAndroidCommon(project: Project) {
     configureSdk()
-    configureCompilerOptions(project)
+    project.configureCompilerOptions()
     enableCoreLibraryDesugaring(project)
     project.configureCommonDependencies()
     configureTestOptions(project)
@@ -69,17 +68,8 @@ private fun BaseExtension.configureSdk() {
     }
 }
 
-private fun BaseExtension.configureCompilerOptions(project: Project) {
-    project.extensions.findByType<KotlinAndroidProjectExtension>()?.apply {
-        jvmToolchain(21)
-    }
-
-    compileOptions {
-        // HACK: workaround a kotlin.jvmToolchain bug
-        //       see: https://issuetracker.google.com/issues/260059413
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
+private fun Project.configureCompilerOptions() {
+    extensions.findByType<KotlinAndroidProjectExtension>()?.jvmToolchain(21)
 }
 
 private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {

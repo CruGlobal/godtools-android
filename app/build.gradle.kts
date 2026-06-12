@@ -176,6 +176,7 @@ dependencies {
     implementation(libs.firebase.perf)
 
     implementation(libs.play.app.update.ktx)
+    implementation(libs.play.base)
     implementation(libs.play.feature.delivery)
     implementation(libs.play.instantapps)
     implementation(libs.play.review)
@@ -189,6 +190,7 @@ dependencies {
     implementation(libs.circuitx.navigation)
     implementation(libs.coil.compose)
     implementation(libs.compose.reorderable)
+    implementation(libs.facebook.common)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines.android)
     implementation(libs.kotlin.immutable.collections)
@@ -210,8 +212,8 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
-    testApi(testFixtures(libs.gtoSupport.androidx.compose))
     testImplementation(testFixtures(projects.library.model))
+    testImplementation(testFixtures(libs.gtoSupport.androidx.compose))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.androidx.test.espresso.core)
@@ -224,6 +226,11 @@ dependencies {
     testImplementation(libs.turbine)
 
     testDebugImplementation(testFixtures(projects.ui.base))
+}
+
+// configure mockposable
+mockposable {
+    plugins = listOf("mockk")
 }
 
 // region Firebase App Distribution
@@ -265,11 +272,6 @@ if (project.hasProperty("firebaseAppDistributionBuild")) {
     }
 }
 
-// configure mockposable
-mockposable {
-    plugins = listOf("mockk")
-}
-
 fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     append("Recent changes:\n\n")
     grgit.log(mapOf("maxCommits" to size)).forEach {
@@ -277,12 +279,9 @@ fun generateFirebaseAppDistributionReleaseNotes(size: Int = 10) = buildString {
     }
 }
 
-afterEvaluate {
-    android.applicationVariants.all { variant ->
-        val packageUniversalApkTask = project.tasks.getByName("package${variant.name.capitalize()}UniversalApk")
-
-        val appDistributionTask = project.tasks.getByName("appDistributionUpload${variant.name.capitalize()}")
-        appDistributionTask.dependsOn.add(packageUniversalApkTask)
-    }
+androidComponents.onVariants { variant ->
+    val variantName = variant.name.replaceFirstChar { it.uppercase() }
+    project.tasks.matching { it.name == "appDistributionUpload$variantName" }
+        .configureEach { dependsOn("package${variantName}UniversalApk") }
 }
 // endregion Firebase App Distribution

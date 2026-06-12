@@ -31,6 +31,7 @@ ktlint = "1.8.0"
 ktlintGradle = "14.0.1"
 lottie = "6.7.1"
 okhttp3 = "5.4.0"
+okio = "3.17.0"
 paparazzi = "2.0.0-alpha05"
 play-app-update = "2.1.0"
 retrofit2 = "3.0.0"
@@ -102,7 +103,8 @@ dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
 eventbus = { module = "org.greenrobot:eventbus", version.ref = "eventbus" }
 eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-processor", version.ref = "eventbus" }
-facebook = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
+facebook-common = { module = "com.facebook.android:facebook-common", version.ref = "facebook" }
+facebook-core = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook" }
 facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
 facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
@@ -189,7 +191,7 @@ kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugi
 kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.0"
 kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
 ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.6.0"
@@ -201,12 +203,14 @@ mockk = "io.mockk:mockk:1.14.11"
 okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 okhttp3-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp3" }
 okhttp3-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp3" }
-okio-fakefilesystem = "com.squareup.okio:okio-fakefilesystem:3.17.0"
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
 play-auth = "com.google.android.gms:play-services-auth:21.6.0"
+play-base = "com.google.android.gms:play-services-base:18.10.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-instantapps = "com.google.android.instantapps:instantapps:1.1.0"
@@ -242,7 +246,7 @@ androidx-compose-testing = ["androidx-compose-ui-test", "circuit-test"]
 circuit = ["circuit-foundation", "circuit-codegen-annotations"]
 common = ["kotlin-stdlib", "timber"]
 ktlint-rulesets = ["ktlint-rules-compose"]
-test-framework = ["junit", "kotlin-test", "androidx-test-junit", "mockk", "robolectric"]
+test-framework = ["junit", "kotlin-test-junit", "androidx-test-junit", "mockk", "robolectric"]
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

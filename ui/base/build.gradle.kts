@@ -1,6 +1,5 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }

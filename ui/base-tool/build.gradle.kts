@@ -1,8 +1,8 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     id("kotlin-parcelize")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.gtoSupport.okio)
     implementation(libs.gtoSupport.util)
 
+    api(libs.okio)
     api(libs.taptargetview)
     implementation(libs.colormath.android.colorint)
     implementation(libs.dagger)
@@ -68,16 +69,12 @@ dependencies {
     implementation(libs.splitties.bitflags)
     implementation(libs.splitties.fragmentargs)
 
-    // TODO: transition to KSP for dagger once Data Binding is no longer used
-    //       see: https://dagger.dev/dev-guide/ksp#interaction-with-javackapt-processors
-    //       see: https://issuetracker.google.com/issues/173030256#comment10
-    kapt(libs.dagger.compiler)
-    kapt(libs.hilt.compiler)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
 
     testImplementation(kotlin("reflect"))
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-    kaptTest(libs.androidx.databinding.compiler)
 }

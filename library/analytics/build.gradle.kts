@@ -29,7 +29,7 @@ dependencies {
 
     implementation(libs.dagger)
     implementation(libs.eventbus)
-    implementation(libs.facebook)
+    implementation(libs.facebook.core)
     implementation(libs.hilt)
     implementation(libs.kotlin.coroutines)
     implementation(libs.okhttp3)
