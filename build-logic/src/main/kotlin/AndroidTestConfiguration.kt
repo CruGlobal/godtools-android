@@ -1,4 +1,5 @@
-import com.android.build.gradle.TestedExtension
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.variant.HasUnitTestBuilder
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -6,7 +7,7 @@ import org.gradle.kotlin.dsl.configure
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will probably reach beta in Kotlin 1.8 or 1.9
 // context(Project)
-internal fun TestedExtension.configureTestOptions(project: Project) {
+internal fun CommonExtension.configureTestOptions(project: Project) {
     testOptions.unitTests {
         isIncludeAndroidResources = true
 
@@ -18,6 +19,7 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
     }
 
     project.dependencies.addProvider("testImplementation", project.libs.findBundle("test-framework").get())
+    project.dependencies.addProvider("testFixturesImplementation", project.libs.findLibrary("kotlin-stdlib").get())
 
     project.configurations.configureEach {
         resolutionStrategy {
@@ -33,8 +35,10 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
     // only enable unit tests for debug builds targeting production
     project.androidComponents {
         beforeVariants { builder ->
-            val env = builder.productFlavors.toMap()[FLAVOR_DIMENSION_ENV] ?: FLAVOR_ENV_PRODUCTION
-            builder.enableUnitTest = builder.buildType == BUILD_TYPE_DEBUG && env == FLAVOR_ENV_PRODUCTION
+            if (builder is HasUnitTestBuilder) {
+                val env = builder.productFlavors.toMap()[FLAVOR_DIMENSION_ENV] ?: FLAVOR_ENV_PRODUCTION
+                builder.enableUnitTest = builder.buildType == BUILD_TYPE_DEBUG && env == FLAVOR_ENV_PRODUCTION
+            }
         }
     }
 
@@ -43,7 +47,7 @@ internal fun TestedExtension.configureTestOptions(project: Project) {
     val totalShards = project.findProperty("testTotalShards")?.toString()?.toIntOrNull()
     if (shard != null && totalShards != null) {
         if (Math.floorMod(project.path.hashCode(), totalShards) != Math.floorMod(shard, totalShards)) {
-            project.androidComponents.beforeVariants { it.enableUnitTest = false }
+            project.androidComponents.beforeVariants { if (it is HasUnitTestBuilder) it.enableUnitTest = false }
         }
     }
 

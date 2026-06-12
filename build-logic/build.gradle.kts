@@ -9,6 +9,7 @@ kotlin.jvmToolchain {
 
 dependencies {
     implementation(libs.android.gradlePlugin)
+    implementation(libs.android.legacy.kapt)
     implementation(libs.gradleDownloadTask)
     implementation(libs.json)
     implementation(libs.kotlin.gradlePlugin)

@@ -1,7 +1,7 @@
 import org.gradle.api.Project
 
 fun Project.createEventBusIndex(className: String) {
-    plugins.apply("org.jetbrains.kotlin.kapt")
+    plugins.apply("com.android.legacy-kapt")
 
     kapt {
         arguments {

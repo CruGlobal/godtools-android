@@ -1,7 +1,5 @@
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.variant.AndroidComponentsExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.TestedExtension
 import org.gradle.api.Project
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.kotlin.dsl.exclude
@@ -18,14 +16,14 @@ internal const val FLAVOR_ENV_PRODUCTION = "production"
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-internal fun TestedExtension.configureAndroidCommon(project: Project) {
+internal fun CommonExtension.configureAndroidCommon(project: Project) {
     configureSdk()
     project.configureCompilerOptions()
     enableCoreLibraryDesugaring(project)
     project.configureCommonDependencies()
     configureTestOptions(project)
 
-    lintOptions.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
+    lint.lintConfig = project.rootProject.file("analysis/lint/lint.xml")
 }
 
 private fun Project.configureCommonDependencies() {
@@ -59,20 +57,16 @@ internal fun Project.excludeAndroidSdkDependencies() {
     }
 }
 
-private fun BaseExtension.configureSdk() {
-    compileSdkVersion(36)
-
-    defaultConfig {
-        minSdk = 24
-        targetSdk = 36
-    }
+private fun CommonExtension.configureSdk() {
+    compileSdk = 36
+    defaultConfig.minSdk = 24
 }
 
 private fun Project.configureCompilerOptions() {
     extensions.findByType<KotlinAndroidProjectExtension>()?.jvmToolchain(21)
 }
 
-private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {
+private fun CommonExtension.enableCoreLibraryDesugaring(project: Project) {
     compileOptions.isCoreLibraryDesugaringEnabled = true
     project.dependencies.addProvider("coreLibraryDesugaring", project.libs.findLibrary("android-desugaring").get())
 }
@@ -80,8 +74,8 @@ private fun BaseExtension.enableCoreLibraryDesugaring(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun BaseExtension.configureFlavorDimensions(project: Project) {
-    flavorDimensions(FLAVOR_DIMENSION_ENV)
+fun CommonExtension.configureFlavorDimensions(project: Project) {
+    flavorDimensions += FLAVOR_DIMENSION_ENV
     productFlavors {
         register(FLAVOR_ENV_PRODUCTION) { dimension = FLAVOR_DIMENSION_ENV }
         register(FLAVOR_ENV_STAGE) {
@@ -100,7 +94,7 @@ fun BaseExtension.configureFlavorDimensions(project: Project) {
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableCircuit: Boolean = false) {
+fun CommonExtension.configureCompose(project: Project, enableCircuit: Boolean = false) {
     buildFeatures.compose = true
     project.pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
@@ -130,7 +124,7 @@ fun CommonExtension<*, *, *, *, *, *>.configureCompose(project: Project, enableC
 // TODO: provide Project using the new multiple context receivers functionality.
 //       this is prototyped in 1.6.20 and will reach beta after Kotlin 2.0
 // context(Project)
-fun CommonExtension<*, *, *, *, *, *>.configureQaBuildType(project: Project) {
+fun CommonExtension.configureQaBuildType(project: Project) {
     buildTypes {
         register(BUILD_TYPE_QA) {
             initWith(getByName(BUILD_TYPE_DEBUG))

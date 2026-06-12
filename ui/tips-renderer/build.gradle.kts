@@ -1,9 +1,10 @@
 plugins {
     id("godtools.library-conventions")
-    kotlin("kapt")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
 }
+
+pluginManager.apply("com.android.legacy-kapt")
 
 android {
     namespace = "org.cru.godtools.tool.tips"
