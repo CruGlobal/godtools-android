@@ -60,7 +60,7 @@ internal fun Project.excludeAndroidSdkDependencies() {
 }
 
 private fun CommonExtension.configureSdk() {
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig.minSdk = 24
 }
 
