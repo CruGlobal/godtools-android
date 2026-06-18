@@ -7,7 +7,7 @@ android {
     configureQaBuildType(project)
     configureFlavorDimensions(project)
 
-    defaultConfig.targetSdk = 36
+    defaultConfig.targetSdk = 37
 }
 
 excludeAndroidSdkDependencies()
