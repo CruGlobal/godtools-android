@@ -32,6 +32,8 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="menu_version">Version: %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">Lektionen</string>
+    <string name="dashboard_lessons_toggle_personalized">Personalisierung Personalisierung</string>
+    <string name="dashboard_lessons_toggle_all">Alle Lektionen Alle Lektionen</string>
     <string name="dashboard_lessons_header_title_personalized">Für dich gemachte Lektionen</string>
     <string name="dashboard_lessons_header_description">Praktische Ideen zum Aufbau von Beziehungen und zum Beginn bedeutungsvoller Unterhaltungen.</string>
     <string name="dashboard_lessons_section_filter_label">Lektionen in:</string>
@@ -41,6 +43,7 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     </plurals>
     <string name="dashboard_lessons_progress_completed">Abgeschlossen</string>
     <string name="dashboard_lessons_progress_in_progress">%1$d%% Abschließen</string>
+    <string name="dashboard_lessons_section_personalized_no_lessons_action_all_lessons">Zu allen Lektionen Zu allen Lektionen</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoriten</string>
     <string name="dashboard_home_header_title">Willkommen bei GodTools</string>
@@ -54,6 +57,8 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="tools_list_favorites_banner_action_dismiss">Ablehnen</string>
     <!-- All Tools -->
     <string name="nav_all_tools">Tools</string>
+    <string name="dashboard_tools_toggle_personalized">Personalisierung Personalisierung</string>
+    <string name="dashboard_tools_toggle_all">Alle Werkzeuge Alle Werkzeuge</string>
     <string name="dashboard_tools_section_filter_label">Filter</string>
     <string name="dashboard_tools_section_filter_category_any">Beliebige Kategorie</string>
     <string name="dashboard_tools_section_filter_language_any">Beliebige Sprache</string>
@@ -66,6 +71,7 @@ Eine Online-Version findest du unter https://knowgod.com/</string>
     <string name="dashboard_tools_section_categories_all">Alle Tools</string>
     <string name="dashboard_tools_section_spotlight_label">Tool-Highlights</string>
     <string name="dashboard_tools_section_spotlight_description">Hier sind ein paar Tools, die dich interessieren könnten</string>
+    <string name="dashboard_section_localization_box_button">Lokalisierungseinstellungen ändern Lokalisierungseinstellungen ändern</string>
     <!-- Tool Cards -->
     <string name="tools_list_remove_favorite_dialog_title">“%1$s” aus den Favoriten entfernen?</string>
     <string name="tools_list_remove_favorite_dialog_confirm">Entfernen</string>
