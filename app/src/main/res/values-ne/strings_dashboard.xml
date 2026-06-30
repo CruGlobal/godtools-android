@@ -33,7 +33,7 @@ https://knowgod.com/</string>
     <string name="menu_version">संस्करण : %1$s (%2$d)</string>
     <!-- Lessons -->
     <string name="nav_lessons">पाठहरु </string>
-    <string name="dashboard_lessons_header_title_personalized">तपाईको लागि बनाइएको पाठहरु </string>
+    <string name="dashboard_lessons_header_title_personalized">तपाईको लागि बनाइएको पाठहरु</string>
     <string name="dashboard_lessons_header_description">सम्बन्ध निर्माण गर्न र अर्थपूर्ण कुराकानी सुरु गर्न व्यावहारिक विचारहरू।</string>
     <string name="dashboard_lessons_section_filter_label">पाठहरुमा:</string>
     <plurals name="dashboard_lessons_section_filter_available_lessons">
