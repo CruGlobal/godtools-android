@@ -5,6 +5,8 @@
   "labels": [
     "dependencies"
   ],
+  "automerge": true,
+  "automergeStrategy": "squash",  
   "dependencyDashboard": true,
   "ignoreDeps": [
     "string:facebook_app_id",
