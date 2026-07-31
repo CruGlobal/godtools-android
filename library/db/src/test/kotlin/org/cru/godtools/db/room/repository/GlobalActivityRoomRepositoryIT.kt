@@ -1,7 +1,7 @@
 package org.cru.godtools.db.room.repository
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
+import org.ccci.gto.android.common.testing.androidx.room.RoomDatabaseRule
 import org.cru.godtools.db.repository.GlobalActivityRepositoryIT
 import org.cru.godtools.db.room.GodToolsRoomDatabase
 import org.junit.Rule
