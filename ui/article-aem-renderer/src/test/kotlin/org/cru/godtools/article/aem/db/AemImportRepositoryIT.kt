@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
+import org.ccci.gto.android.common.testing.androidx.room.RoomDatabaseRule
 import org.cru.godtools.article.aem.model.AemImport
 import org.cru.godtools.article.aem.model.Article
 import org.junit.Assert.assertEquals

@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.util.Locale
 import kotlinx.coroutines.runBlocking
-import org.ccci.gto.android.common.androidx.room.RoomDatabaseRule
+import org.ccci.gto.android.common.testing.androidx.room.RoomDatabaseRule
 import org.cru.godtools.article.aem.model.TranslationRef
 import org.cru.godtools.article.aem.model.toTranslationRefKey
 import org.cru.godtools.model.randomTranslation

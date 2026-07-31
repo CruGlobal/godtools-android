@@ -40,7 +40,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.gtoSupport.testing.androidx.room)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.turbine)
-    testImplementation(testFixtures(libs.gtoSupport.androidx.room))
 }
