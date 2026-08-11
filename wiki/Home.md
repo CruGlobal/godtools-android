@@ -1,6 +1,6 @@
 # GodTools Android Wiki
 
-Welcome to the developer wiki for the GodTools Android app. This page explains what the project is, gets you to a first successful build as fast as possible, sketches the repository layout, and links every other wiki page. The wiki lives in the `wiki/` directory of the repository itself; all diagrams are fenced `mermaid` code blocks that GitHub renders natively.
+Welcome to the developer wiki for the GodTools Android app. This page explains what the project is, gets you to a first successful build as fast as possible, sketches the repository layout, and links every other wiki page. The wiki's source of truth is the `wiki/` directory of the repository — versioned and reviewed alongside the code — and it is published to the project's [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki) by the `Publish Wiki` workflow; all diagrams are fenced `mermaid` code blocks that GitHub renders natively.
 
 ## What is GodTools?
 
@@ -112,6 +112,6 @@ Build variants: product flavors `production` and `stage` (dimension `env`; `stag
 
 ## About This Wiki
 
-- **Location:** these pages live in the `wiki/` directory of the `godtools-android` repository and are versioned alongside the code.
+- **Location:** the source of these pages lives in the `wiki/` directory of the `godtools-android` repository, versioned alongside the code, and is mirrored to the browsable [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki) by `.github/workflows/publish-wiki.yml` on every push to `develop` that touches `wiki/`. Edit pages via pull request against the repository — do not edit the GitHub Wiki directly, as the next sync overwrites it.
 - **Diagrams:** drawn as fenced `mermaid` code blocks, which GitHub renders automatically — no external tooling required.
 - **Conventions:** file paths in this wiki are repo-relative (e.g. `app/build.gradle.kts`); shell commands are copy-pasteable from the repository root.

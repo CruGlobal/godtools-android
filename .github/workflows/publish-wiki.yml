@@ -1,0 +1,39 @@
+name: Publish Wiki
+
+on:
+  push:
+    branches: [develop]
+    paths:
+      - 'wiki/**'
+      - '.github/workflows/publish-wiki.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish wiki/ directory to the GitHub Wiki
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Checkout wiki
+        run: git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git" "$RUNNER_TEMP/wiki"
+      - name: Sync pages
+        # GitHub Wiki serves pages without .md extensions, so inter-page links
+        # are rewritten from [Text](Page.md#anchor) to [Text](Page#anchor).
+        run: |
+          rsync -a --delete --exclude .git wiki/ "$RUNNER_TEMP/wiki/"
+          find "$RUNNER_TEMP/wiki" -name '*.md' -exec sed -i -E 's/\]\(([A-Za-z0-9._-]+)\.md(#[A-Za-z0-9_-]+)?\)/](\1\2)/g' {} +
+      - name: Push wiki
+        run: |
+          cd "$RUNNER_TEMP/wiki"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || { git commit -m "Sync wiki from ${{ github.sha }}"; git push; }
