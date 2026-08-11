@@ -8,7 +8,6 @@ android {
     namespace = "org.cru.godtools.tool.tips"
 
     configureCompose(project)
-    enableDatabinding(project)
 
     defaultConfig.vectorDrawables.useSupportLibrary = true
 }
