@@ -18,14 +18,51 @@ gitGraph
     commit id: "CI + QA build"
 ```
 
-1. Branch from `develop`.
+1. Branch from `develop` (in the main repository if you have write access, or in your fork — see below).
 2. Make your changes, adding unit tests for new functionality (`README.md`, "Contributing").
 3. Run the pre-commit checks below.
 4. Open a PR against `develop` and wait for the CI checks to pass.
 
 There is no `CONTRIBUTING.md` or PR template in the repo — the checklist in `README.md` plus the CI checks below are the contract.
 
-**Contributing from a fork:** PRs from forks are accepted against `develop` just like same-repo branches, and the CI checks below run on them. Two mechanics, however, only work for branches in the main repository: the **Record Snapshots** workflow (`workflow_dispatch` can only target branches in the base repo, and the workflow pushes a "Record updated snapshots" commit back to the triggering branch — impossible against a fork) and the `Publish PR QA Build` label (applying labels requires triage rights). If your fork PR changes UI snapshots or needs a QA build, ask a maintainer — they can record snapshots (typically by pushing your branch to the main repo and dispatching the workflow there) and apply the label; expect snapshots to be recorded by a maintainer before a UI-changing fork PR merges.
+### Working from a fork
+
+If you don't have write access to `CruGlobal/godtools-android`, contribute through a fork and open a pull request to merge your work back:
+
+1. **Fork the repository** on GitHub — the **Fork** button on [`CruGlobal/godtools-android`](https://github.com/CruGlobal/godtools-android) creates `<your-username>/godtools-android` under your account.
+2. **Clone your fork and wire up the upstream remote.** Install Git LFS *before* cloning and do not use a shallow clone — both matter for this repo (see [Getting Started](Getting-Started.md#cloning)):
+
+   ```bash
+   git lfs install
+   git clone https://github.com/<your-username>/godtools-android.git
+   cd godtools-android
+   git remote add upstream https://github.com/CruGlobal/godtools-android.git
+   ```
+
+3. **Branch from the latest upstream `develop`:**
+
+   ```bash
+   git fetch upstream
+   git checkout -b my-feature upstream/develop
+   ```
+
+4. Make your changes and run the [pre-commit checklist](#pre-commit-checklist).
+5. **Push the branch to your fork** (`origin`):
+
+   ```bash
+   git push -u origin my-feature
+   ```
+
+6. **Open the pull request to merge it back.** GitHub shows a "Compare & pull request" prompt on your fork right after the push; otherwise use **New pull request** on the main repository and choose *compare across forks*. Set the **base repository** to `CruGlobal/godtools-android`, the **base branch** to `develop`, and the head to `<your-username>:my-feature`, then describe what the change does and why.
+7. **Keep the PR current while it's under review.** If `develop` moves on, rebase rather than letting the branch drift:
+
+   ```bash
+   git fetch upstream
+   git rebase upstream/develop
+   git push --force-with-lease
+   ```
+
+Fork PRs are accepted against `develop` just like same-repo branches, and the CI checks below run on them. Two mechanics, however, only work for branches in the main repository: the **Record Snapshots** workflow (`workflow_dispatch` can only target branches in the base repo, and the workflow pushes a "Record updated snapshots" commit back to the triggering branch — impossible against a fork) and the `Publish PR QA Build` label (applying labels requires triage rights). If your fork PR changes UI snapshots or needs a QA build, ask a maintainer — they can record snapshots (typically by pushing your branch to the main repo and dispatching the workflow there) and apply the label; expect snapshots to be recorded by a maintainer before a UI-changing fork PR merges.
 
 ## Pre-commit checklist
 
@@ -158,6 +195,7 @@ When editing wiki pages, prefer stable anchors (class, function, and constant na
 | Task | Command / action |
 |---|---|
 | Base branch for PRs | `develop` |
+| Contribute without write access | Fork → branch from `upstream/develop` → PR to `CruGlobal:develop` (see [Working from a fork](#working-from-a-fork)) |
 | Pre-commit style check | `./gradlew :build-logic:ktlintCheck ktlintCheck` |
 | Auto-fix style | `./gradlew ktlintFormat` (then re-run the check) |
 | Run all unit tests | `./gradlew test` |

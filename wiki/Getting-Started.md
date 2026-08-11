@@ -26,6 +26,8 @@ sudo apt-get install git-lfs # Debian/Ubuntu
 git lfs install
 
 # 2. Clone — do NOT use a shallow clone (see note below)
+#    (contributing without write access? clone your fork instead —
+#     see the "Working from a fork" section on the Contributing page)
 git clone https://github.com/CruGlobal/godtools-android.git
 cd godtools-android
 ```
