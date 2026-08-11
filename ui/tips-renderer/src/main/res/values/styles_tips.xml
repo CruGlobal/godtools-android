@@ -3,9 +3,6 @@
     <color name="tool_tips_red">#E53660</color>
     <color name="tool_tips_orange">#E55536</color>
 
-    <dimen name="tool_tip_margin_horiz">32dp</dimen>
-    <dimen name="tool_tip_text_size_label">16sp</dimen>
-
     <dimen name="tool_tips_tip_elevation">4dp</dimen>
     <dimen name="tool_tips_tip_corner_radius">6dp</dimen>
 
@@ -14,18 +11,6 @@
     <!-- region Badge -->
     <dimen name="tool_tips_badge_size">40dp</dimen>
     <dimen name="tool_tips_badge_padding">8dp</dimen>
-
-    <style name="Widget.GodTools.Tip.Badge" parent="Base">
-        <item name="android:layout_width">@dimen/tool_tips_badge_size</item>
-        <item name="android:layout_height">@dimen/tool_tips_badge_size</item>
-        <item name="android:elevation" tools:targetApi="lollipop">@dimen/tool_tips_tip_elevation</item>
-        <item name="shapeAppearance">@style/ShapeAppearance.GodTools.Tip.Badge</item>
-    </style>
-
-    <style name="ShapeAppearance.GodTools.Tip.Badge" parent="ShapeAppearance.MaterialComponents">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/tool_tips_tip_corner_radius</item>
-    </style>
     <!-- endregion Badge -->
 
     <!-- region Arrow -->

@@ -1,4 +1,4 @@
-package org.cru.godtools.tool.tips.databinding
+package org.cru.godtools.tract.databinding.adapters
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
@@ -24,12 +24,4 @@ internal fun ImageView.setInsetImageDrawable(
             else -> InsetDrawable(drawable, left, top, right, bottom)
         }
     )
-}
-
-@BindingAdapter("android:src", "srcInset")
-internal fun ImageView.setInsetImageDrawable(drawable: Drawable?, inset: Float?) {
-    when {
-        drawable == null || inset?.toInt() ?: 0 == 0 -> setImageDrawable(drawable)
-        else -> setInsetImageDrawable(drawable, inset, inset, inset, inset)
-    }
 }
