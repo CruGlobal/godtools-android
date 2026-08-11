@@ -168,7 +168,7 @@ flowchart LR
   ```
 
 - **Android lint** runs via `./gradlew lint` with a shared config at `analysis/lint/lint.xml` (wired to every module in `AndroidConfiguration.kt`; it downgrades `MissingTranslation` to a warning).
-- **Detekt** has **no Gradle integration** — no plugin, no config file. It exists only as the `detekt-analysis.yml` CI workflow, which downloads the standalone Detekt CLI v1.15.0, runs it with default rules under `continue-on-error: true`, and uploads SARIF to GitHub Code Scanning. Findings never fail a build; they appear only in the repo's Security tab.
+- **Detekt** has **no Gradle integration** — no plugin, no config file. It exists only as the `detekt-analysis.yml` CI workflow, which downloads the standalone Detekt CLI v1.15.0, runs it with default rules under `continue-on-error: true`, and uploads SARIF to GitHub Code Scanning. Findings never fail a build; they appear only in the repo's Security tab. Note: the workflow is currently **manually disabled** in the repository's GitHub Actions settings, so it does not run at all despite the triggers in the file.
 
 ## GitHub Actions Workflows
 
@@ -180,7 +180,7 @@ All workflows live in `.github/workflows/`. See [Testing](Testing.md) for the te
 | `record-snapshots.yml` | Record Snapshots | `workflow_dispatch` only | Runs `./gradlew cleanRecordPaparazzi --scan` on the CI runner (full history + LFS checkout), then commits "Record updated snapshots" and pushes back to the triggering branch |
 | `crowdin-upload.yml` | Crowdin Translation Upload | push to `develop` + `workflow_dispatch` | Uploads the latest source strings to Crowdin (`crowdin/github-action@v2` with `upload_sources: true`; project config in root `crowdin.yml`) |
 | `crowdin-download.yml` | Crowdin Translation Download | weekly cron `0 0 * * 0` (Sundays 00:00 UTC) + `workflow_dispatch` | Downloads translations (`skip_untranslated_strings: true`) onto branch `chore/crowdinTranslations` and opens a PR titled "Update Translations" |
-| `detekt-analysis.yml` | Scan with Detekt | push on `develop`/`feature/*`/`master`, PR on `develop`/`feature/*`, weekly cron `21 7 * * 6`, `workflow_dispatch` | Runs the standalone Detekt CLI v1.15.0 and uploads SARIF results to GitHub Code Scanning; non-blocking |
+| `detekt-analysis.yml` | Scan with Detekt | push on `develop`/`feature/*`/`master`, PR on `develop`/`feature/*`, weekly cron `21 7 * * 6`, `workflow_dispatch` | Runs the standalone Detekt CLI v1.15.0 and uploads SARIF results to GitHub Code Scanning; non-blocking — and currently **manually disabled** in the repo's Actions settings, so it does not run |
 | `git-lfs-validation.yml` | Validate Git LFS | push + PR on `develop`, `master`, `feature/*` | `git lfs fsck --pointers` — catches Paparazzi snapshot PNGs committed as real binaries instead of LFS pointers |
 | `gradle-wrapper-validation.yml` | Validate Gradle Wrapper | push + PR on `develop`, `master`, `feature/*` | `gradle/actions/wrapper-validation@v6` checksum-verifies `gradle-wrapper.jar` |
 

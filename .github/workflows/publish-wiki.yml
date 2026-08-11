@@ -2,7 +2,9 @@ name: Publish Wiki
 
 on:
   push:
-    branches: [develop]
+    # TEMPORARY: the claude/* branch entry bootstraps the initial wiki publish
+    # before this workflow lands on develop; remove it once merged.
+    branches: [develop, claude/god-tools-android-wiki-dgmgdr]
     paths:
       - 'wiki/**'
       - '.github/workflows/publish-wiki.yml'

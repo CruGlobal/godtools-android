@@ -107,7 +107,7 @@ The actual style configuration lives in `.editorconfig`:
 
 ## detekt
 
-Detekt runs **in CI only** — there is no detekt Gradle plugin or `detekt.yml` config anywhere in the repo. The workflow `.github/workflows/detekt-analysis.yml`:
+Detekt runs **in CI only** — there is no detekt Gradle plugin or `detekt.yml` config anywhere in the repo. Note that the workflow is currently **manually disabled** in the repository's GitHub Actions settings, so in practice it does not run at all; the description below applies if it is re-enabled. The workflow `.github/workflows/detekt-analysis.yml`:
 
 - runs on pushes to `develop`/`feature/*`/`master`, PRs to `develop`/`feature/*`, a weekly cron, and manual dispatch;
 - downloads the standalone **detekt CLI v1.15.0** and runs it with default rules over the whole workspace;
@@ -128,7 +128,7 @@ All jobs are defined in `.github/workflows/` — see [Build System & CI](Build-S
 | Unit tests + snapshots | `build.yml` (`tests` job, 4-shard matrix) | `test verifyPaparazzi` + Kover coverage upload to Codecov | Yes |
 | Gradle wrapper validation | `gradle-wrapper-validation.yml` | Checksum-verifies `gradle-wrapper.jar` | Yes |
 | Git LFS validation | `git-lfs-validation.yml` | `git lfs fsck --pointers` — catches snapshots committed as real binaries instead of LFS pointers | Yes |
-| detekt | `detekt-analysis.yml` | Static analysis → GitHub Code Scanning | No (`continue-on-error`) |
+| detekt | `detekt-analysis.yml` | Static analysis → GitHub Code Scanning | No (`continue-on-error`; workflow currently disabled in Actions settings) |
 
 Additional PR mechanics:
 
