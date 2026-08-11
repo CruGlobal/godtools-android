@@ -147,6 +147,12 @@ The repo carries checked-in guidance for AI coding assistants — read (and keep
 - **`.claude/rules/design_system_rules.md`** — the Jetpack Compose design-system rules: Material3 tokens (`MaterialTheme.colorScheme`/`typography`/`shapes`), `GodToolsTheme.extendedColorScheme`, spacing grid, icon conventions, accessibility requirements, and string-resource conventions. These rules apply to *all* new Compose UI, human- or AI-written; see [UI Architecture](UI-Architecture.md) for the underlying theme code in `ui/base`.
 - **`.claude/skills/`** — project-local Claude Code skills: `pr-review` (reviews a PR against project conventions) and `record-screenshots` (drives the Record Snapshots workflow and folds the resulting screenshot commit into your branch).
 
+## Keeping this wiki current
+
+This wiki lives in the `wiki/` directory of the repository and is versioned alongside the code (see [Home](Home.md)). The repository's `README.md` links here via its "Developer Wiki" section — that link is the canonical entry point for new contributors, so keep it intact if you restructure the README or rename/move wiki pages. The same expectation that applies to `CLAUDE.md` above applies here: **if your PR changes behavior, configuration, or a workflow documented in a wiki page, update the affected page in the same PR.** The pages cite concrete specifics — library versions, database schema versions, default values, file and line references — that silently rot when the code moves on without them.
+
+When editing wiki pages, prefer stable anchors (class, function, and constant names) over raw line numbers, which break on unrelated edits to the cited file.
+
 ## Quick reference
 
 | Task | Command / action |
@@ -160,3 +166,4 @@ The repo carries checked-in guidance for AI coding assistants — read (and keep
 | Android lint | `./gradlew lint` |
 | Get a QA build of your PR | Add the `Publish PR QA Build` label (fork PRs: ask a maintainer) |
 | Add a user-visible string | English `values/strings*.xml` only — Crowdin handles the rest |
+| Change behavior a wiki page documents | Update the affected `wiki/` page in the same PR |

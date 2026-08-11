@@ -239,7 +239,7 @@ sequenceDiagram
         AC-->>Sub: WebSocket.Event.OnConnectionOpened
         Sub->>AC: re-subscribe(SubscribeChannel)
     end
-    Note over Pub,Sub: Event.Stop / onCleared → cancel consumer jobs<br/>(each sends Unsubscribe in a finally block) →<br/>referenceLifecycle.release() — the socket closes once no holders remain
+    Note over Pub,Sub: Event.Stop / onCleared → cancel consumer jobs<br/>(one consumer coroutine per controller sends Unsubscribe in a finally block) →<br/>referenceLifecycle.release() — the socket closes once no holders remain
 ```
 
 Details verifiable in the controllers: the publisher's `channelId` is a random UUID persisted in `SavedStateHandle`; `sendNavigationEvent` only transmits while the state machine is `On` but always caches `lastEvent`, and the publisher re-sends `lastEvent` on *every* `ConfirmSubscription` — that is what catches a subscriber up after a reconnect. The subscriber consumes `navigationEvents()` on `Dispatchers.Main` into the `receivedEvent` LiveData.

@@ -12,9 +12,9 @@ The UI is in a deliberate, incremental migration from classic Activities/Fragmen
 |---|---|---|
 | Pure Compose + Circuit | most `app` screens, `ui/tutorial-renderer` | `DashboardLayout`, `ToolDetailsLayout`, `TutorialLayout` |
 | Compose in a plain Activity, **no Circuit** (ViewModels where state is needed) | `app` login/account screens (see [Login and Account screens](#login-and-account-screens-compose-without-circuit)), `ui/qr-code` | `LoginActivity`, `AccountActivity`, `QRCodeActivity` |
-| Legacy Activity shell + fully-Compose shared-renderer content | `ui/lesson-renderer` | `LessonActivity` inflates `LessonActivityBinding`, but everything it shows is Compose via `RenderLesson` |
+| Legacy Activity/Fragment shell + fully-Compose content | `ui/lesson-renderer`, `ui/article-renderer` | `LessonActivity` inflates `LessonActivityBinding`, but everything it shows is Compose via `RenderLesson`; `ArticlesActivity`'s category/article list fragments are `ComposeView`-rooted (categories use the shared renderer's `RenderArticleCategory`) |
 | Legacy Activity + DataBinding with embedded Compose "islands" | `ui/base-tool`, `ui/tract-renderer`, `ui/cyoa-renderer`, `ui/tips-renderer` | `TractActivity` pages render heroes via shared-renderer composables inside binding layouts |
-| Legacy Activity + Fragments, little/no Compose | `ui/article-renderer`, `ui/article-aem-renderer` | `ArticlesActivity` category/article lists, AEM WebView |
+| Legacy Activity + Fragments, no Compose | `ui/article-aem-renderer` | `AemArticleActivity` shows AEM articles in a WebView |
 
 `ui/qr-code` is pure Compose but uses **no Circuit**: `QRCodeActivity` is a plain `ComponentActivity` that calls `setContent { GodToolsTheme { QRCodeScreen(...) } }` directly — no `Screen`/Presenter/`@CircuitInject` (Circuit codegen is not enabled in that module; see the [gotchas checklist](#gotchas-checklist-for-new-ui-work)). Don't model new qr-code work on the Circuit pattern.
 
@@ -24,8 +24,9 @@ flowchart TD
         DA["DashboardActivity"]
         CA["CircuitActivity (generic Screen host)"]
     end
-    subgraph plain["App screens without Circuit"]
+    subgraph plain["Plain Compose Activities (no Circuit)"]
         LOGIN["LoginActivity / AccountActivity"]
+        QR["QRCodeActivity (ui/qr-code)"]
     end
     subgraph base["ui/base"]
         THEME["GodToolsTheme"]
@@ -42,10 +43,13 @@ flowchart TD
     CA --> CIRCUIT
     DA -- "IntentScreen via interceptor" --> tools
     DA -- "other Screens via startCircuitActivity" --> CA
+    CA -- "IntentScreen via AndroidScreenAwareNavigator" --> tools
     shell --> THEME
     plain --> THEME
     tools --> THEME
-    ACT -.->|"string class names"| tools
+    ACT -.->|"string class names (tract, cyoa, articles)"| tools
+    ACT -.->|"string class name"| DA
+    ACT -.->|"string class name"| QR
 ```
 
 ## GodToolsTheme and design tokens
@@ -66,7 +70,7 @@ fun GodToolsTheme(
 - Applied **once per Activity root** (`DashboardActivity`, `CircuitActivity`, and each tool Activity wrap their content in it). Feature composables never call `MaterialTheme(...)` or `GodToolsTheme(...)` themselves.
 - **Dark mode is debug-only**: the `BuildConfig.DEBUG` check means production builds always use the light scheme. Don't assume dark mode is user-reachable in production.
 - `dynamicColor` (Android 12+ Material You) exists but defaults off.
-- The theme also installs `CompositionLocals` (`ui/base/src/main/kotlin/org/cru/godtools/base/ui/compose/CompositionLocals.kt`), which replaces `LocalUriHandler` with one that delegates to the app's `openUrl` handling, and sets `LocalContentColor` from the background color.
+- The theme also installs `CompositionLocals` (`ui/base/src/main/kotlin/org/cru/godtools/base/ui/compose/CompositionLocals.kt`), which replaces `LocalUriHandler` with one that delegates to the app's `openUrl` handling. Separately, `GodToolsTheme` itself sets `LocalContentColor` to `contentColorFor(MaterialTheme.colorScheme.background)` in its own `CompositionLocalProvider` block in `GodToolsTheme.kt`.
 
 ### Color tokens
 
@@ -199,6 +203,21 @@ Patterns worth copying from this example:
 | `TutorialScreen(pageSet)` | `ui/tutorial-renderer/src/main/kotlin/org/cru/godtools/tutorial/layout/` |
 
 `DrawerMenuScreen` (`app/src/main/kotlin/org/cru/godtools/ui/drawer/DrawerMenuScreen.kt`) is a special case: it defines a `State` but is never navigated to, and its `State` is produced two different ways. Inside Circuit, the shared (non-`@CircuitInject`) `DrawerMenuPresenter` embeds it into `DashboardPresenter.UiState.drawerState` and `ToolDetailsScreen.UiState.drawerState`, rendered by the state-taking `DrawerMenuLayout(state, …)` overload wrapping the dashboard and tool-details content. Outside Circuit, `DrawerMenuLayout` has a standalone ViewModel-backed overload (default `viewModel: DrawerViewModel = viewModel()` parameter in `app/src/main/kotlin/org/cru/godtools/ui/drawer/DrawerMenuLayout.kt`) that builds the same `State` itself — that overload wraps `AccountActivity`'s content (see [Login and Account screens](#login-and-account-screens-compose-without-circuit)).
+
+Both production paths converge on the same state-taking overload (the ViewModel-backed overload just builds a `State` and delegates):
+
+```mermaid
+flowchart LR
+    subgraph circuit["Inside Circuit"]
+        DMP["DrawerMenuPresenter<br/>(shared, no @CircuitInject)"] -- "present()" --> EMB["DashboardPresenter.UiState.drawerState /<br/>ToolDetailsScreen.UiState.drawerState"]
+    end
+    subgraph vm["Outside Circuit (AccountActivity)"]
+        DVM["DrawerViewModel"] -- "viewModel.toState(drawerState)" --> VMO["ViewModel-backed<br/>DrawerMenuLayout overload"]
+    end
+    EMB -- "DrawerMenuScreen.State" --> LAYOUT["state-taking DrawerMenuLayout(state, …)"]
+    VMO -- "delegates DrawerMenuScreen.State" --> LAYOUT
+    LAYOUT --> WRAP["ModalNavigationDrawer wrapping the screen's content"]
+```
 
 ## Navigation
 
@@ -361,7 +380,7 @@ Two generic pieces round the framework out:
 | `ui/tract-renderer` | `tract_activity.xml`, `tract_page.xml`, card layouts; `PageController`/`CardController` controller tree with embedded shared-renderer Compose (`RenderTractHero` in `ui/tract-renderer/src/main/kotlin/org/cru/godtools/tract/ui/controller/PageController.kt`) |
 | `ui/cyoa-renderer` | `cyoa_activity.xml` + per-page-type layouts; controllers embed `RenderContentStack` via `binding.compose.setContent { ... }` |
 | `ui/tips-renderer` | Bottom-sheet + pager controllers; `TipPageController` embeds `RenderContentStack` |
-| `ui/article-renderer` | Fragment-based category/article lists, no Compose |
+| `ui/article-renderer` | Only the `ArticlesActivity` shell, which inflates `ui/base-tool`'s `tool_generic_fragment_activity` binding layout; the category/article list fragments it hosts are fully Compose (`ComposeView` roots — categories via the shared renderer's `RenderArticleCategory`) |
 | `ui/lesson-renderer`, `ui/article-aem-renderer` | ViewBinding-style generated bindings (`LessonActivityBinding.inflate`, `AemArticleFragmentBinding`) — no DataBinding expressions; the lesson *content* itself is fully Compose via `RenderLesson` |
 
 `ui/qr-code`, `ui/tutorial-renderer`, and all Circuit screens in `app` are pure Compose. **Do not use the tract/cyoa controller pattern for new work** — the renderer asymmetry is transitional, and the lesson renderer (fully Compose content inside a legacy Activity shell — see the [Big picture](#big-picture) table) is the direction of travel. Details in [Tool Renderers](Tool-Renderers.md).

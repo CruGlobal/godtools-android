@@ -5,10 +5,14 @@ GodTools Android
 
 GodTools is a mobile discipleship app built by [Cru](https://www.cru.org/). This repository contains the Android client.
 
+## Documentation
+
+Detailed onboarding and architecture documentation lives in the [`wiki/`](wiki/Home.md) directory, versioned alongside the code. Start with [Home](wiki/Home.md) for the page index, or jump straight to [Getting Started](wiki/Getting-Started.md) for a fresh-machine-to-running-emulator walkthrough (prerequisites, first-build downloads, and troubleshooting). If your PR changes behavior a wiki page documents, update the page in the same PR — see [Contributing](wiki/Contributing.md).
+
 ## Requirements
 
-- **JDK 21** (Temurin) — version specified in `.tool-versions`
-- **Android SDK** — compile/target SDK 36, minimum SDK 24
+- **JDK** — `.tool-versions` pins Temurin 25 as the launcher JDK; the compile toolchain is Java 21 (`jvmToolchain(21)`), auto-provisioned by the foojay resolver. See [wiki/Getting-Started](wiki/Getting-Started.md#prerequisites) for details.
+- **Android SDK** — compile/target SDK 37, minimum SDK 24
 - **Git LFS** — required for Paparazzi snapshot files
 
 ## Getting Started

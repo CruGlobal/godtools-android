@@ -145,6 +145,34 @@ Schema JSON is exported via the KSP arg `room.schemaLocation` to `library/db/roo
 
 A second database still exists: `org.keynote.godtools.android.db.GodToolsDatabase` (`library/db/src/main/kotlin/org/keynote/godtools/android/db/GodToolsDatabase.kt`), file `resource.db`, version 63, a `WalSQLiteOpenHelper`. Its only remaining job is a one-way migration of old installs into Room: `onUpgrade` steps 58–62 read legacy tables via cursor mappers (`ToolMapper`, `AttachmentMapper`, `TranslationMapper`, `TranslationFileMapper`; column contract in `Contract.kt`), insert into the Room DB using `*Blocking` DAO methods (the migration runs synchronously inside `onUpgrade`), then drop the legacy table. On `SQLException` the error is rethrown on debuggable builds but the database is silently reset on release builds. The migration is triggered as a side effect of Hilt providing the Room database: `DatabaseModule.roomDatabase` calls `GodToolsDatabase(context, it).triggerDataMigration()` (`library/db/src/main/kotlin/org/cru/godtools/db/DatabaseModule.kt`).
 
+```mermaid
+flowchart TD
+    provide["Hilt: DatabaseModule.roomDatabase()<br/>builds GodToolsRoomDatabase"] --> trigger["side effect: GodToolsDatabase(context, roomDb)<br/>.triggerDataMigration()"]
+    trigger --> thread{"on main thread?"}
+    thread -- "yes" --> bg["GlobalScope.launch { writableDatabase }"]
+    thread -- "no" --> fg["writableDatabase (synchronous)"]
+    bg --> open["SQLiteOpenHelper opens resource.db"]
+    fg --> open
+    open --> ver{"stored version?"}
+    ver -- "fresh install / already 63<br/>(onCreate is a no-op)" --> noop["nothing to migrate"]
+    ver -- "&lt; 63" --> steps
+
+    subgraph steps["onUpgrade — incremental steps oldVersion+1 … 63"]
+        s58["58: downloadedFiles cursor → DownloadedFileEntity<br/>→ downloadedFilesDao.insertOrIgnoreBlocking → drop legacy table"]
+        s59["59: tools cursor → ToolMapper, filter isValid → ToolEntity<br/>→ toolsDao.insertOrIgnoreTools → drop legacy table"]
+        s60["60: attachments cursor → AttachmentMapper<br/>(toolCode resolved via toolsDao.findToolByApiIdBlocking)<br/>→ attachmentsDao.insertOrIgnore → drop legacy table"]
+        s61["61: translations cursor → TranslationMapper, filter isValid<br/>→ insertOrIgnoreTranslationBlocking, FK violations skipped<br/>→ drop legacy table"]
+        s62["62: translation files cursor → TranslationFileMapper<br/>→ downloadedFilesDao.insertOrIgnoreBlocking, FK violations skipped<br/>→ drop legacy table"]
+        s63["63: drop legacy last-sync table"]
+        s58 --> s59 --> s60 --> s61 --> s62 --> s63
+    end
+
+    steps --> done["migration complete — legacy tables gone"]
+    steps -- "SQLException" --> dbg{"debuggable build?"}
+    dbg -- "yes" --> rethrow["rethrow → crash"]
+    dbg -- "no" --> reset["log + resetDatabase():<br/>silently drop all legacy tables"]
+```
+
 ## Repository layer
 
 The repository **interfaces** in `library/db/src/main/kotlin/org/cru/godtools/db/repository/` are the entire public API of `:library:db`. The `*RoomRepository` implementations (`library/db/src/main/kotlin/org/cru/godtools/db/room/repository/`), the DAOs, and the entities are all `internal`. Hilt wiring lives in `DatabaseModule` (installed in `SingletonComponent`): the Room database is `@Singleton`; each repository binding is `@Provides @Reusable`, delegating to the database's abstract vals. UI code, sync code, and everything else simply `@Inject`s the interface.

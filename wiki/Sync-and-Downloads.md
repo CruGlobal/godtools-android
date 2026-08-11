@@ -28,12 +28,13 @@ flowchart TD
 
     subgraph syncmod["library/sync"]
         service["GodToolsSyncService"]
-        tasks["Sync tasks<br/>Tools, Languages, User,<br/>Favorites, Counters, Followups"]
+        tasks["Sync tasks<br/>Tools, Languages, User, Favorites,<br/>Counters, Followups, Analytics"]
         syncrepo["SyncRepository"]
     end
 
     api["mobile-content-api<br/>Retrofit clients in library/api"]
     db[("Room DB<br/>library/db")]
+    settings["Settings (library/base)<br/>appLanguageFlow"]
 
     subgraph dlmod["library/download-manager"]
         dispatcher["Dispatcher<br/>flow-driven auto-download policy"]
@@ -62,8 +63,10 @@ flowchart TD
     syncworkers -. "retry" .-> tasks
 
     db -- "favorites, pinned languages,<br/>attachment flows" --> dispatcher
+    settings -- "app language" --> dispatcher
     dispatcher --> dm
-    toolact -- "DownloadLatestTranslation" --> dm
+    toolact -- "downloadLatestPublishedTranslationAsync" --> dm
+    presenters -- "DownloadLatestTranslation composable<br/>(ToolDetails only)" --> dm
     dm -- "per-file, CDN first" --> cdn
     dm -- "API fallback + zip" --> api
     dm --> disk
@@ -83,7 +86,7 @@ flowchart TD
 
 Error handling in `executeSync` is deliberately quiet: `IOException` is swallowed and the sync returns `false`; any other exception is logged via Timber (tag `GodToolsSyncService`) and also returns `false`; `CancellationException` is rethrown.
 
-Some sync entry points schedule a one-shot WorkManager retry when the inline attempt returns `false` or is cancelled; others have **no** fallback and simply stay stale until their TTL expires:
+Some sync entry points schedule a one-shot WorkManager retry when the inline attempt returns `false` or is cancelled (`syncFollowups` is the exception in that group: it schedules the retry only on a `false` result — a cancellation propagates without scheduling one); others have **no** fallback and simply stay stale until their TTL expires:
 
 | `GodToolsSyncService` method | WorkManager retry fallback? |
 |---|---|
@@ -98,13 +101,15 @@ All tasks live in `library/sync/src/main/kotlin/org/cru/godtools/sync/task/` and
 
 | Task | API calls | Staleness key(s) | TTL |
 |---|---|---|---|
-| `ToolSyncTasks.kt` | `GET resources?filter[system]=GodTools` (`ToolsApi.list`), `GET resources?filter[abbreviation]=<code>` (`getTool`), `GET resources/featured`, `GET resources/default_order`, `POST views` (`ViewsApi.submitViews`) | `last_synced.tools`, `last_synced.tool.<code>`, `last_synced.featured_tools.<locale>.<country>`, `last_synced.tool_order.<locale>.<country>` | 1 day |
+| `ToolSyncTasks.kt` | `GET resources?filter[system]=GodTools` (`ToolsApi.list`), `GET resources?filter[abbreviation]=<code>` (`getTool`), `GET resources/featured`, `GET resources/default_order`, `POST views` (`ViewsApi.submitViews`) | `last_synced.tools`, `last_synced.tool.:<code>`, `last_synced.featured_tools.:<locale>:<country>`, `last_synced.tool_order.:<locale>:<country>` | 1 day |
 | `LanguagesSyncTasks.kt` | `GET languages` (`LanguagesApi.list`) | `last_synced.languages` | 1 week |
-| `UserSyncTasks.kt` | `GET users/me` (`UserApi.getUser`) | `last_synced.user.<userId>` | 1 week |
-| `UserCounterSyncTasks.kt` | `GET users/me/counters`, `PATCH users/me/counters/{id}` (`UserCountersApi`) | `last_synced.user_counters.<userId>` | 1 day |
-| `UserFavoriteToolsSyncTasks.kt` | `GET users/me`, `POST users/me/relationships/favorite-tools`, `DELETE` (with body) same path (`UserFavoriteToolsApi`) | `last_synced.favorite_tools.<userId>` | 1 day |
+| `UserSyncTasks.kt` | `GET users/me` (`UserApi.getUser`) | `last_synced.user:<userId>` | 1 week |
+| `UserCounterSyncTasks.kt` | `GET users/me/counters`, `PATCH users/me/counters/{id}` (`UserCountersApi`) | `last_synced.user_counters:<userId>` | 1 day |
+| `UserFavoriteToolsSyncTasks.kt` | `GET users/me`, `POST users/me/relationships/favorite-tools`, `DELETE` (with body) same path (`UserFavoriteToolsApi`) | `last_synced.favorite_tools:<userId>` | 1 day |
 | `FollowupSyncTasks.kt` | `POST follow_ups` (`FollowupApi.subscribe`) | none — always attempts all queued followups | — |
 | `AnalyticsSyncTasks.kt` | `GET analytics/global` (`AnalyticsApi.getGlobalActivity`) | `last_synced.global_activity` | 1 day |
+
+The composite keys above are the *stored* Room row ids: vararg key components are flattened with `:` by `LastSyncTimeEntity.flattenKey` (see [Data Layer](Data-Layer.md)). The tool-scoped prefix constants in `ToolSyncTasks.kt` happen to end with a trailing `.`, which is why those stored ids contain a `.:` sequence.
 
 Notes on individual tasks:
 
@@ -194,20 +199,39 @@ Note the asymmetry with sync workers: download retries require an **unmetered** 
 
 ### Cleanup
 
-A conflated actor (`cleanupActor` in `GodToolsDownloadManager.kt`) runs once at startup and again 30 seconds (`CLEANUP_DELAY = 30_000L`) after each trigger. It performs, in order: `detectMissingFiles` (delete DB rows whose file is gone), `deleteOrphanedTranslationFiles` (rows belonging to translations no longer marked downloaded), `deleteUnusedDownloadedFiles` (files referenced by neither attachments nor translation files — removed from DB *and* disk), and `deleteOrphanedFiles` (disk files with no DB row). A `ReadWriteMutex` (`filesystemMutex`) coordinates this with in-flight downloads: downloads take the read lock, cleanup takes the write lock.
+A conflated actor (`cleanupActor` in `GodToolsDownloadManager.kt`) runs 30 seconds (`CLEANUP_DELAY = 30_000L`) after startup and again 30 seconds after each trigger — the startup emission passes through the same `transformLatest` delay as every trigger, so no cleanup pass ever runs before the delay elapses. It performs, in order: `detectMissingFiles` (delete DB rows whose file is gone), `deleteOrphanedTranslationFiles` (rows belonging to translations no longer marked downloaded), `deleteUnusedDownloadedFiles` (files referenced by neither attachments nor translation files — removed from DB *and* disk), and `deleteOrphanedFiles` (disk files with no DB row). A `ReadWriteMutex` (`filesystemMutex`) coordinates this with in-flight downloads: downloads take the read lock, cleanup takes the write lock.
 
 ## Where Files Live on Disk (`library/base`)
 
 - `library/base/src/main/kotlin/org/cru/godtools/base/FileSystem.kt` — a generic directory under `context.filesDir/<dirName>` with async creation (`exists()` awaits `mkdirs`), `file(name)`, `openInputStream(name)`, and a blocking accessor `getFileBlocking`.
 - `library/base/src/main/kotlin/org/cru/godtools/base/ToolFileSystem.kt` — the `@Singleton` subclass `FileSystem(context, "resources")`. **All tool content lives flat in `files/resources/`**, with a Hilt `@EntryPoint` accessor `Context.toolFileSystem`.
 
-Filenames are content-derived, and dedup is handled by two model types in `library/model/src/main/kotlin/org/cru/godtools/model/DownloadedFile.kt`: `DownloadedFile(filename)` (one row per physical file) and `DownloadedTranslationFile(translation, filename)` (many-to-many between translations and files). Multiple translations that share an image store it once on disk. Because the cleanup actor deletes any disk file without a `DownloadedFile` row, never write stray files into `files/resources/`.
+Filenames are content-derived, and dedup is handled by two model types in `library/model/src/main/kotlin/org/cru/godtools/model/`: `DownloadedFile(filename)` (`DownloadedFile.kt`, one row per physical file) and `DownloadedTranslationFile(translation, filename)` (`DownloadedTranslationFile.kt`, many-to-many between translations and files). Multiple translations that share an image store it once on disk. Because the cleanup actor deletes any disk file without a `DownloadedFile` row, never write stray files into `files/resources/`.
 
 ## Initial Bundled Content
 
 ### Runtime seeding (`library/initial-content`)
 
-`library/initial-content/src/main/kotlin/org/cru/godtools/init/content/InitialContentImporter.kt` is a `@Singleton` whose `init` block launches a seeding pipeline on `Dispatchers.IO`: load bundled languages (parallel with tools) → load bundled tools → load + import attachments in parallel with (after languages) load + import translations → `initFavoriteTools`.
+`library/initial-content/src/main/kotlin/org/cru/godtools/init/content/InitialContentImporter.kt` is a `@Singleton` whose `init` block launches a seeding pipeline on `Dispatchers.IO`. The pipeline is a small fork/join DAG — dashed edges are fire-and-forget `launch`es that nothing joins, so `initFavoriteTools` does **not** wait for the attachment import or `importBundledTranslations` to finish:
+
+```mermaid
+flowchart TD
+    data["tasks.bundledData()"]
+    langs["loadBundledLanguages<br/>(parallel launch)"]
+    tools["loadBundledTools"]
+    attach["loadBundledAttachments<br/>then importBundledAttachments"]
+    trans["loadBundledTranslations"]
+    imptrans["importBundledTranslations"]
+    fav["initFavoriteTools"]
+
+    data --> langs
+    data --> tools
+    tools -. "fire-and-forget launch" .-> attach
+    langs -- "join()" --> trans
+    tools --> trans
+    trans -. "fire-and-forget launch" .-> imptrans
+    trans --> fav
+```
 
 The actual steps live in `library/initial-content/src/main/kotlin/org/cru/godtools/init/content/task/Tasks.kt`:
 
@@ -218,12 +242,7 @@ The actual steps live in `library/initial-content/src/main/kotlin/org/cru/godtoo
 
 ### Build-time bundling (Gradle)
 
-The bundled assets are **not checked in** — they are fetched from the live API at build time. `library/initial-content/build.gradle.kts` calls `configureBundledContent` with:
-
-- `bundledTools = ["kgp", "fourlaws", "satisfied", "teachmetoshare"]`
-- `bundledAttachments = ["attr-banner", "attr-banner-about", "attr-about-banner-animation"]`
-- `bundledLanguages = ["en"]`
-- `downloadTranslations = false` — **no translation zips are currently bundled**, so first-run tool content still requires a network download; only metadata, four default favorites, and banner attachments are seeded.
+The bundled assets are **not checked in** — they are fetched from the live API at build time. `library/initial-content/build.gradle.kts` calls `configureBundledContent` with the four bundled default tools, their banner attachments, and English-only metadata (see [Build System & CI](Build-System-and-CI.md#dynamic-feature-bundled-content) for the exact parameter list), plus `downloadTranslations = false` — **no translation zips are currently bundled**, so first-run tool content still requires a network download; only metadata, four default favorites, and banner attachments are seeded.
 
 `build-logic/src/main/kotlin/org/cru/godtools/gradle/bundledcontent/BundledContentConfiguration.kt` registers per-variant Gradle tasks that download `languages.json` from `<api>languages` and `tools.json` from `<api>resources?filter[system]=GodTools&include=attachments,latest-translations.language`, prune them (`PruneJsonApiResponseTask`), and download the attachment binaries into generated asset directories. The API URL is flavor-dependent (`URI_MOBILE_CONTENT_API_STAGE` vs `URI_MOBILE_CONTENT_API_PRODUCTION` from `build-logic/src/main/kotlin/Constants.kt`), so clean builds need network access and stage vs production variants bundle different snapshots. See [Build System & CI](Build-System-and-CI.md).
 

@@ -20,7 +20,7 @@ Key technology at a glance (details on the linked pages):
 
 ## Quick Start
 
-Prerequisites: **Git LFS** (install it *before* cloning — Paparazzi snapshot PNGs are LFS objects per `.gitattributes`), the Android SDK, and a JDK. Gradle locates the Android SDK via `sdk.dir` in a gitignored `local.properties` file (Android Studio generates it on first sync) or via the `ANDROID_HOME` environment variable — without one of these, `./gradlew bundle` fails immediately with "SDK location not found". On a machine without Android Studio, install the SDK command-line tools, set `ANDROID_HOME`, and accept licenses with `sdkmanager --licenses`. The Kotlin compile toolchain is Java 21 (`jvmToolchain(21)` in `build-logic/src/main/kotlin/AndroidConfiguration.kt`) and is auto-provisioned by the foojay resolver plugin (`settings.gradle.kts`), while `.tool-versions` pins Temurin 25.0.4 as the launcher JDK. The first build needs network access: `library/initial-content` downloads bundled content from the mobile-content-api at build time, and some dependencies resolve from Cru's Maven repositories (`settings.gradle.kts`).
+Prerequisites: **Git LFS** (install it *before* cloning — Paparazzi snapshot PNGs are LFS objects per `.gitattributes`), the Android SDK, and a JDK. Gradle locates the Android SDK via `sdk.dir` in a gitignored `local.properties` file (Android Studio generates it on first sync) or via the `ANDROID_HOME` environment variable — without one of these, `./gradlew bundle` fails immediately with "SDK location not found". On a machine without Android Studio, install the SDK command-line tools, set `ANDROID_HOME`, and accept licenses with `sdkmanager --licenses`. The Kotlin compile toolchain is Java 21 (`jvmToolchain(21)` in `build-logic/src/main/kotlin/AndroidConfiguration.kt`) and is auto-provisioned by the foojay resolver plugin (`settings.gradle.kts`), but the JVM that *runs* Gradle must itself be **17+** — Gradle 9.7.0 refuses to start on older JVMs, and toolchain auto-provisioning does not cover the launcher. Simplest is the Temurin 25.0.4 that `.tool-versions` pins as the launcher JDK. The first build needs network access: `library/initial-content` downloads bundled content from the mobile-content-api at build time, and some dependencies resolve from Cru's Maven repositories (`settings.gradle.kts`).
 
 ```bash
 # Install Git LFS first (macOS example), then clone
@@ -72,6 +72,7 @@ firebase/             # CI-only Firebase App Distribution keystore (+ firebase_a
 gradle/               # Version catalog (libs.versions.toml) and wrapper
 .claude/              # AI-assistant config: rules/design_system_rules.md + project skills — see Contributing
 .github/workflows/    # CI (build, tests, Paparazzi recording, Crowdin, detekt, validations)
+.vscode/              # Checked-in VS Code tasks/settings/extension recommendations — see Getting Started
 wiki/                 # This wiki
 ```
 

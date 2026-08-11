@@ -32,11 +32,11 @@ flowchart LR
     yt["YouTube<br/>embedded player"]
 
     api --> mca
+    api --> cdn
     api --> campaign
     sync --> api
     dm --> api
-    dm --> cdn
-    account --> mca
+    account --> api
     account --> play
     account --> fb
     analytics --> fbAnalytics
@@ -46,6 +46,8 @@ flowchart LR
     App --> play
     App --> yt
 ```
+
+All Cru-backend HTTP clients live in `library/api`, so that traffic is routed through the `api` node: `library/download-manager` reaches the CDN via `CdnApi` (whose CDN-host Retrofit instance is built in `ApiModule.cdnApi`) and `library/account` exchanges social credentials via `AuthApi` — neither module builds its own HTTP client.
 
 The `App --> firebase` edge covers the Firebase products whose integration points are spread across modules not shown individually: Crashlytics (`app`), Remote Config (`library/base`), Dynamic Links (`ui/base`), In-App Messaging trigger events (`app`), and Performance Monitoring (`ui/shortcuts`) — see the [Firebase table](#firebase) for exact files. Only Firebase Analytics is integrated via `library/analytics`. Likewise, the `App --> play` edge covers the Play products integrated outside `library/account`: In-App Review (`app`), In-App Updates (`app`), Feature Delivery (`app` + `feature/bundledcontent`), and Instant Apps checks (`app`, `ui/shortcuts`, `ui/tract-renderer`) — see the [Google Play features table](#google-play-features). Only Play Sign-In is integrated via `library/account` (`GoogleAccountProvider.kt`).
 
@@ -96,45 +98,26 @@ Published translation files are preferentially downloaded from a CDN host rather
 
 ## Sequence: downloading a tool translation
 
-Representative flow — the download-manager `Dispatcher` observes Room state (favorite tools, pinned languages) and downloads any translation that isn't downloaded yet:
+Only the external touchpoints are shown — the internal pipeline (Room `DownloadedFile` bookkeeping, stale-translation pruning, and the WorkManager retry workers in `library/download-manager/src/main/kotlin/org/cru/godtools/downloadmanager/work/`) belongs to `library/download-manager` and is walked step-by-step in [Sync & Downloads](Sync-and-Downloads.md#godtoolsdownloadmanager):
 
 ```mermaid
 sequenceDiagram
-    participant D as Dispatcher (GodToolsDownloadManager)
     participant DM as GodToolsDownloadManager
-    participant Repo as Room repositories (library/db)
     participant CDN as Mobile Content CDN
     participant API as mobile-content-api
-    participant WM as WorkManager
 
-    D->>DM: downloadLatestPublishedTranslation(tool, locale)
-    DM->>Repo: findLatestTranslation(tool, locale)
-    Repo-->>DM: Translation (not yet downloaded)
-    DM->>CDN: GET translations/files/{manifest}
-    alt CDN miss / IOException
-        DM->>API: GET translations/files/{manifest}
-    end
-    DM->>DM: parse manifest (ManifestParser)
-    loop each related file in manifest
-        DM->>CDN: GET translations/files/{file}
-        alt CDN miss
-            DM->>API: GET translations/files/{file}
+    loop manifest, then each related file it lists
+        DM->>CDN: GET translations/files/{filename}
+        alt CDN miss / IOException
+            DM->>API: GET translations/files/{filename}
         end
-        DM->>Repo: insertOrIgnore(DownloadedFile)
     end
     alt file-based strategy failed (manifest fetch, parse, or any file)
         DM->>API: GET translations/{id} (zip)
-        DM->>DM: extract zip entries to ToolFileSystem
-    end
-    alt download succeeded
-        DM->>Repo: markTranslationDownloaded(id, true)
-        DM->>Repo: pruneStaleTranslations()
-    else everything failed
-        DM->>WM: scheduleDownloadTranslationWork(key)
     end
 ```
 
-Files are verified against the manifest's SHA-256 checksum and size before being recorded (`storeFile()` in `GodToolsDownloadManager.kt`). Failures schedule WorkManager retry workers in `library/download-manager/src/main/kotlin/org/cru/godtools/downloadmanager/work/`. See [Sync & Downloads](Sync-and-Downloads.md) for the full picture.
+Files are verified against the manifest's SHA-256 checksum and size before being recorded (`storeFile()` in `GodToolsDownloadManager.kt`).
 
 ## Adobe Experience Manager (AEM) — article content
 

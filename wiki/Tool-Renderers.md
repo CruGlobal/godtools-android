@@ -98,17 +98,19 @@ flowchart TD
     MANIFEST --> TRACT
     MANIFEST --> CYOA
     MANIFEST --> TIPS
-    MANIFEST --> ART
+    MANIFEST --> ARTLIST
 
     subgraph compose["Compose UI via godtools-shared renderer"]
         LESSON["lesson-renderer<br/>RenderLesson"]
         TRACT["tract-renderer<br/>DataBinding controllers + RenderTractHero"]
         CYOA["cyoa-renderer<br/>fragments + RenderContentStack"]
         TIPS["tips-renderer<br/>bottom sheet + RenderContentStack"]
+        ARTLIST["article-renderer<br/>fragment-hosted Compose lists +<br/>RenderArticleCategory"]
     end
-    ART["article renderers<br/>fragments + AEM WebView"]
+    AEM["article-aem-renderer<br/>AEM WebView"]
+    ARTLIST -->|"article selected"| AEM
 
-    STATE --> compose
+    STATE --> LESSON & TRACT & CYOA & TIPS
     RFS -.->|"ProvideRendererServices"| compose
 ```
 
@@ -162,12 +164,12 @@ Renderer modules do not depend on each other, so activities are started by **str
 | `ui/lesson-renderer` | `LessonActivity` | Fully Compose via shared `RenderLesson` |
 | `ui/tract-renderer` | `TractActivity` | ViewPager + DataBinding controllers with embedded Compose (`RenderTractHero`, `ModalOverlay`) |
 | `ui/cyoa-renderer` | `CyoaActivity` | Fragment backstack + DataBinding controllers with embedded Compose (`RenderContentStack`) |
-| `ui/article-renderer` | `ArticlesActivity` | Classic fragments (category/article lists), no Compose |
+| `ui/article-renderer` | `ArticlesActivity` | Fragments hosting Compose lists: shared `RenderArticleCategory` for categories, Material3 `ListItem`s for articles |
 | `ui/article-aem-renderer` | `AemArticleActivity` | WebView serving cached AEM HTML |
 | `ui/tips-renderer` | `TipBottomSheetDialogFragment` | Bottom sheet + `RenderContentStack` |
 | `ui/tutorial-renderer` | `TutorialScreen` (Circuit) | Pure Compose + Circuit; renders app tutorials, not tool content |
 
-The asymmetry is intentional and transitional: lessons are the fully-migrated shared-Compose path, tract/CYOA/tips embed shared composables inside legacy DataBinding controllers, and AEM articles are WebView-based. Do not copy the tract controller pattern for new work.
+The asymmetry is intentional and transitional: lessons are the fully-migrated shared-Compose path, tract/CYOA/tips embed shared composables inside legacy DataBinding controllers, article list screens are fragment-hosted Compose, and AEM article content is WebView-based. Do not copy the tract controller pattern for new work.
 
 ### Lesson (`ui/lesson-renderer`)
 
@@ -198,7 +200,7 @@ Tract also supports:
 
 ### Article (`ui/article-renderer`)
 
-`ArticlesActivity` (`ui/article-renderer/src/main/kotlin/org/cru/godtools/article/ui/ArticlesActivity.kt`) extends `BaseArticleActivity` and reuses the generic `tool_generic_fragment_activity.xml` layout from `ui/base-tool`. It hosts `CategoriesFragment` (manifest categories) and `ArticlesFragment` (articles in a category); selecting an article starts `AemArticleActivity` from the AEM module. No Compose is involved here.
+`ArticlesActivity` (`ui/article-renderer/src/main/kotlin/org/cru/godtools/article/ui/ArticlesActivity.kt`) extends `BaseArticleActivity` and reuses the generic `tool_generic_fragment_activity.xml` layout from `ui/base-tool`. It hosts `CategoriesFragment` (manifest categories) and `ArticlesFragment` (articles in a category); selecting an article starts `AemArticleActivity` from the AEM module. Both fragments return a `ComposeView` from `onCreateView`: `CategoriesFragment` renders each manifest category with the shared `RenderArticleCategory` composable inside `ProvideRendererServices(resourceFileSystem)`, while `ArticlesFragment` renders plain Material3 `ListItem`s in a `LazyColumn` (wrapped in a `PullToRefreshBox` that forces an AEM re-sync), colored from the manifest's primary/background colors. Only the article content itself — `AemArticleActivity`'s WebView — is non-Compose.
 
 ### Article AEM (`ui/article-aem-renderer`)
 

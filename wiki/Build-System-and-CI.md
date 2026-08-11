@@ -150,6 +150,7 @@ flowchart LR
     dlLang --> pruneLang["prune JSON"]
     dlTools --> pruneTools["prune JSON"]
     pruneTools --> extract["extract + download<br/>bundled attachments"]
+    api -->|"attachment binary<br/>downloads, per tool"| extract
     pruneLang --> assets["generated asset dir:<br/>languages.json, tools.json,<br/>attachments/"]
     pruneTools --> assets
     extract --> assets
