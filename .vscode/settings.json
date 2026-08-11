@@ -1,0 +1,35 @@
+{
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [120],
+    "editor.detectIndentation": false,
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "files.exclude": {
+        "**/build": true,
+        "**/.gradle": true
+    },
+    "search.exclude": {
+        "**/build": true,
+        "**/.gradle": true,
+        "**/*.snap": true
+    },
+    "files.watcherExclude": {
+        "**/build/**": true,
+        "**/.gradle/**": true
+    },
+    "files.associations": {
+        "*.kts": "kotlin",
+        "*.toml": "toml"
+    },
+    "[kotlin]": {
+        "editor.tabSize": 4,
+        "editor.rulers": [120]
+    },
+    "[json]": {
+        "editor.tabSize": 4
+    },
+    "[xml]": {
+        "editor.tabSize": 4
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "fwcd.kotlin",
+        "mathiasfrohlich.kotlin",
+        "vscjava.vscode-gradle",
+        "editorconfig.editorconfig",
+        "bierner.markdown-mermaid"
+    ]
+}
