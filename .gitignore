@@ -17,6 +17,10 @@ local.properties
 # Kotlin project ignores
 .kotlin/
 
+# Python ignores
+__pycache__/
+*.pyc
+
 # Local Claude Code settings
 .claude/*
 !.claude/rules/

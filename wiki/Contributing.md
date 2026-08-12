@@ -30,9 +30,10 @@ There is no `CONTRIBUTING.md` or PR template in the repo — the checklist in `R
 If you don't have write access to `CruGlobal/godtools-android`, contribute through a fork and open a pull request to merge your work back:
 
 1. **Fork the repository** on GitHub — the **Fork** button on [`CruGlobal/godtools-android`](https://github.com/CruGlobal/godtools-android) creates `<your-username>/godtools-android` under your account.
-2. **Clone your fork and wire up the upstream remote.** Install Git LFS *before* cloning and do not use a shallow clone — both matter for this repo (see [Getting Started](Getting-Started.md#cloning)):
+2. **Clone your fork and wire up the upstream remote.** Install Git LFS *before* cloning and do not use a shallow clone — both matter for this repo (see [Getting Started](Getting-Started.md#cloning)). Sort out GitHub authentication now as well: everything up to this point is an anonymous public read, but step 5 pushes, and GitHub no longer accepts an account password for HTTPS Git operations. Run `gh auth login` (it configures git's credential helper for you), supply a personal access token with `repo` scope when git prompts for a password, or clone over SSH (`git@github.com:<your-username>/godtools-android.git`) instead.
 
    ```bash
+   # git-lfs must already be installed (brew / apt / Windows installer) — see Getting Started
    git lfs install
    git clone https://github.com/<your-username>/godtools-android.git
    cd godtools-android
@@ -43,8 +44,10 @@ If you don't have write access to `CruGlobal/godtools-android`, contribute throu
 
    ```bash
    git fetch upstream
-   git checkout -b my-feature upstream/develop
+   git checkout -b my-feature --no-track upstream/develop
    ```
+
+   `--no-track` is deliberate: without it the new branch is set to track `upstream/develop`, the repository you have no write access to, until the `-u` in step 5 repoints it at your fork.
 
 4. Make your changes and run the [pre-commit checklist](#pre-commit-checklist).
 5. **Push the branch to your fork** (`origin`):
@@ -53,16 +56,32 @@ If you don't have write access to `CruGlobal/godtools-android`, contribute throu
    git push -u origin my-feature
    ```
 
-6. **Open the pull request to merge it back.** GitHub shows a "Compare & pull request" prompt on your fork right after the push; otherwise use **New pull request** on the main repository and choose *compare across forks*. Set the **base repository** to `CruGlobal/godtools-android`, the **base branch** to `develop`, and the head to `<your-username>:my-feature`, then describe what the change does and why.
-7. **Keep the PR current while it's under review.** If `develop` moves on, rebase rather than letting the branch drift:
+6. **Open the pull request to merge it back.** GitHub shows a "Compare & pull request" prompt on your fork right after the push; otherwise use **New pull request** on the main repository and choose *compare across forks*. Set the **base repository** to `CruGlobal/godtools-android`, the **base branch** to `develop`, and the head to `<your-username>:my-feature`, then describe what the change does and why. Leave **Allow edits by maintainers** (the checkbox under the description box) checked — maintainers need it to push a snapshot commit or a small fixup onto your branch. GitHub does not offer that checkbox for forks owned by an organization, so prefer a personal fork.
+7. **Expect an approval gate on your first contribution.** By default GitHub holds workflow runs from first-time contributors until a maintainer clicks **Approve and run**, so a banner reading *1 workflow awaiting approval* on a fresh PR is expected, not a failure. Every subsequent push needs the same approval until one of your PRs is merged.
+8. **Keep the PR current while it's under review.** If `develop` moves on, rebase rather than letting the branch drift:
 
    ```bash
    git fetch upstream
    git rebase upstream/develop
-   git push --force-with-lease
+   git push --force-with-lease --force-if-includes
    ```
 
-Fork PRs are accepted against `develop` just like same-repo branches, and the CI checks below run on them. Two mechanics, however, only work for branches in the main repository: the **Record Snapshots** workflow (`workflow_dispatch` can only target branches in the base repo, and the workflow pushes a "Record updated snapshots" commit back to the triggering branch — impossible against a fork) and the `Publish PR QA Build` label (applying labels requires triage rights). If your fork PR changes UI snapshots or needs a QA build, ask a maintainer — they can record snapshots (typically by pushing your branch to the main repo and dispatching the workflow there) and apply the label; expect snapshots to be recorded by a maintainer before a UI-changing fork PR merges.
+   **Fetch only `upstream` here — do not add a `git fetch origin`.** With no expected value, `--force-with-lease` takes the value it compares against from your remote-tracking ref `origin/my-feature`, so refreshing that ref immediately before the push makes the lease match whatever a maintainer just pushed: the check passes and the force-push destroys their commit. Git's own documentation warns that the protection "is trivially defeated if some background process is updating refs in the background". A *stale* `origin/my-feature` is exactly what makes the lease bite. `--force-if-includes` (git 2.30+) adds a second check that survives a fetch — it rejects the push unless the remote tip is reachable from your branch's reflog, i.e. unless you actually built on top of it.
+
+   A rejected push (`stale info`, or *the tip of the remote-tracking branch has been updated since the last checkout*) is that safety net firing, not a problem to work around. Someone pushed to your branch — most often the **Record Snapshots** workflow's "Record updated snapshots" commit. Never reach for `--force`; pick their work up instead:
+
+   ```bash
+   git fetch origin
+   git rebase origin/my-feature   # replay your commits on top of theirs
+   git rebase upstream/develop
+   git push --force-with-lease --force-if-includes
+   ```
+
+Fork PRs are accepted against `develop` just like same-repo branches, and the CI checks below run on them. Three fork-specific mechanics are worth knowing up front:
+
+- **Record snapshots from your own fork.** The **Record Snapshots** workflow (`.github/workflows/record-snapshots.yml`) is `workflow_dispatch`-only and is copied into your fork like every other workflow file; `workflow_dispatch` targets a branch in whichever repository hosts the workflow, and the final step pushes the "Record updated snapshots" commit back to the branch it was dispatched on — in your fork, that branch is the PR head. Two one-time setup steps on your fork: enable workflows on its **Actions** tab (forks ship with them disabled), and, if the push step fails on permissions, set **Settings → Actions → General → Workflow permissions** to *Read and write permissions*. Then dispatch **Record Snapshots** on `my-feature` and the commit lands on the PR by itself. Ask a maintainer only if that setup isn't available to you.
+- **QA builds are not available on fork PRs at all.** GitHub does not pass repository secrets to a workflow triggered by a pull request from a fork, and the `qa_build` job needs `FIREBASE_API_KEY` and `BETA_KEYSTORE_PASSWORD` (`.github/workflows/build.yml`). Labelling a fork PR with `Publish PR QA Build` therefore gets you nothing: `qa_build` declares `needs: [build, ktlint, lint, tests]`, so it is skipped outright whenever any of those go red (including the Codecov case in the next bullet), and even with all four green it can neither sign the APKs nor authenticate to Firebase. Expect the job to be skipped or red — never a Firebase build. The only route is for a maintainer to push your branch into `CruGlobal/godtools-android` and label a PR from there, or to merge it.
+- **A red Unit Tests check may not be your code.** For the same reason, `secrets.CODECOV_TOKEN` is empty on a fork PR, so the `tests` job's coverage upload falls back to an untokenized upload while still running under `fail_ci_if_error: true` (`.github/workflows/build.yml`). A rejected upload fails the shard with no failing test. Read the job log before chasing it, and ask a maintainer if the Codecov step is what went red.
 
 ## Pre-commit checklist
 
@@ -111,8 +130,8 @@ Detekt runs **in CI only** — there is no detekt Gradle plugin or `detekt.yml` 
 
 - runs on pushes to `develop`/`feature/*`/`master`, PRs to `develop`/`feature/*`, a weekly cron, and manual dispatch;
 - downloads the standalone **detekt CLI v1.15.0** and runs it with default rules over the whole workspace;
-- runs with `continue-on-error: true`, so findings **never fail your PR**;
-- uploads SARIF results to GitHub Code Scanning (the repository's Security tab).
+- carries `continue-on-error: true` on the *analysis* step, so detekt **findings** never fail your PR;
+- uploads SARIF results to GitHub Code Scanning (the repository's Security tab). Note this final `upload-sarif` step is *not* guarded by `continue-on-error`, so an upload failure fails the job — and on a fork PR it cannot succeed at all, because the fork PR `GITHUB_TOKEN` is read-only and the `security-events: write` permission the upload needs is unavailable.
 
 Treat code-scanning annotations from detekt as advisory. You cannot reproduce this run via Gradle — if you want to check locally you would need the same standalone CLI version.
 
@@ -128,13 +147,13 @@ All jobs are defined in `.github/workflows/` — see [Build System & CI](Build-S
 | Unit tests + snapshots | `build.yml` (`tests` job, 4-shard matrix) | `test verifyPaparazzi` + Kover coverage upload to Codecov | Yes |
 | Gradle wrapper validation | `gradle-wrapper-validation.yml` | Checksum-verifies `gradle-wrapper.jar` | Yes |
 | Git LFS validation | `git-lfs-validation.yml` | `git lfs fsck --pointers` — catches snapshots committed as real binaries instead of LFS pointers | Yes |
-| detekt | `detekt-analysis.yml` | Static analysis → GitHub Code Scanning | No (`continue-on-error`; workflow currently disabled in Actions settings) |
+| detekt | `detekt-analysis.yml` | Static analysis → GitHub Code Scanning | Findings are non-blocking (`continue-on-error` on the analysis step), but the unguarded SARIF upload can fail the job; workflow currently disabled in Actions settings |
 
 Additional PR mechanics:
 
-- **QA builds from a PR:** adding the label `Publish PR QA Build` to a PR makes the `qa_build` job upload `stageQa` and `productionQa` builds to Firebase App Distribution (tester group `android-testers`). This also happens automatically on every push to `develop` (`.github/workflows/build.yml`). Applying the label requires triage rights — fork contributors should ask a maintainer.
+- **QA builds from a PR:** adding the label `Publish PR QA Build` to a PR makes the `qa_build` job upload `stageQa` and `productionQa` builds to Firebase App Distribution (tester group `android-testers`). This also happens automatically on every push to `develop` (`.github/workflows/build.yml`). Applying the label requires triage rights, and it does not work on fork PRs at all — the job's Firebase and keystore secrets are withheld from fork-triggered runs, and it only starts once `build`, `ktlint`, `lint` and `tests` are green, so the labelled job ends up skipped or red rather than producing a build (see the fork note above).
 - **PR version suffix:** CI builds PRs with `versionSuffix=PR{n}`, so PR artifacts are identifiable (`.github/workflows/build.yml`).
-- **Paparazzi snapshots are recorded in CI, never locally.** If your UI change alters snapshots, trigger the manual **Record Snapshots** workflow (`.github/workflows/record-snapshots.yml`, `workflow_dispatch`) on your feature branch — it runs `./gradlew cleanRecordPaparazzi` on the CI runner and pushes a "Record updated snapshots" commit to your branch. The workflow can only be dispatched on branches in the main repository, so for fork PRs a maintainer must record snapshots (see the fork note above). Local recording produces machine-dependent renders that fail `verifyPaparazzi` in CI. See [Testing](Testing.md).
+- **Paparazzi snapshots are recorded in CI, never locally.** If your UI change alters snapshots, trigger the manual **Record Snapshots** workflow (`.github/workflows/record-snapshots.yml`, `workflow_dispatch`) on your feature branch — it runs `./gradlew cleanRecordPaparazzi` on the CI runner and pushes a "Record updated snapshots" commit to your branch. Working from a fork, dispatch the workflow on your own fork's copy — the commit lands on your PR head branch (see the fork note above for the one-time fork setup). Local recording produces machine-dependent renders that fail `verifyPaparazzi` in CI. See [Testing](Testing.md).
 - **Coverage** is collected via Kover and uploaded to Codecov with `fail_ci_if_error: true` (`.github/workflows/build.yml`).
 
 ## Translations (Crowdin)
@@ -186,7 +205,11 @@ The repo carries checked-in guidance for AI coding assistants — read (and keep
 
 ## Keeping this wiki current
 
-This wiki lives in the `wiki/` directory of the repository and is versioned alongside the code (see [Home](Home.md)). The repository's `README.md` links here via its "Developer Wiki" section — that link is the canonical entry point for new contributors, so keep it intact if you restructure the README or rename/move wiki pages. The same expectation that applies to `CLAUDE.md` above applies here: **if your PR changes behavior, configuration, or a workflow documented in a wiki page, update the affected page in the same PR.** The pages cite concrete specifics — library versions, database schema versions, default values, file and line references — that silently rot when the code moves on without them.
+This wiki lives in the `wiki/` directory of the repository and is versioned alongside the code (see [Home](Home.md)). Pages are mirrored to the browsable [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki) by the `Publish Wiki` workflow (`.github/workflows/publish-wiki.yml`) on every push to `develop` that touches `wiki/`; the same workflow's `validate` job also runs on pull requests, failing the check when a relative link or heading anchor no longer resolves — edit pages by pull request against this directory, never on the GitHub Wiki, which the next sync overwrites. The repository's `README.md` links here from its **Documentation** section — that link is the canonical entry point for new contributors, so keep it intact if you restructure the README or rename/move wiki pages. The same expectation that applies to `CLAUDE.md` above applies here: **if your PR changes behavior, configuration, or a workflow documented in a wiki page, update the affected page in the same PR.** The pages cite concrete specifics — library versions, database schema versions, default values, file and line references — that silently rot when the code moves on without them.
+
+**Adding a page:** create `wiki/<Page-Name>.md` — GitHub derives the published page's title and URL from the filename, turning hyphens into spaces, so `Build-System-and-CI.md` is served as *Build System and CI* at `/wiki/Build-System-and-CI`. Then register it in both hand-maintained navigation lists, or the page ships reachable only by search: `wiki/_Sidebar.md`, which GitHub renders as the sidebar of every published wiki page, and the **Wiki Navigation** table on [Home](Home.md). Nothing in CI checks either list. Point links at other wiki pages *with* the `.md` extension — target `Testing.md`, not `Testing` — so they resolve while browsing the `wiki/` directory on GitHub; the publish workflow strips the extension as it syncs, since the GitHub Wiki serves pages without one. `.github/scripts/check-wiki-links.py` enforces that on every pull request touching `wiki/`, so an extensionless target fails CI.
+
+**Renaming or deleting a page:** update every inbound link in the same PR — the link check fails the build on any that still point at the old filename, and on any `#anchor` whose heading you renamed along the way. Fix the two navigation lists above too, and expect the old `/wiki/<Page-Name>` URL to start returning 404: the GitHub Wiki has no redirects, so anything linking to it from outside the repository needs updating separately.
 
 When editing wiki pages, prefer stable anchors (class, function, and constant names) over raw line numbers, which break on unrelated edits to the cited file.
 
@@ -200,8 +223,8 @@ When editing wiki pages, prefer stable anchors (class, function, and constant na
 | Auto-fix style | `./gradlew ktlintFormat` (then re-run the check) |
 | Run all unit tests | `./gradlew test` |
 | Verify snapshots | `./gradlew verifyPaparazzi` (Git LFS required) |
-| Update snapshots | Trigger the **Record Snapshots** GitHub Actions workflow on your branch (fork PRs: ask a maintainer) |
+| Update snapshots | Trigger the **Record Snapshots** GitHub Actions workflow on your branch (from a fork: dispatch it on your own fork — see [Working from a fork](#working-from-a-fork)) |
 | Android lint | `./gradlew lint` |
-| Get a QA build of your PR | Add the `Publish PR QA Build` label (fork PRs: ask a maintainer) |
+| Get a QA build of your PR | Add the `Publish PR QA Build` label (unavailable on fork PRs — a maintainer must re-push the branch to the main repo) |
 | Add a user-visible string | English `values/strings*.xml` only — Crowdin handles the rest |
 | Change behavior a wiki page documents | Update the affected `wiki/` page in the same PR |

@@ -7,19 +7,26 @@
     "files.trimTrailingWhitespace": true,
     "files.exclude": {
         "**/build": true,
-        "**/.gradle": true
+        "**/.gradle": true,
+        "**/.idea": true,
+        "**/.kotlin": true,
+        "**/captures": true,
+        "**/out": true
     },
     "search.exclude": {
         "**/build": true,
         "**/.gradle": true,
-        "**/*.snap": true
+        "**/.idea": true,
+        "**/.kotlin": true,
+        "**/captures": true,
+        "**/out": true,
+        "**/src/test/snapshots/images": true
     },
     "files.watcherExclude": {
         "**/build/**": true,
         "**/.gradle/**": true
     },
     "files.associations": {
-        "*.kts": "kotlin",
         "*.toml": "toml"
     },
     "[kotlin]": {
@@ -27,9 +34,15 @@
         "editor.rulers": [120]
     },
     "[json]": {
-        "editor.tabSize": 4
+        "editor.tabSize": 2
     },
     "[xml]": {
         "editor.tabSize": 4
+    },
+    "[yaml]": {
+        "editor.tabSize": 2
+    },
+    "[markdown]": {
+        "files.trimTrailingWhitespace": false
     }
 }

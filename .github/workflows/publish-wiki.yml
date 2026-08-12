@@ -1,39 +1,156 @@
 name: Publish Wiki
 
 on:
+  # Deliberately unfiltered: a workflow skipped by a paths filter never reports
+  # a conclusion, so requiring "Check wiki links" as a status check would leave
+  # every pull request that does not touch wiki/ waiting on it forever. The
+  # check reads a handful of files, so it runs on every pull request instead.
+  pull_request:
   push:
     branches: [develop]
     paths:
       - 'wiki/**'
+      # Root-level markdown only, since '*' does not match '/'. These are the
+      # repository files the link check scans for links into wiki/, so a commit
+      # landing on develop without a pull request still gets checked.
+      - '*.md'
+      - '.github/scripts/check-wiki-links.py'
       - '.github/workflows/publish-wiki.yml'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
+  validate:
+    name: Check wiki links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      # Per-ref, and safe to cancel: this job only reads the checkout.
+      group: ${{ github.workflow }}-validate-${{ github.ref }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      # The publish job rewrites Page.md#anchor to Page#anchor, so a renamed or
+      # deleted page, or a renamed heading, becomes a dead link on the live
+      # wiki. Publishing happens only after merge, so a pull request that breaks
+      # a link has to be caught here to be caught at all.
+      - name: Check that wiki links and anchors resolve
+        run: .github/scripts/check-wiki-links.py wiki
+
   publish:
     name: Publish wiki/ directory to the GitHub Wiki
+    needs: validate
+    # Only this repository has the wiki being published to, and only develop is
+    # the source of truth. Without this guard, a manual run from a feature
+    # branch or a fork would publish that content over the live wiki. Pull
+    # requests never satisfy it either, so they stop after validate.
+    if: github.repository == 'CruGlobal/godtools-android' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      # One global wiki, so every run shares a group regardless of ref. Runs queue
+      # rather than cancel, since a cancelled run can be killed mid-push.
+      group: ${{ github.workflow }}-publish
+      cancel-in-progress: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
       - name: Checkout wiki
-        run: git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git" "$RUNNER_TEMP/wiki"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # The token is sent as a header instead of being embedded in the remote
+        # URL, so it is never persisted into the clone's .git/config.
+        run: |
+          git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
+            clone "https://github.com/$GITHUB_REPOSITORY.wiki.git" "$RUNNER_TEMP/wiki"
       - name: Sync pages
-        # GitHub Wiki serves pages without .md extensions, so inter-page links
-        # are rewritten from [Text](Page.md#anchor) to [Text](Page#anchor).
         run: |
           rsync -a --delete --exclude .git wiki/ "$RUNNER_TEMP/wiki/"
-          find "$RUNNER_TEMP/wiki" -name '*.md' -exec sed -i -E 's/\]\(([A-Za-z0-9._-]+)\.md(#[A-Za-z0-9_-]+)?\)/](\1\2)/g' {} +
+          cd "$RUNNER_TEMP/wiki"
+
+          # Compares a heading to a page title ignoring case, punctuation, and & vs and.
+          normalize() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -e 's/&/and/g' -e 's/[^a-z0-9]//g'; }
+
+          # GitHub Wiki serves pages without .md extensions, so inter-page links
+          # are rewritten from [Text](Page.md#anchor) to [Text](Page#anchor). The
+          # alternation is built from the actual page filenames so links to files
+          # that are not wiki pages (README.md, docs/Guide.md) keep their
+          # extension, and fenced code blocks are skipped so samples stay literal.
+          # A trailing "title" is matched too, because check-wiki-links.py accepts
+          # that link form and the guard below would otherwise fail the run on a
+          # link the pull request check passed.
+          #
+          # Fences are matched with any leading indentation, since a block nested
+          # in a numbered list is indented. The guard below and uncoded_lines() in
+          # check-wiki-links.py match fences the same way and must stay in sync.
+          pages="$(ls *.md | sed -e 's/\.md$//' -e 's/[^[:alnum:]_-]/\\&/g' | paste -sd'|' -)"
+          sed -i -E '/^[[:space:]]*```/,/^[[:space:]]*```/!'"s/\]\(($pages)\.md(#[^)]*)?( +\"[^\"]*\")?\)/](\1\2\3)/g" *.md
+
+          # GitHub Wiki renders a page title derived from the filename, so a
+          # leading H1 that repeats it renders as a duplicate title and is
+          # dropped here. The sources under wiki/ keep their H1, which is what
+          # titles them when the directory is browsed in the repository.
+          for page in *.md; do
+            heading="$(sed -n '1{/^# /s/^# //p}' "$page")"
+            [ -n "$heading" ] || continue
+            [ "$(normalize "$heading")" = "$(normalize "$(basename "$page" .md | tr '-' ' ')")" ] || continue
+            sed -i -E '1{/^# /d}; 2{/^$/d}' "$page"
+          done
+
+          # Any relative .md link left over points at something the wiki does not
+          # serve, so fail the run instead of publishing a dead link. The fence
+          # state is reset at every file boundary: awk reads all the pages in one
+          # invocation, so a page with an odd number of fence lines would
+          # otherwise carry its half-open code block into the next page and skip
+          # it entirely -- silently publishing the dead link this guard exists to
+          # catch.
+          if ! find . -name .git -prune -o -name '*.md' -print0 |
+            xargs -0 -r awk '
+              FNR == 1 { fence = 0 }
+              /^[[:space:]]*```/ { fence = !fence; next }
+              fence { next }
+              { link = $0; gsub(/\]\([^)]*:\/\/[^)]*\)/, "", link) }
+              link ~ /\]\([^)]*\.md[^)]*\)/ { print FILENAME ":" FNR ": " $0; dead = 1 }
+              END { exit dead ? 1 : 0 }
+            '; then
+            echo "::error::Published wiki content still contains .md links (listed above). Link a wiki page as [Text](Page.md) using a filename from wiki/; link anything else by full https:// URL."
+            exit 1
+          fi
       - name: Push wiki
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd "$RUNNER_TEMP/wiki"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          auth="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          branch="$(git rev-parse --abbrev-ref HEAD)"
+
           git add -A
-          git diff --cached --quiet || { git commit -m "Sync wiki from ${{ github.sha }}"; git push; }
+          if git diff --cached --quiet; then
+            echo "Wiki is already up to date."
+            exit 0
+          fi
+          git commit -m "Sync wiki from $GITHUB_SHA"
+
+          # The wiki is also writable through the GitHub web UI, and such an edit
+          # would otherwise reject this push as non-fast-forward and leave every
+          # later run failing. wiki/ is the source of truth, so replay the synced
+          # tree on top of whatever landed in the meantime and push again.
+          for attempt in 1 2 3; do
+            if git -c http.extraheader="$auth" push origin "$branch"; then
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt of 3); replaying onto the current wiki head."
+            git -c http.extraheader="$auth" fetch origin "$branch"
+            git reset --soft "origin/$branch"
+            if git diff --cached --quiet; then
+              echo "Wiki already matches the synced content."
+              exit 0
+            fi
+            git commit -m "Sync wiki from $GITHUB_SHA"
+          done
+          echo "::error::Failed to push to the GitHub Wiki after 3 attempts."
+          exit 1

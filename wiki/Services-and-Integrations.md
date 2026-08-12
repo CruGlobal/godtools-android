@@ -268,7 +268,7 @@ Full detail in [Build System & CI](Build-System-and-CI.md); the external service
 |---|---|
 | `build.yml` | Codecov upload, Gradle build scans (`--scan`), Firebase App Distribution (QA deploy jobs, secrets `FIREBASE_API_KEY`, `BETA_KEYSTORE_PASSWORD`) |
 | `crowdin-upload.yml` / `crowdin-download.yml` | Crowdin |
-| `detekt-analysis.yml` | GitHub code scanning (SARIF) |
+| `detekt-analysis.yml` | GitHub code scanning (SARIF) — the workflow is currently **manually disabled** in the repo's Actions settings, so nothing is uploaded; see [Build System & CI](Build-System-and-CI.md#static-analysis) |
 | `record-snapshots.yml` | Records Paparazzi snapshots on CI (Git LFS) — never record locally; see [Testing](Testing.md) |
 | `git-lfs-validation.yml`, `gradle-wrapper-validation.yml` | Repo hygiene checks |
 

@@ -7,7 +7,7 @@ GodTools is a mobile discipleship app built by [Cru](https://www.cru.org/). This
 
 ## Documentation
 
-Detailed onboarding and architecture documentation is browsable on the [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki); its source of truth is the [`wiki/`](wiki/Home.md) directory of this repository, versioned alongside the code and mirrored to the GitHub Wiki by the `Publish Wiki` workflow. Start with [Home](wiki/Home.md) for the page index, or jump straight to [Getting Started](wiki/Getting-Started.md) for a fresh-machine-to-running-emulator walkthrough (prerequisites, first-build downloads, and troubleshooting). If your PR changes behavior a wiki page documents, update the page in the same PR (do not edit the GitHub Wiki directly — syncs overwrite it) — see [Contributing](wiki/Contributing.md).
+Detailed onboarding and architecture documentation is browsable on the [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki); its source of truth is the [`wiki/`](https://github.com/CruGlobal/godtools-android/tree/develop/wiki) directory of this repository, versioned alongside the code and mirrored to the GitHub Wiki by the `Publish Wiki` workflow. Start with [Home](wiki/Home.md) for the page index, or jump straight to [Getting Started](wiki/Getting-Started.md) for a fresh-machine-to-running-emulator walkthrough (prerequisites, first-build downloads, and troubleshooting). If your PR changes behavior a wiki page documents, update the page in the same PR (do not edit the GitHub Wiki directly — syncs overwrite it) — see [Contributing](wiki/Contributing.md).
 
 ## Requirements
 

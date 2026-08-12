@@ -1,0 +1,3 @@
+---
+
+**Do not edit this page from the GitHub Wiki.** It is generated from the [`wiki/`](https://github.com/CruGlobal/godtools-android/tree/develop/wiki) directory of [CruGlobal/godtools-android](https://github.com/CruGlobal/godtools-android), which [`publish-wiki.yml`](https://github.com/CruGlobal/godtools-android/blob/develop/.github/workflows/publish-wiki.yml) mirrors here on every push to `develop` that touches `wiki/` — the sync deletes anything that directory does not contain, so changes made with the **Edit** or **New page** buttons above are overwritten on the next run. Edit the source and open a pull request against `develop` instead.

@@ -1,8 +1,12 @@
 {
+    // Kotlin language support is owned by jetbrains.kotlin-server. Do not add a second Kotlin
+    // extension: mathiasfrohlich.kotlin contributes the same language id ("kotlin") and the same
+    // TextMate scope ("source.kotlin"), which leaves the winning grammar ambiguous when both load.
+    // .kts files reach that language id via files.associations in settings.json.
     "recommendations": [
-        "fwcd.kotlin",
-        "mathiasfrohlich.kotlin",
+        "jetbrains.kotlin-server",
         "vscjava.vscode-gradle",
+        "tamasfe.even-better-toml",
         "editorconfig.editorconfig",
         "bierner.markdown-mermaid"
     ]

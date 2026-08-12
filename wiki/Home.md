@@ -1,6 +1,6 @@
 # GodTools Android Wiki
 
-Welcome to the developer wiki for the GodTools Android app. This page explains what the project is, gets you to a first successful build as fast as possible, sketches the repository layout, and links every other wiki page. The wiki's source of truth is the `wiki/` directory of the repository — versioned and reviewed alongside the code — and it is published to the project's [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki) by the `Publish Wiki` workflow; all diagrams are fenced `mermaid` code blocks that GitHub renders natively.
+Welcome to the developer wiki for the GodTools Android app. This page explains what the project is, gets you to a first successful build as fast as possible, sketches the repository layout, and links every other wiki page. The wiki's source of truth is the [`wiki/`](https://github.com/CruGlobal/godtools-android/tree/develop/wiki) directory of the repository — versioned and reviewed alongside the code — and it is published to the project's GitHub Wiki by the `Publish Wiki` workflow; all diagrams are fenced `mermaid` code blocks that GitHub renders natively.
 
 ## What is GodTools?
 
@@ -112,6 +112,7 @@ Build variants: product flavors `production` and `stage` (dimension `env`; `stag
 
 ## About This Wiki
 
-- **Location:** the source of these pages lives in the `wiki/` directory of the `godtools-android` repository, versioned alongside the code, and is mirrored to the browsable [GitHub Wiki](https://github.com/CruGlobal/godtools-android/wiki) by `.github/workflows/publish-wiki.yml` on every push to `develop` that touches `wiki/`. Edit pages via pull request against the repository — do not edit the GitHub Wiki directly, as the next sync overwrites it.
+- **Location:** the source of these pages lives in the [`wiki/`](https://github.com/CruGlobal/godtools-android/tree/develop/wiki) directory of the [`CruGlobal/godtools-android`](https://github.com/CruGlobal/godtools-android) repository, versioned alongside the code, and is mirrored to the browsable GitHub Wiki by [`.github/workflows/publish-wiki.yml`](https://github.com/CruGlobal/godtools-android/blob/develop/.github/workflows/publish-wiki.yml) on every push to `develop` that touches `wiki/`. Edit pages via pull request against `develop` — do not edit the GitHub Wiki directly, as the next sync overwrites it.
+- **Navigation:** `_Sidebar.md` and `_Footer.md` are GitHub Wiki special pages — their contents render as the sidebar and footer of every published page. A new page must be added to `_Sidebar.md` *and* to the Wiki Navigation table above; both lists are maintained by hand, so a page left out of them is reachable only by search. See [Contributing](Contributing.md#keeping-this-wiki-current).
 - **Diagrams:** drawn as fenced `mermaid` code blocks, which GitHub renders automatically — no external tooling required.
 - **Conventions:** file paths in this wiki are repo-relative (e.g. `app/build.gradle.kts`); shell commands are copy-pasteable from the repository root.

@@ -6,6 +6,9 @@
             "type": "shell",
             "command": "./gradlew",
             "args": ["bundle"],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
             "group": "build",
             "problemMatcher": []
         },
@@ -14,6 +17,9 @@
             "type": "shell",
             "command": "./gradlew",
             "args": [":build-logic:ktlintCheck", "ktlintCheck"],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
             "group": "test",
             "problemMatcher": []
         },
@@ -22,6 +28,9 @@
             "type": "shell",
             "command": "./gradlew",
             "args": ["lint"],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
             "group": "test",
             "problemMatcher": []
         },
@@ -30,6 +39,9 @@
             "type": "shell",
             "command": "./gradlew",
             "args": ["test"],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -41,6 +53,9 @@
             "type": "shell",
             "command": "./gradlew",
             "args": ["verifyPaparazzi"],
+            "windows": {
+                "command": ".\\gradlew.bat"
+            },
             "group": "test",
             "problemMatcher": []
         }
