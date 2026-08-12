@@ -7,9 +7,7 @@ on:
   # check reads a handful of files, so it runs on every pull request instead.
   pull_request:
   push:
-    # TEMPORARY: the claude/* entry bootstraps the corrected wiki publish before
-    # this workflow lands on develop. Removed immediately after it runs.
-    branches: [develop, claude/god-tools-android-wiki-dgmgdr]
+    branches: [develop]
     paths:
       - 'wiki/**'
       # Root-level markdown only, since '*' does not match '/'. These are the
@@ -47,9 +45,7 @@ jobs:
     # the source of truth. Without this guard, a manual run from a feature
     # branch or a fork would publish that content over the live wiki. Pull
     # requests never satisfy it either, so they stop after validate.
-    # TEMPORARY: the claude/* ref is part of the bootstrap noted above and is
-    # removed with it, restoring the develop-only guard.
-    if: github.repository == 'CruGlobal/godtools-android' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/claude/god-tools-android-wiki-dgmgdr')
+    if: github.repository == 'CruGlobal/godtools-android' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     permissions:
       contents: write
