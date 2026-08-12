@@ -22,8 +22,21 @@ import re
 import sys
 from collections import Counter
 
-# Matches the target of a markdown inline link, with an optional "title".
-LINK = re.compile(r'\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
+# Matches the target of a markdown inline link, and any title following it. All
+# three CommonMark title forms are recognized, so that no link is invisible to
+# this check; SED_TITLE decides which of them the publish job can rewrite.
+LINK = re.compile(r'\]\(([^)\s]+)(\s+(?:"[^"]*"|\'[^\']*\'|\([^)]*\)))?\)')
+# The one title form publish-wiki.yml's sed rewrites, spelled as that sed spells
+# it: literal spaces, then a "double-quoted" title. A tab, or a 'single-quoted'
+# or (parenthesized) title, leaves the .md extension in place for the job's own
+# guard to reject -- after merge, where no pull request check can catch it. Such
+# links are rejected here instead, so the failure lands on the pull request.
+SED_TITLE = re.compile(r'^ +"[^"]*"$')
+# Matches a link reference definition -- `[label]: target "Title"`. The publish
+# job's sed rewrites only the inline `](target)` form, and its leftover-.md guard
+# only looks for that form, so a page target written this way is neither
+# rewritten nor caught, and reaches the wiki dead.
+LINK_DEF = re.compile(r"^ {0,3}\[[^\]]+\]:\s*(\S+)")
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*$")
 CODE_SPAN = re.compile(r"`([^`]*)`")
 INLINE_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
@@ -45,6 +58,11 @@ def uncoded_lines(path):
                 continue
             if not fenced:
                 yield lineno, line
+
+
+def is_external(target):
+    """Report whether a link target leaves the repository, so nothing here resolves it."""
+    return "://" in target or target.startswith("mailto:")
 
 
 def normalize(text):
@@ -103,9 +121,23 @@ def main(root):
     for page in pages:
         source = os.path.join(root, page)
         for lineno, line in uncoded_lines(source):
+            # The publish job rewrites and guards inline links only, so a page
+            # named by a reference definition keeps the .md extension the wiki
+            # does not serve -- dead even when that page exists.
+            if match := LINK_DEF.match(line):
+                target = match.group(1)
+                if not is_external(target) and target.partition("#")[0].endswith(".md"):
+                    fail(
+                        source,
+                        lineno,
+                        f"{page} points a link reference definition at {target}. The publish job rewrites only "
+                        "inline links, so this would be published as a dead .md link; write it inline as "
+                        f"[Text]({target}).",
+                    )
+
             for match in LINK.finditer(line):
                 target = match.group(1)
-                if "://" in target or target.startswith("mailto:"):
+                if is_external(target):
                     continue
 
                 path, _, anchor = target.partition("#")
@@ -115,8 +147,17 @@ def main(root):
                     continue
 
                 if path.endswith(".md"):
+                    title = match.group(2)
                     if path not in published:
                         fail(source, lineno, f"{page} links to {path}, which is not a page in {root}/.")
+                    elif title is not None and not SED_TITLE.match(title):
+                        fail(
+                            source,
+                            lineno,
+                            f"{page} links to {path} with a title the publish job cannot rewrite, which would "
+                            f'fail the publish after merge. Write the title as [Text]({path} "Title") -- literal '
+                            "spaces, double quotes -- or drop it.",
+                        )
                     elif anchor and anchor not in published[path]:
                         fail(source, lineno, f"{page} links to {path}#{anchor}, which is not a heading on that page.")
                     continue
@@ -142,9 +183,16 @@ def main(root):
     for name in inbound:
         source = os.path.normpath(os.path.join(repo, name))
         for lineno, line in uncoded_lines(source):
-            for match in LINK.finditer(line):
-                target = match.group(1)
-                if "://" in target or target.startswith("mailto:"):
+            # Reference definitions count here too. Nothing rewrites a
+            # repository file, so both link forms resolve the same way and go
+            # stale the same way when a page is renamed -- unlike in wiki/,
+            # there is nothing about the reference form to reject.
+            targets = [match.group(1) for match in LINK.finditer(line)]
+            if match := LINK_DEF.match(line):
+                targets.append(match.group(1))
+
+            for target in targets:
+                if is_external(target):
                     continue
 
                 path, _, anchor = target.partition("#")

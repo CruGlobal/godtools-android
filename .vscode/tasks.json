@@ -1,63 +1,63 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Gradle: Build App Bundle",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["bundle"],
-            "windows": {
-                "command": ".\\gradlew.bat"
-            },
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "Gradle: ktlint Check",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": [":build-logic:ktlintCheck", "ktlintCheck"],
-            "windows": {
-                "command": ".\\gradlew.bat"
-            },
-            "group": "test",
-            "problemMatcher": []
-        },
-        {
-            "label": "Gradle: Android Lint",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["lint"],
-            "windows": {
-                "command": ".\\gradlew.bat"
-            },
-            "group": "test",
-            "problemMatcher": []
-        },
-        {
-            "label": "Gradle: All Unit Tests",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["test"],
-            "windows": {
-                "command": ".\\gradlew.bat"
-            },
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Gradle: Verify Paparazzi Snapshots",
-            "type": "shell",
-            "command": "./gradlew",
-            "args": ["verifyPaparazzi"],
-            "windows": {
-                "command": ".\\gradlew.bat"
-            },
-            "group": "test",
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Gradle: Build App Bundle",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": ["bundle"],
+      "windows": {
+        "command": ".\\gradlew.bat"
+      },
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: ktlint Check",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": [":build-logic:ktlintCheck", "ktlintCheck"],
+      "windows": {
+        "command": ".\\gradlew.bat"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: Android Lint",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": ["lint"],
+      "windows": {
+        "command": ".\\gradlew.bat"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: All Unit Tests",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": ["test"],
+      "windows": {
+        "command": ".\\gradlew.bat"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Gradle: Verify Paparazzi Snapshots",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": ["verifyPaparazzi"],
+      "windows": {
+        "command": ".\\gradlew.bat"
+      },
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
 }
