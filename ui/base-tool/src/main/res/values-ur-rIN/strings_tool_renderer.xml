@@ -7,6 +7,8 @@
     <string name="menu_share_tool">شئیر کریں</string>
     <string name="share_tool_message_article">میں آپ کے ساتھ اس مضمون کو ساجھا کرنا چاہتا ہوں اور اس کے بارے میں آپ کے افکا/ سننے کا خواہاں ہوں۔\n%1$s</string>
     <string name="share_action_qr_code">کیو آر کوڈ کے ذریعے شیئر کریں</string>
+    <string name="feature_discovery_title_share_tool">لِنک شئیر کریں</string>
+    <string name="feature_discovery_desc_share_tool">اِس آئیکن پر کلک کر کے یہ ٹول کسی دوست کو بھیجیں۔</string>
     <!-- Shareables -->
     <string name="tool_shareable_action_share_image">تصویر شئیر کریں</string>
     <!-- Settings -->

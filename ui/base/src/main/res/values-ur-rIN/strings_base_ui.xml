@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toast_unable_to_launch_activity">کھولنے کے ناقابل  %s</string>
+    <!-- Tool Categories -->
+    <string name="tool_category_gospel">انجیل کا دعوت نامہ</string>
+    <string name="tool_category_articles">مضامین</string>
+    <string name="tool_category_conversation_starter">گفتگو کے آغاز میں مددگار</string>
+    <string name="tool_category_growth">مسیحی ترقی</string>
+    <string name="tool_category_training">تربیت</string>
+    <!-- Sharing -->
+</resources>
