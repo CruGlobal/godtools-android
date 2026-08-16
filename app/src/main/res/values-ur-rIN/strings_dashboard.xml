@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- optInNotification -->
+    <string name="opt_in_notification_title">تجاویز اور حوصلہ افزائی حاصل کریں</string>
+    <string name="opt_in_notification_body">بات چیت کے لیے تیار رہیں۔ آج نوٹیفیکیشن کی اجازت دیں۔</string>
+    <string name="opt_in_notification_allow_notifications">نوٹیفیکیشن کی اجازت دیں</string>
+    <string name="opt_in_notification_notification_settings">نوٹیفکیشن سیٹنگز</string>
+    <string name="opt_in_notification_maybe_later">شاید بعد میں</string>
+    <!-- Navigation Menu -->
+    <string name="menu_heading_get_started">شروع کیجئے</string>
+    <string name="menu_tutorial">تربیت</string>
+    <string name="menu_heading_account">اکاؤنٹ</string>
+    <string name="menu_login">لاگ اِن</string>
+    <string name="menu_signup">اکاؤنٹ بنائیں</string>
+    <string name="menu_logout">لاگ آؤٹ</string>
+    <string name="menu_heading_support">مدد</string>
+    <string name="menu_feedback">ردعمل بھیجیں</string>
+    <string name="menu_report_bug">وائرس کی اطلاع کریں</string>
+    <string name="menu_question">سوال پوچھیں</string>
+    <string name="menu_heading_share">شئیر کریں</string>
+    <string name="menu_review">ایک جائزہ چھوڑیں</string>
+    <string name="menu_share_story">ہم سے ایک کہانی شئیر کریں</string>
+    <string name="menu_share_godtools">گاڈ ٹولز شئیر کریں</string>
+    <string name="share_app_message">گاڈ ٹولزاَیپ ڈاؤن لوڈ کریں:
+https://godtoolsapp.com \n\n
+https://knowgod.com/
+پر ایک آن لائن ورژن مل سکتا ہے</string>
+    <string name="share_story_subject">گاڈ ٹولز کی کہانی</string>
+    <string name="menu_heading_about">کے بارے میں</string>
+    <string name="menu_terms_of_use">استعمال کی شرائط</string>
+    <string name="menu_privacy_policy">راز داری کی پالیسی</string>
+    <string name="menu_copyright">جملہ حقوق کی معلومات</string>
+    <string name="menu_version">نسخہ: %1$s (%2$d)</string>
+    <!-- Lessons -->
+    <string name="nav_lessons">اسباق</string>
+    <string name="dashboard_lessons_header_title_personalized">آپ کے لئے بنائے گئے اسباق</string>
+    <string name="dashboard_lessons_header_description">تعلقات استوار کرنے اور با معنی گفتگو شروع کرنے کے عملی خیالات</string>
+    <string name="dashboard_lessons_section_filter_label">اسباق در:</string>
+    <plurals name="dashboard_lessons_section_filter_available_lessons">
+        <item quantity="one">اسباق دستیاب ہیں۔%1$d </item>
+        <item quantity="other">اسباق دستیاب ہیں۔%1$d </item>
+    </plurals>
+    <string name="dashboard_lessons_progress_completed">مکمل ہوا</string>
+    <string name="dashboard_lessons_progress_in_progress">%%%1$d کامل</string>
+    <!-- Home -->
+    <string name="nav_favorite_tools">پسندیدہ</string>
+    <string name="dashboard_home_header_title">گاڈ ٹولزمیں خوش آمدید</string>
+    <string name="dashboard_home_section_featured_lesson">نمایاں سبق</string>
+    <string name="dashboard_home_section_favorites_title">آپ کے پسندیدہ ٹولز</string>
+    <string name="dashboard_home_section_favorites_no_tools_title">نمائش کے لئے کوئی پسندیدہ ٹول نہیں</string>
+    <string name="dashboard_home_section_favorites_no_tools_description">کسی پسندیدہ ٹول کی آف لائن دستابی کے لئے دل کے آئیکن کو دبائیں۔</string>
+    <string name="dashboard_home_section_favorites_action_view_all">سب کو دیکھیں اور حاصل کریں؛</string>
+    <string name="dashboard_home_section_favorites_action_all_tools">ٹولز پر جائیں</string>
+    <string name="tools_list_favorites_banner_text">آف لائن ٹول حاصل کرنے کے لئے دل کے آئیکن کو دبائیں جو اُسے آپ کے پسندیدہ میں شامل کرتا ہے۔</string>
+    <string name="tools_list_favorites_banner_action_dismiss">برطرف کریں</string>
+    <!-- All Tools -->
+    <string name="nav_all_tools">ٹولز</string>
+    <string name="dashboard_tools_section_filter_label">فلٹر</string>
+    <string name="dashboard_tools_section_filter_category_any">کوئی بھی زمرہ</string>
+    <string name="dashboard_tools_section_filter_language_any">کوئی بھی زبان</string>
+    <plurals name="dashboard_tools_section_filter_available_tools">
+        <item quantity="one">%1$d ٹول دستیاب ہے۔</item>
+        <item quantity="other">%1$d ٹولز دستیاب ہیں۔</item>
+    </plurals>
+    <string name="dashboard_tools_section_filter_available_tools_all">تمام ٹولز دستیاب ہیں۔</string>
+    <string name="dashboard_tools_section_categories_label">زمرے</string>
+    <string name="dashboard_tools_section_categories_all">تمام ٹولز</string>
+    <string name="dashboard_tools_section_spotlight_label">ٹول اسپاٹ لائٹ</string>
+    <string name="dashboard_tools_section_spotlight_description">کچھ ٹولز جو ہمارا خیال ہے کہ آپ کو پسند آسکتے ہیں</string>
+    <!-- Tool Cards -->
+    <string name="tools_list_remove_favorite_dialog_title">کو اپنے ترجم%1$s براہ مہربانی متغیر کے حصے کے طور پر شامل کریں</string>
+    <string name="tools_list_remove_favorite_dialog_confirm">نکال دیں</string>
+    <string name="tools_list_remove_favorite_dialog_dismiss">منسوخ</string>
+    <string name="tool_card_accessibility_language_available">دستیاب</string>
+    <string name="tool_card_accessibility_language_unavailable">دستیاب نہیں۔</string>
+    <string name="action_tools_about">تفصیلات</string>
+    <string name="action_tools_open">کھولیں</string>
+    <!-- In App Update -->
+    <string name="play_update_available">اَپ ڈیٹ دستیاب</string>
+    <string name="play_update_available_action">ڈاؤن لوڈ</string>
+    <string name="play_update_downloaded">اپ ڈیٹ ڈاؤن لوڈ</string>
+    <string name="play_update_downloaded_action">ریلوڈ کریں</string>
+</resources>
