@@ -174,7 +174,7 @@ gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support
 gtoSupport-turbine = { module = "org.ccci.gto.android:gto-support-turbine", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 gtoSupport-viewpager = { module = "org.ccci.gto.android:gto-support-viewpager", version.ref = "gtoSupport" }
-guava = "com.google.guava:guava:33.6.0-android"
+guava = "com.google.guava:guava:33.7.1-android"
 hamcrest = "org.hamcrest:hamcrest:3.0"
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
