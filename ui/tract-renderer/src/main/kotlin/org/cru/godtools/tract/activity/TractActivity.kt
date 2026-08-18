@@ -159,11 +159,9 @@ class TractActivity :
 
     override fun onContentEvent(event: Event) {
         checkForPageEvent(event)
-        propagateEventToPage(event)
     }
 
     override fun onUpdateActiveCard(page: TractPage, card: Card?) {
-        trackTractPage(page, card)
         sendLiveShareNavigationEvent(page, card)
     }
 
@@ -348,20 +346,15 @@ class TractActivity :
     internal lateinit var pagerAdapterFactory: ManifestPagerAdapter.Factory
     private val pager get() = binding.pages
     private val pagerAdapter by lazy {
-        pagerAdapterFactory.create(this, dataModel.enableTips, toolState.toolState).also { adapter ->
+        pagerAdapterFactory.create(this, toolState.toolState).also { adapter ->
             adapter.callbacks = this
             dataModel.activeManifest.observe(this) { manifest ->
                 val sameLocale = adapter.manifest?.locale == manifest?.locale
                 adapter.manifest = manifest
 
-                // trigger analytics & live share publisher events if the locale was changed
+                // trigger live share publisher events if the locale was changed
                 if (!sameLocale) {
-                    adapter.primaryItem?.binding?.controller?.let {
-                        val page = it.model ?: return@let
-                        val card = it.activeCard
-                        trackTractPage(page, card)
-                        sendLiveShareNavigationEvent(page, card)
-                    }
+                    adapter.primaryPage?.let { sendLiveShareNavigationEvent(it, adapter.primaryPageActiveCard) }
                 }
             }
         }
@@ -392,10 +385,6 @@ class TractActivity :
         activeManifest?.pages?.firstOrNull { it.listeners.contains(event.id) }?.let { goToPage(it.position) }
     }
 
-    private fun propagateEventToPage(event: Event) {
-        pagerAdapter.onContentEvent(event)
-    }
-
     // region ManifestPagerAdapter.Callbacks
     override fun goToPage(position: Int) {
         pager.currentItem = position
@@ -404,16 +393,17 @@ class TractActivity :
     override fun showModal(modal: Modal) {
         modalState.value = modal
     }
-    override fun showTip(tip: Tip) {
-        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
-    }
     // endregion ManifestPagerAdapter.Callbacks
     // endregion Tool Pager
     // endregion UI
 
+    override fun showTip(tip: Tip) {
+        TipBottomSheetDialogFragment.create(tip)?.show(supportFragmentManager, null)
+    }
+
     private fun trackTractPage(
-        page: TractPage? = pagerAdapter.primaryItem?.binding?.controller?.model,
-        card: Card? = pagerAdapter.primaryItem?.binding?.controller?.activeCard,
+        page: TractPage? = pagerAdapter.primaryPage,
+        card: Card? = pagerAdapter.primaryPageActiveCard,
     ) {
         page?.let { eventBus.post(TractPageAnalyticsScreenEvent(page, card)) }
     }
