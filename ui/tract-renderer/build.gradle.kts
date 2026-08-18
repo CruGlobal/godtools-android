@@ -30,10 +30,7 @@ dependencies {
 
     implementation(libs.godtoolsShared.user.activity)
 
-    implementation(libs.androidx.cardview)
-    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
 
@@ -41,7 +38,6 @@ dependencies {
     implementation(libs.gtoSupport.androidx.databinding)
     implementation(libs.gtoSupport.androidx.fragment)
     implementation(libs.gtoSupport.androidx.lifecycle)
-    implementation(libs.gtoSupport.androidx.recyclerview)
     implementation(libs.gtoSupport.base)
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.core)
@@ -59,7 +55,6 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.lottie)
     implementation(libs.materialComponents)
-    implementation(libs.picasso.transformations)
     implementation(libs.play.instantapps)
     implementation(libs.rtlViewpager)
     implementation(libs.splitties.fragmentargs)
@@ -71,7 +66,6 @@ dependencies {
 
     testImplementation(projects.library.account)
     testImplementation(libs.androidx.arch.core.testing)
-    testImplementation(libs.androidx.lifecycle.runtime.testing)
     testImplementation(libs.gtoSupport.testing.dagger)
     testImplementation(libs.gtoSupport.testing.picasso)
     testImplementation(libs.hilt.testing)
