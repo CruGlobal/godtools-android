@@ -253,7 +253,7 @@ test-framework = ["junit", "kotlin-test-junit", "androidx-test-junit", "mockk", 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.3.0" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.7" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.8" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.2" }
 google-services = { id = "com.google.gms.google-services", version = "4.5.0" }
 grgit = { id = "org.ajoberstar.grgit", version = "5.3.3" }
