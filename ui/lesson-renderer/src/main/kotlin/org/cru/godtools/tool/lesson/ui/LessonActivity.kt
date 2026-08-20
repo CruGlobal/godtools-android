@@ -168,10 +168,11 @@ class LessonActivity :
                     val pagerState = lessonPagerState.pagerState
 
                     // record the highest page reached for feedback functionality
+                    // and the current page position for the share link
                     LaunchedEffect(pagerState) {
-                        snapshotFlow { pagerState.settledPage }.collect { page ->
+                        snapshotFlow { pagerState.settledPage to lessonPagerState.pages }.collect { (page, pages) ->
                             dataModel.pageReached.update { maxOf(it, page) }
-                            dataModel.currentPage.value = page
+                            dataModel.currentPagePosition.value = pages.getOrNull(page)?.position ?: 0
                         }
                     }
 
@@ -345,19 +346,19 @@ class LessonActivity :
 
     // region Share Menu Logic
     override val shareLinkUriLiveData by lazy {
-        combine(viewModel.manifest, viewModel.currentPage) { manifest, page ->
-            manifest?.buildShareLink(page)?.build()?.toString()
+        combine(viewModel.manifest, viewModel.currentPagePosition) { manifest, position ->
+            manifest?.buildShareLink(position)?.build()?.toString()
         }.asLiveData()
     }
 
-    private fun Manifest.buildShareLink(page: Int = 0): Uri.Builder? {
+    private fun Manifest.buildShareLink(position: Int = 0): Uri.Builder? {
         val tool = code ?: return null
         val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
             .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
             .appendPath("lesson")
             .appendPath(tool)
-            .apply { if (page > 0) appendPath(page.toString()) }
+            .apply { if (position > 0) appendPath(position.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
     // endregion Share Menu Logic
@@ -386,7 +387,9 @@ class LessonActivityDataModel @Inject constructor(
     savedState
 ) {
     val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
-    val currentPage = savedState.getMutableStateFlow(viewModelScope, "currentPage", 0)
+
+    // the position of the current page within the full list of manifest pages, including hidden pages
+    val currentPagePosition = savedState.getMutableStateFlow(viewModelScope, "currentPagePosition", 0)
     val showFeedback = toolCode
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
         .combine(pageReached) { discovered, page -> !discovered && page > 3 }
