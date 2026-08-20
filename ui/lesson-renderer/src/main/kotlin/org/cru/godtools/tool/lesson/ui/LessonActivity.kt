@@ -73,6 +73,7 @@ import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogOverlay
 import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogOverlay
 import org.cru.godtools.tool.lesson.ui.swipetutorial.LessonSwipeTutorialAnimatedModalOverlay
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
+import org.cru.godtools.tool.lesson.util.lessonPagerIndexForPagePosition
 import org.cru.godtools.user.activity.UserActivityManager
 
 @AndroidEntryPoint
@@ -94,7 +95,7 @@ class LessonActivity :
 
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
-    private var initialPage: Int? = null
+    private var initialPagePosition: Int? = null
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,7 +165,10 @@ class LessonActivity :
                 }
 
                 else -> {
-                    val lessonPagerState = rememberLessonPagerState(manifest, initialPage ?: 0)
+                    val lessonPagerState = rememberLessonPagerState(
+                        manifest,
+                        initialPagePosition?.let { manifest.lessonPagerIndexForPagePosition(it) } ?: 0
+                    )
                     val pagerState = lessonPagerState.pagerState
 
                     // record the highest page reached for feedback functionality
@@ -297,7 +301,7 @@ class LessonActivity :
                     val deepLink = LessonDeepLink.parseKnowGodDeepLink(data) ?: return
                     dataModel.toolCode.value = deepLink.lesson
                     dataModel.locale.value = deepLink.locale
-                    initialPage = deepLink.page
+                    initialPagePosition = deepLink.page
                 }
             }
         }
