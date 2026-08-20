@@ -22,7 +22,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.setViewTreeLifecycleOwner
-import androidx.viewpager.widget.PagerAdapter
 import com.karumi.weak.weak
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -93,8 +92,10 @@ class ManifestPagerAdapter @AssistedInject internal constructor(
     override fun getCount() = manifest?.pages?.size ?: 0
     private fun getItem(position: Int) = manifest?.pages?.getOrNull(position) as? TractPage
     override fun getItemId(position: Int) = getItem(position)?.id?.let { Ids.generate(it) } ?: NO_ID
-    override fun getItemPositionFromId(id: Long) =
-        manifest?.pages?.indexOfFirst { id == Ids.generate(it.id) } ?: PagerAdapter.POSITION_NONE
+    override fun getItemPositionFromId(id: Long) = manifest?.pages
+        ?.indexOfFirst { id == Ids.generate(it.id) }
+        ?.takeUnless { it < 0 }
+        ?: POSITION_NONE
 
     internal val primaryPage get() = primaryItem?.page
     internal val primaryPageActiveCard get() = primaryItem?.pageState?.activeCard
