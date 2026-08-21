@@ -73,7 +73,6 @@ import org.cru.godtools.tool.lesson.ui.feedback.LessonFeedbackDialogOverlay
 import org.cru.godtools.tool.lesson.ui.resume.LessonResumeDialogOverlay
 import org.cru.godtools.tool.lesson.ui.swipetutorial.LessonSwipeTutorialAnimatedModalOverlay
 import org.cru.godtools.tool.lesson.util.isLessonDeepLink
-import org.cru.godtools.tool.lesson.util.lessonPagerIndexForPagePosition
 import org.cru.godtools.user.activity.UserActivityManager
 
 @AndroidEntryPoint
@@ -167,7 +166,7 @@ class LessonActivity :
                 else -> {
                     val lessonPagerState = rememberLessonPagerState(
                         manifest,
-                        initialPagePosition?.let { manifest.lessonPagerIndexForPagePosition(it) } ?: 0
+                        initialPage = initialPagePosition?.let { manifest.pages.getOrNull(it) as? LessonPage },
                     )
                     val pagerState = lessonPagerState.pagerState
 
