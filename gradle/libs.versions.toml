@@ -49,7 +49,6 @@ androidx-annotation = "androidx.annotation:annotation:1.10.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.8.0"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
 androidx-browser = "androidx.browser:browser:1.10.0"
-androidx-cardview = "androidx.cardview:cardview:1.0.0"
 androidx-collection-ktx = "androidx.collection:collection-ktx:1.6.0"
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose-foundation" }
 androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "androidx-compose-foundation" }

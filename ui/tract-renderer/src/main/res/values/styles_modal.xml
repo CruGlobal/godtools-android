@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="tract_content_modal_title_text_size">48sp</dimen>
-
-    <style name="Theme.GodTools.Tract.Activity.Modal" parent="Theme.GodTools.Tool.Modal" />
-</resources>
