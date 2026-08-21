@@ -172,12 +172,16 @@ class LessonActivity :
                     val pagerState = lessonPagerState.pagerState
 
                     // record the highest page reached for feedback functionality
-                    // and the current page position for the share link
                     LaunchedEffect(pagerState) {
-                        snapshotFlow { pagerState.settledPage to lessonPagerState.pages }.collect { (page, pages) ->
+                        snapshotFlow { pagerState.settledPage }.collect { page ->
                             dataModel.pageReached.update { maxOf(it, page) }
-                            dataModel.currentPagePosition.value = pages.getOrNull(page)?.position ?: 0
                         }
+                    }
+
+                    // record the current page position for the share link
+                    LaunchedEffect(lessonPagerState) {
+                        snapshotFlow { lessonPagerState.settledPage?.position ?: 0 }
+                            .collect { dataModel.currentPagePosition.value = it }
                     }
 
                     // record the current progress for lesson resume functionality
