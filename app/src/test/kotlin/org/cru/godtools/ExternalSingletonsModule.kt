@@ -18,7 +18,6 @@ import org.ccci.gto.android.common.dagger.eager.EagerModule
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.analytics.AnalyticsModule
 import org.cru.godtools.dagger.EventBusModule
-import org.cru.godtools.dagger.FlipperModule
 import org.cru.godtools.dagger.ServicesModule
 import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.AttachmentsRepository
@@ -45,7 +44,6 @@ import org.greenrobot.eventbus.EventBus
         DatabaseModule::class,
         DownloadManagerModule::class,
         EventBusModule::class,
-        FlipperModule::class,
         ServicesModule::class,
     ]
 )

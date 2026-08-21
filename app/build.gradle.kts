@@ -102,7 +102,6 @@ android {
             versionNameSuffix = "-qa"
 
             isMinifyEnabled = true
-            proguardFile("proguard-rules-flipper.pro")
 
             resValue("string", "app_name_debug", "GodTools (QA)")
         }
@@ -200,12 +199,7 @@ dependencies {
     implementation(libs.youtubePlayer)
 
     debugImplementation(libs.androidx.compose.runtime.tracing)
-    debugImplementation(libs.facebook.flipper)
-    debugImplementation(libs.facebook.flipper.plugins.leakcanary2)
-    debugImplementation(libs.facebook.flipper.plugins.network)
-    debugImplementation(libs.facebook.soloader)
     debugImplementation(libs.firebase.crashlytics.ndk)
-    debugImplementation(libs.gtoSupport.facebook.flipper)
     debugImplementation(libs.gtoSupport.leakcanary)
     debugImplementation(libs.gtoSupport.okhttp3)
     debugImplementation(libs.leakcanary)
