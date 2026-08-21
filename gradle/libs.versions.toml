@@ -18,7 +18,6 @@ colormath = "3.6.1"
 dagger = "2.60.1"
 eventbus = "3.3.1"
 facebook = "18.3.0"
-facebook-flipper = "0.273.0"
 firebase-crashlytics = "20.1.0"
 firebase-perf = "22.0.6"
 godtoolsShared = "1.4.0-SNAPSHOT"
@@ -106,10 +105,6 @@ eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-pr
 facebook-common = { module = "com.facebook.android:facebook-common", version.ref = "facebook" }
 facebook-core = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook" }
-facebook-flipper = { module = "com.facebook.flipper:flipper", version.ref = "facebook-flipper" }
-facebook-flipper-plugins-leakcanary2 = { module = "com.facebook.flipper:flipper-leakcanary2-plugin", version.ref = "facebook-flipper" }
-facebook-flipper-plugins-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "facebook-flipper" }
-facebook-soloader = "com.facebook.soloader:soloader:0.12.1"
 firebase-config = "com.google.firebase:firebase-config:23.1.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
@@ -148,7 +143,6 @@ gtoSupport-dagger = { module = "org.ccci.gto.android:gto-support-dagger", versio
 gtoSupport-db = { module = "org.ccci.gto.android:gto-support-db", version.ref = "gtoSupport" }
 gtoSupport-eventbus = { module = "org.ccci.gto.android:gto-support-eventbus", version.ref = "gtoSupport" }
 gtoSupport-facebook = { module = "org.ccci.gto.android:gto-support-facebook", version.ref = "gtoSupport" }
-gtoSupport-facebook-flipper = { module = "org.ccci.gto.android:gto-support-facebook-flipper", version.ref = "gtoSupport" }
 gtoSupport-firebase-crashlytics = { module = "org.ccci.gto.android:gto-support-firebase-crashlytics", version.ref = "gtoSupport" }
 gtoSupport-jsonapi = { module = "org.ccci.gto.android:gto-support-jsonapi", version.ref = "gtoSupport" }
 gtoSupport-jsonapi-retrofit2 = { module = "org.ccci.gto.android:gto-support-jsonapi-retrofit2", version.ref = "gtoSupport" }
