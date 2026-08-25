@@ -43,7 +43,6 @@ class FirebaseAnalyticsServiceTest {
             every { InstantApps.isInstantApp(any()) } returns false
 
             analyticsService = FirebaseAnalyticsService(
-                mockk(),
                 accountManager,
                 eventBus,
                 userManager,
