@@ -1,12 +1,10 @@
 package org.cru.godtools.analytics.firebase
 
-import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -39,17 +37,13 @@ class FirebaseAnalyticsServiceTest {
 
     @BeforeTest
     fun setupMocks() {
-        mockkStatic("com.google.android.gms.common.wrappers.InstantApps") {
-            every { InstantApps.isInstantApp(any()) } returns false
-
-            analyticsService = FirebaseAnalyticsService(
-                accountManager,
-                eventBus,
-                userManager,
-                firebase,
-                testScope.backgroundScope
-            )
-        }
+        analyticsService = FirebaseAnalyticsService(
+            accountManager,
+            eventBus,
+            userManager,
+            firebase,
+            testScope.backgroundScope
+        )
     }
 
     @Test
