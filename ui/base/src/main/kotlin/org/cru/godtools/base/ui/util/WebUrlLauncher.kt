@@ -20,7 +20,6 @@ fun Context.openUrl(url: Uri) = try {
                 .setToolbarColor(ContextCompat.getColor(this, R.color.gt_blue_dark))
                 .build()
         )
-        .setInstantAppsEnabled(true)
         .build().launchUrl(this, url)
     true
 } catch (e: ActivityNotFoundException) {

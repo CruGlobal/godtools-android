@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Isa pafoni</string>
     <string name="menu_share_tract">Tumira chombo ichi</string>
     <string name="tract_card_previous">Yapfuura</string>
     <string name="tract_card_next">Zvinotevera</string>

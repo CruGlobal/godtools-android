@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">安裝</string>
     <string name="menu_share_tract">傳送此工具</string>
     <string name="tract_card_previous">前一頁</string>
     <string name="tract_card_next">下一頁</string>

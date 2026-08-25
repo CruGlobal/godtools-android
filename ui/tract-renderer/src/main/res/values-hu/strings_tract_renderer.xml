@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Telepítés</string>
     <string name="menu_share_tract">Küldd el ezt az eszközt</string>
     <string name="tract_card_previous">Előző</string>
     <string name="tract_card_next">Következő</string>

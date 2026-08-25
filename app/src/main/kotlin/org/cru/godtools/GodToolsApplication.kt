@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import co.touchlab.kermit.Logger
-import com.google.android.instantapps.InstantApps
 import com.google.android.play.core.splitcompat.SplitCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Lazy
@@ -55,7 +54,6 @@ open class GodToolsApplication :
 
     private fun initializeCrashlytics() {
         FirebaseCrashlytics.getInstance().apply {
-            setCustomKey("InstantApp", InstantApps.isInstantApp(this@GodToolsApplication))
             setCustomKey("InstallerPackage", packageManager.getInstallerPackageName(packageName).orEmpty())
             setCustomKey("SystemLanguageRaw", Locale.getDefault().toString())
             setCustomKey("SystemLanguage", Locale.getDefault().toLanguageTag())

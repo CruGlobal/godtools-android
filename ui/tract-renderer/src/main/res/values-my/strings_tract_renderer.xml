@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">" install လုပ်ပါ"</string>
     <string name="menu_share_tract">ဤကိရိယာကို ပေးပို့မည်</string>
     <string name="tract_card_previous">အရှေ့သို့</string>
     <string name="tract_card_next">နောက်စာမျက်နှ</string>
