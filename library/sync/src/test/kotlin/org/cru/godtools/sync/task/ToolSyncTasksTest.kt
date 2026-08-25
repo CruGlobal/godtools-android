@@ -118,18 +118,6 @@ class ToolSyncTasksTest {
     }
 
     @Test
-    fun `syncFeaturedTools(country = null)`() = runTest {
-        tasks.syncFeaturedTools(locale, null)
-        coVerifyAll {
-            toolsApi.getFeaturedTools(locale, null, any())
-            toolsRepository.storeFeaturedToolsFromSync(locale, null, apiFeaturedTools)
-        }
-        assertFalse(
-            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_FEATURED_TOOLS, locale, "", staleAfter = 60_000)
-        )
-    }
-
-    @Test
     fun `syncFeaturedTools(force = false) - already synced`() = runTest {
         with(lastSyncTimeRepository) {
             setLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, country, time = System.currentTimeMillis())

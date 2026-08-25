@@ -28,7 +28,7 @@ interface ToolsApi {
     @GET("$PATH_RESOURCES/featured")
     suspend fun getFeaturedTools(
         @Query(PARAM_FILTER_LANGUAGE) locale: Locale,
-        @Query(PARAM_FILTER_COUNTRY) country: String? = null,
+        @Query(PARAM_FILTER_COUNTRY) country: String,
         @QueryMap params: JsonApiParams,
     ): Response<JsonApiObject<Tool>>
 

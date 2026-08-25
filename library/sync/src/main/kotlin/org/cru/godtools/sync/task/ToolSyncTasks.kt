@@ -106,15 +106,15 @@ internal class ToolSyncTasks @Inject internal constructor(
     // region Featured Tools
     private val featuredToolsMutex = MutexMap()
 
-    internal suspend fun syncFeaturedTools(locale: Locale, country: String?, force: Boolean = false): Boolean {
-        val normalizedCountry = country?.uppercase()
+    internal suspend fun syncFeaturedTools(locale: Locale, country: String, force: Boolean = false): Boolean {
+        val normalizedCountry = country.uppercase()
 
         featuredToolsMutex.withLock(locale to normalizedCountry) {
             if (!force &&
                 !lastSyncTimeRepository.isLastSyncStale(
                     SYNC_TIME_FEATURED_TOOLS,
                     locale,
-                    normalizedCountry.orEmpty(),
+                    normalizedCountry,
                     staleAfter = STALE_DURATION_TOOLS,
                 )
             ) {
@@ -125,7 +125,7 @@ internal class ToolSyncTasks @Inject internal constructor(
                 .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
 
             toolsRepository.storeFeaturedToolsFromSync(locale, normalizedCountry, tools)
-            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, normalizedCountry.orEmpty())
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_FEATURED_TOOLS, locale, normalizedCountry)
 
             return true
         }

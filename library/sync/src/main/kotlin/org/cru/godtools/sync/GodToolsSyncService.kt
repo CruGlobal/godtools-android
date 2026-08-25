@@ -86,7 +86,7 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
 
-    suspend fun syncFeaturedTools(locale: Locale, country: String?, force: Boolean = false) =
+    suspend fun syncFeaturedTools(locale: Locale, country: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncFeaturedTools(locale, country, force) }
 
     suspend fun syncToolOrder(locale: Locale, country: String?, force: Boolean = false) =
