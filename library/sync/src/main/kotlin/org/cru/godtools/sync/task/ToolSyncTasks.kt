@@ -40,7 +40,8 @@ internal class ToolSyncTasks @Inject internal constructor(
     internal companion object {
         const val SYNC_TIME_TOOLS = "last_synced.tools"
         const val SYNC_TIME_FEATURED_TOOLS = "last_synced.featured_tools."
-        const val SYNC_TIME_TOOL_ORDER = "last_synced.tool_order."
+        const val SYNC_TIME_DEFAULT_TOOL_ORDER = "last_synced.default_tool_order."
+        const val SYNC_TIME_RANKED_TOOLS = "last_synced.ranked_tools."
 
         private val INCLUDES_GET_TOOL = Includes(
             Tool.JSON_ATTACHMENTS,
@@ -133,28 +134,51 @@ internal class ToolSyncTasks @Inject internal constructor(
     // endregion Featured Tools
 
     // region Tool Order
-    private val toolOrderMutex = MutexMap()
+    private val defaultToolOrderMutex = MutexMap()
+    private val rankedToolsMutex = MutexMap()
 
-    internal suspend fun syncToolOrder(locale: Locale, country: String?, force: Boolean = false): Boolean {
-        val normalizedCountry = country?.uppercase()
-
-        toolOrderMutex.withLock(locale to normalizedCountry) {
+    internal suspend fun syncDefaultToolOrder(locale: Locale, force: Boolean = false): Boolean {
+        defaultToolOrderMutex.withLock(locale) {
             if (!force &&
                 !lastSyncTimeRepository.isLastSyncStale(
-                    SYNC_TIME_TOOL_ORDER,
+                    SYNC_TIME_DEFAULT_TOOL_ORDER,
                     locale,
-                    normalizedCountry.orEmpty(),
                     staleAfter = STALE_DURATION_TOOLS,
                 )
             ) {
                 return true
             }
 
-            val tools = toolsApi.getToolOrder(locale, normalizedCountry, buildToolPlaceholderParams())
+            val tools = toolsApi.getDefaultToolOrder(locale, buildToolPlaceholderParams())
+                .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
+
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, tools)
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOL_ORDER, locale)
+
+            return true
+        }
+    }
+
+    internal suspend fun syncRankedTools(locale: Locale, country: String, force: Boolean = false): Boolean {
+        val normalizedCountry = country.uppercase()
+
+        rankedToolsMutex.withLock(locale to normalizedCountry) {
+            if (!force &&
+                !lastSyncTimeRepository.isLastSyncStale(
+                    SYNC_TIME_RANKED_TOOLS,
+                    locale,
+                    normalizedCountry,
+                    staleAfter = STALE_DURATION_TOOLS,
+                )
+            ) {
+                return true
+            }
+
+            val tools = toolsApi.getRankedTools(locale, normalizedCountry, buildToolPlaceholderParams())
                 .takeIf { it.code() == HTTP_OK }?.body()?.data ?: return false
 
             toolsRepository.storePersonalizedToolOrderFromSync(locale, normalizedCountry, tools)
-            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_TOOL_ORDER, locale, normalizedCountry.orEmpty())
+            lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_RANKED_TOOLS, locale, normalizedCountry)
 
             return true
         }

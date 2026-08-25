@@ -32,10 +32,16 @@ interface ToolsApi {
         @QueryMap params: JsonApiParams,
     ): Response<JsonApiObject<Tool>>
 
-    @GET("$PATH_RESOURCES/default_order")
-    suspend fun getToolOrder(
+    @GET("$PATH_RESOURCES/ranked")
+    suspend fun getRankedTools(
         @Query(PARAM_FILTER_LANGUAGE) locale: Locale,
-        @Query(PARAM_FILTER_COUNTRY) country: String? = null,
+        @Query(PARAM_FILTER_COUNTRY) country: String,
+        @QueryMap params: JsonApiParams,
+    ): Response<JsonApiObject<Tool>>
+
+    @GET("$PATH_RESOURCES/default-order")
+    suspend fun getDefaultToolOrder(
+        @Query(PARAM_FILTER_LANGUAGE) locale: Locale,
         @QueryMap params: JsonApiParams,
     ): Response<JsonApiObject<Tool>>
 }

@@ -18,8 +18,9 @@ import org.cru.godtools.db.repository.InMemoryLastSyncTimeRepository
 import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.model.randomTool
 import org.cru.godtools.sync.repository.SyncRepository
+import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_DEFAULT_TOOL_ORDER
 import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_FEATURED_TOOLS
-import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_TOOL_ORDER
+import org.cru.godtools.sync.task.ToolSyncTasks.Companion.SYNC_TIME_RANKED_TOOLS
 import retrofit2.Response
 
 class ToolSyncTasksTest {
@@ -29,14 +30,17 @@ class ToolSyncTasksTest {
     private val tool = randomTool()
     private val existingTools = listOf(randomTool())
     private val apiFeaturedTools = listOf(randomTool(), randomTool())
-    private val apiToolOrder = listOf(randomTool(), randomTool())
+    private val apiDefaultToolOrder = listOf(randomTool(), randomTool())
+    private val apiRankedTools = listOf(randomTool(), randomTool())
 
     private val toolsApi: ToolsApi = mockk {
         coEvery { list(any()) } returns Response.success(JsonApiObject.single(tool))
         coEvery { getFeaturedTools(any(), any(), any()) } returns
             Response.success(JsonApiObject.of(*apiFeaturedTools.toTypedArray()))
-        coEvery { getToolOrder(any(), any(), any()) } returns
-            Response.success(JsonApiObject.of(*apiToolOrder.toTypedArray()))
+        coEvery { getDefaultToolOrder(any(), any()) } returns
+            Response.success(JsonApiObject.of(*apiDefaultToolOrder.toTypedArray()))
+        coEvery { getRankedTools(any(), any(), any()) } returns
+            Response.success(JsonApiObject.of(*apiRankedTools.toTypedArray()))
     }
     private val viewsApi: ViewsApi = mockk()
     private val syncRepository: SyncRepository = mockk {
@@ -147,43 +151,26 @@ class ToolSyncTasksTest {
     }
     // endregion syncFeaturedTools()
 
-    // region syncToolOrder()
+    // region syncDefaultToolOrder()
     @Test
-    fun `syncToolOrder()`() = runTest {
-        tasks.syncToolOrder(locale, country)
+    fun `syncDefaultToolOrder()`() = runTest {
+        tasks.syncDefaultToolOrder(locale)
         coVerifyAll {
-            toolsApi.getToolOrder(locale, country, any())
-            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, apiToolOrder)
+            toolsApi.getDefaultToolOrder(locale, any())
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, apiDefaultToolOrder)
         }
         assertFalse(
-            lastSyncTimeRepository.isLastSyncStale(
-                SYNC_TIME_TOOL_ORDER,
-                locale,
-                country,
-                staleAfter = 60_000
-            )
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_DEFAULT_TOOL_ORDER, locale, staleAfter = 60_000)
         )
     }
 
     @Test
-    fun `syncToolOrder(country = null)`() = runTest {
-        tasks.syncToolOrder(locale, null)
-        coVerifyAll {
-            toolsApi.getToolOrder(locale, null, any())
-            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, apiToolOrder)
-        }
-        assertFalse(
-            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_TOOL_ORDER, locale, "", staleAfter = 60_000)
-        )
-    }
-
-    @Test
-    fun `syncToolOrder(force = false) - already synced`() = runTest {
+    fun `syncDefaultToolOrder(force = false) - already synced`() = runTest {
         with(lastSyncTimeRepository) {
-            setLastSyncTime(SYNC_TIME_TOOL_ORDER, locale, country, time = System.currentTimeMillis())
+            setLastSyncTime(SYNC_TIME_DEFAULT_TOOL_ORDER, locale, time = System.currentTimeMillis())
         }
 
-        tasks.syncToolOrder(locale, country, force = false)
+        tasks.syncDefaultToolOrder(locale, force = false)
         coVerifyAll {
             toolsApi wasNot Called
             toolsRepository wasNot Called
@@ -191,24 +178,62 @@ class ToolSyncTasksTest {
     }
 
     @Test
-    fun `syncToolOrder(force = true) - already synced`() = runTest {
+    fun `syncDefaultToolOrder(force = true) - already synced`() = runTest {
         with(lastSyncTimeRepository) {
-            setLastSyncTime(SYNC_TIME_TOOL_ORDER, locale, country, time = System.currentTimeMillis())
+            setLastSyncTime(SYNC_TIME_DEFAULT_TOOL_ORDER, locale, time = System.currentTimeMillis())
         }
 
-        tasks.syncToolOrder(locale, country, force = true)
+        tasks.syncDefaultToolOrder(locale, force = true)
         coVerifyAll {
-            toolsApi.getToolOrder(locale, country, any())
-            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, apiToolOrder)
+            toolsApi.getDefaultToolOrder(locale, any())
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, null, apiDefaultToolOrder)
         }
         assertFalse(
-            lastSyncTimeRepository.isLastSyncStale(
-                SYNC_TIME_TOOL_ORDER,
-                locale,
-                country,
-                staleAfter = 60_000,
-            )
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_DEFAULT_TOOL_ORDER, locale, staleAfter = 60_000)
         )
     }
-    // endregion syncToolOrder()
+    // endregion syncDefaultToolOrder()
+
+    // region syncRankedTools()
+    @Test
+    fun `syncRankedTools()`() = runTest {
+        tasks.syncRankedTools(locale, country)
+        coVerifyAll {
+            toolsApi.getRankedTools(locale, country, any())
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, apiRankedTools)
+        }
+        assertFalse(
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_RANKED_TOOLS, locale, country, staleAfter = 60_000)
+        )
+    }
+
+    @Test
+    fun `syncRankedTools(force = false) - already synced`() = runTest {
+        with(lastSyncTimeRepository) {
+            setLastSyncTime(SYNC_TIME_RANKED_TOOLS, locale, country, time = System.currentTimeMillis())
+        }
+
+        tasks.syncRankedTools(locale, country, force = false)
+        coVerifyAll {
+            toolsApi wasNot Called
+            toolsRepository wasNot Called
+        }
+    }
+
+    @Test
+    fun `syncRankedTools(force = true) - already synced`() = runTest {
+        with(lastSyncTimeRepository) {
+            setLastSyncTime(SYNC_TIME_RANKED_TOOLS, locale, country, time = System.currentTimeMillis())
+        }
+
+        tasks.syncRankedTools(locale, country, force = true)
+        coVerifyAll {
+            toolsApi.getRankedTools(locale, country, any())
+            toolsRepository.storePersonalizedToolOrderFromSync(locale, country, apiRankedTools)
+        }
+        assertFalse(
+            lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_RANKED_TOOLS, locale, country, staleAfter = 60_000)
+        )
+    }
+    // endregion syncRankedTools()
 }
