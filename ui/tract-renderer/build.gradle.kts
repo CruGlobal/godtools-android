@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.lottie)
     implementation(libs.materialComponents)
-    implementation(libs.play.instantapps)
     implementation(libs.rtlViewpager)
     implementation(libs.splitties.fragmentargs)
     implementation(libs.tinder.statemachine)

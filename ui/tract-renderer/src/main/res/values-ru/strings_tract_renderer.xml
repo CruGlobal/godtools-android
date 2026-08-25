@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Установка</string>
     <string name="menu_share_tract">Отправить этот инструмент</string>
     <string name="tract_card_previous">Назад</string>
     <string name="tract_card_next">Далее</string>
