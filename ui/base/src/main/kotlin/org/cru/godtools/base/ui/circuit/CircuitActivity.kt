@@ -13,6 +13,7 @@ import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.rememberAndroidScreenAwareNavigator
 import com.slack.circuitx.gesturenavigation.GestureNavigationDecorationFactory
@@ -23,9 +24,9 @@ import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.circuit.CircuitActivity.Companion.EXTRA_SCREEN
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
-fun Context.startCircuitActivity(screen: Screen) = startActivity(createCircuitActivityIntent(screen))
-fun Context.createCircuitActivityIntent(screen: Screen) = Intent(this, CircuitActivity::class.java)
-    .putExtra(EXTRA_SCREEN, screen as Parcelable)
+fun Context.startCircuitActivity(screen: ParcelableScreen) = startActivity(createCircuitActivityIntent(screen))
+fun Context.createCircuitActivityIntent(screen: ParcelableScreen) = Intent(this, CircuitActivity::class.java)
+    .putExtra(EXTRA_SCREEN, screen)
 
 @AndroidEntryPoint
 class CircuitActivity : BaseActivity() {
@@ -54,7 +55,10 @@ class CircuitActivity : BaseActivity() {
                         val backStack = rememberSaveableBackStack(initialScreens)
                         val navigator = rememberAndroidScreenAwareNavigator(
                             rememberCircuitNavigator(backStack) { result ->
-                                setResult(RESULT_OK, Intent().putExtra(EXTRA_RESULT, result))
+                                setResult(
+                                    RESULT_OK,
+                                    Intent().putExtra(EXTRA_RESULT, result as? Parcelable)
+                                )
                                 finish()
                             },
                             this

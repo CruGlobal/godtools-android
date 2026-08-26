@@ -5,13 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import java.util.Locale
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.model.Language
 
 @Parcelize
-object DownloadableLanguagesScreen : Screen {
+object DownloadableLanguagesScreen : ParcelableScreen {
     data class UiState(
         val query: MutableState<String> = mutableStateOf(""),
         val languages: List<UiLanguage> = emptyList(),

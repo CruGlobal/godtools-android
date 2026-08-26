@@ -3,7 +3,7 @@ package org.cru.godtools.ui.tooldetails
 import androidx.annotation.StringRes
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import java.io.File
 import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
@@ -18,7 +18,7 @@ import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tools.ToolCardPresenter
 
 @Parcelize
-data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : Screen {
+data class ToolDetailsScreen(val initialTool: String, val secondLanguage: Locale? = null) : ParcelableScreen {
     data class UiState(
         val toolCode: String? = null,
         val tool: Tool? = null,
