@@ -21,11 +21,13 @@ import com.slack.circuit.foundation.onNavEvent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.overlay.OverlayEffect
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuitx.android.IntentScreen
 import com.slack.circuitx.navigation.intercepting.InterceptedResult
 import com.slack.circuitx.navigation.intercepting.NavigationContext
 import com.slack.circuitx.navigation.intercepting.NavigationInterceptor
+import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.Skipped
 import com.slack.circuitx.navigation.intercepting.NavigationInterceptor.Companion.SuccessConsumed
 import com.slack.circuitx.navigation.intercepting.rememberInterceptingNavigator
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +46,7 @@ import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationControll
 import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationModalOverlay
 import org.cru.godtools.ui.dashboard.optinnotification.PermissionStatus
 import org.cru.godtools.ui.onboarding.OnboardingScreen
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
@@ -66,9 +69,12 @@ class DashboardActivity : BaseActivity() {
 
     private val navigationInterceptor = object : NavigationInterceptor {
         override fun goTo(screen: Screen, navigationContext: NavigationContext): InterceptedResult {
+            @Suppress("ktlint:standard:blank-line-between-when-conditions")
             when (screen) {
                 is IntentScreen -> screen.startWith(this@DashboardActivity)
-                else -> startCircuitActivity(screen)
+                is ParcelableScreen -> startCircuitActivity(screen)
+                else -> Timber.tag("DashboardActivity")
+                    .e(IllegalArgumentException("Unhandled Circuit Screen in DashboardActivity: $screen"))
             }
             return SuccessConsumed
         }
