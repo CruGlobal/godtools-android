@@ -183,7 +183,7 @@ kotlin-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coro
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
-kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.1"
+kotlin-immutable-collections = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2"
 kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
