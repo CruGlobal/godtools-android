@@ -1,5 +1,6 @@
 package org.cru.godtools.ui.account
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,10 +20,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -44,7 +44,6 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.compose.ui.draw.invisibleIf
 import org.cru.godtools.R
@@ -111,8 +110,9 @@ internal fun AccountLayout(viewModel: AccountViewModel = viewModel(), onEvent: (
 }
 
 @Composable
+@VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-private fun AccountLayoutHeader(
+internal fun AccountLayoutHeader(
     user: User? = null,
     pages: List<AccountPage> = emptyList(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -157,9 +157,8 @@ private fun AccountLayoutHeader(
                     .invisibleIf(user?.createdAt == null)
             )
 
-            TabRow(
+            SecondaryTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                indicator = { TabRowDefaults.SecondaryIndicator(Modifier.pagerTabIndicatorOffset(pagerState, it)) },
                 divider = {},
                 modifier = Modifier.padding(top = 12.dp, horizontal = ACCOUNT_PAGE_MARGIN_HORIZONTAL)
                 // TODO: set the correct padding
