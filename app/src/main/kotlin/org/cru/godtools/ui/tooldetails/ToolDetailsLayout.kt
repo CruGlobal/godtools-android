@@ -28,10 +28,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -61,7 +60,6 @@ import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuitx.effects.LaunchedImpressionEffect
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
-import org.ccci.gto.android.common.androidx.compose.material3.ui.tabs.pagerTabIndicatorOffset
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -199,11 +197,8 @@ private fun ToolDetailsContent(state: UiState, modifier: Modifier = Modifier) {
                     modifier = Modifier.padding(top = 16.dp, horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 )
 
-                TabRow(
+                SecondaryTabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    indicator = { positions ->
-                        TabRowDefaults.SecondaryIndicator(Modifier.pagerTabIndicatorOffset(pagerState, positions))
-                    },
                     divider = {},
                     modifier = Modifier.padding(horizontal = TOOL_DETAILS_HORIZONTAL_MARGIN)
                 ) {
