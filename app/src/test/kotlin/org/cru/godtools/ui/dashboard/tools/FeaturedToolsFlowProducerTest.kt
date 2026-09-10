@@ -20,7 +20,7 @@ import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 @Suppress("UnusedFlow")
 class FeaturedToolsFlowProducerTest {
     private val appLanguageFlow = MutableStateFlow(Locale.ENGLISH)
-    private val countryFlow = MutableStateFlow<String?>(null)
+    private val countryFlow = MutableStateFlow<String?>("US")
     private val normalToolsFlow = MutableStateFlow(emptyList<Tool>())
 
     private val settings: Settings = mockk {
@@ -72,7 +72,6 @@ class FeaturedToolsFlowProducerTest {
     // region PERSONALIZATION mode
     @Test
     fun `getFlow - Personalization - uses getFeaturedToolsFlow`() = runTest {
-        countryFlow.value = "US"
         producer.getFlow(mode = Mode.PERSONALIZATION).first()
         verify { toolsRepository.getFeaturedToolsFlow(any(), any()) }
         verify(exactly = 0) { toolsRepository.getNormalToolsFlow() }
@@ -81,14 +80,12 @@ class FeaturedToolsFlowProducerTest {
     @Test
     fun `getFlow - Personalization - uses appLanguageFlow when no language provided`() = runTest {
         appLanguageFlow.value = Locale.FRENCH
-        countryFlow.value = "US"
         producer.getFlow(mode = Mode.PERSONALIZATION).first()
         verify { toolsRepository.getFeaturedToolsFlow(Locale.FRENCH, any()) }
     }
 
     @Test
     fun `getFlow - Personalization - uses provided language`() = runTest {
-        countryFlow.value = "US"
         producer.getFlow(mode = Mode.PERSONALIZATION, language = Locale.GERMAN).first()
         verify { toolsRepository.getFeaturedToolsFlow(Locale.GERMAN, any()) }
         verify(exactly = 0) { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, any()) }
@@ -96,7 +93,6 @@ class FeaturedToolsFlowProducerTest {
 
     @Test
     fun `getFlow - Personalization - uses Settings getPersonalizationCountryFlow for country`() = runTest {
-        countryFlow.value = "US"
         producer.getFlow(mode = Mode.PERSONALIZATION).first()
         verify { toolsRepository.getFeaturedToolsFlow(any(), "US") }
     }
@@ -104,7 +100,6 @@ class FeaturedToolsFlowProducerTest {
     @Test
     fun `getFlow - Personalization - returns featured tools when non-empty`() = runTest {
         val tool = createTool()
-        countryFlow.value = "US"
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(tool))
 
         assertEquals(listOf(tool), producer.getFlow(mode = Mode.PERSONALIZATION).first())
@@ -120,7 +115,6 @@ class FeaturedToolsFlowProducerTest {
 
     @Test
     fun `getFlow - Personalization - GT-3101 - no featured tools when none exist for the selected country`() = runTest {
-        countryFlow.value = "US"
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(emptyList())
 
         assertEquals(emptyList(), producer.getFlow(mode = Mode.PERSONALIZATION).first())
@@ -131,7 +125,6 @@ class FeaturedToolsFlowProducerTest {
     fun `getFlow - Personalization - excludes hidden tools`() = runTest {
         val hidden = createTool(isHidden = true)
         val visible = createTool(isHidden = false)
-        countryFlow.value = "US"
         every { toolsRepository.getFeaturedToolsFlow(any(), any()) } returns flowOf(listOf(hidden, visible))
 
         assertEquals(listOf(visible), producer.getFlow(mode = Mode.PERSONALIZATION).first())
@@ -140,7 +133,6 @@ class FeaturedToolsFlowProducerTest {
     @Test
     fun `getFlow - Personalization - updates when appLanguage changes`() = runTest {
         val frenchTool = createTool()
-        countryFlow.value = "US"
         every { toolsRepository.getFeaturedToolsFlow(Locale.FRENCH, "US") } returns flowOf(listOf(frenchTool))
 
         producer.getFlow(mode = Mode.PERSONALIZATION).test {
@@ -154,6 +146,7 @@ class FeaturedToolsFlowProducerTest {
     @Test
     fun `getFlow - Personalization - updates when country changes`() = runTest {
         val usTool = createTool()
+        countryFlow.value = null
         every { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, "US") } returns flowOf(listOf(usTool))
 
         producer.getFlow(mode = Mode.PERSONALIZATION).test {
