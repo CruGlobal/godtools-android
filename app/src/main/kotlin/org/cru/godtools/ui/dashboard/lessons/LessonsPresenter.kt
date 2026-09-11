@@ -3,12 +3,12 @@ package org.cru.godtools.ui.dashboard.lessons
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -29,13 +29,17 @@ import java.util.Locale
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
 import org.ccci.gto.android.common.sync.SyncTracker
@@ -105,7 +109,7 @@ class LessonsPresenter @AssistedInject internal constructor(
         }
 
         val appLanguage by settings.appLanguageFlow.collectAsState()
-        val languageFilter = rememberLanguagesFilter()
+        val languageFilter = rememberLanguagesFilter(mode)
 
         RegisterSyncTask(languageFilter.selectedItem?.code ?: appLanguage)
 
@@ -127,23 +131,26 @@ class LessonsPresenter @AssistedInject internal constructor(
 
     @Composable
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun rememberLanguagesFilter(): FilterMenu.UiState<Language> {
-        val appLanguage by settings.appLanguageFlow.collectAsState()
-        var locale by rememberSaveable { mutableStateOf(appLanguage to appLanguage) }
-        LaunchedEffect(appLanguage) { if (locale.first != appLanguage) locale = appLanguage to appLanguage }
+    private fun rememberLanguagesFilter(mode: UiState.Mode): FilterMenu.UiState<Language> {
+        val selectedLocaleFlow = remember(mode) {
+            when (mode) {
+                UiState.Mode.PERSONALIZATION -> settings.getDashboardPersonalizedLessonsFilterLocaleFlow()
+                UiState.Mode.ALL_LESSONS -> settings.getDashboardLessonsFilterLocaleFlow()
+            }.combine(settings.appLanguageFlow) { stored, appLanguage -> stored ?: appLanguage }
+        }
 
+        val scope = rememberCoroutineScope()
         val query = rememberSaveable { mutableStateOf("") }
         val languagesFlow = rememberLanguagesFlow()
 
         return FilterMenu.UiState(
             menuExpanded = rememberSaveable { mutableStateOf(false) },
             query = query,
-            selectedItem = remember {
-                snapshotFlow { locale.second }
-                    .flatMapLatest { locale ->
-                        languagesRepository.findLanguageFlow(locale).map { it ?: Language(locale) }
-                    }
-            }.collectAsState(Language(locale.second)).value,
+            selectedItem = remember(selectedLocaleFlow) {
+                selectedLocaleFlow.flatMapLatest { locale ->
+                    languagesRepository.findLanguageFlow(locale).map { it ?: Language(locale) }
+                }
+            }.collectAsState(Language(settings.appLanguage)).value,
             items = remember {
                 combine(
                     languagesFlow,
@@ -169,7 +176,16 @@ class LessonsPresenter @AssistedInject internal constructor(
             }.collectAsState(persistentListOf()).value,
             eventSink = {
                 when (it) {
-                    is FilterMenu.Event.SelectItem -> locale = appLanguage to it.item.code
+                    is FilterMenu.Event.SelectItem -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                        withContext(NonCancellable) {
+                            when (mode) {
+                                UiState.Mode.PERSONALIZATION ->
+                                    settings.updateDashboardPersonalizedLessonsFilterLocale(it.item.code)
+
+                                UiState.Mode.ALL_LESSONS -> settings.updateDashboardLessonsFilterLocale(it.item.code)
+                            }
+                        }
+                    }
                 }
             }
         )
