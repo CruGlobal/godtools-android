@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,17 +19,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.ccci.gto.android.common.androidx.compose.material3.ui.card.ElevatedCard
 import org.ccci.gto.android.common.androidx.compose.ui.text.computeHeightForDefaultText
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.ccci.gto.android.common.util.format
 import org.cru.godtools.R
-
-@Composable
-fun GlobalActivityLayout(modifier: Modifier = Modifier, viewModel: GlobalActivityViewModel = viewModel()) {
-    GlobalActivityLayout(GlobalActivityScreen.UiState(activity = viewModel.activity.collectAsState().value), modifier)
-}
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
