@@ -59,7 +59,17 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
         val scope = rememberCoroutineScope()
 
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
-        val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
+        val appLanguage by settings.appLanguageFlow.collectAsState()
+        val storedLocale by remember(mode) {
+            when (mode) {
+                Mode.PERSONALIZATION -> settings.getDashboardPersonalizedFilterLocaleFlow()
+                Mode.ALL_TOOLS -> settings.getDashboardFilterLocaleFlow()
+            }
+        }.collectAsState(null)
+        val selectedLocale = when (mode) {
+            Mode.PERSONALIZATION -> storedLocale ?: appLanguage
+            Mode.ALL_TOOLS -> storedLocale
+        }
 
         val languageMenuExpanded = rememberSaveable { mutableStateOf(false) }
         val languageQuery = rememberSaveable { mutableStateOf("") }
@@ -89,7 +99,10 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 eventSink = {
                     when (it) {
                         is FilterMenu.Event.SelectItem -> scope.launch {
-                            settings.updateDashboardFilterLocale(it.item?.code)
+                            when (mode) {
+                                Mode.PERSONALIZATION -> settings.updateDashboardPersonalizedFilterLocale(it.item?.code)
+                                Mode.ALL_TOOLS -> settings.updateDashboardFilterLocale(it.item?.code)
+                            }
                         }
                     }
                 }
@@ -151,7 +164,12 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 .flowOn(ioDispatcher)
                 .combine(toolCountsFlow) { languages, toolCounts ->
                     languages
-                        .let { listOf(null) + it }
+                        .let {
+                            when (mode) {
+                                Mode.PERSONALIZATION -> it
+                                Mode.ALL_TOOLS -> listOf(null) + it
+                            }
+                        }
                         .map { FilterMenu.UiState.Item(it, toolCounts[it?.code] ?: 0) }
                 }
         }.collectAsState(emptyList()).value

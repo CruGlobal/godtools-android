@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.test.presenterTestOf
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.excludeRecords
 import io.mockk.mockk
@@ -48,6 +49,7 @@ class DefaultToolFiltersStateProducerTest {
     private val gospelLanguagesFlow = MutableStateFlow(emptyList<Language>())
     private val selectedCategory = MutableStateFlow<String?>(null)
     private val selectedLocale = MutableStateFlow<Locale?>(null)
+    private val selectedPersonalizedLocale = MutableStateFlow<Locale?>(null)
 
     private val testScope = TestScope()
 
@@ -66,8 +68,12 @@ class DefaultToolFiltersStateProducerTest {
         every { appLanguageFlow } returns this@DefaultToolFiltersStateProducerTest.appLanguage
         every { getDashboardFilterCategoryFlow() } returns selectedCategory
         every { getDashboardFilterLocaleFlow() } returns selectedLocale
+        every { getDashboardPersonalizedFilterLocaleFlow() } returns selectedPersonalizedLocale
         coEvery { updateDashboardFilterCategory(any()) } answers { selectedCategory.value = firstArg() }
         coEvery { updateDashboardFilterLocale(any()) } answers { selectedLocale.value = firstArg() }
+        coEvery { updateDashboardPersonalizedFilterLocale(any()) } answers {
+            selectedPersonalizedLocale.value = firstArg()
+        }
     }
     private val translationsRepository: TranslationsRepository = mockk {
         every { getTranslationsFlowForTools(any()) } returns flowOf(emptyList())
@@ -155,6 +161,20 @@ class DefaultToolFiltersStateProducerTest {
         }
 
         verifyAll { languagesRepository.getLanguagesFlow() }
+    }
+
+    @Test
+    fun `Filters - languageFilter - items - GT-3102 - Personalized has no Any language option`() = testScope.runTest {
+        presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
+            languagesFlow.value = listOf(Language(Locale.ENGLISH), Language(Locale.FRENCH))
+            assertEquals(
+                listOf<FilterMenu.UiState.Item<Language?>>(
+                    FilterMenu.UiState.Item(Language(Locale.ENGLISH), 0),
+                    FilterMenu.UiState.Item(Language(Locale.FRENCH), 0)
+                ),
+                expectMostRecentItem().languageFilter.items
+            )
+        }
     }
 
     @Test
@@ -268,6 +288,43 @@ class DefaultToolFiltersStateProducerTest {
 
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
     }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - GT-3102 - Personalized defaults to the app language`() =
+        testScope.runTest {
+            val language = Language(Locale.ENGLISH)
+            every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
+
+            presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
+                assertEquals(language, expectMostRecentItem().languageFilter.selectedItem)
+            }
+
+            verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+        }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - GT-3102 - Personalized updates the personalized setting`() =
+        testScope.runTest {
+            presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
+                awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+                expectMostRecentItem()
+            }
+
+            coVerify { settings.updateDashboardPersonalizedFilterLocale(Locale.FRENCH) }
+            coVerify(exactly = 0) { settings.updateDashboardFilterLocale(any()) }
+        }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - GT-3102 - All Tools doesn't update the personalized setting`() =
+        testScope.runTest {
+            presenterTestOf(presentFunction = { producer.produce(Mode.ALL_TOOLS) }) {
+                awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+                expectMostRecentItem()
+            }
+
+            coVerify { settings.updateDashboardFilterLocale(Locale.FRENCH) }
+            coVerify(exactly = 0) { settings.updateDashboardPersonalizedFilterLocale(any()) }
+        }
     // endregion Filters.languageFilter.selectedItem
 
     // region Filters.languageFilter.menuExpanded
