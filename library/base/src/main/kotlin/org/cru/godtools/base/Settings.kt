@@ -67,6 +67,9 @@ class Settings internal constructor(private val context: Context, coroutineScope
         // Dashboard Settings
         private val KEY_DASHBOARD_FILTER_CATEGORY = stringPreferencesKey("dashboardFilterCategory")
         private val KEY_DASHBOARD_FILTER_LOCALE = stringPreferencesKey("dashboardFilterLocale")
+        private val KEY_DASHBOARD_LESSONS_FILTER_LOCALE = stringPreferencesKey("dashboardLessonsFilterLocale")
+        private val KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE =
+            stringPreferencesKey("dashboardPersonalizedLessonsFilterLocale")
 
         // Personalization Settings
         private val KEY_PERSONALIZATION_COUNTRY = stringPreferencesKey("personalizationCountry")
@@ -162,6 +165,36 @@ class Settings internal constructor(private val context: Context, coroutineScope
                 when (locale) {
                     null -> remove(KEY_DASHBOARD_FILTER_LOCALE)
                     else -> set(KEY_DASHBOARD_FILTER_LOCALE, locale.toLanguageTag())
+                }
+            }
+        }
+    }
+
+    fun getDashboardLessonsFilterLocaleFlow() = dataStorePreferences.data
+        .map { it[KEY_DASHBOARD_LESSONS_FILTER_LOCALE]?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+
+    suspend fun updateDashboardLessonsFilterLocale(locale: Locale?) {
+        dataStorePreferences.updateData {
+            it.toMutablePreferences().apply {
+                when (locale) {
+                    null -> remove(KEY_DASHBOARD_LESSONS_FILTER_LOCALE)
+                    else -> set(KEY_DASHBOARD_LESSONS_FILTER_LOCALE, locale.toLanguageTag())
+                }
+            }
+        }
+    }
+
+    fun getDashboardPersonalizedLessonsFilterLocaleFlow() = dataStorePreferences.data
+        .map { it[KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE]?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+
+    suspend fun updateDashboardPersonalizedLessonsFilterLocale(locale: Locale?) {
+        dataStorePreferences.updateData {
+            it.toMutablePreferences().apply {
+                when (locale) {
+                    null -> remove(KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE)
+                    else -> set(KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE, locale.toLanguageTag())
                 }
             }
         }
