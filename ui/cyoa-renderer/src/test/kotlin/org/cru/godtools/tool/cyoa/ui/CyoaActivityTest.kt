@@ -23,6 +23,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,7 @@ import org.cru.godtools.shared.tool.parser.model.page.backgroundColor
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageGravity
 import org.cru.godtools.shared.tool.parser.model.page.backgroundImageScaleType
 import org.cru.godtools.tool.cyoa.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tool.cyoa.CyoaDeepLink
 import org.cru.godtools.tool.cyoa.R
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -736,6 +738,71 @@ class CyoaActivityTest {
         }
     }
     // endregion Update Manifest
+
+    // region Share Link Logic
+    @Test
+    fun `Share Link - contains current page`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.shareLinkUriLiveData.observeForever { }
+
+                assertEquals("https://knowgod.com/en/tool/v2/test/page1?icid=gtshare", it.shareLinkUriLiveData.value)
+            }
+        }
+    }
+
+    @Test
+    fun `Share Link - updates on navigation`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.shareLinkUriLiveData.observeForever { }
+
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+                assertEquals("https://knowgod.com/en/tool/v2/test/page2?icid=gtshare", it.shareLinkUriLiveData.value)
+
+                it.onBackPressed()
+                it.assertPageStack("page1")
+                assertEquals("https://knowgod.com/en/tool/v2/test/page1?icid=gtshare", it.shareLinkUriLiveData.value)
+            }
+        }
+    }
+
+    @Test
+    fun `Share Link - parseable by CyoaDeepLink`() {
+        manifestEnglish.value = manifest(listOf(page1, page2))
+
+        scenario {
+            it.onActivity {
+                it.shareLinkUriLiveData.observeForever { }
+
+                it.showPage(page2)
+                it.assertPageStack("page1", "page2")
+
+                val uri = Uri.parse(it.shareLinkUriLiveData.value)
+                val deepLink = assertNotNull(CyoaDeepLink.parseKnowGodDeepLink(uri))
+                assertEquals(TOOL, deepLink.tool)
+                assertEquals("page2", deepLink.page)
+                assertEquals(Locale.ENGLISH, deepLink.activeLocale)
+            }
+        }
+    }
+
+    @Test
+    fun `Share Link - no active manifest`() {
+        scenario {
+            it.onActivity {
+                it.shareLinkUriLiveData.observeForever { }
+
+                assertNull(it.shareLinkUriLiveData.value)
+            }
+        }
+    }
+    // endregion Share Link Logic
 
     private val CyoaActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
