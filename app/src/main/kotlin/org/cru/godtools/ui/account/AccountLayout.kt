@@ -62,13 +62,17 @@ internal val ACCOUNT_PAGE_MARGIN_HORIZONTAL = 16.dp
 
 @Composable
 @CircuitInject(AccountScreen::class, SingletonComponent::class)
-@OptIn(ExperimentalMaterial3Api::class)
 internal fun AccountLayout(state: UiState, modifier: Modifier = Modifier) =
+    AccountLayout(state, rememberPagerState { state.pages.size }, modifier)
+
+@Composable
+@VisibleForTesting
+@OptIn(ExperimentalMaterial3Api::class)
+internal fun AccountLayout(state: UiState, pagerState: PagerState, modifier: Modifier = Modifier) =
     DrawerMenuLayout(state.drawerState, modifier) {
         val pages by rememberUpdatedState(state.pages)
         val eventSink by rememberUpdatedState(state.eventSink)
 
-        val pagerState = rememberPagerState { pages.size }
         val refreshState = rememberPullToRefreshState()
 
         RecordAccountPageAnalytics(pages.getOrNull(pagerState.currentPage))
@@ -117,9 +121,8 @@ internal fun AccountLayout(state: UiState, modifier: Modifier = Modifier) =
     }
 
 @Composable
-@VisibleForTesting
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-internal fun AccountLayoutHeader(
+private fun AccountLayoutHeader(
     modifier: Modifier = Modifier,
     user: User? = null,
     pages: List<AccountPage> = emptyList(),
