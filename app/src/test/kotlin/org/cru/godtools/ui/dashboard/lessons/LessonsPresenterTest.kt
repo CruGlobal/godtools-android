@@ -93,9 +93,18 @@ class LessonsPresenterTest {
         every { findLanguageFlow(any()) } answers { flowOf(Language(firstArg())) }
         every { getLanguagesFlow() } returns languagesFlow
     }
+    private val selectedLessonsLocale = MutableStateFlow<Locale?>(null)
+    private val selectedPersonalizedLessonsLocale = MutableStateFlow<Locale?>(null)
     private val settings: Settings = mockk {
+        every { appLanguage } answers { appLangFlow.value }
         every { appLanguageFlow } returns appLangFlow
         every { getCountrySettingFlow() } returns countryFlow
+        every { getDashboardLessonsFilterLocaleFlow() } returns selectedLessonsLocale
+        every { getDashboardPersonalizedLessonsFilterLocaleFlow() } returns selectedPersonalizedLessonsLocale
+        coEvery { updateDashboardLessonsFilterLocale(any()) } answers { selectedLessonsLocale.value = firstArg() }
+        coEvery { updateDashboardPersonalizedLessonsFilterLocale(any()) } answers {
+            selectedPersonalizedLessonsLocale.value = firstArg()
+        }
     }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncToolOrder(any(), any(), any()) } coAnswers { toolOrderSync.receive() }
@@ -215,7 +224,17 @@ class LessonsPresenterTest {
     }
 
     @Test
-    fun `State - languageFilter - selectedItem - reset to app locale when app locale changes`() = testScope.runTest {
+    fun `State - languageFilter - selectedItem - follows app language when no selection made`() = testScope.runTest {
+        presenter.test {
+            assertEquals(Locale.ENGLISH, expectMostRecentItem().languageFilter.selectedItem?.code)
+
+            appLangFlow.value = Locale.GERMAN
+            assertEquals(Locale.GERMAN, expectMostRecentItem().languageFilter.selectedItem?.code)
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - selectedItem - keeps user selection when app language changes`() = testScope.runTest {
         presenter.test {
             assertNotNull(expectMostRecentItem().languageFilter) {
                 assertEquals(Locale.ENGLISH, it.selectedItem?.code)
@@ -224,7 +243,7 @@ class LessonsPresenterTest {
             assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
 
             appLangFlow.value = Locale.GERMAN
-            assertEquals(Locale.GERMAN, expectMostRecentItem().languageFilter.selectedItem?.code)
+            expectNoEvents()
         }
     }
 
@@ -235,11 +254,14 @@ class LessonsPresenterTest {
                 assertEquals(Locale.ENGLISH, it.selectedItem?.code)
                 it.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
             }
+            AndroidUiDispatcherUtil.runScheduledDispatches()
             composeTestRule.waitForIdle()
             assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
 
             stateRestorationTester.emulateSavedInstanceStateRestore()
-            assertEquals(Locale.FRENCH, awaitItem().languageFilter.selectedItem?.code)
+            AndroidUiDispatcherUtil.runScheduledDispatches()
+            composeTestRule.waitForIdle()
+            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
         }
     }
     // endregion State.languageFilter.selectedItem
@@ -366,6 +388,38 @@ class LessonsPresenterTest {
                 .eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
 
             assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - Event - SelectItem - independent selection per mode`() = testScope.runTest {
+        presenter.test {
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(UiState.Mode.PERSONALIZATION, it.mode)
+                it.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.FRENCH)))
+            }
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(Locale.FRENCH, it.languageFilter.selectedItem?.code)
+                it.eventSink(UiEvent.ChangeMode(UiState.Mode.ALL_LESSONS))
+            }
+
+            // All Lessons is unaffected by the personalized selection and still defaults to the app language
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(Locale.ENGLISH, it.languageFilter.selectedItem?.code)
+                it.languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale("es"))))
+            }
+            assertNotNull(expectMostRecentItem()) {
+                assertEquals(Locale("es"), it.languageFilter.selectedItem?.code)
+                it.eventSink(UiEvent.ChangeMode(UiState.Mode.PERSONALIZATION))
+            }
+
+            // the personalized selection was preserved while on All Lessons
+            assertEquals(Locale.FRENCH, expectMostRecentItem().languageFilter.selectedItem?.code)
+
+            coVerify {
+                settings.updateDashboardPersonalizedLessonsFilterLocale(Locale.FRENCH)
+                settings.updateDashboardLessonsFilterLocale(Locale("es"))
+            }
         }
     }
     // endregion State.languageFilter Event.SelectItem
