@@ -10,7 +10,7 @@ internal class FakeOptInNotificationController : OptInNotificationController {
         private set
 
     @Composable
-    override fun rememberPermissionStatus(): PermissionStatus =permissionStatus.collectAsState().value
+    override fun rememberPermissionStatus(): PermissionStatus = permissionStatus.collectAsState().value
 
     @Composable
     override fun rememberRequestPermission(): () -> Unit = { permissionRequests++ }
