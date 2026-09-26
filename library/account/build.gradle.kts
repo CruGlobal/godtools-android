@@ -8,6 +8,10 @@ android {
     namespace = "org.cru.godtools.account"
 
     configureCompose(project)
+
+    defaultConfig {
+        consumerProguardFiles("src/main/proguard-credentials.pro")
+    }
 }
 
 dependencies {
