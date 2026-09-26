@@ -14,6 +14,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -65,7 +66,7 @@ fun Context.getAppLanguageFlow() = callbackFlow {
         applicationContext.unregisterComponentCallbacks(callbacks)
         application?.unregisterActivityLifecycleCallbacks(callbacks)
     }
-}.map { appLanguage }.distinctUntilChanged().flowOn(Dispatchers.Default)
+}.conflate().map { appLanguage }.distinctUntilChanged().flowOn(Dispatchers.Default)
 
 internal fun notifyAppLanguageChanged() {
     appLanguageChanged.tryEmit(Unit)
