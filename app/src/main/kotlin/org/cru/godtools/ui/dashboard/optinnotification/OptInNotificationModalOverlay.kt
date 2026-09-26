@@ -211,20 +211,20 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
 @Composable
 internal fun OptInNotificationMessage(isTablet: Boolean, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier) {
-        val availableWidth = constraints.maxWidth.dp
+        val availableWidth = maxWidth
 
         val titleFontSize = when {
-            availableWidth > 1000.dp -> if (isTablet) 25.sp else 23.sp
-            availableWidth > 800.dp -> if (isTablet) 28.sp else 21.sp
-            availableWidth < 400.dp -> 16.sp
-            else -> if (isTablet) 24.sp else 19.sp
+            availableWidth > 400.dp -> if (isTablet) 28.sp else 23.sp
+            availableWidth >= 260.dp -> if (isTablet) 24.sp else 21.sp
+            availableWidth >= 220.dp -> 19.sp
+            else -> 16.sp
         }
 
         val bodyFontSize = when {
-            availableWidth > 1000.dp -> if (isTablet) 22.sp else 20.sp
-            availableWidth > 800.dp -> if (isTablet) 22.sp else 17.sp
-            availableWidth < 400.dp -> 13.sp
-            else -> if (isTablet) 20.sp else 16.sp
+            availableWidth > 400.dp -> if (isTablet) 22.sp else 20.sp
+            availableWidth >= 260.dp -> if (isTablet) 20.sp else 17.sp
+            availableWidth >= 220.dp -> 16.sp
+            else -> 13.sp
         }
 
         Column {
