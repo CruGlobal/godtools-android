@@ -12,6 +12,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import java.util.Locale
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -137,4 +138,19 @@ class TasksTest {
         coVerifyAll { attachmentsRepository.getAttachments() }
     }
     // endregion loadBundledAttachments()
+
+    // region importBundledAttachments()
+    @Test
+    fun `importBundledAttachments() - IOException importing one attachment`() = runTest {
+        val failing = Attachment { sha256 = "failing" }
+        val attachment = Attachment { sha256 = "valid" }
+        coEvery { attachmentsRepository.getAttachments() } returns listOf(failing, attachment)
+        every { context.assets.list("attachments") } returns arrayOf("failing.bin", "valid.bin")
+        every { context.assets.open("attachments/failing.bin") } throws IOException()
+        coEvery { downloadManager.importAttachment(any(), any()) } just Runs
+
+        tasks.importBundledAttachments()
+        coVerifyAll { downloadManager.importAttachment(attachment.id, any()) }
+    }
+    // endregion importBundledAttachments()
 }
