@@ -16,8 +16,10 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -143,6 +145,26 @@ class GodToolsAccountManagerTest {
         assertTrue(manager.deleteAccount())
         coVerifySequence {
             userApi.deleteUser()
+            provider1.logout()
+            provider2.logout()
+        }
+    }
+
+    @Test
+    fun `deleteAccount() - caller cancelled while waiting for response`() = testScope.runTest {
+        val response = CompletableDeferred<Response<JsonApiObject<User>>>()
+        coEvery { userApi.deleteUser() } coAnswers { response.await() }
+
+        val job = launch { manager.deleteAccount() }
+        runCurrent()
+        job.cancel()
+        response.complete(Response.success(204, null))
+        job.join()
+
+        coVerifySequence {
+            userApi.deleteUser()
+
+            // the server deleted the user, so we should still log the user out
             provider1.logout()
             provider2.logout()
         }
