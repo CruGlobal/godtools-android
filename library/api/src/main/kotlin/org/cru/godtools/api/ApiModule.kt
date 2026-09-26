@@ -121,7 +121,7 @@ object ApiModule {
     fun attachmentsApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AttachmentsApi = retrofit.create()
 
     @Provides
-    @Reusable
+    @Singleton
     fun authApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit, okhttp: OkHttpClient): AuthApi = retrofit.newBuilder()
         // AuthApi is called by MobileContentApiSessionInterceptor while an authenticated call is still occupying a
         // slot in the shared Dispatcher, so it needs its own Dispatcher to avoid waiting on that call to finish
