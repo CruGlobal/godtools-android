@@ -257,6 +257,19 @@ class GodToolsDownloadManagerTest {
             )
         }
     }
+
+    @Test
+    fun `downloadAttachment() - Unable to create resources dir`() = testScope.runTest {
+        coEvery { fs.exists() } returns false
+
+        assertFalse(downloadManager.downloadAttachment(attachment.id))
+        verify {
+            attachmentsApi wasNot Called
+            attachmentsRepository wasNot Called
+            downloadedFilesRepository wasNot Called
+            workManager wasNot Called
+        }
+    }
     // endregion downloadAttachment()
 
     // region importAttachment()
@@ -442,6 +455,18 @@ class GodToolsDownloadManagerTest {
             assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
             assertNull(progressFlow.expectMostRecentItem())
             progressFlow.cancel()
+        }
+    }
+
+    @Test
+    fun `downloadLatestPublishedTranslation() - Unable to create resources dir`() = testScope.runTest {
+        coEvery { fs.exists() } returns false
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        verify {
+            translationsApi wasNot Called
+            translationsRepository wasNot Called
+            workManager wasNot Called
         }
     }
     // endregion downloadLatestPublishedTranslation()
