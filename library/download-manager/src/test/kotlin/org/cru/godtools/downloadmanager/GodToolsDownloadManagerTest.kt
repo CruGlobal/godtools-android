@@ -11,6 +11,7 @@ import io.mockk.coEvery
 import io.mockk.coExcludeRecords
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
+import io.mockk.coVerifyOrder
 import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
 import io.mockk.every
@@ -378,6 +379,34 @@ class GodToolsDownloadManagerTest {
             assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
             assertNull(progressFlow.expectMostRecentItem())
             progressFlow.cancel()
+        }
+    }
+
+    @Test
+    fun `downloadLatestPublishedTranslation() - Files - Corrupted manifest is replaced by Zip`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val translation = randomTranslation(manifestFileName = "a.txt", isDownloaded = false)
+        coEvery {
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
+        } returns translation
+        var manifestDownloaded = true
+        coEvery { downloadedFilesRepository.findDownloadedFile("a.txt") } answers {
+            DownloadedFile("a.txt").takeIf { manifestDownloaded }
+        }
+        every { downloadedFilesRepository.delete(DownloadedFile("a.txt")) } answers { manifestDownloaded = false }
+        files["a.txt"] = getTmpFile().apply { writeText("<html>captive portal</html>") }
+        coEvery { manifestParser.parseManifest("a.txt", any()) } returns mockk<ParserResult.Error.Corrupted>()
+        val response = RealResponseBody(null, 0, getInputStreamForResource("abc.zip").source().buffer())
+        coEvery { translationsApi.download(translation.id) } returns Response.success(response)
+
+        assertTrue(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        assertContentEquals("a".repeat(1024).toByteArray(), files["a.txt"]!!.readBytes())
+        coVerifyOrder {
+            manifestParser.parseManifest("a.txt", any())
+            downloadedFilesRepository.delete(DownloadedFile("a.txt"))
+            translationsApi.download(translation.id)
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("a.txt"))
+            translationsRepository.markTranslationDownloaded(translation.id, true)
         }
     }
 
