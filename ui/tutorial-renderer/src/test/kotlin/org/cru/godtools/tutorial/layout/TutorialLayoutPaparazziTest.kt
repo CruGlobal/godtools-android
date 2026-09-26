@@ -19,10 +19,11 @@ class TutorialLayoutPaparazziTest(
     @TestParameter nightMode: NightMode,
     @TestParameter accessibilityMode: AccessibilityMode,
 ) : BasePaparazziTest(deviceConfig = deviceConfig, nightMode = nightMode, accessibilityMode = accessibilityMode) {
+    // LIVE_SHARE starts on a static image, the FEATURES and TIPS first pages are Lottie animations that load async
     @Test
-    fun `TutorialLayout() - FEATURES`() = snapshot {
+    fun `TutorialLayout() - LIVE_SHARE`() = snapshot {
         CompositionLocalProvider(LocalAppLanguage provides Locale.ENGLISH) {
-            TutorialLayout(UiState(PageSet.FEATURES))
+            TutorialLayout(UiState(PageSet.LIVE_SHARE))
         }
     }
 }
