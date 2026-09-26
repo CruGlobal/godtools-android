@@ -36,7 +36,6 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.accompanist.pager.indicators)
     implementation(libs.circuit.overlay)
     implementation(libs.circuitx.android)
     implementation(libs.hilt)
