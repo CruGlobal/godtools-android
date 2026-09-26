@@ -299,20 +299,38 @@ class TractActivityTest {
     fun `navigateToLiveShareEvent() - Deferred Manifest`() {
         val manifest = MutableStateFlow<Manifest?>(null)
         everyGetManifestFlow(TOOL, Locale.ENGLISH) returns manifest
-        every { tractShareService.subscribe(any()) } just Runs
-        every { tractShareService.unsubscribe(any()) } just Runs
-        every { tractShareService.webSocketEvents() } returns Channel()
-        every { tractShareService.navigationEvents() } returns Channel()
+        everyTractShareService()
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/tool/v1/$TOOL/1?$PARAM_LIVE_SHARE_STREAM=stream")) {
             it.onActivity {
                 it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 3)
-                manifest.value = Manifest(
-                    code = TOOL,
-                    type = Manifest.Type.TRACT,
-                    pages = { listOf(TractPage(it), TractPage(it), TractPage(it), TractPage(it)) }
-                )
+                manifest.value = tractManifest()
                 assertEquals(3, it.findViewById<HackyRtlViewPager>(R.id.pages).currentItem)
+            }
+        }
+    }
+
+    @Test
+    fun `navigateToLiveShareEvent() - Navigating clears deferred page`() {
+        val manifest = MutableStateFlow<Manifest?>(null)
+        everyGetManifestFlow(TOOL, Locale.ENGLISH) returns manifest
+        everyTractShareService()
+
+        deepLinkScenario(Uri.parse("https://knowgod.com/en/tool/v1/$TOOL/1?$PARAM_LIVE_SHARE_STREAM=stream")) {
+            it.onActivity {
+                manifest.value = tractManifest()
+                assertEquals(-1, it.initialPage)
+
+                // the pager is briefly empty, e.g. while the manifest for a new locale is loading
+                manifest.value = null
+                it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 3)
+                assertEquals(3, it.initialPage)
+
+                manifest.value = tractManifest()
+                it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 2)
+                assertEquals(2, it.findViewById<HackyRtlViewPager>(R.id.pages).currentItem)
+                // a stale deferred page would be applied again when the activity is recreated
+                assertEquals(-1, it.initialPage)
             }
         }
     }
@@ -323,4 +341,17 @@ class TractActivityTest {
 
     private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestFlow(tool ?: any(), locale ?: any())) }
+
+    private fun everyTractShareService() {
+        every { tractShareService.subscribe(any()) } just Runs
+        every { tractShareService.unsubscribe(any()) } just Runs
+        every { tractShareService.webSocketEvents() } returns Channel()
+        every { tractShareService.navigationEvents() } returns Channel()
+    }
+
+    private fun tractManifest() = Manifest(
+        code = TOOL,
+        type = Manifest.Type.TRACT,
+        pages = { listOf(TractPage(it), TractPage(it), TractPage(it), TractPage(it)) }
+    )
 }

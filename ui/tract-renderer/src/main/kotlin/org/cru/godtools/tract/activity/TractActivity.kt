@@ -502,6 +502,7 @@ class TractActivity :
             // the pager is empty until the manifest loads, so let setupPager() navigate once it has pages
             if (pagerAdapter.count > 0) {
                 goToPage(it)
+                initialPage = -1
             } else {
                 initialPage = it
             }
