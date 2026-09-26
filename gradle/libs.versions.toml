@@ -7,6 +7,7 @@ androidx-compose-material3 = "1.4.0"
 androidx-compose-runtime = "1.12.1"
 androidx-compose-ui = "1.12.1"
 androidx-core = "1.19.1"
+androidx-credentials = "1.6.0"
 androidx-datastore = "1.2.1"
 androidx-hilt = "1.4.0"
 androidx-lifecycle = "2.11.0"
@@ -65,6 +66,8 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.2"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.2"
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidx-credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credentials" }
 androidx-databinding-compiler = { module = "androidx.databinding:databinding-compiler", version.ref = "android-gradle-plugin" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
@@ -117,6 +120,7 @@ godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
 godtoolsShared-renderer = { module = "org.cru.godtools.kotlin:renderer", version.ref = "godtoolsShared" }
 godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
+googleid = "com.google.android.libraries.identity.googleid:googleid:1.2.1"
 gradleDownloadTask = "de.undercouch:gradle-download-task:5.7.0"
 gtoSupport-androidx-activity = { module = "org.ccci.gto.android:gto-support-androidx-activity", version.ref = "gtoSupport" }
 gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-androidx-collection", version.ref = "gtoSupport" }

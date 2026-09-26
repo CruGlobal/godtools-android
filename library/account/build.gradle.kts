@@ -29,6 +29,9 @@ dependencies {
     // endregion Facebook
 
     // region Google
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     implementation(libs.gtoSupport.play.auth)
     implementation(libs.kotlin.coroutines.play.services)
     implementation(libs.play.auth)
