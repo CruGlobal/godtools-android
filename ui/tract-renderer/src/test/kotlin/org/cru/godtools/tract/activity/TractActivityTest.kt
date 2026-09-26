@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
@@ -12,14 +13,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
+import java.time.Duration
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import org.cru.godtools.api.TractShareService
+import org.cru.godtools.api.model.PublisherInfo
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -29,8 +37,12 @@ import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tract.liveshare.State
+import org.cru.godtools.tract.liveshare.TractPublisherController
+import org.cru.godtools.tract.ui.liveshare.LiveShareStartingDialogFragment
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -49,6 +61,8 @@ class TractActivityTest {
     @Inject
     lateinit var manifestManager: ManifestManager
     @Inject
+    lateinit var tractShareService: TractShareService
+    @Inject
     lateinit var translationsRepository: TranslationsRepository
 
     private fun <R> scenario(
@@ -61,6 +75,14 @@ class TractActivityTest {
     @BeforeTest
     fun setup() {
         hiltRule.inject()
+        tractShareService.apply {
+            every { subscribe(any()) } just Runs
+            every { unsubscribe(any()) } just Runs
+            every { sendEvent(any()) } just Runs
+            every { webSocketEvents() } answers { Channel() }
+            every { subscriptionConfirmation() } answers { Channel() }
+            every { publisherInfo() } answers { Channel() }
+        }
     }
 
     // region Intent Processing
@@ -280,7 +302,74 @@ class TractActivityTest {
     }
     // endregion Intent Processing
 
+    // region shareLiveShareLink()
+    @Test
+    fun `shareLiveShareLink() - Missing manifest - Stops publisher`() {
+        scenario {
+            it.onActivity {
+                it.publisherController.publisherInfo.value = PublisherInfo(subscriberChannelId = "channel")
+
+                it.shareLiveShareLink()
+                assertFalse(it.publisherController.started)
+                assertEquals(State.Off, it.publisherController.state.value)
+            }
+        }
+    }
+
+    @Test
+    fun `shareLiveShareLink() - Missing manifest - Keeps publisher running after a link was shared`() {
+        scenario {
+            it.onActivity {
+                it.publisherController.started = true
+                it.publisherController.linkShared = true
+                it.publisherController.publisherInfo.value = PublisherInfo(subscriberChannelId = "channel")
+
+                it.shareLiveShareLink()
+                assertTrue(it.publisherController.started)
+                assertEquals(State.On, it.publisherController.state.value)
+            }
+        }
+    }
+
+    @Test
+    fun `shareLiveShareLink() - Starting dialog canceled - Stops publisher`() {
+        scenario {
+            it.onActivity {
+                it.shareLiveShareLink()
+                assertTrue(it.publisherController.started)
+
+                val dialog = it.liveShareStartingDialog
+                dialog.onCancel(dialog.requireDialog())
+                assertFalse(it.publisherController.started)
+                assertEquals(State.Off, it.publisherController.state.value)
+            }
+        }
+    }
+
+    @Test
+    fun `shareLiveShareLink() - Starting dialog times out - Stops publisher`() {
+        scenario {
+            it.onActivity {
+                it.shareLiveShareLink()
+                assertTrue(it.publisherController.started)
+            }
+
+            shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(11))
+            it.onActivity {
+                assertFalse(it.publisherController.started)
+                assertEquals(State.Off, it.publisherController.state.value)
+            }
+        }
+    }
+    // endregion shareLiveShareLink()
+
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
+    private val TractActivity.publisherController get() = viewModels<TractPublisherController>().value
+    private val TractActivity.liveShareStartingDialog: LiveShareStartingDialogFragment
+        get() {
+            supportFragmentManager.executePendingTransactions()
+            return supportFragmentManager.fragments.filterIsInstance<LiveShareStartingDialogFragment>().single()
+        }
 
     private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestFlow(tool ?: any(), locale ?: any())) }
