@@ -1,5 +1,4 @@
 [versions]
-accompanist = "0.36.0"
 android-gradle-plugin = "9.4.1"
 androidx-activity = "1.13.0"
 androidx-compose-foundation = "1.12.1"
@@ -38,7 +37,6 @@ scarlet = "0.1.12"
 splitties = "3.0.0"
 
 [libraries]
-accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 android-desugaring = "com.android.tools:desugar_jdk_libs:2.1.5"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 android-legacy-kapt = { module = "com.android.tools.build:gradle-kotlin", version.ref = "android-gradle-plugin" }
