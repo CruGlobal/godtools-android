@@ -5,15 +5,22 @@ import io.mockk.coEvery
 import io.mockk.coExcludeRecords
 import io.mockk.coVerify
 import io.mockk.coVerifyAll
+import io.mockk.coVerifyOrder
 import io.mockk.mockk
 import io.mockk.spyk
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.base.TimeConstants.WEEK_IN_MS
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.api.UserCountersApi
 import org.cru.godtools.db.repository.InMemoryLastSyncTimeRepository
 import org.cru.godtools.db.repository.UserCountersRepository
+import org.cru.godtools.model.UserCounter
 import org.cru.godtools.sync.task.UserCounterSyncTasks.Companion.SYNC_TIME_COUNTERS
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -93,4 +100,27 @@ class UserCounterSyncTasksTest {
         assertTrue(lastSyncTimeRepository.isLastSyncStale(SYNC_TIME_COUNTERS, USER_ID_OTHER, staleAfter = WEEK_IN_MS))
     }
     // endregion syncCounters()
+
+    // region syncDirtyCounters()
+    @Test
+    fun `syncDirtyCounters() - waits for in-flight syncCounters()`() = runTest {
+        val getCountersResponse = Channel<Response<JsonApiObject<UserCounter>>>()
+        coEvery { countersApi.getCounters() } coAnswers { getCountersResponse.receive() }
+        coEvery { userCountersRepository.getDirtyCounters() } returns emptyList()
+
+        val syncCounters = launch { tasks.syncCounters(force = true) }
+        runCurrent()
+        val syncDirtyCounters = async { tasks.syncDirtyCounters() }
+        runCurrent()
+        coVerify(exactly = 0) { userCountersRepository.getDirtyCounters() }
+
+        getCountersResponse.send(Response.error(500, "".toResponseBody()))
+        syncCounters.join()
+        assertTrue(syncDirtyCounters.await())
+        coVerifyOrder {
+            countersApi.getCounters()
+            userCountersRepository.getDirtyCounters()
+        }
+    }
+    // endregion syncDirtyCounters()
 }
