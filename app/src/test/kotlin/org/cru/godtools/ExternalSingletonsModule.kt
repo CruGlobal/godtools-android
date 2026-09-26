@@ -9,8 +9,10 @@ import dagger.hilt.testing.TestInstallIn
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import javax.inject.Named
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import org.ccci.gto.android.common.dagger.coroutines.CoroutinesModule
@@ -90,6 +92,9 @@ class ExternalSingletonsModule {
     }
     @get:Provides
     val lastSyncTimeRepository: LastSyncTimeRepository by lazy { mockk() }
+    @get:Provides
+    @get:Named(DatabaseModule.LEGACY_DATA_MIGRATION)
+    val legacyDataMigration: Job by lazy { Job().apply { complete() } }
     @get:Provides
     val toolsRepository: ToolsRepository by lazy {
         mockk {

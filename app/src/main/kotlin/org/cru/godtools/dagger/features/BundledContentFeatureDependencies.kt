@@ -6,8 +6,11 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
+import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
 import org.cru.godtools.base.Settings
+import org.cru.godtools.db.DatabaseModule
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.LanguagesRepository
 import org.cru.godtools.db.repository.LastSyncTimeRepository
@@ -28,6 +31,8 @@ interface BundledContentFeatureDependencies {
     fun jsonApiConverter(): JsonApiConverter
     fun languagesRepository(): LanguagesRepository
     fun lastSyncTimeRepository(): LastSyncTimeRepository
+    @Named(DatabaseModule.LEGACY_DATA_MIGRATION)
+    fun legacyDataMigration(): Job
     fun settings(): Settings
     fun toolsRepository(): ToolsRepository
     fun translationsRepository(): TranslationsRepository
