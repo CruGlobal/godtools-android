@@ -22,6 +22,7 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.circuit.CircuitActivity.Companion.EXTRA_SCREEN
+import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 fun Context.startCircuitActivity(screen: ParcelableScreen) = startActivity(createCircuitActivityIntent(screen))
@@ -33,7 +34,7 @@ internal fun Intent.resolveInitialScreen(deepLinkParsers: Set<CircuitDeepLinkPar
 
     return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
         ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
-        ?: TODO("Show the DashboardScreen once it uses Circuit")
+        ?: listOf(DashboardScreen())
 }
 
 @AndroidEntryPoint
