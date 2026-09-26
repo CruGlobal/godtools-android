@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.stateIn
 import org.ccci.gto.android.common.androidx.lifecycle.combine
 import org.ccci.gto.android.common.util.os.getLocaleArray
 import org.cru.godtools.base.EXTRA_LANGUAGES
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.analytics.model.ToggleLanguageAnalyticsActionEvent
 import org.cru.godtools.base.tool.analytics.model.ToolAnalyticsActionEvent
 import org.cru.godtools.base.tool.ui.settings.SettingsBottomSheetDialogFragment
@@ -175,6 +176,14 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     }
     // endregion Settings
     // endregion UI
+
+    // region Feature Discovery
+    override fun canShowFeatureDiscovery(feature: String) = when (feature) {
+        // the share action lives in the settings bottom sheet, so there is no toolbar menu item to target
+        FEATURE_TOOL_SHARE -> false
+        else -> super.canShowFeatureDiscovery(feature)
+    }
+    // endregion Feature Discovery
 
     // region Tool sync
     override val isInitialSyncFinished get() = dataModel.isInitialSyncFinished

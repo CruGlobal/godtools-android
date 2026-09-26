@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
@@ -12,25 +13,35 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.fluidsonic.locale.toCommon
+import io.mockk.clearMocks
 import io.mockk.every
+import io.mockk.verify
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
+import org.cru.godtools.base.Settings
+import org.cru.godtools.base.Settings.Companion.FEATURE_TOOL_SHARE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.shared.tool.parser.model.Manifest
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -48,6 +59,8 @@ class TractActivityTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
     lateinit var manifestManager: ManifestManager
+    @Inject
+    lateinit var settings: Settings
     @Inject
     lateinit var translationsRepository: TranslationsRepository
 
@@ -279,6 +292,23 @@ class TractActivityTest {
         }
     }
     // endregion Intent Processing
+
+    // region Feature Discovery
+    @Test
+    fun `Feature Discovery - FEATURE_TOOL_SHARE - Not dispatched without a toolbar share action`() {
+        every { settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) } returns false
+        everyGetManifestFlow(TOOL, Locale.ENGLISH) returns
+            flowOf(Manifest(code = TOOL, type = Manifest.Type.TRACT, locale = Locale.ENGLISH.toCommon()))
+
+        scenario {
+            it.onActivity { assertNotNull(it.dataModel.activeManifest.value) }
+            clearMocks(settings, answers = false)
+
+            shadowOf(Looper.getMainLooper()).idleFor(5, TimeUnit.SECONDS)
+            verify(exactly = 0) { settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) }
+        }
+    }
+    // endregion Feature Discovery
 
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
