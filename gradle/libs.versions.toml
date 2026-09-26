@@ -159,7 +159,6 @@ gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-mat
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-okio = { module = "org.ccci.gto.android:gto-support-okio", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
-gtoSupport-play-auth = { module = "org.ccci.gto.android:gto-support-play-auth", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
@@ -183,7 +182,6 @@ jsoup = "org.jsoup:jsoup:1.23.2"
 junit = "junit:junit:4.13.2"
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
-kotlin-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
@@ -208,7 +206,6 @@ paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
-play-auth = "com.google.android.gms:play-services-auth:21.6.0"
 play-base = "com.google.android.gms:play-services-base:18.11.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
