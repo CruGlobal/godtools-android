@@ -111,10 +111,11 @@ class DashboardActivity : BaseActivity() {
                         if (showOverlay) {
                             OverlayEffect {
                                 val overlay = OptInNotificationModalOverlay(
-                                    requestPermission = { optInNotificationController.requestNotificationPermission() },
                                     isHardDenied = viewModel.permissionStatus == PermissionStatus.HARD_DENIED
                                 )
-                                show(overlay)
+                                if (show(overlay) == OptInNotificationModalOverlay.Result.AllowNotifications) {
+                                    optInNotificationController.requestNotificationPermission()
+                                }
                                 viewModel.setShowOptInNotification(false)
                             }
                         }

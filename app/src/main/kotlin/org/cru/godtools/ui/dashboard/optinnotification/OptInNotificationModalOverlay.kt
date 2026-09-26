@@ -31,7 +31,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import com.slack.circuit.overlay.AnimatedOverlay
 import com.slack.circuit.overlay.OverlayNavigator
 import com.slack.circuit.overlay.OverlayTransitionController
-import kotlinx.coroutines.launch
 import org.cru.godtools.R
 import org.cru.godtools.util.isTablet
 
@@ -57,19 +55,17 @@ enum class PermissionStatus {
     UNDETERMINED // First time request
 }
 
-class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, val isHardDenied: Boolean) :
-    AnimatedOverlay<Unit>(enterTransition = EnterTransition.None, exitTransition = ExitTransition.None) {
+class OptInNotificationModalOverlay(val isHardDenied: Boolean) :
+    AnimatedOverlay<OptInNotificationModalOverlay.Result>(EnterTransition.None, ExitTransition.None) {
 
     @Composable
     override fun AnimatedVisibilityScope.AnimatedContent(
-        navigator: OverlayNavigator<Unit>,
+        navigator: OverlayNavigator<Result>,
         transitionController: OverlayTransitionController,
     ) {
-        BackHandler { navigator.finish(Unit) }
+        BackHandler { navigator.finish(Result.Dismiss) }
 
         val isTablet = isTablet()
-
-        val coroutineScope = rememberCoroutineScope()
 
         val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -211,10 +207,7 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                                 .fillMaxWidth(),
                             shape = RoundedCornerShape(5.dp),
                             onClick = {
-                                coroutineScope.launch {
-                                    requestPermission()
-                                    navigator.finish(Unit)
-                                }
+                                navigator.finish(Result.AllowNotifications)
                             }
                         ) {
                             Text(
@@ -236,7 +229,7 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                                 .padding(bottom = 40.dp, top = 6.dp)
                                 .fillMaxWidth(),
                             onClick = {
-                                navigator.finish(Unit)
+                                navigator.finish(Result.Dismiss)
                             }
                         ) {
                             Text(
@@ -251,5 +244,10 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                 }
             }
         }
+    }
+
+    sealed interface Result {
+        data object AllowNotifications : Result
+        data object Dismiss : Result
     }
 }
