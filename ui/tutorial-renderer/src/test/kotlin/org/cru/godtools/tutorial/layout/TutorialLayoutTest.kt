@@ -8,8 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertAll
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
@@ -109,6 +112,15 @@ class TutorialLayoutTest {
         indicators.assertCountEquals(PageSet.FEATURES.pagesFor(Locale.ENGLISH).size)
         indicators[0].assertIsSelected()
         indicators[1].assertIsNotSelected()
+    }
+
+    @Test
+    fun `Page Indicator - FEATURES - indicators hidden from accessibility`() = runComposeUiTest {
+        setTutorialLayoutContent(PageSet.FEATURES)
+
+        onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)
+            .assertCountEquals(PageSet.FEATURES.pagesFor(Locale.ENGLISH).size)
+            .assertAll(SemanticsMatcher.keyIsDefined(SemanticsProperties.HideFromAccessibility))
     }
 
     @Test

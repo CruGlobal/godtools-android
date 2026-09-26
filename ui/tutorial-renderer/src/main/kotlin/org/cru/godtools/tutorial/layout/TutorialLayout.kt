@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntOffset
@@ -181,7 +182,10 @@ fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) {
                         .testTag(TEST_TAG_PAGE_INDICATOR_PAGE)
                         .size(PAGE_INDICATOR_SIZE)
                         .background(inactiveColor, CircleShape)
-                        .semantics { selected = isActive }
+                        .semantics {
+                            selected = isActive
+                            hideFromAccessibility()
+                        }
                 )
             }
         }
