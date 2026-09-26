@@ -59,6 +59,7 @@ import org.cru.godtools.base.ui.compose.LocalEventBus
 import org.cru.godtools.shared.analytics.AnalyticsScreenNames
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationLayout
 import org.cru.godtools.ui.drawer.DrawerMenuLayout
 
 @Composable
@@ -73,6 +74,7 @@ internal fun DashboardLayout(state: UiState, modifier: Modifier = Modifier) {
 
     AppUpdateSnackbar(state.snackbarState)
     DashboardLayoutAnalytics(currentScreen)
+    OptInNotificationLayout(state.optInNotificationState)
 
     DrawerMenuLayout(state.drawerState, modifier = modifier) {
         Scaffold(
