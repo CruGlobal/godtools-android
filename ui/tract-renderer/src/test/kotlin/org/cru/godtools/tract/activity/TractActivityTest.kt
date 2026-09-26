@@ -14,7 +14,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
 import io.fluidsonic.locale.toCommon
-import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.verify
 import java.util.Locale
@@ -302,7 +301,6 @@ class TractActivityTest {
 
         scenario {
             it.onActivity { assertNotNull(it.dataModel.activeManifest.value) }
-            clearMocks(settings, answers = false)
 
             shadowOf(Looper.getMainLooper()).idleFor(5, TimeUnit.SECONDS)
             verify(exactly = 0) { settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) }
