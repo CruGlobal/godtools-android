@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.withIndex
 import okio.FileSystem
 import org.ccci.gto.android.common.androidx.lifecycle.getMutableStateFlow
 import org.cru.godtools.base.CONFIG_TUTORIAL_LESSON_PAGE_SWIPE
@@ -188,7 +189,14 @@ class LessonActivity :
                         LaunchedEffect(pagerState) {
                             snapshotFlow { pagerState.settledPage }
                                 .conflate()
-                                .collect { updateProgress(it, lessonPagerState.pages) }
+                                .withIndex()
+                                .collect { (i, page) ->
+                                    when (i) {
+                                        // don't overwrite saved progress until the user navigates within the lesson
+                                        0 -> initializeProgress(page, lessonPagerState.pages)
+                                        else -> updateProgress(page, lessonPagerState.pages)
+                                    }
+                                }
                         }
                     }
 
@@ -224,10 +232,14 @@ class LessonActivity :
                             OverlayEffect(resumePageId) {
                                 val pageId = resumePageId ?: return@OverlayEffect
                                 if (state.indexOfResumePage(pageId) in 1 until state.lessonPager.pages.size - 1) {
-                                    val result = show(LessonResumeDialogOverlay(pageId))
-                                    if (result is LessonResumeDialogOverlay.Result.Resume) {
-                                        val index = state.indexOfResumePage(result.pageId)
-                                        if (index >= 0) state.lessonPager.pagerState.animateScrollToPage(index)
+                                    when (val result = show(LessonResumeDialogOverlay(pageId))) {
+                                        is LessonResumeDialogOverlay.Result.Resume -> {
+                                            val index = state.indexOfResumePage(result.pageId)
+                                            if (index >= 0) state.lessonPager.pagerState.animateScrollToPage(index)
+                                        }
+
+                                        LessonResumeDialogOverlay.Result.Restart ->
+                                            updateProgress(0, state.lessonPager.pages)
                                     }
                                 }
 
@@ -336,13 +348,13 @@ class LessonActivity :
     )
 
     // region Progress
-    private suspend fun updateProgress(position: Int, pages: List<LessonPage>) {
-        toolsRepository.updateToolProgress(
-            tool,
-            if (pages.isEmpty()) 0.0 else (position.toDouble() / pages.size),
-            pages.getOrNull(position)?.id
-        )
-    }
+    private suspend fun initializeProgress(position: Int, pages: List<LessonPage>) =
+        toolsRepository.initializeToolProgress(tool, pages.progressAt(position), pages.getOrNull(position)?.id)
+
+    private suspend fun updateProgress(position: Int, pages: List<LessonPage>) =
+        toolsRepository.updateToolProgress(tool, pages.progressAt(position), pages.getOrNull(position)?.id)
+
+    private fun List<LessonPage>.progressAt(position: Int) = if (isEmpty()) 0.0 else (position.toDouble() / size)
     // endregion Progress
 
     // region Resume Progress
