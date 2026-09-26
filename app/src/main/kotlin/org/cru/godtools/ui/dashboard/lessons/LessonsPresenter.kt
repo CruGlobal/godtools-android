@@ -153,7 +153,7 @@ class LessonsPresenter @AssistedInject internal constructor(
                     .flowOn(ioDispatcher)
                     .combine(
                         toolsRepository.getLessonsFlow()
-                            .map { it.mapNotNullTo(mutableSetOf()) { it.code } }
+                            .map { it.filterNot { it.isHidden }.mapNotNullTo(mutableSetOf()) { it.code } }
                             .distinctUntilChanged()
                             .flatMapLatest { translationsRepository.getTranslationsFlowForTools(it) }
                             .map {
