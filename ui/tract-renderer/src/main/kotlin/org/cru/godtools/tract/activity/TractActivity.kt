@@ -401,7 +401,7 @@ class TractActivity :
     private val liveShareTutorialLauncher = registerForActivityResult(TutorialScreenResultContract()) {
         when (it) {
             null,
-            TutorialScreen.Result.Canceled -> publisherController.started = false
+            TutorialScreen.Result.Canceled -> publisherController.cancelStart()
 
             TutorialScreen.Result.Finished,
             TutorialScreen.Result.ShowQrCode -> {
@@ -447,8 +447,13 @@ class TractActivity :
             }
 
             else -> {
-                val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId ?: return
-                val shareUrl = (activeManifest?.buildShareLink() ?: return)
+                val subscriberId = publisherController.publisherInfo.value?.subscriberChannelId
+                val shareLink = activeManifest?.buildShareLink()
+                if (subscriberId == null || shareLink == null) {
+                    publisherController.cancelStart()
+                    return
+                }
+                val shareUrl = shareLink
                     .apply {
                         dataModel.primaryLocales.value?.takeUnless { it.isEmpty() }
                             ?.joinToString(",") { it.toLanguageTag() }
@@ -459,6 +464,7 @@ class TractActivity :
                     }
                     .appendQueryParameter(PARAM_LIVE_SHARE_STREAM, subscriberId)
                     .build().toString()
+                publisherController.linkShared = true
                 eventBus.post(ShareScreenEngagedActionEvent(dataModel.toolCode.value))
 
                 if (showQrCode) {
