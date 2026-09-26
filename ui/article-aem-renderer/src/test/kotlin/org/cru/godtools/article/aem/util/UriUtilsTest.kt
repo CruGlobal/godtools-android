@@ -34,6 +34,7 @@ class UriUtilsTest {
         assertTrue(Uri.parse("https://www.cru.org/content/experience-fragments/article").isTrustedAemUri())
         assertTrue(Uri.parse("https://stage.cru.org/content/experience-fragments/article").isTrustedAemUri())
         assertTrue(Uri.parse("https://cru.org/content/experience-fragments/article").isTrustedAemUri())
+        assertTrue(Uri.parse("https://WWW.CRU.ORG/content/experience-fragments/article").isTrustedAemUri())
     }
 
     @Test
@@ -42,6 +43,8 @@ class UriUtilsTest {
         assertFalse(Uri.parse("https://evilcru.org/x").isTrustedAemUri())
         assertFalse(Uri.parse("https://www.cru.org.evil.example/x").isTrustedAemUri())
         assertFalse(Uri.parse("https://www.cru.org@evil.example/x").isTrustedAemUri())
+        assertFalse(Uri.parse("https://evil.example%2F.cru.org/x").isTrustedAemUri())
+        assertFalse(Uri.parse("https://evil.example\\@www.cru.org/x").isTrustedAemUri())
     }
 
     @Test

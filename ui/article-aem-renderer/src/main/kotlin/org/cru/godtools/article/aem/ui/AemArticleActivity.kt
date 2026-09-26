@@ -106,17 +106,16 @@ class AemArticleActivity :
      * @return true if the intent was successfully processed, otherwise return false
      */
     private fun processIntent(): Boolean {
-        articleUri =
-            processDeepLink() ?: intent?.extras?.getParcelableCompat(EXTRA_ARTICLE, Uri::class.java) ?: return false
+        articleUri = when {
+            intent.isValidDeepLink() -> processDeepLink()
+            else -> intent?.extras?.getParcelableCompat(EXTRA_ARTICLE, Uri::class.java)
+        } ?: return false
         return true
     }
 
-    private fun processDeepLink() = when {
-        intent.isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()
-            ?.takeIf { it.isTrustedAemUri() }
-            ?.removeExtension()
-        else -> null
-    }
+    private fun processDeepLink() = intent?.data?.getQueryParameter(PARAM_URI)?.toUri()
+        ?.takeIf { it.isTrustedAemUri() }
+        ?.removeExtension()
 
     private fun Intent?.isValidDeepLink() =
         this != null && action == Intent.ACTION_VIEW && data?.isValidDeepLink() == true
