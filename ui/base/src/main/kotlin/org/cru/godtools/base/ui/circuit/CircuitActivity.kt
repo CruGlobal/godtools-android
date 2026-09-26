@@ -28,6 +28,14 @@ fun Context.startCircuitActivity(screen: ParcelableScreen) = startActivity(creat
 fun Context.createCircuitActivityIntent(screen: ParcelableScreen) = Intent(this, CircuitActivity::class.java)
     .putExtra(EXTRA_SCREEN, screen)
 
+internal fun Intent.resolveInitialScreen(deepLinkParsers: Set<CircuitDeepLinkParser>): List<Screen> {
+    val uri = data
+
+    return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
+        ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
+        ?: TODO("Show the DashboardScreen once it uses Circuit")
+}
+
 @AndroidEntryPoint
 class CircuitActivity : BaseActivity() {
     companion object {
@@ -46,7 +54,7 @@ class CircuitActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val initialScreens = intent.resolveInitialScreen()
+        val initialScreens = intent.resolveInitialScreen(deepLinkParsers)
 
         setContent {
             CircuitCompositionLocals(circuit) {
@@ -72,13 +80,5 @@ class CircuitActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun Intent.resolveInitialScreen(): List<Screen> {
-        val uri = data
-
-        return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
-            ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
-            ?: TODO("Show the DashboardScreen once it uses Circuit")
     }
 }
