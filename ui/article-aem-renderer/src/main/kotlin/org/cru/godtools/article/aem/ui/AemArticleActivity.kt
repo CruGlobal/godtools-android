@@ -27,6 +27,7 @@ import org.cru.godtools.article.aem.analytics.model.ArticleAnalyticsScreenEvent
 import org.cru.godtools.article.aem.fragment.AemArticleFragment
 import org.cru.godtools.article.aem.model.Article
 import org.cru.godtools.article.aem.service.AemArticleManager
+import org.cru.godtools.article.aem.util.isTrustedAemUri
 import org.cru.godtools.article.aem.util.removeExtension
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.tool.activity.BaseArticleActivity
@@ -111,7 +112,9 @@ class AemArticleActivity :
     }
 
     private fun processDeepLink() = when {
-        intent.isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()?.removeExtension()
+        intent.isValidDeepLink() -> intent?.data?.getQueryParameter(PARAM_URI)?.toUri()
+            ?.takeIf { it.isTrustedAemUri() }
+            ?.removeExtension()
         else -> null
     }
 
