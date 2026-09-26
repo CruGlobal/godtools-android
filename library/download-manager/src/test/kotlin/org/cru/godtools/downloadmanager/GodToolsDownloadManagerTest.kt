@@ -22,15 +22,20 @@ import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyAll
 import io.mockk.verifyOrder
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.util.Locale
+import java.util.zip.ZipEntry
+import java.util.zip.ZipException
+import java.util.zip.ZipOutputStream
 import kotlin.random.Random
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -257,6 +262,19 @@ class GodToolsDownloadManagerTest {
             )
         }
     }
+
+    @Test
+    fun `downloadAttachment() - Invalid localFilename`() = testScope.runTest {
+        attachment.sha256 = "../../evil"
+
+        assertTrue(downloadManager.downloadAttachment(attachment.id))
+        coVerify(exactly = 0) { fs.file(any()) }
+        verifyAll {
+            attachmentsApi wasNot Called
+            downloadedFilesRepository wasNot Called
+            workManager wasNot Called
+        }
+    }
     // endregion downloadAttachment()
 
     // region importAttachment()
@@ -308,6 +326,18 @@ class GodToolsDownloadManagerTest {
         coVerify { attachmentsRepository.updateAttachmentDownloaded(attachment.id, true) }
         coVerify(exactly = 0) { fs.file(any()) }
         confirmVerified(attachmentsRepository, downloadedFilesRepository)
+    }
+
+    @Test
+    fun `importAttachment() - Invalid localFilename`() = testScope.runTest {
+        attachment.sha256 = "../../evil"
+
+        testData.inputStream().use { downloadManager.importAttachment(attachment.id, it) }
+        coVerify(exactly = 0) {
+            fs.file(any())
+            attachmentsRepository.updateAttachmentDownloaded(any(), any())
+        }
+        verify { downloadedFilesRepository wasNot Called }
     }
     // endregion importAttachment()
 
@@ -444,6 +474,22 @@ class GodToolsDownloadManagerTest {
             progressFlow.cancel()
         }
     }
+
+    @Test
+    fun `downloadLatestPublishedTranslation() - Zip - Invalid entry name`() = testScope.runTest {
+        coEvery {
+            translationsRepository.findLatestTranslation(translation.toolCode, translation.languageCode)
+        } returns translation
+        coEvery { translationsApi.download(translation.id) }
+            .returns(Response.success(zipWithEntry("../evil.txt").toResponseBody()))
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify(exactly = 0) {
+            fs.file(any())
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("../evil.txt"))
+            translationsRepository.markTranslationDownloaded(any(), any())
+        }
+    }
     // endregion downloadLatestPublishedTranslation()
 
     // region downloadPublishedFileIfNecessary
@@ -559,6 +605,22 @@ class GodToolsDownloadManagerTest {
         coVerify(exactly = 0) { downloadedFilesRepository.insertOrIgnore(DownloadedFile("file.xml")) }
         assertFalse(files["file.xml"]!!.exists())
     }
+
+    @Test
+    fun `downloadPublishedFileIfNecessary - rejects invalid file name`() = testScope.runTest {
+        downloadManager.cleanupActor.close()
+        val translation = randomTranslation(manifestFileName = "manifest.xml", isDownloaded = false)
+        val manifest = Manifest(pageXmlFiles = listOf(XmlFile("../evil.xml", "../evil.xml")))
+        setupTranslationFilesDownload(translation, manifest)
+
+        assertFalse(downloadManager.downloadLatestPublishedTranslation(TranslationKey(translation)))
+        coVerify(exactly = 0) {
+            cdnApi.downloadPublishedFile("../evil.xml")
+            translationsApi.downloadFile("../evil.xml")
+            fs.file("../evil.xml")
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("../evil.xml"))
+        }
+    }
     // endregion downloadPublishedFileIfNecessary
 
     @Test
@@ -590,6 +652,20 @@ class GodToolsDownloadManagerTest {
             assertSame(DownloadProgress.INITIAL, progressFlow.awaitItem())
             assertNull(progressFlow.expectMostRecentItem())
             progressFlow.cancel()
+        }
+    }
+
+    @Test
+    fun `importTranslation() - Invalid zip entry name`() = testScope.runTest {
+        coEvery { translationsRepository.findLatestTranslation(any(), any(), any()) } returns null
+
+        assertFailsWith<ZipException> {
+            downloadManager.importTranslation(translation, zipWithEntry("../evil.txt").inputStream(), -1)
+        }
+        coVerify(exactly = 0) {
+            fs.file(any())
+            downloadedFilesRepository.insertOrIgnore(DownloadedFile("../evil.txt"))
+            translationsRepository.markTranslationDownloaded(any(), any())
         }
     }
 
@@ -763,4 +839,11 @@ class GodToolsDownloadManagerTest {
     private fun getTmpFile(create: Boolean = false, suffix: String? = null) =
         File.createTempFile("test-", suffix, resourcesDir).also { if (!create) it.delete() }
     private fun getInputStreamForResource(name: String) = this::class.java.getResourceAsStream(name)!!
+    private fun zipWithEntry(name: String) = ByteArrayOutputStream().also {
+        ZipOutputStream(it).use { zip ->
+            zip.putNextEntry(ZipEntry(name))
+            zip.write("data".toByteArray())
+            zip.closeEntry()
+        }
+    }.toByteArray()
 }

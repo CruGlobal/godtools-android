@@ -8,10 +8,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.work.WorkManager
 import com.google.common.io.CountingInputStream
 import dagger.Lazy
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
+import java.util.zip.ZipException
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -76,6 +78,9 @@ import retrofit2.Response
 
 @VisibleForTesting
 internal const val CLEANUP_DELAY = 30_000L
+
+// only allow plain filenames, so that server-provided names can't write outside the resources directory
+private fun String.isSafeFilename() = isNotEmpty() && this != "." && this != ".." && File(this).name == this
 
 @Singleton
 class GodToolsDownloadManager @VisibleForTesting internal constructor(
@@ -166,7 +171,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return true
-            val filename = attachment.localFilename ?: return true
+            val filename = attachment.localFilename?.takeIf { it.isSafeFilename() } ?: return true
             val wasDownloaded = attachment.isDownloaded
 
             filesystemMutex.read.withLock {
@@ -209,7 +214,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
 
         attachmentsMutex.withLock(attachmentId) {
             val attachment = attachmentsRepository.findAttachment(attachmentId) ?: return
-            val filename = attachment.localFilename ?: return
+            val filename = attachment.localFilename?.takeIf { it.isSafeFilename() } ?: return
 
             filesystemMutex.read.withLock {
                 filesMutex.withLock(filename) {
@@ -337,6 +342,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
         sha256: String? = null,
         size: Long? = null,
     ): Boolean = filesMutex[fileName].withLock {
+        if (!fileName.isSafeFilename()) return false
         if (downloadedFilesRepository.findDownloadedFile(fileName) != null) return true
 
         withContext(ioDispatcher) {
@@ -403,6 +409,7 @@ class GodToolsDownloadManager @VisibleForTesting internal constructor(
                     while (true) {
                         val ze = zin.nextEntry ?: break
                         val filename = ze.name
+                        if (!filename.isSafeFilename()) throw ZipException("Invalid zip entry name: $filename")
                         filesMutex.withLock(filename) {
                             // write the file if it hasn't been downloaded before
                             if (downloadedFilesRepository.findDownloadedFile(filename) == null) {
