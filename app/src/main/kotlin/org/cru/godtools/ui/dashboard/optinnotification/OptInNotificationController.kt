@@ -40,15 +40,15 @@ class OptInNotificationController(
     private fun checkNotificationPermissionStatus(): PermissionStatus {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             when {
-                !settings.isFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION) -> {
-                    return PermissionStatus.UNDETERMINED
-                }
-
                 ContextCompat.checkSelfPermission(
                     activity,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED -> {
                     return PermissionStatus.APPROVED
+                }
+
+                !settings.isFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION) -> {
+                    return PermissionStatus.UNDETERMINED
                 }
 
                 ActivityCompat.shouldShowRequestPermissionRationale(
