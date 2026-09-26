@@ -1,5 +1,6 @@
 package org.cru.godtools.base
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
@@ -19,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.junit.runner.RunWith
+import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
@@ -59,6 +61,17 @@ class AppLanguageTest {
 
             contextAppLanguage = Locale.FRENCH
             context.onConfigurationChanged(Configuration(context.resources.configuration))
+            assertEquals(Locale.FRENCH, awaitItem())
+        }
+    }
+
+    @Test
+    fun `getAppLanguageFlow() - emits updated language after an activity is created`() = runTest {
+        context.getAppLanguageFlow().test {
+            assertEquals(Locale.ENGLISH, awaitItem())
+
+            contextAppLanguage = Locale.FRENCH
+            Robolectric.buildActivity(Activity::class.java).create()
             assertEquals(Locale.FRENCH, awaitItem())
         }
     }
