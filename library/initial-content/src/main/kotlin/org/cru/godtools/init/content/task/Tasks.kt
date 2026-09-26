@@ -133,8 +133,12 @@ internal class Tasks @Inject constructor(
                 .filter { !it.isDownloaded && it.localFilename in files }
                 .forEach { attachment ->
                     launch {
-                        context.assets.open("attachments/${attachment.localFilename}").use {
-                            downloadManager.importAttachment(attachment.id, data = it)
+                        try {
+                            context.assets.open("attachments/${attachment.localFilename}").use {
+                                downloadManager.importAttachment(attachment.id, data = it)
+                            }
+                        } catch (e: IOException) {
+                            Timber.tag(TAG).e(e, "Error importing bundled attachment %s", attachment.localFilename)
                         }
                     }
                 }
