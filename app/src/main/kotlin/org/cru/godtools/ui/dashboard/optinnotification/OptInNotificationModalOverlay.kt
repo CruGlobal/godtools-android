@@ -158,53 +158,7 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                                     .fillMaxWidth()
                             )
                         }
-                        BoxWithConstraints {
-                            val availableWidth = constraints.maxWidth.dp
-
-                            val titleFontSize = when {
-                                availableWidth > 1000.dp -> if (isTablet) 25.sp else 23.sp
-                                availableWidth > 800.dp -> if (isTablet) 28.sp else 21.sp
-                                availableWidth < 400.dp -> 16.sp
-                                else -> if (isTablet) 24.sp else 19.sp
-                            }
-
-                            val bodyFontSize = when {
-                                availableWidth > 1000.dp -> if (isTablet) 22.sp else 20.sp
-                                availableWidth > 800.dp -> if (isTablet) 22.sp else 17.sp
-                                availableWidth < 400.dp -> 13.sp
-                                else -> if (isTablet) 20.sp else 16.sp
-                            }
-
-                            Column {
-                                Text(
-                                    stringResource(R.string.opt_in_notification_title),
-                                    color = MaterialTheme.colorScheme.primary,
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.labelLarge.copy(
-                                        fontSize = titleFontSize,
-                                        fontWeight = FontWeight(750),
-                                        letterSpacing = 0.9.sp,
-                                    ),
-                                    modifier = Modifier
-                                        .padding(vertical = if (isTablet) 24.dp else 20.dp)
-                                        .fillMaxWidth()
-                                )
-                                Text(
-                                    stringResource(R.string.opt_in_notification_body),
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.headlineSmall.copy(
-                                        fontSize = bodyFontSize,
-                                        fontWeight = FontWeight(weight = 420),
-                                        letterSpacing = 0.9.sp,
-                                        lineHeight = if (isTablet) 28.sp else 24.sp,
-                                    ),
-                                    modifier = Modifier
-                                        .padding(bottom = if (isTablet) 26.dp else 22.dp)
-                                        .fillMaxWidth()
-                                )
-                            }
-                        }
+                        OptInNotificationMessage(isTablet)
                         Button(
                             modifier = Modifier
                                 .height(48.dp)
@@ -250,6 +204,57 @@ class OptInNotificationModalOverlay(val requestPermission: suspend () -> Unit, v
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+internal fun OptInNotificationMessage(isTablet: Boolean, modifier: Modifier = Modifier) {
+    BoxWithConstraints(modifier = modifier) {
+        val availableWidth = constraints.maxWidth.dp
+
+        val titleFontSize = when {
+            availableWidth > 1000.dp -> if (isTablet) 25.sp else 23.sp
+            availableWidth > 800.dp -> if (isTablet) 28.sp else 21.sp
+            availableWidth < 400.dp -> 16.sp
+            else -> if (isTablet) 24.sp else 19.sp
+        }
+
+        val bodyFontSize = when {
+            availableWidth > 1000.dp -> if (isTablet) 22.sp else 20.sp
+            availableWidth > 800.dp -> if (isTablet) 22.sp else 17.sp
+            availableWidth < 400.dp -> 13.sp
+            else -> if (isTablet) 20.sp else 16.sp
+        }
+
+        Column {
+            Text(
+                stringResource(R.string.opt_in_notification_title),
+                color = MaterialTheme.colorScheme.primary,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.labelLarge.copy(
+                    fontSize = titleFontSize,
+                    fontWeight = FontWeight(750),
+                    letterSpacing = 0.9.sp,
+                ),
+                modifier = Modifier
+                    .padding(vertical = if (isTablet) 24.dp else 20.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                stringResource(R.string.opt_in_notification_body),
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    fontSize = bodyFontSize,
+                    fontWeight = FontWeight(weight = 420),
+                    letterSpacing = 0.9.sp,
+                    lineHeight = if (isTablet) 28.sp else 24.sp,
+                ),
+                modifier = Modifier
+                    .padding(bottom = if (isTablet) 26.dp else 22.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }
