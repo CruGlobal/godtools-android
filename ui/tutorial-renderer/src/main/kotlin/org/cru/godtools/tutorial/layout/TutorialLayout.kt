@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -39,9 +40,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
+import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.compose.material3.ui.appbar.AppBarActionButton
 import org.cru.godtools.analytics.compose.RecordAnalyticsScreen
@@ -163,22 +166,36 @@ fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) {
     val inactiveColor = activeColor.copy(alpha = PAGE_INDICATOR_INACTIVE_ALPHA)
     val currentPage by remember(state) { derivedStateOf { state.currentPage.coerceAtMost(state.pageCount - 1) } }
 
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(PAGE_INDICATOR_SIZE),
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
+        contentAlignment = Alignment.CenterStart,
         modifier = modifier
             .testTag(TEST_TAG_PAGE_INDICATOR)
             .height(dimensionResource(R.dimen.tutorial_indicator_height))
             .wrapContentSize()
     ) {
-        repeat(state.pageCount) { page ->
-            val isActive = page == currentPage
+        Row(horizontalArrangement = Arrangement.spacedBy(PAGE_INDICATOR_SIZE)) {
+            repeat(state.pageCount) { page ->
+                val isActive = page == currentPage
+                Box(
+                    modifier = Modifier
+                        .testTag(TEST_TAG_PAGE_INDICATOR_PAGE)
+                        .size(PAGE_INDICATOR_SIZE)
+                        .background(inactiveColor, CircleShape)
+                        .semantics { selected = isActive }
+                )
+            }
+        }
+
+        if (state.pageCount > 0) {
             Box(
                 modifier = Modifier
-                    .testTag(TEST_TAG_PAGE_INDICATOR_PAGE)
+                    .offset {
+                        val position = (state.currentPage + state.currentPageOffsetFraction)
+                            .coerceIn(0f, (state.pageCount - 1).toFloat())
+                        IntOffset(x = (position * (PAGE_INDICATOR_SIZE * 2).toPx()).roundToInt(), y = 0)
+                    }
                     .size(PAGE_INDICATOR_SIZE)
-                    .background(if (isActive) activeColor else inactiveColor, CircleShape)
-                    .semantics { selected = isActive }
+                    .background(activeColor, CircleShape)
             )
         }
     }
