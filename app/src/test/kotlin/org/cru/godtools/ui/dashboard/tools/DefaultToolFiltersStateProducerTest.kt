@@ -270,7 +270,7 @@ class DefaultToolFiltersStateProducerTest {
 
     @Test
     fun `Filters - languageFilter - selectedItem - language selected`() = testScope.runTest {
-        val language = Language(Locale.ENGLISH)
+        val language = Language(Locale.ENGLISH, name = "English")
         every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
 
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
@@ -280,6 +280,21 @@ class DefaultToolFiltersStateProducerTest {
         }
 
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+    }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - new language not loaded yet`() = testScope.runTest {
+        val language = Language(Locale.ENGLISH, name = "English")
+        every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
+        every { languagesRepository.findLanguageFlow(Locale.FRENCH) } returns MutableSharedFlow()
+        selectedLocale.value = Locale.ENGLISH
+
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
+            assertEquals(language, expectMostRecentItem().languageFilter.selectedItem)
+
+            selectedLocale.value = Locale.FRENCH
+            assertEquals(Language(Locale.FRENCH), expectMostRecentItem().languageFilter.selectedItem)
+        }
     }
     // endregion Filters.languageFilter.selectedItem
 
