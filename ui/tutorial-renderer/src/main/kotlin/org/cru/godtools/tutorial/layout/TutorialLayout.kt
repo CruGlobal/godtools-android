@@ -196,7 +196,7 @@ fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) {
                     .offset {
                         val position = (state.currentPage + state.currentPageOffsetFraction)
                             .coerceIn(0f, (state.pageCount - 1).toFloat())
-                        IntOffset(x = (position * (PAGE_INDICATOR_SIZE * 2).toPx()).roundToInt(), y = 0)
+                        IntOffset(x = (position * PAGE_INDICATOR_SIZE.roundToPx() * 2).roundToInt(), y = 0)
                     }
                     .size(PAGE_INDICATOR_SIZE)
                     .background(activeColor, CircleShape)
