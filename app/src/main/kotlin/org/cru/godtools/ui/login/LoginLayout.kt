@@ -28,27 +28,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.slack.circuit.codegen.annotations.CircuitInject
+import dagger.hilt.components.SingletonComponent
 import org.ccci.gto.android.common.compose.foundation.layout.padding
 import org.cru.godtools.R
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.LoginResponse
 import org.cru.godtools.account.compose.rememberLoginLauncher
 import org.cru.godtools.base.ui.theme.GodToolsTheme
+import org.cru.godtools.ui.login.LoginPresenter.UiEvent
+import org.cru.godtools.ui.login.LoginPresenter.UiState
 
 private val MARGIN_HORIZONTAL = 32.dp
 private val FACEBOOK_BLUE = Color(red = 0x18, green = 0x77, blue = 0xf2)
 
+internal const val TEST_TAG_ICON_CLOSE = "icon_close"
+internal const val TEST_TAG_BUTTON_GOOGLE = "button_google"
+internal const val TEST_TAG_BUTTON_FACEBOOK = "button_facebook"
+internal const val TEST_TAG_ERROR_DIALOG = "error_dialog"
+internal const val TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM = "error_dialog_button_confirm"
+
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 fun LoginLayout(
     modifier: Modifier = Modifier,
     createAccount: Boolean = false,
@@ -62,7 +73,25 @@ fun LoginLayout(
         }
     }
 
-    LoginError(loginError, onDismiss = { loginError = null })
+    LoginLayout(
+        UiState(createAccount = createAccount, loginError = loginError) {
+            when (it) {
+                is UiEvent.Login -> loginLauncher.launch(it.type)
+                UiEvent.ClearError -> loginError = null
+                UiEvent.Close -> onEvent(LoginLayoutEvent.Close)
+            }
+        },
+        modifier = modifier,
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+@CircuitInject(LoginScreen::class, SingletonComponent::class)
+internal fun LoginLayout(state: UiState, modifier: Modifier = Modifier) {
+    val eventSink by rememberUpdatedState(state.eventSink)
+
+    LoginError(state)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +104,10 @@ fun LoginLayout(
         CompositionLocalProvider(LocalContentColor provides Color.White) {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { onEvent(LoginLayoutEvent.Close) }) {
+                    IconButton(
+                        onClick = { eventSink(UiEvent.Close) },
+                        modifier = Modifier.testTag(TEST_TAG_ICON_CLOSE)
+                    ) {
                         Icon(Icons.Filled.Close, null)
                     }
                 },
@@ -95,7 +127,9 @@ fun LoginLayout(
             Spacer(Modifier.weight(1f))
 
             Text(
-                stringResource(if (createAccount) R.string.account_create_heading else R.string.account_login_heading),
+                stringResource(
+                    if (state.createAccount) R.string.account_create_heading else R.string.account_login_heading
+                ),
                 style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier
                     .padding(horizontal = MARGIN_HORIZONTAL)
@@ -103,19 +137,20 @@ fun LoginLayout(
             )
             Text(
                 stringResource(
-                    if (createAccount) R.string.account_create_description else R.string.account_login_description
+                    if (state.createAccount) R.string.account_create_description else R.string.account_login_description
                 ),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = MARGIN_HORIZONTAL, top = 8.dp, bottom = 32.dp)
             )
 
             Button(
-                onClick = { loginLauncher.launch(AccountType.GOOGLE) },
+                onClick = { eventSink(UiEvent.Login(AccountType.GOOGLE)) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black.copy(alpha = 0.54f)
                 ),
                 modifier = Modifier
+                    .testTag(TEST_TAG_BUTTON_GOOGLE)
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
             ) {
@@ -128,12 +163,13 @@ fun LoginLayout(
                 Text(stringResource(com.google.android.gms.base.R.string.common_signin_button_text_long))
             }
             Button(
-                onClick = { loginLauncher.launch(AccountType.FACEBOOK) },
+                onClick = { eventSink(UiEvent.Login(AccountType.FACEBOOK)) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FACEBOOK_BLUE,
                     contentColor = Color.White
                 ),
                 modifier = Modifier
+                    .testTag(TEST_TAG_BUTTON_FACEBOOK)
                     .fillMaxWidth()
                     .padding(horizontal = MARGIN_HORIZONTAL)
             ) {
@@ -150,7 +186,8 @@ fun LoginLayout(
 }
 
 @Composable
-private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
+private fun LoginError(state: UiState) {
+    val error = state.loginError
     if (error != null) {
         AlertDialog(
             title = {
@@ -176,11 +213,15 @@ private fun LoginError(error: LoginResponse.Error?, onDismiss: () -> Unit) {
                 )
             },
             confirmButton = {
-                TextButton(onClick = { onDismiss() }) {
+                TextButton(
+                    onClick = { state.eventSink(UiEvent.ClearError) },
+                    modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG_BUTTON_CONFIRM),
+                ) {
                     Text(stringResource(R.string.account_error_dialog_dismiss))
                 }
             },
-            onDismissRequest = { onDismiss() },
+            onDismissRequest = { state.eventSink(UiEvent.ClearError) },
+            modifier = Modifier.testTag(TEST_TAG_ERROR_DIALOG),
         )
     }
 }
