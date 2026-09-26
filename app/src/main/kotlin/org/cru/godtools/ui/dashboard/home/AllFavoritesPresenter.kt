@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -62,7 +63,8 @@ class AllFavoritesPresenter @AssistedInject constructor(
     @Composable
     override fun present(): UiState {
         val scope = rememberCoroutineScope()
-        var tools by rememberFavoriteTools()
+        val isReordering = remember { mutableStateOf(false) }
+        var tools by rememberFavoriteTools(isReordering)
 
         return UiState(
             tools = tools.mapNotNull { tool ->
@@ -103,21 +105,30 @@ class AllFavoritesPresenter @AssistedInject constructor(
             }
         ) {
             when (it) {
-                is UiEvent.MoveTool -> tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
+                is UiEvent.MoveTool -> {
+                    isReordering.value = true
+                    tools = tools.toMutableList().apply { add(it.to, removeAt(it.from)) }
+                }
 
                 UiEvent.CommitToolOrder -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
                     withContext(NonCancellable) {
                         toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
                     }
+                    isReordering.value = false
                 }
             }
         }
     }
 
     @Composable
-    private fun rememberFavoriteTools(): MutableState<List<Tool>> {
+    private fun rememberFavoriteTools(isReordering: State<Boolean>): MutableState<List<Tool>> {
         val state = remember { mutableStateOf(emptyList<Tool>()) }
-        LaunchedEffect(Unit) { toolsRepository.getFavoriteToolsFlow().collect { state.value = it } }
+        LaunchedEffect(Unit) {
+            toolsRepository.getFavoriteToolsFlow().collect {
+                // don't overwrite an in-progress reorder, storeToolOrder() will trigger a fresh emission once committed
+                if (!isReordering.value) state.value = it
+            }
+        }
         return state
     }
 

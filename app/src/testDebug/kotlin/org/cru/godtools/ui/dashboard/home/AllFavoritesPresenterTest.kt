@@ -137,6 +137,57 @@ class AllFavoritesPresenterTest {
         coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
 
+    @Test
+    fun `Event - CommitToolOrder - ignores tools updates while reordering`() = runTest {
+        toolsFlow.value = listOf(
+            randomTool("tool1"),
+            randomTool("tool2"),
+            randomTool("tool3"),
+            randomTool("tool4"),
+        )
+
+        presenter.test {
+            expectMostRecentItem().eventSink(UiEvent.MoveTool(2, 1))
+            val state = expectMostRecentItem()
+            assertEquals(listOf("tool1", "tool3", "tool2", "tool4"), state.tools.map { it.toolCode })
+
+            // simulate a background sync updating the tools table mid-drag
+            toolsFlow.value = listOf(
+                randomTool("tool1"),
+                randomTool("tool2"),
+                randomTool("tool3"),
+                randomTool("tool4"),
+            )
+            expectNoEvents()
+
+            state.eventSink(UiEvent.CommitToolOrder)
+        }
+
+        coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
+    }
+
+    @Test
+    fun `Event - CommitToolOrder - resumes tools updates after commit`() = runTest {
+        toolsFlow.value = listOf(
+            randomTool("tool1"),
+            randomTool("tool2"),
+            randomTool("tool3"),
+        )
+
+        presenter.test {
+            expectMostRecentItem().eventSink(UiEvent.MoveTool(2, 1))
+            expectMostRecentItem().eventSink(UiEvent.CommitToolOrder)
+
+            toolsFlow.value = listOf(
+                randomTool("tool1"),
+                randomTool("tool3"),
+                randomTool("tool2"),
+                randomTool("tool4"),
+            )
+            assertEquals(listOf("tool1", "tool3", "tool2", "tool4"), expectMostRecentItem().tools.map { it.toolCode })
+        }
+    }
+
     // region ToolCardEvent.Click
     @Test
     fun `ToolCard - Event - Click`() = runTest {
