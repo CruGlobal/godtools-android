@@ -13,6 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
+import okhttp3.Dispatcher
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import org.ccci.gto.android.common.api.okhttp3.interceptor.SessionRetryInterceptor
@@ -121,7 +122,12 @@ object ApiModule {
 
     @Provides
     @Reusable
-    fun authApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit): AuthApi = retrofit.create()
+    fun authApi(@Named(MOBILE_CONTENT_API) retrofit: Retrofit, okhttp: OkHttpClient): AuthApi = retrofit.newBuilder()
+        // AuthApi is called by MobileContentApiSessionInterceptor while an authenticated call is still occupying a
+        // slot in the shared Dispatcher, so it needs its own Dispatcher to avoid waiting on that call to finish
+        .callFactory(okhttp.newBuilder().dispatcher(Dispatcher()).build())
+        .build()
+        .create()
 
     @Provides
     @Reusable
