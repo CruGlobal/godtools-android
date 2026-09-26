@@ -3,6 +3,7 @@ package org.cru.godtools.article.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -10,13 +11,22 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.coEvery
+import io.mockk.every
 import java.util.Locale
+import javax.inject.Inject
+import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.flowOf
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.ui.createArticlesIntent
+import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.sync.GodToolsSyncService
+import org.cru.godtools.tool.R
 import org.cru.godtools.tool.article.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -40,6 +50,19 @@ class ArticlesActivityTest {
     ) = ActivityScenario.launch<ArticlesActivity>(intent).use(block)
     private fun <R> deepLinkScenario(uri: Uri, block: (ActivityScenario<ArticlesActivity>) -> R) =
         scenario(Intent(Intent.ACTION_VIEW, uri), block)
+
+    // region Mocks
+    @Inject
+    internal lateinit var syncService: GodToolsSyncService
+    @Inject
+    internal lateinit var translationsRepository: TranslationsRepository
+
+    @BeforeTest
+    fun setupMocks() {
+        hiltRule.inject()
+        every { translationsRepository.findLatestTranslationFlow(TOOL, Locale.ENGLISH) } returns flowOf(null)
+    }
+    // endregion Mocks
 
     // region Intent processing
     @Test
@@ -75,4 +98,28 @@ class ArticlesActivityTest {
         }
     }
     // endregion Intent processing
+
+    // region Loading State
+    @Test
+    fun `Loading State - Missing translation - initial sync running`() {
+        coEvery { syncService.syncTool(TOOL, any()) } coAnswers { awaitCancellation() }
+
+        scenario {
+            it.onActivity {
+                assertEquals(View.VISIBLE, it.findViewById<View>(R.id.contentLoading).visibility)
+                assertEquals(View.GONE, it.findViewById<View>(R.id.noContent).visibility)
+            }
+        }
+    }
+
+    @Test
+    fun `Loading State - Missing translation - initial sync finished`() {
+        scenario {
+            it.onActivity {
+                assertEquals(View.GONE, it.findViewById<View>(R.id.contentLoading).visibility)
+                assertEquals(View.VISIBLE, it.findViewById<View>(R.id.noContent).visibility)
+            }
+        }
+    }
+    // endregion Loading State
 }
