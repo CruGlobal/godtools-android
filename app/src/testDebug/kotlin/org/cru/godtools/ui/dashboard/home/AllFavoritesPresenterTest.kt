@@ -21,6 +21,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
@@ -165,6 +167,43 @@ class AllFavoritesPresenterTest {
 
         coVerify { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
     }
+
+    @Test
+    fun `Event - CommitToolOrder - keeps ignoring tools updates if a new drag starts before commit finishes`() =
+        runTest {
+            val storeLock = Mutex(true)
+            coEvery { toolsRepository.storeToolOrder(any()) } coAnswers { storeLock.withLock { } }
+            toolsFlow.value = listOf(
+                randomTool("tool1"),
+                randomTool("tool2"),
+                randomTool("tool3"),
+                randomTool("tool4"),
+            )
+
+            presenter.test {
+                expectMostRecentItem().eventSink(UiEvent.MoveTool(2, 1))
+                expectMostRecentItem().let {
+                    it.eventSink(UiEvent.CommitToolOrder)
+                    it.eventSink(UiEvent.MoveTool(0, 3))
+                }
+                assertEquals(
+                    listOf("tool3", "tool2", "tool4", "tool1"),
+                    expectMostRecentItem().tools.map { it.toolCode }
+                )
+
+                // the first commit finishes while the second drag is still in progress
+                storeLock.unlock()
+                toolsFlow.value = listOf(
+                    randomTool("tool1"),
+                    randomTool("tool2"),
+                    randomTool("tool3"),
+                    randomTool("tool4"),
+                )
+                expectNoEvents()
+            }
+
+            coVerify(exactly = 1) { toolsRepository.storeToolOrder(listOf("tool1", "tool3", "tool2", "tool4")) }
+        }
 
     @Test
     fun `Event - CommitToolOrder - resumes tools updates after commit`() = runTest {

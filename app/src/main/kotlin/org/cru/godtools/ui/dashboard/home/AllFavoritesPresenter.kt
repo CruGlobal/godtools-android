@@ -111,10 +111,12 @@ class AllFavoritesPresenter @AssistedInject constructor(
                 }
 
                 UiEvent.CommitToolOrder -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    val order = tools
                     withContext(NonCancellable) {
-                        toolsRepository.storeToolOrder(tools.mapNotNull { it.code })
+                        toolsRepository.storeToolOrder(order.mapNotNull { it.code })
                     }
-                    isReordering.value = false
+                    // a new drag may have moved tools while the order was being stored
+                    if (tools === order) isReordering.value = false
                 }
             }
         }
