@@ -100,7 +100,8 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
     @Composable
     private fun rememberFilterCategories(mode: Mode, selectedLanguage: Locale?) = remember(mode, selectedLanguage) {
         filteredToolsFlowProducer.getFlow(mode, language = selectedLanguage).map {
-            it.groupBy { it.category }
+            it.filterNot { it.category == null }
+                .groupBy { it.category }
                 .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
         }
     }.collectAsState(emptyList()).value

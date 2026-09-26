@@ -111,6 +111,22 @@ class DefaultToolFiltersStateProducerTest {
     }
 
     @Test
+    fun `Filters - categoryFilter - items - excludes tools without a category`() = testScope.runTest {
+        filteredToolsFlow.value = listOf(
+            randomTool(category = null),
+            randomTool(category = Tool.CATEGORY_GOSPEL),
+            randomTool(category = null),
+        )
+
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
+            assertEquals(
+                listOf(FilterMenu.UiState.Item<String?>(Tool.CATEGORY_GOSPEL, 1)),
+                expectMostRecentItem().categoryFilter.items
+            )
+        }
+    }
+
+    @Test
     fun `Filters - categoryFilter - items - uses mode`() = testScope.runTest {
         presenterTestOf(presentFunction = { producer.produce(Mode.PERSONALIZATION) }) {
             expectMostRecentItem()
