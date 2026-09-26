@@ -17,7 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.compat.os.getParcelableCompat
@@ -149,12 +148,7 @@ class AemArticleActivity :
 
     private fun syncData() {
         lifecycleScope.launch(Dispatchers.Main) {
-            GlobalScope.launch {
-                when {
-                    intent.isValidDeepLink() -> aemArticleManager.downloadDeeplinkedArticle(articleUri)
-                    else -> aemArticleManager.downloadArticle(articleUri, false)
-                }
-            }.join()
+            aemArticleManager.downloadArticleForDisplay(articleUri, intent.isValidDeepLink())
             syncFinished.value = true
         }
     }

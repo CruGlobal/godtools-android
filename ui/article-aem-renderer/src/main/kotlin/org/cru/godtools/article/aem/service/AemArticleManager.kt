@@ -13,6 +13,7 @@ import java.security.NoSuchAlgorithmException
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -172,6 +173,24 @@ class AemArticleManager @VisibleForTesting internal constructor(
             }
         }
     }
+
+    /**
+     * Download an article for display. This runs in the manager's scope so it isn't cancelled if the caller goes away,
+     * and it catches any unexpected failure so it can't crash the app.
+     */
+    @AnyThread
+    suspend fun downloadArticleForDisplay(uri: Uri, isDeeplink: Boolean) = coroutineScope.launch {
+        try {
+            when {
+                isDeeplink -> downloadDeeplinkedArticle(uri)
+                else -> downloadArticle(uri, false)
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Timber.tag(TAG).e(e, "Error downloading article %s", uri)
+        }
+    }.join()
     // endregion Download Article
 
     // region Download Resource
