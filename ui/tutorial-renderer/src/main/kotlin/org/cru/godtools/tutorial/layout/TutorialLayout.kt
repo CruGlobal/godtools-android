@@ -2,6 +2,10 @@ package org.cru.godtools.tutorial.layout
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,10 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
-import com.google.accompanist.pager.HorizontalPagerIndicator
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.slack.circuit.codegen.annotations.CircuitInject
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
@@ -48,6 +57,10 @@ import org.cru.godtools.tutorial.theme.tutorialBackgroundColor
 
 internal const val TEST_TAG_NAVIGATE_UP = "navigate_up"
 internal const val TEST_TAG_PAGE_INDICATOR = "page_indicator"
+internal const val TEST_TAG_PAGE_INDICATOR_PAGE = "page_indicator_page"
+
+private const val PAGE_INDICATOR_INACTIVE_ALPHA = 0.38f
+private val PAGE_INDICATOR_SIZE = 8.dp
 
 @Composable
 @CircuitInject(TutorialScreen::class, SingletonComponent::class)
@@ -145,12 +158,28 @@ fun TutorialAppBar(
 )
 
 @Composable
-fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) = HorizontalPagerIndicator(
-    pagerState = state,
-    pageCount = state.pageCount,
-    activeColor = MaterialTheme.colorScheme.primary,
-    modifier = modifier
-        .testTag(TEST_TAG_PAGE_INDICATOR)
-        .height(dimensionResource(R.dimen.tutorial_indicator_height))
-        .wrapContentSize()
-)
+fun TutorialPagerIndicator(state: PagerState, modifier: Modifier = Modifier) {
+    val activeColor = MaterialTheme.colorScheme.primary
+    val inactiveColor = activeColor.copy(alpha = PAGE_INDICATOR_INACTIVE_ALPHA)
+    val currentPage by remember(state) { derivedStateOf { state.currentPage.coerceAtMost(state.pageCount - 1) } }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(PAGE_INDICATOR_SIZE),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .testTag(TEST_TAG_PAGE_INDICATOR)
+            .height(dimensionResource(R.dimen.tutorial_indicator_height))
+            .wrapContentSize()
+    ) {
+        repeat(state.pageCount) { page ->
+            val isActive = page == currentPage
+            Box(
+                modifier = Modifier
+                    .testTag(TEST_TAG_PAGE_INDICATOR_PAGE)
+                    .size(PAGE_INDICATOR_SIZE)
+                    .background(if (isActive) activeColor else inactiveColor, CircleShape)
+                    .semantics { selected = isActive }
+            )
+        }
+    }
+}
