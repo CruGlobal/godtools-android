@@ -12,14 +12,20 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import org.cru.godtools.api.TractShareService
+import org.cru.godtools.api.model.NavigationEvent
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -28,7 +34,13 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
+import org.cru.godtools.tool.tract.R
+import org.cru.godtools.tract.PARAM_LIVE_SHARE_STREAM
+import org.cru.godtools.tract.liveshare.TractSubscriberController
+import org.cru.godtools.tract.widget.HackyRtlViewPager
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -48,6 +60,8 @@ class TractActivityTest {
     private val context get() = ApplicationProvider.getApplicationContext<Context>()
     @Inject
     lateinit var manifestManager: ManifestManager
+    @Inject
+    lateinit var tractShareService: TractShareService
     @Inject
     lateinit var translationsRepository: TranslationsRepository
 
@@ -280,7 +294,32 @@ class TractActivityTest {
     }
     // endregion Intent Processing
 
+    // region navigateToLiveShareEvent()
+    @Test
+    fun `navigateToLiveShareEvent() - Deferred Manifest`() {
+        val manifest = MutableStateFlow<Manifest?>(null)
+        everyGetManifestFlow(TOOL, Locale.ENGLISH) returns manifest
+        every { tractShareService.subscribe(any()) } just Runs
+        every { tractShareService.unsubscribe(any()) } just Runs
+        every { tractShareService.webSocketEvents() } returns Channel()
+        every { tractShareService.navigationEvents() } returns Channel()
+
+        deepLinkScenario(Uri.parse("https://knowgod.com/en/tool/v1/$TOOL/1?$PARAM_LIVE_SHARE_STREAM=stream")) {
+            it.onActivity {
+                it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 3)
+                manifest.value = Manifest(
+                    code = TOOL,
+                    type = Manifest.Type.TRACT,
+                    pages = { listOf(TractPage(it), TractPage(it), TractPage(it), TractPage(it)) }
+                )
+                assertEquals(3, it.findViewById<HackyRtlViewPager>(R.id.pages).currentItem)
+            }
+        }
+    }
+    // endregion navigateToLiveShareEvent()
+
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
+    private val TractActivity.subscriberController get() = viewModels<TractSubscriberController>().value
 
     private fun everyGetManifestFlow(tool: String? = null, locale: Locale? = null) =
         every { (manifestManager.getLatestPublishedManifestFlow(tool ?: any(), locale ?: any())) }

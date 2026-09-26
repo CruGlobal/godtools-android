@@ -66,6 +66,7 @@ class ExternalSingletonsModule {
         mockk<Settings> {
             every { setFeatureDiscovered(any()) } just Runs
             every { isFeatureDiscovered(any()) } returns true
+            every { isFeatureDiscoveredFlow(any()) } returns MutableStateFlow(true).asStateFlow()
             every { isFeatureDiscoveredLiveData(any()) } answers { ImmutableLiveData(true) }
         }
     }

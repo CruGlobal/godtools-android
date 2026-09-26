@@ -498,7 +498,14 @@ class TractActivity :
             }
             dataModel.activeLocale.value = it
         }
-        event.page?.let { goToPage(it) }
+        event.page?.let {
+            // the pager is empty until the manifest loads, so let setupPager() navigate once it has pages
+            if (pagerAdapter.count > 0) {
+                goToPage(it)
+            } else {
+                initialPage = it
+            }
+        }
         eventBus.post(event)
     }
 
