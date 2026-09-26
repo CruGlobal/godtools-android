@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -249,7 +250,19 @@ class DefaultToolFiltersStateProducerTest {
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.ENGLISH)))
 
-            assertNull(expectMostRecentItem().languageFilter.selectedItem)
+            assertEquals(Language(Locale.ENGLISH), expectMostRecentItem().languageFilter.selectedItem)
+        }
+
+        verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+    }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - language not loaded yet`() = testScope.runTest {
+        selectedLocale.value = Locale.ENGLISH
+        every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns MutableSharedFlow()
+
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
+            assertEquals(Language(Locale.ENGLISH), expectMostRecentItem().languageFilter.selectedItem)
         }
 
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }

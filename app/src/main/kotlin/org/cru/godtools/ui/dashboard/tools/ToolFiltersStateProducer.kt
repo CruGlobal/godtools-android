@@ -84,7 +84,8 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
             languageFilter = FilterMenu.UiState(
                 menuExpanded = languageMenuExpanded,
                 items = rememberFilterLanguages(mode, selectedCategory, languageQuery.value),
-                selectedItem = languagesRepository.rememberLanguage(selectedLocale),
+                selectedItem = languagesRepository.rememberLanguage(selectedLocale)
+                    ?: selectedLocale?.let { Language(it) },
                 query = languageQuery,
                 eventSink = {
                     when (it) {
