@@ -55,6 +55,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     testImplementation(projects.ui.tractRenderer)
+    testImplementation(libs.androidx.lifecycle.runtime.testing)
 
     testFixturesApi(libs.testparameterinjector)
     testFixturesImplementation(libs.androidx.activity.compose)
