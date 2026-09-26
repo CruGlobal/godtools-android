@@ -9,8 +9,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.internal.ThreadUtil
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.cru.godtools.db.repository.AttachmentsRepository
 import org.cru.godtools.db.repository.DownloadedFilesRepository
@@ -30,13 +32,20 @@ import org.keynote.godtools.android.db.GodToolsDatabase
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+    const val LEGACY_DATA_MIGRATION = "JOB_LEGACY_DATA_MIGRATION"
+
     @Provides
     @Singleton
     internal fun roomDatabase(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, GodToolsRoomDatabase::class.java, GodToolsRoomDatabase.DATABASE_NAME)
             .enableMigrations()
             .build()
-            .also { GodToolsDatabase(context, it).triggerDataMigration() }
+            .also { it.legacyDataMigration = GodToolsDatabase(context, it).triggerDataMigration() }
+
+    @Provides
+    @Reusable
+    @Named(LEGACY_DATA_MIGRATION)
+    internal fun legacyDataMigration(db: GodToolsRoomDatabase): Job = db.legacyDataMigration
 
     @Provides
     @Reusable
@@ -84,12 +93,15 @@ object DatabaseModule {
     @Reusable
     internal fun translationsRepository(db: GodToolsRoomDatabase): TranslationsRepository = db.translationsRepository
 
-    private fun GodToolsDatabase.triggerDataMigration() {
+    private fun GodToolsDatabase.triggerDataMigration(): Job {
         // TODO: eventually this logic will be triggered directly by the roomDatabase singleton,
         //       until then we trigger it before returning a repository that depends on the migrated data
-        when {
+        return when {
             ThreadUtil.isMainThread() -> GlobalScope.launch { writableDatabase }
-            else -> writableDatabase
+            else -> {
+                writableDatabase
+                Job().apply { complete() }
+            }
         }
     }
 }
