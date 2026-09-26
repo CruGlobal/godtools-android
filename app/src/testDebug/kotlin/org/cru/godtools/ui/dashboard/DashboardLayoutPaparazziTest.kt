@@ -133,7 +133,10 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `ToolsLayout() - Personalization`() {
-        toolsState = toolsState.copy(mode = ToolsPresenter.UiState.Mode.PERSONALIZATION)
+        toolsState = toolsState.copy(
+            mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
+            filters = Filters(languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.ENGLISH))),
+        )
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
 
@@ -142,6 +145,7 @@ class DashboardLayoutPaparazziTest(
         assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
+            filters = Filters(languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.ENGLISH))),
             tools = emptyList()
         )
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
@@ -199,6 +203,7 @@ class DashboardLayoutPaparazziTest(
         assumeTrue(locale == null)
         toolsState = toolsState.copy(
             mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
+            filters = Filters(languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.ENGLISH))),
             spotlightTools = emptyList(),
             tools = emptyList(),
         )
