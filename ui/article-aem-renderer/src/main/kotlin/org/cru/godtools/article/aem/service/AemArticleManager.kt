@@ -176,7 +176,7 @@ class AemArticleManager @VisibleForTesting internal constructor(
 
     /**
      * Download an article for display. This runs in the manager's scope so it isn't cancelled if the caller goes away,
-     * and it catches any unexpected failure so it can't crash the app.
+     * and it logs any unexpected failure of the download itself instead of crashing the app.
      */
     @AnyThread
     suspend fun downloadArticleForDisplay(uri: Uri, isDeeplink: Boolean) = coroutineScope.launch {
