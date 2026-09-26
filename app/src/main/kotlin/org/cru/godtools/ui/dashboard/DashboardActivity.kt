@@ -39,7 +39,6 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class DashboardActivity : BaseActivity() {
-    private val viewModel: DashboardViewModel by viewModels()
     private val launchTrackingViewModel: LaunchTrackingViewModel by viewModels()
 
     // region Circuit
