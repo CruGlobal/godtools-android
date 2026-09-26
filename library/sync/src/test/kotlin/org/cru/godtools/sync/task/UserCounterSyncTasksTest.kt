@@ -8,6 +8,7 @@ import io.mockk.coVerifyAll
 import io.mockk.coVerifyOrder
 import io.mockk.mockk
 import io.mockk.spyk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -103,6 +104,7 @@ class UserCounterSyncTasksTest {
 
     // region syncDirtyCounters()
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun `syncDirtyCounters() - waits for in-flight syncCounters()`() = runTest {
         val getCountersResponse = Channel<Response<JsonApiObject<UserCounter>>>()
         coEvery { countersApi.getCounters() } coAnswers { getCountersResponse.receive() }
