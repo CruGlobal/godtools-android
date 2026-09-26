@@ -338,8 +338,11 @@ class TractActivityTest {
                 it.shareLiveShareLink()
                 assertTrue(it.publisherController.started)
 
-                val dialog = it.liveShareStartingDialog
-                dialog.onCancel(dialog.requireDialog())
+                it.liveShareStartingDialog.requireDialog().cancel()
+            }
+
+            shadowOf(Looper.getMainLooper()).idle()
+            it.onActivity {
                 assertFalse(it.publisherController.started)
                 assertEquals(State.Off, it.publisherController.state.value)
             }
