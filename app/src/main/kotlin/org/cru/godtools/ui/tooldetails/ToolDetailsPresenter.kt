@@ -29,7 +29,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,6 +39,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
@@ -193,15 +196,19 @@ class ToolDetailsPresenter @AssistedInject constructor(
                     }
                 }
 
-                UiEvent.PinTool -> coroutineScope.launch {
-                    settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
-                    toolsRepository.pinTool(toolCode)
-                    syncService.syncDirtyFavoriteTools()
+                UiEvent.PinTool -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    withContext(NonCancellable) {
+                        settings.setFeatureDiscovered(Settings.FEATURE_TOOL_FAVORITE)
+                        toolsRepository.pinTool(toolCode)
+                        syncService.syncDirtyFavoriteTools()
+                    }
                 }
 
-                UiEvent.UnpinTool -> coroutineScope.launch {
-                    toolsRepository.unpinTool(toolCode)
-                    syncService.syncDirtyFavoriteTools()
+                UiEvent.UnpinTool -> coroutineScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    withContext(NonCancellable) {
+                        toolsRepository.unpinTool(toolCode)
+                        syncService.syncDirtyFavoriteTools()
+                    }
                 }
 
                 UiEvent.PinShortcut -> pendingShortcut?.let { shortcutManager.pinShortcut(it) }
