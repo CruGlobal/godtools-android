@@ -12,7 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.distinctUntilChanged
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.overlay.OverlayEffect
@@ -483,8 +482,7 @@ class TractActivity :
         val streamId = intent?.data?.getQueryParameter(PARAM_LIVE_SHARE_STREAM) ?: return
 
         subscriberController.channelId = streamId
-        subscriberController.receivedEvent.notNull().distinctUntilChanged()
-            .observe(this) { navigateToLiveShareEvent(it) }
+        subscriberController.receivedEvent.notNull().observe(this) { navigateToLiveShareEvent(it) }
         if (savedInstanceState == null) eventBus.post(ShareScreenOpenedActionEvent)
     }
 
