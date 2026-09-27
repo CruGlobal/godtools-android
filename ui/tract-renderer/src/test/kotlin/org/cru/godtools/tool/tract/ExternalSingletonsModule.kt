@@ -65,7 +65,7 @@ class ExternalSingletonsModule {
     @get:Provides
     val settings by lazy {
         mockk<Settings> {
-            every { appLanguageFlow } returns flowOf(Locale.ENGLISH)
+            every { appLanguageFlow } returns MutableStateFlow(Locale.ENGLISH).asStateFlow()
             every { setFeatureDiscovered(any()) } just Runs
             every { isFeatureDiscovered(any()) } returns true
             every { isFeatureDiscoveredLiveData(any()) } answers { ImmutableLiveData(true) }
