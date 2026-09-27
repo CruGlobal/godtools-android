@@ -38,9 +38,9 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.util.content.equalsIntent
@@ -520,9 +520,9 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             expectMostRecentItem().eventSink(UiEvent.PinTool)
+            // finish the pinTool() call while the presenter is leaving composition
+            backgroundScope.launch { pinTool.complete(Unit) }
         }
-        pinTool.complete(Unit)
-        runCurrent()
 
         coVerify {
             toolsRepository.pinTool(TOOL)
@@ -556,9 +556,9 @@ class ToolDetailsPresenterTest {
 
         createPresenter().test {
             expectMostRecentItem().eventSink(UiEvent.UnpinTool)
+            // finish the unpinTool() call while the presenter is leaving composition
+            backgroundScope.launch { unpinTool.complete(Unit) }
         }
-        unpinTool.complete(Unit)
-        runCurrent()
 
         coVerify {
             toolsRepository.unpinTool(TOOL)
