@@ -145,8 +145,9 @@ class TasksTest {
         val failing = Attachment { sha256 = "failing" }
         val attachment = Attachment { sha256 = "valid" }
         coEvery { attachmentsRepository.getAttachments() } returns listOf(failing, attachment)
-        every { context.assets.list("attachments") } returns arrayOf("failing.bin", "valid.bin")
-        every { context.assets.open("attachments/failing.bin") } throws IOException()
+        val assets = context.assets
+        every { assets.list("attachments") } returns arrayOf("failing.bin", "valid.bin")
+        every { assets.open("attachments/failing.bin") } throws IOException()
         coEvery { downloadManager.importAttachment(any(), any()) } just Runs
 
         tasks.importBundledAttachments()
