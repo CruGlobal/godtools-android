@@ -62,7 +62,9 @@ class TractPublisherController @Inject constructor(
                         try {
                             service.subscribe(Subscribe(identifier))
                             subscriptionChannel.consumeEach {
-                                if (it.identifier == identifier) lastEvent?.let { sendNavigationEvent(it) }
+                                if (it.identifier == identifier) {
+                                    lastEvent?.let { service.sendEvent(Message(identifier, it)) }
+                                }
                             }
                         } finally {
                             service.unsubscribe(Unsubscribe(identifier))
@@ -107,6 +109,7 @@ class TractPublisherController @Inject constructor(
 
     private var lastEvent: NavigationEvent? = null
     fun sendNavigationEvent(event: NavigationEvent) {
+        if (event == lastEvent) return
         if (stateMachine.state == State.On) service.sendEvent(Message(identifier, event))
         lastEvent = event
     }
