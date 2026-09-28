@@ -35,10 +35,12 @@ class ApiModuleTest {
         dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest) = when (request.path) {
                 "/auth" -> MockResponse().setBody(JSON_RESPONSE_AUTH_TOKEN)
+
                 "/$PATH_USER" -> when (request.getHeader("Authorization")) {
                     TOKEN -> MockResponse().setBody(JSON_RESPONSE_USER)
                     else -> MockResponse().setResponseCode(401)
                 }
+
                 else -> MockResponse().setResponseCode(404)
             }
         }
