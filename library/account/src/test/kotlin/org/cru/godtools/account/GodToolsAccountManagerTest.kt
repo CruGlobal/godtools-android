@@ -158,7 +158,7 @@ class GodToolsAccountManagerTest {
         val job = launch { manager.deleteAccount() }
         runCurrent()
         job.cancel()
-        response.complete(Response.success(204, null))
+        response.complete(Response.success<JsonApiObject<User>>(204, null))
         job.join()
 
         coVerifySequence {
