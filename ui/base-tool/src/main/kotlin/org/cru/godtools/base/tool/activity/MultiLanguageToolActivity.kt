@@ -181,6 +181,7 @@ abstract class MultiLanguageToolActivity<B : ViewDataBinding>(
     override fun canShowFeatureDiscovery(feature: String) = when (feature) {
         // the share action lives in the settings bottom sheet, so there is no toolbar menu item to target
         FEATURE_TOOL_SHARE -> false
+
         else -> super.canShowFeatureDiscovery(feature)
     }
     // endregion Feature Discovery
