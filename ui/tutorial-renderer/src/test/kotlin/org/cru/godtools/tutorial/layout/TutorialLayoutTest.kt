@@ -2,14 +2,18 @@ package org.cru.godtools.tutorial.layout
 
 import android.app.Application
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
@@ -18,12 +22,11 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onAllNodesWithTag
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runComposeUiTest
+import androidx.compose.ui.unit.dp
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.slack.circuit.overlay.ContentWithOverlays
@@ -125,23 +128,6 @@ class TutorialLayoutTest {
     }
 
     @Test
-    fun `Page Indicator - FEATURES - active indicator follows current page`() = runComposeUiTest {
-        setTutorialLayoutContent(PageSet.FEATURES)
-        onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)[0].assertIsSelected()
-
-        // the pager can compose the next page too, and it has its own Continue button
-        onAllNodesWithText(getString(R.string.tutorial_features_action_continue)).onFirst().performClick()
-        // the page change animates, so wait for the pager to settle on the second page
-        waitUntil {
-            onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)[1].fetchSemanticsNode()
-                .config.getOrNull(SemanticsProperties.Selected) == true
-        }
-        val indicators = onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)
-        indicators[0].assertIsNotSelected()
-        indicators[1].assertIsSelected()
-    }
-
-    @Test
     fun `Page Indicator - FEATURES - updates when app language changes page count`() = runComposeUiTest {
         var locale by mutableStateOf(Locale.ENGLISH)
         setTutorialLayoutContent(PageSet.FEATURES) { locale }
@@ -156,6 +142,24 @@ class TutorialLayoutTest {
     // endregion Page Indicator
 
     // region TutorialPagerIndicator()
+    @Test
+    fun `TutorialPagerIndicator() - active indicator follows current page`() = runComposeUiTest {
+        lateinit var state: PagerState
+        setContent {
+            state = rememberPagerState { 5 }
+            Column {
+                HorizontalPager(state, modifier = Modifier.size(100.dp)) {}
+                TutorialPagerIndicator(state)
+            }
+        }
+        onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)[0].assertIsSelected()
+
+        runOnIdle { state.requestScrollToPage(1) }
+        val indicators = onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)
+        indicators[0].assertIsNotSelected()
+        indicators[1].assertIsSelected()
+    }
+
     @Test
     fun `TutorialPagerIndicator() - clamps active indicator when page count shrinks`() = runComposeUiTest {
         var pageCount by mutableIntStateOf(5)
