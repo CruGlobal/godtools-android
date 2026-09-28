@@ -98,6 +98,7 @@ object DatabaseModule {
         //       until then we trigger it before returning a repository that depends on the migrated data
         return when {
             ThreadUtil.isMainThread() -> GlobalScope.launch { writableDatabase }
+
             else -> {
                 writableDatabase
                 Job().apply { complete() }
