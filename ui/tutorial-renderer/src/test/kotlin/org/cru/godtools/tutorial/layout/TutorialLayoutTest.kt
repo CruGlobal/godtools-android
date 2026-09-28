@@ -17,6 +17,8 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsNotSelected
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -126,7 +128,13 @@ class TutorialLayoutTest {
         setTutorialLayoutContent(PageSet.FEATURES)
         onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)[0].assertIsSelected()
 
-        onNodeWithText(getString(R.string.tutorial_features_action_continue)).performClick()
+        // the pager can compose the next page too, and it has its own Continue button
+        onAllNodesWithText(getString(R.string.tutorial_features_action_continue)).onFirst().performClick()
+        // the page change animates, so wait for the pager to settle on the second page
+        waitUntil {
+            onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)[1].fetchSemanticsNode()
+                .config.getOrNull(SemanticsProperties.Selected) == true
+        }
         val indicators = onAllNodesWithTag(TEST_TAG_PAGE_INDICATOR_PAGE)
         indicators[0].assertIsNotSelected()
         indicators[1].assertIsSelected()
