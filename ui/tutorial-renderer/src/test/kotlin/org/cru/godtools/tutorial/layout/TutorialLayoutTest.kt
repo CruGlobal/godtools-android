@@ -46,19 +46,17 @@ class TutorialLayoutTest {
     private fun getString(@StringRes resId: Int) =
         ApplicationProvider.getApplicationContext<Application>().getString(resId)
 
-    private fun ComposeUiTest.setTutorialLayoutContent(
-        pageSet: PageSet,
-        locale: () -> Locale = { Locale.ENGLISH },
-    ) = setContent {
-        CompositionLocalProvider(
-            LocalAppLanguage provides locale(),
-            LocalEventBus provides EventBus(),
-        ) {
-            ContentWithOverlays {
-                TutorialLayout(UiState(pageSet, eventSink = events))
+    private fun ComposeUiTest.setTutorialLayoutContent(pageSet: PageSet, locale: () -> Locale = { Locale.ENGLISH }) =
+        setContent {
+            CompositionLocalProvider(
+                LocalAppLanguage provides locale(),
+                LocalEventBus provides EventBus(),
+            ) {
+                ContentWithOverlays {
+                    TutorialLayout(UiState(pageSet, eventSink = events))
+                }
             }
         }
-    }
 
     // region AppBar - Navigate Up
     @Test
