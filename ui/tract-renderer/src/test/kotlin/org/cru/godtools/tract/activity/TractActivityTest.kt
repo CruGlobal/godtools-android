@@ -3,6 +3,7 @@ package org.cru.godtools.tract.activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Looper
 import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Lifecycle
@@ -43,6 +44,7 @@ import org.cru.godtools.tract.liveshare.TractSubscriberController
 import org.cru.godtools.tract.widget.HackyRtlViewPager
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 private const val TOOL = "test"
@@ -317,16 +319,22 @@ class TractActivityTest {
         everyTractShareService()
 
         deepLinkScenario(Uri.parse("https://knowgod.com/en/tool/v1/$TOOL/1?$PARAM_LIVE_SHARE_STREAM=stream")) {
-            it.onActivity {
-                manifest.value = tractManifest()
-                assertEquals(-1, it.initialPage)
+            it.onActivity { manifest.value = tractManifest() }
+            shadowOf(Looper.getMainLooper()).idle()
+            it.onActivity { assertEquals(-1, it.initialPage) }
 
-                // the pager is briefly empty, e.g. while the manifest for a new locale is loading
-                manifest.value = null
+            // the pager is briefly empty, e.g. while the manifest for a new locale is loading
+            it.onActivity { manifest.value = null }
+            shadowOf(Looper.getMainLooper()).idle()
+            it.onActivity {
+                assertEquals(0, it.findViewById<HackyRtlViewPager>(R.id.pages).adapter!!.count)
                 it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 3)
                 assertEquals(3, it.initialPage)
+            }
 
-                manifest.value = tractManifest()
+            it.onActivity { manifest.value = tractManifest() }
+            shadowOf(Looper.getMainLooper()).idle()
+            it.onActivity {
                 it.subscriberController.receivedEvent.value = NavigationEvent(tool = TOOL, page = 2)
                 assertEquals(2, it.findViewById<HackyRtlViewPager>(R.id.pages).currentItem)
                 // a stale deferred page would be applied again when the activity is recreated
