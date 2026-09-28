@@ -9,6 +9,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -124,10 +125,11 @@ class AllFavoritesPresenter @AssistedInject constructor(
     @Composable
     private fun rememberFavoriteTools(isReordering: () -> Boolean): MutableState<List<Tool>> {
         val state = remember { mutableStateOf(emptyList<Tool>()) }
+        val currentIsReordering by rememberUpdatedState(isReordering)
         LaunchedEffect(Unit) {
             toolsRepository.getFavoriteToolsFlow().collect {
                 // don't overwrite an in-progress reorder, storeToolOrder() will trigger a fresh emission once committed
-                if (!isReordering()) state.value = it
+                if (!currentIsReordering()) state.value = it
             }
         }
         return state
