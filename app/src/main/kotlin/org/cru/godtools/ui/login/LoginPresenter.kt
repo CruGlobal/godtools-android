@@ -49,6 +49,7 @@ class LoginPresenter @AssistedInject constructor(
             when (it) {
                 // CloseWhenAuthenticated() closes the screen once the account manager is authenticated
                 LoginResponse.Success -> Unit
+
                 is LoginResponse.Error -> loginError = it
             }
         }
