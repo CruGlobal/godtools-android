@@ -194,6 +194,7 @@ class LessonActivity :
                                     when (i) {
                                         // don't overwrite saved progress until the user navigates within the lesson
                                         0 -> initializeProgress(page, lessonPagerState.pages)
+
                                         else -> updateProgress(page, lessonPagerState.pages)
                                     }
                                 }
