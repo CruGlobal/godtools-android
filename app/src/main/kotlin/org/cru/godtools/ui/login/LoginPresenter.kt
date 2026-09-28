@@ -2,10 +2,8 @@ package org.cru.godtools.ui.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -17,6 +15,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.first
 import org.cru.godtools.account.AccountType
 import org.cru.godtools.account.GodToolsAccountManager
 import org.cru.godtools.account.LoginResponse
@@ -68,8 +67,10 @@ class LoginPresenter @AssistedInject constructor(
 
     @Composable
     private fun CloseWhenAuthenticated() {
-        val isAuthenticated by remember { accountManager.isAuthenticatedFlow }.collectAsState(false)
-        LaunchedEffect(isAuthenticated) { if (isAuthenticated) navigator.pop() }
+        LaunchedEffect(Unit) {
+            accountManager.isAuthenticatedFlow.first { it }
+            navigator.pop()
+        }
     }
 
     @AssistedFactory
