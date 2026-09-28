@@ -73,11 +73,16 @@ internal class DefaultOptInNotificationPresenter @Inject constructor(
         return when {
             // TODO: Remove sdk version checks for optInNotification logic once minSdk = 33 or greater
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU -> false
+
             !remoteConfig.getBoolean(CONFIG_UI_OPT_IN_NOTIFICATION_ENABLED) -> false
+
             // don't prompt on the launch that shows onboarding
             !settings.isFeatureDiscovered(FEATURE_TUTORIAL_ONBOARDING) -> false
+
             permissionStatus == PermissionStatus.APPROVED -> false
+
             settings.getOptInNotificationPromptCount() > promptLimit -> false
+
             else -> settings.getLastPromptedOptInNotification().isBefore(LocalDate.now().minusDays(promptInterval))
         }
     }
