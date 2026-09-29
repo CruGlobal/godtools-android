@@ -2,6 +2,7 @@ plugins {
     id("godtools.library-conventions")
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.paparazzi)
 }
 
 android {
@@ -36,7 +37,6 @@ dependencies {
     implementation(libs.gtoSupport.compat)
     implementation(libs.gtoSupport.util)
 
-    implementation(libs.accompanist.pager.indicators)
     implementation(libs.circuit.overlay)
     implementation(libs.circuitx.android)
     implementation(libs.hilt)
@@ -47,5 +47,6 @@ dependencies {
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 
+    testImplementation(testFixtures(projects.ui.base))
     testImplementation(testFixtures(libs.gtoSupport.androidx.compose))
 }
