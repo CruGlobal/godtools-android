@@ -480,7 +480,7 @@ class TractActivity :
     }
 
     private fun startLiveShareSubscriberIfNecessary(savedInstanceState: Bundle?) {
-        val streamId = intent?.data?.getQueryParameter(PARAM_LIVE_SHARE_STREAM) ?: return
+        val streamId = intent?.data?.takeIf { it.isHierarchical }?.getQueryParameter(PARAM_LIVE_SHARE_STREAM) ?: return
 
         subscriberController.channelId = streamId
         subscriberController.receivedEvent.notNull().distinctUntilChanged()
