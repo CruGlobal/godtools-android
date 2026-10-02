@@ -13,6 +13,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.base.Ordered
 import org.ccci.gto.android.common.util.content.isConnected
 import org.cru.godtools.account.provider.AccountProvider
@@ -116,12 +118,16 @@ class GodToolsAccountManager @VisibleForTesting internal constructor(
         providers.forEach { launch { it.logout() } }
     }
 
-    suspend fun deleteAccount() = try {
-        userApi.get().deleteUser()
-            .also { if (it.isSuccessful) logout() }
-            .isSuccessful
-    } catch (_: IOException) {
-        false
+    // the server may process the delete even if we are cancelled while waiting for the response,
+    // so always finish tearing down the local session once the request has been sent
+    suspend fun deleteAccount() = withContext(NonCancellable) {
+        try {
+            userApi.get().deleteUser()
+                .also { if (it.isSuccessful) logout() }
+                .isSuccessful
+        } catch (_: IOException) {
+            false
+        }
     }
     // endregion Login/Logout
 
