@@ -57,6 +57,10 @@ fun YouTubePlayer(
                     }
                 }
             })
-        }
+        },
+        onRelease = {
+            lifecycleOwner.lifecycle.removeObserver(it)
+            it.release()
+        },
     )
 }
