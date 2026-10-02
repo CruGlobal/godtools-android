@@ -39,7 +39,6 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
     }
 
     private val favoriteToolsMutex = Mutex()
-    private val favoritesUpdateMutex = Mutex()
 
     suspend fun syncFavoriteTools(force: Boolean) = favoriteToolsMutex.withLock {
         if (!accountManager.isAuthenticated) return true
@@ -71,7 +70,7 @@ internal class UserFavoriteToolsSyncTasks @Inject constructor(
         true
     }
 
-    suspend fun syncDirtyFavoriteTools(): Boolean = favoritesUpdateMutex.withLock {
+    suspend fun syncDirtyFavoriteTools(): Boolean = favoriteToolsMutex.withLock {
         coroutineScope {
             if (!accountManager.isAuthenticated) return@coroutineScope true
             val userId = accountManager.userId.orEmpty()
