@@ -39,18 +39,17 @@ data class Language(
         fun displayNameComparator(context: Context, displayLocale: Locale = context.appLanguage): Comparator<Language> =
             compareBy(displayLocale.getPrimaryCollator()) { it.getDisplayName(context, displayLocale) }
 
-        private fun Collection<Language>.toDisplayNameSortedMap(context: Context, displayLocale: Locale) =
-            associateBy { it.getDisplayName(context, displayLocale) }.toSortedMap(displayLocale.getPrimaryCollator())
-
         fun Collection<Language>.sortedByDisplayName(
             context: Context,
             displayLocale: Locale = context.appLanguage,
-        ): List<Language> = toDisplayNameSortedMap(context, displayLocale).values.toList()
+        ): List<Language> = sortedWith(displayNameComparator(context, displayLocale))
 
         fun Collection<Language>.getSortedDisplayNames(
             context: Context,
             displayLocale: Locale = context.appLanguage,
-        ): List<String> = toDisplayNameSortedMap(context, displayLocale).keys.toList()
+        ): List<String> = map { it.getDisplayName(context, displayLocale) }
+            .toSortedSet(displayLocale.getPrimaryCollator())
+            .toList()
 
         fun Collection<Language>.filterByDisplayAndNativeName(
             query: String,
