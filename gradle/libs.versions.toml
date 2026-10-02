@@ -7,6 +7,7 @@ androidx-compose-material3 = "1.4.0"
 androidx-compose-runtime = "1.12.1"
 androidx-compose-ui = "1.12.1"
 androidx-core = "1.19.1"
+androidx-credentials = "1.6.0"
 androidx-datastore = "1.2.1"
 androidx-hilt = "1.4.0"
 androidx-lifecycle = "2.11.0"
@@ -65,6 +66,8 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.2"
 androidx-constraintlayout-compose = "androidx.constraintlayout:constraintlayout-compose:1.1.2"
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "androidx-credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credentials" }
 androidx-databinding-compiler = { module = "androidx.databinding:databinding-compiler", version.ref = "android-gradle-plugin" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
@@ -117,6 +120,7 @@ godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref
 godtoolsShared-parser = { module = "org.cru.godtools.kotlin:parser", version.ref = "godtoolsShared" }
 godtoolsShared-renderer = { module = "org.cru.godtools.kotlin:renderer", version.ref = "godtoolsShared" }
 godtoolsShared-user-activity = { module = "org.cru.godtools.kotlin:user-activity", version.ref = "godtoolsShared" }
+googleid = "com.google.android.libraries.identity.googleid:googleid:1.2.1"
 gradleDownloadTask = "de.undercouch:gradle-download-task:5.7.0"
 gtoSupport-androidx-activity = { module = "org.ccci.gto.android:gto-support-androidx-activity", version.ref = "gtoSupport" }
 gtoSupport-androidx-collection = { module = "org.ccci.gto.android:gto-support-androidx-collection", version.ref = "gtoSupport" }
@@ -155,7 +159,6 @@ gtoSupport-materialComponents = { module = "org.ccci.gto.android:gto-support-mat
 gtoSupport-okhttp3 = { module = "org.ccci.gto.android:gto-support-okhttp3", version.ref = "gtoSupport" }
 gtoSupport-okio = { module = "org.ccci.gto.android:gto-support-okio", version.ref = "gtoSupport" }
 gtoSupport-picasso = { module = "org.ccci.gto.android:gto-support-picasso", version.ref = "gtoSupport" }
-gtoSupport-play-auth = { module = "org.ccci.gto.android:gto-support-play-auth", version.ref = "gtoSupport" }
 gtoSupport-retrofit2 = { module = "org.ccci.gto.android:gto-support-retrofit2", version.ref = "gtoSupport" }
 gtoSupport-scarlet = { module = "org.ccci.gto.android:gto-support-scarlet", version.ref = "gtoSupport" }
 gtoSupport-scarlet-actioncable = { module = "org.ccci.gto.android:gto-support-scarlet-actioncable", version.ref = "gtoSupport" }
@@ -179,7 +182,6 @@ jsoup = "org.jsoup:jsoup:1.23.2"
 junit = "junit:junit:4.13.2"
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinCoroutines" }
-kotlin-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinCoroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinCoroutines" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kotlinKover" }
@@ -204,7 +206,6 @@ paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
-play-auth = "com.google.android.gms:play-services-auth:21.6.0"
 play-base = "com.google.android.gms:play-services-base:18.11.0"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"

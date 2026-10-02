@@ -1,24 +1,34 @@
 package org.cru.godtools.account.provider.google
 
 import android.content.Context
+import android.os.Bundle
 import androidx.core.content.edit
+import androidx.core.os.bundleOf
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.ClearCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.tasks.Tasks
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.coVerifyAll
 import io.mockk.coVerifySequence
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.unmockkObject
-import io.mockk.unmockkStatic
 import java.net.UnknownHostException
 import java.util.UUID
 import kotlin.random.Random
@@ -29,93 +39,128 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
-import org.ccci.gto.android.common.play.auth.signin.GoogleSignInKtx
 import org.cru.godtools.account.provider.AuthenticationException
-import org.cru.godtools.account.provider.google.GoogleAccountProvider.Companion.PREF_USER_ID
 import org.cru.godtools.api.AuthApi
 import org.cru.godtools.api.model.AuthToken
 import org.junit.runner.RunWith
 import retrofit2.Response
 
+private const val ACCOUNT_ID = "account@example.com"
 private const val ID_TOKEN_VALID = "valid"
 private const val ID_TOKEN_INVALID = "invalid"
-private const val ID_TOKEN_EXCEPTION = "exception"
+private const val ID_TOKEN_REFRESHED = "refreshed"
+private const val SERVER_CLIENT_ID = "server_client_id"
+
+private const val TEST_EXTRA_ID = "test_id"
+private const val TEST_EXTRA_ID_TOKEN = "test_id_token"
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalUuidApi::class)
 class GoogleAccountProviderTest {
-    private val lastSignedInAccount = MutableStateFlow<GoogleSignInAccount?>(null)
     private val userId = UUID.randomUUID().toString()
+    private val authToken = AuthToken(userId, "token")
+    private val createUser = Random.nextBoolean()
 
-    private val authApi: AuthApi = mockk()
+    private val authApi: AuthApi = mockk {
+        coEvery { authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser)) }
+            .returns(Response.success(JsonApiObject.single(authToken)))
+        coEvery { authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_REFRESHED, createUser = createUser)) }
+            .returns(Response.success(JsonApiObject.single(authToken)))
+        coEvery { authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser)) }
+            .returns(Response.error(401, "".toResponseBody()))
+    }
     private val context: Context get() = ApplicationProvider.getApplicationContext()
-    private val googleSignInClient: GoogleSignInClient = mockk()
+    private val credentialManager: CredentialManager = mockk {
+        coEvery { getCredential(any(), any<GetCredentialRequest>()) } throws NoCredentialException()
+        coEvery { clearCredentialState(any()) } just Runs
+    }
+    private val signInWithGoogleOption = GetSignInWithGoogleOption.Builder(SERVER_CLIENT_ID).build()
+    private val authorizedGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(true)
+        .setServerClientId(SERVER_CLIENT_ID)
+        .build()
 
     private lateinit var provider: GoogleAccountProvider
 
     @BeforeTest
     fun setup() {
-        mockkObject(GoogleSignInKtx)
-        every { GoogleSignInKtx.getLastSignedInAccountFlow(any()) } returns lastSignedInAccount
-        mockkStatic(GoogleSignIn::class)
-        every { GoogleSignIn.getLastSignedInAccount(any()) } answers { lastSignedInAccount.value }
-        provider = GoogleAccountProvider(
-            authApi = authApi,
-            context = context,
-            googleSignInClient = googleSignInClient,
-        )
+        mockkObject(GoogleIdTokenCredential)
+        every { GoogleIdTokenCredential.createFrom(any()) } answers {
+            val data = firstArg<Bundle>()
+            mockk {
+                every { id } returns data.getString(TEST_EXTRA_ID)!!
+                every { idToken } returns data.getString(TEST_EXTRA_ID_TOKEN)!!
+            }
+        }
+        provider = createProvider()
     }
 
     @AfterTest
     fun cleanup() {
-        unmockkStatic(GoogleSignIn::class)
-        unmockkObject(GoogleSignInKtx)
+        unmockkObject(GoogleIdTokenCredential)
+    }
+
+    private fun createProvider() = GoogleAccountProvider(
+        authApi = authApi,
+        context = context,
+        credentialManager = credentialManager,
+        signInWithGoogleOption = signInWithGoogleOption,
+        authorizedGoogleIdOption = authorizedGoogleIdOption,
+    )
+
+    private fun googleCredentialResponse(id: String = ACCOUNT_ID, idToken: String = ID_TOKEN_VALID) =
+        GetCredentialResponse(
+            CustomCredential(
+                GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL,
+                bundleOf(TEST_EXTRA_ID to id, TEST_EXTRA_ID_TOKEN to idToken),
+            )
+        )
+
+    private fun storeAccount(idToken: String? = ID_TOKEN_VALID, userId: String? = null) = provider.prefs.edit {
+        putString(PREF_ACCOUNT_ID, ACCOUNT_ID)
+        putString(PREF_ID_TOKEN, idToken)
+        putString(PREF_USER_ID, userId)
     }
 
     // region Property: isAuthenticated
     @Test
-    fun `Property isAuthenticated`() = runTest {
-        assertFalse(provider.isAuthenticated, "No GoogleSignInAccount")
+    fun `Property isAuthenticated`() {
+        assertFalse(provider.isAuthenticated, "No stored account")
 
-        val account = GoogleSignInAccount.createDefault()
-        lastSignedInAccount.value = account
-        assertFalse(provider.isAuthenticated, "GoogleSignInAccount but no userId")
+        storeAccount()
+        assertFalse(provider.isAuthenticated, "Stored account but no userId")
 
-        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
-        assertTrue(provider.isAuthenticated, "GoogleSignInAccount w/ userId")
+        storeAccount(userId = userId)
+        assertTrue(provider.isAuthenticated, "Stored account w/ userId")
 
-        lastSignedInAccount.value = null
-        assertFalse(provider.isAuthenticated, "No GoogleSignInAccount, still has userId")
+        provider.prefs.edit { clear() }
+        assertFalse(provider.isAuthenticated, "Cleared account")
     }
     // endregion Property: isAuthenticated
+
+    // region Property userId
+    @Test
+    fun `Property userId - persisted across provider instances`() {
+        storeAccount(userId = userId)
+
+        val recreated = createProvider()
+        assertTrue(recreated.isAuthenticated)
+        assertEquals(userId, recreated.userId)
+    }
+    // endregion Property userId
 
     // region isAuthenticatedFlow()
     @Test
     fun `isAuthenticatedFlow()`() = runTest {
-        val account = GoogleSignInAccount.createDefault()
-        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
-
         provider.isAuthenticatedFlow().test {
             assertFalse(awaitItem())
 
-            lastSignedInAccount.value = account
+            storeAccount(userId = userId)
             assertTrue(awaitItem())
 
             provider.prefs.edit { clear() }
-            assertFalse(awaitItem())
-
-            provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
-            assertTrue(awaitItem())
-
-            lastSignedInAccount.value = null
             assertFalse(awaitItem())
         }
     }
@@ -124,131 +169,229 @@ class GoogleAccountProviderTest {
     // region userIdFlow()
     @Test
     fun `userIdFlow()`() = runTest {
-        val account = GoogleSignInAccount.createDefault()
-        provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
-
         provider.userIdFlow().test {
             assertNull(awaitItem())
 
-            lastSignedInAccount.value = account
+            storeAccount(userId = userId)
             assertEquals(userId, awaitItem())
 
-            lastSignedInAccount.value = null
-            assertNull(awaitItem())
-        }
-    }
-
-    @Test
-    fun `userIdFlow() - emits when account updates userId`() = runTest {
-        val account = GoogleSignInAccount.createDefault()
-
-        provider.userIdFlow().test {
-            runCurrent()
-            assertNull(expectMostRecentItem())
-
-            lastSignedInAccount.value = account
-            runCurrent()
-
-            provider.prefs.edit { putString(account.PREF_USER_ID, userId) }
-            runCurrent()
-            assertEquals(userId, expectMostRecentItem())
-
             val userId2 = UUID.randomUUID().toString()
-            provider.prefs.edit { putString(account.PREF_USER_ID, userId2) }
-            runCurrent()
-            assertEquals(userId2, expectMostRecentItem())
+            provider.prefs.edit { putString(PREF_USER_ID, userId2) }
+            assertEquals(userId2, awaitItem())
+
+            provider.prefs.edit { clear() }
+            assertNull(awaitItem())
         }
     }
     // endregion userIdFlow()
 
-    // region authenticateWithMobileContentApi()
-    private val authToken = AuthToken(userId, "token")
-    private val createUser = Random.nextBoolean()
-    private val validAccount: GoogleSignInAccount = mockk {
-        every { id } returns UUID.randomUUID().toString()
-        every { idToken } returns ID_TOKEN_VALID
-    }
+    // region login()
+    @Test
+    fun `login()`() = runTest {
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse())
 
-    @BeforeTest
-    fun `Setup authenticateWithMobileContentApi()`() {
-        every { googleSignInClient.silentSignIn() } returns Tasks.forResult(validAccount)
-
-        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser)) }
-            .returns(Response.success(JsonApiObject.single(authToken)))
-        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser)) }
-            .returns(Response.error(401, "".toResponseBody()))
+        assertEquals(Result.success(authToken), provider.login(context, createUser))
+        coVerifySequence {
+            credentialManager.getCredential(
+                context,
+                match<GetCredentialRequest> { it.credentialOptions == listOf(signInWithGoogleOption) }
+            )
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
+        }
+        assertEquals(ACCOUNT_ID, provider.prefs.getString(PREF_ACCOUNT_ID, null))
+        assertEquals(ID_TOKEN_VALID, provider.prefs.getString(PREF_ID_TOKEN, null))
+        assertEquals(userId, provider.userId)
     }
 
     @Test
+    fun `login() - Cancelled`() = runTest {
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .throws(GetCredentialCancellationException())
+
+        assertEquals(Result.failure(AuthenticationException.MissingCredentials), provider.login(context, createUser))
+        coVerifyAll { authApi wasNot Called }
+        assertNull(provider.prefs.getString(PREF_ACCOUNT_ID, null))
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `login() - No credentials`() = runTest {
+        assertEquals(Result.failure(AuthenticationException.MissingCredentials), provider.login(context, createUser))
+        coVerifyAll { authApi wasNot Called }
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `login() - Unexpected credential type`() = runTest {
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(GetCredentialResponse(CustomCredential("unexpected", Bundle())))
+
+        assertEquals(Result.failure(AuthenticationException.MissingCredentials), provider.login(context, createUser))
+        coVerifyAll { authApi wasNot Called }
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `login() - Parsing failure`() = runTest {
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse())
+        every { GoogleIdTokenCredential.createFrom(any()) } throws mockk<GoogleIdTokenParsingException>()
+
+        assertEquals(Result.failure(AuthenticationException.MissingCredentials), provider.login(context, createUser))
+        coVerifyAll { authApi wasNot Called }
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `login() - Api Exception - UnknownHostException()`() = runTest {
+        val exception = UnknownHostException()
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse())
+        coEvery { authApi.authenticate(any()) } throws exception
+
+        assertEquals(Result.failure(exception), provider.login(context, createUser))
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `login() - Api rejects id_token`() = runTest {
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse(idToken = ID_TOKEN_INVALID))
+
+        assertEquals(Result.failure(AuthenticationException.UnknownError), provider.login(context, createUser))
+        coVerify(exactly = 1) { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+        assertFalse(provider.isAuthenticated)
+    }
+    // endregion login()
+
+    // region logout()
+    @Test
+    fun `logout()`() = runTest {
+        storeAccount(userId = userId)
+
+        provider.logout()
+        coVerifyAll { credentialManager.clearCredentialState(any()) }
+        assertNull(provider.prefs.getString(PREF_ACCOUNT_ID, null))
+        assertNull(provider.prefs.getString(PREF_ID_TOKEN, null))
+        assertFalse(provider.isAuthenticated)
+    }
+
+    @Test
+    fun `logout() - clearCredentialState() fails`() = runTest {
+        coEvery { credentialManager.clearCredentialState(any()) } throws ClearCredentialUnknownException()
+        storeAccount(userId = userId)
+
+        provider.logout()
+        assertNull(provider.prefs.getString(PREF_ACCOUNT_ID, null))
+        assertNull(provider.prefs.getString(PREF_ID_TOKEN, null))
+        assertFalse(provider.isAuthenticated)
+    }
+    // endregion logout()
+
+    // region authenticateWithMobileContentApi()
+    @Test
     fun `authenticateWithMobileContentApi()`() = runTest {
-        lastSignedInAccount.value = validAccount
+        storeAccount()
 
         assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
-        coVerifySequence {
+        coVerifyAll {
             authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
-
-            googleSignInClient wasNot Called
+            credentialManager wasNot Called
         }
-        assertEquals(
-            userId,
-            provider.prefs.getString(lastSignedInAccount.value!!.PREF_USER_ID, "")
-        )
+        assertEquals(userId, provider.userId)
     }
 
     @Test
     fun `authenticateWithMobileContentApi() - Api Exception - UnknownHostException()`() = runTest {
         val exception = UnknownHostException()
-        val token = Uuid.random().toString()
-        lastSignedInAccount.value = mockk { every { idToken } returns token }
+        storeAccount()
+        coEvery { authApi.authenticate(any()) } throws exception
 
-        coEvery { authApi.authenticate(AuthToken.Request(googleIdToken = token, createUser = createUser)) }
-            .throws(exception)
-
-        assertEquals(
-            Result.failure(exception),
-            provider.authenticateWithMobileContentApi(createUser)
-        )
+        assertEquals(Result.failure(exception), provider.authenticateWithMobileContentApi(createUser))
         coVerifyAll {
-            authApi.authenticate(AuthToken.Request(googleIdToken = token, createUser = createUser))
-            googleSignInClient wasNot Called
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
+            credentialManager wasNot Called
         }
     }
 
     @Test
     fun `authenticateWithMobileContentApi() - Not authenticated`() = runTest {
-        lastSignedInAccount.value = null
-
         assertEquals(
             Result.failure(AuthenticationException.MissingCredentials),
             provider.authenticateWithMobileContentApi(createUser)
         )
         coVerifyAll {
             authApi wasNot Called
-            googleSignInClient wasNot Called
+            credentialManager wasNot Called
         }
     }
 
     @Test
     fun `authenticateWithMobileContentApi() - No id_token`() = runTest {
-        lastSignedInAccount.value = mockk { every { idToken } returns null }
+        storeAccount(idToken = null)
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse(idToken = ID_TOKEN_REFRESHED))
 
         assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
         coVerifySequence {
-            googleSignInClient.silentSignIn()
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
+            credentialManager.getCredential(
+                context,
+                match<GetCredentialRequest> { it.credentialOptions == listOf(authorizedGoogleIdOption) }
+            )
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_REFRESHED, createUser = createUser))
         }
+        assertEquals(ID_TOKEN_REFRESHED, provider.prefs.getString(PREF_ID_TOKEN, null))
+        assertEquals(userId, provider.userId)
     }
 
     @Test
-    fun `authenticateWithMobileContentApi() - invalid id_token`() = runTest {
-        lastSignedInAccount.value = mockk { every { idToken } returns ID_TOKEN_INVALID }
+    fun `authenticateWithMobileContentApi() - invalid id_token - refreshes credential`() = runTest {
+        storeAccount(idToken = ID_TOKEN_INVALID)
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse(idToken = ID_TOKEN_REFRESHED))
 
         assertEquals(Result.success(authToken), provider.authenticateWithMobileContentApi(createUser))
         coVerifySequence {
             authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser))
-            googleSignInClient.silentSignIn()
-            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_VALID, createUser = createUser))
+            credentialManager.getCredential(
+                context,
+                match<GetCredentialRequest> { it.credentialOptions == listOf(authorizedGoogleIdOption) }
+            )
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_REFRESHED, createUser = createUser))
         }
+        assertEquals(ID_TOKEN_REFRESHED, provider.prefs.getString(PREF_ID_TOKEN, null))
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - invalid id_token - refresh fails`() = runTest {
+        storeAccount(idToken = ID_TOKEN_INVALID)
+
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
+        coVerifySequence {
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser))
+            credentialManager.getCredential(any(), any<GetCredentialRequest>())
+        }
+    }
+
+    @Test
+    fun `authenticateWithMobileContentApi() - invalid id_token - refresh returns different account`() = runTest {
+        storeAccount(idToken = ID_TOKEN_INVALID)
+        coEvery { credentialManager.getCredential(any(), any<GetCredentialRequest>()) }
+            .returns(googleCredentialResponse(id = "other@example.com", idToken = ID_TOKEN_REFRESHED))
+
+        assertEquals(
+            Result.failure(AuthenticationException.UnableToRefreshCredentials),
+            provider.authenticateWithMobileContentApi(createUser)
+        )
+        coVerifySequence {
+            authApi.authenticate(AuthToken.Request(googleIdToken = ID_TOKEN_INVALID, createUser = createUser))
+            credentialManager.getCredential(any(), any<GetCredentialRequest>())
+        }
+        assertEquals(ID_TOKEN_INVALID, provider.prefs.getString(PREF_ID_TOKEN, null))
     }
     // endregion authenticateWithMobileContentApi()
 }
