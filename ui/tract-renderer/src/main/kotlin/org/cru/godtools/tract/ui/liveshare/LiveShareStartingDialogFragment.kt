@@ -1,5 +1,6 @@
 package org.cru.godtools.tract.ui.liveshare
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -37,6 +38,11 @@ class LiveShareStartingDialogFragment() : DialogFragment() {
         .setView(R.layout.tract_live_share_dialog)
         .create()
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        publisherController.cancelStart()
+    }
+
     private fun startAutoDismissObservers() {
         // auto-dismiss dialog when we have publisherInfo
         publisherController.publisherInfo.let {
@@ -57,6 +63,7 @@ class LiveShareStartingDialogFragment() : DialogFragment() {
                 context?.let {
                     Toast.makeText(it, R.string.tract_live_share_unable_to_connect, Toast.LENGTH_LONG).show()
                 }
+                publisherController.cancelStart()
                 dismissAllowingStateLoss()
             }
         }
