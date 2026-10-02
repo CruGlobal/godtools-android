@@ -342,7 +342,7 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     override fun showNextFeatureDiscovery() {
-        if (!settings.isFeatureDiscovered(FEATURE_TOOL_SHARE) && canShowFeatureDiscovery(FEATURE_TOOL_SHARE)) {
+        if (canShowFeatureDiscovery(FEATURE_TOOL_SHARE) && !settings.isFeatureDiscovered(FEATURE_TOOL_SHARE)) {
             dispatchDelayedFeatureDiscovery(FEATURE_TOOL_SHARE, false, 2000)
             return
         }
