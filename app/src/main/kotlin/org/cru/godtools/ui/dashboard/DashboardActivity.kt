@@ -85,6 +85,7 @@ class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val initialScreen = intent?.let { processIntent(it) } ?: DashboardScreen()
+        if (savedInstanceState == null) intent?.let { processNotificationDeepLink(it) }
         triggerOnboardingIfNecessary()
 
         // region optInNotification
@@ -146,6 +147,7 @@ class DashboardActivity : BaseActivity() {
         if (screen != null) {
             deepLinkNavEvents.trySend(NavEvent.ResetRoot(screen))
         }
+        processNotificationDeepLink(newIntent)
     }
 
     override fun onResume() {
@@ -165,6 +167,10 @@ class DashboardActivity : BaseActivity() {
         }
 
         return null
+    }
+
+    private fun processNotificationDeepLink(intent: Intent) {
+        createNotificationDeepLinkIntent(intent)?.let { startActivity(it) }
     }
     // endregion Intent processing
 
