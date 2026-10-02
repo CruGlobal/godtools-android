@@ -2,13 +2,19 @@ package org.cru.godtools.tract.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.net.Uri
+import android.view.View.MeasureSpec.EXACTLY
+import android.view.View.MeasureSpec.makeMeasureSpec
 import androidx.activity.viewModels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -19,7 +25,9 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlinx.coroutines.flow.MutableSharedFlow
+import org.ccci.gto.android.common.util.graphics.toHslColor
 import org.cru.godtools.base.EXTRA_LANGUAGES
 import org.cru.godtools.base.EXTRA_TOOL
 import org.cru.godtools.base.HOST_DYNALINKS
@@ -28,6 +36,8 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.navBarColor
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -279,6 +289,38 @@ class TractActivityTest {
         }
     }
     // endregion Intent Processing
+
+    // region Status Bar
+    @Test
+    fun `Status Bar - Background uses darkened navBarColor`() {
+        val manifest: Manifest? = null
+
+        scenario {
+            it.onActivity {
+                assertEquals(
+                    manifest.navBarColor.toColorInt().toHslColor().darken(0.12f).toColorInt(),
+                    it.statusBarBackground.color
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `Status Bar - Background is sized to the status bar inset`() {
+        scenario {
+            it.onActivity {
+                val decorView = it.window.decorView
+                decorView.measure(makeMeasureSpec(480, EXACTLY), makeMeasureSpec(800, EXACTLY))
+                decorView.layout(0, 0, 480, 800)
+
+                val statusBarHeight = ViewCompat.getRootWindowInsets(decorView)
+                    ?.getInsets(WindowInsetsCompat.Type.statusBars())?.top ?: 0
+                assertNotNull(it.statusBarBackground.callback, "Background is not attached to the decor view overlay")
+                assertEquals(Rect(0, 0, 480, statusBarHeight), it.statusBarBackground.bounds)
+            }
+        }
+    }
+    // endregion Status Bar
 
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 
