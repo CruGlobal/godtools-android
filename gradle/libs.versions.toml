@@ -105,7 +105,7 @@ eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-pr
 facebook-common = { module = "com.facebook.android:facebook-common", version.ref = "facebook" }
 facebook-core = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook" }
-firebase-config = "com.google.firebase:firebase-config:23.1.0"
+firebase-config = "com.google.firebase:firebase-config:24.0.0"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:22.1.0"
