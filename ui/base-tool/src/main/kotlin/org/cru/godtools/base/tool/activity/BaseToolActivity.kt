@@ -1,16 +1,19 @@
 package org.cru.godtools.base.tool.activity
 
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
@@ -154,12 +157,21 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
             else -> super.toolbar
         }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val statusBarBackground = ColorDrawable()
+
     private fun setupStatusBar() {
-        window.apply {
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            viewModel.manifest.asLiveData().observe(this@BaseToolActivity) {
-                statusBarColor = it.navBarColor.toColorInt().toHslColor().darken(0.12f).toColorInt()
+        // Window.setStatusBarColor() is ignored on Android 15+ because edge-to-edge is enforced,
+        // so we draw the status bar background ourselves as an overlay on the window's decor view.
+        window.decorView.apply {
+            overlay.add(statusBarBackground)
+            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
+                val insets = ViewCompat.getRootWindowInsets(v)?.getInsets(WindowInsetsCompat.Type.statusBars())
+                statusBarBackground.setBounds(0, 0, v.width, insets?.top ?: 0)
             }
+        }
+        viewModel.manifest.asLiveData().observe(this) {
+            statusBarBackground.color = it.navBarColor.toColorInt().toHslColor().darken(0.12f).toColorInt()
         }
     }
 
