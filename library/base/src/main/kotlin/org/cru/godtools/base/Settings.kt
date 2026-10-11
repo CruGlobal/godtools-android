@@ -79,7 +79,10 @@ class Settings internal constructor(private val context: Context, coroutineScope
     // region Language Settings
     var appLanguage: Locale
         get() = context.appLanguage
-        set(value) = AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(value))
+        set(value) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(value))
+            notifyAppLanguageChanged()
+        }
 
     val appLanguageFlow = context.getAppLanguageFlow()
         .stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), context.appLanguage)
