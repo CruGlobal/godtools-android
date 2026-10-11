@@ -34,9 +34,11 @@ import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -509,6 +511,24 @@ class ToolDetailsPresenterTest {
             syncService.syncDirtyFavoriteTools()
         }
     }
+
+    @Test
+    fun `Event - PinTool - completes after presenter leaves composition`() = testScope.runTest {
+        val pinTool = CompletableDeferred<Unit>()
+        coEvery { toolsRepository.pinTool(any(), any()) } coAnswers { pinTool.await() }
+        coEvery { syncService.syncDirtyFavoriteTools() } returns true
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(UiEvent.PinTool)
+            // finish the pinTool() call while the presenter is leaving composition
+            backgroundScope.launch { pinTool.complete(Unit) }
+        }
+
+        coVerify {
+            toolsRepository.pinTool(TOOL)
+            syncService.syncDirtyFavoriteTools()
+        }
+    }
     // endregion Event.PinTool
 
     // region Event.UnpinTool
@@ -526,6 +546,24 @@ class ToolDetailsPresenterTest {
             syncService.syncDirtyFavoriteTools()
         }
         coVerify(exactly = 0) { settings.setFeatureDiscovered(any()) }
+    }
+
+    @Test
+    fun `Event - UnpinTool - completes after presenter leaves composition`() = testScope.runTest {
+        val unpinTool = CompletableDeferred<Unit>()
+        coEvery { toolsRepository.unpinTool(any()) } coAnswers { unpinTool.await() }
+        coEvery { syncService.syncDirtyFavoriteTools() } returns true
+
+        createPresenter().test {
+            expectMostRecentItem().eventSink(UiEvent.UnpinTool)
+            // finish the unpinTool() call while the presenter is leaving composition
+            backgroundScope.launch { unpinTool.complete(Unit) }
+        }
+
+        coVerify {
+            toolsRepository.unpinTool(TOOL)
+            syncService.syncDirtyFavoriteTools()
+        }
     }
     // endregion Event.UnpinTool
 
