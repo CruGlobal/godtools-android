@@ -23,11 +23,11 @@ import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetView
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
 import io.fluidsonic.locale.toPlatform
-import java.io.IOException
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -271,13 +271,8 @@ abstract class BaseToolActivity<B : ViewBinding>(@LayoutRes contentLayoutId: Int
     }
 
     private fun syncTools(tools: List<String> = toolsToDownload.value) = lifecycleScope.launch {
-        try {
-            coroutineScope {
-                tools.forEach { launch { syncService.syncTool(it) } }
-            }
-            isInitialSyncFinished.value = true
-        } catch (ignored: IOException) {
-        }
+        val synced = tools.map { async { syncService.syncTool(it) } }.awaitAll().all { it }
+        if (synced) isInitialSyncFinished.value = true
         downloadTranslations()
     }
 
