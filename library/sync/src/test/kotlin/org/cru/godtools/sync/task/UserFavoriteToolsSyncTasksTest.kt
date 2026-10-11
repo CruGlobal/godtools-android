@@ -4,7 +4,9 @@ import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coExcludeRecords
+import io.mockk.coVerify
 import io.mockk.coVerifyAll
+import io.mockk.coVerifyOrder
 import io.mockk.coVerifySequence
 import io.mockk.just
 import io.mockk.mockk
@@ -13,6 +15,12 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.jsonapi.model.JsonApiObject
 import org.cru.godtools.account.GodToolsAccountManager
@@ -239,6 +247,31 @@ class UserFavoriteToolsSyncTasksTest {
             userRepository.findUser(userId)
             userApi.getUser(any())
             syncRepository.storeUser(any(), any())
+        }
+    }
+
+    @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun `syncDirtyFavoriteTools() - waits for in-flight syncFavoriteTools()`() = runTest {
+        val getUserLock = Mutex(true)
+        val tool = randomTool("1", isFavorite = true, apiId = 1, changedFieldsStr = Tool.ATTR_IS_FAVORITE)
+        coEvery { userApi.getUser(any()) } coAnswers {
+            getUserLock.withLock { Response.success(JsonApiObject.single(User(userId))) }
+        }
+        coEvery { toolsRepository.getAllTools() } returns listOf(tool)
+
+        val dispatcher = UnconfinedTestDispatcher(testScheduler)
+        val favoritesSync = launch(dispatcher) { tasks.syncFavoriteTools(force = true) }
+        val dirtySync = launch(dispatcher) { tasks.syncDirtyFavoriteTools() }
+        coVerify(exactly = 0) { favoritesApi.addFavoriteTools(any(), any()) }
+
+        getUserLock.unlock()
+        joinAll(favoritesSync, dirtySync)
+        coVerifyOrder {
+            userApi.getUser(any())
+            syncRepository.storeUser(any(), any())
+            favoritesApi.addFavoriteTools(any(), listOf(tool))
+            syncRepository.storeFavoriteTools(any(), any())
         }
     }
     // endregion syncDirtyFavoriteTools()
