@@ -32,6 +32,8 @@ import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiEvent
 import org.cru.godtools.ui.dashboard.DashboardPresenter.UiState
+import org.cru.godtools.ui.dashboard.optinnotification.FakeOptInNotificationPresenter
+import org.cru.godtools.ui.dashboard.optinnotification.OptInNotificationPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuPresenter
 import org.cru.godtools.ui.drawer.DrawerMenuScreen
 import org.cru.godtools.ui.tooldetails.ToolDetailsScreen
@@ -51,6 +53,7 @@ class DashboardPresenterTest {
         everyComposable { present() } returns DrawerMenuScreen.State()
     }
     private val navigator = FakeNavigator(screen)
+    private val optInNotificationPresenter = FakeOptInNotificationPresenter()
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncFollowupsAsync() } returns CompletableDeferred(true)
         coEvery { syncToolSharesAsync() } returns CompletableDeferred(true)
@@ -61,6 +64,7 @@ class DashboardPresenterTest {
 
     private val presenter = DashboardPresenter(
         drawerMenuPresenter = drawerMenuPresenter,
+        optInNotificationPresenter = optInNotificationPresenter,
         syncService = syncService,
         circuitContext = circuitContext,
         navigator = navigator,
@@ -79,6 +83,7 @@ class DashboardPresenterTest {
     fun `State - initialPage`() = runTest {
         val presenter = DashboardPresenter(
             drawerMenuPresenter = drawerMenuPresenter,
+            optInNotificationPresenter = optInNotificationPresenter,
             syncService = syncService,
             circuitContext = circuitContext,
             navigator = navigator,
@@ -102,6 +107,18 @@ class DashboardPresenterTest {
         }
     }
     // endregion State.drawerState
+
+    // region State.optInNotificationState
+    @Test
+    fun `State - optInNotificationState`() = runTest {
+        val optInNotificationState = OptInNotificationPresenter.UiState(showPrompt = true, isHardDenied = true)
+        optInNotificationPresenter.uiState.value = optInNotificationState
+
+        presenter.test {
+            assertEquals(optInNotificationState, awaitInitialState().optInNotificationState)
+        }
+    }
+    // endregion State.optInNotificationState
 
     // region State.isSyncing
     @Test
