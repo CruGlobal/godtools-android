@@ -12,7 +12,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
+import io.fluidsonic.locale.toCommon
 import io.mockk.every
+import io.mockk.spyk
 import java.util.Locale
 import javax.inject.Inject
 import kotlin.test.BeforeTest
@@ -28,6 +30,8 @@ import org.cru.godtools.base.tool.activity.MultiLanguageToolActivityDataModel
 import org.cru.godtools.base.tool.service.ManifestManager
 import org.cru.godtools.base.ui.createTractActivityIntent
 import org.cru.godtools.db.repository.TranslationsRepository
+import org.cru.godtools.shared.tool.parser.model.Manifest
+import org.cru.godtools.shared.tool.parser.model.tract.TractPage
 import org.cru.godtools.tool.tract.BuildConfig.HOST_GODTOOLS_CUSTOM_URI
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -279,6 +283,24 @@ class TractActivityTest {
         }
     }
     // endregion Intent Processing
+
+    // region onUpdateActiveCard()
+    @Test
+    fun `onUpdateActiveCard() - Updates currentPagePosition`() {
+        val manifest = Manifest(code = TOOL, locale = Locale.ENGLISH.toCommon())
+        val page = spyk(TractPage(manifest)) {
+            every { position } returns 3
+        }
+
+        scenario {
+            it.onActivity {
+                assertEquals(0, it.currentPagePosition.value)
+                it.onUpdateActiveCard(page, null)
+                assertEquals(3, it.currentPagePosition.value)
+            }
+        }
+    }
+    // endregion onUpdateActiveCard()
 
     private val TractActivity.dataModel get() = viewModels<MultiLanguageToolActivityDataModel>().value
 

@@ -21,8 +21,8 @@ import io.fluidsonic.locale.toPlatform
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import okio.FileSystem
 import org.ccci.gto.android.common.androidx.fragment.app.showAllowingStateLoss
 import org.ccci.gto.android.common.androidx.lifecycle.combineWith
@@ -134,6 +134,7 @@ class TractActivity :
     }
 
     override fun onUpdateActiveCard(page: TractPage, card: Card?) {
+        currentPagePosition.value = page.position
         sendLiveShareNavigationEvent(page, card)
     }
 
@@ -381,8 +382,13 @@ class TractActivity :
     }
 
     // region Share Menu Logic
+    @VisibleForTesting
+    internal val currentPagePosition = MutableStateFlow(0)
+
     override val shareLinkUriLiveData by lazy {
-        viewModel.manifest.map { it?.buildShareLink()?.build()?.toString() }.asLiveData()
+        combine(viewModel.manifest, currentPagePosition) { manifest, position ->
+            manifest?.buildShareLink(position)?.build()?.toString()
+        }.asLiveData()
     }
     private fun Manifest.buildShareLink(page: Int = pager.currentItem): Uri.Builder? {
         val tool = code ?: return null
