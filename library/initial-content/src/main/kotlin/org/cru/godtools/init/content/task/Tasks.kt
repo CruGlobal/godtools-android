@@ -9,7 +9,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.jsonapi.JsonApiConverter
@@ -106,7 +105,7 @@ internal class Tasks @Inject constructor(
         if (lastSyncTimeRepository.getLastSyncTime(SYNC_TIME_DEFAULT_TOOLS) > 0) return
         if (toolsRepository.getNormalTools().any { it.isFavorite }) return
 
-        coroutineScope {
+        val favorites = coroutineScope {
             val preferred = async {
                 data.getTools().sortedBy { it.initialFavoritesPriority ?: Int.MAX_VALUE }.mapNotNull { it.code }
             }
@@ -116,9 +115,11 @@ internal class Tasks @Inject constructor(
             (preferred.await().asSequence().filter { available.contains(it) } + preferred.await().asSequence())
                 .distinct()
                 .take(NUMBER_OF_FAVORITES)
-                .map { launch { toolsRepository.pinTool(it, trackChanges = false) } }
-                .toList().joinAll()
+                .toList()
         }
+        favorites.forEach { toolsRepository.pinTool(it, trackChanges = false) }
+        // pinTool() prepends each tool to the favorites order, so store the intended order explicitly
+        toolsRepository.storeToolOrder(favorites)
 
         lastSyncTimeRepository.updateLastSyncTime(SYNC_TIME_DEFAULT_TOOLS)
     }
