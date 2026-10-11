@@ -593,6 +593,33 @@ abstract class ToolsRepositoryIT {
     }
     // endregion updateToolLocales()
 
+    // region initializeToolProgress()
+    @Test
+    fun `initializeToolProgress() - No existing progress`() = testScope.runTest {
+        val code = "tool"
+        repository.storeInitialTools(listOf(randomTool(code, progress = null, progressLastPageId = null)))
+
+        repository.initializeToolProgress(code, 0.0, "first_page")
+        assertNotNull(repository.findTool(code)) {
+            assertEquals(0.0, assertNotNull(it.progress), 0.0001)
+            assertEquals("first_page", it.progressLastPageId)
+        }
+    }
+
+    @Test
+    fun `initializeToolProgress() - Don't overwrite existing progress`() = testScope.runTest {
+        val code = "tool"
+        repository.storeInitialTools(listOf(randomTool(code, progress = null, progressLastPageId = null)))
+        repository.updateToolProgress(code, 0.75, "last_page")
+
+        repository.initializeToolProgress(code, 0.0, "first_page")
+        assertNotNull(repository.findTool(code)) {
+            assertEquals(0.75, assertNotNull(it.progress), 0.0001)
+            assertEquals("last_page", it.progressLastPageId)
+        }
+    }
+    // endregion initializeToolProgress()
+
     // region updateToolProgress()
     @Test
     fun `updateToolProgress()`() = testScope.runTest {

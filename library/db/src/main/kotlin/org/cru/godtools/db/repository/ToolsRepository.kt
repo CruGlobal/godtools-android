@@ -45,6 +45,7 @@ interface ToolsRepository {
 
     suspend fun storeToolOrder(tools: List<String>)
     suspend fun updateToolLocales(code: String, primary: Locale?, parallel: Locale?)
+    suspend fun initializeToolProgress(code: String, progress: Double, lastPageId: String?)
     suspend fun updateToolProgress(code: String, progress: Double?, lastPageId: String?)
     suspend fun updateToolViews(code: String, delta: Int)
 
