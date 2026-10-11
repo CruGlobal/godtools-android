@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.Job
 import org.ccci.gto.android.common.androidx.room.converter.Java8TimeConverters
 import org.ccci.gto.android.common.androidx.room.converter.LocaleConverter
 import org.cru.godtools.db.room.dao.AttachmentsDao
@@ -106,6 +107,8 @@ internal abstract class GodToolsRoomDatabase : RoomDatabase() {
     abstract val lastSyncTimeRepository: LastSyncTimeRoomRepository
     abstract val toolsRepository: ToolsRoomRepository
     // endregion Repositories
+
+    lateinit var legacyDataMigration: Job
 }
 
 // region Migrations
