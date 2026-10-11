@@ -22,11 +22,20 @@ import javax.inject.Inject
 import org.ccci.gto.android.common.compat.content.getParcelableExtraCompat
 import org.cru.godtools.base.ui.activity.BaseActivity
 import org.cru.godtools.base.ui.circuit.CircuitActivity.Companion.EXTRA_SCREEN
+import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.theme.GodToolsTheme
 
 fun Context.startCircuitActivity(screen: ParcelableScreen) = startActivity(createCircuitActivityIntent(screen))
 fun Context.createCircuitActivityIntent(screen: ParcelableScreen) = Intent(this, CircuitActivity::class.java)
     .putExtra(EXTRA_SCREEN, screen)
+
+internal fun Intent.resolveInitialScreen(deepLinkParsers: Set<CircuitDeepLinkParser>): List<Screen> {
+    val uri = data
+
+    return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
+        ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
+        ?: listOf(DashboardScreen())
+}
 
 @AndroidEntryPoint
 class CircuitActivity : BaseActivity() {
@@ -46,7 +55,7 @@ class CircuitActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val initialScreens = intent.resolveInitialScreen()
+        val initialScreens = intent.resolveInitialScreen(deepLinkParsers)
 
         setContent {
             CircuitCompositionLocals(circuit) {
@@ -72,13 +81,5 @@ class CircuitActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun Intent.resolveInitialScreen(): List<Screen> {
-        val uri = data
-
-        return uri?.let { deepLinkParsers.singleOrNull { it.isDeepLinkSupported(uri) } }?.parseDeepLink(uri)
-            ?: getParcelableExtraCompat(EXTRA_SCREEN, Screen::class.java)?.let { listOf(it) }
-            ?: TODO("Show the DashboardScreen once it uses Circuit")
     }
 }
