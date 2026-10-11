@@ -45,6 +45,16 @@ class TractPublisherController @Inject constructor(
             if (value) stateMachine.transition(Event.Start) else stateMachine.transition(Event.Stop)
         }
 
+    internal var linkShared: Boolean
+        get() = savedStateHandle["linkShared"] ?: false
+        set(value) {
+            savedStateHandle["linkShared"] = value
+        }
+
+    internal fun cancelStart() {
+        if (!linkShared) started = false
+    }
+
     internal val state = MutableLiveData<State>(State.Off)
     private val stateMachine = StateMachine.create<State, Event, Unit> {
         initialState(State.Off)
