@@ -87,6 +87,19 @@ class SettingsTest {
             assertNull(awaitItem())
         }
     }
+
+    @Test
+    fun testDashboardPersonalizedFilterLocale() = runTest {
+        settings.getDashboardPersonalizedFilterLocaleFlow().test {
+            assertNull(awaitItem())
+
+            settings.updateDashboardPersonalizedFilterLocale(Locale.ENGLISH)
+            assertEquals(Locale.ENGLISH, awaitItem())
+
+            settings.updateDashboardPersonalizedFilterLocale(null)
+            assertNull(awaitItem())
+        }
+    }
     // endregion Dashboard Settings
 
     // region produceAppLocaleState()

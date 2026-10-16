@@ -37,6 +37,7 @@ import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.filters.FilterMenuItem
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.jetbrains.annotations.VisibleForTesting
 
 private val DROPDOWN_MAX_HEIGHT = 700.dp
@@ -44,7 +45,7 @@ private val DROPDOWN_MAX_HEIGHT = 700.dp
 internal const val TEST_TAG_FILTER_DROPDOWN = "filter_dropdown"
 
 @Composable
-internal fun ToolFilters(filters: Filters, modifier: Modifier = Modifier) {
+internal fun ToolFilters(filters: Filters, mode: Mode, modifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth()) {
         Text(
             stringResource(R.string.dashboard_tools_section_filter_label),
@@ -59,7 +60,7 @@ internal fun ToolFilters(filters: Filters, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             CategoryFilter(filters.categoryFilter, modifier = Modifier.weight(1f))
-            LanguageFilter(filters.languageFilter, modifier = Modifier.weight(1f))
+            LanguageFilter(filters.languageFilter, mode = mode, modifier = Modifier.weight(1f))
         }
     }
 }
@@ -123,30 +124,36 @@ internal fun CategoryFilter(state: FilterMenu.UiState<String?>, modifier: Modifi
 
 @Composable
 @VisibleForTesting
-internal fun LanguageFilter(state: FilterMenu.UiState<Language?>, modifier: Modifier = Modifier) = LazyFilterMenu(
-    state,
-    buttonLabelText = when (val lang = state.selectedItem) {
-        null -> stringResource(R.string.dashboard_tools_section_filter_language_any)
-        else -> lang.getDisplayName(LocalContext.current, LocalAppLanguage.current)
-    },
-    searchPlaceholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
-    itemKey = { (lang) ->
-        when (lang) {
-            null -> "Any Language"
-            else -> lang.code
-        }
-    },
-    itemLabel = { (lang) ->
-        when (lang) {
-            null -> Text(stringResource(R.string.dashboard_tools_section_filter_language_any))
-            else -> LanguageName(lang)
-        }
-    },
-    itemSupportingText = { (lang, count) ->
-        when (lang) {
-            null -> stringResource(R.string.dashboard_tools_section_filter_available_tools_all)
-            else -> pluralStringResource(R.plurals.dashboard_tools_section_filter_available_tools, count, count)
-        }
-    },
-    modifier = modifier,
-)
+internal fun LanguageFilter(state: FilterMenu.UiState<Language?>, mode: Mode, modifier: Modifier = Modifier) =
+    LazyFilterMenu(
+        state,
+        buttonLabelText = when (val lang = state.selectedItem) {
+            null -> when (mode) {
+                Mode.PERSONALIZATION -> ""
+                Mode.ALL_TOOLS -> stringResource(R.string.dashboard_tools_section_filter_language_any)
+            }
+
+            else -> lang.getDisplayName(LocalContext.current, LocalAppLanguage.current)
+        },
+        searchPlaceholder = { Text(stringResource(R.string.language_settings_downloadable_languages_search)) },
+        itemKey = { (lang) ->
+            when (lang) {
+                null -> "Any Language"
+                else -> lang.code
+            }
+        },
+        itemLabel = { (lang) ->
+            when (lang) {
+                null -> Text(stringResource(R.string.dashboard_tools_section_filter_language_any))
+                else -> LanguageName(lang)
+            }
+        },
+        itemSupportingText = { (lang, count) ->
+            when {
+                mode == Mode.PERSONALIZATION -> null
+                lang == null -> stringResource(R.string.dashboard_tools_section_filter_available_tools_all)
+                else -> pluralStringResource(R.plurals.dashboard_tools_section_filter_available_tools, count, count)
+            }
+        },
+        modifier = modifier,
+    )
