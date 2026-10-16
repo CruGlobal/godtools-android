@@ -142,10 +142,6 @@
             android:name=".ui.login.LoginActivity"
             android:parentActivityName=".ui.dashboard.DashboardActivity" />
 
-        <activity
-            android:name=".ui.account.AccountActivity"
-            android:parentActivityName=".ui.dashboard.DashboardActivity" />
-
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
