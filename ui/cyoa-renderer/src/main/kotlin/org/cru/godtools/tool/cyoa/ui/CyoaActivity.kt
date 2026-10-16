@@ -6,19 +6,26 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.VisibleForTesting
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.fragment.app.commit
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 import kotlinx.coroutines.flow.combine
 import org.ccci.gto.android.common.androidx.fragment.app.backStackEntries
 import org.ccci.gto.android.common.androidx.fragment.app.hasPendingActions
+import org.ccci.gto.android.common.androidx.lifecycle.ImmutableLiveData
+import org.ccci.gto.android.common.androidx.lifecycle.combineWith
 import org.ccci.gto.android.common.androidx.lifecycle.toggleValue
 import org.cru.godtools.base.HOST_DYNALINKS
 import org.cru.godtools.base.HOST_GODTOOLSAPP_COM
 import org.cru.godtools.base.SCHEME_GODTOOLS
+import org.cru.godtools.base.URI_SHARE_BASE
 import org.cru.godtools.base.tool.activity.MultiLanguageToolActivity
 import org.cru.godtools.base.tool.model.Event
 import org.cru.godtools.shared.tool.parser.model.Manifest
@@ -48,6 +55,14 @@ class CyoaActivity :
 
         // track this tool open
         if (savedInstanceState == null) dataModel.toolCode.value?.let { trackToolOpen(it, Manifest.Type.CYOA) }
+
+        supportFragmentManager.registerFragmentLifecycleCallbacks(
+            object : FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentStarted(fm: FragmentManager, f: Fragment) = updatePageFragmentLiveData()
+                override fun onFragmentDestroyed(fm: FragmentManager, f: Fragment) = updatePageFragmentLiveData()
+            },
+            false
+        )
 
         dataModel.activeManifest.observe(this) { it?.let { showInitialPageIfNecessary(it) } }
     }
@@ -181,6 +196,31 @@ class CyoaActivity :
     // endregion Training Tips
     // endregion UI
 
+    // region Share Link Logic
+    @VisibleForTesting(otherwise = VisibleForTesting.PROTECTED)
+    public override val shareLinkUriLiveData by lazy {
+        dataModel.activeManifest.combineWith(activePageLiveData) { manifest, page ->
+            manifest?.buildShareLink(page)?.build()?.toString()
+        }
+    }
+
+    private val activePageLiveData by lazy {
+        pageFragmentLiveData.switchMap { it?.page ?: ImmutableLiveData<Page?>(null) }
+    }
+
+    private fun Manifest.buildShareLink(page: Page?): Uri.Builder? {
+        val tool = code ?: return null
+        val locale = locale ?: return null
+        return URI_SHARE_BASE.buildUpon()
+            .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
+            .appendPath("tool")
+            .appendPath("v2")
+            .appendPath(tool)
+            .apply { page?.let { appendPath(it.id) } }
+            .appendQueryParameter("icid", "gtshare")
+    }
+    // endregion Share Link Logic
+
     // region Page management
     @VisibleForTesting
     internal val pageFragment
@@ -189,6 +229,13 @@ class CyoaActivity :
             primaryNavigationFragment as? CyoaPageFragment<*, *>
         }
     private val activePage get() = pageFragment?.page?.value
+
+    private val pageFragmentLiveData = MutableLiveData<CyoaPageFragment<*, *>?>(null)
+
+    private fun updatePageFragmentLiveData() {
+        val fragment = supportFragmentManager.primaryNavigationFragment as? CyoaPageFragment<*, *>
+        if (pageFragmentLiveData.value !== fragment) pageFragmentLiveData.value = fragment
+    }
 
     private fun showInitialPageIfNecessary(manifest: Manifest) {
         if (pageFragment != null) return
