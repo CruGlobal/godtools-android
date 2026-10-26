@@ -1,43 +1,60 @@
 package org.cru.godtools.ui.dashboard.optinnotification
 
 import android.Manifest
-import android.content.Intent
+import android.app.Activity
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import java.time.LocalDate
-import kotlin.coroutines.resume
-import kotlinx.coroutines.suspendCancellableCoroutine
-import org.cru.godtools.base.CONFIG_UI_OPT_IN_NOTIFICATION_ENABLED
-import org.cru.godtools.base.CONFIG_UI_OPT_IN_NOTIFICATION_PROMPT_LIMIT
-import org.cru.godtools.base.CONFIG_UI_OPT_IN_NOTIFICATION_TIME_INTERVAL
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import javax.inject.Inject
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.Settings.Companion.FEATURE_OPT_IN_NOTIFICATION
-import org.cru.godtools.ui.dashboard.DashboardActivity
-import org.cru.godtools.ui.dashboard.DashboardViewModel
 
-class OptInNotificationController(
-    private val activity: DashboardActivity,
-    private val viewModel: DashboardViewModel,
-    private val remoteConfig: FirebaseRemoteConfig,
-    private val settings: Settings,
-) {
-    var isOnboardingLaunch = false
+internal interface OptInNotificationController {
+    @Composable
+    fun rememberPermissionStatus(): PermissionStatus
 
-    fun init() {
-        val permissionStatus = checkNotificationPermissionStatus()
-        viewModel.setPermissionStatus(permissionStatus)
+    @Composable
+    fun rememberRequestPermission(): () -> Unit
+}
+
+internal class DefaultOptInNotificationController @Inject constructor(private val settings: Settings) :
+    OptInNotificationController {
+    @Composable
+    override fun rememberPermissionStatus(): PermissionStatus {
+        val activity = LocalActivity.current ?: return PermissionStatus.APPROVED
+
+        var permissionStatus by remember(activity) { mutableStateOf(checkNotificationPermissionStatus(activity)) }
+        LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+            permissionStatus = checkNotificationPermissionStatus(activity)
+        }
+        return permissionStatus
     }
 
-    fun onResume() {
-        val permissionStatus = checkNotificationPermissionStatus()
-        viewModel.setPermissionStatus(permissionStatus)
+    @Composable
+    override fun rememberRequestPermission(): () -> Unit {
+        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission(), onResult = {})
+
+        return remember(launcher) {
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        }
     }
 
-    private fun checkNotificationPermissionStatus(): PermissionStatus {
+    private fun checkNotificationPermissionStatus(activity: Activity): PermissionStatus {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             when {
                 !settings.isFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION) -> {
@@ -64,59 +81,6 @@ class OptInNotificationController(
             }
         } else {
             PermissionStatus.APPROVED
-        }
-    }
-
-    private fun openNotificationSettings() {
-        val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", activity.packageName, null)
-        }
-        activity.startActivity(intent)
-    }
-
-    fun shouldPromptNotificationSheet() {
-        val lastPrompted = settings.getLastPromptedOptInNotification()
-        val promptCount = settings.getOptInNotificationPromptCount()
-
-        val remoteTimeDays = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_TIME_INTERVAL)
-        val remoteTimeDate = LocalDate.now().minusDays(remoteTimeDays)
-
-        val remotePromptLimit = remoteConfig.getLong(CONFIG_UI_OPT_IN_NOTIFICATION_PROMPT_LIMIT).toInt()
-
-        val remoteFeatureEnabled = remoteConfig.getBoolean(CONFIG_UI_OPT_IN_NOTIFICATION_ENABLED)
-
-        // TODO: Remove sdk version checks for optInNotification logic once minSdk = 33 or greater
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-            !remoteFeatureEnabled ||
-            isOnboardingLaunch ||
-            viewModel.permissionStatus == PermissionStatus.APPROVED ||
-            promptCount > remotePromptLimit
-        ) {
-            return
-        }
-
-        if (lastPrompted.isBefore(remoteTimeDate)) {
-            viewModel.setShowOptInNotification(true)
-            settings.recordOptInNotificationPrompt()
-        }
-    }
-
-    suspend fun requestNotificationPermission(): Boolean = suspendCancellableCoroutine { continuation ->
-        activity.permissionContinuation = continuation
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (viewModel.permissionStatus == PermissionStatus.UNDETERMINED ||
-                viewModel.permissionStatus == PermissionStatus.SOFT_DENIED
-            ) {
-                activity.permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                settings.setFeatureDiscovered(FEATURE_OPT_IN_NOTIFICATION)
-            } else {
-                openNotificationSettings()
-                continuation.resume(true)
-                activity.permissionContinuation = null
-            }
-        } else {
-            continuation.resume(true)
-            activity.permissionContinuation = null
         }
     }
 }
