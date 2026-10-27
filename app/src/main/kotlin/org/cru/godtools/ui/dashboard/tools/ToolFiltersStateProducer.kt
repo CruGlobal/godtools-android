@@ -14,7 +14,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
@@ -59,7 +62,17 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
         val scope = rememberCoroutineScope()
 
         val selectedCategory by remember { settings.getDashboardFilterCategoryFlow() }.collectAsState(null)
-        val selectedLocale by remember { settings.getDashboardFilterLocaleFlow() }.collectAsState(null)
+        val appLanguage by settings.appLanguageFlow.collectAsState()
+        val storedLocale by remember(mode) {
+            when (mode) {
+                Mode.PERSONALIZATION -> settings.getDashboardPersonalizedFilterLocaleFlow()
+                Mode.ALL_TOOLS -> settings.getDashboardFilterLocaleFlow()
+            }
+        }.collectAsState(null)
+        val selectedLocale = when (mode) {
+            Mode.PERSONALIZATION -> storedLocale ?: appLanguage
+            Mode.ALL_TOOLS -> storedLocale
+        }
 
         val languageMenuExpanded = rememberSaveable { mutableStateOf(false) }
         val languageQuery = rememberSaveable { mutableStateOf("") }
@@ -90,8 +103,15 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 query = languageQuery,
                 eventSink = {
                     when (it) {
-                        is FilterMenu.Event.SelectItem -> scope.launch {
-                            settings.updateDashboardFilterLocale(it.item?.code)
+                        is FilterMenu.Event.SelectItem -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                            withContext(NonCancellable) {
+                                when (mode) {
+                                    Mode.PERSONALIZATION ->
+                                        settings.updateDashboardPersonalizedFilterLocale(it.item?.code)
+
+                                    Mode.ALL_TOOLS -> settings.updateDashboardFilterLocale(it.item?.code)
+                                }
+                            }
                         }
                     }
                 }
@@ -102,7 +122,8 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
     @Composable
     private fun rememberFilterCategories(mode: Mode, selectedLanguage: Locale?) = remember(mode, selectedLanguage) {
         filteredToolsFlowProducer.getFlow(mode, language = selectedLanguage).map {
-            it.groupBy { it.category }
+            it.filterNot { it.category == null }
+                .groupBy { it.category }
                 .map { (category, tools) -> FilterMenu.UiState.Item(category, tools.size) }
         }
     }.collectAsState(emptyList()).value
@@ -153,7 +174,12 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 .flowOn(ioDispatcher)
                 .combine(toolCountsFlow) { languages, toolCounts ->
                     languages
-                        .let { listOf(null) + it }
+                        .let {
+                            when (mode) {
+                                Mode.PERSONALIZATION -> it
+                                Mode.ALL_TOOLS -> listOf(null) + it
+                            }
+                        }
                         .map { FilterMenu.UiState.Item(it, toolCounts[it?.code] ?: 0) }
                 }
         }.collectAsState(emptyList()).value
