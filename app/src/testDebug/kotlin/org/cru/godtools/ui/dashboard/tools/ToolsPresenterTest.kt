@@ -272,6 +272,17 @@ class ToolsPresenterTest {
     }
 
     @Test
+    fun `SideEffect - RegisterSyncTask - skips featured tools sync without a country`() = testScope.runTest {
+        countryFlow.value = null
+
+        presenter.test {
+            awaitInitialItem()
+            toolOrderSync.send(true)
+            coVerifyAll { syncService.syncToolOrder(Locale.ENGLISH, null, false) }
+        }
+    }
+
+    @Test
     fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
         toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
             languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
