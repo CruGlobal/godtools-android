@@ -14,7 +14,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.compose.util.rememberStateFlow
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType
 import org.ccci.gto.android.common.dagger.coroutines.DispatcherType.Type.IO
@@ -98,10 +101,14 @@ internal class DefaultToolFiltersStateProducer @Inject constructor(
                 query = languageQuery,
                 eventSink = {
                     when (it) {
-                        is FilterMenu.Event.SelectItem -> scope.launch {
-                            when (mode) {
-                                Mode.PERSONALIZATION -> settings.updateDashboardPersonalizedFilterLocale(it.item?.code)
-                                Mode.ALL_TOOLS -> settings.updateDashboardFilterLocale(it.item?.code)
+                        is FilterMenu.Event.SelectItem -> scope.launch(start = CoroutineStart.UNDISPATCHED) {
+                            withContext(NonCancellable) {
+                                when (mode) {
+                                    Mode.PERSONALIZATION ->
+                                        settings.updateDashboardPersonalizedFilterLocale(it.item?.code)
+
+                                    Mode.ALL_TOOLS -> settings.updateDashboardFilterLocale(it.item?.code)
+                                }
                             }
                         }
                     }
