@@ -8,7 +8,7 @@ androidx-compose-runtime = "1.12.1"
 androidx-compose-ui = "1.12.1"
 androidx-core = "1.19.1"
 androidx-credentials = "1.6.0"
-androidx-datastore = "1.2.1"
+androidx-datastore = "1.3.0"
 androidx-hilt = "1.4.0"
 androidx-lifecycle = "2.11.0"
 androidx-room = "2.8.5"
@@ -18,19 +18,19 @@ coil = "2.7.0"
 colormath = "3.7.0"
 dagger = "2.60.1"
 eventbus = "3.3.1"
-facebook = "18.3.0"
-firebase-crashlytics = "20.1.1"
-firebase-perf = "22.0.6"
+facebook = "19.0.0"
+firebase-crashlytics = "21.0.1"
+firebase-perf = "23.0.1"
 godtoolsShared = "1.4.0-SNAPSHOT"
 gtoSupport = "4.6.0-SNAPSHOT"
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 kotlinCoroutines = "1.11.0"
-kotlinKover = "0.9.9"
+kotlinKover = "0.9.11"
 ksp = "2.3.12"
 ktlint = "1.8.0"
 ktlintGradle = "14.2.0"
 lottie = "6.7.1"
-okhttp3 = "5.5.0"
+okhttp3 = "5.5.1"
 okio = "3.18.2"
 paparazzi = "2.0.0-alpha05"
 play-app-update = "2.1.0"
@@ -49,7 +49,7 @@ androidx-annotation = "androidx.annotation:annotation:1.11.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.8.0"
 androidx-arch-core-testing = "androidx.arch.core:core-testing:2.2.0"
 androidx-browser = "androidx.browser:browser:1.10.0"
-androidx-collection-ktx = "androidx.collection:collection-ktx:1.6.0"
+androidx-collection-ktx = "androidx.collection:collection-ktx:1.7.0"
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose-foundation" }
 androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "androidx-compose-foundation" }
 androidx-compose-material-icons-extended = "androidx.compose.material:material-icons-extended:1.7.8"
@@ -108,12 +108,12 @@ eventbus-annotationProcessor = { module = "org.greenrobot:eventbus-annotation-pr
 facebook-common = { module = "com.facebook.android:facebook-common", version.ref = "facebook" }
 facebook-core = { module = "com.facebook.android:facebook-core", version.ref = "facebook" }
 facebook-login = { module = "com.facebook.android:facebook-login", version.ref = "facebook" }
-firebase-config = "com.google.firebase:firebase-config:23.1.0"
+firebase-config = "com.google.firebase:firebase-config:24.0.1"
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebase-crashlytics" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk", version.ref = "firebase-crashlytics" }
 firebase-dynamic-links = "com.google.firebase:firebase-dynamic-links-ktx:22.1.0"
-firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:22.0.3"
-firebase-messaging = "com.google.firebase:firebase-messaging:25.1.3"
+firebase-inappmessaging = "com.google.firebase:firebase-inappmessaging-display:23.0.0"
+firebase-messaging = "com.google.firebase:firebase-messaging:26.0.1"
 firebase-perf = { module = "com.google.firebase:firebase-perf", version.ref = "firebase-perf" }
 godtoolsShared-analytics = { module = "org.cru.godtools.kotlin:analytics", version.ref = "godtoolsShared" }
 godtoolsShared-common = { module = "org.cru.godtools.kotlin:common", version.ref = "godtoolsShared" }
@@ -170,14 +170,14 @@ gtoSupport-testing-timber = { module = "org.ccci.gto.android.testing:gto-support
 gtoSupport-turbine = { module = "org.ccci.gto.android:gto-support-turbine", version.ref = "gtoSupport" }
 gtoSupport-util = { module = "org.ccci.gto.android:gto-support-util", version.ref = "gtoSupport" }
 gtoSupport-viewpager = { module = "org.ccci.gto.android:gto-support-viewpager", version.ref = "gtoSupport" }
-guava = "com.google.guava:guava:33.7.1-android"
+guava = "com.google.guava:guava:33.7.2-android"
 hamcrest = "org.hamcrest:hamcrest:3.0"
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger" }
 javapoet = "com.squareup:javapoet:1.14.0"
 json = "org.json:json:20260814"
-jsonUnit-assertj = "net.javacrumbs.json-unit:json-unit-assertj:6.2.0"
+jsonUnit-assertj = "net.javacrumbs.json-unit:json-unit-assertj:6.4.0"
 jsoup = "org.jsoup:jsoup:1.23.2"
 junit = "junit:junit:4.13.2"
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
@@ -191,7 +191,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
-ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.6.7"
+ktlint-rules-compose = "io.nlopez.compose.rules:ktlint:0.6.8"
 leakcanary = "com.squareup.leakcanary:leakcanary-android:2.14"
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
@@ -206,7 +206,7 @@ paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi"
 picasso = "com.squareup.picasso:picasso:2.8"
 picasso-transformations = "jp.wasabeef:picasso-transformations:2.4.0"
 play-app-update-ktx = "com.google.android.play:app-update-ktx:2.1.0"
-play-base = "com.google.android.gms:play-services-base:18.11.0"
+play-base = "com.google.android.gms:play-services-base:18.11.1"
 play-feature-delivery = "com.google.android.play:feature-delivery:2.1.0"
 play-installreferrer = "com.android.installreferrer:installreferrer:2.2"
 play-review = "com.google.android.play:review-ktx:2.0.1"
@@ -223,7 +223,7 @@ splitties-bitflags = { module = "com.louiscad.splitties:splitties-bitflags", ver
 splitties-fragmentargs = { module = "com.louiscad.splitties:splitties-fragmentargs", version.ref = "splitties" }
 splitties-intents = { module = "com.louiscad.splitties:splitties-intents", version.ref = "splitties" }
 taptargetview = "com.getkeepsafe.taptargetview:taptargetview:1.15.0"
-testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.23"
+testparameterinjector = "com.google.testparameterinjector:test-parameter-injector:1.25"
 timber = "com.jakewharton.timber:timber:5.0.1"
 tinder-statemachine = "com.tinder.statemachine:statemachine:0.2.0"
 turbine = "app.cash.turbine:turbine:1.2.1"
@@ -245,7 +245,7 @@ test-framework = ["junit", "kotlin-test-junit", "androidx-test-junit", "mockk", 
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.3.0" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.3.1" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.8" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.2" }
 google-services = { id = "com.google.gms.google-services", version = "4.5.0" }
