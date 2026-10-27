@@ -4,10 +4,8 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
@@ -25,13 +23,16 @@ internal class FeaturedToolsFlowProducer @Inject constructor(
         val baseFlow = when (mode) {
             Mode.PERSONALIZATION -> {
                 val languageFlow = if (language != null) flowOf(language) else settings.appLanguageFlow
-                val fallbackFlow = languageFlow.flatMapLatest { toolsRepository.getFeaturedToolsFlow(it, null) }
 
                 languageFlow
                     .combineTransformLatest(settings.getPersonalizationCountryFlow()) { lang, country ->
-                        emitAll(toolsRepository.getFeaturedToolsFlow(lang, country))
+                        when (country) {
+                            // the featured tools section is hidden when no country has been selected
+                            null -> emit(emptyList())
+
+                            else -> emitAll(toolsRepository.getFeaturedToolsFlow(lang, country))
+                        }
                     }
-                    .combine(fallbackFlow) { featured, fallback -> featured.ifEmpty { fallback } }
                     .distinctUntilChanged()
             }
 
