@@ -70,6 +70,8 @@ class Settings internal constructor(private val context: Context, coroutineScope
         private val KEY_DASHBOARD_LESSONS_FILTER_LOCALE = stringPreferencesKey("dashboardLessonsFilterLocale")
         private val KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE =
             stringPreferencesKey("dashboardPersonalizedLessonsFilterLocale")
+        private val KEY_DASHBOARD_PERSONALIZED_FILTER_LOCALE =
+            stringPreferencesKey("dashboardPersonalizedFilterLocale")
 
         // Personalization Settings
         private val KEY_PERSONALIZATION_COUNTRY = stringPreferencesKey("personalizationCountry")
@@ -195,6 +197,21 @@ class Settings internal constructor(private val context: Context, coroutineScope
                 when (locale) {
                     null -> remove(KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE)
                     else -> set(KEY_DASHBOARD_PERSONALIZED_LESSONS_FILTER_LOCALE, locale.toLanguageTag())
+                }
+            }
+        }
+    }
+
+    fun getDashboardPersonalizedFilterLocaleFlow() = dataStorePreferences.data
+        .map { it[KEY_DASHBOARD_PERSONALIZED_FILTER_LOCALE]?.let { Locale.forLanguageTag(it) } }
+        .distinctUntilChanged()
+
+    suspend fun updateDashboardPersonalizedFilterLocale(locale: Locale?) {
+        dataStorePreferences.updateData {
+            it.toMutablePreferences().apply {
+                when (locale) {
+                    null -> remove(KEY_DASHBOARD_PERSONALIZED_FILTER_LOCALE)
+                    else -> set(KEY_DASHBOARD_PERSONALIZED_FILTER_LOCALE, locale.toLanguageTag())
                 }
             }
         }
