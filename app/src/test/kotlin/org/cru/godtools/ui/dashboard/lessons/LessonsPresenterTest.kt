@@ -36,6 +36,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -247,7 +248,7 @@ class LessonsPresenterTest {
     // region State.languageFilter.items
     @Test
     fun `State - languageFilter - items`() = testScope.runTest {
-        lessonsFlow.value = listOf(randomTool("lesson"))
+        lessonsFlow.value = listOf(randomTool("lesson", isHidden = false))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
             Language(Locale.FRENCH)
@@ -264,7 +265,7 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - languageFilter - items - Sorted by app language display name`() = testScope.runTest {
-        lessonsFlow.value = listOf(randomTool("lesson"))
+        lessonsFlow.value = listOf(randomTool("lesson", isHidden = false))
         languagesFlow.value = listOf(
             Language(Locale("es")),
             Language(Locale.FRENCH),
@@ -284,7 +285,7 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - languageFilter - items - Include languages with at least 1 translation`() = testScope.runTest {
-        lessonsFlow.value = listOf(randomTool("lesson"))
+        lessonsFlow.value = listOf(randomTool("lesson", isHidden = false))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
             Language(Locale.FRENCH)
@@ -298,7 +299,7 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - languageFilter - items - filtered by query`() = testScope.runTest {
-        lessonsFlow.value = listOf(randomTool("lesson"))
+        lessonsFlow.value = listOf(randomTool("lesson", isHidden = false))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
             Language(Locale.FRENCH)
@@ -317,7 +318,7 @@ class LessonsPresenterTest {
 
     @Test
     fun `State - languageFilter - items - include count of lessons per language`() = testScope.runTest {
-        lessonsFlow.value = listOf(randomTool("lesson"), randomTool("lesson2"))
+        lessonsFlow.value = listOf(randomTool("lesson", isHidden = false), randomTool("lesson2", isHidden = false))
         languagesFlow.value = listOf(
             Language(Locale.ENGLISH),
             Language(Locale.FRENCH)
@@ -339,6 +340,35 @@ class LessonsPresenterTest {
                     FilterMenu.UiState.Item(Language(Locale.ENGLISH), 2),
                     FilterMenu.UiState.Item(Language(Locale.FRENCH), 1)
                 ),
+                expectMostRecentItem().languageFilter.items
+            )
+        }
+    }
+
+    @Test
+    fun `State - languageFilter - items - exclude hidden lessons from count`() = testScope.runTest {
+        every { translationsRepository.getTranslationsFlowForTools(any()) } answers {
+            val tools = firstArg<Collection<String>>()
+            translationsFlow.map { it.filter { it.toolCode in tools } }
+        }
+        lessonsFlow.value = listOf(
+            randomTool("lesson", isHidden = false),
+            randomTool("hidden", isHidden = true),
+            randomTool("hidden2", isHidden = true),
+        )
+        languagesFlow.value = listOf(
+            Language(Locale.ENGLISH),
+            Language(Locale.FRENCH)
+        )
+        translationsFlow.value = listOf(
+            randomTranslation("lesson", languageCode = Locale.ENGLISH),
+            randomTranslation("hidden", languageCode = Locale.ENGLISH),
+            randomTranslation("hidden2", languageCode = Locale.FRENCH),
+        )
+
+        presenter.test {
+            assertEquals(
+                listOf(FilterMenu.UiState.Item(Language(Locale.ENGLISH), 1)),
                 expectMostRecentItem().languageFilter.items
             )
         }
