@@ -18,6 +18,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
@@ -285,7 +286,19 @@ class DefaultToolFiltersStateProducerTest {
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
             awaitItem().languageFilter.eventSink(FilterMenu.Event.SelectItem(Language(Locale.ENGLISH)))
 
-            assertNull(expectMostRecentItem().languageFilter.selectedItem)
+            assertEquals(Language(Locale.ENGLISH), expectMostRecentItem().languageFilter.selectedItem)
+        }
+
+        verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+    }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - language not loaded yet`() = testScope.runTest {
+        selectedLocale.value = Locale.ENGLISH
+        every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns MutableSharedFlow()
+
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
+            assertEquals(Language(Locale.ENGLISH), expectMostRecentItem().languageFilter.selectedItem)
         }
 
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
@@ -293,7 +306,7 @@ class DefaultToolFiltersStateProducerTest {
 
     @Test
     fun `Filters - languageFilter - selectedItem - language selected`() = testScope.runTest {
-        val language = Language(Locale.ENGLISH)
+        val language = Language(Locale.ENGLISH, name = "English")
         every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
 
         presenterTestOf(presentFunction = { producer.produce(mode) }) {
@@ -303,6 +316,21 @@ class DefaultToolFiltersStateProducerTest {
         }
 
         verify { languagesRepository.findLanguageFlow(Locale.ENGLISH) }
+    }
+
+    @Test
+    fun `Filters - languageFilter - selectedItem - new language not loaded yet`() = testScope.runTest {
+        val language = Language(Locale.ENGLISH, name = "English")
+        every { languagesRepository.findLanguageFlow(Locale.ENGLISH) } returns flowOf(language)
+        every { languagesRepository.findLanguageFlow(Locale.FRENCH) } returns MutableSharedFlow()
+        selectedLocale.value = Locale.ENGLISH
+
+        presenterTestOf(presentFunction = { producer.produce(mode) }) {
+            assertEquals(language, expectMostRecentItem().languageFilter.selectedItem)
+
+            selectedLocale.value = Locale.FRENCH
+            assertEquals(Language(Locale.FRENCH), expectMostRecentItem().languageFilter.selectedItem)
+        }
     }
 
     @Test
