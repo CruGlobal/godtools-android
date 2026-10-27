@@ -20,6 +20,7 @@ import org.cru.godtools.model.Tool
 import org.cru.godtools.ui.dashboard.filters.FilterMenu.Event
 import org.cru.godtools.ui.dashboard.filters.FilterMenu.UiState
 import org.cru.godtools.ui.dashboard.filters.FilterMenu.UiState.Item
+import org.cru.godtools.ui.dashboard.tools.ToolsPresenter.UiState.Mode
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -149,7 +150,8 @@ class ToolFiltersTest {
                 UiState(
                     selectedItem = Language(Locale.ENGLISH),
                     eventSink = events,
-                )
+                ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
@@ -165,6 +167,7 @@ class ToolFiltersTest {
                     selectedItem = null,
                     eventSink = events,
                 ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
@@ -182,6 +185,7 @@ class ToolFiltersTest {
                     selectedItem = Language(Locale.ENGLISH),
                     eventSink = events,
                 ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
@@ -204,6 +208,7 @@ class ToolFiltersTest {
                     ),
                     eventSink = events,
                 ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
@@ -227,6 +232,7 @@ class ToolFiltersTest {
                     selectedItem = Language(Locale.FRENCH),
                     eventSink = events,
                 ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
@@ -246,12 +252,51 @@ class ToolFiltersTest {
                         Item(Language(Locale.GERMAN), 1),
                     ),
                     eventSink = events,
-                )
+                ),
+                mode = Mode.ALL_TOOLS,
             )
         }
 
         composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).performClick()
         events.assertEvents(Event.SelectItem(Language(Locale.FRENCH)))
+    }
+
+    @Test
+    fun `LanguageFilter() - Personalized - GT-3102 - Doesn't show Any Language when no language is specified`() {
+        composeTestRule.setContent {
+            LanguageFilter(
+                UiState(
+                    selectedItem = null,
+                    eventSink = events,
+                ),
+                mode = Mode.PERSONALIZATION,
+            )
+        }
+
+        composeTestRule.onNodeWithText("Any language", substring = true, ignoreCase = true).assertDoesNotExist()
+        events.assertNoEvents()
+    }
+
+    @Test
+    fun `LanguageFilter() - Personalized - GT-3102 - Doesn't show tools available counts`() {
+        composeTestRule.setContent {
+            LanguageFilter(
+                UiState(
+                    menuExpanded = remember { mutableStateOf(true) },
+                    items = persistentListOf(
+                        Item(Language(Locale.FRENCH), 1),
+                        Item(Language(Locale.GERMAN), 2),
+                    ),
+                    eventSink = events,
+                ),
+                mode = Mode.PERSONALIZATION,
+            )
+        }
+
+        composeTestRule.onNodeWithText("French", substring = true, ignoreCase = true).assertExists()
+        composeTestRule.onNodeWithText("Tool available", substring = true, ignoreCase = true).assertDoesNotExist()
+        composeTestRule.onNodeWithText("Tools available", substring = true, ignoreCase = true).assertDoesNotExist()
+        events.assertNoEvents()
     }
     // endregion LanguageFilter
 }
