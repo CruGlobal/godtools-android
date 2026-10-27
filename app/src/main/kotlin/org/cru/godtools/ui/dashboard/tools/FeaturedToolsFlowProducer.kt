@@ -24,11 +24,12 @@ internal class FeaturedToolsFlowProducer @Inject constructor(
             Mode.PERSONALIZATION -> {
                 val languageFlow = if (language != null) flowOf(language) else settings.appLanguageFlow
 
-                // featured tools are only available when a country is selected, there is no fallback behavior
                 languageFlow
                     .combineTransformLatest(settings.getPersonalizationCountryFlow()) { lang, country ->
                         when (country) {
+                            // the featured tools section is hidden when no country has been selected
                             null -> emit(emptyList())
+
                             else -> emitAll(toolsRepository.getFeaturedToolsFlow(lang, country))
                         }
                     }

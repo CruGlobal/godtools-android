@@ -1,5 +1,5 @@
 package org.cru.godtools.base.ui.circuit.screen.dashboard.page
 
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelableScreen
 
-abstract class DashboardPage : Screen
+abstract class DashboardPage : ParcelableScreen

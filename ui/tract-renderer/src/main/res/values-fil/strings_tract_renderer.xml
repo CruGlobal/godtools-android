@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">I-install</string>
     <string name="menu_share_tract">Ipadala ang tool na ito</string>
     <string name="tract_card_previous">Nauna</string>
     <string name="tract_card_next">Susunod</string>

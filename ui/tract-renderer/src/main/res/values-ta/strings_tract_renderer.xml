@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">நிறுவு</string>
     <string name="menu_share_tract">இந்த கருவியை அனுப்பவும்</string>
     <string name="tract_card_previous">முந்தைய</string>
     <string name="tract_card_next">அடுத்த</string>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">স্থাপন করুন</string>
     <string name="menu_share_tract">এই সাধনীটি পাঠান</string>
     <string name="tract_card_previous">Hashwa</string>
     <string name="tract_card_next">Hadien</string>

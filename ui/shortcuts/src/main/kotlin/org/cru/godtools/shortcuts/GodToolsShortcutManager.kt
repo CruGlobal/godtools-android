@@ -10,7 +10,6 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_CACHED
 import androidx.core.content.pm.ShortcutManagerCompat.FLAG_MATCH_PINNED
 import androidx.core.graphics.drawable.IconCompat
-import com.google.android.gms.common.wrappers.InstantApps
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
@@ -96,19 +95,15 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
         coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     )
 
-    @VisibleForTesting
-    internal val isEnabled = !InstantApps.isInstantApp(context)
-
     // region Events
     init {
         // register event listeners
-        if (isEnabled) eventBus.register(this)
+        eventBus.register(this)
     }
 
     @AnyThread
     @Subscribe
     fun onToolUsed(event: ToolUsedEvent) {
-        if (!isEnabled) return
         ShortcutManagerCompat.reportShortcutUsed(context, ShortcutId.Tool(event.toolCode).id)
     }
     // endregion Events
@@ -118,19 +113,15 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @AnyThread
     @Suppress("ktlint:standard:blank-line-between-when-conditions")
-    fun canPinToolShortcut(tool: Tool?) = when {
-        !isEnabled -> false
-        else -> when (tool?.type) {
-            Tool.Type.ARTICLE,
-            Tool.Type.CYOA,
-            Tool.Type.TRACT -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
-            else -> false
-        }
+    fun canPinToolShortcut(tool: Tool?) = when (tool?.type) {
+        Tool.Type.ARTICLE,
+        Tool.Type.CYOA,
+        Tool.Type.TRACT -> ShortcutManagerCompat.isRequestPinShortcutSupported(context)
+        else -> false
     }
 
     @AnyThread
     fun getPendingToolShortcut(code: String?, vararg locales: Locale?): PendingShortcut? {
-        if (!isEnabled) return null
         if (code == null) return null
         val id = ShortcutId.Tool(code, *locales)
 
@@ -185,8 +176,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun updateDynamicShortcuts() {
-        if (!isEnabled) return
-
         val dynamicShortcuts = withContext(ioDispatcher) {
             toolsRepository.getNormalTools()
                 .filter { it.isFavorite }
@@ -206,8 +195,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
     @VisibleForTesting
     internal suspend fun updatePinnedShortcuts() {
-        if (!isEnabled) return
-
         withContext(ioDispatcher) {
             val types = FLAG_MATCH_PINNED or FLAG_MATCH_CACHED
             val (invalid, shortcuts) = ShortcutManagerCompat.getShortcuts(context, types)
@@ -331,8 +318,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         @VisibleForTesting
         internal val updatePendingShortcutsJob = coroutineScope.launch {
-            if (!manager.isEnabled) return@launch
-
             merge(
                 settings.appLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),
@@ -346,8 +331,6 @@ class GodToolsShortcutManager @VisibleForTesting internal constructor(
 
         @VisibleForTesting
         internal val updateShortcutsJob = coroutineScope.launch {
-            if (!manager.isEnabled) return@launch
-
             merge(
                 settings.appLanguageFlow,
                 attachmentsRepository.attachmentsChangeFlow(),

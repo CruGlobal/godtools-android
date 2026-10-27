@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">સ્થાપિત કરો</string>
     <string name="menu_share_tract">આ Tool મોકલો</string>
     <string name="tract_card_previous">અગાઉના</string>
     <string name="tract_card_next">આગળ</string>

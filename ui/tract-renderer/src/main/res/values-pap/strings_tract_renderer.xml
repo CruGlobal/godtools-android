@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">Instalá</string>
     <string name="menu_share_tract">Manda e hèrmènt aki</string>
     <string name="tract_card_previous">Anterior</string>
     <string name="tract_card_next">Siguiente</string>

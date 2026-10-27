@@ -4,12 +4,12 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import kotlinx.parcelize.Parcelize
 import org.cru.godtools.BuildConfig
 
 @Parcelize
-data object DrawerMenuScreen : Screen {
+data object DrawerMenuScreen : ParcelableScreen {
     data class State(
         val drawerState: DrawerState = DrawerState(DrawerValue.Closed),
         val isLoggedIn: Boolean = false,

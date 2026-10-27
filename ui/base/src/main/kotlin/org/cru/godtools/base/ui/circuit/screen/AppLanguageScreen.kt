@@ -1,12 +1,12 @@
 package org.cru.godtools.base.ui.circuit.screen
 
-import com.slack.circuit.runtime.screen.PopResult
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelablePopResult
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object AppLanguageScreen : Screen {
-    sealed interface Result : PopResult {
+data object AppLanguageScreen : ParcelableScreen {
+    sealed interface Result : ParcelablePopResult {
         @Parcelize data object LanguageSelected : Result
         @Parcelize data object Dismissed : Result
     }

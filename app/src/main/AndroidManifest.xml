@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- This permission should be obvious -->
@@ -29,8 +28,6 @@
     <uses-feature
         android:name="android.hardware.location"
         android:required="false" />
-
-    <dist:module dist:instant="true" />
 
     <queries>
         <!-- Used by the Okta OIDC SDK for logging in -->

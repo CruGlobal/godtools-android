@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">اِنسٹال کریں</string>
     <string name="menu_share_tract">یہ ٹول بھیجیں</string>
     <string name="tract_card_previous">گزشتہ</string>
     <string name="tract_card_next">اگلا</string>

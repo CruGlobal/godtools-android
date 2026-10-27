@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">インストール</string>
     <string name="menu_share_tract">ツールを送信する</string>
     <string name="tract_card_previous">前</string>
     <string name="tract_card_next">次</string>

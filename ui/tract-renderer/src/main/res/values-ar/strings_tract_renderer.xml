@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="menu_install">تثبيت</string>
     <string name="menu_share_tract">أرسل هذه الأداة</string>
     <string name="tract_card_previous">السابق</string>
     <string name="tract_card_next">التالي</string>

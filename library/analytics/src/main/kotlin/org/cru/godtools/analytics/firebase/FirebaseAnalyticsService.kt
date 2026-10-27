@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Bundle
 import androidx.annotation.MainThread
 import androidx.annotation.VisibleForTesting
-import com.google.android.gms.common.wrappers.InstantApps
 import com.google.firebase.analytics.FirebaseAnalytics
 import java.util.Locale
 import javax.inject.Inject
@@ -30,10 +29,6 @@ import org.greenrobot.eventbus.ThreadMode
 private const val USER_PROP_APP_NAME = "cru_appname"
 private const val VALUE_APP_NAME_GODTOOLS = "GodTools App"
 
-private const val USER_PROP_APP_TYPE = "godtools_app_type"
-private const val VALUE_APP_TYPE_INSTANT = "instant"
-private const val VALUE_APP_TYPE_INSTALLED = "installed"
-
 private const val USER_PROP_DEBUG = "debug"
 private const val USER_PROP_SSO_GUID = "cru_ssoguid"
 private const val USER_PROP_GR_MASTER_PERSON_ID = "cru_grmasterpersonid"
@@ -45,7 +40,6 @@ const val PARAM_LANGUAGE_SECONDARY = "cru_contentlanguagesecondary"
 
 @Singleton
 class FirebaseAnalyticsService @VisibleForTesting internal constructor(
-    app: Application,
     accountManager: GodToolsAccountManager,
     eventBus: EventBus,
     userManager: UserManager,
@@ -59,7 +53,7 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
         accountManager: GodToolsAccountManager,
         eventBus: EventBus,
         userManager: UserManager,
-    ) : this(app, accountManager, eventBus, userManager, FirebaseAnalytics.getInstance(app))
+    ) : this(accountManager, eventBus, userManager, FirebaseAnalytics.getInstance(app))
 
     // region Tracking Events
     init {
@@ -125,10 +119,6 @@ class FirebaseAnalyticsService @VisibleForTesting internal constructor(
 
         firebase.setUserProperty(USER_PROP_APP_NAME, VALUE_APP_NAME_GODTOOLS)
         firebase.setUserProperty(PARAM_CONTENT_LANGUAGE, Locale.getDefault().toLanguageTag())
-        firebase.setUserProperty(
-            USER_PROP_APP_TYPE,
-            if (InstantApps.isInstantApp(app)) VALUE_APP_TYPE_INSTANT else VALUE_APP_TYPE_INSTALLED
-        )
         firebase.setUserProperty(USER_PROP_DEBUG, BuildConfig.DEBUG.toString())
     }
 }

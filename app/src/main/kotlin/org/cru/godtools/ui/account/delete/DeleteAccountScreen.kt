@@ -1,7 +1,7 @@
 package org.cru.godtools.ui.account.delete
 
-import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.screen.ParcelableScreen
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data object DeleteAccountScreen : Screen
+data object DeleteAccountScreen : ParcelableScreen

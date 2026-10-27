@@ -178,7 +178,6 @@ dependencies {
     implementation(libs.play.app.update.ktx)
     implementation(libs.play.base)
     implementation(libs.play.feature.delivery)
-    implementation(libs.play.instantapps)
     implementation(libs.play.review)
 
     implementation(libs.godtoolsShared.common)

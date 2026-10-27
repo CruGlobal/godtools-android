@@ -5,10 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -16,7 +14,6 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.github.ajalt.colormath.extensions.android.colorint.toColorInt
-import com.google.android.instantapps.InstantApps
 import com.slack.circuit.overlay.ContentWithOverlays
 import com.slack.circuit.overlay.OverlayEffect
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,34 +122,9 @@ class TractActivity :
         setupPager()
     }
 
-    @CallSuper
-    override fun onSetupActionBar() {
-        super.onSetupActionBar()
-        if (InstantApps.isInstantApp(this)) toolbar.setNavigationIcon(org.cru.godtools.ui.R.drawable.ic_close)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu) = super.onCreateOptionsMenu(menu).also {
-        menuInflater.inflate(R.menu.activity_tract, menu)
         menuInflater.inflate(R.menu.activity_tract_live_share, menu)
         menu.setupLiveShareMenuItem()
-
-        // Adjust visibility of menu items
-        menu.findItem(R.id.action_install)?.isVisible = InstantApps.isInstantApp(this)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_install -> {
-            InstantApps.showInstallPrompt(this, intent, -1, "instantapp")
-            true
-        }
-
-        // handle close button if this is an instant app
-        android.R.id.home if (InstantApps.isInstantApp(this)) -> {
-            finish()
-            true
-        }
-
-        else -> super.onOptionsItemSelected(item)
     }
 
     override fun onDismissTip() = trackTractPage()

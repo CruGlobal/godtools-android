@@ -59,7 +59,9 @@ fun TutorialLayout(state: UiState, modifier: Modifier = Modifier) {
     val locale = LocalAppLanguage.current
     val pages = remember(pageSet, locale) { pageSet.pagesFor(locale) }
     val pagerState = rememberPagerState { pages.size }
-    val currentPage by remember { derivedStateOf { pages[pagerState.currentPage] } }
+    val currentPage by remember(pages) {
+        derivedStateOf { pages[pagerState.currentPage.coerceAtMost(pages.lastIndex)] }
+    }
 
     RecordAnalyticsScreen(TutorialAnalyticsScreenEvent(pageSet, currentPage, pagerState.currentPage, locale))
 

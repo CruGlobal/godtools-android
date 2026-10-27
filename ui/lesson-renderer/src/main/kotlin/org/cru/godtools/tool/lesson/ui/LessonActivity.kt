@@ -94,7 +94,7 @@ class LessonActivity :
 
     override val viewModel: LessonActivityDataModel by viewModels()
     override val dataModel get() = viewModel
-    private var initialPage: Int? = null
+    private var initialPagePosition: Int? = null
 
     // region Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,15 +164,23 @@ class LessonActivity :
                 }
 
                 else -> {
-                    val lessonPagerState = rememberLessonPagerState(manifest, initialPage ?: 0)
+                    val lessonPagerState = rememberLessonPagerState(
+                        manifest,
+                        initialPage = initialPagePosition?.let { manifest.pages.getOrNull(it) as? LessonPage },
+                    )
                     val pagerState = lessonPagerState.pagerState
 
                     // record the highest page reached for feedback functionality
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.settledPage }.collect { page ->
                             dataModel.pageReached.update { maxOf(it, page) }
-                            dataModel.currentPage.value = page
                         }
+                    }
+
+                    // record the current page position for the share link
+                    LaunchedEffect(lessonPagerState) {
+                        snapshotFlow { lessonPagerState.settledPage?.position ?: 0 }
+                            .collect { dataModel.currentPagePosition.value = it }
                     }
 
                     // record the current progress for lesson resume functionality
@@ -296,7 +304,7 @@ class LessonActivity :
                     val deepLink = LessonDeepLink.parseKnowGodDeepLink(data) ?: return
                     dataModel.toolCode.value = deepLink.lesson
                     dataModel.locale.value = deepLink.locale
-                    initialPage = deepLink.page
+                    initialPagePosition = deepLink.page
                 }
             }
         }
@@ -345,19 +353,19 @@ class LessonActivity :
 
     // region Share Menu Logic
     override val shareLinkUriLiveData by lazy {
-        combine(viewModel.manifest, viewModel.currentPage) { manifest, page ->
-            manifest?.buildShareLink(page)?.build()?.toString()
+        combine(viewModel.manifest, viewModel.currentPagePosition) { manifest, position ->
+            manifest?.buildShareLink(position)?.build()?.toString()
         }.asLiveData()
     }
 
-    private fun Manifest.buildShareLink(page: Int = 0): Uri.Builder? {
+    private fun Manifest.buildShareLink(position: Int = 0): Uri.Builder? {
         val tool = code ?: return null
         val locale = locale ?: return null
         return URI_SHARE_BASE.buildUpon()
             .appendEncodedPath(locale.toString().lowercase(Locale.ENGLISH))
             .appendPath("lesson")
             .appendPath(tool)
-            .apply { if (page > 0) appendPath(page.toString()) }
+            .apply { if (position > 0) appendPath(position.toString()) }
             .appendQueryParameter("icid", "gtshare")
     }
     // endregion Share Menu Logic
@@ -386,7 +394,9 @@ class LessonActivityDataModel @Inject constructor(
     savedState
 ) {
     val pageReached = savedState.getMutableStateFlow(viewModelScope, "pageReached", 0)
-    val currentPage = savedState.getMutableStateFlow(viewModelScope, "currentPage", 0)
+
+    // the position of the current page within the full list of manifest pages, including hidden pages
+    val currentPagePosition = savedState.getMutableStateFlow(viewModelScope, "currentPagePosition", 0)
     val showFeedback = toolCode
         .flatMapLatest { settings.isFeatureDiscoveredFlow(FEATURE_LESSON_FEEDBACK + it) }
         .combine(pageReached) { discovered, page -> !discovered && page > 3 }
