@@ -14,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.ccci.gto.android.common.dagger.getValue
@@ -86,11 +88,15 @@ class GodToolsSyncService @VisibleForTesting internal constructor(
     suspend fun syncTool(toolCode: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncTool(toolCode, force) }
 
-    suspend fun syncFeaturedTools(locale: Locale, country: String?, force: Boolean = false) =
+    suspend fun syncFeaturedTools(locale: Locale, country: String, force: Boolean = false) =
         executeSync<ToolSyncTasks> { syncFeaturedTools(locale, country, force) }
 
-    suspend fun syncToolOrder(locale: Locale, country: String?, force: Boolean = false) =
-        executeSync<ToolSyncTasks> { syncToolOrder(locale, country, force) }
+    suspend fun syncToolOrder(locale: Locale, country: String?, force: Boolean = false) = coroutineScope {
+        listOfNotNull(
+            country?.let { async { executeSync<ToolSyncTasks> { syncRankedTools(locale, it, force) } } },
+            async { executeSync<ToolSyncTasks> { syncDefaultToolOrder(locale, force) } },
+        ).awaitAll().all { it }
+    }
 
     suspend fun syncGlobalActivity(force: Boolean = false) =
         executeSync<AnalyticsSyncTasks> { syncGlobalActivity(force) }

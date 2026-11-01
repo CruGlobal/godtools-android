@@ -87,6 +87,45 @@ class SettingsTest {
             assertNull(awaitItem())
         }
     }
+
+    @Test
+    fun testDashboardLessonsFilterLocale() = runTest {
+        settings.getDashboardLessonsFilterLocaleFlow().test {
+            assertNull(awaitItem())
+
+            settings.updateDashboardLessonsFilterLocale(Locale.FRENCH)
+            assertEquals(Locale.FRENCH, awaitItem())
+
+            settings.updateDashboardLessonsFilterLocale(null)
+            assertNull(awaitItem())
+        }
+    }
+
+    @Test
+    fun testDashboardPersonalizedLessonsFilterLocale() = runTest {
+        settings.getDashboardPersonalizedLessonsFilterLocaleFlow().test {
+            assertNull(awaitItem())
+
+            settings.updateDashboardPersonalizedLessonsFilterLocale(Locale.FRENCH)
+            assertEquals(Locale.FRENCH, awaitItem())
+
+            settings.updateDashboardPersonalizedLessonsFilterLocale(null)
+            assertNull(awaitItem())
+        }
+    }
+
+    @Test
+    fun testDashboardPersonalizedFilterLocale() = runTest {
+        settings.getDashboardPersonalizedFilterLocaleFlow().test {
+            assertNull(awaitItem())
+
+            settings.updateDashboardPersonalizedFilterLocale(Locale.ENGLISH)
+            assertEquals(Locale.ENGLISH, awaitItem())
+
+            settings.updateDashboardPersonalizedFilterLocale(null)
+            assertNull(awaitItem())
+        }
+    }
     // endregion Dashboard Settings
 
     // region produceAppLocaleState()

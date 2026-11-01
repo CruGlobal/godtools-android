@@ -15,6 +15,7 @@ import org.cru.godtools.R
 import org.cru.godtools.base.LocalAppLanguage
 import org.cru.godtools.ui.common.LanguageName
 import org.cru.godtools.ui.dashboard.filters.LazyFilterMenu
+import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState.Mode
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
@@ -33,7 +34,12 @@ internal fun LessonFilters(state: LessonsPresenter.UiState, modifier: Modifier =
             itemKey = { (it) -> it.code },
             itemLabel = { LanguageName(it.item) },
             itemSupportingText = { (_, count) ->
-                pluralStringResource(R.plurals.dashboard_lessons_section_filter_available_lessons, count, count)
+                when (state.mode) {
+                    Mode.PERSONALIZATION -> null
+
+                    Mode.ALL_LESSONS ->
+                        pluralStringResource(R.plurals.dashboard_lessons_section_filter_available_lessons, count, count)
+                }
             },
             modifier = Modifier
                 .weight(1f)

@@ -186,7 +186,7 @@ class ToolsPresenter @AssistedInject internal constructor(
     private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
         val country = settings.getCountrySettingFlow().first()
         coroutineScope {
-            launch { syncService.syncFeaturedTools(locale, country, force) }
+            if (country != null) launch { syncService.syncFeaturedTools(locale, country, force) }
             launch { syncService.syncToolOrder(locale, country, force) }
         }
     }

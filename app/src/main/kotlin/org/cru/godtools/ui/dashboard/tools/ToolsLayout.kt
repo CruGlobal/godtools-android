@@ -115,6 +115,7 @@ internal fun ToolsLayout(state: UiState, modifier: Modifier = Modifier) {
 
             ToolFilters(
                 filters = filters,
+                mode = state.mode,
                 modifier = Modifier
                     .animateItem()
                     .padding(vertical = 16.dp)

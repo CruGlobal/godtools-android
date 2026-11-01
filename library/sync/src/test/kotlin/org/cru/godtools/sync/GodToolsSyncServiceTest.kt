@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import java.io.IOException
+import java.util.Locale
 import javax.inject.Provider
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -34,6 +35,8 @@ class GodToolsSyncServiceTest {
     private val toolsSyncTasks: ToolSyncTasks = mockk {
         coEvery { syncTools(any()) } returns true
         coEvery { syncShares() } returns true
+        coEvery { syncDefaultToolOrder(any(), any()) } returns true
+        coEvery { syncRankedTools(any(), any(), any()) } returns true
     }
     private val userCounterSyncTasks: UserCounterSyncTasks = mockk {
         coEvery { syncCounters(any()) } returns true
@@ -140,6 +143,23 @@ class GodToolsSyncServiceTest {
         assertEquals(e, timber.logs[0].t)
     }
     // endregion syncTools()
+
+    // region syncToolOrder()
+    @Test
+    fun `syncToolOrder() - with country - syncs ranked tools and default order`() = testScope.runTest {
+        assertTrue(syncService.syncToolOrder(Locale.ENGLISH, "US", force = false))
+        coVerifyAll {
+            toolsSyncTasks.syncRankedTools(Locale.ENGLISH, "US", false)
+            toolsSyncTasks.syncDefaultToolOrder(Locale.ENGLISH, false)
+        }
+    }
+
+    @Test
+    fun `syncToolOrder() - without country - only syncs default order`() = testScope.runTest {
+        assertTrue(syncService.syncToolOrder(Locale.ENGLISH, null, force = false))
+        coVerifyAll { toolsSyncTasks.syncDefaultToolOrder(Locale.ENGLISH, false) }
+    }
+    // endregion syncToolOrder()
 
     // region syncToolSharesAsync()
     @Test
