@@ -78,17 +78,10 @@ class FeaturedToolsFlowProducerTest {
     }
 
     @Test
-    fun `getFlow - Personalization - uses appLanguageFlow when no language provided`() = runTest {
+    fun `getFlow - Personalization - uses appLanguageFlow`() = runTest {
         appLanguageFlow.value = Locale.FRENCH
         producer.getFlow(mode = Mode.PERSONALIZATION).first()
         verify { toolsRepository.getFeaturedToolsFlow(Locale.FRENCH, any()) }
-    }
-
-    @Test
-    fun `getFlow - Personalization - uses provided language`() = runTest {
-        producer.getFlow(mode = Mode.PERSONALIZATION, language = Locale.GERMAN).first()
-        verify { toolsRepository.getFeaturedToolsFlow(Locale.GERMAN, any()) }
-        verify(exactly = 0) { toolsRepository.getFeaturedToolsFlow(Locale.ENGLISH, any()) }
     }
 
     @Test

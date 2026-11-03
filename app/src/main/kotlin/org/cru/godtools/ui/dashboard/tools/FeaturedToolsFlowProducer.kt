@@ -1,12 +1,10 @@
 package org.cru.godtools.ui.dashboard.tools
 
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.ccci.gto.android.common.kotlin.coroutines.flow.combineTransformLatest
 import org.cru.godtools.base.Settings
@@ -19,12 +17,10 @@ internal class FeaturedToolsFlowProducer @Inject constructor(
     private val toolsRepository: ToolsRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun getFlow(mode: Mode, language: Locale? = null): Flow<List<Tool>> {
+    fun getFlow(mode: Mode): Flow<List<Tool>> {
         val baseFlow = when (mode) {
             Mode.PERSONALIZATION -> {
-                val languageFlow = if (language != null) flowOf(language) else settings.appLanguageFlow
-
-                languageFlow
+                settings.appLanguageFlow
                     .combineTransformLatest(settings.getPersonalizationCountryFlow()) { lang, country ->
                         when (country) {
                             // the featured tools section is hidden when no country has been selected

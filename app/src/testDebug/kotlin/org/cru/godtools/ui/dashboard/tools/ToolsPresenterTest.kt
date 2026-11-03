@@ -75,7 +75,7 @@ class ToolsPresenterTest {
     }
     private val favoriteToolsBannerPresenter = FakeBannerPresenter<FavoriteToolsBannerPresenter.UiState>(null)
     private val featuredToolsFlowProducer: FeaturedToolsFlowProducer = mockk {
-        every { getFlow(any(), any()) } returns featuredToolsFlow
+        every { getFlow(any()) } returns featuredToolsFlow
     }
     private val filteredToolsFlowProducer: FilteredToolsFlowProducer = mockk {
         every { getFlow(any(), any(), any()) } returns filteredToolsFlow
@@ -283,20 +283,21 @@ class ToolsPresenterTest {
     }
 
     @Test
-    fun `SideEffect - RegisterSyncTask - uses locale from language filter`() = testScope.runTest {
-        toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
-            languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
-        )
+    fun `SideEffect - RegisterSyncTask - tool order uses language filter, featured tools use app language`() =
+        testScope.runTest {
+            toolFiltersStateProducer.filters.value = ToolFiltersStateProducer.Filters(
+                languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.FRENCH))
+            )
 
-        presenter.test {
-            awaitInitialItem()
-            toolOrderSync.send(true)
-            coVerifyAll {
-                syncService.syncToolOrder(Locale.FRENCH, "US", false)
-                syncService.syncFeaturedTools(Locale.FRENCH, "US", false)
+            presenter.test {
+                awaitInitialItem()
+                toolOrderSync.send(true)
+                coVerifyAll {
+                    syncService.syncToolOrder(Locale.FRENCH, "US", false)
+                    syncService.syncFeaturedTools(Locale.ENGLISH, "US", false)
+                }
             }
         }
-    }
 
     @Test
     fun `SideEffect - RegisterSyncTask - re-syncs when locale changes`() = testScope.runTest {

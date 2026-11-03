@@ -21,9 +21,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.components.SingletonComponent
 import java.util.Locale
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.sync.rememberSyncTask
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
@@ -95,12 +93,11 @@ class ToolsPresenter @AssistedInject internal constructor(
         val selectedLocale by rememberUpdatedState(filters.languageFilter.selectedItem?.code)
 
         val appLocale by settings.appLanguageFlow.collectAsState()
-        RegisterSyncTask(selectedLocale ?: appLocale)
+        RegisterToolOrderSyncTask(selectedLocale ?: appLocale)
+        RegisterFeaturedToolsSyncTask(appLocale)
 
-        val featuredTools = rememberFeaturedTools(
-            mode = mode,
-            language = filters.languageFilter.selectedItem
-        ) { openToolDetails(it, selectedLocale, SOURCE_SPOTLIGHT) }
+        // featured tools always follow the app language, regardless of the selected language filter
+        val featuredTools = rememberFeaturedTools(mode) { openToolDetails(it, null, SOURCE_SPOTLIGHT) }
 
         val tools = rememberTools(
             mode = mode,
@@ -128,21 +125,22 @@ class ToolsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
-    private fun RegisterSyncTask(locale: Locale) {
-        circuitContext.rememberSyncTask(locale) { syncData(locale, it) }
+    private fun RegisterToolOrderSyncTask(locale: Locale) {
+        circuitContext.rememberSyncTask(locale) { syncToolOrder(locale, it) }
+    }
+
+    @Composable
+    private fun RegisterFeaturedToolsSyncTask(locale: Locale) {
+        circuitContext.rememberSyncTask(locale) { syncFeaturedTools(locale, it) }
     }
 
     @Composable
     private fun rememberFeaturedTools(
         mode: Mode,
-        language: Language?,
         onOpenToolDetails: (String) -> Unit,
     ): List<ToolCardPresenter.UiState>? {
-        val locale = language?.code
-        val tools by remember(mode, locale) {
-            featuredToolsFlowProducer.getFlow(mode, locale)
-        }.collectAsState(null)
-        return tools?.toToolCardState(language, onOpenToolDetails)
+        val tools by remember(mode) { featuredToolsFlowProducer.getFlow(mode) }.collectAsState(null)
+        return tools?.toToolCardState(null, onOpenToolDetails)
     }
 
     @Composable
@@ -183,12 +181,13 @@ class ToolsPresenter @AssistedInject internal constructor(
         navigator.goTo(ToolDetailsScreen(tool, selectedLocale))
     }
 
-    private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
-        val country = settings.getCountrySettingFlow().first()
-        coroutineScope {
-            if (country != null) launch { syncService.syncFeaturedTools(locale, country, force) }
-            launch { syncService.syncToolOrder(locale, country, force) }
-        }
+    private fun SyncTracker.syncToolOrder(locale: Locale, force: Boolean = false) = launchSync {
+        syncService.syncToolOrder(locale, settings.getCountrySettingFlow().first(), force)
+    }
+
+    private fun SyncTracker.syncFeaturedTools(locale: Locale, force: Boolean = false) = launchSync {
+        val country = settings.getCountrySettingFlow().first() ?: return@launchSync
+        syncService.syncFeaturedTools(locale, country, force)
     }
 
     @AssistedFactory
