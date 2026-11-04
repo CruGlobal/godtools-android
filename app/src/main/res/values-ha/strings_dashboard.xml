@@ -42,7 +42,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">Waɗanda aka fi so</string>
     <string name="dashboard_home_header_title">Barka da zuwa Godtools</string>
-    <string name="dashboard_home_section_featured_lesson">Babban Darasi</string>
     <string name="dashboard_home_section_favorites_title">Kayan aikin da kuka fi so</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Babu kayan aikin da aka fi so don nunawa</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Matsa gunkin zuciya don fi so kayan aiki kuma sanya shi samuwa a layi.</string>

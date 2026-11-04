@@ -46,7 +46,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">Избранное</string>
     <string name="dashboard_home_header_title">Добро пожаловать в GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Урок</string>
     <string name="dashboard_home_section_favorites_title">Ваши избранные инструменты</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Нет избранных инструментов</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Нажмите на значок сердца, чтобы добавить инструмент в избранное и сделать его доступным в режиме офлайн.</string>

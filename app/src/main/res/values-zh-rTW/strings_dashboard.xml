@@ -43,7 +43,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">我的最愛</string>
     <string name="dashboard_home_header_title">歡迎使用 GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">精選課程</string>
     <string name="dashboard_home_section_favorites_title">您最愛的工具</string>
     <string name="dashboard_home_section_favorites_no_tools_title">沒有可顯示的最愛工具</string>
     <string name="dashboard_home_section_favorites_no_tools_description">點擊心型圖示將工具設為您的最愛，並將它設定成可離線使用。</string>

@@ -44,7 +44,6 @@ Há uma versão online aqui: https://knowgod.com/</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="dashboard_home_header_title">Bem-vindo(a) ao GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Lição em destaque</string>
     <string name="dashboard_home_section_favorites_title">Suas ferramentas favoritas</string>
     <string name="dashboard_home_section_favorites_no_tools_title">Nenhuma ferramenta favorita a exibir</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Toque no ícone do coração para marcar uma ferramenta como favorita e permitir que ela fique disponível offline.</string>

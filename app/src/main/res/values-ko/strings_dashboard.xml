@@ -43,7 +43,6 @@
     <!-- Home -->
     <string name="nav_favorite_tools">즐겨찾기</string>
     <string name="dashboard_home_header_title">GodTools에 오신 걸 환영합니다</string>
-    <string name="dashboard_home_section_featured_lesson">추천 수업</string>
     <string name="dashboard_home_section_favorites_title">즐겨찾는 도구</string>
     <string name="dashboard_home_section_favorites_no_tools_title">표시할 즐겨찾는 도구 없음</string>
     <string name="dashboard_home_section_favorites_no_tools_description">하트 아이콘을 눌러서 도구를 즐겨찾기로 지정하고 오프라인에서도 사용하세요.</string>

@@ -43,6 +43,7 @@ import org.cru.godtools.ui.dashboard.home.HomeLayout
 import org.cru.godtools.ui.dashboard.home.HomePresenter
 import org.cru.godtools.ui.dashboard.lessons.LessonsLayout
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter
+import org.cru.godtools.ui.dashboard.personalization.DashboardPersonalizationState
 import org.cru.godtools.ui.dashboard.tools.ToolFiltersStateProducer.Filters
 import org.cru.godtools.ui.dashboard.tools.ToolsLayout
 import org.cru.godtools.ui.dashboard.tools.ToolsPresenter
@@ -97,7 +98,6 @@ class DashboardLayoutPaparazziTest(
 
     // region ToolsLayout
     private var toolsState = ToolsPresenter.UiState(
-        isPersonalizationEnabled = true,
         dataLoaded = true,
         spotlightTools = listOf(
             ToolCardStateTestData.tool.copy(
@@ -205,7 +205,6 @@ class DashboardLayoutPaparazziTest(
             mode = ToolsPresenter.UiState.Mode.PERSONALIZATION,
             filters = Filters(languageFilter = FilterMenu.UiState(selectedItem = Language(Locale.ENGLISH))),
             spotlightTools = emptyList(),
-            tools = emptyList(),
         )
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
@@ -213,7 +212,7 @@ class DashboardLayoutPaparazziTest(
     @Test
     fun `ToolsLayout() - No Personalization`() {
         assumeTrue(locale == null)
-        toolsState = toolsState.copy(isPersonalizationEnabled = false)
+        isPersonalizationEnabled = false
         snapshotDashboardLayout(state.copy(initialPage = ToolsScreen))
     }
     // endregion ToolsLayout
@@ -221,9 +220,6 @@ class DashboardLayoutPaparazziTest(
     // region HomeLayout
     private var homeState = HomePresenter.UiState(
         dataLoaded = true,
-        spotlightLessons = listOf(
-            ToolCardStateTestData.tool.copy(toolCode = "lesson", translation = null)
-        ),
         favoriteTools = listOf(
             ToolCardStateTestData.tool.copy(toolCode = "tool1", translation = null),
             ToolCardStateTestData.tool.copy(toolCode = "tool2", translation = null),
@@ -260,13 +256,6 @@ class DashboardLayoutPaparazziTest(
     }
 
     @Test
-    fun `HomeLayout() - No Spotlight Lessons`() {
-        assumeTrue(locale == null)
-        homeState = homeState.copy(spotlightLessons = emptyList())
-        snapshotDashboardLayout(state.copy(initialPage = HomeScreen))
-    }
-
-    @Test
     fun `HomeLayout() - No Favorites`() {
         assumeTrue(locale == null)
         homeState = homeState.copy(favoriteTools = emptyList())
@@ -294,7 +283,6 @@ class DashboardLayoutPaparazziTest(
 
     // region LessonsLayout
     private var lessonsState = LessonsPresenter.UiState(
-        isPersonalizationEnabled = true,
         languageFilter = FilterMenu.UiState(
             selectedItem = Language(Locale.ENGLISH)
         ),
@@ -310,6 +298,16 @@ class DashboardLayoutPaparazziTest(
     @Test
     fun `LessonsLayout() - Personalization`() {
         lessonsState = lessonsState.copy(mode = LessonsPresenter.UiState.Mode.PERSONALIZATION)
+        snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
+    }
+
+    @Test
+    fun `LessonsLayout() - Personalization - Featured Lessons`() {
+        assumeTrue(locale == null)
+        lessonsState = lessonsState.copy(
+            mode = LessonsPresenter.UiState.Mode.PERSONALIZATION,
+            featuredLessons = lessonsState.lessons.take(3),
+        )
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
 
@@ -341,7 +339,7 @@ class DashboardLayoutPaparazziTest(
 
     @Test
     fun `LessonsLayout() - Personalization Disabled`() {
-        lessonsState = lessonsState.copy(isPersonalizationEnabled = false)
+        isPersonalizationEnabled = false
         snapshotDashboardLayout(state.copy(initialPage = LessonsScreen))
     }
     // endregion LessonsLayout
@@ -361,6 +359,15 @@ class DashboardLayoutPaparazziTest(
         .addUi<LessonsScreen, LessonsPresenter.UiState> { state, modifier -> LessonsLayout(state, modifier) }
         .build()
 
+    private var isPersonalizationEnabled = true
+
+    // the app bar toggle reads the dashboard's personalization state, so derive it from the fake page states
+    private fun personalizationState() = DashboardPersonalizationState(
+        isEnabled = isPersonalizationEnabled,
+        toolsPersonalized = toolsState.mode == ToolsPresenter.UiState.Mode.PERSONALIZATION,
+        lessonsPersonalized = lessonsState.mode == LessonsPresenter.UiState.Mode.PERSONALIZATION,
+    )
+
     private fun snapshotDashboardLayout(state: UiState = this.state) = snapshot {
         CircuitCompositionLocals(circuit) {
             CompositionLocalProvider(
@@ -369,7 +376,7 @@ class DashboardLayoutPaparazziTest(
                 // mock required for AppUpdateSnackbar
                 LocalAppUpdateManager provides mockk(relaxed = true)
             ) {
-                DashboardLayout(state)
+                DashboardLayout(state.copy(personalization = personalizationState()))
             }
         }
     }

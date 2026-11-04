@@ -3,6 +3,7 @@ package org.cru.godtools.ui.dashboard
 import android.app.Application
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.ReceiveTurbine
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.jeppeman.mockposable.mockk.everyComposable
 import com.slack.circuit.foundation.NavEvent
 import com.slack.circuit.runtime.CircuitContext
@@ -11,6 +12,7 @@ import com.slack.circuit.test.FakeNavigator
 import com.slack.circuit.test.test
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -26,6 +28,7 @@ import kotlinx.coroutines.test.runTest
 import org.ccci.gto.android.common.androidx.compose.ui.platform.AndroidUiDispatcherUtil
 import org.ccci.gto.android.common.sync.SyncTaskRegistry
 import org.ccci.gto.support.turbine.awaitItemMatching
+import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.ui.circuit.screen.dashboard.DashboardScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.HomeScreen
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
@@ -51,6 +54,9 @@ class DashboardPresenterTest {
         everyComposable { present() } returns DrawerMenuScreen.State()
     }
     private val navigator = FakeNavigator(screen)
+    private val remoteConfig: FirebaseRemoteConfig = mockk {
+        every { getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } returns false
+    }
     private val syncService: GodToolsSyncService = mockk {
         coEvery { syncFollowupsAsync() } returns CompletableDeferred(true)
         coEvery { syncToolSharesAsync() } returns CompletableDeferred(true)
@@ -61,6 +67,7 @@ class DashboardPresenterTest {
 
     private val presenter = DashboardPresenter(
         drawerMenuPresenter = drawerMenuPresenter,
+        remoteConfig = remoteConfig,
         syncService = syncService,
         circuitContext = circuitContext,
         navigator = navigator,
@@ -79,6 +86,7 @@ class DashboardPresenterTest {
     fun `State - initialPage`() = runTest {
         val presenter = DashboardPresenter(
             drawerMenuPresenter = drawerMenuPresenter,
+            remoteConfig = remoteConfig,
             syncService = syncService,
             circuitContext = circuitContext,
             navigator = navigator,
@@ -102,6 +110,30 @@ class DashboardPresenterTest {
         }
     }
     // endregion State.drawerState
+
+    // region State.personalization
+    @Test
+    fun `State - personalization - disabled`() = runTest {
+        presenter.test {
+            val personalization = awaitInitialState().personalization
+            assertFalse(personalization.isEnabled)
+            assertFalse(personalization.toolsPersonalized)
+            assertFalse(personalization.lessonsPersonalized)
+        }
+    }
+
+    @Test
+    fun `State - personalization - enabled starts both tabs in personalized mode`() = runTest {
+        every { remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED) } returns true
+
+        presenter.test {
+            val personalization = awaitInitialState().personalization
+            assertTrue(personalization.isEnabled)
+            assertTrue(personalization.toolsPersonalized)
+            assertTrue(personalization.lessonsPersonalized)
+        }
+    }
+    // endregion State.personalization
 
     // region State.isSyncing
     @Test

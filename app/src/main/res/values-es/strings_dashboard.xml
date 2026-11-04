@@ -44,7 +44,6 @@ Puedes acceer a una versión online en https://knowgod.com/</string>
     <!-- Home -->
     <string name="nav_favorite_tools">Favoritos</string>
     <string name="dashboard_home_header_title">Bienvenido a GodTools</string>
-    <string name="dashboard_home_section_featured_lesson">Lección destacada</string>
     <string name="dashboard_home_section_favorites_title">Tus herramientas favoritas</string>
     <string name="dashboard_home_section_favorites_no_tools_title">No hay herramientas favoritas para mostrar</string>
     <string name="dashboard_home_section_favorites_no_tools_description">Pulse sobre el icono del corazón para marcar como favorita una herramienta y hacerla disponible sin conexión.</string>

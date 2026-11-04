@@ -10,9 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -46,8 +44,8 @@ import org.ccci.gto.android.common.sync.SyncTracker
 import org.ccci.gto.android.common.sync.rememberSyncTask
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.ACTION_OPEN_LESSON
+import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_FEATURED
 import org.cru.godtools.analytics.model.OpenAnalyticsActionEvent.Companion.SOURCE_LESSONS
-import org.cru.godtools.base.CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED
 import org.cru.godtools.base.Settings
 import org.cru.godtools.base.ui.circuit.screen.dashboard.page.LessonsScreen
 import org.cru.godtools.db.repository.LanguagesRepository
@@ -55,9 +53,11 @@ import org.cru.godtools.db.repository.ToolsRepository
 import org.cru.godtools.db.repository.TranslationsRepository
 import org.cru.godtools.model.Language
 import org.cru.godtools.model.Language.Companion.filterByDisplayAndNativeName
+import org.cru.godtools.model.Tool
 import org.cru.godtools.sync.GodToolsSyncService
 import org.cru.godtools.ui.dashboard.filters.FilterMenu
 import org.cru.godtools.ui.dashboard.lessons.LessonsPresenter.UiState
+import org.cru.godtools.ui.dashboard.personalization.LocalDashboardPersonalizationState
 import org.cru.godtools.ui.settings.country.CountrySettingsScreen
 import org.cru.godtools.ui.tools.ToolCardPresenter
 import org.cru.godtools.ui.tools.ToolCardPresenter.ToolCardEvent
@@ -70,7 +70,6 @@ class LessonsPresenter @AssistedInject internal constructor(
     private val eventBus: EventBus,
     private val languagesRepository: LanguagesRepository,
     private val lessonsFlowProducer: LessonsFlowProducer,
-    private val remoteConfig: FirebaseRemoteConfig,
     private val settings: Settings,
     private val syncService: GodToolsSyncService,
     private val toolCardPresenter: ToolCardPresenter,
@@ -84,9 +83,9 @@ class LessonsPresenter @AssistedInject internal constructor(
     @ConsistentCopyVisibility
     data class UiState internal constructor(
         val mode: Mode = Mode.ALL_LESSONS,
-        val isPersonalizationEnabled: Boolean = false,
         val dataLoaded: Boolean = true,
         val languageFilter: FilterMenu.UiState<Language> = FilterMenu.UiState(),
+        val featuredLessons: List<ToolCardPresenter.UiState> = emptyList(),
         val lessons: List<ToolCardPresenter.UiState> = emptyList(),
         internal val eventSink: (UiEvent) -> Unit = {},
     ) : CircuitUiState {
@@ -101,29 +100,29 @@ class LessonsPresenter @AssistedInject internal constructor(
 
     @Composable
     override fun present(): UiState {
-        val isPersonalizationEnabled = rememberSaveable {
-            remoteConfig.getBoolean(CONFIG_UI_DASHBOARD_PERSONALIZATION_ENABLED)
-        }
-        var mode by rememberSaveable {
-            mutableStateOf(if (isPersonalizationEnabled) UiState.Mode.PERSONALIZATION else UiState.Mode.ALL_LESSONS)
-        }
+        val personalization = LocalDashboardPersonalizationState.current
+        val mode = if (personalization.lessonsPersonalized) UiState.Mode.PERSONALIZATION else UiState.Mode.ALL_LESSONS
 
         val appLanguage by settings.appLanguageFlow.collectAsState()
         val languageFilter = rememberLanguagesFilter(mode)
 
         RegisterSyncTask(languageFilter.selectedItem?.code ?: appLanguage)
 
+        RegisterFeaturedLessonsSyncTask(appLanguage)
+
+        // featured lessons always follow the app language, regardless of the selected language filter
+        val featuredLessons = rememberFeaturedLessons(appLanguage)
         val lessons = rememberLessons(mode, languageFilter.selectedItem?.code ?: appLanguage)
 
         return UiState(
             mode = mode,
-            isPersonalizationEnabled = isPersonalizationEnabled,
-            dataLoaded = lessons != null,
+            dataLoaded = featuredLessons != null && lessons != null,
             languageFilter = languageFilter,
+            featuredLessons = if (mode == UiState.Mode.PERSONALIZATION) featuredLessons.orEmpty() else emptyList(),
             lessons = lessons.orEmpty(),
         ) {
             when (it) {
-                is UiEvent.ChangeMode -> mode = it.mode
+                is UiEvent.ChangeMode -> personalization.lessonsPersonalized = it.mode == UiState.Mode.PERSONALIZATION
                 is UiEvent.OpenLocalizationSettings -> navigator.goTo(CountrySettingsScreen)
             }
         }
@@ -201,36 +200,45 @@ class LessonsPresenter @AssistedInject internal constructor(
     }
 
     @Composable
+    private fun rememberFeaturedLessons(locale: Locale): List<ToolCardPresenter.UiState>? {
+        val lessons by remember { lessonsFlowProducer.getFeaturedFlow() }.collectAsState(null)
+        return lessons?.toLessonCardStates(locale, SOURCE_FEATURED)
+    }
+
+    @Composable
     private fun rememberLessons(mode: UiState.Mode, locale: Locale): List<ToolCardPresenter.UiState>? {
         val lessons by remember(mode, locale) { lessonsFlowProducer.getFlow(mode, locale) }.collectAsState(null)
-        @SuppressLint("FlowOperatorInvokedInComposition")
-        return lessons?.map { tool ->
-            key(tool.code) {
-                lateinit var toolState: ToolCardPresenter.UiState
-                toolState = toolCardPresenter.present(
-                    tool = tool,
-                    customLocale = locale,
-                    eventSink = {
-                        when (it) {
-                            ToolCardEvent.Click, ToolCardEvent.OpenTool -> {
-                                eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, SOURCE_LESSONS))
-                                navigator.goTo(
-                                    IntentScreen(
-                                        context.createToolIntent(
-                                            tool = tool,
-                                            languages = listOfNotNull(toolState.translation?.languageCode),
-                                            resumeProgress = true
-                                        ) ?: return@present
-                                    )
-                                )
-                            }
+        return lessons?.toLessonCardStates(locale, SOURCE_LESSONS)
+    }
 
-                            ToolCardEvent.OpenToolDetails -> Unit
+    @Composable
+    @SuppressLint("FlowOperatorInvokedInComposition")
+    private fun List<Tool>.toLessonCardStates(locale: Locale, source: String) = map { tool ->
+        key(tool.code) {
+            lateinit var toolState: ToolCardPresenter.UiState
+            toolState = toolCardPresenter.present(
+                tool = tool,
+                customLocale = locale,
+                eventSink = {
+                    when (it) {
+                        ToolCardEvent.Click, ToolCardEvent.OpenTool -> {
+                            eventBus.post(OpenAnalyticsActionEvent(ACTION_OPEN_LESSON, tool.code, source))
+                            navigator.goTo(
+                                IntentScreen(
+                                    context.createToolIntent(
+                                        tool = tool,
+                                        languages = listOfNotNull(toolState.translation?.languageCode),
+                                        resumeProgress = true
+                                    ) ?: return@present
+                                )
+                            )
                         }
+
+                        ToolCardEvent.OpenToolDetails -> Unit
                     }
-                )
-                toolState
-            }
+                }
+            )
+            toolState
         }
     }
 
@@ -239,9 +247,19 @@ class LessonsPresenter @AssistedInject internal constructor(
         circuitContext.rememberSyncTask(locale) { syncData(locale, it) }
     }
 
+    @Composable
+    private fun RegisterFeaturedLessonsSyncTask(locale: Locale) {
+        circuitContext.rememberSyncTask(locale) { syncFeaturedLessons(locale, it) }
+    }
+
     private fun SyncTracker.syncData(locale: Locale, force: Boolean = false) = launchSync {
         val country = settings.getCountrySettingFlow().first()
         syncService.syncToolOrder(locale, country, force)
+    }
+
+    private fun SyncTracker.syncFeaturedLessons(locale: Locale, force: Boolean = false) = launchSync {
+        val country = settings.getCountrySettingFlow().first() ?: return@launchSync
+        syncService.syncFeaturedTools(locale, country, force)
     }
 
     @AssistedFactory
